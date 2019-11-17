@@ -543,13 +543,22 @@
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "notificationAddDesc": {
-    "message": "Should Cozy remember this password for you?"
+    "message": "Save the password and my data in my Cozy?"
   },
   "notificationAddSave": {
-    "message": "Yes, Save Now"
+    "message": "Save"
+  },
+  "notificationAddSavePassword": {
+    "message": "Save the password"
+  },
+  "notificationAddSaveData": {
+    "message": "Save the data"
   },
   "notificationNeverSave": {
-    "message": "Never for this website"
+    "message": "No, thanks"
+  },
+  "notificationNeverAsk": {
+    "message": "Never ask again"
   },
   "disableChangedPasswordNotification": {
     "message": "Disable Changed Password Notification"
@@ -558,10 +567,10 @@
     "message": "The \"Changed Password Notification\" automatically prompts you to update a login's password in your vault whenever it detects that you have changed it on a website."
   },
   "notificationChangeDesc": {
-    "message": "Do you want to update this password in Cozy?"
+    "message": "Update the password and my data in my Cozy?"
   },
   "notificationChangeSave": {
-    "message": "Yes, Update Now"
+    "message": "Update"
   },
   "disableContextMenuItem": {
     "message": "Disable Context Menu Options"
@@ -623,6 +632,9 @@
   },
   "learnMore": {
     "message": "Learn more"
+  },
+  "moreOptions": {
+    "message": "More options"
   },
   "authenticatorKeyTotp": {
     "message": "Authenticator Key (TOTP)"

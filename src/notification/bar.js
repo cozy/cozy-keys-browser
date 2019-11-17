@@ -1,5 +1,7 @@
 require('./bar.scss');
 
+// See original file:
+// https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/notification/bar.js
 document.addEventListener('DOMContentLoaded', () => {
     var i18n = {};
     if (typeof safari !== 'undefined') {
@@ -25,76 +27,93 @@ document.addEventListener('DOMContentLoaded', () => {
         i18n.notificationAddDesc = chrome.i18n.getMessage('notificationAddDesc');
         i18n.notificationChangeSave = chrome.i18n.getMessage('notificationChangeSave');
         i18n.notificationChangeDesc = chrome.i18n.getMessage('notificationChangeDesc');
+        i18n.moreOptions = chrome.i18n.getMessage('moreOptions');
+        i18n.notificationAddSavePassword = chrome.i18n.getMessage('notificationAddSavePassword');
+        i18n.notificationAddSaveData = chrome.i18n.getMessage('notificationAddSaveData');
+        i18n.notificationNeverAsk = chrome.i18n.getMessage('notificationNeverAsk');
 
         // delay 50ms so that we get proper body dimensions
         setTimeout(load, 50);
     }
 
     function load() {
-        var closeButton = document.getElementById('close-button'),
-            body = document.querySelector('body'),
+
+        const body = document.querySelector('body'),
             bodyRect = body.getBoundingClientRect();
 
         // i18n
         body.classList.add('lang-' + window.navigator.language.slice(0, 2));
 
         document.getElementById('logo-link').title = i18n.appName;
-        closeButton.title = i18n.close;
-        closeButton.setAttribute('aria-label', i18n.close);
 
-        if (bodyRect.width < 768) {
-            document.querySelector('#template-add .add-save').textContent = i18n.yes;
-            document.querySelector('#template-add .never-save').textContent = i18n.never;
-            document.querySelector('#template-change .change-save').textContent = i18n.yes;
+        // Set text in popup
+        document.querySelector('#template-notif .never-save').textContent = i18n.notificationNeverSave;
+        document.querySelector('#template-notif .more-options-text').textContent = i18n.moreOptions;
+        document.querySelector('#template-options .save-password').textContent = i18n.notificationAddSavePassword;
+        document.querySelector('#template-options .save-data').textContent = i18n.notificationAddSaveData;
+        document.querySelector('#template-options .save-neverask').textContent = i18n.notificationNeverAsk;
+
+        // NOTE: the info context was removed in absence of use-case yet.
+        // See original file commit at the beggining of this line.
+        const addContext = getQueryVariable('add');
+        const changeContext = getQueryVariable('change');
+
+        if (addContext) {
+            document.querySelector('#template-notif .add-or-change').textContent = i18n.notificationAddSave;
+            document.querySelector('#template-notif .desc-text').textContent = i18n.notificationAddDesc;
+        } else if (changeContext) {
+            document.querySelector('#template-notif .add-or-change').textContent = i18n.notificationChangeSave;
+            document.querySelector('#template-notif .desc-text').textContent = i18n.notificationChangeDesc;
         } else {
-            document.querySelector('#template-add .add-save').textContent = i18n.notificationAddSave;
-            document.querySelector('#template-add .never-save').textContent = i18n.notificationNeverSave;
-            document.querySelector('#template-change .change-save').textContent = i18n.notificationChangeSave;
+            return;
         }
 
-        document.querySelector('#template-add .add-text').textContent = i18n.notificationAddDesc;
-        document.querySelector('#template-change .change-text').textContent = i18n.notificationChangeDesc;
+        // Set DOM content
+        setContent(document.getElementById('template-notif'));
 
-        if (getQueryVariable('add')) {
-            setContent(document.getElementById('template-add'));
+        // Set listeners
+        const addButton = document.querySelector('#template-notif-clone .add-or-change'),
+            neverButton = document.querySelector('#template-notif-clone .never-save'),
+            moreOptions = document.querySelector('#template-notif-clone .more-options');
 
-            var addButton = document.querySelector('#template-add-clone .add-save'),
-                neverButton = document.querySelector('#template-add-clone .never-save');
-
-            addButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                sendPlatformMessage({
-                    command: 'bgAddSave'
-                });
-            });
-
-            neverButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                sendPlatformMessage({
-                    command: 'bgNeverSave'
-                });
-            });
-        } else if (getQueryVariable('change')) {
-            setContent(document.getElementById('template-change'));
-            var changeButton = document.querySelector('#template-change-clone .change-save');
-            changeButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                sendPlatformMessage({
-                    command: 'bgChangeSave'
-                });
-            });
-        } else if (getQueryVariable('info')) {
-            setContent(document.getElementById('template-alert'));
-            document.getElementById('template-alert-clone').textContent = getQueryVariable('info');
-        }
-
-        closeButton.addEventListener('click', (e) => {
+        addButton.addEventListener('click', (e) => {
             e.preventDefault();
+            const command = changeContext ? 'bgChangeSave' : 'bgAddSave';
             sendPlatformMessage({
-                command: 'bgCloseNotificationBar'
+                command: command
             });
         });
 
+        neverButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            sendPlatformMessage({
+                command: 'bgNeverSave'
+            });
+        });
+
+        moreOptions.addEventListener('click', (e) => {
+            e.preventDefault();
+            const display = document.querySelector('.template-options').style.display;
+            if(display === "none") {
+                // Show options
+                document.querySelector('#arrow-right').style.display = "none";
+                document.querySelector('#arrow-down').style.display = "inline";
+                document.querySelector('.template-options').style.display = "block";
+            } else {
+                // Hide options
+                document.querySelector('#arrow-right').style.display = "inline";
+                document.querySelector('#arrow-down').style.display = "none";
+                document.querySelector('.template-options').style.display = "none";
+            }
+            sendPlatformMessage({
+                command: 'bgAdjustNotificationBar',
+                data: {
+                    height: body.scrollHeight
+                }
+            });
+        });
+
+        // Adjust height dynamically
         sendPlatformMessage({
             command: 'bgAdjustNotificationBar',
             data: {

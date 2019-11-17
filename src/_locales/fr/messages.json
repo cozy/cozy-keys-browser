@@ -543,13 +543,22 @@
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "notificationAddDesc": {
-    "message": "Est-ce que Cozy doit se souvenir de ce mot de passe pour vous ?"
+    "message": "Enregistrer le mot de passe et sauvegarder mes données dans mon Cozy ?"
   },
   "notificationAddSave": {
-    "message": "Oui, enregistrer maintenant"
+    "message": "Enregistrer"
+  },
+  "notificationAddSavePassword": {
+    "message": "Enregistrer le mot de passe"
+  },
+  "notificationAddSaveData": {
+    "message": "Sauvegarder les données"
   },
   "notificationNeverSave": {
-    "message": "Jamais pour ce site web"
+    "message": "Non, merci"
+  },
+  "notificationNeverAsk": {
+    "message": "Ne plus me demander"
   },
   "disableChangedPasswordNotification": {
     "message": "Désactiver la notification de changement de mot de passe"
@@ -558,10 +567,10 @@
     "message": "La \"Notification de changement de mot de passe\" vous propose automatiquement de mettre à jour un mot de passe dans votre coffre lorsqu'il est changé sur un site web."
   },
   "notificationChangeDesc": {
-    "message": "Souhaitez-vous mettre à jour ce mot de passe dans Cozy ?"
+    "message": "Mettre à jour le mot de passe et sauvegarder mes données dans mon Cozy ?"
   },
   "notificationChangeSave": {
-    "message": "Oui, mettre à jour maintenant"
+    "message": "Mettre à jour"
   },
   "disableContextMenuItem": {
     "message": "Désactiver les options de menu contextuel"
@@ -623,6 +632,9 @@
   },
   "learnMore": {
     "message": "En savoir plus"
+  },
+  "moreOptions": {
+    "message": "Plus d'options"
   },
   "authenticatorKeyTotp": {
     "message": "Clé d'authentification (TOTP)"
