@@ -1,6 +1,3 @@
-//require('../notification/bar.scss');
-
-
 // See original file:
 // https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/content/notificationBar.ts
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -497,7 +494,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 break;
         }
 
-        const frame = document.getElementById('bit-notification-bar-iframe') as HTMLIFrameElement;
+        const frame = document.getElementById('notification-bar-iframe') as HTMLIFrameElement;
         if (frame != null && frame.src.indexOf(barPage) >= 0) {
             return;
         }
@@ -516,11 +513,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const barPageUrl: string = isSafari ? (safari.extension.baseURI + barPage) : chrome.extension.getURL(barPage);
 
         const iframe = document.createElement('iframe');
-        iframe.id = 'bit-notification-bar-iframe';
+        iframe.id = 'notification-bar-iframe';
 
         const frameDiv = document.createElement('div');
         frameDiv.setAttribute('aria-live', 'polite');
-        frameDiv.id = 'bit-notification-bar';
+        frameDiv.id = 'notification-bar';
 
         frameDiv.appendChild(iframe);
         document.body.appendChild(frameDiv);
@@ -529,7 +526,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function closeBar(explicitClose: boolean) {
-        const barEl = document.getElementById('bit-notification-bar');
+        const barEl = document.getElementById('notification-bar');
         if (barEl != null) {
             barEl.parentElement.removeChild(barEl);
         }
@@ -556,8 +553,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     function adjustBar(data: any) {
         if (data != null) {
             const newHeight = data.height + 'px';
-            doHeightAdjustment('bit-notification-bar-iframe', newHeight);
-            doHeightAdjustment('bit-notification-bar', newHeight);
+            doHeightAdjustment('notification-bar-iframe', newHeight);
+            doHeightAdjustment('notification-bar', newHeight);
         }
     }
 

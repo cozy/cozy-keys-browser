@@ -13,17 +13,6 @@ table {
     width: 100%;
 }
 
-#bit-notification-bar-iframe {
-    width: 100%;
-    max-width: 420px;
-    box-shadow: 0 1px 3px 0 rgba(50, 54, 63, 0.19), 0 6px 18px 0 rgba(50, 54, 63, 0.19);
-    border: solid 1px rgba(50, 54, 63, 0.12);
-    position: fixed;
-    top: 8px;
-    right: 8px;
-    border-radius: $border-radius-large;
-}
-
 .outter-table > tbody > tr > td {
     padding: 0 0 0 15px;
     border-bottom: 2px solid $brand-primary;
@@ -52,13 +41,21 @@ table {
     font-weight: 600;
 }
 
-.options {
+.more-options {
     margin-top: 15px;
 }
 
-.more-options {
+.more-options-label {
     color: #aecdf6;
     text-decoration: none;
+}
+
+.more-options-list {
+    margin-top: 15px;
+    color: #ffffff;
+    background-color: #5397f4;
+    padding: 0px 15px 15px 15px;
+    border-radius: $border-radius-large;
 }
 
 .option-entry {
@@ -85,15 +82,6 @@ table {
 	color: $brand-primary;
 }
 
-
-.template-options {
-    margin-top: 15px;
-    color: #ffffff;
-    background-color: #5397f4;
-    padding: 0px 15px 15px 15px;
-    border-radius: $border-radius-large;
-}
-
 .submit-buttons {
     position: relative;
     top: 15px;
@@ -101,14 +89,14 @@ table {
     border-radius: $border-radius-large;
 }
 
+svg {
+    margin-top: 5px;
+}
+
 button {
     border: 1px solid white;
     font-weight: 600;
     text-transform: uppercase;
-}
-
-svg {
-    margin-top: 5px;
 }
 
 button:not(.link) {

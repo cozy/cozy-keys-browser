@@ -554,7 +554,7 @@
   "notificationAddSaveData": {
     "message": "Save the data"
   },
-  "notificationNeverSave": {
+  "notificationDontSave": {
     "message": "No, thanks"
   },
   "notificationNeverAsk": {

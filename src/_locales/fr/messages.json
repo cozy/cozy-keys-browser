@@ -554,7 +554,7 @@
   "notificationAddSaveData": {
     "message": "Sauvegarder les données"
   },
-  "notificationNeverSave": {
+  "notificationDontSave": {
     "message": "Non, merci"
   },
   "notificationNeverAsk": {
