@@ -1,3 +1,6 @@
+//require('../notification/bar.scss');
+
+
 // See original file:
 // https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/content/notificationBar.ts
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -513,17 +516,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const barPageUrl: string = isSafari ? (safari.extension.baseURI + barPage) : chrome.extension.getURL(barPage);
 
         const iframe = document.createElement('iframe');
-        iframe.style.cssText = 'width: 100%; max-width: 450px; border: 0; \
-                                position: fixed; top: 8px; \
-                                right: 8px; border-radius: 7px; resize: vertical; \
-                                box-shadow: 0 1px 3px 0 rgba(50, 54, 63, 0.19), 0 6px 18px 0 rgba(50, 54, 63, 0.19);';
         iframe.id = 'bit-notification-bar-iframe';
 
         const frameDiv = document.createElement('div');
         frameDiv.setAttribute('aria-live', 'polite');
         frameDiv.id = 'bit-notification-bar';
-        frameDiv.style.cssText = 'width: 100%; top: 0; left: 0; padding: 0; position: fixed;' +
-            'z-index: 2147483647; visibility: visible; resize: vertical;';
+        
         frameDiv.appendChild(iframe);
         document.body.appendChild(frameDiv);
 

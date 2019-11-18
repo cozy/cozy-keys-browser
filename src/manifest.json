@@ -44,7 +44,8 @@
     {
       "all_frames": true,
       "css": [
-        "content/autofill.css"
+        "content/autofill.css",
+        "content/notification.css"
       ],
       "matches": [
         "http://*/*",

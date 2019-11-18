@@ -102,6 +102,7 @@ const plugins = [
         { from: './src/images', to: 'images' },
         { from: './src/popup/images', to: 'popup/images' },
         { from: './src/content/autofill.css', to: 'content' },
+        { from: './src/content/notification.css', to: 'content' },
     ]),
     new webpack.SourceMapDevToolPlugin({
         filename: '[name].js.map',
