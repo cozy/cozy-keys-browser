@@ -105,19 +105,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelector('#arrow-down').style.display = "none";
                 document.querySelector('.template-options').style.display = "none";
             }
-            sendPlatformMessage({
-                command: 'bgAdjustNotificationBar',
-                data: {
-                    height: body.scrollHeight
-                }
-            });
+            sendAdjustBodyHeight(body);
         });
+        sendAdjustBodyHeight(body);
+    }
 
-        // Adjust height dynamically
+    // Adjust height dynamically
+    function sendAdjustBodyHeight(body) {
         sendPlatformMessage({
             command: 'bgAdjustNotificationBar',
             data: {
-                height: body.scrollHeight
+                height: body.scrollHeight + 15 // Add 15px for margin
             }
         });
     }

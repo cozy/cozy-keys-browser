@@ -5,10 +5,8 @@
     border: solid 1px rgba(50, 54, 63, 0.12);
     position: fixed;
     top: 8px;
-    right: 8px;
+    right: 17px;
     border-radius: 8px;
-
-    -webkit-animation: fadein 0.2s; /* Safari, Chrome and Opera > 12.1 */
     animation: fadein 0.2s;
 }
 
@@ -25,56 +23,4 @@
 @keyframes fadein {
   from { opacity: 0; transform: translateY(-50px); }
   to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Safari, Chrome and Opera > 12.1 */
-@-webkit-keyframes fadein {
-  from { opacity: 0; transform: translateY(-50px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/*
-.mfp-move-from-top {
-
-  .mfp-content {
-   vertical-align:top;
-  }
-
-  // start state
-  .mfp-with-anim {
-    opacity: 0;
-    transition: all 0.2s;
-
-
-  }
-
-  &.mfp-bg {
-    opacity: 0;
-	  transition: all 0.2s;
-  }
-
-  // animate in
-  &.mfp-ready {
-    .mfp-with-anim {
-      opacity: 1;
-
-    }
-    &.mfp-bg {
-      opacity: 0.8;
-    }
-  }
-
-  // animate out
-  &.mfp-removing {
-
-    .mfp-with-anim {
-      transform: translateY(-50px);
-      opacity: 0;
-    }
-    &.mfp-bg {
-      opacity: 0;
-    }
-
-  }
-
 }

@@ -22,7 +22,6 @@ table {
     top: 8px;
     right: 8px;
     border-radius: $border-radius-large;
-
 }
 
 .outter-table > tbody > tr > td {
@@ -58,7 +57,7 @@ table {
 }
 
 .more-options {
-    color: $gray-silver;
+    color: #aecdf6;
     text-decoration: none;
 }
 
@@ -121,7 +120,6 @@ button:not(.link) {
 
 button:not(.link):hover {
     cursor: pointer;
-    text-decoration: underline;
 }
 
 button.link {
@@ -134,7 +132,6 @@ button.link {
 
 button.link:hover {
     cursor: pointer;
-    text-decoration: underline;
 }
 
 

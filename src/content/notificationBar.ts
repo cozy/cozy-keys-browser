@@ -521,7 +521,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const frameDiv = document.createElement('div');
         frameDiv.setAttribute('aria-live', 'polite');
         frameDiv.id = 'bit-notification-bar';
-        
+
         frameDiv.appendChild(iframe);
         document.body.appendChild(frameDiv);
 
@@ -555,7 +555,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function adjustBar(data: any) {
         if (data != null) {
-            const newHeight = (data.height + 15) + 'px';
+            const newHeight = data.height + 'px';
             doHeightAdjustment('bit-notification-bar-iframe', newHeight);
             doHeightAdjustment('bit-notification-bar', newHeight);
         }
