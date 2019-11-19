@@ -51,7 +51,7 @@ import { routerTransition } from './app-routing.animations';
 })
 export class AppComponent implements OnInit {
     toasterConfig: ToasterConfig = new ToasterConfig({
-        showCloseButton: false,
+        showCloseButton: true,
         mouseoverTimerStop: true,
         animation: 'slideUp',
         limit: 2,
