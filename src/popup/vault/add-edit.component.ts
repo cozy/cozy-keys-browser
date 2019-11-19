@@ -17,6 +17,7 @@ import { StateService } from 'jslib/abstractions/state.service';
 import { UserService } from 'jslib/abstractions/user.service';
 
 import { AddEditComponent as BaseAddEditComponent } from 'jslib/angular/components/add-edit.component';
+import { CipherType } from 'jslib/enums/cipherType';
 
 @Component({
     selector: 'app-vault-add-edit',
@@ -29,6 +30,8 @@ import { AddEditComponent as BaseAddEditComponent } from 'jslib/angular/componen
  * 7bfb8d91e3fcec00424d28410ef33401d582c3cc/src/popup/vault/add-edit.component.ts
  */
 export class AddEditComponent extends BaseAddEditComponent {
+    typeOptions: any[];
+
     constructor(cipherService: CipherService, folderService: FolderService,
         i18nService: I18nService, platformUtilsService: PlatformUtilsService,
         auditService: AuditService, stateService: StateService,
@@ -38,10 +41,16 @@ export class AddEditComponent extends BaseAddEditComponent {
         eventService: EventService) {
         super(cipherService, folderService, i18nService, platformUtilsService, auditService, stateService,
             userService, collectionService, messagingService, eventService);
+        this.typeOptions = [
+            { name: i18nService.t('typeLogin'), value: CipherType.Login },
+            { name: i18nService.t('typeCard'), value: CipherType.Card },
+            { name: i18nService.t('typeIdentity'), value: CipherType.Identity },
+        ];
     }
 
     async ngOnInit() {
         await super.ngOnInit();
+
         const queryParamsSub = this.route.queryParams.subscribe(async (params) => {
             if (params.cipherId) {
                 this.cipherId = params.cipherId;
