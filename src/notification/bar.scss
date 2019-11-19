@@ -36,7 +36,7 @@ table {
 }
 
 .desc-text {
-    color: #ffffff;
+    color: $bar-text-color;
     margin-top: 15px;
     font-weight: 600;
 }
@@ -46,14 +46,14 @@ table {
 }
 
 .more-options-label {
-    color: #aecdf6;
+    color: $bar-text-color-alt;
     text-decoration: none;
 }
 
 .more-options-list {
     margin-top: 15px;
-    color: #ffffff;
-    background-color: #5397f4;
+    color: $bar-text-color;
+    background-color: $background-color-lighter;
     padding: 0px 15px 15px 15px;
     border-radius: $border-radius-large;
 }
@@ -64,7 +64,7 @@ table {
 
 .checkbox-custom {
     -webkit-appearance: none;
-    background-color: #ffffff;
+    background-color: $background-color;
     border: 1px solid $brand-primary;
     padding: 9px;
     border-radius: $border-radius;
@@ -82,12 +82,6 @@ table {
 	color: $brand-primary;
 }
 
-.submit-buttons {
-    position: relative;
-    top: 15px;
-    float: right;
-    border-radius: $border-radius-large;
-}
 
 svg {
     margin-top: 5px;
@@ -95,31 +89,31 @@ svg {
 
 button {
     border: 1px solid white;
-    font-weight: 600;
+    font-weight: bold;
     text-transform: uppercase;
+    padding: 10px 10px 10px 10px;
+
+    &:hover {
+        cursor: pointer;
+    }
 }
 
-button:not(.link) {
-    background-color: #ffffff;
-    padding: 10px 10px 10px 10px;
+.submit-buttons {
+    position: relative;
+    top: 15px;
+    float: right;
+    border-radius: $border-radius-large;
+}
+
+.add-or-change {
+    background-color: $bar-text-color;
     color: $brand-primary;
     margin-left: 5px;
 }
 
-button:not(.link):hover {
-    cursor: pointer;
-}
-
-button.link {
-    background: none;
-    padding: 10px 10px 10px 10px;
+.dont-save {
     background-color: $brand-primary;
-    color: #ffffff;
-    text-transform: uppercase;
-}
-
-button.link:hover {
-    cursor: pointer;
+    color: $bar-text-color;
 }
 
 
