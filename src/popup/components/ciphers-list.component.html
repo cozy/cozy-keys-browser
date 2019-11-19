@@ -17,6 +17,10 @@
         <div class="row-main-content">
             <span class="text">
                 {{c.name}}
+                <!-- Show when a password is shared with the Cozy organization -->
+                <ng-container class="icon" *ngIf="c.organizationId">
+                    <i class="icon-cozy icon-cozy-sync"></i>
+                </ng-container>
             </span>
             <span class="detail">{{c.subTitle}}</span>
         </div>
