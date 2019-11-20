@@ -6,7 +6,7 @@ import { DeviceType } from 'jslib/enums/deviceType';
 import { MessagingService } from 'jslib/abstractions/messaging.service';
 import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
 
-import { AnalyticsIds } from 'jslib/misc/analytics';
+// import { AnalyticsIds } from 'jslib/misc/analytics';
 
 const DialogPromiseExpiration = 600000; // 10 minutes
 
@@ -80,13 +80,15 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
         return false;
     }
 
+    // TODO: re-enable tracking or remove
     analyticsId(): string {
-        if (this.analyticsIdCache) {
+        /*if (this.analyticsIdCache) {
             return this.analyticsIdCache;
         }
 
         this.analyticsIdCache = (AnalyticsIds as any)[this.getDevice()];
-        return this.analyticsIdCache;
+        return this.analyticsIdCache;*/
+        return;
     }
 
     async isViewOpen(): Promise<boolean> {
@@ -162,6 +164,7 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     }
 
     eventTrack(action: string, label?: string, options?: any) {
+        // FIXME: the service is currently disabled
         this.messagingService.send('analyticsEventTrack', {
             action: action,
             label: label,

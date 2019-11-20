@@ -4,7 +4,6 @@ import 'zone.js/dist/zone';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ToasterModule } from 'angular2-toaster';
 import { Angulartics2Module } from 'angulartics2';
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -71,8 +70,6 @@ import localeFr from '@angular/common/locales/fr';
 registerLocaleData(localeEnGb, 'en-GB');
 registerLocaleData(localeFr, 'fr');
 
-// TODO: remove google tracking
-
 @NgModule({
     imports: [
         BrowserModule,
@@ -80,7 +77,7 @@ registerLocaleData(localeFr, 'fr');
         FormsModule,
         AppRoutingModule,
         ServicesModule,
-        Angulartics2Module.forRoot([Angulartics2GoogleAnalytics], {
+        Angulartics2Module.forRoot([], {
             pageTracking: {
                 clearQueryParams: true,
             },

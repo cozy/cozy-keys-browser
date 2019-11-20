@@ -7,7 +7,6 @@ import {
     ToasterContainerComponent,
     ToasterService,
 } from 'angular2-toaster';
-import { Angulartics2GoogleAnalytics } from 'angulartics2/ga';
 import swal from 'sweetalert';
 
 import {
@@ -61,7 +60,7 @@ export class AppComponent implements OnInit {
 
     private lastActivity: number = null;
 
-    constructor(private angulartics2GoogleAnalytics: Angulartics2GoogleAnalytics, private analytics: Angulartics2,
+    constructor(private analytics: Angulartics2,
         private toasterService: ToasterService, private storageService: StorageService,
         private broadcasterService: BroadcasterService, private authService: AuthService,
         private i18nService: I18nService, private router: Router,
@@ -116,10 +115,11 @@ export class AppComponent implements OnInit {
                     this.showToast(msg);
                 });
             } else if (msg.command === 'analyticsEventTrack') {
-                this.analytics.eventTrack.next({
+                // TODO: re-enable tracking or remove
+                /*this.analytics.eventTrack.next({
                     action: msg.action,
                     properties: { label: msg.label },
-                });
+                });*/
             } else if (msg.command === 'reloadProcess') {
                 const windowReload = this.platformUtilsService.isSafari() ||
                     this.platformUtilsService.isFirefox() || this.platformUtilsService.isOpera();
