@@ -4,3 +4,4 @@ declare var opr: any;
 declare var chrome: any;
 declare var browser: any;
 declare var safari: any;
+declare module 'cozy-client';
