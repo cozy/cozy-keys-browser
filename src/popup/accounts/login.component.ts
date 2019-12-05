@@ -103,9 +103,7 @@ export class LoginComponent implements OnInit {
                 base: this.cozyUrl + '/bitwarden',
             });
             // The email is based on the URL and necessary for login
-            const splitScheme = this.cozyUrl.startsWith('http://')
-                ? this.cozyUrl.split('http://')
-                : this.cozyUrl.split('https://');
+            const splitScheme = this.cozyUrl.split('://');
 
             const baseUrl = splitScheme.length < 2 ? splitScheme[0] : splitScheme[1];
             const baseUrlNoPort = baseUrl.split(':')[0]; // The stack does not use the optional port for salt
