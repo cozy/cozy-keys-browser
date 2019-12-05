@@ -804,6 +804,12 @@
   "environmentSaved": {
     "message": "Les URLs d'environnement ont été enregistrées."
   },
+  "disableKonnectorsSuggestions": {
+    "message": "Désactiver la suggestion automatique de connecteurs"
+  },
+  "disableKonnectorsSuggestionsDesc": {
+    "message": "Si des identifiants correspondent à un connecteur non installé, le suggérer depuis son Cozy."
+  },
   "enableAutoFillOnPageLoad": {
     "message": "Activer l’auto-complétion au chargement de la page"
   },

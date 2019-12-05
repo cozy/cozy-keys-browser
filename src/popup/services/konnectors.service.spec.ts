@@ -31,7 +31,7 @@ const buildCiphers = (ciphers: any[]) => {
 }
 
 describe('Konnectors Service', () => {
-    const konnectorsService = new KonnectorsService(null, null);
+    const konnectorsService = new KonnectorsService(null, null, null);
 
     it('suggested konnectors should match by slug', () => {
         const konnectors = buildKonnectors([{slug: 'ameli'}, {slug: 'amazon'}, {slug: 'impots'}]);

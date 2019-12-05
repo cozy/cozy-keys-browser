@@ -807,6 +807,12 @@
   "environmentSaved": {
     "message": "The environment URLs have been saved."
   },
+  "disableKonnectorsSuggestions": {
+    "message": "Disable automatic connector suggestion"
+  },
+  "disableKonnectorsSuggestionsDesc": {
+    "message": "If a login matches a non-installed connector, suggest it in the Cozy."
+  },
   "enableAutoFillOnPageLoad": {
     "message": "Enable Auto-fill On Page Load"
   },

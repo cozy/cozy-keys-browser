@@ -1,11 +1,14 @@
 import { Registry } from 'cozy-client';
 import { CipherService } from 'jslib/abstractions/cipher.service';
+import { StorageService } from 'jslib/abstractions/storage.service';
 import { Utils } from 'jslib/misc/utils';
 import { CipherView } from 'jslib/models/view/cipherView';
+import { LocalConstantsService as ConstantsService } from '../services/constants.service';
 import { CozyClientService } from './cozyClient.service';
 
 export class KonnectorsService {
-    constructor(private cipherService: CipherService, protected cozyClientService: CozyClientService) {
+    constructor(private cipherService: CipherService, private storageService: StorageService,
+        protected cozyClientService: CozyClientService) {
     }
 
     /**
@@ -16,14 +19,19 @@ export class KonnectorsService {
      *  on the server, we consider it as acceptable.
      */
     async createSuggestions() {
-        const cozyClient = await this.cozyClientService.createClient();
-        const allKonnectors = await this.getRegistryKonnectors(cozyClient);
-        const installedKonnectors = await this.getInstalledKonnectors(cozyClient);
-        const suggestedKonnectors = await this.getSuggestedKonnectors(cozyClient);
-        const ciphers = await this.cipherService.getAllDecrypted();
-        const suggested = await this.suggestedKonnectorsFromCiphers(
-            allKonnectors, installedKonnectors, suggestedKonnectors, ciphers);
-        await this.sendKonnectorsSuggestion(cozyClient, suggested);
+        try {
+            const optionEnabled = await this.storageService.get<boolean>(ConstantsService.enableKonnectorsSuggestions);
+            if (optionEnabled) {
+                const cozyClient = await this.cozyClientService.createClient();
+                const allKonnectors = await this.getRegistryKonnectors(cozyClient);
+                const installedKonnectors = await this.getInstalledKonnectors(cozyClient);
+                const suggestedKonnectors = await this.getSuggestedKonnectors(cozyClient);
+                const ciphers = await this.cipherService.getAllDecrypted();
+                const suggested = await this.suggestedKonnectorsFromCiphers(
+                    allKonnectors, installedKonnectors, suggestedKonnectors, ciphers);
+                await this.sendKonnectorsSuggestion(cozyClient, suggested);
+            }
+        } catch (e) { }
     }
 
     async getRegistryKonnectors(client: any) {

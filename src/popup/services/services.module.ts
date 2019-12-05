@@ -68,7 +68,7 @@ export const messagingService = new BrowserMessagingService();
 export const cozyClientService = new CozyClientService(getBgService<EnvironmentService>('environmentService')(),
     getBgService<TokenService>('tokenService')());
 export const konnectorsService = new KonnectorsService(getBgService<CipherService>('cipherService')(),
-    cozyClientService);
+    getBgService<StorageService>('storageService')(), cozyClientService);
 export const authService = new AuthService(getBgService<CryptoService>('cryptoService')(),
     getBgService<ApiService>('apiService')(), getBgService<UserService>('userService')(),
     getBgService<TokenService>('tokenService')(), getBgService<AppIdService>('appIdService')(),

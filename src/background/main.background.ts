@@ -197,7 +197,7 @@ export default class MainBackground {
             });
 
         this.cozyClientService = new CozyClientService(this.environmentService, this.tokenService);
-        this.konnectorsService = new KonnectorsService(this.cipherService, this.cozyClientService);
+        this.konnectorsService = new KonnectorsService(this.cipherService, this.storageService, this.cozyClientService);
 
         // Other fields
         this.isSafari = this.platformUtilsService.isSafari();

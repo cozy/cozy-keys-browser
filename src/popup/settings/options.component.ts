@@ -14,7 +14,7 @@ import { StateService } from 'jslib/abstractions/state.service';
 import { StorageService } from 'jslib/abstractions/storage.service';
 import { TotpService } from 'jslib/abstractions/totp.service';
 
-import { ConstantsService } from 'jslib/services/constants.service';
+import { LocalConstantsService as ConstantsService } from '..//services/constants.service';
 
 @Component({
     selector: 'app-options',
@@ -22,6 +22,7 @@ import { ConstantsService } from 'jslib/services/constants.service';
 })
 export class OptionsComponent implements OnInit {
     disableFavicon = false;
+    disableKonnectorsSuggestions = true;
     enableAutoFillOnPageLoad = false;
     disableAutoTotpCopy = false;
     disableContextMenuItem = false;
@@ -69,6 +70,10 @@ export class OptionsComponent implements OnInit {
 
     async ngOnInit() {
         this.showDisableContextMenu = !this.platformUtilsService.isSafari();
+
+        this.disableKonnectorsSuggestions = await this.storageService.get(
+            ConstantsService.disableKonnectorsSuggestions,
+        );
 
         this.enableAutoFillOnPageLoad = await this.storageService.get<boolean>(
             ConstantsService.enableAutoFillOnPageLoadKey);
@@ -119,6 +124,13 @@ export class OptionsComponent implements OnInit {
     async updateAutoTotpCopy() {
         await this.storageService.save(ConstantsService.disableAutoTotpCopyKey, this.disableAutoTotpCopy);
         this.callAnalytics('Auto Copy TOTP', !this.disableAutoTotpCopy);
+    }
+
+    async updateKonnectorsSuggestions() {
+        await this.storageService.save(
+            ConstantsService.disableKonnectorsSuggestions,
+            this.disableKonnectorsSuggestions,
+        );
     }
 
     async updateAutoFillOnPageLoad() {
