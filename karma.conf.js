@@ -15,7 +15,8 @@ module.exports = function(config) {
             'jslib/src/services/**/*.ts',
             'jslib/src/misc/**/*.ts',
             'src/browser/**/*.ts',
-            'src/services/**/*.ts'
+            'src/services/**/*.ts',
+            'src/popup/services/**/*.ts'
         ],
 
         // list of files to exclude
@@ -56,14 +57,18 @@ module.exports = function(config) {
         client:{
             clearContext: false // leave Jasmine Spec Runner output visible in browser
         },
-
         karmaTypescriptConfig: {
             tsconfig: './tsconfig.json',
             compilerOptions: {
                 module: 'CommonJS'
             },
             bundlerOptions: {
-                entrypoints: /\.spec\.ts$/
+                entrypoints: /\.spec\.ts$/,
+                resolve: {
+                    alias: { 
+                        'cozy-client': 'node_modules/cozy-client/dist/node.js'
+                    }
+                }
             }
         },
     })
