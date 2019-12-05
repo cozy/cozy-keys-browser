@@ -543,7 +543,7 @@
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "notificationAddDesc": {
-    "message": "Enregistrer le mot de passe et sauvegarder mes données dans mon Cozy ?"
+    "message": "Enregistrer le mot de passe dans mon Cozy ?"
   },
   "notificationAddSave": {
     "message": "Enregistrer"
@@ -567,7 +567,7 @@
     "message": "La \"Notification de changement de mot de passe\" vous propose automatiquement de mettre à jour un mot de passe dans votre coffre lorsqu'il est changé sur un site web."
   },
   "notificationChangeDesc": {
-    "message": "Mettre à jour le mot de passe et sauvegarder mes données dans mon Cozy ?"
+    "message": "Mettre à jour le mot de passe dans mon Cozy ?"
   },
   "notificationChangeSave": {
     "message": "Mettre à jour"

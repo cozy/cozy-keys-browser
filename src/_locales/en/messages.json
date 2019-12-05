@@ -543,7 +543,7 @@
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "notificationAddDesc": {
-    "message": "Save the password and my data in my Cozy?"
+    "message": "Save the password in my Cozy?"
   },
   "notificationAddSave": {
     "message": "Save"
@@ -567,7 +567,7 @@
     "message": "The \"Changed Password Notification\" automatically prompts you to update a login's password in your vault whenever it detects that you have changed it on a website."
   },
   "notificationChangeDesc": {
-    "message": "Update the password and my data in my Cozy?"
+    "message": "Update the password in my Cozy?"
   },
   "notificationChangeSave": {
     "message": "Update"
