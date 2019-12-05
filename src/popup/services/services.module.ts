@@ -14,6 +14,9 @@ import { ValidationService } from 'jslib/angular/services/validation.service';
 
 import { BrowserApi } from '../../browser/browserApi';
 
+import { CozyClientService } from './cozyClient.service';
+import { KonnectorsService } from './konnectors.service';
+
 import { ApiService } from 'jslib/abstractions/api.service';
 import { AppIdService } from 'jslib/abstractions/appId.service';
 import { AuditService } from 'jslib/abstractions/audit.service';
@@ -62,6 +65,10 @@ function getBgService<T>(service: string) {
 
 export const stateService = new StateService();
 export const messagingService = new BrowserMessagingService();
+export const cozyClientService = new CozyClientService(getBgService<EnvironmentService>('environmentService')(),
+    getBgService<TokenService>('tokenService')());
+export const konnectorsService = new KonnectorsService(getBgService<CipherService>('cipherService')(),
+    cozyClientService);
 export const authService = new AuthService(getBgService<CryptoService>('cryptoService')(),
     getBgService<ApiService>('apiService')(), getBgService<UserService>('userService')(),
     getBgService<TokenService>('tokenService')(), getBgService<AppIdService>('appIdService')(),
@@ -116,6 +123,8 @@ export function initFactory(i18nService: I18nService, storageService: StorageSer
         LaunchGuardService,
         PopupUtilsService,
         BroadcasterService,
+        { provide: CozyClientService, useValue: cozyClientService },
+        { provide: KonnectorsService, useValue: konnectorsService },
         { provide: MessagingService, useValue: messagingService },
         { provide: AuthServiceAbstraction, useValue: authService },
         { provide: StateServiceAbstraction, useValue: stateService },

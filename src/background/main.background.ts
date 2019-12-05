@@ -56,6 +56,9 @@ import { SystemService as SystemServiceAbstraction } from 'jslib/abstractions/sy
 import { Analytics } from 'jslib/misc';
 import { Utils } from 'jslib/misc/utils';
 
+import { CozyClientService } from '../popup/services/cozyClient.service';
+import { KonnectorsService } from '../popup/services/konnectors.service';
+
 import { BrowserApi } from '../browser/browserApi';
 import { SafariApp } from '../browser/safariApp';
 
@@ -105,6 +108,8 @@ export default class MainBackground {
     systemService: SystemServiceAbstraction;
     eventService: EventServiceAbstraction;
     analytics: Analytics;
+    cozyClientService: CozyClientService;
+    konnectorsService: KonnectorsService;
 
     onUpdatedRan: boolean;
     onReplacedRan: boolean;
@@ -191,6 +196,9 @@ export default class MainBackground {
                 return Promise.resolve();
             });
 
+        this.cozyClientService = new CozyClientService(this.environmentService, this.tokenService);
+        this.konnectorsService = new KonnectorsService(this.cipherService, this.cozyClientService);
+
         // Other fields
         this.isSafari = this.platformUtilsService.isSafari();
         this.sidebarAction = this.isSafari ? null : (typeof opr !== 'undefined') && opr.sidebarAction ?
@@ -199,7 +207,8 @@ export default class MainBackground {
         // Background
         this.runtimeBackground = new RuntimeBackground(this, this.autofillService, this.cipherService,
             this.platformUtilsService as BrowserPlatformUtilsService, this.storageService, this.i18nService,
-            this.analytics, this.notificationsService, this.systemService, this.lockService);
+            this.analytics, this.notificationsService, this.systemService, this.lockService,
+            this.konnectorsService);
         this.commandsBackground = new CommandsBackground(this, this.passwordGenerationService,
             this.platformUtilsService, this.analytics, this.lockService);
 

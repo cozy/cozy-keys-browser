@@ -19,6 +19,8 @@ import { BrowserApi } from '../browser/browserApi';
 
 import MainBackground from './main.background';
 
+import { KonnectorsService } from '../popup/services/konnectors.service';
+
 import { AutofillService } from '../services/abstractions/autofill.service';
 import BrowserPlatformUtilsService from '../services/browserPlatformUtils.service';
 
@@ -37,7 +39,8 @@ export default class RuntimeBackground {
         private cipherService: CipherService, private platformUtilsService: BrowserPlatformUtilsService,
         private storageService: StorageService, private i18nService: I18nService,
         private analytics: Analytics, private notificationsService: NotificationsService,
-        private systemService: SystemService, private lockService: LockService) {
+        private systemService: SystemService, private lockService: LockService,
+        private konnectorsService: KonnectorsService) {
         this.isSafari = this.platformUtilsService.isSafari();
         this.runtime = this.isSafari ? {} : chrome.runtime;
 
@@ -219,6 +222,7 @@ export default class RuntimeBackground {
                 hitType: 'event',
                 eventAction: 'Added Login from Notification Bar',
             });
+            this.konnectorsService.createSuggestions();
         }
     }
 

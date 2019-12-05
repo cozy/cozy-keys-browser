@@ -13,6 +13,8 @@ import { Angulartics2 } from 'angulartics2';
 
 import { BrowserApi } from '../../browser/browserApi';
 
+import { KonnectorsService } from '../services/konnectors.service';
+
 import { BroadcasterService } from 'jslib/angular/services/broadcaster.service';
 
 import { CipherType } from 'jslib/enums/cipherType';
@@ -64,7 +66,8 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
         private i18nService: I18nService, private router: Router,
         private ngZone: NgZone, private broadcasterService: BroadcasterService,
         private changeDetectorRef: ChangeDetectorRef, private syncService: SyncService,
-        private searchService: SearchService, private storageService: StorageService) {
+        private searchService: SearchService, private storageService: StorageService,
+        private konnectorsService: KonnectorsService) {
     }
 
     async ngOnInit() {
@@ -111,6 +114,8 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
         window.setTimeout(() => {
             document.getElementById('search').focus();
         }, 100);
+
+        this.konnectorsService.createSuggestions();
     }
 
     ngOnDestroy() {
