@@ -132,6 +132,9 @@
     "message": "Your account's fingerprint phrase",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
+  "twoStepLogin": {
+    "message": "Two-step Login"
+  },
   "logOut": {
     "message": "Log Out"
   },
@@ -445,6 +448,9 @@
   "changeMasterPasswordConfirmation": {
     "message": "You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?"
   },
+  "twoStepLoginConfirmation": {
+    "message": "Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?"
+  },
   "editedFolder": {
     "message": "Edited folder"
   },
@@ -729,6 +735,9 @@
   "sendVerificationCodeEmailAgain": {
     "message": "Send verification code email again"
   },
+  "useAnotherTwoStepMethod": {
+    "message": "Use another two-step login method"
+  },
   "insertYubiKey": {
     "message": "Insert your YubiKey into your computer's USB port, then touch its button."
   },
@@ -737,6 +746,18 @@
   },
   "loginUnavailable": {
     "message": "Login Unavailable"
+  },
+  "noTwoStepProviders": {
+    "message": "This account has two-step login enabled, however, none of the configured two-step providers are supported by this web browser."
+  },
+  "noTwoStepProviders2": {
+    "message": "Please use a supported web browser (such as Chrome) and/or add additional providers that are better supported across web browsers (such as an authenticator app)."
+  },
+  "twoStepOptions": {
+    "message": "Two-step Login Options"
+  },
+  "recoveryCodeDesc": {
+    "message": "Lost access to all of your two-factor providers? Use your recovery code to disable all two-factor providers from your account."
   },
   "recoveryCodeTitle": {
     "message": "Recovery Code"
@@ -848,6 +869,12 @@
   },
   "cfTypeBoolean": {
     "message": "Boolean"
+  },
+  "popup2faCloseMessage": {
+    "message": "Clicking outside the popup window to check your email for your verification code will cause this popup to close. Do you want to open this popup in a new window so that it does not close?"
+  },
+  "popupU2fCloseMessage": {
+    "message": "This browser cannot process U2F requests in this popup window. Do you want to open this popup in a new window so that you can log in using U2F?"
   },
   "disableFavicon": {
     "message": "Disable Website Icons"

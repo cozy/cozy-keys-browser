@@ -41,7 +41,9 @@ export class LoginComponent implements OnInit {
     formPromise: Promise<AuthResult>;
     onSuccessfulLogin: () => Promise<any>;
     onSuccessfulLoginNavigate: () => Promise<any>;
+    onSuccessfulLoginTwoFactorNavigate: () => Promise<any>;
 
+    protected twoFactorRoute = '2fa';
     protected successRoute = '/tabs/vault';
 
     constructor(protected authService: AuthService, protected router: Router,
@@ -117,16 +119,24 @@ export class LoginComponent implements OnInit {
             } else {
                 await this.storageService.remove(Keys.rememberedCozyUrl);
             }
-            const disableFavicon = await this.storageService.get<boolean>(ConstantsService.disableFaviconKey);
-            await this.stateService.save(ConstantsService.disableFaviconKey, !!disableFavicon);
-            if (this.onSuccessfulLogin != null) {
-                this.onSuccessfulLogin();
-            }
-            this.platformUtilsService.eventTrack('Logged In');
-            if (this.onSuccessfulLoginNavigate != null) {
-                this.onSuccessfulLoginNavigate();
+            if (response.twoFactor) {
+                if (this.onSuccessfulLoginTwoFactorNavigate != null) {
+                    this.onSuccessfulLoginTwoFactorNavigate();
+                } else {
+                    this.router.navigate([this.twoFactorRoute]);
+                }
             } else {
-                this.router.navigate([this.successRoute]);
+                const disableFavicon = await this.storageService.get<boolean>(ConstantsService.disableFaviconKey);
+                await this.stateService.save(ConstantsService.disableFaviconKey, !!disableFavicon);
+                if (this.onSuccessfulLogin != null) {
+                    this.onSuccessfulLogin();
+                }
+                this.platformUtilsService.eventTrack('Logged In');
+                if (this.onSuccessfulLoginNavigate != null) {
+                    this.onSuccessfulLoginNavigate();
+                } else {
+                    this.router.navigate([this.successRoute]);
+                }
             }
         } catch { }
     }

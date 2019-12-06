@@ -723,6 +723,9 @@
   "sendVerificationCodeEmailAgain": {
     "message": "Envoyer à nouveau l'e-mail du code de vérification"
   },
+  "useAnotherTwoStepMethod": {
+     "message": "Utiliser une autre méthode d'identification en deux étapes"
+   },
   "insertYubiKey": {
     "message": "Insérez votre YubiKey dans le port USB de votre ordinateur puis appuyez sur son bouton."
   },
@@ -731,6 +734,15 @@
   },
   "loginUnavailable": {
     "message": "Connexion impossible"
+  },
+  "noTwoStepProviders": {
+    "message": "Ce compte dispose d'une identification en deux étapes. Cependant, aucun service d'identification en deux étapes n'est supporté par ce navigateur web."
+  },
+  "noTwoStepProviders2": {
+    "message": "Merci d'utiliser un navigateur web compatible (comme Chrome) et/ou d'ajouter des services additionnels d'identification en deux étapes qui sont mieux supportés par les navigateurs web (comme par exemple une application d'authentification)."
+  },
+  "twoStepOptions": {
+    "message": "Options d'identification en deux étapes"
   },
   "recoveryCodeDesc": {
     "message": "Accès perdu à tous vos services d'authentification à double facteurs ? Utilisez votre code de récupération pour désactiver tous les services de double authentifications sur votre compte."
@@ -845,6 +857,12 @@
   },
   "cfTypeBoolean": {
     "message": "Booléen"
+  },
+  "popup2faCloseMessage": {
+    "message": "Le fait de cliquer à l'extérieur de la fenêtre pop-up pour vérifier votre e-mail avec votre code de vérification fermera cette pop-up. Voulez-vous ouvrir cette pop-up dans une nouvelle fenêtre pour qu'elle ne soit pas fermée ?"
+  },
+  "popupU2fCloseMessage": {
+    "message": "Ce navigateur ne peut pas traiter les requêtes U2F dans cette popup. Voulez-vous ouvrir cette popup dans une nouvelle fenêtre pour que vous puissiez vous connecter en utilisant U2F ?"
   },
   "disableFavicon": {
     "message": "Désactiver les icônes des sites web"

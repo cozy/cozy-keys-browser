@@ -18,6 +18,8 @@ import { HintComponent } from './accounts/hint.component';
 import { HomeComponent } from './accounts/home.component';
 import { LockComponent } from './accounts/lock.component';
 import { LoginComponent } from './accounts/login.component';
+import { TwoFactorOptionsComponent } from './accounts/two-factor-options.component';
+import { TwoFactorComponent } from './accounts/two-factor.component';
 import { AppComponent } from './app.component';
 import { PasswordGeneratorHistoryComponent } from './generator/password-generator-history.component';
 import { PasswordGeneratorComponent } from './generator/password-generator.component';
@@ -126,6 +128,8 @@ registerLocaleData(localeFr, 'fr');
         SyncComponent,
         TabsComponent,
         TrueFalseValueDirective,
+        TwoFactorOptionsComponent,
+        TwoFactorComponent,
         ViewComponent,
     ],
     entryComponents: [],

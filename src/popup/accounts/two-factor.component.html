@@ -1,0 +1,61 @@
+<form id="two-factor-page" #form (ngSubmit)="submit()" [appApiAction]="formPromise">
+    <header>
+        <div class="left">
+            <a routerLink="/login">{{'back' | i18n}}</a>
+        </div>
+        <div class="center">
+            <span class="title">{{title}}</span>
+        </div>
+        <div class="right">
+            <button type="submit" appBlurClick [disabled]="form.loading" *ngIf="selectedProviderType != null && selectedProviderType !== providerType.Duo &&
+                        selectedProviderType !== providerType.OrganizationDuo &&
+                        (selectedProviderType !== providerType.U2f || form.loading)">
+                <span [hidden]="form.loading">{{'continue' | i18n}}</span>
+                <i class="fa fa-spinner fa-lg fa-spin" [hidden]="!form.loading" aria-hidden="true"></i>
+            </button>
+        </div>
+    </header>
+    <content>
+        <ng-container *ngIf="selectedProviderType === providerType.Authenticator ||
+                  selectedProviderType === providerType.Email">
+            <div class="content text-center">
+                <span *ngIf="selectedProviderType === providerType.Authenticator">
+                    {{'enterVerificationCodeApp' | i18n}}
+                </span>
+                <span *ngIf="selectedProviderType === providerType.Email">
+                    {{'enterVerificationCodeEmail' | i18n : twoFactorEmail}}
+                </span>
+            </div>
+            <div class="box first">
+                <div class="box-content">
+                    <div class="box-content-row" appBoxRow>
+                        <label for="code">{{'verificationCode' | i18n}}</label>
+                        <input id="code" type="text" name="Code" [(ngModel)]="token" required appAutofocus
+                            inputmode="tel" appInputVerbatim>
+                    </div>
+                    <div class="box-content-row box-content-row-checkbox" appBoxRow>
+                        <label for="remember">{{'rememberMe' | i18n}}</label>
+                        <input id="remember" type="checkbox" name="Remember" [(ngModel)]="remember">
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <div class="content" *ngIf="selectedProviderType == null">
+            <p class="text-center">{{'noTwoStepProviders' | i18n}}</p>
+            <p class="text-center">{{'noTwoStepProviders2' | i18n}}</p>
+        </div>
+        <div class="content no-vpad" *ngIf="selectedProviderType != null">
+            <!--
+            <p class="text-center">
+                <a href="#" appStopClick (click)="anotherMethod()">{{'useAnotherTwoStepMethod' | i18n}}</a>
+            </p>
+            -->
+            <p *ngIf="selectedProviderType === providerType.Email" class="text-center">
+                <a href="#" appStopClick (click)="sendEmail(true)" [appApiAction]="emailPromise">
+                    {{'sendVerificationCodeEmailAgain' | i18n}}
+                </a>
+            </p>
+        </div>
+    </content>
+</form>
+<iframe id="u2f_iframe" hidden></iframe>
