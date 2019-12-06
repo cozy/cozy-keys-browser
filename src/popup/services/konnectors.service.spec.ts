@@ -33,25 +33,53 @@ const buildCiphers = (ciphers: any[]) => {
 describe('Konnectors Service', () => {
     const konnectorsService = new KonnectorsService(null, null, null);
 
-    it('suggested konnectors should match by slug', () => {
+    it('should sugggest konnectors by slug', () => {
         const konnectors = buildKonnectors([{slug: 'ameli'}, {slug: 'amazon'}, {slug: 'impots'}]);
         const ciphers = buildCiphers([{name: 'orange'}, {name: 'Ameli'}]);
         const suggested = konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
         expect(suggested).toEqual([konnectors[0]]);
     });
-    it('suggested konnectors should match by uri', () => {
-        const konnectors = buildKonnectors([{slug: 'ameli', uri: 'ameli.fr'}, {slug: 'sfr', uri: 'http://www.sfr.fr/login'}]);
-        const ciphers = buildCiphers([{name: 'Sécurité Sociale', uri: 'http://ameli.fr/login'}, {name: 'SFR Mobile', uri: 'http://sfr.fr'}]);
+    it('should suggest konnectors by full url match', () => {
+        const konnectors = buildKonnectors([{slug: 'ameli', uri: 'http://ameli.fr/login'}]);
+        const ciphers = buildCiphers([{name: 'Sécurité Sociale', uri: 'http://ameli.fr/login'}]);
         const suggested = konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
         expect(suggested).toEqual(konnectors);
     });
-    it('empty konnector should not be suggested', () => {
+    it('should suggest konnectors by hostname', () => {
+        const konnectors = buildKonnectors([{slug: 'ameli', uri: 'ameli.fr'}]);
+        const ciphers = buildCiphers([{name: 'Sécurité Sociale', uri: 'http://ameli.fr/login'}]);
+        let suggested = konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
+        expect(suggested).toEqual(konnectors);
+
+        konnectors[0].latest_version.manifest.vendor_link  = 'http://ameli.fr/login';
+        ciphers[0].login.uris[0].uri = 'ameli.fr';
+        suggested = konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
+        expect(suggested).toEqual(konnectors);
+    });
+    it('should suggest konnectors by domain', () => {
+        const konnectors = buildKonnectors([{slug: 'ameli', uri: 'ameli.fr'}]);
+        const ciphers = buildCiphers([{name: 'Sécurité Sociale', uri: 'http://www.ameli.fr/login'}]);
+        let suggested = konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
+        expect(suggested).toEqual(konnectors);
+
+        konnectors[0].latest_version.manifest.vendor_link = 'http://www.ameli.fr/login';
+        ciphers[0].login.uris[0].uri = 'ameli.fr';
+        suggested = konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
+        expect(suggested).toEqual(konnectors);
+    });
+    it('should not suggest konnectors with close url', () => {
+        const konnectors = buildKonnectors([{slug: 'Orange', uri: 'orange.fr'}, {slug: 'cozy cloud', uri: 'cozy.io'}]);
+        const ciphers = buildCiphers([{name: 'fruit lover', uri: 'http://fruitlover.fr/orange'}, {slug: 'cozy cat', uri: 'cozy.fr'}]);
+        const suggested = konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
+        expect(suggested).toEqual([]);
+    });
+    it('should not suggest empty konnector', () => {
         const konnectors = buildKonnectors([{slug: ''}]);
         const ciphers = buildCiphers([{name: ''}]);
         const suggested = konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
         expect(suggested).toEqual([]);
     });
-    it('installed or already suggested konnector should not be suggested', () => {
+    it('should not suggest installed or already suggested konnector', () => {
         const konnectors = buildKonnectors([{slug: 'ameli'}, {slug: 'amazon'}, {slug: 'impots'}]);
         const ciphers = buildCiphers([{name: 'Ameli'}, {name: 'amazon'}]);
         const installedKonnectors = buildKonnectors([{slug: 'ameli'}]);
