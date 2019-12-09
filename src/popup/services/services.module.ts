@@ -66,7 +66,7 @@ function getBgService<T>(service: string) {
 export const stateService = new StateService();
 export const messagingService = new BrowserMessagingService();
 export const cozyClientService = new CozyClientService(getBgService<EnvironmentService>('environmentService')(),
-    getBgService<TokenService>('tokenService')());
+    getBgService<ApiService>('apiService')());
 export const konnectorsService = new KonnectorsService(getBgService<CipherService>('cipherService')(),
     getBgService<StorageService>('storageService')(), cozyClientService);
 export const authService = new AuthService(getBgService<CryptoService>('cryptoService')(),
