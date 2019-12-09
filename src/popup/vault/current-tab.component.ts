@@ -13,6 +13,7 @@ import { Angulartics2 } from 'angulartics2';
 
 import { BrowserApi } from '../../browser/browserApi';
 
+import { LocalConstantsService as ConstantsService } from '../services/constants.service';
 import { KonnectorsService } from '../services/konnectors.service';
 
 import { BroadcasterService } from 'jslib/angular/services/broadcaster.service';
@@ -27,8 +28,6 @@ import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
 import { SearchService } from 'jslib/abstractions/search.service';
 import { StorageService } from 'jslib/abstractions/storage.service';
 import { SyncService } from 'jslib/abstractions/sync.service';
-
-import { ConstantsService } from 'jslib/services/constants.service';
 
 import { AutofillService } from '../../services/abstractions/autofill.service';
 
@@ -115,7 +114,18 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
             document.getElementById('search').focus();
         }, 100);
 
-        this.konnectorsService.createSuggestions();
+        // Run konnectors' suggestions if it hasn't been run since the minimum time interval
+        const currentDate = new Date();
+        const lastExecDate = await this.storageService.get<string>(ConstantsService.konnectorSuggestionLastExecution);
+        const notBefore = new Date(lastExecDate);
+        notBefore.setTime(notBefore.getTime() + ConstantsService.konnectorSuggestionInterval);
+        if (currentDate > notBefore || !lastExecDate) {
+            this.konnectorsService.createSuggestions();
+            await this.storageService.save(
+                ConstantsService.konnectorSuggestionLastExecution,
+                currentDate.toISOString(),
+            );
+        }
     }
 
     ngOnDestroy() {
