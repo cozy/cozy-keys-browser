@@ -33,10 +33,12 @@
                         <input id="code" type="text" name="Code" [(ngModel)]="token" required appAutofocus
                             inputmode="tel" appInputVerbatim>
                     </div>
+                    <!--
                     <div class="box-content-row box-content-row-checkbox" appBoxRow>
                         <label for="remember">{{'rememberMe' | i18n}}</label>
                         <input id="remember" type="checkbox" name="Remember" [(ngModel)]="remember">
                     </div>
+                    -->
                 </div>
             </div>
         </ng-container>
@@ -49,12 +51,13 @@
             <p class="text-center">
                 <a href="#" appStopClick (click)="anotherMethod()">{{'useAnotherTwoStepMethod' | i18n}}</a>
             </p>
-            -->
+
             <p *ngIf="selectedProviderType === providerType.Email" class="text-center">
                 <a href="#" appStopClick (click)="sendEmail(true)" [appApiAction]="emailPromise">
                     {{'sendVerificationCodeEmailAgain' | i18n}}
                 </a>
             </p>
+            -->
         </div>
     </content>
 </form>

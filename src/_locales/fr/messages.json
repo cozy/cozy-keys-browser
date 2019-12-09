@@ -700,7 +700,7 @@
     "message": "Saisissez le code de vérification à 6 chiffres depuis votre application d'authentification."
   },
   "enterVerificationCodeEmail": {
-    "message": "Saisissez le code de vérification à 6 chiffres qui vous a été envoyé par e-mail à $EMAIL$.",
+    "message": "Saisissez le code de vérification à 6 chiffres qui vous a été envoyé par e-mail",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -709,7 +709,7 @@
     }
   },
   "verificationCodeEmailSent": {
-    "message": "E-mail de vérification envoyé à $EMAIL$.",
+    "message": "E-mail de vérification envoyé.",
     "placeholders": {
       "email": {
         "content": "$1",
