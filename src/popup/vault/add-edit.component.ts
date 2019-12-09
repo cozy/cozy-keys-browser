@@ -5,6 +5,8 @@ import {
     Router,
 } from '@angular/router';
 
+import { KonnectorsService } from '../services/konnectors.service';
+
 import { AuditService } from 'jslib/abstractions/audit.service';
 import { CipherService } from 'jslib/abstractions/cipher.service';
 import { CollectionService } from 'jslib/abstractions/collection.service';
@@ -38,7 +40,7 @@ export class AddEditComponent extends BaseAddEditComponent {
         userService: UserService, collectionService: CollectionService,
         messagingService: MessagingService, private route: ActivatedRoute,
         private router: Router, private location: Location,
-        eventService: EventService) {
+        eventService: EventService, private konnectorsService: KonnectorsService) {
         super(cipherService, folderService, i18nService, platformUtilsService, auditService, stateService,
             userService, collectionService, messagingService, eventService);
         this.typeOptions = [
@@ -83,6 +85,7 @@ export class AddEditComponent extends BaseAddEditComponent {
             if (queryParamsSub != null) {
                 queryParamsSub.unsubscribe();
             }
+            this.konnectorsService.createSuggestions();
         });
 
         window.setTimeout(() => {
