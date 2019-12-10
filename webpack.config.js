@@ -146,7 +146,7 @@ const config = {
         'notification/bar': './src/notification/bar.js',
     },
     optimization: {
-        minimize: false,
+        minimize: ENV === 'production',
         splitChunks: {
             cacheGroups: {
                 commons: {
