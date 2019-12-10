@@ -66,24 +66,24 @@ describe('Konnectors Service', () => {
     it('should suggest konnectors by hostname', async () => {
         const konnectors = buildKonnectors([{slug: 'ameli', uri: 'ameli.fr'}]);
         const ciphers = buildCiphers([{name: 'Sécurité Sociale', uri: 'http://ameli.fr/login'}]);
-        let suggested = await konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
+        const suggested = await konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
         expect(suggested).toEqual(konnectors);
 
-        konnectors[0].latest_version.manifest.vendor_link  = 'http://ameli.fr/login';
-        ciphers[0].login.uris[0].uri = 'ameli.fr';
-        suggested = await konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
-        expect(suggested).toEqual(konnectors);
+        const konnectors2 = buildKonnectors([{slug: 'ameli', uri: 'http://ameli.fr/login'}]);
+        const ciphers2 = buildCiphers([{name: 'Sécurité Sociale', uri: 'ameli.fr'}]);
+        const suggested2 = await konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
+        expect(suggested2).toEqual(konnectors2);
     });
     it('should suggest konnectors by domain', async () => {
         const konnectors = buildKonnectors([{slug: 'ameli', uri: 'ameli.fr'}]);
         const ciphers = buildCiphers([{name: 'Sécurité Sociale', uri: 'http://www.ameli.fr/login'}]);
-        let suggested = await konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
+        const suggested = await konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
         expect(suggested).toEqual(konnectors);
 
-        konnectors[0].latest_version.manifest.vendor_link = 'http://www.ameli.fr/login';
-        ciphers[0].login.uris[0].uri = 'ameli.fr';
-        suggested = await konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
-        expect(suggested).toEqual(konnectors);
+        const konnectors2 = buildKonnectors([{slug: 'ameli', uri: 'http://www.ameli.fr/login'}]);
+        const ciphers2 = buildCiphers([{name: 'Sécurité Sociale', uri: 'ameli.fr'}]);
+        const suggested2 = await konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
+        expect(suggested2).toEqual(konnectors2);
     });
     it('should not suggest konnectors with close url', async () => {
         const konnectors = buildKonnectors([{slug: 'Orange', uri: 'orange.fr'}, {slug: 'cozy cloud', uri: 'cozy.io'}]);

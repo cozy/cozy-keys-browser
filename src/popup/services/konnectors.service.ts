@@ -43,24 +43,18 @@ export class KonnectorsService {
         } catch (e) { }
     }
 
-    async getRegistryKonnectors(client: any) {
+    getRegistryKonnectors(client: any) {
         const registry = new Registry({client: client});
         return registry.fetchApps({channel: 'stable', type: 'konnector'});
     }
 
     async getInstalledKonnectors(client: any) {
         const konnectors = await client.query(client.find('io.cozy.konnectors'));
-        if (!konnectors) {
-            throw new Error('Error while fetching konnectors');
-        }
         return konnectors.data;
     }
 
     async getSuggestedKonnectors(client: any) {
         const suggestions = await client.query(client.find('io.cozy.apps.suggestions'));
-        if (!suggestions) {
-            throw new Error('Error while fetching suggestions');
-        }
         return suggestions.data;
     }
 
@@ -89,12 +83,20 @@ export class KonnectorsService {
     }
 
     /**
-     * Find a cipher having a matching url.
+     * Find if a url has a maching cipher.
      *
      * This function was extracted from `getAllDecryptedForUrl` in jslib/src/services/cipher.services,
      * as we experienced performances issues with the decryption part.
+     * More precisely, `getAllDecryptedForUrl` calls `getAllDecrypted` to get the decrypted ciphers,
+     * which surprisingly took hundreds of ms alone, even though the ciphers were in the cache.
+     * As the decryption was processed in a loop for each suggestable konnector, this was taking
+     * +1000ms in our tests to process this matching for 146 konnectors and 4 ciphers.
+     *
+     * See the getAllDecrypted call:
+     * https://github.com/bitwarden/jslib/blob/
+     * 57e49207e9ad57c71576fc487a38513a4d0fe120/src/services/cipher.service.ts#L344
      */
-    async matchingUrls(url: string, ciphers: CipherView[], defaultMatch: number) {
+    async hasURLMatchingCiphers(url: string, ciphers: CipherView[], defaultMatch: number) {
 
         const domain = Utils.getDomain(url);
         const eqDomainsPromise = domain == null ? Promise.resolve([]) :
@@ -185,7 +187,7 @@ export class KonnectorsService {
             if (!url) {
                 return null;
             }
-            const matches = await this.matchingUrls(url, ciphers, defaultMatch);
+            const matches = await this.hasURLMatchingCiphers(url, ciphers, defaultMatch);
             return matches ? konnector : null;
         });
         const results = await Promise.all(promises);
