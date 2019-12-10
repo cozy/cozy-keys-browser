@@ -1,11 +1,11 @@
 import { ConstantsService } from 'jslib/services/constants.service';
 
 export class LocalConstantsService extends ConstantsService {
-    static readonly disableKonnectorsSuggestions: string = 'disableKonnectorsSuggestions';
+    static readonly disableKonnectorsSuggestionsKey: string = 'disableKonnectorsSuggestions';
     static readonly konnectorSuggestionInterval: number = 5 * 60 * 60 * 1000; // 5 hours
-    static readonly konnectorSuggestionLastExecution: string = 'konnectorSuggestionLastExecution';
+    static readonly konnectorSuggestionLastExecutionKey: string = 'konnectorSuggestionLastExecution';
 
-    readonly disableKonnectorsSuggestions: string = LocalConstantsService.disableKonnectorsSuggestions;
+    readonly disableKonnectorsSuggestionsStorageKey: string = LocalConstantsService.disableKonnectorsSuggestionsKey;
     readonly konnectorSuggestionInterval: number = LocalConstantsService.konnectorSuggestionInterval;
-    readonly konnectorSuggestionLastExecution: string = LocalConstantsService.konnectorSuggestionLastExecution;
+    readonly konnectorSuggestionLastExecutionKey: string = LocalConstantsService.konnectorSuggestionLastExecutionKey;
 }

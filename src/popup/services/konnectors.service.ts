@@ -16,7 +16,7 @@ const DomainMatchBlacklist = new Map<string, Set<string>>([
 
 export class KonnectorsService {
     constructor(private cipherService: CipherService, private storageService: StorageService,
-        private settingsService: SettingsService, protected cozyClientService: CozyClientService) {
+        private settingsService: SettingsService, private cozyClientService: CozyClientService) {
     }
 
     /**
@@ -28,7 +28,7 @@ export class KonnectorsService {
      */
     async createSuggestions() {
         try {
-            const isDisabled = await this.storageService.get<boolean>(ConstantsService.disableKonnectorsSuggestions);
+            const isDisabled = await this.storageService.get<boolean>(ConstantsService.disableKonnectorsSuggestionsKey);
             if (!isDisabled) {
                 const cozyClient = await this.cozyClientService.createClient();
                 const allKonnectors = await this.getRegistryKonnectors(cozyClient);

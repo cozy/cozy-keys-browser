@@ -116,13 +116,15 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
 
         // Run konnectors' suggestions if it hasn't been run since the minimum time interval
         const currentDate = new Date();
-        const lastExecDate = await this.storageService.get<string>(ConstantsService.konnectorSuggestionLastExecution);
+        const lastExecDate = await this.storageService.get<string>(
+            ConstantsService.konnectorSuggestionLastExecutionKey,
+        );
         const notBefore = new Date(lastExecDate);
         notBefore.setTime(notBefore.getTime() + ConstantsService.konnectorSuggestionInterval);
         if (currentDate > notBefore || !lastExecDate) {
             this.konnectorsService.createSuggestions();
             await this.storageService.save(
-                ConstantsService.konnectorSuggestionLastExecution,
+                ConstantsService.konnectorSuggestionLastExecutionKey,
                 currentDate.toISOString(),
             );
         }
