@@ -85,7 +85,6 @@ export class AddEditComponent extends BaseAddEditComponent {
             if (queryParamsSub != null) {
                 queryParamsSub.unsubscribe();
             }
-            this.konnectorsService.createSuggestions();
         });
 
         window.setTimeout(() => {
@@ -102,9 +101,9 @@ export class AddEditComponent extends BaseAddEditComponent {
     async submit(): Promise<boolean> {
         if (await super.submit()) {
             this.location.back();
+            this.konnectorsService.createSuggestions();
             return true;
         }
-
         return false;
     }
 
