@@ -104,7 +104,7 @@ export class LoginComponent implements OnInit {
             });
             // The email is based on the URL and necessary for login
             const url = this.environmentService.getWebVaultUrl();
-            const hostname = new URL(url).hostname;
+            const hostname = Utils.getHostname(url);
             this.email = 'me@' + hostname;
 
             this.formPromise = this.authService.logIn(this.email, this.masterPassword);
