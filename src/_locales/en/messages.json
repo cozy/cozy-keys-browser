@@ -811,7 +811,7 @@
     "message": "Disable automatic connector suggestion"
   },
   "disableKonnectorsSuggestionsDesc": {
-    "message": "If a login matches a non-installed connector, suggest it in the Cozy."
+    "message": "Prevent suggestions for logins that match a non-installed connector in the Cozy."
   },
   "enableAutoFillOnPageLoad": {
     "message": "Enable Auto-fill On Page Load"

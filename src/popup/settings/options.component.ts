@@ -22,7 +22,7 @@ import { LocalConstantsService as ConstantsService } from '..//services/constant
 })
 export class OptionsComponent implements OnInit {
     disableFavicon = false;
-    disableKonnectorsSuggestions = true;
+    disableKonnectorsSuggestions = false;
     enableAutoFillOnPageLoad = false;
     disableAutoTotpCopy = false;
     disableContextMenuItem = false;
@@ -72,7 +72,7 @@ export class OptionsComponent implements OnInit {
         this.showDisableContextMenu = !this.platformUtilsService.isSafari();
 
         this.disableKonnectorsSuggestions = await this.storageService.get(
-            ConstantsService.disableKonnectorsSuggestions,
+            ConstantsService.disableKonnectorsSuggestionsKey,
         );
 
         this.enableAutoFillOnPageLoad = await this.storageService.get<boolean>(
@@ -128,7 +128,7 @@ export class OptionsComponent implements OnInit {
 
     async updateKonnectorsSuggestions() {
         await this.storageService.save(
-            ConstantsService.disableKonnectorsSuggestions,
+            ConstantsService.disableKonnectorsSuggestionsKey,
             this.disableKonnectorsSuggestions,
         );
     }
