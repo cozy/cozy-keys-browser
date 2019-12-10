@@ -6,7 +6,6 @@ import { CipherType } from 'jslib/enums/cipherType';
 import { UriMatchType } from 'jslib/enums/uriMatchType';
 import { Utils } from 'jslib/misc/utils';
 import { CipherView } from 'jslib/models/view/cipherView';
-import { get } from 'lodash';
 import { LocalConstantsService as ConstantsService } from '../services/constants.service';
 import { CozyClientService } from './cozyClient.service';
 
@@ -183,7 +182,9 @@ export class KonnectorsService {
             defaultMatch = UriMatchType.Domain;
         }
         const promises = suggestableKonnectors.map(async (konnector) => {
-            const url = get(konnector, 'latest_version.manifest.vendor_link');
+            const url = konnector && konnector.latest_version && konnector.latest_version.manifest
+                ? konnector.latest_version.manifest.vendor_link
+                : undefined;
             if (!url) {
                 return null;
             }
