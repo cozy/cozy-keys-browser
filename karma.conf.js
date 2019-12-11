@@ -16,7 +16,8 @@ module.exports = function(config) {
             'jslib/src/misc/**/*.ts',
             'src/browser/**/*.ts',
             'src/services/**/*.ts',
-            'src/popup/services/**/*.ts'
+            'src/popup/services/**/*.ts',
+            'src/popup/accounts/**/*.ts'
         ],
 
         // list of files to exclude
