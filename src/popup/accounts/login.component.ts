@@ -79,13 +79,14 @@ export class LoginComponent implements OnInit {
         }
     }
 
-    controlUrlInput(inputUrl: string): string {
+    sanitizeUrlInput(inputUrl: string): string {
         // Prevent empty url
         if (!inputUrl) {
-            return;
+            throw new Error('cozyUrlRequired');
         }
         // Prevent email input
         if (inputUrl.includes('@')) {
+            throw new Error('noEmailAsCozyUrl');
             return;
         }
         // Handle url with app slug or with no domain
@@ -97,20 +98,15 @@ export class LoginComponent implements OnInit {
     }
 
     async submit() {
-        const loginUrl = this.controlUrlInput(this.cozyUrl);
-        if (!loginUrl) {
-            this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
-                this.i18nService.t('invalidCozyUrl'));
-            return;
-        }
-
-        if (this.masterPassword == null || this.masterPassword === '') {
-            this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
-                this.i18nService.t('masterPassRequired'));
-            return;
-        }
-
         try {
+            const loginUrl = this.sanitizeUrlInput(this.cozyUrl);
+
+            if (this.masterPassword == null || this.masterPassword === '') {
+                this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
+                    this.i18nService.t('masterPassRequired'));
+                return;
+            }
+
             // This adds the scheme if missing
             await this.environmentService.setUrls({
                 base: loginUrl + '/bitwarden',
@@ -148,7 +144,12 @@ export class LoginComponent implements OnInit {
                     this.router.navigate([this.successRoute]);
                 }
             }
-        } catch { }
+        } catch (e) {
+            if (e.message === 'cozyUrlRequired' || e.message === 'noEmailAsCozyUrl') {
+                this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
+                    this.i18nService.t(e.message));
+            }
+        }
     }
 
     togglePassword() {

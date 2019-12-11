@@ -387,6 +387,9 @@
   "invalidCozyUrl": {
     "message": "Invalid Cozy URL"
   },
+  "noEmailAsCozyUrl": {
+    "message": "The Cozy URL is not your email"
+  },
   "masterPassRequired": {
     "message": "Master password is required."
   },
