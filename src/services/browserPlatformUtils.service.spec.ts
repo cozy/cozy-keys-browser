@@ -21,17 +21,6 @@ describe('Browser Utils Service', () => {
             });
         });
 
-        it('should detect chrome', () => {
-            Object.defineProperty(navigator, 'userAgent', {
-                configurable: true,
-                value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)' +
-                  'Chrome/62.0.3202.94 Safari/537.36',
-            });
-
-            const browserPlatformUtilsService = new BrowserPlatformUtilsService(null, null);
-            expect(browserPlatformUtilsService.getDevice()).toBe(DeviceType.ChromeExtension);
-        });
-
         it('should detect firefox', () => {
             Object.defineProperty(navigator, 'userAgent', {
                 configurable: true,
