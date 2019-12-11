@@ -302,14 +302,12 @@ header {
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-
-                @include themify($themes) {
-                    color: themed('mutedColor');
-                }
+                color: $text-muted;
 
                 &:hover, &:focus {
                     @include themify($themes) {
                         background-color: themed('tabBackgroundHoverColor');
+                        color: themed('primaryColor');
                     }
                 }
 
