@@ -307,7 +307,6 @@ header {
                 &:hover, &:focus {
                     @include themify($themes) {
                         background-color: themed('tabBackgroundHoverColor');
-                        color: themed('primaryColor');
                     }
                 }
 
