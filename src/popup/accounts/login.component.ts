@@ -79,30 +79,41 @@ export class LoginComponent implements OnInit {
         }
     }
 
-    async submit() {
-        if (this.cozyUrl == null || this.cozyUrl === '') {
-            this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
-                this.i18nService.t('cozyUrlRequired'));
+    controlUrlInput(inputUrl: string): string {
+        // Prevent empty url
+        if (!inputUrl) {
             return;
         }
-        if (this.cozyUrl.indexOf('@') > -1) {
+        // Prevent email input
+        if (inputUrl.includes('@')) {
+            return;
+        }
+        // Handle url with app slug or with no domain
+        const regexp = /^([a-z0-9]+)(?:-[a-z0-9]+)?(?:\.(.*))?$/;
+        const matches = inputUrl.match(regexp);
+        const cozySlug = matches[1];
+        const domain = matches[2] ? matches[2] : 'mycozy.cloud';
+        return `${cozySlug}.${domain}`;
+    }
+
+    async submit() {
+        const loginUrl = this.controlUrlInput(this.cozyUrl);
+        if (!loginUrl) {
             this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
                 this.i18nService.t('invalidCozyUrl'));
             return;
         }
+
         if (this.masterPassword == null || this.masterPassword === '') {
             this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
                 this.i18nService.t('masterPassRequired'));
             return;
         }
-        if (this.cozyUrl.indexOf('.') === -1) {
-            this.cozyUrl += '.mycozy.cloud';
-        }
 
         try {
             // This adds the scheme if missing
             await this.environmentService.setUrls({
-                base: this.cozyUrl + '/bitwarden',
+                base: loginUrl + '/bitwarden',
             });
             // The email is based on the URL and necessary for login
             const url = this.environmentService.getWebVaultUrl();
@@ -114,7 +125,7 @@ export class LoginComponent implements OnInit {
             // Save the URL for next time
             await this.storageService.save(Keys.rememberCozyUrl, this.rememberCozyUrl);
             if (this.rememberCozyUrl) {
-                await this.storageService.save(Keys.rememberedCozyUrl, this.cozyUrl);
+                await this.storageService.save(Keys.rememberedCozyUrl, loginUrl);
             } else {
                 await this.storageService.remove(Keys.rememberedCozyUrl);
             }
