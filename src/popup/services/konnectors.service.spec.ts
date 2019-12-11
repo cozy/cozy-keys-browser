@@ -71,7 +71,7 @@ describe('Konnectors Service', () => {
 
         const konnectors2 = buildKonnectors([{slug: 'ameli', uri: 'http://ameli.fr/login'}]);
         const ciphers2 = buildCiphers([{name: 'Sécurité Sociale', uri: 'ameli.fr'}]);
-        const suggested2 = await konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
+        const suggested2 = await konnectorsService.suggestedKonnectorsFromCiphers(konnectors2, [], [], ciphers2);
         expect(suggested2).toEqual(konnectors2);
     });
     it('should suggest konnectors by domain', async () => {
@@ -82,7 +82,7 @@ describe('Konnectors Service', () => {
 
         const konnectors2 = buildKonnectors([{slug: 'ameli', uri: 'http://www.ameli.fr/login'}]);
         const ciphers2 = buildCiphers([{name: 'Sécurité Sociale', uri: 'ameli.fr'}]);
-        const suggested2 = await konnectorsService.suggestedKonnectorsFromCiphers(konnectors, [], [], ciphers);
+        const suggested2 = await konnectorsService.suggestedKonnectorsFromCiphers(konnectors2, [], [], ciphers2);
         expect(suggested2).toEqual(konnectors2);
     });
     it('should not suggest konnectors with close url', async () => {
