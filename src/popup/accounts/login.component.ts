@@ -87,14 +87,21 @@ export class LoginComponent implements OnInit {
         // Prevent email input
         if (inputUrl.includes('@')) {
             throw new Error('noEmailAsCozyUrl');
-            return;
         }
+        // String sanitize
+        inputUrl = inputUrl.trim().toLowerCase();
+
+        // Extract protocol
+        const regexpProtocol = /^(https?:\/\/)?(www\.)?/;
+        const protocolMatches = inputUrl.match(regexpProtocol);
+        const protocol = protocolMatches[1] ? protocolMatches[1] : 'https://';
+        inputUrl = inputUrl.replace(regexpProtocol, '');
         // Handle url with app slug or with no domain
-        const regexp = /^([a-z0-9]+)(?:-[a-z0-9]+)?(?:\.(.*))?$/;
-        const matches = inputUrl.match(regexp);
+        const regexpFQDN = /^([a-z0-9]+)(?:-[a-z0-9]+)?(?:\.(.*))?$/;
+        const matches = inputUrl.match(regexpFQDN);
         const cozySlug = matches[1];
         const domain = matches[2] ? matches[2] : 'mycozy.cloud';
-        return `${cozySlug}.${domain}`;
+        return `${protocol}${cozySlug}.${domain}`;
     }
 
     async submit() {
@@ -112,8 +119,7 @@ export class LoginComponent implements OnInit {
                 base: loginUrl + '/bitwarden',
             });
             // The email is based on the URL and necessary for login
-            const url = this.environmentService.getWebVaultUrl();
-            const hostname = Utils.getHostname(url);
+            const hostname = Utils.getHostname(loginUrl);
             this.email = 'me@' + hostname;
 
             this.formPromise = this.authService.logIn(this.email, this.masterPassword);
