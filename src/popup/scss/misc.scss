@@ -301,3 +301,14 @@ app-vault-icon {
 .draggable {
     cursor: move;
 }
+
+.toast-bottom {
+    bottom: 55px;
+    right: 10px;
+    left: 10px;
+    width: 100%;
+}
+
+#toast-container .toast.toast-info {
+    width: 96%;
+}

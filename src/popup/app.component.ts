@@ -40,7 +40,6 @@ import { routerTransition } from './app-routing.animations';
 
 @Component({
     selector: 'app-root',
-    styles: [],
     animations: [routerTransition],
     template: `
         <toaster-container [toasterconfig]="toasterConfig" aria-live="polite"></toaster-container>
@@ -54,7 +53,7 @@ export class AppComponent implements OnInit {
         mouseoverTimerStop: true,
         animation: 'slideUp',
         limit: 2,
-        positionClass: 'toast-bottom-full-width',
+        positionClass: 'toast-bottom',
         newestOnTop: false,
     });
 
