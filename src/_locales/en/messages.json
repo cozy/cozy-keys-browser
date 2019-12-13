@@ -13,6 +13,9 @@
   "loginOrCreateNewAccount": {
     "message": "Log in to your Cozy to access your secure vault."
   },
+  "notRegistered": {
+    "message": "Not registered yet?"
+  },
   "createAccount": {
     "message": "Create Account"
   },

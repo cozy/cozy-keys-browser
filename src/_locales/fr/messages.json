@@ -13,6 +13,9 @@
   "loginOrCreateNewAccount": {
     "message": "Se connecter à votre Cozy pour accéder à votre coffre sécurisé."
   },
+  "notRegistered": {
+    "message": "Pas encore inscrit ?"
+  },
   "createAccount": {
     "message": "Créer un compte"
   },
