@@ -384,7 +384,6 @@ export default class RuntimeBackground {
         setTimeout(async () => {
             if (this.onInstalledReason != null) {
                 if (this.onInstalledReason === 'install') {
-                    BrowserApi.createNewTab('https://cozy.io/');
                     await this.setDefaultSettings();
                 }
 
