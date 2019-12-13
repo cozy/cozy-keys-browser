@@ -8,6 +8,7 @@
     white-space: nowrap;
     text-align: center;
     cursor: pointer;
+    text-transform: uppercase;
 
     @include themify($themes) {
         background-color: themed('buttonBackgroundColor');
@@ -17,6 +18,7 @@
 
     &.primary {
         @include themify($themes) {
+            background-color: $button-background-color-primary;
             color: themed('buttonPrimaryColor');
         }
     }
@@ -38,7 +40,8 @@
 
         &.primary {
             @include themify($themes) {
-                color: darken(themed('buttonPrimaryColor'), 6%);
+                background-color: $button-background-color-primary-active;
+                color: themed('buttonPrimaryColor');
             }
         }
 
@@ -56,6 +59,13 @@
         @include themify($themes) {
             background-color: darken(themed('buttonBackgroundColor'), 6%);
             border-color: darken(themed('buttonBorderColor'), 25%);
+        }
+
+        &.primary {
+            @include themify($themes) {
+                background-color: $button-background-color-primary-active;
+                color: themed('buttonPrimaryColor');
+            }
         }
     }
 
