@@ -11,7 +11,7 @@
     "description": "Extension description"
   },
   "loginOrCreateNewAccount": {
-    "message": "Se connecter à votre Cozy pour accéder à votre coffre sécurisé."
+    "message": "Connectez-vous à votre Cozy pour accéder à votre coffre sécurisé."
   },
   "createAccount": {
     "message": "Créer un compte"
@@ -32,10 +32,10 @@
     "message": "Adresse e-mail"
   },
   "cozyUrl": {
-    "message": "URL du Cozy"
+    "message": "URL de votre Cozy"
   },
   "masterPass": {
-    "message": "Mot de passe maître"
+    "message": "Mot de passe de votre Cozy"
   },
   "masterPassDesc": {
     "message": "Le mot de passe maître est le mot de passe que vous utilisez pour accéder à votre Cozy. Il est très important de ne pas l'oublier. Il n'existe aucun moyen de le récupérer si vous le perdez."
@@ -294,7 +294,7 @@
     "message": "Votre navigateur web ne supporte pas la copie facilitée du presse-papier. Copiez-le manuellement à la place."
   },
   "verifyMasterPassword": {
-    "message": "Vérifiez votre mot de passe maître"
+    "message": "Vérifiez votre mot de passe Cozy"
   },
   "yourVaultIsLocked": {
     "message": "Votre coffre est verrouillé. Vérifiez votre mot de passe maître pour continuer."
@@ -316,7 +316,7 @@
     }
   },
   "invalidMasterPassword": {
-    "message": "Mot de passe maître invalide"
+    "message": "Mot de passe du Cozy invalide"
   },
   "lockOptions": {
     "message": "Options de verrouillage"
@@ -388,7 +388,7 @@
     "message": "L'URL de votre Cozy n'est pas votre email"
   },
   "masterPassRequired": {
-    "message": "Le mot de passe maître est requis."
+    "message": "Le mot de passe du Cozy est requis."
   },
   "masterPassLength": {
     "message": "Le mot de passe maître doit au moins contenir 8 caractères."

@@ -32,10 +32,10 @@
     "message": "Email Address"
   },
   "cozyUrl": {
-    "message": "Cozy URL"
+    "message": "Your Cozy URL"
   },
   "masterPass": {
-    "message": "Master Password"
+    "message": "Your Cozy password"
   },
   "masterPassDesc": {
     "message": "The master password is the password you use to access your Cozy. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it."
@@ -297,7 +297,7 @@
     "message": "Your web browser does not support easy clipboard copying. Copy it manually instead."
   },
   "verifyMasterPassword": {
-    "message": "Verify Master Password"
+    "message": "Verify Cozy Password"
   },
   "yourVaultIsLocked": {
     "message": "Your vault is locked. Verify your master password to continue."
@@ -319,7 +319,7 @@
     }
   },
   "invalidMasterPassword": {
-    "message": "Invalid master password"
+    "message": "Invalid Cozy password"
   },
   "lockOptions": {
     "message": "Lock Options"
@@ -391,7 +391,7 @@
     "message": "The Cozy URL is not your email"
   },
   "masterPassRequired": {
-    "message": "Master password is required."
+    "message": "Cozy password is required."
   },
   "masterPassLength": {
     "message": "Master password must be at least 8 characters long."
