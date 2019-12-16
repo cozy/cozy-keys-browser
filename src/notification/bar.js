@@ -27,10 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
         i18n.notificationAddDesc = chrome.i18n.getMessage('notificationAddDesc');
         i18n.notificationChangeSave = chrome.i18n.getMessage('notificationChangeSave');
         i18n.notificationChangeDesc = chrome.i18n.getMessage('notificationChangeDesc');
-        i18n.moreOptions = chrome.i18n.getMessage('moreOptions');
-        i18n.notificationAddSavePassword = chrome.i18n.getMessage('notificationAddSavePassword');
-        i18n.notificationAddSaveData = chrome.i18n.getMessage('notificationAddSaveData');
-        i18n.notificationNeverAsk = chrome.i18n.getMessage('notificationNeverAsk');
 
         // delay 50ms so that we get proper body dimensions
         setTimeout(load, 50);
@@ -48,10 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Set text in popup
         document.querySelector('#template-notif .dont-save').textContent = i18n.notificationDontSave;
-        document.querySelector('#template-notif .more-options-text').textContent = i18n.moreOptions;
-        document.querySelector('.more-options-list .save-password').textContent = i18n.notificationAddSavePassword;
-        document.querySelector('.more-options-list .save-data').textContent = i18n.notificationAddSaveData;
-        document.querySelector('.more-options-list .save-neverask').textContent = i18n.notificationNeverAsk;
 
         // NOTE: the info context was removed in absence of use-case yet.
         // See original file commit at the beggining of this fine.
@@ -74,8 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set listeners
         // TODO: the checkboxes options are not active yet
         const addOrChangeButton = document.querySelector('#template-notif-clone .add-or-change'),
-            dontSaveButton = document.querySelector('#template-notif-clone .dont-save'),
-            moreOptions = document.querySelector('#template-notif-clone .more-options');
+            dontSaveButton = document.querySelector('#template-notif-clone .dont-save');
 
         addOrChangeButton.addEventListener('click', (e) => {
             e.preventDefault();
@@ -90,23 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
             sendPlatformMessage({
                 command: 'bgCloseNotificationBar'
             });
-        });
-
-        moreOptions.addEventListener('click', (e) => {
-            e.preventDefault();
-            const display = document.querySelector('.more-options-list').style.display;
-            if(display === "none") {
-                // Show options
-                document.querySelector('#arrow-right').style.display = "none";
-                document.querySelector('#arrow-down').style.display = "inline";
-                document.querySelector('.more-options-list').style.display = "block";
-            } else {
-                // Hide options
-                document.querySelector('#arrow-right').style.display = "inline";
-                document.querySelector('#arrow-down').style.display = "none";
-                document.querySelector('.more-options-list').style.display = "none";
-            }
-            sendAdjustBodyHeight(body);
         });
         sendAdjustBodyHeight(body);
     }

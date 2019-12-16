@@ -563,14 +563,8 @@
   "notificationAddSavePassword": {
     "message": "Save the password"
   },
-  "notificationAddSaveData": {
-    "message": "Save the data"
-  },
   "notificationDontSave": {
     "message": "No, thanks"
-  },
-  "notificationNeverAsk": {
-    "message": "Never ask again"
   },
   "disableChangedPasswordNotification": {
     "message": "Disable Changed Password Notification"

@@ -557,14 +557,8 @@
   "notificationAddSavePassword": {
     "message": "Enregistrer le mot de passe"
   },
-  "notificationAddSaveData": {
-    "message": "Sauvegarder les données"
-  },
   "notificationDontSave": {
     "message": "Non, merci"
-  },
-  "notificationNeverAsk": {
-    "message": "Ne plus me demander"
   },
   "disableChangedPasswordNotification": {
     "message": "Désactiver la notification de changement de mot de passe"
