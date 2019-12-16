@@ -310,5 +310,7 @@ app-vault-icon {
 }
 
 #toast-container .toast.toast-info {
+    /* This width is from the #toast-container.toast-bottom-full-width > div
+    in  https://github.com/Stabzs/Angular2-Toaster/blob/master/src/toaster.css */
     width: 96%;
 }
