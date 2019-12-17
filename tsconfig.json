@@ -25,7 +25,8 @@
       "duo_web_sdk": [
         "node_modules/duo_web_sdk"
       ]
-    }
+    },
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "preserveWhitespaces": true
