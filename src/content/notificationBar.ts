@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         navigator.userAgent.indexOf('Chrome') === -1;
     let disabledAddLoginNotification = false;
     let disabledChangedPasswordNotification = false;
+    const formEls = new Map();
 
     if (isSafari) {
         if ((window as any).__bitwardenFrameId == null) {
@@ -128,14 +129,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 if (mutations == null || mutations.length === 0 || pageHref !== window.location.href) {
                     return;
                 }
-
                 let doCollect = false;
                 for (let i = 0; i < mutations.length; i++) {
                     const mutation = mutations[i];
                     if (mutation.addedNodes == null || mutation.addedNodes.length === 0) {
                         continue;
                     }
-
                     for (let j = 0; j < mutation.addedNodes.length; j++) {
                         const addedNode: any = mutation.addedNodes[j];
                         if (addedNode == null) {
@@ -193,7 +192,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 observer.disconnect();
                 observer = null;
             }
-
             collect();
 
             if (observeDomTimeout != null) {
@@ -226,25 +224,36 @@ document.addEventListener('DOMContentLoaded', (event) => {
             if (formId != null && formId !== '') {
                 formEl = document.getElementById(formId) as HTMLFormElement;
             }
-
             if (formEl == null) {
                 const index = parseInt(f.form.opid.split('__')[2], null);
                 formEl = document.getElementsByTagName('form')[index];
             }
 
-            if (formEl != null && formEl.dataset.bitwardenWatching !== '1') {
-                const formDataObj: any = {
-                    data: f,
-                    formEl: formEl,
-                    usernameEl: null,
-                    passwordEl: null,
-                    passwordEls: null,
-                };
-                locateFields(formDataObj);
-                formData.push(formDataObj);
-                listen(formEl);
-                formEl.dataset.bitwardenWatching = '1';
+            if (!formEl) {
+                return;
             }
+            if (!formEls.has(formId)) {
+                // This is a new form
+                formEls.set(formId, formEl);
+            } else {
+                // This form id has been met before: check if it has changed
+                const isFormEqual = isEqual(formEl, formEls.get(formId));
+                if (isFormEqual) {
+                    // The form is the same: nothing to do here
+                    return;
+                }
+            }
+
+            const formDataObj: any = {
+                data: f,
+                formEl: formEl,
+                usernameEl: null,
+                passwordEl: null,
+                passwordEls: null,
+            };
+            locateFields(formDataObj);
+            formData.push(formDataObj);
+            listen(formEl);
         });
     }
 
