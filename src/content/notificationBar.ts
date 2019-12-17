@@ -1,4 +1,3 @@
-import isEqual from 'lodash/isEqual';
 import {
     cancelButtonNames,
     changePasswordButtonContainsNames,
@@ -25,7 +24,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         navigator.userAgent.indexOf('Chrome') === -1;
     let disabledAddLoginNotification = false;
     let disabledChangedPasswordNotification = false;
-    const formEls = new Map();
+    const formEls = new Set();
 
     if (isSafari) {
         if ((window as any).__bitwardenFrameId == null) {
@@ -232,20 +231,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 const index = parseInt(f.form.opid.split('__')[2], null);
                 formEl = document.getElementsByTagName('form')[index];
             }
-
             if (!formEl) {
                 return;
             }
-            if (!formEls.has(formId)) {
-                // This is a new form
-                formEls.set(formId, formEl);
+            if (formEls.has(formEl)) {
+                // The form has already been processed: nothing to do here
+                return;
             } else {
-                // This form id has been met before: check if it has changed
-                const isFormEqual = isEqual(formEl, formEls.get(formId));
-                if (isFormEqual) {
-                    // The form is the same: nothing to do here
-                    return;
-                }
+                // This is a new form
+                formEls.add(formEl);
             }
 
             const formDataObj: any = {
