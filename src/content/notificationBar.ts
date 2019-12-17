@@ -1,3 +1,11 @@
+import isEqual from 'lodash/isEqual';
+import {
+    cancelButtonNames,
+    changePasswordButtonContainsNames,
+    changePasswordButtonNames,
+    logInButtonNames,
+} from './consts';
+
 // See original file:
 // https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/content/notificationBar.ts
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -12,10 +20,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let collectIfNeededTimeout: number = null;
     let observeDomTimeout: number = null;
     const inIframe = isInIframe();
-    const cancelButtonNames = new Set(['cancel', 'close', 'back']);
-    const logInButtonNames = new Set(['log in', 'sign in', 'login', 'go', 'submit', 'continue', 'next']);
-    const changePasswordButtonNames = new Set(['save password', 'update password', 'change password', 'change']);
-    const changePasswordButtonContainsNames = new Set(['pass', 'change', 'contras', 'senha']);
     let notificationBarData = null;
     const isSafari = (typeof safari !== 'undefined') && navigator.userAgent.indexOf(' Safari/') !== -1 &&
         navigator.userAgent.indexOf('Chrome') === -1;
