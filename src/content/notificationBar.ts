@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let pageHref: string = null;
     let observer: MutationObserver = null;
     const observeIgnoredElements = new Set(['a', 'i', 'b', 'strong', 'span', 'code', 'br', 'img', 'small', 'em', 'hr']);
+    const submitButtonSelector = 'input[type="submit"], input[type="image"], ' +
+        'button[type="submit"]';
     let domObservationCollectTimeout: number = null;
     let collectIfNeededTimeout: number = null;
     let observeDomTimeout: number = null;
@@ -262,6 +264,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (submitButton != null) {
             submitButton.removeEventListener('click', formSubmitted, false);
             submitButton.addEventListener('click', formSubmitted, false);
+        } else {
+            // No submit button found in the form: it might be elsewhere in the document
+            const potentialSubmitButtons = getButtonsInDocument();
+            for (const button of potentialSubmitButtons) {
+                button.removeEventListener('click', formSubmitted, false);
+                button.addEventListener('click', formSubmitted, false);
+            }
         }
     }
 
@@ -332,12 +341,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
             form = e.target as HTMLFormElement;
         }
 
-        if (form == null || form.dataset.bitwardenProcessed === '1') {
+        if (form && form.dataset.bitwardenProcessed === '1') {
             return;
         }
-
         for (let i = 0; i < formData.length; i++) {
-            if (formData[i].formEl !== form) {
+            if (form && formData[i].formEl !== form) {
                 continue;
             }
             const disabledBoth = disabledChangedPasswordNotification && disabledAddLoginNotification;
@@ -347,9 +355,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     password: formData[i].passwordEl.value,
                     url: document.URL,
                 };
-
                 if (login.username != null && login.username !== '' &&
                     login.password != null && login.password !== '') {
+                    if (!form) {
+                        // This happens when the submit button was found outside of the form
+                        form = formData[i].formEl;
+                    }
                     processedForm(form);
                     sendPlatformMessage({
                         command: 'bgAddLogin',
@@ -366,6 +377,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 let curPass: string = null;
                 let newPass: string = null;
                 let newPassOnly = false;
+
                 if (formData[i].passwordEls.length === 3 && passwords.length === 3) {
                     newPass = passwords[1];
                     if (passwords[0] !== newPass && newPass === passwords[2]) {
@@ -378,7 +390,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         newPassOnly = true;
                         newPass = passwords[0];
                         curPass = null;
-                    } else {
+                    } else if (form) {
                         const buttonText = getButtonText(getSubmitButton(form, changePasswordButtonNames));
                         const matches = Array.from(changePasswordButtonContainsNames)
                             .filter((n) => buttonText.indexOf(n) > -1);
@@ -390,6 +402,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 }
 
                 if (newPass != null && curPass != null || (newPassOnly && newPass != null)) {
+                    if (!form) {
+                        // This happens when the submit button was found outside of the form
+                        form = formData[i].formEl;
+                    }
                     processedForm(form);
                     sendPlatformMessage({
                         command: 'bgChangedPassword',
@@ -405,6 +421,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
+    function getButtonsInDocument() {
+        const submitButtons = document.querySelectorAll(submitButtonSelector +
+             ', div[role="button"]') as NodeList;
+        return submitButtons;
+    }
+
     function getSubmitButton(wrappingEl: HTMLElement, buttonNames: Set<string>) {
         if (wrappingEl == null) {
             return null;
@@ -412,8 +434,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         const wrappingElIsForm = wrappingEl.tagName.toLowerCase() === 'form';
 
-        let submitButton = wrappingEl.querySelector('input[type="submit"], input[type="image"], ' +
-            'button[type="submit"]') as HTMLElement;
+        let submitButton = wrappingEl.querySelector(submitButtonSelector) as HTMLElement;
         if (submitButton == null && wrappingElIsForm) {
             submitButton = wrappingEl.querySelector('button:not([type])');
             if (submitButton != null) {
