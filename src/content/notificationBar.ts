@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         'button[type="submit"]';
     let domObservationCollectTimeout: number = null;
     let collectIfNeededTimeout: number = null;
-    let observeDomTimeout: number = null;
     const inIframe = isInIframe();
     let notificationBarData = null;
     const isSafari = (typeof safari !== 'undefined') && navigator.userAgent.indexOf(' Safari/') !== -1 &&
@@ -127,6 +126,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
+    /**
+     * observeDom watches changes in the DOM and starts a new details page collect
+     * if a new form is found.
+     */
     function observeDom() {
         const bodies = document.querySelectorAll('body');
         if (bodies && bodies.length > 0) {
@@ -174,7 +177,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     if (domObservationCollectTimeout != null) {
                         window.clearTimeout(domObservationCollectTimeout);
                     }
-
                     domObservationCollectTimeout = window.setTimeout(collect, 1000);
                 }
             });
@@ -198,11 +200,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 observer = null;
             }
             collect();
-
-            if (observeDomTimeout != null) {
-                window.clearTimeout(observeDomTimeout);
-            }
-            observeDomTimeout = window.setTimeout(observeDom, 1000);
+            // The DOM might change during the collect: watch the DOM body for changes
+            observeDom();
         }
 
         if (collectIfNeededTimeout != null) {
@@ -357,6 +356,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 };
                 if (login.username != null && login.username !== '' &&
                     login.password != null && login.password !== '') {
+
                     if (!form) {
                         // This happens when the submit button was found outside of the form
                         form = formData[i].formEl;
