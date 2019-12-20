@@ -200,7 +200,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 observer = null;
             }
             collect();
-            // The DOM might change during the collect: watch the DOM body for changes
+            // The DOM might change during the collect: watch the DOM body for changes.
+            // Note: a setTimeout was present here, apparently related to the autofill:
+            // https://github.com/bitwarden/browser/commit/d19fcd6e4ccf062b595c2823267ffd32fd8e5a3d
             observeDom();
         }
 
