@@ -121,10 +121,13 @@ export class OptionsComponent implements OnInit {
         this.callAnalytics('Context Menu Item', !this.disableContextMenuItem);
     }
 
+    /*
+    TODO: enable back when TOTP is available
     async updateAutoTotpCopy() {
         await this.storageService.save(ConstantsService.disableAutoTotpCopyKey, this.disableAutoTotpCopy);
         this.callAnalytics('Auto Copy TOTP', !this.disableAutoTotpCopy);
     }
+    */
 
     async updateKonnectorsSuggestions() {
         await this.storageService.save(
