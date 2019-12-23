@@ -139,6 +139,7 @@ const config = {
     entry: {
         'popup/main': './src/popup/main.ts',
         'background': './src/background.ts',
+        'content/appInfo': './src/content/appInfo.ts',
         'content/autofill': './src/content/autofill.js',
         'content/autofiller': './src/content/autofiller.ts',
         'content/notificationBar': './src/content/notificationBar.ts',

@@ -20,7 +20,8 @@
       "js": [
         "content/autofill.js",
         "content/autofiller.js",
-        "content/notificationBar.js"
+        "content/notificationBar.js",
+        "content/appInfo.js"
       ],
       "matches": [
         "http://*/*",
