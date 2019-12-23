@@ -387,6 +387,12 @@ export default class RuntimeBackground {
                     await this.setDefaultSettings();
                 }
 
+                // Execute the content-script on all tabs in case cozy-passwords is waiting for an answer
+                const allTabs = await BrowserApi.getAllTabs();
+                for (const tab of allTabs) {
+                    chrome.tabs.executeScript(tab.id, { file: 'content/appInfo.js' });
+                }
+
                 this.analytics.ga('send', {
                     hitType: 'event',
                     eventAction: 'onInstalled ' + this.onInstalledReason,

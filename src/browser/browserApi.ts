@@ -28,6 +28,10 @@ export class BrowserApi {
         });
     }
 
+    static async getAllTabs(): Promise<any[]> {
+        return await BrowserApi.tabsQuery({});
+    }
+
     static async getActiveTabs(): Promise<any[]> {
         return await BrowserApi.tabsQuery({
             active: true,
