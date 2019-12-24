@@ -228,7 +228,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const formId: string = f.form != null ? f.form.htmlID : null;
             let formEl: HTMLFormElement = null;
             if (formId != null && formId !== '') {
+                // Get form by id
                 formEl = document.getElementById(formId) as HTMLFormElement;
+            } else if (f.form.htmlClass) {
+                // Get form by class
+                const formsByClass = document.getElementsByClassName(
+                    f.form.htmlClass) as HTMLCollectionOf<HTMLFormElement>;
+                if (formsByClass.length > 0) {
+                    formEl = formsByClass[0];
+                }
             }
             if (formEl == null) {
                 const index = parseInt(f.form.opid.split('__')[2], null);
@@ -453,6 +461,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
             possibleSubmitButtons.forEach((button) => {
                 if (submitButton != null || button == null || button.tagName == null) {
                     return;
+                }
+                const inputButton = button as HTMLInputElement;
+                if (inputButton.type === 'submit') {
+                    submitButton = button;
                 }
                 const buttonText = getButtonText(button);
                 if (buttonText != null) {

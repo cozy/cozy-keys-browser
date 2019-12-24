@@ -224,13 +224,29 @@
                 return els;
             }
 
+            // Find the form parent of the HTML element
+            function findFormParent(forms, el) {
+                return forms.find(function(form) {
+                    const formById = form.htmlID ? el.closest('#' + form.htmlID) : null;
+                    let formByClass;
+                    if (form.htmlClass) {
+                        const classSelector = form.htmlClass.replace(/ /g,'.');
+                        formByClass = el.closest('.' + classSelector);
+                    }
+                    return formById || formByClass;
+                })
+            }
+
             // end helpers
 
             var theView = theDoc.defaultView ? theDoc.defaultView : window,
                 passwordRegEx = RegExp('((\\\\b|_|-)pin(\\\\b|_|-)|password|passwort|kennwort|(\\\\b|_|-)passe(\\\\b|_|-)|contraseña|senha|密码|adgangskode|hasło|wachtwoord)', 'i');
 
             // get all the docs
-            var theForms = Array.prototype.slice.call(queryDoc(theDoc, 'form')).map(function (formEl, elIndex) {
+            var domForms = Array.prototype.slice.call(queryDoc(theDoc, 'form'));
+            var signinForms = Array.prototype.slice.call(queryDoc(theDoc,
+                '[class*="signin"], [class*="sign-in"], [class*="log-in"], [class*="log-in"]'));
+            var theForms = domForms.concat(signinForms).map(function (formEl, elIndex) {
                 var op = {},
                     formOpId = '__form__' + elIndex;
 
@@ -238,6 +254,7 @@
                 op.opid = formOpId;
                 addProp(op, 'htmlName', getElementAttrValue(formEl, 'name'));
                 addProp(op, 'htmlID', getElementAttrValue(formEl, 'id'));
+                addProp(op, 'htmlClass', getElementAttrValue(formEl, 'class'));
                 formOpId = getElementAttrValue(formEl, 'action');
                 formOpId = new URL(formOpId, window.location.href);
                 addProp(op, 'htmlAction', formOpId ? formOpId.href : null);
@@ -316,6 +333,11 @@
 
                 if (el.form) {
                     field.form = getElementAttrValue(el.form, 'opid');
+                } else {
+                    const parentForm = findFormParent(theForms, el);
+                    if (parentForm) {
+                        field.form = getElementAttrValue(parentForm, 'opid');
+                    }
                 }
 
                 // START MODIFICATION
