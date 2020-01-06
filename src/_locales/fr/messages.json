@@ -151,7 +151,7 @@
     "message": "Ajouter un dossier"
   },
   "name": {
-    "message": "Nom"
+    "message": "Label"
   },
   "editFolder": {
     "message": "Modifier le dossier"
@@ -246,7 +246,7 @@
     "message": "Information sur l'élément"
   },
   "username": {
-    "message": "Nom d'utilisateur"
+    "message": "Identifiant"
   },
   "password": {
     "message": "Mot de passe"
@@ -880,7 +880,7 @@
     "message": "Nom du titulaire de la carte"
   },
   "number": {
-    "message": "Nombre"
+    "message": "Numéro de carte"
   },
   "brand": {
     "message": "Réseau de paiement"
@@ -937,7 +937,7 @@
     "message": "ex."
   },
   "title": {
-    "message": "Titre"
+    "message": "Civilité"
   },
   "mr": {
     "message": "M."
@@ -1006,7 +1006,7 @@
     "message": "Pays"
   },
   "type": {
-    "message": "Format"
+    "message": "Type"
   },
   "typeLogin": {
     "message": "Identifiant"

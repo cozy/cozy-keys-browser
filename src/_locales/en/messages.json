@@ -154,7 +154,7 @@
     "message": "Add Folder"
   },
   "name": {
-    "message": "Name"
+    "message": "Label"
   },
   "editFolder": {
     "message": "Edit Folder"
@@ -892,7 +892,7 @@
     "message": "Cardholder Name"
   },
   "number": {
-    "message": "Number"
+    "message": "Card number"
   },
   "brand": {
     "message": "Brand"
