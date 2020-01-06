@@ -300,7 +300,7 @@
     "message": "Vérifiez votre mot de passe Cozy"
   },
   "yourVaultIsLocked": {
-    "message": "Votre coffre est verrouillé. Vérifiez votre mot de passe maître pour continuer."
+    "message": "Votre coffre est verrouillé. Vérifiez votre mot de passe Cozy pour continuer."
   },
   "unlock": {
     "message": "Déverrouiller"
