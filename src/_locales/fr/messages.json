@@ -558,7 +558,7 @@
     "message": "Enregistrer le mot de passe"
   },
   "notificationDontSave": {
-    "message": "Non, merci"
+    "message": "Non, pas maintenant"
   },
   "disableChangedPasswordNotification": {
     "message": "Désactiver la notification de changement de mot de passe"

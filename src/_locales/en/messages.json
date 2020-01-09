@@ -564,7 +564,7 @@
     "message": "Save the password"
   },
   "notificationDontSave": {
-    "message": "No, thanks"
+    "message": "No, not now"
   },
   "disableChangedPasswordNotification": {
     "message": "Disable Changed Password Notification"
