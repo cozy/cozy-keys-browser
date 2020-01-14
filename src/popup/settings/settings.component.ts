@@ -205,9 +205,8 @@ export class SettingsComponent implements OnInit {
         this.router.navigate(['/export']);
     }
 
-    // TODO: add-on entry in FAQ
     help() {
-        BrowserApi.createNewTab('https://help.cozy.io/');
+        BrowserApi.createNewTab('https://support.cozy.io/category/378-gestionnaire-de-mots-de-passe');
     }
 
     // TODO: use a Cozy icon in the about modale
