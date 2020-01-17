@@ -168,6 +168,9 @@
   "helpFeedback": {
     "message": "Aide"
   },
+  "helpLink": {
+    "message": "https://support.cozy.io/category/378-gestionnaire-de-mots-de-passe"
+  },
   "sync": {
     "message": "Synchroniser"
   },

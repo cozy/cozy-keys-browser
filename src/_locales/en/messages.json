@@ -171,6 +171,9 @@
   "helpFeedback": {
     "message": "Help"
   },
+  "helpLink": {
+    "message": "https://help.cozy.io/category/395-password-manager"
+  },
   "sync": {
     "message": "Sync"
   },

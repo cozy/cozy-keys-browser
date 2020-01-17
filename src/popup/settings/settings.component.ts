@@ -206,7 +206,7 @@ export class SettingsComponent implements OnInit {
     }
 
     help() {
-        BrowserApi.createNewTab('https://support.cozy.io/category/378-gestionnaire-de-mots-de-passe');
+        BrowserApi.createNewTab(this.i18nService.t('helpLink'));
     }
 
     // TODO: use a Cozy icon in the about modale
