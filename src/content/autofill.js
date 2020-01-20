@@ -230,7 +230,7 @@
                     const formById = form.htmlID ? el.closest('#' + form.htmlID) : null;
                     let formByClass;
                     if (form.htmlClass) {
-                        const classSelector = form.htmlClass.replace(/ /g,'.');
+                        const classSelector = form.htmlClass.trim().replace(/ /g,'.');
                         formByClass = el.closest('.' + classSelector);
                     }
                     return formById || formByClass;
