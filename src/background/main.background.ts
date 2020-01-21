@@ -22,9 +22,10 @@ import { EventService } from 'jslib/services/event.service';
 import { ExportService } from 'jslib/services/export.service';
 import { NotificationsService } from 'jslib/services/notifications.service';
 import { SearchService } from 'jslib/services/search.service';
-import { SyncService } from 'jslib/services/sync.service';
 import { SystemService } from 'jslib/services/system.service';
 import { WebCryptoFunctionService } from 'jslib/services/webCryptoFunction.service';
+
+import { SyncService } from '../popup/services/sync.service';
 
 import {
     ApiService as ApiServiceAbstraction,

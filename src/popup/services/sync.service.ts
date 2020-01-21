@@ -8,8 +8,9 @@ import { SettingsService } from 'jslib/abstractions/settings.service';
 import { StorageService } from 'jslib/abstractions/storage.service';
 import { UserService } from 'jslib/abstractions/user.service';
 
-import { SyncService as BaseSyncService } from 'original-jslib/services/sync.service';
-import { CozyClientService } from '../../../../src/popup/services/cozyClient.service';
+import { SyncService as BaseSyncService } from 'jslib/services/sync.service';
+
+import { CozyClientService } from './cozyClient.service';
 
 const Keys = {
     lastSyncPrefix: 'lastSync_',
