@@ -14,7 +14,6 @@ import {
     LockService,
     PasswordGenerationService,
     SettingsService,
-    SyncService,
     TokenService,
     TotpService,
     UserService,
@@ -23,6 +22,7 @@ import { EventService } from 'jslib/services/event.service';
 import { ExportService } from 'jslib/services/export.service';
 import { NotificationsService } from 'jslib/services/notifications.service';
 import { SearchService } from 'jslib/services/search.service';
+import { SyncService } from 'jslib/services/sync.service';
 import { SystemService } from 'jslib/services/system.service';
 import { WebCryptoFunctionService } from 'jslib/services/webCryptoFunction.service';
 
@@ -172,7 +172,7 @@ export default class MainBackground {
             });
         this.syncService = new SyncService(this.userService, this.apiService, this.settingsService,
             this.folderService, this.cipherService, this.cryptoService, this.collectionService,
-            this.storageService, this.messagingService, async (expired: boolean) => await this.logout(expired));
+        this.storageService, this.messagingService, async (expired: boolean) => await this.logout(expired), () => this.cozyClientService);
         this.eventService = new EventService(this.storageService, this.apiService, this.userService,
             this.cipherService);
         this.passwordGenerationService = new PasswordGenerationService(this.cryptoService, this.storageService);

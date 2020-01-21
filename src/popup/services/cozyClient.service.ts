@@ -15,4 +15,17 @@ export class CozyClientService {
         const token = await this.apiService.getActiveBearerToken();
         return new CozyClient({ uri: uri, token: token });
     }
+
+    async updateSynchronizedAt() {
+        const client = await this.createClient();
+
+        try {
+            await client.getStackClient().fetchJSON('POST', '/settings/synchronized');
+        } catch (err) {
+            /* tslint:disable-next-line */
+            console.error('Error while updating cozy client\'s synchronized_at');
+            /* tslint:disable-next-line */
+            console.error(err);
+        }
+    }
 }
