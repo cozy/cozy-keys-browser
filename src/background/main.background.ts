@@ -307,7 +307,6 @@ export default class MainBackground {
         await Promise.all([
             this.eventService.clearEvents(),
             this.syncService.setLastSync(new Date(0)),
-            this.tokenService.clearToken(),
             this.cryptoService.clearKeys(),
             this.userService.clear(),
             this.settingsService.clear(userId),
@@ -317,6 +316,9 @@ export default class MainBackground {
             this.passwordGenerationService.clear(),
             this.lockService.clear(),
         ]);
+
+        // Clear token afterwards, as previous services might need it
+        await this.tokenService.clearToken();
 
         this.searchService.clearIndex();
         this.messagingService.send('doneLoggingOut', { expired: expired });
