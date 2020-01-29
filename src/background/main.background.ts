@@ -27,6 +27,7 @@ import { SyncService } from '../popup/services/sync.service';
 import { ExportService } from '../services/export.service';
 
 import { ApiService } from '../services/api.service';
+import { AuthService } from '../services/auth.service';
 
 import {
     ApiService as ApiServiceAbstraction,
@@ -112,6 +113,7 @@ export default class MainBackground {
     analytics: Analytics;
     cozyClientService: CozyClientService;
     konnectorsService: KonnectorsService;
+    authService: AuthService;
 
     onUpdatedRan: boolean;
     onReplacedRan: boolean;
@@ -225,6 +227,19 @@ export default class MainBackground {
                 this.lockService);
             this.windowsBackground = new WindowsBackground(this);
         }
+
+        this.authService = new AuthService(
+            this.cryptoService,
+            this.apiService,
+            this.userService,
+            this.tokenService,
+            this.appIdService,
+            this.i18nService,
+            this.platformUtilsService,
+            this.messagingService,
+            true,
+            this.cozyClientService,
+        );
     }
 
     async bootstrap() {
@@ -318,7 +333,8 @@ export default class MainBackground {
             this.lockService.clear(),
         ]);
 
-        // Clear token afterwards, as previous services might need it
+        // Clear auth and token afterwards, as previous services might need it
+        await this.authService.clear();
         await this.tokenService.clearToken();
 
         this.searchService.clearIndex();

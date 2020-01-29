@@ -46,7 +46,6 @@ import { UserService } from 'jslib/abstractions/user.service';
 import { AutofillService } from '../../services/abstractions/autofill.service';
 import BrowserMessagingService from '../../services/browserMessaging.service';
 
-import { AuthService } from 'jslib/services/auth.service';
 import { ConstantsService } from 'jslib/services/constants.service';
 import { SearchService } from 'jslib/services/search.service';
 import { StateService } from 'jslib/services/state.service';
@@ -55,6 +54,8 @@ import { Analytics } from 'jslib/misc/analytics';
 
 import { PopupSearchService } from './popup-search.service';
 import { PopupUtilsService } from './popup-utils.service';
+
+import { AuthService } from '../../services/auth.service';
 
 function getBgService<T>(service: string) {
     return (): T => {
@@ -70,11 +71,7 @@ export const cozyClientService = new CozyClientService(getBgService<EnvironmentS
 export const konnectorsService = new KonnectorsService(getBgService<CipherService>('cipherService')(),
     getBgService<StorageService>('storageService')(), getBgService<SettingsService>('settingsService')(),
     cozyClientService);
-export const authService = new AuthService(getBgService<CryptoService>('cryptoService')(),
-    getBgService<ApiService>('apiService')(), getBgService<UserService>('userService')(),
-    getBgService<TokenService>('tokenService')(), getBgService<AppIdService>('appIdService')(),
-    getBgService<I18nService>('i18nService')(), getBgService<PlatformUtilsService>('platformUtilsService')(),
-    messagingService);
+export const authService = getBgService<AuthService>('authService')();
 export const searchService = new PopupSearchService(getBgService<SearchService>('searchService')(),
     getBgService<CipherService>('cipherService')(), getBgService<PlatformUtilsService>('platformUtilsService')());
 

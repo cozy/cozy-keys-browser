@@ -3,9 +3,10 @@ import { TokenService } from 'jslib/abstractions/token.service';
 import { DeviceType } from 'jslib/enums/deviceType';
 import { TokenRequest } from 'jslib/models/request/tokenRequest';
 import { ErrorResponse } from 'jslib/models/response/errorResponse';
-import { IdentityTokenResponse } from 'jslib/models/response/identityTokenResponse';
 import { IdentityTwoFactorResponse } from 'jslib/models/response/identityTwoFactorResponse';
 import { ApiService as BaseApiService } from 'jslib/services/api.service';
+
+import { IdentityTokenResponse } from '../models/response/identityTokenResponse';
 
 function getDeviceName(deviceType: DeviceType): string {
     switch (deviceType) {
