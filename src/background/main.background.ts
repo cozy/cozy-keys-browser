@@ -1,7 +1,6 @@
 import { CipherType } from 'jslib/enums';
 
 import {
-    ApiService,
     AppIdService,
     AuditService,
     CipherService,
@@ -26,6 +25,8 @@ import { SystemService } from 'jslib/services/system.service';
 import { WebCryptoFunctionService } from 'jslib/services/webCryptoFunction.service';
 
 import { SyncService } from '../popup/services/sync.service';
+
+import { ApiService } from '../services/api.service';
 
 import {
     ApiService as ApiServiceAbstraction,
