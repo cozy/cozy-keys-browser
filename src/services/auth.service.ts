@@ -5,6 +5,7 @@ import { AuthResult } from 'jslib/models/domain/authResult';
 import { SymmetricCryptoKey } from 'jslib/models/domain/symmetricCryptoKey';
 import { DeviceRequest } from 'jslib/models/request/deviceRequest';
 import { KeysRequest } from 'jslib/models/request/keysRequest';
+import { PreloginRequest } from 'jslib/models/request/preloginRequest';
 import { TokenRequest } from 'jslib/models/request/tokenRequest';
 import { IdentityTwoFactorResponse } from 'jslib/models/response/identityTwoFactorResponse';
 
@@ -88,7 +89,7 @@ export class AuthService extends BaseAuthService {
 
     async logIn(email: string, masterPassword: string): Promise<AuthResult> {
         this.selectedTwoFactorProviderType = null;
-        const key = await this.makePreloginKey(masterPassword, email);
+        const key = await this._makePreloginKey(masterPassword, email);
         const hashedPassword = await this._cryptoService.hashPassword(masterPassword, key);
         return await this._logInHelper(email, hashedPassword, key);
     }
@@ -102,9 +103,27 @@ export class AuthService extends BaseAuthService {
     async logInComplete(email: string, masterPassword: string, twoFactorProvider: TwoFactorProviderType,
         twoFactorToken: string, remember?: boolean): Promise<AuthResult> {
         this.selectedTwoFactorProviderType = null;
-        const key = await this.makePreloginKey(masterPassword, email);
+        const key = await this._makePreloginKey(masterPassword, email);
         const hashedPassword = await this._cryptoService.hashPassword(masterPassword, key);
         return await this._logInHelper(email, hashedPassword, key, twoFactorProvider, twoFactorToken, remember);
+    }
+
+    async _makePreloginKey(masterPassword: string, email: string): Promise<SymmetricCryptoKey> {
+        email = email.trim().toLowerCase();
+        this._kdf = null;
+        this._kdfIterations = null;
+        try {
+            const preloginResponse = await this._apiService.postPrelogin(new PreloginRequest(email));
+            if (preloginResponse != null) {
+                this._kdf = preloginResponse.kdf;
+                this._kdfIterations = preloginResponse.kdfIterations;
+            }
+        } catch (e) {
+            if (e == null || e.statusCode !== 404) {
+                throw e;
+            }
+        }
+        return this._cryptoService.makeKey(masterPassword, email, this._kdf, this._kdfIterations);
     }
 
     private async _logInHelper(email: string, hashedPassword: string, key: SymmetricCryptoKey,
@@ -172,7 +191,6 @@ export class AuthService extends BaseAuthService {
 
             await this._cryptoService.setEncPrivateKey(tokenResponse.privateKey);
         }
-
         this._messagingService.send('loggedIn');
         return result;
     }
