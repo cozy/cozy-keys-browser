@@ -44,16 +44,17 @@ export class KonnectorsService {
 
     getRegistryKonnectors(client: any) {
         const registry = new Registry({client: client});
+        // The limit is handled by cozy-client
         return registry.fetchApps({channel: 'stable', type: 'konnector'});
     }
 
     async getInstalledKonnectors(client: any) {
-        const konnectors = await client.query(client.find('io.cozy.konnectors'));
+        const konnectors = await client.queryAll(client.find('io.cozy.konnectors'));
         return konnectors.data;
     }
 
     async getSuggestedKonnectors(client: any) {
-        const suggestions = await client.query(client.find('io.cozy.apps.suggestions'));
+        const suggestions = await client.queryAll(client.find('io.cozy.apps.suggestions'));
         return suggestions.data;
     }
 
