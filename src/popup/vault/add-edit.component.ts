@@ -126,10 +126,44 @@ export class AddEditComponent extends BaseAddEditComponent {
     }
 
     async delete(): Promise<boolean> {
-        const confirmed = await super.delete();
-        if (confirmed) {
-            this.router.navigate(['/tabs/vault']);
+        const organizations = await this.userService.getAllOrganizations();
+        const [cozyOrganization] = organizations.filter(
+            org => org.name === 'Cozy'
+        );
+        const isCozyOrganization =
+            this.cipher.organizationId === cozyOrganization.id
+
+        const confirmationMessage = isCozyOrganization
+            ? this.i18nService.t('deleteSharedItemConfirmation')
+            : this.i18nService.t('deleteItemConfirmation');
+
+        const confirmationTitle = isCozyOrganization
+            ? this.i18nService.t('deleteSharedItem')
+            : this.i18nService.t('deleteItem');
+
+        const confirmed = await this.platformUtilsService.showDialog(
+            confirmationMessage,
+            confirmationTitle,
+            this.i18nService.t('yes'),
+            this.i18nService.t('no'),
+            'warning'
+        );
+
+        if (!confirmed) {
+            return false;
         }
-        return confirmed;
+
+        try {
+            this.deletePromise = this.deleteCipher();
+            await this.deletePromise;
+            this.platformUtilsService.eventTrack('Deleted Cipher');
+            this.platformUtilsService.showToast('success', null, this.i18nService.t('deletedItem'));
+            this.onDeletedCipher.emit(this.cipher);
+            this.messagingService.send('deletedCipher');
+        } catch { }
+
+        this.router.navigate(['/tabs/vault']);
+
+        return true;
     }
 }

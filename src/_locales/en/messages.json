@@ -275,6 +275,9 @@
   "deleteItem": {
     "message": "Delete Item"
   },
+  "deleteSharedItem": {
+    "message": "Delete this identifier and data import"
+  },
   "viewItem": {
     "message": "View Item"
   },
@@ -508,6 +511,9 @@
   },
   "deleteItemConfirmation": {
     "message": "Are you sure you want to delete this item?"
+  },
+  "deleteSharedItemConfirmation": {
+    "message": "This identifier is currently used to import the account data into your Cozy. By deleting it, this automatic import will be interrupted. Are you sure ?"
   },
   "deletedItem": {
     "message": "Deleted item"

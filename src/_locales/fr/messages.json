@@ -272,6 +272,9 @@
   "deleteItem": {
     "message": "Supprimer l'élément"
   },
+  "deleteSharedItem": {
+    "message": "Supprimer cet identifiant et l'import des données"
+  },
   "viewItem": {
     "message": "Voir l'élément"
   },
@@ -502,6 +505,9 @@
   },
   "deleteItemConfirmation": {
     "message": "Êtes-vous sûr(e) de vouloir supprimer cet identifiant ?"
+  },
+  "deleteSharedItemConfirmation": {
+    "message": "Cet identifiant permet actuellement d'importer les données du compte dans votre Cozy. En le supprimant, cet import automatique sera interrompu.  Etes-vous sûr ?"
   },
   "deletedItem": {
     "message": "Identifiant supprimé"
