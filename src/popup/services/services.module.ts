@@ -72,6 +72,10 @@ export const konnectorsService = new KonnectorsService(getBgService<CipherServic
     getBgService<StorageService>('storageService')(), getBgService<SettingsService>('settingsService')(),
     cozyClientService);
 export const authService = getBgService<AuthService>('authService')();
+
+// See https://github.com/cozy/cozy-keys-browser/pull/70 to have more context
+// about why we do this
+authService.setMessagingService(messagingService);
 export const searchService = new PopupSearchService(getBgService<SearchService>('searchService')(),
     getBgService<CipherService>('cipherService')(), getBgService<PlatformUtilsService>('platformUtilsService')());
 

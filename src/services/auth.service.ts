@@ -87,6 +87,10 @@ export class AuthService extends BaseAuthService {
         );
     }
 
+    setMessagingService(messagingService: MessagingService) {
+        this._messagingService = messagingService;
+    }
+
     async logIn(email: string, masterPassword: string): Promise<AuthResult> {
         this.selectedTwoFactorProviderType = null;
         const key = await this._makePreloginKey(masterPassword, email);
