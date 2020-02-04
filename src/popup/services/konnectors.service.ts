@@ -58,8 +58,6 @@ export class KonnectorsService {
         return suggestions.data;
     }
 
-    // TODO: Add relationships
-    // https://github.com/cozy/cozy-doctypes/blob/master/docs/io.cozy.accounts.md#vault-cipher
     async sendKonnectorsSuggestion(client: any, konnectors: any[]) {
         const creationPromises = konnectors.map((konnector) => {
             const suggested = {
