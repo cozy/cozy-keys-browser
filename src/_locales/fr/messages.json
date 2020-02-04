@@ -507,7 +507,7 @@
     "message": "Êtes-vous sûr(e) de vouloir supprimer cet identifiant ?"
   },
   "deleteSharedItemConfirmation": {
-    "message": "Cet identifiant permet actuellement d'importer les données du compte dans votre Cozy. En le supprimant, cet import automatique sera interrompu.  Etes-vous sûr ?"
+    "message": "Cet identifiant permet actuellement d'importer les données du compte dans votre Cozy. En le supprimant, cet import automatique sera interrompu. Etes-vous sûr ?"
   },
   "deletedItem": {
     "message": "Identifiant supprimé"
