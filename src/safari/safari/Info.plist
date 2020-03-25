@@ -5,15 +5,15 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Bitwarden</string>
+	<string>Cozy Pass</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.bitwarden.desktop.safari</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Bitwarden</string>
+	<string>Cozy Pass</string>
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
@@ -28,13 +28,6 @@
 		<string>com.apple.Safari.extension</string>
 		<key>NSExtensionPrincipalClass</key>
 		<string>$(PRODUCT_MODULE_NAME).SafariExtensionHandler</string>
-		<key>SFSafariStyleSheet</key>
-		<array>
-			<dict>
-				<key>Style Sheet</key>
-				<string>app/content/autofill.css</string>
-			</dict>
-		</array>
 		<key>SFSafariContentScript</key>
 		<array>
 			<dict>
@@ -54,6 +47,17 @@
 				<string>app/content/shortcuts.js</string>
 			</dict>
 		</array>
+		<key>SFSafariExtensionBundleIdentifiersToUninstall</key>
+		<array>
+			<string>io.cozy.pass.desktop.safari</string>
+		</array>
+		<key>SFSafariStyleSheet</key>
+		<array>
+			<dict>
+				<key>Style Sheet</key>
+				<string>app/content/autofill.css</string>
+			</dict>
+		</array>
 		<key>SFSafariToolbarItem</key>
 		<dict>
 			<key>Action</key>
@@ -63,20 +67,16 @@
 			<key>Image</key>
 			<string>ToolbarItemIcon.pdf</string>
 			<key>Label</key>
-			<string>Bitwarden</string>
+			<string>Cozy Pass</string>
 		</dict>
 		<key>SFSafariWebsiteAccess</key>
 		<dict>
 			<key>Level</key>
 			<string>All</string>
 		</dict>
-		<key>SFSafariExtensionBundleIdentifiersToUninstall</key>
-		<array>
-			<string>com.bitwarden.safari</string>
-		</array>
 	</dict>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2019 8bit Solutions LLC. All rights reserved.</string>
+	<string>Copyright © 2020 Cozy Cloud. Based on Bitwarden</string>
 	<key>NSHumanReadableDescription</key>
 	<string>A secure and free password manager for all of your devices.</string>
 </dict>
