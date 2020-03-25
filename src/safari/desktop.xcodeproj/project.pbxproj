@@ -21,7 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		27E5E9B222F3D5FE005EA1D9 /* PBXContainerItemProxy */ = {
+		99B0B5DD242A7AE90054A1DE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 27E5E98122F3D5B2005EA1D9 /* Project object */;
 			proxyType = 1;
@@ -151,7 +151,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				27E5E9B322F3D5FE005EA1D9 /* PBXTargetDependency */,
+				99B0B5DE242A7AE90054A1DE /* PBXTargetDependency */,
 			);
 			name = desktop;
 			productName = desktop;
@@ -261,10 +261,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		27E5E9B322F3D5FE005EA1D9 /* PBXTargetDependency */ = {
+		99B0B5DE242A7AE90054A1DE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 27E5E99F22F3D5FD005EA1D9 /* safari */;
-			targetProxy = 27E5E9B222F3D5FE005EA1D9 /* PBXContainerItemProxy */;
+			targetProxy = 99B0B5DD242A7AE90054A1DE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -411,9 +411,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = desktop/desktop.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = LTZ2PFU5D6;
+				DEVELOPMENT_TEAM = 3AKXFMV43J;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = desktop/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -421,7 +422,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bitwarden.desktop;
+				PRODUCT_BUNDLE_IDENTIFIER = io.cozy.pass.desktop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -433,9 +434,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = desktop/desktop.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = LTZ2PFU5D6;
+				DEVELOPMENT_TEAM = 3AKXFMV43J;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = desktop/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -443,7 +445,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bitwarden.desktop;
+				PRODUCT_BUNDLE_IDENTIFIER = io.cozy.pass.desktop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -454,8 +456,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_ENTITLEMENTS = safari/safari.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = LTZ2PFU5D6;
+				DEVELOPMENT_TEAM = 3AKXFMV43J;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = safari/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -464,7 +467,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bitwarden.desktop.safari;
+				PRODUCT_BUNDLE_IDENTIFIER = io.cozy.pass.desktop.safari;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -476,8 +479,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_ENTITLEMENTS = safari/safari.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = LTZ2PFU5D6;
+				DEVELOPMENT_TEAM = 3AKXFMV43J;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = safari/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -486,7 +490,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bitwarden.desktop.safari;
+				PRODUCT_BUNDLE_IDENTIFIER = io.cozy.pass.desktop.safari;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
