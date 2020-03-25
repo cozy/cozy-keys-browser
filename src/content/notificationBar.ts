@@ -556,11 +556,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         const iframe = document.createElement('iframe');
         iframe.id = 'notification-bar-iframe';
-
+        if(isSafari) iframe.style.cssText = ' width: 100%;max-width: 430px; border: solid 1px rgba(50, 54, 63, 0.12); top: 8px; right: 17px;  border-radius: 8px;   animation: fadein 0.2s;'
         const frameDiv = document.createElement('div');
         frameDiv.setAttribute('aria-live', 'polite');
         frameDiv.id = 'notification-bar';
-
+        if(isSafari)  frameDiv.style.cssText = 'height: 42px; top: 0; right: 0; padding: 0; position: fixed; ' +
+        'z-index: 2147483647; visibility: visible;';
         frameDiv.appendChild(iframe);
         document.body.appendChild(frameDiv);
 
