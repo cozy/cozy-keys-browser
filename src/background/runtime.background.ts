@@ -432,6 +432,7 @@ export default class RuntimeBackground {
                 notificationAddDesc: this.i18nService.t('notificationAddDesc'),
                 notificationChangeSave: this.i18nService.t('notificationChangeSave'),
                 notificationChangeDesc: this.i18nService.t('notificationChangeDesc'),
+                notificationDontSave: this.i18nService.t('notificationDontSave')
             };
         }
 
