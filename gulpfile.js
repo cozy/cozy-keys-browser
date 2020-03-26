@@ -191,7 +191,7 @@ function distSafariApp(cb, subBuildPath) {
         '-o',
         'runtime',
         '--sign',
-        'Developer ID Application: 8bit Solutions LLC',
+        'Developer ID Application: Cozy Cloud (3AKXFMV43J)',
         '--entitlements',
         entitlementsPath
     ];
@@ -200,7 +200,7 @@ function distSafariApp(cb, subBuildPath) {
             '--verbose',
             '--force',
             '--sign',
-            subBuildPath === 'mas' ? '3rd Party Mac Developer Application: 8bit Solutions LLC' :
+            subBuildPath === 'mas' ? 'Developer ID Application: Cozy Cloud (3AKXFMV43J)' :
                 'C12A12E8595453C8B57028790FADB6AD426165AE',
             '--entitlements',
             entitlementsPath
@@ -216,7 +216,9 @@ function distSafariApp(cb, subBuildPath) {
                 buildPath + 'desktop.xcodeproj',
                 '-alltargets',
                 '-configuration',
-                'Release']);
+                'Release', 
+                '-UseModernBuildSystem=NO'
+                ]);
             stdOutProc(proc);
             return new Promise((resolve) => proc.on('close', resolve));
         }).then(() => {
@@ -293,7 +295,10 @@ exports['dist:firefox'] = distFirefox;
 exports['dist:chrome'] = distChrome;
 exports['dist:opera'] = distOpera;
 exports['dist:edge'] = distEdge;
-exports['dist:safari'] = gulp.parallel(distSafariMas, distSafariMasDev, distSafariDmg);
+exports['dist:distSafariMas'] = distSafariMas;
+exports['dist:distSafariMasDev'] = distSafariMasDev;
+exports['dist:distSafariDmg'] = distSafariDmg;
+//exports['dist:safari'] = gulp.parallel(distSafariMas, distSafariMasDev, distSafariDmg);
 exports.dist = gulp.parallel(distFirefox, distChrome);
 exports['ci:coverage'] = ciCoverage;
 exports.ci = ciCoverage;
