@@ -18,6 +18,7 @@
 		27E5E9B022F3D5FE005EA1D9 /* ToolbarItemIcon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 27E5E9AF22F3D5FE005EA1D9 /* ToolbarItemIcon.pdf */; };
 		27E5E9B422F3D5FE005EA1D9 /* safari.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 27E5E9A022F3D5FE005EA1D9 /* safari.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		27E5E9BC22F4B9D5005EA1D9 /* app in Resources */ = {isa = PBXBuildFile; fileRef = 27E5E9BB22F4B9D5005EA1D9 /* app */; };
+		990BBB41242CB2970012825A /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 990BBB40242CB2970012825A /* icon.icns */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		27E5E9AF22F3D5FE005EA1D9 /* ToolbarItemIcon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = ToolbarItemIcon.pdf; sourceTree = "<group>"; };
 		27E5E9B122F3D5FE005EA1D9 /* safari.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = safari.entitlements; sourceTree = "<group>"; };
 		27E5E9BB22F4B9D5005EA1D9 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; path = app; sourceTree = "<group>"; };
+		990BBB40242CB2970012825A /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = Assets.xcassets/AppIcon.appiconset/icon.icns; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				27E5E98C22F3D5B2005EA1D9 /* AppDelegate.swift */,
+				990BBB40242CB2970012825A /* icon.icns */,
 				27E5E98E22F3D5B2005EA1D9 /* ViewController.swift */,
 				27E5E99022F3D5B4005EA1D9 /* Assets.xcassets */,
 				27E5E99222F3D5B4005EA1D9 /* Main.storyboard */,
@@ -224,6 +227,7 @@
 			files = (
 				27E5E99122F3D5B4005EA1D9 /* Assets.xcassets in Resources */,
 				27E5E99422F3D5B4005EA1D9 /* Main.storyboard in Resources */,
+				990BBB41242CB2970012825A /* icon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,7 +413,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = desktop/desktop.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -432,7 +435,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = desktop/desktop.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
