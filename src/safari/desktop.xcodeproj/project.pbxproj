@@ -19,6 +19,7 @@
 		27E5E9B422F3D5FE005EA1D9 /* safari.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 27E5E9A022F3D5FE005EA1D9 /* safari.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		27E5E9BC22F4B9D5005EA1D9 /* app in Resources */ = {isa = PBXBuildFile; fileRef = 27E5E9BB22F4B9D5005EA1D9 /* app */; };
 		990BBB41242CB2970012825A /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 990BBB40242CB2970012825A /* icon.icns */; };
+		99801C69242E03C800A7460A /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99801C68242E03C800A7460A /* SuccessViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		27E5E9B122F3D5FE005EA1D9 /* safari.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = safari.entitlements; sourceTree = "<group>"; };
 		27E5E9BB22F4B9D5005EA1D9 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; path = app; sourceTree = "<group>"; };
 		990BBB40242CB2970012825A /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = Assets.xcassets/AppIcon.appiconset/icon.icns; sourceTree = "<group>"; };
+		99801C68242E03C800A7460A /* SuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				27E5E99222F3D5B4005EA1D9 /* Main.storyboard */,
 				27E5E99522F3D5B4005EA1D9 /* Info.plist */,
 				27E5E99622F3D5B4005EA1D9 /* desktop.entitlements */,
+				99801C68242E03C800A7460A /* SuccessViewController.swift */,
 			);
 			path = desktop;
 			sourceTree = "<group>";
@@ -190,6 +193,7 @@
 				TargetAttributes = {
 					27E5E98822F3D5B2005EA1D9 = {
 						CreatedOnToolsVersion = 10.3;
+						LastSwiftMigration = 1130;
 					};
 					27E5E99F22F3D5FD005EA1D9 = {
 						CreatedOnToolsVersion = 10.3;
@@ -249,6 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				27E5E98F22F3D5B2005EA1D9 /* ViewController.swift in Sources */,
+				99801C69242E03C800A7460A /* SuccessViewController.swift in Sources */,
 				27E5E98D22F3D5B2005EA1D9 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -413,10 +418,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = desktop/desktop.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 3AKXFMV43J;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = desktop/Info.plist;
@@ -424,9 +431,11 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MARKETING_VERSION = 0.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.cozy.pass.desktop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -435,10 +444,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = desktop/desktop.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 3AKXFMV43J;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = desktop/Info.plist;
@@ -446,7 +457,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MARKETING_VERSION = 0.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.cozy.pass.desktop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -460,6 +472,7 @@
 				CODE_SIGN_ENTITLEMENTS = safari/safari.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 3AKXFMV43J;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = safari/Info.plist;
@@ -468,7 +481,8 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MARKETING_VERSION = 0.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.cozy.pass.desktop.safari;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -483,6 +497,7 @@
 				CODE_SIGN_ENTITLEMENTS = safari/safari.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 3AKXFMV43J;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = safari/Info.plist;
@@ -491,7 +506,8 @@
 					"@executable_path/../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MARKETING_VERSION = 0.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.cozy.pass.desktop.safari;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
