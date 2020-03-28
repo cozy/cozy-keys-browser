@@ -829,7 +829,7 @@
     "message": "Désactiver la suggestion automatique de connecteurs"
   },
   "disableKonnectorsSuggestionsDesc": {
-    "message": "Désactive la suggestion de connecteurs non installés dans son Cozy."
+    "message": "Votre Cozy ne saura plus vous aider à trouver les organismes dont il possède un connecteur et dont vous avez un compte dans votre gestionnaire de mot de passe."
   },
   "enableAutoFillOnPageLoad": {
     "message": "Activer l’auto-complétion au chargement de la page"
