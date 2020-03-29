@@ -7,8 +7,6 @@ class ViewController: NSViewController {
     var isActivated = false
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if #available(OSX 10.12, *) {
            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
                SFSafariExtensionManager.getStateOfSafariExtension(withIdentifier: "io.cozy.pass.desktop.safari") { (state, error) in
                      if state?.isEnabled ?? false {
@@ -16,12 +14,8 @@ class ViewController: NSViewController {
                      }
                 }
             }
-        } else {
-            // Fallback on earlier versions
-        }
     }
     override func viewDidAppear() {
-        if #available(OSX 10.12, *) {
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
                 if(self.isActivated){
                     let successView = self.storyboard?.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier("SuccessViewController"))
@@ -29,9 +23,6 @@ class ViewController: NSViewController {
                     self.view.window?.contentViewController = successView
                 }
             }
-        } else {
-            // Fallback on earlier versions
-        }
     }
     override var representedObject: Any? {
         didSet {
