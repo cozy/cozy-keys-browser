@@ -4,8 +4,7 @@ import SafariServices
 class ViewController: NSViewController {
     @IBOutlet weak var OpenSafari: NSButton!
 
-    var timer = Timer()
-var isActivated = false
+    var isActivated = false
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,16 +49,3 @@ var isActivated = false
         }
     }
 }
-
-/**
-
- var error: NSDictionary?
- if let scriptObject = NSAppleScript(source: myAppleScript) {
-     if let output: NSAppleEventDescriptor = scriptObject.executeAndReturnError(
-                                                                        &error) {
-         print(output.stringValue)
-     } else if (error != nil) {
-         print("error: \(error)")
-     }
- }
- */
