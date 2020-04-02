@@ -76,7 +76,7 @@
 		</dict>
 	</dict>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2020 Cozy Cloud. Based on Bitwarden</string>
+	<string>Made by Cozy Cloud. Based on Bitwarden</string>
 	<key>NSHumanReadableDescription</key>
 	<string>A secure and free password manager for all of your devices.</string>
 </dict>
