@@ -7,6 +7,15 @@ class ViewController: NSViewController {
     var isActivated = false
     override func viewDidLoad() {
         super.viewDidLoad()
+        //Button custom
+        OpenSafari.isBordered = false
+        OpenSafari.wantsLayer = true
+        OpenSafari.layer?.backgroundColor = NSColor.linkColor.cgColor
+        OpenSafari.layer?.cornerRadius = 4
+        var attributes = OpenSafari.attributedTitle.attributes(at: 0, effectiveRange: nil)
+        attributes[.foregroundColor] = NSColor.white
+        OpenSafari.attributedTitle = NSMutableAttributedString(string: OpenSafari.title,
+                                                              attributes: attributes)
            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
                SFSafariExtensionManager.getStateOfSafariExtension(withIdentifier: "io.cozy.pass.desktop.safari") { (state, error) in
                      if state?.isEnabled ?? false {
