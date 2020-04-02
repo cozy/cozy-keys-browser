@@ -232,6 +232,7 @@
     &.box-content-row-input, &.box-content-row-slider, &.box-content-row-multi {
         display: flex;
         align-items: center;
+        //cozy-customisations break on word, not all. Mainly used for option panel
         //word-break: break-all;
     }
 
@@ -263,6 +264,9 @@
 
     &.box-content-row-checkbox, &.box-content-row-input, &.box-content-row-slider {
         label, .row-label {
+            //cozy-customisations
+            //In the option panel, French sentences are pretty long, 
+            //so let's use a smaller font-size in this view
             font-size: 13px;
             display: block;
             width: initial;
