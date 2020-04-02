@@ -17,9 +17,9 @@ The Cozy browser extension is written using the Web Extension API and Angular. I
 
 **Requirements**
 
-- [Node.js](https://nodejs.org) v8.11 or greater
+- [Node.js](https://nodejs.org) v10 or greater
 - [Gulp](https://gulpjs.com/) (`npm install --global gulp-cli`)
-- Chrome (preferred), Opera, or Firefox browser
+- Chrome (preferred), Opera, Firefox browser or Safari
 
 **Run the app**
 
