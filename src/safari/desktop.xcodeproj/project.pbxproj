@@ -18,7 +18,7 @@
 		27E5E9B022F3D5FE005EA1D9 /* ToolbarItemIcon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 27E5E9AF22F3D5FE005EA1D9 /* ToolbarItemIcon.pdf */; };
 		27E5E9B422F3D5FE005EA1D9 /* safari.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 27E5E9A022F3D5FE005EA1D9 /* safari.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		27E5E9BC22F4B9D5005EA1D9 /* app in Resources */ = {isa = PBXBuildFile; fileRef = 27E5E9BB22F4B9D5005EA1D9 /* app */; };
-		990BBB41242CB2970012825A /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 990BBB40242CB2970012825A /* icon.icns */; };
+		99690D3A2436059D0017EF42 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 99690D392436059D0017EF42 /* icon.icns */; };
 		99801C69242E03C800A7460A /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99801C68242E03C800A7460A /* SuccessViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,7 +47,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		27E5E98922F3D5B2005EA1D9 /* desktop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = desktop.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		27E5E98922F3D5B2005EA1D9 /* Cozy Pass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cozy Pass.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		27E5E98C22F3D5B2005EA1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		27E5E98E22F3D5B2005EA1D9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		27E5E99022F3D5B4005EA1D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -63,7 +63,7 @@
 		27E5E9AF22F3D5FE005EA1D9 /* ToolbarItemIcon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = ToolbarItemIcon.pdf; sourceTree = "<group>"; };
 		27E5E9B122F3D5FE005EA1D9 /* safari.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = safari.entitlements; sourceTree = "<group>"; };
 		27E5E9BB22F4B9D5005EA1D9 /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; path = app; sourceTree = "<group>"; };
-		990BBB40242CB2970012825A /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = Assets.xcassets/AppIcon.appiconset/icon.icns; sourceTree = "<group>"; };
+		99690D392436059D0017EF42 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		99801C68242E03C800A7460A /* SuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -99,7 +99,7 @@
 		27E5E98A22F3D5B2005EA1D9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				27E5E98922F3D5B2005EA1D9 /* desktop.app */,
+				27E5E98922F3D5B2005EA1D9 /* Cozy Pass.app */,
 				27E5E9A022F3D5FE005EA1D9 /* safari.appex */,
 			);
 			name = Products;
@@ -109,8 +109,8 @@
 			isa = PBXGroup;
 			children = (
 				27E5E98C22F3D5B2005EA1D9 /* AppDelegate.swift */,
-				990BBB40242CB2970012825A /* icon.icns */,
 				27E5E98E22F3D5B2005EA1D9 /* ViewController.swift */,
+				99690D392436059D0017EF42 /* icon.icns */,
 				27E5E99022F3D5B4005EA1D9 /* Assets.xcassets */,
 				27E5E99222F3D5B4005EA1D9 /* Main.storyboard */,
 				27E5E99522F3D5B4005EA1D9 /* Info.plist */,
@@ -161,7 +161,7 @@
 			);
 			name = desktop;
 			productName = desktop;
-			productReference = 27E5E98922F3D5B2005EA1D9 /* desktop.app */;
+			productReference = 27E5E98922F3D5B2005EA1D9 /* Cozy Pass.app */;
 			productType = "com.apple.product-type.application";
 		};
 		27E5E99F22F3D5FD005EA1D9 /* safari */ = {
@@ -231,7 +231,7 @@
 			files = (
 				27E5E99122F3D5B4005EA1D9 /* Assets.xcassets in Resources */,
 				27E5E99422F3D5B4005EA1D9 /* Main.storyboard in Resources */,
-				990BBB41242CB2970012825A /* icon.icns in Resources */,
+				99690D3A2436059D0017EF42 /* icon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,7 +434,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MARKETING_VERSION = 0.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.cozy.pass.desktop;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Cozy Pass";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -460,7 +460,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MARKETING_VERSION = 0.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.cozy.pass.desktop;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Cozy Pass";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
