@@ -15,7 +15,10 @@ function getDeviceName(deviceType: DeviceType): string {
 
         case DeviceType.FirefoxExtension:
             return 'Firefox';
-
+        
+        case DeviceType.SafariExtension:
+                return 'Safari'
+                
         default:
             return '';
     }
