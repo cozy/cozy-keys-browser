@@ -25,10 +25,10 @@ import { StorageService } from 'jslib/abstractions/storage.service';
 import { UserService } from 'jslib/abstractions/user.service';
 import { CozyClientService } from '../services/cozyClient.service';
 
-// TODO: change URLs when add-on is published
+// TODO: Add Safari URL when published
 const RateUrls = {
     [DeviceType.ChromeExtension]:
-        'https://chrome.google.com/webstore/detail/bitwarden-free-password-m/nngceckbapebfimnlniiiahkandclblb/reviews',
+        'https://chrome.google.com/webstore/detail/cozy-personal-cloud/jplochopoaajoochpoccajmgelpfbbic/reviews',
     [DeviceType.FirefoxExtension]:
         'https://addons.mozilla.org/en-US/firefox/addon/cozy-personal-cloud/reviews',
 };
