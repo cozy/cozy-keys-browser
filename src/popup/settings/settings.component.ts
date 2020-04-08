@@ -236,7 +236,9 @@ export class SettingsComponent implements OnInit {
         this.analytics.eventTrack.next({ action: 'Rate Extension' });
         BrowserApi.createNewTab((RateUrls as any)[this.platformUtilsService.getDevice()]);
     }
-
+    isPremiumEnabled(){
+        return !this.platformUtilsService.isSafari()
+    }
     premium() {
         BrowserApi.createNewTab('https://cozy.io/fr/pricing/');
     }
