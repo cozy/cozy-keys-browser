@@ -323,7 +323,7 @@
       },
       "hostname": {
         "content": "$2",
-        "example": "bitwarden.com"
+        "example": "mycozy.cloud"
       }
     }
   },
