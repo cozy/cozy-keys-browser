@@ -151,7 +151,6 @@ export default class AutofillService implements AutofillServiceInterface {
     async doAutoFill(options: any) {
         let totpPromise: Promise<string> = null;
         const tab = await this.getActiveTab();
-        console.log('BJA - step 060 - services/autofill.service doAutoFill(), with options:', options);
         if (!tab || !options.cipher || !options.pageDetails || !options.pageDetails.length) {
             throw new Error('Nothing to auto-fill.');
         }
@@ -285,7 +284,6 @@ export default class AutofillService implements AutofillServiceInterface {
             });
         }
 
-        console.log('BJA - step 07 - services/autofill.service generateFillScript()');
         switch (options.cipher.type) {
             case CipherType.Login:
                 fillScript = this.generateLoginFillScript(fillScript, pageDetails, filledFields, options);
@@ -305,8 +303,6 @@ export default class AutofillService implements AutofillServiceInterface {
 
     private generateLoginFillScript(fillScript: AutofillScript, pageDetails: any,
         filledFields: { [id: string]: AutofillField; }, options: any): AutofillScript {
-
-        console.log('BJA - STEP 08 - services/autofill.service generateFillScript(), sender', options.sender);
 
         if (!options.cipher.login) {
             return null;
@@ -906,7 +902,6 @@ export default class AutofillService implements AutofillServiceInterface {
     private loadPasswordFields(pageDetails: AutofillPageDetails, canBeHidden: boolean, canBeReadOnly: boolean,
         mustBeEmpty: boolean) {
         const arr: AutofillField[] = [];
-        console.log('BJA - step 09 - services/autofill.service loadPasswordFields()');
         pageDetails.fields.forEach((f) => {
             const isPassword = f.type === 'password';
             const valueIsLikePassword = (value: string) => {
@@ -1122,8 +1117,11 @@ export default class AutofillService implements AutofillServiceInterface {
         return fillScript;
     }
 
+    /*
+        @override by Cozy
+        function in charge of adapting the fillScript for a menu fillscript
+     */
     private setFillScriptForMenu(fillScript: AutofillScript): AutofillScript {
-        console.log('BJA - Step XX - setFillScriptForMenu');
         const newScript: any[] = [];
         fillScript.script.forEach((ope) => {
             if (ope[0].startsWith('fill')) {

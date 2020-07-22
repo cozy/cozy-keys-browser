@@ -193,9 +193,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (collectIfNeededTimeout != null) {
             window.clearTimeout(collectIfNeededTimeout);
         }
-        // collectIfNeededTimeout = window.setTimeout(collectIfNeeded, 1000);
-        // TODO BJA : inutile puisque collectIfNeeded n'est utile que tant que pageHref === window.location.href
-        // A supprimer ?
+        collectIfNeededTimeout = window.setTimeout(collectIfNeeded, 1000);
     }
 
     function collectIfNeeded() {
@@ -217,13 +215,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
             window.clearTimeout(collectIfNeededTimeout);
         }
         console.log(2);
-        // collectIfNeededTimeout = window.setTimeout(collectIfNeeded, 1000);
-        // TODO BJA : quelle utilité ? se relance lui meme et ne fait plus rien
-        // tant que pageHref === window.location.href : une boucle inutile non ? A supprimer ?
+        collectIfNeededTimeout = window.setTimeout(collectIfNeeded, 1000);
     }
 
     function collect() {
-        console.log('BJA - step 00 - content.notificationBar, COLLECT requested by notificationBar');
         sendPlatformMessage({
             command: 'bgCollectPageDetails',
             sender: 'notificationBar',

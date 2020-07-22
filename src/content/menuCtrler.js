@@ -131,7 +131,6 @@ function _initInPageMenuForEl(targetEl) {
     targetEl.addEventListener('keyup', (event) => {
         if (!event.isTrusted) return;
         const keyName = event.key;
-        console.log(keyName); // BJA
         if (keyName === 'Escape') {
             // then hide menu
             menuCtrler.hide(true)
