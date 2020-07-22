@@ -1,5 +1,19 @@
 import { createPopper } from '@popperjs/core';
 
+/* =========================================================================
+
+menuCtrler exposes an API to interact with the menus within the pages.
+
+    menuCtrler = {
+        hide()
+        setHeight(integer in px)
+        getCipher(id)
+        state
+        unlock()
+        lock()
+    }
+
+========================================================================= */
 
 var menuCtrler = {
     addMenuButton: null,

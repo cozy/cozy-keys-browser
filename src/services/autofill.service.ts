@@ -183,7 +183,6 @@ export default class AutofillService implements AutofillServiceInterface {
             }
 
             BrowserApi.tabSendMessage(tab, {
-              // command: pd.sender !== 'autofillerMenu' ? 'fillForm' : 'appendInPageMenu',
                 command: 'fillForm',
                 fillScript: fillScript,
                 url: tab.url,
@@ -419,7 +418,7 @@ export default class AutofillService implements AutofillServiceInterface {
         console.log('    STEP 08- I1 - before setFillScriptForFocus, fillScript=', fillScript);
         fillScript = this.setFillScriptForFocus(filledFields, fillScript);
 
-        if (options.sender === 'autofillerMenu') {
+        if (options.sender === 'notifBarForInPageMenu') {
             fillScript = this.setFillScriptForMenu(fillScript);
         }
         return fillScript;

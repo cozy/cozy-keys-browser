@@ -42,15 +42,6 @@ import menuCtrler from './menuCtrler';
     7. Remove "some useful globals" on window
     */
 
-	// TODO BJA : add more explanations here
-    // var menuCtrler = {
-    //     hide     : null,
-    //     setHeight: null,
-    //     getCipher: null,
-    //     state    : {islocked:false},
-    //     unlock   : function() { this.state.isLocked = false },
-    //     lock     : function() { this.state.isLocked = true  },
-    // }
 
     function collect(document, undefined) {
         // START MODIFICATION
@@ -716,9 +707,8 @@ import menuCtrler from './menuCtrler';
             fillScriptOps = fillScript.script;
             doOperation(fillScriptOps, function () {
                 // All ops are done now
-                // unlock menu and hide it after autofill (should be already hidden)
+                // unlock menu
                 menuCtrler.unlock()
-                // menuCtrler.hide(true) // TODO BJA : uncomment ?
                 // Do we have anything to autosubmit?
                 if (fillScript.hasOwnProperty('autosubmit') && 'function' == typeof autosubmit) {
                     fillScript.itemType && 'fillLogin' !== fillScript.itemType || (0 < operationsToDo.length ? setTimeout(function () {
@@ -1085,7 +1075,7 @@ import menuCtrler from './menuCtrler';
                 menuCtrler.hide(true);
             }else if (msg.subcommand === 'setMenuHeight') {
                 menuCtrler.setHeight(msg.height)
-            }else if (msg.subcommand === 'fillWithCipher') {
+            }else if (msg.subcommand === 'fillMenuWithCipher') {
                 menuCtrler.hide(true)
                 menuCtrler.lock() // lock menu to avoid clipping during autofill
                 var pageDetails = collect(document);

@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("click on row", rowEl);
         chrome.runtime.sendMessage({
             command   : 'bgAnswerMenuRequest'  ,
-            subcommand: 'fillWithCipher'       ,
+            subcommand: 'fillMenuWithCipher'       ,
             cipherId  : rowEl.dataset.cipherId ,
             sender    : 'menu.js'              ,
         });

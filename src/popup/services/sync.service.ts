@@ -1,3 +1,15 @@
+/* -----------------------------------------------------------------------------------
+
+    @override by Cozy
+
+    COZY DUPLICATE -
+    This file is duplicated from the JSlib file : jslib/abstractions/sync.service.ts
+    For more context, see commit f1956682454d00328dea38d37257ab32dc80129f
+    The copied file version is here :
+       https://github.com/bitwarden/jslib/blob/669f6ddf93bbfe8acd18a4834fff5e1c7f9c91ba/src/services/sync.service.ts
+
+   ----------------------------------------------------------------------------------- */
+
 import { ApiService } from 'jslib/abstractions/api.service';
 import { CipherService } from 'jslib/abstractions/cipher.service';
 import { CollectionService } from 'jslib/abstractions/collection.service';
@@ -61,4 +73,16 @@ export class SyncService extends BaseSyncService {
         const cozyClientService = this.cozyClientService();
         await cozyClientService.updateSynchronizedAt();
     }
+
+
+    // private async syncPolicies(response: PolicyResponse[]) {
+    //     const policies: { [id: string]: PolicyData; } = {};
+    //     if (response != null) {
+    //         response.forEach((p) => {
+    //             policies[p.id] = new PolicyData(p);
+    //         });
+    //     }
+    //     return await this.policyService.replace(policies);
+    // }
+
 }

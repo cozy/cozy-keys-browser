@@ -105,8 +105,6 @@ export default class RuntimeBackground {
             case 'bgAnswerMenuRequest':
                 switch (msg.subcommand) {
                     case 'getCiphersForTab':
-                        console.log('BJA - get proper ciphers for sender ', sender);
-
                         const ciphers = await this.cipherService.getAllDecryptedForUrl(sender.tab.url, null);
                         await BrowserApi.tabSendMessageData(sender.tab, 'updateMenuCiphers', ciphers);
                         break;
@@ -123,10 +121,10 @@ export default class RuntimeBackground {
                             height    : msg.height,
                         });
                         break;
-                    case 'fillWithCipher':
+                    case 'fillMenuWithCipher':
                         await BrowserApi.tabSendMessage(sender.tab, {
                             command   : 'autofillAnswerMenuRequest',
-                            subcommand: 'fillWithCipher',
+                            subcommand: 'fillMenuWithCipher',
                             cipherId  : msg.cipherId,
                         });
                         break;
@@ -171,13 +169,12 @@ export default class RuntimeBackground {
                         // auttofill.js sends the page details requested by the notification bar.
                         // 1- request autofill for the in page menu (if activated)
                         const enableInPageMenu = await this.storageService.get<any>(LocalConstantsService.enableInPageMenuKey);
-                        console.log('              -  Background.processMessage, about to autofillService.doAutoFillForLastUsedLogin(), msg.sender = autofillerMenu, enableInPageMenu', enableInPageMenu);
                         if (enableInPageMenu) {
                             const totpCode1 = await this.autofillService.doAutoFillForLastUsedLogin([{
                                 frameId: sender.frameId,
                                 tab: msg.tab,
                                 details: msg.details,
-                                sender: 'autofillerMenu', // in order to prepare a fillscript for the menu
+                                sender: 'notifBarForInPageMenu', // in order to prepare a fillscript for the menu
                             }], true);
                             if (totpCode1 != null) {
                                 this.platformUtilsService.copyToClipboard(totpCode1, { window: window });
@@ -197,7 +194,7 @@ export default class RuntimeBackground {
                             frameId: sender.frameId,
                             tab: msg.tab,
                             details: msg.details,
-                            sender: msg.sender, // BJA
+                            sender: msg.sender, // @override by Cozy : sent to precise it is for inPageMenu fillScript
                         }], msg.sender === 'autofill_cmd');
                         if (totpCode != null) {
                             this.platformUtilsService.copyToClipboard(totpCode, { window: window });
@@ -205,7 +202,6 @@ export default class RuntimeBackground {
                         break;
 
                     case 'menu.js':
-                        console.log('BJA - step B03 - runtime.Background.processMessage, about to autofillService.doAutoFill(), cipher:', msg.cipher);
                         const tab = await BrowserApi.getTabFromCurrentWindow();
                         const totpCode2 = await this.autofillService.doAutoFill({
                             cipher     : msg.cipher,
@@ -214,11 +210,6 @@ export default class RuntimeBackground {
                                 tab    : tab,
                                 details: msg.details,
                             }],
-
-                            // doc        : window.document,
-                            // frameId    : sender.frameId,
-                            // tab        : msg.tab,
-                            // details    : msg.details,
                         });
                         if (totpCode2 != null) {
                             this.platformUtilsService.copyToClipboard(totpCode2, { window: window });
