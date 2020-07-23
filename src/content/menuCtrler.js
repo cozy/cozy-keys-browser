@@ -8,7 +8,13 @@ menuCtrler exposes an API to interact with the menus within the pages.
         hide()
         setHeight(integer in px)
         getCipher(id)
-        state
+        setCiphers([array of ciphers])
+        state : {
+                    islocked:false      ,
+                    isHiden:true        ,
+                    _ciphers:[]         ,
+                    _selectionRow:0     ,
+                },
         unlock()
         lock()
     }
@@ -20,8 +26,13 @@ var menuCtrler = {
     hide         : null,
     setHeight    : null,
     getCipher    : null,
-    ciphers      : null,
-    state        : {islocked:false},
+    setCiphers   : null,
+    state        : {
+                     islocked:false,
+                     isHiden:true,
+                     _ciphers:[],
+                     _selectionRow:0,
+                 },
     unlock       : function() {this.state.isLocked = false},
     lock         : function() {this.state.isLocked = true },
 }
@@ -70,6 +81,9 @@ menuCtrler.addMenuButton = addMenuButton
 function _initInPageMenuForEl(targetEl) {
 
     targetsEl.push(targetEl) // register this element as one of the targets for the menu
+
+    // prevent browser autocomplet with history for this field
+    targetEl.autocomplete='off'
 
 	if(!menuEl) { // menu is not yet initiated
         menuEl = document.createElement('iframe')
@@ -126,7 +140,8 @@ function _initInPageMenuForEl(targetEl) {
         if (state.isLocked) return
         popperInstance.state.elements.reference = targetEl
         popperInstance.update()
-        menuEl.setAttribute('data-show', '');
+        menuEl.setAttribute('data-show', '')
+        state.isHiden = false
     }
     // show menu when input receives focus or is clicked (it can be click while if already has focus)
     targetEl.addEventListener('focus', (event)=>{
@@ -142,24 +157,46 @@ function _initInPageMenuForEl(targetEl) {
     if(document.activeElement === targetEl) _show()
 
     //
-    targetEl.addEventListener('keyup', (event) => {
+    targetEl.addEventListener('keydown', (event) => {
         if (!event.isTrusted) return;
         const keyName = event.key;
+        console.log("keyName", keyName);
         if (keyName === 'Escape') {
             // then hide menu
             menuCtrler.hide(true)
             return;
+        } else if (keyName === 'ArrowUp') {
+            if (state.isHiden) return  // if menu is not displayed, then nothing to do
+            event.stopPropagation()
+            event.preventDefault()
+            menuCtrler.moveSelection(-1)
+            return;
+        } else if (keyName === 'ArrowDown') {
+            if (state.isHiden) return  // if menu is not displayed, then nothing to do
+            event.stopPropagation()
+            event.preventDefault()
+            menuCtrler.moveSelection(1)
+            return;
+        } else if (keyName === 'Enter') {
+            if (state.isHiden) return  // if menu is not displayed, then nothing to do
+            // else request menu selection validation
+            event.stopPropagation()
+            event.preventDefault()
+            menuCtrler.validate()
+            return false;
         }
     }, false);
 
 }
+
 
 /* --------------------------------------------------------------------- */
 // Init a target element to be able to trigger the menu
 function hide(force) {
     if (state.isLocked) return
     if (force && typeof force == 'boolean') {
-        menuEl.removeAttribute('data-show');
+        menuEl.removeAttribute('data-show')
+        state.isHiden = true
         return
     }
     setTimeout(() => {
@@ -169,10 +206,44 @@ function hide(force) {
             return
         }
         // otherwise, hide
-        menuEl.removeAttribute('data-show');
+        menuEl.removeAttribute('data-show')
+        state.isHiden = true
     }, 1);
 }
 menuCtrler.hide = hide
+
+
+/* --------------------------------------------------------------------- */
+// Init a target element to be able to trigger the menu
+function moveSelection(n) {
+    console.log("moveSelection of ", n);
+    state._selectionRow += n
+    if (state._selectionRow === state._ciphers.length) {
+        state._selectionRow = 0
+    } else if (state._selectionRow === -1 ) {
+        state._selectionRow = state._ciphers.length - 1
+    }
+    chrome.runtime.sendMessage({
+        command      : 'bgAnswerMenuRequest',
+        subcommand   : 'menuMoveSelection',
+        targetCipher : state._ciphers[state._selectionRow].id,
+        sender       : 'menuCtrler',
+    });
+}
+menuCtrler.moveSelection = moveSelection
+
+
+/* --------------------------------------------------------------------- */
+// Init a target element to be able to trigger the menu
+function validate() {
+    console.log("VALIDATE !");
+    chrome.runtime.sendMessage({
+        command    : 'bgAnswerMenuRequest',
+        subcommand : 'menuSelectionValidate',
+        sender     : 'menuCtrler',
+    });
+}
+menuCtrler.validate = validate
 
 
 /* --------------------------------------------------------------------- */
@@ -186,12 +257,21 @@ menuCtrler.setHeight = setHeight
 /* --------------------------------------------------------------------- */
 // Get a cipher given its id
 function getCipher(id) {
-    const cipher = menuCtrler.ciphers.find((cipher)=>{
+    const cipher = state._ciphers.find((cipher)=>{
         return cipher.id == id
     })
     return cipher
 }
 menuCtrler.getCipher = getCipher
+
+
+/* --------------------------------------------------------------------- */
+// Set the ciphers
+function setCiphers(ciphers) {
+    state._ciphers = ciphers
+    // console.log('ciphers in menuCtrler = ', ciphers);
+}
+menuCtrler.setCiphers = setCiphers
 
 
 /* --------------------------------------------------------------------- */

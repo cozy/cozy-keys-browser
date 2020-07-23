@@ -1,18 +1,17 @@
 require('./menu.scss');
 
-// Globals
-var rowsl,
-    ciphers,
-    panel
 
+// Globals
+var ciphers,
+    panel
 
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // get panel reference
+    // 1- get panel reference
     panel = document.querySelector('.panel')
 
-    // close iframe when it looses focus
+    // 2- close iframe when it looses focus
     document.addEventListener('blur', ()=>{
         chrome.runtime.sendMessage({
             command   : 'bgAnswerMenuRequest',
@@ -21,25 +20,42 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     })
 
-    // listen to the ciphers sent by the addon
+    // 3- listen to the commands and ciphers sent by the addon
     chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-        if (msg.command != 'updateMenuCiphers') return
-        ciphers = msg.data
-        updateRows()
-        // then request to adjust the menu height
-        adjustMenuHeight()
-        // then update the height each time the iframe window is resized
-        window.addEventListener('resize', ()=>{
+        if (msg.command !== 'updateMenuCiphers' && msg.command !== 'menuAnswerRequest') return
+
+        if (msg.command === 'updateMenuCiphers') {
+            ciphers = msg.data
+            updateRows()
+            // then request to adjust the menu height
             adjustMenuHeight()
-        });
+            // then update the height each time the iframe window is resized
+            window.addEventListener('resize', ()=>{
+                adjustMenuHeight()
+            });
+
+        } else if (msg.command === 'menuAnswerRequest') {
+            switch (msg.subcommand) {
+                case 'menuSetSelectionOnCipher':
+                    setSelectionOnCipher(msg.targetCipher)
+                    break;
+                case 'menuSelectionValidate':
+                    requestFormFillingWithCipher(document.querySelector('.selected').dataset.cipherId)
+                    break;
+            }
+
+        }
+
     })
-    // request ciphers to the background scripts
+
+    // 4- request ciphers to the background scripts
     chrome.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest',
         subcommand: 'getCiphersForTab'   ,
         sender    : 'menu.js'            ,
     });
-    // listen to UI events (close and click)
+
+    // 5- listen to UI events (close and click)
     const closeIcon = document.querySelector('.close-icon')
     closeIcon.addEventListener('click',()=>{
         chrome.runtime.sendMessage({
@@ -51,16 +67,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const rowsList = document.querySelector('#rows-list')
     rowsList.addEventListener('click',(e)=>{
         const rowEl = e.target.closest('.row-main')
-        console.log("click on row", rowEl);
-        chrome.runtime.sendMessage({
-            command   : 'bgAnswerMenuRequest'  ,
-            subcommand: 'fillMenuWithCipher'       ,
-            cipherId  : rowEl.dataset.cipherId ,
-            sender    : 'menu.js'              ,
-        });
+        requestFormFillingWithCipher(rowEl.dataset.cipherId)
     })
 
 })
+
+
+function requestFormFillingWithCipher(cipherId) {
+    chrome.runtime.sendMessage({
+        command   : 'bgAnswerMenuRequest',
+        subcommand: 'fillFormWithCipher' ,
+        cipherId  : cipherId             ,
+        sender    : 'menu.js'            ,
+    });
+}
+
 
 function updateRows() {
     // 1- generate rows
@@ -74,9 +95,13 @@ function updateRows() {
         text.textContent = cipher.name
         detail.textContent = cipher.login.username
         row.dataset.cipherId = cipher.id
+        if (i === 0) {
+            row.classList.add('selected')
+        }
         ciphers.push()
     });
 }
+
 
 const rowTemplate = `
 <div class="row-main">
@@ -92,6 +117,7 @@ const rowTemplate = `
 </div>
 `
 
+
 function adjustMenuHeight() {
     chrome.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest' ,
@@ -99,4 +125,12 @@ function adjustMenuHeight() {
         height    : panel.offsetHeight    ,
         sender    : 'menu.js'             ,
     });
+}
+
+
+function setSelectionOnCipher(targetCipherId) {
+    // 1- remove current selection
+    document.querySelector('.selected').classList.remove('selected')
+    // 2- set new selection
+    document.querySelector(`[data-cipher-id="${targetCipherId}"]`).classList.add('selected')
 }

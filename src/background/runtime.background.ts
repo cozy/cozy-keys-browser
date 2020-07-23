@@ -64,7 +64,7 @@ export default class RuntimeBackground {
     }
 
     async processMessage(msg: any, sender: any, sendResponse: any) {
-        console.log('BJA - step 05 - Background.processMessage, msg.command', msg.subcommand, 'msg.subcommand', msg.command, ', msg.sender', msg.sender);
+        console.log('BJA - step 05 - Background.processMessage, msg.command', msg.command, 'msg.subcommand', msg.subcommand, ', msg.sender', msg.sender);
         switch (msg.command) {
             case 'loggedIn':
             case 'unlocked':
@@ -110,22 +110,35 @@ export default class RuntimeBackground {
                         break;
                     case 'closeMenu':
                         await BrowserApi.tabSendMessage(sender.tab, {
-                            command    : 'autofillAnswerMenuRequest',
+                            command    : 'autofillAnswerRequest',
                             subcommand : 'closeMenu',
                         });
                         break;
                     case 'setMenuHeight':
                         await BrowserApi.tabSendMessage(sender.tab, {
-                            command   : 'autofillAnswerMenuRequest',
+                            command   : 'autofillAnswerRequest',
                             subcommand: 'setMenuHeight',
                             height    : msg.height,
                         });
                         break;
-                    case 'fillMenuWithCipher':
+                    case 'fillFormWithCipher':
                         await BrowserApi.tabSendMessage(sender.tab, {
-                            command   : 'autofillAnswerMenuRequest',
-                            subcommand: 'fillMenuWithCipher',
+                            command   : 'autofillAnswerRequest',
+                            subcommand: 'fillFormWithCipher',
                             cipherId  : msg.cipherId,
+                        });
+                        break;
+                    case 'menuMoveSelection':
+                        await BrowserApi.tabSendMessage(sender.tab, {
+                            command     : 'menuAnswerRequest',
+                            subcommand  : 'menuSetSelectionOnCipher',
+                            targetCipher: msg.targetCipher,
+                        });
+                        break;
+                    case 'menuSelectionValidate':
+                        await BrowserApi.tabSendMessage(sender.tab, {
+                            command   : 'menuAnswerRequest',
+                            subcommand: 'menuSelectionValidate',
                         });
                         break;
                 }
@@ -169,6 +182,8 @@ export default class RuntimeBackground {
                         // auttofill.js sends the page details requested by the notification bar.
                         // 1- request autofill for the in page menu (if activated)
                         const enableInPageMenu = await this.storageService.get<any>(LocalConstantsService.enableInPageMenuKey);
+                        console.log('TEST DU PARAMETRAGE DU MENU', enableInPageMenu);
+
                         if (enableInPageMenu) {
                             const totpCode1 = await this.autofillService.doAutoFillForLastUsedLogin([{
                                 frameId: sender.frameId,

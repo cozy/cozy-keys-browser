@@ -67,12 +67,14 @@ hr {
     flex-grow: 1;
     min-width: 0;
     padding: 10px 0px 10px 0px;
+    &.selected {
+        background-color: #2a6fcd;
+        border-bottom-left-radius : 5px;
+        border-bottom-right-radius: 5px;
+    }
     &:hover{
         cursor: pointer;
         background-color: #0d5bc5;
-    }
-    &.selected {
-        background-color: #2a6fcd;
     }
 }
 

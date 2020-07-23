@@ -1070,12 +1070,12 @@ import menuCtrler from './menuCtrler';
             sendResponse();
             return true;
         }
-        else if (msg.command === 'autofillAnswerMenuRequest') {
+        else if (msg.command === 'autofillAnswerRequest') {
             if (msg.subcommand === 'closeMenu') {
                 menuCtrler.hide(true);
             }else if (msg.subcommand === 'setMenuHeight') {
                 menuCtrler.setHeight(msg.height)
-            }else if (msg.subcommand === 'fillMenuWithCipher') {
+            }else if (msg.subcommand === 'fillFormWithCipher') {
                 menuCtrler.hide(true)
                 menuCtrler.lock() // lock menu to avoid clipping during autofill
                 var pageDetails = collect(document);
@@ -1090,7 +1090,7 @@ import menuCtrler from './menuCtrler';
             }
         }else if (msg.command === 'updateMenuCiphers') {
             // store the ciphers sent to the menu to reuse them later on
-            menuCtrler.ciphers = msg.data
+            menuCtrler.setCiphers(msg.data)
         }
         sendResponse();
         return true;
