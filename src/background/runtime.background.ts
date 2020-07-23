@@ -64,7 +64,6 @@ export default class RuntimeBackground {
     }
 
     async processMessage(msg: any, sender: any, sendResponse: any) {
-        console.log('BJA - step 05 - Background.processMessage, msg.command', msg.command, 'msg.subcommand', msg.subcommand, ', msg.sender', msg.sender);
         switch (msg.command) {
             case 'loggedIn':
             case 'unlocked':
@@ -181,7 +180,8 @@ export default class RuntimeBackground {
                     case 'notificationBar':
                         // auttofill.js sends the page details requested by the notification bar.
                         // 1- request autofill for the in page menu (if activated)
-                        var enableInPageMenu = await this.storageService.get<any>(LocalConstantsService.enableInPageMenuKey);
+                        var enableInPageMenu = await this.storageService.get<any>(
+                            LocalConstantsService.enableInPageMenuKey);
                         if (enableInPageMenu === null) { // if not yet set, then default to true
                             enableInPageMenu = true;
                         }

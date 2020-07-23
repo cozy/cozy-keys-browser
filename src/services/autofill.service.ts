@@ -316,34 +316,27 @@ export default class AutofillService implements AutofillServiceInterface {
 
         if (!login.password || login.password === '') {
             // No password for this login. Maybe they just wanted to auto-fill some custom fields?
-            console.log('    STEP 08- A - `!login.password || login.password === \'\'` == true');
             fillScript = this.setFillScriptForFocus(filledFields, fillScript);
             return fillScript;
         }
 
         let passwordFields = this.loadPasswordFields(pageDetails, false, false, options.onlyEmptyFields);
-        console.log('    STEP 08- B0 - passwordFields=', passwordFields );
         if (!passwordFields.length && !options.onlyVisibleFields) {
             // not able to find any viewable password fields. maybe there are some "hidden" ones?
             passwordFields = this.loadPasswordFields(pageDetails, true, true, options.onlyEmptyFields);
-            console.log('    STEP 08- B1 - passwordFields=', passwordFields );
         }
 
         for (const formKey in pageDetails.forms) { // tslint:disable-line
             if (!pageDetails.forms.hasOwnProperty(formKey)) {
-                console.log('    STEP 08- C0 - formKey is inherited, skip it');
                 continue;
             }
 
             const passwordFieldsForForm: AutofillField[] = [];
             passwordFields.forEach((passField) => {
-                console.log('    STEP 08- D0 - passField', passField);
                 if (formKey === passField.form) {
-                    console.log('    STEP 08- D1 - push passField because it corresponds to formKey:', formKey);
                     passwordFieldsForForm.push(passField);
                 }
             });
-            console.log('    STEP 08- D2 - in the end passwordFieldsForForm:', passwordFieldsForForm);
 
             passwordFields.forEach((passField) => {
                 pf = passField;
@@ -367,7 +360,6 @@ export default class AutofillService implements AutofillServiceInterface {
         if (passwordFields.length && !passwords.length) {
             // The page does not have any forms with password fields. Use the first password field on the page and the
             // input field just before it as the username.
-            console.log('    STEP 08- E1 - passwordFields.length && !passwords.length=', passwordFields.length && !passwords.length); // tslint:disable-line
             pf = passwordFields[0];
             passwords.push(pf);
 
@@ -387,7 +379,6 @@ export default class AutofillService implements AutofillServiceInterface {
 
         if (!passwordFields.length && !options.skipUsernameOnlyFill) {
             // No password fields on this page. Let's try to just fuzzy fill the username.
-            console.log('    STEP 08- F1 - !passwordFields.length && !options.skipUsernameOnlyFill');
             pageDetails.fields.forEach((f: any) => {
                 if (f.viewable && (f.type === 'text' || f.type === 'email' || f.type === 'tel') &&
                     this.fieldIsFuzzyMatch(f, UsernameFieldNames)) {
@@ -396,9 +387,7 @@ export default class AutofillService implements AutofillServiceInterface {
             });
         }
 
-        console.log('    STEP 08- G0 - before usernames loop, fillScript=', fillScript);
         usernames.forEach((u) => {
-            console.log('    STEP 08- G1 - usernames loop');
             if (filledFields.hasOwnProperty(u.opid)) {
                 return;
             }
@@ -406,9 +395,7 @@ export default class AutofillService implements AutofillServiceInterface {
             this.fillByOpid(fillScript, u, login.username);
         });
 
-        console.log('    STEP 08- H0 - before passwords loop, fillScript=', fillScript);
         passwords.forEach((p) => {
-            console.log('    STEP 08- H1 - passwords loop');
             if (filledFields.hasOwnProperty(p.opid)) {
                 return;
             }
@@ -416,7 +403,6 @@ export default class AutofillService implements AutofillServiceInterface {
             this.fillByOpid(fillScript, p, login.password);
         });
 
-        console.log('    STEP 08- I1 - before setFillScriptForFocus, fillScript=', fillScript);
         fillScript = this.setFillScriptForFocus(filledFields, fillScript);
 
         if (options.sender === 'notifBarForInPageMenu') {

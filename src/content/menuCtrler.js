@@ -264,7 +264,6 @@ menuCtrler.getCipher = getCipher
 // Set the ciphers
 function setCiphers(ciphers) {
     state._ciphers = ciphers
-    // console.log('ciphers in menuCtrler = ', ciphers);
 }
 menuCtrler.setCiphers = setCiphers
 

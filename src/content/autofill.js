@@ -1050,12 +1050,9 @@ import menuCtrler from './menuCtrler';
     }
 
     chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-        console.log("BJA - step 04 - content.autofill.onMessage(), command=", msg.command, 'subcommand=', msg.subcommand, "sender :", msg.sender);
         if (msg.command === 'collectPageDetails') {
-            console.log("              - content.autoFill.onMessage, about to collect(), sender :", msg.sender);
             var pageDetails = collect(document);
             var pageDetailsObj = JSON.parse(pageDetails);
-            console.log("              - collected pageDetails :", pageDetailsObj);
             chrome.runtime.sendMessage({
                 command: 'collectPageDetailsResponse',
                 tab: msg.tab,

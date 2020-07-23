@@ -188,7 +188,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function collectIfNeededWithTimeout() {
-        console.log(0, document.URL);
         collectIfNeeded();
         if (collectIfNeededTimeout != null) {
             window.clearTimeout(collectIfNeededTimeout);
@@ -203,7 +202,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 observer.disconnect();
                 observer = null;
             }
-            console.log(1);
             collect();
             // The DOM might change during the collect: watch the DOM body for changes.
             // Note: a setTimeout was present here, apparently related to the autofill:
@@ -214,8 +212,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (collectIfNeededTimeout != null) {
             window.clearTimeout(collectIfNeededTimeout);
         }
-        console.log(2);
-        collectIfNeededTimeout = window.setTimeout(collectIfNeeded, 1000);
+
+        // @override by Cozy :
+        // this loop waiting for (pageHref !== window.location.href) to become true seems useless : we only need to react to dom modifications, already taken into account by observeDom()
+        // so we comment the loop waiting for "production tests"
+        // collectIfNeededTimeout = window.setTimeout(collectIfNeeded, 1000);
     }
 
     function collect() {
