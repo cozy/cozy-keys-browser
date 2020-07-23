@@ -156,33 +156,30 @@ function _initInPageMenuForEl(targetEl) {
     // if targetEl already has focus, then show menu
     if(document.activeElement === targetEl) _show()
 
-    //
+    // listen keystrokes on the input form
     targetEl.addEventListener('keydown', (event) => {
         if (!event.isTrusted) return;
         const keyName = event.key;
-        console.log("keyName", keyName);
         if (keyName === 'Escape') {
-            // then hide menu
             menuCtrler.hide(true)
             return;
         } else if (keyName === 'ArrowUp') {
-            if (state.isHiden) return  // if menu is not displayed, then nothing to do
+            if (state.isHiden) return
             event.stopPropagation()
             event.preventDefault()
             menuCtrler.moveSelection(-1)
             return;
         } else if (keyName === 'ArrowDown') {
-            if (state.isHiden) return  // if menu is not displayed, then nothing to do
+            if (state.isHiden) return
             event.stopPropagation()
             event.preventDefault()
             menuCtrler.moveSelection(1)
             return;
         } else if (keyName === 'Enter') {
-            if (state.isHiden) return  // if menu is not displayed, then nothing to do
-            // else request menu selection validation
+            if (state.isHiden) return
             event.stopPropagation()
             event.preventDefault()
-            menuCtrler.validate()
+            menuCtrler.validate()      // else request menu selection validation
             return false;
         }
     }, false);
@@ -216,7 +213,6 @@ menuCtrler.hide = hide
 /* --------------------------------------------------------------------- */
 // Init a target element to be able to trigger the menu
 function moveSelection(n) {
-    console.log("moveSelection of ", n);
     state._selectionRow += n
     if (state._selectionRow === state._ciphers.length) {
         state._selectionRow = 0
@@ -236,7 +232,6 @@ menuCtrler.moveSelection = moveSelection
 /* --------------------------------------------------------------------- */
 // Init a target element to be able to trigger the menu
 function validate() {
-    console.log("VALIDATE !");
     chrome.runtime.sendMessage({
         command    : 'bgAnswerMenuRequest',
         subcommand : 'menuSelectionValidate',

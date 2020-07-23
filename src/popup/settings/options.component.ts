@@ -78,6 +78,9 @@ export class OptionsComponent implements OnInit {
 
         this.enableInPageMenu = await this.storageService.get<boolean>(
             ConstantsService.enableInPageMenuKey);
+        if (this.enableInPageMenu === null) { // if not yet set, then default to true
+            this.enableInPageMenu = true;
+        }
 
         this.enableAutoFillOnPageLoad = await this.storageService.get<boolean>(
             ConstantsService.enableAutoFillOnPageLoadKey);
