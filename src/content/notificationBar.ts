@@ -214,7 +214,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
         // @override by Cozy :
-        // this loop waiting for (pageHref !== window.location.href) to become true seems useless : we only need to react to dom modifications, already taken into account by observeDom()
+        // this loop waiting for (pageHref !== window.location.href) to become true seems useless :
+        // we only need to react to dom modifications, already taken into account by observeDom()
         // so we comment the loop waiting for "production tests"
         // collectIfNeededTimeout = window.setTimeout(collectIfNeeded, 1000);
     }

@@ -180,7 +180,7 @@ export default class RuntimeBackground {
                     case 'notificationBar':
                         // auttofill.js sends the page details requested by the notification bar.
                         // 1- request autofill for the in page menu (if activated)
-                        var enableInPageMenu = await this.storageService.get<any>(
+                        let enableInPageMenu = await this.storageService.get<any>(
                             LocalConstantsService.enableInPageMenuKey);
                         if (enableInPageMenu === null) { // if not yet set, then default to true
                             enableInPageMenu = true;
