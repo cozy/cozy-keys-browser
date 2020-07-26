@@ -10,13 +10,16 @@ menuCtrler exposes an API to interact with the menus within the pages.
         getCipher(id)
         setCiphers([array of ciphers])
         state : {
+                    isMenuInited:false  ,
                     islocked:false      ,
+                    isActivated:true    ,
                     isHiden:true        ,
                     _ciphers:[]         ,
                     _selectionRow:0     ,
                 },
         unlock()
         lock()
+        deactivate()
     }
 
 ========================================================================= */
@@ -28,13 +31,17 @@ var menuCtrler = {
     getCipher    : null,
     setCiphers   : null,
     state        : {
-                     islocked:false,
-                     isHiden:true,
-                     _ciphers:[],
-                     _selectionRow:0,
+                    isMenuInited:false,
+                    islocked:false,
+                    isActivated:true,
+                    isHiden:true,
+                    _ciphers:[],
+                    _selectionRow:0,
                  },
     unlock       : function() {this.state.isLocked = false},
     lock         : function() {this.state.isLocked = true },
+    deactivate   : null,
+    activate     : null,
 }
 
 /* --------------------------------------------------------------------- */
@@ -42,7 +49,12 @@ var menuCtrler = {
 var menuEl,
     popperInstance,
     targetsEl = [],
-    state = menuCtrler.state
+    state = menuCtrler.state,
+    menuBtnSvg = "url(\"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%0A%20%20%20%20%20%20%3Cg%20fill%3D%27none%27%20fill-rule%3D%27evenodd%27%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ccircle%20cx%3D%2716%27%20cy%3D%2716%27%20r%3D%2716%27%20fill%3D%27%23297EF1%27%20fill-rule%3D%27nonzero%27%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%27%23FFF%27%20d%3D%27M19.314%2017.561a.555.555%200%200%201-.82.12%204.044%204.044%200%200%201-2.499.862%204.04%204.04%200%200%201-2.494-.86.557.557%200%200%201-.815-.12.547.547%200%200%201%20.156-.748c.214-.14.229-.421.229-.424a.555.555%200%200%201%20.176-.385.504.504%200%200%201%20.386-.145.544.544%200%200%201%20.528.553c0%20.004%200%20.153-.054.36a2.954%202.954%200%200%200%203.784-.008%201.765%201.765%200%200%201-.053-.344.546.546%200%200%201%20.536-.561h.01c.294%200%20.538.237.545.532%200%200%20.015.282.227.422a.544.544%200%200%201%20.158.746m2.322-6.369a5.94%205.94%200%200%200-1.69-3.506A5.651%205.651%200%200%200%2015.916%206a5.648%205.648%200%200%200-4.029%201.687%205.936%205.936%200%200%200-1.691%203.524%205.677%205.677%200%200%200-3.433%201.737%205.966%205.966%200%200%200-1.643%204.137C5.12%2020.347%207.704%2023%2010.882%2023h10.236c3.176%200%205.762-2.653%205.762-5.915%200-3.083-2.31-5.623-5.244-5.893%27%2F%3E%0A%20%20%20%20%20%20%3C%2Fg%3E%0A%20%20%3C%2Fsvg%3E\")";
+    // the string after ";utf8,...')" is just the svg inlined. Done here : https://yoksel.github.io/url-encoder/
+    // Might be optimized, see here :
+    //    * https://codepen.io/tigt/post/optimizing-svgs-in-data-uris
+    //    * https://www.npmjs.com/package/mini-svg-data-uri
 
 
 /* --------------------------------------------------------------------- */
@@ -59,16 +71,12 @@ function addMenuButton(el, op, markTheFilling) {
             case 'radio':
                 break;
             default:
-                el.style.backgroundImage = "url(\"data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2732%27%20height%3D%2732%27%20viewBox%3D%270%200%2032%2032%27%3E%0A%20%20%20%20%20%20%3Cg%20fill%3D%27none%27%20fill-rule%3D%27evenodd%27%3E%0A%20%20%20%20%20%20%20%20%20%20%3Ccircle%20cx%3D%2716%27%20cy%3D%2716%27%20r%3D%2716%27%20fill%3D%27%23297EF1%27%20fill-rule%3D%27nonzero%27%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill%3D%27%23FFF%27%20d%3D%27M19.314%2017.561a.555.555%200%200%201-.82.12%204.044%204.044%200%200%201-2.499.862%204.04%204.04%200%200%201-2.494-.86.557.557%200%200%201-.815-.12.547.547%200%200%201%20.156-.748c.214-.14.229-.421.229-.424a.555.555%200%200%201%20.176-.385.504.504%200%200%201%20.386-.145.544.544%200%200%201%20.528.553c0%20.004%200%20.153-.054.36a2.954%202.954%200%200%200%203.784-.008%201.765%201.765%200%200%201-.053-.344.546.546%200%200%201%20.536-.561h.01c.294%200%20.538.237.545.532%200%200%20.015.282.227.422a.544.544%200%200%201%20.158.746m2.322-6.369a5.94%205.94%200%200%200-1.69-3.506A5.651%205.651%200%200%200%2015.916%206a5.648%205.648%200%200%200-4.029%201.687%205.936%205.936%200%200%200-1.691%203.524%205.677%205.677%200%200%200-3.433%201.737%205.966%205.966%200%200%200-1.643%204.137C5.12%2020.347%207.704%2023%2010.882%2023h10.236c3.176%200%205.762-2.653%205.762-5.915%200-3.083-2.31-5.623-5.244-5.893%27%2F%3E%0A%20%20%20%20%20%20%3C%2Fg%3E%0A%20%20%3C%2Fsvg%3E\")";
-                // the string after ";utf8,...')" is just the svg inlined. Done here : https://yoksel.github.io/url-encoder/
-                // Might be optimized, see here :
-                //    * https://codepen.io/tigt/post/optimizing-svgs-in-data-uris
-                //    * https://www.npmjs.com/package/mini-svg-data-uri
-                el.style.backgroundRepeat = "no-repeat";
-                el.style.backgroundAttachment = "scroll";
-                el.style.backgroundSize = "16px 18px";
-                el.style.backgroundPosition = "calc(100% - 16px) 50%";
-                el.style.cursor = "pointer";
+                el.style.backgroundImage = menuBtnSvg
+                el.style.backgroundRepeat = "no-repeat"
+                el.style.backgroundAttachment = "scroll"
+                el.style.backgroundSize = "16px 18px"
+                el.style.backgroundPosition = "calc(100% - 16px) 50%"
+                el.style.cursor = "pointer"
                 _initInPageMenuForEl(el)
         }
     }
@@ -85,7 +93,7 @@ function _initInPageMenuForEl(targetEl) {
     // prevent browser autocomplet with history for this field
     targetEl.autocomplete='off'
 
-	if(!menuEl) { // menu is not yet initiated
+	if(!state.isMenuInited) { // menu is not yet initiated
         menuEl = document.createElement('iframe')
         // menuEl.contentWindow.location = chrome.extension.getURL('inPageMenu/menu.html') // ne fonctionne pas
         menuEl.src = chrome.runtime.getURL('inPageMenu/menu.html')
@@ -127,17 +135,21 @@ function _initInPageMenuForEl(targetEl) {
         setTimeout(popperInstance.update, 1200)
         setTimeout(popperInstance.update, 1800)
 
+        state.isMenuInited = true
+
 
     }
     // hide menu if focus leaves the input
     targetEl.addEventListener('blur' , (event)=>{
         if (!event.isTrusted) return;
+        if (!state.isActivated) return;
         menuCtrler.hide()
         return true
     })
 
     function _show() {
         if (state.isLocked) return
+        if (!state.isActivated) return;
         popperInstance.state.elements.reference = targetEl
         popperInstance.update()
         menuEl.setAttribute('data-show', '')
@@ -146,10 +158,12 @@ function _initInPageMenuForEl(targetEl) {
     // show menu when input receives focus or is clicked (it can be click while if already has focus)
     targetEl.addEventListener('focus', (event)=>{
         if (!event.isTrusted) return;
+        if (!state.isActivated) return;
         _show()
     })
     targetEl.addEventListener('click', (event)=>{
         if (!event.isTrusted) return;
+        if (!state.isActivated) return;
         _show()
     })
 
@@ -159,6 +173,7 @@ function _initInPageMenuForEl(targetEl) {
     // listen keystrokes on the input form
     targetEl.addEventListener('keydown', (event) => {
         if (!event.isTrusted) return;
+        if (!state.isActivated) return;
         const keyName = event.key;
         if (keyName === 'Escape') {
             menuCtrler.hide(true)
@@ -208,6 +223,33 @@ function hide(force) {
     }, 1);
 }
 menuCtrler.hide = hide
+
+
+/* --------------------------------------------------------------------- */
+// remove the buttons and prevent listerners' actions
+function deactivate() {
+    menuEl.removeAttribute('data-show')
+    state.isHiden = true
+    // remove all button inside the input of the form
+    for (var el of targetsEl) {
+        el.style.backgroundImage = ''
+    }
+    state.isActivated = false
+}
+menuCtrler.deactivate = deactivate
+
+
+/* --------------------------------------------------------------------- */
+// add the buttons icons and no longuer prevent listerners' actions
+function activate() {
+    // add button icons in inputs of the form
+    for (var el of targetsEl) {
+        el.style.backgroundImage = menuBtnSvg
+    }
+    // no longuer prevent listeners' actions
+    state.isActivated = true
+}
+menuCtrler.activate = activate
 
 
 /* --------------------------------------------------------------------- */

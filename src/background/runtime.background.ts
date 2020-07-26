@@ -204,7 +204,7 @@ export default class RuntimeBackground {
                                 frameId: sender.frameId,
                                 tab: msg.tab,
                                 details: msg.details,
-                                sender: 'notifBarForInPageMenu', // in order to prepare a fillscript for the menu
+                                sender: 'notifBarForInPageMenu', // to prepare a fillscript for the in-page-menu
                             }], true);
                             if (totpCode1 != null) {
                                 this.platformUtilsService.copyToClipboard(totpCode1, { window: window });
@@ -224,7 +224,7 @@ export default class RuntimeBackground {
                             frameId: sender.frameId,
                             tab: msg.tab,
                             details: msg.details,
-                            sender: msg.sender, // @override by Cozy : sent to precise it is for inPageMenu fillScript
+                            sender: msg.sender,
                         }], msg.sender === 'autofill_cmd');
                         if (totpCode != null) {
                             this.platformUtilsService.copyToClipboard(totpCode, { window: window });

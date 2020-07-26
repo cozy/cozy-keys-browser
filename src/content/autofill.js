@@ -1089,7 +1089,18 @@ import menuCtrler from './menuCtrler';
                     details     : pageDetailsObj,
                     sender      : 'menu.js',
                     cipher      : selectedCipher,
-                });
+                })
+            } else if (msg.subcommand === 'deactivateMenu') {
+                menuCtrler.deactivate()
+            } else if (msg.subcommand === 'activateMenu') {
+                if (menuCtrler.state.isMenuInited) {
+                    menuCtrler.activate()
+                } else {
+                    chrome.runtime.sendMessage({
+                        command: 'bgCollectPageDetails',
+                        sender: 'notificationBar',
+                    })
+                }
             }
         }else if (msg.command === 'updateMenuCiphers') {
             // store the ciphers sent to the menu to reuse them later on
