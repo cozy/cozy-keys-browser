@@ -115,6 +115,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
             watchForms(msg.data.forms);
             sendResponse();
             return true;
+        } else if (msg.command === 'notificationBarCollect') {
+            collect()
+            sendResponse();
+            return true;
         }
     }
 

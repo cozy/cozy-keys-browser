@@ -150,7 +150,18 @@ export default class AutofillService implements AutofillServiceInterface {
 
     async doAutoFill(options: any) {
         let totpPromise: Promise<string> = null;
-        const tab = await this.getActiveTab();
+        let tab = await this.getActiveTab();
+
+        /*
+        @override by Cozy : when the user logins into the addon, all tabs requests a pageDetail in order to
+        activate the in-page-menu : then the tab to take into accound is not the active tab, but the tab sent with
+        the pageDetails
+        */
+        if (options.pageDetails[0].sender === 'notifBarForInPageMenu') {
+            tab = options.pageDetails[0].tab
+        }
+        /* END @override by Cozy */
+
         if (!tab || !options.cipher || !options.pageDetails || !options.pageDetails.length) {
             throw new Error('Nothing to auto-fill.');
         }
@@ -214,10 +225,20 @@ export default class AutofillService implements AutofillServiceInterface {
     }
 
     async doAutoFillForLastUsedLogin(pageDetails: any, fromCommand: boolean) {
-        const tab = await this.getActiveTab();
+        let tab = await this.getActiveTab();
+
+        /*
+        @override by Cozy : when the user logins into the addon, all tabs requests a pageDetail in order to
+        activate the in-page-menu : then the tab to take into accound is not the active tab, but the tab sent with
+        the pageDetails
+        */
+        if (pageDetails[0].sender === 'notifBarForInPageMenu') {
+            tab = pageDetails[0].tab
+        }
         if (!tab || !tab.url) {
             return;
         }
+        /* END @override by Cozy */
 
         const lastUsedCipher = await this.cipherService.getLastUsedForUrl(tab.url);
         if (!lastUsedCipher) {

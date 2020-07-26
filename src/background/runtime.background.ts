@@ -64,6 +64,13 @@ export default class RuntimeBackground {
     }
 
     async processMessage(msg: any, sender: any, sendResponse: any) {
+        /*
+        @override by Cozy : this log is very usefoul for reverse engineer the code, keep it for tests
+
+        console.log('PROCESS MESSAGE msg.command:', msg.command, 'msg.subcommandm', msg.subcommand, 'msg.sender', msg.sender, 'sender', sender);
+
+        */
+
         switch (msg.command) {
             case 'loggedIn':
             case 'unlocked':
@@ -71,6 +78,13 @@ export default class RuntimeBackground {
                 await this.main.refreshBadgeAndMenu(false);
                 this.notificationsService.updateConnection(msg.command === 'unlocked');
                 this.systemService.cancelProcessReload();
+                // ask notificationbar of all tabs to retry to collect pageDetails in order to activate in-page-menu
+                window.setTimeout(async () => {
+                    const allTabs = await BrowserApi.getAllTabs();
+                    for (const tab of allTabs) {
+                        BrowserApi.tabSendMessage(tab,{command: 'notificationBarCollect'})
+                    }
+                }, 1);
                 break;
             case 'logout':
                 await this.main.logout(msg.expired);
@@ -185,7 +199,6 @@ export default class RuntimeBackground {
                         if (enableInPageMenu === null) { // if not yet set, then default to true
                             enableInPageMenu = true;
                         }
-
                         if (enableInPageMenu) {
                             const totpCode1 = await this.autofillService.doAutoFillForLastUsedLogin([{
                                 frameId: sender.frameId,

@@ -1050,6 +1050,12 @@ import menuCtrler from './menuCtrler';
     }
 
     chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+        /*
+        @override by Cozy : this log is very usefoul for reverse engineer the code, keep it for tests
+
+        console.log('autofil.js HEARD MESSAGE : msg.command:', msg.command, 'sender', sender);
+
+        */
         if (msg.command === 'collectPageDetails') {
             var pageDetails = collect(document);
             var pageDetailsObj = JSON.parse(pageDetails);
