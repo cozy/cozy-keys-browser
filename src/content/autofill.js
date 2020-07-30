@@ -877,8 +877,6 @@ import menuCtrler from './menuCtrler';
                 ev.charCode = 0;
                 ev.keyCode = 0;
                 ev.which = 0;
-                ev.srcElement = el;
-                ev.target = el;
             }
 
             return ev;
