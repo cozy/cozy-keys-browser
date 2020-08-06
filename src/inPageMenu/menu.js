@@ -3,7 +3,8 @@ require('./menu.scss');
 
 // Globals
 var ciphers,
-    panel
+    panel,
+    resizeListener = null
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -30,9 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // then request to adjust the menu height
             adjustMenuHeight()
             // then update the height each time the iframe window is resized
-            window.addEventListener('resize', ()=>{
-                adjustMenuHeight()
-            });
+            if (!resizeListener) {
+                resizeListener = window.addEventListener('resize', ()=>{
+                    adjustMenuHeight()
+                });
+            }
 
         } else if (msg.command === 'menuAnswerRequest') {
             switch (msg.subcommand) {

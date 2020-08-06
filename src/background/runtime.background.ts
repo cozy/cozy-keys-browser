@@ -65,7 +65,7 @@ export default class RuntimeBackground {
 
     async processMessage(msg: any, sender: any, sendResponse: any) {
         /*
-        @override by Cozy : this log is very usefoul for reverse engineer the code, keep it for tests
+        @override by Cozy : this log is very useful for reverse engineering the code, keep it for tests
 
         console.log('PROCESS MESSAGE msg.command:', msg.command, 'msg.subcommandm', msg.subcommand, 'msg.sender', msg.sender, 'sender', sender);
 
@@ -79,12 +79,12 @@ export default class RuntimeBackground {
                 this.notificationsService.updateConnection(msg.command === 'unlocked');
                 this.systemService.cancelProcessReload();
                 // ask notificationbar of all tabs to retry to collect pageDetails in order to activate in-page-menu
-                window.setTimeout(async () => {
-                    const allTabs = await BrowserApi.getAllTabs();
-                    for (const tab of allTabs) {
-                        BrowserApi.tabSendMessage(tab,{command: 'notificationBarCollect'})
-                    }
-                }, 1);
+                const allTabs = await BrowserApi.getAllTabs();
+                for (const tab of allTabs) {
+                    BrowserApi.tabSendMessage(tab,{command: 'notificationBarCollect'})
+                }
+                // window.setTimeout(async () => {
+                // }, 1);
                 break;
             case 'logout':
                 await this.main.logout(msg.expired);

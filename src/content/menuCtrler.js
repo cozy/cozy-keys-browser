@@ -195,7 +195,7 @@ function _initInPageMenuForEl(targetEl) {
             event.stopPropagation()
             event.preventDefault()
             menuCtrler.validate()      // else request menu selection validation
-            return false;
+            return;
         }
     }, false);
 

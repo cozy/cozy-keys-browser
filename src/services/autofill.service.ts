@@ -154,7 +154,7 @@ export default class AutofillService implements AutofillServiceInterface {
 
         /*
         @override by Cozy : when the user logins into the addon, all tabs requests a pageDetail in order to
-        activate the in-page-menu : then the tab to take into accound is not the active tab, but the tab sent with
+        activate the in-page-menu : then the tab to take into account is not the active tab, but the tab sent with
         the pageDetails
         */
         if (options.pageDetails[0].sender === 'notifBarForInPageMenu') {

@@ -74,14 +74,4 @@ export class SyncService extends BaseSyncService {
         await cozyClientService.updateSynchronizedAt();
     }
 
-    // private async syncPolicies(response: PolicyResponse[]) {
-    //     const policies: { [id: string]: PolicyData; } = {};
-    //     if (response != null) {
-    //         response.forEach((p) => {
-    //             policies[p.id] = new PolicyData(p);
-    //         });
-    //     }
-    //     return await this.policyService.replace(policies);
-    // }
-
 }
