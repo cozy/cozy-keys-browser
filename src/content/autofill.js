@@ -1064,7 +1064,7 @@ import menuCtrler from './menuCtrler';
         /*
         @override by Cozy : this log is very useful for reverse engineering the code, keep it for tests
 
-        console.log('autofil.js HEARD MESSAGE : msg.command:', msg.command, 'sender', sender);
+        console.log('autofil.js HEARD MESSAGE : ', {'msg.command': msg.command,'msg.subCommand': msg.subCommand, 'sender.url': sender.url, "msg": msg});
         */
 
         if (msg.command === 'collectPageDetails') {
