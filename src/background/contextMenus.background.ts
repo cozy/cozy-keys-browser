@@ -111,6 +111,7 @@ export default class ContextMenusBackground {
             command: 'collectPageDetails',
             tab: tab,
             sender: 'contextMenu',
+            toto:'BJA-contextMenu.background'
         });
     }
 }

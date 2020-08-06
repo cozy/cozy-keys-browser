@@ -148,9 +148,9 @@ export class OptionsComponent implements OnInit {
     async updateEnableInPageMenu() {
         await this.storageService.save(ConstantsService.enableInPageMenuKey, this.enableInPageMenu);
         // activate or deactivate the menu from all tabs
-        let subcommand = 'activateMenu';
+        let subcommand = 'inPageMenuActivate';
         if (!this.enableInPageMenu) {
-            subcommand = 'deactivateMenu';
+            subcommand = 'inPageMenuDeactivate';
         }
         const allTabs = await BrowserApi.getAllTabs();
         for (const tab of allTabs) {

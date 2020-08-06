@@ -13,7 +13,9 @@ menuCtrler exposes an API to interact with the menus within the pages.
                     isMenuInited:false  ,
                     islocked:false      ,
                     isActivated:true    ,
-                    isHidden:true        ,
+                    isHiden:true        ,
+                    isAutoFillInited    ,
+                    currentMenuType:null,
                     _ciphers:[]         ,
                     _selectionRow:0     ,
                 },
@@ -25,23 +27,26 @@ menuCtrler exposes an API to interact with the menus within the pages.
 ========================================================================= */
 
 var menuCtrler = {
-    addMenuButton: null,
-    hide         : null,
-    setHeight    : null,
-    getCipher    : null,
-    setCiphers   : null,
-    state        : {
-                    isMenuInited:false,
-                    islocked:false,
-                    isActivated:true,
-                    isHidden:true,
-                    _ciphers:[],
-                    _selectionRow:0,
-                 },
-    unlock       : function() {this.state.isLocked = false},
-    lock         : function() {this.state.isLocked = true },
-    deactivate   : null,
-    activate     : null,
+    addMenuButton          : null,
+    hide                   : null,
+    setHeight              : null,
+    getCipher              : null,
+    setCiphers             : null,
+    state                  : {
+                               isMenuInited:false,
+                               islocked:false,
+                               isActivated:true,
+                               isHiden:true,
+                               isAutoFillInited:false,
+                               currentMenuType:null,
+                               _ciphers:[],
+                               _selectionRow:0,
+                             },
+    unlock                 : function() {this.state.isLocked = false},
+    lock                   : function() {this.state.isLocked = true },
+    deactivate             : null,
+    activate               : null,
+    displayInPageLoginMenu : null,
 }
 
 /* --------------------------------------------------------------------- */
@@ -60,7 +65,6 @@ var menuEl,
 /* --------------------------------------------------------------------- */
 // Add a menu button to an element and initialize the iframe for the menu
 function addMenuButton(el, op, markTheFilling) {
-
     if (targetsEl.includes(el)) return; // can happen if several fillscripts are requested in autofiller.js
 
     if (el && null !== op && void 0 !== op && !(el.disabled || el.a || el.readOnly)) {
@@ -87,17 +91,18 @@ menuCtrler.addMenuButton = addMenuButton
 /* --------------------------------------------------------------------- */
 // Init a target element to be able to trigger the menu
 function _initInPageMenuForEl(targetEl) {
-
+    console.log('_initInPageMenuForEl()');
     targetsEl.push(targetEl) // register this element as one of the targets for the menu
 
     // prevent browser autocomplet with history for this field
     targetEl.autocomplete='off'
 
 	if(!state.isMenuInited) { // menu is not yet initiated
+        console.log('    menu initialization for menuType', state.currentMenuType);
         menuEl = document.createElement('iframe')
-        menuEl.src = chrome.runtime.getURL('inPageMenu/menu.html')
+        _setIframeURL(state.currentMenuType)
         menuEl.id  = 'cozy-menu-in-page'
-        menuEl.style.cssText = 'z-index: 2147483647 !important; border:0;'
+        menuEl.style.cssText = 'z-index: 2147483647 !important; border:0; height:0;'
         // Append <style> element to add popperjs styles
         // relevant doc for css stylesheet manipulation : https://www.w3.org/wiki/Dynamic_style_-_manipulating_CSS_with_JavaScript
         const styleEl = document.createElement('style')
@@ -241,6 +246,7 @@ function deactivate() {
     for (var el of targetsEl) {
         el.style.backgroundImage = ''
     }
+    // prevent listeners' actions
     state.isActivated = false
 }
 menuCtrler.deactivate = deactivate
@@ -293,6 +299,7 @@ menuCtrler.submit = submit
 /* --------------------------------------------------------------------- */
 // Set the height of menuEl (iframe) taking into account the inner margin
 function setHeight(h) {
+    console.log('setHeight');
     menuEl.style.height = h + 28 + 'px'
 }
 menuCtrler.setHeight = setHeight
@@ -313,8 +320,37 @@ menuCtrler.getCipher = getCipher
 // Set the ciphers
 function setCiphers(ciphers) {
     state._ciphers = ciphers
+    state.isAutoFillInited = true
 }
 menuCtrler.setCiphers = setCiphers
+
+
+/* --------------------------------------------------------------------- */
+//
+function setMenuType(menuType) {
+    console.log('setMenuType() to', menuType);
+    if (menuType === state.currentMenuType) {
+        return
+    }
+    if (menuEl) {
+        _setIframeURL(menuType)
+    }
+    state.currentMenuType = menuType
+}
+menuCtrler.setMenuType = setMenuType
+
+
+/* --------------------------------------------------------------------- */
+//
+function _setIframeURL(menuType) {
+    console.log('_setIframeURL() for :', menuType);
+    if (menuType === 'autofillMenu') {
+        menuEl.src = chrome.runtime.getURL('inPageMenu/menu.html')
+    }else if (menuType === 'loginMenu') {
+        menuEl.src = chrome.runtime.getURL('inPageMenu/loginMenu.html')
+    }
+}
+menuCtrler._setIframeURL = _setIframeURL
 
 
 /* --------------------------------------------------------------------- */

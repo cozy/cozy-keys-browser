@@ -209,6 +209,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
             command: 'collectPageDetails',
             tab: tab,
             sender: BroadcasterSubscriptionId,
+            toto:'BJA-current-tab.component'
         });
 
         const otherTypes: CipherType[] = [];

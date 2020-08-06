@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <!-- <div class="panel" style="transform: scale(0); transform-origin: top right; transition: all .2s ease-in-out;"> -->
+        <div class="panel">
+
+            <div id="header">
+                <div id="title-content">Login</div>
+                <div class="close-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 6.586l5.293-5.293a1 1 0 0 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 1 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 1 1 1.414-1.414L8 6.586z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <hr>
+
+            <div id="login-form">
+
+                <div id="url-row" class="row">
+                    <label id="cozy-url-label"></label>
+                    <input id="cozy-url" type="text" name="CozyUrl" inputmode="url"
+                        placeholder="ex. https://claude.mycozy.cloud" value="https://benji.mycozy.cloud">
+                </div>
+
+                <div id="pwd-row" class="row">
+                    <label id="master-password-label"></label>
+                    <div class="box-input">
+                        <input id="master-password" type="password"
+                            placeholder="Cozy password" value="J341123!!">
+                        <div id="visi-pwd-btn" class="visibility-btn">
+                            <i class="fa fa-lg fa-eye"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="twoFa-row" class="row">
+                    <label id="2fa-label"></label>
+                    <div class="box-input">
+                        <input id="two-fa-input" type="password"
+                            placeholder="2FA" value="1234">
+                        <div id="visi-2fa-btn" class="visibility-btn">
+                            <i class="fa fa-lg fa-eye"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <label id="error-label" class="row"></label>
+
+                <button id="submit-btn">Valider</button>
+
+            </div>
+
+        </div>
+    </body>
+</html>

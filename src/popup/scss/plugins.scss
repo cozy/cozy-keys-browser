@@ -177,7 +177,7 @@ $fa-font-path: "~font-awesome/fonts";
         padding: 10px 0 15px;
         margin: 0;
         font-size: $font-size-large;
-        
+
         @include themify($themes) {
             color: themed('textColor');
         }

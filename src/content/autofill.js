@@ -629,7 +629,7 @@ import menuCtrler from './menuCtrler';
             }
         }
 
-        return JSON.stringify(getPageDetails(document, 'oneshotUUID'));
+        return getPageDetails(document, 'oneshotUUID');
     }
 
     function fill(document, fillScript, undefined) {
@@ -761,6 +761,7 @@ import menuCtrler from './menuCtrler';
         // add the menu button in the element by opid operation
         function addMenuBtnByOpId(opId, op) {
             var el = getElementByOpId(opId);
+            menuCtrler.setMenuType('autofillMenu')
             return el ? (menuCtrler.addMenuButton(el, op, markTheFilling), [el]) : null;
         }
 
@@ -1005,11 +1006,22 @@ import menuCtrler from './menuCtrler';
             }
         }
 
-        doFill(fillScript);
+        function displayInPageLoginMenu(fillScript) {
+            menuCtrler.setMenuType('loginMenu')
+            // console.log("setMenuType('loginMenu') OK", fillScript.fields);
+            fillScript.fields.forEach((field, i) => {
+                const el = getElementByOpId(field.opid)
+                menuCtrler.addMenuButton(el, true)
+            });
+        }
+        if (fillScript.isInPageLoginMenu) {
+            displayInPageLoginMenu(fillScript)
+        } else {
+            menuCtrler.setMenuType('autofillMenu')
+            doFill(fillScript);
+        }
 
-        return JSON.stringify({
-            success: true
-        });
+        return '{"success": true}';
     }
 
 
@@ -1056,8 +1068,7 @@ import menuCtrler from './menuCtrler';
         */
 
         if (msg.command === 'collectPageDetails') {
-            var pageDetails = collect(document);
-            var pageDetailsObj = JSON.parse(pageDetails);
+            var pageDetailsObj = collect(document);
             chrome.runtime.sendMessage({
                 command: 'collectPageDetailsResponse',
                 tab: msg.tab,
@@ -1080,8 +1091,7 @@ import menuCtrler from './menuCtrler';
             }else if (msg.subcommand === 'fillFormWithCipher') {
                 menuCtrler.hide(true)
                 menuCtrler.lock() // lock menu to avoid clipping during autofill
-                var pageDetails = collect(document);
-                var pageDetailsObj = JSON.parse(pageDetails);
+                var pageDetailsObj = collect(document);
                 var selectedCipher = menuCtrler.getCipher(msg.cipherId)
                 chrome.runtime.sendMessage({
                     command     : 'collectPageDetailsResponse',
@@ -1089,11 +1099,30 @@ import menuCtrler from './menuCtrler';
                     sender      : 'menu.js',
                     cipher      : selectedCipher,
                 })
-            } else if (msg.subcommand === 'deactivateMenu') {
+            } else if (msg.subcommand === 'inPageMenuDeactivate') {
                 menuCtrler.deactivate()
-            } else if (msg.subcommand === 'activateMenu') {
+            } else if (msg.subcommand === 'loginInPageMenuActivate') {
+                // menuCtrler.loginMenuActivate()
+                menuCtrler.activate()
+                const pageDetails = collect(document)
+                pageDetails.isInPageLoginMenu = true
+                fill(document, pageDetails)
+            } else if (msg.subcommand === 'inPageMenuActivate') {
+                // menuCtrler.setMenuType('autofillMenu')
                 if (menuCtrler.state.isMenuInited) {
-                    menuCtrler.activate()
+                    menuCtrler.setMenuType('autofillMenu')
+                    if (menuCtrler.state.isAutoFillInited) {
+                        console.log(1);
+                        menuCtrler.activate()
+                    } else {
+                        // BJA : on devrait d'abord enlever les boutons précédants ?
+                        console.log(2);
+                        menuCtrler.activate()
+                        chrome.runtime.sendMessage({
+                            command: 'bgCollectPageDetails',
+                            sender: 'notificationBar',
+                        })
+                    }
                 } else {
                     chrome.runtime.sendMessage({
                         command: 'bgCollectPageDetails',
@@ -1104,6 +1133,10 @@ import menuCtrler from './menuCtrler';
         }else if (msg.command === 'updateMenuCiphers') {
             // store the ciphers sent to the menu to reuse them later on
             menuCtrler.setCiphers(msg.data)
+        } else if (msg.command === 'displayInPageMenuLogin') {
+            const pageDetails = collect(document)
+            pageDetails.isInPageLoginMenu = true
+            fill(document, pageDetails)
         }
         sendResponse();
         return true;

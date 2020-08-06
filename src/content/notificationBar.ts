@@ -88,6 +88,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function processMessages(msg: any, sendResponse: Function) {
+        /*
+        @override by Cozy :
+        This log is very usefoul for reverse engineer the code, keep it for tests
+        console.log('notificationBar.js HEARD MESSAGE : ', {'msg.command': msg.command,'msg': msg});
+        */
+
         if (msg.command === 'openNotificationBar') {
             if (inIframe) {
                 return;
@@ -225,6 +231,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function collect() {
+        // console.log('notificationBar about to send command bgCollectPageDetails', );
+
         sendPlatformMessage({
             command: 'bgCollectPageDetails',
             sender: 'notificationBar',

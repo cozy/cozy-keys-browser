@@ -34,6 +34,18 @@ const moduleRules = [
         }],
     },
     {
+        test: /.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+        include: [path.resolve('node_modules/font-awesome')],
+        use: [{
+            loader: 'file-loader',
+            options: {
+                name: '[name].[ext]',
+                outputPath: 'inPageMenu/fonts/',
+                publicPath: './fonts/',
+            },
+        }],
+    },
+    {
         test: /\.(jpe?g|png|gif|svg)$/i,
         exclude: /.*(fontawesome-webfont|glyphicons-halflings-regular)\.svg/,
         use: [{
@@ -92,6 +104,11 @@ const plugins = [
         filename: 'inPageMenu/menu.html',
         chunks: ['inPageMenu/menu']
     }),
+    new HtmlWebpackPlugin({
+        template: './src/inPageMenu/loginMenu.html',
+        filename: 'inPageMenu/loginMenu.html',
+        chunks: ['inPageMenu/loginMenu']
+    }),
     new CopyWebpackPlugin([
         './src/manifest.json',
         { from: './src/_locales', to: '_locales' },
@@ -145,6 +162,7 @@ const config = {
         'content/shortcuts': './src/content/shortcuts.ts',
         'notification/bar': './src/notification/bar.js',
         'inPageMenu/menu': './src/inPageMenu/menu.js',
+        'inPageMenu/loginMenu': './src/inPageMenu/loginMenu.js',
     },
     optimization: {
         minimize: ENV === 'production',

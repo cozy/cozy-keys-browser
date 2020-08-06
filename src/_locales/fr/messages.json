@@ -309,7 +309,7 @@
     "message": "Votre navigateur web ne supporte pas la copie rapide depuis le presse-papier. Copiez-le manuellement à la place."
   },
   "verifyMasterPassword": {
-    "message": "Vérifiez votre mot de passe Cozy"
+    "message": "Authentification"
   },
   "yourVaultIsLocked": {
     "message": "Votre coffre est verrouillé. Vérifiez votre mot de passe Cozy pour continuer."
@@ -848,6 +848,9 @@
   },
   "enableInPageMenuDesc": {
     "message": "Affiche un menu de sélection dans les formulaires pouvant être remplis automatiquement."
+  },
+  "loginInPageMenuTitle": {
+    "message": "Authentification"
   },
   "experimentalFeature": {
     "message": "Ceci est actuellement une fonctionnalité expérimentale. À utiliser avec prudence."

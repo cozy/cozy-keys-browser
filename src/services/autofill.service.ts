@@ -246,13 +246,11 @@ export default class AutofillService implements AutofillServiceInterface {
             return;
         }
         /* END @override by Cozy */
-
         const lastUsedCipher = await this.cipherService.getLastUsedForUrl(tab.url);
         if (!lastUsedCipher) {
             return;
         }
-
-        return await this.doAutoFill({
+        const res = await this.doAutoFill({
             cipher: lastUsedCipher,
             // tslint:disable-next-line
             pageDetails: pageDetails,
@@ -262,6 +260,7 @@ export default class AutofillService implements AutofillServiceInterface {
             onlyEmptyFields: !fromCommand,
             onlyVisibleFields: !fromCommand,
         });
+        return res
     }
 
     // Helpers

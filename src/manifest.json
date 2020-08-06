@@ -112,7 +112,8 @@
   },
   "web_accessible_resources": [
     "notification/bar.html",
-    "inPageMenu/menu.html"
+    "inPageMenu/menu.html",
+    "inPageMenu/loginMenu.html"
   ],
   "applications": {
     "gecko": {

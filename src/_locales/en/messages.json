@@ -312,7 +312,7 @@
     "message": "Your web browser does not support easy clipboard copying. Copy it manually instead."
   },
   "verifyMasterPassword": {
-    "message": "Verify Cozy Password"
+    "message": "Authentication"
   },
   "yourVaultIsLocked": {
     "message": "Your vault is locked. Verify your Cozy password to continue."
@@ -860,6 +860,9 @@
   },
   "enableInPageMenuDesc": {
     "message": "Display a selection menu in the forms that can be filled automatically."
+  },
+  "loginInPageMenuTitle": {
+    "message": "Authentication"
   },
   "experimentalFeature": {
     "message": "This is currently an experimental feature. Use at your own risk."

@@ -300,7 +300,7 @@
     "message": "Your web browser does not support easy clipboard copying. Copy it manually instead."
   },
   "verifyMasterPassword": {
-    "message": "Verify Master Password"
+    "message": "Authentication"
   },
   "yourVaultIsLocked": {
     "message": "Your vault is locked. Verify your master password to continue."

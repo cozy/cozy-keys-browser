@@ -46,9 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     requestFormFillingWithCipher(document.querySelector('.selected').dataset.cipherId)
                     break;
             }
-
         }
-
     })
 
     // 4- request ciphers to the background scripts

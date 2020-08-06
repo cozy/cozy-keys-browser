@@ -172,11 +172,14 @@ export default class MainBackground {
                 /* @override by Cozy :
                 This callback is the lockedCallback of the VaultTimeoutService
                 (see jslib/src/services/vaultTimeout.service.ts )
-                When CB is fired, ask all tabs to deactivate in-page-menu
+                When CB is fired, ask all tabs to activate login-in-page-menu
                 */
                 const allTabs = await BrowserApi.getAllTabs();
                 for (const tab of allTabs) {
-                    BrowserApi.tabSendMessage(tab, {command: 'autofillAnswerRequest', subcommand: 'deactivateMenu'});
+                    BrowserApi.tabSendMessage(tab, {
+                        command   : 'autofillAnswerRequest',
+                        subcommand: 'loginInPageMenuActivate',
+                    });
                 }
                 /* end @override by Cozy */
                 if (this.notificationsService != null) {
@@ -192,11 +195,14 @@ export default class MainBackground {
                 /* @override by Cozy :
                 This callback is the loggedOutCallback of the VaultTimeoutService
                 (see jslib/src/services/vaultTimeout.service.ts )
-                When CB is fired, ask all tabs to deactivate in-page-menu
+                When CB is fired, ask all tabs to activate login-in-page-menu
                 */
                 const allTabs = await BrowserApi.getAllTabs();
                 for (const tab of allTabs) {
-                    BrowserApi.tabSendMessage(tab, {command: 'autofillAnswerRequest', subcommand: 'deactivateMenu'});
+                    BrowserApi.tabSendMessage(tab, {
+                        command   : 'autofillAnswerRequest',
+                        subcommand: 'loginInPageMenuActivate',
+                    });
                 }
                 /* end @override by Cozy */
                 await this.logout(false);
@@ -238,11 +244,6 @@ export default class MainBackground {
         this.sidebarAction = this.isSafari ? null : (typeof opr !== 'undefined') && opr.sidebarAction ?
             opr.sidebarAction : (window as any).chrome.sidebarAction;
 
-        // Background
-        this.runtimeBackground = new RuntimeBackground(this, this.autofillService, this.cipherService,
-            this.platformUtilsService as BrowserPlatformUtilsService, this.storageService, this.i18nService,
-            this.analytics, this.notificationsService, this.systemService, this.vaultTimeoutService,
-            this.konnectorsService, this.syncService);
         this.commandsBackground = new CommandsBackground(this, this.passwordGenerationService,
             this.platformUtilsService, this.analytics, this.vaultTimeoutService);
 
@@ -270,6 +271,13 @@ export default class MainBackground {
             true,
             this.cozyClientService,
         );
+
+        // Background
+        this.runtimeBackground = new RuntimeBackground(this, this.autofillService, this.cipherService,
+            this.platformUtilsService as BrowserPlatformUtilsService, this.storageService, this.i18nService,
+            this.analytics, this.notificationsService, this.systemService, this.vaultTimeoutService,
+            this.konnectorsService, this.syncService, this.authService);
+
     }
 
     async bootstrap() {
@@ -406,6 +414,12 @@ export default class MainBackground {
         }
 
         if (await this.vaultTimeoutService.isLocked()) {
+            BrowserApi.tabSendMessage(tab, {
+                command: 'autofillAnswerRequest',
+                subcommand: 'loginInPageMenuActivate',
+                tab: tab,
+                sender: sender,
+            });
             return;
         }
 
@@ -418,6 +432,7 @@ export default class MainBackground {
             command: 'collectPageDetails',
             tab: tab,
             sender: sender,
+            toto:'BJA-main.background'
         }, options);
     }
 
