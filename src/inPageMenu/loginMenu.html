@@ -8,7 +8,12 @@
         <div class="panel">
 
             <div id="header">
-                <div id="title-content">Login</div>
+                <a href="https://cozy.io/" target="_blank" id="logo-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12">
+                        <path fill="#FFF" fill-rule="evenodd" d="M7.939 0c1.114 0 2.166.422 2.962 1.19.695.67 1.127 1.537 1.243 2.475C14.302 3.856 16 5.65 16 7.825 16 10.126 14.099 12 11.763 12H4.237C1.9 12 0 10.127 0 7.824c0-1.098.429-2.135 1.208-2.92.683-.687 1.567-1.114 2.524-1.226.113-.943.547-1.815 1.244-2.487C5.772.422 6.824 0 7.939 0zm1.998 6.8c-.202.003-.37.163-.365.365.003.061.01.12.022.18l.024.093-.159.114c-.922.609-2.198.572-3.08-.109.035-.11.05-.211.05-.282.003-.197-.163-.356-.364-.36-.2-.006-.373.147-.38.347 0 .08-.039.197-.13.286l-.14.107c-.129.119-.155.313-.05.461.07.1.186.156.307.156.069 0 .137-.019.197-.054l.094-.064.198.136c.541.343 1.18.524 1.835.524.74 0 1.457-.23 2.037-.662l.099.066.061.03c.043.016.09.024.135.024.12 0 .236-.057.307-.156.105-.15.078-.345-.05-.462l-.115-.084c-.033-.027-.06-.06-.083-.096-.034-.053-.053-.106-.063-.152l-.018-.134c-.033-.137-.15-.242-.295-.268z"/>
+                    </svg>
+                </a>
+                <div id="title-content"></div>
                 <div class="close-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M8 6.586l5.293-5.293a1 1 0 0 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 1 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 1 1 1.414-1.414L8 6.586z"/>
@@ -16,41 +21,39 @@
                 </div>
             </div>
 
-            <hr>
-
             <div id="login-form">
 
-                <div id="url-row" class="row">
-                    <label id="cozy-url-label"></label>
+                <div id="url-row" class="row row-input">
+                    <label id="cozy-url-label" class="row-label"></label>
                     <input id="cozy-url" type="text" name="CozyUrl" inputmode="url"
                         placeholder="ex. https://claude.mycozy.cloud" value="https://benji.mycozy.cloud">
                 </div>
 
-                <div id="pwd-row" class="row">
-                    <label id="master-password-label"></label>
+                <div id="pwd-row" class="row row-input">
+                    <label id="master-password-label" class="row-label"></label>
                     <div class="box-input">
                         <input id="master-password" type="password"
                             placeholder="Cozy password" value="J341123!!">
                         <div id="visi-pwd-btn" class="visibility-btn">
-                            <i class="fa fa-lg fa-eye"></i>
+                            <i class="fa fa-mg fa-eye"></i>
                         </div>
                     </div>
                 </div>
 
-                <div id="twoFa-row" class="row">
-                    <label id="2fa-label"></label>
+                <div id="twoFa-row" class="row row-input">
+                    <label id="2fa-label" class="row-label"></label>
                     <div class="box-input">
                         <input id="two-fa-input" type="password"
                             placeholder="2FA" value="1234">
                         <div id="visi-2fa-btn" class="visibility-btn">
-                            <i class="fa fa-lg fa-eye"></i>
+                            <i class="fa fa-mg fa-eye"></i>
                         </div>
                     </div>
                 </div>
 
                 <label id="error-label" class="row"></label>
 
-                <button id="submit-btn">Valider</button>
+                <button id="submit-btn"></button>
 
             </div>
 

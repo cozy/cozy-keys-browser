@@ -35,10 +35,10 @@
     "message": "Email Address"
   },
   "cozyUrl": {
-    "message": "Your Cozy URL"
+    "message": "Adress of my Cozy"
   },
   "masterPass": {
-    "message": "Your Cozy password"
+    "message": "My Cozy password"
   },
   "masterPassDesc": {
     "message": "The master password is the password you use to access your Cozy. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it."
@@ -862,7 +862,13 @@
     "message": "Display a selection menu in the forms that can be filled automatically."
   },
   "loginInPageMenuTitle": {
-    "message": "Authentication"
+      "message": "Auhtentication on my Cozy"
+  },
+  "inPageMenuLoginError": {
+    "message": "Adress and password don't match"
+  },
+  "inPageMenuLogin2FACheckError": {
+    "message": "Wrong activation code, a new will be sent"
   },
   "experimentalFeature": {
     "message": "This is currently an experimental feature. Use at your own risk."

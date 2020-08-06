@@ -20,7 +20,7 @@
     "message": "Créer un compte"
   },
   "login": {
-    "message": "Se connecter"
+    "message": "Me connecter"
   },
   "cancel": {
     "message": "Annuler"
@@ -35,10 +35,10 @@
     "message": "Adresse e-mail"
   },
   "cozyUrl": {
-    "message": "URL de votre Cozy"
+    "message": "Adresse de mon Cozy"
   },
   "masterPass": {
-    "message": "Mot de passe de votre Cozy"
+    "message": "Mot de passe de mon Cozy"
   },
   "masterPassDesc": {
     "message": "Le mot de passe maître est le mot de passe que vous utilisez pour accéder à votre Cozy. Il est très important de ne pas l'oublier. Il n'existe aucun moyen de le récupérer si vous le perdez."
@@ -850,7 +850,13 @@
     "message": "Affiche un menu de sélection dans les formulaires pouvant être remplis automatiquement."
   },
   "loginInPageMenuTitle": {
-    "message": "Authentification"
+    "message": "Me connecter à mon Cozy"
+  },
+  "inPageMenuLoginError": {
+    "message": "L'adresse et le mot de passe ne correspondent pas"
+  },
+  "inPageMenuLogin2FACheckError": {
+    "message": "Code d'activation erroné, un nouveau va vous être envoyé"
   },
   "experimentalFeature": {
     "message": "Ceci est actuellement une fonctionnalité expérimentale. À utiliser avec prudence."

@@ -11,7 +11,7 @@ var panel               ,
     closeIcon           ,
     visiPwdBtn          ,
     visi2faBtn          ,
-    cozyUrl             ,
+    urlInput             ,
     pwdInput            ,
     twoFaInput          ,
     errorLabel          ,
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     closeIcon = document.querySelector('.close-icon')
     submitBtn = document.querySelector('#submit-btn')
     errorLabel = document.querySelector('#error-label')
-    cozyUrl = document.getElementById('cozy-url')
+    urlInput = document.getElementById('cozy-url')
 
     // 2- close iframe when it looses focus
     document.addEventListener('blur', ()=>{
@@ -94,25 +94,24 @@ document.addEventListener('DOMContentLoaded', () => {
             switch (msg.subcommand) {
                 case 'loginNOK':
                     console.log("loginNOK heard in loginInPageMenu");
-                    errorLabel.innerHTML  = "loginNOK heard in loginInPageMenu"
-                    adjustMenuHeight()
+                    errorLabel.innerHTML  = chrome.i18n.getMessage('inPageMenuLoginError')
+                    _setErrorMode()
                     break;
                 case '2faRequested':
                     console.log('2faRequested heard in loginInPageMenu');
                     isIn2FA = true
-                    errorLabel.innerHTML  = ''
                     panel.classList.add('twoFa-mode')
-                    // submitBtn.textContent = ''
-                    adjustMenuHeight()
+                    panel.classList.remove('error')
+                    _removeWaitingMode()
                     break;
                 case '2faCheckNOK':
                     console.log("2faCheckNOK heard in loginInPageMenu");
-                    errorLabel.innerHTML  = "Validation code failed"
+                    errorLabel.innerHTML  = chrome.i18n.getMessage('inPageMenuLogin2FACheckError')
+                    _setErrorMode()
                     adjustMenuHeight()
                     break;
             }
         }
-
     })
 
     // 5- listen to UI events (close, visibility toggle and click to submit)
@@ -196,10 +195,9 @@ function adjustMenuHeight() {
 async function submit() {
 
     // remove possible lognin error message
-    errorLabel.innerHTML  = ""
-    adjustMenuHeight()
+    _setWaitingMode()
 
-    const loginUrl = sanitizeUrlInput(cozyUrl.value);
+    const loginUrl = sanitizeUrlInput(urlInput.value);
 
 
     if (pwdInput.value == null || pwdInput.value === '') {
@@ -231,9 +229,7 @@ async function submit() {
 
 async function submit2fa() {
 
-    // remove possible lognin error message
-    errorLabel.innerHTML  = ""
-    adjustMenuHeight()
+    _setWaitingMode()
 
     if (twoFaInput.value == null || twoFaInput.value === '') {
         // this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
@@ -242,8 +238,6 @@ async function submit2fa() {
         return;
     }
 
-
-    console.log('about to send message for 2FA check');
     chrome.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest',
         subcommand: '2faCheck'           ,
@@ -276,4 +270,36 @@ function sanitizeUrlInput(inputUrl) {
     const cozySlug = matches[1];
     const domain = matches[2] ? matches[2] : 'mycozy.cloud';
     return `${protocol}${cozySlug}.${domain}`;
+}
+
+
+function _setErrorMode() {
+    panel.classList.remove('waiting')
+    panel.classList.add('error')
+    urlInput.disabled   = false
+    pwdInput.disabled   = false
+    twoFaInput.disabled = false
+    submitBtn.disabled  = false
+    adjustMenuHeight()
+}
+
+function _removeWaitingMode() {
+    panel.classList.remove('waiting')
+    urlInput.disabled   = false
+    pwdInput.disabled   = false
+    twoFaInput.disabled = false
+    submitBtn.disabled  = false
+    errorLabel.innerHTML  = ''
+    adjustMenuHeight()
+}
+
+function _setWaitingMode() {
+    panel.classList.add('waiting')
+    panel.classList.remove('error')
+    urlInput.disabled   = true
+    pwdInput.disabled   = true
+    twoFaInput.disabled = true
+    submitBtn.disabled  = true
+    errorLabel.innerHTML  = ''
+    adjustMenuHeight()
 }
