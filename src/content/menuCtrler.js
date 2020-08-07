@@ -13,7 +13,7 @@ menuCtrler exposes an API to interact with the menus within the pages.
                     isMenuInited:false  ,
                     islocked:false      ,
                     isActivated:true    ,
-                    isHiden:true        ,
+                    isHidden:true        ,
                     isAutoFillInited    ,
                     currentMenuType:null,
                     lastFocusedEl       ,
@@ -37,7 +37,7 @@ var menuCtrler = {
                                isMenuInited:false,
                                islocked:false,
                                isActivated:true,
-                               isHiden:true,
+                               isHidden:true,
                                isAutoFillInited:false,
                                currentMenuType:null,
                                lastFocusedEl:null,
@@ -177,6 +177,7 @@ function _initInPageMenuForEl(targetEl) {
             menuCtrler.hide(true)
             return;
         } else if (keyName === 'ArrowUp') {
+            if (state.isHidden) return
             event.stopPropagation()
             event.preventDefault()
             if (state.isHidden) {
@@ -186,6 +187,7 @@ function _initInPageMenuForEl(targetEl) {
             }
             return;
         } else if (keyName === 'ArrowDown') {
+            if (state.isHidden) return
             event.stopPropagation()
             event.preventDefault()
             if (state.isHidden) {
