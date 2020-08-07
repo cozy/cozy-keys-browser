@@ -1102,7 +1102,6 @@ import menuCtrler from './menuCtrler';
             } else if (msg.subcommand === 'inPageMenuDeactivate') {
                 menuCtrler.deactivate()
             } else if (msg.subcommand === 'loginInPageMenuActivate') {
-                // menuCtrler.loginMenuActivate()
                 menuCtrler.activate()
                 const pageDetails = collect(document)
                 pageDetails.isInPageLoginMenu = true
@@ -1133,10 +1132,6 @@ import menuCtrler from './menuCtrler';
         }else if (msg.command === 'updateMenuCiphers') {
             // store the ciphers sent to the menu to reuse them later on
             menuCtrler.setCiphers(msg.data)
-        } else if (msg.command === 'displayInPageMenuLogin') {
-            const pageDetails = collect(document)
-            pageDetails.isInPageLoginMenu = true
-            fill(document, pageDetails)
         }
         sendResponse();
         return true;

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 
 import { AuthService } from 'jslib/abstractions/auth.service';
 import { EnvironmentService } from 'jslib/abstractions/environment.service';
+import { EnvironmentService as EnvironmentServiceAbstraction } from 'jslib/abstractions';
+
 import { I18nService } from 'jslib/abstractions/i18n.service';
 import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
 import { StateService } from 'jslib/abstractions/state.service';

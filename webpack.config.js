@@ -34,18 +34,6 @@ const moduleRules = [
         }],
     },
     {
-        test: /.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
-        include: [path.resolve('node_modules/font-awesome')],
-        use: [{
-            loader: 'file-loader',
-            options: {
-                name: '[name].[ext]',
-                outputPath: 'inPageMenu/fonts/',
-                publicPath: './fonts/',
-            },
-        }],
-    },
-    {
         test: /\.(jpe?g|png|gif|svg)$/i,
         exclude: /.*(fontawesome-webfont|glyphicons-halflings-regular)\.svg/,
         use: [{
@@ -116,6 +104,7 @@ const plugins = [
         { from: './src/popup/images', to: 'popup/images' },
         { from: './src/content/autofill.css', to: 'content' },
         { from: './src/content/notification.css', to: 'content' },
+        { from: './node_modules/font-awesome/*', to: 'inPageMenu/fonts/' },
     ]),
     new webpack.SourceMapDevToolPlugin({
         include: ['popup/main.js', 'background.js'],

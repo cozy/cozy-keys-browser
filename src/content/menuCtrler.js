@@ -16,6 +16,7 @@ menuCtrler exposes an API to interact with the menus within the pages.
                     isHiden:true        ,
                     isAutoFillInited    ,
                     currentMenuType:null,
+                    lastFocusedEl       ,
                     _ciphers:[]         ,
                     _selectionRow:0     ,
                 },
@@ -39,6 +40,7 @@ var menuCtrler = {
                                isHiden:true,
                                isAutoFillInited:false,
                                currentMenuType:null,
+                               lastFocusedEl:null,
                                _ciphers:[],
                                _selectionRow:0,
                              },
@@ -145,32 +147,25 @@ function _initInPageMenuForEl(targetEl) {
     targetEl.addEventListener('blur' , (event)=>{
         if (!event.isTrusted) return;
         if (!state.isActivated) return;
+        console.log('Blur about to hide()')
         menuCtrler.hide()
         return true
     })
 
-    function _show() {
-        if (state.isLocked) return
-        if (!state.isActivated) return;
-        popperInstance.state.elements.reference = targetEl
-        popperInstance.update()
-        menuEl.setAttribute('data-show', '')
-        state.isHidden = false
-    }
     // show menu when input receives focus or is clicked (it can be click while if already has focus)
     targetEl.addEventListener('focus', (event)=>{
         if (!event.isTrusted) return;
         if (!state.isActivated) return;
-        _show()
+        show(targetEl)
     })
     targetEl.addEventListener('click', (event)=>{
         if (!event.isTrusted) return;
         if (!state.isActivated) return;
-        _show()
+        show(targetEl)
     })
 
     // if targetEl already has focus, then show menu
-    if(document.activeElement === targetEl) _show()
+    if(document.activeElement === targetEl) show(targetEl)
 
     // listen keystrokes on the input form
     var hasTypedSomething = false
@@ -214,22 +209,41 @@ function _initInPageMenuForEl(targetEl) {
 }
 
 
+function show(targetEl) {
+    if (state.isLocked) return
+    if (!state.isActivated) return;
+    state.lastFocusedEl = targetEl
+    popperInstance.state.elements.reference = targetEl
+    popperInstance.update()
+    menuEl.setAttribute('data-show', '')
+    state.isHiden = false
+}
+
 /* --------------------------------------------------------------------- */
 // Init a target element to be able to trigger the menu
+var n = 0
 function hide(force) {
+    var internN = n
+    n += 1
+    console.log('menuCtrler.hide() - ', internN, 'force:', force);
     if (state.isLocked) return
     if (force && typeof force == 'boolean') {
+        console.log('HIDE!', internN)
+        console.trace()
         menuEl.removeAttribute('data-show')
         state.isHidden = true
         return
     }
+    console.trace()
     setTimeout(() => {
         var target = document.activeElement;
         if (!force && (targetsEl.indexOf(target) != -1 || target.tagName == 'IFRAME' && target.id == 'cozy-menu-in-page')) {
             // but click in iframe, do NOT hide
+            console.log('click in iframe : do NOT hide', internN);
             return
         }
         // otherwise, hide
+        console.log('HIDE!', internN)
         menuEl.removeAttribute('data-show')
         state.isHidden = true
     }, 1);
@@ -299,7 +313,7 @@ menuCtrler.submit = submit
 /* --------------------------------------------------------------------- */
 // Set the height of menuEl (iframe) taking into account the inner margin
 function setHeight(h) {
-    console.log('setHeight');
+    // console.log('setHeight');
     menuEl.style.height = h + 28 + 'px'
 }
 menuCtrler.setHeight = setHeight
@@ -334,6 +348,14 @@ function setMenuType(menuType) {
     }
     if (menuEl) {
         _setIframeURL(menuType)
+        if (menuType === 'autofillMenu' && state.currentMenuType === 'loginMenu' ) { // BJA : testing currentMenuType should be useless since here it must be 'loginMenu'
+            if (state.lastFocusedEl) {
+                window.setTimeout(()=>{
+                    // timeout is required in order to move focus only when iframe url has been setup
+                    state.lastFocusedEl.focus()
+                },100)
+            }
+        }
     }
     state.currentMenuType = menuType
 }

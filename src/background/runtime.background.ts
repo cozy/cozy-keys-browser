@@ -12,6 +12,8 @@ import { I18nService } from 'jslib/abstractions/i18n.service';
 import { Analytics } from 'jslib/misc';
 
 import { AuthService } from '../services/auth.service';
+import { EnvironmentService } from 'jslib/services';
+import { EnvironmentService as EnvironmentServiceAbstraction } from 'jslib/abstractions'; // BJA
 import { CipherService } from 'jslib/abstractions/cipher.service';
 import { StorageService } from 'jslib/abstractions/storage.service';
 import { SystemService } from 'jslib/abstractions/system.service';
@@ -43,7 +45,7 @@ export default class RuntimeBackground {
         private storageService: StorageService, private i18nService: I18nService,
         private analytics: Analytics, private notificationsService: NotificationsService,
         private systemService: SystemService, private vaultTimeoutService: VaultTimeoutService,
-        private konnectorsService: KonnectorsService, private syncService: SyncService, private authService:AuthService) {
+        private konnectorsService: KonnectorsService, private syncService: SyncService, private authService:AuthService, private environmentService:EnvironmentServiceAbstraction) {
         this.isSafari = this.platformUtilsService.isSafari();
         this.runtime = this.isSafari ? {} : chrome.runtime;
 
@@ -121,8 +123,8 @@ export default class RuntimeBackground {
                 allTabs = await BrowserApi.getAllTabs();
                 for (const tab of allTabs) {
                     BrowserApi.tabSendMessage(tab, {
-                        command   : 'autofillAnswerRequest',
-                        subcommand: 'loginInPageMenuActivate',
+                        command           : 'autofillAnswerRequest',
+                        subcommand        : 'loginInPageMenuActivate',
                     });
                 }
                 // logout
@@ -199,10 +201,22 @@ export default class RuntimeBackground {
                         break;
                     case 'login':
                         console.log('login requested with', msg.email, msg.pwd);
-                        await this.logIn (msg.email, msg.pwd, sender.tab)
+                        await this.logIn (msg.email, msg.pwd, sender.tab, msg.loginUrl)
                         break;
                     case '2faCheck':
                         console.log('2faCheck requested with', msg.token);
+                        await this.twoFaCheck (msg.token, sender.tab)
+                        break;
+                    case 'getRememberedCozyUrl':
+                        console.log('getRememberedCozyUrl requested');
+                        let rememberedCozyUrl = await this.storageService.get<string>('rememberedCozyUrl')
+                        if (!rememberedCozyUrl) { rememberedCozyUrl = "" }
+                        await BrowserApi.tabSendMessage(sender.tab, {
+                            command           : 'menuAnswerRequest',
+                            subcommand        : 'setRememberedCozyUrl',
+                            rememberedCozyUrl : rememberedCozyUrl,
+                        });
+                        break;
                         await this.twoFaCheck (msg.token, sender.tab)
                         break;
                 }
@@ -602,8 +616,13 @@ export default class RuntimeBackground {
         await BrowserApi.tabSendMessageData(tab, responseCommand, responseData);
     }
 
-    private async logIn(email: string, pwd: string, tab:any) {
+    private async logIn(email: string, pwd: string, tab:any, loginUrl: string) {
         try {
+            // This adds the scheme if missing
+            await this.environmentService.setUrls({
+                base: loginUrl + '/bitwarden',
+            });
+
             const response = await this.authService.logIn(email, pwd)
             // const formPromise = authService.logIn(this.email, masterPassword.value)
             // const response = await this.formPromise
@@ -628,6 +647,12 @@ export default class RuntimeBackground {
                 //     this.router.navigate([this.twoFactorRoute])
                 // }
             } else {
+                // Save the URL for next time
+                if (await this.storageService.get<boolean>('rememberCozyUrl')) {
+                    await this.storageService.save('rememberedCozyUrl', loginUrl);
+                } else {
+                    await this.storageService.remove('rememberedCozyUrl');
+                }
                 await BrowserApi.tabSendMessage(tab, {
                     command   : 'menuAnswerRequest',
                     subcommand: 'loginOK',

@@ -5,13 +5,14 @@ import { EnvironmentService } from 'jslib/abstractions/environment.service';
 import { Utils } from 'jslib/misc/utils';
 
 
+/* --------------------------------------------------------------------- */
 // Globals
 // UI elements
 var panel               ,
     closeIcon           ,
     visiPwdBtn          ,
     visi2faBtn          ,
-    urlInput             ,
+    urlInput            ,
     pwdInput            ,
     twoFaInput          ,
     errorLabel          ,
@@ -20,20 +21,27 @@ var panel               ,
     is2faHidden = true  ,
     isIn2FA     = false
 
-
-
+/* --------------------------------------------------------------------- */
+// initialization of the login menu
 document.addEventListener('DOMContentLoaded', () => {
+
+    // 0- ask rememberedCozyUrl
+    chrome.runtime.sendMessage({
+        command   : 'bgAnswerMenuRequest',
+        subcommand: 'getRememberedCozyUrl',
+        sender    : 'loginMenu.js',
+    });
 
     // 1- get elements references
     panel = document.querySelector('.panel')
-    visiPwdBtn = document.getElementById('visi-pwd-btn')
-    visi2faBtn = document.getElementById('visi-2fa-btn')
+    urlInput = document.getElementById('cozy-url')
     pwdInput = document.getElementById('master-password')
+    visiPwdBtn = document.getElementById('visi-pwd-btn')
     twoFaInput = document.getElementById('two-fa-input')
+    visi2faBtn = document.getElementById('visi-2fa-btn')
     closeIcon = document.querySelector('.close-icon')
     submitBtn = document.querySelector('#submit-btn')
     errorLabel = document.querySelector('#error-label')
-    urlInput = document.getElementById('cozy-url')
 
     // 2- close iframe when it looses focus
     document.addEventListener('blur', ()=>{
@@ -83,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3- listen to the commands and ciphers sent by the addon
     chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-        console.log('XXXXXXXXXXXXXXXXXXXx loginMenu heared msg', msg);
+        // console.log('XXXXXXXXXXXXXXXXXXXx loginMenu heared msg', msg);
         if (msg.command !== 'updateMenuCiphers' && msg.command !== 'menuAnswerRequest') return
 
         if (msg.command === 'updateMenuCiphers') {
@@ -110,16 +118,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     _setErrorMode()
                     adjustMenuHeight()
                     break;
+                case 'setRememberedCozyUrl':
+                    console.log("setRememberedCozyUrl heard in loginInPageMenu", msg.rememberedCozyUrl);
+                    urlInput.value = msg.rememberedCozyUrl
+                    break;
             }
         }
     })
 
+
     // 5- listen to UI events (close, visibility toggle and click to submit)
+
     closeIcon.addEventListener('click',()=>{
         chrome.runtime.sendMessage({
             command   : 'bgAnswerMenuRequest',
             subcommand: 'closeMenu'          ,
-            sender    : 'menu.js'            ,
+            sender    : 'loginMenu.js'       ,
         });
     })
 
@@ -181,6 +195,10 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 
+/* --------------------------------------------------------------------- */
+// Ask parent page to adjuste iframe height
+// Width is constraint by the parent page, but height is decided by the
+// iframe content
 function adjustMenuHeight() {
     panel.style.transform = 'scale(1)'
     chrome.runtime.sendMessage({
@@ -192,25 +210,21 @@ function adjustMenuHeight() {
 }
 
 
+/* --------------------------------------------------------------------- */
+// Submit the credentials
 async function submit() {
 
     // remove possible lognin error message
     _setWaitingMode()
 
+    // sanitize url
     const loginUrl = sanitizeUrlInput(urlInput.value);
+    urlInput.value = loginUrl
 
 
     if (pwdInput.value == null || pwdInput.value === '') {
-        // this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
-        //     this.i18nService.t('masterPassRequired'));
-        console.log('Mot de passe vide');
-        return;
+        return;  // empty password, nothing to do
     }
-
-    // This adds the scheme if missing
-    // await environmentService.setUrls({
-    //     base: loginUrl + '/bitwarden',
-    // });
 
     // The email is based on the URL and necessary for login
     const hostname = Utils.getHostname(loginUrl);
@@ -222,11 +236,14 @@ async function submit() {
         subcommand: 'login'              ,
         sender    : 'loginMenu.js'       ,
         email     : email                ,
-        pwd       : pwdInput.value ,
+        pwd       : pwdInput.value       ,
+        loginUrl  : loginUrl             ,
     });
 }
 
 
+/* --------------------------------------------------------------------- */
+// Submit 2FA code
 async function submit2fa() {
 
     _setWaitingMode()
@@ -247,6 +264,8 @@ async function submit2fa() {
 }
 
 
+/* --------------------------------------------------------------------- */
+// try to find a valid Cozy URL
 function sanitizeUrlInput(inputUrl) {
     // Prevent empty url
     if (!inputUrl) {
@@ -273,6 +292,8 @@ function sanitizeUrlInput(inputUrl) {
 }
 
 
+/* --------------------------------------------------------------------- */
+// set the menu content in error mode
 function _setErrorMode() {
     panel.classList.remove('waiting')
     panel.classList.add('error')
@@ -283,6 +304,9 @@ function _setErrorMode() {
     adjustMenuHeight()
 }
 
+
+/* --------------------------------------------------------------------- */
+// rmeove the menu content from waiting mode
 function _removeWaitingMode() {
     panel.classList.remove('waiting')
     urlInput.disabled   = false
@@ -293,6 +317,9 @@ function _removeWaitingMode() {
     adjustMenuHeight()
 }
 
+
+/* --------------------------------------------------------------------- */
+// set the menu content in waiting mode
 function _setWaitingMode() {
     panel.classList.add('waiting')
     panel.classList.remove('error')

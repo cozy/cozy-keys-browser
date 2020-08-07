@@ -177,8 +177,8 @@ export default class MainBackground {
                 const allTabs = await BrowserApi.getAllTabs();
                 for (const tab of allTabs) {
                     BrowserApi.tabSendMessage(tab, {
-                        command   : 'autofillAnswerRequest',
-                        subcommand: 'loginInPageMenuActivate',
+                        command    : 'autofillAnswerRequest',
+                        subcommand : 'loginInPageMenuActivate',
                     });
                 }
                 /* end @override by Cozy */
@@ -200,8 +200,8 @@ export default class MainBackground {
                 const allTabs = await BrowserApi.getAllTabs();
                 for (const tab of allTabs) {
                     BrowserApi.tabSendMessage(tab, {
-                        command   : 'autofillAnswerRequest',
-                        subcommand: 'loginInPageMenuActivate',
+                        command    : 'autofillAnswerRequest',
+                        subcommand : 'loginInPageMenuActivate',
                     });
                 }
                 /* end @override by Cozy */
@@ -276,7 +276,7 @@ export default class MainBackground {
         this.runtimeBackground = new RuntimeBackground(this, this.autofillService, this.cipherService,
             this.platformUtilsService as BrowserPlatformUtilsService, this.storageService, this.i18nService,
             this.analytics, this.notificationsService, this.systemService, this.vaultTimeoutService,
-            this.konnectorsService, this.syncService, this.authService);
+            this.konnectorsService, this.syncService, this.authService, this.environmentService);
 
     }
 
@@ -415,10 +415,10 @@ export default class MainBackground {
 
         if (await this.vaultTimeoutService.isLocked()) {
             BrowserApi.tabSendMessage(tab, {
-                command: 'autofillAnswerRequest',
-                subcommand: 'loginInPageMenuActivate',
-                tab: tab,
-                sender: sender,
+                command    : 'autofillAnswerRequest',
+                subcommand : 'loginInPageMenuActivate',
+                tab        : tab,
+                sender     : sender,
             });
             return;
         }
