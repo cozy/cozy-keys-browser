@@ -180,7 +180,6 @@ function _initInPageMenuForEl(targetEl) {
             menuCtrler.hide(true)
             return;
         } else if (keyName === 'ArrowUp') {
-            if (state.isHidden) return
             event.stopPropagation()
             event.preventDefault()
             if (state.isHidden) {
@@ -190,7 +189,6 @@ function _initInPageMenuForEl(targetEl) {
             }
             return;
         } else if (keyName === 'ArrowDown') {
-            if (state.isHidden) return
             event.stopPropagation()
             event.preventDefault()
             if (state.isHidden) {
