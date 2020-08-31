@@ -9,12 +9,15 @@ import { LocalConstantsService } from '../popup/services/constants.service';
 
 import { I18nService } from 'jslib/abstractions/i18n.service';
 
+import { CipherString } from 'jslib/models/domain/cipherString';
+
 import { Analytics } from 'jslib/misc';
 
 import { AuthService } from '../services/auth.service';
-import { EnvironmentService } from 'jslib/services';
-import { EnvironmentService as EnvironmentServiceAbstraction } from 'jslib/abstractions'; // BJA
+import { EnvironmentService } from 'jslib/services'; // BJA : to be removed ?
+import { EnvironmentService as EnvironmentServiceAbstraction, UserService } from 'jslib/abstractions'; // BJA
 import { CipherService } from 'jslib/abstractions/cipher.service';
+import { CryptoService } from 'jslib/abstractions/crypto.service';
 import { StorageService } from 'jslib/abstractions/storage.service';
 import { SystemService } from 'jslib/abstractions/system.service';
 import { VaultTimeoutService } from 'jslib/abstractions/vaultTimeout.service';
@@ -45,7 +48,7 @@ export default class RuntimeBackground {
         private storageService: StorageService, private i18nService: I18nService,
         private analytics: Analytics, private notificationsService: NotificationsService,
         private systemService: SystemService, private vaultTimeoutService: VaultTimeoutService,
-        private konnectorsService: KonnectorsService, private syncService: SyncService, private authService:AuthService, private environmentService:EnvironmentServiceAbstraction) {
+        private konnectorsService: KonnectorsService, private syncService: SyncService, private authService:AuthService, private environmentService:EnvironmentServiceAbstraction, private cryptoService:CryptoService, private userService:UserService) {
         this.isSafari = this.platformUtilsService.isSafari();
         this.runtime = this.isSafari ? {} : chrome.runtime;
 
@@ -69,7 +72,6 @@ export default class RuntimeBackground {
     }
 
     async processMessage(msg: any, sender: any, sendResponse: any) {
-        let allTabs;
         /*
         @override by Cozy : this log is very useful for reverse engineering the code, keep it for tests
 
@@ -94,33 +96,34 @@ export default class RuntimeBackground {
             case 'loggedIn':
             case 'unlocked':
                 console.log(msg.command, ' !!');
+                await this.loggedinAndUnlocked(msg.command)
 
-                await this.main.setIcon();
-                await this.main.refreshBadgeAndMenu(false);
-                this.notificationsService.updateConnection(msg.command === 'unlocked');
-                this.systemService.cancelProcessReload();
-                // ask notificationbar of all tabs to retry to collect pageDetails in order to activate in-page-menu
-                let enableInPageMenu = await this.storageService.get<boolean>(
-                    LocalConstantsService.enableInPageMenuKey);
-                if (enableInPageMenu === null) { // if not yet set, then default to true
-                    enableInPageMenu = true;
-                }
-                let subCommand = 'inPageMenuDeactivate'
-                if (enableInPageMenu) {
-                    subCommand = 'inPageMenuActivate'
-                }
-                await this.syncService.fullSync(true);
-                allTabs = await BrowserApi.getAllTabs();
-                for (const tab of allTabs) {
-                    BrowserApi.tabSendMessage(tab, {
-                        command   : 'autofillAnswerRequest',
-                        subcommand: subCommand,
-                    });
-                }
+                // await this.main.setIcon();
+                // await this.main.refreshBadgeAndMenu(false);
+                // this.notificationsService.updateConnection(msg.command === 'unlocked');
+                // this.systemService.cancelProcessReload();
+                // // ask notificationbar of all tabs to retry to collect pageDetails in order to activate in-page-menu
+                // let enableInPageMenu = await this.storageService.get<boolean>(
+                //     LocalConstantsService.enableInPageMenuKey);
+                // if (enableInPageMenu === null) { // if not yet set, then default to true
+                //     enableInPageMenu = true;
+                // }
+                // let subCommand = 'inPageMenuDeactivate'
+                // if (enableInPageMenu) {
+                //     subCommand = 'inPageMenuActivate'
+                // }
+                // await this.syncService.fullSync(true);
+                // allTabs = await BrowserApi.getAllTabs();
+                // for (const tab of allTabs) {
+                //     BrowserApi.tabSendMessage(tab, {
+                //         command   : 'autofillAnswerRequest',
+                //         subcommand: subCommand,
+                //     });
+                // }
                 break;
             case 'logout':
                 // ask all tabs to activate login-in-page-menu
-                allTabs = await BrowserApi.getAllTabs();
+                const allTabs = await BrowserApi.getAllTabs();
                 for (const tab of allTabs) {
                     BrowserApi.tabSendMessage(tab, {
                         command           : 'autofillAnswerRequest',
@@ -202,6 +205,10 @@ export default class RuntimeBackground {
                     case 'login':
                         console.log('login requested with', msg.email, msg.pwd);
                         await this.logIn (msg.email, msg.pwd, sender.tab, msg.loginUrl)
+                        break;
+                    case 'pinLogin':
+                        console.log('pinLogin requested with', msg.email, msg.pwd);
+                        await this.pinLogIn (msg.email, msg.pwd, sender.tab, msg.loginUrl)
                         break;
                     case '2faCheck':
                         console.log('2faCheck requested with', msg.token);
@@ -682,6 +689,58 @@ export default class RuntimeBackground {
         }
     }
 
+    /*
+        this function is based on the submit() function in /jslib/src/angular/components/lock.component.ts
+     */
+    private invalidPinAttempts = 0
+    private async pinLogIn(email: string, pin: string, tab:any, loginUrl: string) {
+        console.log(0);
+        const kdf = await this.userService.getKdf();
+        const kdfIterations = await this.userService.getKdfIterations();
+        const pinSet = await this.vaultTimeoutService.isPinLockSet();
+        let failed = true;
+        try {
+            console.log(1);
+            if (pinSet[0]) {
+                console.log(2);
+                const key = await this.cryptoService.makeKeyFromPin(pin, email, kdf, kdfIterations,
+                    this.vaultTimeoutService.pinProtectedKey);
+                const encKey = await this.cryptoService.getEncKey(key);
+                const protectedPin = await this.storageService.get<string>(ConstantsService.protectedPin);
+                const decPin = await this.cryptoService.decryptToUtf8(new CipherString(protectedPin), encKey);
+
+                failed = decPin !== pin;
+                console.log('failed', failed);
+
+                if (!failed) {
+                    // await this.setKeyAndContinue(key);
+                    await this.cryptoService.setKey(key);
+                    // chrome.runtime.sendMessage({ command: 'unlocked' });
+                    this.loggedinAndUnlocked('unlocked')
+                }
+            } else {
+                const key = await this.cryptoService.makeKeyFromPin(pin, email, kdf, kdfIterations);
+                failed = false;
+                // await this.setKeyAndContinue(key);
+                await this.cryptoService.setKey(key);
+                chrome.runtime.sendMessage({ command: 'unlocked' });
+            }
+        } catch {
+            failed = true;
+        }
+
+        if (failed) {
+            this.invalidPinAttempts++;
+            if (this.invalidPinAttempts >= 5) {
+                // this.messagingService.send('logout');
+                chrome.runtime.sendMessage({ command: 'logout' });
+                return;
+            }
+            this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
+                this.i18nService.t('invalidPin'));
+        }
+    }
+
 
     private async twoFaCheck(token: string, tab:any) {
 
@@ -729,4 +788,30 @@ export default class RuntimeBackground {
             // }
         }
     }
+
+    private async loggedinAndUnlocked(command:string){
+        await this.main.setIcon();
+        await this.main.refreshBadgeAndMenu(false);
+        this.notificationsService.updateConnection(command === 'unlocked');
+        this.systemService.cancelProcessReload();
+        // ask notificationbar of all tabs to retry to collect pageDetails in order to activate in-page-menu
+        let enableInPageMenu = await this.storageService.get<boolean>(
+            LocalConstantsService.enableInPageMenuKey);
+        if (enableInPageMenu === null) { // if not yet set, then default to true
+            enableInPageMenu = true;
+        }
+        let subCommand = 'inPageMenuDeactivate'
+        if (enableInPageMenu) {
+            subCommand = 'inPageMenuActivate'
+        }
+        await this.syncService.fullSync(true);
+        const allTabs = await BrowserApi.getAllTabs();
+        for (const tab of allTabs) {
+            BrowserApi.tabSendMessage(tab, {
+                command   : 'autofillAnswerRequest',
+                subcommand: subCommand,
+            });
+        }
+    }
+
 }

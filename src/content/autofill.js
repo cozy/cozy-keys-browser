@@ -707,8 +707,8 @@ import menuCtrler from './menuCtrler';
             fillScriptOps = fillScript.script;
             doOperation(fillScriptOps, function () {
                 // All ops are done now
-                // unlock menu
-                menuCtrler.unlock()
+                // unfreeze menu
+                menuCtrler.unFreeze()
                 // Do we have anything to autosubmit?
                 if (fillScript.hasOwnProperty('autosubmit') && 'function' == typeof autosubmit) {
                     fillScript.itemType && 'fillLogin' !== fillScript.itemType || (0 < operationsToDo.length ? setTimeout(function () {
@@ -761,7 +761,7 @@ import menuCtrler from './menuCtrler';
         // add the menu button in the element by opid operation
         function addMenuBtnByOpId(opId, op) {
             var el = getElementByOpId(opId);
-            menuCtrler.setMenuType('autofillMenu')
+            menuCtrler.setMenuType('autofillMenu', false)
             return el ? (menuCtrler.addMenuButton(el, op, markTheFilling), [el]) : null;
         }
 
@@ -1006,18 +1006,18 @@ import menuCtrler from './menuCtrler';
             }
         }
 
-        function displayInPageLoginMenu(fillScript) {
-            menuCtrler.setMenuType('loginMenu')
-            // console.log("setMenuType('loginMenu') OK", fillScript.fields);
+        function displayInPageLoginMenu(fillScript, isPinLocked) {
+            console.log('displayInPageLoginMenu(), isPinLocked',isPinLocked);
+            menuCtrler.setMenuType('loginMenu', isPinLocked)
             fillScript.fields.forEach((field, i) => {
                 const el = getElementByOpId(field.opid)
                 menuCtrler.addMenuButton(el, true)
             });
         }
         if (fillScript.isInPageLoginMenu) {
-            displayInPageLoginMenu(fillScript)
+            displayInPageLoginMenu(fillScript, fillScript.isPinLocked)
         } else {
-            menuCtrler.setMenuType('autofillMenu')
+            menuCtrler.setMenuType('autofillMenu', false)
             doFill(fillScript);
         }
 
@@ -1090,7 +1090,7 @@ import menuCtrler from './menuCtrler';
                 menuCtrler.setHeight(msg.height)
             }else if (msg.subcommand === 'fillFormWithCipher') {
                 menuCtrler.hide(true)
-                menuCtrler.lock() // lock menu to avoid clipping during autofill
+                menuCtrler.freeze() // freeze menu to avoid clipping during autofill
                 var pageDetailsObj = collect(document);
                 var selectedCipher = menuCtrler.getCipher(msg.cipherId)
                 chrome.runtime.sendMessage({
@@ -1105,17 +1105,15 @@ import menuCtrler from './menuCtrler';
                 menuCtrler.activate()
                 const pageDetails = collect(document)
                 pageDetails.isInPageLoginMenu = true
+                pageDetails.isPinLocked = msg.isPinLocked
                 fill(document, pageDetails)
             } else if (msg.subcommand === 'inPageMenuActivate') {
-                // menuCtrler.setMenuType('autofillMenu')
                 if (menuCtrler.state.isMenuInited) {
-                    menuCtrler.setMenuType('autofillMenu')
+                    menuCtrler.setMenuType('autofillMenu', false)
                     if (menuCtrler.state.isAutoFillInited) {
-                        console.log(1);
                         menuCtrler.activate()
                     } else {
                         // BJA : on devrait d'abord enlever les boutons précédants ?
-                        console.log(2);
                         menuCtrler.activate()
                         chrome.runtime.sendMessage({
                             command: 'bgCollectPageDetails',

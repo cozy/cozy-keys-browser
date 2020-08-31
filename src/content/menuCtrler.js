@@ -11,17 +11,19 @@ menuCtrler exposes an API to interact with the menus within the pages.
         setCiphers([array of ciphers])
         state : {
                     isMenuInited:false  ,
-                    islocked:false      ,
+                    isFrozen:false      ,
                     isActivated:true    ,
-                    isHidden:true        ,
+                    isHidden:true       ,
                     isAutoFillInited    ,
                     currentMenuType:null,
                     lastFocusedEl       ,
                     _ciphers:[]         ,
                     _selectionRow:0     ,
+                    islocked            ,
+                    isPinLocked         ,
                 },
-        unlock()
-        lock()
+        unFreeze()
+        freeze()
         deactivate()
     }
 
@@ -35,7 +37,7 @@ var menuCtrler = {
     setCiphers             : null,
     state                  : {
                                isMenuInited:false,
-                               islocked:false,
+                               isFrozen:false,
                                isActivated:true,
                                isHidden:true,
                                isAutoFillInited:false,
@@ -43,9 +45,10 @@ var menuCtrler = {
                                lastFocusedEl:null,
                                _ciphers:[],
                                _selectionRow:0,
+                               isPinLocked:false,
                              },
-    unlock                 : function() {this.state.isLocked = false},
-    lock                   : function() {this.state.isLocked = true },
+    unFreeze               : function() {this.state.isFrozen = false},
+    freeze                 : function() {this.state.isFrozen = true },
     deactivate             : null,
     activate               : null,
     displayInPageLoginMenu : null,
@@ -102,7 +105,7 @@ function _initInPageMenuForEl(targetEl) {
 	if(!state.isMenuInited) { // menu is not yet initiated
         console.log('    menu initialization for menuType', state.currentMenuType);
         menuEl = document.createElement('iframe')
-        _setIframeURL(state.currentMenuType)
+        _setIframeURL(state.currentMenuType, state.isPinLocked)
         menuEl.id  = 'cozy-menu-in-page'
         menuEl.style.cssText = 'z-index: 2147483647 !important; border:0; height:0;'
         // Append <style> element to add popperjs styles
@@ -212,7 +215,8 @@ function _initInPageMenuForEl(targetEl) {
 
 
 function show(targetEl) {
-    if (state.isLocked) return
+    console.log('menuCtrler.show()');
+    if (state.isFrozen) return
     if (!state.isActivated) return;
     state.lastFocusedEl = targetEl
     popperInstance.state.elements.reference = targetEl
@@ -228,15 +232,15 @@ function hide(force) {
     var internN = n
     n += 1
     console.log('menuCtrler.hide() - ', internN, 'force:', force);
-    if (state.isLocked) return
+    if (state.isFrozen) return
     if (force && typeof force == 'boolean') {
         console.log('HIDE!', internN)
-        console.trace()
+        // console.trace()  // BJA
         menuEl.removeAttribute('data-show')
         state.isHidden = true
         return
     }
-    console.trace()
+    // console.trace() // BJA
     setTimeout(() => {
         var target = document.activeElement;
         if (!force && (targetsEl.indexOf(target) != -1 || target.tagName == 'IFRAME' && target.id == 'cozy-menu-in-page')) {
@@ -343,13 +347,14 @@ menuCtrler.setCiphers = setCiphers
 
 /* --------------------------------------------------------------------- */
 //
-function setMenuType(menuType) {
-    console.log('setMenuType() to', menuType);
+function setMenuType(menuType, isPinLocked) {
+    console.log('setMenuType()', {menuType, isPinLocked, 'currentMenuType': state.currentMenuType});
     if (menuType === state.currentMenuType) {
         return
     }
     if (menuEl) {
-        _setIframeURL(menuType)
+        console.log('about to call _setIframeURL() avec :', menuType, isPinLocked);
+        _setIframeURL(menuType, isPinLocked)
         if (menuType === 'autofillMenu' && state.currentMenuType === 'loginMenu' ) { // BJA : testing currentMenuType should be useless since here it must be 'loginMenu'
             if (state.lastFocusedEl) {
                 window.setTimeout(()=>{
@@ -360,18 +365,22 @@ function setMenuType(menuType) {
         }
     }
     state.currentMenuType = menuType
+    state.isPinLocked = isPinLocked
 }
 menuCtrler.setMenuType = setMenuType
 
 
 /* --------------------------------------------------------------------- */
 //
-function _setIframeURL(menuType) {
-    console.log('_setIframeURL() for :', menuType);
+function _setIframeURL(menuType, isPinLocked) {
+    console.log('_setIframeURL() for :', {menuType, isPinLocked});
     if (menuType === 'autofillMenu') {
-        menuEl.src = chrome.runtime.getURL('inPageMenu/menu.html')
+        menuEl.src = chrome.runtime.getURL('inPageMenu/menu.html' )
     }else if (menuType === 'loginMenu') {
-        menuEl.src = chrome.runtime.getURL('inPageMenu/loginMenu.html')
+        let urlParams = ''
+        if (isPinLocked) urlParams = '?isPinLocked=true'
+        console.log('iframe url will be :', 'inPageMenu/loginMenu.html' + urlParams);
+        menuEl.src = chrome.runtime.getURL('inPageMenu/loginMenu.html' + urlParams)
     }
 }
 menuCtrler._setIframeURL = _setIframeURL

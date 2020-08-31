@@ -175,10 +175,15 @@ export default class MainBackground {
                 When CB is fired, ask all tabs to activate login-in-page-menu
                 */
                 const allTabs = await BrowserApi.getAllTabs();
+                // const pinSet = await this.vaultTimeoutService.isPinLockSet();
+                // const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1]
                 for (const tab of allTabs) {
                     BrowserApi.tabSendMessage(tab, {
                         command    : 'autofillAnswerRequest',
                         subcommand : 'loginInPageMenuActivate',
+                        isPinLocked: true,
+                        tab        : tab,
+                        // sender     : sender,
                     });
                 }
                 /* end @override by Cozy */
@@ -198,10 +203,14 @@ export default class MainBackground {
                 When CB is fired, ask all tabs to activate login-in-page-menu
                 */
                 const allTabs = await BrowserApi.getAllTabs();
+                // const pinSet = await this.vaultTimeoutService.isPinLockSet();
+                // const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1]
                 for (const tab of allTabs) {
                     BrowserApi.tabSendMessage(tab, {
                         command    : 'autofillAnswerRequest',
                         subcommand : 'loginInPageMenuActivate',
+                        isPinLocked: false,
+                        tab        : tab,
                     });
                 }
                 /* end @override by Cozy */
@@ -276,7 +285,8 @@ export default class MainBackground {
         this.runtimeBackground = new RuntimeBackground(this, this.autofillService, this.cipherService,
             this.platformUtilsService as BrowserPlatformUtilsService, this.storageService, this.i18nService,
             this.analytics, this.notificationsService, this.systemService, this.vaultTimeoutService,
-            this.konnectorsService, this.syncService, this.authService, this.environmentService);
+            this.konnectorsService, this.syncService, this.authService, this.environmentService, this.cryptoService,
+            this.userService);
 
     }
 
@@ -302,9 +312,20 @@ export default class MainBackground {
         const checkCurrentStatus = async (msg: any) => {
             const isAuthenticated = await this.userService.isAuthenticated();
             const status = isAuthenticated ? 'connected' : 'installed';
+            console.log('status =', status);
 
             return status;
         };
+
+        // const status = await checkCurrentStatus(true)
+        const isAuthenticated = await this.userService.isAuthenticated(); // = connected or installed
+        const isLocked = await this.vaultTimeoutService.isLocked()
+        // if  isAuthenticated == false  &  isLocked == true   => loggedout
+        // if  isAuthenticated == true   &  isLocked == true   => locked
+        // if  isAuthenticated == true   &  isLocked == false  => logged
+        const pinSet = await this.vaultTimeoutService.isPinLockSet();
+        const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1]
+        console.log('au démarrage', {isAuthenticated, isLocked, isPinLocked} )
 
         BrowserApi.messageListener(
             'main.background',
@@ -414,11 +435,21 @@ export default class MainBackground {
         }
 
         if (await this.vaultTimeoutService.isLocked()) {
+            // For information, to make the difference betweend locked and loggedout :
+            // const isAuthenticated = await this.userService.isAuthenticated(); // = connected or installed
+            // const isLocked        = await this.vaultTimeoutService.isLocked()
+            //    if  isAuthenticated == false  &  isLocked == true   => loggedout
+            //    if  isAuthenticated == true   &  isLocked == true   => locked
+            //    if  isAuthenticated == true   &  isLocked == false  => logged
+            const pinSet = await this.vaultTimeoutService.isPinLockSet();
+            const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1]
+            console.log('collectPageDetailsForContentScript ------ isPinLocked', isPinLocked);
             BrowserApi.tabSendMessage(tab, {
                 command    : 'autofillAnswerRequest',
                 subcommand : 'loginInPageMenuActivate',
+                isPinLocked: isPinLocked,
                 tab        : tab,
-                sender     : sender,
+                // sender     : sender, // BJA : peut être supprimé ?
             });
             return;
         }

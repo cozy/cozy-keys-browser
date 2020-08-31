@@ -9,17 +9,21 @@ import { Utils } from 'jslib/misc/utils';
 // Globals
 // UI elements
 var panel               ,
+    title               ,
     closeIcon           ,
     visiPwdBtn          ,
     visi2faBtn          ,
     urlInput            ,
+    pwdLabel            ,
     pwdInput            ,
     twoFaInput          ,
     errorLabel          ,
     submitBtn           ,
     isPwdHidden = true  ,
     is2faHidden = true  ,
-    isIn2FA     = false
+    isIn2FA     = false ,
+    isLocked            ,
+    isPinLocked
 
 /* --------------------------------------------------------------------- */
 // initialization of the login menu
@@ -34,8 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1- get elements references
     panel = document.querySelector('.panel')
+    title = document.getElementById('title-content')
     urlInput = document.getElementById('cozy-url')
     pwdInput = document.getElementById('master-password')
+    pwdLabel = document.getElementById('master-password-label')
     visiPwdBtn = document.getElementById('visi-pwd-btn')
     twoFaInput = document.getElementById('two-fa-input')
     visi2faBtn = document.getElementById('visi-2fa-btn')
@@ -43,7 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
     submitBtn = document.querySelector('#submit-btn')
     errorLabel = document.querySelector('#error-label')
 
-    // 2- close iframe when it looses focus
+    // 2- set isLocked & isPinLocked
+    isPinLocked = window.location.search.indexOf('isPinLocked=true') === -1 ? false : true
+    console.log('in loginMenu !!!!!!!!! isPinLocked=', isPinLocked, window.location );
+
+    // 3- close iframe when it looses focus
     document.addEventListener('blur', ()=>{
         chrome.runtime.sendMessage({
             command   : 'bgAnswerMenuRequest',
@@ -71,15 +81,23 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         // retrieve i18n values and set elements textcontent
         lang = chrome.i18n.getUILanguage();
-        document.getElementById('title-content').textContent         = chrome.i18n.getMessage('loginInPageMenuTitle')
-        document.getElementById('cozy-url-label').textContent        = chrome.i18n.getMessage('cozyUrl'             )
-        document.getElementById('master-password-label').textContent = chrome.i18n.getMessage('masterPass'          )
-        document.getElementById('2fa-label').textContent             = chrome.i18n.getMessage('verificationCode'    )
-        visiPwdBtn.title                                             = chrome.i18n.getMessage('toggleVisibility'    )
-        visi2faBtn.title                                             = chrome.i18n.getMessage('toggleVisibility'    )
-        submitBtn.textContent                                        = chrome.i18n.getMessage('login'               )
+        const i18nGetMessage = chrome.i18n.getMessage
+        document.getElementById('cozy-url-label').textContent = i18nGetMessage('cozyUrl'             )
+        document.getElementById('2fa-label').textContent      = i18nGetMessage('verificationCode'    )
+        visiPwdBtn.title                                      = i18nGetMessage('toggleVisibility'    )
+        visi2faBtn.title                                      = i18nGetMessage('toggleVisibility'    )
+        submitBtn.textContent                                 = i18nGetMessage('login'               )
+        if (isPinLocked) {
+            title.textContent                                 = i18nGetMessage('unlockWithPin'       )
+            pwdLabel.textContent                              = i18nGetMessage('pin'                 )
+            pwdInput.placeholder                              = i18nGetMessage('pin'                 )
+            urlInput.disabled = true
+            document.getElementById('url-row').classList.add('disabled')
+        } else {
+            title.textContent                                 = i18nGetMessage('loginInPageMenuTitle')
+            pwdLabel.textContent                              = i18nGetMessage('masterPass'          )
+        }
     }
-
     pwdInput.focus()
 
     // request to adjust the menu height
@@ -214,26 +232,28 @@ function adjustMenuHeight() {
 // Submit the credentials
 async function submit() {
 
-    // remove possible lognin error message
-    _setWaitingMode()
-
     // sanitize url
     const loginUrl = sanitizeUrlInput(urlInput.value);
     urlInput.value = loginUrl
-
-
     if (pwdInput.value == null || pwdInput.value === '') {
+        pwdInput.focus()
         return;  // empty password, nothing to do
     }
-
+    // remove possible lognin error message
+    _setWaitingMode()
     // The email is based on the URL and necessary for login
     const hostname = Utils.getHostname(loginUrl);
     const email = 'me@' + hostname;
+    // decide if it's a login or pinLogin
+    var subcommand = 'login'
+    if (isPinLocked) {
+        subcommand = 'pinLogin'
+    }
 
     console.log('about to send message for loging in');
     chrome.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest',
-        subcommand: 'login'              ,
+        subcommand: subcommand           ,
         sender    : 'loginMenu.js'       ,
         email     : email                ,
         pwd       : pwdInput.value       ,

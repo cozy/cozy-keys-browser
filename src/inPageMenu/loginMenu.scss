@@ -79,7 +79,7 @@ body {
   border-color: #ffffffa3;
 }
 
-.waiting .row-input {
+.waiting .row-input , .row-input.disabled {
     background-color: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.64);
     color: #b5d4ff;

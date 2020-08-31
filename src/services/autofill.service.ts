@@ -155,6 +155,8 @@ export default class AutofillService implements AutofillServiceInterface {
     async doAutoFill(options: any) {
         let totpPromise: Promise<string> = null;
         let tab = await this.getActiveTab();
+        console.log('in doAutoFill, options = ', options);
+
 
         /*
         @override by Cozy : when the user logins into the addon, all tabs requests a pageDetail in order to
