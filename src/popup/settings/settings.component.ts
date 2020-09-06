@@ -166,6 +166,10 @@ export class SettingsComponent implements OnInit {
             (div.querySelector('#pin-val') as HTMLInputElement).placeholder = this.i18nService.t('pin');
             div.appendChild(label);
 
+            div.querySelector('input').addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') Swal.clickConfirm()
+            })
+
             const submitted = await Swal.fire({
                 heightAuto: false,
                 buttonsStyling: false,
@@ -174,6 +178,7 @@ export class SettingsComponent implements OnInit {
                 cancelButtonText: this.i18nService.t('cancel'),
                 showConfirmButton: true,
                 confirmButtonText: this.i18nService.t('submit'),
+                focusConfirm: false,
             });
 
             let pin: string = null;

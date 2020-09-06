@@ -104,7 +104,7 @@ const plugins = [
         { from: './src/popup/images', to: 'popup/images' },
         { from: './src/content/autofill.css', to: 'content' },
         { from: './src/content/notification.css', to: 'content' },
-        { from: './node_modules/font-awesome/*', to: 'inPageMenu/fonts/' },
+        { from: './node_modules/font-awesome/fonts/*', to: 'inPageMenu/fonts/', flatten:true },
     ]),
     new webpack.SourceMapDevToolPlugin({
         include: ['popup/main.js', 'background.js'],

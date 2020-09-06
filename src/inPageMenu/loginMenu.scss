@@ -14,11 +14,27 @@ body {
     overflow: hidden;
 }
 
+.fade-in{
+    animation-duration : 300ms;
+    animation-name: slidein;
+    @keyframes slidein {
+        from {
+            transform: scale(0);
+        }
+        to {
+            transform: scale(1);
+        }
+    }
+}
+
 .panel {
     margin: 16px 10px 10px 10px;
     background-color: #297EF2;
     border-radius: 5px;
     filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.9));
+    transform-origin: calc(100% - 25px) 0;
+    animation-fill-mode: forwards;
+    transform: scale(0);
 }
 
 .panel:after {
@@ -118,6 +134,10 @@ input {
     top: -0.25rem;
     position: relative;
     outline: none;
+}
+
+input::placeholder {
+    color: #b5d4ff;
 }
 
 .box-input {

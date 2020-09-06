@@ -175,13 +175,14 @@ export default class MainBackground {
                 When CB is fired, ask all tabs to activate login-in-page-menu
                 */
                 const allTabs = await BrowserApi.getAllTabs();
-                // const pinSet = await this.vaultTimeoutService.isPinLockSet();
-                // const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1]
+                const pinSet = await this.vaultTimeoutService.isPinLockSet();
+                const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1]
+                console.log('****************** lockedCallback of the VaultTimeoutService ------ isPinLocked', isPinLocked);
                 for (const tab of allTabs) {
                     BrowserApi.tabSendMessage(tab, {
                         command    : 'autofillAnswerRequest',
                         subcommand : 'loginInPageMenuActivate',
-                        isPinLocked: true,
+                        isPinLocked: isPinLocked,
                         tab        : tab,
                         // sender     : sender,
                     });
@@ -205,6 +206,7 @@ export default class MainBackground {
                 const allTabs = await BrowserApi.getAllTabs();
                 // const pinSet = await this.vaultTimeoutService.isPinLockSet();
                 // const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1]
+                console.log('****************** loggedOutCallback of the VaultTimeoutService ------ isPinLocked', false);
                 for (const tab of allTabs) {
                     BrowserApi.tabSendMessage(tab, {
                         command    : 'autofillAnswerRequest',

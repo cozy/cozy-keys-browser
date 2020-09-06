@@ -51,18 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2- set isLocked & isPinLocked
     isPinLocked = window.location.search.indexOf('isPinLocked=true') === -1 ? false : true
-    console.log('in loginMenu !!!!!!!!! isPinLocked=', isPinLocked, window.location );
 
     // 3- close iframe when it looses focus
-    document.addEventListener('blur', ()=>{
-        chrome.runtime.sendMessage({
-            command   : 'bgAnswerMenuRequest',
-            subcommand: 'closeMenu'          ,
-            sender    : 'menu.js'            ,
-        });
-    })
+    document.addEventListener('blur', close);
 
-    // prepare i18n
+    // 4- detect when to apply the fadeIn effect
+    window.addEventListener('hashchange', _testHash)
+
+    // 5- prepare i18n and apply
     var i18n = {};
     var lang = window.navigator.language;
     if (typeof safari !== 'undefined') {
@@ -98,72 +94,57 @@ document.addEventListener('DOMContentLoaded', () => {
             pwdLabel.textContent                              = i18nGetMessage('masterPass'          )
         }
     }
-    pwdInput.focus()
 
-    // request to adjust the menu height
+    // 5- put focus
+    urlInput.focus()
+
+    // 6- request to adjust the menu height
     adjustMenuHeight()
-    // update the height each time the iframe window is resized
+
+    // 7- update the height each time the iframe window is resized
     window.addEventListener('resize', ()=>{
         adjustMenuHeight()
     });
 
-    // 3- listen to the commands and ciphers sent by the addon
+    // 8- listen to the commands sent by the addon
     chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-        // console.log('XXXXXXXXXXXXXXXXXXXx loginMenu heared msg', msg);
-        if (msg.command !== 'updateMenuCiphers' && msg.command !== 'menuAnswerRequest') return
-
-        if (msg.command === 'updateMenuCiphers') {
-            ciphers = msg.data
-            updateRows()
-
-        } else if (msg.command === 'menuAnswerRequest') {
-            switch (msg.subcommand) {
-                case 'loginNOK':
-                    console.log("loginNOK heard in loginInPageMenu");
-                    errorLabel.innerHTML  = chrome.i18n.getMessage('inPageMenuLoginError')
-                    _setErrorMode()
-                    break;
-                case '2faRequested':
-                    console.log('2faRequested heard in loginInPageMenu');
-                    isIn2FA = true
-                    panel.classList.add('twoFa-mode')
-                    panel.classList.remove('error')
-                    _removeWaitingMode()
-                    break;
-                case '2faCheckNOK':
-                    console.log("2faCheckNOK heard in loginInPageMenu");
-                    errorLabel.innerHTML  = chrome.i18n.getMessage('inPageMenuLogin2FACheckError')
-                    _setErrorMode()
-                    adjustMenuHeight()
-                    break;
-                case 'setRememberedCozyUrl':
-                    console.log("setRememberedCozyUrl heard in loginInPageMenu", msg.rememberedCozyUrl);
-                    urlInput.value = msg.rememberedCozyUrl
-                    break;
-            }
+        // console.log('loginMenu heared msg', msg);
+        if (msg.command !== 'menuAnswerRequest') return
+        switch (msg.subcommand) {
+            case 'loginNOK':
+                console.log("loginNOK heard in loginInPageMenu");
+                errorLabel.innerHTML  = chrome.i18n.getMessage('inPageMenuLoginError')
+                _setErrorMode()
+                break;
+            case '2faRequested':
+                console.log('2faRequested heard in loginInPageMenu');
+                isIn2FA = true
+                panel.classList.add('twoFa-mode')
+                panel.classList.remove('error')
+                _removeWaitingMode()
+                break;
+            case '2faCheckNOK':
+                console.log("2faCheckNOK heard in loginInPageMenu");
+                errorLabel.innerHTML  = chrome.i18n.getMessage('inPageMenuLogin2FACheckError')
+                _setErrorMode()
+                adjustMenuHeight()
+                break;
+            case 'setRememberedCozyUrl':
+                urlInput.value = msg.rememberedCozyUrl
+                pwdInput.focus()
+                break;
         }
     })
 
-
-    // 5- listen to UI events (close, visibility toggle and click to submit)
-
-    closeIcon.addEventListener('click',()=>{
-        chrome.runtime.sendMessage({
-            command   : 'bgAnswerMenuRequest',
-            subcommand: 'closeMenu'          ,
-            sender    : 'loginMenu.js'       ,
-        });
-    })
-
+    // 9- listen to UI events (close, visibility toggle and click to submit)
+    closeIcon.addEventListener('click', close)
 
     visiPwdBtn.addEventListener('click',(e)=>{
         if (isPwdHidden) {
-            console.log(1);
             pwdInput.type = 'text'
             visiPwdBtn.firstElementChild.classList.replace('fa-eye','fa-eye-slash')
 
         } else {
-            console.log(2);
             pwdInput.type = 'password'
             visiPwdBtn.firstElementChild.classList.replace('fa-eye-slash','fa-eye')
         }
@@ -171,15 +152,11 @@ document.addEventListener('DOMContentLoaded', () => {
         pwdInput.focus()
     })
 
-
     visi2faBtn.addEventListener('click',(e)=>{
         if (is2faHidden) {
-            console.log(1);
             twoFaInput.type = 'text'
             visi2faBtn.firstElementChild.classList.replace('fa-eye','fa-eye-slash')
-
         } else {
-            console.log(2);
             twoFaInput.type = 'password'
             visi2faBtn.firstElementChild.classList.replace('fa-eye-slash','fa-eye')
         }
@@ -187,16 +164,13 @@ document.addEventListener('DOMContentLoaded', () => {
         pwdInput.focus()
     })
 
-
     submitBtn.addEventListener('click',(e)=>{
-        console.log("submitBtn.click()");
         if (isIn2FA) {
             submit2fa()
         } else {
             submit()
         }
     })
-
 
     panel.addEventListener('keydown', (event) => {
         if (!event.isTrusted) return;
@@ -207,9 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 submit()
             }
+        } else if (keyName === 'Escape') {
+            close();
         }
     })
-
 })
 
 
@@ -218,7 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // Width is constraint by the parent page, but height is decided by the
 // iframe content
 function adjustMenuHeight() {
-    panel.style.transform = 'scale(1)'
     chrome.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest' ,
         subcommand: 'setMenuHeight'       ,
@@ -250,7 +224,6 @@ async function submit() {
         subcommand = 'pinLogin'
     }
 
-    console.log('about to send message for loging in');
     chrome.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest',
         subcommand: subcommand           ,
@@ -321,6 +294,7 @@ function _setErrorMode() {
     pwdInput.disabled   = false
     twoFaInput.disabled = false
     submitBtn.disabled  = false
+    pwdInput.focus()
     adjustMenuHeight()
 }
 
@@ -349,4 +323,26 @@ function _setWaitingMode() {
     submitBtn.disabled  = true
     errorLabel.innerHTML  = ''
     adjustMenuHeight()
+}
+
+
+/* --------------------------------------------------------------------- */
+// Request the iframe content to fadeIn or not
+function _testHash(){
+    if (window.location.hash === '#applyFadeIn') {
+        panel.classList.add('fade-in')
+    } else {
+        panel.className = "panel";
+    }
+}
+
+
+/* --------------------------------------------------------------------- */
+// Request the menu controler to close the iframe of the
+function close() {
+    chrome.runtime.sendMessage({
+        command   : 'bgAnswerMenuRequest',
+        subcommand: 'closeMenu'          ,
+        sender    : 'loginMenu.js'       ,
+    });
 }

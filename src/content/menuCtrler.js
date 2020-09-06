@@ -105,14 +105,14 @@ function _initInPageMenuForEl(targetEl) {
 	if(!state.isMenuInited) { // menu is not yet initiated
         console.log('    menu initialization for menuType', state.currentMenuType);
         menuEl = document.createElement('iframe')
-        _setIframeURL(state.currentMenuType, state.isPinLocked)
+        _setIframeURL(state.currentMenuType, state.isPinLocked, '#isNotVisible' )
         menuEl.id  = 'cozy-menu-in-page'
-        menuEl.style.cssText = 'z-index: 2147483647 !important; border:0; height:0;'
+        menuEl.style.cssText = 'z-index: 2147483647 !important; border:0; height:0; transition: transform 30ms linear 0s;'
         // Append <style> element to add popperjs styles
         // relevant doc for css stylesheet manipulation : https://www.w3.org/wiki/Dynamic_style_-_manipulating_CSS_with_JavaScript
         const styleEl = document.createElement('style')
         styleEl.innerHTML = `
-            #cozy-menu-in-page {visibility: hidden;}
+            #cozy-menu-in-page {visibility: hidden; }
             #cozy-menu-in-page[data-show] {visibility: visible;}
         `;
         document.head.appendChild(styleEl)
@@ -135,6 +135,12 @@ function _initInPageMenuForEl(targetEl) {
                     name: 'offset',
                     options: {offset: [0, -5]},
                 },
+                {
+                    name: 'computeStyles',
+                    options: {
+                        adaptive: false,
+                    },
+                },
                 sameWidth,
             ],
         });
@@ -150,40 +156,48 @@ function _initInPageMenuForEl(targetEl) {
     targetEl.addEventListener('blur' , (event)=>{
         if (!event.isTrusted) return;
         if (!state.isActivated) return;
-        console.log('Blur about to hide()')
+        console.log('Blur event in an input', event.target.id)
         menuCtrler.hide()
         return true
     })
 
-    // show menu when input receives focus or is clicked (it can be click while if already has focus)
+    // show menu when input receives focus or is clicked (it can be click while it already has focus)
     targetEl.addEventListener('focus', (event)=>{
+        console.log('focus event in an input', event.target.id);
         if (!event.isTrusted) return;
         if (!state.isActivated) return;
         show(targetEl)
     })
     targetEl.addEventListener('click', (event)=>{
+        console.log('click event in an input', event.target.id);
         if (!event.isTrusted) return;
         if (!state.isActivated) return;
         show(targetEl)
     })
 
     // if targetEl already has focus, then show menu
-    if(document.activeElement === targetEl) show(targetEl)
+    // if(document.activeElement === targetEl) {
+    //     setTimeout(()=>{show(targetEl)},1000)
+    // }
 
     // listen keystrokes on the input form
     var hasTypedSomething = false
     targetEl.addEventListener('keydown', (event) => {
+        console.log('keydown event', event.key, state.isHidden);
         if (!event.isTrusted) return;
         if (!state.isActivated) return;
         const keyName = event.key;
         if (keyName === 'Escape') {
+            console.log('escape ==> hide');
             menuCtrler.hide(true)
+            return;
+        } else if (keyName === 'Tab') {
             return;
         } else if (keyName === 'ArrowUp') {
             event.stopPropagation()
             event.preventDefault()
             if (state.isHidden) {
-                _show()
+                show(event.target)
             } else {
                 menuCtrler.moveSelection(-1)
             }
@@ -192,7 +206,7 @@ function _initInPageMenuForEl(targetEl) {
             event.stopPropagation()
             event.preventDefault()
             if (state.isHidden) {
-                _show()
+                show(event.target)
             } else {
                 menuCtrler.moveSelection(1)
             }
@@ -203,7 +217,8 @@ function _initInPageMenuForEl(targetEl) {
             event.preventDefault()
             menuCtrler.submit()      // else request menu selection validation
             return;
-        } else {
+        } else if  (_isCharacterKeyPress(event)){
+            console.log('_isCharacterKeyPress ==> hide');
             menuCtrler.hide(true)
             return;
         }
@@ -220,7 +235,8 @@ function show(targetEl) {
     popperInstance.state.elements.reference = targetEl
     popperInstance.update()
     menuEl.setAttribute('data-show', '')
-    state.isHiden = false
+    state.isHidden = false
+    _setApplyFadeInUrl(true)
 }
 
 /* --------------------------------------------------------------------- */
@@ -229,26 +245,35 @@ var n = 0
 function hide(force) {
     var internN = n
     n += 1
-    console.log('menuCtrler.hide() - ', internN, 'force:', force);
+    console.log('menuCtrler.hide() - ', internN, 'force:', force, document.activeElement.id);
     if (state.isFrozen) return
     if (force && typeof force == 'boolean') {
         console.log('HIDE!', internN)
-        // console.trace()  // BJA
-        menuEl.removeAttribute('data-show')
+        _setApplyFadeInUrl(false)
+        // hide menu element after a delay so that the inner pannel has been scaled to 0 and therefore enables
+        // a proper start for the next display of the menu.
+        // There is an explanation in MDN but their solution didnot work as well as this one :
+        // https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Animations/Tips#Run_an_animation_again
+        setTimeout(()=>{menuEl.removeAttribute('data-show')}, 50)
         state.isHidden = true
         return
     }
-    // console.trace() // BJA
     setTimeout(() => {
         var target = document.activeElement;
+        console.log('after timout, hide with the following', target.id, targetsEl.indexOf(target))
         if (!force && (targetsEl.indexOf(target) != -1 || target.tagName == 'IFRAME' && target.id == 'cozy-menu-in-page')) {
-            // but click in iframe, do NOT hide
-            console.log('click in iframe : do NOT hide', internN);
+            // Focus is know in iframe or in one of the input => do NOT hide
+            console.log('Focus is know in iframe or in one of the input => do NOT hide', internN);
             return
         }
         // otherwise, hide
         console.log('HIDE!', internN)
-        menuEl.removeAttribute('data-show')
+        _setApplyFadeInUrl(false)
+        // hide menu element after a delay so that the inner pannel has been scaled to 0 and therefore enables
+        // a proper start for the next display of the menu.
+        // There is an explanation in MDN but their solution didnot work as well as this one :
+        // https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Animations/Tips#Run_an_animation_again
+        setTimeout(()=>{menuEl.removeAttribute('data-show')}, 50)
         state.isHidden = true
     }, 1);
 }
@@ -256,7 +281,7 @@ menuCtrler.hide = hide
 
 
 /* --------------------------------------------------------------------- */
-// Remove the buttons and prevent listerners' actions
+// Remove the "buttons" in form inputs and prevent listerners' actions
 function deactivate() {
     menuEl.removeAttribute('data-show')
     state.isHidden = true
@@ -286,6 +311,7 @@ menuCtrler.activate = activate
 /* --------------------------------------------------------------------- */
 // Moves selection of +1 or -1  (n=1 || n=-1)
 function moveSelection(n) {
+    if (state._ciphers.length === 0) return
     state._selectionRow += n
     if (state._selectionRow >= state._ciphers.length) {
         state._selectionRow = 0
@@ -351,7 +377,6 @@ function setMenuType(menuType, isPinLocked) {
         return
     }
     if (menuEl) {
-        console.log('about to call _setIframeURL() avec :', menuType, isPinLocked);
         _setIframeURL(menuType, isPinLocked)
         if (menuType === 'autofillMenu' && state.currentMenuType === 'loginMenu' ) { // BJA : testing currentMenuType should be useless since here it must be 'loginMenu'
             if (state.lastFocusedEl) {
@@ -370,18 +395,49 @@ menuCtrler.setMenuType = setMenuType
 
 /* --------------------------------------------------------------------- */
 //
-function _setIframeURL(menuType, isPinLocked) {
+function _setIframeURL(menuType, isPinLocked, hash) {
     console.log('_setIframeURL() for :', {menuType, isPinLocked});
     if (menuType === 'autofillMenu') {
-        menuEl.src = chrome.runtime.getURL('inPageMenu/menu.html' )
-    }else if (menuType === 'loginMenu') {
+        menuEl.src = chrome.runtime.getURL('inPageMenu/menu.html' ) + (hash ? hash : '')
+    } else if (menuType === 'loginMenu') {
         let urlParams = ''
         if (isPinLocked) urlParams = '?isPinLocked=true'
-        console.log('iframe url will be :', 'inPageMenu/loginMenu.html' + urlParams);
-        menuEl.src = chrome.runtime.getURL('inPageMenu/loginMenu.html' + urlParams)
+        menuEl.src = chrome.runtime.getURL('inPageMenu/loginMenu.html' + urlParams) + (hash ? hash : '')
     }
 }
-menuCtrler._setIframeURL = _setIframeURL
+
+
+/* --------------------------------------------------------------------- */
+//
+function _setApplyFadeInUrl(doApplay) {
+    console.log('_setVisibleUrl() :', {doApplay});
+    const url = new URL(menuEl.src)
+    if (doApplay) {
+        menuEl.src = url.origin + url.pathname + '#applyFadeIn'
+    } else {
+        menuEl.src = url.origin + url.pathname + '#dontApplyFadeIn'
+    }
+}
+
+
+/* --------------------------------------------------------------------- */
+//
+function _isCharacterKeyPress(evt) {
+    return evt.key.length === 1;
+}
+
+
+/* --------------------------------------------------------------------- */
+//
+function _hideMenuEl(isHide){
+    if (isHide) {
+        menuEl.removeAttribute('data-show')
+    } else {
+        menuEl.setAttribute('data-show','')
+    }
+}
+
+
 
 
 /* --------------------------------------------------------------------- */

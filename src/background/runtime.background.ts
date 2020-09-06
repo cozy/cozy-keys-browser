@@ -95,31 +95,7 @@ export default class RuntimeBackground {
         switch (msg.command) {
             case 'loggedIn':
             case 'unlocked':
-                console.log(msg.command, ' !!');
-                await this.loggedinAndUnlocked(msg.command)
-
-                // await this.main.setIcon();
-                // await this.main.refreshBadgeAndMenu(false);
-                // this.notificationsService.updateConnection(msg.command === 'unlocked');
-                // this.systemService.cancelProcessReload();
-                // // ask notificationbar of all tabs to retry to collect pageDetails in order to activate in-page-menu
-                // let enableInPageMenu = await this.storageService.get<boolean>(
-                //     LocalConstantsService.enableInPageMenuKey);
-                // if (enableInPageMenu === null) { // if not yet set, then default to true
-                //     enableInPageMenu = true;
-                // }
-                // let subCommand = 'inPageMenuDeactivate'
-                // if (enableInPageMenu) {
-                //     subCommand = 'inPageMenuActivate'
-                // }
-                // await this.syncService.fullSync(true);
-                // allTabs = await BrowserApi.getAllTabs();
-                // for (const tab of allTabs) {
-                //     BrowserApi.tabSendMessage(tab, {
-                //         command   : 'autofillAnswerRequest',
-                //         subcommand: subCommand,
-                //     });
-                // }
+                await this.loggedinAndUnlocked(msg.command) //
                 break;
             case 'logout':
                 // ask all tabs to activate login-in-page-menu
@@ -215,8 +191,8 @@ export default class RuntimeBackground {
                         await this.twoFaCheck (msg.token, sender.tab)
                         break;
                     case 'getRememberedCozyUrl':
-                        console.log('getRememberedCozyUrl requested');
                         let rememberedCozyUrl = await this.storageService.get<string>('rememberedCozyUrl')
+                        console.log('getRememberedCozyUrl requested, result is :', rememberedCozyUrl);
                         if (!rememberedCozyUrl) { rememberedCozyUrl = "" }
                         await BrowserApi.tabSendMessage(sender.tab, {
                             command           : 'menuAnswerRequest',
@@ -629,18 +605,9 @@ export default class RuntimeBackground {
             await this.environmentService.setUrls({
                 base: loginUrl + '/bitwarden',
             });
-
+            // logIn
             const response = await this.authService.logIn(email, pwd)
-            // const formPromise = authService.logIn(this.email, masterPassword.value)
-            // const response = await this.formPromise
-
-            // Save the URL for next time // BJA - TODO
-            // await this.storageService.save(Keys.rememberCozyUrl, this.rememberCozyUrl)
-            // if (this.rememberCozyUrl) {
-            //     await this.storageService.save(Keys.rememberedCozyUrl, loginUrl)
-            // } else {
-            //     await this.storageService.remove(Keys.rememberedCozyUrl)
-            // }
+            console.log("runtime.background.login()", 2, response);
 
             if (response.twoFactor) { // BJA : TODO
                 console.log('two factor requested');
@@ -648,75 +615,65 @@ export default class RuntimeBackground {
                     command   : 'menuAnswerRequest',
                     subcommand: '2faRequested',
                 })
-                // if (this.onSuccessfulLoginTwoFactorNavigate != null) {
-                //     this.onSuccessfulLoginTwoFactorNavigate()
-                // } else {
-                //     this.router.navigate([this.twoFactorRoute])
-                // }
             } else {
-                // Save the URL for next time
-                if (await this.storageService.get<boolean>('rememberCozyUrl')) {
+                // Save the URL for next time (default to yes)
+                var rememberCozyUrl = await this.storageService.get<boolean>('rememberCozyUrl')
+                if (rememberCozyUrl == null) rememberCozyUrl = true
+                if (rememberCozyUrl) {
                     await this.storageService.save('rememberedCozyUrl', loginUrl);
                 } else {
                     await this.storageService.remove('rememberedCozyUrl');
                 }
+                console.log("runtime.background.login()", 3);
                 await BrowserApi.tabSendMessage(tab, {
                     command   : 'menuAnswerRequest',
                     subcommand: 'loginOK',
                 })
-                // // const disableFavicon = await this.storageService.get<boolean>(ConstantsService.disableFaviconKey)
-                // // await this.stateService.save(ConstantsService.disableFaviconKey, !!disableFavicon)
-                // if (this.onSuccessfulLogin != null) {
-                //     // this.onSuccessfulLogin()
-                // }
-                // // this.platformUtilsService.eventTrack('Logged In')
-                // if (this.onSuccessfulLoginNavigate != null) {
-                //     // this.onSuccessfulLoginNavigate()
-                // } else {
-                //     // this.router.navigate([this.successRoute])
-                // }
+                // when login is processed on background side, then your messages are not receivend by the background,
+                // so you need to triger yourself "loggedIn" actions
+                this.processMessage({command:'loggedIn'}, null, null)
+                // this.loggedinAndUnlocked('loggedIn')
+                console.log("runtime.background.login()", 4);
             }
         } catch (e) {
-            console.log('error during submit()', e);
+            console.log('error during submit()');
             await BrowserApi.tabSendMessage(tab, {
                 command   : 'menuAnswerRequest',
                 subcommand: 'loginNOK',
             })
-            // if (e.message === 'cozyUrlRequired' || e.message === 'noEmailAsCozyUrl') {
-            //     this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
-            //         this.i18nService.t(e.message))
-            // }
         }
     }
 
     /*
-        this function is based on the submit() function in /jslib/src/angular/components/lock.component.ts
+        this function is based on the submit() function in jslib/src/angular/components/lock.component.ts
      */
     private invalidPinAttempts = 0
     private async pinLogIn(email: string, pin: string, tab:any, loginUrl: string) {
-        console.log(0);
+        console.log('pinLogIn', 0);
         const kdf = await this.userService.getKdf();
         const kdfIterations = await this.userService.getKdfIterations();
         const pinSet = await this.vaultTimeoutService.isPinLockSet();
         let failed = true;
         try {
-            console.log(1);
+            console.log('pinLogIn', 1, pinSet);
             if (pinSet[0]) {
-                console.log(2);
+                console.log('pinLogIn', 2);
                 const key = await this.cryptoService.makeKeyFromPin(pin, email, kdf, kdfIterations,
                     this.vaultTimeoutService.pinProtectedKey);
+                console.log('pinLogIn', 2.1);
                 const encKey = await this.cryptoService.getEncKey(key);
+                console.log('pinLogIn', 2.2);
                 const protectedPin = await this.storageService.get<string>(ConstantsService.protectedPin);
+                console.log('pinLogIn', 2.3);
                 const decPin = await this.cryptoService.decryptToUtf8(new CipherString(protectedPin), encKey);
+                console.log('pinLogIn', 2.4);
 
                 failed = decPin !== pin;
-                console.log('failed', failed);
+                console.log('pinLogIn', 'Pin decrypt ', failed ? 'failed' : 'success');
 
                 if (!failed) {
-                    // await this.setKeyAndContinue(key);
                     await this.cryptoService.setKey(key);
-                    // chrome.runtime.sendMessage({ command: 'unlocked' });
-                    this.loggedinAndUnlocked('unlocked')
+                    this.processMessage({command:'unlocked'}, null, null)
                 }
             } else {
                 const key = await this.cryptoService.makeKeyFromPin(pin, email, kdf, kdfIterations);
@@ -726,18 +683,25 @@ export default class RuntimeBackground {
                 chrome.runtime.sendMessage({ command: 'unlocked' });
             }
         } catch {
+            console.log('pinLogIn', 3);
             failed = true;
         }
 
         if (failed) {
+            console.log('pinLogIn', 5);
             this.invalidPinAttempts++;
             if (this.invalidPinAttempts >= 5) {
                 // this.messagingService.send('logout');
                 chrome.runtime.sendMessage({ command: 'logout' });
                 return;
             }
+            await BrowserApi.tabSendMessage(tab, {
+                command   : 'menuAnswerRequest',
+                subcommand: 'loginNOK',
+            })
             this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
                 this.i18nService.t('invalidPin'));
+
         }
     }
 

@@ -71,6 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
         requestFormFillingWithCipher(rowEl.dataset.cipherId)
     })
 
+    // 4- detect when to apply the fadeIn effect
+    window.addEventListener('hashchange', _testHash)
+
 })
 
 
@@ -134,4 +137,15 @@ function setSelectionOnCipher(targetCipherId) {
     document.querySelector('.selected').classList.remove('selected')
     // 2- set new selection
     document.querySelector(`[data-cipher-id="${targetCipherId}"]`).classList.add('selected')
+}
+
+
+/* --------------------------------------------------------------------- */
+// Request the iframe content to fadeIn or not
+function _testHash(){
+    if (window.location.hash === '#applyFadeIn') {
+        panel.classList.add('fade-in')
+    } else {
+        panel.className = "panel";
+    }
 }
