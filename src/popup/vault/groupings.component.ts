@@ -82,6 +82,11 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async ngOnInit() {
+        this.ciphersByType = {};
+        this.ciphersByType[CipherType.Card] = [];
+        this.ciphersByType[CipherType.Identity] = [];
+        this.ciphersByType[CipherType.Login] = [];
+
         this.searchTypeSearch = !this.platformUtilsService.isSafari();
         this.showLeftHeader = !this.platformUtilsService.isSafari() &&
             !(this.popupUtils.inSidebar(window) && this.platformUtilsService.isFirefox());
@@ -165,6 +170,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         this.ciphersByType[CipherType.Card] = this._ciphersByType(CipherType.Card);
         this.ciphersByType[CipherType.Identity] = this._ciphersByType(CipherType.Identity);
         this.ciphersByType[CipherType.Login] = this._ciphersByType(CipherType.Login);
+
         this.typeCounts = typeCounts;
     }
 
