@@ -167,8 +167,8 @@ export class SettingsComponent implements OnInit {
             div.appendChild(label);
 
             div.querySelector('input').addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') Swal.clickConfirm()
-            })
+                if (event.key === 'Enter') { Swal.clickConfirm(); }
+            });
 
             const submitted = await Swal.fire({
                 heightAuto: false,

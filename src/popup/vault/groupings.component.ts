@@ -86,7 +86,6 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         this.ciphersByType[CipherType.Card] = [];
         this.ciphersByType[CipherType.Identity] = [];
         this.ciphersByType[CipherType.Login] = [];
-
         this.searchTypeSearch = !this.platformUtilsService.isSafari();
         this.showLeftHeader = !this.platformUtilsService.isSafari() &&
             !(this.popupUtils.inSidebar(window) && this.platformUtilsService.isFirefox());

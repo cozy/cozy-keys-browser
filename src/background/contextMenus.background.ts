@@ -106,12 +106,10 @@ export default class ContextMenusBackground {
         if (tab == null) {
             return;
         }
-
         BrowserApi.tabSendMessage(tab, {
             command: 'collectPageDetails',
             tab: tab,
             sender: 'contextMenu',
-            toto:'BJA-contextMenu.background'
         });
     }
 }

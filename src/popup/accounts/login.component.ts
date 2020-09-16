@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { EnvironmentService as EnvironmentServiceAbstraction } from 'jslib/abstractions';
 import { AuthService } from 'jslib/abstractions/auth.service';
 import { EnvironmentService } from 'jslib/abstractions/environment.service';
-import { EnvironmentService as EnvironmentServiceAbstraction } from 'jslib/abstractions';
 
 import { I18nService } from 'jslib/abstractions/i18n.service';
 import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
@@ -13,6 +13,10 @@ import { SyncService } from 'jslib/abstractions/sync.service';
 import { Utils } from 'jslib/misc/utils';
 import { AuthResult } from 'jslib/models/domain/authResult';
 import { ConstantsService } from 'jslib/services/constants.service';
+
+import BrowserMessagingService from '../../services/browserMessaging.service';
+
+const messagingService = new BrowserMessagingService();
 
 const Keys = {
     rememberedCozyUrl: 'rememberedCozyUrl',
@@ -140,6 +144,8 @@ export class LoginComponent implements OnInit {
                     this.router.navigate([this.twoFactorRoute]);
                 }
             } else {
+                // chrome.runtime.sendMessage({command: 'loggedIn'})
+                messagingService.send('loggedIn');
                 const disableFavicon = await this.storageService.get<boolean>(ConstantsService.disableFaviconKey);
                 await this.stateService.save(ConstantsService.disableFaviconKey, !!disableFavicon);
                 if (this.onSuccessfulLogin != null) {

@@ -133,23 +133,18 @@ export class AuthService extends BaseAuthService {
 
     private async _logInHelper(email: string, hashedPassword: string, key: SymmetricCryptoKey,
         twoFactorProvider?: TwoFactorProviderType, twoFactorToken?: string, remember?: boolean): Promise<AuthResult> {
-            console.log('auth.service._logInHelper()', 0);
         const storedTwoFactorToken = await this._tokenService.getTwoFactorToken(email);
         const appId = await this._appIdService.getAppId();
         const deviceRequest = new DeviceRequest(appId, this._platformUtilsService);
 
         let request: TokenRequest;
         if (twoFactorToken != null && twoFactorProvider != null) {
-            console.log('_logInHelper', 1);
-
             request = new TokenRequest(email, hashedPassword, twoFactorProvider, twoFactorToken, remember,
                 deviceRequest);
         } else if (storedTwoFactorToken != null) {
-            console.log('_logInHelper', 2);
             request = new TokenRequest(email, hashedPassword, TwoFactorProviderType.Remember,
                 storedTwoFactorToken, false, deviceRequest);
         } else {
-            console.log('_logInHelper', 3);
             request = new TokenRequest(email, hashedPassword, null, null, false, deviceRequest);
         }
 
@@ -204,9 +199,7 @@ export class AuthService extends BaseAuthService {
         if (window.location.pathname !== '/background.html') {
             // when login is processed on background side, then your messages are not receivend by the background,
             // so you need to triger yourself "logedIn" actions
-            console.log('auth.service._logInHelper() - before _messagingService.send(\'loggedIn\')', 1);
-            this._messagingService.send('loggedIn');
-            console.log('auth.service._logInHelper() - after _messagingService.send(\'loggedIn\')', 2);
+            // this._messagingService.send('loggedIn');
         }
         return result;
     }

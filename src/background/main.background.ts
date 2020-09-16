@@ -175,16 +175,11 @@ export default class MainBackground {
                 When CB is fired, ask all tabs to activate login-in-page-menu
                 */
                 const allTabs = await BrowserApi.getAllTabs();
-                const pinSet = await this.vaultTimeoutService.isPinLockSet();
-                const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1]
-                console.log('****************** lockedCallback of the VaultTimeoutService ------ isPinLocked', isPinLocked);
                 for (const tab of allTabs) {
                     BrowserApi.tabSendMessage(tab, {
                         command    : 'autofillAnswerRequest',
-                        subcommand : 'loginInPageMenuActivate',
-                        isPinLocked: isPinLocked,
+                        subcommand : 'loginIPMenuActivate',
                         tab        : tab,
-                        // sender     : sender,
                     });
                 }
                 /* end @override by Cozy */
@@ -194,7 +189,32 @@ export default class MainBackground {
                 await this.setIcon();
                 await this.refreshBadgeAndMenu(true);
                 if (this.systemService != null) {
-                    this.systemService.startProcessReload();
+                    /* @override by Cozy :
+                    BUG :
+                    * if you lock or logout, the background script is reloaded, preventing current injected content
+                       script to communicate with the background
+                       (see for exemple : https://stackoverflow.com/questions/53939205)
+                    * Consequence : when user locks ou logouts, then background is reloaded, and then all
+                      content scripts no longer can exchange with background script : form filling will not work until
+                      you reload the web page and therefore its content scripts
+                    * Analysis of the background lifecycle :
+                        * in browserApi `reloadExtension()` => `chrome.runtime.reload()` or `win.location.reload()`
+                          (if win is a frame, ie the popup or other window)
+                        * `reloadExtension()` is called
+                            - by  `SystemService.startProcessReload()`
+                                - which is called a two places, in main.background, in lockedCallback and in logout
+                            - by the msg 'reloadProcess' in popup/app.component.ts (which only triggers the reload of
+                              the frame because the window is transmited in the parameters
+                              `BrowserApi.reloadExtension(window)`)
+                              => 'reloadProcess' has no impact on the background script, therefore not involved in
+                              the bug.
+                    * solutions :
+                        1. reload content script on background init => then content scripts are loaded multiple
+                          times : not clean at all...
+                        2. don't reload... solution used here.
+                    */
+                    // this.systemService.startProcessReload(); // commented by Cozy
+                    /* end @override by Cozy */
                     await this.systemService.clearPendingClipboard();
                 }
             }, async () => {
@@ -204,13 +224,10 @@ export default class MainBackground {
                 When CB is fired, ask all tabs to activate login-in-page-menu
                 */
                 const allTabs = await BrowserApi.getAllTabs();
-                // const pinSet = await this.vaultTimeoutService.isPinLockSet();
-                // const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1]
-                console.log('****************** loggedOutCallback of the VaultTimeoutService ------ isPinLocked', false);
                 for (const tab of allTabs) {
                     BrowserApi.tabSendMessage(tab, {
                         command    : 'autofillAnswerRequest',
-                        subcommand : 'loginInPageMenuActivate',
+                        subcommand : 'loginIPMenuActivate',
                         isPinLocked: false,
                         tab        : tab,
                     });
@@ -312,22 +329,23 @@ export default class MainBackground {
         }
 
         const checkCurrentStatus = async (msg: any) => {
-            const isAuthenticated = await this.userService.isAuthenticated();
-            const status = isAuthenticated ? 'connected' : 'installed';
-            console.log('status =', status);
-
+            const isAuthenticatedNow = await this.userService.isAuthenticated();
+            const status = isAuthenticatedNow ? 'connected' : 'installed';
             return status;
         };
 
         // const status = await checkCurrentStatus(true)
         const isAuthenticated = await this.userService.isAuthenticated(); // = connected or installed
-        const isLocked = await this.vaultTimeoutService.isLocked()
-        // if  isAuthenticated == false  &  isLocked == true   => loggedout
-        // if  isAuthenticated == true   &  isLocked == true   => locked
-        // if  isAuthenticated == true   &  isLocked == false  => logged
+        const isLocked = await this.vaultTimeoutService.isLocked();
+        // Cozy explanations :
+        // For information, to make the difference betweend locked and loggedout :
+        // const isAuthenticated = await this.userService.isAuthenticated(); // = connected or installed
+        // const isLocked        = await this.vaultTimeoutService.isLocked()
+        //    if  isAuthenticated == false  &  isLocked == true   => loggedout
+        //    if  isAuthenticated == true   &  isLocked == true   => locked
+        //    if  isAuthenticated == true   &  isLocked == false  => logged in
         const pinSet = await this.vaultTimeoutService.isPinLockSet();
-        const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1]
-        console.log('au démarrage', {isAuthenticated, isLocked, isPinLocked} )
+        const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1];
 
         BrowserApi.messageListener(
             'main.background',
@@ -427,7 +445,32 @@ export default class MainBackground {
         await this.refreshBadgeAndMenu();
         await this.reseedStorage();
         this.notificationsService.updateConnection(false);
-        this.systemService.startProcessReload();
+        /* @override by Cozy :
+        BUG :
+        * if you lock or logout, the background script is reloaded, preventing current injected content
+           script to communicate with the background
+           (see for exemple : https://stackoverflow.com/questions/53939205)
+        * Consequence : when user locks ou logouts, then background is reloaded, and then all
+          content scripts no longer can exchange with background script : form filling will not work until
+          you reload the web page and therefore its content scripts
+        * Analysis of the background lifecycle :
+            * in browserApi `reloadExtension()` => `chrome.runtime.reload()` or `win.location.reload()`
+              (if win is a frame, ie the popup or other window)
+            * `reloadExtension()` is called
+                - by  `SystemService.startProcessReload()`
+                    - which is called a two places, in main.background, in lockedCallback and in logout
+                - by the msg 'reloadProcess' in popup/app.component.ts (which only triggers the reload of
+                  the frame because the window is transmited in the parameters
+                  `BrowserApi.reloadExtension(window)`)
+                  => 'reloadProcess' has no impact on the background script, therefore not involved in
+                  the bug.
+        * solutions :
+            1. reload content script on background init => then content scripts are loaded multiple
+              times : not clean at all...
+            2. don't reload... solution used here.
+        */
+        // this.systemService.startProcessReload();
+        /* end @override by Cozy */
         await this.systemService.clearPendingClipboard();
     }
 
@@ -442,17 +485,14 @@ export default class MainBackground {
             // const isLocked        = await this.vaultTimeoutService.isLocked()
             //    if  isAuthenticated == false  &  isLocked == true   => loggedout
             //    if  isAuthenticated == true   &  isLocked == true   => locked
-            //    if  isAuthenticated == true   &  isLocked == false  => logged
-            const pinSet = await this.vaultTimeoutService.isPinLockSet();
-            const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1]
-            console.log('collectPageDetailsForContentScript ------ isPinLocked', isPinLocked);
+            //    if  isAuthenticated == true   &  isLocked == false  => logged in
+            // const pinSet = await this.vaultTimeoutService.isPinLockSet();
+            // const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1];
             BrowserApi.tabSendMessage(tab, {
                 command    : 'autofillAnswerRequest',
-                subcommand : 'loginInPageMenuActivate',
-                isPinLocked: isPinLocked,
+                subcommand : 'loginIPMenuActivate',
                 tab        : tab,
-                // sender     : sender, // BJA : peut être supprimé ?
-            });
+            }, {frameId: frameId});
             return;
         }
 
@@ -465,7 +505,6 @@ export default class MainBackground {
             command: 'collectPageDetails',
             tab: tab,
             sender: sender,
-            toto:'BJA-main.background'
         }, options);
     }
 

@@ -4,7 +4,7 @@ body {
     color:white;
     padding: 0;
     margin: 0;
-    font-size: $font-size-large;
+    font-size: $font-size-small;
     line-height: 16px;
     font-family: $font-family-sans-serif;
     overflow: hidden;
@@ -26,7 +26,7 @@ body {
 .panel {
     margin: 16px 10px 10px 10px;
     background-color: #297EF2;
-    border-radius: 5px;
+    border-radius: 0.5rem;
     filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.9));
     transform-origin: calc(100% - 25px) 0;
     animation-fill-mode: forwards;
@@ -46,35 +46,51 @@ body {
 }
 
 #header {
-    padding: 15px 10px 15px 10px;
+    padding: 0 1rem 0 1rem;
     font-weight: bold;
-    font-size: large;
     display: flex;
     justify-content: space-between;
-    z-index: 2;
-    position: relative;
+    text-transform: uppercase;
+    height: 3rem;
+    align-items: center;
+}
+
+#logo-link {
+    height: 1rem;
+    &:hover svg {
+        transform: scale(1.3);
+        transition: transform 0.2s;
+    }
+    svg {
+      fill: white;
+    }
+}
+
+#title-content{
+    flex-grow: 1;
+    padding-left: 0.5rem;
 }
 
 .close-icon {
-    width: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 1rem;
     &:hover, &:active {
       cursor: pointer;
-      svg {
-        fill: white;
-      }
     }
     svg {
-        fill: white;
+      fill: white;
     }
 }
 
 hr {
-    margin: 0 10px 0 10px;
+    margin: 0;
     border-width: 0;
-    border-bottom: 1px solid #5892E6;
+    border-bottom: 1px solid #d6d8da;
+    background: white;
+}
+
+#rows-list {
+    padding: 0 1rem 1rem 1rem;
+    color: #393e48;
 }
 
 .row-main {
@@ -82,39 +98,46 @@ hr {
     align-items: stretch;
     flex-grow: 1;
     min-width: 0;
-    padding: 10px 0px 10px 0px;
+    padding: 0.875rem 0 0.875rem 1rem;
+    background-color: white;
+    border-bottom: #d6d8da 1.5px solid;
     &.selected {
-        background-color: #2a6fcd;
-        border-bottom-left-radius : 5px;
-        border-bottom-right-radius: 5px;
+        background-color: #ddebff;
     }
     &:hover{
         cursor: pointer;
-        background-color: #0d5bc5;
+        background-color: #c4dcfd;
+    }
+    &:first-child {
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+    }
+    &:last-child {
+        border-bottom-right-radius: 0.5rem;
+        border-bottom-left-radius: 0.5rem;
+        border-bottom: 0;
     }
 }
 
 .row-icon {
-    width: 40px;
+    width: 2rem;
+    height: 2rem;
+    padding-top: 0.125rem;
+    padding-bottom: 0.125rem;
+    padding-right: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    &:hover, &:active {
-      color: $brand-primary;
-      svg {
-        fill: white;
-      }
-    }
-    svg {
-        fill: white;
-    }
 }
 
 .row-text {
+    margin-top: 0.3rem;
     display: block;
+    font-size: $font-size-large;
 }
 
 .row-detail {
     display: block;
-    font-size: 12px;
+    font-size: $font-size-small;
+    color: #95999d;
 }

@@ -29,6 +29,11 @@ var panel               ,
 // initialization of the login menu
 document.addEventListener('DOMContentLoaded', () => {
 
+    // const port = chrome.runtime.connect({name:"port-from-cs"});
+    // port.onDisconnect.addListener(function() {
+    //     console.log('%%%%%%%%%%% CONNECTION of loginMenu WITH BACKGROUND LOST § § § §');
+    // })
+
     // 0- ask rememberedCozyUrl
     chrome.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest',
@@ -37,16 +42,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 1- get elements references
-    panel = document.querySelector('.panel')
-    title = document.getElementById('title-content')
-    urlInput = document.getElementById('cozy-url')
-    pwdInput = document.getElementById('master-password')
-    pwdLabel = document.getElementById('master-password-label')
+    panel      = document.querySelector('.panel')
+    title      = document.getElementById('title-content')
+    urlInput   = document.getElementById('cozy-url')
+    pwdInput   = document.getElementById('master-password')
+    pwdLabel   = document.getElementById('master-password-label')
     visiPwdBtn = document.getElementById('visi-pwd-btn')
     twoFaInput = document.getElementById('two-fa-input')
     visi2faBtn = document.getElementById('visi-2fa-btn')
-    closeIcon = document.querySelector('.close-icon')
-    submitBtn = document.querySelector('#submit-btn')
+    closeIcon  = document.querySelector('.close-icon')
+    submitBtn  = document.querySelector('#submit-btn')
     errorLabel = document.querySelector('#error-label')
 
     // 2- set isLocked & isPinLocked
@@ -57,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4- detect when to apply the fadeIn effect
     window.addEventListener('hashchange', _testHash)
+    _testHash()
 
     // 5- prepare i18n and apply
     var i18n = {};
@@ -205,7 +211,7 @@ function adjustMenuHeight() {
 /* --------------------------------------------------------------------- */
 // Submit the credentials
 async function submit() {
-
+    console.log('loginMenu.submit()');
     // sanitize url
     const loginUrl = sanitizeUrlInput(urlInput.value);
     urlInput.value = loginUrl
@@ -330,15 +336,29 @@ function _setWaitingMode() {
 // Request the iframe content to fadeIn or not
 function _testHash(){
     if (window.location.hash === '#applyFadeIn') {
+        console.log('loginMenu._testHash() : add fade-in');
         panel.classList.add('fade-in')
+        setFocusOnEmptyField()
     } else {
+        console.log('loginMenu._testHash() : remove fade-in');
         panel.className = "panel";
     }
 }
 
 
 /* --------------------------------------------------------------------- */
-// Request the menu controler to close the iframe of the
+//
+function setFocusOnEmptyField(){
+    if (urlInput.value) {
+        pwdInput.focus()
+    } else {
+        urlInput.focus()
+    }
+}
+
+
+/* --------------------------------------------------------------------- */
+// Request the menu controler to close the iframe of the menu
 function close() {
     chrome.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest',

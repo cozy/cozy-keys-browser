@@ -51,7 +51,7 @@ var menuCtrler = {
     freeze                 : function() {this.state.isFrozen = true },
     deactivate             : null,
     activate               : null,
-    displayInPageLoginMenu : null,
+    displayLoginIPMenu : null,
 }
 
 /* --------------------------------------------------------------------- */
@@ -96,16 +96,15 @@ menuCtrler.addMenuButton = addMenuButton
 /* --------------------------------------------------------------------- */
 // Init a target element to be able to trigger the menu
 function _initInPageMenuForEl(targetEl) {
-    console.log('_initInPageMenuForEl()');
     targetsEl.push(targetEl) // register this element as one of the targets for the menu
 
     // prevent browser autocomplet with history for this field
     targetEl.autocomplete='off'
 
-	if(!state.isMenuInited) { // menu is not yet initiated
-        console.log('    menu initialization for menuType', state.currentMenuType);
+	if(!state.isMenuInited) { // menu is not yet initiated, there is no ifram elemeent for the menu
+        // initIframe()
         menuEl = document.createElement('iframe')
-        _setIframeURL(state.currentMenuType, state.isPinLocked, '#isNotVisible' )
+        _setIframeURL(state.currentMenuType, state.isPinLocked )
         menuEl.id  = 'cozy-menu-in-page'
         menuEl.style.cssText = 'z-index: 2147483647 !important; border:0; height:0; transition: transform 30ms linear 0s;'
         // Append <style> element to add popperjs styles
@@ -152,85 +151,83 @@ function _initInPageMenuForEl(targetEl) {
 
         state.isMenuInited = true
     }
+
     // hide menu if focus leaves the input
-    targetEl.addEventListener('blur' , (event)=>{
-        if (!event.isTrusted) return;
-        if (!state.isActivated) return;
-        console.log('Blur event in an input', event.target.id)
-        menuCtrler.hide()
-        return true
-    })
-
+    targetEl.addEventListener('blur' , _onBlur)
     // show menu when input receives focus or is clicked (it can be click while it already has focus)
-    targetEl.addEventListener('focus', (event)=>{
-        console.log('focus event in an input', event.target.id);
-        if (!event.isTrusted) return;
-        if (!state.isActivated) return;
-        show(targetEl)
-    })
-    targetEl.addEventListener('click', (event)=>{
-        console.log('click event in an input', event.target.id);
-        if (!event.isTrusted) return;
-        if (!state.isActivated) return;
-        show(targetEl)
-    })
-
-    // if targetEl already has focus, then show menu
-    // if(document.activeElement === targetEl) {
-    //     setTimeout(()=>{show(targetEl)},1000)
-    // }
-
+    targetEl.addEventListener('focus', _onFocus)
+    targetEl.addEventListener('click', _onClick)
     // listen keystrokes on the input form
-    var hasTypedSomething = false
-    targetEl.addEventListener('keydown', (event) => {
-        console.log('keydown event', event.key, state.isHidden);
-        if (!event.isTrusted) return;
-        if (!state.isActivated) return;
-        const keyName = event.key;
-        if (keyName === 'Escape') {
-            console.log('escape ==> hide');
-            menuCtrler.hide(true)
-            return;
-        } else if (keyName === 'Tab') {
-            return;
-        } else if (keyName === 'ArrowUp') {
-            event.stopPropagation()
-            event.preventDefault()
-            if (state.isHidden) {
-                show(event.target)
-            } else {
-                menuCtrler.moveSelection(-1)
-            }
-            return;
-        } else if (keyName === 'ArrowDown') {
-            event.stopPropagation()
-            event.preventDefault()
-            if (state.isHidden) {
-                show(event.target)
-            } else {
-                menuCtrler.moveSelection(1)
-            }
-            return;
-        } else if (keyName === 'Enter') {
-            if (state.isHidden) return
-            event.stopPropagation()
-            event.preventDefault()
-            menuCtrler.submit()      // else request menu selection validation
-            return;
-        } else if  (_isCharacterKeyPress(event)){
-            console.log('_isCharacterKeyPress ==> hide');
-            menuCtrler.hide(true)
-            return;
-        }
-    }, false);
+    targetEl.addEventListener('keydown', _onKeyDown);
 
 }
 
+function _onBlur(event) {
+    if (!event.isTrusted) return;
+    console.log('Blur event in an input', event.target.id)
+    menuCtrler.hide()
+    return true
+}
 
+function _onFocus(event) {
+    console.log('focus event in an input 2', event.target.id);
+    if (!event.isTrusted) return;
+    show(this)
+}
+
+function _onClick(event) {
+    console.log('click event in an input 2', event.target.id);
+    if (!event.isTrusted) return;
+    show(this)
+}
+
+function _onKeyDown(event) {
+    // console.log('keydown event', event.key, state.isHidden);
+    if (!event.isTrusted) return;
+    const keyName = event.key;
+    if (keyName === 'Escape') {
+        // console.log('escape ==> hide');
+        menuCtrler.hide(true)
+        return;
+    } else if (keyName === 'Tab') {
+        return;
+    } else if (keyName === 'ArrowUp') {
+        event.stopPropagation()
+        event.preventDefault()
+        if (state.isHidden) {
+            show(event.target)
+        } else {
+            menuCtrler.moveSelection(-1)
+        }
+        return;
+    } else if (keyName === 'ArrowDown') {
+        event.stopPropagation()
+        event.preventDefault()
+        if (state.isHidden) {
+            show(event.target)
+        } else {
+            menuCtrler.moveSelection(1)
+        }
+        return;
+    } else if (keyName === 'Enter') {
+        if (state.isHidden) return
+        event.stopPropagation()
+        event.preventDefault()
+        menuCtrler.submit()      // else request menu selection validation
+        return;
+    } else if  (_isCharacterKeyPress(event)){
+        // console.log('_isCharacterKeyPress ==> hide');
+        menuCtrler.hide(true)
+        return;
+    }
+}
+
+
+/* --------------------------------------------------------------------- */
+//
 function show(targetEl) {
     console.log('menuCtrler.show()');
     if (state.isFrozen) return
-    if (!state.isActivated) return;
     state.lastFocusedEl = targetEl
     popperInstance.state.elements.reference = targetEl
     popperInstance.update()
@@ -239,13 +236,19 @@ function show(targetEl) {
     _setApplyFadeInUrl(true)
 }
 
+
 /* --------------------------------------------------------------------- */
 // Init a target element to be able to trigger the menu
+// force = false : a shrot time out will wait to check where the focus
+//       goes so that to not hide if target is an input or the iframe of
+//       the menu.
+// force = true : hide the menu without waiting to check the target of the
+//       focus.
 var n = 0
 function hide(force) {
     var internN = n
     n += 1
-    console.log('menuCtrler.hide() - ', internN, 'force:', force, document.activeElement.id);
+    console.log('menuCtrler.hide() - Hide_id=', internN, 'force:', !!force, document.activeElement.id);
     if (state.isFrozen) return
     if (force && typeof force == 'boolean') {
         console.log('HIDE!', internN)
@@ -259,11 +262,11 @@ function hide(force) {
         return
     }
     setTimeout(() => {
-        var target = document.activeElement;
-        console.log('after timout, hide with the following', target.id, targetsEl.indexOf(target))
+        const target = document.activeElement;
+        // console.log('after timout, hide with the following', target.id, targetsEl.indexOf(target))
         if (!force && (targetsEl.indexOf(target) != -1 || target.tagName == 'IFRAME' && target.id == 'cozy-menu-in-page')) {
             // Focus is know in iframe or in one of the input => do NOT hide
-            console.log('Focus is know in iframe or in one of the input => do NOT hide', internN);
+            console.log('After hide, focus is now in iframe or in one of the input => do NOT hide', internN);
             return
         }
         // otherwise, hide
@@ -283,29 +286,26 @@ menuCtrler.hide = hide
 /* --------------------------------------------------------------------- */
 // Remove the "buttons" in form inputs and prevent listerners' actions
 function deactivate() {
-    menuEl.removeAttribute('data-show')
-    state.isHidden = true
-    // remove all button inside the input of the form
-    for (var el of targetsEl) {
-        el.style.backgroundImage = ''
-    }
-    // prevent listeners' actions
-    state.isActivated = false
+    if (!menuEl) return; // can happen
+    // menuEl.removeAttribute('data-show')
+    // _setApplyFadeInUrl(false)
+    // state.isHidden = true
+    hide(true)
+    removeInPageButtons()
 }
 menuCtrler.deactivate = deactivate
 
 
-/* --------------------------------------------------------------------- */
-// Add the buttons icons and no longuer prevent listerners' actions
-function activate() {
-    // add button icons in inputs of the form
+function removeInPageButtons() {
     for (var el of targetsEl) {
-        el.style.backgroundImage = menuBtnSvg
+        el.style.backgroundImage = ''
+        el.removeEventListener('blur' , _onBlur)
+        el.removeEventListener('focus', _onFocus)
+        el.removeEventListener('click', _onClick)
+        el.removeEventListener('keydown', _onKeyDown);
     }
-    // no longuer prevent listeners' actions
-    state.isActivated = true
+    targetsEl = []
 }
-menuCtrler.activate = activate
 
 
 /* --------------------------------------------------------------------- */
@@ -331,6 +331,7 @@ menuCtrler.moveSelection = moveSelection
 /* --------------------------------------------------------------------- */
 // Submit the currently selected cypher for autofill
 function submit() {
+    console.log('menuCtrler.submit()');
     chrome.runtime.sendMessage({
         command    : 'bgAnswerMenuRequest',
         subcommand : 'menuSelectionValidate',
@@ -344,6 +345,7 @@ menuCtrler.submit = submit
 // Set the height of menuEl (iframe) taking into account the inner margin
 function setHeight(h) {
     // console.log('setHeight');
+    if (!state.isMenuInited) return // happens if in an iframe without relevant inputs for the menu
     menuEl.style.height = h + 28 + 'px'
 }
 menuCtrler.setHeight = setHeight
@@ -372,13 +374,15 @@ menuCtrler.setCiphers = setCiphers
 /* --------------------------------------------------------------------- */
 //
 function setMenuType(menuType, isPinLocked) {
-    console.log('setMenuType()', {menuType, isPinLocked, 'currentMenuType': state.currentMenuType});
+    console.log('setMenuType()', {menuType, isPinLocked});
     if (menuType === state.currentMenuType) {
+        // _forceIframeRefresh()
         return
     }
     if (menuEl) {
         _setIframeURL(menuType, isPinLocked)
-        if (menuType === 'autofillMenu' && state.currentMenuType === 'loginMenu' ) { // BJA : testing currentMenuType should be useless since here it must be 'loginMenu'
+        removeInPageButtons() // remove all "buttons"
+        if (menuType === 'autofillMenu' && state.currentMenuType === 'loginMenu' ) {
             if (state.lastFocusedEl) {
                 window.setTimeout(()=>{
                     // timeout is required in order to move focus only when iframe url has been setup
@@ -396,26 +400,45 @@ menuCtrler.setMenuType = setMenuType
 /* --------------------------------------------------------------------- */
 //
 function _setIframeURL(menuType, isPinLocked, hash) {
-    console.log('_setIframeURL() for :', {menuType, isPinLocked});
+    const rand = '?' + Math.floor((Math.random()*1000000)+1)
+    if (menuEl.src) {
+        const location = new URL(menuEl.src)
+        hash = (hash ? hash : location.hash)
+    } else {
+        hash = (hash ? hash : '')
+    }
     if (menuType === 'autofillMenu') {
-        menuEl.src = chrome.runtime.getURL('inPageMenu/menu.html' ) + (hash ? hash : '')
+        menuEl.src = chrome.runtime.getURL('inPageMenu/menu.html' + rand)  + hash
     } else if (menuType === 'loginMenu') {
         let urlParams = ''
         if (isPinLocked) urlParams = '?isPinLocked=true'
-        menuEl.src = chrome.runtime.getURL('inPageMenu/loginMenu.html' + urlParams) + (hash ? hash : '')
+        menuEl.src = chrome.runtime.getURL('inPageMenu/loginMenu.html' + urlParams + rand) + hash
     }
 }
 
 
 /* --------------------------------------------------------------------- */
 //
-function _setApplyFadeInUrl(doApplay) {
-    console.log('_setVisibleUrl() :', {doApplay});
+function forceIframeRefresh() {
+    if (!menuEl ||!menuEl.src) return
     const url = new URL(menuEl.src)
-    if (doApplay) {
-        menuEl.src = url.origin + url.pathname + '#applyFadeIn'
+    const rand = '?' + Math.floor((Math.random()*1000000)+1)
+    menuEl.src = url.origin + url.pathname + rand + url.hash
+}
+menuCtrler.forceIframeRefresh = forceIframeRefresh
+
+
+/* --------------------------------------------------------------------- */
+//
+function _setApplyFadeInUrl(doApply) {
+    if (!menuEl.src) return
+    const url = new URL(menuEl.src)
+    if (doApply) {
+        console.log('menuCtrler.applyFadeIn()');
+        menuEl.src = url.origin + url.pathname + url.search + '#applyFadeIn'
     } else {
-        menuEl.src = url.origin + url.pathname + '#dontApplyFadeIn'
+        console.log('menuCtrler.removeFadeIn()');
+        menuEl.src = url.origin + url.pathname + url.search + '#dontApplyFadeIn'
     }
 }
 

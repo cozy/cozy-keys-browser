@@ -101,7 +101,7 @@
     "message": "Le coffre est déconnecté."
   },
   "autoFillInfo": {
-    "message": "Il n'existe aucun site disponible pour le remplissage automatique pour l'onglet actuel du navigateur."
+    "message": "Vous n'avez aucun identifiant enregistré pour remplir automatiquement la page actuelle du navigateur."
   },
   "addLogin": {
     "message": "Ajouter un identifiant"
@@ -857,6 +857,9 @@
   },
   "inPageMenuLogin2FACheckError": {
     "message": "Code d'activation erroné, un nouveau va vous être envoyé"
+  },
+  "inPageMenuSelectAnAccount": {
+    "message": "Sélectionner un compte"
   },
   "experimentalFeature": {
     "message": "Ceci est actuellement une fonctionnalité expérimentale. À utiliser avec prudence."

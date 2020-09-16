@@ -231,8 +231,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function collect() {
-        // console.log('notificationBar about to send command bgCollectPageDetails', );
-
+        // notificationBar about to request to bgCollectPageDetails, result will also be used for the inPageMenu
         sendPlatformMessage({
             command: 'bgCollectPageDetails',
             sender: 'notificationBar',

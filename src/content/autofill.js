@@ -761,7 +761,6 @@ import menuCtrler from './menuCtrler';
         // add the menu button in the element by opid operation
         function addMenuBtnByOpId(opId, op) {
             var el = getElementByOpId(opId);
-            menuCtrler.setMenuType('autofillMenu', false)
             return el ? (menuCtrler.addMenuButton(el, op, markTheFilling), [el]) : null;
         }
 
@@ -1006,18 +1005,61 @@ import menuCtrler from './menuCtrler';
             }
         }
 
-        function displayInPageLoginMenu(fillScript, isPinLocked) {
-            console.log('displayInPageLoginMenu(), isPinLocked',isPinLocked);
+        function displayLoginIPMenu(fillScripts, isPinLocked) {
+            console.log('============== displayLoginIPMenu()', document.URL);
+            // console.log('==== fillScripts');
+            // console.log(fillScripts);
+            // console.log('number of fields', fillScripts.loginLoginMenuFillScript.script.length);
+            // console.log('=== list login FillScript actions');
+            // fillScripts.loginLoginMenuFillScript.script.forEach((action, i) => {
+            //     if (action[0] !== 'fill_by_opid') return
+            //     const el = getElementByOpId(action[1])
+            //     if (!el) {
+            //         console.log('no element  for action', i, action);
+            //         return
+            //     }
+            //     console.log('==== action[',i,'] =', action, 'corresonding to', {id:el.id, name:el.name});
+            // });
+            // console.log('=== list card FillScript actions');
+            // fillScripts.cardLoginMenuFillScript.script.forEach((action, i) => {
+            //     if (action[0] !== 'fill_by_opid') return
+            //     const el = getElementByOpId(action[1])
+            //     if (!el) {
+            //         console.log('no element  for action', i, action);
+            //         return
+            //     }
+            //     console.log('==== action[',i,'] =', action, 'corresonding to', {id:el.id, name:el.name});
+            // });
+            // console.log('=== list identity FillScript actions');
+            // fillScripts.identityLoginMenuFillScript.script.forEach((action, i) => {
+            //     if (action[0] !== 'fill_by_opid') return
+            //     const el = getElementByOpId(action[1])
+            //     if (!el) {
+            //         console.log('no element  for action', i, action);
+            //         return
+            //     }
+            //     console.log('==== action[',i,'] =', action, 'corresonding to', {id:el.id, name:el.name});
+            // });
             menuCtrler.setMenuType('loginMenu', isPinLocked)
-            fillScript.fields.forEach((field, i) => {
-                const el = getElementByOpId(field.opid)
+            runLoginMenuFillScript(fillScripts.loginLoginMenuFillScript.script)
+            runLoginMenuFillScript(fillScripts.cardLoginMenuFillScript.script)
+            runLoginMenuFillScript(fillScripts.identityLoginMenuFillScript.script)
+        }
+
+        function runLoginMenuFillScript(script) {
+            script.forEach((action) => {
+                if (action[0] !== 'fill_by_opid') return
+                const el = getElementByOpId(action[1])
                 menuCtrler.addMenuButton(el, true)
             });
         }
-        if (fillScript.isInPageLoginMenu) {
-            displayInPageLoginMenu(fillScript, fillScript.isPinLocked)
-        } else {
+
+        if (fillScript.type === 'inPageLoginMenuScript') {
+            displayLoginIPMenu(fillScript, fillScript.isPinLocked)
+        } else if (fillScript.type === 'inPageMenuScript') {
             menuCtrler.setMenuType('autofillMenu', false)
+            doFill(fillScript);
+        } else {
             doFill(fillScript);
         }
 
@@ -1064,8 +1106,16 @@ import menuCtrler from './menuCtrler';
         /*
         @override by Cozy : this log is very useful for reverse engineering the code, keep it for tests
 
-        console.log('autofil.js HEARD MESSAGE : ', {'msg.command': msg.command,'msg.subCommand': msg.subCommand, 'sender.url': sender.url, "msg": msg});
+        console.log('autofil.js HEARD : ', {'command': msg.command,'subcommand': msg.subcommand, 'sender': new URL(sender.url).pathname, "msg": msg, "heard in": document.location.pathname},);
         */
+       if (msg.command === 'notificationBarPageDetails') return
+        console.log('autofil.js HEARD : ', {
+            'command': msg.command,
+            'subcommand': msg.subcommand,
+            // 'sender': sender.url ? (new URL(sender.url)).pathname : sender.id,
+            'sender': sender,
+            "msg": msg,
+            "heard in": document.location.pathname},);
 
         if (msg.command === 'collectPageDetails') {
             var pageDetailsObj = collect(document);
@@ -1079,6 +1129,7 @@ import menuCtrler from './menuCtrler';
             return true;
         }
         else if (msg.command === 'fillForm') {
+            // menuCtrler.setMenuType('autofillMenu')
             fill(document, msg.fillScript);
             sendResponse();
             return true;
@@ -1099,37 +1150,34 @@ import menuCtrler from './menuCtrler';
                     sender      : 'menu.js',
                     cipher      : selectedCipher,
                 })
-            } else if (msg.subcommand === 'inPageMenuDeactivate') {
+            } else if (msg.subcommand === 'autofillIPMenuDeactivate') {
                 menuCtrler.deactivate()
-            } else if (msg.subcommand === 'loginInPageMenuActivate') {
-                menuCtrler.activate()
+
+            } else if (msg.subcommand === 'loginIPMenuActivate') {
                 const pageDetails = collect(document)
-                pageDetails.isInPageLoginMenu = true
-                pageDetails.isPinLocked = msg.isPinLocked
-                fill(document, pageDetails)
-            } else if (msg.subcommand === 'inPageMenuActivate') {
-                if (menuCtrler.state.isMenuInited) {
-                    menuCtrler.setMenuType('autofillMenu', false)
-                    if (menuCtrler.state.isAutoFillInited) {
-                        menuCtrler.activate()
-                    } else {
-                        // BJA : on devrait d'abord enlever les boutons précédants ?
-                        menuCtrler.activate()
-                        chrome.runtime.sendMessage({
-                            command: 'bgCollectPageDetails',
-                            sender: 'notificationBar',
-                        })
-                    }
-                } else {
-                    chrome.runtime.sendMessage({
-                        command: 'bgCollectPageDetails',
-                        sender: 'notificationBar',
-                    })
-                }
+                chrome.runtime.sendMessage({
+                    command: 'bgGetLoginMenuFillScript',
+                    pageDetails: pageDetails,
+                    isPinLocked: msg.isPinLocked,
+                })
+
+            } else if (msg.subcommand === 'loginIPMenuSetFields') {
+                // menuCtrler.setMenuType('loginMenu', msg.isPinLocked)
+                msg.loginFillScripts.isPinLocked = msg.isPinLocked
+                // and then send the script for filling
+                fill(document, msg.loginFillScripts)
+
+            } else if (msg.subcommand === 'autofilIPMenuActivate') {
+                var pageDetails = collect(document);
+                chrome.runtime.sendMessage({
+                    command: 'bgGetAutofillMenuScript',
+                    details: pageDetails,
+                    sender: 'notificationBar',
+                });
             }
         }else if (msg.command === 'updateMenuCiphers') {
             // store the ciphers sent to the menu to reuse them later on
-            menuCtrler.setCiphers(msg.data)
+            menuCtrler.setCiphers(msg.data.ciphers)
         }
         sendResponse();
         return true;

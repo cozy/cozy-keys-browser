@@ -101,7 +101,7 @@
     "message": "Vault is logged out."
   },
   "autoFillInfo": {
-    "message": "There are no logins available to auto-fill for the current browser tab."
+    "message": "You don't have recorded any login to auto-fill the current browser tab."
   },
   "addLogin": {
     "message": "Add a Login"

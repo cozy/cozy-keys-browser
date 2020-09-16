@@ -155,9 +155,6 @@ export default class AutofillService implements AutofillServiceInterface {
     async doAutoFill(options: any) {
         let totpPromise: Promise<string> = null;
         let tab = await this.getActiveTab();
-        console.log('in doAutoFill, options = ', options);
-
-
         /*
         @override by Cozy : when the user logins into the addon, all tabs requests a pageDetail in order to
         activate the in-page-menu : then the tab to take into account is not the active tab, but the tab sent with
@@ -184,10 +181,10 @@ export default class AutofillService implements AutofillServiceInterface {
 
             const fillScript = this.generateFillScript(pd.details, {
                 skipUsernameOnlyFill: options.skipUsernameOnlyFill || false,
-                onlyEmptyFields: options.onlyEmptyFields || false,
-                onlyVisibleFields: options.onlyVisibleFields || false,
-                cipher: options.cipher,
-                sender: pd.sender,
+                onlyEmptyFields     : options.onlyEmptyFields      || false,
+                onlyVisibleFields   : options.onlyVisibleFields    || false,
+                cipher              : options.cipher,
+                sender              : pd.sender,
             });
 
             if (!fillScript || !fillScript.script || !fillScript.script.length) {
@@ -237,7 +234,7 @@ export default class AutofillService implements AutofillServiceInterface {
         let tab = await this.getActiveTab();
 
         /*
-        @override by Cozy : when the user logins into the addon, all tabs requests a pageDetail in order to
+        @override by Cozy : when the user logins into the addon, all tabs request a pageDetail in order to
         activate the in-page-menu : then the tab to take into account is not the active tab, but the tab sent with
         the pageDetails
         */
@@ -262,7 +259,250 @@ export default class AutofillService implements AutofillServiceInterface {
             onlyEmptyFields: !fromCommand,
             onlyVisibleFields: !fromCommand,
         });
-        return res
+        return res;
+    }
+
+    /* --------------------------------------------------------------------- */
+    // Select in pageDetails the inputs that could be filled
+    // in order to activate the loginMenu into it.
+    generateLoginMenuFillScript(pageDetails: any) {
+
+        if (!pageDetails ) {
+            return null;
+        }
+        const fillScript = new AutofillScript(pageDetails.documentUUID);
+        const filledFields: { [id: string]: AutofillField; } = {};
+
+        /*
+        Exemples of ciphers :
+
+        1/ Login Cipher :
+        `{
+            "id": "b9a67ec355b1e5bbe672d6632955bd31",
+            "organizationId": null,
+            "folderId": null,
+            "name": "bbox - Verdun - benbox",
+            "notes": "dd",
+            "type": 1,
+            "favorite": false,
+            "organizationUseTotp": false,
+            "edit": true,
+            "viewPassword": true,
+            "login": {
+              "username": "admin",
+              "password": "1234",
+              "passwordRevisionDate": null,
+              "totp": null,
+              "uris": [
+                 {
+                    "match": null,
+                    "_uri": "http://gestionbbox.lan/",
+                    "_domain": "gestionbbox.lan",
+                    "_hostname": "gestionbbox.lan",
+                    "_host": null,
+                    "_canLaunch": null
+                 },
+                 {
+                    "match": null,
+                    "_uri": "https://mabbox.bytel.fr/",
+                    "_domain": "bytel.fr",
+                    "_hostname": "mabbox.bytel.fr",
+                    "_host": null,
+                    "_canLaunch": null
+                 }
+              ]
+            },
+            "identity": {
+              "title": null,
+              "middleName": null,
+              "address1": null,
+              "address2": null,
+              "address3": null,
+              "city": null,
+              "state": null,
+              "postalCode": null,
+              "country": null,
+              "company": null,
+              "email": null,
+              "phone": null,
+              "ssn": null,
+              "username": null,
+              "passportNumber": null,
+              "licenseNumber": null,
+              "_firstName": null,
+              "_lastName": null,
+              "_subTitle": null
+            },
+            "card": {
+              "cardholderName": "Smith",
+              "expMonth": "",
+              "expYear": null,
+              "code": null,
+              "_brand": null,
+              "_number": null,
+              "_subTitle": null
+            },
+            "secureNote": {
+              "type": null
+            },
+            "attachments": null,
+            "fields": [
+              {
+                 "name": "Clé Wifi SSID : benbox",
+                 "value": "4567",
+                 "type": 0,
+                 "newField": false
+              }
+            ],
+            "passwordHistory": null,
+            "collectionIds": null,
+            "revisionDate": "2020-09-07T13:32:53.543Z",
+            "deletedDate": null,
+            "localData": null
+        }`
+
+        2/ Card Cipher (extract) :
+        `{
+            "card": {
+                "cardholderName": "SMITH",
+                "expMonth": "6",
+                "expYear": "2028",
+                "code": "346",
+                "_brand": "Mastercard",
+                "_number": "5581692893367425",
+                "_subTitle": "Mastercard, *7425"
+            },
+        }`
+
+        3/ identity cipher (extract) :
+        {
+            "identity": {
+                "title": "M.",
+                "middleName": "Thimothée",
+                "address1": "158, rue de Verdun, 92800 Puteaux",
+                "address2": null,
+                "address3": null,
+                "city": "Puteaux",
+                "state": null,
+                "postalCode": "92800",
+                "country": "France",
+                "company": "Cozy Cloud",
+                "email": "mail1@sonadresse.com",
+                "phone": "+33686253666",
+                "ssn": "1 77 02 93 010 075   -   16",
+                "username": "Benibur",
+                "passportNumber": null,
+                "licenseNumber": null,
+                "firstName": "Benjamin",
+                "lastName": "ANDRE",
+                "subTitle": "Benjamin ANDRE"
+            },
+        }
+        */
+
+        const cipherModel = JSON.parse(`{
+            "id": "b9a67ec355b1e5bbe672d6632955bd31",
+            "organizationId": null,
+            "folderId": null,
+            "name": "bbox - Verdon - box",
+            "notes": "dd",
+            "type": 1,
+            "favorite": false,
+            "organizationUseTotp": false,
+            "edit": true,
+            "viewPassword": true,
+            "login": {
+              "username": "admin",
+              "password": "1234",
+              "passwordRevisionDate": null,
+              "totp": null,
+              "uris": [
+                 {
+                    "match": null,
+                    "uri": "http://gestionbbox.lan/",
+                    "domain": "gestionbbox.lan",
+                    "hostname": "gestionbbox.lan",
+                    "host": null,
+                    "canLaunch": null
+                 }
+              ]
+            },
+            "identity": {
+                "title": "M.",
+                "middleName": "Thim",
+                "address1": "13, rue de Verdon, 93100 Lyon",
+                "address2": "adress ligne 2",
+                "address3": "adress ligne 3",
+                "city": "Lyon",
+                "state": null,
+                "postalCode": "93100",
+                "country": "France",
+                "company": "Cozy Cloud",
+                "email": "mail@dude.com",
+                "phone": "+33606205636",
+                "ssn": "1 78 12 77 010 065   -   13",
+                "username": "Jojo",
+                "passportNumber": "21343245",
+                "licenseNumber": "678678678",
+                "firstName": "John",
+                "lastName": "SMITH",
+                "subTitle": "Josh SMITH"
+            },
+            "card": {
+                "cardholderName": "SMITH",
+                "expMonth": "6",
+                "expYear": "2028",
+                "code": "346",
+                "brand": "Mastercard",
+                "number": "5581692893367425",
+                "subTitle": "Mastercard, *7425"
+            },
+            "secureNote": {
+              "type": null
+            },
+            "attachments": null,
+            "fields": [
+              {
+                 "name": "Clé Wifi SSID : benbox",
+                 "value": "4567",
+                 "type": 0,
+                 "newField": false
+              }
+            ],
+            "passwordHistory": null,
+            "collectionIds": null,
+            "revisionDate": "2020-09-07T13:32:53.543Z",
+            "deletedDate": null,
+            "localData": null
+        }`);
+
+        const options = {
+           skipUsernameOnlyFill: false,
+           onlyEmptyFields     : false,
+           onlyVisibleFields   : false,
+           cipher              : cipherModel,
+        };
+        const loginFS = new AutofillScript(pageDetails.documentUUID);
+        const loginFilledFields: { [id: string]: AutofillField; } = {};
+        const loginLoginMenuFillScript    =
+            this.generateLoginFillScript(loginFS, pageDetails, loginFilledFields, options);
+
+        const cardFS = new AutofillScript(pageDetails.documentUUID);
+        const cardFilledFields: { [id: string]: AutofillField; } = {};
+        const cardLoginMenuFillScript     =
+            this.generateCardFillScript(cardFS, pageDetails, cardFilledFields, options);
+
+        const idFS = new AutofillScript(pageDetails.documentUUID);
+        const idFilledFields: { [id: string]: AutofillField; } = {};
+        const identityLoginMenuFillScript =
+            this.generateIdentityFillScript(idFS, pageDetails, idFilledFields, options);
+
+        return {
+            loginLoginMenuFillScript: loginLoginMenuFillScript,
+            cardLoginMenuFillScript: cardLoginMenuFillScript,
+            identityLoginMenuFillScript: identityLoginMenuFillScript,
+            type: 'inPageLoginMenuScript',
+        };
     }
 
     // Helpers
@@ -461,8 +701,8 @@ export default class AutofillService implements AutofillServiceInterface {
                 // ref https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill
                 // ref https://developers.google.com/web/fundamentals/design-and-ux/input/forms/
                 if (!fillFields.cardholderName && this.isFieldMatch(f[attr],
-                    ['cc-name', 'card-name', 'cardholder-name', 'cardholder', 'name', 'nom'],
-                    ['cc-name', 'card-name', 'cardholder-name', 'cardholder', 'tbName'])) {
+                    ['cc-name', 'card-name', 'cardholder-name', 'cardholder', 'card-owner', 'name', 'nom'],
+                    ['cc-name', 'card-name', 'cardholder-name', 'cardholder', 'card-owner', 'tbName'])) {
                     fillFields.cardholderName = f;
                     break;
                 } else if (!fillFields.number && this.isFieldMatch(f[attr],
@@ -693,11 +933,13 @@ export default class AutofillService implements AutofillServiceInterface {
                 // ref https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill
                 // ref https://developers.google.com/web/fundamentals/design-and-ux/input/forms/
                 if (!fillFields.name && this.isFieldMatch(f[attr],
-                    ['name', 'full-name', 'your-name'], ['full-name', 'your-name'])) {
+                    ['name', 'full-name', 'your-name', 'nom'],
+                    ['full-name', 'your-name', 'nom'])
+                ) {
                     fillFields.name = f;
                     break;
                 } else if (!fillFields.firstName && this.isFieldMatch(f[attr],
-                    ['f-name', 'first-name', 'given-name', 'first-n'])) {
+                    ['f-name', 'first-name', 'given-name', 'first-n', 'prénom'])) {
                     fillFields.firstName = f;
                     break;
                 } else if (!fillFields.middleName && this.isFieldMatch(f[attr],
@@ -705,19 +947,20 @@ export default class AutofillService implements AutofillServiceInterface {
                     fillFields.middleName = f;
                     break;
                 } else if (!fillFields.lastName && this.isFieldMatch(f[attr],
-                    ['l-name', 'last-name', 's-name', 'surname', 'family-name', 'family-n', 'last-n'])) {
+                    ['l-name', 'last-name', 's-name', 'surname', 'family-name', 'family-n',
+                    'last-n', 'nom-de-famille'])) {
                     fillFields.lastName = f;
                     break;
                 } else if (!fillFields.title && this.isFieldMatch(f[attr],
-                    ['honorific-prefix', 'prefix', 'title'])) {
+                    ['honorific-prefix', 'prefix', 'title', 'titre'])) {
                     fillFields.title = f;
                     break;
                 } else if (!fillFields.email && this.isFieldMatch(f[attr],
-                    ['e-mail', 'email-address'])) {
+                    ['e-mail', 'email-address', 'courriel'])) {
                     fillFields.email = f;
                     break;
                 } else if (!fillFields.address && this.isFieldMatch(f[attr],
-                    ['address', 'street-address', 'addr', 'street', 'mailing-addr', 'billing-addr',
+                    ['address', 'adresse', 'street-address', 'addr', 'street', 'mailing-addr', 'billing-addr',
                         'mail-addr', 'bill-addr'], ['mailing-addr', 'billing-addr', 'mail-addr', 'bill-addr'])) {
                     fillFields.address = f;
                     break;
@@ -734,12 +977,12 @@ export default class AutofillService implements AutofillServiceInterface {
                     fillFields.address3 = f;
                     break;
                 } else if (!fillFields.postalCode && this.isFieldMatch(f[attr],
-                    ['postal', 'zip', 'zip2', 'zip-code', 'postal-code', 'post-code', 'address-zip',
+                    ['postal', 'zip', 'zip2', 'zip-code', 'postal-code', 'code-postal', 'post-code', 'address-zip',
                         'address-postal', 'address-code', 'address-postal-code', 'address-zip-code'])) {
                     fillFields.postalCode = f;
                     break;
                 } else if (!fillFields.city && this.isFieldMatch(f[attr],
-                    ['city', 'town', 'address-level-2', 'address-city', 'address-town'])) {
+                    ['city', 'town', 'address-level-2', 'address-city', 'address-town', 'ville'])) {
                     fillFields.city = f;
                     break;
                 } else if (!fillFields.state && this.isFieldMatch(f[attr],
@@ -749,19 +992,19 @@ export default class AutofillService implements AutofillServiceInterface {
                     break;
                 } else if (!fillFields.country && this.isFieldMatch(f[attr],
                     ['country', 'country-code', 'country-name', 'address-country', 'address-country-name',
-                        'address-country-code'])) {
+                        'address-country-code', 'pays'])) {
                     fillFields.country = f;
                     break;
                 } else if (!fillFields.phone && this.isFieldMatch(f[attr],
-                    ['phone', 'mobile', 'mobile-phone', 'tel', 'telephone', 'phone-number'])) {
+                    ['phone', 'mobile', 'mobile-phone', 'tel', 'telephone', 'phone-number', 'téléphone'])) {
                     fillFields.phone = f;
                     break;
                 } else if (!fillFields.username && this.isFieldMatch(f[attr],
-                    ['user-name', 'user-id', 'screen-name'])) {
+                    ['user-name', 'user-id', 'screen-name', 'utilisateur'])) {
                     fillFields.username = f;
                     break;
                 } else if (!fillFields.company && this.isFieldMatch(f[attr],
-                    ['company', 'company-name', 'organization', 'organization-name'])) {
+                    ['company', 'company-name', 'organization', 'organization-name', 'entreprise'])) {
                     fillFields.company = f;
                     break;
                 }
@@ -1146,6 +1389,7 @@ export default class AutofillService implements AutofillServiceInterface {
             }
         });
         fillScript.script = newScript;
+        fillScript.type = 'inPageMenuScript';
         return fillScript;
     }
 
