@@ -42,7 +42,6 @@ import menuCtrler from './menuCtrler';
     7. Remove "some useful globals" on window
     */
 
-
     function collect(document, undefined) {
         // START MODIFICATION
         var isFirefox = navigator.userAgent.indexOf('Firefox') !== -1 || navigator.userAgent.indexOf('Gecko/') !== -1;
@@ -1112,7 +1111,6 @@ import menuCtrler from './menuCtrler';
         console.log('autofil.js HEARD : ', {
             'command': msg.command,
             'subcommand': msg.subcommand,
-            // 'sender': sender.url ? (new URL(sender.url)).pathname : sender.id,
             'sender': sender,
             "msg": msg,
             "heard in": document.location.pathname},);
@@ -1129,7 +1127,6 @@ import menuCtrler from './menuCtrler';
             return true;
         }
         else if (msg.command === 'fillForm') {
-            // menuCtrler.setMenuType('autofillMenu')
             fill(document, msg.fillScript);
             sendResponse();
             return true;
@@ -1162,7 +1159,6 @@ import menuCtrler from './menuCtrler';
                 })
 
             } else if (msg.subcommand === 'loginIPMenuSetFields') {
-                // menuCtrler.setMenuType('loginMenu', msg.isPinLocked)
                 msg.loginFillScripts.isPinLocked = msg.isPinLocked
                 // and then send the script for filling
                 fill(document, msg.loginFillScripts)

@@ -106,7 +106,7 @@ function _initInPageMenuForEl(targetEl) {
         menuEl = document.createElement('iframe')
         _setIframeURL(state.currentMenuType, state.isPinLocked )
         menuEl.id  = 'cozy-menu-in-page'
-        menuEl.style.cssText = 'z-index: 2147483647 !important; border:0; height:0; transition: transform 30ms linear 0s;'
+        menuEl.style.cssText = 'z-index: 2147483647 !important; border:0; height:0; transition: transform 30ms linear 0s; display:block;'
         // Append <style> element to add popperjs styles
         // relevant doc for css stylesheet manipulation : https://www.w3.org/wiki/Dynamic_style_-_manipulating_CSS_with_JavaScript
         const styleEl = document.createElement('style')
@@ -244,14 +244,14 @@ function show(targetEl) {
 //       the menu.
 // force = true : hide the menu without waiting to check the target of the
 //       focus.
-var n = 0
+// var n = 0
 function hide(force) {
-    var internN = n
-    n += 1
-    console.log('menuCtrler.hide() - Hide_id=', internN, 'force:', !!force, document.activeElement.id);
+    // var internN = n
+    // n += 1
+    // console.log('menuCtrler.hide() - Hide_id=', internN, 'force:', !!force, document.activeElement.id);
     if (state.isFrozen) return
     if (force && typeof force == 'boolean') {
-        console.log('HIDE!', internN)
+        // console.log('HIDE!', internN)
         _setApplyFadeInUrl(false)
         // hide menu element after a delay so that the inner pannel has been scaled to 0 and therefore enables
         // a proper start for the next display of the menu.
@@ -266,11 +266,11 @@ function hide(force) {
         // console.log('after timout, hide with the following', target.id, targetsEl.indexOf(target))
         if (!force && (targetsEl.indexOf(target) != -1 || target.tagName == 'IFRAME' && target.id == 'cozy-menu-in-page')) {
             // Focus is know in iframe or in one of the input => do NOT hide
-            console.log('After hide, focus is now in iframe or in one of the input => do NOT hide', internN);
+            // console.log('After hide, focus is now in iframe or in one of the input => do NOT hide', internN);
             return
         }
         // otherwise, hide
-        console.log('HIDE!', internN)
+        // console.log('HIDE!', internN)
         _setApplyFadeInUrl(false)
         // hide menu element after a delay so that the inner pannel has been scaled to 0 and therefore enables
         // a proper start for the next display of the menu.
@@ -284,18 +284,17 @@ menuCtrler.hide = hide
 
 
 /* --------------------------------------------------------------------- */
-// Remove the "buttons" in form inputs and prevent listerners' actions
+// Hide menu and remove the "buttons" in form inputs
 function deactivate() {
     if (!menuEl) return; // can happen
-    // menuEl.removeAttribute('data-show')
-    // _setApplyFadeInUrl(false)
-    // state.isHidden = true
     hide(true)
     removeInPageButtons()
 }
 menuCtrler.deactivate = deactivate
 
 
+/* --------------------------------------------------------------------- */
+// Remove the "buttons" in form inputs and their listerners
 function removeInPageButtons() {
     for (var el of targetsEl) {
         el.style.backgroundImage = ''
@@ -376,7 +375,6 @@ menuCtrler.setCiphers = setCiphers
 function setMenuType(menuType, isPinLocked) {
     console.log('setMenuType()', {menuType, isPinLocked});
     if (menuType === state.currentMenuType) {
-        // _forceIframeRefresh()
         return
     }
     if (menuEl) {
@@ -415,17 +413,6 @@ function _setIframeURL(menuType, isPinLocked, hash) {
         menuEl.src = chrome.runtime.getURL('inPageMenu/loginMenu.html' + urlParams + rand) + hash
     }
 }
-
-
-/* --------------------------------------------------------------------- */
-//
-function forceIframeRefresh() {
-    if (!menuEl ||!menuEl.src) return
-    const url = new URL(menuEl.src)
-    const rand = '?' + Math.floor((Math.random()*1000000)+1)
-    menuEl.src = url.origin + url.pathname + rand + url.hash
-}
-menuCtrler.forceIframeRefresh = forceIframeRefresh
 
 
 /* --------------------------------------------------------------------- */

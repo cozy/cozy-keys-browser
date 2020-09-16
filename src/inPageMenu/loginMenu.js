@@ -96,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isPinLocked) {
             title.textContent                                 = i18nGetMessage('unlockWithPin'       )
             pwdLabel.textContent                              = i18nGetMessage('pin'                 )
-            // pwdInput.placeholder                              = i18nGetMessage('pin'                 )
             urlInput.disabled = true
             document.getElementById('url-row').classList.add('disabled')
         } else {
@@ -257,8 +256,6 @@ async function submit2fa() {
     _setWaitingMode()
 
     if (twoFaInput.value == null || twoFaInput.value === '') {
-        // this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
-        //     this.i18nService.t('masterPassRequired'));
         console.log('Code 2FA vide');
         return;
     }
@@ -378,7 +375,7 @@ function close() {
 
 
 /* --------------------------------------------------------------------- */
-// Request the menu controler to close the iframe of the menu
+// Prepare an input element to have a material UX
 function _turnIntoMaterialInput(inputEl, labelEl) {
     const container = inputEl.closest('.row-input')
     container.addEventListener('click', ()=>{

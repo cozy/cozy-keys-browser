@@ -1,6 +1,5 @@
 require('./menu.scss');
 
-
 // Globals
 var ciphers,
     panel,
@@ -94,6 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 
+/* --------------------------------------------------------------------- */
+// request the background to autofill the page with a cipher
 function requestFormFillingWithCipher(cipherId) {
     chrome.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest',
@@ -104,13 +105,15 @@ function requestFormFillingWithCipher(cipherId) {
 }
 
 
+/* --------------------------------------------------------------------- */
+// request the background to autofill the page with a cipher
 function updateRows() {
     // 1- generate rows
     const rowsList = document.querySelector('#rows-list')
+    // 2- remove all previous rows
+    while (rowsList.firstElementChild) {rowsList.firstElementChild.remove();}
+    // 3- add rows
     ciphers.forEach((cipher, i) => {
-        // if (i != 0) {
-        //     rowsList.appendChild(document.createElement('hr'))
-        // }
         rowsList.insertAdjacentHTML('beforeend', rowTemplate)
         const row = rowsList.lastElementChild
         const text = row.querySelector('.row-text')
@@ -121,7 +124,6 @@ function updateRows() {
         if (i === 0) {
             row.classList.add('selected')
         }
-        ciphers.push()
     });
 }
 
@@ -143,7 +145,10 @@ const rowTemplate = `
 </div>
 `
 
-
+/* --------------------------------------------------------------------- */
+// Ask parent page to adjuste iframe height
+// Width is constraint by the parent page, but height is decided by the
+// iframe content
 function adjustMenuHeight() {
     chrome.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest' ,
@@ -154,6 +159,9 @@ function adjustMenuHeight() {
 }
 
 
+
+/* --------------------------------------------------------------------- */
+// Select the row corresponding to a Cipher ID
 function setSelectionOnCipher(targetCipherId) {
     // 1- remove current selection
     document.querySelector('.selected').classList.remove('selected')
@@ -163,7 +171,7 @@ function setSelectionOnCipher(targetCipherId) {
 
 
 /* --------------------------------------------------------------------- */
-// Request the iframe content to fadeIn or not
+// Test if iframe content should fadeIn or not
 function _testHash(){
     if (window.location.hash === '#applyFadeIn') {
         console.log('autofillMenu._testHash() : add fade-in');

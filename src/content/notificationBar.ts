@@ -144,7 +144,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const bodies = document.querySelectorAll('body');
         if (bodies && bodies.length > 0) {
             observer = new MutationObserver((mutations) => {
-                if (mutations == null || mutations.length === 0 || pageHref !== window.location.href) {
+
+                // we remove the pageHref !== window.location.href condition since in some cases it prevents to react
+                // to the page changes (for instance second step of this page :
+                // https://secure.fnac.com/identity/server/gateway/signin-signup )
+                // if (mutations == null || mutations.length === 0 || pageHref !== window.location.href) {
+                if (mutations == null || mutations.length === 0) {
                     return;
                 }
                 let doCollect = false;
