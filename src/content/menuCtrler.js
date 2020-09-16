@@ -170,13 +170,13 @@ function _onBlur(event) {
 }
 
 function _onFocus(event) {
-    console.log('focus event in an input 2', event.target.id);
+    console.log('focus event in an input', event.target.id);
     if (!event.isTrusted) return;
     show(this)
 }
 
 function _onClick(event) {
-    console.log('click event in an input 2', event.target.id);
+    console.log('click event in an input', event.target.id);
     if (!event.isTrusted) return;
     show(this)
 }
@@ -226,7 +226,7 @@ function _onKeyDown(event) {
 /* --------------------------------------------------------------------- */
 //
 function show(targetEl) {
-    console.log('menuCtrler.show()');
+    console.log('menuCtrler.show() ');
     if (state.isFrozen) return
     state.lastFocusedEl = targetEl
     popperInstance.state.elements.reference = targetEl

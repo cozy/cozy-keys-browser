@@ -13,9 +13,11 @@ var panel               ,
     closeIcon           ,
     visiPwdBtn          ,
     visi2faBtn          ,
+    urlLabel            ,
     urlInput            ,
     pwdLabel            ,
     pwdInput            ,
+    twoFaLabel          ,
     twoFaInput          ,
     errorLabel          ,
     submitBtn           ,
@@ -44,10 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1- get elements references
     panel      = document.querySelector('.panel')
     title      = document.getElementById('title-content')
+    urlLabel   = document.getElementById('cozy-url-label')
     urlInput   = document.getElementById('cozy-url')
-    pwdInput   = document.getElementById('master-password')
     pwdLabel   = document.getElementById('master-password-label')
+    pwdInput   = document.getElementById('master-password')
     visiPwdBtn = document.getElementById('visi-pwd-btn')
+    twoFaLabel = document.getElementById('2fa-label')
     twoFaInput = document.getElementById('two-fa-input')
     visi2faBtn = document.getElementById('visi-2fa-btn')
     closeIcon  = document.querySelector('.close-icon')
@@ -92,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isPinLocked) {
             title.textContent                                 = i18nGetMessage('unlockWithPin'       )
             pwdLabel.textContent                              = i18nGetMessage('pin'                 )
-            pwdInput.placeholder                              = i18nGetMessage('pin'                 )
+            // pwdInput.placeholder                              = i18nGetMessage('pin'                 )
             urlInput.disabled = true
             document.getElementById('url-row').classList.add('disabled')
         } else {
@@ -101,7 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 5- put focus
+    // 5- activate material inputs and put focus
+    _turnIntoMaterialInput(urlInput, urlLabel)
+    _turnIntoMaterialInput(pwdInput, pwdLabel)
+    _turnIntoMaterialInput(twoFaInput, twoFaLabel)
     urlInput.focus()
 
     // 6- request to adjust the menu height
@@ -137,6 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'setRememberedCozyUrl':
                 urlInput.value = msg.rememberedCozyUrl
+                // input event not triggered in Chrome by the previous instruction... so we triger event manually...
+                urlInput.dispatchEvent(new Event('input', { 'bubbles': true }))
                 pwdInput.focus()
                 break;
         }
@@ -365,4 +374,42 @@ function close() {
         subcommand: 'closeMenu'          ,
         sender    : 'loginMenu.js'       ,
     });
+}
+
+
+/* --------------------------------------------------------------------- */
+// Request the menu controler to close the iframe of the menu
+function _turnIntoMaterialInput(inputEl, labelEl) {
+    const container = inputEl.closest('.row-input')
+    container.addEventListener('click', ()=>{
+        inputEl.focus()
+    })
+    let isFocusedOrFilled = false
+    const initialPlaceholder = inputEl.placeholder
+    // init input state
+    if (inputEl.value) {
+        container.classList.add('focused-or-filled')
+        inputEl.placeholder = initialPlaceholder
+        isFocusedOrFilled = true
+    }
+    inputEl.addEventListener('focus', (e)=>{
+        container.classList.add('focused-or-filled')
+        setTimeout(()=>{inputEl.placeholder = initialPlaceholder},100)
+        isFocusedOrFilled = true
+    })
+    inputEl.addEventListener('blur', (e)=>{
+        if (!inputEl.value) {
+            container.classList.remove('focused-or-filled')
+            inputEl.placeholder = ''
+            isFocusedOrFilled = false
+        }
+    })
+    inputEl.addEventListener('input', (e)=>{
+        console.log('input HEARD !!!');
+        if (!isFocusedOrFilled && inputEl.value) {
+            container.classList.add('focused-or-filled')
+            inputEl.placeholder = initialPlaceholder
+            isFocusedOrFilled = true
+        }
+    })
 }

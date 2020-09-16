@@ -86,19 +86,24 @@ body {
 
 .row {
     margin-bottom: 1em;
+    cursor:text;
 }
 
 .row-input {
-  height: 3rem;
-  border: 1px solid;
-  border-radius: 4px;
-  border-color: #ffffffa3;
+    height: 3rem;
+    border: 1px solid;
+    border-radius: 4px;
+    border-color: #ffffffa3;
+    & ::selection {
+        background: #b5d4ff;;
+    }
 }
 
-.waiting .row-input , .row-input.disabled {
+.waiting .row-input {
     background-color: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.64);
     color: #b5d4ff;
+    cursor: progress;
 }
 
 .error .row-input {
@@ -116,12 +121,17 @@ label {
 
 .row-label {
   // margin-left: 0.75rem;
-  top: -0.6rem;
+  top: 0.8rem;
   left: 0.75rem;
   position: relative;
   background-color: #297ef2;
   padding-left: 0.25rem;
   padding-right: 0.25rem;
+  transition: top 0.5s;
+}
+
+.focused-or-filled .row-label {
+    top: -0.7rem;
 }
 
 input {
@@ -183,6 +193,16 @@ button {
     &:hover {
         cursor: pointer;
     }
+
+    &:disabled {
+        color: #84b5f8;
+        background-color: #d3e5ff;
+        cursor: progress;
+    }
+}
+
+:disabled {
+    cursor: progress;
 }
 
 .twoFa-mode #url-row {
