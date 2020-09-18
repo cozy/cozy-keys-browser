@@ -85,6 +85,13 @@ export default class RuntimeBackground {
         });
 
         */
+        console.log('runtime.background PROCESS MESSAGE ', {
+            'msg.command:': msg.command,
+            'msg.subcommand': msg.subcommand,
+            'msg.sender': msg.sender,
+            'msg': msg,
+            'sender': sender
+        });
 
         switch (msg.command) {
             case 'loggedIn':
@@ -734,7 +741,7 @@ export default class RuntimeBackground {
         if (enableInPageMenu === null) { // if not yet set, then default to true
             enableInPageMenu = true;
         }
-        let subCommand = 'autofillIPMenuDeactivate';
+        let subCommand = 'inPageMenuDeactivate';
         if (enableInPageMenu) {
             subCommand = 'autofilIPMenuActivate';
         }

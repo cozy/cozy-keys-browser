@@ -375,6 +375,8 @@ menuCtrler.setCiphers = setCiphers
 function setMenuType(menuType, isPinLocked) {
     console.log('setMenuType()', {menuType, isPinLocked});
     if (menuType === state.currentMenuType) {
+        _setIframeURL(menuType, isPinLocked)
+        _forceIframeRefresh()
         return
     }
     if (menuEl) {
@@ -412,6 +414,16 @@ function _setIframeURL(menuType, isPinLocked, hash) {
         if (isPinLocked) urlParams = '?isPinLocked=true'
         menuEl.src = chrome.runtime.getURL('inPageMenu/loginMenu.html' + urlParams + rand) + hash
     }
+}
+
+
+/* --------------------------------------------------------------------- */
+// just modify the random part of the iframe url in order to force refresh
+function _forceIframeRefresh() {
+    if (!menuEl.src) return
+    const url = new URL(menuEl.src)
+    const rand = '?' + Math.floor((Math.random()*1000000)+1)
+    menuEl.src = url.origin + url.pathname + url.search + rand + url.hash
 }
 
 

@@ -150,7 +150,7 @@ export class OptionsComponent implements OnInit {
         // activate or deactivate the menu from all tabs
         let subcommand = 'autofilIPMenuActivate';
         if (!this.enableInPageMenu) {
-            subcommand = 'autofillIPMenuDeactivate';
+            subcommand = 'inPageMenuDeactivate';
         }
         const allTabs = await BrowserApi.getAllTabs();
         for (const tab of allTabs) {

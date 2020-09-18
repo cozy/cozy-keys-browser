@@ -154,14 +154,19 @@ export default class AutofillService implements AutofillServiceInterface {
 
     async doAutoFill(options: any) {
         let totpPromise: Promise<string> = null;
-        let tab = await this.getActiveTab();
+        let tab: any;
         /*
         @override by Cozy : when the user logins into the addon, all tabs requests a pageDetail in order to
         activate the in-page-menu : then the tab to take into account is not the active tab, but the tab sent with
-        the pageDetails
+        the pageDetails.
+        If the request doesn't come from notificationBar, then it is the current tab to use as a target.
         */
-        if (options.pageDetails[0].sender === 'notifBarForInPageMenu') {
+        if (options.tab) {
+            tab = options.tab;
+        } else if (options.pageDetails[0].sender === 'notifBarForInPageMenu') {
             tab = options.pageDetails[0].tab;
+        } else {
+            tab = await this.getActiveTab();
         }
         /* END @override by Cozy */
 
@@ -232,6 +237,7 @@ export default class AutofillService implements AutofillServiceInterface {
 
     async doAutoFillForLastUsedLogin(pageDetails: any, fromCommand: boolean) {
         let tab = await this.getActiveTab();
+        let lastUsedCipher: any;
 
         /*
         @override by Cozy : when the user logins into the addon, all tabs request a pageDetail in order to
@@ -240,17 +246,23 @@ export default class AutofillService implements AutofillServiceInterface {
         */
         if (pageDetails[0].sender === 'notifBarForInPageMenu') {
             tab = pageDetails[0].tab;
-        }
-        if (!tab || !tab.url) {
-            return;
+            lastUsedCipher = await this.cipherService.getLastUsedForUrl(tab.url);
+            if (!lastUsedCipher) { // there is no cipher for this URL : deactivate in page menu
+                BrowserApi.tabSendMessage(tab, {command: 'autofillAnswerRequest', subcommand: 'inPageMenuDeactivate'});
+            }
+        } else {
+            if (!tab || !tab.url) {
+                return;
+            }
+            lastUsedCipher = await this.cipherService.getLastUsedForUrl(tab.url);
         }
         /* END @override by Cozy */
-        const lastUsedCipher = await this.cipherService.getLastUsedForUrl(tab.url);
         if (!lastUsedCipher) {
             return;
         }
         const res = await this.doAutoFill({
             cipher: lastUsedCipher,
+            tab : tab,
             // tslint:disable-next-line
             pageDetails: pageDetails,
             skipTotp: !fromCommand,

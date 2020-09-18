@@ -1107,6 +1107,11 @@ import menuCtrler from './menuCtrler';
 
         console.log('autofil.js HEARD : ', {'command': msg.command,'subcommand': msg.subcommand, 'sender': new URL(sender.url).pathname, "msg": msg, "heard in": document.location.pathname},);
         */
+
+
+       console.log('autofil.js HEARD : ', {'command': msg.command,'subcommand': msg.subcommand, 'sender': sender.url, "msg": msg, "heard in": document.location.pathname},);
+       // console.log('autofil.js HEARD : ', {'command': msg.command,'subcommand': msg.subcommand, 'sender': new URL(sender.url).pathname, "msg": msg, "heard in": document.location.pathname},);
+
        if (msg.command === 'notificationBarPageDetails') return
         console.log('autofil.js HEARD : ', {
             'command': msg.command,
@@ -1147,7 +1152,7 @@ import menuCtrler from './menuCtrler';
                     sender      : 'menu.js',
                     cipher      : selectedCipher,
                 })
-            } else if (msg.subcommand === 'autofillIPMenuDeactivate') {
+            } else if (msg.subcommand === 'inPageMenuDeactivate') {
                 menuCtrler.deactivate()
 
             } else if (msg.subcommand === 'loginIPMenuActivate') {
@@ -1157,7 +1162,6 @@ import menuCtrler from './menuCtrler';
                     pageDetails: pageDetails,
                     isPinLocked: msg.isPinLocked,
                 })
-
             } else if (msg.subcommand === 'loginIPMenuSetFields') {
                 msg.loginFillScripts.isPinLocked = msg.isPinLocked
                 // and then send the script for filling
