@@ -247,7 +247,6 @@ export default class AutofillService implements AutofillServiceInterface {
             * and if there is no cipher for the tab, then request to close in page menu
         */
         if (pageDetails[0].sender === 'notifBarForInPageMenu') {
-            // console.log('doAutoFillForLastUsedLogin() et sender = notifBarForInPageMenu');
             tab = pageDetails[0].tab;
             lastUsedCipher = await this.cipherService.getLastUsedForUrl(tab.url);
             if (!lastUsedCipher) { // there is no cipher for this URL : deactivate in page menu

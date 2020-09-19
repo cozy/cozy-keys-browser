@@ -115,7 +115,7 @@ body {
 }
 
 label {
-    font-size: 12px;
+    font-size: 16px;
     color: #b5d4ff;
 }
 
@@ -127,11 +127,12 @@ label {
   background-color: #297ef2;
   padding-left: 0.25rem;
   padding-right: 0.25rem;
-  transition: top 0.5s;
+  transition: all 0.5s;
 }
 
 .focused-or-filled .row-label {
     top: -0.7rem;
+    font-size: 12px;
 }
 
 input {
@@ -145,6 +146,7 @@ input {
     top: -0.25rem;
     position: relative;
     outline: none;
+    font-size: 16px;
 }
 
 input::placeholder {
