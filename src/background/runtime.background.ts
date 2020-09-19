@@ -239,6 +239,7 @@ export default class RuntimeBackground {
                     loginFillScripts: loginFillScripts,
                     isPinLocked     : isPinLocked,
                 }, {frameId: sender.frameId});
+                break;
             case 'bgGetAutofillMenuScript':
                 await this.autofillService.doAutoFillForLastUsedLogin([{
                     frameId: sender.frameId,
@@ -246,6 +247,7 @@ export default class RuntimeBackground {
                     details: msg.details,
                     sender: 'notifBarForInPageMenu', // to prepare a fillscript for the in-page-menu
                 }], true);
+                break;
             case 'collectPageDetailsResponse':
                 if (await this.vaultTimeoutService.isLocked()) {
                     BrowserApi.tabSendMessage(msg.tab, {

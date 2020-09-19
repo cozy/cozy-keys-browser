@@ -175,10 +175,10 @@ function setSelectionOnCipher(targetCipherId) {
 // Test if iframe content should fadeIn or not
 function _testHash(){
     if (window.location.hash === '#applyFadeIn') {
-        console.log('autofillMenu._testHash() : add fade-in');
+        // console.log('autofillMenu._testHash() : add fade-in');
         panel.classList.add('fade-in')
     } else {
-        console.log('autofillMenu._testHash() : remove fade-in');
+        // console.log('autofillMenu._testHash() : remove fade-in');
         panel.className = "panel";
     }
 }
