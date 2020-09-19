@@ -333,7 +333,7 @@ function _removeWaitingMode() {
 function _setWaitingMode() {
     panel.classList.add('waiting')
     panel.classList.remove('error')
-    _togglePwdVisibility()
+    _hidePwdVisibility()
     urlInput.disabled   = true
     pwdInput.disabled   = true
     twoFaInput.disabled = true
@@ -428,4 +428,22 @@ function _togglePwdVisibility() {
         visiPwdBtn.firstElementChild.classList.replace('fa-eye-slash','fa-eye')
     }
     isPwdHidden = !isPwdHidden
+}
+
+
+/* --------------------------------------------------------------------- */
+// Hide the visibility of the password
+function _hidePwdVisibility() {
+    pwdInput.type = 'password'
+    visiPwdBtn.firstElementChild.classList.replace('fa-eye-slash','fa-eye')
+    isPwdHidden = true
+}
+
+
+/* --------------------------------------------------------------------- */
+// unHide the visibility of the password
+function _unHidePwdVisibility() {
+    pwdInput.type = 'text'
+    visiPwdBtn.firstElementChild.classList.replace('fa-eye','fa-eye-slash')
+    isPwdHidden = false
 }
