@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.runtime.sendMessage({
             command   : 'bgAnswerMenuRequest',
             subcommand: 'closeMenu'          ,
+            force     : true                 ,
             sender    : 'menu.js'            ,
         });
     })

@@ -62,7 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
     isPinLocked = window.location.search.indexOf('isPinLocked=true') === -1 ? false : true
 
     // 3- close iframe when it looses focus
-    document.addEventListener('blur', close);
+    document.addEventListener('focusout', ()=>{
+        close(false)});
 
     // 4- detect when to apply the fadeIn effect
     window.addEventListener('hashchange', _testHash)
@@ -151,7 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // 9- listen to UI events (close, visibility toggle and click to submit)
-    closeIcon.addEventListener('click', close)
+    closeIcon.addEventListener('click', ()=>{
+        close(true)
+    })
 
     visiPwdBtn.addEventListener('click',(e)=>{
         if (isPwdHidden) {
@@ -196,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 submit()
             }
         } else if (keyName === 'Escape') {
-            close();
+            close(true);
         }
     })
 })
@@ -365,9 +368,10 @@ function setFocusOnEmptyField(){
 
 /* --------------------------------------------------------------------- */
 // Request the menu controler to close the iframe of the menu
-function close() {
+function close(force) {
     chrome.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest',
+        force     : force,
         subcommand: 'closeMenu'          ,
         sender    : 'loginMenu.js'       ,
     });
@@ -395,6 +399,7 @@ function _turnIntoMaterialInput(inputEl, labelEl) {
         isFocusedOrFilled = true
     })
     inputEl.addEventListener('blur', (e)=>{
+        console.log('blur to transition a meterial UI Input');
         if (!inputEl.value) {
             container.classList.remove('focused-or-filled')
             inputEl.placeholder = ''

@@ -85,13 +85,6 @@ export default class RuntimeBackground {
         });
 
         */
-        console.log('runtime.background PROCESS MESSAGE ', {
-            'msg.command:': msg.command,
-            'msg.subcommand': msg.subcommand,
-            'msg.sender': msg.sender,
-            'msg': msg,
-            'sender': sender
-        });
 
         switch (msg.command) {
             case 'loggedIn':
@@ -102,7 +95,6 @@ export default class RuntimeBackground {
                 // 1- ask all tabs to activate login-in-page-menu
                 const allTabs = await BrowserApi.getAllTabs();
                 for (const tab of allTabs) {
-                    console.log('request loginIPMenuActivate from logout');
                     BrowserApi.tabSendMessage(tab, {
                         command           : 'autofillAnswerRequest',
                         subcommand        : 'loginIPMenuActivate',
@@ -157,6 +149,7 @@ export default class RuntimeBackground {
                         await BrowserApi.tabSendMessage(sender.tab, {
                             command    : 'autofillAnswerRequest',
                             subcommand : 'closeMenu',
+                            force      : msg.force,
                         }); // don't add the frameId, since the emiter (menu) is not the target...
                         break;
                     case 'setMenuHeight':

@@ -1104,21 +1104,16 @@ import menuCtrler from './menuCtrler';
 
         /*
         @override by Cozy : this log is very useful for reverse engineering the code, keep it for tests
-
-        console.log('autofil.js HEARD : ', {'command': msg.command,'subcommand': msg.subcommand, 'sender': new URL(sender.url).pathname, "msg": msg, "heard in": document.location.pathname},);
-        */
-
-
-       console.log('autofil.js HEARD : ', {'command': msg.command,'subcommand': msg.subcommand, 'sender': sender.url, "msg": msg, "heard in": document.location.pathname},);
-       // console.log('autofil.js HEARD : ', {'command': msg.command,'subcommand': msg.subcommand, 'sender': new URL(sender.url).pathname, "msg": msg, "heard in": document.location.pathname},);
-
-       if (msg.command === 'notificationBarPageDetails') return
         console.log('autofil.js HEARD : ', {
             'command': msg.command,
             'subcommand': msg.subcommand,
-            'sender': sender,
+            'sender': sender.url ? new URL(sender.url).pathname : sender,
             "msg": msg,
-            "heard in": document.location.pathname},);
+            "heard in": document.location.pathname
+        });
+        */
+
+       if (msg.command === 'notificationBarPageDetails') return
 
         if (msg.command === 'collectPageDetails') {
             var pageDetailsObj = collect(document);
@@ -1138,7 +1133,7 @@ import menuCtrler from './menuCtrler';
         }
         else if (msg.command === 'autofillAnswerRequest') {
             if (msg.subcommand === 'closeMenu') {
-                menuCtrler.hide(true);
+                menuCtrler.hide(msg.force);
             }else if (msg.subcommand === 'setMenuHeight') {
                 menuCtrler.setHeight(msg.height)
             }else if (msg.subcommand === 'fillFormWithCipher') {

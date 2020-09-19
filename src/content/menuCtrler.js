@@ -244,14 +244,14 @@ function show(targetEl) {
 //       the menu.
 // force = true : hide the menu without waiting to check the target of the
 //       focus.
-// var n = 0
+var n = 0
 function hide(force) {
-    // var internN = n
-    // n += 1
-    // console.log('menuCtrler.hide() - Hide_id=', internN, 'force:', !!force, document.activeElement.id);
+    var internN = n
+    n += 1
+    console.log('menuCtrler.hide() - Hide_id=', internN, 'force:', !!force, document.activeElement.id);
     if (state.isFrozen) return
     if (force && typeof force == 'boolean') {
-        // console.log('HIDE!', internN)
+        console.log('HIDE!', internN)
         _setApplyFadeInUrl(false)
         // hide menu element after a delay so that the inner pannel has been scaled to 0 and therefore enables
         // a proper start for the next display of the menu.
@@ -270,7 +270,7 @@ function hide(force) {
             return
         }
         // otherwise, hide
-        // console.log('HIDE!', internN)
+        console.log('HIDE!', internN)
         _setApplyFadeInUrl(false)
         // hide menu element after a delay so that the inner pannel has been scaled to 0 and therefore enables
         // a proper start for the next display of the menu.
