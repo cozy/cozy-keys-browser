@@ -125,19 +125,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (msg.command !== 'menuAnswerRequest') return
         switch (msg.subcommand) {
             case 'loginNOK':
-                console.log("loginNOK heard in loginInPageMenu");
+                // console.log("loginNOK heard in loginInPageMenu");
                 errorLabel.innerHTML  = chrome.i18n.getMessage('inPageMenuLoginError')
                 _setErrorMode()
                 break;
             case '2faRequested':
-                console.log('2faRequested heard in loginInPageMenu');
+                // console.log('2faRequested heard in loginInPageMenu');
                 isIn2FA = true
                 panel.classList.add('twoFa-mode')
                 panel.classList.remove('error')
                 _removeWaitingMode()
                 break;
             case '2faCheckNOK':
-                console.log("2faCheckNOK heard in loginInPageMenu");
+                // console.log("2faCheckNOK heard in loginInPageMenu");
                 errorLabel.innerHTML  = chrome.i18n.getMessage('inPageMenuLogin2FACheckError')
                 _setErrorMode()
                 adjustMenuHeight()
@@ -157,15 +157,16 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     visiPwdBtn.addEventListener('click',(e)=>{
-        if (isPwdHidden) {
-            pwdInput.type = 'text'
-            visiPwdBtn.firstElementChild.classList.replace('fa-eye','fa-eye-slash')
-
-        } else {
-            pwdInput.type = 'password'
-            visiPwdBtn.firstElementChild.classList.replace('fa-eye-slash','fa-eye')
-        }
-        isPwdHidden = !isPwdHidden
+        // if (isPwdHidden) {
+        //     pwdInput.type = 'text'
+        //     visiPwdBtn.firstElementChild.classList.replace('fa-eye','fa-eye-slash')
+        //
+        // } else {
+        //     pwdInput.type = 'password'
+        //     visiPwdBtn.firstElementChild.classList.replace('fa-eye-slash','fa-eye')
+        // }
+        // isPwdHidden = !isPwdHidden
+        _togglePwdVisibility()
         pwdInput.focus()
     })
 
@@ -222,7 +223,7 @@ function adjustMenuHeight() {
 /* --------------------------------------------------------------------- */
 // Submit the credentials
 async function submit() {
-    console.log('loginMenu.submit()');
+    // console.log('loginMenu.submit()');
     // sanitize url
     const loginUrl = sanitizeUrlInput(urlInput.value);
     urlInput.value = loginUrl
@@ -259,7 +260,7 @@ async function submit2fa() {
     _setWaitingMode()
 
     if (twoFaInput.value == null || twoFaInput.value === '') {
-        console.log('Code 2FA vide');
+        // console.log('Code 2FA vide');
         return;
     }
 
@@ -332,6 +333,7 @@ function _removeWaitingMode() {
 function _setWaitingMode() {
     panel.classList.add('waiting')
     panel.classList.remove('error')
+    _togglePwdVisibility()
     urlInput.disabled   = true
     pwdInput.disabled   = true
     twoFaInput.disabled = true
@@ -345,11 +347,9 @@ function _setWaitingMode() {
 // Request the iframe content to fadeIn or not
 function _testHash(){
     if (window.location.hash === '#applyFadeIn') {
-        console.log('loginMenu._testHash() : add fade-in');
         panel.classList.add('fade-in')
         setFocusOnEmptyField()
     } else {
-        console.log('loginMenu._testHash() : remove fade-in');
         panel.className = "panel";
     }
 }
@@ -399,7 +399,7 @@ function _turnIntoMaterialInput(inputEl, labelEl) {
         isFocusedOrFilled = true
     })
     inputEl.addEventListener('blur', (e)=>{
-        console.log('blur to transition a meterial UI Input');
+        // console.log('blur to transition a meterial UI Input');
         if (!inputEl.value) {
             container.classList.remove('focused-or-filled')
             inputEl.placeholder = ''
@@ -407,11 +407,25 @@ function _turnIntoMaterialInput(inputEl, labelEl) {
         }
     })
     inputEl.addEventListener('input', (e)=>{
-        console.log('input HEARD !!!');
+        // console.log('input HEARD !!!');
         if (!isFocusedOrFilled && inputEl.value) {
             container.classList.add('focused-or-filled')
             inputEl.placeholder = initialPlaceholder
             isFocusedOrFilled = true
         }
     })
+}
+
+
+/* --------------------------------------------------------------------- */
+// Toggle the visibility of the password
+function _togglePwdVisibility() {
+    if (isPwdHidden) {
+        pwdInput.type = 'text'
+        visiPwdBtn.firstElementChild.classList.replace('fa-eye','fa-eye-slash')
+    } else {
+        pwdInput.type = 'password'
+        visiPwdBtn.firstElementChild.classList.replace('fa-eye-slash','fa-eye')
+    }
+    isPwdHidden = !isPwdHidden
 }

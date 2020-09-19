@@ -1005,7 +1005,7 @@ import menuCtrler from './menuCtrler';
         }
 
         function displayLoginIPMenu(fillScripts, isPinLocked) {
-            console.log('============== displayLoginIPMenu()', document.URL);
+            // console.log('============== displayLoginIPMenu()', document.URL);
             // console.log('==== fillScripts');
             // console.log(fillScripts);
             // console.log('number of fields', fillScripts.loginLoginMenuFillScript.script.length);

@@ -164,19 +164,19 @@ function _initInPageMenuForEl(targetEl) {
 
 function _onBlur(event) {
     if (!event.isTrusted) return;
-    console.log('Blur event in an input', event.target.id)
+    // console.log('Blur event in an input', event.target.id)
     menuCtrler.hide()
     return true
 }
 
 function _onFocus(event) {
-    console.log('focus event in an input', event.target.id);
+    // console.log('focus event in an input', event.target.id);
     if (!event.isTrusted) return;
     show(this)
 }
 
 function _onClick(event) {
-    console.log('click event in an input', event.target.id);
+    // console.log('click event in an input', event.target.id);
     if (!event.isTrusted) return;
     show(this)
 }
@@ -226,7 +226,7 @@ function _onKeyDown(event) {
 /* --------------------------------------------------------------------- */
 //
 function show(targetEl) {
-    console.log('menuCtrler.show() ');
+    // console.log('menuCtrler.show() ');
     if (state.isFrozen) return
     state.lastFocusedEl = targetEl
     popperInstance.state.elements.reference = targetEl
@@ -244,14 +244,14 @@ function show(targetEl) {
 //       the menu.
 // force = true : hide the menu without waiting to check the target of the
 //       focus.
-var n = 0
+// var n = 0
 function hide(force) {
-    var internN = n
-    n += 1
-    console.log('menuCtrler.hide() - Hide_id=', internN, 'force:', !!force, document.activeElement.id);
+    // var internN = n
+    // n += 1
+    // console.log('menuCtrler.hide() - Hide_id=', internN, 'force:', !!force, document.activeElement.id);
     if (state.isFrozen) return
     if (force && typeof force == 'boolean') {
-        console.log('HIDE!', internN)
+        // console.log('HIDE!', internN)
         _setApplyFadeInUrl(false)
         // hide menu element after a delay so that the inner pannel has been scaled to 0 and therefore enables
         // a proper start for the next display of the menu.
@@ -270,7 +270,7 @@ function hide(force) {
             return
         }
         // otherwise, hide
-        console.log('HIDE!', internN)
+        // console.log('HIDE!', internN)
         _setApplyFadeInUrl(false)
         // hide menu element after a delay so that the inner pannel has been scaled to 0 and therefore enables
         // a proper start for the next display of the menu.
@@ -373,7 +373,7 @@ menuCtrler.setCiphers = setCiphers
 /* --------------------------------------------------------------------- */
 //
 function setMenuType(menuType, isPinLocked) {
-    console.log('setMenuType()', {menuType, isPinLocked});
+    // console.log('setMenuType()', {menuType, isPinLocked});
     if (menuType === state.currentMenuType) {
         _setIframeURL(menuType, isPinLocked)
         _forceIframeRefresh()
@@ -433,10 +433,10 @@ function _setApplyFadeInUrl(doApply) {
     if (!menuEl.src) return
     const url = new URL(menuEl.src)
     if (doApply) {
-        console.log('menuCtrler.applyFadeIn()');
+        // console.log('menuCtrler.applyFadeIn()');
         menuEl.src = url.origin + url.pathname + url.search + '#applyFadeIn'
     } else {
-        console.log('menuCtrler.removeFadeIn()');
+        // console.log('menuCtrler.removeFadeIn()');
         menuEl.src = url.origin + url.pathname + url.search + '#dontApplyFadeIn'
     }
 }
