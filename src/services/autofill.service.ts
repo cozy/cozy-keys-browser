@@ -241,14 +241,18 @@ export default class AutofillService implements AutofillServiceInterface {
 
         /*
         @override by Cozy : when the user logins into the addon, all tabs request a pageDetail in order to
-        activate the in-page-menu : then the tab to take into account is not the active tab, but the tab sent with
+        activate the in-page-menu :
+            * then the tab to take into account is not the active tab, but the tab sent with
         the pageDetails
+            * and if there is no cipher for the tab, then request to close in page menu
         */
         if (pageDetails[0].sender === 'notifBarForInPageMenu') {
+            // console.log('doAutoFillForLastUsedLogin() et sender = notifBarForInPageMenu');
             tab = pageDetails[0].tab;
             lastUsedCipher = await this.cipherService.getLastUsedForUrl(tab.url);
             if (!lastUsedCipher) { // there is no cipher for this URL : deactivate in page menu
                 BrowserApi.tabSendMessage(tab, {command: 'autofillAnswerRequest', subcommand: 'inPageMenuDeactivate'});
+                return;
             }
         } else {
             if (!tab || !tab.url) {

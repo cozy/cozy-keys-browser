@@ -176,6 +176,7 @@ export default class MainBackground {
                 */
                 const allTabs = await BrowserApi.getAllTabs();
                 for (const tab of allTabs) {
+                    console.log('request loginIPMenuActivate from lockedCallback');
                     BrowserApi.tabSendMessage(tab, {
                         command    : 'autofillAnswerRequest',
                         subcommand : 'loginIPMenuActivate',
@@ -224,6 +225,7 @@ export default class MainBackground {
                 When CB is fired, ask all tabs to activate login-in-page-menu
                 */
                 const allTabs = await BrowserApi.getAllTabs();
+                console.log('request loginIPMenuActivate from loggedOutCallback');
                 for (const tab of allTabs) {
                     BrowserApi.tabSendMessage(tab, {
                         command    : 'autofillAnswerRequest',
@@ -488,6 +490,8 @@ export default class MainBackground {
             //    if  isAuthenticated == true   &  isLocked == false  => logged in
             // const pinSet = await this.vaultTimeoutService.isPinLockSet();
             // const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1];
+            console.log('request loginIPMenuActivate from collectPageDetailsForContentScript');
+
             BrowserApi.tabSendMessage(tab, {
                 command    : 'autofillAnswerRequest',
                 subcommand : 'loginIPMenuActivate',

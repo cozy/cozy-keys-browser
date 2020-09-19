@@ -102,6 +102,7 @@ export default class RuntimeBackground {
                 // 1- ask all tabs to activate login-in-page-menu
                 const allTabs = await BrowserApi.getAllTabs();
                 for (const tab of allTabs) {
+                    console.log('request loginIPMenuActivate from logout');
                     BrowserApi.tabSendMessage(tab, {
                         command           : 'autofillAnswerRequest',
                         subcommand        : 'loginIPMenuActivate',
@@ -254,6 +255,10 @@ export default class RuntimeBackground {
                 }], true);
             case 'collectPageDetailsResponse':
                 if (await this.vaultTimeoutService.isLocked()) {
+                    BrowserApi.tabSendMessage(msg.tab, {
+                        command: 'autofillAnswerRequest',
+                        subcommand: 'inPageMenuDeactivate',
+                    });
                     return;
                 }
                 switch (msg.sender) {
@@ -276,9 +281,6 @@ export default class RuntimeBackground {
                                 sender: 'notifBarForInPageMenu', // to prepare a fillscript for the in-page-menu
                             }], true);
                             // console.timeEnd('collectPageDetailsResponse - doAutoFillForLastUsedLogin');
-                            // if (totpCode1 != null) {
-                            //     this.platformUtilsService.copyToClipboard(totpCode1, { window: window });
-                            // }
                         }
                         // 2- send page details to the notification bar
                         const forms = this.autofillService.getFormsWithPasswordFields(msg.details);
