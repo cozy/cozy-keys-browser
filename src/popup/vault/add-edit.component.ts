@@ -24,6 +24,8 @@ import { LoginUriView } from 'jslib/models/view/loginUriView';
 import { AddEditComponent as BaseAddEditComponent } from 'jslib/angular/components/add-edit.component';
 import { CipherType } from 'jslib/enums/cipherType';
 
+import { deleteCipher } from './utils';
+
 @Component({
     selector: 'app-vault-add-edit',
     templateUrl: 'add-edit.component.html',
@@ -144,45 +146,14 @@ export class AddEditComponent extends BaseAddEditComponent {
     }
 
     async delete(): Promise<boolean> {
-        const organizations = await this.userService.getAllOrganizations();
-        const [cozyOrganization] = organizations.filter(
-            (org) => org.name === 'Cozy',
-        );
-        const isCozyOrganization =
-            this.cipher.organizationId === cozyOrganization.id;
-
-        const confirmationMessage = isCozyOrganization
-            ? this.i18nService.t('deleteSharedItemConfirmation')
-            : this.i18nService.t('deleteItemConfirmation');
-
-        const confirmationTitle = isCozyOrganization
-            ? this.i18nService.t('deleteSharedItem')
-            : this.i18nService.t('deleteItem');
-
-        const confirmed = await this.platformUtilsService.showDialog(
-            confirmationMessage,
-            confirmationTitle,
-            this.i18nService.t('yes'),
-            this.i18nService.t('no'),
-            'warning',
-        );
-
-        if (!confirmed) {
-            return false;
+        // Calls an override by Cozy
+        const deleted = await deleteCipher(this.cipherService, this.userService, this.i18nService,
+            this.platformUtilsService, this.cipher);
+        if (deleted) {
+            this.router.navigate(['/tabs/vault']);
+            return true;
         }
-
-        try {
-            this.deletePromise = this.deleteCipher();
-            await this.deletePromise;
-            this.platformUtilsService.eventTrack('Deleted Cipher');
-            this.platformUtilsService.showToast('success', null, this.i18nService.t('deletedItem'));
-            this.onDeletedCipher.emit(this.cipher);
-            this.messagingService.send('deletedCipher');
-        } catch { }
-
-        this.router.navigate(['/tabs/vault']);
-
-        return true;
+        return false;
     }
 
     toggleUriInput(uri: LoginUriView) {

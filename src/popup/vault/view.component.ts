@@ -23,6 +23,8 @@ import { BroadcasterService } from 'jslib/angular/services/broadcaster.service';
 
 import { ViewComponent as BaseViewComponent } from 'jslib/angular/components/view.component';
 
+import { deleteCipher } from './utils';
+
 @Component({
     selector: 'app-vault-view',
     templateUrl: 'view.component.html',
@@ -91,8 +93,11 @@ export class ViewComponent extends BaseViewComponent {
         return false;
     }
 
-    async delete() {
-        if (await super.delete()) {
+    async delete(): Promise<boolean> {
+        // Calls an override by Cozy
+        const deleted = await deleteCipher(this.cipherService, this.userService, this.i18nService,
+            this.platformUtilsService, this.cipher);
+        if (deleted) {
             this.close();
             return true;
         }
