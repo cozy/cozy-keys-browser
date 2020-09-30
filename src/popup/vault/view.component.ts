@@ -93,8 +93,11 @@ export class ViewComponent extends BaseViewComponent {
         return false;
     }
 
+    /**
+     * @override by Cozy
+     * Calls the overrided deleteCipher
+     */
     async delete(): Promise<boolean> {
-        // Calls an override by Cozy
         const deleted = await deleteCipher(this.cipherService, this.userService, this.i18nService,
             this.platformUtilsService, this.cipher);
         if (deleted) {
