@@ -101,7 +101,7 @@
     "message": "Le coffre est déconnecté."
   },
   "autoFillInfo": {
-    "message": "Vous n'avez aucun identifiant enregistré pour remplir automatiquement la page actuelle du navigateur."
+    "message": "Aucun identifiant enregistré pour remplir la page actuelle."
   },
   "addLogin": {
     "message": "Ajouter un identifiant"

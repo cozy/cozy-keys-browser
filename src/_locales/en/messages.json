@@ -35,7 +35,7 @@
     "message": "Email Address"
   },
   "cozyUrl": {
-    "message": "Adress of my Cozy"
+    "message": "Address of my Cozy"
   },
   "masterPass": {
     "message": "My Cozy password"
@@ -101,7 +101,7 @@
     "message": "Vault is logged out."
   },
   "autoFillInfo": {
-    "message": "You don't have recorded any login to auto-fill the current browser tab."
+    "message": "You don't have any recorded login to fill the current web page."
   },
   "addLogin": {
     "message": "Add a Login"
@@ -862,13 +862,16 @@
     "message": "Display a selection menu in the forms that can be filled automatically."
   },
   "loginInPageMenuTitle": {
-      "message": "Auhtentication on my Cozy"
+      "message": "Authentication on my Cozy"
   },
   "inPageMenuLoginError": {
-    "message": "Adress and password don't match"
+    "message": "Address and password don't match"
   },
   "inPageMenuLogin2FACheckError": {
     "message": "Wrong activation code, a new will be sent"
+  },
+  "inPageMenuSelectAnAccount": {
+    "message": "Select a login"
   },
   "experimentalFeature": {
     "message": "This is currently an experimental feature. Use at your own risk."
