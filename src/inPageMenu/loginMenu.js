@@ -270,6 +270,8 @@ async function submit2fa() {
 
 /* --------------------------------------------------------------------- */
 // try to find a valid Cozy URL
+// this function is copied from Security src/popup/accounts/login.component.ts
+// 
 function sanitizeUrlInput(inputUrl) {
     // Prevent empty url
     if (!inputUrl) {
