@@ -36,17 +36,17 @@ var menuCtrler = {
     getCipher              : null,
     setCiphers             : null,
     state                  : {
-                               isMenuInited:false,
-                               isFrozen:false,
-                               isActivated:true,
-                               isHidden:true,
-                               isAutoFillInited:false,
-                               currentMenuType:null,
-                               lastFocusedEl:null,
-                               _ciphers:[],
-                               _selectionRow:0,
-                               isPinLocked:false,
-                             },
+        isMenuInited    :false,
+        isFrozen        :false,
+        isActivated     :true,
+        isHidden        :true,
+        isAutoFillInited:false,
+        currentMenuType :null,
+        lastFocusedEl   :null,
+        _ciphers        :[],
+        _selectionRow   :0,
+        isPinLocked     :false,
+    },
     unFreeze               : function() {this.state.isFrozen = false},
     freeze                 : function() {this.state.isFrozen = true },
     deactivate             : null,
@@ -242,16 +242,10 @@ function show(targetEl) {
 // force = false : a shrot time out will wait to check where the focus
 //       goes so that to not hide if target is an input or the iframe of
 //       the menu.
-// force = true : hide the menu without waiting to check the target of the
-//       focus.
-// var n = 0
+// force = true : hide the menu without waiting to check the target of the focus.
 function hide(force) {
-    // var internN = n
-    // n += 1
-    // console.log('menuCtrler.hide() - Hide_id=', internN, 'force:', !!force, document.activeElement.id);
     if (state.isFrozen) return
     if (force && typeof force == 'boolean') {
-        // console.log('HIDE!', internN)
         _setApplyFadeInUrl(false)
         // hide menu element after a delay so that the inner pannel has been scaled to 0 and therefore enables
         // a proper start for the next display of the menu.
@@ -263,14 +257,12 @@ function hide(force) {
     }
     setTimeout(() => {
         const target = document.activeElement;
-        // console.log('after timout, hide with the following', target.id, targetsEl.indexOf(target))
         if (!force && (targetsEl.indexOf(target) != -1 || target.tagName == 'IFRAME' && target.id == 'cozy-menu-in-page')) {
             // Focus is know in iframe or in one of the input => do NOT hide
             // console.log('After hide, focus is now in iframe or in one of the input => do NOT hide', internN);
             return
         }
         // otherwise, hide
-        // console.log('HIDE!', internN)
         _setApplyFadeInUrl(false)
         // hide menu element after a delay so that the inner pannel has been scaled to 0 and therefore enables
         // a proper start for the next display of the menu.
@@ -330,7 +322,6 @@ menuCtrler.moveSelection = moveSelection
 /* --------------------------------------------------------------------- */
 // Submit the currently selected cypher for autofill
 function submit() {
-    console.log('menuCtrler.submit()');
     chrome.runtime.sendMessage({
         command    : 'bgAnswerMenuRequest',
         subcommand : 'menuSelectionValidate',

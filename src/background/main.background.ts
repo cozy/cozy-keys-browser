@@ -334,7 +334,6 @@ export default class MainBackground {
             return status;
         };
 
-        // const status = await checkCurrentStatus(true)
         const isAuthenticated = await this.userService.isAuthenticated(); // = connected or installed
         const isLocked = await this.vaultTimeoutService.isLocked();
         // Cozy explanations :

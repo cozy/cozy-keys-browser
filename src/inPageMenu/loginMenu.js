@@ -31,11 +31,6 @@ var panel               ,
 // initialization of the login menu
 document.addEventListener('DOMContentLoaded', () => {
 
-    // const port = chrome.runtime.connect({name:"port-from-cs"});
-    // port.onDisconnect.addListener(function() {
-    //     console.log('%%%%%%%%%%% CONNECTION of loginMenu WITH BACKGROUND LOST § § § §');
-    // })
-
     // 0- ask rememberedCozyUrl
     chrome.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest',

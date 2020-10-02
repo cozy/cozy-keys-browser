@@ -1005,40 +1005,6 @@ import menuCtrler from './menuCtrler';
         }
 
         function displayLoginIPMenu(fillScripts, isPinLocked) {
-            // console.log('============== displayLoginIPMenu()', document.URL);
-            // console.log('==== fillScripts');
-            // console.log(fillScripts);
-            // console.log('number of fields', fillScripts.loginLoginMenuFillScript.script.length);
-            // console.log('=== list login FillScript actions');
-            // fillScripts.loginLoginMenuFillScript.script.forEach((action, i) => {
-            //     if (action[0] !== 'fill_by_opid') return
-            //     const el = getElementByOpId(action[1])
-            //     if (!el) {
-            //         console.log('no element  for action', i, action);
-            //         return
-            //     }
-            //     console.log('==== action[',i,'] =', action, 'corresonding to', {id:el.id, name:el.name});
-            // });
-            // console.log('=== list card FillScript actions');
-            // fillScripts.cardLoginMenuFillScript.script.forEach((action, i) => {
-            //     if (action[0] !== 'fill_by_opid') return
-            //     const el = getElementByOpId(action[1])
-            //     if (!el) {
-            //         console.log('no element  for action', i, action);
-            //         return
-            //     }
-            //     console.log('==== action[',i,'] =', action, 'corresonding to', {id:el.id, name:el.name});
-            // });
-            // console.log('=== list identity FillScript actions');
-            // fillScripts.identityLoginMenuFillScript.script.forEach((action, i) => {
-            //     if (action[0] !== 'fill_by_opid') return
-            //     const el = getElementByOpId(action[1])
-            //     if (!el) {
-            //         console.log('no element  for action', i, action);
-            //         return
-            //     }
-            //     console.log('==== action[',i,'] =', action, 'corresonding to', {id:el.id, name:el.name});
-            // });
             menuCtrler.setMenuType('loginMenu', isPinLocked)
             runLoginMenuFillScript(fillScripts.loginLoginMenuFillScript.script)
             runLoginMenuFillScript(fillScripts.cardLoginMenuFillScript.script)

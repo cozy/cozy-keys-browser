@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     function processMessages(msg: any, sendResponse: Function) {
         /*
         @override by Cozy :
-        This log is very usefoul for reverse engineer the code, keep it for tests
+        This log is very useful for reverse engineer the code, keep it for tests
         console.log('notificationBar.js HEARD MESSAGE : ', {'msg.command': msg.command,'msg': msg});
         */
 
