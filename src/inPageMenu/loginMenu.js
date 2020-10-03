@@ -152,15 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     visiPwdBtn.addEventListener('click',(e)=>{
-        // if (isPwdHidden) {
-        //     pwdInput.type = 'text'
-        //     visiPwdBtn.firstElementChild.classList.replace('fa-eye','fa-eye-slash')
-        //
-        // } else {
-        //     pwdInput.type = 'password'
-        //     visiPwdBtn.firstElementChild.classList.replace('fa-eye-slash','fa-eye')
-        // }
-        // isPwdHidden = !isPwdHidden
         _togglePwdVisibility()
         pwdInput.focus()
     })
@@ -271,7 +262,7 @@ async function submit2fa() {
 /* --------------------------------------------------------------------- */
 // try to find a valid Cozy URL
 // this function is copied from Security src/popup/accounts/login.component.ts
-// 
+//
 function sanitizeUrlInput(inputUrl) {
     // Prevent empty url
     if (!inputUrl) {

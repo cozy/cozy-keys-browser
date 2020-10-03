@@ -85,6 +85,13 @@ export default class RuntimeBackground {
         });
 
         */
+        console.log('runtime.background PROCESS MESSAGE ', {
+            'msg.command:': msg.command,
+            'msg.subcommand': msg.subcommand,
+            'msg.sender': msg.sender,
+            'msg': msg,
+            'sender': sender
+        });
 
         switch (msg.command) {
             case 'loggedIn':

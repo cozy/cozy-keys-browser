@@ -197,9 +197,9 @@ export class AuthService extends BaseAuthService {
             await this._cryptoService.setEncPrivateKey(tokenResponse.privateKey);
         }
         if (window.location.pathname !== '/background.html') {
-            // when login is processed on background side, then your messages are not receivend by the background,
+            // when login is processed on background side, then your messages are not received by the background,
             // so you need to triger yourself "logedIn" actions
-            // this._messagingService.send('loggedIn');
+            this._messagingService.send('loggedIn');
         }
         return result;
     }

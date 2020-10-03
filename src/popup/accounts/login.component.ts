@@ -144,7 +144,6 @@ export class LoginComponent implements OnInit {
                     this.router.navigate([this.twoFactorRoute]);
                 }
             } else {
-                // chrome.runtime.sendMessage({command: 'loggedIn'})
                 messagingService.send('loggedIn');
                 const disableFavicon = await this.storageService.get<boolean>(ConstantsService.disableFaviconKey);
                 await this.stateService.save(ConstantsService.disableFaviconKey, !!disableFavicon);
