@@ -83,15 +83,7 @@ export default class RuntimeBackground {
             'msg': msg,
             'sender': sender
         });
-
         */
-        console.log('runtime.background PROCESS MESSAGE ', {
-            'msg.command:': msg.command,
-            'msg.subcommand': msg.subcommand,
-            'msg.sender': msg.sender,
-            'msg': msg,
-            'sender': sender
-        });
 
         switch (msg.command) {
             case 'loggedIn':
@@ -742,7 +734,7 @@ export default class RuntimeBackground {
         if (enableInPageMenu) {
             subCommand = 'autofilIPMenuActivate';
         }
-        await this.syncService.fullSync(true); // BJA : nécessaire ?
+        await this.syncService.fullSync(true);
         const allTabs = await BrowserApi.getAllTabs();
         for (const tab of allTabs) {
             BrowserApi.tabSendMessage(tab, {
