@@ -5,7 +5,7 @@
     "sub:init": "git submodule update --init --recursive",
     "sub:update": "git submodule update --remote",
     "sub:pull": "git submodule foreach git pull origin master",
-    "postinstall": "npm run sub:init",
+    "postinstall": "git init && npm run sub:init",
     "symlink:win": "rmdir /S /Q ./jslib && cmd /c mklink /J .\\jslib ..\\jslib",
     "symlink:mac": "npm run symlink:lin",
     "symlink:lin": "rm -rf ./jslib && ln -s ../jslib ./jslib",
