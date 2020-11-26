@@ -136,6 +136,44 @@ var IsoProvinces: { [id: string]: string; } = {
 };
 /* tslint:enable */
 
+const attributesAmbiguity: any = {
+    identity : {
+        title          : 1,
+        firstName      : 1,
+        middleName     : 1,
+        lastName       : 1,
+        address1       : 1,
+        address2       : 1,
+        address3       : 1,
+        city           : 1,
+        state          : 1,
+        postalCode     : 1,
+        country        : 1,
+        company        : 1,
+        email          : 0,
+        phone          : 0,
+        ssn            : 0,
+        username       : 1,
+        passportNumber : 1,
+        licenseNumber  : 1,
+    },
+    card : {
+        cardholderName : 1,
+        brand          : 1,
+        number         : 1,
+        expMonth       : 1,
+        expYear        : 1,
+        code           : 1,
+    },
+    login : {
+        uris                 : 1,
+        username             : 1,
+        password             : 1,
+        passwordRevisionDate : 1,
+        totp                 : 1,
+    },
+};
+
 export default class AutofillService implements AutofillServiceInterface {
 
     constructor(private cipherService: CipherService, private userService: UserService,
@@ -607,12 +645,11 @@ export default class AutofillService implements AutofillServiceInterface {
     /* -------------------------------------------------------------------------------- */
     // Filter scripts on different rules to limit the inputs where to add the loginMenu
     postFilterFieldsForInPageMenu(scriptObjs: any, forms: any, fields: any) {
-
         const res: any = [];
         let actions: any = [];
         scriptObjs.forEach( (scriptObj: any) => { actions = actions.concat(scriptObj.script); });
         for (const action of actions) {
-            // count hom many actions are linked to a field which are in the same form
+            // count how many actions are linked to a field which are in the same form
             // and are identified to the same cipher.type
             const scriptContext: any = action[3];
             const fieldForm: string = scriptContext.field.form;
@@ -639,6 +676,9 @@ export default class AutofillService implements AutofillServiceInterface {
                 default:
                     break;
             }
+            // check if the field is associated to an ambiguous attribute of a cipher
+            const ambiguity = attributesAmbiguity[scriptContext.cipher.type][scriptContext.cipher.fieldType];
+            scriptContext.ambiguity = ambiguity ? ambiguity : 0; // custom fields are not ambiguous
             // prepare decision array used to decide if the script should be run for this field
             const decisionArray = {
                 connected            : scriptContext.connected            ,
@@ -646,6 +686,7 @@ export default class AutofillService implements AutofillServiceInterface {
                 hasLoginCipher       : scriptContext.hasLoginCipher       ,
                 hasCardCipher        : scriptContext.hasCardCipher        ,
                 hasIdentityCipher    : scriptContext.hasIdentityCipher    ,
+                ambiguity            : scriptContext.ambiguity            ,
                 loginFellows         : scriptContext.loginFellows         ,
                 cardFellows          : scriptContext.cardFellows          ,
                 identityFellows      : scriptContext.identityFellows      ,
@@ -664,26 +705,35 @@ export default class AutofillService implements AutofillServiceInterface {
             scriptObj.script = scriptObj.script.filter((action: any) => {
                 if (!this.evaluateDecisionArray(action)) {
                     // @override by Cozy : this log is required for debug and analysis
+                    // const fieldStr = `${action[1]}, ${action[3].cipher.type}:${action[3].cipher.fieldType}`
                     // console.log("!! ELIMINATE menu for field", {
-                    //     action: `${action[1]}, ${JSON.stringify(action[3].cipher.fieldType)}`,
+                    //     action: fieldStr,
                     //     field: action[3].field,
                     //     cipher: action[3].cipher,
-                    //     form: action[3].field.formObj
+                    //     form: action[3].field.formObj,
                     // });
-                    // console.log(action[3].decisionArray);
+                    // console.log({a_field: fieldStr, ...action[3].decisionArray});
 
                     return false; // remove unwanted action
                 }
                 // @override by Cozy : this log is required for debug and analysis
+                // const fieldStr = `${action[1]}, ${action[3].cipher.type}:${action[3].cipher.fieldType}`
                 // console.log("ACTIVATE menu for field", {
-                //     action: `${action[1]}, ${JSON.stringify(action[3].cipher.fieldType)}`,
+                //     action: `${action[1]}, ${action[3].cipher.type}:${action[3].cipher.fieldType}`,
                 //     field: action[3].field,
                 //     cipher: action[3].cipher,
-                //     form: action[3].field.formObj
+                //     form: action[3].field.formObj,
                 // });
-                // console.log(action[3].decisionArray);
-
-                action[3] = action[3].cipher.fieldType; // finalise the action to send to autofill.js
+                // console.log({a_field: fieldStr, ...action[3].decisionArray});
+                // finalise the action to send to autofill.js
+                const scriptCipher = action[3].cipher;
+                const fieldTypeToSend: any = {};
+                fieldTypeToSend[scriptCipher.type] = scriptCipher.fieldType;
+                if (scriptCipher.fieldFormat) {
+                    fieldTypeToSend.fieldFormat = scriptCipher.fieldFormat;
+                }
+                action[3] =  fieldTypeToSend;
+                // action[3] = action[3].cipher.fieldType; // finalise the action to send to autofill.js
                 return true;
             });
         });
@@ -703,8 +753,8 @@ export default class AutofillService implements AutofillServiceInterface {
         if (da.hasExistingCipher === true && da.field_isInForm === true && da.field_isInSearchForm === false) {
             return true; }
         if (da.field_isInSearchForm === true) {return false; }
-        if (da.connected === true && da.hasExistingCipher === true && da.loginFellows  > 1 &&
-            da.field_visible === true) {return true; }
+        if (da.connected === true && da.hasExistingCipher === true && da.loginFellows  > 1
+            && da.field_visible === true) {return true; }
         if (da.cardFellows  > 1 && da.field_isInForm === true) {return true; }
         if (da.connected === true && da.hasIdentityCipher === true && da.identityFellows  > 1
             && da.field_visible === true) {return true; }
@@ -712,7 +762,8 @@ export default class AutofillService implements AutofillServiceInterface {
         if (da.connected === false && da.hasLoginCipher === true && da.field_isInloginForm === true) {return true; }
         if (da.connected === false && da.hasLoginCipher === true && da.field_isInSignupForm === true) {return true; }
         if (da.connected === false && da.cardFellows  > 1 && da.field_isInForm === true) {return true; }
-        if (da.identityFellows  > 0 && da.field_isInForm === true) {return true; }
+        if (da.ambiguity === 0 && da.identityFellows  > 0 && da.field_isInForm === true) {return true; }
+        if (da.ambiguity === 1 && da.identityFellows  > 1 && da.field_isInForm === true) {return true; }
         if (da.connected === true && da.hasExistingCipher === undefined && da.hasLoginCipher === true) {return false; }
 
         // end selection conditions
@@ -762,14 +813,14 @@ export default class AutofillService implements AutofillServiceInterface {
                     let cipher: any;
                     switch (options.cipher.type) {
                         case CipherType.Login:
-                            cipher = {type: 'login', fieldType: {login: 'customField'}};
+                            cipher = {type: 'login', fieldType: 'customField'};
                             break;
                         case CipherType.Card:
-                            cipher = {type: 'card', fieldType: {card: 'customField'}};
+                            cipher = {type: 'card', fieldType: 'customField'};
                             break;
                         case CipherType.Identity:
-                            field.fieldType = {identity: 'customField'};
-                            cipher = {type: 'identity', fieldType: {identity: 'customField'}};
+                            field.fieldType = 'customField';
+                            cipher = {type: 'identity', fieldType: 'customField'};
                             break;
                     }
                     this.fillByOpid(fillScript, field, val, cipher);
@@ -887,7 +938,7 @@ export default class AutofillService implements AutofillServiceInterface {
                 return;
             }
             filledFields[u.opid] = u;
-            const cipher = {type: 'login', fieldType: {login: 'username'}};
+            const cipher = {type: 'login', fieldType: 'username'};
             this.fillByOpid(fillScript, u, login.username, cipher);
         });
 
@@ -896,7 +947,7 @@ export default class AutofillService implements AutofillServiceInterface {
                 return;
             }
             filledFields[p.opid] = p;
-            const cipher = {type: 'login', fieldType: {login: 'password'}};
+            const cipher = {type: 'login', fieldType: 'password'};
             this.fillByOpid(fillScript, p, login.password, cipher);
         });
 
@@ -1023,7 +1074,7 @@ export default class AutofillService implements AutofillServiceInterface {
             }
 
             filledFields[fillFields.expMonth.opid] = fillFields.expMonth;
-            const cipher = {type: 'card', fieldType: {card: 'expMonth'}};
+            const cipher = {type: 'card', fieldType: 'expMonth'};
             this.fillByOpid(fillScript, fillFields.expMonth, expMonth, cipher);
         }
 
@@ -1060,7 +1111,7 @@ export default class AutofillService implements AutofillServiceInterface {
             }
 
             filledFields[fillFields.expYear.opid] = fillFields.expYear;
-            const cipher = {type: 'card', fieldType: {card: 'expYear'}};
+            const cipher = {type: 'card', fieldType: 'expYear'};
             this.fillByOpid(fillScript, fillFields.expYear, expYear, cipher);
         }
 
@@ -1140,10 +1191,8 @@ export default class AutofillService implements AutofillServiceInterface {
                 filledFields,
                 {
                     type: 'card',
-                    fieldType: {
-                        card: 'expiration',
-                        value: format,
-                    },
+                    fieldType: 'expiration',
+                    fieldFormat: format,
                 },
             );
         }
@@ -1291,7 +1340,7 @@ export default class AutofillService implements AutofillServiceInterface {
             const isoState = IsoStates[stateLower] || IsoProvinces[stateLower];
             if (isoState) {
                 filledState = true;
-                const cipher = {type: 'identity', fieldType: {identity: 'state'}};
+                const cipher = {type: 'identity', fieldType: 'state'};
                 this.makeScriptActionWithValue(fillScript, isoState, fillFields.state, filledFields, cipher);
             }
         }
@@ -1304,7 +1353,7 @@ export default class AutofillService implements AutofillServiceInterface {
         if (fillFields.country && identity.country && identity.country.length > 2) {
             const countryLower = identity.country.toLowerCase();
             const isoCountry = IsoCountries[countryLower];
-            const cipher = {type: 'identity', fieldType: {identity: 'country'}};
+            const cipher = {type: 'identity', fieldType: 'country'};
             if (isoCountry) {
                 filledCountry = true;
                 this.makeScriptActionWithValue(
@@ -1339,7 +1388,7 @@ export default class AutofillService implements AutofillServiceInterface {
                 fullName += identity.lastName;
             }
 
-            const cipher = {type: 'identity', fieldType: {identity: 'fullName'}};
+            const cipher = {type: 'identity', fieldType: 'fullName'};
             this.makeScriptActionWithValue(fillScript, fullName, fillFields.name, filledFields, cipher);
         }
 
@@ -1361,7 +1410,7 @@ export default class AutofillService implements AutofillServiceInterface {
                 address += identity.address3;
             }
 
-            const cipher = {type: 'identity', fieldType: {identity: 'fullAddress'}};
+            const cipher = {type: 'identity', fieldType: 'fullAddress'};
             this.makeScriptActionWithValue(fillScript,
                 address,
                 fillFields.address,
@@ -1422,9 +1471,7 @@ export default class AutofillService implements AutofillServiceInterface {
     ) {
         let fieldProp;
         fieldProp = fieldProp || dataProp;
-        const fieldType: any =  {};
-        fieldType[cipherType] = dataProp;
-        const cipher = {type: cipherType, fieldType: fieldType };
+        const cipher = {type: cipherType, fieldType: dataProp };
         this.makeScriptActionWithValue(
             fillScript,
             cipherData[dataProp],
@@ -1698,22 +1745,6 @@ export default class AutofillService implements AutofillServiceInterface {
 
         return fillScript;
     }
-
-    /*
-        @override by Cozy
-        function in charge of adapting the fillScript for a menu fillscript
-     */
-    // private setFillScriptForMenu(fillScript: AutofillScript): AutofillScript {
-    //     const newScript: any[] = [];
-    //     fillScript.script.forEach((ope) => {
-    //         if (ope[0].startsWith('fill')) {
-    //             newScript.push(['add_menu_btn_by_opid', ope[1], ope[3]]); // ['operation', opid, fieldType]
-    //         }
-    //     });
-    //     fillScript.script = newScript;
-    //     fillScript.type = 'loginFieldsForInPageMenuScript';
-    //     return fillScript;
-    // }
 
     private fillByOpid(fillScript: AutofillScript, field: AutofillField, value: string, cipher: any): void {
         if (field.maxLength && value && value.length > field.maxLength) {

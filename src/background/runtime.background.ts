@@ -307,11 +307,11 @@ export default class RuntimeBackground {
                             existing logins)
                         */
                         // 1- request a fill script for the in-page-menu (if activated)
-                        let enableInPageMenu = await this.storageService.get<any>(
+                        let enableInPageMenu2 = await this.storageService.get<any>(
                             LocalConstantsService.enableInPageMenuKey);
                         // default to true
-                        if (enableInPageMenu === null) {enableInPageMenu = true; }
-                        if (enableInPageMenu) {
+                        if (enableInPageMenu2 === null) {enableInPageMenu2 = true; }
+                        if (enableInPageMenu2) {
                             // If goes here : means that the page has just been loaded while addon was already connected
                             // get scripts for logins, cards and identities
 

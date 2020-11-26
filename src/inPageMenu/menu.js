@@ -253,7 +253,7 @@ function updateRows(rowsListType) {
             case 'card':
                 text.textContent = cipher.name
                 row.title = 'fill the whole form with this login (Enter)'
-                detail.textContent = formatCipherData(cipher.card, currentFieldData.card ,currentFieldData.format)
+                detail.textContent = formatCipherData(cipher.card, currentFieldData.card ,currentFieldData.fieldFormat)
                 detail.title = 'fill only this field with this value (Ctrl+Enter)'
                 break;
             case 'ids':
@@ -271,7 +271,7 @@ function updateRows(rowsListType) {
 //
 function formatCipherData(cipherData, key, format) {
 
-    if (!currentFieldData.format) return  cipherData[key];
+    if (!format) return  cipherData[key];
 
     if (format.type === 'expDate') {
         const fullMonth = ('0' + cipherData.expMonth).slice(-2);

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" media="screen" type="text/css" href="TXX.css"/>
+    </head>
+
+    <body>
+
+        <a href="./">Back to menu</a>
+
+        <hr>
+        <h2>email is not ambiguous, so menu is activated ✅ even if alone</h2>
+
+        <form class="form-example form autosave-enabled form-exemple" id="dossier-edit-form" enctype="multipart/form-data" action="https://www.demarches-simplifiees.fr/dossiers/2418643/brouillon" accept-charset="UTF-8" method="post">
+
+            <label for="dossier_champs_attributes_4_value">email</label>
+            <input placeholder="email" type="text" value="" name="dossier[champs_attributes][4][value]" id="dossier_champs_attributes_4_value">
+        </form>
+
+        <hr>
+        <h2>phone is not ambiguous, so menu is activated ✅ even if alone</h2>
+
+        <form class="form-example form autosave-enabled form-exemple" id="dossier-edit-form" enctype="multipart/form-data" action="https://www.demarches-simplifiees.fr/dossiers/2418643/brouillon" accept-charset="UTF-8" method="post">
+            <label for="dossier_champs_attributes_9_value">Téléphone
+                <span class="mandatory">*</span>
+            </label>
+            <input placeholder="Téléphone" required="required" pattern="[^a-z^A-Z]+" type="tel" value="" name="dossier[champs_attributes][9][value]" id="dossier_champs_attributes_9_value">
+            </div>
+        </form>
+
+        <hr>
+        <h2>name is ambiguous, so menu is NOT activated ❗❗ if alone</h2>
+
+        <form class="form-example form autosave-enabled form-exemple" id="dossier-edit-form" enctype="multipart/form-data" action="https://www.demarches-simplifiees.fr/dossiers/2418643/brouillon" accept-charset="UTF-8" method="post">
+            <label for="dossier_champs_attributes_4_value">Nom d'usage</label>
+            <input placeholder="Nom de famille" required="required" type="text" value="" name="dossier[champs_attributes][3][value]" id="dossier_champs_attributes_3_value" autocomplete="off" >
+        </form>
+
+        <hr>
+        <h2>City is ambiguous, but menu is activated ✅ if not alone</h2>
+
+        <form class="form-example form autosave-enabled form-exemple" id="dossier-edit-form" enctype="multipart/form-data" action="https://www.demarches-simplifiees.fr/dossiers/2418643/brouillon" accept-charset="UTF-8" method="post">
+            <label for="dossier_champs_attributes_4_value">Ville</label>
+            <input placeholder="Ville" required="required" type="text" value="" name="dossier[champs_attributes][3][value]" id="dossier_champs_attributes_3_value" autocomplete="off" >
+
+            <label for="dossier_champs_attributes_5_value">Prénoms
+                <span class="mandatory">*</span>
+            </label>
+            <input placeholder="Prénoms" required="required" type="text" value="" name="dossier[champs_attributes][5][value]" id="dossier_champs_attributes_5_value">
+        </form>
+
+        <hr>
+
+        <iframe id="header" style="width:100%; height:180px;" src="T04.2-ambiguous-field-alone.html"></iframe>
+
+    </body>
+</html>

@@ -633,7 +633,7 @@ function _setApplyFadeInUrl(doApply, fieldTypes) {
     if (!menuEl || !menuEl.src) return
     const url = new URL(menuEl.src)
     if (doApply) {
-        fieldTypes = {...{login: false, identity: false, card: false, format:false},...fieldTypes}
+        fieldTypes = {...{login: false, identity: false, card: false, fieldFormat:false},...fieldTypes}
         state.iFrameHash = {...state.iFrameHash, ...fieldTypes, applyFadeIn: true}
         menuEl.src = url.origin + url.pathname + url.search + '#' +
             encodeURIComponent(JSON.stringify(state.iFrameHash))
