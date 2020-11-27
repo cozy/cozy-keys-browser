@@ -44,7 +44,7 @@ const FirstnameFieldNames: string[] = [
     'vorname',
     // French
     'prenom',
-]
+];
 
 const LastnameFieldNames: string[] = [
     // English
@@ -53,7 +53,7 @@ const LastnameFieldNames: string[] = [
     'nachname', 'familienname',
     // French
     'nom-de-famille',
-]
+];
 
 const ExcludedAutofillTypes: string[] = ['radio', 'checkbox', 'hidden', 'file', 'button', 'image', 'reset', 'search'];
 
@@ -405,8 +405,6 @@ export default class AutofillService implements AutofillServiceInterface {
         if (!pageDetails ) {
             return null;
         }
-        const fillScript = new AutofillScript(pageDetails.documentUUID);
-        const filledFields: { [id: string]: AutofillField; } = {};
 
         /*
         Info : for the data structure of ciphers, logins, cards, identities... go there :
@@ -598,36 +596,26 @@ export default class AutofillService implements AutofillServiceInterface {
     //           a form is a "login form" if any of its attibutes includes some keywords such as 'login'
     //
     prepareFieldsForInPageMenu(pageDetails: any) {
-        // 1- test if the forms into the page might be a search or a login form
-        const isSpecificFormHelper = (formId: string, markers: any, attributesToCheck: any) => {
-            const form = pageDetails.forms[formId];
-            for (const attr of attributesToCheck) {
-                if (!form.hasOwnProperty(attr) || !form[attr] ) { continue; }
-                if (this.isFieldMatch(form[attr], markers)) {
-                    return true;
-                }
-            }
-            return false;
-        };
-        // 2- enrich the field
+        // enrich each fields
         pageDetails.fields.forEach((field: any) => {
+            // 1- test if the forms into the page might be a search, a login or a signup form
             field.isInSearchForm = field.form ?
-                isSpecificFormHelper(
-                    field.form,
+                this.isSpecificElementHelper(
+                    pageDetails.forms[field.form],
                     ['search', 'recherche'],
                     ['htmlClass', 'htmlAction', 'htmlMethod', 'htmlID'],
                 )
                 : false;
             field.isInloginForm  = field.form ?
-                isSpecificFormHelper(
-                    field.form,
+                this.isSpecificElementHelper(
+                    pageDetails.forms[field.form],
                     ['login', 'signin'],
                     ['htmlAction', 'htmlID'],
                 )
                 : false;
             field.isInSignupForm  = field.form ?
-                isSpecificFormHelper(
-                    field.form,
+                this.isSpecificElementHelper(
+                    pageDetails.forms[field.form],
                     ['signup', 'register'],
                     ['htmlAction', 'htmlID'],
                 )
@@ -643,11 +631,29 @@ export default class AutofillService implements AutofillServiceInterface {
     }
 
     /* -------------------------------------------------------------------------------- */
+    // Test is an element (field or form) contains specific markers
+    isSpecificElementHelper(element: string, markers: any, attributesToCheck: any) {
+        for (const attr of attributesToCheck) {
+            if (!element.hasOwnProperty(attr) || !element[attr] ) { continue; }
+            if (this.isFieldMatch(element[attr], markers)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /* -------------------------------------------------------------------------------- */
+    // Test if a field might correspond to a one time password
+    isOtpField(field: any) {
+        return this.isSpecificElementHelper(field, ['otp'], ['htmlName', 'htmlID']);
+    }
+
+    /* -------------------------------------------------------------------------------- */
     // Filter scripts on different rules to limit the inputs where to add the loginMenu
     postFilterFieldsForInPageMenu(scriptObjs: any, forms: any, fields: any) {
-        const res: any = [];
         let actions: any = [];
         scriptObjs.forEach( (scriptObj: any) => { actions = actions.concat(scriptObj.script); });
+        // prepare decision array for each action
         for (const action of actions) {
             // count how many actions are linked to a field which are in the same form
             // and are identified to the same cipher.type
@@ -656,8 +662,6 @@ export default class AutofillService implements AutofillServiceInterface {
             const cipherType: string = scriptContext.cipher.type;
             let nFellows: number = 1;
             for (const a of actions) {
-                const aField = a[3].field;
-                const sCipher = a[3].cipher;
                 if (   a[3].field.form  === fieldForm
                     && a[3].cipher.type === cipherType
                     && a[1] !== action[1]
@@ -700,7 +704,7 @@ export default class AutofillService implements AutofillServiceInterface {
             };
             scriptContext.decisionArray = decisionArray;
         }
-
+        // filter according to decisionArray
         scriptObjs.forEach( (scriptObj: any) => {
             scriptObj.script = scriptObj.script.filter((action: any) => {
                 if (!this.evaluateDecisionArray(action)) {
@@ -725,6 +729,7 @@ export default class AutofillService implements AutofillServiceInterface {
                 //     form: action[3].field.formObj,
                 // });
                 // console.log({a_field: fieldStr, ...action[3].decisionArray});
+
                 // finalise the action to send to autofill.js
                 const scriptCipher = action[3].cipher;
                 const fieldTypeToSend: any = {};
@@ -733,7 +738,6 @@ export default class AutofillService implements AutofillServiceInterface {
                     fieldTypeToSend.fieldFormat = scriptCipher.fieldFormat;
                 }
                 action[3] =  fieldTypeToSend;
-                // action[3] = action[3].cipher.fieldType; // finalise the action to send to autofill.js
                 return true;
             });
         });
@@ -852,8 +856,8 @@ export default class AutofillService implements AutofillServiceInterface {
             return null;
         }
 
-        const passwords: AutofillField[] = [];
-        const usernames: AutofillField[] = [];
+        let passwords: AutofillField[] = [];
+        let   usernames: AutofillField[] = [];
         let pf: AutofillField = null;
         let username: AutofillField = null;
         const login = options.cipher.login;
@@ -933,6 +937,15 @@ export default class AutofillService implements AutofillServiceInterface {
             });
         }
 
+        // @override by Cozy : remove otp fields
+        usernames = usernames.filter((field) => {
+            return !this.isOtpField(field);
+        });
+        passwords = passwords.filter((field) => {
+            return !this.isOtpField(field);
+        });
+        // end @override by Cozy
+
         usernames.forEach((u) => {
             if (filledFields.hasOwnProperty(u.opid)) {
                 return;
@@ -953,11 +966,6 @@ export default class AutofillService implements AutofillServiceInterface {
 
         fillScript = this.setFillScriptForFocus(filledFields, fillScript);
 
-        // fillScript.type = 'autofillScript';
-        // if (options.sender === 'notifBarForInPageMenu') {
-        //     fillScript = this.setFillScriptForMenu(fillScript);
-        //     fillScript.type = 'existingLoginFieldsForInPageMenuScript';
-        // }
         return fillScript;
     }
 
@@ -1469,7 +1477,7 @@ export default class AutofillService implements AutofillServiceInterface {
         dataProp: string,
         cipherType: string,
     ) {
-        let fieldProp;
+        let fieldProp: any;
         fieldProp = fieldProp || dataProp;
         const cipher = {type: cipherType, fieldType: dataProp };
         this.makeScriptActionWithValue(
