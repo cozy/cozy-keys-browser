@@ -183,10 +183,12 @@ const routes: Routes = [
             },
             {
                 path: 'current',
-                component: CurrentTabComponent,
-                canActivate: [AuthGuardService],
-                data: { state: 'tabs_current' },
-                runGuardsAndResolvers: 'always',
+                redirectTo: '/tabs/vault',
+                pathMatch: 'full',
+                // component: CurrentTabComponent,
+                // canActivate: [AuthGuardService],
+                // data: { state: 'tabs_current' },
+                // runGuardsAndResolvers: 'always',
             },
             {
                 path: 'vault',
