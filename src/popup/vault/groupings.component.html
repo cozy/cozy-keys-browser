@@ -39,7 +39,7 @@
                 </app-ciphers-list>
             </div>
         </div>
-        <div *ngIf="ciphersByType[cipherType.Card].Identity > 0" class="box list">
+        <div *ngIf="ciphersByType[cipherType.Identity].length > 0" class="box list">
             <div class="box-header">
                 {{'identities' | i18n}}
                 <span class="flex-right">{{countByType(cipherType.Identity)}}</span>
