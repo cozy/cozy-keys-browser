@@ -3,6 +3,7 @@
         <app-pop-out></app-pop-out>
     </div>
     <div class="search">
+        <div id="search-tag">Pour ce site web <span>X</span></div>
         <input type="{{searchTypeSearch ? 'search' : 'text'}}" placeholder="{{'searchVault' | i18n}}" id="search"
             [(ngModel)]="searchText" (input)="search(200)" autocomplete="off" appAutofocus>
         <i class="fa fa-search"></i>

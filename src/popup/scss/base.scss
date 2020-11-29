@@ -14,7 +14,7 @@ html, body {
 }
 
 body {
-    width: 375px !important;
+    width: 390px !important;
     height: 600px !important;
     overflow: hidden;
     color: $text-color;
@@ -219,11 +219,32 @@ header {
             }
         }
 
+        #search-tag {
+            position: absolute;
+            top: 11px;
+            left: 35px;
+            border: 1px solid blue;
+            padding: 0 6px;
+            background-color: black;
+            border-radius: 4px;
+
+            span {
+                color: white;
+                border-left: 1px solid #9cbad8;
+                cursor: pointer;
+                font-size: 0.6em;
+                display: inline-block;
+                padding: 0 0 0 4px;
+                margin: 0 0 0 4px;
+                height: 100%;
+            }
+        }
+
         input {
             width: 100%;
             margin: 0;
             border: none;
-            padding: 5px 10px 5px 30px;
+            padding: 5px 10px 5px 175px;
             border-radius: $border-radius;
 
 
