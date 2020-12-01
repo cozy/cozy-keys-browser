@@ -221,8 +221,8 @@ header {
 
         #search-tag {
             position: absolute;
-            top: 11px;
-            left: 35px;
+            top: 12px;
+            left: 34px;
             padding: 0 6px;
             background-color: black;
             border-radius: 4px;
@@ -315,13 +315,6 @@ header {
             transform: scaleX(0);
             padding: 0;
         }
-        input::placeholder {
-            color:red;
-        }
-        input::-webkit-input-placeholder {
-            color:red;
-        }
-
     }
 
     .left + .search {
