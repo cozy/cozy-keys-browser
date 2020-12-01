@@ -63,6 +63,10 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     searchPending = false;
     searchTypeSearch = false;
     deletedCount = 0;
+    displayCurrentPageCiphersMode: boolean = true;
+    displayCiphersListsMode: boolean = false;
+    ciphersForCurrentPage: CipherView[] = [];
+    searchTagClass: string = 'showSearchTag';
 
     private loadedTimeout: number;
     private selectedTimeout: number;
@@ -163,12 +167,15 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async load() {
+        console.log('load()');
+
         await super.load(false);
         await this.loadCiphers();
         if (this.showNoFolderCiphers && this.nestedFolders.length > 0) {
             // Remove "No Folder" from folder listing
             this.nestedFolders = this.nestedFolders.slice(0, this.nestedFolders.length - 1);
         }
+        await this.getCiphersForCurrentPage();
 
         super.loaded = true;
     }
@@ -286,6 +293,34 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     emptySearch() {
         this.searchText = '';
         this.hasSearched = false;
+    }
+
+    searchWrapper(timeout: number = null) {
+        this.displayCurrentPageCiphersMode = false;
+        this.displayCiphersListsMode = true;
+        this.search(timeout);
+    }
+
+    switchToCiphersListsMode() {
+        console.log('switchToCiphersListsMode()');
+        this.searchTagClass = 'hideSearchTag';
+        this.searchText = '';
+        this.hasSearched = false;
+        this.displayCurrentPageCiphersMode = false;
+        this.displayCiphersListsMode = true;
+    }
+
+    async getCiphersForCurrentPage(): Promise<any[]> {
+        console.log('getCiphersForCurrentPage()');
+        const tab = await BrowserApi.getTabFromCurrentWindow();
+        console.log(tab);
+        if (tab == null) { return []; }
+        let ciphersForCurrentPage = await this.cipherService.getAllDecryptedForUrl(tab.url, null);
+        console.log(ciphersForCurrentPage);
+        ciphersForCurrentPage = ciphersForCurrentPage.sort((a, b): number => {
+            return this.cipherService.sortCiphersByLastUsedThenName(a, b);
+        });
+        this.ciphersForCurrentPage = ciphersForCurrentPage;
     }
 
     _ciphersByType(type: CipherType) {
