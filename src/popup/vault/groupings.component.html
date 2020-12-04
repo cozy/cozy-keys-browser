@@ -75,7 +75,7 @@
     </ng-container>
 
     <!-- full vault V1 -->
-    <ng-container *ngIf="(displayCiphersListsMode && ciphers && ciphers.length && !showSearching())">
+    <!-- <ng-container *ngIf="(displayCiphersListsMode && ciphers && ciphers.length && !showSearching())">
         <div *ngIf="ciphersByType[cipherType.Card].length > 0" class="box list">
             <div class="box-header">
                 {{'cards' | i18n}}
@@ -125,11 +125,11 @@
                 </a>
             </div>
         </div>
-    </ng-container>
+    </ng-container> -->
 
     <!-- full vault V2 -->
     <!-- standard BW ways of accessing ciphers : by types, by folders, by collection and trashed -->
-    <!-- <ng-container *ngIf="(displayCiphersListsMode && ciphers && ciphers.length && !showSearching())">
+    <ng-container *ngIf="(displayCiphersListsMode && ciphers && ciphers.length && !showSearching())">
         <div class="box list" *ngIf="favoriteCiphers">
             <div class="box-header">
                 {{'favorites' | i18n}}
@@ -148,7 +148,7 @@
             <div class="box-content single-line">
                 <a href="#" class="box-content-row" appStopClick appBlurClick (click)="selectType(cipherType.Login)">
                     <div class="row-main">
-                        <div class="icon"><i class="fa fa-fw fa-lg fa-globe"></i></div>
+                        <div class="icon"><i class="icon-cozy icon-login"></i></div>
                         <span class="text">{{'typeLogin' | i18n}}</span>
                     </div>
                     <span class="row-sub-label">{{typeCounts.get(cipherType.Login) || 0}}</span>
@@ -156,7 +156,7 @@
                 </a>
                 <a href="#" class="box-content-row" appStopClick appBlurClick (click)="selectType(cipherType.Card)">
                     <div class="row-main">
-                        <div class="icon"><i class="fa fa-fw fa-lg fa-credit-card"></i></div>
+                        <div class="icon"><i class="icon-cozy icon-bank"></i></div>
                         <span class="text">{{'typeCard' | i18n}}</span>
                     </div>
                     <span class="row-sub-label">{{typeCounts.get(cipherType.Card) || 0}}</span>
@@ -164,13 +164,13 @@
                 </a>
                 <a href="#" class="box-content-row" appStopClick appBlurClick (click)="selectType(cipherType.Identity)">
                     <div class="row-main">
-                        <div class="icon"><i class="fa fa-fw fa-lg fa-id-card-o"></i></div>
+                        <div class="icon"><i class="icon-cozy icon-identity"></i></div>
                         <span class="text">{{'typeIdentity' | i18n}}</span>
                     </div>
                     <span class="row-sub-label">{{typeCounts.get(cipherType.Identity) || 0}}</span>
                     <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
                 </a>
-                <a href="#" class="box-content-row" appStopClick appBlurClick
+                <!-- <a href="#" class="box-content-row" appStopClick appBlurClick
                     (click)="selectType(cipherType.SecureNote)">
                     <div class="row-main">
                         <div class="icon"><i class="fa fa-fw fa-lg fa-sticky-note-o"></i></div>
@@ -178,7 +178,7 @@
                     </div>
                     <span class="row-sub-label">{{typeCounts.get(cipherType.SecureNote) || 0}}</span>
                     <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
-                </a>
+                </a> -->
             </div>
         </div>
         <div class="box list" *ngIf="nestedFolders && nestedFolders.length">
@@ -201,7 +201,7 @@
                 </a>
             </div>
         </div>
-        <div class="box list" *ngIf="nestedCollections && nestedCollections.length">
+        <!-- <div class="box list" *ngIf="nestedCollections && nestedCollections.length">
             <div class="box-header">
                 {{'collections' | i18n}}
                 <span class="flex-right">{{nestedCollections.length}}</span>
@@ -217,7 +217,7 @@
                     <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
                 </a>
             </div>
-        </div>
+        </div> -->
         <div class="box list" *ngIf="showNoFolderCiphers">
             <div class="box-header">
                 {{'noneFolder' | i18n}}
@@ -245,7 +245,7 @@
                 </a>
             </div>
         </div>
-    </ng-container> -->
+    </ng-container>
 
     <!-- search results -->
     <ng-container *ngIf="showSearching()">

@@ -26,6 +26,8 @@ import { PasswordGeneratorHistoryComponent } from './generator/password-generato
 import { PasswordGeneratorComponent } from './generator/password-generator.component';
 import { PrivateModeComponent } from './private-mode.component';
 import { ExportComponent } from './settings/export.component';
+import { FolderAddEditComponent } from './settings/folder-add-edit.component';
+import { FoldersComponent } from './settings/folders.component';
 import { OptionsComponent } from './settings/options.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SyncComponent } from './settings/sync.component';
@@ -61,7 +63,8 @@ import { CiphersListComponent } from './components/ciphers-list.component';
 import { PopOutComponent } from './components/pop-out.component';
 
 import { CalloutComponent } from 'jslib/angular/components/callout.component';
-import { IconComponent } from 'jslib/angular/components/icon.component';
+// import { IconComponent } from 'jslib/angular/components/icon.component';
+import { IconComponent } from './components/icon.component';
 
 import {
     CurrencyPipe,
@@ -103,6 +106,8 @@ registerLocaleData(localeFr, 'fr');
         CurrentTabComponent,
         ExportComponent,
         FallbackSrcDirective,
+        FolderAddEditComponent,
+        FoldersComponent,
         GroupingsComponent,
         HomeComponent,
         HintComponent,

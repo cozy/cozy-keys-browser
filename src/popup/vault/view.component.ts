@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import {
     ChangeDetectorRef,
     Component,
+    HostListener,
     NgZone,
 } from '@angular/core';
 import {
@@ -55,6 +56,14 @@ export class ViewComponent extends BaseViewComponent {
         private messagingService: MessagingService, private popupUtilsService: PopupUtilsService) {
         super(cipherService, totpService, tokenService, i18nService, cryptoService, platformUtilsService,
             auditService, window, broadcasterService, ngZone, changeDetectorRef, userService, eventService);
+    }
+
+    @HostListener('window:keydown', ['$event'])
+    handleKeyDown(event: KeyboardEvent) {
+        if (event.key === 'Escape') {
+            this.close();
+            event.preventDefault();
+        }
     }
 
     ngOnInit() {

@@ -231,11 +231,6 @@ header {
             transition: all 200ms;
             transform-origin: left top;
 
-            // &.hide {
-            //     transform: scaleX(0);
-            //     padding: 0;
-            // }
-
             :first-child {
                 position: relative;
             }

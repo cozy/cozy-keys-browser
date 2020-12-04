@@ -14,14 +14,15 @@ import { HintComponent } from './accounts/hint.component';
 import { HomeComponent } from './accounts/home.component';
 import { LockComponent } from './accounts/lock.component';
 import { LoginComponent } from './accounts/login.component';
-import { SetPasswordComponent } from './accounts/set-password.component';
 import { TwoFactorOptionsComponent } from './accounts/two-factor-options.component';
 import { TwoFactorComponent } from './accounts/two-factor.component';
-import { SsoComponent } from './accounts/sso.component';
 import { PasswordGeneratorHistoryComponent } from './generator/password-generator-history.component';
 import { PasswordGeneratorComponent } from './generator/password-generator.component';
 import { PrivateModeComponent } from './private-mode.component';
 import { ExportComponent } from './settings/export.component';
+
+import { FolderAddEditComponent } from './settings/folder-add-edit.component';
+import { FoldersComponent } from './settings/folders.component';
 import { OptionsComponent } from './settings/options.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SyncComponent } from './settings/sync.component';
@@ -149,6 +150,24 @@ const routes: Routes = [
         data: { state: 'export' },
     },
     {
+        path: 'folders',
+        component: FoldersComponent,
+        canActivate: [AuthGuardService],
+        data: { state: 'folders' },
+    },
+    {
+        path: 'add-folder',
+        component: FolderAddEditComponent,
+        canActivate: [AuthGuardService],
+        data: { state: 'add-folder' },
+    },
+    {
+        path: 'edit-folder',
+        component: FolderAddEditComponent,
+        canActivate: [AuthGuardService],
+        data: { state: 'edit-folder' },
+    },
+    {
         path: 'sync',
         component: SyncComponent,
         canActivate: [AuthGuardService],
@@ -183,8 +202,15 @@ const routes: Routes = [
             },
             {
                 path: 'current',
-                redirectTo: '/tabs/vault',
-                pathMatch: 'full',
+
+                component: CurrentTabComponent,
+                canActivate: [AuthGuardService],
+                data: { state: 'tabs_current' },
+                runGuardsAndResolvers: 'always',
+                // component: GroupingsComponent,
+                // canActivate: [AuthGuardService],
+                // data: { state: 'tabs_vault_for_current_page' },
+
                 // component: CurrentTabComponent,
                 // canActivate: [AuthGuardService],
                 // data: { state: 'tabs_current' },
@@ -237,7 +263,7 @@ export class NoRouteReuseStrategy implements RouteReuseStrategy {
     imports: [RouterModule.forRoot(routes, {
         useHash: true,
         onSameUrlNavigation: 'reload',
-        /*enableTracing: true,*/
+        // enableTracing: true,
     })],
     exports: [RouterModule],
     providers: [

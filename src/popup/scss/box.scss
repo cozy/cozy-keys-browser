@@ -116,6 +116,7 @@
                 .row-main {
                     display: flex;
                     min-width: 0;
+                    align-items: center;
 
                     .row-main-content {
                         min-width: 0;
@@ -126,6 +127,7 @@
             &.single-line {
                 .box-content-row {
                     display: flex;
+                    align-items: center;
                     padding-top: 10px;
                     padding-bottom: 10px;
                 }

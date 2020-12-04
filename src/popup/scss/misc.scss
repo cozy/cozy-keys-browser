@@ -221,6 +221,7 @@ app-vault-icon {
     background-repeat: no-repeat;
     width: 16px;
     height: 16px;
+    background-position: center;
 }
 
 .icon-cozy-inline {
@@ -256,18 +257,22 @@ app-vault-icon {
     background-size: 12px 16px;
 }
 
+.icon-login {
+    background-image: url('../images/icons-login.svg');
+    width: 24px;
+    height: 24px;
+}
+
 .icon-identity {
     background-image: url('../images/icons-identity.svg');
     width: 24px;
     height: 24px;
-    margin-top: 8px;
 }
 
 .icon-bank {
     background-image: url('../images/icons-card.svg');
     width: 24px;
     height: 24px;
-    margin-top: 8px;
 }
 
 .icon-key {
