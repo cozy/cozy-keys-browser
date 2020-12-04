@@ -59,4 +59,3 @@ In case you need to create an archive of the source code, which can be required 
 ```
 npm run dist:sources
 ```
-
