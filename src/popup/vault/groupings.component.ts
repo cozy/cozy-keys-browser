@@ -67,10 +67,10 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     searchPending = false;
     searchTypeSearch = false;
     deletedCount = 0;
-    displayCurrentPageCiphersMode: boolean = true;
-    displayCiphersListsMode: boolean = false;
+    displayCurrentPageCiphersMode: boolean = false;
+    displayCiphersListsMode: boolean = true;
     ciphersForCurrentPage: CipherView[] = [];
-    searchTagClass: string = 'showSearchTag';
+    searchTagClass: string = 'hideSearchTag';
 
     private loadedTimeout: number;
     private selectedTimeout: number;
@@ -142,14 +142,16 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
         const restoredScopeState = await this.restoreState();
         const queryParamsSub = this.route.queryParams.subscribe(async (params) => {
-            console.log('ngOnInit : queryParamsSub', params);
+            console.log('ngOnInit : queryParamsSub', params.isFilteredForPage);
             if (params.isFilteredForPage) {
-                this.searchTagClass = 'applyuSearchTag';
+                this.searchTagClass = 'showSearchTag';
                 this.searchText = '';
                 this.hasSearched = false;
-                this.displayCurrentPageCiphersMode = false;
-                this.displayCiphersListsMode = true;
+                this.displayCurrentPageCiphersMode = true;
+                this.displayCiphersListsMode = false;
             }
+            console.log('in the end', );
+
             this.state = (await this.stateService.get<any>(ComponentId)) || {};
             if (this.state.searchText) {
                 this.searchText = this.state.searchText;
