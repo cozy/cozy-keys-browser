@@ -1,5 +1,3 @@
-import { Angulartics2 } from 'angulartics2';
-
 import { Location } from '@angular/common';
 import {
     ChangeDetectorRef,
@@ -76,7 +74,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         private ngZone: NgZone, private broadcasterService: BroadcasterService,
         private changeDetectorRef: ChangeDetectorRef, private route: ActivatedRoute,
         private stateService: StateService, private popupUtils: PopupUtilsService,
-        private syncService: SyncService, private analytics: Angulartics2,
+        private syncService: SyncService,
         private platformUtilsService: PlatformUtilsService, private searchService: SearchService,
         private location: Location) {
         super(collectionService, folderService, storageService, userService);
@@ -237,7 +235,6 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             window.clearTimeout(this.selectedTimeout);
         }
         this.preventSelected = true;
-        this.analytics.eventTrack.next({ action: 'Launched URI From Listing' });
         await this.cipherService.updateLastLaunchedDate(cipher.id);
         BrowserApi.createNewTab(cipher.login.launchUri);
         if (this.popupUtils.inPopup(window)) {

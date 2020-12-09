@@ -29,7 +29,6 @@ import MainBackground from './main.background';
 
 import { CipherWithIds as CipherExport } from 'jslib/models/export/cipherWithIds.ts';
 
-import { Analytics } from 'jslib/misc';
 import { Utils } from 'jslib/misc/utils';
 import { PasswordVerificationRequest } from 'jslib/models/request/passwordVerificationRequest';
 import { KonnectorsService } from '../popup/services/konnectors.service';
@@ -45,7 +44,7 @@ export default class RuntimeBackground {
     constructor(private main: MainBackground, private autofillService: AutofillService,
         private cipherService: CipherService, private platformUtilsService: BrowserPlatformUtilsService,
         private storageService: StorageService, private i18nService: I18nService,
-        private analytics: Analytics, private notificationsService: NotificationsService,
+        private notificationsService: NotificationsService,
         private systemService: SystemService, private vaultTimeoutService: VaultTimeoutService,
         private environmentService: EnvironmentService,
         private konnectorsService: KonnectorsService, private syncService: SyncService,
@@ -456,10 +455,6 @@ export default class RuntimeBackground {
 
             const cipher = await this.cipherService.encrypt(model);
             await this.cipherService.saveWithServer(cipher);
-            this.analytics.ga('send', {
-                hitType: 'event',
-                eventAction: 'Added Login from Notification Bar',
-            });
             this.konnectorsService.createSuggestions();
         }
     }
@@ -489,10 +484,6 @@ export default class RuntimeBackground {
                 model.login.password = queueMessage.newPassword;
                 const newCipher = await this.cipherService.encrypt(model);
                 await this.cipherService.saveWithServer(newCipher);
-                this.analytics.ga('send', {
-                    hitType: 'event',
-                    eventAction: 'Changed Password from Notification Bar',
-                });
             }
         }
     }
@@ -636,11 +627,6 @@ export default class RuntimeBackground {
                 for (const tab of allTabs) {
                     chrome.tabs.executeScript(tab.id, { file: 'content/appInfo.js' });
                 }
-
-                this.analytics.ga('send', {
-                    hitType: 'event',
-                    eventAction: 'onInstalled ' + this.onInstalledReason,
-                });
                 this.onInstalledReason = null;
             }
         }, 100);

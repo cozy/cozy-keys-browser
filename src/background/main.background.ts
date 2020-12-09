@@ -61,7 +61,6 @@ import { PolicyService as PolicyServiceAbstraction } from 'jslib/abstractions/po
 import { SearchService as SearchServiceAbstraction } from 'jslib/abstractions/search.service';
 import { SystemService as SystemServiceAbstraction } from 'jslib/abstractions/system.service';
 
-import { Analytics } from 'jslib/misc';
 import { Utils } from 'jslib/misc/utils';
 
 import { CozyClientService } from '../popup/services/cozyClient.service';
@@ -121,7 +120,6 @@ export default class MainBackground {
     systemService: SystemServiceAbstraction;
     eventService: EventServiceAbstraction;
     policyService: PolicyServiceAbstraction;
-    analytics: Analytics;
     popupUtilsService: PopupUtilsService;
     cozyClientService: CozyClientService;
     konnectorsService: KonnectorsService;
@@ -274,8 +272,6 @@ export default class MainBackground {
             this.apiService, this.vaultTimeoutService, () => this.logout(true));
         // this.environmentService = new EnvironmentService(this.apiService, this.storageService,
         //     this.notificationsService); // this declaration has been moved up for the cozyClientService declaration
-        this.analytics = new Analytics(window, () => BrowserApi.gaFilter(), this.platformUtilsService,
-            this.storageService, this.appIdService);
         this.popupUtilsService = new PopupUtilsService(this.platformUtilsService);
         this.systemService = new SystemService(this.storageService, this.vaultTimeoutService,
             this.messagingService, this.platformUtilsService, () => {
@@ -295,12 +291,12 @@ export default class MainBackground {
 
         // Background
         this.commandsBackground = new CommandsBackground(this, this.passwordGenerationService,
-            this.platformUtilsService, this.analytics, this.vaultTimeoutService);
+            this.platformUtilsService, this.vaultTimeoutService);
 
         if (!this.isSafari) {
             this.tabsBackground = new TabsBackground(this);
             this.contextMenusBackground = new ContextMenusBackground(this, this.cipherService,
-                this.passwordGenerationService, this.analytics, this.platformUtilsService, this.vaultTimeoutService,
+                this.passwordGenerationService, this.platformUtilsService, this.vaultTimeoutService,
                 this.eventService, this.totpService);
             this.idleBackground = new IdleBackground(this.vaultTimeoutService, this.storageService,
                 this.notificationsService);
@@ -312,7 +308,7 @@ export default class MainBackground {
         // Background
         this.runtimeBackground = new RuntimeBackground(this, this.autofillService, this.cipherService,
             this.platformUtilsService as BrowserPlatformUtilsService, this.storageService, this.i18nService,
-            this.analytics, this.notificationsService, this.systemService, this.vaultTimeoutService,
+            this.notificationsService, this.systemService, this.vaultTimeoutService,
             this.environmentService,
             this.konnectorsService, this.syncService, this.authService, this.cryptoService, this.userService);
 
@@ -320,7 +316,6 @@ export default class MainBackground {
 
     async bootstrap() {
         SafariApp.init();
-        this.analytics.ga('send', 'pageview', '/background.html');
         this.containerService.attachToWindow(window);
 
         await (this.vaultTimeoutService as VaultTimeoutService).init(true);

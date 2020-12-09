@@ -1,4 +1,3 @@
-import { Angulartics2 } from 'angulartics2';
 import Swal from 'sweetalert2/src/sweetalert2.js';
 
 import {
@@ -54,7 +53,7 @@ export class SettingsComponent implements OnInit {
     previousVaultTimeout: number = null;
 
     constructor(private platformUtilsService: PlatformUtilsService, private i18nService: I18nService,
-        private analytics: Angulartics2, private vaultTimeoutService: VaultTimeoutService,
+        private vaultTimeoutService: VaultTimeoutService,
         private storageService: StorageService, public messagingService: MessagingService,
         private router: Router, private environmentService: EnvironmentService,
         private cryptoService: CryptoService, private userService: UserService,
@@ -211,7 +210,6 @@ export class SettingsComponent implements OnInit {
     }
 
     async lock() {
-        this.analytics.eventTrack.next({ action: 'Lock Now' });
         await this.vaultTimeoutService.lock(true);
     }
 
@@ -226,7 +224,6 @@ export class SettingsComponent implements OnInit {
 
     // TODO: redirect to the Cozy settings
     async changePassword() {
-        this.analytics.eventTrack.next({ action: 'Clicked Change Password' });
         const confirmed = await this.platformUtilsService.showDialog(
             this.i18nService.t('changeMasterPasswordConfirmation'), this.i18nService.t('changeMasterPassword'),
             this.i18nService.t('yes'), this.i18nService.t('cancel'));
@@ -242,7 +239,6 @@ export class SettingsComponent implements OnInit {
     // TODO: Add a Cozy help
     import() {
         const url = this.cozyClientService.getAppURL('passwords', '/installation/import');
-        this.analytics.eventTrack.next({ action: 'Clicked Import Items' });
         BrowserApi.createNewTab(url);
     }
 
@@ -256,8 +252,6 @@ export class SettingsComponent implements OnInit {
     }
 
     about() {
-        this.analytics.eventTrack.next({ action: 'Clicked About' });
-
         const versionText = document.createTextNode(
             this.i18nService.t('version') + ': ' + BrowserApi.getApplicationVersion());
         const div = document.createElement('div');
@@ -281,7 +275,6 @@ export class SettingsComponent implements OnInit {
     }
 
     rate() {
-        this.analytics.eventTrack.next({ action: 'Rate Extension' });
         const deviceType = this.platformUtilsService.getDevice();
         BrowserApi.createNewTab((RateUrls as any)[deviceType]);
     }
