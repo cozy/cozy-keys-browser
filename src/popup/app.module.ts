@@ -3,7 +3,6 @@ import 'zone.js/dist/zone';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ToasterModule } from 'angular2-toaster';
-import { Angulartics2Module } from 'angulartics2';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -82,12 +81,6 @@ registerLocaleData(localeFr, 'fr');
         FormsModule,
         AppRoutingModule,
         ServicesModule,
-        // Angulartics2Module.forRoot([], {
-        Angulartics2Module.forRoot({  // BJA : hésitation avec la ligne pr�c�dante pendant le merge... (cette ligne est celle de BW)
-            pageTracking: {
-                clearQueryParams: true,
-            },
-        }),
         ToasterModule.forRoot(),
         InfiniteScrollModule,
         DragDropModule,

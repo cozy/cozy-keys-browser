@@ -1,6 +1,4 @@
 import { ToasterService } from 'angular2-toaster';
-import { Angulartics2 } from 'angulartics2';
-
 import {
     Component,
     OnInit,
@@ -19,7 +17,7 @@ export class SyncComponent implements OnInit {
     syncPromise: Promise<any>;
 
     constructor(private syncService: SyncService, private router: Router,
-        private toasterService: ToasterService, private analytics: Angulartics2,
+        private toasterService: ToasterService,
         private i18nService: I18nService) {
     }
 
@@ -32,7 +30,6 @@ export class SyncComponent implements OnInit {
         const success = await this.syncPromise;
         if (success) {
             await this.setLastSync();
-            this.analytics.eventTrack.next({ action: 'Synced Full' });
             this.toasterService.popAsync('success', null, this.i18nService.t('syncingComplete'));
         } else {
             this.toasterService.popAsync('error', null, this.i18nService.t('syncingFailed'));

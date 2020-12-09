@@ -6,7 +6,6 @@ import {
 } from '@angular/core';
 
 import { ToasterService } from 'angular2-toaster';
-import { Angulartics2 } from 'angulartics2';
 
 import { BrowserApi } from '../../browser/browserApi';
 
@@ -32,7 +31,7 @@ export class ActionButtonsComponent {
 
     cipherType = CipherType;
 
-    constructor(private analytics: Angulartics2, private toasterService: ToasterService,
+    constructor(private toasterService: ToasterService,
         private i18nService: I18nService, private platformUtilsService: PlatformUtilsService,
         private popupUtilsService: PopupUtilsService, private eventService: EventService) { }
 
@@ -41,7 +40,6 @@ export class ActionButtonsComponent {
             return;
         }
 
-        this.analytics.eventTrack.next({ action: 'Launched URI From Listing' });
         BrowserApi.createNewTab(this.cipher.login.launchUri);
         if (this.popupUtilsService.inPopup(window)) {
             BrowserApi.closePopup(window);
@@ -57,7 +55,6 @@ export class ActionButtonsComponent {
             return;
         }
 
-        this.analytics.eventTrack.next({ action: 'Copied ' + aType });
         this.platformUtilsService.copyToClipboard(value, { window: window });
         this.toasterService.popAsync('info', null,
             this.i18nService.t('valueCopied', this.i18nService.t(typeI18nKey)));

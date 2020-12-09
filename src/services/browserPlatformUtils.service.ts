@@ -6,8 +6,6 @@ import { DeviceType } from 'jslib/enums/deviceType';
 import { MessagingService } from 'jslib/abstractions/messaging.service';
 import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
 
-// import { AnalyticsIds } from 'jslib/misc/analytics';
-
 const DialogPromiseExpiration = 600000; // 10 minutes
 
 export default class BrowserPlatformUtilsService implements PlatformUtilsService {
@@ -15,7 +13,6 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
 
     private showDialogResolves = new Map<number, { resolve: (value: boolean) => void, date: Date }>();
     private deviceCache: DeviceType = null;
-    private analyticsIdCache: string = null;
 
     constructor(private messagingService: MessagingService,
         private clipboardWriteCallback: (clipboardValue: string, clearMs: number) => void) { }
@@ -81,13 +78,8 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     }
 
     // TODO: re-enable tracking or remove
+    // This does nothing, but it is necessary to cope with the jslib interface
     analyticsId(): string {
-        /*if (this.analyticsIdCache) {
-            return this.analyticsIdCache;
-        }
-
-        this.analyticsIdCache = (AnalyticsIds as any)[this.getDevice()];
-        return this.analyticsIdCache;*/
         return;
     }
 
@@ -165,11 +157,11 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
 
     eventTrack(action: string, label?: string, options?: any) {
         // FIXME: the service is currently disabled
-        this.messagingService.send('analyticsEventTrack', {
+        /*this.messagingService.send('analyticsEventTrack', {
             action: action,
             label: label,
             options: options,
-        });
+        });*/
     }
 
     isDev(): boolean {

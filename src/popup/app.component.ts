@@ -23,8 +23,6 @@ import {
     RouterOutlet,
 } from '@angular/router';
 
-import { Angulartics2 } from 'angulartics2';
-
 import { BroadcasterService } from 'jslib/angular/services/broadcaster.service';
 
 import { AuthService } from 'jslib/abstractions/auth.service';
@@ -59,7 +57,7 @@ export class AppComponent implements OnInit {
 
     private lastActivity: number = null;
 
-    constructor(private analytics: Angulartics2,
+    constructor(
         private toasterService: ToasterService, private storageService: StorageService,
         private broadcasterService: BroadcasterService, private authService: AuthService,
         private i18nService: I18nService, private router: Router,
@@ -85,7 +83,6 @@ export class AppComponent implements OnInit {
             if (msg.command === 'doneLoggingOut') {
                 this.ngZone.run(async () => {
                     this.authService.logOut(() => {
-                        this.analytics.eventTrack.next({ action: 'Logged Out' });
                         if (msg.expired) {
                             this.showToast({
                                 type: 'warning',
@@ -113,12 +110,6 @@ export class AppComponent implements OnInit {
                 this.ngZone.run(() => {
                     this.showToast(msg);
                 });
-            } else if (msg.command === 'analyticsEventTrack') {
-                // TODO: re-enable tracking or remove
-                /*this.analytics.eventTrack.next({
-                    action: msg.action,
-                    properties: { label: msg.label },
-                });*/
             } else if (msg.command === 'reloadProcess') {
                 const windowReload = this.platformUtilsService.isSafari() ||
                     this.platformUtilsService.isFirefox() || this.platformUtilsService.isOpera();
