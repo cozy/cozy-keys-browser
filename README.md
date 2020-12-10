@@ -46,3 +46,17 @@ Production builds can be created for each browser with the following commands:
 npm install
 npm run dist:<firefox|chrome|opera|safari>`
 ```
+
+You can also build all of them in once by running:
+```
+npm install
+npm run dist`
+```
+
+## Source archive
+
+In case you need to create an archive of the source code, which can be required for an add-on submission on some platforms:
+```
+npm run dist:sources
+```
+
