@@ -29,7 +29,7 @@ export class KonnectorsService {
         try {
             const isDisabled = await this.storageService.get<boolean>(ConstantsService.disableKonnectorsSuggestionsKey);
             if (!isDisabled) {
-                const cozyClient = await this.cozyClientService.createClient();
+                const cozyClient = await this.cozyClientService.getClientInstance();
                 const allKonnectors = await this.getRegistryKonnectors(cozyClient);
                 const installedKonnectors = await this.getInstalledKonnectors(cozyClient);
                 const suggestedKonnectors = await this.getSuggestedKonnectors(cozyClient);
@@ -39,7 +39,12 @@ export class KonnectorsService {
                 );
                 this.sendKonnectorsSuggestion(cozyClient, konnectorsToSuggest);
             }
-        } catch (e) { }
+        } catch (e) {
+            /* tslint:disable-next-line */
+            console.error(e);
+            /* tslint:disable-next-line */
+            console.error('Error while trying to make konnectors suggestions');
+        }
     }
 
     getRegistryKonnectors(client: any) {

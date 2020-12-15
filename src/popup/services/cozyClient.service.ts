@@ -11,8 +11,14 @@ interface ICozyStackClient {
 interface ICozyClient {
     getStackClient: () => ICozyStackClient;
     getAppURL: () => string;
+    options: any;
 }
 
+/**
+ * CozyClient service, used to communicate with a Cozy stack on specific Cozy's routes.
+ *
+ * The token used to create a cozy-client instance is the bearer token retrieved from jslib.
+ */
 export class CozyClientService {
     protected instance: ICozyClient;
 
@@ -22,23 +28,48 @@ export class CozyClientService {
 
     getCozyURL(): string {
         const vaultUrl = this.environmentService.getWebVaultUrl();
-        return new URL(vaultUrl).origin; // Remove the /bitwarden part
+        if (!vaultUrl) {
+            return null
+        }
+        return new URL(vaultUrl).origin // Remove the /bitwarden part
+    }
+
+    async getClientInstance () {
+        try {
+            if (this.instance) {
+                const token = await this.apiService.getActiveBearerToken();
+                // If the instance's token differ from the active bearer, a refresh is needed.
+                if (token === this.instance.options.token) {
+                    return this.instance;
+                }
+            }
+            this.instance = await this.createClient();
+        } catch (err) {
+            /* tslint:disable-next-line */
+            console.error('Error while initializing cozy-client');
+            /* tslint:disable-next-line */
+            console.error(err);
+        }
+        return this.instance;
     }
 
     async createClient() {
-        if (this.instance) {
-            return this.instance;
+        try  {
+            const uri = this.getCozyURL();
+            const token = await this.apiService.getActiveBearerToken();
+            this.instance = new CozyClient({ uri: uri, token: token });
+        } catch (err) {
+            /* tslint:disable-next-line */
+            console.error('Error while initializing cozy-client');
+            /* tslint:disable-next-line */
+            console.error(err);
         }
 
-        const uri = this.getCozyURL();
-        const token = await this.apiService.getActiveBearerToken();
-        this.instance = new CozyClient({ uri: uri, token: token });
         return this.instance;
     }
 
     async updateSynchronizedAt() {
-        const client = await this.createClient();
-
+        const client = await this.getClientInstance();
         try {
             await client.getStackClient().fetchJSON('POST', '/settings/synchronized');
         } catch (err) {
@@ -50,7 +81,10 @@ export class CozyClientService {
     }
 
     async deleteOAuthClient(clientId: string, registrationAccessToken: string) {
-        const client = await this.createClient();
+        if (!clientId || !registrationAccessToken) {
+            return
+        }
+        const client = await this.getClientInstance();
 
         try {
             await client.getStackClient().fetch(
