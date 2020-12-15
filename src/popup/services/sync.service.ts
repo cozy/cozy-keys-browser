@@ -53,7 +53,7 @@ export class SyncService extends BaseSyncService {
         messagingService: MessagingService,
         policyService: PolicyService,
         logoutCallback: (expired: boolean) => Promise<void>,
-        private cozyClientService: () => CozyClientService,
+        private cozyClientService: CozyClientService,
     ) {
             super(
                 userService,
@@ -76,8 +76,10 @@ export class SyncService extends BaseSyncService {
     async setLastSync(date: Date): Promise<any> {
         await super.setLastSync(date);
 
-        const cozyClientService = this.cozyClientService();
-        await cozyClientService.updateSynchronizedAt();
+        // Update remote sync date only for non-zero date, which is used for logout
+        if (date.getTime() !== new Date(0).getTime()) {
+            await this.cozyClientService.updateSynchronizedAt();
+        }
     }
 
     /*
