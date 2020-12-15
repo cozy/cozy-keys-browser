@@ -101,6 +101,7 @@ export default class RuntimeBackground {
                     });
                 }
                 // 2- logout
+                await this.authService.clear(); // moved from the logout to avoid potential infinite loop
                 await this.main.logout(msg.expired);
                 break;
             case 'syncCompleted':

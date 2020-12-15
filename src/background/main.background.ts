@@ -438,7 +438,6 @@ export default class MainBackground {
         ]);
 
         // Clear auth and token afterwards, as previous services might need it
-        await this.authService.clear();
         await this.tokenService.clearToken();
 
         this.searchService.clearIndex();
