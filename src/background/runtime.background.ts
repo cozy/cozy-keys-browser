@@ -33,6 +33,7 @@ import { Utils } from 'jslib/misc/utils';
 import { PasswordVerificationRequest } from 'jslib/models/request/passwordVerificationRequest';
 import { KonnectorsService } from '../popup/services/konnectors.service';
 import { AuthService } from '../services/auth.service';
+import { CozyClientService } from 'src/popup/services/cozyClient.service';
 
 export default class RuntimeBackground {
     private runtime: any;
@@ -47,6 +48,7 @@ export default class RuntimeBackground {
         private notificationsService: NotificationsService,
         private systemService: SystemService, private vaultTimeoutService: VaultTimeoutService,
         private environmentService: EnvironmentService,
+        private cozyClientService: CozyClientService,
         private konnectorsService: KonnectorsService, private syncService: SyncService,
         private authService: AuthService, private cryptoService: CryptoService,
         private userService: UserService) {
@@ -838,6 +840,9 @@ export default class RuntimeBackground {
         await this.main.refreshBadgeAndMenu(false);
         this.notificationsService.updateConnection(command === 'unlocked');
         this.systemService.cancelProcessReload();
+
+        await this.cozyClientService.createClient();
+
         // ask notificationbar of all tabs to retry to collect pageDetails in order to activate in-page-menu
         let enableInPageMenu = await this.storageService.get<boolean>(
             LocalConstantsService.enableInPageMenuKey);

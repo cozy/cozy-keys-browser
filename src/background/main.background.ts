@@ -309,7 +309,7 @@ export default class MainBackground {
         this.runtimeBackground = new RuntimeBackground(this, this.autofillService, this.cipherService,
             this.platformUtilsService as BrowserPlatformUtilsService, this.storageService, this.i18nService,
             this.notificationsService, this.systemService, this.vaultTimeoutService,
-            this.environmentService,
+            this.environmentService, this.cozyClientService,
             this.konnectorsService, this.syncService, this.authService, this.cryptoService, this.userService);
 
     }
