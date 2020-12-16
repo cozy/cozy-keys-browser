@@ -38,7 +38,7 @@
             <div class="box-header">
                 <!-- {{'typeLogins' | i18n}} -->
                 Identifiants pour cette page web
-                <span class="flex-right">{{ciphersForCurrentPage.length}}</span>
+                <!-- <span class="flex-right">{{ciphersForCurrentPage.length}}</span> -->
             </div>
             <div class="box-content">
                 <app-ciphers-list [ciphers]="ciphersForCurrentPage" title="{{'autoFill' | i18n}}" [showView]="true"
@@ -55,7 +55,7 @@
         <div class="box list" *ngIf="ciphersByType[3] && ciphersByType[3].length">
             <div class="box-header">
                 {{'cards' | i18n}}
-                <span class="flex-right">{{ciphersByType[3].length}}</span>
+                <!-- <span class="flex-right">{{ciphersByType[3].length}}</span> -->
             </div>
             <div class="box-content">
                 <app-ciphers-list [ciphers]="ciphersByType[3]" title="{{'autoFill' | i18n}}" [showView]="true"
@@ -65,7 +65,7 @@
         <div class="box list" *ngIf="ciphersByType[4] && ciphersByType[4].length">
             <div class="box-header">
                 {{'identities' | i18n}}
-                <span class="flex-right">{{ciphersByType[4].length}}</span>
+                <!-- <span class="flex-right">{{ciphersByType[4].length}}</span> -->
             </div>
             <div class="box-content">
                 <app-ciphers-list [ciphers]="ciphersByType[4]" title="{{'autoFill' | i18n}}" [showView]="true"
@@ -133,7 +133,7 @@
         <div class="box list" *ngIf="favoriteCiphers">
             <div class="box-header">
                 {{'favorites' | i18n}}
-                <span class="flex-right">{{favoriteCiphers.length}}</span>
+                <!-- <span class="flex-right">{{favoriteCiphers.length}}</span> -->
             </div>
             <div class="box-content">
                 <app-ciphers-list [ciphers]="favoriteCiphers" title="{{'viewItem' | i18n}}"
@@ -143,7 +143,7 @@
         <div class="box list">
             <div class="box-header">
                 {{'types' | i18n}}
-                <span class="flex-right">4</span>
+                <!-- <span class="flex-right">4</span> -->
             </div>
             <div class="box-content single-line">
                 <a href="#" class="box-content-row" appStopClick appBlurClick (click)="selectType(cipherType.Login)">
@@ -184,7 +184,7 @@
         <div class="box list" *ngIf="nestedFolders && nestedFolders.length">
             <div class="box-header">
                 {{'folders' | i18n}}
-                <span class="flex-right">{{folderCount}}</span>
+                <!-- <span class="flex-right">{{folderCount}}</span> -->
             </div>
             <div class="box-content single-line">
                 <a *ngFor="let f of nestedFolders" href="#" class="box-content-row" appStopClick appBlurClick
@@ -231,7 +231,7 @@
         <div class="box list" *ngIf="deletedCount">
             <div class="box-header">
                 {{'trash' | i18n}}
-                <span class="flex-right">{{deletedCount}}</span>
+                <!-- <span class="flex-right">{{deletedCount}}</span> -->
             </div>
             <div class="box-content single-line">
                 <a href="#" class="box-content-row" appStopClick appBlurClick
@@ -254,8 +254,11 @@
         </div>
         <div class="box list full-list" *ngIf="ciphers && ciphers.length > 0">
             <div class="box-content">
-                <app-ciphers-list [ciphers]="ciphers" title="{{'viewItem' | i18n}}" (onSelected)="selectCipher($event)"
-                    (onDoubleSelected)="launchCipher($event)"></app-ciphers-list>
+                <app-ciphers-list [ciphers]="ciphers" title="{{'viewItem' | i18n}}"
+                    (onSelected)="fillOrLaunchCipher($event)"
+                    (onDoubleSelected)="launchCipher($event)"
+                    (onView)="viewCipher($event)" [showView]="true"
+                    ></app-ciphers-list>
             </div>
         </div>
     </ng-container>

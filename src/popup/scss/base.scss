@@ -298,10 +298,8 @@ header {
             }
         }
 
-        .showSearchTag input::placeholder {
-            @include themify($themes) {
-                color: themed('headerInputBackgroundColor');
-            }
+        &.showSearchTag > input {
+            padding-left: 168px;
         }
     }
 

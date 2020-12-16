@@ -135,7 +135,7 @@ registerLocaleData(localeFr, 'fr');
         TwoFactorComponent,
         SsoComponent,
         ViewComponent,
-        SetPasswordComponent
+        SetPasswordComponent,
     ],
     entryComponents: [],
     providers: [

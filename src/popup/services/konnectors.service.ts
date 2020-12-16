@@ -118,6 +118,9 @@ export class KonnectorsService {
         const matchingDomains = await eqDomainsPromise;
 
         return ciphers.some((cipher) => {
+            if (cipher.deletedDate != null) {
+                return false;
+            }
             if (url != null && cipher.type === CipherType.Login && cipher.login.uris != null) {
                 for (let i = 0; i < cipher.login.uris.length; i++) {
                     const u = cipher.login.uris[i];

@@ -36,7 +36,8 @@ The reason for this duplication is :
 
 @Component({
     selector: 'app-vault-icon',
-    templateUrl: '../../../jslib/src/angular/components/icon.component.html',
+    // templateUrl: '../../../jslib/src/angular/components/icon.component.html',
+    templateUrl: 'icon.component.html',
 })
 export class IconComponent implements OnChanges {
     @Input() cipher: CipherView;

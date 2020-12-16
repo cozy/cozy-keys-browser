@@ -207,14 +207,6 @@ const routes: Routes = [
                 canActivate: [AuthGuardService],
                 data: { state: 'tabs_current' },
                 runGuardsAndResolvers: 'always',
-                // component: GroupingsComponent,
-                // canActivate: [AuthGuardService],
-                // data: { state: 'tabs_vault_for_current_page' },
-
-                // component: CurrentTabComponent,
-                // canActivate: [AuthGuardService],
-                // data: { state: 'tabs_current' },
-                // runGuardsAndResolvers: 'always',
             },
             {
                 path: 'vault',

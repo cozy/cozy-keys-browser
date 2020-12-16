@@ -16,6 +16,7 @@ import {
 import { BrowserApi } from '../../browser/browserApi';
 
 import { CipherType } from 'jslib/enums/cipherType';
+import { UriMatchType } from 'jslib/enums/uriMatchType';
 
 import { CipherView } from 'jslib/models/view/cipherView';
 // import { CollectionView } from 'jslib/models/view/collectionView';
@@ -37,6 +38,8 @@ import { BroadcasterService } from 'jslib/angular/services/broadcaster.service';
 import { GroupingsComponent as BaseGroupingsComponent } from 'jslib/angular/components/groupings.component';
 
 import { AutofillService } from '../../services/abstractions/autofill.service';
+import { LocalConstantsService as ConstantsService } from '../services/constants.service';
+import { KonnectorsService } from '../services/konnectors.service';
 import { PopupUtilsService } from '../services/popup-utils.service';
 
 const ComponentId = 'GroupingsComponent';
@@ -92,7 +95,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         private syncService: SyncService,
         private platformUtilsService: PlatformUtilsService, private searchService: SearchService,
         private location: Location, private toasterService: ToasterService, private i18nService: I18nService,
-        private autofillService: AutofillService) {
+        private autofillService: AutofillService, private konnectorsService: KonnectorsService) {
         super(collectionService, folderService, storageService, userService);
         this.noFolderListSize = 100;
     }
@@ -107,6 +110,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async ngOnInit() {
+        console.log('ngOnInit()');
         this.ciphersByType = {};
         this.ciphersByType[CipherType.Card] = [];
         this.ciphersByType[CipherType.Identity] = [];
@@ -141,17 +145,20 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         });
 
         const restoredScopeState = await this.restoreState();
-        const queryParamsSub = this.route.queryParams.subscribe(async (params) => {
-            console.log('ngOnInit : queryParamsSub', params.isFilteredForPage);
-            if (params.isFilteredForPage) {
+
+        const fragmentSub = this.route.fragment.subscribe(async (fragment) => {
+            if (fragment === 'isFilteredForPage') {
                 this.searchTagClass = 'showSearchTag';
-                this.searchText = '';
-                this.hasSearched = false;
                 this.displayCurrentPageCiphersMode = true;
                 this.displayCiphersListsMode = false;
+            } else {
+                this.searchTagClass = 'hideSearchTag';
+                this.displayCurrentPageCiphersMode = false;
+                this.displayCiphersListsMode = true;
             }
-            console.log('in the end', );
+        });
 
+        const queryParamsSub = this.route.queryParams.subscribe(async (params) => {
             this.state = (await this.stateService.get<any>(ComponentId)) || {};
             if (this.state.searchText) {
                 this.searchText = this.state.searchText;
@@ -191,7 +198,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async load() {
-        console.log('load()', this.route.data);
+        console.log('grouping.component.load()', this.route);
         // request page detail from current tab
         const tab = await BrowserApi.getTabFromCurrentWindow();
         this.pageDetails = [];
@@ -328,18 +335,17 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     searchWrapper(timeout: number = null) {
-        this.displayCurrentPageCiphersMode = false;
-        this.displayCiphersListsMode = true;
+        this.switchToCiphersListsMode();
         this.search(timeout);
     }
 
     switchToCiphersListsMode() {
-        // console.log('switchToCiphersListsMode()');
-        this.searchTagClass = 'hideSearchTag';
-        this.searchText = '';
-        this.hasSearched = false;
-        this.displayCurrentPageCiphersMode = false;
-        this.displayCiphersListsMode = true;
+        if (!this.displayCiphersListsMode) {
+            this.router.navigate([], {
+                relativeTo: this.route,
+                fragment: '',
+            });
+        }
     }
 
     async getCiphersForCurrentPage(): Promise<any[]> {
@@ -438,6 +444,28 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         }
     }
 
+    async fillOrLaunchCipher(cipher: CipherView) {
+        console.log('fillOrLaunchCipher()');
+
+        // Get default matching setting for urls
+        let defaultMatch = await this.storageService.get<UriMatchType>(ConstantsService.defaultUriMatch);
+        if (defaultMatch == null) {
+            defaultMatch = UriMatchType.Domain;
+        }
+        // Get the current url
+        const tab = await BrowserApi.getTabFromCurrentWindow();
+        const isCipherMatcinghUrl = await this.konnectorsService.hasURLMatchingCiphers(tab.url, [cipher], defaultMatch);
+        if (isCipherMatcinghUrl) {
+            this.fillCipher(cipher);
+        } else {
+            this.launchCipher(cipher);
+        }
+    }
+
+    viewCipher(cipher: CipherView) {
+        this.router.navigate(['/view-cipher'], { queryParams: { cipherId: cipher.id } });
+    }
+
     private async saveState() {
         this.state = {
             scrollY: this.popupUtils.getContentScrollY(window),
@@ -474,10 +502,6 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         }
 
         return true;
-    }
-
-    private viewCipher(cipher: CipherView) {
-        this.router.navigate(['/view-cipher'], { queryParams: { cipherId: cipher.id } });
     }
 
 }
