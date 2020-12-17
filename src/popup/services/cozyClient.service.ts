@@ -35,42 +35,27 @@ export class CozyClientService {
     }
 
     async getClientInstance () {
-        try {
-            if (this.instance) {
-                const token = await this.apiService.getActiveBearerToken();
-                // If the instance's token differ from the active bearer, a refresh is needed.
-                if (token === this.instance.options.token) {
-                    return this.instance;
-                }
+        if (this.instance) {
+            const token = await this.apiService.getActiveBearerToken();
+            // If the instance's token differ from the active bearer, a refresh is needed.
+            if (token === this.instance.options.token) {
+                return this.instance;
             }
-            this.instance = await this.createClient();
-        } catch (err) {
-            /* tslint:disable-next-line */
-            console.error('Error while initializing cozy-client');
-            /* tslint:disable-next-line */
-            console.error(err);
         }
+        this.instance = await this.createClient();
         return this.instance;
     }
 
     async createClient() {
-        try  {
-            const uri = this.getCozyURL();
-            const token = await this.apiService.getActiveBearerToken();
-            this.instance = new CozyClient({ uri: uri, token: token });
-        } catch (err) {
-            /* tslint:disable-next-line */
-            console.error('Error while initializing cozy-client');
-            /* tslint:disable-next-line */
-            console.error(err);
-        }
-
+        const uri = this.getCozyURL();
+        const token = await this.apiService.getActiveBearerToken();
+        this.instance = new CozyClient({ uri: uri, token: token });
         return this.instance;
     }
 
     async updateSynchronizedAt() {
-        const client = await this.getClientInstance();
         try {
+            const client = await this.getClientInstance();
             await client.getStackClient().fetchJSON('POST', '/settings/synchronized');
         } catch (err) {
             /* tslint:disable-next-line */
@@ -84,9 +69,9 @@ export class CozyClientService {
         if (!clientId || !registrationAccessToken) {
             return
         }
-        const client = await this.getClientInstance();
 
         try {
+            const client = await this.getClientInstance();
             await client.getStackClient().fetch(
                 'DELETE',
                 '/auth/register/' + clientId,
