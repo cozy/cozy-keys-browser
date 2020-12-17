@@ -77,7 +77,7 @@ export class SyncService extends BaseSyncService {
         await super.setLastSync(date);
 
         // Update remote sync date only for non-zero date, which is used for logout
-        if (date.getTime() !== new Date(0).getTime()) {
+        if (date.getTime() !== 0) {
             await this.cozyClientService.updateSynchronizedAt();
         }
     }
