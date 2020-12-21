@@ -22,6 +22,7 @@
     "dist:safari:mas": "npm run build:prod && gulp dist:safari:mas",
     "dist:safari:masdev": "npm run build:prod && gulp dist:safari:masdev",
     "dist:safari:dmg": "npm run build:prod && gulp dist:safari:dmg",
+    "dist:sources": "./scripts/create-archive.sh",
     "lint": "tslint src/**/*.ts || true",
     "lint:fix": "tslint src/**/*.ts --fix",
     "test": "karma start --single-run",
