@@ -2,6 +2,7 @@
     <div class="left" *ngIf="showLeftHeader">
         <app-pop-out></app-pop-out>
     </div>
+    <div (click)="toggleIsCorrect()">toto</div>
     <div class="search {{searchTagClass}}" (click)="switchToCiphersListsMode()">
         <div id="search-tag"> <span id="search-tag-text">Pour ce site web</span> <span>X</span> </div>
         <input type="{{searchTypeSearch ? 'search' : 'text'}}"
@@ -18,7 +19,8 @@
     </div>
 </header>
 <content>
-    <div class="no-items" *ngIf="(!ciphers || !ciphers.length) && !showSearching()">
+
+    <div class="no-items" *ngIf="(!ciphers || !ciphers.length)">
         <i class="fa fa-spinner fa-spin fa-3x" *ngIf="!loaded"></i>
         <ng-container *ngIf="loaded">
             <div class="icon-cozy-inline">
@@ -33,7 +35,7 @@
 
 
     <!-- ciphers for current web page -->
-    <ng-container *ngIf="loaded && displayCurrentPageCiphersMode && !showSearching()">
+    <ng-container *ngIf="loaded && displayCurrentPageCiphersMode">
         <div class="box list">
             <div class="box-header">
                 <!-- {{'typeLogins' | i18n}} -->
@@ -75,7 +77,7 @@
     </ng-container>
 
     <!-- full vault V1 -->
-    <!-- <ng-container *ngIf="(displayCiphersListsMode && ciphers && ciphers.length && !showSearching())">
+    <!-- <ng-container *ngIf="(displayCiphersListsMode && ciphers && ciphers.length)">
         <div *ngIf="ciphersByType[cipherType.Card].length > 0" class="box list">
             <div class="box-header">
                 {{'cards' | i18n}}
@@ -129,7 +131,7 @@
 
     <!-- full vault V2 -->
     <!-- standard BW ways of accessing ciphers : by types, by folders, by collection and trashed -->
-    <ng-container *ngIf="(displayCiphersListsMode && ciphers && ciphers.length && !showSearching())">
+    <ng-container *ngIf="(displayCiphersListsMode && ciphers && ciphers.length)">
         <div class="box list" *ngIf="favoriteCiphers">
             <div class="box-header">
                 {{'favorites' | i18n}}
@@ -248,18 +250,23 @@
     </ng-container>
 
     <!-- search results -->
-    <ng-container *ngIf="showSearching()">
-        <div class="no-items" *ngIf="!ciphers || !ciphers.length">
-            <p>{{'noItemsInList' | i18n}}</p>
-        </div>
-        <div class="box list full-list" *ngIf="ciphers && ciphers.length > 0">
-            <div class="box-content">
-                <app-ciphers-list [ciphers]="ciphers" title="{{'viewItem' | i18n}}"
+    <!-- <ng-container> -->
+    <div class="ciphersPannel" [@toggleClick]="isPannelVisible" *ngIf="showSearching()">
+        <!-- <ng-container *ngIf="showSearching()"> -->
+        <ng-container >
+            <div class="no-items" *ngIf="!ciphers || !ciphers.length">
+                <p>{{'noItemsInList' | i18n}}</p>
+            </div>
+            <div class="box list full-list" *ngIf="ciphers && ciphers.length > 0">
+                <div class="box-content">
+                    <app-ciphers-list [ciphers]="ciphers" title="{{'viewItem' | i18n}}"
                     (onSelected)="fillOrLaunchCipher($event)"
                     (onDoubleSelected)="launchCipher($event)"
                     (onView)="viewCipher($event)" [showView]="true"
                     ></app-ciphers-list>
+                </div>
             </div>
-        </div>
-    </ng-container>
+        </ng-container>
+    </div>
+
 </content>

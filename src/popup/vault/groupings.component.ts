@@ -1,5 +1,6 @@
 import { ToasterService } from 'angular2-toaster';
 
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Location } from '@angular/common';
 import {
     ChangeDetectorRef,
@@ -48,6 +49,26 @@ const ScopeStateId = ComponentId + 'Scope';
 @Component({
     selector: 'app-vault-groupings',
     templateUrl: 'groupings.component.html',
+    animations: [
+        trigger('toggleClick', [
+            state('true', style({
+                transform: 'translateX(0%)',
+                boxShadow: '0 3px 2px -2px gray',
+            })),
+            transition('void => *', animate(
+                '0.4s' + ' ease-in-out',
+                style({ transform: 'translateX(0%)' }),
+            )),
+            state('false', style({
+                transform: 'translateX(100%)',
+                boxShadow: '0 3px 2px -2px gray',
+            })),
+            transition('* => void', animate(
+                '0.4s' + ' ease-in-out',
+                style({ transform: 'translateX(100%)' }),
+            )),
+        ]),
+    ],
 })
 
 /**
@@ -85,6 +106,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     private allCiphers: CipherView[] = null;
     private ciphersByType: any;
     private pageDetails: any[] = [];
+    private isPannelVisible: string = 'false';
 
     constructor(collectionService: CollectionService, folderService: FolderService,
         storageService: StorageService, userService: UserService,
@@ -107,6 +129,11 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
     get folderCount(): number {
         return this.nestedFolders.length - (this.showNoFolderCiphers ? 0 : 1);
+    }
+
+    toggleIsCorrect() {
+        console.log('toggleIsCorrect()', this.isPannelVisible);
+        this.isPannelVisible = this.isPannelVisible === 'true' ? 'false' : 'true'; // change in data-bound value
     }
 
     async ngOnInit() {
@@ -412,7 +439,17 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     showSearching() {
-        return this.hasSearched || (!this.searchPending && this.searchService.isSearchable(this.searchText));
+        const shouldBeVisible: boolean =
+            this.hasSearched ||
+            (!this.searchPending && this.searchService.isSearchable(this.searchText));
+        const shouldBeVisibleStr: string = shouldBeVisible ? 'true' : 'false';
+        console.log('showSearching()', shouldBeVisible);
+        if (shouldBeVisibleStr !== this.isPannelVisible) {
+            console.log('  shouldBeVisible has changed', shouldBeVisibleStr, this.isPannelVisible );
+            this.isPannelVisible = shouldBeVisibleStr;
+        }
+        // return true;
+        return shouldBeVisible;
     }
 
     async fillCipher(cipher: CipherView) {

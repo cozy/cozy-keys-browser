@@ -80,7 +80,6 @@ export class AppComponent implements OnInit {
         });
 
         (window as any).bitwardenPopupMainMessageListener = async (msg: any, sender: any, sendResponse: any) => {
-            console.log('msg ', msg.command);
 
             if (msg.command === 'doneLoggingOut') {
                 this.ngZone.run(async () => {
