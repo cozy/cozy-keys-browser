@@ -29,7 +29,7 @@ export class LaunchGuardService implements CanActivate {
         if (locked) {
             this.router.navigate(['lock']);
         } else {
-            this.router.navigate(['tabs/vault'], { fragment: 'isFilteredForPage' });
+            this.router.navigate(['tabs/vault'], { queryParams: { activatedPanel: 'currentPageCiphers' } });
         }
 
         return false;

@@ -5,9 +5,11 @@ import { Location } from '@angular/common';
 import {
     ChangeDetectorRef,
     Component,
+    ElementRef,
     NgZone,
     OnDestroy,
     OnInit,
+    ViewChild,
 } from '@angular/core';
 import {
     ActivatedRoute,
@@ -46,6 +48,12 @@ import { PopupUtilsService } from '../services/popup-utils.service';
 const ComponentId = 'GroupingsComponent';
 const ScopeStateId = ComponentId + 'Scope';
 
+const enum PanelNames {
+    CurrentPageCiphers = 'currentPageCiphers',
+    Search = 'search',
+    None = 'none',
+}
+
 @Component({
     selector: 'app-vault-groupings',
     templateUrl: 'groupings.component.html',
@@ -53,7 +61,6 @@ const ScopeStateId = ComponentId + 'Scope';
         trigger('toggleClick', [
             state('true', style({
                 transform: 'translateX(0%)',
-                boxShadow: '0 3px 2px -2px gray',
             })),
             transition('void => *', animate(
                 '0.4s' + ' ease-in-out',
@@ -61,7 +68,6 @@ const ScopeStateId = ComponentId + 'Scope';
             )),
             state('false', style({
                 transform: 'translateX(100%)',
-                boxShadow: '0 3px 2px -2px gray',
             })),
             transition('* => void', animate(
                 '0.4s' + ' ease-in-out',
@@ -95,6 +101,10 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     displayCiphersListsMode: boolean = true;
     ciphersForCurrentPage: CipherView[] = [];
     searchTagClass: string = 'hideSearchTag';
+    enableAnimations: boolean = false;
+
+    @ViewChild('groupingContent')
+    groupingContentEl: ElementRef;
 
     private loadedTimeout: number;
     private selectedTimeout: number;
@@ -107,6 +117,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     private ciphersByType: any;
     private pageDetails: any[] = [];
     private isPannelVisible: string = 'false';
+    private currentPannel: string = PanelNames.None;
 
     constructor(collectionService: CollectionService, folderService: FolderService,
         storageService: StorageService, userService: UserService,
@@ -131,13 +142,8 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         return this.nestedFolders.length - (this.showNoFolderCiphers ? 0 : 1);
     }
 
-    toggleIsCorrect() {
-        console.log('toggleIsCorrect()', this.isPannelVisible);
-        this.isPannelVisible = this.isPannelVisible === 'true' ? 'false' : 'true'; // change in data-bound value
-    }
-
     async ngOnInit() {
-        console.log('ngOnInit()');
+        console.log('ngOnInit()', 'isPannelVisible', this.isPannelVisible);
         this.ciphersByType = {};
         this.ciphersByType[CipherType.Card] = [];
         this.ciphersByType[CipherType.Identity] = [];
@@ -146,6 +152,10 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         this.showLeftHeader = !this.platformUtilsService.isSafari() &&
             !(this.popupUtils.inSidebar(window) && this.platformUtilsService.isFirefox());
         this.stateService.remove('CiphersComponent');
+
+        setTimeout(() => {
+            this.enableAnimations = true;
+        }, 600);
 
         this.broadcasterService.subscribe(ComponentId, (message: any) => {
             this.ngZone.run(async () => {
@@ -173,15 +183,20 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
         const restoredScopeState = await this.restoreState();
 
-        const fragmentSub = this.route.fragment.subscribe(async (fragment) => {
-            if (fragment === 'isFilteredForPage') {
-                this.searchTagClass = 'showSearchTag';
-                this.displayCurrentPageCiphersMode = true;
-                this.displayCiphersListsMode = false;
+        this.route.queryParams.subscribe(async (params) => {
+            console.log('queryParams.subscribe', params);
+            if (params.activatedPanel) {
+                this.activatePanel(params.activatedPanel);
+                if (params.scrollTopBack) {
+                    console.log(`scrllTop update`);
+                    console.log(this.groupingContentEl.nativeElement);
+                    console.log(this.groupingContentEl.nativeElement.scrollTop);
+                    setTimeout(() => {
+                        this.groupingContentEl.nativeElement.scrollTop = params.scrollTopBack;
+                    }, 150);
+                }
             } else {
-                this.searchTagClass = 'hideSearchTag';
-                this.displayCurrentPageCiphersMode = false;
-                this.displayCiphersListsMode = true;
+                this.unActivatePanel();
             }
         });
 
@@ -270,6 +285,8 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     // }
 
     async loadCiphers() {
+        console.log(`loadCiphers()`);
+
         this.allCiphers = await this.cipherService.getAllDecrypted();
         if (!this.hasLoadedAllCiphers) {
             this.hasLoadedAllCiphers = !this.searchService.isSearchable(this.searchText);
@@ -334,6 +351,8 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async search(timeout: number = null) {
+        console.log(`search(timeout=${timeout}, ${this.searchText})`);
+
         this.searchPending = false;
         if (this.searchTimeout != null) {
             window.clearTimeout(this.searchTimeout);
@@ -341,12 +360,20 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         const filterDeleted = (c: CipherView) => !c.isDeleted;
         if (timeout == null) {
             this.hasSearched = this.searchService.isSearchable(this.searchText);
+            if (this.hasSearched) {
+                this.activatePanel(PanelNames.Search);
+            }
             this.ciphers = await this.searchService.searchCiphers(this.searchText, filterDeleted, this.allCiphers);
             return;
         }
         this.searchPending = true;
         this.searchTimeout = setTimeout(async () => {
             this.hasSearched = this.searchService.isSearchable(this.searchText);
+            if (this.hasSearched) {
+                this.activatePanel(PanelNames.Search);
+            } else {
+                this.unActivatePanel();
+            }
             if (!this.hasLoadedAllCiphers && !this.hasSearched) {
                 await this.loadCiphers();
             } else {
@@ -357,21 +384,44 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     emptySearch() {
-        this.searchText = '';
-        this.hasSearched = false;
+        this.unActivatePanel();
     }
 
-    searchWrapper(timeout: number = null) {
-        this.switchToCiphersListsMode();
-        this.search(timeout);
+    unActivatePanel() {
+        console.log(`unActivatePanel('${this.currentPannel}')`);
+        switch (this.currentPannel) {
+            case PanelNames.None:
+                return;
+            case PanelNames.Search:
+                this.searchText = '';
+                this.hasSearched = false;
+                break;
+            default:
+                break;
+        }
+        this.displayCiphersListsMode = true;
+        this.displayCurrentPageCiphersMode = false;
+        this.searchTagClass = 'hideSearchTag';
+        this.isPannelVisible = 'false';
+        this.currentPannel = 'none';
     }
 
-    switchToCiphersListsMode() {
-        if (!this.displayCiphersListsMode) {
-            this.router.navigate([], {
-                relativeTo: this.route,
-                fragment: '',
-            });
+    activatePanel(panelName: string) {
+        console.log(`activatePanel('${panelName}')`);
+        switch (panelName) {
+            case PanelNames.CurrentPageCiphers:
+                this.displayCiphersListsMode = false;
+                this.displayCurrentPageCiphersMode = true;
+                this.searchTagClass = 'showSearchTag';
+                this.isPannelVisible = 'true';
+                this.currentPannel = PanelNames.CurrentPageCiphers;
+                break;
+            case PanelNames.Search:
+                this.currentPannel = PanelNames.Search;
+                this.isPannelVisible = 'true';
+                break;
+            default:
+                break;
         }
     }
 
@@ -410,9 +460,13 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async selectCipher(cipher: CipherView) {
+        console.log(`selectCipher()`, this.currentPannel);
         this.selectedTimeout = window.setTimeout(() => {
             if (!this.preventSelected) {
-                this.router.navigate(['/view-cipher'], { queryParams: { cipherId: cipher.id } });
+                this.router.navigate(['/view-cipher'], { queryParams: {
+                    cipherId  : cipher.id,
+                    pannelBack: this.currentPannel,
+                }});
             }
             this.preventSelected = false;
         }, 200);
@@ -440,16 +494,52 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
     showSearching() {
         const shouldBeVisible: boolean =
-            this.hasSearched ||
-            (!this.searchPending && this.searchService.isSearchable(this.searchText));
-        const shouldBeVisibleStr: string = shouldBeVisible ? 'true' : 'false';
-        console.log('showSearching()', shouldBeVisible);
-        if (shouldBeVisibleStr !== this.isPannelVisible) {
-            console.log('  shouldBeVisible has changed', shouldBeVisibleStr, this.isPannelVisible );
-            this.isPannelVisible = shouldBeVisibleStr;
-        }
-        // return true;
+            this.hasSearched;
+        // const shouldBeVisible: boolean =
+        //     this.hasSearched ||
+        //     (!this.searchPending && this.searchService.isSearchable(this.searchText));
         return shouldBeVisible;
+    }
+
+    showCurrentPageCiphers() {
+        const shouldBeVisible: boolean = this.loaded && this.displayCurrentPageCiphersMode;
+        const shouldBeVisibleStr: string = shouldBeVisible ? 'true' : 'false';
+        // console.log('showCurrentPageCiphers()', 'shouldBeVisible:', shouldBeVisible);
+        // if (shouldBeVisibleStr !== this.isPannelVisible) {
+        //     this.isPannelVisible = shouldBeVisibleStr;
+        // }
+        return shouldBeVisible;
+    }
+
+    toggleCurrentPageForTests() {
+        // const shouldBeVisible: boolean = this.loaded && this.displayCurrentPageCiphersMode;
+        if (this.displayCurrentPageCiphersMode) {
+            // console.log('toggleCurrentPageForTests()', '=> hide pannel');
+            this.unActivatePanel();
+            // this.searchTagClass = 'hideSearchTag';
+            // this.displayCurrentPageCiphersMode = false;
+            // this.displayCiphersListsMode = true;
+            // this.isPannelVisible = 'false';
+            // this.router.navigate( ['./'], { relativeTo: this.route, fragment: 'a', replaceUrl: false } );
+            // this.router.navigate( ['tabs/vault'], {fragment: 'a', replaceUrl: false } );
+            // this.route.fragment = 'a';
+        } else {
+            // console.log('toggleCurrentPageForTests()', '=> show pannel');
+            this.activatePanel(PanelNames.CurrentPageCiphers);
+            // this.searchTagClass = 'showSearchTag';
+            // this.displayCurrentPageCiphersMode = true;
+            // this.displayCiphersListsMode = false;
+            // this.isPannelVisible = 'true';
+            // this.router.navigate( ['./'], { relativeTo: this.route, fragment: 'isFilteredForPage', replaceUrl: false } );
+            // this.router.navigate( ['tabs/vault'], { fragment: 'isFilteredForPage', replaceUrl: false } );
+            // this.route.fragment = 'isFilteredForPage';
+        }
+        // if (shouldBeVisible !== this.isPannelVisible) {
+        //     console.log('  shouldBeVisible has changed', shouldBeVisibleStr, this.isPannelVisible );
+        //     this.isPannelVisible = shouldBeVisibleStr;
+        // }
+        // return true;
+        return;
     }
 
     async fillCipher(cipher: CipherView) {
@@ -500,7 +590,13 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     viewCipher(cipher: CipherView) {
-        this.router.navigate(['/view-cipher'], { queryParams: { cipherId: cipher.id } });
+        console.log('viewCipher()', this.currentPannel, this.groupingContentEl.nativeElement.scrollTop);
+
+        this.router.navigate(['/view-cipher'], { queryParams: {
+            cipherId: cipher.id,
+            pannelBack: this.currentPannel,
+            scrollTopBack : this.groupingContentEl.nativeElement.scrollTop,
+         } });
     }
 
     private async saveState() {

@@ -44,6 +44,8 @@ export class ViewComponent extends BaseViewComponent {
     tab: any;
     loadPageDetailsTimeout: number;
     inPopout = false;
+    pannelBack: string = undefined;
+    scrollTopBack: number = undefined;
 
     constructor(cipherService: CipherService, totpService: TotpService,
         tokenService: TokenService, i18nService: I18nService,
@@ -73,6 +75,14 @@ export class ViewComponent extends BaseViewComponent {
                 this.cipherId = params.cipherId;
             } else {
                 this.close();
+            }
+
+            if (params.pannelBack) {
+                this.pannelBack = params.pannelBack;
+            }
+
+            if (params.scrollTopBack) {
+                this.scrollTopBack = params.scrollTopBack;
             }
 
             await this.load();
@@ -209,6 +219,15 @@ export class ViewComponent extends BaseViewComponent {
     }
 
     close() {
+        console.log('view.component.close()', this.pannelBack, this.scrollTopBack);
+
+        if (this.pannelBack) {
+            this.router.navigate(['tabs/vault'], { queryParams: {
+                activatedPanel : this.pannelBack,
+                scrollTopBack: this.scrollTopBack,
+            }});
+            return;
+        }
         this.location.back();
     }
 

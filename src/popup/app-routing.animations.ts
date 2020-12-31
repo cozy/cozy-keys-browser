@@ -88,7 +88,6 @@ const outSlideUp = [
 ];
 
 export function tabsToCiphers(fromState: string, toState: string) {
-    console.log('evaluate tabsToCiphers\n from : ', fromState, '\n to : ', toState);
     if (fromState == null || toState === null || toState.indexOf('ciphers_') === -1) {
         return false;
     }
@@ -97,7 +96,6 @@ export function tabsToCiphers(fromState: string, toState: string) {
 }
 
 export function ciphersToTabs(fromState: string, toState: string) {
-    console.log('evaluate ciphersToTabs\n from : ', fromState, '\n to : ', toState);
     if (fromState == null || toState === null || fromState.indexOf('ciphers_') === -1) {
         return false;
     }
@@ -105,7 +103,6 @@ export function ciphersToTabs(fromState: string, toState: string) {
 }
 
 export function ciphersToView(fromState: string, toState: string) {
-    console.log('evaluate ciphersToView\n from : ', fromState, '\n to : ', toState);
     if (fromState == null || toState === null) {
         return false;
     }
@@ -114,7 +111,6 @@ export function ciphersToView(fromState: string, toState: string) {
 }
 
 export function viewToCiphers(fromState: string, toState: string) {
-    console.log('evaluate viewToCiphers\n from : ', fromState, '\n to : ', toState);
     if (fromState == null || toState === null) {
         return false;
     }
