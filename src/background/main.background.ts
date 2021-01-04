@@ -161,7 +161,7 @@ export default class MainBackground {
         this.tokenService = new TokenService(this.storageService);
         this.appIdService = new AppIdService(this.storageService);
         this.apiService = new ApiService(this.tokenService, this.platformUtilsService,
-            (expired: boolean) => this.logout(expired));
+            (expired: boolean) => this.logout(expired), this.buildUserAgent());
         this.userService = new UserService(this.tokenService, this.storageService);
         this.environmentService = new EnvironmentService(this.apiService, this.storageService,
             this.notificationsService); // this declaration has been moved up for the cozyClientService declaration
@@ -906,5 +906,12 @@ export default class MainBackground {
                 tabId: tabId,
             });
         }
+    }
+
+    private buildUserAgent(): string {
+        const browserUA = navigator.userAgent;
+        const appName = BrowserApi.getApplicationName() || 'Cozy';
+        const appVersion = BrowserApi.getApplicationVersion() || 'unknown';
+        return `${browserUA} ${appName}/${appVersion}`
     }
 }
