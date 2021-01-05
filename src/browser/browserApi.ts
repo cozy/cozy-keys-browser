@@ -117,16 +117,6 @@ export class BrowserApi {
         }
     }
 
-    static getApplicationName(): string {
-        if (BrowserApi.isChromeApi) {
-            return chrome.runtime.getManifest().name;
-        } else if (BrowserApi.isSafariApi) {
-            return (window as any).applicationName;
-        } else {
-            return null;
-        }
-    }
-
     static async isPopupOpen(): Promise<boolean> {
         if (BrowserApi.isChromeApi) {
             return Promise.resolve(chrome.extension.getViews({ type: 'popup' }).length > 0);
