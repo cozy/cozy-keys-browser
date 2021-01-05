@@ -910,7 +910,7 @@ export default class MainBackground {
 
     private buildUserAgent(): string {
         const browserUA = navigator.userAgent;
-        const appName = 'io.cozy.pass-browser';
+        const appName = 'io.cozy.pass.browser';
         const appVersion = BrowserApi.getApplicationVersion() || 'unknown';
         return `${browserUA} ${appName}-${appVersion}`
     }
