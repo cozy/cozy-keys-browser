@@ -1,9 +1,9 @@
 <div class="tab-page">
     <router-outlet></router-outlet>
-    <nav class="tabs" [ngClass]="{'tabs-3': !showCurrentTab}">
+    <nav class="tabs">
         <ul>
-            <li routerLinkActive="active" *ngIf="showCurrentTab">
-                <a class="icon-cozy-inline" routerLink="current" appA11yTitle="{{'currentTab' | i18n}}">
+            <li>
+                <a class="icon-cozy-inline" appA11yTitle="{{'myCozyTab' | i18n}}" href="{{cozyUrl}}" target="_blank">
                     <div class="icon-cozy-inline">
                         <svg height="24" style="overflow: visible;" viewBox="0 2 32 32" width="24" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="16" cy="16" fill-rule="evenodd" r="16"></circle>

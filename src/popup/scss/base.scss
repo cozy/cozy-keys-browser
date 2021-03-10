@@ -431,7 +431,6 @@ header {
             }
 
             &.active * {
-                fill: $brand-primary;
                 color: $brand-primary;
                 a {
                     @include themify($themes) {

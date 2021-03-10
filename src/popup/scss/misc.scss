@@ -239,6 +239,10 @@ app-vault-icon {
     }
 }
 
+li.active .icon-cozy-inline > svg {
+    fill: $brand-primary;
+}
+
 .icon-copy {
     background-image: url('../images/icons-16-copy.svg');
 }

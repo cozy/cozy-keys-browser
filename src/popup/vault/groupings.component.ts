@@ -153,7 +153,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async ngOnInit() {
-        console.log('ngOnInit()', 'isPannelVisible', this.isPannelVisible);
+        // console.log('ngOnInit()', 'isPannelVisible', this.isPannelVisible);
         this.ciphersByType = {};
         this.ciphersByType[CipherType.Card] = [];
         this.ciphersByType[CipherType.Identity] = [];
@@ -246,7 +246,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async load() {
-        console.log('grouping.component.load()', this.route);
+        // console.log('grouping.component.load()', this.route);
         // request page detail from current tab
         const tab = await BrowserApi.getTabFromCurrentWindow();
         this.pageDetails = [];
@@ -267,31 +267,8 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         super.loaded = true;
     }
 
-    // async loadCiphers() {
-    //     this.allCiphers = await this.cipherService.getAllDecrypted();
-    //     this.deletedCount = this.allCiphers.filter((c) => c.isDeleted).length;
-    //     await this.search(null);
-    //     const typeCounts = new Map<CipherType, number>();
-    //     this.ciphers.forEach((c) => {
-    //         if (c.isDeleted) {
-    //             return;
-    //         }
-    //         if (typeCounts.has(c.type)) {
-    //             typeCounts.set(c.type, typeCounts.get(c.type) + 1);
-    //         } else {
-    //             typeCounts.set(c.type, 1);
-    //         }
-    //     });
-    //     this.ciphersByType = {};
-    //     this.ciphersByType[CipherType.Card] = this._ciphersByType(CipherType.Card);
-    //     this.ciphersByType[CipherType.Identity] = this._ciphersByType(CipherType.Identity);
-    //     this.ciphersByType[CipherType.Login] = this._ciphersByType(CipherType.Login);
-    //
-    //     this.typeCounts = typeCounts;
-    // }
-
     async loadCiphers() {
-        console.log(`loadCiphers()`);
+        // console.log(`loadCiphers()`);
 
         this.allCiphers = await this.cipherService.getAllDecrypted();
         if (!this.hasLoadedAllCiphers) {
@@ -395,7 +372,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     unActivatePanel() {
-        console.log(`unActivatePanel('${this.currentPannel}')`);
+        // console.log(`unActivatePanel('${this.currentPannel}')`);
         switch (this.currentPannel) {
             case PanelNames.None:
                 return;
@@ -413,7 +390,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     activatePanel(panelName: string) {
-        console.log(`activatePanel('${panelName}')`);
+        // console.log(`activatePanel('${panelName}')`);
         switch (panelName) {
             case PanelNames.CurrentPageCiphers:
                 this.searchTagClass = 'showSearchTag';
@@ -486,12 +463,9 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             default:
                 break;
         }
-        // this.router.navigate(['/ciphers'], { queryParams: { type: type } });
     }
 
     async selectFolder(folder: FolderView) {
-        console.log(folder);
-
         super.selectFolder(folder);
         this.router.navigate(['/ciphers'], { queryParams: { folderId: folder.id || 'none' } });
     }
@@ -502,7 +476,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async selectCipher(cipher: CipherView) {
-        console.log(`selectCipher()`, this.currentPannel);
+        // console.log(`selectCipher()`, this.currentPannel);
         this.selectedTimeout = window.setTimeout(() => {
             if (!this.preventSelected) {
                 this.router.navigate(['/view-cipher'], { queryParams: {
@@ -556,10 +530,8 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
     toggleCurrentPageForTests() {
         if (this.currentPannel === PanelNames.CurrentPageCiphers) {
-            // console.log('toggleCurrentPageForTests()', '=> hide pannel');
             this.unActivatePanel();
         } else {
-            // console.log('toggleCurrentPageForTests()', '=> show pannel');
             this.activatePanel(PanelNames.CurrentPageCiphers);
         }
     }
@@ -594,7 +566,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async fillOrLaunchCipher(cipher: CipherView) {
-        console.log('fillOrLaunchCipher()');
+        // console.log('fillOrLaunchCipher()');
 
         // Get default matching setting for urls
         let defaultMatch = await this.storageService.get<UriMatchType>(ConstantsService.defaultUriMatch);
@@ -612,8 +584,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     viewCipher(cipher: CipherView) {
-        console.log('viewCipher()', this.currentPannel, this.groupingContentEl.nativeElement.scrollTop);
-
+        // console.log('viewCipher()', this.currentPannel, this.groupingContentEl.nativeElement.scrollTop);
         this.router.navigate(['/view-cipher'], { queryParams: {
             cipherId: cipher.id,
             pannelBack: this.currentPannel,

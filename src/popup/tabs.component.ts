@@ -3,6 +3,7 @@ import {
     OnInit,
 } from '@angular/core';
 
+import { CozyClientService } from './services/cozyClient.service';
 import { PopupUtilsService } from './services/popup-utils.service';
 
 @Component({
@@ -11,10 +12,14 @@ import { PopupUtilsService } from './services/popup-utils.service';
 })
 export class TabsComponent implements OnInit {
     showCurrentTab: boolean = true;
+    cozyUrl: string;
 
-    constructor(private popupUtilsService: PopupUtilsService) { }
+    constructor(private popupUtilsService: PopupUtilsService, private cozyClientService: CozyClientService) { }
 
     ngOnInit() {
         this.showCurrentTab = !this.popupUtilsService.inPopout(window);
+        this.cozyUrl = this.cozyClientService.getAppURL('', '');
+        console.log(this.cozyUrl);
+
     }
 }

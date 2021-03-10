@@ -240,7 +240,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
     }
 
     async fillOrLaunchCipher(cipher: CipherView) {
-        console.log('fillOrLaunchCipher()');
+        // console.log('fillOrLaunchCipher()');
 
         // Get default matching setting for urls
         let defaultMatch = await this.storageService.get<UriMatchType>(ConstantsService.defaultUriMatch);
