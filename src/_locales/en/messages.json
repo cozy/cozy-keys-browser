@@ -64,8 +64,11 @@
   "tab": {
     "message": "This web page"
   },
+  "myCozyTab": {
+    "message": "My Cozy"
+  },
   "myVault": {
-    "message": "My Vault"
+    "message": "Passwords & co"
   },
   "tools": {
     "message": "Tools"

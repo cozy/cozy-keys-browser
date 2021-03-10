@@ -15,6 +15,9 @@ app-password-generator .password-block {
     box-sizing: border-box;
     border-radius: .188rem;
     border: .063rem solid $gray;
+    @include themify($themes) {
+        background-color: themed('boxBackgroundColor');
+    }
 
     .password-wrapper {
         text-align: center;

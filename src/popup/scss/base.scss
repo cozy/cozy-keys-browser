@@ -144,6 +144,22 @@ header {
             margin-right: 5px;
         }
     }
+    .cozy-left{
+        position: relative;
+        & > * {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+        }
+        & button {
+            position: relative;
+            height: 100%;
+            width: 100%;
+        }
+    }
 
     .right {
         justify-content: flex-end;
@@ -342,11 +358,20 @@ header {
     padding: 15px;
 }
 
-.ciphersPannel {
+.ciphersPanel::after {
+    height: 3px;
+    content: "";
+    display: block;
+    border: solid 1px #ff000000;
+}
+
+.ciphersPanel {
     position: absolute;
     top: 0;
     bottom: 0;
-    background-color: white;
+    @include themify($themes) {
+        background-color: themed('backgroundColor');
+    }
     transform : translateX(100%);
     width: 100%;
     z-index: 10;

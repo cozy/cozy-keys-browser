@@ -6,6 +6,7 @@ import {
 
 import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
 
+import { CozyClientService } from '../services/cozyClient.service';
 import { PopupUtilsService } from '../services/popup-utils.service';
 
 @Component({
@@ -16,7 +17,7 @@ export class PopOutComponent implements OnInit {
     @Input() show = true;
 
     constructor(private platformUtilsService: PlatformUtilsService,
-        private popupUtilsService: PopupUtilsService) { }
+        private popupUtilsService: PopupUtilsService, private cozyClientService: CozyClientService) { }
 
     ngOnInit() {
         if (this.show) {
@@ -28,6 +29,8 @@ export class PopOutComponent implements OnInit {
     }
 
     expand() {
-        this.popupUtilsService.popOut(window);
+        // original Bitwarden instruction :
+        // this.popupUtilsService.popOut(window);
+        window.open(this.cozyClientService.getAppURL('passwords', ''));
     }
 }

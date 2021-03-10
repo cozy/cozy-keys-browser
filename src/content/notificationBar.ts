@@ -5,10 +5,45 @@ import {
     logInButtonNames,
 } from './consts';
 
+import { ConstantsService } from 'jslib/services/constants.service';
+
 // See original file:
 // https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/content/notificationBar.ts
-document.addEventListener('DOMContentLoaded', (event) => {
 
+/*
+    Returns a cozy app url based on the cozyUrl and the app name
+ */
+function getAppURLCozy(cozyUrl: string, appName: string, hash: string) {
+    if (!appName) {
+        return (new URL(cozyUrl)).toString();
+    }
+    const url = new URL(cozyUrl);
+    const hostParts = url.host.split('.');
+    url.host = [
+        `${hostParts[0]}-${appName}`,
+        ...hostParts.slice(1),
+    ].join('.');
+    if (hash) {
+        url.hash = hash;
+    }
+    return url.toString();
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    /*
+      The aim is to deactivate the inPageMenu in Cozy Password so that there is no menu when filing a cipher.
+      We compare the hostname of the webpage with the Cozy Password hostname
+     */
+    chrome.storage.local.get(ConstantsService.environmentUrlsKey, (urls: any) => {
+        const cozyPasswordsUrl = new URL(getAppURLCozy(urls.environmentUrls.base, 'passwords', ''));
+        if (cozyPasswordsUrl.hostname === window.location.hostname) {
+            return;
+        }
+        afterLoadedIfRelevant(event);
+    });
+});
+
+function afterLoadedIfRelevant(event: any) {
     const pageDetails: any[] = [];
     const formData: any[] = [];
     let barType: string = null;
@@ -652,4 +687,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
             chrome.runtime.sendMessage(msg);
         }
     }
-});
+}

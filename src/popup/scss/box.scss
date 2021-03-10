@@ -16,17 +16,18 @@
 
     .box-header {
         margin: 15px 10px 5px 10px;
+        padding: 0px 0px 4px 0;
         display: flex;
-        font-size: $font-size-large;
+        font-size: $font-size-small;
+        text-transform: uppercase;
+        color: #95999D;
         font-weight: bold;
         @include themify($themes) {
-            color: themed('headingColor');
+            color: themed('labelColor');
         }
     }
 
     .box-content {
-        border-top: 1px solid #000000;
-        border-bottom: 1px solid #000000;
 
         @include themify($themes) {
             background-color: themed('boxBackgroundColor');
@@ -34,11 +35,11 @@
         }
 
         &.box-content-settings {
-            border-top:none;
+            border:none;
         }
 
         &.box-content-options {
-            border-bottom:none;
+            border:none;
         }
 
         &.box-content-padded {
@@ -58,9 +59,8 @@
     }
 
     .box-footer {
-        margin: 5px 10px;
+        padding: 5px 10px;
         font-size: $font-size-small;
-
         @include themify($themes) {
             color: themed('mutedColor');
         }
@@ -72,6 +72,7 @@
 
     &.list {
         .box-content {
+            background-color: white;
             .box-content-row {
                 padding: 5px 10px;
                 text-decoration: none;
@@ -178,7 +179,7 @@
         right: 0;
         bottom: 0;
         height: 1px;
-        width: calc(100% - 10px);
+        width: calc(100% - 40px);
         border-bottom: 1px solid #000000;
 
         @include themify($themes) {

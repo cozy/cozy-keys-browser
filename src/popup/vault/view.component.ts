@@ -219,8 +219,6 @@ export class ViewComponent extends BaseViewComponent {
     }
 
     close() {
-        console.log('view.component.close()', this.pannelBack, this.scrollTopBack);
-
         if (this.pannelBack) {
             this.router.navigate(['tabs/vault'], { queryParams: {
                 activatedPanel : this.pannelBack,

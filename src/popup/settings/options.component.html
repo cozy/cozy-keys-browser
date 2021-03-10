@@ -11,7 +11,7 @@
     <div class="right"></div>
 </header>
 <content>
-    <div class="box first">
+    <div class="box list">
         <div class="box-content box-content-options">
             <div class="box-content-row options-row box-content-row-checkbox" appBoxRow>
                 <label for="disableSuggestions">{{'disableKonnectorsSuggestions' | i18n}}</label>
@@ -23,7 +23,7 @@
             {{'disableKonnectorsSuggestionsDesc' | i18n}}
         </div>
     </div>
-    <div class="box">
+    <div class="box list">
         <div class="box-content box-content-options">
             <div class="box-content-row options-row box-content-row-checkbox" appBoxRow>
                 <label for="inPageMenu">{{'enableInPageMenu' | i18n}}</label>
@@ -35,7 +35,7 @@
             {{'enableInPageMenuDesc' | i18n}}
         </div>
     </div>
-    <div class="box">
+    <div class="box list">
         <div class="box-content box-content-options">
             <div class="box-content-row options-row box-content-row-checkbox" appBoxRow>
                 <label for="autofill">{{'enableAutoFillOnPageLoad' | i18n}}</label>
@@ -48,7 +48,7 @@
             <b>{{'warning' | i18n}}</b>: {{'experimentalFeature' | i18n}}
         </div>
     </div>
-    <div class="box">
+    <div class="box list">
         <div class="box-content box-content-options">
             <div class="box-content-row options-row" appBoxRow>
                 <label for="defaultUriMatch">{{'defaultUriMatchDetection' | i18n}}</label>
@@ -60,7 +60,7 @@
         </div>
         <div class="box-footer">{{'defaultUriMatchDetectionDesc' | i18n}}</div>
     </div>
-    <div class="box" *ngIf="showClearClipboard">
+    <div class="box list" *ngIf="showClearClipboard">
         <div class="box-content box-content-options">
             <div class="box-content-row options-row" appBoxRow>
                 <label for="clearClipboard">{{'clearClipboard' | i18n}}</label>
@@ -74,7 +74,7 @@
     </div>
     <!--
     TODO: enable back when TOTP is available
-    <div class="box">
+    <div class="box list">
         <div class="box-content box-content-options">
             <div class="box-content-row options-row box-content-row-checkbox" appBoxRow>
                 <label for="totp">{{'disableAutoTotpCopy' | i18n}}</label>
@@ -84,7 +84,7 @@
         <div class="box-footer">{{'disableAutoTotpCopyDesc' | i18n}}</div>
     </div>
     -->
-    <div class="box">
+    <div class="box list">
         <div class="box-content box-content-options">
             <div class="box-content-row options-row box-content-row-checkbox" appBoxRow>
                 <label for="dontShowCards">{{'dontShowCardsCurrentTab' | i18n}}</label>
@@ -93,7 +93,7 @@
         </div>
         <div class="box-footer">{{'dontShowCardsCurrentTabDesc' | i18n}}</div>
     </div>
-    <div class="box">
+    <div class="box list">
         <div class="box-content box-content-options">
             <div class="box-content-row options-row box-content-row-checkbox" appBoxRow>
                 <label for="dontShowIdentities">{{'dontShowIdentitiesCurrentTab' | i18n}}</label>
@@ -103,7 +103,7 @@
         </div>
         <div class="box-footer">{{'dontShowIdentitiesCurrentTabDesc' | i18n}}</div>
     </div>
-    <div class="box">
+    <div class="box list">
         <div class="box-content box-content-options">
             <div class="box-content-row options-row box-content-row-checkbox" appBoxRow>
                 <label for="addlogin-notification-bar">{{'disableAddLoginNotification' | i18n}}</label>
@@ -113,7 +113,7 @@
         </div>
         <div class="box-footer">{{'addLoginNotificationDesc' | i18n}}</div>
     </div>
-    <div class="box">
+    <div class="box list">
         <div class="box-content box-content-options">
             <div class="box-content-row options-row box-content-row-checkbox" appBoxRow>
                 <label for="changedpass-notification-bar">{{'disableChangedPasswordNotification' | i18n}}</label>
@@ -123,7 +123,7 @@
         </div>
         <div class="box-footer">{{'disableChangedPasswordNotificationDesc' | i18n}}</div>
     </div>
-    <div class="box" *ngIf="showDisableContextMenu">
+    <div class="box list" *ngIf="showDisableContextMenu">
         <div class="box-content box-content-options">
             <div class="box-content-row options-row box-content-row-checkbox" appBoxRow>
                 <label for="context-menu">{{'disableContextMenuItem' | i18n}}</label>
@@ -133,7 +133,7 @@
         </div>
         <div class="box-footer">{{'disableContextMenuItemDesc' | i18n}}</div>
     </div>
-    <div class="box">
+    <div class="box list">
         <div class="box-content box-content-options">
             <div class="box-content-row options-row box-content-row-checkbox" appBoxRow>
                 <label for="favicon">{{'disableFavicon' | i18n}}</label>
@@ -142,7 +142,7 @@
         </div>
         <div class="box-footer">{{'disableFaviconDesc' | i18n}}</div>
     </div>
-    <div class="box">
+    <div class="box list">
         <div class="box-content box-content-options">
             <div class="box-content-row options-row" appBoxRow>
                 <label for="theme">{{'theme' | i18n}}</label>

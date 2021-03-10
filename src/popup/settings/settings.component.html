@@ -11,7 +11,7 @@
     <div class="box list">
         <div class="box-header">{{'manage' | i18n}}</div>
         <div class="box-content box-content-settings single-line">
-            <a class="box-content-row box-content-row-flex text-default" routerLink="/folders">
+            <a class="box-content-row settings-row box-content-row-flex text-default" routerLink="/folders">
                 <div class="row-main">{{'folders' | i18n}}</div>
                 <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
             </a>
@@ -31,7 +31,7 @@
                     <option *ngFor="let o of vaultTimeouts" [ngValue]="o.value">{{o.name}}</option>
                 </select>
             </div>
-            <div class="box-content-row display-block" appBoxRow>
+            <div class="box-content-row settings-row display-block" appBoxRow>
                 <label for="vaultTimeoutAction">{{'vaultTimeoutAction' | i18n}}</label>
                 <select #vaultTimeoutActionSelect id="vaultTimeoutAction" name="VaultTimeoutActions"
                     [ngModel]="vaultTimeoutAction" (ngModelChange)="saveVaultTimeoutAction($event)">

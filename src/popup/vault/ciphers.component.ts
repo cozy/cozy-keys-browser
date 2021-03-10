@@ -302,7 +302,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
 
     back() {
         (window as any).routeDirection = 'b';
-        this.location.back();
+        this.router.navigate(['tabs/vault'], { queryParams: { activatedPanel: 'none' } });
     }
 
     showGroupings() {

@@ -259,6 +259,8 @@ app-vault-icon {
 
 .icon-login {
     background-image: url('../images/icons-login.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
     width: 24px;
     height: 24px;
 }
