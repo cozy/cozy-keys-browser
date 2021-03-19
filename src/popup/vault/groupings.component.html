@@ -12,7 +12,7 @@
         </div>
     </div>
     <div class="search {{searchTagClass}}" (click)="unActivatePanel()">
-        <div id="search-tag"> <span id="search-tag-text">Pour ce site web</span> <span>X</span> </div>
+        <div id="search-tag"> <span id="search-tag-text">{{searchTagText}}</span> <span>X</span> </div>
         <input #searchInput type="{{searchTypeSearch ? 'search' : 'text'}}"
             placeholder="{{searchTagClass === 'hideSearchTag' ? ('searchVault' | i18n) : ''}}"
             id="search"
@@ -74,7 +74,7 @@
                 <span class="row-sub-label">{{typeCounts.get(cipherType.Identity) || 0}}</span>
                 <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
             </a>
-            <a href="#" class="box-content-row" appStopClick appBlurClick (click)="toggleCurrentPageForTests()">
+            <a href="#" class="box-content-row" appStopClick appBlurClick (click)="toggleCurrentPagePanel()">
                 <div class="row-main">
                     <div class="icon"><i class="fa fa-search"></i></div>
                     <span class="text">Pour ce site web</span>

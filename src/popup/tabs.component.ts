@@ -19,7 +19,5 @@ export class TabsComponent implements OnInit {
     ngOnInit() {
         this.showCurrentTab = !this.popupUtilsService.inPopout(window);
         this.cozyUrl = this.cozyClientService.getAppURL('', '');
-        console.log(this.cozyUrl);
-
     }
 }

@@ -103,6 +103,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     deletedCount = 0;
     ciphersForCurrentPage: CipherView[] = [];
     searchTagClass: string = 'hideSearchTag';
+    searchTagText: string;
     enableAnimations: boolean = false;
 
     @ViewChild('groupingContent')
@@ -138,6 +139,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     @HostListener('window:keydown', ['$event'])
     handleKeyDown(event: KeyboardEvent) {
         if (event.key === 'Escape' && this.currentPannel !== PanelNames.None) {
+            this.searchText = '';
             this.unActivatePanel();
             event.preventDefault();
         }
@@ -169,6 +171,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
         this.broadcasterService.subscribe(ComponentId, (message: any) => {
             this.ngZone.run(async () => {
+                // console.log('broadcasterService.heard :', message.command);
                 switch (message.command) {
                     case 'syncCompleted':
                         window.setTimeout(() => {
@@ -194,6 +197,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         const restoredScopeState = await this.restoreState();
 
         this.route.queryParams.subscribe(async (params) => {
+            // console.log('groupings.queryParams.heard :', params);
             if (params.activatedPanel) {
                 this.activatePanel(params.activatedPanel);
                 if (params.scrollTopBack) {
@@ -367,17 +371,12 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         }, timeout);
     }
 
-    emptySearch() {
-        this.unActivatePanel();
-    }
-
     unActivatePanel() {
         // console.log(`unActivatePanel('${this.currentPannel}')`);
         switch (this.currentPannel) {
             case PanelNames.None:
                 return;
             case PanelNames.Search:
-                this.searchText = '';
                 this.search(null);
                 this.hasSearched = false;
                 break;
@@ -394,22 +393,30 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         switch (panelName) {
             case PanelNames.CurrentPageCiphers:
                 this.searchTagClass = 'showSearchTag';
+                this.searchTagText  = this.i18nService.t('forThisWebSite');
                 this.currentPannel = PanelNames.CurrentPageCiphers;
                 this.isPannelVisible = 'true';
                 break;
             case PanelNames.Search:
+                this.searchTagClass = 'hideSearchTag';
                 this.currentPannel = PanelNames.Search;
                 this.isPannelVisible = 'true';
                 break;
             case PanelNames.Logins:
+                this.searchTagClass = 'showSearchTag';
+                this.searchTagText  = this.i18nService.t('logins');
                 this.currentPannel = PanelNames.Logins;
                 this.isPannelVisible = 'true';
                 break;
             case PanelNames.Cards:
+                this.searchTagClass = 'showSearchTag';
+                this.searchTagText  = this.i18nService.t('cards');
                 this.currentPannel = PanelNames.Cards;
                 this.isPannelVisible = 'true';
                 break;
             case PanelNames.Identities:
+                this.searchTagClass = 'showSearchTag';
+                this.searchTagText  = this.i18nService.t('identities');
                 this.currentPannel = PanelNames.Identities;
                 this.isPannelVisible = 'true';
                 break;
@@ -528,7 +535,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         return this.loaded && this.currentPannel === PanelNames.Identities;
     }
 
-    toggleCurrentPageForTests() {
+    toggleCurrentPagePanel() {
         if (this.currentPannel === PanelNames.CurrentPageCiphers) {
             this.unActivatePanel();
         } else {
@@ -593,6 +600,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     private async saveState() {
+        // console.log('saveState()');
         this.state = {
             scrollY: this.popupUtils.getContentScrollY(window),
             searchText: this.searchText,
@@ -608,7 +616,9 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     private async restoreState(): Promise<boolean> {
+        // console.log('restoreState()');
         this.scopeState = await this.stateService.get<any>(ScopeStateId);
+        // console.log('this.scopeState restored =', this.scopeState);
         if (this.scopeState == null) {
             return false;
         }
