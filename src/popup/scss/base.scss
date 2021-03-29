@@ -237,15 +237,18 @@ header {
 
         #search-tag {
             position: absolute;
-            top: 12px;
+            top: 13px;
             left: 34px;
             padding: 0 6px;
-            background-color: black;
+            background-color: white;
+            color : $brand-primary;
             border-radius: 4px;
             white-space: nowrap;
             overflow: hidden;
             transition: all 200ms;
             transform-origin: left top;
+            font-size: 12px;
+            font-weight: bold;
 
             :first-child {
                 position: relative;
@@ -269,15 +272,15 @@ header {
             }
             #search-tag-text::after{
                 content: '';
-                border-bottom: 1px solid white;
+                border-bottom: 1px solid $brand-primary;
                 position: absolute;
                 left: 0;
                 top: 56%;
                 width: 100%;
             }
             #search-tag-text+span {
-                color: white;
-                border-color: white;
+                color: $brand-primary;
+                border-color: $brand-primary;
             }
         }
 
@@ -321,7 +324,7 @@ header {
 
     .search.hideSearchTag {
         #search-tag {
-            transform: scaleX(0);
+            display: none;
             padding: 0;
         }
     }

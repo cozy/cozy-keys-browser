@@ -82,8 +82,10 @@
     &.link {
         border: none !important;
         background: none !important;
-
-        &:focus {
+        color: $brand-primary !important;
+        font-size: 12px;
+        font-weight: bold;
+        &:hover {
             text-decoration: underline;
         }
     }

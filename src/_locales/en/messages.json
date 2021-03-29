@@ -115,8 +115,23 @@
   "autoFillInfo": {
     "message": "You don't have any recorded login to fill the current web page."
   },
+  "addLoginExplanation": {
+    "message": "No longer search, loose nor type your passwords..."
+  },
+  "addIdentityExplanation": {
+    "message": "Automatically fill forms with you adresses, emails, phone numbers, birth dates..."
+  },
+  "addCardExplanation": {
+    "message": "No longer type you credit card numbers, no longuer loose your PIN, enjoy Cozy Pass filling the purchase forms..."
+  },
   "addLogin": {
     "message": "Add a Login"
+  },
+  "addCard": {
+    "message": "Add a credit card"
+  },
+  "addIdentity": {
+    "message": "Add an identity"
   },
   "addItem": {
     "message": "Add Item"

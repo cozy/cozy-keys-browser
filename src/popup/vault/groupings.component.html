@@ -131,30 +131,42 @@
                     *ngIf="!ciphersForCurrentPage.length"
                 >
                     <p class="text-center">{{'autoFillInfo' | i18n}}</p>
-                    <button type="button" class="btn primary block" (click)="addCipher()">
+                    <button type="button" class="btn link block" (click)="addCipher()">
                         {{'addLogin' | i18n}}
                     </button>
                 </div>
             </div>
         </div>
-        <div class="box list" *ngIf="ciphersByType[3] && ciphersByType[3].length">
+        <div class="box list">
             <div class="box-header">
                 {{'cards' | i18n}}
             </div>
             <div class="box-content">
                 <app-ciphers-list [ciphers]="ciphersByType[3]" title="{{'autoFill' | i18n}}" [showView]="true"
                 (onSelected)="fillCipher($event)" (onView)="viewCipher($event)"></app-ciphers-list>
+                <div class="box-content-row padded no-hover"
+                    *ngIf="!ciphersByType[3] || ciphersByType[3].length === 0"
+                >
+                    <button type="button" class="btn link block" (click)="addCipher()">
+                        {{'addCard' | i18n}}
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="box list"
-        >
-        <!-- *ngIf="ciphersByType[4] && ciphersByType[4].length" -->
+        <div class="box list">
             <div class="box-header">
                 {{'identities' | i18n}}
             </div>
             <div class="box-content">
                 <app-ciphers-list [ciphers]="ciphersByType[4]" title="{{'autoFill' | i18n}}" [showView]="true"
                 (onSelected)="fillCipher($event)" (onView)="viewCipher($event)"></app-ciphers-list>
+                <div class="box-content-row padded no-hover"
+                    *ngIf="!ciphersByType[4] || ciphersByType[4].length === 0"
+                >
+                    <button type="button" class="btn link block" (click)="addCipher()">
+                        {{'addIdentity' | i18n}}
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -233,7 +245,7 @@
                 <div class="box-content-row padded no-hover"
                     *ngIf="!ciphersByType[1].length"
                 >
-                    <p class="text-center">{{'autoFillInfo' | i18n}}</p>
+                    <p class="text-center">{{'addLoginExplanation' | i18n}}</p>
                     <button type="button" class="btn primary block" (click)="addCipher()">
                         {{'addLogin' | i18n}}
                     </button>
@@ -245,13 +257,19 @@
     <!-- ************************************ -->
     <!-- CARDS PANEL                          -->
     <div *ngIf="showCardsPanel()" class="ciphersPanel" [@toggleClick]="isPannelVisible" [@.disabled]="!enableAnimations">
-        <div class="box list" *ngIf="ciphersByType[3].length">
+        <div class="box list">
             <div class="box-header">
                 {{'cards' | i18n}}
             </div>
             <div class="box-content">
                 <app-ciphers-list [ciphers]="ciphersByType[3]" title="{{'autoFill' | i18n}}" [showView]="true"
                 (onSelected)="fillCipher($event)" (onView)="viewCipher($event)"></app-ciphers-list>
+                <div class="box-content-row padded no-hover" *ngIf="!ciphersByType[3].length">
+                    <p class="text-center">{{'addCardExplanation' | i18n}}</p>
+                    <button type="button" class="btn link block" (click)="addCipher()">
+                        {{'addCard' | i18n}}
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -259,13 +277,21 @@
     <!-- ************************************ -->
     <!-- IDENTITIES PANEL                     -->
     <div *ngIf="showIdentitiesPanel()" class="ciphersPanel" [@toggleClick]="isPannelVisible" [@.disabled]="!enableAnimations">
-        <div class="box list" *ngIf="ciphersByType[4].length">
+        <div class="box list">
             <div class="box-header">
                 {{'identities' | i18n}}
             </div>
             <div class="box-content">
                 <app-ciphers-list [ciphers]="ciphersByType[4]" title="{{'autoFill' | i18n}}" [showView]="true"
                 (onSelected)="fillCipher($event)" (onView)="viewCipher($event)"></app-ciphers-list>
+                <div class="box-content-row padded no-hover"
+                    *ngIf="!ciphersByType[4].length"
+                >
+                    <p class="text-center">{{'addIdentityExplanation' | i18n}}</p>
+                    <button type="button" class="btn link block" (click)="addCipher()">
+                        {{'addIdentity' | i18n}}
+                    </button>
+                </div>
             </div>
         </div>
     </div>

@@ -115,8 +115,23 @@
   "autoFillInfo": {
     "message": "Aucun identifiant enregistré pour remplir la page actuelle."
   },
+  "addLoginExplanation": {
+    "message": "Ne plus chercher, ne plus perdre, ne plus taper vos mots de passe..."
+  },
+  "addIdentityExplanation": {
+    "message": "Remplissez automatiquement les formulaires avec vos adresses, email, téléphone, date de naissance..."
+  },
+  "addCardExplanation": {
+    "message": "Arrêtez de recopier vos numéros de carte de crédit, ne perdez plus votre code, laissez Cozy Pass vous remplir vos formulaire lors de vos achants en ligne..."
+  },
   "addLogin": {
     "message": "Ajouter un identifiant"
+  },
+  "addCard": {
+    "message": "Ajouter une carte de paiement"
+  },
+  "addIdentity": {
+    "message": "Ajouter une identité"
   },
   "addItem": {
     "message": "Ajouter un élément"
