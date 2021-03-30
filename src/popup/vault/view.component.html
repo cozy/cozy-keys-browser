@@ -1,12 +1,19 @@
 <header>
     <div class="left">
-        <button type="button" appBlurClick (click)="close()">{{'close' | i18n}}</button>
+        <button type="button" appBlurClick (click)="close()" title="{{'close' | i18n}}">
+            <i class="icon-cozy icon-cross"  aria-hidden="true"></i>
+        </button>
     </div>
     <div class="center">
         <span class="title">{{'viewItem' | i18n}}</span>
     </div>
     <div class="right" *ngIf="cipher">
-        <button type="button" appBlurClick (click)="edit()" *ngIf="!cipher.isDeleted">{{'edit' | i18n}}</button>
+        <button (click)="openWebApp()" appA11yTitle="{{'popOutNewWindow' | i18n}}">
+            <i class="icon-cozy icon-out-w"  aria-hidden="true"></i>
+        </button>
+        <button type="button" appBlurClick (click)="edit()" *ngIf="!cipher.isDeleted" title="{{'edit' | i18n}}">
+            <i class="icon-cozy icon-pen"  aria-hidden="true"></i>
+        </button>
     </div>
 </header>
 <content *ngIf="cipher">

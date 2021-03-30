@@ -136,28 +136,24 @@ header {
         border-bottom-color: themed('headerBorderColor');
     }
 
+    button {
+        background-color: unset;
+        flex-grow: 0;
+        border: none;
+        padding: 0 10px;
+        &:hover, &:focus {
+            @include themify($themes) {
+                background-color: themed('headerBackgroundHoverColor');
+            }
+        }
+    }
+
     .left, .right {
         flex: 1;
         display: flex;
         min-width: -webkit-min-content; /* Workaround to Chrome bug */
         .header-icon {
             margin-right: 5px;
-        }
-    }
-    .cozy-left{
-        position: relative;
-        & > * {
-            position: absolute;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            width: 100%;
-        }
-        & button {
-            position: relative;
-            height: 100%;
-            width: 100%;
         }
     }
 
@@ -172,7 +168,7 @@ header {
         min-width: 0;
     }
 
-    app-pop-out > button, div > button, div > a {
+    div > button, div > a {
         border: none;
         padding: 0 10px;
         text-decoration: none;
@@ -207,10 +203,6 @@ header {
         }
     }
 
-    app-pop-out {
-        display: flex;
-    }
-
     .title {
         font-weight: bold;
         white-space: nowrap;
@@ -219,49 +211,56 @@ header {
     }
 
     .search {
-        padding: 7px 10px;
-        width: 100%;
-        text-align: left;
-        position: relative;
+        flex-grow: 1;
+        margin: 6px 0;
         display: flex;
+        align-items: center;
+        border-radius: 14px;
+        @include themify($themes) {
+            background-color: themed('headerInputBackgroundColor');
+            color: themed('headerInputColor');
+        }
 
         .fa {
-            position: absolute;
-            top: 15px;
-            left: 20px;
-
+            width: 15px;
             @include themify($themes) {
                 color: themed('headerInputPlaceholderColor');
             }
         }
 
+        .fa-search {
+            margin-left: 7px;
+            margin-right: 7px;
+        }
+
+        .fa-close {
+            margin-left: 0px;
+            margin-right: 7px;
+            &:hover {
+                color: white !important;
+            }
+        }
+
         #search-tag {
-            position: absolute;
-            top: 13px;
-            left: 34px;
+            flex-grow: 0;
+            flex-shrink: 0;
             padding: 0 6px;
             background-color: white;
             color : $brand-primary;
             border-radius: 4px;
             white-space: nowrap;
             overflow: hidden;
-            transition: all 200ms;
-            transform-origin: left top;
             font-size: 12px;
             font-weight: bold;
-
             :first-child {
                 position: relative;
             }
-
             :last-child {
                 color: #8d8d8d;
                 border-left: 1px solid #8d8d8d;
                 font-size: 0.6em;
-                display: inline-block;
                 padding: 0 0 0 4px;
                 margin: 0 0 0 4px;
-                height: 100%;
             }
         }
 
@@ -286,21 +285,15 @@ header {
 
         input {
             width: 100%;
-            margin: 0;
+            margin-left: 4px;
             border: none;
-            padding: 5px 10px 5px 35px;
-            border-radius: $border-radius;
-
-
             @include themify($themes) {
                 background-color: themed('headerInputBackgroundColor');
                 color: themed('headerInputColor');
             }
 
             &:focus {
-                border-radius: $border-radius;
                 outline: none;
-
                 @include themify($themes) {
                     background-color: themed('headerInputBackgroundFocusColor');
                 }
@@ -316,45 +309,15 @@ header {
                 }
             }
         }
-
-        &.showSearchTag > input {
-            padding-left: 168px;
-        }
-    }
-
-    .search.hideSearchTag {
-        #search-tag {
-            display: none;
-            padding: 0;
-        }
-    }
-
-    .left + .search {
-        padding-left: 0;
-
-        .fa {
-            left: 10px;
-        }
-
-        .fa-close {
-            right: 16px;
-            left: unset;
-        }
-
-        .fa-close:hover {
-            cursor: pointer;
-            color: white !important;
+        &.hideSearchTag {
+            #search-tag {
+                display: none;
+                padding: 0;
+            }
         }
 
     }
 
-    .search + .right {
-        margin-left: -10px;
-    }
-}
-
-#search:placeholder-shown ~ .fa-close {
-    visibility: hidden;
 }
 
 .content {

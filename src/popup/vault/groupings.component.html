@@ -1,30 +1,27 @@
-<header>
-    <div class="left" *ngIf="showLeftHeader">
-        <div class="cozy-left">
-            <app-pop-out [style.visibility]="(currentPannel === 'none') ? 'visible' : 'hidden'" ></app-pop-out>
-            <!-- <button type="button" appBlurClick (click)="unActivatePanel()" *ngIf="currentPannel !== 'none'"> -->
-            <button type="button" appBlurClick (click)="unActivatePanel()"
-            [style.visibility]="(currentPannel !== 'none') ? 'visible' : 'hidden'" >
-                <span class="header-icon"><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
-                <span>{{'back' | i18n}}</span>
-            </button>
-
-        </div>
-    </div>
+<header [style.padding-left]="(currentPannel !== 'none') ? 'unset' : '8px'" >
+    <button type="button" appBlurClick (click)="unActivatePanel()"
+        [style.display]="(currentPannel !== 'none') ? '' : 'none'"
+         >
+        <span class="header-icon" title="{{'back' | i18n}}"><i class="icon-cozy icon-back"></i></span>
+    </button>
     <div class="search {{searchTagClass}}" (click)="unActivatePanel()">
-        <div id="search-tag"> <span id="search-tag-text">{{searchTagText}}</span> <span>X</span> </div>
+        <i class="fa fa-search"></i>
+        <div id="search-tag">
+            <span id="search-tag-text">{{searchTagText}}</span>
+            <span>X</span>
+        </div>
         <input #searchInput type="{{searchTypeSearch ? 'search' : 'text'}}"
             placeholder="{{searchTagClass === 'hideSearchTag' ? ('searchVault' | i18n) : ''}}"
             id="search"
-            [(ngModel)]="searchText" (input)="search(200)" autocomplete="off" appAutofocus>
-        <i class="fa fa-search"></i>
+            [(ngModel)]="searchText" (input)="search(200)" autocomplete="off">
         <i class="fa fa-close" aria-hidden="true" (click)="unActivatePanel()"></i>
     </div>
-    <div class="right">
-        <button appBlurClick (click)="addCipher()" appA11yTitle="{{'addItem' | i18n}}">
-            <i class="fa fa-plus fa-lg fa-fw" aria-hidden="true"></i>
-        </button>
-    </div>
+    <button (click)="openWebApp()" appA11yTitle="{{'popOutNewWindow' | i18n}}">
+        <i class="icon-cozy icon-out-w"  aria-hidden="true"></i>
+    </button>
+    <button appBlurClick (click)="addCipher()" appA11yTitle="{{'addItem' | i18n}}">
+        <i class="icon-cozy icon-plus"  aria-hidden="true"></i>
+    </button>
 </header>
 
 <content #groupingContent class="groupingContent">
@@ -74,7 +71,7 @@
                 <span class="row-sub-label">{{typeCounts.get(cipherType.Identity) || 0}}</span>
                 <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
             </a>
-            <a href="#" class="box-content-row" appStopClick appBlurClick (click)="toggleCurrentPagePanel()">
+            <a href="#" class="box-content-row" appStopClick appBlurClick (click)="showCurrentPagePanel()">
                 <div class="row-main">
                     <div class="icon"><i class="fa fa-search"></i></div>
                     <span class="text">Pour ce site web</span>
@@ -147,7 +144,7 @@
                 <div class="box-content-row padded no-hover"
                     *ngIf="!ciphersByType[3] || ciphersByType[3].length === 0"
                 >
-                    <button type="button" class="btn link block" (click)="addCipher()">
+                    <button type="button" class="btn link block" (click)="addCardCipher()">
                         {{'addCard' | i18n}}
                     </button>
                 </div>
@@ -163,7 +160,7 @@
                 <div class="box-content-row padded no-hover"
                     *ngIf="!ciphersByType[4] || ciphersByType[4].length === 0"
                 >
-                    <button type="button" class="btn link block" (click)="addCipher()">
+                    <button type="button" class="btn link block" (click)="addIdentityCipher()">
                         {{'addIdentity' | i18n}}
                     </button>
                 </div>
@@ -266,7 +263,7 @@
                 (onSelected)="fillCipher($event)" (onView)="viewCipher($event)"></app-ciphers-list>
                 <div class="box-content-row padded no-hover" *ngIf="!ciphersByType[3].length">
                     <p class="text-center">{{'addCardExplanation' | i18n}}</p>
-                    <button type="button" class="btn link block" (click)="addCipher()">
+                    <button type="button" class="btn link block" (click)="addCardCipher()">
                         {{'addCard' | i18n}}
                     </button>
                 </div>
@@ -288,7 +285,7 @@
                     *ngIf="!ciphersByType[4].length"
                 >
                     <p class="text-center">{{'addIdentityExplanation' | i18n}}</p>
-                    <button type="button" class="btn link block" (click)="addCipher()">
+                    <button type="button" class="btn link block" (click)="addIdentityCipher()">
                         {{'addIdentity' | i18n}}
                     </button>
                 </div>

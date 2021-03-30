@@ -28,6 +28,7 @@ import { BroadcasterService } from 'jslib/angular/services/broadcaster.service';
 import { ViewComponent as BaseViewComponent } from 'jslib/angular/components/view.component';
 import { BrowserApi } from '../../browser/browserApi';
 import { AutofillService } from '../../services/abstractions/autofill.service';
+import { CozyClientService } from '../services/cozyClient.service';
 import { PopupUtilsService } from '../services/popup-utils.service';
 
 const BroadcasterSubscriptionId = 'ChildViewComponent';
@@ -55,7 +56,8 @@ export class ViewComponent extends BaseViewComponent {
         broadcasterService: BroadcasterService, ngZone: NgZone,
         changeDetectorRef: ChangeDetectorRef, userService: UserService,
         eventService: EventService, private autofillService: AutofillService,
-        private messagingService: MessagingService, private popupUtilsService: PopupUtilsService) {
+        private messagingService: MessagingService, private popupUtilsService: PopupUtilsService,
+        private cozyClientService: CozyClientService) {
         super(cipherService, totpService, tokenService, i18nService, cryptoService, platformUtilsService,
             auditService, window, broadcasterService, ngZone, changeDetectorRef, userService, eventService);
     }
@@ -227,6 +229,11 @@ export class ViewComponent extends BaseViewComponent {
             return;
         }
         this.location.back();
+    }
+
+    openWebApp() {
+        const hash = '#/vault?action=view&type=' + this.cipherId;
+        window.open(this.cozyClientService.getAppURL('passwords', hash));
     }
 
     private async loadPageDetails() {

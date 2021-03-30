@@ -1,7 +1,9 @@
 <form #form (ngSubmit)="submit()" [appApiAction]="formPromise">
     <header>
         <div class="left">
-            <button type="button" appBlurClick (click)="cancel()">{{'cancel' | i18n}}</button>
+            <button type="button" appBlurClick (click)="cancel()" title="{{'cancel' | i18n}}">
+                <i class="icon-cozy icon-cross"  aria-hidden="true"></i>
+            </button>
         </div>
         <div class="center">
             <span class="title">{{title}}</span>

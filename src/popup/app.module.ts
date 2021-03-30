@@ -36,7 +36,6 @@ import { AddEditComponent } from './vault/add-edit.component';
 import { AttachmentsComponent } from './vault/attachments.component';
 import { CiphersComponent } from './vault/ciphers.component';
 import { CollectionsComponent } from './vault/collections.component';
-import { CurrentTabComponent } from './vault/current-tab.component';
 import { GroupingsComponent } from './vault/groupings.component';
 import { PasswordHistoryComponent } from './vault/password-history.component';
 import { ShareComponent } from './vault/share.component';
@@ -60,7 +59,6 @@ import { SearchCiphersPipe } from 'jslib/angular/pipes/search-ciphers.pipe';
 
 import { ActionButtonsComponent } from './components/action-buttons.component';
 import { CiphersListComponent } from './components/ciphers-list.component';
-import { PopOutComponent } from './components/pop-out.component';
 
 import { CalloutComponent } from 'jslib/angular/components/callout.component';
 // import { IconComponent } from 'jslib/angular/components/icon.component';
@@ -103,7 +101,6 @@ registerLocaleData(localeFr, 'fr');
         CiphersListComponent,
         CollectionsComponent,
         ColorPasswordPipe,
-        CurrentTabComponent,
         ExportComponent,
         FallbackSrcDirective,
         FolderAddEditComponent,
@@ -120,7 +117,6 @@ registerLocaleData(localeFr, 'fr');
         PasswordGeneratorComponent,
         PasswordGeneratorHistoryComponent,
         PasswordHistoryComponent,
-        PopOutComponent,
         PrivateModeComponent,
         SearchCiphersPipe,
         SelectCopyDirective,

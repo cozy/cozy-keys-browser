@@ -23,7 +23,6 @@ import { CipherType } from 'jslib/enums/cipherType';
 import { UriMatchType } from 'jslib/enums/uriMatchType';
 
 import { CipherView } from 'jslib/models/view/cipherView';
-// import { CollectionView } from 'jslib/models/view/collectionView';
 import { FolderView } from 'jslib/models/view/folderView';
 
 import { CipherService } from 'jslib/abstractions/cipher.service';
@@ -43,6 +42,7 @@ import { GroupingsComponent as BaseGroupingsComponent } from 'jslib/angular/comp
 
 import { AutofillService } from '../../services/abstractions/autofill.service';
 import { LocalConstantsService as ConstantsService } from '../services/constants.service';
+import { CozyClientService } from '../services/cozyClient.service';
 import { KonnectorsService } from '../services/konnectors.service';
 import { PopupUtilsService } from '../services/popup-utils.service';
 
@@ -51,9 +51,9 @@ const ScopeStateId = ComponentId + 'Scope';
 
 const enum PanelNames {
     CurrentPageCiphers = 'currentPageCiphers',
-    Logins = 'logins',
-    Cards = 'cards',
-    Identities = 'identities',
+    Logins = 'Login',
+    Cards = 'Card',
+    Identities = 'Identity',
     Search = 'search',
     None = 'none',
 }
@@ -106,8 +106,8 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     searchTagText: string;
     enableAnimations: boolean = false;
 
-    @ViewChild('groupingContent')
-    groupingContentEl: ElementRef;
+    @ViewChild('groupingContent') groupingContentEl: ElementRef;
+    @ViewChild('searchInput') searchInputEl: ElementRef;
 
     private loadedTimeout: number;
     private selectedTimeout: number;
@@ -131,7 +131,8 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         private syncService: SyncService,
         private platformUtilsService: PlatformUtilsService, private searchService: SearchService,
         private location: Location, private toasterService: ToasterService, private i18nService: I18nService,
-        private autofillService: AutofillService, private konnectorsService: KonnectorsService) {
+        private autofillService: AutofillService, private konnectorsService: KonnectorsService,
+        private cozyClientService: CozyClientService) {
         super(collectionService, folderService, storageService, userService);
         this.noFolderListSize = 100;
     }
@@ -139,7 +140,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     @HostListener('window:keydown', ['$event'])
     handleKeyDown(event: KeyboardEvent) {
         if (event.key === 'Escape' && this.currentPannel !== PanelNames.None) {
-            this.searchText = '';
+            // this.searchText = '';
             this.unActivatePanel();
             event.preventDefault();
         }
@@ -377,6 +378,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             case PanelNames.None:
                 return;
             case PanelNames.Search:
+                this.searchText = '';
                 this.search(null);
                 this.hasSearched = false;
                 break;
@@ -385,6 +387,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         }
         this.searchTagClass = 'hideSearchTag';
         this.isPannelVisible = 'false';
+        this.searchInputEl.nativeElement.focus();
         this.currentPannel = PanelNames.None;
     }
 
@@ -515,6 +518,14 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         this.router.navigate(['/add-cipher']);
     }
 
+    async addIdentityCipher() {
+        this.router.navigate(['/add-cipher'], { queryParams: { type: this.cipherType.Identity } });
+    }
+
+    async addCardCipher() {
+        this.router.navigate(['/add-cipher'], { queryParams: { type: this.cipherType.Card } });
+    }
+
     showSearchPanel() {
         return this.hasSearched;
     }
@@ -535,7 +546,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         return this.loaded && this.currentPannel === PanelNames.Identities;
     }
 
-    toggleCurrentPagePanel() {
+    showCurrentPagePanel() {
         if (this.currentPannel === PanelNames.CurrentPageCiphers) {
             this.unActivatePanel();
         } else {
@@ -597,6 +608,19 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             pannelBack: this.currentPannel,
             scrollTopBack : this.groupingContentEl.nativeElement.scrollTop,
          } });
+    }
+
+    openWebApp() {
+        let hash = '';
+        const noHashPanels = [
+            PanelNames.CurrentPageCiphers,
+            PanelNames.Search,
+            PanelNames.None,
+        ];
+        if (!noHashPanels.includes(this.currentPannel)) {
+            hash = '#/vault?action=view&type=' + this.cipherType[this.currentPannel];
+        }
+        window.open(this.cozyClientService.getAppURL('passwords', hash));
     }
 
     private async saveState() {

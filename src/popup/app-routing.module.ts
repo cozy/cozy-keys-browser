@@ -31,7 +31,6 @@ import { AddEditComponent } from './vault/add-edit.component';
 import { AttachmentsComponent } from './vault/attachments.component';
 import { CiphersComponent } from './vault/ciphers.component';
 import { CollectionsComponent } from './vault/collections.component';
-import { CurrentTabComponent } from './vault/current-tab.component';
 import { GroupingsComponent } from './vault/groupings.component';
 import { PasswordHistoryComponent } from './vault/password-history.component';
 import { ShareComponent } from './vault/share.component';
@@ -199,14 +198,6 @@ const routes: Routes = [
                 path: '',
                 redirectTo: '/tabs/vault',
                 pathMatch: 'full',
-            },
-            {
-                path: 'current',
-
-                component: CurrentTabComponent,
-                canActivate: [AuthGuardService],
-                data: { state: 'tabs_current' },
-                runGuardsAndResolvers: 'always',
             },
             {
                 path: 'vault',

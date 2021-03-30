@@ -243,6 +243,30 @@ li.active .icon-cozy-inline > svg {
     fill: $brand-primary;
 }
 
+.icon-pen {
+    background-image: url('../images/icons-16-icon-pen.svg');
+}
+
+.icon-cross {
+    background-image: url('../images/icons-16-icon-cross.svg');
+}
+
+.icon-plus {
+    background-image: url('../images/icons-16-icon-plus.svg');
+}
+
+.icon-back {
+    background-image: url('../images/icons-16-icon-back.svg');
+}
+
+.icon-out-w {
+    background-image: url('../images/icons-16-icon-out-white.svg');
+}
+
+.icon-out {
+    background-image: url('../images/icons-16-icon-out.svg');
+}
+
 .icon-copy {
     background-image: url('../images/icons-16-copy.svg');
 }
@@ -283,10 +307,6 @@ li.active .icon-cozy-inline > svg {
 
 .icon-key {
     background-image: url('../images/icons-16-icon-key.svg');
-}
-
-.icon-out {
-    background-image: url('../images/icons-16-icon-out.svg');
 }
 
 .icon-profile {
