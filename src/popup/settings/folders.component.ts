@@ -1,5 +1,6 @@
 import {
     Component,
+    HostListener,
     OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
@@ -16,6 +17,12 @@ export class FoldersComponent implements OnInit {
     folders: FolderView[];
 
     constructor(private folderService: FolderService, private router: Router) { }
+
+    @HostListener('window:keydown', ['$event'])
+    handleKeyDown(event: KeyboardEvent) {
+        this.router.navigate(['/tabs/settings']);
+        event.preventDefault();
+    }
 
     async ngOnInit() {
         this.folders = await this.folderService.getAllDecrypted();
