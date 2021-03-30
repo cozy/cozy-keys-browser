@@ -324,13 +324,6 @@ header {
     padding: 15px;
 }
 
-.ciphersPanel::after {
-    height: 3px;
-    content: "";
-    display: block;
-    border: solid 1px #ff000000;
-}
-
 .ciphersPanel {
     position: absolute;
     top: 0;

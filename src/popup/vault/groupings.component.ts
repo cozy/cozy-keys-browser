@@ -51,11 +51,12 @@ const ScopeStateId = ComponentId + 'Scope';
 
 const enum PanelNames {
     CurrentPageCiphers = 'currentPageCiphers',
-    Logins = 'Login',
     Cards = 'Card',
+    Folder = 'Folder',
     Identities = 'Identity',
-    Search = 'search',
+    Logins = 'Login',
     None = 'none',
+    Search = 'search',
 }
 
 @Component({
@@ -90,6 +91,7 @@ const enum PanelNames {
 export class GroupingsComponent extends BaseGroupingsComponent implements OnInit, OnDestroy {
     ciphers: CipherView[];
     favoriteCiphers: CipherView[];
+    deletedCiphers: CipherView[];
     noFolderCiphers: CipherView[];
     folderCounts = new Map<string, number>();
     collectionCounts = new Map<string, number>();
@@ -102,6 +104,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     searchTypeSearch = false;
     deletedCount = 0;
     ciphersForCurrentPage: CipherView[] = [];
+    selectedFolderTitle: string;
     searchTagClass: string = 'hideSearchTag';
     searchTagText: string;
     enableAnimations: boolean = false;
@@ -118,6 +121,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     private hasLoadedAllCiphers = false;
     private allCiphers: CipherView[] = null;
     private ciphersByType: any;
+    private ciphersForFolder: CipherView[] = [];
     private pageDetails: any[] = [];
     private isPannelVisible: string = 'false';
     private currentPannel: string = PanelNames.None;
@@ -140,7 +144,6 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     @HostListener('window:keydown', ['$event'])
     handleKeyDown(event: KeyboardEvent) {
         if (event.key === 'Escape' && this.currentPannel !== PanelNames.None) {
-            // this.searchText = '';
             this.unActivatePanel();
             event.preventDefault();
         }
@@ -279,7 +282,8 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         if (!this.hasLoadedAllCiphers) {
             this.hasLoadedAllCiphers = !this.searchService.isSearchable(this.searchText);
         }
-        this.deletedCount = this.allCiphers.filter((c) => c.isDeleted).length;
+        this.deletedCiphers = this.allCiphers.filter((c) => c.isDeleted);
+        this.deletedCount = this.deletedCiphers.length;
         await this.search(null);
         let favoriteCiphers: CipherView[] = null;
         let noFolderCiphers: CipherView[] = null;
@@ -423,6 +427,12 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
                 this.currentPannel = PanelNames.Identities;
                 this.isPannelVisible = 'true';
                 break;
+            case PanelNames.Folder:
+                this.searchTagClass = 'showSearchTag';
+                this.searchTagText  = this.selectedFolderTitle; this.i18nService.t('identities'); // BJA
+                this.currentPannel = PanelNames.Folder;
+                this.isPannelVisible = 'true';
+                break;
             default:
                 break;
         }
@@ -476,13 +486,17 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async selectFolder(folder: FolderView) {
-        super.selectFolder(folder);
-        this.router.navigate(['/ciphers'], { queryParams: { folderId: folder.id || 'none' } });
+        // console.log(`selectFolder()`, folder.id);
+        this.ciphersForFolder = this.ciphers.filter((c) => c.folderId === folder.id);
+        this.selectedFolderTitle = folder.name;
+        this.activatePanel(PanelNames.Folder);
     }
 
     async selectTrash() {
-        super.selectTrash();
-        this.router.navigate(['/ciphers'], { queryParams: { deleted: true } });
+        // console.log(`selectTrash()`);
+        this.ciphersForFolder = this.deletedCiphers;
+        this.selectedFolderTitle = this.i18nService.t('trash');
+        this.activatePanel(PanelNames.Folder);
     }
 
     async selectCipher(cipher: CipherView) {
@@ -552,6 +566,10 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         } else {
             this.activatePanel(PanelNames.CurrentPageCiphers);
         }
+    }
+
+    showFolderPanel() {
+        return this.loaded && this.currentPannel === PanelNames.Folder;
     }
 
     async fillCipher(cipher: CipherView) {
@@ -642,7 +660,6 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     private async restoreState(): Promise<boolean> {
         // console.log('restoreState()');
         this.scopeState = await this.stateService.get<any>(ScopeStateId);
-        // console.log('this.scopeState restored =', this.scopeState);
         if (this.scopeState == null) {
             return false;
         }
