@@ -336,7 +336,7 @@ export default class AutofillService implements AutofillServiceInterface {
         if (pageDetails[0].sender === 'notifBarForInPageMenu') {
             cipher = await this.cipherService.getLastUsedForUrl(tab.url);
             let r = 0;
-            pageDetails[0].fieldsForInPageMenuScripts.forEach( (s: any) => r = r + s.script.length);
+            pageDetails[0].fieldsForInPageMenuScripts.forEach( (s: any) => r += s.script.length);
             hasFieldsForInPageMenu = r > 0;
             tab = pageDetails[0].tab;
             if (!cipher && !hasFieldsForInPageMenu) {
@@ -405,6 +405,8 @@ export default class AutofillService implements AutofillServiceInterface {
         if (!pageDetails ) {
             return null;
         }
+
+        const scriptForFieldsMenu: any[] = [];
 
         /*
         Info : for the data structure of ciphers, logins, cards, identities... go there :
@@ -503,7 +505,7 @@ export default class AutofillService implements AutofillServiceInterface {
         // (field of search forms, field outside any form, include even not viewable fields )
         this.prepareFieldsForInPageMenu(pageDetails);
 
-        // B2] if connected, check if therer are ciphers
+        // B2] if connected, check if there are ciphers
         let hasIdentities: boolean = false;
         let hasLogins: boolean     = false;
         let hasCards: boolean      = false;
@@ -523,8 +525,8 @@ export default class AutofillService implements AutofillServiceInterface {
         }
 
         // C] generate a standard login fillscript for the generic cipher
-        let loginLoginMenuFillScript: any = [];
         if (hasLogins) {
+            let loginLoginMenuFillScript: any = [];
             const loginFS = new AutofillScript(pageDetails.documentUUID);
             const loginFilledFields: { [id: string]: AutofillField; } = {};
             loginLoginMenuFillScript    =
@@ -538,11 +540,12 @@ export default class AutofillService implements AutofillServiceInterface {
                 action[3].connected = connected;
                 return true;
             });
+            scriptForFieldsMenu.push(loginLoginMenuFillScript);
         }
 
         // D] generate a standard card fillscript for the generic cipher
-        let cardLoginMenuFillScript: any = [];
         if (hasCards) {
+            let cardLoginMenuFillScript: any = [];
             const cardFS = new AutofillScript(pageDetails.documentUUID);
             const cardFilledFields: { [id: string]: AutofillField; } = {};
             cardLoginMenuFillScript     =
@@ -556,11 +559,12 @@ export default class AutofillService implements AutofillServiceInterface {
                 action[3].connected = connected;
                 return true;
             });
+            scriptForFieldsMenu.push(cardLoginMenuFillScript);
         }
 
         // E] generate a standard identity fillscript for the generic cipher
-        let identityLoginMenuFillScript: any = [];
         if (hasIdentities) {
+            let identityLoginMenuFillScript: any = [];
             const idFS = new AutofillScript(pageDetails.documentUUID);
             const idFilledFields: { [id: string]: AutofillField; } = {};
             identityLoginMenuFillScript =
@@ -574,13 +578,10 @@ export default class AutofillService implements AutofillServiceInterface {
                 action[3].connected = connected;
                 return true;
             });
+            scriptForFieldsMenu.push(identityLoginMenuFillScript);
         }
 
-        return [
-            loginLoginMenuFillScript,
-            cardLoginMenuFillScript,
-            identityLoginMenuFillScript,
-        ];
+        return scriptForFieldsMenu;
     }
 
     /* ----------------------------------------------------------------------------- */
