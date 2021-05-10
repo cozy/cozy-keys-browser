@@ -243,29 +243,24 @@ function updateRows(rowsListType) {
         const text = row.querySelector('.row-text')
         const detail = row.querySelector('.row-detail')
         row.dataset.cipherId = cipher.id
+        row.title = i18nGetMessage('inPageMenuFillTheWholeForm')
+        detail.title = i18nGetMessage('inPageMenuOnlyThisField')
         switch (rowsListType) {
             case 'login':
                 text.textContent = cipher.name
-                row.title = 'fill the whole form with this login (Enter)'
                 detail.textContent = cipher.login.username
-                detail.title = 'fill only this field with this value (Ctrl+Enter)'
                 break;
             case 'card':
                 text.textContent = cipher.name
-                row.title = 'fill the whole form with this login (Enter)'
                 detail.textContent = formatCipherData(cipher.card, currentFieldData.card ,currentFieldData.fieldFormat)
-                detail.title = 'fill only this field with this value (Ctrl+Enter)'
                 break;
             case 'ids':
                 text.textContent = cipher.name
-                row.title = 'fill the whole form with this login (Enter)'
                 detail.textContent = cipher.identity[currentFieldData.identity]
-                detail.title = 'fill only this field with this value (Ctrl+Enter)'
                 break;
         }
     });
 }
-
 
 /* --------------------------------------------------------------------- */
 //

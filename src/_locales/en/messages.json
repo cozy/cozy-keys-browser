@@ -125,7 +125,7 @@
     "message": "Automatically fill forms with you adresses, emails, phone numbers, birth dates..."
   },
   "addCardExplanation": {
-    "message": "No longer type you credit card numbers, no longuer loose your PIN, enjoy Cozy Pass filling the purchase forms..."
+    "message": "No longer type you credit card numbers, no longuer loose your PIN: enjoy Cozy Pass filling the purchase forms..."
   },
   "addLogin": {
     "message": "Add a Login"
@@ -908,6 +908,12 @@
   },
   "inPageMenuSelectAnIdentity": {
     "message": "Select an identity"
+  },
+  "inPageMenuFillTheWholeForm": {
+    "message": "fill the whole form (Enter)"
+  },
+  "inPageMenuOnlyThisField": {
+    "message": "only this field (Ctrl+Enter)"
   },
   "experimentalFeature": {
     "message": "This is currently an experimental feature. Use at your own risk."

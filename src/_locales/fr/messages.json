@@ -125,7 +125,7 @@
     "message": "Remplissez automatiquement les formulaires avec vos adresses, email, téléphone, date de naissance..."
   },
   "addCardExplanation": {
-    "message": "Arrêtez de recopier vos numéros de carte de crédit, ne perdez plus votre code, laissez Cozy Pass vous remplir vos formulaire lors de vos achants en ligne..."
+    "message": "Simplifiez vous la vie : ne recopiez plus vos numéros de carte de crédit, ne perdez plus votre code, laissez Cozy Pass remplir pour vous vos formulaires d'achats en ligne..."
   },
   "addLogin": {
     "message": "Ajouter un identifiant"
@@ -896,6 +896,12 @@
   },
   "inPageMenuSelectAnIdentity": {
     "message": "Sélectionner une identité"
+  },
+  "inPageMenuFillTheWholeForm": {
+    "message": "remplir tout le formulaire (Enter)"
+  },
+  "inPageMenuOnlyThisField": {
+    "message": "seulement ce champ (Ctrl+Enter)"
   },
   "experimentalFeature": {
     "message": "Ceci est actuellement une fonctionnalité expérimentale. À utiliser avec prudence."
