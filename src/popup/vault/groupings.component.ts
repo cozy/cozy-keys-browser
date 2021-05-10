@@ -124,7 +124,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     private ciphersForFolder: CipherView[] = [];
     private pageDetails: any[] = [];
     private isPannelVisible: string = 'false';
-    private currentPannel: string = PanelNames.None;
+    private currentPannel: PanelNames = PanelNames.None;
 
     constructor(collectionService: CollectionService, folderService: FolderService,
         storageService: StorageService, userService: UserService,
@@ -636,7 +636,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             PanelNames.None,
         ];
         if (!noHashPanels.includes(this.currentPannel)) {
-            hash = '#/vault?action=view&type=' + this.cipherType[this.currentPannel];
+            hash = '#/vault?action=view&type=' + this.cipherType[this.currentPannel as any];
         }
         window.open(this.cozyClientService.getAppURL('passwords', hash));
     }
