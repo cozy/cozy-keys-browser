@@ -264,7 +264,7 @@ export default class AutofillService implements AutofillServiceInterface {
                 didAutofill = true;
             }
 
-            if (!options.skipLastUsed && options.cipher) {
+            if (!options.skipLastUsed && options.cipher && !options.fieldsForInPageMenuScripts) {
                 this.cipherService.updateLastUsedDate(options.cipher.id);
             }
 
