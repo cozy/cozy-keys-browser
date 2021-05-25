@@ -54,7 +54,7 @@ export default class BrowserMessagingService implements MessagingService {
     (2021/04/05) the server doesn't implement these routes.
     */
     private countSync() {
-        console.log(`countSync()`, this.syncCounter + 1);
+        // console.log(`countSync()`, this.syncCounter + 1);
         this.syncCounter += 1;
         if (this.syncCounter < 3) {
             // console.log(' a chrome.runtime.sendMessage(syncCompleted) is broadcasted');

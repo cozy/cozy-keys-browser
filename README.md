@@ -50,7 +50,7 @@ npm run dist:<firefox|chrome|opera|safari>`
 You can also build all of them in once by running:
 ```
 npm install
-npm run dist`
+npm run dist
 ```
 
 ## Source archive
