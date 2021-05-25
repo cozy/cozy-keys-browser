@@ -108,6 +108,10 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     searchTagClass: string = 'hideSearchTag';
     searchTagText: string;
     enableAnimations: boolean = false;
+    currentPannel: PanelNames = PanelNames.None;
+    ciphersForFolder: CipherView[] = [];
+    isPannelVisible: string = 'false';
+    allCiphers: CipherView[] = null;
 
     @ViewChild('groupingContent') groupingContentEl: ElementRef;
     @ViewChild('searchInput') searchInputEl: ElementRef;
@@ -119,12 +123,8 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     private searchTimeout: any = null;
     private hasSearched = false;
     private hasLoadedAllCiphers = false;
-    private allCiphers: CipherView[] = null;
     private ciphersByType: any;
-    private ciphersForFolder: CipherView[] = [];
     private pageDetails: any[] = [];
-    private isPannelVisible: string = 'false';
-    private currentPannel: PanelNames = PanelNames.None;
 
     constructor(collectionService: CollectionService, folderService: FolderService,
         storageService: StorageService, userService: UserService,
