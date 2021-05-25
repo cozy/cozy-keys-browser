@@ -11,7 +11,7 @@
 }
 
 #notification-bar {
-  width: 100%;
+  width: 0;
   top: 0;
   left: 0;
   padding: 0;

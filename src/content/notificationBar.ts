@@ -630,7 +630,7 @@ function afterLoadedIfRelevant(event: any) {
         frameDiv.setAttribute('aria-live', 'polite');
         frameDiv.id = 'notification-bar';
         if (isSafari)  {
-            frameDiv.style.cssText = 'height: 42px; top: 0; right: 0; padding: 0; position: fixed; ' +
+            frameDiv.style.cssText = 'height: 0; top: 0; right: 0; padding: 0; position: fixed; ' +
             'z-index: 2147483647; visibility: visible;';
         }
         frameDiv.appendChild(iframe);
