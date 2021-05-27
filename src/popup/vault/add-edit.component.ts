@@ -58,7 +58,6 @@ export class AddEditComponent extends BaseAddEditComponent {
 
     @HostListener('window:keydown', ['$event'])
     handleKeyDown(event: KeyboardEvent) {
-        console.log(event.key);
         if (event.key === 'Escape') {
             this.cancel();
             event.preventDefault();

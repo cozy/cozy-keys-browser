@@ -620,8 +620,9 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         }
         // Get the current url
         const tab = await BrowserApi.getTabFromCurrentWindow();
-        const isCipherMatcinghUrl = await this.konnectorsService.hasURLMatchingCiphers(tab.url, [cipher], defaultMatch);
-        if (isCipherMatcinghUrl) {
+        const isCipherMatchinghUrl =
+            await this.konnectorsService.hasURLMatchingCiphers(tab.url, [cipher], defaultMatch);
+        if (isCipherMatchinghUrl) {
             this.fillCipher(cipher);
         } else {
             this.launchCipher(cipher);
