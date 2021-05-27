@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import {
     ActivatedRoute,
     Router,
@@ -54,6 +54,15 @@ export class AddEditComponent extends BaseAddEditComponent {
             { name: i18nService.t('typeCard'), value: CipherType.Card },
             { name: i18nService.t('typeIdentity'), value: CipherType.Identity },
         ];
+    }
+
+    @HostListener('window:keydown', ['$event'])
+    handleKeyDown(event: KeyboardEvent) {
+        console.log(event.key);
+        if (event.key === 'Escape') {
+            this.cancel();
+            event.preventDefault();
+        }
     }
 
     async ngOnInit() {

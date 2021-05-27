@@ -40,6 +40,8 @@ import { BroadcasterService } from 'jslib/angular/services/broadcaster.service';
 
 import { GroupingsComponent as BaseGroupingsComponent } from 'jslib/angular/components/groupings.component';
 
+import { Utils } from 'jslib/misc/utils';
+
 import { AutofillService } from '../../services/abstractions/autofill.service';
 import { LocalConstantsService as ConstantsService } from '../services/constants.service';
 import { CozyClientService } from '../services/cozyClient.service';
@@ -125,6 +127,8 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     private hasLoadedAllCiphers = false;
     private ciphersByType: any;
     private pageDetails: any[] = [];
+    private url: string = '';
+    private hostname: string = '';
 
     constructor(collectionService: CollectionService, folderService: FolderService,
         storageService: StorageService, userService: UserService,
@@ -257,6 +261,11 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         // console.log('grouping.component.load()', this.route);
         // request page detail from current tab
         const tab = await BrowserApi.getTabFromCurrentWindow();
+        if (tab != null) {
+            this.url = tab.url;
+            this.hostname = Utils.getHostname(this.url);
+        }
+
         this.pageDetails = [];
         BrowserApi.tabSendMessage(tab, {
             command: 'collectPageDetails',
@@ -529,7 +538,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async addCipher() {
-        this.router.navigate(['/add-cipher']);
+        this.router.navigate(['/add-cipher'], { queryParams: { name: this.hostname, uri: this.url } });
     }
 
     async addIdentityCipher() {
