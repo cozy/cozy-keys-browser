@@ -342,7 +342,7 @@
     "message": "Authentification"
   },
   "yourVaultIsLocked": {
-    "message": "Votre coffre est verrouillé. Vérifiez votre mot de passe Cozy pour continuer."
+    "message": "Votre coffre est verrouillé, confirmez votre mot de passe Cozy pour continuer."
   },
   "unlock": {
     "message": "Déverrouiller"

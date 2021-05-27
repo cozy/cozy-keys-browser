@@ -5,7 +5,6 @@
             <span class="title">{{(pinLock ? 'verifyPin' : 'verifyMasterPassword') | i18n}}</span>
         </div>
         <div class="right">
-            <button type="submit" appBlurClick>{{'unlock' | i18n}}</button>
         </div>
     </header>
     <content>
@@ -31,13 +30,16 @@
                     </div>
                 </div>
             </div>
+            <div class="content">
+                <button class="btn primary block" type="submit" appBlurClick>{{'unlock' | i18n}}</button>
+            </div>
             <div class="box-footer">
                 <p>{{(pinLock ? 'yourVaultIsLockedPinCode' : 'yourVaultIsLocked') | i18n}}</p>
                 {{'loggedInAsOn' | i18n : email : webVaultHostname}}
+                <a href="#" appStopClick (click)="logOut()">{{'logOut' | i18n}}.</a>
+                <p class="">
+                </p>
             </div>
         </div>
-        <p class="text-center">
-            <a href="#" appStopClick (click)="logOut()">{{'logOut' | i18n}}</a>
-        </p>
     </content>
 </form>

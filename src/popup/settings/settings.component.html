@@ -10,6 +10,11 @@
     <div class="box list">
         <div class="box-header">{{'manage' | i18n}}</div>
         <div class="box-content box-content-settings single-line">
+            <a class="box-content-row settings-row box-content-row-flex text-default" href="#" appStopClick appBlurClick
+                (click)="lock()">
+                <div class="row-main">{{'lockNow' | i18n}}</div>
+                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+            </a>
             <a class="box-content-row settings-row box-content-row-flex text-default" routerLink="/folders">
                 <div class="row-main">{{'folders' | i18n}}</div>
                 <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
@@ -41,11 +46,6 @@
                 <label for="pin">{{'unlockWithPin' | i18n}}</label>
                 <input id="pin" type="checkbox" (change)="updatePin()" [(ngModel)]="pin">
             </div>
-            <a class="box-content-row settings-row box-content-row-flex text-default" href="#" appStopClick appBlurClick
-                (click)="lock()">
-                <div class="row-main">{{'lockNow' | i18n}}</div>
-                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </a>
         </div>
     </div>
     <div class="box list">
