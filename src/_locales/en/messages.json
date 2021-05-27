@@ -67,6 +67,9 @@
   "myCozyTab": {
     "message": "My Cozy"
   },
+  "myCozyTab_toolTip": {
+    "message": "Open my Cozy"
+  },
   "myVault": {
     "message": "Passwords & co"
   },
@@ -570,7 +573,7 @@
     "message": "Search type"
   },
   "noneFolder": {
-    "message": "No Folder",
+    "message": "Uncategorized",
     "description": "This is the folder for uncategorized items"
   },
   "disableAddLoginNotification": {
