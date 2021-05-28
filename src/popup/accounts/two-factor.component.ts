@@ -69,11 +69,8 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
 
         if (!isSafari && this.selectedProviderType === TwoFactorProviderType.Email &&
             this.popupUtilsService.inPopup(window)) {
-            const confirmed = await this.platformUtilsService.showDialog(this.i18nService.t('popup2faCloseMessage'),
-                null, this.i18nService.t('yes'), this.i18nService.t('no'));
-            if (confirmed) {
-                this.popupUtilsService.popOut(window);
-            }
+            // in case of 2FA and not in Safari, open popout where the user will type its 2FA Code.
+            this.popupUtilsService.popOut(window);
         }
 
         if (!this.initU2f && this.selectedProviderType === TwoFactorProviderType.U2f &&
