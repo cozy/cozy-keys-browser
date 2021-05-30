@@ -1,16 +1,16 @@
-<span class="row-btn" (click)="view()" appStopClick appStopProp appA11yTitle="{{'view' | i18n}}" *ngIf="showView">
+<span class="row-btn" (click)="autofill()" appStopClick appStopProp appA11yTitle="{{'autofill' | i18n}}" *ngIf="!showGlobe">
     <div class="icon-cozy-inline">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M0 8s2-6 8-6 8 6 8 6-2 6-8 6-8-6-8-6zm8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.7847 9.63712C15.9175 9.70962 16 9.84884 16 10.0001C16 10.1513 15.9175 10.2903 15.7849 10.363L12.2798 12.2799L10.3631 15.7847C10.2905 15.9175 10.1513 16 10.0001 16C9.84863 16 9.70962 15.9175 9.63685 15.7849L7.72012 12.2799L4.21528 10.363C4.08247 10.2905 4 10.1513 4 10.0001C4 9.84884 4.08247 9.70962 4.21528 9.63712L7.72012 7.72007L9.63685 4.21523C9.70962 4.08263 9.84863 4 10.0001 4C10.1513 4 10.2904 4.08263 10.3631 4.21523L12.2798 7.72007L15.7847 9.63712ZM6.87442 3.28832C6.95189 3.33061 7 3.41182 7 3.50006C7 3.58827 6.95189 3.66936 6.87454 3.71178L4.8299 4.82993L3.71181 6.87442C3.66948 6.95189 3.58827 7 3.50006 7C3.4117 7 3.33061 6.95189 3.28816 6.87454L2.17007 4.82993L0.12558 3.71178C0.0481097 3.66948 0 3.58827 0 3.50006C0 3.41182 0.0481097 3.33061 0.12558 3.28832L2.17007 2.17004L3.28816 0.125549C3.33061 0.0482025 3.4117 0 3.50006 0C3.58827 0 3.66939 0.0482025 3.71181 0.125549L4.8299 2.17004L6.87442 3.28832Z"/>
         </svg>
     </div>
 </span>
 <ng-container *ngIf="cipher.type === cipherType.Login">
     <span class="row-btn" appStopClick appStopProp appA11yTitle="{{'launch' | i18n}}" (click)="launch()"
-        *ngIf="!showView" [ngClass]="{disabled: !cipher.login.canLaunch}">
+        *ngIf="showGlobe" [ngClass]="{disabled: !cipher.login.canLaunch}">
         <div class="icon-cozy-inline">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M9 0h5.997A.996.996 0 0 1 16 1.003V7h-2V3.5L7.5 10 6 8.5 12.5 2H9V0zM7 2H2v12h12V9h2v5.997A.995.995 0 0 1 15 16H1c-.555 0-1-.448-1-1V1a1 1 0 0 1 1.003-1H7v2z"/>
+            <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                        <path d="M7.88866394,13.9989877 L7,10 L6,9 L4,6 L3.64539075,3.87234452 C2.62559227,4.94785733 2,6.40087117 2,8 C2,11.2765166 4.62632955,13.9396208 7.88866394,13.9989877 L7.88866394,13.9989877 Z M8.12663738,2.00130991 L10,3.5 L10,5 L8,6.5 L6.5,7.5 L7,8.5 L10,9 L11,10 L11,11.5 L9.45110858,13.8233371 C12.0637207,13.1744316 14,10.8133371 14,8 C14,4.72860754 11.3818787,2.06871043 8.12663738,2.00130991 L8.12663738,2.00130991 Z M8,16 C3.58172178,16 0,12.4182782 0,8 C0,3.58172178 3.58172178,0 8,0 C12.4182782,0 16,3.58172178 16,8 C16,12.4182782 12.4182782,16 8,16 Z"></path>
             </svg>
         </div>
     </span>

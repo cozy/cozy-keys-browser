@@ -25,9 +25,10 @@ import { PopupUtilsService } from '../services/popup-utils.service';
     templateUrl: 'action-buttons.component.html',
 })
 export class ActionButtonsComponent {
+    @Output() onAutofill = new EventEmitter<CipherView>();
     @Output() onView = new EventEmitter<CipherView>();
     @Input() cipher: CipherView;
-    @Input() showView = false;
+    @Input() showGlobe = false;
 
     cipherType = CipherType;
 
@@ -68,5 +69,9 @@ export class ActionButtonsComponent {
 
     view() {
         this.onView.emit(this.cipher);
+    }
+
+    autofill() {
+        this.onAutofill.emit(this.cipher);
     }
 }

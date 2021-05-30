@@ -243,6 +243,10 @@ li.active .icon-cozy-inline > svg {
     fill: $brand-primary;
 }
 
+.text-primary .icon-cozy-inline > svg {
+    fill: $brand-primary;
+}
+
 .icon-pen {
     background-image: url('../images/icons-16-icon-pen.svg');
 }
