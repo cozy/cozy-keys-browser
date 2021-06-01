@@ -1119,8 +1119,14 @@
   "typeCard": {
     "message": "Card"
   },
+  "typeCards": {
+    "message": "Cards"
+  },
   "typeIdentity": {
     "message": "Profile"
+  },
+  "typeIdentities": {
+    "message": "Profiles"
   },
   "forThisWebSite": {
     "message": "For this web page"

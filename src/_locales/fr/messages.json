@@ -1107,8 +1107,14 @@
   "typeCard": {
     "message": "Carte de paiement"
   },
+  "typeCards": {
+    "message": "Cartes de paiement"
+  },
   "typeIdentity": {
     "message": "Profil"
+  },
+  "typeIdentities": {
+    "message": "Profils"
   },
   "forThisWebSite": {
     "message": "Pour ce site web"
