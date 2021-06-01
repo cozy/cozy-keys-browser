@@ -137,7 +137,7 @@
     "message": "Ajouter une carte de paiement"
   },
   "addIdentity": {
-    "message": "Ajouter une identité"
+    "message": "Ajouter un profil"
   },
   "addItem": {
     "message": "Ajouter un élément"
@@ -187,7 +187,7 @@
     "message": "Ajouter un dossier"
   },
   "name": {
-    "message": "Label"
+    "message": "Intitulé"
   },
   "editFolder": {
     "message": "Modifier le dossier"
@@ -583,10 +583,10 @@
     "message": "Les cartes stockées dans votre coffre sont listées sur la page \"Onglet courant\" pour un accès facile lors du remplissage automatique."
   },
   "dontShowIdentitiesCurrentTab": {
-    "message": "Ne pas afficher les identités sur la page Onglet courant"
+    "message": "Ne pas afficher les profils sur la page Onglet courant"
   },
   "dontShowIdentitiesCurrentTabDesc": {
-    "message": "Les identités stockées dans votre coffre sont listées sur la page \"Onglet courant\" pour un accès facile lors du remplissage automatique."
+    "message": "Les profils stockés dans votre coffre sont listées sur la page \"Onglet courant\" pour un accès facile lors du remplissage automatique."
   },
   "clearClipboard": {
     "message": "Effacer le presse-papiers",
@@ -898,7 +898,7 @@
     "message": "Sélectionner une carte bancaire"
   },
   "inPageMenuSelectAnIdentity": {
-    "message": "Sélectionner une identité"
+    "message": "Sélectionner un profil"
   },
   "inPageMenuFillTheWholeForm": {
     "message": "remplir tout le formulaire (Enter)"
@@ -1048,7 +1048,7 @@
     "message": "Nom"
   },
   "identityName": {
-    "message": "Identité"
+    "message": "Nom complet"
   },
   "company": {
     "message": "Société"
@@ -1108,7 +1108,7 @@
     "message": "Carte de paiement"
   },
   "typeIdentity": {
-    "message": "Identité"
+    "message": "Profil"
   },
   "forThisWebSite": {
     "message": "Pour ce site web"
@@ -1132,7 +1132,7 @@
     "message": "Cartes de paiement"
   },
   "identities": {
-    "message": "Identités"
+    "message": "Profils"
   },
   "logins": {
     "message": "Identifiants"

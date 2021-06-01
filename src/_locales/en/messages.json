@@ -137,7 +137,7 @@
     "message": "Add a credit card"
   },
   "addIdentity": {
-    "message": "Add an identity"
+    "message": "Add a profile"
   },
   "addItem": {
     "message": "Add Item"
@@ -589,10 +589,10 @@
     "message": "Card items from your vault are listed on the 'Current Tab' page for easy auto-fill access."
   },
   "dontShowIdentitiesCurrentTab": {
-    "message": "Don't Show Identities on Tab Page"
+    "message": "Don't show Profiles on Tab Page"
   },
   "dontShowIdentitiesCurrentTabDesc": {
-    "message": "Identity items from your vault are listed on the 'Current Tab' page for easy auto-fill access."
+    "message": "Profile items from your vault are listed on the 'Current Tab' page for easy auto-fill access."
   },
   "clearClipboard": {
     "message": "Clear Clipboard",
@@ -910,7 +910,7 @@
     "message": "Select a bank card"
   },
   "inPageMenuSelectAnIdentity": {
-    "message": "Select an identity"
+    "message": "Select a profile"
   },
   "inPageMenuFillTheWholeForm": {
     "message": "fill the whole form (Enter)"
@@ -1060,7 +1060,7 @@
     "message": "Last Name"
   },
   "identityName": {
-    "message": "Identity Name"
+    "message": "Full name"
   },
   "company": {
     "message": "Company"
@@ -1120,7 +1120,7 @@
     "message": "Card"
   },
   "typeIdentity": {
-    "message": "Identity"
+    "message": "Profile"
   },
   "forThisWebSite": {
     "message": "For this web page"
@@ -1144,7 +1144,7 @@
     "message": "Cards"
   },
   "identities": {
-    "message": "Identities"
+    "message": "Profiles"
   },
   "logins": {
     "message": "Logins"
