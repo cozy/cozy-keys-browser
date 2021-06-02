@@ -387,6 +387,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
     unActivatePanel() {
         // console.log(`unActivatePanel('${this.currentPannel}')`);
+        this.location.go('/tabs/vault');
         switch (this.currentPannel) {
             case PanelNames.None:
                 return;
@@ -406,6 +407,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
     activatePanel(panelName: string) {
         // console.log(`activatePanel('${panelName}')`);
+        this.location.go('/tabs/vault?activatedPanel=' + panelName);
         switch (panelName) {
             case PanelNames.CurrentPageCiphers:
                 this.searchTagClass = 'showSearchTag';
