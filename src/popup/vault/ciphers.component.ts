@@ -1,5 +1,4 @@
 import { ToasterService } from 'angular2-toaster';
-import { Angulartics2 } from 'angulartics2';
 
 import { Location } from '@angular/common';
 import {
