@@ -64,8 +64,14 @@
   "tab": {
     "message": "Ce site web"
   },
+  "myCozyTab": {
+    "message": "Mon Cozy"
+  },
+  "myCozyTab_toolTip": {
+    "message": "Accéder à mon Cozy"
+  },
   "myVault": {
-    "message": "Mon coffre"
+    "message": "Mots de passe"
   },
   "tools": {
     "message": "Outils"
@@ -112,8 +118,26 @@
   "autoFillInfo": {
     "message": "Aucun identifiant enregistré pour remplir la page actuelle."
   },
+  "addLoginExplanation_L1": {
+    "message": "Ne plus chercher, ne plus perdre, ne plus taper"
+  },
+  "addLoginExplanation_L2": {
+    "message": "vos mots de passe..."
+  },
+  "addIdentityExplanation": {
+    "message": "Remplissez automatiquement les formulaires avec vos adresses, email, téléphone, date de naissance..."
+  },
+  "addCardExplanation": {
+    "message": "Simplifiez vous la vie : ne recopiez plus vos numéros de carte de crédit, ne perdez plus votre code, laissez Cozy Pass remplir pour vous vos formulaires d'achats en ligne..."
+  },
   "addLogin": {
     "message": "Ajouter un identifiant"
+  },
+  "addCard": {
+    "message": "Ajouter une carte de paiement"
+  },
+  "addIdentity": {
+    "message": "Ajouter un profil"
   },
   "addItem": {
     "message": "Ajouter un élément"
@@ -163,7 +187,7 @@
     "message": "Ajouter un dossier"
   },
   "name": {
-    "message": "Label"
+    "message": "Intitulé"
   },
   "editFolder": {
     "message": "Modifier le dossier"
@@ -309,7 +333,7 @@
     "message": "Noter l'extension"
   },
   "rateExtensionDesc": {
-    "message": "Merci de nous aider en mettant une bonne note !"
+    "message": "Merci de nous aider avec une bonne note !"
   },
   "connectedCozy": {
     "message": "Connecté à :"
@@ -321,7 +345,7 @@
     "message": "Authentification"
   },
   "yourVaultIsLocked": {
-    "message": "Votre coffre est verrouillé. Vérifiez votre mot de passe Cozy pour continuer."
+    "message": "Votre coffre est verrouillé, confirmez votre mot de passe Cozy pour continuer."
   },
   "unlock": {
     "message": "Déverrouiller"
@@ -543,8 +567,8 @@
     "message": "Rechercher dans le type"
   },
   "noneFolder": {
-    "message": "Aucun dossier",
-    "description": "This is the folder for uncategorized items"
+    "message": "Non classés",
+    "description": "Répertoire avec les éléments non classés"
   },
   "disableAddLoginNotification": {
     "message": "Désactiver la notification d'ajout d'identifiant"
@@ -559,10 +583,10 @@
     "message": "Les cartes stockées dans votre coffre sont listées sur la page \"Onglet courant\" pour un accès facile lors du remplissage automatique."
   },
   "dontShowIdentitiesCurrentTab": {
-    "message": "Ne pas afficher les identités sur la page Onglet courant"
+    "message": "Ne pas afficher les profils sur la page Onglet courant"
   },
   "dontShowIdentitiesCurrentTabDesc": {
-    "message": "Les identités stockées dans votre coffre sont listées sur la page \"Onglet courant\" pour un accès facile lors du remplissage automatique."
+    "message": "Les profils stockés dans votre coffre sont listées sur la page \"Onglet courant\" pour un accès facile lors du remplissage automatique."
   },
   "clearClipboard": {
     "message": "Effacer le presse-papiers",
@@ -874,7 +898,13 @@
     "message": "Sélectionner une carte bancaire"
   },
   "inPageMenuSelectAnIdentity": {
-    "message": "Sélectionner une identité"
+    "message": "Sélectionner un profil"
+  },
+  "inPageMenuFillTheWholeForm": {
+    "message": "remplir tout le formulaire (Enter)"
+  },
+  "inPageMenuOnlyThisField": {
+    "message": "seulement ce champ (Ctrl+Enter)"
   },
   "experimentalFeature": {
     "message": "Ceci est actuellement une fonctionnalité expérimentale. À utiliser avec prudence."
@@ -1018,7 +1048,7 @@
     "message": "Nom"
   },
   "identityName": {
-    "message": "Identité"
+    "message": "Nom complet"
   },
   "company": {
     "message": "Société"
@@ -1077,8 +1107,17 @@
   "typeCard": {
     "message": "Carte de paiement"
   },
+  "typeCards": {
+    "message": "Cartes de paiement"
+  },
   "typeIdentity": {
-    "message": "Identité"
+    "message": "Profil"
+  },
+  "typeIdentities": {
+    "message": "Profils"
+  },
+  "forThisWebSite": {
+    "message": "Pour ce site web"
   },
   "passwordHistory": {
     "message": "Historique des mots de passe"
@@ -1090,7 +1129,7 @@
     "message": "Collections"
   },
   "popOutNewWindow": {
-    "message": "Ouvrir dans une nouvelle fenêtre"
+    "message": "Ouvrir dans votre Cozy"
   },
   "refresh": {
     "message": "Actualiser"
@@ -1099,7 +1138,7 @@
     "message": "Cartes de paiement"
   },
   "identities": {
-    "message": "Identités"
+    "message": "Profils"
   },
   "logins": {
     "message": "Identifiants"

@@ -221,6 +221,7 @@ app-vault-icon {
     background-repeat: no-repeat;
     width: 16px;
     height: 16px;
+    background-position: center;
 }
 
 .icon-cozy-inline {
@@ -236,6 +237,38 @@ app-vault-icon {
     svg {
         fill: $gray-light;
     }
+}
+
+li.active .icon-cozy-inline > svg {
+    fill: $brand-primary;
+}
+
+.text-primary .icon-cozy-inline > svg {
+    fill: $brand-primary;
+}
+
+.icon-pen {
+    background-image: url('../images/icons-16-icon-pen.svg');
+}
+
+.icon-cross {
+    background-image: url('../images/icons-16-icon-cross.svg');
+}
+
+.icon-plus {
+    background-image: url('../images/icons-16-icon-plus.svg');
+}
+
+.icon-back {
+    background-image: url('../images/icons-16-icon-back.svg');
+}
+
+.icon-out-w {
+    background-image: url('../images/icons-16-icon-out-white.svg');
+}
+
+.icon-out {
+    background-image: url('../images/icons-16-icon-out.svg');
 }
 
 .icon-copy {
@@ -256,26 +289,28 @@ app-vault-icon {
     background-size: 12px 16px;
 }
 
+.icon-login {
+    background-image: url('../images/icons-login.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+}
+
 .icon-identity {
     background-image: url('../images/icons-identity.svg');
     width: 24px;
     height: 24px;
-    margin-top: 8px;
 }
 
 .icon-bank {
     background-image: url('../images/icons-card.svg');
     width: 24px;
     height: 24px;
-    margin-top: 8px;
 }
 
 .icon-key {
     background-image: url('../images/icons-16-icon-key.svg');
-}
-
-.icon-out {
-    background-image: url('../images/icons-16-icon-out.svg');
 }
 
 .icon-profile {

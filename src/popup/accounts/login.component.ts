@@ -27,10 +27,10 @@ const Keys = {
 const getPassphraseResetURL = (cozyUrl: string) => {
     // Handle lack of protocol and trailing slash
     cozyUrl = cozyUrl.startsWith('http') ?
-        cozyUrl : `https://${cozyUrl}`
-    cozyUrl = cozyUrl.endsWith('/') ? cozyUrl.substring(0, cozyUrl.length - 1) : cozyUrl
-    return `${cozyUrl}/auth/passphrase_reset` 
-}
+        cozyUrl : `https://${cozyUrl}`;
+    cozyUrl = cozyUrl.endsWith('/') ? cozyUrl.substring(0, cozyUrl.length - 1) : cozyUrl;
+    return `${cozyUrl}/auth/passphrase_reset`;
+};
 
 @Component({
     selector: 'app-login',
@@ -137,20 +137,20 @@ export class LoginComponent implements OnInit {
             const hostname = Utils.getHostname(loginUrl);
             this.email = 'me@' + hostname;
 
-            this.formPromise = this.authService.logIn(this.email, this.masterPassword).catch(e => {
+            this.formPromise = this.authService.logIn(this.email, this.masterPassword).catch( (e) => {
                 if (e.response && e.response.error && e.response.error === 'invalid password') {
                     this.platformUtilsService.showToast('error',  this.i18nService.t('errorOccurred'),
                         this.i18nService.t('invalidMasterPassword'));
                     // Returning null here so that the validation service in jslib
                     // does not consider the result of the call as an error, otherwise
                     // we would have a double toast
-                    return null
+                    return null;
                 }
-                throw e
+                throw e;
             });
             const response = await this.formPromise;
             if (!response) {
-                return
+                return;
             }
 
             // Save the URL for next time
@@ -196,21 +196,21 @@ export class LoginComponent implements OnInit {
 
     async forgotPassword() {
         if (!this.cozyUrl) {
-           this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
+            this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
                 this.i18nService.t('cozyUrlRequired'));
-            return
+            return;
         }
 
-        const browser = window.browser || window.chrome
+        const browser = window.browser || window.chrome;
         await browser.tabs.create({
             active: true,
-            url: getPassphraseResetURL(this.cozyUrl)
-        })
+            url: getPassphraseResetURL(this.cozyUrl),
+        });
 
         // Close popup
-        const popupWindows = browser.extension.getViews({ type: "popup" });
+        const popupWindows = browser.extension.getViews({ type: 'popup' });
         if (popupWindows.find((w: Window) => w === window)) {
-          window.close()
+          window.close();
         }
     }
 }

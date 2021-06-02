@@ -1,6 +1,7 @@
 import { ToasterService } from 'angular2-toaster';
 import {
     Component,
+    HostListener,
     OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
@@ -19,6 +20,12 @@ export class SyncComponent implements OnInit {
     constructor(private syncService: SyncService, private router: Router,
         private toasterService: ToasterService,
         private i18nService: I18nService) {
+    }
+
+    @HostListener('window:keydown', ['$event'])
+    handleKeyDown(event: KeyboardEvent) {
+        this.router.navigate(['/tabs/settings']);
+        event.preventDefault();
     }
 
     async ngOnInit() {

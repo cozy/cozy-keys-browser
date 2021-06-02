@@ -1,5 +1,4 @@
 import menuCtrler from './menuCtrler';
-
 !(function () {
     /*
     1Password Extension

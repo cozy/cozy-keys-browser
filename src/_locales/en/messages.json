@@ -64,8 +64,14 @@
   "tab": {
     "message": "This web page"
   },
+  "myCozyTab": {
+    "message": "My Cozy"
+  },
+  "myCozyTab_toolTip": {
+    "message": "Open my Cozy"
+  },
   "myVault": {
-    "message": "My Vault"
+    "message": "Passwords & co"
   },
   "tools": {
     "message": "Tools"
@@ -112,8 +118,26 @@
   "autoFillInfo": {
     "message": "You don't have any recorded login to fill the current web page."
   },
+  "addLoginExplanation_L1": {
+    "message": "No longer search, loose nor type"
+  },
+  "addLoginExplanation_L2": {
+    "message": "your passwords..."
+  },
+  "addIdentityExplanation": {
+    "message": "Automatically fill forms with you adresses, emails, phone numbers, birth dates..."
+  },
+  "addCardExplanation": {
+    "message": "No longer type you credit card numbers, no longuer loose your PIN: enjoy Cozy Pass filling the purchase forms..."
+  },
   "addLogin": {
     "message": "Add a Login"
+  },
+  "addCard": {
+    "message": "Add a credit card"
+  },
+  "addIdentity": {
+    "message": "Add a profile"
   },
   "addItem": {
     "message": "Add Item"
@@ -324,7 +348,7 @@
     "message": "Authentication"
   },
   "yourVaultIsLocked": {
-    "message": "Your vault is locked. Verify your Cozy password to continue."
+    "message": "Your vault is locked, confirm your Cozy password to continue."
   },
   "unlock": {
     "message": "Unlock"
@@ -549,7 +573,7 @@
     "message": "Search type"
   },
   "noneFolder": {
-    "message": "No Folder",
+    "message": "Uncategorized",
     "description": "This is the folder for uncategorized items"
   },
   "disableAddLoginNotification": {
@@ -565,10 +589,10 @@
     "message": "Card items from your vault are listed on the 'Current Tab' page for easy auto-fill access."
   },
   "dontShowIdentitiesCurrentTab": {
-    "message": "Don't Show Identities on Tab Page"
+    "message": "Don't show Profiles on Tab Page"
   },
   "dontShowIdentitiesCurrentTabDesc": {
-    "message": "Identity items from your vault are listed on the 'Current Tab' page for easy auto-fill access."
+    "message": "Profile items from your vault are listed on the 'Current Tab' page for easy auto-fill access."
   },
   "clearClipboard": {
     "message": "Clear Clipboard",
@@ -886,7 +910,13 @@
     "message": "Select a bank card"
   },
   "inPageMenuSelectAnIdentity": {
-    "message": "Select an identity"
+    "message": "Select a profile"
+  },
+  "inPageMenuFillTheWholeForm": {
+    "message": "fill the whole form (Enter)"
+  },
+  "inPageMenuOnlyThisField": {
+    "message": "only this field (Ctrl+Enter)"
   },
   "experimentalFeature": {
     "message": "This is currently an experimental feature. Use at your own risk."
@@ -1030,7 +1060,7 @@
     "message": "Last Name"
   },
   "identityName": {
-    "message": "Identity Name"
+    "message": "Full name"
   },
   "company": {
     "message": "Company"
@@ -1089,8 +1119,17 @@
   "typeCard": {
     "message": "Card"
   },
+  "typeCards": {
+    "message": "Cards"
+  },
   "typeIdentity": {
-    "message": "Identity"
+    "message": "Profile"
+  },
+  "typeIdentities": {
+    "message": "Profiles"
+  },
+  "forThisWebSite": {
+    "message": "For this web page"
   },
   "passwordHistory": {
     "message": "Password History"
@@ -1102,7 +1141,7 @@
     "message": "Collections"
   },
   "popOutNewWindow": {
-    "message": "Pop out to a new window"
+    "message": "Open in your Cozy"
   },
   "refresh": {
     "message": "Refresh"
@@ -1111,7 +1150,7 @@
     "message": "Cards"
   },
   "identities": {
-    "message": "Identities"
+    "message": "Profiles"
   },
   "logins": {
     "message": "Logins"

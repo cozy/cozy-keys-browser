@@ -17,8 +17,9 @@ export class CiphersListComponent {
     @Output() onSelected = new EventEmitter<CipherView>();
     @Output() onDoubleSelected = new EventEmitter<CipherView>();
     @Output() onView = new EventEmitter<CipherView>();
+    @Output() onAutofill = new EventEmitter<CipherView>();
     @Input() ciphers: CipherView[];
-    @Input() showView = false;
+    @Input() showGlobe = false;
     @Input() title: string;
 
     cipherType = CipherType;
@@ -33,5 +34,9 @@ export class CiphersListComponent {
 
     viewCipher(c: CipherView) {
         this.onView.emit(c);
+    }
+
+    autofill(c: CipherView) {
+        this.onAutofill.emit(c);
     }
 }

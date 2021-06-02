@@ -146,9 +146,9 @@ $visible-label-focused-top: -0.7rem;
     cursor:text;
     position: absolute;
     left: $visible-label-left;
-    padding-left: $visible-label-padding;
-    padding-right: $visible-label-padding;
-    max-width: calc(100% - #{ 2 * $visible-label-padding + $visible-label-left});
+    padding-left: 0;
+    padding-right: 0;
+    max-width: calc(100% - #{ $visible-label-left});
     transition: all 0.5s;
     background-color: #297EF2;
 }
@@ -180,6 +180,8 @@ $visible-label-focused-top: -0.7rem;
 .focused-or-filled .visible-label > label {
     font-size: 12px;
     max-width: calc(100% - #{ 2 * $visible-label-padding + $visible-label-left + $visible-label-right});
+    padding-left: $visible-label-padding;
+    padding-right: $visible-label-padding;
 }
 
 .box-labeled-input {

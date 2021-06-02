@@ -109,6 +109,9 @@ export default class RuntimeBackground {
                     setTimeout(async () => await this.main.refreshBadgeAndMenu(), 2000);
                 }
                 break;
+            case 'fullSync':
+                this.syncService.fullSync(true);
+                break;
             case 'openPopup':
                 await this.main.openPopup();
                 break;

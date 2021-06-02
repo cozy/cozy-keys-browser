@@ -7,10 +7,6 @@
             <span class="title">{{'appName' | i18n}}</span>
         </div>
         <div class="right">
-            <button type="submit" appBlurClick [disabled]="form.loading">
-                <span [hidden]="form.loading">{{'login' | i18n}}</span>
-                <i class="fa fa-spinner fa-lg fa-spin" [hidden]="!form.loading" aria-hidden="true"></i>
-            </button>
         </div>
     </header>
     <content>
@@ -26,7 +22,7 @@
                         <label for="masterPassword">{{'masterPass' | i18n}}</label>
                         <input id="masterPassword" type="{{showPassword ? 'text' : 'password'}}" name="MasterPassword"
                             class="monospaced" [(ngModel)]="masterPassword" required
-                            placeholder="{{'cozyPassword' | i18n}}" appInputVerbatim>
+                            appInputVerbatim>
                     </div>
                     <div class="action-buttons">
                         <a class="row-btn" href="#" appStopClick appBlurClick
@@ -37,11 +33,19 @@
                     </div>
                 </div>
             </div>
+
+            <div class="content">
+                <button class="btn primary block" type="submit" appBlurClick [disabled]="form.loading">
+                    <span [hidden]="form.loading">{{'login' | i18n}}</span>
+                    <i class="fa fa-spinner fa-lg fa-spin" [hidden]="!form.loading" aria-hidden="true"></i>
+                </button>
+            </div>
+
             <div class="box-content-row box-content-row-flex">
                 <a style="cursor: pointer" (click)="forgotPassword()">{{'forgotPassword' | i18n}}</a>
             </div>
         </div>
-        
-        
+
+
     </content>
 </form>

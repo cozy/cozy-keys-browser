@@ -122,6 +122,7 @@ const plugins = [
 ];
 
 if (ENV === 'production') {
+// if (false) {
     moduleRules.push({
         test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
         loader: '@ngtools/webpack',

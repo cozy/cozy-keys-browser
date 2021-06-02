@@ -28,7 +28,7 @@ $brand-info: #555555;
 $brand-warning: #bf7e16;
 $brand-primary-accent: #1252A3;
 
-$background-color: #ffffff;
+$background-color: #F5F6F7;
 $background-color-alt: #ffffff;
 $background-color-lighter: #5397f4;
 
@@ -79,7 +79,7 @@ $themes: (
         boxRowButtonHoverColor: darken($brand-primary, 10%),
         inputBorderColor: darken($border-color-dark, 7%),
         inputBackgroundColor: #ffffff,
-        inputPlaceholderColor: lighten($gray-light, 35%),
+        inputPlaceholderColor: lighten($gray-light, 20%),
         buttonBackgroundColor: $button-background-color,
         buttonBorderColor: $button-border-color,
         buttonColor: $button-color,

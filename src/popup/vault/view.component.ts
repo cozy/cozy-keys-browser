@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import {
     ChangeDetectorRef,
     Component,
+    HostListener,
     NgZone,
 } from '@angular/core';
 import {
@@ -27,6 +28,7 @@ import { BroadcasterService } from 'jslib/angular/services/broadcaster.service';
 import { ViewComponent as BaseViewComponent } from 'jslib/angular/components/view.component';
 import { BrowserApi } from '../../browser/browserApi';
 import { AutofillService } from '../../services/abstractions/autofill.service';
+import { CozyClientService } from '../services/cozyClient.service';
 import { PopupUtilsService } from '../services/popup-utils.service';
 
 const BroadcasterSubscriptionId = 'ChildViewComponent';
@@ -43,6 +45,8 @@ export class ViewComponent extends BaseViewComponent {
     tab: any;
     loadPageDetailsTimeout: number;
     inPopout = false;
+    pannelBack: string = undefined;
+    scrollTopBack: number = undefined;
 
     constructor(cipherService: CipherService, totpService: TotpService,
         tokenService: TokenService, i18nService: I18nService,
@@ -52,9 +56,18 @@ export class ViewComponent extends BaseViewComponent {
         broadcasterService: BroadcasterService, ngZone: NgZone,
         changeDetectorRef: ChangeDetectorRef, userService: UserService,
         eventService: EventService, private autofillService: AutofillService,
-        private messagingService: MessagingService, private popupUtilsService: PopupUtilsService) {
+        private messagingService: MessagingService, private popupUtilsService: PopupUtilsService,
+        private cozyClientService: CozyClientService) {
         super(cipherService, totpService, tokenService, i18nService, cryptoService, platformUtilsService,
             auditService, window, broadcasterService, ngZone, changeDetectorRef, userService, eventService);
+    }
+
+    @HostListener('window:keydown', ['$event'])
+    handleKeyDown(event: KeyboardEvent) {
+        if (event.key === 'Escape') {
+            this.close();
+            event.preventDefault();
+        }
     }
 
     ngOnInit() {
@@ -64,6 +77,14 @@ export class ViewComponent extends BaseViewComponent {
                 this.cipherId = params.cipherId;
             } else {
                 this.close();
+            }
+
+            if (params.pannelBack) {
+                this.pannelBack = params.pannelBack;
+            }
+
+            if (params.scrollTopBack) {
+                this.scrollTopBack = params.scrollTopBack;
             }
 
             await this.load();
@@ -200,7 +221,19 @@ export class ViewComponent extends BaseViewComponent {
     }
 
     close() {
+        if (this.pannelBack) {
+            this.router.navigate(['tabs/vault'], { queryParams: {
+                activatedPanel : this.pannelBack,
+                scrollTopBack: this.scrollTopBack,
+            }});
+            return;
+        }
         this.location.back();
+    }
+
+    openWebApp() {
+        const hash = '#/vault?action=view&type=' + this.cipherId;
+        window.open(this.cozyClientService.getAppURL('passwords', hash));
     }
 
     private async loadPageDetails() {

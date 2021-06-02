@@ -1,92 +1,315 @@
-<header>
-    <div class="left" *ngIf="showLeftHeader">
-        <app-pop-out></app-pop-out>
-    </div>
-    <div class="search">
-        <input type="{{searchTypeSearch ? 'search' : 'text'}}" placeholder="{{'searchVault' | i18n}}" id="search"
-            [(ngModel)]="searchText" (input)="search(200)" autocomplete="off" appAutofocus>
+<header [style.padding-left]="(currentPannel !== 'none') ? 'unset' : '8px'" >
+    <button type="button" appBlurClick (click)="unActivatePanel()"
+        [style.display]="(currentPannel !== 'none') ? '' : 'none'"
+         >
+        <span class="header-icon" title="{{'back' | i18n}}"><i class="icon-cozy icon-back"></i></span>
+    </button>
+    <div class="search {{searchTagClass}}" (click)="unActivatePanel()">
         <i class="fa fa-search"></i>
-        <i class="fa fa-close" aria-hidden="true" (click)="emptySearch()"></i>
+        <div id="search-tag">
+            <span id="search-tag-text">{{searchTagText}}</span>
+            <span>X</span>
+        </div>
+        <input #searchInput type="{{searchTypeSearch ? 'search' : 'text'}}"
+            placeholder="{{searchTagClass === 'hideSearchTag' ? ('searchVault' | i18n) : ''}}"
+            id="search"
+            [(ngModel)]="searchText" (input)="search(200)" autocomplete="off">
+        <i class="fa fa-close" aria-hidden="true" (click)="unActivatePanel()"></i>
     </div>
-    <div class="right">
-        <button appBlurClick (click)="addCipher()" appA11yTitle="{{'addItem' | i18n}}">
-            <i class="fa fa-plus fa-lg fa-fw" aria-hidden="true"></i>
-        </button>
-    </div>
+    <button (click)="openWebApp()" appA11yTitle="{{'popOutNewWindow' | i18n}}">
+        <i class="icon-cozy icon-out-w"  aria-hidden="true"></i>
+    </button>
+    <button appBlurClick (click)="addCipher()" appA11yTitle="{{'addItem' | i18n}}">
+        <i class="icon-cozy icon-plus"  aria-hidden="true"></i>
+    </button>
 </header>
-<content>
-    <div class="no-items" *ngIf="(!ciphers || !ciphers.length) && !showSearching()">
-        <i class="fa fa-spinner fa-spin fa-3x" *ngIf="!loaded"></i>
-        <ng-container *ngIf="loaded">
-            <div class="icon-cozy-inline">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="64" height="64">
-                    <path fill-rule="evenodd" d="M15.97 3c2.2.01 4.33.89 5.9 2.45v.04a8.69 8.69 0 0 1 2.53 5.1 8.62 8.62 0 0 1-.68 17.15H8.55a8.6 8.6 0 0 1-1.01-17.15A8.55 8.55 0 0 1 15.97 3zm-.09 1.63a6.91 6.91 0 0 0-6.83 6.74.9.9 0 0 1-.84.9 6.94 6.94 0 0 0 .17 13.88h15.34a6.94 6.94 0 0 0 0-13.87h-.09c-.5 0-.91-.4-.92-.9a6.91 6.91 0 0 0-6.83-6.75zm4.21 13.86l.24-.17c.14-.1.31-.13.48-.1a.7.7 0 0 1 .42.29c.16.27.1.61-.12.82l-.08.06c-.26.22-.42.52-.45.85v.17a.65.65 0 1 1-1.27-.2c0-.23.05-.45.11-.65a4.97 4.97 0 0 0-6.74 0c.07.21.12.45.13.68 0 .35-.3.64-.65.64h-.01a.62.62 0 0 1-.42-.15.66.66 0 0 1-.21-.47 1.3 1.3 0 0 0-.48-.9.66.66 0 0 1-.13-.85.64.64 0 0 1 .84-.19c.08.05.16.1.23.17a6.26 6.26 0 0 1 8.11 0z"/>
-                </svg>
-            </div>
-            <p>{{'noItemsInList' | i18n}}</p>
-            <button (click)="addCipher()" class="btn block primary link">{{'addItem' | i18n}}</button>
-        </ng-container>
+
+<content #groupingContent class="groupingContent">
+
+    <!-- **************************************************************** -->
+    <!-- ACCESS CIPHERS : by types, by folders, by collection and trashed -->
+    <div class="box list">
+        <div class="box-header">
+            {{'types' | i18n}}
+            <!-- <span class="flex-right">4</span> -->
+        </div>
+        <div class="box-content single-line">
+            <a href="#" class="box-content-row" appStopClick appBlurClick (click)="selectType(cipherType.Login)">
+                <div class="row-main">
+                    <div class="icon"><i class="icon-cozy icon-login"></i></div>
+                    <span class="text">{{'typeLogins' | i18n}}</span>
+                </div>
+                <span class="row-sub-label">{{typeCounts.get(cipherType.Login) || 0}}</span>
+                <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
+            </a>
+            <a href="#" class="box-content-row" appStopClick appBlurClick (click)="selectType(cipherType.Card)">
+                <div class="row-main">
+                    <div class="icon"><i class="icon-cozy icon-bank"></i></div>
+                    <span class="text">{{'typeCards' | i18n}}</span>
+                </div>
+                <span class="row-sub-label">{{typeCounts.get(cipherType.Card) || 0}}</span>
+                <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
+            </a>
+            <a href="#" class="box-content-row" appStopClick appBlurClick (click)="selectType(cipherType.Identity)">
+                <div class="row-main">
+                    <div class="icon"><i class="icon-cozy icon-identity"></i></div>
+                    <span class="text">{{'typeIdentities' | i18n}}</span>
+                </div>
+                <span class="row-sub-label">{{typeCounts.get(cipherType.Identity) || 0}}</span>
+                <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
+            </a>
+            <a href="#" class="box-content-row" appStopClick appBlurClick (click)="showCurrentPagePanel()">
+                <div class="row-main">
+                    <div class="icon"><i class="fa fa-search"></i></div>
+                    <span class="text">Pour ce site web</span>
+                </div>
+                <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
+            </a>
+        </div>
     </div>
-    <ng-container *ngIf="(ciphers && ciphers.length && !showSearching())">
-        <div *ngIf="ciphersByType[cipherType.Card].length > 0" class="box list">
+    <!-- <div class="box list">
+        <div class="box-header">
+            {{'folders' | i18n}}
+        </div>
+        <div class="box-content single-line">
+            <a *ngFor="let f of nestedFolders" href="#" class="box-content-row" appStopClick appBlurClick
+                (click)="selectFolder(f.node)">
+                <div class="row-main">
+                    <div class="icon">
+                        <i class="fa fa-fw fa-lg"
+                            [ngClass]="{'fa-folder-open': f.node.id, 'fa-folder-open-o': !f.node.id}"></i>
+                    </div>
+                    <span class="text">{{f.node.name}}</span>
+                </div>
+                <span class="row-sub-label">{{folderCounts.get(f.node.id) || 0}}</span>
+                <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
+            </a>
+            <a href="#" class="box-content-row" appStopClick appBlurClick
+                (click)="selectTrash()">
+                <div class="row-main">
+                    <div class="icon"><i class="fa fa-fw fa-lg fa-trash-o"></i></div>
+                    <span class="text">{{'trash' | i18n}}</span>
+                </div>
+                <span class="row-sub-label">{{deletedCount}}</span>
+                <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
+            </a>
+        </div>
+    </div> -->
+    <div class="box list">
+        <div class="box-header"></div>
+        <div class="box-content single-line">
+            <a href="#" class="box-content-row" appStopClick appBlurClick
+                (click)="selectTrash()">
+                <div class="row-main">
+                    <div class="icon"><i class="fa fa-fw fa-lg fa-trash-o"></i></div>
+                    <span class="text">{{'trash' | i18n}}</span>
+                </div>
+                <span class="row-sub-label">{{deletedCount}}</span>
+                <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ************************************ -->
+    <!-- CURRENT WEB PAGE PANEL               -->
+    <div *ngIf="showCurrentPageCiphersPanel()" class="ciphersPanel" [@toggleClick]="isPannelVisible" [@.disabled]="!enableAnimations">
+        <div class="box list">
+            <div class="box-header">
+                {{'typeLogins' | i18n}}
+            </div>
+            <div class="box-content">
+                <app-ciphers-list [ciphers]="ciphersForCurrentPage" title="{{'viewItem' | i18n}}" [showGlobe]="false"
+                    (onSelected)="viewCipher($event)" (onAutofill)="fillCipher($event)"
+                    *ngIf="ciphersForCurrentPage.length"
+                >
+                </app-ciphers-list>
+                <div class="box-content-row padded no-hover"
+                    *ngIf="!ciphersForCurrentPage.length"
+                >
+                    <p class="text-center">{{'autoFillInfo' | i18n}}</p>
+                    <button type="button" class="btn link block" (click)="addCipher()">
+                        {{'addLogin' | i18n}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="box list">
             <div class="box-header">
                 {{'cards' | i18n}}
-                <span class="flex-right">{{countByType(cipherType.Card)}}</span>
             </div>
             <div class="box-content">
-                <app-ciphers-list [ciphers]="ciphersByType[cipherType.Card]" title="{{'viewItem' | i18n}}"
-                    (onSelected)="selectCipher($event)" (onDoubleSelected)="launchCipher($event)">
-                </app-ciphers-list>
+                <app-ciphers-list [ciphers]="ciphersByType[3]" title="{{'viewItem' | i18n}}" [showGlobe]="false"
+                (onSelected)="viewCipher($event)" (onAutofill)="fillCipher($event)"></app-ciphers-list>
+                <div class="box-content-row padded no-hover"
+                    *ngIf="!ciphersByType[3] || ciphersByType[3].length === 0"
+                >
+                    <button type="button" class="btn link block" (click)="addCardCipher()">
+                        {{'addCard' | i18n}}
+                    </button>
+                </div>
             </div>
         </div>
-        <div *ngIf="ciphersByType[cipherType.Card].Identity > 0" class="box list">
+        <div class="box list">
             <div class="box-header">
                 {{'identities' | i18n}}
-                <span class="flex-right">{{countByType(cipherType.Identity)}}</span>
             </div>
             <div class="box-content">
-                <app-ciphers-list [ciphers]="ciphersByType[cipherType.Identity]" title="{{'viewItem' | i18n}}"
-                    (onSelected)="selectCipher($event)" (onDoubleSelected)="launchCipher($event)">
-                </app-ciphers-list>
+                <app-ciphers-list [ciphers]="ciphersByType[4]" title="{{'viewItem' | i18n}}" [showGlobe]="false"
+                (onSelected)="viewCipher($event)" (onAutofill)="fillCipher($event)"></app-ciphers-list>
+                <div class="box-content-row padded no-hover"
+                    *ngIf="!ciphersByType[4] || ciphersByType[4].length === 0"
+                >
+                    <button type="button" class="btn link block" (click)="addIdentityCipher()">
+                        {{'addIdentity' | i18n}}
+                    </button>
+                </div>
             </div>
         </div>
-        <div *ngIf="ciphersByType[cipherType.Login].length > 0" class="box list">
+    </div>
+
+    <!-- ********************** -->
+    <!-- SEARCH RESULTS PANEL   -->
+    <div class="ciphersPanel" [@toggleClick]="isPannelVisible" *ngIf="showSearchPanel()" [@.disabled]="!enableAnimations">
+
+        <div class="box list" *ngIf="ciphersByType[1] && ciphersByType[1].length">
             <div class="box-header">
-                {{'logins' | i18n}}
-                <div class="flex-right">{{countByType(cipherType.Login)}}</div>
+                {{'typeLogins' | i18n}}
+                <span class="flex-right">{{ciphersByType[1].length}}</span>
             </div>
-            <div class="box-content">
-                <app-ciphers-list [ciphers]="ciphersByType[cipherType.Login]" title="{{'viewItem' | i18n}}"
-                    (onSelected)="selectCipher($event)" (onDoubleSelected)="launchCipher($event)"></app-ciphers-list>
+            <div class="box list full-list" *ngIf="ciphers && ciphers.length > 0">
+                <div class="box-content">
+                    <app-ciphers-list [ciphers]="ciphersByType[1]" title="{{'viewItem' | i18n}}"
+                    (onSelected)="viewCipher($event)"
+                    (onDoubleSelected)="launchCipher($event)"
+                    [showGlobe]="true"
+                    ></app-ciphers-list>
+                </div>
             </div>
         </div>
-        <div class="box list" *ngIf="deletedCount">
+
+        <div class="box list" *ngIf="ciphersByType[3] && ciphersByType[3].length">
             <div class="box-header">
-                {{'trash' | i18n}}
-                <span class="flex-right">{{deletedCount}}</span>
+                {{'cards' | i18n}}
+                <span class="flex-right">{{ciphersByType[3].length}}</span>
             </div>
-            <div class="box-content single-line">
-                <a href="#" class="box-content-row" appStopClick appBlurClick
-                    (click)="selectTrash()">
-                    <div class="row-main">
-                        <div class="icon"><i class="fa fa-fw fa-lg fa-trash-o"></i></div>
-                        <span class="text">{{'trash' | i18n}}</span>
-                    </div>
-                    <span class="row-sub-label">{{deletedCount}}</span>
-                    <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
-                </a>
+            <div class="box list full-list">
+                <div class="box-content">
+                    <app-ciphers-list [ciphers]="ciphersByType[3]" title="{{'viewItem' | i18n}}"
+                    (onSelected)="viewCipher($event)"
+                    (onDoubleSelected)="launchCipher($event)"
+                    [showGlobe]="true"
+                    ></app-ciphers-list>
+                </div>
             </div>
         </div>
-    </ng-container>
-    <ng-container *ngIf="showSearching()">
+
+        <div class="box list" *ngIf="ciphersByType[4] && ciphersByType[4].length">
+            <div class="box-header">
+                {{'identities' | i18n}}
+                <span class="flex-right">{{ciphersByType[4].length}}</span>
+            </div>
+            <div class="box list full-list">
+                <div class="box-content">
+                    <app-ciphers-list [ciphers]="ciphersByType[4]" title="{{'viewItem' | i18n}}"
+                    (onSelected)="viewCipher($event)"
+                    (onDoubleSelected)="launchCipher($event)"
+                    [showGlobe]="true"
+                    ></app-ciphers-list>
+                </div>
+            </div>
+        </div>
+
         <div class="no-items" *ngIf="!ciphers || !ciphers.length">
             <p>{{'noItemsInList' | i18n}}</p>
         </div>
-        <div class="box list full-list" *ngIf="ciphers && ciphers.length > 0">
+
+    </div>
+
+    <!-- ************************************ -->
+    <!-- LOGINS         PANEL                 -->
+    <div *ngIf="showLoginsPanel()" class="ciphersPanel" [@toggleClick]="isPannelVisible" [@.disabled]="!enableAnimations">
+        <div class="box list">
+            <div class="box-header">
+                {{'typeLogins' | i18n}}
+            </div>
             <div class="box-content">
-                <app-ciphers-list [ciphers]="ciphers" title="{{'viewItem' | i18n}}" (onSelected)="selectCipher($event)"
-                    (onDoubleSelected)="launchCipher($event)"></app-ciphers-list>
+                <app-ciphers-list [ciphers]="ciphersByType[1]" title="{{'autoFill' | i18n}}" [showGlobe]="true"
+                    (onSelected)="viewCipher($event)"
+                    *ngIf="ciphersByType[1].length"
+                >
+                </app-ciphers-list>
+                <div class="box-content-row padded no-hover explanation" *ngIf="!ciphersByType[1].length" >
+                    <p class="text-center">
+                        {{'addLoginExplanation_L1' | i18n}}<br>{{'addLoginExplanation_L2' | i18n}}
+                    </p>
+                    <button type="button" class="btn link block" (click)="addCipher()">
+                        {{'addLogin' | i18n}}
+                    </button>
+                </div>
             </div>
         </div>
-    </ng-container>
+    </div>
+
+    <!-- ************************************ -->
+    <!-- CARDS PANEL                          -->
+    <div *ngIf="showCardsPanel()" class="ciphersPanel" [@toggleClick]="isPannelVisible" [@.disabled]="!enableAnimations">
+        <div class="box list">
+            <div class="box-header">
+                {{'cards' | i18n}}
+            </div>
+            <div class="box-content">
+                <app-ciphers-list [ciphers]="ciphersByType[3]" title="{{'autoFill' | i18n}}" [showGlobe]="true"
+                (onSelected)="viewCipher($event)"></app-ciphers-list>
+                <div class="box-content-row padded no-hover explanation" *ngIf="!ciphersByType[3].length">
+                    <p class="text-center">{{'addCardExplanation' | i18n}}</p>
+                    <button type="button" class="btn link block" (click)="addCardCipher()">
+                        {{'addCard' | i18n}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ************************************ -->
+    <!-- IDENTITIES PANEL                     -->
+    <div *ngIf="showIdentitiesPanel()" class="ciphersPanel" [@toggleClick]="isPannelVisible" [@.disabled]="!enableAnimations">
+        <div class="box list">
+            <div class="box-header">
+                {{'identities' | i18n}}
+            </div>
+            <div class="box-content">
+                <app-ciphers-list [ciphers]="ciphersByType[4]" title="{{'autoFill' | i18n}}" [showGlobe]="true"
+                (onSelected)="viewCipher($event)"></app-ciphers-list>
+                <div class="box-content-row padded no-hover explanation" *ngIf="!ciphersByType[4].length" >
+                    <p class="text-center">{{'addIdentityExplanation' | i18n}}</p>
+                    <button type="button" class="btn link block" (click)="addIdentityCipher()">
+                        {{'addIdentity' | i18n}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ************************************ -->
+    <!-- FOLDER PANEL                         -->
+    <div *ngIf="showFolderPanel()" class="ciphersPanel" [@toggleClick]="isPannelVisible" [@.disabled]="!enableAnimations">
+        <div class="box list">
+            <div class="box-header">
+                {{selectedFolderTitle}}
+            </div>
+            <div class="box-content">
+                <app-ciphers-list [ciphers]="ciphersForFolder" title="{{'autoFill' | i18n}}" [showGlobe]="true"
+                (onSelected)="viewCipher($event)"></app-ciphers-list>
+                <div class="box-content-row padded no-hover explanation" *ngIf="!ciphersForFolder.length" >
+                    <p class="text-center">
+                        {{'addLoginExplanation_L1' | i18n}}<br>{{'addLoginExplanation_L2' | i18n}}
+                    </p>
+                    <button type="button" class="btn link block" (click)="addIdentityCipher()">
+                        {{'addLogin' | i18n}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </content>
