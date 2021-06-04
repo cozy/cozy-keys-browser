@@ -112,7 +112,7 @@ export class LoginComponent implements OnInit {
         const protocol = protocolMatches[1] ? protocolMatches[1] : 'https://';
         inputUrl = inputUrl.replace(regexpProtocol, '');
         // Handle url with app slug or with no domain
-        const regexpFQDN = /^([a-z0-9]+)(?:-[a-z0-9]+)?(?:\.(.*))?$/;
+        const regexpFQDN = /^([-a-z0-9]+)(?:-[a-z0-9]+)?(?:\.(.*))?$/;
         const matches = inputUrl.match(regexpFQDN);
         const cozySlug = matches[1];
         const domain = matches[2] ? matches[2] : 'mycozy.cloud';
