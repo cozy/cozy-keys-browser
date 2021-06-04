@@ -220,7 +220,6 @@ export class ViewComponent extends BaseViewComponent {
         const deleted = await deleteCipher(this.cipherService, this.userService, this.i18nService,
             this.platformUtilsService, this.cipher);
         if (deleted) {
-            this.pannelBack = undefined;
             this.close();
             return true;
         }

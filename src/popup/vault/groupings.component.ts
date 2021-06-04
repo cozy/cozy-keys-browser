@@ -115,6 +115,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     ciphersForFolder: CipherView[] = [];
     isPannelVisible: string = 'false';
     allCiphers: CipherView[] = null;
+    isInPopOut: boolean = false;
 
     @ViewChild('groupingContent') groupingContentEl: ElementRef;
     @ViewChild('searchInput') searchInputEl: ElementRef;
@@ -144,6 +145,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         private cozyClientService: CozyClientService) {
         super(collectionService, folderService, storageService, userService);
         this.noFolderListSize = 100;
+        this.isInPopOut = this.popupUtils.inPopout(window);
     }
 
     @HostListener('window:keydown', ['$event'])
@@ -302,7 +304,6 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             this.searchTagText  = this.selectedFolderTitle;
             this.ciphersForFolder = this.ciphers.filter((c) => c.folderId === this.selectedFolderId);
         }
-
         super.loaded = true;
     }
 
@@ -583,19 +584,19 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     showCurrentPageCiphersPanel() {
-        return this.loaded && this.currentPannel === PanelNames.CurrentPageCiphers;
+        return this.currentPannel === PanelNames.CurrentPageCiphers;
     }
 
     showLoginsPanel() {
-        return this.loaded && this.currentPannel === PanelNames.Logins;
+        return this.currentPannel === PanelNames.Logins;
     }
 
     showCardsPanel() {
-        return this.loaded && this.currentPannel === PanelNames.Cards;
+        return this.currentPannel === PanelNames.Cards;
     }
 
     showIdentitiesPanel() {
-        return this.loaded && this.currentPannel === PanelNames.Identities;
+        return this.currentPannel === PanelNames.Identities;
     }
 
     showCurrentPagePanel() {
@@ -607,7 +608,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     showFolderPanel() {
-        return this.loaded && this.currentPannel === PanelNames.Folder;
+        return this.currentPannel === PanelNames.Folder;
     }
 
     async fillCipher(cipher: CipherView) {

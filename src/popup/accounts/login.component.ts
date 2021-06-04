@@ -177,7 +177,8 @@ export class LoginComponent implements OnInit {
                 if (this.onSuccessfulLoginNavigate != null) {
                     this.onSuccessfulLoginNavigate();
                 } else {
-                    this.router.navigate([this.successRoute]);
+                    this.router.navigate([this.successRoute], { queryParams: {activatedPanel : 'currentPageCiphers'},
+                    });
                 }
             }
         } catch (e) {

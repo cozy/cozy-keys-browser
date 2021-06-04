@@ -126,15 +126,9 @@ export class AddEditComponent extends BaseAddEditComponent {
         if (await super.submit()) {
             if (this.cloneMode) {
                 this.router.navigate(['/tabs/vault']);
-                // setTimeout( () => {
-                //     this.location.back();
-                // }, 1000);
             } else {
                 this.konnectorsService.createSuggestions();
-                // add a timeout in order to prevent to display the vault home
-                setTimeout( () => {
-                    this.location.back();
-                }, 1000);
+                this.location.back();
             }
             return true;
         }

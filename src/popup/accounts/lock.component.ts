@@ -27,7 +27,7 @@ export class LockComponent extends BaseLockComponent {
         apiService: ApiService) {
         super(router, i18nService, platformUtilsService, messagingService, userService, cryptoService,
             storageService, vaultTimeoutService, environmentService, stateService, apiService);
-        this.successRoute = '/tabs/vault';
+        this.successRoute = '/tabs/vault-current-page';
     }
 
     async ngOnInit() {
