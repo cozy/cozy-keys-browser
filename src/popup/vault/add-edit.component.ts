@@ -126,9 +126,15 @@ export class AddEditComponent extends BaseAddEditComponent {
         if (await super.submit()) {
             if (this.cloneMode) {
                 this.router.navigate(['/tabs/vault']);
+                // setTimeout( () => {
+                //     this.location.back();
+                // }, 1000);
             } else {
-                this.location.back();
                 this.konnectorsService.createSuggestions();
+                // add a timeout in order to prevent to display the vault home
+                setTimeout( () => {
+                    this.location.back();
+                }, 1000);
             }
             return true;
         }
@@ -161,7 +167,10 @@ export class AddEditComponent extends BaseAddEditComponent {
         const deleted = await deleteCipher(this.cipherService, this.userService, this.i18nService,
             this.platformUtilsService, this.cipher);
         if (deleted) {
-            this.router.navigate(['/tabs/vault']);
+            // add a timeout in order to prevent to display the vault home
+            setTimeout( () => {
+                this.location.back();
+            }, 700);
             return true;
         }
         return false;

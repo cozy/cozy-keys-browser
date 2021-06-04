@@ -46,6 +46,7 @@ export class ViewComponent extends BaseViewComponent {
     loadPageDetailsTimeout: number;
     inPopout = false;
     pannelBack: string = undefined;
+    folderBack: string = undefined;
     scrollTopBack: number = undefined;
 
     constructor(cipherService: CipherService, totpService: TotpService,
@@ -81,6 +82,10 @@ export class ViewComponent extends BaseViewComponent {
 
             if (params.pannelBack) {
                 this.pannelBack = params.pannelBack;
+            }
+
+            if (params.folderBack) {
+                this.folderBack = params.folderBack;
             }
 
             if (params.scrollTopBack) {
@@ -200,6 +205,7 @@ export class ViewComponent extends BaseViewComponent {
             return false;
         }
         if (await super.restore()) {
+            this.pannelBack = undefined;
             this.close();
             return true;
         }
@@ -214,6 +220,7 @@ export class ViewComponent extends BaseViewComponent {
         const deleted = await deleteCipher(this.cipherService, this.userService, this.i18nService,
             this.platformUtilsService, this.cipher);
         if (deleted) {
+            this.pannelBack = undefined;
             this.close();
             return true;
         }
@@ -224,11 +231,12 @@ export class ViewComponent extends BaseViewComponent {
         if (this.pannelBack) {
             this.router.navigate(['tabs/vault'], { queryParams: {
                 activatedPanel : this.pannelBack,
+                folderId : this.folderBack,
                 scrollTopBack: this.scrollTopBack,
             }});
             return;
         }
-        this.location.back();
+        this.router.navigate(['tabs/vault']);
     }
 
     openWebApp() {
