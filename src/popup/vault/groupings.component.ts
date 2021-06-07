@@ -568,7 +568,17 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async addCipher() {
-        this.router.navigate(['/add-cipher'], { queryParams: { name: this.hostname, uri: this.url } });
+        switch (this.currentPannel) {
+            case PanelNames.Cards:
+                this.addCardCipher();
+                break;
+            case PanelNames.Identities:
+                this.addIdentityCipher();
+                break;
+            default:
+                this.router.navigate(['/add-cipher'], { queryParams: { name: this.hostname, uri: this.url } });
+                break;
+        }
     }
 
     async addIdentityCipher() {
