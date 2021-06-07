@@ -240,7 +240,7 @@
             </div>
             <div id="loading" *ngIf="!loaded"><i class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></i></div>
             <div class="box-content" *ngIf="loaded">
-                <app-ciphers-list [ciphers]="ciphersByType[1]" title="{{'autoFill' | i18n}}" [showGlobe]="true"
+                <app-ciphers-list [ciphers]="ciphersByType[1]" title="{{'viewItem' | i18n}}" [showGlobe]="true"
                     (onSelected)="viewCipher($event)"
                     *ngIf="ciphersByType[1].length"
                 >
@@ -266,7 +266,7 @@
             </div>
             <div class="box-content">
                 <div id="loading" *ngIf="!loaded"><i class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></i></div>
-                <app-ciphers-list [ciphers]="ciphersByType[3]" title="{{'autoFill' | i18n}}" [showGlobe]="true"
+                <app-ciphers-list [ciphers]="ciphersByType[3]" title="{{'viewItem' | i18n}}" [showGlobe]="true"
                 (onSelected)="viewCipher($event)" *ngIf="loaded">
                 </app-ciphers-list>
                 <div class="box-content-row padded no-hover explanation" *ngIf="loaded && !ciphersByType[3].length">
@@ -288,7 +288,7 @@
             </div>
             <div class="box-content">
                 <div id="loading" *ngIf="!loaded"><i class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></i></div>
-                <app-ciphers-list [ciphers]="ciphersByType[4]" title="{{'autoFill' | i18n}}" [showGlobe]="true"
+                <app-ciphers-list [ciphers]="ciphersByType[4]" title="{{'viewItem' | i18n}}" [showGlobe]="true"
                     (onSelected)="viewCipher($event)" *ngIf="loaded">
                 </app-ciphers-list>
                 <div class="box-content-row padded no-hover explanation" *ngIf="loaded && !ciphersByType[4].length" >
@@ -310,7 +310,7 @@
             </div>
             <div class="box-content">
                 <div id="loading" *ngIf="!loaded"><i class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></i></div>
-                <app-ciphers-list [ciphers]="ciphersForFolder" title="{{'autoFill' | i18n}}" [showGlobe]="true"
+                <app-ciphers-list [ciphers]="ciphersForFolder" title="{{'viewItem' | i18n}}" [showGlobe]="true"
                     (onSelected)="viewCipher($event)" *ngIf="loaded">
                 </app-ciphers-list>
                 <div class="box-content-row padded no-hover explanation" *ngIf="loaded && !ciphersForFolder.length" >
