@@ -162,9 +162,7 @@ export class AddEditComponent extends BaseAddEditComponent {
             this.platformUtilsService, this.cipher);
         if (deleted) {
             // add a timeout in order to prevent to display the vault home
-            setTimeout( () => {
-                this.location.back();
-            }, 700);
+            this.location.back();
             return true;
         }
         return false;

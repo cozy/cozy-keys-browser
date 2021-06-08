@@ -177,8 +177,11 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         this.stateService.remove('CiphersComponent');
 
         setTimeout(() => {
+            // Enable panels animations only after a delay so that only user actions triger an animation.
+            // when component is initied, if a panel is displayed, we don't want the apparition of the panel
+            // to be animated.
             this.enableAnimations = true;
-        }, 900);
+        }, 300);
 
         this.broadcasterService.subscribe(ComponentId, (message: any) => {
             this.ngZone.run(async () => {
@@ -211,7 +214,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             // console.log('groupings.queryParams.heard :', params);
             if (params.activatedPanel) {
                 let folderId: string;
-                if (params.activatedPanel !== 'Folder') {
+                if (params.activatedPanel !== PanelNames.Folder) {
                     this.activatePanel(params.activatedPanel);
                 } else {
                     folderId = params.folderId === 'null' ? null : params.folderId ;
