@@ -176,7 +176,7 @@ p.lead {
     }
 }
 
-app-root > #loading {
+#loading {
     display: flex;
     text-align: center;
     justify-content: center;
@@ -184,6 +184,7 @@ app-root > #loading {
     height: 100%;
     width: 100%;
     color: $text-muted;
+    min-height: 46px;
 
     @include themify($themes) {
         color: themed('mutedColor');

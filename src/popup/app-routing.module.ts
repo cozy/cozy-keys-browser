@@ -206,6 +206,11 @@ const routes: Routes = [
                 data: { state: 'tabs_vault' },
             },
             {
+                path: 'vault-current-page',
+                redirectTo: '/tabs/vault?activatedPanel=currentPageCiphers',
+                pathMatch: 'full',
+            },
+            {
                 path: 'generator',
                 component: PasswordGeneratorComponent,
                 canActivate: [AuthGuardService],

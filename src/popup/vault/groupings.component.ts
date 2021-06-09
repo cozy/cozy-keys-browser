@@ -107,6 +107,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     deletedCount = 0;
     ciphersForCurrentPage: CipherView[] = [];
     selectedFolderTitle: string;
+    selectedFolderId: string;
     searchTagClass: string = 'hideSearchTag';
     searchTagText: string;
     enableAnimations: boolean = false;
@@ -114,6 +115,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     ciphersForFolder: CipherView[] = [];
     isPannelVisible: string = 'false';
     allCiphers: CipherView[] = null;
+    isInPopOut: boolean = false;
 
     @ViewChild('groupingContent') groupingContentEl: ElementRef;
     @ViewChild('searchInput') searchInputEl: ElementRef;
@@ -143,6 +145,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         private cozyClientService: CozyClientService) {
         super(collectionService, folderService, storageService, userService);
         this.noFolderListSize = 100;
+        this.isInPopOut = this.popupUtils.inPopout(window);
     }
 
     @HostListener('window:keydown', ['$event'])
@@ -174,8 +177,11 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         this.stateService.remove('CiphersComponent');
 
         setTimeout(() => {
+            // Enable panels animations only after a delay so that only user actions triger an animation.
+            // when component is initied, if a panel is displayed, we don't want the apparition of the panel
+            // to be animated.
             this.enableAnimations = true;
-        }, 600);
+        }, 300);
 
         this.broadcasterService.subscribe(ComponentId, (message: any) => {
             this.ngZone.run(async () => {
@@ -207,7 +213,13 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         this.route.queryParams.subscribe(async (params) => {
             // console.log('groupings.queryParams.heard :', params);
             if (params.activatedPanel) {
-                this.activatePanel(params.activatedPanel);
+                let folderId: string;
+                if (params.activatedPanel !== PanelNames.Folder) {
+                    this.activatePanel(params.activatedPanel);
+                } else {
+                    folderId = params.folderId === 'null' ? null : params.folderId ;
+                    this.activatePanel(params.activatedPanel, folderId);
+                }
                 if (params.scrollTopBack) {
                     setTimeout(() => {
                         this.groupingContentEl.nativeElement.scrollTop = params.scrollTopBack;
@@ -226,6 +238,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
                 this.searchText = params.searchText;
                 this.location.replaceState('vault');
             }
+            this.selectedFolderId = params.folderId ? params.folderId : undefined;
 
             if (!this.syncService.syncInProgress) {
                 this.load();
@@ -280,7 +293,20 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             this.nestedFolders = this.nestedFolders.slice(0, this.nestedFolders.length - 1);
         }
         await this.getCiphersForCurrentPage();
-
+        if (this.selectedFolderId === 'trash') {
+            this.searchTagText  = this.i18nService.t('trash');
+            this.selectedFolderTitle = this.searchTagText;
+            this.ciphersForFolder = this.deletedCiphers;
+        } else if (this.selectedFolderId === 'noneFolder') {
+            this.searchTagText  = this.i18nService.t('noneFolder');
+            this.selectedFolderTitle = this.searchTagText;
+            this.ciphersForFolder = this.noFolderCiphers;
+        } else if (this.selectedFolderId !== undefined) {
+            this.selectedFolderTitle =
+                this.nestedFolders.find( (f) => f.node.id === this.selectedFolderId ).node.name;
+            this.searchTagText  = this.selectedFolderTitle;
+            this.ciphersForFolder = this.ciphers.filter((c) => c.folderId === this.selectedFolderId);
+        }
         super.loaded = true;
     }
 
@@ -387,6 +413,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
     unActivatePanel() {
         // console.log(`unActivatePanel('${this.currentPannel}')`);
+        this.location.go('/tabs/vault');
         switch (this.currentPannel) {
             case PanelNames.None:
                 return;
@@ -404,8 +431,9 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         this.currentPannel = PanelNames.None;
     }
 
-    activatePanel(panelName: string) {
-        // console.log(`activatePanel('${panelName}')`);
+    activatePanel(panelName: string, folderId?: string) {
+        // console.log(`activatePanel('${panelName}', '${folderId}')`);
+        let folderIdQueryParam: string = '';
         switch (panelName) {
             case PanelNames.CurrentPageCiphers:
                 this.searchTagClass = 'showSearchTag';
@@ -437,14 +465,16 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
                 this.isPannelVisible = 'true';
                 break;
             case PanelNames.Folder:
+                folderIdQueryParam = '&folderId=' + folderId ;
+                this.selectedFolderId = folderId;
                 this.searchTagClass = 'showSearchTag';
-                this.searchTagText  = this.selectedFolderTitle; this.i18nService.t('identities'); // BJA
                 this.currentPannel = PanelNames.Folder;
                 this.isPannelVisible = 'true';
                 break;
             default:
                 break;
         }
+        this.location.go('/tabs/vault?activatedPanel=' + panelName + folderIdQueryParam);
     }
 
     async getCiphersForCurrentPage(): Promise<any[]> {
@@ -496,25 +526,28 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
     async selectFolder(folder: FolderView) {
         // console.log(`selectFolder()`, folder.id);
-        this.ciphersForFolder = this.ciphers.filter((c) => c.folderId === folder.id);
         this.selectedFolderTitle = folder.name;
-        this.activatePanel(PanelNames.Folder);
+        this.searchTagText  = this.selectedFolderTitle;
+        this.ciphersForFolder = this.ciphers.filter((c) => c.folderId === folder.id);
+        this.activatePanel(PanelNames.Folder, folder.id === null ? 'noneFolder' : folder.id );
     }
 
     async selectTrash() {
         // console.log(`selectTrash()`);
         this.ciphersForFolder = this.deletedCiphers;
         this.selectedFolderTitle = this.i18nService.t('trash');
-        this.activatePanel(PanelNames.Folder);
+        this.searchTagText  = this.selectedFolderTitle;
+        this.activatePanel(PanelNames.Folder, 'trash');
     }
 
     async selectCipher(cipher: CipherView) {
-        // console.log(`selectCipher()`, this.currentPannel);
+        // console.log(`selectCipher()`, this.currentPannel, this.selectedFolderId);
         this.selectedTimeout = window.setTimeout(() => {
             if (!this.preventSelected) {
                 this.router.navigate(['/view-cipher'], { queryParams: {
                     cipherId  : cipher.id,
                     pannelBack: this.currentPannel,
+                    folderBack : this.selectedFolderId,
                 }});
             }
             this.preventSelected = false;
@@ -538,7 +571,17 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async addCipher() {
-        this.router.navigate(['/add-cipher'], { queryParams: { name: this.hostname, uri: this.url } });
+        switch (this.currentPannel) {
+            case PanelNames.Cards:
+                this.addCardCipher();
+                break;
+            case PanelNames.Identities:
+                this.addIdentityCipher();
+                break;
+            default:
+                this.router.navigate(['/add-cipher'], { queryParams: { name: this.hostname, uri: this.url } });
+                break;
+        }
     }
 
     async addIdentityCipher() {
@@ -554,19 +597,19 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     showCurrentPageCiphersPanel() {
-        return this.loaded && this.currentPannel === PanelNames.CurrentPageCiphers;
+        return this.currentPannel === PanelNames.CurrentPageCiphers;
     }
 
     showLoginsPanel() {
-        return this.loaded && this.currentPannel === PanelNames.Logins;
+        return this.currentPannel === PanelNames.Logins;
     }
 
     showCardsPanel() {
-        return this.loaded && this.currentPannel === PanelNames.Cards;
+        return this.currentPannel === PanelNames.Cards;
     }
 
     showIdentitiesPanel() {
-        return this.loaded && this.currentPannel === PanelNames.Identities;
+        return this.currentPannel === PanelNames.Identities;
     }
 
     showCurrentPagePanel() {
@@ -578,7 +621,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     showFolderPanel() {
-        return this.loaded && this.currentPannel === PanelNames.Folder;
+        return this.currentPannel === PanelNames.Folder;
     }
 
     async fillCipher(cipher: CipherView) {
@@ -635,6 +678,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             cipherId: cipher.id,
             pannelBack: this.currentPannel,
             scrollTopBack : this.groupingContentEl.nativeElement.scrollTop,
+            folderBack : this.selectedFolderId,
          } });
     }
 
