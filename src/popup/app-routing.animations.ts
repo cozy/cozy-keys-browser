@@ -150,6 +150,9 @@ export const routerTransition = trigger('routerTransition', [
     transition('view-cipher => clone-cipher', inSlideUp),
     transition('clone-cipher => view-cipher, clone-cipher => tabs', outSlideDown),
 
+    transition('view-cipher => share-cipher', inSlideUp),
+    transition('share-cipher => view-cipher', outSlideDown),
+
     transition('tabs => add-cipher', inSlideUp),
     transition('add-cipher => tabs', outSlideDown),
 
@@ -158,9 +161,6 @@ export const routerTransition = trigger('routerTransition', [
 
     transition('add-cipher => generator, edit-cipher => generator, clone-cipher => generator', inSlideUp),
     transition('generator => add-cipher, generator => edit-cipher, generator => clone-cipher', outSlideDown),
-
-    transition('edit-cipher => share-cipher', inSlideUp),
-    transition('share-cipher => edit-cipher, share-cipher => view-cipher', outSlideDown),
 
     transition('edit-cipher => attachments, edit-cipher => collections', inSlideLeft),
     transition('attachments => edit-cipher, collections => edit-cipher', outSlideRight),
@@ -182,8 +182,15 @@ export const routerTransition = trigger('routerTransition', [
 
     transition('tabs => options', inSlideLeft),
     transition('options => tabs', outSlideRight),
-]);
 
-if (!BrowserApi.isSafariApi) {
-    routerTransition.definitions.push(transition('tabs => lock', inSlideDown));
-}
+    transition('tabs => lock', inSlideDown),
+
+    transition('tabs => send-type', inSlideLeft),
+    transition('send-type => tabs', outSlideRight),
+
+    transition('tabs => add-send, send-type => add-send', inSlideUp),
+    transition('add-send => tabs, add-send => send-type', outSlideDown),
+
+    transition('tabs => edit-send, send-type => edit-send', inSlideUp),
+    transition('edit-send => tabs, edit-send => send-type', outSlideDown),
+]);

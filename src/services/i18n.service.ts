@@ -1,25 +1,17 @@
 import { I18nService as BaseI18nService } from 'jslib/services/i18n.service';
 
-import { BrowserApi } from '../browser/browserApi';
-import { SafariApp } from '../browser/safariApp';
-
 export default class I18nService extends BaseI18nService {
     constructor(systemLanguage: string) {
-        super(systemLanguage, BrowserApi.isSafariApi ? 'safari' : null, async (formattedLocale: string) => {
-            if (BrowserApi.isSafariApi) {
-                await SafariApp.sendMessageToApp('getLocaleStrings', formattedLocale);
-                return (window as any).bitwardenLocaleStrings;
-            } else {
-                // Deprecated
-                const file = await fetch(this.localesDirectory + formattedLocale + '/messages.json');
-                return await file.json();
-            }
+        super(systemLanguage, null, async (formattedLocale: string) => {
+            // Deprecated
+            const file = await fetch(this.localesDirectory + formattedLocale + '/messages.json');
+            return await file.json();
         });
 
         this.supportedTranslationLocales = [
-            'en', 'be', 'bg', 'ca', 'cs', 'da', 'de', 'el', 'en-GB', 'es', 'et', 'fa', 'fi', 'fr', 'he', 'hr', 'hu',
-            'id', 'it', 'ja', 'ko', 'nb', 'nl', 'pl', 'pt-BR', 'pt-PT', 'ro', 'ru', 'sk', 'sv', 'th', 'tr', 'uk', 'vi',
-            'zh-CN', 'zh-TW',
+            'en', 'be', 'bg', 'bn', 'ca', 'cs', 'da', 'de', 'el', 'en-GB', 'en-IN', 'es', 'et', 'fa', 'fi', 'fr', 'he', 'hr', 'hu',
+            'id', 'it', 'ja', 'ko', 'lv', 'ml', 'nb', 'nl', 'pl', 'pt-BR', 'pt-PT', 'ro', 'ru', 'sk', 'sr', 'sv', 'th', 'tr', 'uk',
+            'vi', 'zh-CN', 'zh-TW',
         ];
     }
 

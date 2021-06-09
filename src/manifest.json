@@ -45,7 +45,7 @@
     {
       "all_frames": false,
       "js": [
-        "content/sso.js"
+        "content/message_handler.js"
       ],
       "matches": [
         "http://*/*",
@@ -92,6 +92,9 @@
     "https://*/*",
     "webRequest",
     "webRequestBlocking"
+  ],
+  "optional_permissions": [
+    "nativeMessaging"
   ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "commands": {

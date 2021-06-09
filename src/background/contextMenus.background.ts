@@ -48,8 +48,8 @@ export default class ContextMenusBackground {
     private async cipherAction(info: any) {
         const id = info.menuItemId.split('_')[1];
         if (id === 'noop') {
-            if (chrome.browserAction && chrome.browserAction.openPopup) {
-                chrome.browserAction.openPopup();
+            if (chrome.browserAction && (chrome.browserAction as any).openPopup) {
+                (chrome.browserAction as any).openPopup();
             }
             return;
         }
@@ -59,7 +59,7 @@ export default class ContextMenusBackground {
         }
 
         const ciphers = await this.cipherService.getAllDecrypted();
-        const cipher = ciphers.find((c) => c.id === id);
+        const cipher = ciphers.find(c => c.id === id);
         if (cipher == null) {
             return;
         }

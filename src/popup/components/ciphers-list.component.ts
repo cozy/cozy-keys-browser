@@ -15,7 +15,7 @@ import { CipherView } from 'jslib/models/view/cipherView';
 })
 export class CiphersListComponent {
     @Output() onSelected = new EventEmitter<CipherView>();
-    @Output() onDoubleSelected = new EventEmitter<CipherView>();
+    @Output() launchEvent = new EventEmitter<CipherView>();
     @Output() onView = new EventEmitter<CipherView>();
     @Output() onAutofill = new EventEmitter<CipherView>();
     @Input() ciphers: CipherView[];
@@ -28,8 +28,8 @@ export class CiphersListComponent {
         this.onSelected.emit(c);
     }
 
-    doubleSelectCipher(c: CipherView) {
-        this.onDoubleSelected.emit(c);
+    launchCipher(c: CipherView) {
+        this.launchEvent.emit(c);
     }
 
     viewCipher(c: CipherView) {

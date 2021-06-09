@@ -21,13 +21,23 @@ describe('Browser Utils Service', () => {
             });
         });
 
+        it('should detect chrome', () => {
+            Object.defineProperty(navigator, 'userAgent', {
+                configurable: true,
+                value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
+            });
+
+            const browserPlatformUtilsService = new BrowserPlatformUtilsService(null, null, null);
+            expect(browserPlatformUtilsService.getDevice()).toBe(DeviceType.ChromeExtension);
+        });
+
         it('should detect firefox', () => {
             Object.defineProperty(navigator, 'userAgent', {
                 configurable: true,
                 value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0',
             });
 
-            const browserPlatformUtilsService = new BrowserPlatformUtilsService(null, null);
+            const browserPlatformUtilsService = new BrowserPlatformUtilsService(null, null, null);
             expect(browserPlatformUtilsService.getDevice()).toBe(DeviceType.FirefoxExtension);
         });
 
@@ -43,7 +53,7 @@ describe('Browser Utils Service', () => {
                 value: {},
             });
 
-            const browserPlatformUtilsService = new BrowserPlatformUtilsService(null, null);
+            const browserPlatformUtilsService = new BrowserPlatformUtilsService(null, null, null);
             expect(browserPlatformUtilsService.getDevice()).toBe(DeviceType.OperaExtension);
         });
 
@@ -53,7 +63,7 @@ describe('Browser Utils Service', () => {
                 value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.74 Safari/537.36 Edg/79.0.309.43',
             });
 
-            const browserPlatformUtilsService = new BrowserPlatformUtilsService(null, null);
+            const browserPlatformUtilsService = new BrowserPlatformUtilsService(null, null, null);
             expect(browserPlatformUtilsService.getDevice()).toBe(DeviceType.EdgeExtension);
         });
 
@@ -69,7 +79,7 @@ describe('Browser Utils Service', () => {
                 value: true,
             });
 
-            const browserPlatformUtilsService = new BrowserPlatformUtilsService(null, null);
+            const browserPlatformUtilsService = new BrowserPlatformUtilsService(null, null, null);
             expect(browserPlatformUtilsService.getDevice()).toBe(DeviceType.SafariExtension);
 
             Object.defineProperty(window, 'safariAppExtension', {
@@ -85,7 +95,7 @@ describe('Browser Utils Service', () => {
                   'Chrome/62.0.3202.97 Safari/537.36 Vivaldi/1.94.1008.40',
             });
 
-            const browserPlatformUtilsService = new BrowserPlatformUtilsService(null, null);
+            const browserPlatformUtilsService = new BrowserPlatformUtilsService(null, null, null);
             expect(browserPlatformUtilsService.getDevice()).toBe(DeviceType.VivaldiExtension);
         });
     });

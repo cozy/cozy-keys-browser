@@ -4,10 +4,7 @@ import { CipherView } from 'jslib/models/view/cipherView';
 import { LoginUriView } from 'jslib/models/view/loginUriView';
 import { LoginView } from 'jslib/models/view/loginView';
 
-import { AutofillService } from '../services/abstractions/autofill.service';
-import BrowserPlatformUtilsService from '../services/browserPlatformUtils.service';
 import { CipherService } from 'jslib/abstractions/cipher.service';
-import { ConstantsService } from 'jslib/services/constants.service';
 import { LocalConstantsService } from '../popup/services/constants.service';
 
 import { EnvironmentService } from 'jslib/abstractions/environment.service';
@@ -15,13 +12,16 @@ import { I18nService } from 'jslib/abstractions/i18n.service';
 import { CipherString } from 'jslib/models/domain/cipherString';
 import { UserService } from 'jslib/abstractions';
 import { CryptoService } from 'jslib/abstractions/crypto.service';
+import { MessagingService } from 'jslib/abstractions/messaging.service';
 import { NotificationsService } from 'jslib/abstractions/notifications.service';
-import { PopupUtilsService } from '../popup/services/popup-utils.service';
-import { StateService } from 'jslib/abstractions/state.service';
+import { PolicyService } from 'jslib/abstractions/policy.service';
 import { StorageService } from 'jslib/abstractions/storage.service';
-import { SyncService } from 'jslib/abstractions/sync.service';
 import { SystemService } from 'jslib/abstractions/system.service';
+import { UserService } from 'jslib/abstractions/user.service';
 import { VaultTimeoutService } from 'jslib/abstractions/vaultTimeout.service';
+import { ConstantsService } from 'jslib/services/constants.service';
+import { AutofillService } from '../services/abstractions/autofill.service';
+import BrowserPlatformUtilsService from '../services/browserPlatformUtils.service';
 
 import { BrowserApi } from '../browser/browserApi';
 
@@ -35,11 +35,13 @@ import { KonnectorsService } from '../popup/services/konnectors.service';
 import { AuthService } from '../services/auth.service';
 import { CozyClientService } from 'src/popup/services/cozyClient.service';
 
+import { OrganizationUserStatusType } from 'jslib/enums/organizationUserStatusType';
+import { PolicyType } from 'jslib/enums/policyType';
+
 export default class RuntimeBackground {
     private runtime: any;
     private autofillTimeout: any;
     private pageDetailsToAutoFill: any[] = [];
-    private isSafari: boolean;
     private onInstalledReason: string = null;
 
     constructor(private main: MainBackground, private autofillService: AutofillService,
@@ -47,24 +49,20 @@ export default class RuntimeBackground {
         private storageService: StorageService, private i18nService: I18nService,
         private notificationsService: NotificationsService,
         private systemService: SystemService, private vaultTimeoutService: VaultTimeoutService,
-        private environmentService: EnvironmentService,
-        private cozyClientService: CozyClientService,
-        private konnectorsService: KonnectorsService, private syncService: SyncService,
-        private authService: AuthService, private cryptoService: CryptoService,
-        private userService: UserService) {
-        this.isSafari = this.platformUtilsService.isSafari();
-        this.runtime = this.isSafari ? {} : chrome.runtime;
+        private environmentService: EnvironmentService, private policyService: PolicyService,
+        private userService: UserService, private messagingService: MessagingService,
+        private cozyClientService: CozyClientService, private konnectorsService: KonnectorsService,
+        private syncService: SyncService, private authService: AuthService,
+        private cryptoService: CryptoService) {
 
         // onInstalled listener must be wired up before anything else, so we do it in the ctor
-        if (!this.isSafari) {
-            this.runtime.onInstalled.addListener((details: any) => {
-                this.onInstalledReason = details.reason;
-            });
-        }
+        chrome.runtime.onInstalled.addListener((details: any) => {
+            this.onInstalledReason = details.reason;
+        });
     }
 
     async init() {
-        if (!this.runtime) {
+        if (!chrome.runtime) {
             return;
         }
 
@@ -392,7 +390,7 @@ export default class RuntimeBackground {
                 }
                 break;
             case 'authResult':
-                let vaultUrl = this.environmentService.webVaultUrl;
+                let vaultUrl = this.environmentService.getWebVaultUrl();
                 if (vaultUrl == null) {
                     vaultUrl = 'https://vault.bitwarden.com';
                 }
@@ -407,6 +405,31 @@ export default class RuntimeBackground {
                 }
                 catch { }
                 break;
+            case 'webAuthnResult':
+                let vaultUrl2 = this.environmentService.getWebVaultUrl();
+                if (vaultUrl2 == null) {
+                    vaultUrl2 = 'https://vault.bitwarden.com';
+                }
+
+                if (msg.referrer == null || Utils.getHostname(vaultUrl2) !== msg.referrer) {
+                    return;
+                }
+
+                const params = `webAuthnResponse=${encodeURIComponent(msg.data)};remember=${msg.remember}`;
+                BrowserApi.createNewTab(`popup/index.html?uilocation=popout#/2fa;${params}`, undefined, false);
+                break;
+            case 'reloadPopup':
+                this.messagingService.send('reloadPopup');
+                break;
+            case 'emailVerificationRequired':
+                this.messagingService.send('showDialog', {
+                    dialogId: 'emailVerificationRequired',
+                    title: this.i18nService.t('emailVerificationRequired'),
+                    text: this.i18nService.t('emailVerificationRequiredDesc'),
+                    confirmText: this.i18nService.t('ok'),
+                    type: 'info',
+                });
+                break;
             default:
                 break;
         }
@@ -416,7 +439,7 @@ export default class RuntimeBackground {
         const totpCode = await this.autofillService.doAutoFill({
             cipher: this.main.loginToAutoFill,
             pageDetails: this.pageDetailsToAutoFill,
-            fillNewPassword: true
+            fillNewPassword: true,
         });
 
         if (totpCode != null) {
@@ -530,7 +553,7 @@ export default class RuntimeBackground {
         }
 
         const ciphers = await this.cipherService.getAllDecryptedForUrl(loginInfo.url);
-        const usernameMatches = ciphers.filter((c) =>
+        const usernameMatches = ciphers.filter(c =>
             c.login.username != null && c.login.username.toLowerCase() === normalizedUsername);
         if (usernameMatches.length === 0) {
             const disabledAddLogin = await this.storageService.get<boolean>(
@@ -538,6 +561,11 @@ export default class RuntimeBackground {
             if (disabledAddLogin) {
                 return;
             }
+
+            if (!(await this.allowPersonalOwnership())) {
+                return;
+            }
+
             // remove any old messages for this tab
             this.removeTabFromNotificationQueue(tab);
             this.main.notificationQueue.push({
@@ -573,7 +601,7 @@ export default class RuntimeBackground {
         let id: string = null;
         const ciphers = await this.cipherService.getAllDecryptedForUrl(changeData.url);
         if (changeData.currentPassword != null) {
-            const passwordMatches = ciphers.filter((c) => c.login.password === changeData.currentPassword);
+            const passwordMatches = ciphers.filter(c => c.login.password === changeData.currentPassword);
             if (passwordMatches.length === 1) {
                 id = passwordMatches[0].id;
             }
@@ -608,20 +636,6 @@ export default class RuntimeBackground {
     }
 
     private async checkOnInstalled() {
-        if (this.isSafari) {
-            const installedVersion = await this.storageService.get<string>(LocalConstantsService.installedVersionKey);
-            if (installedVersion == null) {
-                this.onInstalledReason = 'install';
-            } else if (BrowserApi.getApplicationVersion() !== installedVersion) {
-                this.onInstalledReason = 'update';
-            }
-
-            if (this.onInstalledReason != null) {
-                await this.storageService.save(LocalConstantsService.installedVersionKey,
-                    BrowserApi.getApplicationVersion());
-            }
-        }
-
         setTimeout(async () => {
             if (this.onInstalledReason != null) {
                 if (this.onInstalledReason === 'install') {
@@ -657,8 +671,9 @@ export default class RuntimeBackground {
         const responseData: any = {};
         if (responseCommand === 'notificationBarDataResponse') {
             responseData.neverDomains = await this.storageService.get<any>(LocalConstantsService.neverDomainsKey);
-            responseData.disabledAddLoginNotification = await this.storageService.get<boolean>(
+            const disableAddLoginFromOptions = await this.storageService.get<boolean>(
                 LocalConstantsService.disableAddLoginNotificationKey);
+            responseData.disabledAddLoginNotification = disableAddLoginFromOptions || !(await this.allowPersonalOwnership());
             responseData.disabledChangedPasswordNotification = await this.storageService.get<boolean>(
                 LocalConstantsService.disableChangedPasswordNotificationKey);
         } else if (responseCommand === 'autofillerAutofillOnPageLoadEnabledResponse') {
@@ -680,6 +695,22 @@ export default class RuntimeBackground {
         }
 
         await BrowserApi.tabSendMessageData(tab, responseCommand, responseData);
+    }
+
+    private async allowPersonalOwnership(): Promise<boolean> {
+        const personalOwnershipPolicies = await this.policyService.getAll(PolicyType.PersonalOwnership);
+        if (personalOwnershipPolicies != null) {
+            for (const policy of personalOwnershipPolicies) {
+                if (policy.enabled) {
+                    const org = await this.userService.getOrganization(policy.organizationId);
+                    if (org != null && org.enabled && org.usePolicies && !org.canManagePolicies
+                        && org.status === OrganizationUserStatusType.Confirmed) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     /*

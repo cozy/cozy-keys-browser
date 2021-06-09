@@ -16,6 +16,9 @@
         </div>
     </header>
     <content *ngIf="cipher">
+        <app-callout type="info" *ngIf="allowOwnershipOptions() && !allowPersonal">
+            {{'personalOwnershipPolicyInEffect' | i18n}}
+        </app-callout>
         <div class="box">
             <div class="box-header">
                 {{'itemInformation' | i18n}}
@@ -76,10 +79,19 @@
                         <input id="cardCardholderName" type="text" name="Card.CardCardholderName"
                             [(ngModel)]="cipher.card.cardholderName">
                     </div>
-                    <div class="box-content-row" appBoxRow>
-                        <label for="cardNumber">{{'number' | i18n}}</label>
-                        <input id="cardNumber" type="text" name="Card.Number" [(ngModel)]="cipher.card.number"
-                            appInputVerbatim>
+                    <div class="box-content-row box-content-row-flex" appBoxRow>
+                        <div class="row-main">
+                            <label for="cardNumber">{{'number' | i18n}}</label>
+                            <input id="cardNumber" class="monospaced" type="{{showCardNumber ? 'text' : 'password'}}"
+                                name="Card.Number" [(ngModel)]="cipher.card.number" appInputVerbatim>
+                        </div>
+                        <div class="action-buttons">
+                            <a class="row-btn" href="#" appStopClick appBlurClick
+                                appA11yTitle="{{'toggleVisibility' | i18n}}" (click)="toggleCardNumber()">
+                                <i class="fa fa-lg" aria-hidden="true"
+                                    [ngClass]="{'fa-eye': !showCardNumber, 'fa-eye-slash': showCardNumber}"></i>
+                            </a>
+                        </div>
                     </div>
                     <div class="box-content-row" appBoxRow>
                         <label for="cardBrand">{{'brand' | i18n}}</label>
@@ -252,6 +264,16 @@
                 </a>
             </div>
         </div>
+        <div class="box" *ngIf="showAutoFillOnPageLoadOptions">
+            <div class="box-content">
+                <div class="box-content-row" appBoxRow>
+                    <label for="autofillOnPageLoad">{{'itemAutoFillOnPageLoad' | i18n}} </label>
+                    <select id="autofillOnPageLoad" name="AutofillOnPageLoad" [(ngModel)]="cipher.login.autofillOnPageLoad">
+                        <option *ngFor="let o of autofillOnPageLoadOptions" [ngValue]="o.value">{{o.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
         <div class="box">
             <div class="box-content">
                 <!-- <div class="box-content-row" appBoxRow>
@@ -264,10 +286,16 @@
                     <label for="favorite">{{'favorite' | i18n}}</label>
                     <input id="favorite" type="checkbox" name="Favorite" [(ngModel)]="cipher.favorite">
                 </div>
+                <div class="box-content-row box-content-row-checkbox" appBoxRow>
+                    <label for="passwordPrompt">{{'passwordPrompt' | i18n}}</label>
+                    <input id="passwordPrompt" type="checkbox" name="PasswordPrompt" [ngModel]="reprompt"
+                        (change)="repromptChanged()">
+                </div>
                 <a class="box-content-row box-content-row-flex text-default" href="#" appStopClick appBlurClick
                     (click)="attachments()" *ngIf="editMode && showAttachments && !cloneMode">
                     <div class="row-main">{{'attachments' | i18n}}</div>
-                    <i class="fa fa-chevron-right row-sub-icon" aria-hidden="true"></i>
+                    <i class="fa fa-external-link fa-lg fa-fw" aria-hidden="true" *ngIf="openAttachmentsInPopup"></i>
+                    <i class="fa fa-chevron-right row-sub-icon" aria-hidden="true" *ngIf="!openAttachmentsInPopup"></i>
                 </a>
                 <a class="box-content-row box-content-row-flex text-default" href="#" appStopClick appBlurClick
                     (click)="editCollections()" *ngIf="editMode && cipher.organizationId && !cloneMode">

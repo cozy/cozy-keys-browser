@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { BrowserApi } from '../../browser/browserApi';
 
-import { ConstantsService } from 'jslib/services/constants.service'
+import { ConstantsService } from 'jslib/services/constants.service';
+
 import { CryptoFunctionService } from 'jslib/abstractions/cryptoFunction.service';
 import { EnvironmentService } from 'jslib/abstractions/environment.service';
-import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
 import { PasswordGenerationService } from 'jslib/abstractions/passwordGeneration.service';
+import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
 import { StorageService } from 'jslib/abstractions/storage.service';
 
 import { Utils } from 'jslib/misc/utils';

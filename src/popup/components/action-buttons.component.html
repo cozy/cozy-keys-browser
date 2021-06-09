@@ -6,7 +6,7 @@
     </div>
 </span>
 <ng-container *ngIf="cipher.type === cipherType.Login">
-    <span class="row-btn" appStopClick appStopProp appA11yTitle="{{'launch' | i18n}}" (click)="launch()"
+    <span class="row-btn" appStopClick appStopProp appA11yTitle="{{'launch' | i18n}}" (click)="launchCipher()"
         *ngIf="showGlobe" [ngClass]="{disabled: !cipher.login.canLaunch}">
         <div class="icon-cozy-inline">
             <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -31,6 +31,11 @@
                 <path fill-rule="evenodd" d="M6.416 7H6v1.5a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5V15a1 1 0 0 0 1 1h1.586a1 1 0 0 0 .707-.293l6.004-6.004A5 5 0 1 0 6.416 7zm7.58-2.07c0 .232-.027.466-.082.694a1.003 1.003 0 0 1-1.626.522l-.056-.053-2.328-2.328a1.003 1.003 0 0 1 .395-1.66l.074-.022a2.926 2.926 0 0 1 2.666.68l.1.095c.536.536.821 1.229.854 1.93l.004.141z"/>
             </svg>
         </div>
+    </span>
+    <span class="row-btn" appStopClick appStopProp appA11yTitle="{{'copyVerificationCode' | i18n}}"
+        (click)="copy(cipher, cipher.login.totp, 'verificationCodeTotp', 'TOTP')"
+        [ngClass]="{disabled: (!displayTotpCopyButton(cipher))}">
+        <i class="fa fa-lg fa-clock-o" aria-hidden="true"></i>
     </span>
 </ng-container>
 <ng-container *ngIf="cipher.type === cipherType.Card">

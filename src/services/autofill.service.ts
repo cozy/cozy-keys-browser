@@ -20,6 +20,7 @@ import {
 } from 'jslib/abstractions';
 
 import { EventService } from 'jslib/abstractions/event.service';
+import { CipherRepromptType } from 'jslib/enums/cipherRepromptType';
 import { EventType } from 'jslib/enums/eventType';
 
 const CardAttributes: string[] = ['autoCompleteType', 'data-stripe', 'htmlName', 'htmlID', 'label-tag',
@@ -192,7 +193,7 @@ export default class AutofillService implements AutofillServiceInterface {
                 continue;
             }
 
-            const formPasswordFields = passwordFields.filter((pf) => formKey === pf.form);
+            const formPasswordFields = passwordFields.filter(pf => formKey === pf.form);
             if (formPasswordFields.length > 0) {
                 let uf = this.findUsernameField(pageDetails, formPasswordFields[0], false, false, false);
                 if (uf == null) {
@@ -298,12 +299,12 @@ export default class AutofillService implements AutofillServiceInterface {
 
             if (!fillScript) { return; }
 
-            if (options.cipher.type !== CipherType.Login || totpPromise || options.skipTotp ||
-                !options.cipher.login.totp || (!canAccessPremium && !options.cipher.organizationUseTotp)) {
+            if (options.cipher.type !== CipherType.Login || totpPromise || !options.cipher.login.totp ||
+                (!canAccessPremium && !options.cipher.organizationUseTotp)) {
                 return;
             }
 
-            totpPromise = this.totpService.isAutoCopyEnabled().then((enabled) => {
+            totpPromise = this.totpService.isAutoCopyEnabled().then(enabled => {
                 if (enabled) {
                     return this.totpService.getCode(options.cipher.login.totp);
                 }
@@ -361,24 +362,23 @@ export default class AutofillService implements AutofillServiceInterface {
             if (fromCommand) {
                 cipher = await this.cipherService.getNextCipherForUrl(tab.url);
             } else {
-                const lastLaunchedCipher = await this.cipherService.getLastLaunchedForUrl(tab.url);
+                const lastLaunchedCipher = await this.cipherService.getLastLaunchedForUrl(tab.url, true);
                 if (lastLaunchedCipher && Date.now().valueOf() - lastLaunchedCipher.localData?.lastLaunched?.valueOf() < 30000) {
                     cipher = lastLaunchedCipher;
                 }
                 else {
-                    cipher = await this.cipherService.getLastUsedForUrl(tab.url);
+                    cipher = await this.cipherService.getLastUsedForUrl(tab.url, true);
                 }
             }
         }
-        if (!cipher && !hasFieldsForInPageMenu) {
-            return;
+        if (cipher == null && !hasFieldsForInPageMenu) {
+            return null;
         }
         /* END @override by Cozy */
-        const autoFillResponse = await this.doAutoFill({
+        const totpCode = await this.doAutoFill({
             cipher: cipher,
             tab : tab,
             pageDetails: pageDetails,
-            skipTotp: !fromCommand,
             skipLastUsed: !fromCommand,
             skipUsernameOnlyFill: !fromCommand,
             onlyEmptyFields: !fromCommand,
@@ -387,12 +387,12 @@ export default class AutofillService implements AutofillServiceInterface {
             fieldsForInPageMenuScripts: pageDetails[0].fieldsForInPageMenuScripts,
         });
 
-        // Only update last used index if doAutoFill didn't throw an exception
+        // Update last used index as autofill has succeed
         if (fromCommand) {
             this.cipherService.updateLastUsedIndexForUrl(tab.url);
         }
 
-        return autoFillResponse;
+        return totpCode;
     }
 
     /* ----------------------------------------------------------------------------- */
@@ -883,13 +883,13 @@ export default class AutofillService implements AutofillServiceInterface {
             }
 
             const passwordFieldsForForm: AutofillField[] = [];
-            passwordFields.forEach((passField) => {
+            passwordFields.forEach(passField => {
                 if (formKey === passField.form) {
                     passwordFieldsForForm.push(passField);
                 }
             });
 
-            passwordFields.forEach((passField) => {
+            passwordFields.forEach(passField => {
                 pf = passField;
                 passwords.push(pf);
 
@@ -947,7 +947,7 @@ export default class AutofillService implements AutofillServiceInterface {
         });
         // end @override by Cozy
 
-        usernames.forEach((u) => {
+        usernames.forEach(u => {
             if (filledFields.hasOwnProperty(u.opid)) {
                 return;
             }
@@ -956,7 +956,7 @@ export default class AutofillService implements AutofillServiceInterface {
             this.fillByOpid(fillScript, u, login.username, cipher);
         });
 
-        passwords.forEach((p) => {
+        passwords.forEach(p => {
             if (filledFields.hasOwnProperty(p.opid)) {
                 return;
             }
@@ -1215,7 +1215,7 @@ export default class AutofillService implements AutofillServiceInterface {
         }
 
         let doesContain = false;
-        CardAttributesExtended.forEach((attr) => {
+        CardAttributesExtended.forEach(attr => {
             if (doesContain || !field.hasOwnProperty(attr) || !field[attr]) {
                 return;
             }
@@ -1531,7 +1531,7 @@ export default class AutofillService implements AutofillServiceInterface {
     private loadPasswordFields(pageDetails: AutofillPageDetails, canBeHidden: boolean, canBeReadOnly: boolean,
         mustBeEmpty: boolean, fillNewPassword: boolean) {
         const arr: AutofillField[] = [];
-        pageDetails.fields.forEach((f) => {
+        pageDetails.fields.forEach(f => {
             const isPassword = f.type === 'password';
             const valueIsLikePassword = (value: string) => {
                 if (value == null) {
@@ -1545,7 +1545,7 @@ export default class AutofillService implements AutofillServiceInterface {
                 }
 
                 const ignoreList = ['onetimepassword', 'captcha', 'findanything'];
-                if (ignoreList.some((i) => cleanedValue.indexOf(i) > -1)) {
+                if (ignoreList.some(i => cleanedValue.indexOf(i) > -1)) {
                     return false;
                 }
 

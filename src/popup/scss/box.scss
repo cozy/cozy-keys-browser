@@ -27,6 +27,32 @@
         }
     }
 
+    .box-header-expandable {
+        margin: 0 10px 5px 10px;
+        text-transform: uppercase;
+        display: flex;
+
+        @include themify($themes) {
+            color: themed('headingColor');
+        }
+
+        &:hover, &:focus, &.active {
+            @include themify($themes) {
+                background-color: themed('boxBackgroundHoverColor');
+            }
+        }
+
+        .icon {
+            display: flex;
+            align-items: center;
+            margin-left: 5px;
+
+            @include themify($themes) {
+                color: themed('headingColor');
+            }
+        }
+    }
+
     .box-content {
 
         @include themify($themes) {
@@ -171,6 +197,15 @@
     flex-direction: column;
 }
 
+.box-section-divider {
+    border-top: 1px solid #000000;
+    padding-top: 10px;
+
+    @include themify($themes) {
+        border-color: themed('borderColor');
+    }
+}
+
 .box-content-row {
     display: block;
     padding: 10px 15px;
@@ -239,6 +274,21 @@
 
         .sub-label {
             margin-left: 10px;
+        }
+    }
+
+    .flex-label {
+        font-size: $font-size-small;
+        display: flex;
+        flex-grow: 1;
+        margin-bottom: 5px;
+
+        @include themify($themes) {
+            color: themed('mutedColor');
+        }
+
+        > a {
+            flex-grow: 0;
         }
     }
 
@@ -349,6 +399,14 @@
         }
     }
 
+    &.box-content-row-checkbox-left {
+        justify-content: flex-start;
+
+        > input {
+            margin: 0 15px 0 0;
+        }
+    }
+
     &.box-content-row-input {
         label {
             white-space: nowrap;
@@ -377,7 +435,7 @@
         }
     }
 
-    input:not([type="checkbox"]), textarea {
+    input:not([type="checkbox"]):not([type="radio"]), textarea {
         border: none;
         width: 100%;
         background-color: transparent !important;
@@ -426,13 +484,16 @@
             &.disabled {
                 @include themify($themes) {
                     color: themed('disabledIconColor');
+                    opacity: themed('disabledBoxOpacity');
                 }
 
                 &:hover {
                     @include themify($themes) {
                         color: themed('disabledIconColor');
+                        opacity: themed('disabledBoxOpacity');
                     }
                 }
+                cursor: default !important;
             }
         }
 
@@ -529,6 +590,29 @@
             justify-content: center;
             white-space: nowrap;
             background-color: $brand-primary;
+        }
+    }
+
+    .radio-group {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 5px;
+
+        input {
+            flex-grow: 0;
+        }
+
+        label {
+            margin: 0 0 0 5px;
+            flex-grow: 1;
+            font-size: $font-size-base;
+            display: block;
+            width: 100%;
+
+            @include themify($themes) {
+                color: themed('textColor');
+            }
         }
     }
 }

@@ -176,6 +176,29 @@ p.lead {
     }
 }
 
+#web-authn-frame {
+    background: url('../images/loading.svg') 0 0 no-repeat;
+    width: 100%;
+    height: 310px;
+    margin-bottom: -10px;
+
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+}
+
+body.linux-webauthn {
+    width: 485px !important;
+    #web-authn-frame {
+        iframe {
+            width: 375px;
+            margin: 0 55px;
+        }
+    }
+}
+
 #loading {
     display: flex;
     text-align: center;
@@ -430,24 +453,34 @@ li.active .icon-cozy-inline > svg {
             }
         }
     }
+
+    &.clickable {
+        &:hover, &:focus, &.active {
+            @include themify($themes) {
+                background-color: themed('boxBackgroundHoverColor');
+            }
+        }
+    }
 }
 
 input[type="password"]::-ms-reveal {
     display: none;
 }
 
-.checkbox {
-        position: relative;
-        display: block;
-        padding-left: 18px;
+.flex {
+    display: flex;
 
-        label {
-            margin-bottom: 0;
-        }
-
-        input[type="checkbox"] {
-            position: absolute;
-            margin-top: 4px;
-            margin-left: -18px;
+    &.flex-grow {
+        > * {
+            flex: 1;
         }
     }
+}
+
+// Workaround for rendering error in Firefox sidebar
+// option elements will not render background-color correctly if identical to parent background-color
+select option {
+    @include themify($themes) {
+        background-color: darken(themed('inputBackgroundColor'), +1);
+    }
+}

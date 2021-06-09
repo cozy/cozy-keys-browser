@@ -106,11 +106,17 @@
                 <div class="box-content-row box-content-row-flex" *ngIf="cipher.card.number">
                     <div class="row-main">
                         <span class="row-label">{{'number' | i18n}}</span>
-                        {{cipher.card.number}}
+                        <span [hidden]="showCardNumber" class="monospaced">{{cipher.card.maskedNumber}}</span>
+                        <span [hidden]="!showCardNumber" class="monospaced">{{cipher.card.number}}</span>
                     </div>
                     <div class="action-buttons">
+                        <a class="row-btn" href="#" appStopClick appA11yTitle="{{'toggleVisibility' | i18n}}"
+                            (click)="toggleCardNumber()">
+                            <i class="fa fa-lg" aria-hidden="true"
+                                [ngClass]="{'fa-eye': !showCardNumber, 'fa-eye-slash': showCardNumber}"></i>
+                        </a>
                         <a class="row-btn" href="#" appStopClick appA11yTitle="{{'copyNumber' | i18n}}"
-                            (click)="copy(cipher.card.number, 'number', 'Number')">
+                            (click)="copy(cipher.card.number, 'number', 'Card Number')">
                             <i class="fa fa-lg fa-clone" aria-hidden="true"></i>
                         </a>
                     </div>
@@ -276,7 +282,7 @@
     <div class="box list">
         <div class="box-content single-line">
             <a class="box-content-row" href="#" appStopClick appBlurClick (click)="fillCipher()"
-                *ngIf="!cipher.isDeleted && !inPopout">
+                *ngIf="cipher.type !== cipherType.SecureNote && !cipher.isDeleted && !inPopout">
                 <div class="row-main text-primary">
                     <div class="icon icon-cozy-inline" aria-hidden="true">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -287,7 +293,7 @@
                 </div>
             </a>
             <a class="box-content-row" href="#" appStopClick appBlurClick (click)="fillCipherAndSave()"
-                *ngIf="!cipher.isDeleted && !inPopout">
+                *ngIf="cipher.type === cipherType.Login && !cipher.isDeleted && !inPopout">
                 <div class="row-main text-primary">
                     <div class="icon text-primary" aria-hidden="true">
                         <i class="fa fa-bookmark fa-lg fa-fw"></i>
@@ -302,6 +308,14 @@
                         <i class="fa fa-files-o fa-lg fa-fw"></i>
                     </div>
                     <span>{{'cloneItem' | i18n}}</span>
+                </div>
+            </a>
+            <a class="box-content-row" href="#" appStopClick appBlurClick (click)="share()" *ngIf="!cipher.organizationId">
+                <div class="row-main text-primary">
+                    <div class="icon text-primary" aria-hidden="true">
+                        <i class="fa fa-share-alt fa-lg fa-fw"></i>
+                    </div>
+                    <span>{{'shareItem' | i18n}}</span>
                 </div>
             </a>
             <a class="box-content-row" href="#" appStopClick appBlurClick (click)="restore()" *ngIf="cipher.isDeleted">

@@ -11,14 +11,13 @@ export default class CommandsBackground {
     private isVivaldi: boolean;
 
     constructor(private main: MainBackground, private passwordGenerationService: PasswordGenerationService,
-        private platformUtilsService: PlatformUtilsService,
-        private vaultTimeoutService: VaultTimeoutService) {
+        private platformUtilsService: PlatformUtilsService, private vaultTimeoutService: VaultTimeoutService) {
         this.isSafari = this.platformUtilsService.isSafari();
         this.isVivaldi = this.platformUtilsService.isVivaldi();
     }
 
     async init() {
-        if (this.isSafari || this.isVivaldi) {
+        if (this.isVivaldi) {
             BrowserApi.messageListener('commands.background', async (msg: any, sender: any, sendResponse: any) => {
                 if (msg.command === 'keyboardShortcutTriggered' && msg.shortcut) {
                     await this.processCommand(msg.shortcut, sender);

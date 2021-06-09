@@ -29,7 +29,7 @@ export class ShareComponent extends BaseShareComponent {
         this.onSharedCipher.subscribe(() => {
             this.router.navigate(['view-cipher', { cipherId: this.cipherId }]);
         });
-        const queryParamsSub = this.route.queryParams.subscribe(async (params) => {
+        const queryParamsSub = this.route.queryParams.subscribe(async params => {
             this.cipherId = params.cipherId;
             await this.load();
             if (queryParamsSub != null) {
@@ -41,14 +41,12 @@ export class ShareComponent extends BaseShareComponent {
     async submit(): Promise<boolean> {
         const success = await super.submit();
         if (success) {
-            window.setTimeout(() => {
-                this.location.back();
-            }, 200);
+            this.cancel();
         }
         return success;
     }
 
     cancel() {
-        this.location.back();
+        this.router.navigate(['/view-cipher'], { replaceUrl: true, queryParams: { cipherId: this.cipher.id } });
     }
 }

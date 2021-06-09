@@ -22,6 +22,7 @@ import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
 import { StorageService } from 'jslib/abstractions/storage.service';
 import { UserService } from 'jslib/abstractions/user.service';
 import { VaultTimeoutService } from 'jslib/abstractions/vaultTimeout.service';
+import { PopupUtilsService } from '../services/popup-utils.service';
 import { CozyClientService } from '../services/cozyClient.service';
 
 // TODO: Add Safari URL when published
@@ -50,13 +51,15 @@ export class SettingsComponent implements OnInit {
     vaultTimeoutActions: any[];
     vaultTimeoutAction: string;
     pin: boolean = null;
+    supportsBiometric: boolean;
+    biometric: boolean = false;
     previousVaultTimeout: number = null;
 
     constructor(private platformUtilsService: PlatformUtilsService, private i18nService: I18nService,
-        private vaultTimeoutService: VaultTimeoutService,
-        private storageService: StorageService, public messagingService: MessagingService,
-        private router: Router, private environmentService: EnvironmentService,
-        private cryptoService: CryptoService, private userService: UserService,
+        private vaultTimeoutService: VaultTimeoutService, private storageService: StorageService,
+        public messagingService: MessagingService, private router: Router,
+        private environmentService: EnvironmentService, private cryptoService: CryptoService,
+        private userService: UserService, private popupUtilsService: PopupUtilsService,
         private cozyClientService: CozyClientService) {
     }
 
@@ -100,6 +103,9 @@ export class SettingsComponent implements OnInit {
 
         const pinSet = await this.vaultTimeoutService.isPinLockSet();
         this.pin = pinSet[0] || pinSet[1];
+
+        this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
+        this.biometric = await this.vaultTimeoutService.isBiometricLockSet();
     }
 
     async saveVaultTimeout(newValue: number) {
@@ -206,6 +212,74 @@ export class SettingsComponent implements OnInit {
         if (!this.pin) {
             await this.cryptoService.clearPinProtectedKey();
             await this.vaultTimeoutService.clear();
+        }
+    }
+
+    async updateBiometric() {
+        if (this.biometric && this.supportsBiometric) {
+
+            let granted;
+            try {
+                granted = await BrowserApi.requestPermission({ permissions: ['nativeMessaging'] });
+            } catch (e) {
+                // tslint:disable-next-line
+                console.error(e);
+
+                if (this.platformUtilsService.isFirefox() && this.popupUtilsService.inSidebar(window)) {
+                    await this.platformUtilsService.showDialog(
+                        this.i18nService.t('nativeMessaginPermissionSidebarDesc'), this.i18nService.t('nativeMessaginPermissionSidebarTitle'),
+                        this.i18nService.t('ok'), null);
+                    this.biometric = false;
+                    return;
+                }
+            }
+
+            if (!granted) {
+                await this.platformUtilsService.showDialog(
+                    this.i18nService.t('nativeMessaginPermissionErrorDesc'), this.i18nService.t('nativeMessaginPermissionErrorTitle'),
+                    this.i18nService.t('ok'), null);
+                this.biometric = false;
+                return;
+            }
+
+            const submitted = Swal.fire({
+                heightAuto: false,
+                buttonsStyling: false,
+                titleText: this.i18nService.t('awaitDesktop'),
+                text: this.i18nService.t('awaitDesktopDesc'),
+                icon: 'info',
+                iconHtml: '<i class="swal-custom-icon fa fa-info-circle text-info"></i>',
+                showCancelButton: true,
+                cancelButtonText: this.i18nService.t('cancel'),
+                showConfirmButton: false,
+                allowOutsideClick: false,
+            });
+
+            await this.storageService.save(ConstantsService.biometricAwaitingAcceptance, true);
+            await this.cryptoService.toggleKey();
+
+            await Promise.race([
+                submitted.then(result => {
+                    if (result.dismiss === Swal.DismissReason.cancel) {
+                        this.biometric = false;
+                        this.storageService.remove(ConstantsService.biometricAwaitingAcceptance);
+                    }
+                }),
+                this.platformUtilsService.authenticateBiometric().then(result => {
+                    this.biometric = result;
+
+                    Swal.close();
+                    if (this.biometric === false) {
+                        this.platformUtilsService.showToast('error', this.i18nService.t('errorEnableBiometricTitle'), this.i18nService.t('errorEnableBiometricDesc'));
+                    }
+                }).catch(e => {
+                    // Handle connection errors
+                    this.biometric = false;
+                }),
+            ]);
+        } else {
+            await this.storageService.remove(ConstantsService.biometricUnlockKey);
+            this.vaultTimeoutService.biometricLocked = false;
         }
     }
 

@@ -91,6 +91,15 @@ const enum PanelNames {
  *  0bbe17f6e2becdf5146677d51cbc71cc099aaec9/src/popup/vault/groupings.component.ts
  */
 export class GroupingsComponent extends BaseGroupingsComponent implements OnInit, OnDestroy {
+
+    get showNoFolderCiphers(): boolean {
+        return this.noFolderCiphers != null && this.noFolderCiphers.length < this.noFolderListSize &&
+            this.collections.length === 0;
+    }
+
+    get folderCount(): number {
+        return this.nestedFolders.length - (this.showNoFolderCiphers ? 0 : 1);
+    }
     ciphers: CipherView[];
     favoriteCiphers: CipherView[];
     deletedCiphers: CipherView[];
@@ -138,9 +147,9 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         private ngZone: NgZone, private broadcasterService: BroadcasterService,
         private changeDetectorRef: ChangeDetectorRef, private route: ActivatedRoute,
         private stateService: StateService, private popupUtils: PopupUtilsService,
-        private syncService: SyncService,
-        private platformUtilsService: PlatformUtilsService, private searchService: SearchService,
-        private location: Location, private toasterService: ToasterService, private i18nService: I18nService,
+        private syncService: SyncService, private platformUtilsService: PlatformUtilsService,
+        private searchService: SearchService, private location: Location,
+        private toasterService: ToasterService, private i18nService: I18nService,
         private autofillService: AutofillService, private konnectorsService: KonnectorsService,
         private cozyClientService: CozyClientService) {
         super(collectionService, folderService, storageService, userService);
@@ -156,15 +165,6 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         }
     }
 
-    get showNoFolderCiphers(): boolean {
-        return this.noFolderCiphers != null && this.noFolderCiphers.length < this.noFolderListSize &&
-            this.collections.length === 0;
-    }
-
-    get folderCount(): number {
-        return this.nestedFolders.length - (this.showNoFolderCiphers ? 0 : 1);
-    }
-
     async ngOnInit() {
         // console.log('ngOnInit()', 'isPannelVisible', this.isPannelVisible);
         this.ciphersByType = {};
@@ -172,8 +172,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         this.ciphersByType[CipherType.Identity] = [];
         this.ciphersByType[CipherType.Login] = [];
         this.searchTypeSearch = !this.platformUtilsService.isSafari();
-        this.showLeftHeader = !this.platformUtilsService.isSafari() &&
-            !(this.popupUtils.inSidebar(window) && this.platformUtilsService.isFirefox());
+        this.showLeftHeader = !(this.popupUtils.inSidebar(window) && this.platformUtilsService.isFirefox());
         this.stateService.remove('CiphersComponent');
 
         setTimeout(() => {
@@ -210,7 +209,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
         const restoredScopeState = await this.restoreState();
 
-        this.route.queryParams.subscribe(async (params) => {
+        this.route.queryParams.subscribe(async params => {
             // console.log('groupings.queryParams.heard :', params);
             if (params.activatedPanel) {
                 let folderId: string;
@@ -317,7 +316,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         if (!this.hasLoadedAllCiphers) {
             this.hasLoadedAllCiphers = !this.searchService.isSearchable(this.searchText);
         }
-        this.deletedCiphers = this.allCiphers.filter((c) => c.isDeleted);
+        this.deletedCiphers = this.allCiphers.filter(c => c.isDeleted);
         this.deletedCount = this.deletedCiphers.length;
         await this.search(null);
         let favoriteCiphers: CipherView[] = null;
@@ -325,7 +324,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         const folderCounts = new Map<string, number>();
         const collectionCounts = new Map<string, number>();
         const typeCounts = new Map<CipherType, number>();
-        this.ciphers.forEach((c) => {
+        this.ciphers.forEach(c => {
             if (c.isDeleted) {
                 return;
             }
@@ -356,7 +355,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             }
 
             if (c.collectionIds != null) {
-                c.collectionIds.forEach((colId) => {
+                c.collectionIds.forEach(colId => {
                     if (collectionCounts.has(colId)) {
                         collectionCounts.set(colId, collectionCounts.get(colId) + 1);
                     } else {
@@ -581,6 +580,13 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             default:
                 this.router.navigate(['/add-cipher'], { queryParams: { name: this.hostname, uri: this.url } });
                 break;
+        }
+    }
+
+    closeOnEsc(e: KeyboardEvent) {
+        // If input not empty, use browser default behavior of clearing input instead
+		if (e.key === 'Escape' && (this.searchText == null || this.searchText === '')) {
+            BrowserApi.closePopup(window);
         }
     }
 

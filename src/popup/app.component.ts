@@ -4,7 +4,6 @@ import {
     BodyOutputType,
     Toast,
     ToasterConfig,
-    ToasterContainerComponent,
     ToasterService,
 } from 'angular2-toaster';
 import Swal, { SweetAlertIcon } from 'sweetalert2/src/sweetalert2.js';
@@ -34,6 +33,7 @@ import { StorageService } from 'jslib/abstractions/storage.service';
 
 import { ConstantsService } from 'jslib/services/constants.service';
 
+import BrowserPlatformUtilsService from 'src/services/browserPlatformUtils.service';
 import { routerTransition } from './app-routing.animations';
 
 @Component({
@@ -57,8 +57,7 @@ export class AppComponent implements OnInit {
 
     private lastActivity: number = null;
 
-    constructor(
-        private toasterService: ToasterService, private storageService: StorageService,
+    constructor(private toasterService: ToasterService, private storageService: StorageService,
         private broadcasterService: BroadcasterService, private authService: AuthService,
         private i18nService: I18nService, private router: Router,
         private stateService: StateService, private messagingService: MessagingService,
@@ -107,6 +106,8 @@ export class AppComponent implements OnInit {
                 });
             } else if (msg.command === 'showDialog') {
                 await this.showDialog(msg);
+            } else if (msg.command === 'showPasswordDialog') {
+                await this.showPasswordDialog(msg);
             } else if (msg.command === 'showToast') {
                 this.ngZone.run(() => {
                     this.showToast(msg);
@@ -130,13 +131,17 @@ export class AppComponent implements OnInit {
 
         BrowserApi.messageListener('app.component', (window as any).bitwardenPopupMainMessageListener);
 
-        this.router.events.subscribe((event) => {
+        this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
                 const url = event.urlAfterRedirects || event.url || '';
                 if (url.startsWith('/tabs/') && (window as any).previousPopupUrl != null &&
                     (window as any).previousPopupUrl.startsWith('/tabs/')) {
                     this.stateService.remove('GroupingsComponent');
+                    this.stateService.remove('GroupingsComponentScope');
                     this.stateService.remove('CiphersComponent');
+                    this.stateService.remove('SendGroupingsComponent');
+                    this.stateService.remove('SendGroupingsComponentScope');
+                    this.stateService.remove('SendTypeComponent');
                 }
                 if (url.startsWith('/tabs/')) {
                     this.stateService.remove('addEditCipherInfo');
@@ -232,7 +237,8 @@ export class AppComponent implements OnInit {
             icon: type as SweetAlertIcon, // required to be any of the SweetAlertIcons to output the iconHtml.
             iconHtml: iconClasses != null ? `<i class="swal-custom-icon fa ${iconClasses}"></i>` : undefined,
             text: msg.text,
-            title: msg.title,
+            html: msg.html,
+            titleText: msg.title,
             showCancelButton: (cancelText != null),
             cancelButtonText: cancelText,
             showConfirmButton: true,
@@ -244,5 +250,31 @@ export class AppComponent implements OnInit {
             dialogId: msg.dialogId,
             confirmed: confirmed.value,
         });
+    }
+
+    private async showPasswordDialog(msg: any) {
+        const platformUtils = this.platformUtilsService as BrowserPlatformUtilsService;
+        const result = await Swal.fire({
+            heightAuto: false,
+            titleText: msg.title,
+            input: 'password',
+            text: msg.body,
+            confirmButtonText: this.i18nService.t('ok'),
+            showCancelButton: true,
+            cancelButtonText: this.i18nService.t('cancel'),
+            inputAttributes: {
+                autocapitalize: 'off',
+                autocorrect: 'off',
+            },
+            inputValidator: async (value: string): Promise<any> => {
+                if (await platformUtils.resolvePasswordDialogPromise(msg.dialogId, false, value)) {
+                    return false;
+                }
+
+                return this.i18nService.t('invalidMasterPassword');
+            },
+        });
+
+        platformUtils.resolvePasswordDialogPromise(msg.dialogId, true, null);
     }
 }

@@ -9,7 +9,7 @@
         <div class="right">
             <button type="submit" appBlurClick [disabled]="form.loading" *ngIf="selectedProviderType != null && selectedProviderType !== providerType.Duo &&
                         selectedProviderType !== providerType.OrganizationDuo &&
-                        (selectedProviderType !== providerType.U2f || form.loading)">
+                        (selectedProviderType !== providerType.WebAuthn || form.loading)">
                 <span [hidden]="form.loading">{{'continue' | i18n}}</span>
                 <i class="fa fa-spinner fa-lg fa-spin" [hidden]="!form.loading" aria-hidden="true"></i>
             </button>
@@ -61,4 +61,3 @@
         </div>
     </content>
 </form>
-<iframe id="u2f_iframe" hidden></iframe>

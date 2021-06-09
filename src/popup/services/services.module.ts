@@ -23,19 +23,22 @@ import { AuditService } from 'jslib/abstractions/audit.service';
 import { AuthService as AuthServiceAbstraction } from 'jslib/abstractions/auth.service';
 import { CipherService } from 'jslib/abstractions/cipher.service';
 import { CollectionService } from 'jslib/abstractions/collection.service';
-import { CryptoFunctionService } from 'jslib/abstractions/cryptoFunction.service';
 import { CryptoService } from 'jslib/abstractions/crypto.service';
+import { CryptoFunctionService } from 'jslib/abstractions/cryptoFunction.service';
 import { EnvironmentService } from 'jslib/abstractions/environment.service';
 import { EventService } from 'jslib/abstractions/event.service';
 import { ExportService } from 'jslib/abstractions/export.service';
+import { FileUploadService } from 'jslib/abstractions/fileUpload.service';
 import { FolderService } from 'jslib/abstractions/folder.service';
 import { I18nService } from 'jslib/abstractions/i18n.service';
 import { MessagingService } from 'jslib/abstractions/messaging.service';
 import { NotificationsService } from 'jslib/abstractions/notifications.service';
 import { PasswordGenerationService } from 'jslib/abstractions/passwordGeneration.service';
+import { PasswordRepromptService as PasswordRepromptServiceAbstraction } from 'jslib/abstractions/passwordReprompt.service';
 import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
 import { PolicyService } from 'jslib/abstractions/policy.service';
 import { SearchService as SearchServiceAbstraction } from 'jslib/abstractions/search.service';
+import { SendService } from 'jslib/abstractions/send.service';
 import { SettingsService } from 'jslib/abstractions/settings.service';
 import { StateService as StateServiceAbstraction } from 'jslib/abstractions/state.service';
 import { StorageService } from 'jslib/abstractions/storage.service';
@@ -44,10 +47,12 @@ import { TokenService } from 'jslib/abstractions/token.service';
 import { TotpService } from 'jslib/abstractions/totp.service';
 import { UserService } from 'jslib/abstractions/user.service';
 import { VaultTimeoutService } from 'jslib/abstractions/vaultTimeout.service';
+import { PasswordRepromptService } from 'jslib/services/passwordReprompt.service';
 
 import { AutofillService } from '../../services/abstractions/autofill.service';
 import BrowserMessagingService from '../../services/browserMessaging.service';
 
+import { ConsoleLogService } from 'jslib/services/consoleLog.service';
 import { ConstantsService } from 'jslib/services/constants.service';
 import { SearchService } from 'jslib/services/search.service';
 import { StateService } from 'jslib/services/state.service';
@@ -64,22 +69,26 @@ function getBgService<T>(service: string) {
     };
 }
 
-export const stateService = new StateService();
-export const messagingService = new BrowserMessagingService();
-export const cozyClientService = new CozyClientService(getBgService<EnvironmentService>('environmentService')(),
+const stateService = new StateService();
+const messagingService = new BrowserMessagingService();
+const searchService = new PopupSearchService(getBgService<SearchService>('searchService')(),
+    getBgService<CipherService>('cipherService')(), getBgService<ConsoleLogService>('consoleLogService')(),
+    getBgService<I18nService>('i18nService')());
+const passwordRepromptService = new PasswordRepromptService(getBgService<I18nService>('i18nService')(),
+    getBgService<CryptoService>('cryptoService')(), getBgService<PlatformUtilsService>('platformUtilsService')());
+// récupéré brut lors du merge upstream, à adapter TODO BJA
+const cozyClientService = new CozyClientService(getBgService<EnvironmentService>('environmentService')(),
     getBgService<ApiService>('apiService')());
-export const konnectorsService = new KonnectorsService(getBgService<CipherService>('cipherService')(),
+const konnectorsService = new KonnectorsService(getBgService<CipherService>('cipherService')(),
     getBgService<StorageService>('storageService')(), getBgService<SettingsService>('settingsService')(),
     cozyClientService);
-export const authService = getBgService<AuthService>('authService')();
+const authService = getBgService<AuthService>('authService')();
 
 // See https://github.com/cozy/cozy-keys-browser/pull/70 to have more context
 // about why we do this
 authService.setMessagingService(messagingService);
-export const searchService = new PopupSearchService(getBgService<SearchService>('searchService')(),
-    getBgService<CipherService>('cipherService')());
 
-export function initFactory(i18nService: I18nService, storageService: StorageService,
+export function initFactory(platformUtilsService: PlatformUtilsService, i18nService: I18nService, storageService: StorageService,
     popupUtilsService: PopupUtilsService): Function {
     return async () => {
         if (!popupUtilsService.inPopup(window)) {
@@ -91,16 +100,25 @@ export function initFactory(i18nService: I18nService, storageService: StorageSer
         }
 
         if (BrowserApi.getBackgroundPage() != null) {
-            stateService.save(ConstantsService.disableFaviconKey,
+            await stateService.save(ConstantsService.disableFaviconKey,
                 await storageService.get<boolean>(ConstantsService.disableFaviconKey));
+
+            await stateService.save(ConstantsService.disableBadgeCounterKey,
+                await storageService.get<boolean>(ConstantsService.disableBadgeCounterKey));
 
             let theme = await storageService.get<string>(ConstantsService.themeKey);
             if (theme == null) {
-                theme = 'light';
+                theme = await platformUtilsService.getDefaultSystemTheme();
+
+                platformUtilsService.onDefaultSystemThemeChange(sysTheme => {
+                    window.document.documentElement.classList.remove('theme_light', 'theme_dark');
+                    window.document.documentElement.classList.add('theme_' + sysTheme);
+                });
             }
             window.document.documentElement.classList.add('locale_' + i18nService.translationLocale);
             window.document.documentElement.classList.add('theme_' + theme);
 
+            // conservé brut du merge upstream, à adapter TODO BJA
             authService.init();
         }
     };
@@ -120,10 +138,11 @@ export function initFactory(i18nService: I18nService, storageService: StorageSer
         { provide: CozyClientService, useValue: cozyClientService },
         { provide: KonnectorsService, useValue: konnectorsService },
         { provide: MessagingService, useValue: messagingService },
-        { provide: AuthServiceAbstraction, useValue: authService },
+        { provide: AuthServiceAbstraction, useFactory: getBgService<AuthService>('authService'), deps: [] },
         { provide: StateServiceAbstraction, useValue: stateService },
         { provide: SearchServiceAbstraction, useValue: searchService },
         { provide: AuditService, useFactory: getBgService<AuditService>('auditService'), deps: [] },
+        { provide: FileUploadService, useFactory: getBgService<FileUploadService>('fileUploadService'), deps: [] },
         { provide: CipherService, useFactory: getBgService<CipherService>('cipherService'), deps: [] },
         {
             provide: CryptoFunctionService,
@@ -157,6 +176,7 @@ export function initFactory(i18nService: I18nService, storageService: StorageSer
         { provide: AppIdService, useFactory: getBgService<AppIdService>('appIdService'), deps: [] },
         { provide: AutofillService, useFactory: getBgService<AutofillService>('autofillService'), deps: [] },
         { provide: ExportService, useFactory: getBgService<ExportService>('exportService'), deps: [] },
+        { provide: SendService, useFactory: getBgService<SendService>('sendService'), deps: [] },
         {
             provide: VaultTimeoutService,
             useFactory: getBgService<VaultTimeoutService>('vaultTimeoutService'),
@@ -170,7 +190,7 @@ export function initFactory(i18nService: I18nService, storageService: StorageSer
         {
             provide: APP_INITIALIZER,
             useFactory: initFactory,
-            deps: [I18nService, StorageService, PopupUtilsService],
+            deps: [PlatformUtilsService, I18nService, StorageService, PopupUtilsService],
             multi: true,
         },
         {
@@ -178,6 +198,7 @@ export function initFactory(i18nService: I18nService, storageService: StorageSer
             useFactory: () => getBgService<I18nService>('i18nService')().translationLocale,
             deps: [],
         },
+        { provide: PasswordRepromptServiceAbstraction, useValue: passwordRepromptService },
     ],
 })
 export class ServicesModule {

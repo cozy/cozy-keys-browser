@@ -9,7 +9,6 @@ import { UriMatchType } from 'jslib/enums/uriMatchType';
 
 import { I18nService } from 'jslib/abstractions/i18n.service';
 import { MessagingService } from 'jslib/abstractions/messaging.service';
-import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
 import { StateService } from 'jslib/abstractions/state.service';
 import { StorageService } from 'jslib/abstractions/storage.service';
 import { TotpService } from 'jslib/abstractions/totp.service';
@@ -24,14 +23,16 @@ export class OptionsComponent implements OnInit {
     disableFavicon = false;
     disableKonnectorsSuggestions = false;
     enableInPageMenu = true;
+    disableBadgeCounter = false;
     enableAutoFillOnPageLoad = false;
+    autoFillOnPageLoadDefault = false;
+    autoFillOnPageLoadOptions: any[];
     disableAutoTotpCopy = false;
     disableContextMenuItem = false;
     disableAddLoginNotification = false;
     disableChangedPasswordNotification = false;
     dontShowCards = false;
     dontShowIdentities = false;
-    showDisableContextMenu = true;
     showClearClipboard = true;
     theme: string;
     themeOptions: any[];
@@ -39,16 +40,19 @@ export class OptionsComponent implements OnInit {
     uriMatchOptions: any[];
     clearClipboard: number;
     clearClipboardOptions: any[];
+    showGeneral: boolean = true;
+    showAutofill: boolean = true;
+    showDisplay: boolean = true;
 
-    constructor(private messagingService: MessagingService,
-        private platformUtilsService: PlatformUtilsService, private storageService: StorageService,
-        private stateService: StateService, private totpService: TotpService,
-        i18nService: I18nService) {
+    constructor(private messagingService: MessagingService, private storageService: StorageService,
+        private stateService: StateService, private totpService: TotpService, i18nService: I18nService,
+        private platformUtilsService: PlatformUtilsService) {
         this.themeOptions = [
             { name: i18nService.t('default'), value: null },
             { name: i18nService.t('light'), value: 'light' },
             { name: i18nService.t('dark'), value: 'dark' },
             { name: 'Nord', value: 'nord' },
+            { name: i18nService.t('solarizedDark'), value: 'solarizedDark' },
         ];
         this.uriMatchOptions = [
             { name: i18nService.t('baseDomain'), value: UriMatchType.Domain },
@@ -67,11 +71,13 @@ export class OptionsComponent implements OnInit {
             { name: i18nService.t('twoMinutes'), value: 120 },
             { name: i18nService.t('fiveMinutes'), value: 300 },
         ];
+        this.autoFillOnPageLoadOptions = [
+            { name: i18nService.t('autoFillOnPageLoadYes'), value: true },
+            { name: i18nService.t('autoFillOnPageLoadNo'), value: false },
+        ]
     }
 
     async ngOnInit() {
-        this.showDisableContextMenu = !this.platformUtilsService.isSafari();
-
         this.disableKonnectorsSuggestions = await this.storageService.get(
             ConstantsService.disableKonnectorsSuggestionsKey,
         );
@@ -84,6 +90,9 @@ export class OptionsComponent implements OnInit {
 
         this.enableAutoFillOnPageLoad = await this.storageService.get<boolean>(
             ConstantsService.enableAutoFillOnPageLoadKey);
+        
+        this.autoFillOnPageLoadDefault = await this.storageService.get<boolean>(
+            ConstantsService.autoFillOnPageLoadDefaultKey) ?? true;
 
         this.disableAddLoginNotification = await this.storageService.get<boolean>(
             ConstantsService.disableAddLoginNotificationKey);
@@ -100,6 +109,8 @@ export class OptionsComponent implements OnInit {
         this.disableAutoTotpCopy = !(await this.totpService.isAutoCopyEnabled());
 
         this.disableFavicon = await this.storageService.get<boolean>(ConstantsService.disableFaviconKey);
+
+        this.disableBadgeCounter = await this.storageService.get<boolean>(ConstantsService.disableBadgeCounterKey);
 
         this.theme = await this.storageService.get<string>(ConstantsService.themeKey);
 
@@ -156,9 +167,19 @@ export class OptionsComponent implements OnInit {
         await this.storageService.save(ConstantsService.enableAutoFillOnPageLoadKey, this.enableAutoFillOnPageLoad);
     }
 
+    async updateAutoFillOnPageLoadDefault() {
+        await this.storageService.save(ConstantsService.autoFillOnPageLoadDefaultKey, this.autoFillOnPageLoadDefault);
+    }
+
     async updateDisableFavicon() {
         await this.storageService.save(ConstantsService.disableFaviconKey, this.disableFavicon);
         await this.stateService.save(ConstantsService.disableFaviconKey, this.disableFavicon);
+    }
+
+    async updateDisableBadgeCounter() {
+        await this.storageService.save(ConstantsService.disableBadgeCounterKey, this.disableBadgeCounter);
+        await this.stateService.save(ConstantsService.disableBadgeCounterKey, this.disableBadgeCounter);
+        this.messagingService.send('bgUpdateContextMenu');
     }
 
     async updateShowCards() {
