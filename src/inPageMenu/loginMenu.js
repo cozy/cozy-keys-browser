@@ -3,6 +3,7 @@ require('./loginMenu.scss');
 import { AuthService } from 'jslib/abstractions/auth.service';
 import { EnvironmentService } from 'jslib/abstractions/environment.service';
 import { Utils } from 'jslib/misc/utils';
+import { CozySanitizeUrlService } from '../popup/services/cozySanitizeUrl.service';
 
 
 /* --------------------------------------------------------------------- */
@@ -120,13 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
         switch (msg.subcommand) {
             case 'loginNOK':
                 // console.log("loginNOK heard in loginInPageMenu");
-                errorLabel.innerHTML  = chrome.i18n.getMessage('inPageMenuLoginError')
-                _setErrorMode()
+                setError(chrome.i18n.getMessage('inPageMenuLoginError'))
                 break;
             case '2faCheckNOK':
                 // console.log("2faCheckNOK heard in loginInPageMenu");
-                errorLabel.innerHTML  = chrome.i18n.getMessage('inPageMenuLogin2FACheckError')
-                _setErrorMode()
+                setError(chrome.i18n.getMessage('inPageMenuLogin2FACheckError'))
                 adjustMenuHeight()
                 break;
             case 'setRememberedCozyUrl':
@@ -198,39 +197,57 @@ function adjustMenuHeight() {
     });
 }
 
+function setError(errorMsg) {
+    errorLabel.innerHTML  = errorMsg
+    _setErrorMode()
+}
 
 /* --------------------------------------------------------------------- */
 // Submit the credentials
 async function submit() {
-    // console.log('loginMenu.submit()');
-    // sanitize url
-    const loginUrl = sanitizeUrlInput(urlInput.value);
-    urlInput.value = loginUrl
-    if (pwdInput.value == null || pwdInput.value === '') {
-        pwdInput.focus()
-        return;  // empty password, nothing to do
-    }
-    // remove possible lognin error message
-    _setWaitingMode()
-    // The email is based on the URL and necessary for login
-    const hostname = Utils.getHostname(loginUrl);
-    const email = 'me@' + hostname;
-    // decide if it's a login or pinLogin
-    var subcommand = 'login'
-    if (isPinLocked) {
-        subcommand = 'unPinlock'
-    } else if (isLocked) {
-        subcommand = 'unlock'
-    }
+    try {
+        // console.log('loginMenu.submit()');
+        // sanitize url
+        const loginUrl = sanitizeUrlInput(urlInput.value);
+        urlInput.value = loginUrl
+        if (pwdInput.value == null || pwdInput.value === '') {
+            pwdInput.focus()
+            return;  // empty password, nothing to do
+        }
+        // remove possible lognin error message
+        _setWaitingMode()
+        // The email is based on the URL and necessary for login
+        const hostname = Utils.getHostname(loginUrl);
+        const email = 'me@' + hostname;
+        // decide if it's a login or pinLogin
+        var subcommand = 'login'
+        if (isPinLocked) {
+            subcommand = 'unPinlock'
+        } else if (isLocked) {
+            subcommand = 'unlock'
+        }
 
-    chrome.runtime.sendMessage({
-        command   : 'bgAnswerMenuRequest',
-        subcommand: subcommand           ,
-        sender    : 'loginMenu.js'       ,
-        email     : email                ,
-        pwd       : pwdInput.value       ,
-        loginUrl  : loginUrl             ,
-    });
+        chrome.runtime.sendMessage({
+            command   : 'bgAnswerMenuRequest',
+            subcommand: subcommand           ,
+            sender    : 'loginMenu.js'       ,
+            email     : email                ,
+            pwd       : pwdInput.value       ,
+            loginUrl  : loginUrl             ,
+        });
+    } catch (e) {
+        const translatableMessages = [
+            'cozyUrlRequired',
+            'noEmailAsCozyUrl',
+            'hasMispelledCozy'
+        ]
+
+        if (translatableMessages.includes(e.message)) {
+            setError(chrome.i18n.getMessage(e.message))
+        } else {
+            setError(chrome.i18n.getMessage('errorOccurred'))
+        }
+    }
 }
 
 
@@ -267,21 +284,15 @@ function sanitizeUrlInput(inputUrl) {
     if (inputUrl.includes('@')) {
         throw new Error('noEmailAsCozyUrl');
     }
-    // String sanitize
-    inputUrl = inputUrl.trim().toLowerCase();
-    inputUrl = inputUrl.replace(/\/+$/, '') // remove trailing '/' that the user might have inserted by ex when pasting a url for his cozy adress
 
-    // Extract protocol
-    const regexpProtocol = /^(https?:\/\/)?(www\.)?/;
-    const protocolMatches = inputUrl.match(regexpProtocol);
-    const protocol = protocolMatches[1] ? protocolMatches[1] : 'https://';
-    inputUrl = inputUrl.replace(regexpProtocol, '');
-    // Handle url with app slug or with no domain
-    const regexpFQDN = /^([a-z0-9]+)(?:-[a-z0-9]+)?(?:\.(.*))?$/;
-    const matches = inputUrl.match(regexpFQDN);
-    const cozySlug = matches[1];
-    const domain = matches[2] ? matches[2] : 'mycozy.cloud';
-    return `${protocol}${cozySlug}.${domain}`;
+    const cozySanitizeUrlService = new CozySanitizeUrlService();
+    
+    // Prevent mycosy instead of mycozy
+    if (cozySanitizeUrlService.hasMispelledCozy(inputUrl)){
+        throw new Error('hasMispelledCozy');
+    }
+
+    return cozySanitizeUrlService.normalizeURL(inputUrl, cozySanitizeUrlService.cozyDomain);
 }
 
 
