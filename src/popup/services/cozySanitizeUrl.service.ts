@@ -6,6 +6,8 @@ export class CozySanitizeUrlService {
 
     constructor() {}
 
+    hasMispelledCozy = (value: string): boolean => /\.mycosy\./.test(value);
+    
     protected appendDomain = (value: string, domain: string) =>
         /\./.test(value) ? value : `${value}${domain}`;
 

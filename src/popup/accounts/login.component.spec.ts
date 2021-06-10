@@ -55,4 +55,15 @@ describe('url input', () => {
         const url = loginComponent.sanitizeUrlInput(inputUrl);
         expect(url).toEqual('https://on-premise.cloud');
     });
+    it(`should throw if user write 'mycosy' instead of 'mycozy'`, () => {
+        const inputUrl = 'https://claude.mycosy.cloud';
+        expect(() => {
+            loginComponent.sanitizeUrlInput(inputUrl);
+        }).toThrow(new Error('hasMispelledCozy'));
+    });
+    it(`should accept real '*cosy*' url`, () => {
+        const inputUrl = 'https://claude.realdomaincosy.cloud';
+        const url = loginComponent.sanitizeUrlInput(inputUrl);
+        expect(url).toEqual('https://claude.realdomaincosy.cloud');
+    });
 });
