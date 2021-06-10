@@ -121,13 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
         switch (msg.subcommand) {
             case 'loginNOK':
                 // console.log("loginNOK heard in loginInPageMenu");
-                errorLabel.innerHTML  = chrome.i18n.getMessage('inPageMenuLoginError')
-                _setErrorMode()
+                setError(chrome.i18n.getMessage('inPageMenuLoginError'))
                 break;
             case '2faCheckNOK':
                 // console.log("2faCheckNOK heard in loginInPageMenu");
-                errorLabel.innerHTML  = chrome.i18n.getMessage('inPageMenuLogin2FACheckError')
-                _setErrorMode()
+                setError(chrome.i18n.getMessage('inPageMenuLogin2FACheckError'))
                 adjustMenuHeight()
                 break;
             case 'setRememberedCozyUrl':
@@ -199,39 +197,56 @@ function adjustMenuHeight() {
     });
 }
 
+function setError(errorMsg) {
+    errorLabel.innerHTML  = errorMsg
+    _setErrorMode()
+}
 
 /* --------------------------------------------------------------------- */
 // Submit the credentials
 async function submit() {
-    // console.log('loginMenu.submit()');
-    // sanitize url
-    const loginUrl = sanitizeUrlInput(urlInput.value);
-    urlInput.value = loginUrl
-    if (pwdInput.value == null || pwdInput.value === '') {
-        pwdInput.focus()
-        return;  // empty password, nothing to do
-    }
-    // remove possible lognin error message
-    _setWaitingMode()
-    // The email is based on the URL and necessary for login
-    const hostname = Utils.getHostname(loginUrl);
-    const email = 'me@' + hostname;
-    // decide if it's a login or pinLogin
-    var subcommand = 'login'
-    if (isPinLocked) {
-        subcommand = 'unPinlock'
-    } else if (isLocked) {
-        subcommand = 'unlock'
-    }
+    try {
+        // console.log('loginMenu.submit()');
+        // sanitize url
+        const loginUrl = sanitizeUrlInput(urlInput.value);
+        urlInput.value = loginUrl
+        if (pwdInput.value == null || pwdInput.value === '') {
+            pwdInput.focus()
+            return;  // empty password, nothing to do
+        }
+        // remove possible lognin error message
+        _setWaitingMode()
+        // The email is based on the URL and necessary for login
+        const hostname = Utils.getHostname(loginUrl);
+        const email = 'me@' + hostname;
+        // decide if it's a login or pinLogin
+        var subcommand = 'login'
+        if (isPinLocked) {
+            subcommand = 'unPinlock'
+        } else if (isLocked) {
+            subcommand = 'unlock'
+        }
 
-    chrome.runtime.sendMessage({
-        command   : 'bgAnswerMenuRequest',
-        subcommand: subcommand           ,
-        sender    : 'loginMenu.js'       ,
-        email     : email                ,
-        pwd       : pwdInput.value       ,
-        loginUrl  : loginUrl             ,
-    });
+        chrome.runtime.sendMessage({
+            command   : 'bgAnswerMenuRequest',
+            subcommand: subcommand           ,
+            sender    : 'loginMenu.js'       ,
+            email     : email                ,
+            pwd       : pwdInput.value       ,
+            loginUrl  : loginUrl             ,
+        });
+    } catch (e) {
+    const translatableMessages = [
+        'cozyUrlRequired',
+        'noEmailAsCozyUrl'
+    ]
+
+    if (translatableMessages.includes(e.message)) {
+        setError(chrome.i18n.getMessage(e.message))
+    } else {
+        setError(chrome.i18n.getMessage('errorOccurred'))
+    }
+}
 }
 
 

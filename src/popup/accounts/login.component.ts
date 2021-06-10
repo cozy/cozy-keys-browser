@@ -171,9 +171,17 @@ export class LoginComponent implements OnInit {
                 }
             }
         } catch (e) {
-            if (e.message === 'cozyUrlRequired' || e.message === 'noEmailAsCozyUrl') {
+            const translatableMessages = [
+                'cozyUrlRequired',
+                'noEmailAsCozyUrl',
+                'hasMispelledCozy'
+            ]
+            
+            if (translatableMessages.includes(e.message)) {
                 this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
                     this.i18nService.t(e.message));
+            } else {
+                this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'), '');
             }
         }
     }
