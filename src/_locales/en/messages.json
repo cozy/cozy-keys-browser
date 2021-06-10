@@ -438,6 +438,9 @@
   "noEmailAsCozyUrl": {
     "message": "The Cozy URL is not your email"
   },
+  "hasMispelledCozy": {
+    "message": "Woops, the address is not correct. Try with \"cozy\" with a \"z\"!"
+  },
   "masterPassRequired": {
     "message": "Cozy password is required."
   },

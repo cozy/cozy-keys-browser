@@ -105,6 +105,10 @@ export class LoginComponent implements OnInit {
             throw new Error('noEmailAsCozyUrl');
         }
         
+        if (this.cozySanitizeUrlService.hasMispelledCozy(inputUrl)){
+            throw new Error('hasMispelledCozy');
+        }
+        
         return this.cozySanitizeUrlService.normalizeURL(inputUrl, this.cozySanitizeUrlService.cozyDomain);
     }
 

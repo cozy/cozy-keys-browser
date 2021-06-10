@@ -238,7 +238,8 @@ async function submit() {
     } catch (e) {
     const translatableMessages = [
         'cozyUrlRequired',
-        'noEmailAsCozyUrl'
+        'noEmailAsCozyUrl',
+        'hasMispelledCozy'
     ]
 
     if (translatableMessages.includes(e.message)) {
@@ -285,6 +286,12 @@ function sanitizeUrlInput(inputUrl) {
     }
     
     const cozySanitizeUrlService = new CozySanitizeUrlService();
+
+    // Prevent mycosy instead of mycozy
+    if (cozySanitizeUrlService.hasMispelledCozy(inputUrl)){
+        throw new Error('hasMispelledCozy');
+    }
+    
     return cozySanitizeUrlService.normalizeURL(inputUrl, cozySanitizeUrlService.cozyDomain);
 }
 
