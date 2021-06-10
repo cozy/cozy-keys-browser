@@ -18,6 +18,7 @@ import { ValidationService } from 'jslib-angular/services/validation.service';
 import { BrowserApi } from '../../browser/browserApi';
 
 import { CozyClientService } from './cozyClient.service';
+import { CozySanitizeUrlService } from './cozySanitizeUrl.service';
 import { KonnectorsService } from './konnectors.service';
 
 import { ApiService } from 'jslib-common/abstractions/api.service';
@@ -84,7 +85,8 @@ const passwordRepromptService = isPrivateMode ? null : new PasswordRepromptServi
 // r�cup�r� brut lors du merge upstream, � adapter TODO BJA
 const cozyClientService = new CozyClientService(getBgService<EnvironmentService>('environmentService')(),
     getBgService<ApiService>('apiService')());
-const konnectorsService = new KonnectorsService(getBgService<CipherService>('cipherService')(),
+export const cozySanitizeUrlService = new CozySanitizeUrlService();
+export const konnectorsService = new KonnectorsService(getBgService<CipherService>('cipherService')(),
     getBgService<StorageService>('storageService')(), getBgService<SettingsService>('settingsService')(),
     cozyClientService);
 const authService = getBgService<AuthService>('authService')();
@@ -144,6 +146,7 @@ export function initFactory(platformUtilsService: PlatformUtilsService, i18nServ
         PopupUtilsService,
         BroadcasterService,
         { provide: CozyClientService, useValue: cozyClientService },
+        { provide: CozySanitizeUrlService, useValue: cozySanitizeUrlService },
         { provide: KonnectorsService, useValue: konnectorsService },
         { provide: MessagingService, useValue: messagingService },
         { provide: AuthServiceAbstraction, useFactory: getBgService<AuthService>('authService'), deps: [] },
