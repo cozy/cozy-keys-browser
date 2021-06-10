@@ -3,6 +3,7 @@ require('./loginMenu.scss');
 import { AuthService } from 'jslib/abstractions/auth.service';
 import { EnvironmentService } from 'jslib/abstractions/environment.service';
 import { Utils } from 'jslib/misc/utils';
+import { CozySanitizeUrlService } from '../popup/services/cozySanitizeUrl.service';
 
 
 /* --------------------------------------------------------------------- */
@@ -267,21 +268,9 @@ function sanitizeUrlInput(inputUrl) {
     if (inputUrl.includes('@')) {
         throw new Error('noEmailAsCozyUrl');
     }
-    // String sanitize
-    inputUrl = inputUrl.trim().toLowerCase();
-    inputUrl = inputUrl.replace(/\/+$/, '') // remove trailing '/' that the user might have inserted by ex when pasting a url for his cozy adress
-
-    // Extract protocol
-    const regexpProtocol = /^(https?:\/\/)?(www\.)?/;
-    const protocolMatches = inputUrl.match(regexpProtocol);
-    const protocol = protocolMatches[1] ? protocolMatches[1] : 'https://';
-    inputUrl = inputUrl.replace(regexpProtocol, '');
-    // Handle url with app slug or with no domain
-    const regexpFQDN = /^([a-z0-9]+)(?:-[a-z0-9]+)?(?:\.(.*))?$/;
-    const matches = inputUrl.match(regexpFQDN);
-    const cozySlug = matches[1];
-    const domain = matches[2] ? matches[2] : 'mycozy.cloud';
-    return `${protocol}${cozySlug}.${domain}`;
+    
+    const cozySanitizeUrlService = new CozySanitizeUrlService();
+    return cozySanitizeUrlService.normalizeURL(inputUrl, cozySanitizeUrlService.cozyDomain);
 }
 
 

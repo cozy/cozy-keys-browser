@@ -16,6 +16,7 @@ import { AuthResult } from 'jslib/models/domain/authResult';
 import { ConstantsService } from 'jslib/services/constants.service';
 
 import BrowserMessagingService from '../../services/browserMessaging.service';
+import { CozySanitizeUrlService } from "../services/cozySanitizeUrl.service";
 
 const messagingService = new BrowserMessagingService();
 
@@ -63,7 +64,8 @@ export class LoginComponent implements OnInit {
     constructor(protected authService: AuthService, protected router: Router,
         protected platformUtilsService: PlatformUtilsService, protected i18nService: I18nService,
         protected syncService: SyncService, private storageService: StorageService,
-        protected stateService: StorageService, protected environmentService: EnvironmentService) {
+        protected stateService: StorageService, protected environmentService: EnvironmentService,
+        protected cozySanitizeUrlService: CozySanitizeUrlService) {
 
             this.authService = authService;
             this.router = router;
@@ -102,21 +104,8 @@ export class LoginComponent implements OnInit {
         if (inputUrl.includes('@')) {
             throw new Error('noEmailAsCozyUrl');
         }
-        // String sanitize
-        inputUrl = inputUrl.trim().toLowerCase();
-        inputUrl = inputUrl.replace(/\/+$/, ''); // remove trailing '/'
-
-        // Extract protocol
-        const regexpProtocol = /^(https?:\/\/)?(www\.)?/;
-        const protocolMatches = inputUrl.match(regexpProtocol);
-        const protocol = protocolMatches[1] ? protocolMatches[1] : 'https://';
-        inputUrl = inputUrl.replace(regexpProtocol, '');
-        // Handle url with app slug or with no domain
-        const regexpFQDN = /^([a-z0-9]+)(?:-[a-z0-9]+)?(?:\.(.*))?$/;
-        const matches = inputUrl.match(regexpFQDN);
-        const cozySlug = matches[1];
-        const domain = matches[2] ? matches[2] : 'mycozy.cloud';
-        return `${protocol}${cozySlug}.${domain}`;
+        
+        return this.cozySanitizeUrlService.normalizeURL(inputUrl, this.cozySanitizeUrlService.cozyDomain);
     }
 
     async submit() {
