@@ -15,6 +15,7 @@ import { ValidationService } from 'jslib/angular/services/validation.service';
 import { BrowserApi } from '../../browser/browserApi';
 
 import { CozyClientService } from './cozyClient.service';
+import { CozySanitizeUrlService } from './cozySanitizeUrl.service';
 import { KonnectorsService } from './konnectors.service';
 
 import { ApiService } from 'jslib/abstractions/api.service';
@@ -68,6 +69,7 @@ export const stateService = new StateService();
 export const messagingService = new BrowserMessagingService();
 export const cozyClientService = new CozyClientService(getBgService<EnvironmentService>('environmentService')(),
     getBgService<ApiService>('apiService')());
+export const cozySanitizeUrlService = new CozySanitizeUrlService();
 export const konnectorsService = new KonnectorsService(getBgService<CipherService>('cipherService')(),
     getBgService<StorageService>('storageService')(), getBgService<SettingsService>('settingsService')(),
     cozyClientService);
@@ -118,6 +120,7 @@ export function initFactory(i18nService: I18nService, storageService: StorageSer
         PopupUtilsService,
         BroadcasterService,
         { provide: CozyClientService, useValue: cozyClientService },
+        { provide: CozySanitizeUrlService, useValue: cozySanitizeUrlService },
         { provide: KonnectorsService, useValue: konnectorsService },
         { provide: MessagingService, useValue: messagingService },
         { provide: AuthServiceAbstraction, useValue: authService },
