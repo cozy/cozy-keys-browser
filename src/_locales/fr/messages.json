@@ -47,7 +47,7 @@
     "message": "Adresse de mon Cozy"
   },
   "masterPass": {
-    "message": "Mot de passe de mon Cozy"
+    "message": "Mot de passe"
   },
   "masterPassDesc": {
     "message": "Le mot de passe maître est le mot de passe que vous utilisez pour accéder à votre Cozy. Il est très important de ne pas l'oublier. Il n'existe aucun moyen de le récupérer si vous le perdez."

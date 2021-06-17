@@ -47,7 +47,7 @@
     "message": "Address of my Cozy"
   },
   "masterPass": {
-    "message": "My Cozy password"
+    "message": "Password"
   },
   "masterPassDesc": {
     "message": "The master password is the password you use to access your Cozy. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it."
