@@ -23,6 +23,7 @@ import { StorageService } from 'jslib/abstractions/storage.service';
 import { UserService } from 'jslib/abstractions/user.service';
 import { VaultTimeoutService } from 'jslib/abstractions/vaultTimeout.service';
 import { PopupUtilsService } from '../services/popup-utils.service';
+
 import { CozyClientService } from '../services/cozyClient.service';
 
 // TODO: Add Safari URL when published

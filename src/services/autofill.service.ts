@@ -335,7 +335,7 @@ export default class AutofillService implements AutofillServiceInterface {
         */
         let hasFieldsForInPageMenu = false;
         if (pageDetails[0].sender === 'notifBarForInPageMenu') {
-            cipher = await this.cipherService.getLastUsedForUrl(tab.url);
+            cipher = await this.cipherService.getLastUsedForUrl(tab.url, false);
             let r = 0;
             pageDetails[0].fieldsForInPageMenuScripts.forEach( (s: any) => r += s.script.length);
             hasFieldsForInPageMenu = r > 0;

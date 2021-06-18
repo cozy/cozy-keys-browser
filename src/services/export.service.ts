@@ -4,6 +4,7 @@ import { ExportService as BaseExportService } from 'jslib/services/export.servic
 
 import { ApiService } from 'jslib/abstractions/api.service';
 import { CipherService } from 'jslib/abstractions/cipher.service';
+import { CryptoService } from 'jslib/abstractions/crypto.service';
 import { FolderService } from 'jslib/abstractions/folder.service';
 
 import { CipherWithIds as CipherExport } from 'jslib/models/export/cipherWithIds';
@@ -37,8 +38,9 @@ export class ExportService extends BaseExportService {
         folderService: FolderService,
         cipherService: CipherService,
         apiService: ApiService,
+        cryptoService: CryptoService
     ) {
-        super(folderService, cipherService, apiService);
+        super(folderService, cipherService, apiService, cryptoService);
 
         this._folderService = folderService;
         this._cipherService = cipherService;
@@ -50,11 +52,11 @@ export class ExportService extends BaseExportService {
         let decCiphers: CipherView[] = [];
         const promises = [];
 
-        promises.push(this._folderService.getAllDecrypted().then((folders) => {
+        promises.push(this._folderService.getAllDecrypted().then(folders => {
             decFolders = folders;
         }));
 
-        promises.push(this._cipherService.getAllDecrypted().then((ciphers) => {
+        promises.push(this._cipherService.getAllDecrypted().then(ciphers => {
             decCiphers = ciphers;
         }));
 
@@ -62,12 +64,12 @@ export class ExportService extends BaseExportService {
 
         if (format === 'csv') {
             const foldersMap = new Map<string, FolderView>();
-            decFolders.forEach((f) => {
+            decFolders.forEach(f => {
                 foldersMap.set(f.id, f);
             });
 
             const exportCiphers: any[] = [];
-            decCiphers.forEach((c) => {
+            decCiphers.forEach(c => {
                 // only export logins and secure notes
                 if (c.type !== CipherType.Login && c.type !== CipherType.SecureNote) {
                     return;
@@ -88,7 +90,7 @@ export class ExportService extends BaseExportService {
                 items: [],
             };
 
-            decFolders.forEach((f) => {
+            decFolders.forEach(f => {
                 if (f.id == null) {
                     return;
                 }
@@ -97,7 +99,7 @@ export class ExportService extends BaseExportService {
                 jsonDoc.folders.push(folder);
             });
 
-            decCiphers.forEach((c) => {
+            decCiphers.forEach(c => {
                 const cipher = new CipherExport();
                 cipher.build(c);
                 cipher.collectionIds = null;
@@ -140,7 +142,7 @@ export class ExportService extends BaseExportService {
 
                 if (c.login.uris) {
                     cipher.login_uri = [];
-                    c.login.uris.forEach((u) => {
+                    c.login.uris.forEach(u => {
                         cipher.login_uri.push(u.uri);
                     });
                 }

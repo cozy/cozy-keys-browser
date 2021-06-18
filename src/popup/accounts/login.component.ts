@@ -37,11 +37,12 @@ const getPassphraseResetURL = (cozyUrl: string) => {
     templateUrl: 'login.component.html',
 })
 /**
- *    This class used to extend the LoginComponent from jslib. We copied the
- *    component here to avoid having to modify jslib, as the private storageService
+ *    This class is a mix of the LoginComponent from jslib and the one from the repo.
+ *      jslib/src/angular/components/login.component.ts
+ *
+ *    We extended the component to avoid to have to modify jslib, as the private storageService
  *    prevented us to just override methods.
  *    See the original component:
- *
  *    https://github.com/bitwarden/browser/blob/
  *    af8274247b2242fe93ad2f7ca4c13f9f7ecf2860/src/popup/accounts/login.component.ts
  */
@@ -173,7 +174,6 @@ export class LoginComponent implements OnInit {
                 if (this.onSuccessfulLogin != null) {
                     this.onSuccessfulLogin();
                 }
-                this.platformUtilsService.eventTrack('Logged In');
                 if (this.onSuccessfulLoginNavigate != null) {
                     this.onSuccessfulLoginNavigate();
                 } else {
@@ -190,7 +190,6 @@ export class LoginComponent implements OnInit {
     }
 
     togglePassword() {
-        this.platformUtilsService.eventTrack('Toggled Master Password on Login');
         this.showPassword = !this.showPassword;
         document.getElementById('masterPassword').focus();
     }

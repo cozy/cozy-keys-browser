@@ -58,7 +58,7 @@ export class AddEditComponent extends BaseAddEditComponent {
         private popupUtilsService: PopupUtilsService, private storageService: StorageService,
         private konnectorsService: KonnectorsService) {
         super(cipherService, folderService, i18nService, platformUtilsService, auditService, stateService,
-            userService, collectionService, messagingService, eventService, eventService, policyService);
+            userService, collectionService, messagingService, eventService, policyService);
         this.typeOptions = [
             { name: i18nService.t('typeLogin'), value: CipherType.Login },
             { name: i18nService.t('typeCard'), value: CipherType.Card },

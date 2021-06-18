@@ -20,7 +20,7 @@ export const deleteCipher = async (cipherService: CipherService, userService: Us
   i18nService: I18nService, platformUtilsService: PlatformUtilsService, cipher: CipherView): Promise<boolean>  => {
   const organizations = await userService.getAllOrganizations();
   const [cozyOrganization] = organizations.filter(
-      (org) => org.name === 'Cozy',
+      org => org.name === 'Cozy',
   );
   const isCozyOrganization =
       cipher.organizationId === cozyOrganization.id;
@@ -48,7 +48,6 @@ export const deleteCipher = async (cipherService: CipherService, userService: Us
   try {
     const deletePromise = cipher.isDeleted ? cipherService.deleteWithServer(cipher.id)
             : cipherService.softDeleteWithServer(cipher.id);
-    platformUtilsService.eventTrack('Deleted Cipher');
     const message = i18nService.t(cipher.isDeleted ? 'permanentlyDeletedItem' : 'deletedItem');
     await deletePromise;
     platformUtilsService.showToast('success', null, message);

@@ -13,6 +13,7 @@ import { ApiService } from 'jslib/abstractions/api.service';
 import { AppIdService } from 'jslib/abstractions/appId.service';
 import { CryptoService } from 'jslib/abstractions/crypto.service';
 import { I18nService } from 'jslib/abstractions/i18n.service';
+import { LogService } from 'jslib/abstractions/log.service';
 import { MessagingService } from 'jslib/abstractions/messaging.service';
 import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
 import { TokenService } from 'jslib/abstractions/token.service';
@@ -49,27 +50,29 @@ export class AuthService extends BaseAuthService {
 
     constructor(
         /* tslint:disable-next-line */
-        private _cryptoService: CryptoService,
+        private   _cryptoService: CryptoService,
         /* tslint:disable-next-line */
-        private _apiService: ApiService,
+        protected _apiService: ApiService,
         /* tslint:disable-next-line */
-        private _userService: UserService,
+        private   _userService: UserService,
         /* tslint:disable-next-line */
-        private _tokenService: TokenService,
+        protected _tokenService: TokenService,
         /* tslint:disable-next-line */
-        private _appIdService: AppIdService,
+        protected _appIdService: AppIdService,
         /* tslint:disable-next-line */
-        private _i18nService: I18nService,
+        private   _i18nService: I18nService,
         /* tslint:disable-next-line */
-        private _platformUtilsService: PlatformUtilsService,
+        protected _platformUtilsService: PlatformUtilsService,
         /* tslint:disable-next-line */
-        private _messagingService: MessagingService,
+        private   _messagingService: MessagingService,
         /* tslint:disable-next-line */
-        private _vaultTimeoutService: VaultTimeoutService,
+        private   _vaultTimeoutService: VaultTimeoutService,
         /* tslint:disable-next-line */
-        private _setCryptoKeys = true,
+        private   _logService: LogService,
         /* tslint:disable-next-line */
-        private _cozyClientService: CozyClientService,
+        private   _setCryptoKeys = true,
+        /* tslint:disable-next-line */
+        private   _cozyClientService: CozyClientService,
     ) {
         super(
             _cryptoService,
@@ -81,6 +84,7 @@ export class AuthService extends BaseAuthService {
             _platformUtilsService,
             _messagingService,
             _vaultTimeoutService,
+            _logService,
             _setCryptoKeys,
         );
     }
@@ -100,12 +104,14 @@ export class AuthService extends BaseAuthService {
         this.selectedTwoFactorProviderType = null;
         const key = await this._makePreloginKey(masterPassword, email);
         const hashedPassword = await this._cryptoService.hashPassword(masterPassword, key);
-        return await this._logInHelper(email, hashedPassword, key);
+        return await this._logInHelper(email, hashedPassword, null, null, null, null, null,
+            key, null, null, null);
     }
 
     async logInTwoFactor(twoFactorProvider: TwoFactorProviderType, twoFactorToken: string,
         remember?: boolean): Promise<AuthResult> {
-        return await this._logInHelper(this.email, this.masterPasswordHash, this._key, twoFactorProvider,
+        return await this._logInHelper(this.email, this.masterPasswordHash, this.code, this.codeVerifier,
+            this.ssoRedirectUrl, this.clientId, this.clientSecret, this._key, twoFactorProvider,
             twoFactorToken, remember);
     }
 
@@ -114,7 +120,8 @@ export class AuthService extends BaseAuthService {
         this.selectedTwoFactorProviderType = null;
         const key = await this._makePreloginKey(masterPassword, email);
         const hashedPassword = await this._cryptoService.hashPassword(masterPassword, key);
-        return await this._logInHelper(email, hashedPassword, key, twoFactorProvider, twoFactorToken, remember);
+        return await this._logInHelper(email, hashedPassword, null, null, null, null, null, key,
+            twoFactorProvider, twoFactorToken, remember);
     }
 
     async _makePreloginKey(masterPassword: string, email: string): Promise<SymmetricCryptoKey> {
@@ -135,26 +142,46 @@ export class AuthService extends BaseAuthService {
         return this._cryptoService.makeKey(masterPassword, email, this._kdf, this._kdfIterations);
     }
 
-    private async _logInHelper(email1: string, hashedPassword1: string, key: SymmetricCryptoKey,
+    private async _logInHelper(email: string, hashedPassword: string, code: string, codeVerifier: string,
+        redirectUrl: string, clientId: string, clientSecret: string, key: SymmetricCryptoKey,
         twoFactorProvider?: TwoFactorProviderType, twoFactorToken?: string, remember?: boolean): Promise<AuthResult> {
-        const storedTwoFactorToken = await this._tokenService.getTwoFactorToken(email1);
-        const appId = await this._appIdService.getAppId();
-        const deviceRequest = new DeviceRequest(appId, this._platformUtilsService);
-        const credentials: string[] = [email1, hashedPassword1];
-        const codes: string[] = [hashedPassword1];
+        const storedTwoFactorToken = await this.tokenService.getTwoFactorToken(email);
+        const appId = await this.appIdService.getAppId();
+        const deviceRequest = new DeviceRequest(appId, this.platformUtilsService);
+
+        let emailPassword: string[] = [];
+        let codeCodeVerifier: string[] = [];
+        let clientIdClientSecret: string[] = [];
+
+        if (email != null && hashedPassword != null) {
+            emailPassword = [email, hashedPassword];
+        } else {
+            emailPassword = null;
+        }
+        if (code != null && codeVerifier != null && redirectUrl != null) {
+            codeCodeVerifier = [code, codeVerifier, redirectUrl];
+        } else {
+            codeCodeVerifier = null;
+        }
+        if (clientId != null && clientSecret != null) {
+            clientIdClientSecret = [clientId, clientSecret];
+        } else {
+            clientIdClientSecret = null;
+        }
 
         let request: TokenRequest;
         if (twoFactorToken != null && twoFactorProvider != null) {
-            request = new TokenRequest(credentials, codes, twoFactorProvider, twoFactorToken, remember,
-                deviceRequest);
+            request = new TokenRequest(emailPassword, codeCodeVerifier, clientIdClientSecret, twoFactorProvider,
+                twoFactorToken, remember, deviceRequest);
         } else if (storedTwoFactorToken != null) {
-            request = new TokenRequest(credentials, codes, TwoFactorProviderType.Remember,
+            request = new TokenRequest(emailPassword, codeCodeVerifier, clientIdClientSecret, TwoFactorProviderType.Remember,
                 storedTwoFactorToken, false, deviceRequest);
         } else {
-            request = new TokenRequest(credentials, codes, null, null, false, deviceRequest);
+            request = new TokenRequest(emailPassword, codeCodeVerifier, clientIdClientSecret, null,
+                null, false, deviceRequest);
         }
 
-        const response = await this._apiService.postIdentityToken(request);
+        const response = await this.apiService.postIdentityToken(request);
 
         this._clearState();
         const result = new AuthResult();
@@ -163,8 +190,13 @@ export class AuthService extends BaseAuthService {
         if (result.twoFactor) {
             // two factor required
             const twoFactorResponse = response as IdentityTwoFactorResponse;
-            this.email = email1;
-            this.masterPasswordHash = hashedPassword1;
+            this.email = email;
+            this.masterPasswordHash = hashedPassword;
+            this.code = code;
+            this.codeVerifier = codeVerifier;
+            this.ssoRedirectUrl = redirectUrl;
+            this.clientId = clientId;
+            this.clientSecret = clientSecret;
             this._key = this._setCryptoKeys ? key : null;
             this.twoFactorProvidersData = twoFactorResponse.twoFactorProviders2;
             result.twoFactorProviders = twoFactorResponse.twoFactorProviders2;
@@ -172,48 +204,60 @@ export class AuthService extends BaseAuthService {
         }
 
         const tokenResponse = response as IdentityTokenResponse;
-
-        this.clientId = tokenResponse.clientId;
-        this.registrationAccessToken = tokenResponse.registrationAccessToken;
-
+        result.resetMasterPassword = tokenResponse.resetMasterPassword;
         if (tokenResponse.twoFactorToken != null) {
-            await this._tokenService.setTwoFactorToken(tokenResponse.twoFactorToken, email1);
+            await this.tokenService.setTwoFactorToken(tokenResponse.twoFactorToken, email);
         }
 
-        await this._tokenService.setTokens(tokenResponse.accessToken, tokenResponse.refreshToken);
-        await this._userService.setInformation(this._tokenService.getUserId(), this._tokenService.getEmail(),
-            this._kdf, this._kdfIterations);
+        await this.tokenService.setTokens(tokenResponse.accessToken, tokenResponse.refreshToken);
+        await this._userService.setInformation(this.tokenService.getUserId(), this.tokenService.getEmail(),
+            tokenResponse.kdf, tokenResponse.kdfIterations);
         if (this._setCryptoKeys) {
-            await this._cryptoService.setKey(key);
-            await this._cryptoService.setKeyHash(hashedPassword1);
-            await this._cryptoService.setEncKey(tokenResponse.key);
-
-            // User doesn't have a key pair yet (old account), let's generate one for them
-            if (tokenResponse.privateKey == null) {
-                try {
-                    const keyPair = await this._cryptoService.makeKeyPair();
-                    await this._apiService.postAccountKeys(new KeysRequest(keyPair[0], keyPair[1].encryptedString));
-                    tokenResponse.privateKey = keyPair[1].encryptedString;
-                } catch (e) {
-                    // tslint:disable-next-line
-                    console.error(e);
-                }
+            if (key != null) {
+                await this._cryptoService.setKey(key);
+            }
+            if (hashedPassword != null) {
+                await this._cryptoService.setKeyHash(hashedPassword);
             }
 
-            await this._cryptoService.setEncPrivateKey(tokenResponse.privateKey);
+            // Skip this step during SSO new user flow. No key is returned from server.
+            if (code == null || tokenResponse.key != null) {
+                await this._cryptoService.setEncKey(tokenResponse.key);
+
+                // User doesn't have a key pair yet (old account), let's generate one for them
+                if (tokenResponse.privateKey == null) {
+                    try {
+                        const keyPair = await this._cryptoService.makeKeyPair();
+                        await this.apiService.postAccountKeys(new KeysRequest(keyPair[0], keyPair[1].encryptedString));
+                        tokenResponse.privateKey = keyPair[1].encryptedString;
+                    } catch (e) {
+                        // tslint:disable-next-line
+                        this._logService.error(e);
+                    }
+                }
+
+                await this._cryptoService.setEncPrivateKey(tokenResponse.privateKey);
+            }
         }
-        if (window.location.pathname !== '/background.html') {
-            // when login is processed on background side, then your messages are not received by the background,
-            // so you need to triger yourself "logedIn" actions
-            this._messagingService.send('loggedIn');
+
+        if (this._vaultTimeoutService != null) {
+            this._vaultTimeoutService.biometricLocked = false;
         }
+        this._messagingService.send('loggedIn');
         return result;
     }
 
     private _clearState(): void {
+        this._key = null;
         this.email = null;
         this.masterPasswordHash = null;
+        this.code = null;
+        this.codeVerifier = null;
+        this.ssoRedirectUrl = null;
+        this.clientId = null;
+        this.clientSecret = null;
         this.twoFactorProvidersData = null;
         this.selectedTwoFactorProviderType = null;
+        this.clear();
     }
 }

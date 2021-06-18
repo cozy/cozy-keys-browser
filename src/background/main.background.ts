@@ -71,7 +71,6 @@ import { Utils } from 'jslib/misc/utils';
 
 import { CozyClientService } from '../popup/services/cozyClient.service';
 import { KonnectorsService } from '../popup/services/konnectors.service';
-import { PopupUtilsService } from '../popup/services/popup-utils.service';
 
 import { BrowserApi } from '../browser/browserApi';
 import { SafariApp } from '../browser/safariApp';
@@ -193,11 +192,11 @@ export default class MainBackground {
         this.environmentService = new EnvironmentService(this.apiService, this.storageService,
             this.notificationsService);
         this.cozyClientService = new CozyClientService(this.environmentService, this.apiService);
-        this.authService = new AuthService(this.cryptoService, this.apiService, this.userService,
-            this.tokenService, this.appIdService, this.i18nService, this.platformUtilsService,
-            this.messagingService, this.vaultTimeoutService,
-            true, this.cozyClientService,
-        );
+        // this.authService = new AuthService(this.cryptoService, this.apiService, this.userService,
+        //     this.tokenService, this.appIdService, this.i18nService, this.platformUtilsService,
+        //     this.messagingService, this.vaultTimeoutService,
+        //     true, this.cozyClientService,
+        // );
 		// end TODO BJA //
 
         this.settingsService = new SettingsService(this.userService, this.storageService);
@@ -334,11 +333,19 @@ export default class MainBackground {
         this.runtimeBackground = new RuntimeBackground(this, this.autofillService, this.cipherService,
             this.platformUtilsService as BrowserPlatformUtilsService, this.storageService, this.i18nService,
             this.notificationsService, this.systemService, this.vaultTimeoutService,
-            this.environmentService, this.cozyClientService,
-            this.konnectorsService, this.syncService, this.authService, this.cryptoService, this.userService);
+            this.environmentService, this.policyService, this.userService, this.messagingService,
+            this.cozyClientService, this.konnectorsService, this.syncService, this.authService, this.cryptoService,
+            );
         this.messagingService.setRuntimeBackground(this.runtimeBackground);
 
         const that = this;
+
+        // this.authService = new AuthService(this.cryptoService, this.apiService, this.userService,
+        //     this.tokenService, this.appIdService, this.i18nService, this.platformUtilsService,
+        //     this.messagingService, this.vaultTimeoutService,
+        //     true, this.cozyClientService,
+        // );
+
         this.authService = new AuthService(this.cryptoService, this.apiService, this.userService,
             this.tokenService, this.appIdService, this.i18nService, this.platformUtilsService,
             new class extends MessagingServiceAbstraction {
@@ -347,7 +354,8 @@ export default class MainBackground {
                     const message = Object.assign({}, { command: subscriber }, arg);
                     that.runtimeBackground.processMessage(message, that, null);
                 }
-            }(), this.vaultTimeoutService, this.consoleLogService);
+            }(), this.vaultTimeoutService, this.consoleLogService, true,
+            this.cozyClientService);
     }
 
     async bootstrap() {

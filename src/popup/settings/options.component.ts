@@ -45,8 +45,7 @@ export class OptionsComponent implements OnInit {
     showDisplay: boolean = true;
 
     constructor(private messagingService: MessagingService, private storageService: StorageService,
-        private stateService: StateService, private totpService: TotpService, i18nService: I18nService,
-        private platformUtilsService: PlatformUtilsService) {
+        private stateService: StateService, private totpService: TotpService, i18nService: I18nService) {
         this.themeOptions = [
             { name: i18nService.t('default'), value: null },
             { name: i18nService.t('light'), value: 'light' },
@@ -90,7 +89,7 @@ export class OptionsComponent implements OnInit {
 
         this.enableAutoFillOnPageLoad = await this.storageService.get<boolean>(
             ConstantsService.enableAutoFillOnPageLoadKey);
-        
+
         this.autoFillOnPageLoadDefault = await this.storageService.get<boolean>(
             ConstantsService.autoFillOnPageLoadDefaultKey) ?? true;
 

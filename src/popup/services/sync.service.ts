@@ -3,7 +3,7 @@
     @override by Cozy
 
     COZY DUPLICATE -
-    This file is duplicated from the JSlib file : jslib/abstractions/sync.service.ts
+    This file extends the JSlib file : jslib/services/sync.service
     For more context, see commit f1956682454d00328dea38d37257ab32dc80129f
     The copied file version is here :
        https://github.com/bitwarden/jslib/blob/669f6ddf93bbfe8acd18a4834fff5e1c7f9c91ba/src/services/sync.service.ts
@@ -17,6 +17,7 @@ import { CryptoService } from 'jslib/abstractions/crypto.service';
 import { FolderService } from 'jslib/abstractions/folder.service';
 import { MessagingService } from 'jslib/abstractions/messaging.service';
 import { PolicyService } from 'jslib/abstractions/policy.service';
+import { SendService } from 'jslib/abstractions/send.service';
 import { SettingsService } from 'jslib/abstractions/settings.service';
 import { StorageService } from 'jslib/abstractions/storage.service';
 import { UserService } from 'jslib/abstractions/user.service';
@@ -52,6 +53,7 @@ export class SyncService extends BaseSyncService {
         storageService: StorageService,
         messagingService: MessagingService,
         policyService: PolicyService,
+        sendService: SendService,
         logoutCallback: (expired: boolean) => Promise<void>,
         private cozyClientService: CozyClientService,
     ) {
@@ -66,6 +68,7 @@ export class SyncService extends BaseSyncService {
                 storageService,
                 messagingService,
                 policyService,
+                sendService,
                 logoutCallback,
             );
 

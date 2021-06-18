@@ -1,9 +1,11 @@
 import { ToasterService } from 'angular2-toaster';
+
 import {
     Component,
     HostListener,
     OnInit,
 } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { I18nService } from 'jslib/abstractions/i18n.service';
 import { SyncService } from 'jslib/abstractions/sync.service';
@@ -16,8 +18,8 @@ export class SyncComponent implements OnInit {
     lastSync = '--';
     syncPromise: Promise<any>;
 
-    constructor(private syncService: SyncService, private toasterService: ToasterService, private router: Router,
-        private i18nService: I18nService) {
+    constructor(private syncService: SyncService, private toasterService: ToasterService,
+        private i18nService: I18nService, private router: Router) {
     }
 
     @HostListener('window:keydown', ['$event'])
