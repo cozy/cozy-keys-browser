@@ -1,4 +1,4 @@
-import CozyClient from 'cozy-client';
+import {CozyClient} from 'cozy-client/dist/CozyClient';
 import { ApiService } from 'jslib/abstractions/api.service';
 import { EnvironmentService } from 'jslib/abstractions/environment.service';
 import { TokenService } from 'jslib/abstractions/token.service';

@@ -196,8 +196,8 @@ const config = {
     resolve: {
         extensions: ['.ts', '.js', '.json'],
         alias: {
-            'jslib': path.join(__dirname, 'jslib/src'),
-            'cozy-client': path.join(__dirname, 'node_modules/cozy-client/dist/node')
+            'jslib': path.join(__dirname, 'jslib/src')
+            //'cozy-client': path.join(__dirname, 'node_modules/cozy-client/dist/node')
         },
         symlinks: false,
         modules: [path.resolve('node_modules')],

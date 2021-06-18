@@ -1,4 +1,4 @@
-import { Registry } from 'cozy-client';
+import { Registry } from 'cozy-client/dist/registry';
 import { CipherService } from 'jslib/abstractions/cipher.service';
 import { SettingsService } from 'jslib/abstractions/settings.service';
 import { StorageService } from 'jslib/abstractions/storage.service';
@@ -49,8 +49,10 @@ export class KonnectorsService {
 
     getRegistryKonnectors(client: any) {
         const registry = new Registry({client: client});
-        // The limit is handled by cozy-client
-        return registry.fetchApps({channel: 'stable', type: 'konnector'});
+        // 200 is the default for CozyClient but for now we have a TS issue on the CC's side
+        // so let's use this number. Should be removed after https://github.com/cozy/cozy-client/issues/973 
+        // is fixed
+        return registry.fetchApps({channel: 'stable', type: 'konnector', limit: "200"});
     }
 
     async getInstalledKonnectors(client: any) {
