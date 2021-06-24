@@ -1,4 +1,4 @@
-import {CozyClient} from 'cozy-client/dist/CozyClient';
+import { CozyClient } from 'cozy-client/dist/CozyClient';
 import { ApiService } from 'jslib/abstractions/api.service';
 import { EnvironmentService } from 'jslib/abstractions/environment.service';
 import { TokenService } from 'jslib/abstractions/token.service';
@@ -29,12 +29,12 @@ export class CozyClientService {
     getCozyURL(): string {
         const vaultUrl = this.environmentService.getWebVaultUrl();
         if (!vaultUrl) {
-            return null
+            return null;
         }
-        return new URL(vaultUrl).origin // Remove the /bitwarden part
+        return new URL(vaultUrl).origin; // Remove the /bitwarden part
     }
 
-    async getClientInstance () {
+    async getClientInstance() {
         if (this.instance) {
             const token = await this.apiService.getActiveBearerToken();
             // If the instance's token differ from the active bearer, a refresh is needed.
@@ -67,7 +67,7 @@ export class CozyClientService {
 
     async deleteOAuthClient(clientId: string, registrationAccessToken: string) {
         if (!clientId || !registrationAccessToken) {
-            return
+            return;
         }
 
         try {

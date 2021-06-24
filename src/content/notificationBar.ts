@@ -29,7 +29,7 @@ function getAppURLCozy(cozyUrl: string, appName: string, hash: string) {
     return url.toString();
 }
 
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', event => {
     /*
       The aim is to deactivate the inPageMenu in Cozy Password so that there is no menu when filing a cipher.
       We compare the hostname of the webpage with the Cozy Password hostname

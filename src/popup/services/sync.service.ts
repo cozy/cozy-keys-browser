@@ -97,7 +97,7 @@ export class SyncService extends BaseSyncService {
         } else {
             isfullSyncRunning = true;
             fullSyncPromise = super.fullSync(forceSync, allowThrowOnError)
-            .then( (resp) => {
+            .then( resp => {
                 isfullSyncRunning = false;
                 return resp;
             });

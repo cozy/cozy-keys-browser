@@ -229,7 +229,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             }
         });
 
-        const queryParamsSub = this.route.queryParams.subscribe(async (params) => {
+        const queryParamsSub = this.route.queryParams.subscribe(async params => {
             this.state = (await this.stateService.get<any>(ComponentId)) || {};
             if (this.state.searchText) {
                 this.searchText = this.state.searchText;
@@ -302,9 +302,9 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             this.ciphersForFolder = this.noFolderCiphers;
         } else if (this.selectedFolderId !== undefined) {
             this.selectedFolderTitle =
-                this.nestedFolders.find( (f) => f.node.id === this.selectedFolderId ).node.name;
+                this.nestedFolders.find( f => f.node.id === this.selectedFolderId ).node.name;
             this.searchTagText  = this.selectedFolderTitle;
-            this.ciphersForFolder = this.ciphers.filter((c) => c.folderId === this.selectedFolderId);
+            this.ciphersForFolder = this.ciphers.filter( c => c.folderId === this.selectedFolderId);
         }
         super.loaded = true;
     }
@@ -488,7 +488,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     _ciphersByType(type: CipherType) {
-        return this.ciphers.filter((c) => c.type === type);
+        return this.ciphers.filter( c => c.type === type);
     }
 
     sortAllCiphersByType() {
@@ -527,7 +527,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         // console.log(`selectFolder()`, folder.id);
         this.selectedFolderTitle = folder.name;
         this.searchTagText  = this.selectedFolderTitle;
-        this.ciphersForFolder = this.ciphers.filter((c) => c.folderId === folder.id);
+        this.ciphersForFolder = this.ciphers.filter( c => c.folderId === folder.id);
         this.activatePanel(PanelNames.Folder, folder.id === null ? 'noneFolder' : folder.id );
     }
 
@@ -585,7 +585,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
     closeOnEsc(e: KeyboardEvent) {
         // If input not empty, use browser default behavior of clearing input instead
-		if (e.key === 'Escape' && (this.searchText == null || this.searchText === '')) {
+        if (e.key === 'Escape' && (this.searchText == null || this.searchText === '')) {
             BrowserApi.closePopup(window);
         }
     }

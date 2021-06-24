@@ -50,9 +50,9 @@ export class KonnectorsService {
     getRegistryKonnectors(client: any) {
         const registry = new Registry({client: client});
         // 200 is the default for CozyClient but for now we have a TS issue on the CC's side
-        // so let's use this number. Should be removed after https://github.com/cozy/cozy-client/issues/973 
+        // so let's use this number. Should be removed after https://github.com/cozy/cozy-client/issues/973
         // is fixed
-        return registry.fetchApps({channel: 'stable', type: 'konnector', limit: "200"});
+        return registry.fetchApps({channel: 'stable', type: 'konnector', limit: '200'});
     }
 
     async getInstalledKonnectors(client: any) {
@@ -64,7 +64,7 @@ export class KonnectorsService {
     }
 
     async sendKonnectorsSuggestion(client: any, konnectors: any[]) {
-        const creationPromises = konnectors.map((konnector) => {
+        const creationPromises = konnectors.map(konnector => {
             const suggested = {
                 slug: konnector.slug,
                 silenced: false,
@@ -78,9 +78,9 @@ export class KonnectorsService {
     }
 
     getSuggestableKonnectors(registryKonnectors: any[], installedKonnectors: any[], suggestedKonnectors: any[]) {
-        return registryKonnectors.filter((konn) => {
-            const alreadySuggested = suggestedKonnectors.some((suggested) => suggested.slug === konn.slug);
-            const alreadyInstalled = installedKonnectors.some((installed) => installed.slug === konn.slug);
+        return registryKonnectors.filter(konn => {
+            const alreadySuggested = suggestedKonnectors.some(suggested => suggested.slug === konn.slug);
+            const alreadyInstalled = installedKonnectors.some(installed => installed.slug === konn.slug);
             return !alreadySuggested && !alreadyInstalled;
         });
     }
@@ -105,7 +105,7 @@ export class KonnectorsService {
         const eqDomainsPromise = domain == null ? Promise.resolve([]) :
             this.settingsService.getEquivalentDomains().then((eqDomains: any[][]) => {
                 let matches: any[] = [];
-                eqDomains.forEach((eqDomain) => {
+                eqDomains.forEach(eqDomain => {
                     if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
                         matches = matches.concat(eqDomain);
                     }
@@ -119,7 +119,7 @@ export class KonnectorsService {
             });
         const matchingDomains = await eqDomainsPromise;
 
-        return ciphers.some((cipher) => {
+        return ciphers.some(cipher => {
             if (cipher.deletedDate != null) {
                 return false;
             }
@@ -188,7 +188,7 @@ export class KonnectorsService {
         if (defaultMatch == null) {
             defaultMatch = UriMatchType.Domain;
         }
-        const promises = suggestableKonnectors.map(async (konnector) => {
+        const promises = suggestableKonnectors.map(async konnector => {
             const url = konnector && konnector.latest_version && konnector.latest_version.manifest
                 ? konnector.latest_version.manifest.vendor_link
                 : undefined;
@@ -199,7 +199,7 @@ export class KonnectorsService {
             return matches ? konnector : null;
         });
         const results = await Promise.all(promises);
-        const matchingKonnectors = results.filter((res) => res);
+        const matchingKonnectors = results.filter(res => res);
         return matchingKonnectors;
     }
 }

@@ -73,7 +73,7 @@ export class OptionsComponent implements OnInit {
         this.autoFillOnPageLoadOptions = [
             { name: i18nService.t('autoFillOnPageLoadYes'), value: true },
             { name: i18nService.t('autoFillOnPageLoadNo'), value: false },
-        ]
+        ];
     }
 
     async ngOnInit() {

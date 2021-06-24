@@ -272,7 +272,7 @@ export default class AutofillService implements AutofillServiceInterface {
             if (options.fieldsForInPageMenuScripts) {
                 // means we are preparing a script to activate menu into page fields
                 if (fillScript) {
-                    fillScript.script = fillScript.script.filter( (action) => {
+                    fillScript.script = fillScript.script.filter( action => {
                         if (action[0] !== 'fill_by_opid') { return false; }
                         action[0] = 'add_menu_btn_by_opid';
                         action[3].hasExistingCipher = true;
@@ -939,10 +939,10 @@ export default class AutofillService implements AutofillServiceInterface {
         }
 
         // @override by Cozy : remove otp fields
-        usernames = usernames.filter((field) => {
+        usernames = usernames.filter(field => {
             return !this.isOtpField(field);
         });
-        passwords = passwords.filter((field) => {
+        passwords = passwords.filter(field => {
             return !this.isOtpField(field);
         });
         // end @override by Cozy

@@ -138,7 +138,7 @@ export class LoginComponent implements OnInit {
             const hostname = Utils.getHostname(loginUrl);
             this.email = 'me@' + hostname;
 
-            this.formPromise = this.authService.logIn(this.email, this.masterPassword).catch( (e) => {
+            this.formPromise = this.authService.logIn(this.email, this.masterPassword).catch( e => {
                 if (e.response && e.response.error && e.response.error === 'invalid password') {
                     this.platformUtilsService.showToast('error',  this.i18nService.t('errorOccurred'),
                         this.i18nService.t('invalidMasterPassword'));

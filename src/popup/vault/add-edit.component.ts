@@ -18,11 +18,11 @@ import { MessagingService } from 'jslib/abstractions/messaging.service';
 import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
 import { PolicyService } from 'jslib/abstractions/policy.service';
 import { StateService } from 'jslib/abstractions/state.service';
-import { UserService } from 'jslib/abstractions/user.service';
 import { StorageService } from 'jslib/abstractions/storage.service';
+import { UserService } from 'jslib/abstractions/user.service';
 
-import { PopupUtilsService } from '../services/popup-utils.service';
 import { ConstantsService } from 'jslib/services/constants.service';
+import { PopupUtilsService } from '../services/popup-utils.service';
 
 import { LoginUriView } from 'jslib/models/view/loginUriView';
 

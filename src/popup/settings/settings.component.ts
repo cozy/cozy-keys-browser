@@ -171,7 +171,7 @@ export class SettingsComponent implements OnInit {
             (div.querySelector('#pin-val') as HTMLInputElement).placeholder = this.i18nService.t('pin');
             div.appendChild(label);
 
-            div.querySelector('input').addEventListener('keydown', (event) => {
+            div.querySelector('input').addEventListener('keydown', event => {
                 if (event.key === 'Enter') { Swal.clickConfirm(); }
             });
 
