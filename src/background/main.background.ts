@@ -329,15 +329,6 @@ export default class MainBackground {
             this.vaultTimeoutService);
         this.windowsBackground = new WindowsBackground(this);
 
-        // Background
-        this.runtimeBackground = new RuntimeBackground(this, this.autofillService, this.cipherService,
-            this.platformUtilsService as BrowserPlatformUtilsService, this.storageService, this.i18nService,
-            this.notificationsService, this.systemService, this.vaultTimeoutService,
-            this.environmentService, this.policyService, this.userService, this.messagingService,
-            this.cozyClientService, this.konnectorsService, this.syncService, this.authService, this.cryptoService,
-            );
-        this.messagingService.setRuntimeBackground(this.runtimeBackground);
-
         const that = this;
 
         // this.authService = new AuthService(this.cryptoService, this.apiService, this.userService,
@@ -356,6 +347,16 @@ export default class MainBackground {
                 }
             }(), this.vaultTimeoutService, this.consoleLogService, true,
             this.cozyClientService);
+
+        // Background
+        this.runtimeBackground = new RuntimeBackground(this, this.autofillService, this.cipherService,
+            this.platformUtilsService as BrowserPlatformUtilsService, this.storageService, this.i18nService,
+            this.notificationsService, this.systemService, this.vaultTimeoutService,
+            this.environmentService, this.policyService, this.userService, this.messagingService,
+            this.cozyClientService, this.konnectorsService, this.syncService, this.authService, this.cryptoService,
+            );
+        this.messagingService.setRuntimeBackground(this.runtimeBackground);
+
     }
 
     async bootstrap() {
@@ -963,6 +964,6 @@ export default class MainBackground {
         const browserUA = navigator.userAgent;
         const appName = 'io.cozy.pass.browser';
         const appVersion = BrowserApi.getApplicationVersion() || 'unknown';
-        return `${browserUA} ${appName}-${appVersion}`
+        return `${browserUA} ${appName}-${appVersion}`;
     }
 }
