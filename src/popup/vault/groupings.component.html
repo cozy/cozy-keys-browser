@@ -187,6 +187,7 @@
                     <app-ciphers-list [ciphers]="ciphersByType[1]" title="{{'viewItem' | i18n}}"
                     (onSelected)="viewCipher($event)"
                     (onDoubleSelected)="launchCipher($event)"
+                    (launchEvent)="launchCipher($event)"
                     [showGlobe]="true"
                     ></app-ciphers-list>
                 </div>
@@ -242,6 +243,7 @@
             <div class="box-content" *ngIf="loaded">
                 <app-ciphers-list [ciphers]="ciphersByType[1]" title="{{'viewItem' | i18n}}" [showGlobe]="true"
                     (onSelected)="viewCipher($event)"
+                    (launchEvent)="launchCipher($event)"
                     *ngIf="ciphersByType[1].length"
                 >
                 </app-ciphers-list>
