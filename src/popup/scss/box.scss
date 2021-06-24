@@ -482,6 +482,7 @@
             }
 
             &.disabled {
+                display: none;
                 @include themify($themes) {
                     color: themed('disabledIconColor');
                     opacity: themed('disabledBoxOpacity');
