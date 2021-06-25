@@ -100,12 +100,14 @@ const plugins = [
     new HtmlWebpackPlugin({
         template: './src/inPageMenu/menu.html',
         filename: 'inPageMenu/menu.html',
-        chunks: ['inPageMenu/menu']
+        chunks: ['inPageMenu/menu'],
+        cache: false, // Remove after upgrading to Webpack 5
     }),
     new HtmlWebpackPlugin({
         template: './src/inPageMenu/loginMenu.html',
         filename: 'inPageMenu/loginMenu.html',
-        chunks: ['inPageMenu/loginMenu']
+        chunks: ['inPageMenu/loginMenu'],
+        cache: false, // Remove after upgrading to Webpack 5
     }),
     new CopyWebpackPlugin({
         patterns: [
