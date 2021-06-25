@@ -145,12 +145,14 @@ function afterLoadedIfRelevant(event: any) {
                 if (mutations == null || mutations.length === 0) {
                     return;
                 }
+
                 let doCollect = false;
                 for (let i = 0; i < mutations.length; i++) {
                     const mutation = mutations[i];
                     if (mutation.addedNodes == null || mutation.addedNodes.length === 0) {
                         continue;
                     }
+
                     for (let j = 0; j < mutation.addedNodes.length; j++) {
                         const addedNode: any = mutation.addedNodes[j];
                         if (addedNode == null) {
@@ -218,6 +220,7 @@ function afterLoadedIfRelevant(event: any) {
                 observer.disconnect();
                 observer = null;
             }
+
             collect();
             // The DOM might change during the collect: watch the DOM body for changes.
             // Note: a setTimeout was present here, apparently related to the autofill:
@@ -263,6 +266,7 @@ function afterLoadedIfRelevant(event: any) {
                     formEl = formsByClass[0];
                 }
             }
+
             if (formEl == null) {
                 const index = parseInt(f.form.opid.split('__')[2], null);
                 formEl = document.getElementsByTagName('form')[index];
@@ -359,7 +363,6 @@ function afterLoadedIfRelevant(event: any) {
     }
 
     function formSubmitted(e: Event) {
-
         let form: HTMLFormElement = null;
         if (e.type === 'click') {
             form = (e.target as HTMLElement).closest('form');
@@ -379,6 +382,7 @@ function afterLoadedIfRelevant(event: any) {
         if (form && form.dataset.bitwardenProcessed === '1') {
             return;
         }
+
         for (let i = 0; i < formData.length; i++) {
             if (form && formData[i].formEl !== form) {
                 continue;
@@ -390,6 +394,7 @@ function afterLoadedIfRelevant(event: any) {
                     password: formData[i].passwordEl.value,
                     url: document.URL,
                 };
+
                 if (login.username != null && login.username !== '' &&
                     login.password != null && login.password !== '') {
 
@@ -413,7 +418,6 @@ function afterLoadedIfRelevant(event: any) {
                 let curPass: string = null;
                 let newPass: string = null;
                 let newPassOnly = false;
-
                 if (formData[i].passwordEls.length === 3 && passwords.length === 3) {
                     newPass = passwords[1];
                     if (passwords[0] !== newPass && newPass === passwords[2]) {
@@ -581,14 +585,10 @@ function afterLoadedIfRelevant(event: any) {
         const barPageUrl: string = chrome.extension.getURL(barPage);
 
         const iframe = document.createElement('iframe');
-        iframe.style.cssText = 'height: 42px; width: 100%; border: 0; min-height: initial;';
-        iframe.id = 'bit-notification-bar-iframe';
-
+        iframe.id = 'notification-bar-iframe';
         const frameDiv = document.createElement('div');
         frameDiv.setAttribute('aria-live', 'polite');
-        frameDiv.id = 'bit-notification-bar';
-        frameDiv.style.cssText = 'height: 42px; width: 100%; top: 0; left: 0; padding: 0; position: fixed; ' +
-            'z-index: 2147483647; visibility: visible;';
+        frameDiv.id = 'notification-bar';
         frameDiv.appendChild(iframe);
         document.body.appendChild(frameDiv);
 
