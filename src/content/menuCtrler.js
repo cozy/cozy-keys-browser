@@ -63,7 +63,7 @@ const
     // Might be optimized, see here :
     //    * https://codepen.io/tigt/post/optimizing-svgs-in-data-uris
     //    * https://www.npmjs.com/package/mini-svg-data-uri
-    minMenuWidth = 210 ;
+    minMenuWidth = 250 ;
 
 /* --------------------------------------------------------------------- */
 // Add a menu button to an element and initialize the iframe for the menu
@@ -110,7 +110,7 @@ function _initInPageMenuForEl(targetEl) {
     // prevent browser autocomplet with history for this field
     targetEl.autocomplete='off'
 
-    // When user click in a form (not evant an input), the focus is put in the closest input.
+    // When user click in a form (but not in an input), the browser puts the focus in the closest input.
     // So if the focus was in an input with the menu opended, the blur event will close the menu which is reopened
     // immmediately when the focus is put again in the menu...
     // Solution : freeze the menu half a second after a click in a form that is not in an input.
@@ -142,33 +142,21 @@ function _initInPageMenuForEl(targetEl) {
         document.head.appendChild(styleEl)
         // append element and configure popperjs
         document.body.append(menuEl)
-        const preSameWidth = {
-            name     : "preSameWidth",
-            enabled  : true,
-            phase    : "afterRead",
-            requires : ["computeStyles"],
-            fn       : (pop) => {
-                pop.state.rects.popper.width = minMenuWidth + 20
-            },
-        };
         const sameWidth = {
             name     : "sameWidth",
             enabled  : true,
             phase    : "beforeWrite",
             requires : ["computeStyles"],
-            fn       : (pop) => {
-                if (state.isHidden) return
-                var w = pop.state.rects.reference.width
-                var d = w -  minMenuWidth
-                if (d > 0)  {
-                    d = 0
-                } else {
-                    w = minMenuWidth
-                    d = - parseFloat(pop.state.styles.popper.transform.slice(10).split('px')[0]) - w + pop.state.rects.reference.x + pop.state.rects.reference.width
-                }
-                if (state.iFrameHash.arrowD !== d) _updateArrowPos(d)
-                pop.state.styles.popper.width = `${w+20}px`
-                pop.state.styles.popper.left = `-10px`
+            fn       : ({state}) => {
+                var ref = state.rects.reference
+                var w = ref.width
+                var tw = Math.max(minMenuWidth, w/2)
+                tw = Math.min(tw, ref.width)
+                state.elements.popper.style.width = `${tw+20}px`;
+                var dx = ref.x + ref.width - tw - 10 + 'px'
+                var dy = ref.y + ref.height -12 + 'px'
+                state.styles.popper.transform = `translate(${dx}, ${dy})`
+                state.styles.popper.width = `${tw+20}px`
             },
         };
         const afterWrite = {
@@ -181,19 +169,14 @@ function _initInPageMenuForEl(targetEl) {
             },
         };
         popperInstance = createPopper(targetEl, menuEl, {
-            placement: 'bottom-start',
+            placement: 'bottom-end',
             modifiers: [
-                {
-                    name: 'offset',
-                    options: {offset: [0, -5]},
-                },
                 {
                     name: 'flip',
                     options: {
                         fallbackPlacements: ['bottom'], // force the menu ot go only under the field
                     },
                 },
-                preSameWidth,
                 sameWidth,
                 afterWrite,
             ],
