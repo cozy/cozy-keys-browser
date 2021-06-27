@@ -25,7 +25,7 @@ body {
 
 .panel {
     margin: 16px 10px 10px 10px;
-    background-color: #297EF2;
+    background-color: white;
     border-radius: 0.5rem;
     filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.9));
     transform-origin: calc(100% - 25px) 0;
@@ -39,7 +39,7 @@ body {
     width: 0;
     border-width: 0 8px 8px 8px;
     border-style: solid;
-    border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #297ef2 rgba(255, 255, 255, 0);
+    border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) white rgba(255, 255, 255, 0);
     position: absolute;
     top: -8px;
     right: 10px;
@@ -62,13 +62,14 @@ body {
         transition: transform 0.2s;
     }
     svg {
-      fill: white;
+      fill: #297EF2;
     }
 }
 
 #title-content{
     flex-grow: 1;
     padding-left: 0.5rem;
+    color : #297EF2;
 }
 
 .close-icon {
@@ -77,7 +78,7 @@ body {
       cursor: pointer;
     }
     svg {
-      fill: white;
+      fill: #e9e9e9;
     }
 }
 
@@ -99,7 +100,7 @@ hr {
     flex-grow: 1;
     min-width: 0;
     padding: 0.875rem 0 0.875rem 1rem;
-    background-color: white;
+    background-color: #f0f5fd;
     border-bottom: #d6d8da 1.5px solid;
     overflow: hidden;
     &.selected {
