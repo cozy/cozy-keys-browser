@@ -253,6 +253,56 @@ export class ViewComponent extends BaseViewComponent {
         return false;
     }
 
+    /* ---------------------------------------------------------------
+    @added by Cozy
+    returns the postal adress as a string
+    the adress will be formated according to the local standard
+    ------------------------------------------------------------------- */
+    getLocalizedAdress(): string {
+        const id = this.cipher.identity;
+        let fullAdress: string;
+        switch (navigator.language.substr(0, 2)) {
+            case 'fr':
+                /* for the french official format, see : AFNOR XPZ10-011 (no free acces)
+                a free summary
+                for an individual :
+                    1- CIVILITE-TITRE ou QUALITE-PRENOM-NOM
+                       permet d’identifier le destinataire, la ligne 2 le point de remise.
+                    2- N° APP ou BAL-ETAGE-COULOIR-ESC
+                       correspond à tout ce qui est situé à l’intérieur d’un bâtiment,
+                    3- ENTREE-BATIMENT-IMMEUBLE-RESIDENCE
+                       tout ce qui est à l’extérieur.
+                    4- NUMERO-LIBELLE DE LA VOIE
+                    5- LIEU DIT ou SERVICE PARTICULIER DE DISTRIBUTION
+                    6- CODE POSTAL et LOCALITE DE DESTINATION ou CODE CEDEX et LIBELLE CEDEX
+                for a company :
+                    1. RAISON SOCIALE ou DENOMINATION
+                    2. IDENTITE DU DESTINATAIRE et/ou SERVICE
+                    3. ENTREE-BATIMENT-IMMEUBLE-RES-ZI
+                    4. NUMERO-LIBELLE DE LA VOIE
+                    5. MENTION SPECIALE et COMMUNE GEOGRAPHIQUE - si différente de celle indiquée ligne 6
+                    6. (CODE POSTAL et LOCALITE DE DESTINATION) ou (CODE CEDEX et LIBELLE CEDEX)
+                */
+                fullAdress =
+                    (id.address1 ? id.address1 : '')                         +
+                    (id.address2 ? '\n' + id.address2 : '')                  +
+                    (id.address3 ? '\n' + id.address3 : '')                  +
+                    (id.postalCode || id.city ?
+                        '\n' + id.postalCode + ' ' + id.city : '')           +
+                    (id.country ? '\n' + id.country : '') ;
+                break;
+            default:
+                fullAdress =
+                    (id.address1 ? id.address1 : '')                         +
+                    (id.address2 ? '\n' + id.address2 : '')                  +
+                    (id.address3 ? '\n' + id.address3 : '')                  +
+                    (id.fullAddressPart2 ? '\n' + id.fullAddressPart2 : '')  +
+                    (id.country ? '\n' + id.country : '') ;
+                break;
+        }
+        return fullAdress;
+    }
+
     close() {
         if (this.pannelBack) {
             this.router.navigate(['tabs/vault'], { queryParams: {

@@ -150,46 +150,101 @@
             </div>
             <!-- Identity -->
             <div *ngIf="cipher.identity">
-                <div class="box-content-row" *ngIf="cipher.identity.fullName">
-                    <span class="row-label">{{'identityName' | i18n}}</span>
-                    {{cipher.identity.fullName}}
+                <div class="box-content-row box-content-row-flex" *ngIf="cipher.identity.fullName">
+                    <div class="row-main">
+                        <span class="row-label">{{'identityName' | i18n}}</span>
+                        <span>{{cipher.identity.fullName}}</span>
+                    </div>
+                    <div class="action-buttons">
+                        <a class="row-btn" href="#" appStopClick appA11yTitle="{{'copyValue' | i18n}}"
+                            (click)="copy(cipher.identity.fullName, '', '')">
+                            <i class="fa fa-lg fa-clone" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="box-content-row" *ngIf="cipher.identity.username">
-                    <span class="row-label">{{'username' | i18n}}</span>
-                    {{cipher.identity.username}}
+                <div class="box-content-row box-content-row-flex" *ngIf="cipher.identity.username">
+                    <div class="row-main">
+                        <span class="row-label">{{'username' | i18n}}</span>
+                        <span>{{cipher.identity.username}}</span>
+                    </div>
+                    <div class="action-buttons">
+                        <a class="row-btn" href="#" appStopClick appA11yTitle="{{'copyValue' | i18n}}"
+                            (click)="copy(cipher.identity.username, '', '')">
+                            <i class="fa fa-lg fa-clone" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="box-content-row" *ngIf="cipher.identity.company">
-                    <span class="row-label">{{'company' | i18n}}</span>
-                    {{cipher.identity.company}}
+                <div class="box-content-row box-content-row-flex" *ngIf="cipher.identity.company">
+                    <div class="row-main">
+                        <span class="row-label">{{'company' | i18n}}</span>
+                        <span>{{cipher.identity.company}}</span>
+                    </div>
+                    <div class="action-buttons">
+                        <a class="row-btn" href="#" appStopClick appA11yTitle="{{'copyValue' | i18n}}"
+                            (click)="copy(cipher.identity.company, '', '')">
+                            <i class="fa fa-lg fa-clone" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="box-content-row" *ngIf="cipher.identity.ssn">
-                    <span class="row-label">{{'ssn' | i18n}}</span>
-                    {{cipher.identity.ssn}}
+                <div class="box-content-row box-content-row-flex" *ngIf="cipher.identity.ssn">
+                    <div class="row-main">
+                        <span class="row-label">{{'ssn' | i18n}}</span>
+                        <span>{{cipher.identity.ssn}}</span>
+                    </div>
+                    <div class="action-buttons">
+                        <a class="row-btn" href="#" appStopClick appA11yTitle="{{'copyValue' | i18n}}"
+                            (click)="copy(cipher.identity.ssn, '', '')">
+                            <i class="fa fa-lg fa-clone" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="box-content-row" *ngIf="cipher.identity.passportNumber">
-                    <span class="row-label">{{'passportNumber' | i18n}}</span>
-                    {{cipher.identity.passportNumber}}
+                <div class="box-content-row box-content-row-flex" *ngIf="cipher.identity.passportNumber">
+                    <div class="row-main">
+                        <span class="row-label">{{'passportNumber' | i18n}}</span>
+                        <span>{{cipher.identity.passportNumber}}</span>
+                    </div>
+                    <div class="action-buttons">
+                        <a class="row-btn" href="#" appStopClick appA11yTitle="{{'copyValue' | i18n}}"
+                            (click)="copy(cipher.identity.passportNumber, '', '')">
+                            <i class="fa fa-lg fa-clone" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="box-content-row" *ngIf="cipher.identity.licenseNumber">
-                    <span class="row-label">{{'licenseNumber' | i18n}}</span>
-                    {{cipher.identity.licenseNumber}}
+                <div class="box-content-row box-content-row-flex" *ngIf="cipher.identity.email">
+                    <div class="row-main">
+                        <span class="row-label">{{'email' | i18n}}</span>
+                        <span>{{cipher.identity.email}}</span>
+                    </div>
+                    <div class="action-buttons">
+                        <a class="row-btn" href="#" appStopClick appA11yTitle="{{'copyValue' | i18n}}"
+                            (click)="copy(cipher.identity.email, '', '')">
+                            <i class="fa fa-lg fa-clone" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="box-content-row" *ngIf="cipher.identity.email">
-                    <span class="row-label">{{'email' | i18n}}</span>
-                    {{cipher.identity.email}}
+                <div class="box-content-row box-content-row-flex" *ngIf="cipher.identity.phone">
+                    <div class="row-main">
+                        <span class="row-label">{{'phone' | i18n}}</span>
+                        <span>{{cipher.identity.phone}}</span>
+                    </div>
+                    <div class="action-buttons">
+                        <a class="row-btn" href="#" appStopClick appA11yTitle="{{'copyValue' | i18n}}"
+                            (click)="copy(cipher.identity.phone, '', '')">
+                            <i class="fa fa-lg fa-clone" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="box-content-row" *ngIf="cipher.identity.phone">
-                    <span class="row-label">{{'phone' | i18n}}</span>
-                    {{cipher.identity.phone}}
-                </div>
-                <div class="box-content-row"
-                    *ngIf="cipher.identity.address1 || cipher.identity.city || cipher.identity.country">
-                    <span class="row-label">{{'address' | i18n}}</span>
-                    <div *ngIf="cipher.identity.address1">{{cipher.identity.address1}}</div>
-                    <div *ngIf="cipher.identity.address2">{{cipher.identity.address2}}</div>
-                    <div *ngIf="cipher.identity.address3">{{cipher.identity.address3}}</div>
-                    <div *ngIf="cipher.identity.fullAddressPart2">{{cipher.identity.fullAddressPart2}}</div>
-                    <div *ngIf="cipher.identity.country">{{cipher.identity.country}}</div>
+                <div class="box-content-row box-content-row-flex" *ngIf="cipher.identity.address1">
+                    <div class="row-main">
+                        <span class="row-label">{{'address' | i18n}}</span>
+                        <div *ngIf="cipher.identity.address1" class="show-whitespace">{{getLocalizedAdress()}}</div>
+                    </div>
+                    <div class="action-buttons">
+                        <a class="row-btn" href="#" appStopClick appA11yTitle="{{'copyValue' | i18n}}"
+                            (click)="copy(getLocalizedAdress(), '', '')">
+                            <i class="fa fa-lg fa-clone" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
