@@ -53,7 +53,7 @@ const LastnameFieldNames: string[] = [
     // German
     'nachname', 'familienname',
     // French
-    'nom-de-famille',
+    'nom-de-famille', 'nom',
 ];
 
 const ExcludedAutofillTypes: string[] = ['radio', 'checkbox', 'hidden', 'file', 'button', 'image', 'reset', 'search'];
@@ -1250,8 +1250,8 @@ export default class AutofillService implements AutofillServiceInterface {
                 // ref https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill
                 // ref https://developers.google.com/web/fundamentals/design-and-ux/input/forms/
                 if (!fillFields.name && this.isFieldMatch(f[attr],
-                    ['name', 'full-name', 'your-name', 'nom'],
-                    ['full-name', 'your-name', 'nom'])
+                    ['name', 'full-name', 'your-name'],
+                    ['full-name', 'your-name'])
                 ) {
                     fillFields.name = f;
                     break;
@@ -1439,11 +1439,13 @@ export default class AutofillService implements AutofillServiceInterface {
     /*
     Test if a value matches some criteria
         * value : String : the value to test
-        * containsOptions : [String] : array of strings to test if they are contained into the value string
-        * options : [String] : array of strings to look into the value.
-            * if there is no containsOptions : the test is to look for the sting into value
-            * if there are some containsOptions provided, then a strict equality between the string and the
-              value is expected
+        * options : [String] : array of strings to compare with the value.
+        * containsOptions : [String] : subset of options strings : those repeated strings
+            will be searched into the value
+        * notes :
+            * containsOptions is a subset of options ... not intuitive nor classic...
+            * in the value string, all non letter and non digits caracters are removed
+            * in the strings (options & containsOptions) use a `-` for spaces and all non [a-zA-Z0-9] caracters.
      */
     private isFieldMatch(value: string, options: string[], containsOptions?: string[]): boolean {
         value = value.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
