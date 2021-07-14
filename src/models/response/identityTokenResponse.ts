@@ -1,6 +1,6 @@
 import {
     IdentityTokenResponse as BaseIdentityTokenResponse,
-} from 'jslib/models/response/identityTokenResponse';
+} from 'jslib-common/models/response/identityTokenResponse';
 
 /**
  * We need to extend the jslib's IdentityTokenResponse to add the clientId and

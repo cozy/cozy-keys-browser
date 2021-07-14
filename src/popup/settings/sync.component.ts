@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { I18nService } from 'jslib/abstractions/i18n.service';
-import { SyncService } from 'jslib/abstractions/sync.service';
+import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { SyncService } from 'jslib-common/abstractions/sync.service';
 
 @Component({
     selector: 'app-sync',

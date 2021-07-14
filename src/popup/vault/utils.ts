@@ -2,11 +2,11 @@ import {
   EventEmitter,
 } from '@angular/core';
 
-import { CipherService } from 'jslib/abstractions/cipher.service';
-import { I18nService } from 'jslib/abstractions/i18n.service';
-import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
-import { UserService } from 'jslib/abstractions/user.service';
-import { CipherView } from 'jslib/models/view/cipherView';
+import { CipherService } from 'jslib-common/abstractions/cipher.service';
+import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
+import { UserService } from 'jslib-common/abstractions/user.service';
+import { CipherView } from 'jslib-common/models/view/cipherView';
 
 /**
  * @override by Cozy

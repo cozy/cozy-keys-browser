@@ -8,25 +8,13 @@
     "target": "ES2016",
     "allowJs": true,
     "sourceMap": true,
-    "types": [
-      "jasmine",
-      "sweetalert2",
-      "@types/chrome",
-      "@types/firefox-webext-browser"
-    ],
     "baseUrl": ".",
     "paths": {
-      "jslib/*": [
-        "jslib/src/*"
+      "jslib-common/*": [
+        "jslib/common/src/*"
       ],
-      "@angular/*": [
-        "node_modules/@angular/*"
-      ],
-      "node": [
-        "node_modules/@types/node"
-      ],
-      "duo_web_sdk": [
-        "node_modules/duo_web_sdk"
+      "jslib-angular/*": [
+        "jslib/angular/src/*"
       ]
     },
     "allowSyntheticDefaultImports": true
@@ -35,6 +23,9 @@
     "preserveWhitespaces": true,
     "enableIvy": false
   },
+  "include": [
+    "src"
+],
   "exclude": [
     "node_modules",
     "jslib/node_modules",

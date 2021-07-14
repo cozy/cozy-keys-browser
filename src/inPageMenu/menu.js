@@ -1,6 +1,6 @@
 require('./menu.scss');
-import { CipherType } from 'jslib/enums/cipherType.ts';
-import { CipherView } from 'jslib/models/view/cipherView.ts';
+import { CipherType } from 'jslib-common/enums/cipherType.ts';
+import { CipherView } from 'jslib-common/models/view/cipherView.ts';
 
 
 // Globals

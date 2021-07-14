@@ -1,7 +1,7 @@
 import { CozyClient } from 'cozy-client/dist/CozyClient';
-import { ApiService } from 'jslib/abstractions/api.service';
-import { EnvironmentService } from 'jslib/abstractions/environment.service';
-import { TokenService } from 'jslib/abstractions/token.service';
+import { ApiService } from 'jslib-common/abstractions/api.service';
+import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
+import { TokenService } from 'jslib-common/abstractions/token.service';
 
 interface ICozyStackClient {
     fetchJSON: (method: string, path: string) => Promise<any>;

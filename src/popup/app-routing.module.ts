@@ -6,9 +6,11 @@ import {
     Routes,
 } from '@angular/router';
 
-import { AuthGuardService } from 'jslib/angular/services/auth-guard.service';
+import { AuthGuardService } from 'jslib-angular/services/auth-guard.service';
 
+import { DebounceNavigationService } from './services/debounceNavigationService';
 import { LaunchGuardService } from './services/launch-guard.service';
+import { LockGuardService } from './services/lock-guard.service';
 
 import { HintComponent } from './accounts/hint.component';
 import { HomeComponent } from './accounts/home.component';
@@ -72,6 +74,7 @@ const routes: Routes = [
     {
         path: 'lock',
         component: LockComponent,
+        canActivate: [LockGuardService],
         data: { state: 'lock' },
     },
     {
@@ -113,14 +116,16 @@ const routes: Routes = [
     {
         path: 'add-cipher',
         component: AddEditComponent,
-        canActivate: [AuthGuardService],
+        canActivate: [AuthGuardService, DebounceNavigationService],
         data: { state: 'add-cipher' },
+        runGuardsAndResolvers: 'always',
     },
     {
         path: 'edit-cipher',
         component: AddEditComponent,
-        canActivate: [AuthGuardService],
+        canActivate: [AuthGuardService, DebounceNavigationService],
         data: { state: 'edit-cipher' },
+        runGuardsAndResolvers: 'always',
     },
     {
         path: 'share-cipher',

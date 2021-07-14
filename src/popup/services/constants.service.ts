@@ -1,4 +1,4 @@
-import { ConstantsService } from 'jslib/services/constants.service';
+import { ConstantsService } from 'jslib-common/services/constants.service';
 
 export class LocalConstantsService extends ConstantsService {
     static readonly disableKonnectorsSuggestionsKey: string = 'disableKonnectorsSuggestions';

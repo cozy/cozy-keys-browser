@@ -4,16 +4,16 @@ import {
     OnChanges,
 } from '@angular/core';
 
-import { CipherType } from 'jslib/enums/cipherType';
+import { CipherType } from 'jslib-common/enums/cipherType';
 
-import { CipherView } from 'jslib/models/view/cipherView';
+import { CipherView } from 'jslib-common/models/view/cipherView';
+import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
 
-import { EnvironmentService } from 'jslib/abstractions/environment.service';
-import { StateService } from 'jslib/abstractions/state.service';
+import { StateService } from 'jslib-common/abstractions/state.service';
 
-import { ConstantsService } from 'jslib/services/constants.service';
+import { ConstantsService } from 'jslib-common/services/constants.service';
 
-import { Utils } from 'jslib/misc/utils';
+import { Utils } from 'jslib-common/misc/utils';
 
 const IconMap: any = {
     'fa-globe': String.fromCharCode(0xf0ac),

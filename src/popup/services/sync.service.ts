@@ -10,20 +10,20 @@
 
    ----------------------------------------------------------------------------------- */
 
-import { ApiService } from 'jslib/abstractions/api.service';
-import { CipherService } from 'jslib/abstractions/cipher.service';
-import { CollectionService } from 'jslib/abstractions/collection.service';
-import { CryptoService } from 'jslib/abstractions/crypto.service';
-import { FolderService } from 'jslib/abstractions/folder.service';
-import { MessagingService } from 'jslib/abstractions/messaging.service';
-import { PolicyService } from 'jslib/abstractions/policy.service';
-import { SendService } from 'jslib/abstractions/send.service';
-import { SettingsService } from 'jslib/abstractions/settings.service';
-import { StorageService } from 'jslib/abstractions/storage.service';
-import { UserService } from 'jslib/abstractions/user.service';
+import { ApiService } from 'jslib-common/abstractions/api.service';
+import { CipherService } from 'jslib-common/abstractions/cipher.service';
+import { CollectionService } from 'jslib-common/abstractions/collection.service';
+import { CryptoService } from 'jslib-common/abstractions/crypto.service';
+import { FolderService } from 'jslib-common/abstractions/folder.service';
+import { MessagingService } from 'jslib-common/abstractions/messaging.service';
+import { PolicyService } from 'jslib-common/abstractions/policy.service';
+import { SendService } from 'jslib-common/abstractions/send.service';
+import { SettingsService } from 'jslib-common/abstractions/settings.service';
+import { StorageService } from 'jslib-common/abstractions/storage.service';
+import { UserService } from 'jslib-common/abstractions/user.service';
 
 /* start Cozy imports */
-import { SyncService as BaseSyncService } from 'jslib/services/sync.service';
+import { SyncService as BaseSyncService } from 'jslib-common/services/sync.service';
 import { CozyClientService } from './cozyClient.service';
 /* end Cozy imports */
 

@@ -19,28 +19,28 @@ import {
 
 import { BrowserApi } from '../../browser/browserApi';
 
-import { CipherType } from 'jslib/enums/cipherType';
-import { UriMatchType } from 'jslib/enums/uriMatchType';
+import { CipherType } from 'jslib-common/enums/cipherType';
+import { UriMatchType } from 'jslib-common/enums/uriMatchType';
 
-import { CipherView } from 'jslib/models/view/cipherView';
-import { FolderView } from 'jslib/models/view/folderView';
+import { CipherView } from 'jslib-common/models/view/cipherView';
+import { FolderView } from 'jslib-common/models/view/folderView';
 
-import { CipherService } from 'jslib/abstractions/cipher.service';
-import { CollectionService } from 'jslib/abstractions/collection.service';
-import { FolderService } from 'jslib/abstractions/folder.service';
-import { I18nService } from 'jslib/abstractions/i18n.service';
-import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
-import { SearchService } from 'jslib/abstractions/search.service';
-import { StateService } from 'jslib/abstractions/state.service';
-import { StorageService } from 'jslib/abstractions/storage.service';
-import { SyncService } from 'jslib/abstractions/sync.service';
-import { UserService } from 'jslib/abstractions/user.service';
+import { CipherService } from 'jslib-common/abstractions/cipher.service';
+import { CollectionService } from 'jslib-common/abstractions/collection.service';
+import { FolderService } from 'jslib-common/abstractions/folder.service';
+import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
+import { SearchService } from 'jslib-common/abstractions/search.service';
+import { StateService } from 'jslib-common/abstractions/state.service';
+import { StorageService } from 'jslib-common/abstractions/storage.service';
+import { SyncService } from 'jslib-common/abstractions/sync.service';
+import { UserService } from 'jslib-common/abstractions/user.service';
 
-import { BroadcasterService } from 'jslib/angular/services/broadcaster.service';
+import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
 
-import { GroupingsComponent as BaseGroupingsComponent } from 'jslib/angular/components/groupings.component';
+import { GroupingsComponent as BaseGroupingsComponent } from 'jslib-angular/components/groupings.component';
 
-import { Utils } from 'jslib/misc/utils';
+import { Utils } from 'jslib-common/misc/utils';
 
 import { AutofillService } from '../../services/abstractions/autofill.service';
 import { LocalConstantsService as ConstantsService } from '../services/constants.service';

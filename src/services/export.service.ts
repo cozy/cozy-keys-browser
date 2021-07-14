@@ -1,18 +1,18 @@
 import * as papa from 'papaparse';
 
-import { ExportService as BaseExportService } from 'jslib/services/export.service';
+import { ExportService as BaseExportService } from 'jslib-common/services/export.service';
 
-import { ApiService } from 'jslib/abstractions/api.service';
-import { CipherService } from 'jslib/abstractions/cipher.service';
-import { CryptoService } from 'jslib/abstractions/crypto.service';
-import { FolderService } from 'jslib/abstractions/folder.service';
+import { ApiService } from 'jslib-common/abstractions/api.service';
+import { CipherService } from 'jslib-common/abstractions/cipher.service';
+import { CryptoService } from 'jslib-common/abstractions/crypto.service';
+import { FolderService } from 'jslib-common/abstractions/folder.service';
 
-import { CipherWithIds as CipherExport } from 'jslib/models/export/cipherWithIds';
-import { FolderWithId as FolderExport } from 'jslib/models/export/folderWithId';
-import { CipherView } from 'jslib/models/view/cipherView';
-import { FolderView } from 'jslib/models/view/folderView';
+import { CipherWithIds as CipherExport } from 'jslib-common/models/export/cipherWithIds';
+import { FolderWithId as FolderExport } from 'jslib-common/models/export/folderWithId';
+import { CipherView } from 'jslib-common/models/view/cipherView';
+import { FolderView } from 'jslib-common/models/view/folderView';
 
-import { CipherType } from 'jslib/enums/cipherType';
+import { CipherType } from 'jslib-common/enums/cipherType';
 
 /**
  * By default the ciphers that have an organizationId and not included in the

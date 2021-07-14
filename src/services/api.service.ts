@@ -1,10 +1,10 @@
-import { PlatformUtilsService } from 'jslib/abstractions/platformUtils.service';
-import { TokenService } from 'jslib/abstractions/token.service';
-import { DeviceType } from 'jslib/enums/deviceType';
-import { TokenRequest } from 'jslib/models/request/tokenRequest';
-import { ErrorResponse } from 'jslib/models/response/errorResponse';
-import { IdentityTwoFactorResponse } from 'jslib/models/response/identityTwoFactorResponse';
-import { ApiService as BaseApiService } from 'jslib/services/api.service';
+import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
+import { TokenService } from 'jslib-common/abstractions/token.service';
+import { DeviceType } from 'jslib-common/enums/deviceType';
+import { TokenRequest } from 'jslib-common/models/request/tokenRequest';
+import { ErrorResponse } from 'jslib-common/models/response/errorResponse';
+import { IdentityTwoFactorResponse } from 'jslib-common/models/response/identityTwoFactorResponse';
+import { ApiService as BaseApiService } from 'jslib-common/services/api.service';
 
 import { IdentityTokenResponse } from '../models/response/identityTokenResponse';
 

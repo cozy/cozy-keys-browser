@@ -1,11 +1,11 @@
 import { Registry } from 'cozy-client/dist/registry';
-import { CipherService } from 'jslib/abstractions/cipher.service';
-import { SettingsService } from 'jslib/abstractions/settings.service';
-import { StorageService } from 'jslib/abstractions/storage.service';
-import { CipherType } from 'jslib/enums/cipherType';
-import { UriMatchType } from 'jslib/enums/uriMatchType';
-import { Utils } from 'jslib/misc/utils';
-import { CipherView } from 'jslib/models/view/cipherView';
+import { CipherService } from 'jslib-common/abstractions/cipher.service';
+import { SettingsService } from 'jslib-common/abstractions/settings.service';
+import { StorageService } from 'jslib-common/abstractions/storage.service';
+import { CipherType } from 'jslib-common/enums/cipherType';
+import { UriMatchType } from 'jslib-common/enums/uriMatchType';
+import { Utils } from 'jslib-common/misc/utils';
+import { CipherView } from 'jslib-common/models/view/cipherView';
 import { LocalConstantsService as ConstantsService } from '../services/constants.service';
 import { CozyClientService } from './cozyClient.service';
 

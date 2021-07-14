@@ -1,6 +1,6 @@
 import RuntimeBackground from '../background/runtime.background';
 
-import { MessagingService } from 'jslib/abstractions/messaging.service';
+import { MessagingService } from 'jslib-common/abstractions/messaging.service';
 
 function debounce(fnToDebounce: () => any, delay: number, context: any) {
     let timeout: any;

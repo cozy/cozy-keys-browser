@@ -1,44 +1,45 @@
-import { CipherType } from 'jslib/enums';
+import { CipherType } from 'jslib-common/enums';
 
-import { CipherView } from 'jslib/models/view/cipherView';
-import { LoginUriView } from 'jslib/models/view/loginUriView';
-import { LoginView } from 'jslib/models/view/loginView';
+import { CipherView } from 'jslib-common/models/view/cipherView';
+import { LoginUriView } from 'jslib-common/models/view/loginUriView';
+import { LoginView } from 'jslib-common/models/view/loginView';
 
 import { LocalConstantsService } from '../popup/services/constants.service';
 
-import { CipherService } from 'jslib/abstractions/cipher.service';
-import { EnvironmentService } from 'jslib/abstractions/environment.service';
-import { I18nService } from 'jslib/abstractions/i18n.service';
-import { MessagingService } from 'jslib/abstractions/messaging.service';
-import { NotificationsService } from 'jslib/abstractions/notifications.service';
-import { PolicyService } from 'jslib/abstractions/policy.service';
-import { StorageService } from 'jslib/abstractions/storage.service';
-import { SyncService } from 'jslib/abstractions/sync.service';
-import { SystemService } from 'jslib/abstractions/system.service';
-import { UserService } from 'jslib/abstractions/user.service';
-import { VaultTimeoutService } from 'jslib/abstractions/vaultTimeout.service';
-import { ConstantsService } from 'jslib/services/constants.service';
+import { CipherService } from 'jslib-common/abstractions/cipher.service';
+import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
+import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { MessagingService } from 'jslib-common/abstractions/messaging.service';
+import { NotificationsService } from 'jslib-common/abstractions/notifications.service';
+import { PolicyService } from 'jslib-common/abstractions/policy.service';
+import { StorageService } from 'jslib-common/abstractions/storage.service';
+import { SyncService } from 'jslib-common/abstractions/sync.service';
+import { SystemService } from 'jslib-common/abstractions/system.service';
+import { UserService } from 'jslib-common/abstractions/user.service';
+import { VaultTimeoutService } from 'jslib-common/abstractions/vaultTimeout.service';
+import { ConstantsService } from 'jslib-common/services/constants.service';
 import { AutofillService } from '../services/abstractions/autofill.service';
 import BrowserPlatformUtilsService from '../services/browserPlatformUtils.service';
 
-import { CryptoService } from 'jslib/abstractions/crypto.service';
-import { EncString } from 'jslib/models/domain/encString';
+import { CryptoService } from 'jslib-common/abstractions/crypto.service';
+import { EncString } from 'jslib-common/models/domain/encString';
 
 import { BrowserApi } from '../browser/browserApi';
 
 import MainBackground from './main.background';
 
-import { CipherWithIds as CipherExport } from 'jslib/models/export/cipherWithIds.ts';
+import { CipherWithIds as CipherExport } from 'jslib-common/models/export/cipherWithIds.ts';
 
-import { Utils } from 'jslib/misc/utils';
+import { Utils } from 'jslib-common/misc/utils';
 
-// import { PasswordVerificationRequest } from 'jslib/models/request/passwordVerificationRequest';
+
 import { CozyClientService } from 'src/popup/services/cozyClient.service';
 import { KonnectorsService } from '../popup/services/konnectors.service';
 import { AuthService } from '../services/auth.service';
 
-import { OrganizationUserStatusType } from 'jslib/enums/organizationUserStatusType';
-import { PolicyType } from 'jslib/enums/policyType';
+import { OrganizationUserStatusType } from 'jslib-common/enums/organizationUserStatusType';
+import { PolicyType } from 'jslib-common/enums/policyType';
+
 
 export default class RuntimeBackground {
     private runtime: any;

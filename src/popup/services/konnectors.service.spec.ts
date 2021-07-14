@@ -1,9 +1,9 @@
-import { StorageService } from 'jslib/abstractions/storage.service';
-import { CipherType } from 'jslib/enums/cipherType';
-import { CipherView } from 'jslib/models/view/cipherView';
-import { LoginUriView } from 'jslib/models/view/loginUriView';
-import { LoginView } from 'jslib/models/view/loginView';
-import { SettingsService } from 'jslib/services/settings.service';
+import { StorageService } from 'jslib-common/abstractions/storage.service';
+import { CipherType } from 'jslib-common/enums/cipherType';
+import { CipherView } from 'jslib-common/models/view/cipherView';
+import { LoginUriView } from 'jslib-common/models/view/loginUriView';
+import { LoginView } from 'jslib-common/models/view/loginView';
+import { SettingsService } from 'jslib-common/services/settings.service';
 import BrowserStorageService from '../../services/browserStorage.service';
 import { KonnectorsService } from './konnectors.service';
 
@@ -36,15 +36,21 @@ const buildCiphers = (ciphers: any[]) => {
 };
 
 export class TestStorageService implements StorageService {
+
     async get<T>(key: string): Promise<T> {
-        return new Promise((resolve) => resolve(null));
+        return new Promise( resolve => resolve(null));
     }
+
+    async has(key: string): Promise<boolean> {
+        return new Promise( resolve => resolve(null));
+    }
+
     async save(key: string, obj: any): Promise<any> {
-        return new Promise((resolve) => resolve(null));
+        return new Promise( resolve => resolve(null));
     }
 
     async remove(key: string): Promise<any> {
-        return new Promise((resolve) => resolve(null));
+        return new Promise( resolve => resolve(null));
     }
 }
 

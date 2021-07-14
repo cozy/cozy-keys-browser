@@ -1,5 +1,5 @@
 import { createPopper } from '@popperjs/core';
-import { CipherType } from 'jslib/enums/cipherType';
+import { CipherType } from 'jslib-common/enums/cipherType';
 import LinkedList from '../scripts/doublyLinkedList';
 
 /* =========================================================================
