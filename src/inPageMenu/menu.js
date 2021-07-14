@@ -256,7 +256,16 @@ function updateRows(rowsListType) {
                 break;
             case 'ids':
                 text.textContent = cipher.name
-                detail.textContent = cipher.identity[currentFieldData.identity]
+                switch (currentFieldData.identity) {
+                    case 'lastNameFirstName':
+                        detail.textContent = cipher.identity.lastName + ' ' + cipher.identity.firstName;
+                        break;
+                    case 'firstNameLastName':
+                        detail.textContent = cipher.identity.firstName + ' ' + cipher.identity.lastName;
+                        break;
+                    default:
+                        detail.textContent = cipher.identity[currentFieldData.identity]
+                }
                 break;
         }
     });
@@ -394,19 +403,19 @@ function _testHash(){
 
     const typesOptions = [
         {
-            fieldType:'card',
+            fieldCipherType:'card',
             title:i18nGetMessage('inPageMenuSelectACard'),
             updateFn: () => updateRows('card'),
             selector:'#card-rows-list',
         },
         {
-            fieldType:'identity',
+            fieldCipherType:'identity',
             title:i18nGetMessage('inPageMenuSelectAnIdentity'),
             updateFn: () => updateRows('ids'),
             selector:'#ids-rows-list',
         },
         {
-            fieldType:'login',
+            fieldCipherType:'login',
             title:i18nGetMessage('inPageMenuSelectAnAccount'),
             updateFn: () => updateRows('login'),
             selector:'#login-rows-list',
@@ -415,7 +424,7 @@ function _testHash(){
 
     for (let options of typesOptions) {
         const rowsEl = document.querySelector(options.selector)
-        const key = options.fieldType
+        const key = options.fieldCipherType
         if (oldFieldData && oldFieldData[key] === hash[key]) continue
         if (hash[key]) {
             titleEl.textContent = options.title

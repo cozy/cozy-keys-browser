@@ -632,7 +632,7 @@ export default class AutofillService implements AutofillServiceInterface {
     }
 
     /* -------------------------------------------------------------------------------- */
-    // Test is an element (field or form) contains specific markers
+    // Test if an element (field or form) contains specific markers
     isSpecificElementHelper(element: string, markers: any, attributesToCheck: any) {
         for (const attr of attributesToCheck) {
             if (!element.hasOwnProperty(attr) || !element[attr] ) { continue; }
@@ -1257,7 +1257,17 @@ export default class AutofillService implements AutofillServiceInterface {
                     break;
                 } else if (!fillFields.firstName && this.isFieldMatch(f[attr],
                     FirstnameFieldNames)) {
-                    fillFields.firstName = f;
+                    switch (this.isFirstNameFirst(f[attr])) {
+                        case true:
+                            fillFields.firstNameLastName = f;
+                            break;
+                        case false:
+                            fillFields.lastNameFirstName = f;
+                            break;
+                        default:
+                            fillFields.firstName = f;
+                            break;
+                    }
                     break;
                 } else if (!fillFields.middleName && this.isFieldMatch(f[attr],
                     ['m-name', 'middle-name', 'additional-name', 'middle-initial', 'middle-n', 'middle-i'])) {
@@ -1401,6 +1411,18 @@ export default class AutofillService implements AutofillServiceInterface {
             this.makeScriptActionWithValue(fillScript, fullName, fillFields.name, filledFields, cipher);
         }
 
+        if (fillFields.lastNameFirstName) {
+            const cipher = {type: 'identity', fieldType: 'lastNameFirstName'};
+            const nameToDisplay = identity.lastName + ' ' + identity.firstName;
+            this.makeScriptActionWithValue(fillScript, nameToDisplay, fillFields.lastNameFirstName,
+                filledFields, cipher);
+        } else if (fillFields.firstNameLastName) {
+            const cipher = {type: 'identity', fieldType: 'firstNameLastName'};
+            const nameToDisplay = identity.firstName + ' ' + identity.lastName;
+            this.makeScriptActionWithValue(fillScript, nameToDisplay, fillFields.firstNameLastName,
+            filledFields, cipher);
+        }
+
         if (fillFields.address && this.hasValue(identity.address1)) {
             let address = '';
             if (this.hasValue(identity.address1)) {
@@ -1445,7 +1467,8 @@ export default class AutofillService implements AutofillServiceInterface {
         * notes :
             * containsOptions is a subset of options ... not intuitive nor classic...
             * in the value string, all non letter and non digits caracters are removed
-            * in the strings (options & containsOptions) use a `-` for spaces and all non [a-zA-Z0-9] caracters.
+            * in the strings (both options & containsOptions), you should use a `-` for spaces
+                and all non [a-zA-Z0-9] caracters.
      */
     private isFieldMatch(value: string, options: string[], containsOptions?: string[]): boolean {
         value = value.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -1470,6 +1493,49 @@ export default class AutofillService implements AutofillServiceInterface {
         }
 
         return false;
+    }
+
+    /* @added by Cozy
+    value :
+        * a string where firstname is mentionned
+        * and where to search if lastname appears and if it is after Firstname
+    returns :
+        * true : Lastname appears and is after Firstname
+        * false : Lastname appears and is before Firstname
+        * null : Lastname doesn't appear
+     */
+    private isFirstNameFirst(value: string) {
+        value = value.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        value = value.replace(/[^a-zA-Z0-9]+/g, '');
+        let firstNameStart: number;
+        let firstNameEnd: number;
+        // search for the occurence of the firstname
+        for (let firstNameStr of FirstnameFieldNames) {
+            firstNameStr = firstNameStr.replace(/-/g, '');
+            firstNameStart = value.indexOf(firstNameStr);
+            if (firstNameStart > -1) {
+                firstNameEnd = firstNameStart + firstNameStr.length;
+                break;
+            }
+        }
+        // search for the lastName occurrence after firstName
+        const valueAfterFirstName: string = value.slice(firstNameEnd);
+        for (let lastNameStr of LastnameFieldNames) {
+            lastNameStr = lastNameStr.replace(/-/g, '');
+            if (valueAfterFirstName.indexOf(lastNameStr) > -1) {
+                return true;
+            }
+        }
+        // search for the lastName occurrence before firstName
+        const valueBeforeFirstName: string = value.slice(0, firstNameStart);
+        for (let lastNameStr of LastnameFieldNames) {
+            lastNameStr = lastNameStr.replace(/-/g, '');
+            if (valueBeforeFirstName.indexOf(lastNameStr) > -1) {
+                return false;
+            }
+        }
+        // lastName has not been found, neither before nor after firstName
+        return null;
     }
 
     private makeScriptAction(
