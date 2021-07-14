@@ -42,7 +42,7 @@ export class CiphersListComponent {
 
     getSubtitle(c: CipherView) {
         if (c.type === CipherType.Card) {
-            return c.subTitle + ', ' + ('0' + c.card.expMonth).slice(-2) + '/' + c.card.expYear ;
+            return c.subTitle + ',  ' + ('0' + c.card.expMonth).slice(-2) + '/' + c.card.expYear.slice(-2) ;
         }
         return c.subTitle;
     }
