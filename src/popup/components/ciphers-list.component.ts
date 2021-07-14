@@ -39,4 +39,11 @@ export class CiphersListComponent {
     autofill(c: CipherView) {
         this.onAutofill.emit(c);
     }
+
+    getSubtitle(c: CipherView) {
+        if (c.type === CipherType.Card) {
+            return c.subTitle + ', ' + ('0' + c.card.expMonth).slice(-2) + '/' + c.card.expYear ;
+        }
+        return c.subTitle;
+    }
 }
