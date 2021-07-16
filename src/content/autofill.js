@@ -871,7 +871,9 @@ import menuCtrler from './menuCtrler';
             // END MODIFICATION
         }
 
-        document.elementForOPID = getElementByOpId;
+        // helper to find the input corresponding to an OpId from the console
+        // ex : document.getElementForOPID('__2')
+        document.getElementForOPID = getElementByOpId;
 
         // normalize the event since firefox handles events differently than others
         function normalizeEvent(el, eventName) {

@@ -1241,6 +1241,12 @@ export default class AutofillService implements AutofillServiceInterface {
                 return;
             }
 
+            // if viewableOri is undefined, means we are building a script for an autofil (and not a menu)
+            // in this case, only viewable fields will be taken into account, so we force all of them.
+            if (f.viewableOri === undefined ) {
+                f.viewableOri = true;
+            }
+
             for (let i = 0; i < IdentityAttributes.length; i++) {
                 const attr = IdentityAttributes[i];
                 if (!f.hasOwnProperty(attr) || !f[attr] || !f.viewable) {
@@ -1249,14 +1255,51 @@ export default class AutofillService implements AutofillServiceInterface {
 
                 // ref https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill
                 // ref https://developers.google.com/web/fundamentals/design-and-ux/input/forms/
-                if (!fillFields.name && this.isFieldMatch(f[attr],
+
+                /* ---------------------------------------------------------------
+                Scheme of the selection of the mapping between page fields
+                and cipher attributes
+
+                A field for :
+
+                 1- autofill                  2- menu
+                      │                         │
+                      │                   force viewable=1
+                      │                         │
+                      ▼                         ▼
+                    viewable                  viewable
+                      │ │                       │ │
+                      │ └──0───►  out           │ └──0───►  out
+                      │                         │           (never happens)
+                      ▼                         ▼
+                    match                     match
+                      │ │                       │ │
+                      │ └──0───► out            │ └──0───► out
+                      │                         │
+                      ▼                         ▼
+                    already_one_field         already_one_field
+                    for this property         for this property
+                      │ │                       │ │
+                      │ └──0───►  select        │ └──0───►  Select the field
+                      │           the field     │
+                      ▼                         ▼
+                    viewableOri               viewableOri
+                      │ │                      │ │
+                      │ └──0───►  out          │ └──0───►  out
+                      |          (never        │
+                      ▼           happen)      ▼
+                    select the field          select the field
+                 ------------------------------------------------------------------*/
+                if (this.isFieldMatch(f[attr],
                     ['name', 'full-name', 'your-name'],
                     ['full-name', 'your-name'])
+                    && (!fillFields.name || f.viewableOri)
                 ) {
                     fillFields.name = f;
                     break;
-                } else if (!fillFields.firstName && this.isFieldMatch(f[attr],
-                    FirstnameFieldNames)) {
+                } else if (this.isFieldMatch(f[attr],
+                    FirstnameFieldNames)
+                    && (!fillFields.firstName || f.viewableOri)) {
                     switch (this.isFirstNameFirst(f[attr])) {
                         case true:
                             fillFields.firstNameLastName = f;
@@ -1269,69 +1312,99 @@ export default class AutofillService implements AutofillServiceInterface {
                             break;
                     }
                     break;
-                } else if (!fillFields.middleName && this.isFieldMatch(f[attr],
-                    ['m-name', 'middle-name', 'additional-name', 'middle-initial', 'middle-n', 'middle-i'])) {
+                } else if (this.isFieldMatch(f[attr],
+                    ['m-name', 'middle-name', 'additional-name', 'middle-initial', 'middle-n', 'middle-i'])
+                    && (!fillFields.middleName || f.viewableOri)
+                ) {
                     fillFields.middleName = f;
                     break;
-                } else if (!fillFields.lastName && this.isFieldMatch(f[attr],
-                    LastnameFieldNames)) {
+                } else if (this.isFieldMatch(f[attr],
+                    LastnameFieldNames)
+                    && (!fillFields.lastName || f.viewableOri)
+                ) {
                     fillFields.lastName = f;
                     break;
-                } else if (!fillFields.title && this.isFieldMatch(f[attr],
-                    ['honorific-prefix', 'prefix', 'title', 'titre'])) {
+                } else if (this.isFieldMatch(f[attr],
+                    ['honorific-prefix', 'prefix', 'title', 'titre'])
+                    && (!fillFields.title || f.viewableOri)
+                ) {
                     fillFields.title = f;
                     break;
-                } else if (!fillFields.email && this.isFieldMatch(f[attr],
-                    ['e-mail', 'email-address', 'courriel'])) {
+                } else if (this.isFieldMatch(f[attr],
+                    ['e-mail', 'email-address', 'courriel'])
+                    && (!fillFields.email || f.viewableOri)
+                ) {
                     fillFields.email = f;
                     break;
-                } else if (!fillFields.address && this.isFieldMatch(f[attr],
+                } else if (this.isFieldMatch(f[attr],
                     ['address', 'adresse', 'street-address', 'addr', 'street', 'mailing-addr', 'billing-addr',
                         'mail-addr', 'bill-addr', 'adresse-personnelle'], ['mailing-addr', 'billing-addr', 'mail-addr',
-                        'bill-addr'])) {
+                        'bill-addr'])
+                    && (!fillFields.address || f.viewableOri)
+                ) {
                     fillFields.address = f;
                     break;
-                } else if (!fillFields.address1 && this.isFieldMatch(f[attr],
-                    ['address-1', 'address-line-1', 'addr-1', 'street-1'])) {
+                } else if (this.isFieldMatch(f[attr],
+                    ['address-1', 'address-line-1', 'addr-1', 'street-1'])
+                    && (!fillFields.address1 || f.viewableOri)
+                ) {
                     fillFields.address1 = f;
                     break;
-                } else if (!fillFields.address2 && this.isFieldMatch(f[attr],
-                    ['address-2', 'address-line-2', 'addr-2', 'street-2'])) {
+                } else if (this.isFieldMatch(f[attr],
+                    ['address-2', 'address-line-2', 'addr-2', 'street-2'])
+                    && (!fillFields.address2 || f.viewableOri)
+                ) {
                     fillFields.address2 = f;
                     break;
-                } else if (!fillFields.address3 && this.isFieldMatch(f[attr],
-                    ['address-3', 'address-line-3', 'addr-3', 'street-3'])) {
+                } else if (this.isFieldMatch(f[attr],
+                    ['address-3', 'address-line-3', 'addr-3', 'street-3'])
+                    && (!fillFields.address3 || f.viewableOri)
+                ) {
                     fillFields.address3 = f;
                     break;
-                } else if (!fillFields.postalCode && this.isFieldMatch(f[attr],
+                } else if (this.isFieldMatch(f[attr],
                     ['postal', 'zip', 'zip2', 'zip-code', 'postal-code', 'code-postal', 'post-code', 'address-zip',
-                        'address-postal', 'address-code', 'address-postal-code', 'address-zip-code'])) {
+                        'address-postal', 'address-code', 'address-postal-code', 'address-zip-code'])
+                    && (!fillFields.postalCode || f.viewableOri)
+                ) {
                     fillFields.postalCode = f;
                     break;
-                } else if (!fillFields.city && this.isFieldMatch(f[attr],
-                    ['city', 'town', 'address-level-2', 'address-city', 'address-town', 'ville'])) {
+                } else if (this.isFieldMatch(f[attr],
+                    ['city', 'town', 'address-level-2', 'address-city', 'address-town', 'ville'])
+                    && (!fillFields.city || f.viewableOri)
+                ) {
                     fillFields.city = f;
                     break;
-                } else if (!fillFields.state && this.isFieldMatch(f[attr],
+                } else if (this.isFieldMatch(f[attr],
                     ['state', 'province', 'provence', 'address-level-1', 'address-state',
-                        'address-province'])) {
+                        'address-province'])
+                    && (!fillFields.state || f.viewableOri)
+                ) {
                     fillFields.state = f;
                     break;
-                } else if (!fillFields.country && this.isFieldMatch(f[attr],
+                } else if (this.isFieldMatch(f[attr],
                     ['country', 'country-code', 'country-name', 'address-country', 'address-country-name',
-                        'address-country-code', 'pays'])) {
+                        'address-country-code', 'pays'])
+                    && (!fillFields.country || f.viewableOri)
+                ) {
                     fillFields.country = f;
                     break;
-                } else if (!fillFields.phone && this.isFieldMatch(f[attr],
-                    ['phone', 'mobile', 'mobile-phone', 'tel', 'telephone', 'phone-number', 'téléphone'])) {
+                } else if (this.isFieldMatch(f[attr],
+                    ['phone', 'mobile', 'mobile-phone', 'tel', 'telephone', 'phone-number', 'téléphone'])
+                    && (!fillFields.phone || f.viewableOri)
+                ) {
                     fillFields.phone = f;
                     break;
-                } else if (!fillFields.username && this.isFieldMatch(f[attr],
-                    ['user-name', 'user-id', 'screen-name', 'utilisateur', 'pseudo', 'login'])) {
+                } else if (this.isFieldMatch(f[attr],
+                    ['user-name', 'user-id', 'screen-name', 'utilisateur', 'pseudo', 'login'])
+                    && (!fillFields.username || f.viewableOri)
+                ) {
                     fillFields.username = f;
                     break;
-                } else if (!fillFields.company && this.isFieldMatch(f[attr],
-                    ['company', 'company-name', 'organization', 'organization-name', 'entreprise'])) {
+                } else if (this.isFieldMatch(f[attr],
+                    ['company', 'company-name', 'organization', 'organization-name', 'entreprise'])
+                    && (!fillFields.company || f.viewableOri)
+                ) {
                     fillFields.company = f;
                     break;
                 }
