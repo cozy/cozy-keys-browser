@@ -36,7 +36,10 @@ const UsernameFieldNames: string[] = [
     'username', 'user name', 'email', 'email address', 'e-mail', 'e-mail address', 'userid', 'user id',
     'customer id', 'login id',
     // German
-    'benutzername', 'benutzer name', 'email adresse', 'e-mail adresse', 'benutzerid', 'benutzer id'];
+    'benutzername', 'benutzer name', 'email adresse', 'e-mail adresse', 'benutzerid', 'benutzer id',
+    // French
+    'identifiant',
+];
 
 const FirstnameFieldNames: string[] = [
     // English
@@ -525,6 +528,8 @@ export default class AutofillService implements AutofillServiceInterface {
         }
 
         // C] generate a standard login fillscript for the generic cipher
+        console.log('generateFieldsForInPageMenuScripts');
+
         if (hasLogins) {
             let loginLoginMenuFillScript: any = [];
             const loginFS = new AutofillScript(pageDetails.documentUUID);
