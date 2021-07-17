@@ -1,0 +1,2908 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto");
+.kr-embedded,
+.kr-checkout {
+  /*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
+  /* Document
+   ========================================================================== */
+  /**
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in iOS.
+ */
+  /* Sections
+   ========================================================================== */
+  /**
+ * Remove the margin in all browsers.
+ */
+  /**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+  /* Grouping content
+   ========================================================================== */
+  /**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+  /**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+  /* Text-level semantics
+   ========================================================================== */
+  /**
+ * Remove the gray background on active links in IE 10.
+ */
+  /**
+ * 1. Remove the bottom border in Chrome 57-
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+  /**
+ * Add the correct font weight in Chrome, Edge, and Safari.
+ */
+  /**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+  /**
+ * Add the correct font size in all browsers.
+ */
+  /**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+  /* Embedded content
+   ========================================================================== */
+  /**
+ * Remove the border on images inside links in IE 10.
+ */
+  /* Forms
+   ========================================================================== */
+  /**
+ * 1. Change the font styles in all browsers.
+ * 2. Remove the margin in Firefox and Safari.
+ */
+  /**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+  /**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+  /**
+ * Correct the inability to style clickable types in iOS and Safari.
+ */
+  /**
+ * Remove the inner border and padding in Firefox.
+ */
+  /**
+ * Restore the focus styles unset by the previous rule.
+ */
+  /**
+ * Correct the padding in Firefox.
+ */
+  /**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *    `fieldset` elements in all browsers.
+ */
+  /**
+ * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+  /**
+ * Remove the default vertical scrollbar in IE 10+.
+ */
+  /**
+ * 1. Add the correct box sizing in IE 10.
+ * 2. Remove the padding in IE 10.
+ */
+  /**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+  /**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+  /**
+ * Remove the inner padding in Chrome and Safari on macOS.
+ */
+  /**
+ * 1. Correct the inability to style clickable types in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+  /* Interactive
+   ========================================================================== */
+  /*
+ * Add the correct display in Edge, IE 10+, and Firefox.
+ */
+  /*
+ * Add the correct display in all browsers.
+ */
+  /* Misc
+   ========================================================================== */
+  /**
+ * Add the correct display in IE 10+.
+ */
+  /**
+ * Add the correct display in IE 10.
+ */ }
+  .kr-embedded *:not(svg):not(g):not(path):not(circle):not(rect):not(ellipse):not(text):not(linearGradient):not(stop):not(i),
+  .kr-checkout *:not(svg):not(g):not(path):not(circle):not(rect):not(ellipse):not(text):not(linearGradient):not(stop):not(i) {
+    all: initial; }
+  .kr-embedded html,
+  .kr-checkout html {
+    line-height: 1.15;
+    /* 1 */
+    -webkit-text-size-adjust: 100%;
+    /* 2 */ }
+  .kr-embedded body,
+  .kr-checkout body {
+    margin: 0; }
+  .kr-embedded h1,
+  .kr-checkout h1 {
+    font-size: 2em;
+    margin: 0.67em 0; }
+  .kr-embedded hr,
+  .kr-checkout hr {
+    box-sizing: content-box;
+    /* 1 */
+    height: 0;
+    /* 1 */
+    overflow: visible;
+    /* 2 */ }
+  .kr-embedded pre,
+  .kr-checkout pre {
+    font-family: monospace, monospace;
+    /* 1 */
+    font-size: 1em;
+    /* 2 */ }
+  .kr-embedded a,
+  .kr-checkout a {
+    background-color: transparent; }
+  .kr-embedded abbr[title],
+  .kr-checkout abbr[title] {
+    border-bottom: none;
+    /* 1 */
+    text-decoration: underline;
+    /* 2 */
+    -webkit-text-decoration: underline dotted;
+       -moz-text-decoration: underline dotted;
+            text-decoration: underline dotted;
+    /* 2 */ }
+  .kr-embedded b,
+  .kr-embedded strong,
+  .kr-checkout b,
+  .kr-checkout strong {
+    font-weight: bolder; }
+  .kr-embedded code,
+  .kr-embedded kbd,
+  .kr-embedded samp,
+  .kr-checkout code,
+  .kr-checkout kbd,
+  .kr-checkout samp {
+    font-family: monospace, monospace;
+    /* 1 */
+    font-size: 1em;
+    /* 2 */ }
+  .kr-embedded small,
+  .kr-checkout small {
+    font-size: 80%; }
+  .kr-embedded sub,
+  .kr-embedded sup,
+  .kr-checkout sub,
+  .kr-checkout sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline; }
+  .kr-embedded sub,
+  .kr-checkout sub {
+    bottom: -0.25em; }
+  .kr-embedded sup,
+  .kr-checkout sup {
+    top: -0.5em; }
+  .kr-embedded img,
+  .kr-checkout img {
+    border-style: none; }
+  .kr-embedded button,
+  .kr-embedded input,
+  .kr-embedded optgroup,
+  .kr-embedded select,
+  .kr-embedded textarea,
+  .kr-checkout button,
+  .kr-checkout input,
+  .kr-checkout optgroup,
+  .kr-checkout select,
+  .kr-checkout textarea {
+    font-family: inherit;
+    /* 1 */
+    font-size: 100%;
+    /* 1 */
+    line-height: 1.15;
+    /* 1 */
+    margin: 0;
+    /* 2 */ }
+  .kr-embedded button,
+  .kr-embedded input,
+  .kr-checkout button,
+  .kr-checkout input {
+    /* 1 */
+    overflow: visible; }
+  .kr-embedded button,
+  .kr-embedded select,
+  .kr-checkout button,
+  .kr-checkout select {
+    /* 1 */
+    text-transform: none; }
+  .kr-embedded button,
+  .kr-embedded [type="button"],
+  .kr-embedded [type="reset"],
+  .kr-embedded [type="submit"],
+  .kr-checkout button,
+  .kr-checkout [type="button"],
+  .kr-checkout [type="reset"],
+  .kr-checkout [type="submit"] {
+    -webkit-appearance: button; }
+  .kr-embedded button::-moz-focus-inner,
+  .kr-embedded [type="button"]::-moz-focus-inner,
+  .kr-embedded [type="reset"]::-moz-focus-inner,
+  .kr-embedded [type="submit"]::-moz-focus-inner,
+  .kr-checkout button::-moz-focus-inner,
+  .kr-checkout [type="button"]::-moz-focus-inner,
+  .kr-checkout [type="reset"]::-moz-focus-inner,
+  .kr-checkout [type="submit"]::-moz-focus-inner {
+    border-style: none;
+    padding: 0; }
+  .kr-embedded button:-moz-focusring,
+  .kr-embedded [type="button"]:-moz-focusring,
+  .kr-embedded [type="reset"]:-moz-focusring,
+  .kr-embedded [type="submit"]:-moz-focusring,
+  .kr-checkout button:-moz-focusring,
+  .kr-checkout [type="button"]:-moz-focusring,
+  .kr-checkout [type="reset"]:-moz-focusring,
+  .kr-checkout [type="submit"]:-moz-focusring {
+    outline: 1px dotted ButtonText; }
+  .kr-embedded fieldset,
+  .kr-checkout fieldset {
+    padding: 0.35em 0.75em 0.625em; }
+  .kr-embedded legend,
+  .kr-checkout legend {
+    box-sizing: border-box;
+    /* 1 */
+    color: inherit;
+    /* 2 */
+    display: table;
+    /* 1 */
+    max-width: 100%;
+    /* 1 */
+    padding: 0;
+    /* 3 */
+    white-space: normal;
+    /* 1 */ }
+  .kr-embedded progress,
+  .kr-checkout progress {
+    vertical-align: baseline; }
+  .kr-embedded textarea,
+  .kr-checkout textarea {
+    overflow: auto; }
+  .kr-embedded [type="checkbox"],
+  .kr-embedded [type="radio"],
+  .kr-checkout [type="checkbox"],
+  .kr-checkout [type="radio"] {
+    box-sizing: border-box;
+    /* 1 */
+    padding: 0;
+    /* 2 */ }
+  .kr-embedded [type="number"]::-webkit-inner-spin-button,
+  .kr-embedded [type="number"]::-webkit-outer-spin-button,
+  .kr-checkout [type="number"]::-webkit-inner-spin-button,
+  .kr-checkout [type="number"]::-webkit-outer-spin-button {
+    height: auto; }
+  .kr-embedded [type="search"],
+  .kr-checkout [type="search"] {
+    -webkit-appearance: textfield;
+    /* 1 */
+    outline-offset: -2px;
+    /* 2 */ }
+  .kr-embedded [type="search"]::-webkit-search-decoration,
+  .kr-checkout [type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none; }
+  .kr-embedded ::-webkit-file-upload-button,
+  .kr-checkout ::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    /* 1 */
+    font: inherit;
+    /* 2 */ }
+  .kr-embedded details,
+  .kr-checkout details {
+    display: block; }
+  .kr-embedded summary,
+  .kr-checkout summary {
+    display: list-item; }
+  .kr-embedded template,
+  .kr-checkout template {
+    display: none; }
+  .kr-embedded [hidden],
+  .kr-checkout [hidden] {
+    display: none; }
+
+.kr-embedded {
+  display: block; }
+  .kr-embedded.kr-embedded-flex-display {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap; }
+    .kr-embedded.kr-embedded-flex-display.kr-embedded-flex-direction-column {
+      -ms-flex-direction: column;
+          flex-direction: column; }
+    .kr-embedded.kr-embedded-flex-display.kr-embedded-flex-direction-row {
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap; }
+  .kr-embedded .kr-pan,
+  .kr-embedded .kr-expiry,
+  .kr-embedded .kr-security-code,
+  .kr-embedded .kr-installment-number,
+  .kr-embedded .kr-first-installment-delay,
+  .kr-embedded .kr-identity-document-type,
+  .kr-embedded .kr-identity-document-number,
+  .kr-embedded .kr-card-holder-name,
+  .kr-embedded .kr-card-holder-mail,
+  .kr-embedded .kr-do-register,
+  .kr-embedded div[id^='kr-field-app-'] {
+    position: relative;
+    -moz-order: 1;
+    -ms-flex-order: 1;
+    order: 1; }
+  .kr-embedded .kr-form-error,
+  .kr-embedded .kr-payment-button {
+    -moz-order: 30;
+    -ms-flex-order: 30;
+    order: 30; }
+
+.kr-embedded.kr-out-of-view-form[krvue],
+.kr-embedded.kr-out-of-view-form[krvue][kr-popin] {
+  position: fixed;
+  top: -4000px;
+  left: -4000px;
+  right: -4000px;
+  bottom: -4000px; }
+
+.kr-embedded[krvue] .kr-expiry.kr-size-half,
+.kr-embedded[krvue] .kr-security-code.kr-size-half {
+  width: calc(50% - 5px); }
+
+/* Popin CSS */
+.kr-popin-utils .kr-popin-background {
+  background-color: #232323;
+  bottom: 0;
+  left: 0;
+  opacity: 0.7;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 9998; }
+
+.kr-popin-wrapper {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+      flex-direction: row;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
+  left: -9999px;
+  position: fixed;
+  top: -9999px;
+  z-index: 9999;
+  overflow: auto; }
+  .kr-popin-wrapper .kr-embedded[kr-popin] {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column; }
+    .kr-popin-wrapper .kr-embedded[kr-popin].kr-embedded-flex-display-row-wrap {
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap; }
+  .kr-popin-wrapper.kr-secure-iframe-open {
+    z-index: 10000; }
+  @media (max-width: 410px) {
+    .kr-popin-wrapper {
+      -ms-flex-align: start;
+      -moz-align-items: start;
+      align-items: start;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      min-height: 100%;
+      padding-top: 10px;
+      padding-bottom: 10px; } }
+  @media (max-width: 800px) and (max-height: 500px) {
+    .kr-popin-wrapper {
+      -ms-flex-align: start;
+      -moz-align-items: start;
+      align-items: start;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      min-height: 100%;
+      padding-top: 10px;
+      padding-bottom: 10px; } }
+  @media (max-width: 350px) {
+    .kr-popin-wrapper {
+      padding-top: 0px;
+      padding-bottom: 0px; } }
+
+.kr-embedded[kr-popin] {
+  box-sizing: border-box;
+  background-color: #ffffff;
+  padding-bottom: 80px;
+  padding-top: 119px;
+  position: relative; }
+  .kr-embedded[kr-popin] .kr-popin-modal-header {
+    background-color: #e4e4e4;
+    color: #333333;
+    height: 90px;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    -moz-align-items: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0; }
+    .kr-embedded[kr-popin] .kr-popin-modal-header.kr-secure-iframe-visible {
+      height: 30px;
+      border-bottom: 0;
+      margin-bottom: 0; }
+    .kr-embedded[kr-popin] .kr-popin-modal-header .kr-popin-modal-header-background,
+    .kr-embedded[kr-popin] .kr-popin-modal-header .kr-popin-modal-header-background-image {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0; }
+    .kr-embedded[kr-popin] .kr-popin-modal-header i.fi-lock svg {
+      height: 20px;
+      left: 0;
+      margin-left: 9px;
+      margin-top: 5px;
+      position: absolute;
+      top: 0;
+      width: 19px; }
+    .kr-embedded[kr-popin] .kr-popin-modal-header span.kr-popin-header {
+      font-size: 12px;
+      line-height: 30px;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      display: block;
+      font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+      left: 0;
+      top: 0; }
+    .kr-embedded[kr-popin] .kr-popin-modal-header span.kr-popin-shop-name {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      z-index: 1;
+      margin-top: 50px;
+      padding: 0 20px;
+      left: 0;
+      top: 0;
+      position: relative; }
+      .kr-embedded[kr-popin] .kr-popin-modal-header span.kr-popin-shop-name span {
+        font-size: 16px; }
+    .kr-embedded[kr-popin] .kr-popin-modal-header i.fi-x-circle {
+      cursor: pointer;
+      height: 20px;
+      margin-right: 5px;
+      margin-top: 5px;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 20px;
+      z-index: 1; }
+  .kr-embedded[kr-popin] .kr-popin-modal-footer {
+    background-color: #ffffff;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: end;
+    -moz-justify-content: flex-end;
+    justify-content: flex-end;
+    -ms-flex-align: center;
+    -moz-align-items: center;
+    align-items: center;
+    height: 80px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0; }
+    .kr-embedded[kr-popin] .kr-popin-modal-footer img {
+      margin-right: 30px;
+      height: 40px; }
+    .kr-embedded[kr-popin] .kr-popin-modal-footer img.kr-logo-payzen {
+      height: 40px; }
+    .kr-embedded[kr-popin] .kr-popin-modal-footer img.kr-logo-lyra {
+      height: 40px; }
+    .kr-embedded[kr-popin] .kr-popin-modal-footer img.kr-logo-sogecom {
+      height: 20px; }
+    .kr-embedded[kr-popin] .kr-popin-modal-footer img.kr-logo-cdn {
+      height: 30px; }
+  .kr-embedded[kr-popin][krvue].kr-secure-iframe-open {
+    padding: 30px 0 0 0;
+    width: auto;
+    height: auto; }
+
+/* 3ds mobile */
+@media (max-width: 450px) {
+  .kr-embedded.kr-secure-iframe-open[kr-popin] {
+    bottom: 0;
+    left: 0;
+    margin-top: 0px;
+    position: absolute;
+    right: 0;
+    top: 0; }
+    .kr-embedded.kr-secure-iframe-open[kr-popin] .kr-secure-iframe-visible.kr-popin-modal-header {
+      height: 40px; }
+      .kr-embedded.kr-secure-iframe-open[kr-popin] .kr-secure-iframe-visible.kr-popin-modal-header i.fi-lock svg {
+        margin-top: 10px; }
+      .kr-embedded.kr-secure-iframe-open[kr-popin] .kr-secure-iframe-visible.kr-popin-modal-header i.fi-x-circle {
+        margin-right: 9px;
+        margin-top: 10px; }
+    .kr-embedded.kr-secure-iframe-open[kr-popin] iframe#krcheckout {
+      bottom: 0 !important;
+      height: 100% !important;
+      left: 0 !important;
+      position: fixed !important;
+      right: 0 !important;
+      top: 40px !important;
+      width: 100% !important; } }
+
+/* Header logo */
+.kr-embedded[kr-popin] .kr-popin-modal-header .kr-popin-modal-header-image {
+  position: absolute;
+  top: -44px;
+  width: 84px;
+  height: 84px; }
+  .kr-embedded[kr-popin] .kr-popin-modal-header .kr-popin-modal-header-image .kr-header-logo,
+  .kr-embedded[kr-popin] .kr-popin-modal-header .kr-popin-modal-header-image .kr-header-border-shadow,
+  .kr-embedded[kr-popin] .kr-popin-modal-header .kr-popin-modal-header-image .kr-header-border {
+    border-radius: 50%;
+    position: absolute; }
+  .kr-embedded[kr-popin] .kr-popin-modal-header .kr-popin-modal-header-image .kr-header-border-shadow {
+    width: 84px;
+    height: 84px;
+    background-color: rgba(0, 0, 0, 0.2); }
+  .kr-embedded[kr-popin] .kr-popin-modal-header .kr-popin-modal-header-image .kr-header-border {
+    width: 80px;
+    height: 80px;
+    background-color: #808080;
+    margin-top: 2px;
+    margin-left: 2px; }
+  .kr-embedded[kr-popin] .kr-popin-modal-header .kr-popin-modal-header-image .kr-header-logo {
+    width: 74px;
+    height: 74px;
+    margin-top: 5px;
+    margin-left: 5px;
+    background-color: #222; }
+
+/* Internet Explorer 11 */
+.kr-embedded.kr-internet-explorer[kr-popin] .kr-popin-modal-header .kr-popin-modal-header-image {
+  margin-left: 42px; }
+
+.kr-embedded.kr-internet-explorer[kr-popin] .kr-popin-modal-footer .kr-whitelabel-logo img {
+  position: absolute;
+  right: 0;
+  bottom: 22px; }
+
+/* iOS10 */
+.kr-embedded.kr-ios-10[kr-popin] .kr-popin-modal-header .kr-popin-modal-header-image,
+.kr-embedded.kr-ios-9[kr-popin] .kr-popin-modal-header .kr-popin-modal-header-image {
+  margin-left: 70px; }
+
+.kr-brand-buttons,
+.kr-embedded .kr-brand-buttons {
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-pack: center;
+  -moz-justify-content: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  -moz-align-items: center;
+  align-items: center;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  width: 100%;
+  min-height: 40px; }
+  .kr-brand-buttons .kr-brand-button,
+  .kr-embedded .kr-brand-buttons .kr-brand-button {
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -moz-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-pack: center;
+    -moz-justify-content: center;
+    justify-content: center; }
+  .kr-brand-buttons .kr-brand-button .kr-brand-button-icon,
+  .kr-embedded .kr-brand-buttons .kr-brand-button .kr-brand-button-icon {
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-pack: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    -moz-align-items: center;
+    align-items: center;
+    height: 40px;
+    width: 50px;
+    position: relative;
+    cursor: pointer; }
+    .kr-brand-buttons .kr-brand-button .kr-brand-button-icon svg,
+    .kr-embedded .kr-brand-buttons .kr-brand-button .kr-brand-button-icon svg {
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0; }
+  .kr-brand-buttons .kr-brand-button .kr-brand-button-label,
+  .kr-embedded .kr-brand-buttons .kr-brand-button .kr-brand-button-label {
+    text-align: center;
+    text-transform: lowercase; }
+
+.kr-embedded {
+  position: relative;
+  /* Help */
+  /* Help modal */
+  /* Payment button CSS */
+  /* Reset CSS */
+  /* Form */ }
+  .kr-embedded .kr-icon {
+    position: relative; }
+    .kr-embedded .kr-icon .kr-icon-wrapper {
+      display: none; }
+  .kr-embedded .kr-icon-arrow {
+    display: none; }
+  .kr-embedded .kr-field-wrapper {
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: start;
+    -moz-justify-content: flex-start;
+    justify-content: flex-start;
+    -ms-flex-align: stretch;
+    -moz-align-items: stretch;
+    align-items: stretch;
+    width: 100%;
+    height: 100%; }
+    .kr-embedded .kr-field-wrapper .kr-field-component {
+      width: 100%;
+      -moz-order: 1;
+      -ms-flex-order: 1;
+      order: 1; }
+    .kr-embedded .kr-field-wrapper .kr-icon-wrapper-root {
+      -moz-order: 3;
+      -ms-flex-order: 3;
+      order: 3; }
+    .kr-embedded .kr-field-wrapper .kr-help-button-wrapper {
+      -moz-order: 4;
+      -ms-flex-order: 4;
+      order: 4; }
+    .kr-embedded .kr-field-wrapper .kr-delete-button-wrapper {
+      -moz-order: 5;
+      -ms-flex-order: 5;
+      order: 5; }
+  .kr-embedded .kr-field-wrapper .kr-help-button-wrapper {
+    display: none; }
+  .kr-embedded .kr-field-wrapper .kr-help-button-wrapper.kr-inner {
+    -moz-order: 4;
+    -ms-flex-order: 4;
+    order: 4;
+    display: none; }
+    .kr-embedded .kr-field-wrapper .kr-help-button-wrapper.kr-inner.kr-visible {
+      display: block; }
+      .kr-embedded .kr-field-wrapper .kr-help-button-wrapper.kr-inner.kr-visible .kr-help-button {
+        display: none; }
+  .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 10000;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    -moz-align-items: center;
+    align-items: center;
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row; }
+  .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal-background {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    opacity: 0.7;
+    background-color: #232323; }
+  .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal {
+    box-sizing: border-box;
+    width: 300px;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    -moz-align-items: center;
+    align-items: center;
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row; }
+    .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-header {
+      display: block;
+      height: 30px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0; }
+      .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-header .kr-help-modal-close-button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 20px;
+        height: 20px;
+        cursor: pointer; }
+    .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-content {
+      width: 100%;
+      display: block; }
+    .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-content > div.kr-help-content,
+    .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-content > div {
+      display: block; }
+    .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-content > div.kr-help-content {
+      margin: 10px 0;
+      font-size: 14px; }
+    .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-content svg,
+    .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-content svg image {
+      width: 100%; }
+    .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-content svg {
+      height: 106px; }
+    .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-content svg image {
+      height: 100%; }
+  .kr-embedded .kr-select-wrapper.kr-real-select select {
+    width: 100%;
+    background: #fff;
+    border: 1px solid #000; }
+  .kr-embedded .kr-select-wrapper.kr-real-select .kr-select-caret {
+    display: none; }
+  .kr-embedded .kr-select-wrapper.kr-real-select .kr-select-caret svg {
+    width: 8px;
+    height: 8px; }
+  .kr-embedded .kr-select-wrapper.kr-custom-select {
+    -moz-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    position: relative; }
+    .kr-embedded .kr-select-wrapper.kr-custom-select .kr-select {
+      -webkit-user-select: none;
+      /* Chrome/Safari */
+      -moz-user-select: none;
+      /* Firefox */
+      -ms-user-select: none;
+      /* IE10+ */
+      /* Rules below not implemented in browsers yet */
+      -o-user-select: none;
+      user-select: none;
+      border: 1px solid #000;
+      position: relative;
+      cursor: default; }
+      .kr-embedded .kr-select-wrapper.kr-custom-select .kr-select .kr-select-caret {
+        position: absolute;
+        right: 5px; }
+      .kr-embedded .kr-select-wrapper.kr-custom-select .kr-select .kr-select-caret svg {
+        width: 8px;
+        height: 8px; }
+    .kr-embedded .kr-select-wrapper.kr-custom-select .kr-options {
+      -webkit-user-select: none;
+      /* Chrome/Safari */
+      -moz-user-select: none;
+      /* Firefox */
+      -ms-user-select: none;
+      /* IE10+ */
+      /* Rules below not implemented in browsers yet */
+      -o-user-select: none;
+      user-select: none;
+      position: absolute;
+      width: 100%;
+      max-height: 120px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      z-index: 10000;
+      cursor: default; }
+      .kr-embedded .kr-select-wrapper.kr-custom-select .kr-options .kr-option {
+        -webkit-user-select: none;
+        /* Chrome/Safari */
+        -moz-user-select: none;
+        /* Firefox */
+        -ms-user-select: none;
+        /* IE10+ */
+        /* Rules below not implemented in browsers yet */
+        -o-user-select: none;
+        user-select: none;
+        cursor: default; }
+        .kr-embedded .kr-select-wrapper.kr-custom-select .kr-options .kr-option:hover {
+          background-color: #ccc; }
+      .kr-embedded .kr-select-wrapper.kr-custom-select .kr-options.top.kr-options-6 {
+        top: -120px; }
+      .kr-embedded .kr-select-wrapper.kr-custom-select .kr-options.top.kr-options-5 {
+        top: -100px; }
+      .kr-embedded .kr-select-wrapper.kr-custom-select .kr-options.top.kr-options-4 {
+        top: -80px; }
+      .kr-embedded .kr-select-wrapper.kr-custom-select .kr-options.top.kr-options-3 {
+        top: -60px; }
+      .kr-embedded .kr-select-wrapper.kr-custom-select .kr-options.top.kr-options-2 {
+        top: -40px; }
+      .kr-embedded .kr-select-wrapper.kr-custom-select .kr-options.top.kr-options-1 {
+        top: -20px; }
+      .kr-embedded .kr-select-wrapper.kr-custom-select .kr-options.bottom {
+        top: 18px; }
+      .kr-embedded .kr-select-wrapper.kr-custom-select .kr-options:not(:hover) .kr-option.kr-active-option {
+        background-color: #ccc; }
+  .kr-embedded .kr-identity-document-type .kr-select-wrapper.kr-real-select span.kr-select-placeholder {
+    position: absolute;
+    pointer-events: none; }
+  .kr-embedded .kr-error-animation.kr-select-wrapper select,
+  .kr-embedded .kr-error-animation.kr-select-wrapper .kr-select span.kr-selected-option,
+  .kr-embedded .kr-error-animation.kr-text-wrapper input {
+    -webkit-animation: shake-anim 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+            animation: shake-anim 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+    perspective: 1000px; }
+
+@-webkit-keyframes shake-anim {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0); }
+  20%, 80% {
+    transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0); }
+  40%, 60% {
+    transform: translate3d(4px, 0, 0); } }
+
+@keyframes shake-anim {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0); }
+  20%, 80% {
+    transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0); }
+  40%, 60% {
+    transform: translate3d(4px, 0, 0); } }
+  .kr-embedded .kr-field {
+    display: none; }
+    .kr-embedded .kr-field.kr-visible {
+      display: block; }
+    .kr-embedded .kr-field input[type='text'],
+    .kr-embedded .kr-field.kr-radio label,
+    .kr-embedded .kr-field label.kr-checkbox {
+      width: 100%; }
+    .kr-embedded .kr-field input[type='text'],
+    .kr-embedded .kr-field.kr-radio input[type='radio'],
+    .kr-embedded .kr-field .kr-checkbox input[type='checkbox'] {
+      background-color: initial;
+      padding: initial;
+      border: initial;
+      margin: initial;
+      cursor: default; }
+  .kr-embedded .kr-field.kr-checkbox .kr-checkbox-input-wrapper .kr-checkbox-control-indicator {
+    background-color: #e6e6e6;
+    border: 1px solid #b1b1b1;
+    height: 12px;
+    width: 12px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer; }
+  .kr-embedded .kr-field.kr-checkbox .kr-checkbox-input-wrapper .kr-label {
+    padding-left: 5px;
+    display: inline-block; }
+  .kr-embedded .kr-field.kr-checkbox .kr-checkbox-input-wrapper .kr-field-control:hover input ~ .kr-checkbox-control-indicator,
+  .kr-embedded .kr-field.kr-checkbox .kr-checkbox-input-wrapper .kr-field-control input:focus ~ .kr-checkbox-control-indicator {
+    background-color: #cccccc; }
+  .kr-embedded .kr-field.kr-checkbox .kr-checkbox-input-wrapper .kr-field-control input:checked ~ .kr-checkbox-control-indicator,
+  .kr-embedded .kr-field.kr-checkbox .kr-checkbox-input-wrapper .kr-field-control input:checked:focus ~ .kr-checkbox-control-indicator {
+    background-color: #717171; }
+  .kr-embedded .kr-field.kr-checkbox .kr-checkbox-input-wrapper .kr-field-control:hover
+input:not([disabled]):checked
+~ .kr-checkbox-control-indicator,
+  .kr-embedded .kr-field.kr-checkbox .kr-checkbox-input-wrapper .kr-field-control input:checked:focus ~ .kr-checkbox-control-indicator {
+    background-color: #656565; }
+  .kr-embedded .kr-field.kr-checkbox .kr-checkbox-input-wrapper .kr-field-control input:disabled ~ .kr-checkbox-control-indicator {
+    background-color: #e6e6e6;
+    opacity: 0.6;
+    pointer-events: none; }
+  .kr-embedded .kr-field.kr-checkbox .kr-checkbox-input-wrapper .kr-field-control input:disabled ~ .kr-checkbox-control-indicator:after {
+    border-color: #7b7b7b; }
+  .kr-embedded .kr-wallet-tabs {
+    width: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    cursor: pointer; }
+    .kr-embedded .kr-wallet-tabs .kr-wallet-tab {
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+          align-items: center;
+      -ms-flex-direction: column;
+          flex-direction: column; }
+      .kr-embedded .kr-wallet-tabs .kr-wallet-tab.kr-selected {
+        background-color: grey; }
+  .kr-embedded .kr-wallet-card-list {
+    width: 100%;
+    display: -ms-flexbox;
+    display: flex; }
+    .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper {
+      width: 100%; }
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+            align-items: center;
+        -ms-flex-direction: row;
+            flex-direction: row;
+        -ms-flex-pack: justify;
+            justify-content: space-between; }
+        .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element.kr-deleted {
+          height: 0;
+          padding: 0;
+          opacity: 0; }
+        .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label,
+        .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-brand-icon {
+          display: -ms-flexbox;
+          display: flex;
+          -ms-flex-align: center;
+              align-items: center; }
+        .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label {
+          -ms-flex-direction: row;
+              flex-direction: row; }
+        .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-brand-icon {
+          -ms-flex-direction: column;
+              flex-direction: column; }
+          .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-brand-icon svg {
+            width: 30px;
+            height: 20px; }
+        .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element input[type='radio'] {
+          background-color: initial;
+          cursor: default;
+          -webkit-appearance: radio;
+          box-sizing: border-box;
+          padding: initial;
+          border: initial; }
+        .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element i.fi-x-circle {
+          cursor: pointer; }
+          .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element i.fi-x-circle svg {
+            width: 16px;
+            height: 16px; }
+  .kr-embedded .kr-visibility-button {
+    -ms-flex-order: 2;
+        order: 2;
+    display: none;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-pack: center;
+        justify-content: center;
+    cursor: pointer; }
+    .kr-embedded .kr-visibility-button svg {
+      fill: #717171;
+      width: 20px; }
+  .kr-embedded .kr-layer {
+    z-index: 1; }
+    .kr-embedded .kr-layer.kr-form-layer {
+      position: absolute;
+      z-index: 11;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(30, 30, 30, 0.8);
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center; }
+    .kr-embedded .kr-layer .kr-layer-background {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: #232323;
+      opacity: 0.7;
+      z-index: 10; }
+    .kr-embedded .kr-layer .kr-layer-message {
+      color: #fff;
+      z-index: 12; }
+  .kr-embedded .kr-modal-wrapper {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+        flex-direction: row;
+    -ms-flex-pack: center;
+        justify-content: center;
+    -ms-flex-align: center;
+        align-items: center;
+    z-index: 9999;
+    pointer-events: none; }
+    .kr-embedded .kr-modal-wrapper .kr-modal {
+      margin: 0;
+      background-color: #ffffff;
+      width: 375px;
+      position: relative;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-direction: column;
+          flex-direction: column;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center;
+      pointer-events: all;
+      border-radius: 5px; }
+      .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-header {
+        display: block;
+        height: 25px;
+        padding: 5px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0; }
+        .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-header .kr-modal-header-close-button svg {
+          cursor: pointer;
+          display: block;
+          height: 25px;
+          width: 25px;
+          float: right; }
+          .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-header .kr-modal-header-close-button svg path {
+            fill: #808080; }
+      .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content {
+        padding: 30px;
+        box-sizing: border-box;
+        width: 100%; }
+        .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content p {
+          display: block;
+          text-align: left;
+          margin: 15px 0;
+          width: 100%; }
+          .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content p.kr-token {
+            text-align: left; }
+          .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content p.kr-modal-card {
+            font-size: 16px;
+            text-align: left; }
+        .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content .kr-modal-optional-content {
+          display: table;
+          margin-top: 30px;
+          padding-top: 15px;
+          border-top: solid #5694C7 1px;
+          width: 60%; }
+          .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content .kr-modal-optional-content .kr-phone,
+          .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content .kr-modal-optional-content .kr-mail {
+            display: table-row; }
+            .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content .kr-modal-optional-content .kr-phone p,
+            .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content .kr-modal-optional-content .kr-phone a,
+            .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content .kr-modal-optional-content .kr-mail p,
+            .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content .kr-modal-optional-content .kr-mail a {
+              display: table-cell; }
+            .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content .kr-modal-optional-content .kr-phone a,
+            .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content .kr-modal-optional-content .kr-mail a {
+              cursor: pointer;
+              color: #5694C7; }
+        .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content .kr-help-image {
+          display: block;
+          width: 100%;
+          margin-top: 22.5px; }
+      .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-footer {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
+        width: 100%;
+        padding: 0 15px 15px 15px;
+        box-sizing: border-box; }
+        .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-footer button {
+          margin: 0;
+          cursor: pointer;
+          text-align: center; }
+          .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-footer button.kr-cancel {
+            margin-right: 15px; }
+  .kr-embedded .kr-form-error span {
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
+  .kr-embedded .kr-delete-button-wrapper {
+    cursor: pointer; }
+    .kr-embedded .kr-delete-button-wrapper:not(.kr-visible) {
+      display: none; }
+    .kr-embedded .kr-delete-button-wrapper .kr-delete-button {
+      height: 100%;
+      display: flexbox;
+      -ms-flex-direction: row;
+          flex-direction: row;
+      -ms-flex-pack: center;
+          justify-content: center;
+      -ms-flex-align: center;
+          align-items: center; }
+      .kr-embedded .kr-delete-button-wrapper .kr-delete-button .kr-delete-icon {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+            flex-direction: column;
+        -ms-flex-align: center;
+            align-items: center;
+        cursor: pointer; }
+        .kr-embedded .kr-delete-button-wrapper .kr-delete-button .kr-delete-icon svg {
+          fill: #000;
+          width: 16px;
+          height: 18px; }
+        .kr-embedded .kr-delete-button-wrapper .kr-delete-button .kr-delete-icon.kr-error svg path.icon {
+          fill: red; }
+    .kr-embedded .kr-delete-button-wrapper.kr-card-list .kr-delete-button .kr-delete-icon svg {
+      height: 16px; }
+  .kr-embedded button::-moz-focus-inner {
+    border: 0; }
+  .kr-embedded input.kr-input-field {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+    background: none;
+    line-height: 1;
+    box-shadow: initial;
+    transition: initial;
+    height: 1.05em;
+    width: 230px;
+    line-height: 1em;
+    font-size: 1em; }
+  .kr-embedded #krFieldRepresentation,
+  .kr-embedded #krFieldRepresentationError,
+  .kr-embedded #krFieldRepresentationDisabled {
+    position: fixed;
+    top: -10000px;
+    left: -10000px; }
+
+iframe#krcheckout {
+  all: initial; }
+
+/**
+TEMPORALLY REMOVED THINGS (to recover)
+
+- fields
+  - width 100%.
+
+**/
+/* Breakpoint configuration */
+/* Font */
+/* Mixins */
+.clear-spaces {
+  margin: 0;
+  padding: 0; }
+
+.table-cell {
+  display: table-cell;
+  vertical-align: middle; }
+
+/* Vendors */
+.kr-animated {
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both; }
+
+.kr-animated.infinite {
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite; }
+
+.kr-animated.hinge {
+  -webkit-animation-duration: 2s;
+          animation-duration: 2s; }
+
+.kr-animated.flipOutX,
+.kr-animated.flipOutY,
+.kr-animated.bounceIn,
+.kr-animated.bounceOut {
+  -webkit-animation-duration: .75s;
+          animation-duration: .75s; }
+
+@-webkit-keyframes kr-flipInX {
+  from {
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    opacity: 0; }
+  40% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in; }
+  60% {
+    transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    opacity: 1; }
+  80% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -5deg); }
+  to {
+    transform: perspective(400px); } }
+
+@keyframes kr-flipInX {
+  from {
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    opacity: 0; }
+  40% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in; }
+  60% {
+    transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    opacity: 1; }
+  80% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -5deg); }
+  to {
+    transform: perspective(400px); } }
+
+.kr-flipInX {
+  -webkit-backface-visibility: visible !important;
+          backface-visibility: visible !important;
+  -webkit-animation-name: kr-flipInX;
+          animation-name: kr-flipInX; }
+
+/* Popin */
+/* BREAKPOINT VARIABLES */
+/* Components */
+.kr-popin-utils button.kr-popin-button {
+  box-sizing: border-box;
+  background-color: #293C7A;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1em;
+  height: 46px;
+  margin: 0px 6px 7px 10px;
+  outline: none !important;
+  padding: 12px 0;
+  text-align: center;
+  width: 232px; }
+
+.kr-embedded[kr-popin] {
+  display: none;
+  box-shadow: 0 0 15px #121212;
+  transition: height 1s;
+  width: 331px;
+  margin: 0; }
+  .kr-embedded[kr-popin] div.kr-popin-modal-header {
+    height: 90px;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    -moz-align-items: center;
+    align-items: center;
+    border-bottom: 1px solid #808080;
+    margin-bottom: 16px; }
+    .kr-embedded[kr-popin] div.kr-popin-modal-header .kr-popin-modal-header-image img.kr-header-logo {
+      background-color: #000; }
+    .kr-embedded[kr-popin] div.kr-popin-modal-header.kr-secure-iframe-visible {
+      height: 30px;
+      border-bottom: 0;
+      margin-bottom: 0; }
+    .kr-embedded[kr-popin] div.kr-popin-modal-header span.kr-popin-shop-name {
+      margin: 40px 0 0 0;
+      padding: 0 5px;
+      text-align: center; }
+      .kr-embedded[kr-popin] div.kr-popin-modal-header span.kr-popin-shop-name span {
+        font-family: 'Roboto', sans-serif;
+        font-weight: bold;
+        line-height: 19px; }
+  .kr-embedded[kr-popin][krvue] .kr-pan,
+  .kr-embedded[kr-popin][krvue] .kr-identity-document-number,
+  .kr-embedded[kr-popin][krvue] .kr-card-holder-name,
+  .kr-embedded[kr-popin][krvue] .kr-card-holder-mail,
+  .kr-embedded[kr-popin][krvue] .kr-identity-document-type,
+  .kr-embedded[kr-popin][krvue] .kr-installment-number,
+  .kr-embedded[kr-popin][krvue] .kr-first-installment-delay {
+    margin: 12px 0 12px 0; }
+  .kr-embedded[kr-popin][krvue] .kr-expiry,
+  .kr-embedded[kr-popin][krvue] .kr-security-code {
+    margin-left: 0;
+    margin-top: 12px; }
+  .kr-embedded[kr-popin][krvue] .kr-field.kr-text {
+    margin: 12px 50px 12px 0; }
+  .kr-embedded[kr-popin][krvue] .kr-field.kr-checkbox {
+    margin: 12px 50px 12px 0; }
+  .kr-embedded[kr-popin] .kr-outer-expiry.kr-outer-wrapper,
+  .kr-embedded[kr-popin] .kr-outer-security-code.kr-outer-wrapper {
+    width: 100%; }
+    .kr-embedded[kr-popin] .kr-outer-expiry.kr-outer-wrapper .kr-inner-wrapper,
+    .kr-embedded[kr-popin] .kr-outer-security-code.kr-outer-wrapper .kr-inner-wrapper {
+      width: 100%; }
+  .kr-embedded[kr-popin] .kr-form-error {
+    margin-top: 10px;
+    margin-left: 0; }
+    .kr-embedded[kr-popin] .kr-form-error > span {
+      padding: 8px 3px; }
+  .kr-embedded[kr-popin] .kr-payment-button {
+    display: block;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    margin-left: 0; }
+  .kr-embedded[kr-popin].kr-help-button-hidden {
+    width: 291px;
+    padding-left: 30px;
+    padding-right: 30px; }
+    .kr-embedded[kr-popin].kr-help-button-hidden .kr-popin-modal-footer .kr-whitelabel-logo img {
+      margin-right: 30px; }
+  .kr-embedded[kr-popin].kr-help-button-inner-field {
+    width: 311px;
+    padding-left: 30px;
+    padding-right: 30px; }
+    .kr-embedded[kr-popin].kr-help-button-inner-field .kr-pan,
+    .kr-embedded[kr-popin].kr-help-button-inner-field .kr-field.kr-text,
+    .kr-embedded[kr-popin].kr-help-button-inner-field .kr-field.kr-checkbox {
+      width: 100%; }
+      .kr-embedded[kr-popin].kr-help-button-inner-field .kr-pan .kr-help-button-wrapper.kr-inner.kr-visible .kr-help-button,
+      .kr-embedded[kr-popin].kr-help-button-inner-field .kr-field.kr-text .kr-help-button-wrapper.kr-inner.kr-visible .kr-help-button,
+      .kr-embedded[kr-popin].kr-help-button-inner-field .kr-field.kr-checkbox .kr-help-button-wrapper.kr-inner.kr-visible .kr-help-button {
+        width: 38px; }
+    .kr-embedded[kr-popin].kr-help-button-inner-field .kr-security-code.kr-size-half .kr-help-button-wrapper.kr-inner .kr-help-button {
+      width: 37px;
+      height: 30px; }
+    .kr-embedded[kr-popin].kr-help-button-inner-field .kr-payment-button,
+    .kr-embedded[kr-popin].kr-help-button-inner-field .kr-form-error {
+      width: 100%;
+      margin-right: 0; }
+    .kr-embedded[kr-popin].kr-help-button-inner-field .kr-popin-modal-footer .kr-whitelabel-logo img {
+      margin-right: 30px; }
+  .kr-embedded[kr-popin] .kr-popin-modal-footer .kr-whitelabel-logo img {
+    margin-right: 50px; }
+  .kr-embedded[kr-popin].kr-small-popin {
+    padding-bottom: 30px; }
+    .kr-embedded[kr-popin].kr-small-popin .kr-popin-modal-footer {
+      height: 30px; }
+  .kr-embedded[kr-popin].kr-wallet {
+    padding-top: 155px; }
+  .kr-embedded[kr-popin] .kr-wallet-tabs {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    right: 0; }
+  .kr-embedded[kr-popin] .kr-wallet-card-list {
+    margin: 0; }
+    .kr-embedded[kr-popin] .kr-wallet-card-list .kr-card-list-wrapper {
+      border: 0; }
+      .kr-embedded[kr-popin] .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label {
+        margin-left: 24px; }
+  .kr-embedded[kr-popin] .kr-layer .kr-popin-modal-header {
+    border-bottom: 0;
+    background-color: rgba(0, 0, 0, 0); }
+  .kr-embedded[kr-popin] .kr-layer .kr-popin-logo-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    background-color: rgba(30, 30, 30, 0.8); }
+  .kr-embedded[kr-popin] .kr-delete-button-wrapper.kr-card-list {
+    padding: 0 3px 0 0; }
+  .kr-embedded[kr-popin].kr-internet-explorer .kr-popin-modal-header .kr-popin-modal-header-image {
+    margin-left: 103px;
+    left: 0; }
+  .kr-embedded[kr-popin].kr-internet-explorer[kr-popin][krvue].kr-embedded .kr-field.kr-text {
+    margin: 12px 12px 12px 0; }
+
+@media (max-width: 450px) {
+  .kr-popin-wrapper {
+    padding-top: 45px; } }
+
+/* Brand buttons */
+.kr-brand-buttons,
+.kr-embedded .kr-brand-buttons {
+  margin-bottom: 20px;
+  min-height: 40px; }
+  .kr-brand-buttons .kr-brand-button .kr-brand-button-icon,
+  .kr-embedded .kr-brand-buttons .kr-brand-button .kr-brand-button-icon {
+    margin: 0 5px;
+    height: 40px;
+    width: 47px; }
+    .kr-brand-buttons .kr-brand-button .kr-brand-button-icon svg,
+    .kr-embedded .kr-brand-buttons .kr-brand-button .kr-brand-button-icon svg {
+      opacity: .5; }
+  .kr-brand-buttons .kr-brand-button .kr-brand-button-label,
+  .kr-embedded .kr-brand-buttons .kr-brand-button .kr-brand-button-label {
+    font-family: 'Roboto', sans-serif;
+    color: #999999;
+    font-size: 13px;
+    height: 15px; }
+  .kr-brand-buttons .kr-brand-button.kr-selected svg,
+  .kr-embedded .kr-brand-buttons .kr-brand-button.kr-selected svg {
+    opacity: 1; }
+  .kr-brand-buttons .kr-brand-button.kr-selected .kr-brand-button-label,
+  .kr-embedded .kr-brand-buttons .kr-brand-button.kr-selected .kr-brand-button-label {
+    color: #717171; }
+
+.kr-brand-buttons {
+  width: 266px; }
+
+/* Default (embedded) */
+.kr-embedded {
+  width: 266px;
+  font-family: 'Roboto', sans-serif;
+  -moz-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  /* Components */
+  /* Firefox */
+  /** CHECKBOX **/
+  /** Regular checkbox **/
+  /*******************/
+  /* Switch checkbox */
+  /** RADIO **/
+  /* Modal */ }
+  .kr-embedded .kr-icon-arrow {
+    display: block;
+    position: absolute;
+    right: 42px;
+    top: 7px;
+    transition: transform 0.1s ease-in;
+    z-index: 2;
+    cursor: pointer; }
+    .kr-embedded .kr-icon-arrow svg {
+      height: auto;
+      width: 10px;
+      height: 18px; }
+      .kr-embedded .kr-icon-arrow svg path {
+        fill: #717171; }
+  .kr-embedded .kr-icon-inner-wrapper {
+    position: relative; }
+    .kr-embedded .kr-icon-inner-wrapper .kr-icon-wrapper-layer {
+      cursor: pointer;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 5; }
+  .kr-embedded .kr-brand-selector {
+    background-color: #fff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    opacity: 0;
+    padding: 8px;
+    position: absolute;
+    right: -7px;
+    top: 28px;
+    z-index: 5;
+    margin-top: 10px;
+    border: 1px solid #aaa; }
+    .kr-embedded .kr-brand-selector .kr-brand-selector-wrapper {
+      position: relative; }
+    .kr-embedded .kr-brand-selector .kr-arrow {
+      border: 1px solid #aaa;
+      display: block;
+      position: absolute;
+      top: -15px;
+      left: 16px;
+      width: 11px;
+      height: 11px;
+      transform: rotate(45deg);
+      background-color: #fff;
+      border-bottom-color: rgba(255, 255, 255, 0);
+      border-right-color: rgba(255, 255, 255, 0); }
+    .kr-embedded .kr-brand-selector ul {
+      padding: 0;
+      margin: 0;
+      text-align: center; }
+    .kr-embedded .kr-brand-selector li {
+      background-color: #fff;
+      cursor: pointer;
+      display: block;
+      height: 30px;
+      list-style-type: none;
+      margin: 5px 0 0 0;
+      padding: 0; }
+      .kr-embedded .kr-brand-selector li svg {
+        box-sizing: content-box;
+        border: 4px solid rgba(0, 0, 0, 0);
+        cursor: pointer; }
+    .kr-embedded .kr-brand-selector li.kr-selected-brand svg {
+      border: 4px solid #b0bec5; }
+    .kr-embedded .kr-brand-selector svg {
+      width: 34px;
+      height: 22px; }
+  .kr-embedded .kr-open .kr-brand-selector {
+    opacity: 1; }
+  .kr-embedded.kr-firefox .kr-brand-selector .kr-arrow {
+    top: 0; }
+  .kr-embedded .kr-field-wrapper {
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: start;
+    -moz-justify-content: flex-start;
+    justify-content: flex-start;
+    -ms-flex-align: stretch;
+    -moz-align-items: stretch;
+    align-items: stretch;
+    width: 100%;
+    height: 100%; }
+    .kr-embedded .kr-field-wrapper .kr-field-component {
+      width: 100%;
+      -moz-order: 1;
+      -ms-flex-order: 1;
+      order: 1; }
+    .kr-embedded .kr-field-wrapper .kr-icon-wrapper-root {
+      -moz-order: 3;
+      -ms-flex-order: 3;
+      order: 3; }
+    .kr-embedded .kr-field-wrapper .kr-help-button-wrapper {
+      -moz-order: 4;
+      -ms-flex-order: 4;
+      order: 4; }
+    .kr-embedded .kr-field-wrapper .kr-delete-button-wrapper {
+      -moz-order: 5;
+      -ms-flex-order: 5;
+      order: 5; }
+  .kr-embedded .kr-pan,
+  .kr-embedded .kr-field.kr-text,
+  .kr-embedded .kr-field.kr-checkbox,
+  .kr-embedded .kr-expiry,
+  .kr-embedded .kr-security-code,
+  .kr-embedded .kr-identity-document-number,
+  .kr-embedded .kr-card-holder-name,
+  .kr-embedded .kr-card-holder-mail,
+  .kr-embedded .kr-identity-document-type,
+  .kr-embedded .kr-installment-number,
+  .kr-embedded .kr-first-installment-delay,
+  .kr-embedded > .kr-field-wrapper {
+    box-sizing: border-box;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 35px;
+    background-color: #fff;
+    border: 1px solid #b1b1b1;
+    margin-bottom: 16px; }
+  .kr-embedded:not([krvue]) .kr-pan,
+  .kr-embedded:not([krvue]) .kr-field.kr-text,
+  .kr-embedded:not([krvue]) .kr-field.kr-checkbox,
+  .kr-embedded:not([krvue]) .kr-expiry,
+  .kr-embedded:not([krvue]) .kr-security-code,
+  .kr-embedded:not([krvue]) .kr-identity-document-number,
+  .kr-embedded:not([krvue]) .kr-card-holder-name,
+  .kr-embedded:not([krvue]) .kr-card-holder-mail,
+  .kr-embedded:not([krvue]) .kr-identity-document-type,
+  .kr-embedded:not([krvue]) .kr-installment-number,
+  .kr-embedded:not([krvue]) .kr-first-installment-delay,
+  .kr-embedded:not([krvue]) > .kr-field-wrapper {
+    height: 35px; }
+  .kr-embedded[krvue] .kr-pan,
+  .kr-embedded[krvue] .kr-field.kr-text,
+  .kr-embedded[krvue] .kr-field.kr-checkbox,
+  .kr-embedded[krvue] .kr-expiry,
+  .kr-embedded[krvue] .kr-security-code,
+  .kr-embedded[krvue] .kr-identity-document-number,
+  .kr-embedded[krvue] .kr-card-holder-name,
+  .kr-embedded[krvue] .kr-card-holder-mail,
+  .kr-embedded[krvue] > .kr-field-wrapper {
+    background-color: transparent; }
+    .kr-embedded[krvue] .kr-pan .kr-field-wrapper,
+    .kr-embedded[krvue] .kr-field.kr-text .kr-field-wrapper,
+    .kr-embedded[krvue] .kr-field.kr-checkbox .kr-field-wrapper,
+    .kr-embedded[krvue] .kr-expiry .kr-field-wrapper,
+    .kr-embedded[krvue] .kr-security-code .kr-field-wrapper,
+    .kr-embedded[krvue] .kr-identity-document-number .kr-field-wrapper,
+    .kr-embedded[krvue] .kr-card-holder-name .kr-field-wrapper,
+    .kr-embedded[krvue] .kr-card-holder-mail .kr-field-wrapper,
+    .kr-embedded[krvue] > .kr-field-wrapper .kr-field-wrapper {
+      height: 31px; }
+    .kr-embedded[krvue] .kr-pan .kr-field-component,
+    .kr-embedded[krvue] .kr-field.kr-text .kr-field-component,
+    .kr-embedded[krvue] .kr-field.kr-checkbox .kr-field-component,
+    .kr-embedded[krvue] .kr-expiry .kr-field-component,
+    .kr-embedded[krvue] .kr-security-code .kr-field-component,
+    .kr-embedded[krvue] .kr-identity-document-number .kr-field-component,
+    .kr-embedded[krvue] .kr-card-holder-name .kr-field-component,
+    .kr-embedded[krvue] .kr-card-holder-mail .kr-field-component,
+    .kr-embedded[krvue] > .kr-field-wrapper .kr-field-component {
+      height: 33px;
+      width: 100%;
+      background-color: #fff; }
+    .kr-embedded[krvue] .kr-pan .kr-field-component input.kr-input-field,
+    .kr-embedded[krvue] .kr-field.kr-text .kr-field-component input.kr-input-field,
+    .kr-embedded[krvue] .kr-field.kr-checkbox .kr-field-component input.kr-input-field,
+    .kr-embedded[krvue] .kr-expiry .kr-field-component input.kr-input-field,
+    .kr-embedded[krvue] .kr-security-code .kr-field-component input.kr-input-field,
+    .kr-embedded[krvue] .kr-identity-document-number .kr-field-component input.kr-input-field,
+    .kr-embedded[krvue] .kr-card-holder-name .kr-field-component input.kr-input-field,
+    .kr-embedded[krvue] .kr-card-holder-mail .kr-field-component input.kr-input-field,
+    .kr-embedded[krvue] > .kr-field-wrapper .kr-field-component input.kr-input-field {
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+      color: #717171;
+      padding: 4px 0 4px 9px;
+      font-size: 14px;
+      outline: 0;
+      width: 100%;
+      height: 33px;
+      background-color: #fff; }
+      .kr-embedded[krvue] .kr-pan .kr-field-component input.kr-input-field::-webkit-input-placeholder,
+      .kr-embedded[krvue] .kr-field.kr-text .kr-field-component input.kr-input-field::-webkit-input-placeholder,
+      .kr-embedded[krvue] .kr-field.kr-checkbox .kr-field-component input.kr-input-field::-webkit-input-placeholder,
+      .kr-embedded[krvue] .kr-expiry .kr-field-component input.kr-input-field::-webkit-input-placeholder,
+      .kr-embedded[krvue] .kr-security-code .kr-field-component input.kr-input-field::-webkit-input-placeholder,
+      .kr-embedded[krvue] .kr-identity-document-number .kr-field-component input.kr-input-field::-webkit-input-placeholder,
+      .kr-embedded[krvue] .kr-card-holder-name .kr-field-component input.kr-input-field::-webkit-input-placeholder,
+      .kr-embedded[krvue] .kr-card-holder-mail .kr-field-component input.kr-input-field::-webkit-input-placeholder,
+      .kr-embedded[krvue] > .kr-field-wrapper .kr-field-component input.kr-input-field::-webkit-input-placeholder {
+        color: #999999;
+        opacity: 1; }
+      .kr-embedded[krvue] .kr-pan .kr-field-component input.kr-input-field:-moz-placeholder,
+      .kr-embedded[krvue] .kr-field.kr-text .kr-field-component input.kr-input-field:-moz-placeholder,
+      .kr-embedded[krvue] .kr-field.kr-checkbox .kr-field-component input.kr-input-field:-moz-placeholder,
+      .kr-embedded[krvue] .kr-expiry .kr-field-component input.kr-input-field:-moz-placeholder,
+      .kr-embedded[krvue] .kr-security-code .kr-field-component input.kr-input-field:-moz-placeholder,
+      .kr-embedded[krvue] .kr-identity-document-number .kr-field-component input.kr-input-field:-moz-placeholder,
+      .kr-embedded[krvue] .kr-card-holder-name .kr-field-component input.kr-input-field:-moz-placeholder,
+      .kr-embedded[krvue] .kr-card-holder-mail .kr-field-component input.kr-input-field:-moz-placeholder,
+      .kr-embedded[krvue] > .kr-field-wrapper .kr-field-component input.kr-input-field:-moz-placeholder {
+        /* Firefox 18- */
+        color: #999999;
+        opacity: 1; }
+      .kr-embedded[krvue] .kr-pan .kr-field-component input.kr-input-field::-moz-placeholder,
+      .kr-embedded[krvue] .kr-field.kr-text .kr-field-component input.kr-input-field::-moz-placeholder,
+      .kr-embedded[krvue] .kr-field.kr-checkbox .kr-field-component input.kr-input-field::-moz-placeholder,
+      .kr-embedded[krvue] .kr-expiry .kr-field-component input.kr-input-field::-moz-placeholder,
+      .kr-embedded[krvue] .kr-security-code .kr-field-component input.kr-input-field::-moz-placeholder,
+      .kr-embedded[krvue] .kr-identity-document-number .kr-field-component input.kr-input-field::-moz-placeholder,
+      .kr-embedded[krvue] .kr-card-holder-name .kr-field-component input.kr-input-field::-moz-placeholder,
+      .kr-embedded[krvue] .kr-card-holder-mail .kr-field-component input.kr-input-field::-moz-placeholder,
+      .kr-embedded[krvue] > .kr-field-wrapper .kr-field-component input.kr-input-field::-moz-placeholder {
+        /* Firefox 19+ */
+        color: #999999;
+        opacity: 1; }
+      .kr-embedded[krvue] .kr-pan .kr-field-component input.kr-input-field:-ms-input-placeholder,
+      .kr-embedded[krvue] .kr-field.kr-text .kr-field-component input.kr-input-field:-ms-input-placeholder,
+      .kr-embedded[krvue] .kr-field.kr-checkbox .kr-field-component input.kr-input-field:-ms-input-placeholder,
+      .kr-embedded[krvue] .kr-expiry .kr-field-component input.kr-input-field:-ms-input-placeholder,
+      .kr-embedded[krvue] .kr-security-code .kr-field-component input.kr-input-field:-ms-input-placeholder,
+      .kr-embedded[krvue] .kr-identity-document-number .kr-field-component input.kr-input-field:-ms-input-placeholder,
+      .kr-embedded[krvue] .kr-card-holder-name .kr-field-component input.kr-input-field:-ms-input-placeholder,
+      .kr-embedded[krvue] .kr-card-holder-mail .kr-field-component input.kr-input-field:-ms-input-placeholder,
+      .kr-embedded[krvue] > .kr-field-wrapper .kr-field-component input.kr-input-field:-ms-input-placeholder {
+        color: #999999;
+        opacity: 1; }
+  .kr-embedded[krvue] .kr-pan,
+  .kr-embedded[krvue] .kr-expiry,
+  .kr-embedded[krvue] .kr-security-code {
+    background-color: #fff;
+    padding: 1px; }
+    .kr-embedded[krvue] .kr-pan .kr-icon-wrapper-root,
+    .kr-embedded[krvue] .kr-pan .kr-field-component,
+    .kr-embedded[krvue] .kr-expiry .kr-icon-wrapper-root,
+    .kr-embedded[krvue] .kr-expiry .kr-field-component,
+    .kr-embedded[krvue] .kr-security-code .kr-icon-wrapper-root,
+    .kr-embedded[krvue] .kr-security-code .kr-field-component {
+      height: 31px;
+      padding-top: 0px;
+      top: 0px; }
+  .kr-embedded[krvue] .kr-field.kr-checkbox,
+  .kr-embedded[krvue] .kr-field.kr-text {
+    width: 100%;
+    height: 35px; }
+  .kr-embedded[krvue] .kr-field.kr-text {
+    border: 1px solid #b1b1b1; }
+    .kr-embedded[krvue] .kr-field.kr-text .kr-icon-wrapper-root {
+      border: 0; }
+  .kr-embedded[krvue] .kr-field.kr-checkbox {
+    border: 0; }
+  .kr-embedded .kr-expiry.kr-size-half {
+    margin-right: 10px; }
+  .kr-embedded .kr-inner-wrapper.kr-error .kr-field-container input.kr-input-field {
+    color: red; }
+  .kr-embedded .kr-field-container {
+    box-sizing: border-box;
+    padding-left: 0;
+    padding-right: 1px;
+    display: block; }
+    .kr-embedded .kr-field-container input.kr-input-field {
+      box-sizing: content-box;
+      border: 0;
+      color: #717171;
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      outline: 0;
+      padding: 4px 0;
+      width: 100%;
+      line-height: normal;
+      margin: 2px 0 0 0; }
+  .kr-embedded .kr-field.kr-field-wrapper .kr-icon {
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -moz-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-pack: stretch;
+    -moz-justify-content: stretch;
+    justify-content: stretch;
+    -ms-flex-align: stretch;
+    -moz-align-items: stretch;
+    align-items: stretch;
+    top: 0; }
+    .kr-embedded .kr-field.kr-field-wrapper .kr-icon .kr-icon-wrapper-content {
+      display: -moz-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -moz-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      -ms-flex-pack: center;
+      -moz-justify-content: center;
+      justify-content: center;
+      -ms-flex-align: center;
+      -moz-align-items: center;
+      align-items: center; }
+      .kr-embedded .kr-field.kr-field-wrapper .kr-icon .kr-icon-wrapper-content i {
+        height: auto;
+        max-width: 27px; }
+  .kr-embedded .kr-field.kr-field-wrapper input {
+    border: 0;
+    color: #717171;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    outline: 0;
+    padding: 4px 0;
+    width: 100%;
+    line-height: normal;
+    margin: 2px 0 0 0;
+    padding-left: 9px;
+    padding-top: 8px; }
+    .kr-embedded .kr-field.kr-field-wrapper input::-webkit-input-placeholder {
+      color: #999;
+      opacity: 1; }
+    .kr-embedded .kr-field.kr-field-wrapper input:-moz-placeholder {
+      /* Firefox 18- */
+      color: #999;
+      opacity: 1; }
+    .kr-embedded .kr-field.kr-field-wrapper input::-moz-placeholder {
+      /* Firefox 19+ */
+      color: #999;
+      opacity: 1; }
+    .kr-embedded .kr-field.kr-field-wrapper input:-ms-input-placeholder {
+      color: #999;
+      opacity: 1; }
+  .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-real-select {
+    position: relative; }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-real-select select {
+      box-sizing: border-box;
+      border: none;
+      line-height: 33px;
+      padding-left: 9px;
+      font-family: 'Roboto', sans-serif;
+      color: #717171;
+      font-size: 14px; }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-real-select span.kr-select-caret {
+      display: block;
+      position: absolute;
+      top: 7.5px;
+      right: 16px; }
+      .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-real-select span.kr-select-caret svg {
+        fill: #717171; }
+      .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-real-select span.kr-select-caret.kr-read-only svg {
+        fill: #999999; }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-real-select span.kr-select-placeholder {
+      position: absolute;
+      left: 9px;
+      top: 0;
+      height: 100%;
+      right: 40px;
+      line-height: 33px;
+      font-family: 'Roboto', sans-serif;
+      color: #999999;
+      font-size: 14px;
+      pointer-events: none; }
+  .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-select {
+    box-sizing: border-box;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -moz-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-pack: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    border: none;
+    width: 100%;
+    height: 35px;
+    padding-left: 9px; }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-select span.kr-selected-option {
+      font-family: 'Roboto', sans-serif;
+      color: #717171;
+      font-size: 14px;
+      width: calc(100% - 25px); }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-select span.kr-selected-option.kr-placeholder {
+      color: #999999; }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-select .kr-select-caret {
+      box-sizing: border-box;
+      display: -moz-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -moz-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      -ms-flex-pack: center;
+      -moz-justify-content: center;
+      justify-content: center;
+      right: 16px;
+      top: 0px;
+      height: 34px; }
+      .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-select .kr-select-caret svg {
+        fill: #717171; }
+      .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-select .kr-select-caret.kr-read-only svg {
+        fill: #999999; }
+  .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-options {
+    width: 100%;
+    left: -1px;
+    max-height: 210px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-left: 1px solid #b1b1b1;
+    border-right: 1px solid #b1b1b1;
+    border-bottom: 1px solid #b1b1b1;
+    z-index: 10000; }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-options .kr-option {
+      box-sizing: border-box;
+      display: -moz-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -moz-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      -ms-flex-pack: center;
+      -moz-justify-content: center;
+      justify-content: center;
+      height: 35px;
+      padding-left: 9px;
+      font-family: 'Roboto', sans-serif;
+      color: #717171;
+      font-size: 14px; }
+      .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-options .kr-option:hover {
+        background-color: #dddddd; }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-options.top.kr-options-6 {
+      top: -210px; }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-options.top.kr-options-5 {
+      top: -175px; }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-options.top.kr-options-4 {
+      top: -140px; }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-options.top.kr-options-3 {
+      top: -105px; }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-options.top.kr-options-2 {
+      top: -70px; }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-options.top.kr-options-1 {
+      top: -35px; }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-options.bottom {
+      top: 33px; }
+    .kr-embedded .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-options:not(:hover) .kr-option.kr-active-option {
+      background-color: #dddddd; }
+  .kr-embedded .kr-identity-document-type.kr-error .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-select-caret svg,
+  .kr-embedded .kr-identity-document-type.kr-error .kr-field-wrapper.kr-select-wrapper.kr-real-select .kr-select-caret svg,
+  .kr-embedded .kr-installment-number.kr-error .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-select-caret svg,
+  .kr-embedded .kr-installment-number.kr-error .kr-field-wrapper.kr-select-wrapper.kr-real-select .kr-select-caret svg,
+  .kr-embedded .kr-first-installment-delay.kr-error .kr-field-wrapper.kr-select-wrapper.kr-custom-select .kr-select-caret svg,
+  .kr-embedded .kr-first-installment-delay.kr-error .kr-field-wrapper.kr-select-wrapper.kr-real-select .kr-select-caret svg {
+    fill: #d9534f; }
+
+@-webkit-keyframes kr-bouncedelay {
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0); }
+  40% {
+    -webkit-transform: scale(1); } }
+
+@keyframes kr-bouncedelay {
+  0%,
+  80%,
+  100% {
+    transform: scale(0); }
+  40% {
+    transform: scale(1); } }
+  .kr-embedded .kr-spinner {
+    box-sizing: border-box;
+    display: none;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 1px;
+    height: 22px;
+    width: 70px; }
+  .kr-embedded .kr-spinner > div {
+    width: 18px;
+    height: 18px;
+    background-color: #cfcfcf;
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: kr-bouncedelay 1.4s infinite ease-in-out both;
+    animation: kr-bouncedelay 1.4s infinite ease-in-out both; }
+  .kr-embedded .kr-spinner .kr-bounce1 {
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s; }
+  .kr-embedded .kr-spinner .kr-bounce2 {
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s; }
+  .kr-embedded .kr-outer-wrapper {
+    box-sizing: border-box;
+    background-color: #fff;
+    display: block;
+    width: 187px;
+    height: 31px; }
+    .kr-embedded .kr-outer-wrapper .kr-inner-wrapper {
+      box-sizing: border-box;
+      background-color: #fff;
+      display: block;
+      padding: 3px 4px 4px 8px;
+      zoom: 1;
+      width: 187px;
+      height: 31px; }
+  .kr-embedded .kr-field-wrapper .kr-icon .kr-icon-wrapper {
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 0;
+    margin: 0; }
+  .kr-embedded .kr-field-wrapper .kr-icon-image {
+    box-sizing: border-box;
+    display: inline-block; }
+  .kr-embedded .kr-installments-wrapper {
+    margin: 14px 0 16px 10px !important;
+    display: block; }
+  .kr-embedded .kr-installments-wrapper,
+  .kr-embedded .kr-installments-wrapper select {
+    width: 232px;
+    height: 32px; }
+  .kr-embedded .kr-installments-wrapper select {
+    padding-left: 5px; }
+  .kr-embedded .kr-icon-wrapper-root {
+    position: relative;
+    background-color: #fff;
+    width: 43px;
+    height: 31px; }
+  .kr-embedded .kr-icon-wrapper-root .kr-icon {
+    width: 43px;
+    height: 31px; }
+  .kr-embedded .kr-icon {
+    background-color: #fff;
+    display: block; }
+    .kr-embedded .kr-icon.kr-disabled {
+      background-color: #ebebe4; }
+  .kr-embedded .kr-icon-wrapper,
+  .kr-embedded .kr-icon-inner-wrapper,
+  .kr-embedded .kr-icon-wrapper-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    -moz-align-items: center;
+    align-items: center;
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row; }
+  .kr-embedded .kr-icon-wrapper svg {
+    width: 28px;
+    height: 20px; }
+  .kr-embedded .kr-identity-document-number .kr-icon-wrapper-root,
+  .kr-embedded .kr-card-holder-name .kr-icon-wrapper-root,
+  .kr-embedded .kr-card-holder-mail .kr-icon-wrapper-root,
+  .kr-embedded .kr-field.kr-text .kr-icon-wrapper-root {
+    padding: 1px 1px 1px 0; }
+  .kr-embedded .kr-form-error {
+    box-sizing: border-box;
+    box-sizing: border-box;
+    margin-bottom: 7px;
+    text-align: center;
+    width: 100%;
+    border: 0;
+    border: 0;
+    background-color: #b71c1c;
+    display: block; }
+    .kr-embedded .kr-form-error span {
+      -webkit-user-select: none;
+      /* Chrome/Safari */
+      -moz-user-select: none;
+      /* Firefox */
+      -ms-user-select: none;
+      /* IE10+ */
+      /* Rules below not implemented in browsers yet */
+      -o-user-select: none;
+      user-select: none;
+      box-sizing: border-box;
+      color: #fff !important;
+      padding: 10px 3px;
+      display: inline-blocK;
+      font-size: 1em;
+      font-family: 'Roboto', sans-serif;
+      text-align: center;
+      cursor: default; }
+  .kr-embedded .kr-form-error-visible {
+    display: block; }
+  .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-footer button,
+  .kr-embedded .kr-payment-button {
+    box-sizing: border-box;
+    margin-bottom: 7px;
+    width: 100%;
+    border: 0;
+    background-color: #293c7a;
+    color: #fff;
+    padding: 12px 0;
+    font-size: 1em;
+    outline: none !important;
+    height: 46px;
+    font-family: inherit;
+    cursor: pointer; }
+    .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-footer button.kr-cancel,
+    .kr-embedded .kr-payment-button.kr-cancel {
+      background-color: #717171; }
+    .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-footer button span,
+    .kr-embedded .kr-payment-button span {
+      -webkit-user-select: none;
+      /* Chrome/Safari */
+      -moz-user-select: none;
+      /* Firefox */
+      -ms-user-select: none;
+      /* IE10+ */
+      /* Rules below not implemented in browsers yet */
+      -o-user-select: none;
+      user-select: none;
+      display: inline-block;
+      width: 100%;
+      line-height: 22px;
+      color: inherit;
+      text-align: center;
+      font-family: 'Roboto', sans-serif;
+      cursor: pointer; }
+  .kr-embedded .kr-payment-button:focus {
+    background-color: #293c7a;
+    color: #fff;
+    font-family: 'Roboto', sans-serif; }
+  .kr-embedded .kr-field.kr-checkbox {
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    display: block;
+    margin-bottom: 16px;
+    min-height: 33px;
+    padding-right: 0;
+    padding-left: 4px;
+    width: 230px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+        align-items: center;
+    -ms-flex-direction: row;
+        flex-direction: row; }
+  .kr-embedded .kr-field.kr-checkbox .kr-checkbox-input-wrapper .kr-field-control {
+    color: #777;
+    cursor: pointer;
+    display: block;
+    line-height: 33px;
+    position: relative;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
+    .kr-embedded .kr-field.kr-checkbox .kr-checkbox-input-wrapper .kr-field-control .kr-label {
+      padding-bottom: 2px;
+      padding-left: 4px; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-default .kr-checkbox-input-wrapper .kr-field-control {
+    font-size: 0.9em;
+    padding-left: 20px; }
+    .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-default .kr-checkbox-input-wrapper .kr-field-control input {
+      opacity: 0;
+      position: absolute;
+      z-index: -1; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-default .kr-checkbox-input-wrapper .kr-checkbox-control-indicator {
+    background-color: #e6e6e6;
+    border: 1px solid #b1b1b1;
+    height: 20px;
+    left: 0;
+    position: absolute;
+    top: 5px;
+    width: 20px;
+    cursor: pointer; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-default .kr-checkbox-input-wrapper .kr-field-control:hover input ~ .kr-checkbox-control-indicator,
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-default .kr-checkbox-input-wrapper .kr-field-control input:focus ~ .kr-checkbox-control-indicator {
+    background-color: #cccccc; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-default .kr-checkbox-input-wrapper .kr-field-control input:checked ~ .kr-checkbox-control-indicator,
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-default .kr-checkbox-input-wrapper .kr-field-control input:checked:focus ~ .kr-checkbox-control-indicator {
+    background-color: #717171; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-default .kr-checkbox-input-wrapper .kr-field-control:hover
+input:not([disabled]):checked
+~ .kr-checkbox-control-indicator,
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-default .kr-checkbox-input-wrapper .kr-field-control input:checked:focus ~ .kr-checkbox-control-indicator {
+    background-color: #656565; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-default .kr-checkbox-input-wrapper .kr-field-control input:disabled ~ .kr-checkbox-control-indicator {
+    background-color: #e6e6e6;
+    opacity: 0.6;
+    pointer-events: none; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-default .kr-checkbox-input-wrapper .kr-checkbox-control-indicator:after {
+    content: '';
+    display: none;
+    position: absolute; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-default .kr-checkbox-input-wrapper .kr-field-control input:checked ~ .kr-checkbox-control-indicator:after {
+    display: block; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-default .kr-checkbox-input-wrapper .kr-field-control .kr-checkbox-control-indicator:after {
+    box-sizing: initial;
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;
+    height: 8px;
+    left: 8px;
+    top: 4px;
+    transform: rotate(45deg);
+    width: 3px; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-default .kr-checkbox-input-wrapper .kr-field-control input:disabled ~ .kr-checkbox-control-indicator:after {
+    border-color: #7b7b7b; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-switch .kr-checkbox-input-wrapper .kr-field-control.kr-checkbox input.kr-theme {
+    opacity: 0;
+    width: 0;
+    height: 0; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-switch .kr-checkbox-input-wrapper .kr-field-control.kr-checkbox .kr-checkbox-control-indicator {
+    position: relative;
+    cursor: pointer;
+    width: 32px;
+    height: 19px;
+    background-color: #ddd;
+    transition: 0.4s;
+    border-radius: 34px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 2px;
+    margin-right: 5px;
+    border: none;
+    outline: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+    border-color: transparent; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-switch .kr-checkbox-input-wrapper .kr-field-control.kr-checkbox .kr-checkbox-control-indicator:focus {
+    border: none;
+    outline: none;
+    border-color: transparent; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-switch .kr-checkbox-input-wrapper .kr-field-control.kr-checkbox .kr-checkbox-control-indicator:before {
+    position: absolute;
+    content: '';
+    height: 15px;
+    width: 15px;
+    left: 2px;
+    bottom: 2px;
+    background-color: #fff;
+    transition: 0.4s;
+    border-radius: 50%; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-switch .kr-checkbox-input-wrapper .kr-field-control.kr-checkbox input:checked + .kr-checkbox-control-indicator {
+    background-color: #717171; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-switch .kr-checkbox-input-wrapper .kr-field-control.kr-checkbox input:checked + .kr-checkbox-control-indicator:before {
+    transform: translateX(13px); }
+  .kr-embedded .kr-field.kr-radio {
+    cursor: pointer;
+    margin-bottom: 16px;
+    height: 33px;
+    width: 100%; }
+    .kr-embedded .kr-field.kr-radio .kr-radio-control-indicator {
+      cursor: pointer;
+      display: block;
+      height: 13px;
+      width: 13px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      border: 1px solid #717171;
+      margin-left: 5px;
+      z-index: 1; }
+      .kr-embedded .kr-field.kr-radio .kr-radio-control-indicator .kr-checked {
+        display: block;
+        margin: 2px;
+        height: 9px;
+        width: 9px;
+        border-radius: 50%;
+        background-color: #ffffff; }
+    .kr-embedded .kr-field.kr-radio input[type='radio'] {
+      cursor: pointer;
+      position: fixed;
+      opacity: 0;
+      margin-left: 5px;
+      height: 13px;
+      width: 13px;
+      z-index: 2;
+      padding: 0; }
+      .kr-embedded .kr-field.kr-radio input[type='radio']:checked + .kr-radio-control-indicator .kr-checked {
+        background-color: #717171; }
+    .kr-embedded .kr-field.kr-radio label {
+      cursor: pointer;
+      width: 100%;
+      text-align: justify;
+      margin-left: 8px; }
+  .kr-embedded input.kr-theme {
+    display: block; }
+    .kr-embedded input.kr-theme[type='text'] {
+      height: 31px; }
+    .kr-embedded input.kr-theme[type='checkbox'] {
+      height: 46px; }
+  .kr-embedded .kr-field.kr-text {
+    position: relative; }
+    .kr-embedded .kr-field.kr-text.kr-field-wrapper.kr-visible {
+      display: -ms-flexbox;
+      display: flex; }
+    .kr-embedded .kr-field.kr-text .kr-input-wrapper {
+      -moz-order: 1;
+      -ms-flex-order: 1;
+      order: 1;
+      width: 100%;
+      background-color: #fff; }
+    .kr-embedded .kr-field.kr-text .kr-icon {
+      -moz-order: 2;
+      -ms-flex-order: 2;
+      order: 2; }
+      .kr-embedded .kr-field.kr-text .kr-icon i {
+        display: inline-block;
+        color: #717171;
+        font-size: 1.5em; }
+      .kr-embedded .kr-field.kr-text .kr-icon.kr-error i {
+        color: #d9534f; }
+    .kr-embedded .kr-field.kr-text input.kr-theme {
+      box-sizing: border-box;
+      outline: none;
+      border: none;
+      font-size: 0.9em;
+      margin-top: 0;
+      position: static;
+      line-height: 1em;
+      background-clip: unset;
+      margin-right: 9px;
+      padding-left: 10px;
+      font-family: 'Roboto', sans-serif;
+      color: #717171;
+      padding-top: 2px !important;
+      padding-bottom: 0px !important;
+      outline: none;
+      visibility: visible;
+      cursor: text !important; }
+      .kr-embedded .kr-field.kr-text input.kr-theme::-webkit-input-placeholder {
+        color: #999;
+        opacity: 1; }
+      .kr-embedded .kr-field.kr-text input.kr-theme:-moz-placeholder {
+        /* Firefox 18- */
+        color: #999;
+        opacity: 1; }
+      .kr-embedded .kr-field.kr-text input.kr-theme::-moz-placeholder {
+        /* Firefox 19+ */
+        color: #999;
+        opacity: 1; }
+      .kr-embedded .kr-field.kr-text input.kr-theme:-ms-input-placeholder {
+        color: #999;
+        opacity: 1; }
+    .kr-embedded .kr-field.kr-text input.kr-theme:-webkit-autofill,
+    .kr-embedded .kr-field.kr-text input.kr-theme:-webkit-autofill:hover,
+    .kr-embedded .kr-field.kr-text input.kr-theme:-webkit-autofill:focus {
+      -webkit-transition: all 5000s ease-in-out 0s !important;
+      transition: all 5000s ease-in-out 0s !important; }
+  .kr-embedded > input.kr-theme {
+    display: none;
+    width: 187px;
+    height: 33px;
+    background-color: #fff;
+    padding-left: 44px; }
+  .kr-embedded .kr-checkbox-input-wrapper .kr-field-control,
+  .kr-embedded .kr-checkbox-input-wrapper .kr-field-control .kr-checkbox-label {
+    font-family: 'Roboto', sans-serif; }
+  .kr-embedded .kr-checkbox-input-wrapper .kr-checkbox input.kr-field.kr-theme {
+    visibility: visible;
+    display: inline-block;
+    margin-right: 0; }
+  .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-switch .kr-field-wrapper {
+    height: auto; }
+    .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-switch .kr-field-wrapper .kr-checkbox-input-wrapper .kr-field-control.kr-checkbox.kr-checkbox-layout {
+      padding-left: 0 !important;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+          align-items: center; }
+    .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-switch .kr-field-wrapper .kr-checkbox-input-wrapper .kr-checkbox-control-indicator {
+      top: 0;
+      background-color: #e6e6e6; }
+    .kr-embedded .kr-field.kr-checkbox.kr-checkbox-type-switch .kr-field-wrapper .kr-checkbox-input-wrapper .kr-field-control:hover
+input:not([disabled]):checked
+~ .kr-checkbox-control-indicator {
+      background-color: #717171; }
+  .kr-embedded .kr-checkbox-input-wrapper .kr-field-control .kr-checkbox-label {
+    color: #777; }
+  .kr-embedded .kr-checkbox-input-wrapper .kr-field-control input.kr-theme {
+    background: #ddd; }
+    .kr-embedded .kr-checkbox-input-wrapper .kr-field-control input.kr-theme:checked {
+      background: #000000; }
+    .kr-embedded .kr-checkbox-input-wrapper .kr-field-control input.kr-theme:after {
+      background: #fff; }
+  .kr-embedded .kr-field.kr-radio {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+        align-items: center;
+    -ms-flex-direction: row;
+        flex-direction: row; }
+    .kr-embedded .kr-field.kr-radio label {
+      outline: none;
+      font-size: 0.9em;
+      line-height: 1em;
+      font-family: 'Roboto', sans-serif;
+      color: #717171; }
+  .kr-embedded .kr-inner-wrapper.kr-disabled input.kr-input-field {
+    color: #717171; }
+  .kr-embedded .kr-pan.kr-disabled,
+  .kr-embedded .kr-expiry.kr-disabled,
+  .kr-embedded .kr-security-code.kr-disabled,
+  .kr-embedded .kr-identity-document-number.kr-disabled,
+  .kr-embedded .kr-identity-document-type.kr-disabled,
+  .kr-embedded .kr-card-holder-name.kr-disabled,
+  .kr-embedded .kr-card-holder-mail.kr-disabled,
+  .kr-embedded .kr-installment-number.kr-disabled,
+  .kr-embedded .kr-first-installment-delay.kr-disabled {
+    background-color: #ebebe4 !important; }
+  .kr-embedded .kr-pan .kr-field-component.kr-disabled,
+  .kr-embedded .kr-pan .kr-help-button-wrapper.kr-disabled,
+  .kr-embedded .kr-expiry .kr-field-component.kr-disabled,
+  .kr-embedded .kr-expiry .kr-help-button-wrapper.kr-disabled,
+  .kr-embedded .kr-security-code .kr-field-component.kr-disabled,
+  .kr-embedded .kr-security-code .kr-help-button-wrapper.kr-disabled,
+  .kr-embedded .kr-identity-document-number .kr-field-component.kr-disabled,
+  .kr-embedded .kr-identity-document-number .kr-help-button-wrapper.kr-disabled,
+  .kr-embedded .kr-identity-document-type .kr-field-component.kr-disabled,
+  .kr-embedded .kr-identity-document-type .kr-help-button-wrapper.kr-disabled,
+  .kr-embedded .kr-card-holder-name .kr-field-component.kr-disabled,
+  .kr-embedded .kr-card-holder-name .kr-help-button-wrapper.kr-disabled,
+  .kr-embedded .kr-card-holder-mail .kr-field-component.kr-disabled,
+  .kr-embedded .kr-card-holder-mail .kr-help-button-wrapper.kr-disabled,
+  .kr-embedded .kr-installment-number .kr-field-component.kr-disabled,
+  .kr-embedded .kr-installment-number .kr-help-button-wrapper.kr-disabled,
+  .kr-embedded .kr-first-installment-delay .kr-field-component.kr-disabled,
+  .kr-embedded .kr-first-installment-delay .kr-help-button-wrapper.kr-disabled {
+    background-color: #ebebe4; }
+    .kr-embedded .kr-pan .kr-field-component.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-pan .kr-help-button-wrapper.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-expiry .kr-field-component.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-expiry .kr-help-button-wrapper.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-security-code .kr-field-component.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-security-code .kr-help-button-wrapper.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-identity-document-number .kr-field-component.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-identity-document-number .kr-help-button-wrapper.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-identity-document-type .kr-field-component.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-identity-document-type .kr-help-button-wrapper.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-card-holder-name .kr-field-component.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-card-holder-name .kr-help-button-wrapper.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-card-holder-mail .kr-field-component.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-card-holder-mail .kr-help-button-wrapper.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-installment-number .kr-field-component.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-installment-number .kr-help-button-wrapper.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-first-installment-delay .kr-field-component.kr-disabled .kr-iframe-wrapper,
+    .kr-embedded .kr-first-installment-delay .kr-help-button-wrapper.kr-disabled .kr-iframe-wrapper {
+      background-color: #ebebe4; }
+  .kr-embedded .kr-pan .kr-icon.kr-disabled,
+  .kr-embedded .kr-expiry .kr-icon.kr-disabled,
+  .kr-embedded .kr-security-code .kr-icon.kr-disabled,
+  .kr-embedded .kr-identity-document-number .kr-icon.kr-disabled,
+  .kr-embedded .kr-identity-document-type .kr-icon.kr-disabled,
+  .kr-embedded .kr-card-holder-name .kr-icon.kr-disabled,
+  .kr-embedded .kr-card-holder-mail .kr-icon.kr-disabled,
+  .kr-embedded .kr-installment-number .kr-icon.kr-disabled,
+  .kr-embedded .kr-first-installment-delay .kr-icon.kr-disabled {
+    top: 0px; }
+  .kr-embedded .kr-identity-document-number.kr-disabled .kr-selected-option,
+  .kr-embedded .kr-identity-document-number.kr-disabled input,
+  .kr-embedded .kr-identity-document-type.kr-disabled .kr-selected-option,
+  .kr-embedded .kr-identity-document-type.kr-disabled input,
+  .kr-embedded .kr-card-holder-name.kr-disabled .kr-selected-option,
+  .kr-embedded .kr-card-holder-name.kr-disabled input,
+  .kr-embedded .kr-card-holder-mail.kr-disabled .kr-selected-option,
+  .kr-embedded .kr-card-holder-mail.kr-disabled input,
+  .kr-embedded .kr-installment-number.kr-disabled .kr-selected-option,
+  .kr-embedded .kr-installment-number.kr-disabled input,
+  .kr-embedded .kr-first-installment-delay.kr-disabled .kr-selected-option,
+  .kr-embedded .kr-first-installment-delay.kr-disabled input {
+    background-color: #ebebe4 !important;
+    color: #545454 !important; }
+  .kr-embedded .kr-identity-document-number.kr-disabled .kr-icon-wrapper-root,
+  .kr-embedded .kr-identity-document-type.kr-disabled .kr-icon-wrapper-root,
+  .kr-embedded .kr-card-holder-name.kr-disabled .kr-icon-wrapper-root,
+  .kr-embedded .kr-card-holder-mail.kr-disabled .kr-icon-wrapper-root,
+  .kr-embedded .kr-installment-number.kr-disabled .kr-icon-wrapper-root,
+  .kr-embedded .kr-first-installment-delay.kr-disabled .kr-icon-wrapper-root {
+    background-color: #ebebe4; }
+  .kr-embedded .kr-outer-wrapper.kr-disabled,
+  .kr-embedded .kr-inner-wrapper.kr-disabled {
+    background-color: #ebebe4; }
+  .kr-embedded.kr-ios .kr-inner-wrapper.kr-disabled input.kr-input-field {
+    color: #222; }
+  .kr-embedded .kr-field-wrapper .kr-help-button-wrapper {
+    display: block;
+    position: relative;
+    height: 100%; }
+    .kr-embedded .kr-field-wrapper .kr-help-button-wrapper .kr-help-button {
+      display: block;
+      width: 50px;
+      height: 35px;
+      display: -moz-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+      -moz-justify-content: center;
+      justify-content: center;
+      -ms-flex-align: center;
+      -moz-align-items: center;
+      align-items: center;
+      -moz-flex-direction: row;
+      -ms-flex-direction: row;
+      flex-direction: row; }
+    .kr-embedded .kr-field-wrapper .kr-help-button-wrapper .kr-help-button .kr-help-icon-wrapper {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background-color: #fff;
+      display: -moz-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+      -moz-justify-content: center;
+      justify-content: center;
+      -ms-flex-align: center;
+      -moz-align-items: center;
+      align-items: center;
+      -moz-flex-direction: row;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      box-shadow: 0px 0px 0px 1px #717171;
+      cursor: pointer; }
+      .kr-embedded .kr-field-wrapper .kr-help-button-wrapper .kr-help-button .kr-help-icon-wrapper .kr-help-icon {
+        display: -moz-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -moz-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -ms-flex-align: center;
+        -moz-align-items: center;
+        align-items: center;
+        cursor: pointer; }
+      .kr-embedded .kr-field-wrapper .kr-help-button-wrapper .kr-help-button .kr-help-icon-wrapper .kr-help-icon svg {
+        width: 10px;
+        height: 10px; }
+      .kr-embedded .kr-field-wrapper .kr-help-button-wrapper .kr-help-button .kr-help-icon-wrapper .kr-help-icon svg path {
+        fill: #717171; }
+  .kr-embedded[kr-help-button='inner-field']:not([krvue]) .kr-pan,
+  .kr-embedded[kr-help-button='inner-field']:not([krvue]) .kr-field.kr-text,
+  .kr-embedded[kr-help-button='inner-field']:not([krvue]) .kr-field.kr-checkbox,
+  .kr-embedded[kr-help-button='inner-field']:not([krvue]) .kr-expiry,
+  .kr-embedded[kr-help-button='inner-field']:not([krvue]) .kr-security-code {
+    width: 264px; }
+  .kr-embedded[kr-help-button='inner-field']:not([krvue]) .kr-payment-button {
+    width: 266px; }
+  .kr-embedded.kr-help-button-inner-field .kr-icon-wrapper-root.kr-multi-brand,
+  .kr-embedded.kr-help-button-inner-field .kr-icon-wrapper-root.kr-multi-brand .kr-icon {
+    width: 39px; }
+    .kr-embedded.kr-help-button-inner-field .kr-icon-wrapper-root.kr-multi-brand .kr-icon-arrow,
+    .kr-embedded.kr-help-button-inner-field .kr-icon-wrapper-root.kr-multi-brand .kr-icon .kr-icon-arrow {
+      right: -5px; }
+    .kr-embedded.kr-help-button-inner-field .kr-icon-wrapper-root.kr-multi-brand .kr-icon-wrapper .kr-icon-inner-wrapper .kr-icon-wrapper-content,
+    .kr-embedded.kr-help-button-inner-field .kr-icon-wrapper-root.kr-multi-brand .kr-icon .kr-icon-wrapper .kr-icon-inner-wrapper .kr-icon-wrapper-content {
+      -ms-flex-pack: start;
+      -moz-justify-content: start;
+      justify-content: start; }
+    .kr-embedded.kr-help-button-inner-field .kr-icon-wrapper-root.kr-multi-brand .kr-brand-selector,
+    .kr-embedded.kr-help-button-inner-field .kr-icon-wrapper-root.kr-multi-brand .kr-icon .kr-brand-selector {
+      right: -3px; }
+  .kr-embedded.kr-help-button-inner-field .kr-help-button-wrapper.kr-inner:not(.kr-visible) {
+    display: -ms-flexbox;
+    display: flex;
+    width: 0; }
+    .kr-embedded.kr-help-button-inner-field .kr-help-button-wrapper.kr-inner:not(.kr-visible) .kr-help-button {
+      width: 0;
+      opacity: 0; }
+  .kr-embedded.kr-help-button-inner-field .kr-help-button-wrapper.kr-inner.kr-visible .kr-help-button {
+    opacity: 1;
+    width: 39px;
+    height: 31px;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex; }
+  .kr-embedded.kr-help-button-inner-field .kr-help-button-wrapper.kr-inner .kr-help-button .kr-help-icon-wrapper {
+    width: 18px;
+    height: 18px;
+    background-color: #717171;
+    box-shadow: none; }
+  .kr-embedded.kr-help-button-inner-field .kr-help-button-wrapper.kr-inner .kr-help-button .kr-help-icon-wrapper.kr-error {
+    background-color: #d9534f; }
+  .kr-embedded.kr-help-button-inner-field .kr-help-button-wrapper.kr-inner .kr-help-button .kr-help-icon-wrapper .kr-help-icon svg {
+    width: 8px;
+    height: 8px; }
+  .kr-embedded.kr-help-button-inner-field .kr-help-button-wrapper.kr-inner .kr-help-button .kr-help-icon-wrapper .kr-help-icon svg path {
+    fill: #fff; }
+  .kr-embedded.kr-help-button-inner-field .kr-pan .kr-help-button-wrapper.kr-inner:not(.kr-visible) .kr-help-button {
+    transition: width 0.5s; }
+  .kr-embedded.kr-help-button-inner-field .kr-pan .kr-help-button-wrapper.kr-inner.kr-visible .kr-help-button {
+    transition: all 0.5s; }
+  .kr-embedded.kr-help-button-inner-field .kr-security-code .kr-icon-wrapper-root {
+    display: none !important; }
+  .kr-embedded.kr-help-button-inner-field .kr-security-code .kr-help-button-wrapper.kr-inner .kr-help-button {
+    width: 43px; }
+  .kr-embedded.kr-help-button-inner-field .kr-payment-button,
+  .kr-embedded.kr-help-button-inner-field .kr-form-error {
+    width: 266px; }
+  .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal {
+    background-color: #fff;
+    box-shadow: 0 0 15px #121212; }
+    .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-header {
+      background-color: #e4e4e4;
+      border-bottom: 1px solid #808080; }
+      .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-header .kr-help-modal-close-button svg path {
+        fill: #808080; }
+    .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-content {
+      margin-top: 35px; }
+    .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-content > div.kr-help-content {
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      color: #333; }
+    .kr-embedded .kr-help-button-wrapper .kr-help-modal-wrapper .kr-help-modal .kr-help-modal-content > .kr-help-image {
+      margin-top: 25px; }
+  .kr-embedded .kr-delete-button-wrapper {
+    cursor: pointer;
+    display: block;
+    position: relative;
+    height: 100%;
+    padding: 0 13px 0 7px; }
+    .kr-embedded .kr-delete-button-wrapper:not(.kr-visible) {
+      display: none; }
+    .kr-embedded .kr-delete-button-wrapper .kr-delete-button {
+      display: block;
+      height: 100%;
+      display: -moz-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: center;
+      -moz-justify-content: center;
+      justify-content: center;
+      -ms-flex-align: center;
+      -moz-align-items: center;
+      align-items: center;
+      -moz-flex-direction: row;
+      -ms-flex-direction: row;
+      flex-direction: row; }
+      .kr-embedded .kr-delete-button-wrapper .kr-delete-button .kr-delete-icon {
+        display: -moz-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -moz-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -ms-flex-align: center;
+        -moz-align-items: center;
+        align-items: center;
+        cursor: pointer; }
+        .kr-embedded .kr-delete-button-wrapper .kr-delete-button .kr-delete-icon svg {
+          width: 16px;
+          height: 18px; }
+          .kr-embedded .kr-delete-button-wrapper .kr-delete-button .kr-delete-icon svg path.icon {
+            fill: #717171; }
+          .kr-embedded .kr-delete-button-wrapper .kr-delete-button .kr-delete-icon svg path.background {
+            fill: #fff; }
+        .kr-embedded .kr-delete-button-wrapper .kr-delete-button .kr-delete-icon.kr-error svg path.icon {
+          fill: #d9534f; }
+        .kr-embedded .kr-delete-button-wrapper .kr-delete-button .kr-delete-icon.kr-error svg path.background {
+          fill: #fff; }
+    .kr-embedded .kr-delete-button-wrapper.kr-card-list {
+      height: 18px;
+      padding: 0 14px 0 0; }
+      .kr-embedded .kr-delete-button-wrapper.kr-card-list .kr-delete-button .kr-delete-icon svg {
+        height: 16px; }
+    .kr-embedded .kr-delete-button-wrapper.kr-visible + .kr-icon-wrapper-root {
+      right: -5px; }
+  .kr-embedded .kr-identity-document-number.kr-error .kr-field-wrapper.kr-text-wrapper .kr-icon-wrapper-root svg path,
+  .kr-embedded .kr-card-holder-name.kr-error .kr-field-wrapper.kr-text-wrapper .kr-icon-wrapper-root svg path,
+  .kr-embedded .kr-card-holder-mail.kr-error .kr-field-wrapper.kr-text-wrapper .kr-icon-wrapper-root svg path {
+    fill: #d9534f; }
+  .kr-embedded .kr-wallet-tabs {
+    margin-bottom: 20px; }
+    .kr-embedded .kr-wallet-tabs .kr-wallet-tab {
+      padding: 5px 10px;
+      margin: 0px 4px;
+      border-bottom: 2px solid rgba(0, 0, 0, 0);
+      cursor: pointer; }
+      .kr-embedded .kr-wallet-tabs .kr-wallet-tab.kr-selected {
+        background-color: rgba(0, 0, 0, 0);
+        border-bottom: 2px solid #293c7a; }
+      .kr-embedded .kr-wallet-tabs .kr-wallet-tab span {
+        font-family: 'Roboto', sans-serif;
+        font-size: 16px;
+        color: #293c7a;
+        cursor: pointer; }
+      .kr-embedded .kr-wallet-tabs .kr-wallet-tab.kr-disabled span {
+        color: #717171; }
+  .kr-embedded .kr-wallet-card-list {
+    margin: 16px 0; }
+    .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper {
+      border: 1px solid #b1b1b1;
+      margin-bottom: 4px; }
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element,
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-delete-button,
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-delete-button svg,
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label,
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label label {
+        cursor: pointer; }
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element:not(.kr-deleted) {
+        padding: 12px 0; }
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element.kr-deleted {
+        transition: all 0.5s;
+        height: 0;
+        padding: 0;
+        opacity: 0; }
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-brand-icon svg {
+        width: 24px;
+        height: 16px; }
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element i.fi-x-circle svg {
+        width: 20px;
+        height: 20px; }
+  .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label {
+    margin-left: 31px; }
+    .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label input[type='radio'] {
+      display: none; }
+    .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label label {
+      position: relative;
+      min-width: 150px; }
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label label span {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        color: #717171; }
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label label span::before,
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label label span::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto; }
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label label span:hover {
+        cursor: pointer; }
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label label span::before {
+        left: -21.5px;
+        width: 10px;
+        height: 10px;
+        background-color: #fff;
+        border-radius: 50%;
+        border: 1px solid #717171; }
+      .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label label span::after {
+        left: -18.5px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: #fff; }
+    .kr-embedded .kr-wallet-card-list .kr-card-list-wrapper .kr-card-element .kr-card-label input[type='radio']:checked + label span::after {
+      background-color: #717171; }
+  .kr-embedded .kr-visibility-button {
+    display: -ms-flexbox;
+    display: flex; }
+  .kr-embedded .kr-modal-wrapper .kr-modal {
+    box-shadow: 0 0 15px #121212; }
+    .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-header .kr-modal-header-close-button svg path {
+      fill: #D4AC6D; }
+    .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content p, .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content a {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      color: #4A4A4A; }
+      .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content p b, .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content p strong, .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content a b, .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content a strong {
+        font-weight: 600;
+        font-family: 'Roboto', sans-serif;
+        font-size: 16px; }
+      .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content p.kr-modal-card, .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content p.kr-token, .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content a.kr-modal-card, .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content a.kr-token {
+        color: #4A4A4A8F; }
+    .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-content .kr-modal-optional-content p {
+      color: #5694C7; }
+    .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-footer button {
+      width: 30%;
+      margin: 0; }
+      .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-footer button, .kr-embedded .kr-modal-wrapper .kr-modal .kr-modal-footer button span {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        color: #fff;
+        text-transform: uppercase; }
+  .kr-embedded .kr-layer .kr-layer-message {
+    font-family: 'Roboto', sans-serif;
+    color: #fff; }
+  .kr-embedded.kr-internet-explorer .kr-icon-arrow {
+    top: 8px; }
+  .kr-embedded.kr-internet-explorer .kr-brand-selector-wrapper .kr-arrow {
+    top: -20px; }
+  .kr-embedded.kr-internet-explorer .kr-icon {
+    margin-left: -6px; }
+  .kr-embedded.kr-internet-explorer .kr-expiry.kr-size-half .kr-icon {
+    margin-left: -12px; }
+  .kr-embedded.kr-internet-explorer .kr-inner-wrapper .kr-field-container input.kr-input-field {
+    height: 6px; }
+  .kr-embedded.kr-internet-explorer[kr-popin] .kr-outer-wrapper .kr-inner-wrapper {
+    height: 25px; }
+  .kr-embedded.kr-ios {
+    /* &[krvue] {
+  .kr-expiry {
+    &.kr-size-half .kr-field-component iframe {
+      width: $field-width/2 - $icon-width + 1px !important;
+    }
+  }
+
+  .kr-security-code {
+    &.kr-size-half .kr-field-component iframe {
+      width: $field-width/2 - $icon-width + 7px !important;
+    }
+  }
+
+  .kr-security-code.kr-size-half[kr-order='2'] {
+    width: calc(50% - 7px) !important;
+  }
+} */ }
+    .kr-embedded.kr-ios .kr-field.kr-text input.kr-theme {
+      padding-top: 6px !important; }
+  .kr-embedded.kr-ios-9[krvue] .kr-pan .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] .kr-field.kr-text .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] .kr-field.kr-checkbox .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] .kr-expiry .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] .kr-security-code .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] .kr-identity-document-number .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] .kr-card-holder-name .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] .kr-card-holder-mail .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] > .kr-field-wrapper .kr-field-component {
+    width: 185px; }
+  .kr-embedded.kr-ios-9[krvue] .kr-pan .kr-field-component .kr-iframe-wrapper iframe,
+  .kr-embedded.kr-ios-9[krvue] .kr-field.kr-text .kr-field-component .kr-iframe-wrapper iframe,
+  .kr-embedded.kr-ios-9[krvue] .kr-field.kr-checkbox .kr-field-component .kr-iframe-wrapper iframe,
+  .kr-embedded.kr-ios-9[krvue] .kr-expiry .kr-field-component .kr-iframe-wrapper iframe,
+  .kr-embedded.kr-ios-9[krvue] .kr-security-code .kr-field-component .kr-iframe-wrapper iframe,
+  .kr-embedded.kr-ios-9[krvue] .kr-identity-document-number .kr-field-component .kr-iframe-wrapper iframe,
+  .kr-embedded.kr-ios-9[krvue] .kr-card-holder-name .kr-field-component .kr-iframe-wrapper iframe,
+  .kr-embedded.kr-ios-9[krvue] .kr-card-holder-mail .kr-field-component .kr-iframe-wrapper iframe,
+  .kr-embedded.kr-ios-9[krvue] > .kr-field-wrapper .kr-field-component .kr-iframe-wrapper iframe {
+    height: 33px !important; }
+  .kr-embedded.kr-ios-9[krvue] .kr-pan.kr-size-half .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] .kr-field.kr-text.kr-size-half .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] .kr-field.kr-checkbox.kr-size-half .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] .kr-expiry.kr-size-half .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] .kr-security-code.kr-size-half .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] .kr-identity-document-number.kr-size-half .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] .kr-card-holder-name.kr-size-half .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] .kr-card-holder-mail.kr-size-half .kr-field-component,
+  .kr-embedded.kr-ios-9[krvue] > .kr-field-wrapper.kr-size-half .kr-field-component {
+    width: 66.5px; }
+
+/* PATCH */
+#portal .kr-embedded-wrapper-isVisible .kr-embedded {
+  width: auto; }
+  #portal .kr-embedded-wrapper-isVisible .kr-embedded .kr-pan,
+  #portal .kr-embedded-wrapper-isVisible .kr-embedded .kr-field.kr-text,
+  #portal .kr-embedded-wrapper-isVisible .kr-embedded .kr-field.kr-checkbox,
+  #portal .kr-embedded-wrapper-isVisible .kr-embedded .kr-expiry,
+  #portal .kr-embedded-wrapper-isVisible .kr-embedded .kr-security-code,
+  #portal .kr-embedded-wrapper-isVisible .kr-embedded .kr-identity-document-number,
+  #portal .kr-embedded-wrapper-isVisible .kr-embedded .kr-card-holder-name,
+  #portal .kr-embedded-wrapper-isVisible .kr-embedded .kr-card-holder-mail,
+  #portal .kr-embedded-wrapper-isVisible .kr-embedded .kr-identity-document-type,
+  #portal .kr-embedded-wrapper-isVisible .kr-embedded .kr-installment-number,
+  #portal .kr-embedded-wrapper-isVisible .kr-embedded .kr-first-installment-delay,
+  #portal .kr-embedded-wrapper-isVisible .kr-embedded > .kr-field-wrapper {
+    margin-top: 14px;
+    margin-left: 10px;
+    width: 266px; }
+  #portal .kr-embedded-wrapper-isVisible .kr-embedded .kr-payment-button,
+  #portal .kr-embedded-wrapper-isVisible .kr-embedded .kr-form-error {
+    margin-left: 10px;
+    width: 266px; }
+
+.payzen #embedded-cart-tpl #krtoolbar-birdplace #embedded-form.kr-embedded,
+.page-template-default.mega-menu-primary
+#embedded-cart-tpl
+#user-wrapper-form
+#embedded-form.kr-embedded {
+  width: auto; }
+  .payzen #embedded-cart-tpl #krtoolbar-birdplace #embedded-form.kr-embedded #kr-form .mdl-cell.mdl-cell--4-col,
+  .page-template-default.mega-menu-primary
+#embedded-cart-tpl
+#user-wrapper-form
+#embedded-form.kr-embedded #kr-form .mdl-cell.mdl-cell--4-col {
+    margin: 8px;
+    padding: 0 6px; }
+  .payzen #embedded-cart-tpl #krtoolbar-birdplace #embedded-form.kr-embedded #kr-form .mdl-cell.mdl-cell--4-col .kr-pan,
+  .payzen #embedded-cart-tpl #krtoolbar-birdplace #embedded-form.kr-embedded #kr-form .mdl-cell.mdl-cell--4-col .kr-expiry,
+  .payzen #embedded-cart-tpl #krtoolbar-birdplace #embedded-form.kr-embedded #kr-form .mdl-cell.mdl-cell--4-col .kr-security-code,
+  .page-template-default.mega-menu-primary
+#embedded-cart-tpl
+#user-wrapper-form
+#embedded-form.kr-embedded #kr-form .mdl-cell.mdl-cell--4-col .kr-pan,
+  .page-template-default.mega-menu-primary
+#embedded-cart-tpl
+#user-wrapper-form
+#embedded-form.kr-embedded #kr-form .mdl-cell.mdl-cell--4-col .kr-expiry,
+  .page-template-default.mega-menu-primary
+#embedded-cart-tpl
+#user-wrapper-form
+#embedded-form.kr-embedded #kr-form .mdl-cell.mdl-cell--4-col .kr-security-code {
+    max-width: 232px; }
+  .payzen #embedded-cart-tpl #krtoolbar-birdplace #embedded-form.kr-embedded #kr-form .column.is-4 .kr-pan,
+  .payzen #embedded-cart-tpl #krtoolbar-birdplace #embedded-form.kr-embedded #kr-form .column.is-4 .kr-expiry,
+  .payzen #embedded-cart-tpl #krtoolbar-birdplace #embedded-form.kr-embedded #kr-form .column.is-4 .kr-security-code,
+  .page-template-default.mega-menu-primary
+#embedded-cart-tpl
+#user-wrapper-form
+#embedded-form.kr-embedded #kr-form .column.is-4 .kr-pan,
+  .page-template-default.mega-menu-primary
+#embedded-cart-tpl
+#user-wrapper-form
+#embedded-form.kr-embedded #kr-form .column.is-4 .kr-expiry,
+  .page-template-default.mega-menu-primary
+#embedded-cart-tpl
+#user-wrapper-form
+#embedded-form.kr-embedded #kr-form .column.is-4 .kr-security-code {
+    height: auto; }

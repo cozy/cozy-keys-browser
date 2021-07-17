@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<!-- saved from url=(0520)https://api.scelliuspaiement.labanquepostale.fr/static/js/krypton-client/V4.0/slave/index.html?assets=43#%7B%22formId%22%3A%22F29771%22%2C%22awareId%22%3A%22aware15%22%2C%22name%22%3A%22securityCode%22%2C%22formTokenPrefix%22%3A%2235%22%2C%22placeholder%22%3Anull%2C%22parentDomain%22%3A%22https%3A%2F%2Fwww.laposte.fr%22%2C%22applicationPath%22%3A%22%2Fstatic%2Fjs%2Fkrypton-client%2FV4.0%2Fstable%2Fkr-payment-form.min.js%22%2C%22disabled%22%3Afalse%2C%22fontFamily%22%3A%22Arial%22%2C%22hasDynamicValues%22%3Afalse%7D -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,width=device-width">
+    <style type="text/css">
+      @font-face {
+        font-family: 'Password';
+        font-style: normal;
+        font-weight: 400;
+        src: url('../ext/font/password.ttf');
+      }
+
+      body {
+        padding: 0;
+        margin: 0;
+      }
+      ::-webkit-input-placeholder {
+        /* WebKit, Blink, Edge */
+        color: #999;
+      }
+      :-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        color: #999;
+        opacity: 1;
+      }
+      ::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        color: #999;
+        opacity: 1;
+      }
+      :-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: #999;
+      }
+      ::-ms-input-placeholder {
+        /* Microsoft Edge */
+        color: #999;
+      }
+      ::-ms-reveal,
+      ::-ms-clear {
+        display: none;
+      }
+
+      input {
+        display: none;
+      }
+
+      input.kr-password {
+        font-family: 'Password' !important;
+      }
+
+      /* Remove input cross on Edge */
+      input::-ms-clear {
+        display: none;
+      }
+
+      span.placeholder-block {
+        color: #999 !important;
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* Non-prefixed version, currently
+                                        supported by Chrome and Opera */
+      }
+
+      body.caret-invisible #inputField {
+        caret-color: transparent !important;
+        cursor: text !important;
+      }
+
+      body.caret-invisible {
+        caret-color: transparent !important;
+      }
+
+      body.flex-slave {
+        width: 100% !important;
+      }
+
+      @keyframes blink {
+        from,
+        to {
+          opacity: 1;
+        }
+        10%,
+        90% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      @-webkit-keyframes blink {
+        from,
+        to {
+          opacity: 1;
+        }
+        10%,
+        90% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      body.caret-blink .kr-cursor-mirror.animated {
+        transition: all 0.5s;
+        animation: 1s blink step-end 0.5s infinite;
+        -webkit-animation: 1s blink step-end 0.5s infinite;
+      }
+    </style>
+  <script src="./kr-payment-form.min.js.téléchargement"></script><style id="injectedShakeStyle">
+            input.on-error-animation {
+                animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both
+                transform: translate3d(0, 0, 0)
+                backface-visibility: hidden
+                perspective: 1000px
+            }
+            @keyframes shake {
+                10%, 90% {
+                    transform: translate3d(-1px, 0, 0)
+                }
+
+                20%, 80% {
+                    transform: translate3d(2px, 0, 0)
+                }
+
+                30%, 50%, 70% {
+                    transform: translate3d(-4px, 0, 0)
+                }
+
+                40%, 60% {
+                    transform: translate3d(4px, 0, 0)
+                }
+            }
+            </style><style>
+                input:-webkit-autofill,
+                input:-webkit-autofill:hover,
+                input:-webkit-autofill:focus {
+                    transition: all 5000s ease-in-out 0s!important;
+                    color: rgb(0, 0, 0)!important;
+                }</style></head>
+  <body id="slave-app" class="flex-slave Chrome Chrome-91">
+    <div id="inputWrapper" class=""><div id="wrapper" class="kr-outer-wrapper default kr-security-code" style="background-color: rgba(0, 0, 0, 0); border: 0px solid rgb(60, 60, 60); border-radius: 0px; box-shadow: none; box-sizing: border-box; color: rgb(60, 60, 60); font-family: Roboto, Verdana, sans-serif; font-size: 16px; font-style: normal; font-weight: 400; height: 16.8px; letter-spacing: normal; margin: 0px; max-height: none; min-height: 0px; min-width: 0px; opacity: 1; outline: rgb(60, 60, 60) none 0px; padding: 0px; text-align: start; text-decoration: none solid rgb(60, 60, 60); text-shadow: none; transition: all 0s ease 0s; user-select: auto; vertical-align: baseline; visibility: visible; white-space: normal; width: 100%;"><div class="kr-inner-wrapper" style="background-color: rgba(0, 0, 0, 0); border: 0px solid rgb(60, 60, 60); border-radius: 0px; box-shadow: none; box-sizing: border-box; color: rgb(60, 60, 60); font-family: Roboto, Verdana, sans-serif; font-size: 16px; font-style: normal; font-weight: 400; height: 16.8px; letter-spacing: normal; margin: 0px; max-height: none; min-height: 0px; min-width: 0px; opacity: 1; outline: rgb(60, 60, 60) none 0px; padding: 0px; text-align: start; text-decoration: none solid rgb(60, 60, 60); text-shadow: none; transition: all 0s ease 0s; user-select: auto; vertical-align: baseline; visibility: visible; white-space: normal; width: 100%;"><div class="kr-field-container" style="background-color: rgba(0, 0, 0, 0); border: 0px solid rgb(60, 60, 60); border-radius: 0px; box-shadow: none; box-sizing: border-box; color: rgb(60, 60, 60); font-family: Roboto, Verdana, sans-serif; font-size: 16px; font-style: normal; font-weight: 400; height: 16.8px; letter-spacing: normal; margin: 0px; max-height: none; min-height: 0px; min-width: 0px; opacity: 1; outline: rgb(60, 60, 60) none 0px; padding: 0px; text-align: start; text-decoration: none solid rgb(60, 60, 60); text-shadow: none; transition: all 0s ease 0s; user-select: auto; vertical-align: baseline; visibility: visible; white-space: normal; width: 100%;"><div class="kr-field-relative-wrapper" style="background-color: rgba(0, 0, 0, 0); border: 0px solid rgb(60, 60, 60); border-radius: 0px; box-shadow: none; box-sizing: border-box; color: rgb(60, 60, 60); font-family: Roboto, Verdana, sans-serif; font-size: 16px; font-style: normal; font-weight: 400; height: 16.8px; letter-spacing: normal; margin: 0px; max-height: none; min-height: 0px; min-width: 0px; opacity: 1; outline: rgb(60, 60, 60) none 0px; padding: 0px; text-align: start; text-decoration: none solid rgb(60, 60, 60); text-shadow: none; transition: all 0s ease 0s; user-select: auto; vertical-align: baseline; visibility: visible; white-space: normal; width: 100%;"><!----><!----><div class="kr-input-relative-wrapper" style="background-color: rgba(0, 0, 0, 0); box-shadow: none; box-sizing: border-box; color: rgb(60, 60, 60); font-family: Roboto, Verdana, sans-serif; font-size: 16px; font-style: normal; font-weight: 400; height: 16.8px; letter-spacing: normal; margin: 0px; max-height: none; min-height: 0px; min-width: 0px; opacity: 1; outline: rgb(60, 60, 60) none 0px; padding: 0px; text-align: start; text-decoration: none solid rgb(60, 60, 60); text-shadow: none; transition: all 0s ease 0s; user-select: auto; vertical-align: baseline; visibility: visible; white-space: normal; width: 100%; border: 0px solid black;"><div class="kr-input-relative-wrapper-inner"><input id="inputField" autocorrect="off" spellcheck="false" tabindex="1" placeholder="CVV" autocomplete="off" type="tel" class="kr-input-field" style="background-color: rgba(0, 0, 0, 0); box-shadow: none; box-sizing: border-box; color: rgb(0, 0, 0); font-family: Arial; font-size: 16px; font-style: normal; font-weight: 400; height: 16.8px; letter-spacing: normal; margin: 0px; max-height: none; min-height: 0px; min-width: 0px; opacity: 1; outline: rgb(0, 0, 0) none 0px; padding: 0px; text-align: start; text-decoration: none solid rgb(0, 0, 0); text-shadow: none; transition: all 0s ease 0s; user-select: auto; vertical-align: middle; visibility: visible; white-space: normal; width: 100%; border: 0px solid black; display: inline-block;"><input value="123" class="kr-password" style="display: block; position: absolute; top: -999px; left: -999px;"><!----><!----></div></div><input id="endInputHook" tabindex="10" style="position: absolute; top: -9999px; left: -9999px; color: transparent; background-color: transparent; z-index: 0; border: none; outline: none; display: block;"></div></div></div></div></div>
+    <script type="text/javascript">
+      var script = document.createElement('script');
+      script.src = window.location.pathname.replace('slave/index.html', 'stable/kr-payment-form.min.js');
+      document.head.appendChild(script);
+    </script>
+  
+
+</body></html>

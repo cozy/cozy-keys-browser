@@ -65,7 +65,7 @@ const ExcludedAutofillTypes: string[] = ['radio', 'checkbox', 'hidden', 'file', 
 // 0: English, 1: Danish, 2: German/Dutch, 3: French/Spanish/Italian, 4: Russian, 5: Portuguese
 const MonthAbbr = ['mm', 'mm', 'mm', 'mm', 'mm', 'mm'];
 const YearAbbrShort = ['yy', 'åå', 'jj', 'aa', 'гг', 'rr'];
-const YearAbbrLong = ['yyyy', 'åååå', 'jjjj', 'aa', 'гггг', 'rrrr'];
+const YearAbbrLong = ['yyyy', 'åååå', 'jjjj', 'aaaa', 'гггг', 'rrrr'];
 
 const OperationDelays = new Map<string, number>([
     ['buzzsprout.com', 100],
@@ -528,8 +528,6 @@ export default class AutofillService implements AutofillServiceInterface {
         }
 
         // C] generate a standard login fillscript for the generic cipher
-        console.log('generateFieldsForInPageMenuScripts');
-
         if (hasLogins) {
             let loginLoginMenuFillScript: any = [];
             const loginFS = new AutofillScript(pageDetails.documentUUID);
@@ -1012,7 +1010,7 @@ export default class AutofillService implements AutofillServiceInterface {
                     ['cc-exp', 'card-exp', 'cc-expiration', 'card-expiration', 'cc-ex', 'card-ex',
                         'card-expire', 'card-expiry', 'validite', 'expiration', 'expiry', 'mm-yy',
                         'mm-yyyy', 'yy-mm', 'yyyy-mm', 'expiration-date', 'payment-card-expiration',
-                        'payment-cc-date'],
+                        'payment-cc-date', 'mm-aa'],
                     ['mm-yy', 'mm-yyyy', 'yy-mm', 'yyyy-mm', 'expiration-date',
                         'payment-card-expiration'])) {
                     fillFields.exp = f;
