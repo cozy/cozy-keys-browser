@@ -57,9 +57,10 @@
                 </ul>
             </li>
             <br>
-            <li>Special cases from the web
+            <li>Special cases from the web (static html pages)
                 <ul>
                     <li><a href="2021-06-05-CB_LaPoste/Paiement.html">LaPoste.fr</a> : A CB where each field is in an ifrmae, only the first one is in a form, so we prefer not to create a rule to activate the menu for second and third inputs. The probability of edge cases is to high and in this case, having only one menu is ok since autofill will work on each input.</li>
+                    <li><a href="2021-07-16-Nextinpact-form-with-hidden-inputs-for-identities/index.html">NextInpact.com</a> : An identity form where most fields are twice, one visible, one hidden. This led to select for the menu only the first field, which is hidden : the visible field had then no menu. We fixed this by selecting the last visible fields if exists, any hidden otherwise.<br>note : open this static page from the local filesystem, css is not displayed when served from localhost (?) </li>
                 </ul>
             </li>
             <br>
