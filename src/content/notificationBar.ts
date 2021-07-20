@@ -171,7 +171,7 @@ function afterLoadedIfRelevant(event: any) {
                             continue;
                         }
 
-                        const forms = addedNode.querySelectorAll('form:not([data-bitwarden-watching])');
+                        const forms = addedNode.querySelectorAll('form:not([data-bitwarden-watching]),input');
                         if (forms != null && forms.length > 0) {
                             doCollect = true;
                             break;
