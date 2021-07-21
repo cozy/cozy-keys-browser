@@ -1,8 +1,8 @@
 require('./loginMenu.scss');
 
-import { AuthService } from 'jslib/abstractions/auth.service';
-import { EnvironmentService } from 'jslib/abstractions/environment.service';
-import { Utils } from 'jslib/misc/utils';
+import { AuthService } from 'jslib-common/abstractions/auth.service';
+import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
+import { Utils } from 'jslib-common/misc/utils';
 import { CozySanitizeUrlService } from '../popup/services/cozySanitizeUrl.service';
 
 
@@ -284,14 +284,14 @@ function sanitizeUrlInput(inputUrl) {
     if (inputUrl.includes('@')) {
         throw new Error('noEmailAsCozyUrl');
     }
-    
+
     const cozySanitizeUrlService = new CozySanitizeUrlService();
 
     // Prevent mycosy instead of mycozy
     if (cozySanitizeUrlService.hasMispelledCozy(inputUrl)){
         throw new Error('hasMispelledCozy');
     }
-    
+
     return cozySanitizeUrlService.normalizeURL(inputUrl, cozySanitizeUrlService.cozyDomain);
 }
 
