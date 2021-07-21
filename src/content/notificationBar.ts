@@ -31,7 +31,8 @@ function getAppURLCozy(cozyUrl: string, appName: string, hash: string) {
 
 document.addEventListener('DOMContentLoaded', event => {
     /*
-      The aim is to deactivate the inPageMenu in Cozy Password so that there is no menu when filing a cipher.
+      The aim is to deactivate the inPageMenu in Cozy somme Cozy applications so that there is no menu in
+      their forms (contacts, pass...)
       We compare the hostname of the webpage with the Cozy Password hostname
      */
     chrome.storage.local.get(ConstantsService.environmentUrlsKey, (urls: any) => {
@@ -361,6 +362,7 @@ function afterLoadedIfRelevant(event: any) {
             el = form.querySelector('input[name="' + fieldData.htmlName + '"]');
         }
         if (el == null && fieldData.opid != null) {
+            // @ts-expect-error
             el = inputs.find( e => e.opid === fieldData.opid);
         }
         if (el == null && fieldData.elementNumber != null) {
