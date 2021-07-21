@@ -66,4 +66,9 @@ describe('url input', () => {
         const url = loginComponent.sanitizeUrlInput(inputUrl);
         expect(url).toEqual('https://claude.realdomaincosy.cloud');
     });
+    it(`should remove trailing / in url`, () => {
+        const inputUrl = 'https://claude.realdomaincosy.cloud/';
+        const url = loginComponent.sanitizeUrlInput(inputUrl);
+        expect(url).toEqual('https://claude.realdomaincosy.cloud');
+    });
 });

@@ -20,10 +20,13 @@ export class CozySanitizeUrlService {
         return matchedSlugs ? value.replace(matchedSlugs[1], '') : value;
     };
 
+    protected removeTrailingSlash = (value: string) => value.replace(/\/$/, "");
+
     normalizeURL = (value: string, defaultDomain: string): string => {
         const valueWithProtocol = this.prependProtocol(value);
+        const valueWithoutTrailingSlash = this.removeTrailingSlash(valueWithProtocol);
         const valueWithProtocolAndDomain = this.appendDomain(
-            valueWithProtocol,
+            valueWithoutTrailingSlash,
             defaultDomain
         );
 
