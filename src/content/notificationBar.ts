@@ -12,7 +12,7 @@ import { ConstantsService } from 'jslib-common/services/constants.service';
 
 /*
     Returns a cozy app url based on the cozyUrl and the app name
- */
+*/
 function getAppURLCozy(cozyUrl: string, appName: string, hash: string) {
     if (!appName) {
         return (new URL(cozyUrl)).toString();
@@ -29,26 +29,27 @@ function getAppURLCozy(cozyUrl: string, appName: string, hash: string) {
     return url.toString();
 }
 
-document.addEventListener('DOMContentLoaded', event => {
-    /*
-      The aim is to deactivate the inPageMenu in Cozy somme Cozy applications so that there is no menu in
-      their forms (contacts, pass...)
-      We compare the hostname of the webpage with the Cozy Password hostname
-     */
-    chrome.storage.local.get(ConstantsService.environmentUrlsKey, (urls: any) => {
-        const cozyPasswordsUrl = new URL(getAppURLCozy(urls.environmentUrls.base, 'passwords', ''));
-        const cozyContactsUrl = new URL(getAppURLCozy(urls.environmentUrls.base, 'contacts', ''));
-        if (
-            cozyPasswordsUrl.hostname === window.location.hostname ||
-            cozyContactsUrl.hostname === window.location.hostname
-        ) {
-            return;
-        }
-        afterLoadedIfRelevant(event);
-    });
+/*
+    The aim is to not activate the inPageMenu in somme Cozy applications so that there is no menu in
+    their forms (contacts, pass...)
+*/
+let cozyPasswordsHostname: string;
+let cozyContactsHostname: string;
+function shouldTrigerMenu() {
+    return !(
+        (cozyPasswordsHostname === window.location.hostname && window.location.hash !== '#/login') ||
+        cozyContactsHostname === window.location.hostname
+    );
+}
+
+chrome.storage.local.get(ConstantsService.environmentUrlsKey, (urls: any) => {
+    cozyPasswordsHostname = (new URL(getAppURLCozy(
+        urls.environmentUrls.base, 'passwords', ''
+    ))).hostname;
+    cozyContactsHostname = (new URL(getAppURLCozy(urls.environmentUrls.base, 'contacts', ''))).hostname;
 });
 
-function afterLoadedIfRelevant(event: any) {
+document.addEventListener('DOMContentLoaded', event => {
     const pageDetails: any[] = [];
     const formData: any[] = [];
     let barType: string = null;
@@ -147,7 +148,7 @@ function afterLoadedIfRelevant(event: any) {
                 // to the page changes (for instance second step of this page :
                 // https://secure.fnac.com/identity/server/gateway/signin-signup )
                 // if (mutations == null || mutations.length === 0 || pageHref !== window.location.href) {
-                if (mutations == null || mutations.length === 0) {
+                if (mutations == null || mutations.length === 0 || !shouldTrigerMenu()) {
                     return;
                 }
 
@@ -225,8 +226,9 @@ function afterLoadedIfRelevant(event: any) {
                 observer.disconnect();
                 observer = null;
             }
-
-            collect();
+            if (shouldTrigerMenu()) {
+                collect();
+            }
             // The DOM might change during the collect: watch the DOM body for changes.
             // Note: a setTimeout was present here, apparently related to the autofill:
             // https://github.com/bitwarden/browser/commit/d19fcd6e4ccf062b595c2823267ffd32fd8e5a3d
