@@ -22,7 +22,7 @@
                     <i class="icon-cozy icon-cozy-sync"></i>
                 </ng-container>
             </span>
-            <span class="detail">{{c.subTitle}}</span>
+            <span class="detail">{{getSubtitle(c)}}</span>
         </div>
     </div>
     <app-action-buttons [cipher]="c" [showGlobe]="showGlobe" (onAutofill)="autofill(c)" (onView)="viewCipher(c)" (launchEvent)="launchCipher(c)"

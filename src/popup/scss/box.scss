@@ -302,7 +302,7 @@
 
     .detail {
         font-size: $font-size-small;
-
+        white-space: pre !important;
         @include themify($themes) {
             color: themed('mutedColor');
         }
