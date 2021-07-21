@@ -36,7 +36,11 @@ document.addEventListener('DOMContentLoaded', event => {
      */
     chrome.storage.local.get(ConstantsService.environmentUrlsKey, (urls: any) => {
         const cozyPasswordsUrl = new URL(getAppURLCozy(urls.environmentUrls.base, 'passwords', ''));
-        if (cozyPasswordsUrl.hostname === window.location.hostname) {
+        const cozyContactsUrl = new URL(getAppURLCozy(urls.environmentUrls.base, 'contacts', ''));
+        if (
+            cozyPasswordsUrl.hostname === window.location.hostname ||
+            cozyContactsUrl.hostname === window.location.hostname
+        ) {
             return;
         }
         afterLoadedIfRelevant(event);
