@@ -712,7 +712,7 @@ export default class AutofillService implements AutofillServiceInterface {
         scriptObjs.forEach( (scriptObj: any) => {
             scriptObj.script = scriptObj.script.filter((action: any) => {
                 if (!this.evaluateDecisionArray(action)) {
-                    // @override by Cozy : this log is required for debug and analysis
+                    /* @override by Cozy : this log is required for debug and analysis
                     const fieldStr = `${action[1]}, ${action[3].cipher.type}:${action[3].cipher.fieldType}`
                     console.log("!! ELIMINATE menu for field", {
                         action: fieldStr,
@@ -721,10 +721,11 @@ export default class AutofillService implements AutofillServiceInterface {
                         form: action[3].field.formObj,
                     });
                     console.log({a_field: fieldStr, ...action[3].decisionArray});
+                    */
 
                     return false; // remove unwanted action
                 }
-                // @override by Cozy : this log is required for debug and analysis
+                /* @override by Cozy : this log is required for debug and analysis
                 const fieldStr = `${action[1]}, ${action[3].cipher.type}:${action[3].cipher.fieldType}`
                 console.log("ACTIVATE menu for field", {
                         action: `${action[1]}, ${action[3].cipher.type}:${action[3].cipher.fieldType}`,
@@ -732,7 +733,8 @@ export default class AutofillService implements AutofillServiceInterface {
                         cipher: action[3].cipher,
                         form: action[3].field.formObj,
                     });
-                    console.log({a_field: fieldStr, ...action[3].decisionArray});
+                console.log({a_field: fieldStr, ...action[3].decisionArray});
+                */
 
                 // finalise the action to send to autofill.js
                 const scriptCipher = action[3].cipher;
