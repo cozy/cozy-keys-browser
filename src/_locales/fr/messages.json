@@ -161,7 +161,7 @@
     "message": "Compte"
   },
   "changeMasterPassword": {
-    "message": "Changer le mot de passe mon Cozy"
+    "message": "Changer le mot de passe"
   },
   "fingerprintPhrase": {
     "message": "Phrase d'empreinte",
@@ -348,7 +348,7 @@
     "message": "Authentification"
   },
   "yourVaultIsLocked": {
-    "message": "Votre coffre est verrouillé, confirmez votre mot de passe Cozy pour continuer."
+    "message": "Votre coffre est verrouillé, confirmez votre mot de passe pour continuer."
   },
   "unlock": {
     "message": "Déverrouiller"
@@ -442,7 +442,7 @@
     "message": "Oups, ce n'est pas la bonne adresse. Essayez d'écrire \"cozy\" avec un \"z\" !"
   },
   "masterPassRequired": {
-    "message": "Le mot de passe du Cozy est requis."
+    "message": "Le mot de passe est requis."
   },
   "masterPassLength": {
     "message": "Le mot de passe maître doit au moins contenir 8 caractères."
