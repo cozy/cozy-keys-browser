@@ -188,11 +188,6 @@ export default class RuntimeBackground {
                             targetCipher: msg.targetCipher,
                         });
                         break;
-                        await BrowserApi.tabSendMessage(sender.tab, {
-                            command   : 'menuAnswerRequest',
-                            subcommand: 'menuSelectionValidate',
-                        });
-                        break;
                     case 'login':
                         await this.logIn(msg.email, msg.pwd, sender.tab, msg.loginUrl);
                         break;
