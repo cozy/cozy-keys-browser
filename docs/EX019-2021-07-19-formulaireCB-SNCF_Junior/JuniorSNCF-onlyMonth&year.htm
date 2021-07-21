@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale = 1.0, user-scalable = no, maximum-scale=1.0"
+    />
+    <meta charset="utf-8" />
+    <!-- base href="https://ventes-juniorcie.oui.sncf/" -->
+    <link
+      rel="stylesheet"
+      href="Junior%20SNCF_fichiers/all.css"
+      integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+      crossorigin="anonymous"
+    />
+    <title>Junior &amp; Cie : accompagnement d'enfants en train</title>
+    <link rel="stylesheet" href="Junior%20SNCF_fichiers/src.css" />
+    <style type="text/css">
+      /* Copyright 2014-present Evernote Corporation. All rights reserved. */
+      @keyframes caretBlink {
+          from { opacity: 1.0; }
+          to { opacity: 0.0; }
+      }
+
+      @keyframes rotateSpinner {
+          from {
+              transform:rotate(0deg);
+          }
+          to {
+              transform:rotate(360deg);
+          }
+      }
+
+      #text-tool-caret {
+          animation-name: caretBlink;
+          animation-iteration-count: infinite;
+          animation-timing-function: cubic-bezier(1.0,0,0,1.0);
+          animation-duration: 1s;
+      }
+
+      #en-markup-loading-spinner {
+          position: absolute;
+          top: calc(50% - 16px);
+          left: calc(50% - 16px);
+          width: 32px;
+          height: 32px;
+      }
+
+      #en-markup-loading-spinner img {
+          position: relative;
+          top: 0px;
+          left: 0px;
+          animation-name: rotateSpinner;
+          animation-duration: 0.6s;
+          animation-iteration-count: infinite;
+          animation-timing-function: linear;
+      }
+    </style>
+    <style type="text/css">
+      /* Copyright 2014-present Evernote Corporation. All rights reserved. */
+      .skitchToastBoxContainer {
+          position: absolute;
+          width: 100%;
+          text-align: center;
+          top: 30px;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          pointer-events: none;
+      }
+
+      .skitchToastBox {
+          width: 200px;
+          height: 16px;
+          padding: 12px;
+          background-color: rgba(47, 55, 61, 0.95);
+          border-radius: 4px;
+          color: white;
+          cursor: default;
+          font-size: 10pt;
+          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.32);
+          font-family: 'Soleil', Helvetica, Arial, sans-serif;
+          border: 2px rgba(255, 255, 255, 0.38) solid;
+      }
+
+      .lang-zh-cn .skitchToastBox {
+          font-family: '微软雅黑', 'Microsoft YaHei', SimSun,
+              '&#x30E1;&#x30A4;&#x30EA;&#x30AA;', Meiryo, 'MS PGothic', 'Soleil',
+              Helvetica, Arial, sans-serif;
+      }
+
+      .lang-ja-jp .skitchToastBox {
+          font-family: '&#x30E1;&#x30A4;&#x30EA;&#x30AA;', Meiryo, 'MS PGothic',
+              '微软雅黑', 'Microsoft YaHei', SimSun, 'Soleil', Helvetica, Arial,
+              sans-serif;
+      }
+
+      .skitchToast {
+          padding-left: 20px;
+          padding-right: 20px;
+          display: inline-block;
+          height: 10px;
+          color: #f1f5f8;
+          text-align: center;
+      }
+
+      .skitchVisible {
+          /* Don't remove this class it's a hack used by the Evernote Clipper */
+      }
+    </style>
+    <style type="text/css">
+      /* Copyright 2014-present Evernote Corporation. All rights reserved. */
+
+      @font-face {
+      	font-family: 'Soleil';
+      	font-weight: normal;
+      	font-style: normal;
+      }
+    </style>
+    <style type="text/css">
+      /* Copyright 2019-present Evernote Corporation. All rights reserved. */
+
+      #en-markup-disabled {
+          position: fixed;
+          z-index: 9999;
+          width: 100%;
+          height: 100%;
+          top: 0px;
+          left: 0px;
+          cursor: default;
+          -webkit-user-select: none;
+      }
+
+      #en-markup-alert-container {
+          position: absolute;
+          z-index: 9999;
+          width: 450px;
+          left: calc(50% - 225px);
+          top: calc(50% - 85px);
+          background-color: white;
+          box-shadow: 0 2px 7px 1px rgba(0,0,0,0.35);
+          -webkit-user-select: none;
+      }
+
+      #en-markup-alert-container .cell-1 {
+          position: relative;
+          height: 110px;
+          width: 105px;
+          float: left;
+          text-align: center;
+          background-position: 65% 50%;
+          background-repeat: no-repeat;
+      }
+
+      #en-markup-alert-container .cell-2 {
+          position: relative;
+          float: left;
+          width: 345px;
+          margin-top: 29px;
+          margin-bottom: 20px;
+      }
+
+      #en-markup-alert-container .cell-2 .cell-2-title {
+          margin-bottom: 5px;
+          padding-right: 30px;
+          font-size: 12pt;
+          font-family: Tahoma, Arial;
+      }
+
+      #en-markup-alert-container .cell-2 .cell-2-message {
+          padding-right: 30px;
+          font-size: 9.5pt;
+          font-family: Tahoma, Arial;
+      }
+
+      #en-markup-alert-container .cell-3 {
+          position: relative;
+          width: 450px;
+          height: 60px;
+          float: left;
+          background-color: rgb(240,240,240);
+      }
+
+      #en-markup-alert-container .cell-3 button {
+          position: absolute;
+          top: 12px;
+          right: 15px;
+          width: 110px;
+          height: 36px;
+      }
+
+      #en-markup-alert-container .cell-3 button.alt-button {
+          position: absolute;
+          top: 12px;
+          right: 140px;
+          width: 110px;
+          height: 36px;
+      }
+    </style>
+    <style>
+      #cozy-menu-in-page {display: none;}
+      #cozy-menu-in-page[data-show] {display: block;}
+      #cozy-menu-in-page[data-unvisible] {height: 1px !important; }
+    </style>
+  </head>
+  <body>
+    <div id="junior-mount-node" class="border-box stretch">
+      <div class="junior-app border-box stretch">
+        <div class="jr-main border-box hstretch flex flex-column items-center">
+          <section class="border-box flex flex-column flex-auto">
+            <div class="jr-tunnel border-box">
+              <section class="jr-journey-title">
+                <h1 class="cap-first white undefined">paiement</h1>
+              </section>
+              <section class="jr-tunnel-body flex">
+                <section
+                  class="jr-content flex flex-column items-stretch flex-auto"
+                >
+                  <div class="jr-payment rounded">
+
+
+
+                    <div
+                      class="jr-payment-form mt2 px3 pt3 pb1 rounded relative"
+                    >
+                      <form>
+                        <div class="jr-payment-form-header left-align">
+                          <div class="jr-payment-form-title">
+                            Carte Bancaire
+                          </div>
+                          <div class="jr-payment-form-description gray h5">
+                            Sélectionnez une carte ci-dessous pour payer votre
+                            réservation. Les symboles indiquent que votre
+                            transaction est sécurisée. Vous pouvez donc
+                            effectuer votre paiement en tout confiance.
+                          </div>
+                        </div>
+                        <div class="jr-payment-form-content">
+                          <div class="jr-payment-form-separator"></div>
+                          <div class="jr-payment-form-content flex flex-column">
+                            <div class="jr-payment-form-line flex px3">
+                              <div class="jr-payment-form-fields mr3 mb1">
+                                <div
+                                  class="jr-payment-form-input-container center"
+                                >
+                                  <!-- <input
+                                    name="cardNumber"
+                                    class="
+                                      jr-payment-form-input
+                                      border-box border
+                                      rounded
+                                      p1
+                                    "
+                                    placeholder="Numéro de la carte*"
+                                    type="text"
+                                    autocomplete="off"
+                                  /> -->
+                                </div>
+                              </div>
+                              <div
+                                class="
+                                  jr-payment-form-cards
+                                  flex flex-column
+                                  left-align
+                                  mb1
+                                "
+                              >
+                                <div class="h6 gray">
+                                  Moyens de paiement acceptés
+                                </div>
+                                <div class="flex">
+                                  <div
+                                    class="col-3 jr-payment-methods jr-visa mr1"
+                                  >
+                                    <img
+                                      src="Junior%20SNCF_fichiers/visa-card.png"
+                                      alt="[Visa card icon]"
+                                    />
+                                  </div>
+                                  <div class="jr-payment-methods mr1">
+                                    <img
+                                      src="Junior%20SNCF_fichiers/bank-card.png"
+                                      alt="[Bank card icon]"
+                                    />
+                                  </div>
+                                  <div class="jr-payment-methods">
+                                    <img
+                                      src="Junior%20SNCF_fichiers/master-card.png"
+                                      alt="[Master card icon]"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="jr-payment-form-line flex col-12 px3 mb1"
+                            >
+                              <div class="jr-payment-form-fields col-6">
+                                <div
+                                  class="jr-payment-form-input-container center"
+                                >
+                                  <!-- <input
+                                    type="text"
+                                    name="cardHolder"
+                                    class="
+                                      jr-payment-form-input
+                                      border-box border
+                                      rounded
+                                      p1
+                                    "
+                                    placeholder="Nom du titulaire*"
+                                    autocomplete="off"
+                                  /> -->
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="jr-payment-form-line flex col-12 px3 mb1"
+                            >
+                              <div class="jr-payment-form-fields col-6 center">
+                                <div
+                                  class="
+                                    jr-payment-form-input-container
+                                    flex
+                                    justify-between
+                                    items-center
+                                  "
+                                >
+                                  <label class="col-3 h5">Expire le*</label
+                                  ><input
+                                    name="month"
+                                    class="
+                                      jr-payment-form-small-input
+                                      border-box border
+                                      rounded
+                                      p1
+                                      col-4
+                                    "
+                                    placeholder="MM*"
+                                    type="text"
+                                  /><input
+                                    name="year"
+                                    class="
+                                      jr-payment-form-small-input
+                                      border-box border
+                                      rounded
+                                      p1
+                                      col-4
+                                    "
+                                    placeholder="AA*"
+                                    type="text"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div class="jr-payment-form-line flex col-12 px3">
+                              <div class="jr-payment-form-fields mr3 mb1">
+                                <div
+                                  class="jr-payment-form-input-container center"
+                                >
+                                  <!-- <input
+                                    type="text"
+                                    name="cryptogram"
+                                    class="
+                                      jr-payment-form-input
+                                      border-box border
+                                      rounded
+                                      p1
+                                    "
+                                    placeholder="Cryptogramme*"
+                                    autocomplete="off"
+                                  /> -->
+                                </div>
+                              </div>
+                              <div
+                                class="jr-payment-form-cards flex left-align"
+                              >
+                                <div
+                                  class="inline-block jr-turquoise-info-icon"
+                                ></div>
+                                <p
+                                  class="inline-block h6 gray only-desktop mt1"
+                                >
+                                  il est constitué de 3 chiffres inscrits au dos
+                                  de la carte de paiement
+                                </p>
+                                <div
+                                  class="inline-block h6 gray only-mobile mt1"
+                                >
+                                  il est constitué de 3 chiffres inscrits au dos
+                                  de la carte de paiement
+                                </div>
+                              </div>
+                            </div>
+                            <div class="mt3">
+                              <div class="center h6 mb1">
+                                <span
+                                  >Consulter les informations concernant vos
+                                  données personnelles en </span
+                                ><span class="pointer semi-bold"
+                                  >cliquant ici</span
+                                >
+                              </div>
+                            </div>
+                          </div>
+                          <div class="jr-payment-form-separator"></div>
+                          <div class="jr-payment-form-submit-container mb2">
+                            <button
+                              class="
+                                jr-payment-form-submit
+                                btn
+                                bg-tangerine
+                                rounded
+                                white
+                                cap-first
+                              "
+                              disabled="disabled"
+                            >
+                              payer 183,40€
+                            </button>
+                          </div>
+                          <div class="jr-payment-form-submit-container mb2">
+                            <div class="jr-payment-form-secured flex">
+                              <div
+                                class="jr-padlock-icon inline-block mx1"
+                              ></div>
+                              <div
+                                class="
+                                  jr-secured-payment-label
+                                  h5
+                                  dark-turquoise
+                                  inline-block
+                                "
+                              >
+                                <span> Paiement </span
+                                ><span class="semi-bold">100% </span
+                                ><span>sécurisé</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </section>
+              </section>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+    <script src="Junior%20SNCF_fichiers/src.js"></script>
+    <div id="sconnect-is-installed" style="display: none;"></div>
+  </body>
+</html>

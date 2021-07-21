@@ -165,8 +165,8 @@ const attributesAmbiguity: any = {
         cardholderName : 1,
         brand          : 1,
         number         : 1,
-        expMonth       : 1,
-        expYear        : 1,
+        expMonth       : 0,
+        expYear        : 0,
         code           : 1,
     },
     login : {
@@ -713,26 +713,26 @@ export default class AutofillService implements AutofillServiceInterface {
             scriptObj.script = scriptObj.script.filter((action: any) => {
                 if (!this.evaluateDecisionArray(action)) {
                     // @override by Cozy : this log is required for debug and analysis
-                    // const fieldStr = `${action[1]}, ${action[3].cipher.type}:${action[3].cipher.fieldType}`
-                    // console.log("!! ELIMINATE menu for field", {
-                    //     action: fieldStr,
-                    //     field: action[3].field,
-                    //     cipher: action[3].cipher,
-                    //     form: action[3].field.formObj,
-                    // });
-                    // console.log({a_field: fieldStr, ...action[3].decisionArray});
+                    const fieldStr = `${action[1]}, ${action[3].cipher.type}:${action[3].cipher.fieldType}`
+                    console.log("!! ELIMINATE menu for field", {
+                        action: fieldStr,
+                        field: action[3].field,
+                        cipher: action[3].cipher,
+                        form: action[3].field.formObj,
+                    });
+                    console.log({a_field: fieldStr, ...action[3].decisionArray});
 
                     return false; // remove unwanted action
                 }
                 // @override by Cozy : this log is required for debug and analysis
-                // const fieldStr = `${action[1]}, ${action[3].cipher.type}:${action[3].cipher.fieldType}`
-                // console.log("ACTIVATE menu for field", {
-                //     action: `${action[1]}, ${action[3].cipher.type}:${action[3].cipher.fieldType}`,
-                //     field: action[3].field,
-                //     cipher: action[3].cipher,
-                //     form: action[3].field.formObj,
-                // });
-                // console.log({a_field: fieldStr, ...action[3].decisionArray});
+                const fieldStr = `${action[1]}, ${action[3].cipher.type}:${action[3].cipher.fieldType}`
+                console.log("ACTIVATE menu for field", {
+                        action: `${action[1]}, ${action[3].cipher.type}:${action[3].cipher.fieldType}`,
+                        field: action[3].field,
+                        cipher: action[3].cipher,
+                        form: action[3].field.formObj,
+                    });
+                    console.log({a_field: fieldStr, ...action[3].decisionArray});
 
                 // finalise the action to send to autofill.js
                 const scriptCipher = action[3].cipher;
@@ -758,18 +758,19 @@ export default class AutofillService implements AutofillServiceInterface {
     private evaluateDecisionArray(action: any) {
         const da = action[3].decisionArray;
         // selection conditions
+
         if (da.hasExistingCipher === true && da.field_isInForm === true && da.field_isInSearchForm === false) {
             return true; }
         if (da.field_isInSearchForm === true) {return false; }
         if (da.connected === true && da.hasExistingCipher === true && da.loginFellows  > 1
             && da.field_visible === true) {return true; }
-        if (da.cardFellows  > 1 && da.field_isInForm === true) {return true; }
+        if (da.ambiguity === 1 && da.cardFellows  > 1 && da.field_isInForm === true) {return true; }
+        if (da.ambiguity === 0 && da.cardFellows  > 3 && da.field_isInForm === true) {return true; }
         if (da.connected === true && da.hasIdentityCipher === true && da.identityFellows  > 1
             && da.field_visible === true) {return true; }
         if (da.connected === false && da.loginFellows === 2) {return true; }
         if (da.connected === false && da.hasLoginCipher === true && da.field_isInloginForm === true) {return true; }
         if (da.connected === false && da.hasLoginCipher === true && da.field_isInSignupForm === true) {return true; }
-        if (da.connected === false && da.cardFellows  > 1 && da.field_isInForm === true) {return true; }
         if (da.ambiguity === 0 && da.identityFellows  > 0 && da.field_isInForm === true) {return true; }
         if (da.ambiguity === 1 && da.identityFellows  > 1 && da.field_isInForm === true) {return true; }
         if (da.connected === true && da.hasExistingCipher === undefined && da.hasLoginCipher === true) {return false; }
@@ -1023,7 +1024,7 @@ export default class AutofillService implements AutofillServiceInterface {
                         'card-expire-mo', 'card-expiry-month', 'card-expiry-mo', 'mois-validite',
                         'mois-expiration', 'm-validite', 'm-expiration', 'expiry-date-field-month',
                         'expiration-date-month', 'expiration-date-mm', 'exp-mon', 'validity-mo',
-                        'exp-date-mo', 'cb-date-mois', 'date-m'])) {
+                        'exp-date-mo', 'cb-date-mois', 'date-m', 'month'])) {
                     fillFields.expMonth = f;
                     break;
                 } else if (!fillFields.expYear && this.isFieldMatch(f[attr],
@@ -1034,7 +1035,8 @@ export default class AutofillService implements AutofillServiceInterface {
                         'expiry-year', 'expiry-yr', 'card-expire-year', 'card-expire-yr', 'card-expiry-year',
                         'card-expiry-yr', 'an-validite', 'an-expiration', 'annee-validite',
                         'annee-expiration', 'expiry-date-field-year', 'expiration-date-year', 'cb-date-ann',
-                        'expiration-date-yy', 'expiration-date-yyyy', 'validity-year', 'exp-date-year', 'date-y'])) {
+                        'expiration-date-yy', 'expiration-date-yyyy', 'validity-year', 'exp-date-year', 'date-y',
+                        'year'])) {
                     fillFields.expYear = f;
                     break;
                 } else if (!fillFields.code && this.isFieldMatch(f[attr],
