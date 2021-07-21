@@ -356,6 +356,9 @@ function afterLoadedIfRelevant(event: any) {
         if (el == null && fieldData.htmlName != null && fieldData.htmlName !== '') {
             el = form.querySelector('input[name="' + fieldData.htmlName + '"]');
         }
+        if (el == null && fieldData.opid != null) {
+            el = inputs.find( e => e.opid === fieldData.opid);
+        }
         if (el == null && fieldData.elementNumber != null) {
             el = inputs[fieldData.elementNumber];
         }
