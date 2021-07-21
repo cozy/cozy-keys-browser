@@ -161,7 +161,7 @@
     "message": "Account"
   },
   "changeMasterPassword": {
-    "message": "The modification of your password must be done from your Cozy. Do you want to open it now ?"
+    "message": "Change Master Password"
   },
   "fingerprintPhrase": {
     "message": "Fingerprint Phrase",
