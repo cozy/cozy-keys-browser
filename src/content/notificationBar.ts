@@ -649,4 +649,4 @@ document.addEventListener('DOMContentLoaded', event => {
     function sendPlatformMessage(msg: any) {
         chrome.runtime.sendMessage(msg);
     }
-}
+});
