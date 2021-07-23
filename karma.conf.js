@@ -12,8 +12,6 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             { pattern: 'src/**/*.spec.ts', watch: false },
-            { pattern: 'src/popup/services/**/*.ts', watch: false },
-            { pattern: 'src/popup/accounts/**/*.ts', watch: false },
         ],
 
         exclude: [
@@ -42,7 +40,7 @@ module.exports = function(config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Firefox'],
+        browsers: ['Chrome'],
 
         // Concurrency level
         // how many browser should be started simultaneous
@@ -58,7 +56,6 @@ module.exports = function(config) {
                 alias: {
                     "jslib-common": path.join(__dirname, 'jslib/common/src'),
                     "jslib-angular": path.join(__dirname, 'jslib/angular/src'),
-                    'cozy-client': 'node_modules/cozy-client/dist/node.js',
                 },
             },
             module: {
