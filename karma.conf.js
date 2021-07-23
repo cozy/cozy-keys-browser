@@ -12,8 +12,6 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             { pattern: 'src/**/*.spec.ts', watch: false },
-            { pattern: 'src/popup/services/**/*.ts', watch: false },
-            { pattern: 'src/popup/accounts/**/*.ts', watch: false },
         ],
 
         exclude: [
