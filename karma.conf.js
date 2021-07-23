@@ -58,7 +58,6 @@ module.exports = function(config) {
                 alias: {
                     "jslib-common": path.join(__dirname, 'jslib/common/src'),
                     "jslib-angular": path.join(__dirname, 'jslib/angular/src'),
-                    'cozy-client': 'node_modules/cozy-client/dist/node.js',
                 },
             },
             module: {
