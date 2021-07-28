@@ -1,18 +1,6 @@
-import { CozyClient } from 'cozy-client/dist/CozyClient';
+import CozyClient from 'cozy-client';
 import { ApiService } from 'jslib-common/abstractions/api.service';
 import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
-import { TokenService } from 'jslib-common/abstractions/token.service';
-
-interface ICozyStackClient {
-    fetchJSON: (method: string, path: string) => Promise<any>;
-    fetch: (method: string, path: string, body: any, options: any) => Promise<any>;
-}
-
-interface ICozyClient {
-    getStackClient: () => ICozyStackClient;
-    getAppURL: () => string;
-    options: any;
-}
 
 /**
  * CozyClient service, used to communicate with a Cozy stack on specific Cozy's routes.
@@ -20,7 +8,7 @@ interface ICozyClient {
  * The token used to create a cozy-client instance is the bearer token retrieved from jslib.
  */
 export class CozyClientService {
-    protected instance: ICozyClient;
+    protected instance: CozyClient;
 
     constructor(protected environmentService: EnvironmentService,
         protected apiService: ApiService) {
