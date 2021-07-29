@@ -32,6 +32,7 @@ import { CipherWithIds as CipherExport } from 'jslib-common/models/export/cipher
 
 import { Utils } from 'jslib-common/misc/utils';
 
+import { HashPurpose } from 'jslib-common/enums/hashPurpose';
 
 import { CozyClientService } from 'src/popup/services/cozyClient.service';
 import { KonnectorsService } from '../popup/services/konnectors.service';
@@ -39,7 +40,6 @@ import { AuthService } from '../services/auth.service';
 
 import { OrganizationUserStatusType } from 'jslib-common/enums/organizationUserStatusType';
 import { PolicyType } from 'jslib-common/enums/policyType';
-
 
 export default class RuntimeBackground {
     private runtime: any;
@@ -93,7 +93,10 @@ export default class RuntimeBackground {
                 await this.loggedinAndUnlocked(msg.command); //
                 break;
             case 'logout':
-                // 1- ask all frames of all tabs to activate login-in-page-menu
+                // 1- logout
+                await this.authService.clear(); // moved from the logout to avoid potential infinite loop
+                await this.main.logout(msg.expired);
+                // 2- ask all frames of all tabs to activate login-in-page-menu
                 const allTabs = await BrowserApi.getAllTabs();
                 for (const tab of allTabs) {
                     BrowserApi.tabSendMessage(tab, {
@@ -101,9 +104,6 @@ export default class RuntimeBackground {
                         subcommand        : 'loginIPMenuActivate',
                     });
                 }
-                // 2- logout
-                await this.authService.clear(); // moved from the logout to avoid potential infinite loop
-                await this.main.logout(msg.expired);
                 break;
             case 'syncCompleted':
                 if (msg.successfully) {
@@ -762,7 +762,7 @@ export default class RuntimeBackground {
         const kdf = await this.userService.getKdf();
         const kdfIterations = await this.userService.getKdfIterations();
         const key = await this.cryptoService.makeKey(pwd, email, kdf, kdfIterations);
-        const keyHash = await this.cryptoService.hashPassword(pwd, key);
+        const keyHash = await this.cryptoService.hashPassword(pwd, key, HashPurpose.LocalAuthorization);
 
         let passwordValid = false;
 

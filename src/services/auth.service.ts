@@ -1,3 +1,4 @@
+import { HashPurpose } from 'jslib-common/enums/hashPurpose';
 import { KdfType } from 'jslib-common/enums/kdfType';
 import { TwoFactorProviderType } from 'jslib-common/enums/twoFactorProviderType';
 
@@ -36,6 +37,7 @@ import { CozyClientService } from '../popup/services/cozyClient.service';
 export class AuthService extends BaseAuthService {
     email: string;
     masterPasswordHash: string;
+    localMasterPasswordHash: string;
     twoFactorProvidersData: Map<TwoFactorProviderType, { [key: string]: string; }>;
     selectedTwoFactorProviderType: TwoFactorProviderType = null;
     clientId: string;
@@ -96,32 +98,21 @@ export class AuthService extends BaseAuthService {
         );
     }
 
-    setMessagingService(messagingService: MessagingService) {
-        this._messagingService = messagingService;
-    }
-
     async logIn(email: string, masterPassword: string): Promise<AuthResult> {
         this.selectedTwoFactorProviderType = null;
         const key = await this._makePreloginKey(masterPassword, email);
         const hashedPassword = await this._cryptoService.hashPassword(masterPassword, key);
-        return await this._logInHelper(email, hashedPassword, null, null, null, null, null,
+        const localHashedPassword = await this._cryptoService.hashPassword(masterPassword, key,
+            HashPurpose.LocalAuthorization);
+        return await this._logInHelper(email, hashedPassword, localHashedPassword, null, null, null, null, null,
             key, null, null, null);
     }
 
     async logInTwoFactor(twoFactorProvider: TwoFactorProviderType, twoFactorToken: string,
         remember?: boolean): Promise<AuthResult> {
-        return await this._logInHelper(this.email, this.masterPasswordHash, this.code, this.codeVerifier,
-            this.ssoRedirectUrl, this.clientId, this.clientSecret, this._key, twoFactorProvider,
+        return await this._logInHelper(this.email, this.masterPasswordHash, this.localMasterPasswordHash, this.code,
+            this.codeVerifier, this.ssoRedirectUrl, this.clientId, this.clientSecret, this._key, twoFactorProvider,
             twoFactorToken, remember);
-    }
-
-    async logInComplete(email: string, masterPassword: string, twoFactorProvider: TwoFactorProviderType,
-        twoFactorToken: string, remember?: boolean): Promise<AuthResult> {
-        this.selectedTwoFactorProviderType = null;
-        const key = await this._makePreloginKey(masterPassword, email);
-        const hashedPassword = await this._cryptoService.hashPassword(masterPassword, key);
-        return await this._logInHelper(email, hashedPassword, null, null, null, null, null, key,
-            twoFactorProvider, twoFactorToken, remember);
     }
 
     async _makePreloginKey(masterPassword: string, email: string): Promise<SymmetricCryptoKey> {
@@ -142,8 +133,8 @@ export class AuthService extends BaseAuthService {
         return this._cryptoService.makeKey(masterPassword, email, this._kdf, this._kdfIterations);
     }
 
-    private async _logInHelper(email: string, hashedPassword: string, code: string, codeVerifier: string,
-        redirectUrl: string, clientId: string, clientSecret: string, key: SymmetricCryptoKey,
+    private async _logInHelper(email: string, hashedPassword: string, localHashedPassword: string, code: string,
+        codeVerifier: string, redirectUrl: string, clientId: string, clientSecret: string, key: SymmetricCryptoKey,
         twoFactorProvider?: TwoFactorProviderType, twoFactorToken?: string, remember?: boolean): Promise<AuthResult> {
         const storedTwoFactorToken = await this.tokenService.getTwoFactorToken(email);
         const appId = await this.appIdService.getAppId();
@@ -192,6 +183,7 @@ export class AuthService extends BaseAuthService {
             const twoFactorResponse = response as IdentityTwoFactorResponse;
             this.email = email;
             this.masterPasswordHash = hashedPassword;
+            this.localMasterPasswordHash = localHashedPassword;
             this.code = code;
             this.codeVerifier = codeVerifier;
             this.ssoRedirectUrl = redirectUrl;

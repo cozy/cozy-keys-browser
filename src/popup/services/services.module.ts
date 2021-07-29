@@ -91,10 +91,6 @@ export const konnectorsService = new KonnectorsService(getBgService<CipherServic
     cozyClientService);
 const authService = getBgService<AuthService>('authService')();
 
-// See https://github.com/cozy/cozy-keys-browser/pull/70 to have more context
-// about why we do this
-authService.setMessagingService(messagingService);
-
 export function initFactory(platformUtilsService: PlatformUtilsService, i18nService: I18nService, storageService: StorageService,
     popupUtilsService: PopupUtilsService): Function {
     return async () => {
