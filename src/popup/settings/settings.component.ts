@@ -313,7 +313,7 @@ export class SettingsComponent implements OnInit {
 
     // TODO: Add a Cozy help
     import() {
-        const url = this.cozyClientService.getAppURL('passwords', '/installation/import');
+        const url = this.cozyClientService.getAppURL('passwords', '/vault?action=import');
         BrowserApi.createNewTab(url);
     }
 
