@@ -8,6 +8,7 @@ import {
 import { CipherType } from 'jslib-common/enums/cipherType';
 
 import { CipherView } from 'jslib-common/models/view/cipherView';
+import { zeroPadLeftUntilTwoChars } from '../../tools/strings';
 
 @Component({
     selector: 'app-ciphers-list',
@@ -42,8 +43,25 @@ export class CiphersListComponent {
 
     getSubtitle(c: CipherView) {
         if (c.type === CipherType.Card) {
-            return c.subTitle + ',  ' + ('0' + c.card.expMonth).slice(-2) + '/' + c.card.expYear.slice(-2) ;
+            const subTitleParts = [];
+
+            if (c.subTitle) {
+                subTitleParts.push(c.subTitle);
+            }
+
+            const isMonthFormatOk = !!c.card.expMonth;
+            const isYearFormatOk = c.card.expYear?.match(/^(?:\d{2}){1,2}$/g);
+
+            if (isMonthFormatOk || isYearFormatOk) {
+                const month = isMonthFormatOk ? zeroPadLeftUntilTwoChars(c.card.expMonth) : '__';
+                const year = isYearFormatOk ? zeroPadLeftUntilTwoChars(c.card.expYear) : '__';
+
+                subTitleParts.push(`${month}/${year}`);
+            }
+            
+            return subTitleParts.join(', ');
         }
+        
         return c.subTitle;
     }
 }
