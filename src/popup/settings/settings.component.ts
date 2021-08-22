@@ -349,6 +349,31 @@ export class SettingsComponent implements OnInit {
         });
     }
 
+    async fingerprint() {
+        const fingerprint = await this.cryptoService.getFingerprint(await this.userService.getUserId());
+        const p = document.createElement('p');
+        p.innerText = this.i18nService.t('yourAccountsFingerprint') + ':';
+        const p2 = document.createElement('p');
+        p2.innerText = fingerprint.join('-');
+        const div = document.createElement('div');
+        div.appendChild(p);
+        div.appendChild(p2);
+
+        const result = await Swal.fire({
+            heightAuto: false,
+            buttonsStyling: false,
+            html: div,
+            showCancelButton: true,
+            cancelButtonText: this.i18nService.t('close'),
+            showConfirmButton: true,
+            confirmButtonText: this.i18nService.t('learnMore'),
+        });
+
+        if (result.value) {
+            this.platformUtilsService.launchUri('https://help.bitwarden.com/article/fingerprint-phrase/');
+        }
+    }
+
     rate() {
         const deviceType = this.platformUtilsService.getDevice();
         BrowserApi.createNewTab((RateUrls as any)[deviceType]);
