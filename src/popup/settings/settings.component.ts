@@ -365,7 +365,7 @@ export class SettingsComponent implements OnInit {
             html: div,
             showCancelButton: true,
             cancelButtonText: this.i18nService.t('close'),
-            showConfirmButton: true,
+            showConfirmButton: false,
             confirmButtonText: this.i18nService.t('learnMore'),
         });
 
