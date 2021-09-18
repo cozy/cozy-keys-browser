@@ -13,18 +13,22 @@
 import { ApiService } from 'jslib-common/abstractions/api.service';
 import { CipherService } from 'jslib-common/abstractions/cipher.service';
 import { CollectionService } from 'jslib-common/abstractions/collection.service';
-import { CryptoService } from 'jslib-common/abstractions/crypto.service';
 import { FolderService } from 'jslib-common/abstractions/folder.service';
 import { MessagingService } from 'jslib-common/abstractions/messaging.service';
 import { PolicyService } from 'jslib-common/abstractions/policy.service';
 import { SendService } from 'jslib-common/abstractions/send.service';
 import { SettingsService } from 'jslib-common/abstractions/settings.service';
 import { StorageService } from 'jslib-common/abstractions/storage.service';
-import { UserService } from 'jslib-common/abstractions/user.service';
 
 /* start Cozy imports */
+import { SyncCipherNotification } from 'jslib-common/models/response/notificationResponse';
+import { ProfileOrganizationResponse } from 'jslib-common/models/response/profileOrganizationResponse';
 import { SyncService as BaseSyncService } from 'jslib-common/services/sync.service';
+
 import { CozyClientService } from './cozyClient.service';
+import { UserService } from './user.service';
+
+import { BrowserCryptoService as CryptoService } from '../../services/browserCrypto.service';
 /* end Cozy imports */
 
 const Keys = {
@@ -35,30 +39,30 @@ let fullSyncPromise: Promise<boolean>;
 
 export class SyncService extends BaseSyncService {
     constructor(
-        userService: UserService,
-        apiService: ApiService,
+        private localUserService: UserService,
+        private localApiService: ApiService,
         settingsService: SettingsService,
         folderService: FolderService,
         cipherService: CipherService,
-        cryptoService: CryptoService,
-        collectionService: CollectionService,
+        private localCryptoService: CryptoService,
+        private localCollectionService: CollectionService,
         storageService: StorageService,
-        messagingService: MessagingService,
+        private localMessagingService: MessagingService,
         policyService: PolicyService,
         sendService: SendService,
         logoutCallback: (expired: boolean) => Promise<void>,
         private cozyClientService: CozyClientService,
     ) {
             super(
-                userService,
-                apiService,
+                localUserService,
+                localApiService,
                 settingsService,
                 folderService,
                 cipherService,
-                cryptoService,
-                collectionService,
+                localCryptoService,
+                localCollectionService,
                 storageService,
-                messagingService,
+                localMessagingService,
                 policyService,
                 sendService,
                 logoutCallback,
@@ -94,4 +98,61 @@ export class SyncService extends BaseSyncService {
         }
     }
 
+    async syncUpsertCipher(notification: SyncCipherNotification, isEdit: boolean): Promise<boolean> {
+        const isAuthenticated = await this.localUserService.isAuthenticated();
+        if (!isAuthenticated) return false;
+
+        this.localSyncStarted();
+
+        await this.syncUpsertOrganization(notification.organizationId, isEdit);
+
+        return super.syncUpsertCipher(notification, isEdit);
+    }
+
+    protected async syncUpsertOrganization(organizationId: string, isEdit: boolean) {
+        if (isEdit) {
+            return;
+        }
+
+        if (!organizationId) {
+            return;
+        }
+
+        const storedOrganization = await this.localUserService.getOrganization(organizationId);
+
+        if (storedOrganization !== null) {
+            return;
+        }
+
+        const remoteOrganization = await this.localApiService.getOrganization(organizationId);
+        const remoteOrganizationResponse = (remoteOrganization as any).response;
+        const remoteProfileOrganizationResponse = new ProfileOrganizationResponse(remoteOrganizationResponse);
+
+        if (remoteOrganization !== null) {
+            await this.localUserService.upsertOrganization(remoteProfileOrganizationResponse);
+
+            await this.localCryptoService.upsertOrganizationKey(remoteProfileOrganizationResponse);
+
+            await this.syncUpsertCollections(organizationId, isEdit);
+        }
+    }
+
+    protected async syncUpsertCollections(organizationId: string, isEdit: boolean) {
+        const syncCollections = await this.localApiService.getCollections(organizationId);
+
+        await this.localCollectionService.upsert(syncCollections.data.map(col => {
+            return {
+                externalId: col.externalId,
+                id: col.id,
+                name: col.name,
+                organizationId: col.organizationId,
+                readOnly: false,
+            };
+        }));
+    }
+
+    protected localSyncStarted() {
+        this.syncInProgress = true;
+        this.localMessagingService.send('syncStarted');
+    }
 }

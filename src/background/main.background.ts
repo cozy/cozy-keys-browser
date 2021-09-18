@@ -15,7 +15,6 @@ import {
     StateService,
     TokenService,
     TotpService,
-    UserService,
 } from 'jslib-common/services';
 import { ConsoleLogService } from 'jslib-common/services/consoleLog.service';
 import { EventService } from 'jslib-common/services/event.service';
@@ -94,6 +93,11 @@ import VaultTimeoutService from '../services/vaultTimeout.service';
 
 import { MessagingService as MessagingServiceAbstraction } from '../services/abstractions/messaging.service';
 
+/* start Cozy imports */
+import { UserService } from '../popup/services/user.service';
+import { BrowserCryptoService as CryptoService } from '../services/browserCrypto.service';
+/* end Cozy imports */
+
 export default class MainBackground {
     messagingService: MessagingServiceAbstraction;
     storageService: StorageServiceAbstraction;
@@ -102,13 +106,13 @@ export default class MainBackground {
     platformUtilsService: PlatformUtilsServiceAbstraction;
     constantsService: ConstantsService;
     consoleLogService: ConsoleLogService;
-    cryptoService: CryptoServiceAbstraction;
+    cryptoService: CryptoService;
     cryptoFunctionService: CryptoFunctionServiceAbstraction;
     tokenService: TokenServiceAbstraction;
     appIdService: AppIdServiceAbstraction;
     apiService: ApiServiceAbstraction;
     environmentService: EnvironmentServiceAbstraction;
-    userService: UserServiceAbstraction;
+    userService: UserService;
     settingsService: SettingsServiceAbstraction;
     cipherService: CipherServiceAbstraction;
     folderService: FolderServiceAbstraction;
