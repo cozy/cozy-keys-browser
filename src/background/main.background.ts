@@ -4,7 +4,6 @@ import { CipherRepromptType } from 'jslib-common/enums/cipherRepromptType';
 import {
     AppIdService,
     AuditService,
-    CipherService,
     CollectionService,
     ConstantsService,
     ContainerService,
@@ -94,6 +93,7 @@ import VaultTimeoutService from '../services/vaultTimeout.service';
 import { MessagingService as MessagingServiceAbstraction } from '../services/abstractions/messaging.service';
 
 /* start Cozy imports */
+import { CipherService } from '../popup/services/cipher.service';
 import { UserService } from '../popup/services/user.service';
 import { BrowserCryptoService as CryptoService } from '../services/browserCrypto.service';
 /* end Cozy imports */
@@ -114,7 +114,7 @@ export default class MainBackground {
     environmentService: EnvironmentServiceAbstraction;
     userService: UserService;
     settingsService: SettingsServiceAbstraction;
-    cipherService: CipherServiceAbstraction;
+    cipherService: CipherService;
     folderService: FolderServiceAbstraction;
     collectionService: CollectionServiceAbstraction;
     vaultTimeoutService: VaultTimeoutServiceAbstraction;
