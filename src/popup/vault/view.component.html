@@ -365,6 +365,7 @@
                     <span>{{'cloneItem' | i18n}}</span>
                 </div>
             </a>
+            <ng-container *ifFlag="CAN_SHARE_ORGANIZATION">
             <a class="box-content-row" href="#" appStopClick appBlurClick (click)="share()" *ngIf="!cipher.organizationId">
                 <div class="row-main text-primary">
                     <div class="icon text-primary" aria-hidden="true">
@@ -373,6 +374,7 @@
                     <span>{{'shareItem' | i18n}}</span>
                 </div>
             </a>
+            </ng-container>
             <a class="box-content-row" href="#" appStopClick appBlurClick (click)="restore()" *ngIf="cipher.isDeleted">
                 <div class="row-main text-primary">
                     <div class="icon text-primary" aria-hidden="true">
