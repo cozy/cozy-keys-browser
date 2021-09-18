@@ -29,13 +29,13 @@ export class BrowserCryptoService extends CryptoService {
         );
     }
 
-    async upsertOrganizationKey(organization: ProfileOrganizationResponse) {
-        if (organization.key === '') {
+    async upsertOrganizationKey(organizationId: string, key: string) {
+        if (key === '') {
             return;
         }
         const encOrgKeys = await this.localStorageService.get<any>(Keys.encOrgKeys);
 
-        encOrgKeys[organization.id] = organization.key;
+        encOrgKeys[organizationId] = key;
 
         await this.clearOrgKeys();
         await this.localStorageService.save(Keys.encOrgKeys, encOrgKeys);
