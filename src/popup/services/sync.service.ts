@@ -34,6 +34,17 @@ import { BrowserCryptoService as CryptoService } from '../../services/browserCry
 const Keys = {
     lastSyncPrefix: 'lastSync_',
 };
+interface Member {
+    user_id: string;
+    key?: string;
+}
+
+type Members = { [id: string]: Member };
+
+interface CozyOrganizationDocument {
+    members?: Members;
+}
+
 let isfullSyncRunning: boolean = false;
 let fullSyncPromise: Promise<boolean>;
 
@@ -109,6 +120,28 @@ export class SyncService extends BaseSyncService {
         return super.syncUpsertCipher(notification, isEdit);
     }
 
+    protected async getOrganizationKey(organizationId: string): Promise<string> {
+        const client = await this.cozyClientService.getClientInstance();
+        const remoteOrganizationData: CozyOrganizationDocument = await client.stackClient.fetchJSON(
+            'GET',
+            `/data/com.bitwarden.organizations/${organizationId}`,
+            []
+        );
+
+        const userId = await this.localUserService.getUserId();
+
+        const remoteOrganizationUser = Object.values(remoteOrganizationData.members)
+            .find(member => member.user_id === userId);
+
+        return remoteOrganizationUser?.key || '';
+    }
+
+    protected async syncUpsertOrganizationKey(organizationId: string) {
+        const remoteOrganizationKey = await this.getOrganizationKey(organizationId);
+
+        await this.localCryptoService.upsertOrganizationKey(organizationId, remoteOrganizationKey);
+    }
+
     protected async syncUpsertOrganization(organizationId: string, isEdit: boolean) {
         if (isEdit) {
             return;
@@ -132,7 +165,7 @@ export class SyncService extends BaseSyncService {
         if (remoteOrganization !== null) {
             await this.localUserService.upsertOrganization(remoteProfileOrganizationResponse);
 
-            await this.localCryptoService.upsertOrganizationKey(remoteProfileOrganizationResponse);
+            await this.syncUpsertOrganizationKey(organizationId);
 
             await this.syncUpsertCollections(organizationId, isEdit);
         }
