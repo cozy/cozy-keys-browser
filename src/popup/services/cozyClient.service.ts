@@ -1,4 +1,6 @@
 import CozyClient from 'cozy-client';
+// @ts-ignore
+import flag from 'cozy-flags';
 import { ApiService } from 'jslib-common/abstractions/api.service';
 import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
 
@@ -38,6 +40,7 @@ export class CozyClientService {
         const uri = this.getCozyURL();
         const token = await this.apiService.getActiveBearerToken();
         this.instance = new CozyClient({ uri: uri, token: token });
+        this.instance.registerPlugin(flag.plugin, undefined);
         return this.instance;
     }
 

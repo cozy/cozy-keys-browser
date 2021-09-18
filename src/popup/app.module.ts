@@ -80,6 +80,11 @@ import {
 import localeEnGb from '@angular/common/locales/en-GB';
 import localeFr from '@angular/common/locales/fr';
 
+/* start Cozy imports */
+import { FlagConditionalComponent } from '../cozy/components/flag-conditional/flag-conditional.component';
+import { IfFlagDirective } from '../cozy/components/flag-conditional/if-flag.directive';
+/* end Cozy imports */
+
 registerLocaleData(localeEnGb, 'en-GB');
 registerLocaleData(localeFr, 'fr');
 
@@ -145,6 +150,8 @@ registerLocaleData(localeFr, 'fr');
         SsoComponent,
         ViewComponent,
         SetPasswordComponent,
+        FlagConditionalComponent,
+        IfFlagDirective,
     ],
     entryComponents: [],
     providers: [
