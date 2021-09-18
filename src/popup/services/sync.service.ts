@@ -34,14 +34,6 @@ let isfullSyncRunning: boolean = false;
 let fullSyncPromise: Promise<boolean>;
 
 export class SyncService extends BaseSyncService {
-    // We need to store these two service instances here because in the extended
-    // class they are private, meaning we can't access this.userService or
-    // this.storageService otherwise
-    /* tslint:disable-next-line */
-    private _userService: UserService;
-    /* tslint:disable-next-line */
-    private _storageService: StorageService;
-
     constructor(
         userService: UserService,
         apiService: ApiService,
@@ -71,9 +63,6 @@ export class SyncService extends BaseSyncService {
                 sendService,
                 logoutCallback,
             );
-
-            this._userService = userService;
-            this._storageService = storageService;
     }
 
     async setLastSync(date: Date): Promise<any> {
