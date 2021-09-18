@@ -143,10 +143,6 @@ export class SyncService extends BaseSyncService {
     }
 
     protected async syncUpsertOrganization(organizationId: string, isEdit: boolean) {
-        if (isEdit) {
-            return;
-        }
-
         if (!organizationId) {
             return;
         }
