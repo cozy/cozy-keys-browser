@@ -30,12 +30,21 @@ export class BrowserCryptoService extends CryptoService {
     }
 
     async upsertOrganizationKey(organization: ProfileOrganizationResponse) {
+        if (organization.key === '') {
+            return;
+        }
         const encOrgKeys = await this.localStorageService.get<any>(Keys.encOrgKeys);
 
         encOrgKeys[organization.id] = organization.key;
 
         await this.clearOrgKeys();
         await this.localStorageService.save(Keys.encOrgKeys, encOrgKeys);
+    }
+
+    setOrgKeys(orgs: ProfileOrganizationResponse[]): Promise<{}> {
+        const validOrgs = orgs.filter(org => org.key !== '');
+
+        return super.setOrgKeys(validOrgs);
     }
 
     protected async retrieveKeyFromStorage(keySuffix: KeySuffixOptions) {

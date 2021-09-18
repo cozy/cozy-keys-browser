@@ -119,8 +119,9 @@ export class SyncService extends BaseSyncService {
         }
 
         const storedOrganization = await this.localUserService.getOrganization(organizationId);
+        const storedOrganizationkey = await this.localCryptoService.getOrgKey(organizationId);
 
-        if (storedOrganization !== null) {
+        if (storedOrganization !== null && storedOrganizationkey != null) {
             return;
         }
 
