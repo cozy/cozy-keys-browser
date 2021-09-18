@@ -39,11 +39,16 @@ const BroadcasterSubscriptionId = 'ChildViewComponent';
 
 import { deleteCipher } from './utils';
 
+/* start Cozy imports */
+import { CAN_SHARE_ORGANIZATION } from '../../cozy/flags';
+/* end Cozy imports */
+
 @Component({
     selector: 'app-vault-view',
     templateUrl: 'view.component.html',
 })
 export class ViewComponent extends BaseViewComponent {
+    CAN_SHARE_ORGANIZATION = CAN_SHARE_ORGANIZATION;
     showAttachments = true;
     pageDetails: any[] = [];
     tab: any;
