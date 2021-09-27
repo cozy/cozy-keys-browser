@@ -24,7 +24,10 @@ import { UserService } from 'jslib-common/abstractions/user.service';
 import { VaultTimeoutService } from 'jslib-common/abstractions/vaultTimeout.service';
 import { PopupUtilsService } from '../services/popup-utils.service';
 
+/* start Cozy imports */
 import { CozyClientService } from '../services/cozyClient.service';
+import { CAN_SHARE_ORGANIZATION } from '../../cozy/flags';
+/* end Cozy imports */
 
 // TODO: Add Safari URL when published
 const RateUrls = {
@@ -47,6 +50,7 @@ const RateUrls = {
 export class SettingsComponent implements OnInit {
     @ViewChild('vaultTimeoutSelect', { read: ElementRef, static: true }) vaultTimeoutSelectRef: ElementRef;
     @ViewChild('vaultTimeoutActionSelect', { read: ElementRef, static: true }) vaultTimeoutActionSelectRef: ElementRef;
+    CAN_SHARE_ORGANIZATION = CAN_SHARE_ORGANIZATION;
     vaultTimeouts: any[];
     vaultTimeout: number = null;
     vaultTimeoutActions: any[];
