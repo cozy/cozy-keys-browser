@@ -16,6 +16,7 @@ import { CollectionService } from 'jslib-common/abstractions/collection.service'
 import { FolderService } from 'jslib-common/abstractions/folder.service';
 import { MessagingService } from 'jslib-common/abstractions/messaging.service';
 import { PolicyService } from 'jslib-common/abstractions/policy.service';
+import { TokenService } from 'jslib-common/abstractions/token.service';
 import { SendService } from 'jslib-common/abstractions/send.service';
 import { SettingsService } from 'jslib-common/abstractions/settings.service';
 import { StorageService } from 'jslib-common/abstractions/storage.service';
@@ -63,6 +64,7 @@ export class SyncService extends BaseSyncService {
         sendService: SendService,
         logoutCallback: (expired: boolean) => Promise<void>,
         private cozyClientService: CozyClientService,
+        private tokenService: TokenService
     ) {
             super(
                 localUserService,
@@ -89,6 +91,33 @@ export class SyncService extends BaseSyncService {
         }
     }
 
+    /**
+     * Cozy stack may change how userId is computed in the future
+     * So this userId can be desynchronized between client and server
+     * This impacts realtime notifications that would be broken if wrong userId is used
+     * This method allows to synchronize user identity from the server 
+     */
+    async refreshIdentityToken() {
+        const isAuthenticated = await this.localUserService.isAuthenticated();
+        if (!isAuthenticated) {
+            return;
+        }
+
+        const currentToken = await this.tokenService.getToken();
+
+        await this.localApiService.refreshIdentityToken();
+        const refreshedToken = await this.tokenService.getToken();
+
+        if (currentToken !== refreshedToken) {
+            const newUserId = this.tokenService.getUserId();
+            const email = this.tokenService.getEmail();
+            const kdf = await this.localUserService.getKdf();
+            const kdfIterations = await this.localUserService.getKdfIterations();
+
+            await this.localUserService.setInformation(newUserId, email, kdf, kdfIterations);
+        }
+    }
+
     /*
         Using this function instead of the super :
             * checks if a fullSync is already running
@@ -100,6 +129,7 @@ export class SyncService extends BaseSyncService {
             return fullSyncPromise;
         } else {
             isfullSyncRunning = true;
+            await this.refreshIdentityToken(); 
             fullSyncPromise = super.fullSync(forceSync, allowThrowOnError)
             .then( resp => {
                 isfullSyncRunning = false;
