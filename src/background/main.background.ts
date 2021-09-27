@@ -289,7 +289,7 @@ export default class MainBackground {
         this.syncService = new SyncService(this.userService, this.apiService, this.settingsService,
             this.folderService, this.cipherService, this.cryptoService, this.collectionService,
             this.storageService, this.messagingService, this.policyService, this.sendService,
-            async (expired: boolean) => await this.logout(expired), this.cozyClientService);
+            async (expired: boolean) => await this.logout(expired), this.cozyClientService, this.tokenService);
         this.eventService = new EventService(this.storageService, this.apiService, this.userService,
             this.cipherService);
         this.passwordGenerationService = new PasswordGenerationService(this.cryptoService, this.storageService,
