@@ -94,6 +94,7 @@ export default class RuntimeBackground {
                 break;
             case 'logout':
                 // 1- logout
+                await this.cozyClientService.logout();
                 await this.authService.clear(); // moved from the logout to avoid potential infinite loop
                 await this.main.logout(msg.expired);
                 // 2- ask all frames of all tabs to activate login-in-page-menu

@@ -96,4 +96,10 @@ export class CozyClientService {
         }
         return url.toString();
     }
+
+    async logout() {
+        const client = await this.getClientInstance();
+
+        await client.logout();
+    }
 }
