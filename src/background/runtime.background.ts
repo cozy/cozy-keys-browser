@@ -6,6 +6,7 @@ import { LoginView } from 'jslib-common/models/view/loginView';
 
 import { LocalConstantsService } from '../popup/services/constants.service';
 
+import { ApiService } from 'jslib-common/abstractions/api.service';
 import { CipherService } from 'jslib-common/abstractions/cipher.service';
 import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
 import { I18nService } from 'jslib-common/abstractions/i18n.service';
@@ -29,6 +30,7 @@ import { BrowserApi } from '../browser/browserApi';
 import MainBackground from './main.background';
 
 import { CipherWithIds as CipherExport } from 'jslib-common/models/export/cipherWithIds.ts';
+import { PasswordVerificationRequest } from 'jslib-common/models/request/passwordVerificationRequest';
 
 import { Utils } from 'jslib-common/misc/utils';
 
@@ -56,7 +58,7 @@ export default class RuntimeBackground {
         private userService: UserService, private messagingService: MessagingService,
         private cozyClientService: CozyClientService, private konnectorsService: KonnectorsService,
         private syncService: SyncService, private authService: AuthService,
-        private cryptoService: CryptoService) {
+        private cryptoService: CryptoService, private apiService: ApiService) {
 
         // onInstalled listener must be wired up before anything else, so we do it in the ctor
         chrome.runtime.onInstalled.addListener((details: any) => {
@@ -763,15 +765,24 @@ export default class RuntimeBackground {
         const kdf = await this.userService.getKdf();
         const kdfIterations = await this.userService.getKdfIterations();
         const key = await this.cryptoService.makeKey(pwd, email, kdf, kdfIterations);
-        const keyHash = await this.cryptoService.hashPassword(pwd, key, HashPurpose.LocalAuthorization);
+        const storedKeyHash = await this.cryptoService.getKeyHash();
 
         let passwordValid = false;
 
-        if (keyHash != null) {
-            const storedKeyHash = await this.cryptoService.getKeyHash();
-            if (storedKeyHash != null) {
-                passwordValid = storedKeyHash === keyHash;
-            }
+        if (storedKeyHash != null) {
+            passwordValid = await this.cryptoService.compareAndUpdateKeyHash(pwd, key);
+        } else {
+            const request = new PasswordVerificationRequest();
+            const serverKeyHash = await this.cryptoService.hashPassword(pwd, key,
+                HashPurpose.ServerAuthorization);
+            request.masterPasswordHash = serverKeyHash;
+            try {
+                await this.apiService.postAccountVerifyPassword(request);
+                passwordValid = true;
+                const localKeyHash = await this.cryptoService.hashPassword(pwd, key,
+                    HashPurpose.LocalAuthorization);
+                await this.cryptoService.setKeyHash(localKeyHash);
+            } catch { }
         }
 
         if (passwordValid) {
