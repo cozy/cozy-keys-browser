@@ -833,7 +833,7 @@ export default class RuntimeBackground {
                 const key = await this.cryptoService.makeKeyFromPin(pin, email, kdf, kdfIterations);
                 failed = false;
                 await this.cryptoService.setKey(key);
-                chrome.runtime.sendMessage({ command: 'unlocked' });
+                this.processMessage({ command: 'unlocked' }, 'runtime.background.ts.unlock()', null);
             }
         } catch {
             failed = true;
@@ -843,7 +843,7 @@ export default class RuntimeBackground {
             this.invalidPinAttempts++;
             if (this.invalidPinAttempts >= 5) {
                 // this.messagingService.send('logout');
-                chrome.runtime.sendMessage({ command: 'logout' });
+                this.processMessage({ command: 'logout' }, 'runtime.background.ts.unlock()', null);
                 return;
             }
             await BrowserApi.tabSendMessage(tab, {
