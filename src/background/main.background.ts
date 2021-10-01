@@ -358,7 +358,7 @@ export default class MainBackground {
             this.notificationsService, this.systemService, this.vaultTimeoutService,
             this.environmentService, this.policyService, this.userService, this.messagingService,
             this.cozyClientService, this.konnectorsService, this.syncService, this.authService, this.cryptoService,
-            );
+            this.apiService);
         this.messagingService.setRuntimeBackground(this.runtimeBackground);
 
     }
