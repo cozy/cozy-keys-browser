@@ -1,6 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-// @ts-ignore
-import flag from 'cozy-flags';
+import { CozyClientService } from '../../../popup/services/cozyClient.service';
 
 /**
  * A component that renders its children only if the correct flag is set to TRUE
@@ -17,17 +16,23 @@ export class FlagConditionalComponent implements OnInit, OnDestroy {
 
     isFlagEnabled = false;
 
+    private flag: any = undefined;
+
+    constructor(private cozyClientService: CozyClientService) {
+        this.flag = this.cozyClientService.getFlagLib();
+    }
+
     ngOnDestroy(): void {
-        flag.store.removeListener('change', this.flagChanged.bind(this));
+        this.flag.store.removeListener('change', this.flagChanged.bind(this));
     }
 
     ngOnInit() {
-        flag.store.on('change', this.flagChanged.bind(this));
+        this.flag.store.on('change', this.flagChanged.bind(this));
 
         this.flagChanged();
     }
 
     flagChanged() {
-        this.isFlagEnabled = flag(this.flagname);
+        this.isFlagEnabled = this.flag(this.flagname);
     }
 }

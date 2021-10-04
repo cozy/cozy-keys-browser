@@ -1,6 +1,5 @@
 import { Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
-// @ts-ignore
-import flag from 'cozy-flags';
+import { CozyClientService } from '../../../popup/services/cozyClient.service';
 
 /**
  * A directive that allows to render a component only if the correct flag is set to TRUE
@@ -13,6 +12,8 @@ export class IfFlagDirective implements OnInit, OnDestroy {
   private hasView = false;
   private flagName: string;
 
+  private flag: any = undefined;
+
   @Input() set ifFlag(flagName: string) {
     this.flagName = flagName;
     this.flagChanged();
@@ -20,21 +21,24 @@ export class IfFlagDirective implements OnInit, OnDestroy {
 
   constructor(
     private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef
-  ) { }
+    private viewContainer: ViewContainerRef,
+    private cozyClientService: CozyClientService 
+  ) {
+    this.flag = this.cozyClientService.getFlagLib();
+  }
 
   ngOnDestroy(): void {
-      flag.store.removeListener('change', this.flagChanged.bind(this));
+      this.flag.store.removeListener('change', this.flagChanged.bind(this));
   }
 
   ngOnInit() {
-      flag.store.on('change', this.flagChanged.bind(this));
+      this.flag.store.on('change', this.flagChanged.bind(this));
 
       this.flagChanged();
   }
 
   flagChanged() {
-      this.isFlagEnabled = flag(this.flagName);
+      this.isFlagEnabled = this.flag(this.flagName);
 
       if (this.isFlagEnabled && !this.hasView) {
           this.viewContainer.createEmbeddedView(this.templateRef);

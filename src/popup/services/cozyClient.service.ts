@@ -102,4 +102,8 @@ export class CozyClientService {
 
         await client.logout();
     }
+
+    getFlagLib() {
+        return flag;
+    }
 }
