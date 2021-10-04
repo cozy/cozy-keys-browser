@@ -27,6 +27,8 @@ import { PopupUtilsService } from '../services/popup-utils.service';
 /* start Cozy imports */
 import { CozyClientService } from '../services/cozyClient.service';
 import { CAN_SHARE_ORGANIZATION } from '../../cozy/flags';
+
+import { generateWebLink, Q } from 'cozy-client';
 /* end Cozy imports */
 
 // TODO: Add Safari URL when published
@@ -316,9 +318,26 @@ export class SettingsComponent implements OnInit {
     }
 
     // TODO: Add a Cozy help
-    import() {
-        const url = this.cozyClientService.getAppURL('passwords', '/vault?action=import');
-        BrowserApi.createNewTab(url);
+    async import() {
+        const client = await this.cozyClientService.getClientInstance();
+
+        const capabilities = await client.query(
+            Q('io.cozy.settings').getById('capabilities')
+        );
+
+        const cozyURL = client.getStackClient().uri;
+        const subdomain = capabilities?.data.attributes.flat_subdomains ? 'flat' : 'nested';
+
+        const link = generateWebLink({
+            cozyUrl: cozyURL,
+            searchParams: [],
+            pathname: '',
+            hash: '/vault?action=import',
+            slug: 'passwords',
+            subDomainType: subdomain
+        });
+
+        BrowserApi.createNewTab(link);
     }
 
     // TODO: Add a Cozy help
