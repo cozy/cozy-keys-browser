@@ -28,9 +28,11 @@ export class CozyClientService {
         if (this.instance) {
             const token = await this.apiService.getActiveBearerToken();
             // If the instance's token differ from the active bearer, a refresh is needed.
-            if (token === this.instance.options.token) {
-                return this.instance;
+            if (token !== this.instance.options.token) {
+                this.instance.getStackClient().setToken(token);
+                this.instance.options.token = token;
             }
+            return this.instance;
         }
         this.instance = await this.createClient();
         return this.instance;
