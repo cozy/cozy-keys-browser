@@ -103,10 +103,14 @@ export class SyncService extends BaseSyncService {
             return;
         }
 
+        const client = await this.cozyClientService.getClientInstance();
+
         const currentToken = await this.tokenService.getToken();
 
         await this.localApiService.refreshIdentityToken();
         const refreshedToken = await this.tokenService.getToken();
+        client.getStackClient().setToken(refreshedToken);
+        client.options.token = refreshedToken;
 
         if (currentToken !== refreshedToken) {
             const newUserId = this.tokenService.getUserId();
