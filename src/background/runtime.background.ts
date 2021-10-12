@@ -883,6 +883,7 @@ export default class RuntimeBackground {
     private async loggedinAndUnlocked(command: string) {
         await this.main.setIcon();
         await this.main.refreshBadgeAndMenu(false);
+        this.notificationsService.init(this.environmentService);
         this.notificationsService.updateConnection(command === 'unlocked');
         this.systemService.cancelProcessReload();
 
