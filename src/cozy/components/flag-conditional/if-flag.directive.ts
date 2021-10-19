@@ -1,6 +1,11 @@
 import { Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
-// @ts-ignore
-import flag from 'cozy-flags';
+
+import { MessagingService } from 'jslib-common/abstractions/messaging.service';
+import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
+
+import * as uuid from 'uuid';
+
+const BroadcasterSubscriptionId = 'IfFlagDirective';
 
 /**
  * A directive that allows to render a component only if the correct flag is set to TRUE
@@ -12,6 +17,7 @@ export class IfFlagDirective implements OnInit, OnDestroy {
   private isFlagEnabled = false;
   private hasView = false;
   private flagName: string;
+  private broadcasterSubscriptionId = '';
 
   @Input() set ifFlag(flagName: string) {
     this.flagName = flagName;
@@ -20,21 +26,30 @@ export class IfFlagDirective implements OnInit, OnDestroy {
 
   constructor(
     private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef
-  ) { }
+    private viewContainer: ViewContainerRef,
+    protected messagingService: MessagingService,
+    protected broadcasterService: BroadcasterService
+  ) {
+  }
 
   ngOnDestroy(): void {
-      flag.store.removeListener('change', this.flagChanged.bind(this));
+      this.broadcasterService.unsubscribe(this.broadcasterSubscriptionId);
   }
 
   ngOnInit() {
-      flag.store.on('change', this.flagChanged.bind(this));
+      this.broadcasterSubscriptionId = BroadcasterSubscriptionId + uuid.v1();
 
-      this.flagChanged();
+      this.broadcasterService.subscribe(this.broadcasterSubscriptionId, (message: any) => {
+          if (message.command === 'flagChange' && message.flagName === this.flagName) {
+            this.flagChanged(message.flagValue);
+          }
+      });
+
+      this.messagingService.send('queryFlag', { flagName: this.flagName });
   }
 
-  flagChanged() {
-      this.isFlagEnabled = flag(this.flagName);
+  flagChanged(flagValue?: boolean) {
+      this.isFlagEnabled = flagValue === true;
 
       if (this.isFlagEnabled && !this.hasView) {
           this.viewContainer.createEmbeddedView(this.templateRef);

@@ -1,6 +1,11 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-// @ts-ignore
-import flag from 'cozy-flags';
+
+import { MessagingService } from 'jslib-common/abstractions/messaging.service';
+import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
+
+import * as uuid from 'uuid';
+
+const BroadcasterSubscriptionId = 'FlagConditionalComponent';
 
 /**
  * A component that renders its children only if the correct flag is set to TRUE
@@ -14,20 +19,34 @@ import flag from 'cozy-flags';
 })
 export class FlagConditionalComponent implements OnInit, OnDestroy {
     @Input() flagname: string;
+    private broadcasterSubscriptionId = '';
 
     isFlagEnabled = false;
 
+
+    constructor(
+        protected messagingService: MessagingService,
+        protected broadcasterService: BroadcasterService
+    ) {
+    }
+
     ngOnDestroy(): void {
-        flag.store.removeListener('change', this.flagChanged.bind(this));
+        this.broadcasterService.unsubscribe(this.broadcasterSubscriptionId);
     }
 
     ngOnInit() {
-        flag.store.on('change', this.flagChanged.bind(this));
-
-        this.flagChanged();
+        this.broadcasterSubscriptionId = BroadcasterSubscriptionId + uuid.v1();
+  
+        this.broadcasterService.subscribe(this.broadcasterSubscriptionId, (message: any) => {
+            if (message.command === 'flagChange' && message.flagName === this.flagname) {
+              this.flagChanged(message.flagValue);
+            }
+        });
+  
+        this.messagingService.send('queryFlag', { flagName: this.flagname });
     }
 
-    flagChanged() {
-        this.isFlagEnabled = flag(this.flagname);
+    flagChanged(flagValue?: boolean) {
+        this.isFlagEnabled = flagValue === true;
     }
 }

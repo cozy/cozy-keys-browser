@@ -3,6 +3,7 @@ import CozyClient from 'cozy-client';
 import flag from 'cozy-flags';
 import { ApiService } from 'jslib-common/abstractions/api.service';
 import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
+import { MessagingService } from 'jslib-common/abstractions/messaging.service';
 
 /**
  * CozyClient service, used to communicate with a Cozy stack on specific Cozy's routes.
@@ -11,9 +12,14 @@ import { EnvironmentService } from 'jslib-common/abstractions/environment.servic
  */
 export class CozyClientService {
     protected instance: CozyClient;
+    protected flagChangedPointer: any = undefined; 
 
-    constructor(protected environmentService: EnvironmentService,
-        protected apiService: ApiService) {
+    constructor(
+        protected environmentService: EnvironmentService,
+        protected apiService: ApiService,
+        protected messagingService: MessagingService
+    ) {
+        this.flagChangedPointer = this.flagChanged.bind(this); 
     }
 
     getCozyURL(): string {
@@ -22,6 +28,24 @@ export class CozyClientService {
             return null;
         }
         return new URL(vaultUrl).origin; // Remove the /bitwarden part
+    }
+
+    registerFlags() {
+        flag.store.on('change', this.flagChangedPointer); 
+    }
+
+    unregisterFlags() {
+        flag.store.removeListener('change', this.flagChangedPointer); 
+    }
+
+    notifyFlagStatus(flagName: string) {
+        const flagValue = flag(flagName);
+        this.messagingService.send('flagChange', {flagName, flagValue});
+    }
+
+    flagChanged(flagName: string) {
+        const flagValue = flag(flagName);
+        this.messagingService.send('flagChange', {flagName, flagValue});
     }
 
     async getClientInstance() {
@@ -39,10 +63,14 @@ export class CozyClientService {
     }
 
     async createClient() {
+        if (this.instance) {
+            this.unregisterFlags();
+        }
         const uri = this.getCozyURL();
         const token = await this.apiService.getActiveBearerToken();
         this.instance = new CozyClient({ uri: uri, token: token });
         this.instance.registerPlugin(flag.plugin, undefined);
+        this.registerFlags();
         return this.instance;
     }
 
