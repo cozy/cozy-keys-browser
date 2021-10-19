@@ -195,7 +195,7 @@ export default class MainBackground {
         // TODO BJA : authService is removed in merged from upstream...
         this.environmentService = new EnvironmentService(this.apiService, this.storageService,
             this.notificationsService);
-        this.cozyClientService = new CozyClientService(this.environmentService, this.apiService);
+        this.cozyClientService = new CozyClientService(this.environmentService, this.apiService, this.messagingService);
         // this.authService = new AuthService(this.cryptoService, this.apiService, this.userService,
         //     this.tokenService, this.appIdService, this.i18nService, this.platformUtilsService,
         //     this.messagingService, this.vaultTimeoutService,
@@ -407,6 +407,8 @@ export default class MainBackground {
                     // response asynchronously.
                     // See https://developer.chrome.com/apps/runtime#event-onMessage
                     return true;
+                } else if (msg.command === 'queryFlag') {
+                    this.cozyClientService.notifyFlagStatus(msg.flagName);
                 }
             },
         );

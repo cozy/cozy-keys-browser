@@ -84,7 +84,7 @@ const passwordRepromptService = isPrivateMode ? null : new PasswordRepromptServi
     getBgService<CryptoService>('cryptoService')(), getBgService<PlatformUtilsService>('platformUtilsService')());
 // r�cup�r� brut lors du merge upstream, � adapter TODO BJA
 const cozyClientService = new CozyClientService(getBgService<EnvironmentService>('environmentService')(),
-    getBgService<ApiService>('apiService')());
+    getBgService<ApiService>('apiService')(), messagingService);
 export const cozySanitizeUrlService = new CozySanitizeUrlService();
 export const konnectorsService = new KonnectorsService(getBgService<CipherService>('cipherService')(),
     getBgService<StorageService>('storageService')(), getBgService<SettingsService>('settingsService')(),
