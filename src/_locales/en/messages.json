@@ -430,13 +430,13 @@
     "message": "Invalid email address."
   },
   "cozyUrlRequired": {
-    "message": "Cozy URL is required"
+    "message": "Cozy address is required"
   },
   "invalidCozyUrl": {
-    "message": "Invalid Cozy URL"
+    "message": "Invalid Cozy address"
   },
   "noEmailAsCozyUrl": {
-    "message": "The Cozy URL is not your email"
+    "message": "The Cozy address is not your email"
   },
   "hasMispelledCozy": {
     "message": "Woops, the address is not correct. Try with \"cozy\" with a \"z\"!"
