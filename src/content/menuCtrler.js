@@ -239,6 +239,7 @@ function _onClick(event) {
     } else {
         show(this)
     }
+    console.log('end _onCliek')
 }
 
 function _onKeyDown(event) {
@@ -291,6 +292,7 @@ function _onKeyDown(event) {
 //
 function show(targetEl) {
     // console.log('menuCtrler.show() ');
+    console.log('SHOW()')
     if (state.isFrozen) return
     if (!state.isHidden && (state.lastFocusedEl === targetEl)) return
     state.lastFocusedEl = targetEl
@@ -520,6 +522,7 @@ menuCtrler.setCiphers = setCiphers
 // Run this function so that menuCtrler.state.selectedCipher corresponds
 // to the initial selection within the menu
 function selectFirstCipherToSuggestFor(fieldEl) {
+    console.log('selectFirstCipherToSuggestFor')
     if (state.isHidden) return
     if (!ciphers || ciphers._length == 0) return
     if (!fieldEl) return
@@ -630,12 +633,15 @@ function _updateHash() {
 // send informations to the iframe through the url's hash (no reload)
 // the hash is a Json string
 function _setApplyFadeInUrl(doApply, fieldTypes) {
+    console.log('_setApplyFadeInUrl', doApply, fieldTypes)
     if (!menuEl || !menuEl.src) return
     const url = new URL(menuEl.src)
+    console.log('url', url)
     if (doApply) {
         fieldTypes = {...{login: false, identity: false, card: false, fieldFormat:false},...fieldTypes}
+        console.log('setHash')
         state.iFrameHash = {...state.iFrameHash, ...fieldTypes, applyFadeIn: true}
-        menuEl.src = url.origin + url.pathname + url.search + '#' +
+        console.log('end setHash')
             encodeURIComponent(JSON.stringify(state.iFrameHash))
     } else {
         state.iFrameHash.applyFadeIn = false

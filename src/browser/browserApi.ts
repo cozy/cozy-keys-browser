@@ -65,10 +65,12 @@ export class BrowserApi {
     }
 
     static async tabSendMessage(tab: any, obj: any, options: any = null): Promise<any> {
+        console.log('tabSendMessage')
         if (!tab || !tab.id) {
             return;
         }
 
+        console.log('tabSendMessage',tab.id, obj, options)
         return new Promise<void>(resolve => {
             browser.tabs.sendMessage(tab.id, obj, options).then(() => {
                 if (browser.runtime.lastError) {
@@ -97,6 +99,7 @@ export class BrowserApi {
 
     static messageListener(name: string, callback: (message: any, sender: any, response: any) => void) {
         browser.runtime.onMessage.addListener((msg: any, sender: any, response: any) => {
+            console.log('messageListenerFrombrowserApi', msg)
             callback(msg, sender, response);
         });
     }

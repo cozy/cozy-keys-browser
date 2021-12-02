@@ -2,7 +2,9 @@ import { BrowserApi } from './browserApi';
 
 export class SafariApp {
     static sendMessageToApp(command: string, data: any = null, resolveNow = false): Promise<any> {
+        console.log('sendMessageToApp',command, data)
         if (!BrowserApi.isSafariApi) {
+            console.log('resolbe null')
             return Promise.resolve(null);
         }
         const now = new Date();

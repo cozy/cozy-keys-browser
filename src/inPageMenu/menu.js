@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3- listen to the commands and ciphers sent by the addon
     browser.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+        console.log('messageListenerFromMenu', msg)
         /*
         @override by Cozy : this log is very useful for reverse engineering the code, keep it for tests
         console.log('menu.js HEARD : ', {

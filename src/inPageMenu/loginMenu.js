@@ -97,6 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             title.textContent                                 = browser.i18n.getMessage('loginInPageMenuTitle')
             pwdLabelTxt                                       = browser.i18n.getMessage('masterPass'          )
+
+            console.log('title.textContent', browser.i18n.getMessage('loginInPageMenuTitle'))
         }
     }
 
@@ -114,7 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 8- listen to the commands sent by the addon
+    console.log('addListener')
     browser.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+        console.log('Received message ', msg)
         // console.log('loginMenu heared msg', msg);
         if (msg.command !== 'menuAnswerRequest') return
         switch (msg.subcommand) {
