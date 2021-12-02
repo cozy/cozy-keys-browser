@@ -71,13 +71,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // }, false);
     } else {
         // retrieve i18n values and set elements textcontent
-        lang = chrome.i18n.getUILanguage();
+        lang = browser.i18n.getUILanguage();
         i18nGetMessage = chrome.i18n.getMessage
         titleEl.textContent = i18nGetMessage('inPageMenuSelectAnAccount')
     }
 
     // 3- listen to the commands and ciphers sent by the addon
-    chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+    browser.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
         /*
         @override by Cozy : this log is very useful for reverse engineering the code, keep it for tests
         console.log('menu.js HEARD : ', {
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // 4- request ciphers to the background scripts
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest',
         subcommand: 'getCiphersForTab'   ,
         sender    : 'menu.js'            ,
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 5- listen to click on the close menu button
     const closeIcon = document.querySelector('.close-icon')
     closeIcon.addEventListener('click',()=>{
-        chrome.runtime.sendMessage({
+        browser.runtime.sendMessage({
             command   : 'bgAnswerMenuRequest',
             subcommand: 'closeMenu'          ,
             force     : true                 ,
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /* --------------------------------------------------------------------- */
 // Request the background to autofill the page with a cipher
 function requestFormFillingWithCipher(cipherId) {
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest',
         subcommand: 'fillFormWithCipher' ,
         cipherId  : cipherId             ,
@@ -186,7 +186,7 @@ function requestFormFillingWithCipher(cipherId) {
 /* --------------------------------------------------------------------- */
 // Request the background to autofill the page with a cipher
 function requestFieldFillingWithData(dataTxt) {
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest'  ,
         subcommand: 'fieldFillingWithData' ,
         frameId   : hostFrameId            ,
@@ -328,7 +328,7 @@ function selectFirstVisibleRow() {
 function adjustMenuHeight() {
     if (lastSentHeight === panel.offsetHeight) return
     lastSentHeight = panel.offsetHeight
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest' ,
         subcommand: 'setMenuHeight'       ,
         height    : lastSentHeight        ,

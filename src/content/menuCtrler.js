@@ -431,7 +431,7 @@ function moveSelection(n) {
     }
     state.selectedCipher = newCipherNode
 
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         command      : 'bgAnswerMenuRequest',
         subcommand   : 'menuMoveSelection',
         targetCipher : newCipherNode.data.id,
@@ -457,7 +457,7 @@ function getPossibleTypesForField(fieldEl) {
 /* --------------------------------------------------------------------- */
 // Submit the currently selected cypher for autofill
 function submit() {
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         command    : 'bgAnswerMenuRequest',
         subcommand : 'fillFormWithCipher',
         sender     : 'menuCtrler',
@@ -470,7 +470,7 @@ menuCtrler.submit = submit
 /* --------------------------------------------------------------------- */
 // autofill the focused field with the detail of the currently selected cypher
 function submitDetail() {
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         command    : 'bgAnswerMenuRequest',
         subcommand : 'askMenuTofillFieldWithData',
         sender     : 'menuCtrler',
@@ -576,13 +576,13 @@ function _setIframeURLforMenuType(menuType, isPinLocked, isLocked) {
     const hash = '#' + encodeURIComponent(JSON.stringify(state.iFrameHash));
     const rand = '?' + Math.floor((Math.random()*1000000)+1)
     if (menuType === 'autofillMenu') {
-        menuEl.src = chrome.runtime.getURL('inPageMenu/menu.html' + rand) + hash
+        menuEl.src = browser.runtime.getURL('inPageMenu/menu.html' + rand) + hash
     } else if (menuType === 'loginMenu') {
         let searchParams = ''
         if (isPinLocked) searchParams = 'isPinLocked=true'
         if (isLocked) searchParams += 'isLocked=true'
         if (searchParams) searchParams = '?' + searchParams
-        menuEl.src = chrome.runtime.getURL('inPageMenu/loginMenu.html' + searchParams + rand) + hash
+        menuEl.src = browser.runtime.getURL('inPageMenu/loginMenu.html' + searchParams + rand) + hash
     }
 }
 
