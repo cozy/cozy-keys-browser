@@ -84,20 +84,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }, false);
     } else {
         // retrieve i18n values and set elements textcontent
-        const i18nGetMessage = browser.i18n.getMessage
-        urlLabelTxt                                           = i18nGetMessage('cozyUrl'             )
-        twoFaLabelTxt                                         = i18nGetMessage('verificationCode'    )
-        visiPwdBtn.title                                      = i18nGetMessage('toggleVisibility'    )
-        visi2faBtn.title                                      = i18nGetMessage('toggleVisibility'    )
-        submitBtn.textContent                                 = i18nGetMessage('login'               )
+        urlLabelTxt                                           = browser.i18n.getMessage('cozyUrl'             )
+        twoFaLabelTxt                                         = browser.i18n.getMessage('verificationCode'    )
+        visiPwdBtn.title                                      = browser.i18n.getMessage('toggleVisibility'    )
+        visi2faBtn.title                                      = browser.i18n.getMessage('toggleVisibility'    )
+        submitBtn.textContent                                 = browser.i18n.getMessage('login'               )
         if (isPinLocked) {
-            title.textContent                                 = i18nGetMessage('unlockWithPin'       )
-            pwdLabelTxt                                       = i18nGetMessage('pin'                 )
+            title.textContent                                 = browser.i18n.getMessage('unlockWithPin'       )
+            pwdLabelTxt                                       = browser.i18n.getMessage('pin'                 )
             urlInput.disabled = true
             document.getElementById('url-row').classList.add('disabled')
         } else {
-            title.textContent                                 = i18nGetMessage('loginInPageMenuTitle')
-            pwdLabelTxt                                       = i18nGetMessage('masterPass'          )
+            title.textContent                                 = browser.i18n.getMessage('loginInPageMenuTitle')
+            pwdLabelTxt                                       = browser.i18n.getMessage('masterPass'          )
         }
     }
 

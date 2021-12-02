@@ -72,8 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         // retrieve i18n values and set elements textcontent
         lang = browser.i18n.getUILanguage();
-        i18nGetMessage = chrome.i18n.getMessage
-        titleEl.textContent = i18nGetMessage('inPageMenuSelectAnAccount')
+        titleEl.textContent = browser.i18n.getMessage('inPageMenuSelectAnAccount')
     }
 
     // 3- listen to the commands and ciphers sent by the addon
