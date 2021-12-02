@@ -581,8 +581,8 @@ function _setIframeURLforMenuType(menuType, isPinLocked, isLocked) {
         let searchParams = ''
         if (isPinLocked) searchParams = 'isPinLocked=true'
         if (isLocked) searchParams += 'isLocked=true'
-        if (searchParams) searchParams = '?' + searchParams
-        menuEl.src = browser.runtime.getURL('inPageMenu/loginMenu.html' + searchParams + rand) + hash
+        if (searchParams) searchParams = '&' + searchParams
+        menuEl.src = browser.runtime.getURL('inPageMenu/loginMenu.html' + rand + searchParams) + hash
     }
 }
 
@@ -594,7 +594,7 @@ function _forceIframeRefresh() {
     if (!menuEl || !menuEl.src) return
     const url = new URL(menuEl.src)
     const rand = '?' + Math.floor((Math.random()*1000000)+1)
-    menuEl.src = url.origin + url.pathname + url.search + rand + url.hash
+    menuEl.src = url.origin + url.pathname + rand + url.search + url.hash
 }
 
 
