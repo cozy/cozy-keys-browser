@@ -642,11 +642,12 @@ function _setApplyFadeInUrl(doApply, fieldTypes) {
         console.log('setHash')
         state.iFrameHash = {...state.iFrameHash, ...fieldTypes, applyFadeIn: true}
         console.log('end setHash')
-            encodeURIComponent(JSON.stringify(state.iFrameHash))
+        menuEl.src = url.origin + url.pathname + url.search + '#' +'%7B%22arrowD%22%3A0%2C%22hostFrameId%22%3A0%7D'
+            // encodeURIComponent(JSON.stringify(state.iFrameHash))
     } else {
         state.iFrameHash.applyFadeIn = false
-        menuEl.src = url.origin + url.pathname + url.search + '#' +
-            encodeURIComponent(JSON.stringify(state.iFrameHash))
+        menuEl.src = url.origin + url.pathname + url.search + '#' + '%7B%22arrowD%22%3A0%2C%22hostFrameId%22%3A0%7D'
+            // encodeURIComponent(JSON.stringify(state.iFrameHash))
     }
 }
 
