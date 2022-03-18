@@ -140,7 +140,7 @@
     }
   },
   "sidebar_action": {
-    "default_title": "Cozy Keys",
+    "default_title": "Cozy",
     "default_panel": "popup/index.html?uilocation=sidebar",
     "default_icon": "images/icon19.png"
   }
