@@ -22,6 +22,15 @@
         <div class="box">
             <div class="box-content">
                 <div class="box-content-row box-content-row-checkbox" appBoxRow>
+                    <label for="disableSuggestions">{{'disableKonnectorsSuggestions' | i18n}}</label>
+                    <input id="disableSuggestions" type="checkbox" (change)="updateKonnectorsSuggestions()" [(ngModel)]="disableKonnectorsSuggestions">
+                </div>
+            </div>
+            <div class="box-footer">{{'disableKonnectorsSuggestionsDesc' | i18n}}</div>
+        </div>
+        <div class="box">
+            <div class="box-content">
+                <div class="box-content-row box-content-row-checkbox" appBoxRow>
                     <label for="inPageMenu">{{'enableInPageMenu' | i18n}}</label>
                     <input id="inPageMenu" type="checkbox" (change)="updateEnableInPageMenu()" [(ngModel)]="enableInPageMenu">
                 </div>
