@@ -18,7 +18,7 @@
             <div class="box-content">
                 <div class="box-content-row" appBoxRow>
                     <label for="name">{{'name' | i18n}}</label>
-                    <input id="name" type="text" name="Name" [(ngModel)]="folder.name" [appAutofocus]="!editMode">
+                    <input id="name" type="text" name="Name" [(ngModel)]="folder.name" [appAutofocus]="!editMode" appInputVerbatim>
                 </div>
             </div>
         </div>

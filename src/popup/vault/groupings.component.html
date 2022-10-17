@@ -13,7 +13,7 @@
         <input #searchInput type="{{searchTypeSearch ? 'search' : 'text'}}"
             placeholder="{{searchTagClass === 'hideSearchTag' ? ('searchVault' | i18n) : ''}}"
             id="search"
-            [(ngModel)]="searchText" (input)="search(200)" autocomplete="off">
+            [(ngModel)]="searchText" (input)="search(200)" autocomplete="off" appInputVerbatim>
         <i class="fa fa-close" aria-hidden="true" (click)="unActivatePanel()"></i>
     </div>
     <button (click)="openWebApp()" appA11yTitle="{{'popOutNewWindow' | i18n}}">
