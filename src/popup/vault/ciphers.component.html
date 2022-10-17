@@ -8,7 +8,7 @@
     <div class="search">
         <input type="{{searchTypeSearch ? 'search' : 'text'}}"
             placeholder="{{searchPlaceholder || ('searchVault' | i18n)}}" id="search" [(ngModel)]="searchText"
-            (input)="search(200)" autocomplete="off" appAutofocus>
+            (input)="search(200)" autocomplete="off" appAutofocus appInputVerbatim>
         <i class="fa fa-search" aria-hidden="true"></i>
         <i class="fa fa-close" aria-hidden="true" (click)="emptySearch()"></i>
     </div>
