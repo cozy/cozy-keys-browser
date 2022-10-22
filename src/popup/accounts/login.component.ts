@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { EnvironmentService as EnvironmentServiceAbstraction } from 'jslib-common/abstractions';
+import { ApiService } from 'jslib-common/abstractions/api.service';
 import { AuthService } from 'jslib-common/abstractions/auth.service';
 import { CryptoFunctionService } from 'jslib-common/abstractions/cryptoFunction.service';
 import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
@@ -13,10 +14,24 @@ import { StorageService } from 'jslib-common/abstractions/storage.service';
 import { SyncService } from 'jslib-common/abstractions/sync.service';
 import { Utils } from 'jslib-common/misc/utils';
 import { AuthResult } from 'jslib-common/models/domain/authResult';
+import { PreloginRequest } from 'jslib-common/models/request/preloginRequest';
+import { PreloginResponse } from 'jslib-common/models/response/preloginResponse';
 import { ConstantsService } from 'jslib-common/services/constants.service';
 
 import BrowserMessagingService from '../../services/browserMessaging.service';
+
+/* start Cozy imports */
+import { generateWebLink, Q } from 'cozy-client';
+
+import { CozyClientService } from '../services/cozyClient.service';
 import { CozySanitizeUrlService } from "../services/cozySanitizeUrl.service";
+/* end Cozy imports */
+
+type CozyConfiguration = {
+    HasCiphers?: boolean
+    OIDC?: boolean
+    FlatSubdomains?: boolean
+}
 
 const messagingService = new BrowserMessagingService();
 
@@ -25,8 +40,27 @@ const Keys = {
     rememberCozyUrl: 'rememberCozyUrl',
 };
 
+const getCozyPassWebURL = (cozyUrl: string, cozyConfiguration: CozyConfiguration) => {
+    const link = generateWebLink({
+        cozyUrl: cozyUrl,
+        searchParams: [],
+        pathname: '',
+        hash: '',
+        slug: 'passwords',
+        subDomainType: cozyConfiguration.FlatSubdomains ? 'flat' : 'nested'
+    });
+
+    return link;
+};
+
 const getPassphraseResetURL = (cozyUrl: string) => {
     return `${cozyUrl}/auth/passphrase_reset`;
+};
+
+const shouldRedirectToOIDCPasswordPage = (cozyConfiguration: CozyConfiguration) => {
+    const shouldRedirect = cozyConfiguration.OIDC && !cozyConfiguration.HasCiphers;
+
+    return shouldRedirect
 };
 
 @Component({
@@ -62,7 +96,7 @@ export class LoginComponent implements OnInit {
         protected platformUtilsService: PlatformUtilsService, protected i18nService: I18nService,
         protected syncService: SyncService, private storageService: StorageService,
         protected stateService: StorageService, protected environmentService: EnvironmentService,
-        protected cozySanitizeUrlService: CozySanitizeUrlService) {
+        protected cozySanitizeUrlService: CozySanitizeUrlService, private apiService: ApiService) {
 
             this.authService = authService;
             this.router = router;
@@ -200,10 +234,27 @@ export class LoginComponent implements OnInit {
 
         const loginUrl = this.sanitizeUrlInput(this.cozyUrl);
 
+        await this.initializeEnvForCozy(loginUrl);
+
+        let cozyConfiguration: CozyConfiguration = {};
+        try {
+            cozyConfiguration = await this.getCozyConfiguration();
+        } catch (e) {
+            this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
+                this.i18nService.t('invalidCozyUrl'));
+            return;
+        }
+        
+        const shouldRedirectToOidc = shouldRedirectToOIDCPasswordPage(cozyConfiguration);
+
+        const url = shouldRedirectToOidc
+            ? getCozyPassWebURL(loginUrl, cozyConfiguration)
+            : getPassphraseResetURL(loginUrl);
+
         const browser = window.browser || window.chrome;
         await browser.tabs.create({
             active: true,
-            url: getPassphraseResetURL(loginUrl),
+            url: url,
         });
 
         // Close popup
@@ -211,5 +262,25 @@ export class LoginComponent implements OnInit {
         if (popupWindows.find((w: Window) => w === window)) {
           window.close();
         }
+    }
+
+    private getCozyConfiguration = async (): Promise<CozyConfiguration> => {
+        const preloginResponse = await this.apiService.postPrelogin(new PreloginRequest(this.cozyUrl));
+
+        const { HasCiphers, OIDC, FlatSubdomains } = (preloginResponse as any).response;
+
+        return { HasCiphers, OIDC, FlatSubdomains }
+    }
+
+    /**
+     * Initialize EnvironmentService with cozyUrl input so it can be used by ApiService
+     * Also save cozyUrl input in storageService so it will be pre-filled on next popup opening
+     * @param cozyUrl - The Cozy address
+     */
+    private initializeEnvForCozy = async (cozyUrl: string) => {
+        await this.environmentService.setUrls({
+            base: cozyUrl + '/bitwarden',
+        });
+        this.storageService.save(Keys.rememberedCozyUrl, cozyUrl);
     }
 }
