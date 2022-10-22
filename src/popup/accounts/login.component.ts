@@ -26,10 +26,6 @@ const Keys = {
 };
 
 const getPassphraseResetURL = (cozyUrl: string) => {
-    // Handle lack of protocol and trailing slash
-    cozyUrl = cozyUrl.startsWith('http') ?
-        cozyUrl : `https://${cozyUrl}`;
-    cozyUrl = cozyUrl.endsWith('/') ? cozyUrl.substring(0, cozyUrl.length - 1) : cozyUrl;
     return `${cozyUrl}/auth/passphrase_reset`;
 };
 
@@ -202,10 +198,12 @@ export class LoginComponent implements OnInit {
             return;
         }
 
+        const loginUrl = this.sanitizeUrlInput(this.cozyUrl);
+
         const browser = window.browser || window.chrome;
         await browser.tabs.create({
             active: true,
-            url: getPassphraseResetURL(this.cozyUrl),
+            url: getPassphraseResetURL(loginUrl),
         });
 
         // Close popup
