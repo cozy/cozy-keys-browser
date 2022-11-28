@@ -1,0 +1,211 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag_name_input:
+        description: "Release Tag Name <X.X.X>"
+        required: true
+
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      tag_version: ${{ steps.create_tags.outputs.tag_version }}
+      release_upload_url: ${{ steps.create_release.outputs.upload_url }}
+      repo_url: ${{ steps.gen_vars.outputs.repo_url }}
+      adj_build_number: ${{ steps.gen_vars.outputs.adj_build_number }}
+    steps:
+      - name: Branch check
+        run: |
+          if [[ "$GITHUB_REF" != "refs/heads/rc" ]]; then
+            echo "==================================="
+            echo "[!] Can only release from rc branch"
+            echo "==================================="
+            exit 1
+          fi
+      
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+
+      - name: Get Package Version
+        id: gen_vars
+        shell: pwsh
+        run: |
+          $repo_url = "https://github.com/${env:GITHUB_REPOSITORY}.git"
+          $build_num = [int]$env:GITHUB_RUN_NUMBER
+          $adj_build_num = $build_num + 3000
+
+          echo "::set-output name=repo_url::$repo_url" 
+          echo "::set-output name=adj_build_number::$adj_build_num" 
+
+      - name: Create Release Vars
+        id: create_tags
+        run: |
+          case "${RELEASE_TAG_NAME_INPUT:0:1}" in
+            v)
+              echo "RELEASE_NAME=${RELEASE_TAG_NAME_INPUT:1}" >> $GITHUB_ENV
+              echo "RELEASE_TAG_NAME=$RELEASE_TAG_NAME_INPUT" >> $GITHUB_ENV
+              echo "::set-output name=tag_version::$RELEASE_TAG_NAME_INPUT"
+              ;;
+            [0-9])
+              echo "RELEASE_NAME=$RELEASE_TAG_NAME_INPUT" >> $GITHUB_ENV
+              echo "RELEASE_TAG_NAME=v$RELEASE_TAG_NAME_INPUT" >> $GITHUB_ENV
+              echo "::set-output name=tag_version::v$RELEASE_TAG_NAME_INPUT"
+              ;;
+            *)
+              exit 1
+              ;;
+          esac
+        env:
+          RELEASE_TAG_NAME_INPUT: ${{ github.event.inputs.release_tag_name_input }}
+
+      - name: Create Draft Release
+        id: create_release
+        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.RELEASE_TAG_NAME }}
+          release_name: ${{ env.RELEASE_NAME }}
+          draft: true
+          prerelease: false
+
+
+  locales-test:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+
+      - name: Testing locales - extName length
+        run: |
+         found_error=false
+
+         echo "Locales Test"
+         echo "============"
+         echo "extName string must be 40 characters or less"
+         echo
+         for locale in $(ls src/_locales/); do
+           string_length=$(jq '.extName.message | length' src/_locales/$locale/messages.json)
+           if [[ $string_length -gt 40 ]]; then
+             echo "$locale: $string_length"
+             found_error=true
+           fi
+         done
+
+         if $found_error; then
+           echo
+           echo "Please fix 'extName' for the locales listed above."
+           exit 1
+         else
+           echo "Test passed!"
+         fi
+
+  build:
+    runs-on: windows-latest
+    needs: [ setup, locales-test ]
+    env:
+      REPO_URL: ${{ needs.setup.outputs.repo_url }}
+      BUILD_NUMBER: ${{ needs.setup.outputs.adj_build_number }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+
+      - name: Set up Node
+        uses: actions/setup-node@46071b5c7a2e0c34e49c3cb8a0e792e86e18d5ea
+        with:
+          node-version: '14'
+
+      - name: Update NPM
+        run: |
+          npm install -g npm@7
+
+      - name: Print environment
+        run: |
+          node --version
+          npm --version
+
+      - name: npm setup & test
+        run: |
+          npm install
+          npm run dist
+          npm run test
+
+      - name: gulp
+        run: gulp ci
+
+      - name: Build sources for reviewers
+        shell: cmd
+        run: |
+          mkdir dist\Source
+          call git clone %REPO_URL% dist\Source
+          cd dist\Source
+          call git checkout %GITHUB_SHA%
+          call git submodule update --init --recursive
+          cd ../
+          del /S/Q "Source\.git\objects\pack\*"
+          call 7z a browser-source-%BUILD_NUMBER%.zip "Source\*"
+
+      - name: upload opera release asset
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.setup.outputs.release_upload_url }}
+          asset_name: dist-opera-${{ env.BUILD_NUMBER }}.zip
+          asset_path: dist/dist-opera-${{ env.BUILD_NUMBER }}.zip
+          asset_content_type: application
+
+      - name: upload chrome release asset
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.setup.outputs.release_upload_url }}
+          asset_name: dist-chrome-${{ env.BUILD_NUMBER }}.zip
+          asset_path: dist/dist-chrome-${{ env.BUILD_NUMBER }}.zip
+          asset_content_type: application/zip
+
+      - name: upload firefox release asset
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.setup.outputs.release_upload_url }}
+          asset_name: dist-firefox-${{ env.BUILD_NUMBER }}.zip
+          asset_path: dist/dist-firefox-${{ env.BUILD_NUMBER }}.zip
+          asset_content_type: application/zip
+
+      - name: upload edge release asset
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.setup.outputs.release_upload_url }}
+          asset_name: dist-edge-${{ env.BUILD_NUMBER }}.zip
+          asset_path: dist/dist-edge-${{ env.BUILD_NUMBER }}.zip
+          asset_content_type: application/zip
+
+      - name: upload browser source zip release asset
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.setup.outputs.release_upload_url }}
+          asset_name: browser-source-${{ env.BUILD_NUMBER }}.zip
+          asset_path: dist/browser-source-${{ env.BUILD_NUMBER }}.zip
+          asset_content_type: application/zip
+
+      - name: upload coverage release asset
+        if: false
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.setup.outputs.release_upload_url }}
+          asset_name: coverage-${{ env.BUILD_NUMBER }}.zip
+          asset_path: coverage/coverage-${{ env.BUILD_NUMBER }}.zip
+          asset_content_type: application/zip

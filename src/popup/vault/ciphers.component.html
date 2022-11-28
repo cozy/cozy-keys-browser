@@ -54,8 +54,8 @@
             </div>
         </div>
     </ng-container>
-    <ng-container *ngIf="(isPaging() ? pagedCiphers : ciphers) as filteredCiphers">
-        <div class="no-items" *ngIf="!filteredCiphers.length">
+    <ng-container *ngIf="ciphers">
+        <div class="no-items" *ngIf="!ciphers.length">
             <i class="fa fa-spinner fa-spin fa-3x" *ngIf="!loaded" aria-hidden="true"></i>
             <ng-container *ngIf="loaded">
                 <p>{{'noItemsInList' | i18n}}</p>
@@ -64,17 +64,19 @@
                 </button>
             </ng-container>
         </div>
-        <div class="box list only-list" *ngIf="filteredCiphers.length" infiniteScroll [infiniteScrollDistance]="1"
-            [infiniteScrollContainer]="'content'" [fromRoot]="true" [infiniteScrollDisabled]="!isPaging()"
-            (scrolled)="loadMore()">
-            <div class="box-header">
-                {{groupingTitle}}
-                <span class="flex-right">{{isSearching() ? filteredCiphers.length : ciphers.length}}</span>
+                                                                                     <cdk-virtual-scr.length"
+            #virtualScrollViewport>
+            <div class="box list only-list">
+                <div class="box-header">
+                    {{groupingTitle}}
+                    <span class="flex-right">{{isSearching() ? ciphers.length : ciphers.length}}</span>
+                </div>
+                <div class="box-content">
+                    <app-cipher-row *cdkVirtualFor="let c of ciphers" [cipher]="c" title="{{'viewItem' | i18n}}"
+                        (onSelected)="selectCipher($event)" (launchEvent)="launchCipher($event)" 
+                        (onDoubleSelected)="fillOrLaunchCipher($event)" [showGlobe]="true" (onView)="viewCipher($event)"></app-cipher-row>
+                </div>
             </div>
-            <div class="box-content">
-                <app-ciphers-list [ciphers]="filteredCiphers" title="{{'viewItem' | i18n}}" (launchEvent)="launchCipher($event)"
-                    (onSelected)="fillOrLaunchCipher($event)" (onDoubleSelected)="fillOrLaunchCipher($event)" [showGlobe]="true" (onView)="viewCipher($event)"></app-ciphers-list>
-            </div>
-        </div>
+        </cdk-virtual-scroll-viewport>
     </ng-container>
 </content>

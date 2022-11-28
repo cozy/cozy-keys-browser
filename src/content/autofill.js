@@ -875,12 +875,14 @@ import menuCtrler from './menuCtrler';
         // ex : document.getElementByOpId('__2')
         document.getElementByOpId = getElementByOpId;
 
-        // normalize the event since firefox handles events differently than others
+        // normalize the event based on API support
         function normalizeEvent(el, eventName) {
             var ev;
-            if (isFirefox) {
-                ev = document.createEvent('KeyboardEvent');
-                ev.initKeyEvent(eventName, true, false, null, false, false, false, false, 0, 0);
+            if ('KeyboardEvent' in window) {
+                ev = new window.KeyboardEvent(eventName, {
+                    bubbles: true,
+                    cancelable: false,
+                });
             }
             else {
                 ev = el.ownerDocument.createEvent('Events');

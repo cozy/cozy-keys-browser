@@ -324,8 +324,11 @@
         align-items: center;
         //cozy-customisations break on word, not all. Mainly used for option panel
         //word-break: break-all;
-    }
 
+        &.box-content-row-word-break {
+            word-break: normal;
+        }
+    }
     &.box-content-row-multi-wrap {
         display: flex;
         flex-wrap: wrap;

@@ -12,6 +12,7 @@ import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.se
 import { StateService } from 'jslib-common/abstractions/state.service';
 import { StorageService } from 'jslib-common/abstractions/storage.service';
 import { SyncService } from 'jslib-common/abstractions/sync.service';
+// import { UserService } from 'jslib-common/abstractions/user.service'; TODO BJA : DELETE
 import { Utils } from 'jslib-common/misc/utils';
 import { AuthResult } from 'jslib-common/models/domain/authResult';
 import { PreloginRequest } from 'jslib-common/models/request/preloginRequest';
@@ -53,9 +54,6 @@ const getCozyPassWebURL = (cozyUrl: string, cozyConfiguration: CozyConfiguration
     return link;
 };
 
-const getPassphraseResetURL = (cozyUrl: string) => {
-    return `${cozyUrl}/auth/passphrase_reset`;
-};
 
 const shouldRedirectToOIDCPasswordPage = (cozyConfiguration: CozyConfiguration) => {
     const shouldRedirect = cozyConfiguration.OIDC && !cozyConfiguration.HasCiphers;
@@ -169,6 +167,10 @@ export class LoginComponent implements OnInit {
                     // does not consider the result of the call as an error, otherwise
                     // we would have a double toast
                     return null;
+        super.onSuccessfulLogin = async () => {
+            await syncService.fullSync(true).then(async () => {
+                if (await this.userService.getForcePasswordReset()) {
+                    this.router.navigate(['update-temp-password']);
                 }
                 throw e;
             });

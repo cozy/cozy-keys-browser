@@ -19,6 +19,7 @@ import { LoginComponent } from './accounts/login.component';
 import { SsoComponent } from './accounts/sso.component';
 import { TwoFactorOptionsComponent } from './accounts/two-factor-options.component';
 import { TwoFactorComponent } from './accounts/two-factor.component';
+import { UpdateTempPasswordComponent } from './accounts/update-temp-password.component';
 
 import { PasswordGeneratorHistoryComponent } from './generator/password-generator-history.component';
 import { PasswordGeneratorComponent } from './generator/password-generator.component';
@@ -227,6 +228,12 @@ const routes: Routes = [
         component: SendAddEditComponent,
         canActivate: [AuthGuardService],
         data: { state: 'edit-send' },
+    },
+    {
+        path: 'update-temp-password',
+        component: UpdateTempPasswordComponent,
+        canActivate: [AuthGuardService],
+        data: { state: 'update-temp-password' },
     },
     {
         path: 'tabs',

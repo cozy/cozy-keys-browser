@@ -184,7 +184,7 @@
     "message": "Enregistrer"
   },
   "move": {
-    "message": "Move"
+    "message": "Se déplacer"
   },
   "addFolder": {
     "message": "Ajouter un dossier"
@@ -685,14 +685,14 @@
   "shared": {
     "message": "Partagé"
   },
-  "shareItem": {
-    "message": "Partager l'élément"
+  "moveToOrganization": {
+    "message": "Déplacer vers l'organisation"
   },
   "share": {
     "message": "Partager"
   },
   "movedItemToOrg": {
-    "message": "$ITEMNAME$ moved to $ORGNAME$",
+    "message": "$ITEMNAME$ a été déplacé vers $ORGNAME$",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -705,7 +705,7 @@
     }
   },
   "moveToOrgDesc": {
-    "message": "Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved."
+    "message": "Choisissez une organisation vers laquelle vous souhaitez déplacer cet élément. Déplacer un élément vers une organisation transfère la propriété de l'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu'il aura été déplacé."
   },
   "learnMore": {
     "message": "En savoir plus"
@@ -855,7 +855,7 @@
     "message": "Poursuivez la vérification 2FA WebAuthn dans le nouvel onglet."
   },
   "webAuthnNewTabOpen": {
-    "message": "Open new tab"
+    "message": "Ouvrir un nouvel onglet"
   },
   "webAuthnAuthenticate": {
     "message": "Authentifier WebAuthn"
@@ -956,11 +956,23 @@
   "enableAutoFillOnPageLoadDesc": {
     "message": "Si un formulaire de connexion est détecté, remplir automatiquement les champs au chargement de la page web."
   },
-  "enableAutoTotpCopyOnAutoFill": {
-    "message": "Automatic TOTP Copy after Page Load"
+  "experimentalFeature": {
+    "message": "Ceci est actuellement une fonctionnalité expérimentale. À utiliser avec prudence."
   },
-  "enableAutoTotpCopyOnAutoFillDesc": {
-    "message": "If Auto-fill On Page Load is enabled, the TOTP verification code is automatically copied to your clipboard after loading the web page. This is overridden by Disable Automatic TOTP Copy."
+  "defaultAutoFillOnPageLoad": {
+    "message": "Paramètre de saisie automatique par défaut pour les identifiants"
+  },
+  "defaultAutoFillOnPageLoadDesc": {
+    "message": "Après avoir activé le remplissage automatique au chargement de la page, vous pourrez activer ou désactiver la fonctionnalité pour chaque identifiant. Ceci est le paramètre par défaut pour les identifiants qui ne sont pas configurés individuellement."
+  },
+  "itemAutoFillOnPageLoad": {
+    "message": "Remplissage automatique au chargement de la page (si activé dans les options)"
+  },
+  "autoFillOnPageLoadUseDefault": {
+    "message": "Utiliser le paramètre par défaut"
+  },
+  "autoFillOnPageLoadYes": {
+    "message": "Remplissage automatique au chargement de la page"
   },
   "enableInPageMenu": {
     "message": "Activer le menu de sélection dans la page web"
@@ -992,8 +1004,8 @@
   "inPageMenuOnlyThisField": {
     "message": "seulement ce champ (Ctrl+Enter)"
   },
-  "experimentalFeature": {
-    "message": "Ceci est actuellement une fonctionnalité expérimentale. À utiliser avec prudence."
+  "autoFillOnPageLoadNo": {
+    "message": "Ne pas remplir automatiquement au chargement de la page"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Default autofill setting for login items"
@@ -1838,9 +1850,9 @@
     "message": "Cette action est protégée. Pour continuer, veuillez ressaisir votre mot de passe maître pour vérifier votre identité."
   },
   "emailVerificationRequired": {
-    "message": "Email Verification Required"
+    "message": "Vérification de l'adresse e-mail nécessaire"
   },
   "emailVerificationRequiredDesc": {
-    "message": "You must verify your email to use this feature. You can verify your email in the web vault."
+    "message": "Vous devez vérifier votre adresse e-mail pour utiliser cette fonctionnalité. Vous pouvez vérifier votre adresse e-mail dans le coffre web."
   }
 }
