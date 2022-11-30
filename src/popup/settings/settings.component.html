@@ -31,14 +31,8 @@
     </div>
     <div class="box list">
         <div class="box-header">{{'security' | i18n}}</div>
-        <div class="box-content box-content-settings single-line">
-            <div class="box-content-row settings-row display-block" appBoxRow>
-                <label for="vaultTimeout">{{'vaultTimeout' | i18n}}</label>
-                <select #vaultTimeoutSelect id="vaultTimeout" name="VaultTimeouts" [ngModel]="vaultTimeout"
-                    (ngModelChange)="saveVaultTimeout($event)">
-                    <option *ngFor="let o of vaultTimeouts" [ngValue]="o.value">{{o.name}}</option>
-                </select>
-            </div>
+        <div class="box-content single-line">
+            <app-vault-timeout-input [vaultTimeouts]="vaultTimeouts" [formControl]="vaultTimeout" ngDefaultControl></app-vault-timeout-input>
             <div class="box-content-row settings-row display-block" appBoxRow>
                 <label for="vaultTimeoutAction">{{'vaultTimeoutAction' | i18n}}</label>
                 <select #vaultTimeoutActionSelect id="vaultTimeoutAction" name="VaultTimeoutActions"
@@ -71,38 +65,38 @@
             </a>
             <!-- TODO: enable this with Cozy's password change
           -->
-            <a class="box-content-row settings-row box-content-row-flex text-default" href="#" appStopClick appBlurClick
-                (click)="changePassword()">
+            <button type="button" class="box-content-row box-content-row-flex text-default" appStopClick appBlurClick
+                (click)="changePassword()" *ngIf="showChangeMasterPass">
                 <div class="row-main">{{'changeMasterPassword' | i18n}}</div>
                 <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </a>
+            </button>
             <ng-container *ifFlag="CAN_SHARE_ORGANIZATION">
-            <a class="box-content-row box-content-row-flex text-default" href="#" appStopClick appBlurClick
+            <button type="button" class="box-content-row box-content-row-flex text-default" appStopClick appBlurClick
                 (click)="fingerprint()">
                 <div class="row-main">{{'fingerprintPhrase' | i18n}}</div>
                 <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </a>
+            </button>
             </ng-container>
-            <a class="box-content-row settings-row box-content-row-flex text-default" href="#" appStopClick appBlurClick
+            <button type="button" class="box-content-row settings-row box-content-row-flex text-default" appStopClick appBlurClick
                 (click)="logOut()">
                 <div class="row-main">{{'logOut' | i18n}}</div>
                 <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </a>
+            </button>
         </div>
     </div>
     <div class="box list">
         <div class="box-header">{{'tools' | i18n}}</div>
         <div class="box-content box-content-settings single-line">
-            <a class="box-content-row settings-row box-content-row-flex text-default" href="#" appStopClick appBlurClick
+            <button type="button" class="box-content-row settings-row box-content-row-flex text-default" appStopClick appBlurClick
                 (click)="import()">
                 <div class="row-main">{{'importItems' | i18n}}</div>
                 <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </a>
-            <a class="box-content-row settings-row box-content-row-flex text-default" href="#" appStopClick appBlurClick
+            </button>
+            <button type="button" class="box-content-row settings-row box-content-row-flex text-default" appStopClick appBlurClick
                 (click)="export()">
                 <div class="row-main">{{'exportVault' | i18n}}</div>
                 <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </a>
+            </button>
         </div>
     </div>
     <div class="box list">
@@ -112,22 +106,22 @@
                 <div class="row-main">{{'options' | i18n}}</div>
                 <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
             </a>
-            <a class="box-content-row settings-row box-content-row-flex text-default" href="#" appStopClick appBlurClick
+            <button type="button" class="box-content-row settings-row box-content-row-flex text-default" appStopClick appBlurClick
                 (click)="about()">
                 <div class="row-main">{{'about' | i18n}}</div>
                 <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </a>
-            <a class="box-content-row settings-row box-content-row-flex text-default" href="#" appStopClick appBlurClick
+            </button>
+            <button type="button" class="box-content-row settings-row box-content-row-flex text-default" appStopClick appBlurClick
                 (click)="help()">
                 <div class="row-main">{{'helpFeedback' | i18n}}</div>
                 <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </a>
-            <a class="box-content-row settings-row box-content-row-multi-wrap text-default" href="#" appStopClick appBlurClick
+            </button>
+            <button type="button" class="box-content-row settings-row box-content-row-multi-wrap text-default" appStopClick appBlurClick
                 (click)="rate()">
                 <div class="row-main">{{'rateExtension' | i18n}}</div>
                 <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
                 <div class="box-footer in-flex-row-full-width">{{'rateExtensionDesc' | i18n}}</div>
-            </a>
+            </button>
         </div>
         <div class="box-footer">{{'connectedCozy' | i18n}} {{getCozyURL()}}</div>
     </div>

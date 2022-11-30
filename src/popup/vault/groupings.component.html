@@ -16,10 +16,10 @@
             [(ngModel)]="searchText" (input)="search(200)" autocomplete="off" appInputVerbatim>
         <i class="fa fa-close" aria-hidden="true" (click)="unActivatePanel()"></i>
     </div>
-    <button (click)="openWebApp()" appA11yTitle="{{'popOutNewWindow' | i18n}}">
+    <button type="button" (click)="openWebApp()" appA11yTitle="{{'popOutNewWindow' | i18n}}">
         <i class="icon-cozy icon-out-w"  aria-hidden="true"></i>
     </button>
-    <button appBlurClick (click)="addCipher()" appA11yTitle="{{'addItem' | i18n}}">
+    <button type="button" appBlurClick (click)="addCipher()" appA11yTitle="{{'addItem' | i18n}}">
         <i class="icon-cozy icon-plus"  aria-hidden="true"></i>
     </button>
 </header>

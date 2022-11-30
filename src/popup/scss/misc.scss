@@ -146,7 +146,7 @@ p.lead {
 }
 
 .password-wrapper {
-    word-break: break-all;
+    overflow-wrap: break-word;
     white-space: pre-wrap;
     min-width: 0;
 }
@@ -467,6 +467,11 @@ li.active .icon-cozy-inline > svg {
             }
         }
     }
+
+    .enforced-policy-options ul {
+        padding-left: 30px;
+        margin: 0;
+    }
 }
 
 input[type="password"]::-ms-reveal {
@@ -489,4 +494,18 @@ select option {
     @include themify($themes) {
         background-color: darken(themed('inputBackgroundColor'), +1);
     }
+}
+
+// Workaround for slow performance on external monitors on Chrome + MacOS
+// See: https://bugs.chromium.org/p/chromium/issues/detail?id=971701#c64
+@keyframes redraw {
+    0% {
+        opacity: 0.99;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+html.force_redraw {
+    animation: redraw 1s linear infinite;
 }

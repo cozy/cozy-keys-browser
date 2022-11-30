@@ -12,8 +12,10 @@ import { SendView } from 'jslib-common/models/view/sendView';
 
 import { SendComponent as BaseSendComponent } from 'jslib-angular/components/send/send.component';
 
+import { BroadcasterService } from 'jslib-common/abstractions/broadcaster.service';
 import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
 import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { LogService } from 'jslib-common/abstractions/log.service';
 import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
 import { PolicyService } from 'jslib-common/abstractions/policy.service';
 import { SearchService } from 'jslib-common/abstractions/search.service';
@@ -21,8 +23,6 @@ import { SendService } from 'jslib-common/abstractions/send.service';
 import { StateService } from 'jslib-common/abstractions/state.service';
 import { SyncService } from 'jslib-common/abstractions/sync.service';
 import { UserService } from 'jslib-common/abstractions/user.service';
-
-import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
 
 import { PopupUtilsService } from '../services/popup-utils.service';
 
@@ -50,9 +50,10 @@ export class SendGroupingsComponent extends BaseSendComponent {
         policyService: PolicyService, userService: UserService, searchService: SearchService,
         private popupUtils: PopupUtilsService, private stateService: StateService,
         private router: Router, private syncService: SyncService,
-        private changeDetectorRef: ChangeDetectorRef, private broadcasterService: BroadcasterService) {
+        private changeDetectorRef: ChangeDetectorRef, private broadcasterService: BroadcasterService,
+        logService: LogService) {
         super(sendService, i18nService, platformUtilsService, environmentService, ngZone, searchService,
-            policyService, userService);
+            policyService, userService, logService);
         super.onSuccessfulLoad = async () => {
             this.calculateTypeCounts();
             this.selectAll();

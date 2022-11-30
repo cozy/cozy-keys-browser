@@ -1,5 +1,3 @@
-import { ToasterService } from 'angular2-toaster';
-
 import {
     Component,
     HostListener,
@@ -8,6 +6,7 @@ import {
 import { Router } from '@angular/router';
 
 import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
 import { SyncService } from 'jslib-common/abstractions/sync.service';
 
 @Component({
@@ -18,7 +17,7 @@ export class SyncComponent implements OnInit {
     lastSync = '--';
     syncPromise: Promise<any>;
 
-    constructor(private syncService: SyncService, private toasterService: ToasterService,
+    constructor(private syncService: SyncService, private platformUtilsService: PlatformUtilsService,
         private i18nService: I18nService, private router: Router) {
     }
 
@@ -37,9 +36,9 @@ export class SyncComponent implements OnInit {
         const success = await this.syncPromise;
         if (success) {
             await this.setLastSync();
-            this.toasterService.popAsync('success', null, this.i18nService.t('syncingComplete'));
+            this.platformUtilsService.showToast('success', null, this.i18nService.t('syncingComplete'));
         } else {
-            this.toasterService.popAsync('error', null, this.i18nService.t('syncingFailed'));
+            this.platformUtilsService.showToast('error', null, this.i18nService.t('syncingFailed'));
         }
     }
 

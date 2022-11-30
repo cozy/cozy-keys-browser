@@ -2,9 +2,13 @@ import { BrowserApi } from '../browser/browserApi';
 import { SafariApp } from '../browser/safariApp';
 
 import { DeviceType } from 'jslib-common/enums/deviceType';
+import { ThemeType } from 'jslib-common/enums/themeType';
 
 import { MessagingService } from 'jslib-common/abstractions/messaging.service';
 import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
+import { StorageService } from 'jslib-common/abstractions/storage.service';
+
+import { ConstantsService } from 'jslib-common/services/constants.service';
 
 const DialogPromiseExpiration = 600000; // 10 minutes
 
@@ -16,7 +20,7 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
     private deviceCache: DeviceType = null;
     private prefersColorSchemeDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-    constructor(private messagingService: MessagingService,
+    constructor(private messagingService: MessagingService, private storageService: StorageService,
         private clipboardWriteCallback: (clipboardValue: string, clearMs: number) => void,
         private biometricCallback: () => Promise<boolean>) { }
 
@@ -147,33 +151,6 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
         });
         return new Promise<boolean>(resolve => {
             this.showDialogResolves.set(dialogId, { resolve: resolve, date: new Date() });
-        });
-    }
-
-    async showPasswordDialog(title: string, body: string, passwordValidation: (value: string) => Promise<boolean>) {
-        const dialogId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-
-        this.messagingService.send('showPasswordDialog', {
-            title: title,
-            body: body,
-            dialogId: dialogId,
-        });
-
-        return new Promise<boolean>(resolve => {
-            this.passwordDialogResolves.set(dialogId, {
-                tryResolve: async (canceled: boolean, password: string) => {
-                    if (canceled) {
-                        resolve(false);
-                        return false;
-                    }
-
-                    if (await passwordValidation(password)) {
-                        resolve(true);
-                        return true;
-                    }
-                },
-                date: new Date(),
-            });
         });
     }
 
@@ -344,13 +321,22 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
         return false;
     }
 
-    getDefaultSystemTheme(): Promise<'light' | 'dark'> {
-        return Promise.resolve(this.prefersColorSchemeDark.matches ? 'dark' : 'light');
+    getDefaultSystemTheme(): Promise<ThemeType.Light | ThemeType.Dark> {
+        return Promise.resolve(this.prefersColorSchemeDark.matches ? ThemeType.Dark : ThemeType.Light);
     }
 
-    onDefaultSystemThemeChange(callback: ((theme: 'light' | 'dark') => unknown)) {
+    onDefaultSystemThemeChange(callback: ((theme: ThemeType.Light | ThemeType.Dark) => unknown)) {
         this.prefersColorSchemeDark.addEventListener('change', ({ matches }) => {
-            callback(matches ? 'dark' : 'light');
+            callback(matches ? ThemeType.Dark : ThemeType.Light);
         });
+    }
+
+    async getEffectiveTheme() {
+        const theme = await this.storageService.get<ThemeType>(ConstantsService.themeKey);
+        if (theme == null || theme === ThemeType.System) {
+            return this.getDefaultSystemTheme();
+        } else {
+            return theme;
+        }
     }
 }

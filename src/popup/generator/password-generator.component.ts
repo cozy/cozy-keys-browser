@@ -48,10 +48,6 @@ export class PasswordGeneratorComponent extends BasePasswordGeneratorComponent {
         this.close();
     }
 
-    lengthChanged() {
-        document.getElementById('length').focus();
-    }
-
     close() {
         this.location.back();
     }

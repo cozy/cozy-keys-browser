@@ -10,12 +10,13 @@ import { AuthService } from 'jslib-common/abstractions/auth.service';
 import { CryptoFunctionService } from 'jslib-common/abstractions/cryptoFunction.service';
 import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
 import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { LogService } from 'jslib-common/abstractions/log.service';
 import { PasswordGenerationService } from 'jslib-common/abstractions/passwordGeneration.service';
 import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
 import { StateService } from 'jslib-common/abstractions/state.service';
 import { StorageService } from 'jslib-common/abstractions/storage.service';
 import { SyncService } from 'jslib-common/abstractions/sync.service';
-import { UserService } from 'jslib-common/abstractions/user.service';
+import { VaultTimeoutService } from 'jslib-common/abstractions/vaultTimeout.service';
 
 import { SsoComponent as BaseSsoComponent } from 'jslib-angular/components/sso.component';
 import { BrowserApi } from '../../browser/browserApi';
@@ -30,9 +31,10 @@ export class SsoComponent extends BaseSsoComponent {
         storageService: StorageService, stateService: StateService,
         platformUtilsService: PlatformUtilsService, apiService: ApiService,
         cryptoFunctionService: CryptoFunctionService, passwordGenerationService: PasswordGenerationService,
-        syncService: SyncService, environmentService: EnvironmentService, private userService: UserService) {
+        syncService: SyncService, environmentService: EnvironmentService, logService: LogService,
+        private vaultTimeoutService: VaultTimeoutService) {
         super(authService, router, i18nService, route, storageService, stateService, platformUtilsService,
-            apiService, cryptoFunctionService, environmentService, passwordGenerationService);
+            apiService, cryptoFunctionService, environmentService, passwordGenerationService, logService);
 
         const url = this.environmentService.getWebVaultUrl();
 
@@ -41,17 +43,13 @@ export class SsoComponent extends BaseSsoComponent {
 
         super.onSuccessfulLogin = async () => {
             await syncService.fullSync(true);
-            BrowserApi.reloadOpenWindows();
+            if (await this.vaultTimeoutService.isLocked()) {
+                // If the vault is unlocked then this will clear keys from memory, which we don't want to do
+                BrowserApi.reloadOpenWindows();
+            }
+
             const thisWindow = window.open('', '_self');
             thisWindow.close();
-        };
-
-        super.onSuccessfulLoginNavigate = async () => {
-            if (await this.userService.getForcePasswordReset()) {
-                this.router.navigate(['update-temp-password']);
-            } else {
-                this.router.navigate([this.successRoute]);
-            }
         };
     }
 }

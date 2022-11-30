@@ -1,6 +1,6 @@
+import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { ToasterModule } from 'angular2-toaster';
 
 import { AppRoutingModule } from './app-routing.module';
 import { ServicesModule } from './services/services.module';
@@ -14,6 +14,7 @@ import { HintComponent } from './accounts/hint.component';
 import { HomeComponent } from './accounts/home.component';
 import { LockComponent } from './accounts/lock.component';
 import { LoginComponent } from './accounts/login.component';
+import { RemovePasswordComponent } from './accounts/remove-password.component';
 import { SetPasswordComponent } from './accounts/set-password.component';
 import { SsoComponent } from './accounts/sso.component';
 import { TwoFactorOptionsComponent } from './accounts/two-factor-options.component';
@@ -34,7 +35,9 @@ import { FoldersComponent } from './settings/folders.component';
 import { OptionsComponent } from './settings/options.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SyncComponent } from './settings/sync.component';
+import { VaultTimeoutInputComponent } from './settings/vault-timeout-input.component';
 
+import { AddEditCustomFieldsComponent } from './vault/add-edit-custom-fields.component';
 import { AddEditComponent } from './vault/add-edit.component';
 import { AttachmentsComponent } from './vault/attachments.component';
 import { CiphersComponent } from './vault/ciphers.component';
@@ -42,6 +45,7 @@ import { CollectionsComponent } from './vault/collections.component';
 import { GroupingsComponent } from './vault/groupings.component';
 import { PasswordHistoryComponent } from './vault/password-history.component';
 import { ShareComponent } from './vault/share.component';
+import { ViewCustomFieldsComponent } from './vault/view-custom-fields.component';
 import { ViewComponent } from './vault/view.component';
 
 import { EffluxDatesComponent as SendEffluxDatesComponent } from './send/efflux-dates.component';
@@ -68,11 +72,15 @@ import { SearchCiphersPipe } from 'jslib-angular/pipes/search-ciphers.pipe';
 
 import { ActionButtonsComponent } from './components/action-buttons.component';
 import { CipherRowComponent } from './components/cipher-row.component';
+import { PasswordRepromptComponent } from './components/password-reprompt.component';
 import { SendListComponent } from './components/send-list.component';
+import { SetPinComponent } from './components/set-pin.component';
+import { VerifyMasterPasswordComponent } from './components/verify-master-password.component';
 
 import { CalloutComponent } from 'jslib-angular/components/callout.component';
 // import { IconComponent } from 'jslib-angular/components/icon.component';
 import { IconComponent } from './components/icon.component';
+import { BitwardenToastModule } from 'jslib-angular/components/toastr.component';
 
 import {
     CurrencyPipe,
@@ -94,6 +102,7 @@ registerLocaleData(localeFr, 'fr');
 
 @NgModule({
     imports: [
+        A11yModule,
         AppRoutingModule,
         BrowserAnimationsModule,
         BrowserModule,
@@ -102,12 +111,18 @@ registerLocaleData(localeFr, 'fr');
         ReactiveFormsModule,
         ScrollingModule,
         ServicesModule,
-        ToasterModule.forRoot(),
+        BitwardenToastModule.forRoot({
+            maxOpened: 2,
+            autoDismiss: true,
+            closeButton: true,
+            positionClass: 'toast-bottom-full-width',
+        }),
     ],
     declarations: [
         A11yTitleDirective,
         ActionButtonsComponent,
         AddEditComponent,
+        AddEditCustomFieldsComponent,
         ApiActionDirective,
         AppComponent,
         AttachmentsComponent,
@@ -126,8 +141,8 @@ registerLocaleData(localeFr, 'fr');
         FolderAddEditComponent,
         FoldersComponent,
         GroupingsComponent,
-        HomeComponent,
         HintComponent,
+        HomeComponent,
         I18nPipe,
         IconComponent,
         InputVerbatimDirective,
@@ -137,6 +152,7 @@ registerLocaleData(localeFr, 'fr');
         PasswordGeneratorComponent,
         PasswordGeneratorHistoryComponent,
         PasswordHistoryComponent,
+        PasswordRepromptComponent,
         PrivateModeComponent,
         SearchCiphersPipe,
         SelectCopyDirective,
@@ -146,6 +162,7 @@ registerLocaleData(localeFr, 'fr');
         SendListComponent,
         SendTypeComponent,
         SetPasswordComponent,
+        SetPinComponent,
         SettingsComponent,
         ShareComponent,
         SsoComponent,
@@ -154,10 +171,14 @@ registerLocaleData(localeFr, 'fr');
         SyncComponent,
         TabsComponent,
         TrueFalseValueDirective,
-        TwoFactorOptionsComponent,
         TwoFactorComponent,
+        TwoFactorOptionsComponent,
         UpdateTempPasswordComponent,
+        VaultTimeoutInputComponent,
+        VerifyMasterPasswordComponent,
         ViewComponent,
+        ViewCustomFieldsComponent,
+        RemovePasswordComponent,
         FlagConditionalComponent,
         IfFlagDirective,
     ],

@@ -4,8 +4,11 @@ import {
     Router,
 } from '@angular/router';
 
+import { first } from 'rxjs/operators';
+
 import { FolderService } from 'jslib-common/abstractions/folder.service';
 import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { LogService } from 'jslib-common/abstractions/log.service';
 import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
 
 import {
@@ -19,19 +22,16 @@ import {
 export class FolderAddEditComponent extends BaseFolderAddEditComponent {
     constructor(folderService: FolderService, i18nService: I18nService,
         platformUtilsService: PlatformUtilsService, private router: Router,
-        private route: ActivatedRoute) {
-        super(folderService, i18nService, platformUtilsService);
+        private route: ActivatedRoute, logService: LogService) {
+        super(folderService, i18nService, platformUtilsService, logService);
     }
 
     async ngOnInit() {
-        const queryParamsSub = this.route.queryParams.subscribe(async params => {
+        this.route.queryParams.pipe(first()).subscribe(async params => {
             if (params.folderId) {
                 this.folderId = params.folderId;
             }
             await this.init();
-            if (queryParamsSub != null) {
-                queryParamsSub.unsubscribe();
-            }
         });
     }
 

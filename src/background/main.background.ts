@@ -1,71 +1,77 @@
-import { CipherType } from 'jslib-common/enums';
 import { CipherRepromptType } from 'jslib-common/enums/cipherRepromptType';
+import { CipherType } from 'jslib-common/enums/cipherType';
 
-import {
-    AppIdService,
-    AuditService,
-    CollectionService,
-    ConstantsService,
-    ContainerService,
-    EnvironmentService,
-    FolderService,
-    PasswordGenerationService,
-    SettingsService,
-    StateService,
-    TokenService,
-    TotpService,
-} from 'jslib-common/services';
+import { CipherView } from 'jslib-common/models/view/cipherView';
+
+// import { ApiService } from 'jslib-common/services/api.service';
+import { AppIdService } from 'jslib-common/services/appId.service';
+import { AuditService } from 'jslib-common/services/audit.service';
+// import { AuthService } from 'jslib-common/services/auth.service';
+// import { CipherService } from 'jslib-common/services/cipher.service';
+import { CollectionService } from 'jslib-common/services/collection.service';
 import { ConsoleLogService } from 'jslib-common/services/consoleLog.service';
+import { ConstantsService } from 'jslib-common/services/constants.service';
+import { ContainerService } from 'jslib-common/services/container.service';
+import { EnvironmentService } from 'jslib-common/services/environment.service';
 import { EventService } from 'jslib-common/services/event.service';
 import { FileUploadService } from 'jslib-common/services/fileUpload.service';
+import { FolderService } from 'jslib-common/services/folder.service';
+import { KeyConnectorService } from 'jslib-common/services/keyConnector.service';
 import { NotificationsService } from 'jslib-common/services/notifications.service';
+import { PasswordGenerationService } from 'jslib-common/services/passwordGeneration.service';
 import { PolicyService } from 'jslib-common/services/policy.service';
 import { SearchService } from 'jslib-common/services/search.service';
 import { SendService } from 'jslib-common/services/send.service';
+import { SettingsService } from 'jslib-common/services/settings.service';
+import { StateService } from 'jslib-common/services/state.service';
+// import { SyncService } from 'jslib-common/services/sync.service';
 import { SystemService } from 'jslib-common/services/system.service';
+import { TokenService } from 'jslib-common/services/token.service';
+import { TotpService } from 'jslib-common/services/totp.service';
+// import { UserService } from 'jslib-common/services/user.service';
+import { UserVerificationService } from 'jslib-common/services/userVerification.service';
 import { WebCryptoFunctionService } from 'jslib-common/services/webCryptoFunction.service';
 
 import { SyncService } from '../popup/services/sync.service';
 import { ExportService } from '../services/export.service';
-
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 
-import {
-    ApiService as ApiServiceAbstraction,
-    AppIdService as AppIdServiceAbstraction,
-    AuditService as AuditServiceAbstraction,
-    CipherService as CipherServiceAbstraction,
-    CollectionService as CollectionServiceAbstraction,
-    CryptoService as CryptoServiceAbstraction,
-    EnvironmentService as EnvironmentServiceAbstraction,
-    FolderService as FolderServiceAbstraction,
-    I18nService as I18nServiceAbstraction,
-    // MessagingService as MessagingServiceAbstraction,
-    LogService as LogServiceAbstraction,
-    PasswordGenerationService as PasswordGenerationServiceAbstraction,
-    PlatformUtilsService as PlatformUtilsServiceAbstraction,
-    SettingsService as SettingsServiceAbstraction,
-    StateService as StateServiceAbstraction,
-    StorageService as StorageServiceAbstraction,
-    SyncService as SyncServiceAbstraction,
-    TokenService as TokenServiceAbstraction,
-    TotpService as TotpServiceAbstraction,
-    UserService as UserServiceAbstraction,
-    VaultTimeoutService as VaultTimeoutServiceAbstraction,
-} from 'jslib-common/abstractions';
+import { ApiService as ApiServiceAbstraction } from 'jslib-common/abstractions/api.service';
+import { AppIdService as AppIdServiceAbstraction } from 'jslib-common/abstractions/appId.service';
+import { AuditService as AuditServiceAbstraction } from 'jslib-common/abstractions/audit.service';
+import { AuthService as AuthServiceAbstraction } from 'jslib-common/abstractions/auth.service';
+import { CipherService as CipherServiceAbstraction } from 'jslib-common/abstractions/cipher.service';
+import { CollectionService as CollectionServiceAbstraction } from 'jslib-common/abstractions/collection.service';
+import { CryptoService as CryptoServiceAbstraction } from 'jslib-common/abstractions/crypto.service';
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from 'jslib-common/abstractions/cryptoFunction.service';
+import { EnvironmentService as EnvironmentServiceAbstraction } from 'jslib-common/abstractions/environment.service';
 import { EventService as EventServiceAbstraction } from 'jslib-common/abstractions/event.service';
 import { ExportService as ExportServiceAbstraction } from 'jslib-common/abstractions/export.service';
 import { FileUploadService as FileUploadServiceAbstraction } from 'jslib-common/abstractions/fileUpload.service';
+import { FolderService as FolderServiceAbstraction } from 'jslib-common/abstractions/folder.service';
+import { I18nService as I18nServiceAbstraction } from 'jslib-common/abstractions/i18n.service';
+import { KeyConnectorService as KeyConnectorServiceAbstraction } from 'jslib-common/abstractions/keyConnector.service';
+import { LogService as LogServiceAbstraction } from 'jslib-common/abstractions/log.service';
+// import { MessagingService as MessagingServiceAbstraction } from 'jslib-common/abstractions/messaging.service';
 import { NotificationsService as NotificationsServiceAbstraction } from 'jslib-common/abstractions/notifications.service';
+import { PasswordGenerationService as PasswordGenerationServiceAbstraction } from 'jslib-common/abstractions/passwordGeneration.service';
+import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from 'jslib-common/abstractions/platformUtils.service';
 import { PolicyService as PolicyServiceAbstraction } from 'jslib-common/abstractions/policy.service';
 import { SearchService as SearchServiceAbstraction } from 'jslib-common/abstractions/search.service';
 import { SendService as SendServiceAbstraction } from 'jslib-common/abstractions/send.service';
+import { SettingsService as SettingsServiceAbstraction } from 'jslib-common/abstractions/settings.service';
+import { StateService as StateServiceAbstraction } from 'jslib-common/abstractions/state.service';
+import { StorageService as StorageServiceAbstraction } from 'jslib-common/abstractions/storage.service';
+import { SyncService as SyncServiceAbstraction } from 'jslib-common/abstractions/sync.service';
 import { SystemService as SystemServiceAbstraction } from 'jslib-common/abstractions/system.service';
-import { AutofillService as AutofillServiceAbstraction } from '../services/abstractions/autofill.service';
+import { TokenService as TokenServiceAbstraction } from 'jslib-common/abstractions/token.service';
+import { TotpService as TotpServiceAbstraction } from 'jslib-common/abstractions/totp.service';
+import { UserService as UserServiceAbstraction } from 'jslib-common/abstractions/user.service';
+import { UserVerificationService as UserVerificationServiceAbstraction } from 'jslib-common/abstractions/userVerification.service';
+import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from 'jslib-common/abstractions/vaultTimeout.service';
 
-import { Utils } from 'jslib-common/misc/utils';
+import { AutofillService as AutofillServiceAbstraction } from '../services/abstractions/autofill.service';
 
 import { CozyClientService } from '../popup/services/cozyClient.service';
 import { KonnectorsService } from '../popup/services/konnectors.service';
@@ -77,6 +83,7 @@ import CommandsBackground from './commands.background';
 import ContextMenusBackground from './contextMenus.background';
 import IdleBackground from './idle.background';
 import { NativeMessagingBackground } from './nativeMessaging.background';
+import NotificationBackground from './notification.background';
 import RuntimeBackground from './runtime.background';
 import TabsBackground from './tabs.background';
 import WebRequestBackground from './webRequest.background';
@@ -136,17 +143,19 @@ export default class MainBackground {
     popupUtilsService: PopupUtilsService;
     sendService: SendServiceAbstraction;
     fileUploadService: FileUploadServiceAbstraction;
+    keyConnectorService: KeyConnectorServiceAbstraction;
+    userVerificationService: UserVerificationServiceAbstraction;
     cozyClientService: CozyClientService;
     konnectorsService: KonnectorsService;
 
     onUpdatedRan: boolean;
     onReplacedRan: boolean;
-    loginToAutoFill: any = null;
-    notificationQueue: any[] = [];
+    loginToAutoFill: CipherView = null;
 
     private commandsBackground: CommandsBackground;
     private contextMenusBackground: ContextMenusBackground;
     private idleBackground: IdleBackground;
+    private notificationBackground: NotificationBackground;
     private runtimeBackground: RuntimeBackground;
     private tabsBackground: TabsBackground;
     private webRequestBackground: WebRequestBackground;
@@ -162,7 +171,8 @@ export default class MainBackground {
     constructor() {
         // Services
         this.messagingService = new BrowserMessagingService();
-        this.platformUtilsService = new BrowserPlatformUtilsService(this.messagingService,
+        this.storageService = new BrowserStorageService();
+        this.platformUtilsService = new BrowserPlatformUtilsService(this.messagingService, this.storageService,
             (clipboardValue, clearMs) => {
                 if (this.systemService != null) {
                     this.systemService.clearClipboard(clipboardValue, clearMs);
@@ -181,7 +191,6 @@ export default class MainBackground {
                     return promise.then(result => result.response === 'unlocked');
                 }
             });
-        this.storageService = new BrowserStorageService();
         this.secureStorageService = new BrowserStorageService();
         this.i18nService = new I18nService(BrowserApi.getUILanguage(window));
         this.cryptoFunctionService = new WebCryptoFunctionService(window, this.platformUtilsService);
@@ -199,7 +208,8 @@ export default class MainBackground {
         this.settingsService = new SettingsService(this.userService, this.storageService);
         this.fileUploadService = new FileUploadService(this.logService, this.apiService);
         this.cipherService = new CipherService(this.cryptoService, this.userService, this.settingsService,
-            this.apiService, this.fileUploadService, this.storageService, this.i18nService, () => this.searchService);
+            this.apiService, this.fileUploadService, this.storageService, this.i18nService, () => this.searchService,
+            this.logService);
         this.folderService = new FolderService(this.cryptoService, this.userService, this.apiService,
             this.storageService, this.i18nService, this.cipherService);
         this.collectionService = new CollectionService(this.cryptoService, this.userService, this.storageService,
@@ -208,10 +218,13 @@ export default class MainBackground {
         this.sendService = new SendService(this.cryptoService, this.userService, this.apiService, this.fileUploadService,
             this.storageService, this.i18nService, this.cryptoFunctionService);
         this.stateService = new StateService();
-        this.policyService = new PolicyService(this.userService, this.storageService);
+        this.policyService = new PolicyService(this.userService, this.storageService, this.apiService);
+        this.keyConnectorService = new KeyConnectorService(this.storageService, this.userService, this.cryptoService,
+            this.apiService, this.tokenService, this.logService);
         this.vaultTimeoutService = new VaultTimeoutService(this.cipherService, this.folderService,
             this.collectionService, this.cryptoService, this.platformUtilsService, this.storageService,
-            this.messagingService, this.searchService, this.userService, this.tokenService,
+            this.messagingService, this.searchService, this.userService, this.tokenService, this.policyService,
+            this.keyConnectorService,
             async () => {
                 /* @override by Cozy :
                 This callback is the lockedCallback of the VaultTimeoutService
@@ -282,14 +295,15 @@ export default class MainBackground {
         this.syncService = new SyncService(this.userService, this.apiService, this.settingsService,
             this.folderService, this.cipherService, this.cryptoService, this.collectionService,
             this.storageService, this.messagingService, this.policyService, this.sendService,
+            this.logService, this.tokenService, this.keyConnectorService,
             async (expired: boolean) => await this.logout(expired), this.cozyClientService, this.tokenService);
         this.eventService = new EventService(this.storageService, this.apiService, this.userService,
-            this.cipherService);
+            this.cipherService, this.logService);
         this.passwordGenerationService = new PasswordGenerationService(this.cryptoService, this.storageService,
             this.policyService);
-        this.totpService = new TotpService(this.storageService, this.cryptoFunctionService);
+        this.totpService = new TotpService(this.storageService, this.cryptoFunctionService, this.logService);
         this.autofillService = new AutofillService(this.cipherService, this.userService, this.totpService,
-            this.eventService);
+            this.eventService, this.logService);
         this.containerService = new ContainerService(this.cryptoService);
         this.auditService = new AuditService(this.cryptoFunctionService, this.apiService);
         this.exportService = new ExportService(this.folderService, this.cipherService, this.apiService,
@@ -304,6 +318,8 @@ export default class MainBackground {
                 BrowserApi.reloadExtension(forceWindowReload ? window : null);
                 return Promise.resolve();
             });
+        this.userVerificationService = new UserVerificationService(this.cryptoService, this.i18nService,
+            this.apiService);
 
         this.konnectorsService = new KonnectorsService(this.cipherService, this.storageService, this.settingsService,
             this.cozyClientService);
@@ -316,8 +332,10 @@ export default class MainBackground {
         // Background
         this.commandsBackground = new CommandsBackground(this, this.passwordGenerationService,
             this.platformUtilsService, this.vaultTimeoutService);
+        this.notificationBackground = new NotificationBackground(this, this.autofillService, this.cipherService,
+            this.storageService, this.vaultTimeoutService, this.policyService, this.folderService, this.userService);
 
-        this.tabsBackground = new TabsBackground(this);
+        this.tabsBackground = new TabsBackground(this, this.notificationBackground);
         this.contextMenusBackground = new ContextMenusBackground(this, this.cipherService, this.passwordGenerationService,
             this.platformUtilsService, this.vaultTimeoutService, this.eventService, this.totpService);
         this.idleBackground = new IdleBackground(this.vaultTimeoutService, this.storageService,
@@ -342,16 +360,17 @@ export default class MainBackground {
                     const message = Object.assign({}, { command: subscriber }, arg);
                     that.runtimeBackground.processMessage(message, that, null);
                 }
-            }(), this.vaultTimeoutService, this.logService, true,
-            this.cozyClientService);
+            }(), this.vaultTimeoutService, this.logService, this.cryptoFunctionService, this.environmentService,
+            this.keyConnectorService,
+            true, this.cozyClientService);
 
         // Background
-        this.runtimeBackground = new RuntimeBackground(this, this.autofillService, this.cipherService,
+        this.runtimeBackground = new RuntimeBackground(this, this.autofillService,
             this.platformUtilsService as BrowserPlatformUtilsService, this.storageService, this.i18nService,
-            this.notificationsService, this.systemService, this.vaultTimeoutService,
-            this.environmentService, this.policyService, this.userService, this.messagingService,
-            this.cozyClientService, this.konnectorsService, this.syncService, this.authService, this.cryptoService,
-            this.apiService);
+            this.notificationsService, this.systemService, this.environmentService, this.messagingService,
+            this.logService,
+            this.cipherService, this.vaultTimeoutService, this.policyService, this.userService, this.cozyClientService,
+            this.konnectorsService, this.syncService, this.authService, this.cryptoService, this.apiService);
         this.messagingService.setRuntimeBackground(this.runtimeBackground);
 
     }
@@ -364,6 +383,7 @@ export default class MainBackground {
         await (this.i18nService as I18nService).init();
         await (this.eventService as EventService).init(true);
         await this.runtimeBackground.init();
+        await this.notificationBackground.init();
         await this.commandsBackground.init();
 
         await this.tabsBackground.init();
@@ -410,7 +430,6 @@ export default class MainBackground {
             setTimeout(async () => {
                 await this.environmentService.setUrlsFromStorage();
                 await this.setIcon();
-                this.cleanupNotificationQueue();
                 this.fullSync(true);
                 setTimeout(() => this.notificationsService.init(), 2500);
                 resolve();
@@ -477,6 +496,7 @@ export default class MainBackground {
             this.policyService.clear(userId),
             this.passwordGenerationService.clear(),
             this.vaultTimeoutService.clear(),
+            this.keyConnectorService.clear(),
         ]);
 
         // Clear auth and token afterwards, as previous services might need it
@@ -523,23 +543,6 @@ export default class MainBackground {
             return;
         }
 
-        if (await this.vaultTimeoutService.isLocked()) {
-            // For information, to make the difference betweend locked and loggedout :
-            // const isAuthenticated = await this.userService.isAuthenticated(); // = connected or installed
-            // const isLocked        = await this.vaultTimeoutService.isLocked()
-            //    if  isAuthenticated == false  &  isLocked == true   => loggedout
-            //    if  isAuthenticated == true   &  isLocked == true   => locked
-            //    if  isAuthenticated == true   &  isLocked == false  => logged in
-            // const pinSet = await this.vaultTimeoutService.isPinLockSet();
-            // const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1];
-            BrowserApi.tabSendMessage(tab, {
-                command    : 'autofillAnswerRequest',
-                subcommand : 'loginIPMenuActivate',
-                tab        : tab,
-            }, {frameId: frameId});
-            return;
-        }
-
         const options: any = {};
         if (frameId != null) {
             options.frameId = frameId;
@@ -550,22 +553,6 @@ export default class MainBackground {
             tab: tab,
             sender: sender,
         }, options);
-    }
-
-    async checkNotificationQueue(tab: any = null): Promise<any> {
-        if (this.notificationQueue.length === 0) {
-            return;
-        }
-
-        if (tab != null) {
-            this.doNotificationQueueCheck(tab);
-            return;
-        }
-
-        const currentTab = await BrowserApi.getTabFromCurrentWindow();
-        if (currentTab != null) {
-            this.doNotificationQueueCheck(currentTab);
-        }
     }
 
     async openPopup() {
@@ -670,6 +657,14 @@ export default class MainBackground {
             title: this.i18nService.t('generatePasswordCopied'),
         });
 
+        await this.contextMenusCreate({
+            type: 'normal',
+            id: 'copy-identifier',
+            parentId: 'root',
+            contexts: ['all'],
+            title: this.i18nService.t('copyElementIdentifier'),
+        });
+
         this.buildingContextMenu = false;
     }
 
@@ -718,7 +713,9 @@ export default class MainBackground {
                 this.browserActionSetBadgeText(theText, tabId);
 
                 return;
-            } catch { }
+            } catch (e) {
+                this.logService.error(e);
+            }
         }
 
         await this.loadMenuAndUpdateBadgeForNoAccessState(contextMenuEnabled);
@@ -809,42 +806,6 @@ export default class MainBackground {
 
     private sanitizeContextMenuTitle(title: string): string {
         return title.replace(/&/g, '&&');
-    }
-
-    private cleanupNotificationQueue() {
-        for (let i = this.notificationQueue.length - 1; i >= 0; i--) {
-            if (this.notificationQueue[i].expires < new Date()) {
-                this.notificationQueue.splice(i, 1);
-            }
-        }
-        setTimeout(() => this.cleanupNotificationQueue(), 2 * 60 * 1000); // check every 2 minutes
-    }
-
-    private doNotificationQueueCheck(tab: any) {
-        if (tab == null) {
-            return;
-        }
-
-        const tabDomain = Utils.getDomain(tab.url);
-        if (tabDomain == null) {
-            return;
-        }
-
-        for (let i = 0; i < this.notificationQueue.length; i++) {
-            if (this.notificationQueue[i].tabId !== tab.id || this.notificationQueue[i].domain !== tabDomain) {
-                continue;
-            }
-            if (this.notificationQueue[i].type === 'addLogin') {
-                BrowserApi.tabSendMessageData(tab, 'openNotificationBar', {
-                    type: 'add',
-                });
-            } else if (this.notificationQueue[i].type === 'changePassword') {
-                BrowserApi.tabSendMessageData(tab, 'openNotificationBar', {
-                    type: 'change',
-                });
-            }
-            break;
-        }
     }
 
     private async fullSync(override: boolean = false) {

@@ -1,28 +1,23 @@
-import {
-    ChangeDetectorRef,
-    Component,
-    NgZone,
-} from '@angular/core';
-
+import { Component } from '@angular/core';
 import {
     ActivatedRoute,
     Router,
 } from '@angular/router';
+import { first } from 'rxjs/operators';
 
 import { TwoFactorProviderType } from 'jslib-common/enums/twoFactorProviderType';
 
 import { ApiService } from 'jslib-common/abstractions/api.service';
 import { AuthService } from 'jslib-common/abstractions/auth.service';
+import { BroadcasterService } from 'jslib-common/abstractions/broadcaster.service';
 import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
 import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { LogService } from 'jslib-common/abstractions/log.service';
 import { MessagingService } from 'jslib-common/abstractions/messaging.service';
 import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
 import { StateService } from 'jslib-common/abstractions/state.service';
 import { StorageService } from 'jslib-common/abstractions/storage.service';
 import { SyncService } from 'jslib-common/abstractions/sync.service';
-import { UserService } from 'jslib-common/abstractions/user.service';
-
-import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
 
 import { TwoFactorComponent as BaseTwoFactorComponent } from 'jslib-angular/components/two-factor.component';
 
@@ -42,19 +37,14 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     constructor(authService: AuthService, router: Router,
         i18nService: I18nService, apiService: ApiService,
         platformUtilsService: PlatformUtilsService, private syncService: SyncService,
-        environmentService: EnvironmentService, private ngZone: NgZone,
-        private broadcasterService: BroadcasterService, private changeDetectorRef: ChangeDetectorRef,
+        environmentService: EnvironmentService, private broadcasterService: BroadcasterService,
         private popupUtilsService: PopupUtilsService, stateService: StateService,
         storageService: StorageService, route: ActivatedRoute, protected messagingService: MessagingService,
-        private userService: UserService) {
+        logService: LogService) {
         super(authService, router, i18nService, apiService, platformUtilsService, window, environmentService,
-            stateService, storageService, route);
-        super.onSuccessfulLogin = async () => {
-            return syncService.fullSync(true).then(async () => {
-                if (await this.userService.getForcePasswordReset()) {
-                    this.router.navigate(['update-temp-password']);
-                };
-            });
+            stateService, storageService, route, logService);
+        super.onSuccessfulLogin = () => {
+            return syncService.fullSync(true);
         };
         super.successRoute = '/tabs/vault';
         this.webAuthnNewTab = this.platformUtilsService.isFirefox() || this.platformUtilsService.isSafari();
@@ -95,7 +85,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
             }
         }
 
-        const queryParamsSub = this.route.queryParams.subscribe(async qParams => {
+        this.route.queryParams.pipe(first()).subscribe(async qParams => {
             if (qParams.sso === 'true') {
                 super.onSuccessfulLogin = () => {
                     BrowserApi.reloadOpenWindows();
@@ -103,9 +93,6 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
                     thisWindow.close();
                     return this.syncService.fullSync(true);
                 };
-                if (queryParamsSub != null) {
-                    queryParamsSub.unsubscribe();
-                }
             }
         });
     }

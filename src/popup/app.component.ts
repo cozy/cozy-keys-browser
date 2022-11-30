@@ -1,13 +1,3 @@
-import { BrowserApi } from '../browser/browserApi';
-
-import {
-    BodyOutputType,
-    Toast,
-    ToasterConfig,
-    ToasterService,
-} from 'angular2-toaster';
-import Swal, { SweetAlertIcon } from 'sweetalert2/src/sweetalert2.js';
-
 import {
     ChangeDetectorRef,
     Component,
@@ -21,11 +11,17 @@ import {
     Router,
     RouterOutlet,
 } from '@angular/router';
-
-import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
+import {
+    IndividualConfig,
+    ToastrService,
+} from 'ngx-toastr';
+import Swal, { SweetAlertIcon } from 'sweetalert2/src/sweetalert2.js';
+import { BrowserApi } from '../browser/browserApi';
 
 import { AuthService } from 'jslib-common/abstractions/auth.service';
+import { BroadcasterService } from 'jslib-common/abstractions/broadcaster.service';
 import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { KeyConnectorService } from 'jslib-common/abstractions/keyConnector.service';
 import { MessagingService } from 'jslib-common/abstractions/messaging.service';
 import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
 import { StateService } from 'jslib-common/abstractions/state.service';
@@ -33,36 +29,27 @@ import { StorageService } from 'jslib-common/abstractions/storage.service';
 
 import { ConstantsService } from 'jslib-common/services/constants.service';
 
-import BrowserPlatformUtilsService from 'src/services/browserPlatformUtils.service';
 import { routerTransition } from './app-routing.animations';
 
 @Component({
     selector: 'app-root',
     animations: [routerTransition],
     template: `
-        <toaster-container [toasterconfig]="toasterConfig" aria-live="polite"></toaster-container>
         <main [@routerTransition]="getState(o)">
             <router-outlet #o="outlet"></router-outlet>
         </main>`,
 })
 export class AppComponent implements OnInit {
-    toasterConfig: ToasterConfig = new ToasterConfig({
-        showCloseButton: true,
-        mouseoverTimerStop: true,
-        animation: 'slideUp',
-        limit: 2,
-        positionClass: 'toast-bottom',
-        newestOnTop: false,
-    });
 
     private lastActivity: number = null;
 
-    constructor(private toasterService: ToasterService, private storageService: StorageService,
+    constructor(private toastrService: ToastrService, private storageService: StorageService,
         private broadcasterService: BroadcasterService, private authService: AuthService,
         private i18nService: I18nService, private router: Router,
         private stateService: StateService, private messagingService: MessagingService,
         private changeDetectorRef: ChangeDetectorRef, private ngZone: NgZone,
-        private sanitizer: DomSanitizer, private platformUtilsService: PlatformUtilsService) { }
+        private sanitizer: DomSanitizer, private platformUtilsService: PlatformUtilsService,
+        private keyConnectoService: KeyConnectorService) { }
 
     ngOnInit() {
         if (BrowserApi.getBackgroundPage() == null) {
@@ -106,8 +93,6 @@ export class AppComponent implements OnInit {
                 });
             } else if (msg.command === 'showDialog') {
                 await this.showDialog(msg);
-            } else if (msg.command === 'showPasswordDialog') {
-                await this.showPasswordDialog(msg);
             } else if (msg.command === 'showToast') {
                 this.ngZone.run(() => {
                     this.showToast(msg);
@@ -122,6 +107,11 @@ export class AppComponent implements OnInit {
             } else if (msg.command === 'reloadPopup') {
                 this.ngZone.run(() => {
                     this.router.navigate(['/']);
+                });
+            } else if (msg.command === 'convertAccountToKeyConnector') {
+                this.ngZone.run(async () => {
+                    await this.keyConnectoService.setConvertAccountRequired(true);
+                    this.router.navigate(['/remove-password']);
                 });
             } else {
                 msg.webExtSender = sender;
@@ -180,30 +170,29 @@ export class AppComponent implements OnInit {
     }
 
     private showToast(msg: any) {
-        const toast: Toast = {
-            type: msg.type,
-            title: msg.title,
-        };
+        let message = '';
+
+        const options: Partial<IndividualConfig> = {};
+
         if (typeof (msg.text) === 'string') {
-            toast.body = msg.text;
+            message = msg.text;
         } else if (msg.text.length === 1) {
-            toast.body = msg.text[0];
+            message = msg.text[0];
         } else {
-            let message = '';
             msg.text.forEach((t: string) =>
                 message += ('<p>' + this.sanitizer.sanitize(SecurityContext.HTML, t) + '</p>'));
-            toast.body = message;
-            toast.bodyOutputType = BodyOutputType.TrustedHtml;
+            options.enableHtml = true;
         }
         if (msg.options != null) {
             if (msg.options.trustedHtml === true) {
-                toast.bodyOutputType = BodyOutputType.TrustedHtml;
+                options.enableHtml = true;
             }
             if (msg.options.timeout != null && msg.options.timeout > 0) {
-                toast.timeout = msg.options.timeout;
+                options.timeOut = msg.options.timeout;
             }
         }
-        this.toasterService.popAsync(toast);
+
+        this.toastrService.show(message, msg.title, options, 'toast-' + msg.type);
     }
 
     private async showDialog(msg: any) {
@@ -250,31 +239,5 @@ export class AppComponent implements OnInit {
             dialogId: msg.dialogId,
             confirmed: confirmed.value,
         });
-    }
-
-    private async showPasswordDialog(msg: any) {
-        const platformUtils = this.platformUtilsService as BrowserPlatformUtilsService;
-        const result = await Swal.fire({
-            heightAuto: false,
-            titleText: msg.title,
-            input: 'password',
-            text: msg.body,
-            confirmButtonText: this.i18nService.t('ok'),
-            showCancelButton: true,
-            cancelButtonText: this.i18nService.t('cancel'),
-            inputAttributes: {
-                autocapitalize: 'off',
-                autocorrect: 'off',
-            },
-            inputValidator: async (value: string): Promise<any> => {
-                if (await platformUtils.resolvePasswordDialogPromise(msg.dialogId, false, value)) {
-                    return false;
-                }
-
-                return this.i18nService.t('invalidMasterPassword');
-            },
-        });
-
-        platformUtils.resolvePasswordDialogPromise(msg.dialogId, true, null);
     }
 }

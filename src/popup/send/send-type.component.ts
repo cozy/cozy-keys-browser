@@ -9,22 +9,24 @@ import {
     Router,
 } from '@angular/router';
 
+import { first } from 'rxjs/operators';
+
 import { Location } from '@angular/common';
 
 import { SendView } from 'jslib-common/models/view/sendView';
 
 import { SendComponent as BaseSendComponent } from 'jslib-angular/components/send/send.component';
 
+import { BroadcasterService } from 'jslib-common/abstractions/broadcaster.service';
 import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
 import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { LogService } from 'jslib-common/abstractions/log.service';
 import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
 import { PolicyService } from 'jslib-common/abstractions/policy.service';
 import { SearchService } from 'jslib-common/abstractions/search.service';
 import { SendService } from 'jslib-common/abstractions/send.service';
 import { StateService } from 'jslib-common/abstractions/state.service';
 import { UserService } from 'jslib-common/abstractions/user.service';
-
-import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
 
 import { PopupUtilsService } from '../services/popup-utils.service';
 
@@ -48,9 +50,9 @@ export class SendTypeComponent extends BaseSendComponent {
         policyService: PolicyService, userService: UserService, searchService: SearchService,
         private popupUtils: PopupUtilsService, private stateService: StateService,
         private route: ActivatedRoute, private location: Location, private changeDetectorRef: ChangeDetectorRef,
-        private broadcasterService: BroadcasterService, private router: Router) {
+        private broadcasterService: BroadcasterService, private router: Router, logService: LogService) {
         super(sendService, i18nService, platformUtilsService, environmentService, ngZone, searchService,
-            policyService, userService);
+            policyService, userService, logService);
         super.onSuccessfulLoad = async () => {
             this.selectType(this.type);
         };
@@ -61,7 +63,7 @@ export class SendTypeComponent extends BaseSendComponent {
     async ngOnInit() {
         // Let super class finish
         await super.ngOnInit();
-        const queryParamsSub = this.route.queryParams.subscribe(async params => {
+        this.route.queryParams.pipe(first()).subscribe(async params => {
             if (this.applySavedState) {
                 this.state = (await this.stateService.get<any>(ComponentId)) || {};
                 if (this.state.searchText != null) {
@@ -89,11 +91,6 @@ export class SendTypeComponent extends BaseSendComponent {
                 window.setTimeout(() => this.popupUtils.setContentScrollY(window, this.state.scrollY), 0);
             }
             this.stateService.remove(ComponentId);
-
-            // Unsubscribe
-            if (queryParamsSub != null) {
-                queryParamsSub.unsubscribe();
-            }
         });
 
         // Refresh Send list if sync completed in background

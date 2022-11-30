@@ -3,6 +3,7 @@ import {
     Input,
     OnInit,
     Component,
+    NgZone,
 } from '@angular/core';
 
 import { Router } from '@angular/router';
@@ -15,6 +16,7 @@ import { AuthService } from 'jslib-common/abstractions/auth.service';
 import { CryptoFunctionService } from 'jslib-common/abstractions/cryptoFunction.service';
 import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
 import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { LogService } from 'jslib-common/abstractions/log.service';
 import { PasswordGenerationService } from 'jslib-common/abstractions/passwordGeneration.service';
 import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
 import { StateService } from 'jslib-common/abstractions/state.service';
@@ -109,8 +111,8 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
         protected stateService: StorageService, protected environmentService: EnvironmentService,
         protected passwordGenerationService: PasswordGenerationService,
         protected cryptoFunctionService: CryptoFunctionService, private storageService: StorageService,
-        protected syncService: SyncService, protected cozySanitizeUrlService: CozySanitizeUrlService,
-        private apiService: ApiService) {
+        protected syncService: SyncService, logService: Lo        protected syncSer
+         protected cozySanitizeUrlService: CozySanitizeUrlService, private apiService: ApiService) {
             super(environmentService, i18nService, platformUtilsService);
             this.authService = authService;
             this.router = router;

@@ -1,4 +1,4 @@
-<a (click)="selectCipher(cipher)" (dblclick)="launchCipher(cipher)" href="#" appStopClick
+<button type="button" (click)="selectCipher(cipher)" (dblclick)="launchCipher(cipher)" appStopClick
     title="{{title}} - {{cipher.name}}" class="box-content-row box-content-row-flex virtual-scroll-item">
     <div class="row-main">
         <ng-container *ngIf="cipher.type === cipherType.Login">
@@ -32,4 +32,4 @@
     <app-action-buttons [cipher]="cipher" (onView)="viewCipher(cipher)" (launchEvent)="launchCipher(cipher)" [showGlobe]="showGlobe" (onAutofill)="autofill(cipher)"
         class="action-buttons">
     </app-action-buttons>
-</a>
+</button>

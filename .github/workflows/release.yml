@@ -1,80 +1,56 @@
+---
 name: Release
 
 on:
   workflow_dispatch:
-    inputs:
-      release_tag_name_input:
-        description: "Release Tag Name <X.X.X>"
-        required: true
+    inputs: {}
 
 
 jobs:
   setup:
-    runs-on: ubuntu-latest
+    name: Setup
+    runs-on: ubuntu-20.04
     outputs:
-      tag_version: ${{ steps.create_tags.outputs.tag_version }}
-      release_upload_url: ${{ steps.create_release.outputs.upload_url }}
-      repo_url: ${{ steps.gen_vars.outputs.repo_url }}
-      adj_build_number: ${{ steps.gen_vars.outputs.adj_build_number }}
+      release-version: ${{ steps.version.outputs.package-version }}
+      branch-name: ${{ steps.branch.outputs.branch-name }}
     steps:
       - name: Branch check
         run: |
-          if [[ "$GITHUB_REF" != "refs/heads/rc" ]]; then
+          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix" ]]; then
             echo "==================================="
-            echo "[!] Can only release from rc branch"
+            echo "[!] Can only release from the 'rc' or 'hotfix' branches"
             echo "==================================="
             exit 1
           fi
-      
+
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
-      - name: Get Package Version
-        id: gen_vars
-        shell: pwsh
+      - name: Check Release Version
+        id: version
         run: |
-          $repo_url = "https://github.com/${env:GITHUB_REPOSITORY}.git"
-          $build_num = [int]$env:GITHUB_RUN_NUMBER
-          $adj_build_num = $build_num + 3000
+          version=$( jq -r ".version" src/manifest.json)
+          previous_release_tag_version=$(
+            curl -sL https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest | jq -r ".tag_name"
+          )
 
-          echo "::set-output name=repo_url::$repo_url" 
-          echo "::set-output name=adj_build_number::$adj_build_num" 
+          if [ "v$version" == "$previous_release_tag_version" ]; then
+            echo "[!] Already released v$version. Please bump version to continue"
+            exit 1
+          fi
 
-      - name: Create Release Vars
-        id: create_tags
+          echo "::set-output name=package-version::$version"
+
+      - name: Get branch name
+        id: branch
         run: |
-          case "${RELEASE_TAG_NAME_INPUT:0:1}" in
-            v)
-              echo "RELEASE_NAME=${RELEASE_TAG_NAME_INPUT:1}" >> $GITHUB_ENV
-              echo "RELEASE_TAG_NAME=$RELEASE_TAG_NAME_INPUT" >> $GITHUB_ENV
-              echo "::set-output name=tag_version::$RELEASE_TAG_NAME_INPUT"
-              ;;
-            [0-9])
-              echo "RELEASE_NAME=$RELEASE_TAG_NAME_INPUT" >> $GITHUB_ENV
-              echo "RELEASE_TAG_NAME=v$RELEASE_TAG_NAME_INPUT" >> $GITHUB_ENV
-              echo "::set-output name=tag_version::v$RELEASE_TAG_NAME_INPUT"
-              ;;
-            *)
-              exit 1
-              ;;
-          esac
-        env:
-          RELEASE_TAG_NAME_INPUT: ${{ github.event.inputs.release_tag_name_input }}
-
-      - name: Create Draft Release
-        id: create_release
-        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.RELEASE_TAG_NAME }}
-          release_name: ${{ env.RELEASE_NAME }}
-          draft: true
-          prerelease: false
+          BRANCH_NAME=$(basename ${{ github.ref }})
+          echo "::set-output name=branch-name::$BRANCH_NAME"
 
 
   locales-test:
-    runs-on: ubuntu-latest
+    name: Locales Test
+    runs-on: ubuntu-20.04
     needs: setup
     steps:
       - name: Checkout repo
@@ -104,108 +80,47 @@ jobs:
            echo "Test passed!"
          fi
 
-  build:
-    runs-on: windows-latest
-    needs: [ setup, locales-test ]
-    env:
-      REPO_URL: ${{ needs.setup.outputs.repo_url }}
-      BUILD_NUMBER: ${{ needs.setup.outputs.adj_build_number }}
+
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-20.04
+    needs:
+      - setup
+      - locales-test
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
-
-      - name: Set up Node
-        uses: actions/setup-node@46071b5c7a2e0c34e49c3cb8a0e792e86e18d5ea
+      - name: Download latest RC build artifacts
+        uses: bitwarden/gh-actions/download-artifacts@23433be15ed6fd046ce12b6889c5184a8d9c8783
         with:
-          node-version: '14'
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: ${{ needs.setup.outputs.branch-name }}
+          artifacts: 'browser-source-*.zip,
+                      dist-chrome-*.zip,
+                      dist-opera-*.zip,
+                      dist-firefox-*.zip,
+                      dist-edge-*.zip'
 
-      - name: Update NPM
+      - name: Rename build artifacts
+        env:
+          PACKAGE_VERSION: ${{ needs.setup.outputs.release-version }}
         run: |
-          npm install -g npm@7
+          mv browser-source.zip browser-source-$PACKAGE_VERSION.zip
+          mv dist-chrome.zip dist-chrome-$PACKAGE_VERSION.zip
+          mv dist-opera.zip dist-opera-$PACKAGE_VERSION.zip
+          mv dist-firefox.zip dist-firefox-$PACKAGE_VERSION.zip
+          mv dist-edge.zip dist-edge-$PACKAGE_VERSION.zip
 
-      - name: Print environment
-        run: |
-          node --version
-          npm --version
-
-      - name: npm setup & test
-        run: |
-          npm install
-          npm run dist
-          npm run test
-
-      - name: gulp
-        run: gulp ci
-
-      - name: Build sources for reviewers
-        shell: cmd
-        run: |
-          mkdir dist\Source
-          call git clone %REPO_URL% dist\Source
-          cd dist\Source
-          call git checkout %GITHUB_SHA%
-          call git submodule update --init --recursive
-          cd ../
-          del /S/Q "Source\.git\objects\pack\*"
-          call 7z a browser-source-%BUILD_NUMBER%.zip "Source\*"
-
-      - name: upload opera release asset
-        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create release
+        uses: ncipollo/release-action@95215a3cb6e6a1908b3c44e00b4fdb15548b1e09
         with:
-          upload_url: ${{ needs.setup.outputs.release_upload_url }}
-          asset_name: dist-opera-${{ env.BUILD_NUMBER }}.zip
-          asset_path: dist/dist-opera-${{ env.BUILD_NUMBER }}.zip
-          asset_content_type: application
-
-      - name: upload chrome release asset
-        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.setup.outputs.release_upload_url }}
-          asset_name: dist-chrome-${{ env.BUILD_NUMBER }}.zip
-          asset_path: dist/dist-chrome-${{ env.BUILD_NUMBER }}.zip
-          asset_content_type: application/zip
-
-      - name: upload firefox release asset
-        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.setup.outputs.release_upload_url }}
-          asset_name: dist-firefox-${{ env.BUILD_NUMBER }}.zip
-          asset_path: dist/dist-firefox-${{ env.BUILD_NUMBER }}.zip
-          asset_content_type: application/zip
-
-      - name: upload edge release asset
-        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.setup.outputs.release_upload_url }}
-          asset_name: dist-edge-${{ env.BUILD_NUMBER }}.zip
-          asset_path: dist/dist-edge-${{ env.BUILD_NUMBER }}.zip
-          asset_content_type: application/zip
-
-      - name: upload browser source zip release asset
-        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.setup.outputs.release_upload_url }}
-          asset_name: browser-source-${{ env.BUILD_NUMBER }}.zip
-          asset_path: dist/browser-source-${{ env.BUILD_NUMBER }}.zip
-          asset_content_type: application/zip
-
-      - name: upload coverage release asset
-        if: false
-        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.setup.outputs.release_upload_url }}
-          asset_name: coverage-${{ env.BUILD_NUMBER }}.zip
-          asset_path: coverage/coverage-${{ env.BUILD_NUMBER }}.zip
-          asset_content_type: application/zip
+          artifacts: 'browser-source-${{ needs.setup.outputs.release-version }}.zip,
+                      dist-chrome-${{ needs.setup.outputs.release-version }}.zip,
+                      dist-opera-${{ needs.setup.outputs.release-version }}.zip,
+                      dist-firefox-${{ needs.setup.outputs.release-version }}.zip,
+                      dist-edge-${{ needs.setup.outputs.release-version }}.zip'
+          commit: ${{ github.sha }}
+          tag: "v${{ needs.setup.outputs.release-version }}"
+          name: "Version ${{ needs.setup.outputs.release-version }}"
+          body: "<insert release notes here>"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: true

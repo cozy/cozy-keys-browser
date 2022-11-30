@@ -5,6 +5,8 @@ import {
     Router,
 } from '@angular/router';
 
+import { first } from 'rxjs/operators';
+
 import { BrowserApi } from '../../browser/browserApi';
 import { KonnectorsService } from '../services/konnectors.service';
 
@@ -14,7 +16,9 @@ import { CollectionService } from 'jslib-common/abstractions/collection.service'
 import { EventService } from 'jslib-common/abstractions/event.service';
 import { FolderService } from 'jslib-common/abstractions/folder.service';
 import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { LogService } from 'jslib-common/abstractions/log.service';
 import { MessagingService } from 'jslib-common/abstractions/messaging.service';
+import { PasswordRepromptService } from 'jslib-common/abstractions/passwordReprompt.service';
 import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
 import { PolicyService } from 'jslib-common/abstractions/policy.service';
 import { StateService } from 'jslib-common/abstractions/state.service';
@@ -22,6 +26,7 @@ import { StorageService } from 'jslib-common/abstractions/storage.service';
 import { UserService } from 'jslib-common/abstractions/user.service';
 
 import { ConstantsService } from 'jslib-common/services/constants.service';
+
 import { PopupUtilsService } from '../services/popup-utils.service';
 
 import { LoginUriView } from 'jslib-common/models/view/loginUriView';
@@ -56,9 +61,11 @@ export class AddEditComponent extends BaseAddEditComponent {
         private router: Router, private location: Location,
         eventService: EventService, policyService: PolicyService,
         private popupUtilsService: PopupUtilsService, private storageService: StorageService,
+        logService: LogService, passwordRepromptService: PasswordRepromptService,
         private konnectorsService: KonnectorsService) {
         super(cipherService, folderService, i18nService, platformUtilsService, auditService, stateService,
-            userService, collectionService, messagingService, eventService, policyService);
+            userService, collectionService, messagingService, eventService, policyService, passwordRepromptService,
+            logService);
         this.typeOptions = [
             { name: i18nService.t('typeLogin'), value: CipherType.Login },
             { name: i18nService.t('typeCard'), value: CipherType.Card },
@@ -77,7 +84,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     async ngOnInit() {
         await super.ngOnInit();
 
-        const queryParamsSub = this.route.queryParams.subscribe(async params => {
+        this.route.queryParams.pipe(first()).subscribe(async params => {
             if (params.cipherId) {
                 this.cipherId = params.cipherId;
             }
@@ -111,9 +118,6 @@ export class AddEditComponent extends BaseAddEditComponent {
                     (this.cipher.login.uris[0].uri == null || this.cipher.login.uris[0].uri === '')) {
                     this.cipher.login.uris[0].uri = params.uri;
                 }
-            }
-            if (queryParamsSub != null) {
-                queryParamsSub.unsubscribe();
             }
 
             this.openAttachmentsInPopup = this.popupUtilsService.inPopup(window);

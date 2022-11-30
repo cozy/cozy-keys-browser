@@ -14,8 +14,11 @@ import {
     Router,
 } from '@angular/router';
 
+import { first } from 'rxjs/operators';
+
 import { BrowserApi } from '../../browser/browserApi';
 
+import { BroadcasterService } from 'jslib-common/abstractions/broadcaster.service';
 import { CipherService } from 'jslib-common/abstractions/cipher.service';
 import { CollectionService } from 'jslib-common/abstractions/collection.service';
 import { FolderService } from 'jslib-common/abstractions/folder.service';
@@ -33,8 +36,6 @@ import { CollectionView } from 'jslib-common/models/view/collectionView';
 import { FolderView } from 'jslib-common/models/view/folderView';
 
 import { TreeNode } from 'jslib-common/models/domain/treeNode';
-
-import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
 
 import { CiphersComponent as BaseCiphersComponent } from 'jslib-angular/components/ciphers.component';
 
@@ -90,7 +91,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
 
     async ngOnInit() {
         this.searchTypeSearch = !this.platformUtilsService.isSafari();
-        const queryParamsSub = this.route.queryParams.subscribe(async params => {
+        this.route.queryParams.pipe(first()).subscribe(async params => {
             if (this.applySavedState) {
                 this.state = (await this.stateService.get<any>(ComponentId)) || {};
                 if (this.state.searchText) {
@@ -156,9 +157,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
                     this.scrollingContainer), 0);
             }
             this.stateService.remove(ComponentId);
-            if (queryParamsSub != null) {
-                queryParamsSub.unsubscribe();
-            }
         });
 
         this.broadcasterService.subscribe(ComponentId, (message: any) => {

@@ -2,7 +2,6 @@ const gulp = require('gulp'),
     gulpif = require('gulp-if'),
     filter = require('gulp-filter'),
     replace = require('gulp-replace'),
-    googleWebFonts = require('gulp-google-webfonts'),
     jeditor = require("gulp-json-editor"),
     child = require('child_process'),
     zip = require('gulp-zip'),
@@ -206,15 +205,6 @@ function stdOutProc(proc) {
     proc.stderr.on('data', (data) => console.error(data.toString()));
 }
 
-function webfonts() {
-    return gulp.src('./webfonts.list')
-        .pipe(googleWebFonts({
-            fontsDir: 'webfonts',
-            cssFilename: 'webfonts.css'
-        }))
-        .pipe(gulp.dest(paths.cssDir));
-}
-
 function ciCoverage(cb) {
     return gulp.src(paths.coverage + '**/*')
         .pipe(filter(['**', '!coverage/coverage*.zip']))
@@ -233,5 +223,3 @@ exports['dist:safari:dmg'] = distSafariDmg;
 exports.dist = gulp.parallel(distFirefox, distChrome, distOpera, distEdge);
 exports['ci:coverage'] = ciCoverage;
 exports.ci = ciCoverage;
-exports.webfonts = webfonts;
-exports.build = webfonts;

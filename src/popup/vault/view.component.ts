@@ -10,30 +10,33 @@ import {
     Router,
 } from '@angular/router';
 
+import { first } from 'rxjs/operators';
+
 import { ApiService } from 'jslib-common/abstractions/api.service';
 import { AuditService } from 'jslib-common/abstractions/audit.service';
+import { BroadcasterService } from 'jslib-common/abstractions/broadcaster.service';
 import { CipherService } from 'jslib-common/abstractions/cipher.service';
 import { CryptoService } from 'jslib-common/abstractions/crypto.service';
 import { EventService } from 'jslib-common/abstractions/event.service';
 import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { LogService } from 'jslib-common/abstractions/log.service';
 import { MessagingService } from 'jslib-common/abstractions/messaging.service';
 import { PasswordRepromptService } from 'jslib-common/abstractions/passwordReprompt.service';
 import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
 import { TokenService } from 'jslib-common/abstractions/token.service';
 import { TotpService } from 'jslib-common/abstractions/totp.service';
 import { UserService } from 'jslib-common/abstractions/user.service';
-import { Cipher } from 'jslib-common/models/domain';
-import { LoginUriView } from 'jslib-common/models/view';
 
-import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
+import { Cipher } from 'jslib-common/models/domain/cipher';
+import { LoginUriView } from 'jslib-common/models/view/loginUriView';
+
+import { CipherType } from 'jslib-common/enums/cipherType';
 
 import { ViewComponent as BaseViewComponent } from 'jslib-angular/components/view.component';
 import { BrowserApi } from '../../browser/browserApi';
 import { AutofillService } from '../../services/abstractions/autofill.service';
 import { CozyClientService } from '../services/cozyClient.service';
 import { PopupUtilsService } from '../services/popup-utils.service';
-
-import { CipherType } from 'jslib-common/enums';
 
 const BroadcasterSubscriptionId = 'ChildViewComponent';
 
@@ -69,10 +72,10 @@ export class ViewComponent extends BaseViewComponent {
         eventService: EventService, private autofillService: AutofillService,
         private messagingService: MessagingService, private popupUtilsService: PopupUtilsService,
         apiService: ApiService, passwordRepromptService: PasswordRepromptService,
-        private cozyClientService: CozyClientService) {
+        logService: LogService, private cozyClientService: CozyClientService) {
         super(cipherService, totpService, tokenService, i18nService, cryptoService, platformUtilsService,
             auditService, window, broadcasterService, ngZone, changeDetectorRef, userService, eventService,
-            apiService, passwordRepromptService);
+            apiService, passwordRepromptService, logService);
     }
 
     @HostListener('window:keydown', ['$event'])
@@ -85,7 +88,7 @@ export class ViewComponent extends BaseViewComponent {
 
     ngOnInit() {
         this.inPopout = this.popupUtilsService.inPopout(window);
-        const queryParamsSub = this.route.queryParams.subscribe(async params => {
+        this.route.queryParams.pipe(first()).subscribe(async params => {
             if (params.cipherId) {
                 this.cipherId = params.cipherId;
             } else {
@@ -105,9 +108,6 @@ export class ViewComponent extends BaseViewComponent {
             }
 
             await this.load();
-            if (queryParamsSub != null) {
-                queryParamsSub.unsubscribe();
-            }
         });
 
         super.ngOnInit();
