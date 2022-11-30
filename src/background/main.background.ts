@@ -194,16 +194,7 @@ export default class MainBackground {
         this.apiService = new ApiService(this.tokenService, this.platformUtilsService, this.environmentService,
             (expired: boolean) => this.logout(expired), this.buildUserAgent());
         this.userService = new UserService(this.tokenService, this.storageService);
-        // TODO BJA : authService is removed in merged from upstream...
-        this.environmentService = new EnvironmentService(this.apiService, this.storageService,
-            this.notificationsService);
         this.cozyClientService = new CozyClientService(this.environmentService, this.apiService, this.messagingService);
-        // this.authService = new AuthService(this.cryptoService, this.apiService, this.userService,
-        //     this.tokenService, this.appIdService, this.i18nService, this.platformUtilsService,
-        //     this.messagingService, this.vaultTimeoutService,
-        //     true, this.cozyClientService,
-        // );
-		// end TODO BJA //
 
         this.settingsService = new SettingsService(this.userService, this.storageService);
         this.fileUploadService = new FileUploadService(this.logService, this.apiService);

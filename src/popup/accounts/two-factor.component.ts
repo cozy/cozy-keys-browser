@@ -28,7 +28,6 @@ import { TwoFactorComponent as BaseTwoFactorComponent } from 'jslib-angular/comp
 
 import { PopupUtilsService } from '../services/popup-utils.service';
 
-import { UserService } from 'jslib-common/abstractions/user.service';
 import { BrowserApi } from '../../browser/browserApi';
 
 const BroadcasterSubscriptionId = 'TwoFactorComponent';

@@ -68,34 +68,6 @@
             </a>
         </div>
     </div>
-    <!-- <div class="box list">
-        <div class="box-header">
-            {{'folders' | i18n}}
-        </div>
-        <div class="box-content single-line">
-            <a *ngFor="let f of nestedFolders" href="#" class="box-content-row" appStopClick appBlurClick
-                (click)="selectFolder(f.node)">
-                <div class="row-main">
-                    <div class="icon">
-                        <i class="fa fa-fw fa-lg"
-                            [ngClass]="{'fa-folder-open': f.node.id, 'fa-folder-open-o': !f.node.id}"></i>
-                    </div>
-                    <span class="text">{{f.node.name}}</span>
-                </div>
-                <span class="row-sub-label">{{folderCounts.get(f.node.id) || 0}}</span>
-                <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
-            </a>
-            <a href="#" class="box-content-row" appStopClick appBlurClick
-                (click)="selectTrash()">
-                <div class="row-main">
-                    <div class="icon"><i class="fa fa-fw fa-lg fa-trash-o"></i></div>
-                    <span class="text">{{'trash' | i18n}}</span>
-                </div>
-                <span class="row-sub-label">{{deletedCount}}</span>
-                <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
-            </a>
-        </div>
-    </div> -->
     <div class="box list">
         <div class="box-header"></div>
         <div class="box-content single-line">
@@ -124,8 +96,7 @@
                     [showGlobe]="false" (onSelected)="viewCipher($event)" (onAutofill)="fillCipher($event)"
                     (launchEvent)="launchCipher($event)"></app-cipher-row>
                 <div class="box-content-row padded no-hover"
-                    *ngIf="loaded && !ciphersForCurrentPage.length"
-                >
+                    *ngIf="loaded && !ciphersForCurrentPage.length">
                     <p class="text-center">{{'autoFillInfo' | i18n}}</p>
                     <button type="button" class="btn link block" (click)="addCipher()">
                         {{'addLogin' | i18n}}
@@ -139,15 +110,14 @@
             </div>
             <div class="box-content">
                 <div id="loading" *ngIf="!loaded"><i class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></i></div>
-                <app-ciphers-list [ciphers]="ciphersByType[3]" title="{{'viewItem' | i18n}}" [showGlobe]="false"
-                    (onSelected)="viewCipher($event)" (onAutofill)="fillCipher($event)"
-                    *ngIf="loaded"
-                ></app-ciphers-list>
-                <div class="box-content-row padded no-hover"
-                    *ngIf="loaded && (!ciphersByType[3] || ciphersByType[3].length === 0)"
-                >
+                <app-cipher-row *ngFor="let card of ciphersByType[3]" [cipher]="card"
+                    title="{{'viewItem' | i18n}}"
+                    [showGlobe]="false" (onSelected)="viewCipher($event)" (onAutofill)="fillCipher($event)"
+                    (launchEvent)="launchCipher($event)"></app-cipher-row>
+                <div class="box-content-row padded no-hover" *ngIf="loaded && !ciphersByType[3].length">
+                    <p class="text-center">{{'addCardExplanation' | i18n}}</p>
                     <button type="button" class="btn link block" (click)="addCardCipher()">
-                        {{'addCard' | i18n}}
+                            {{'addCard' | i18n}}
                     </button>
                 </div>
             </div>
@@ -158,13 +128,14 @@
             </div>
             <div class="box-content">
                 <div id="loading" *ngIf="!loaded"><i class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></i></div>
-                <app-ciphers-list [ciphers]="ciphersByType[4]" title="{{'viewItem' | i18n}}" [showGlobe]="false"
-                    (onSelected)="viewCipher($event)" (onAutofill)="fillCipher($event)"
-                    *ngIf="loaded">
-                </app-ciphers-list>
+                <app-cipher-row *ngFor="let identity of ciphersByType[4]" [cipher]="identity"
+                    title="{{'viewItem' | i18n}}"
+                    [showGlobe]="false" (onSelected)="viewCipher($event)" (onAutofill)="fillCipher($event)"
+                    (launchEvent)="launchCipher($event)"></app-cipher-row>
                 <div class="box-content-row padded no-hover"
-                    *ngIf="loaded && (!ciphersByType[4] || ciphersByType[4].length === 0)"
+                    *ngIf="loaded && ciphersByType[4].length === 0"
                 >
+                    <p class="text-center">{{'addIdentityExplanation' | i18n}}</p>
                     <button type="button" class="btn link block" (click)="addIdentityCipher()">
                         {{'addIdentity' | i18n}}
                     </button>
@@ -233,108 +204,104 @@
     </div>
 
     <!-- ************************************ -->
-    <!-- LOGINS         PANEL                 -->
+    <!-- LOGINS PANEL                         -->
     <div *ngIf="showLoginsPanel()" class="ciphersPanel" [@toggleClick]="isPannelVisible" [@.disabled]="!enableAnimations">
-        <div class="box list">
-            <div class="box-header">
-                {{'typeLogins' | i18n}}
-            </div>
-            <div id="loading" *ngIf="!loaded"><i class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></i></div>
-            <div class="box-content" *ngIf="loaded">
-                <cdk-virtual-scroll-viewport itemSize="46" minBufferPx="400" maxBufferPx="600"
-                    *ngIf="ciphersByType[1].length">
-                    <div class="box list full-list">
-                        <div class="box-content">
-                            <app-cipher-row *cdkVirtualFor="let cipherT1 of ciphersByType[1]" [cipher]="cipherT1"
-                                title="{{'viewItem' | i18n}}" (onSelected)="viewCipher($event)"
-                                (launchEvent)="launchCipher($event)" [showGlobe]="true"></app-cipher-row>
-                        </div>
-                    </div>
-                </cdk-virtual-scroll-viewport>
-                <div class="box-content-row padded no-hover explanation" *ngIf="!ciphersByType[1].length" >
-                    <p class="text-center">
-                        {{'addLoginExplanation_L1' | i18n}}<br>{{'addLoginExplanation_L2' | i18n}}
-                    </p>
-                    <button type="button" class="btn link block" (click)="addCipher()">
-                        {{'addLogin' | i18n}}
-                    </button>
+            <cdk-virtual-scroll-viewport itemSize="46" minBufferPx="400" maxBufferPx="600"
+                *ngIf="ciphersByType[1].length"  class="box list">
+                <div class="box-header">
+                    {{'typeLogins' | i18n}}
                 </div>
+                <div id="loading" *ngIf="!loaded"><i class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></i></div>
+                <div class="box-content">
+                    <app-cipher-row *cdkVirtualFor="let cipherT1 of ciphersByType[1]" [cipher]="cipherT1"
+                        title="{{'viewItem' | i18n}}" (onSelected)="viewCipher($event)"
+                        (launchEvent)="launchCipher($event)" [showGlobe]="true"></app-cipher-row>
+                </div>
+            </cdk-virtual-scroll-viewport>
+            <div class="box-content-row padded no-hover explanation" *ngIf="!ciphersByType[1].length" >
+                <p class="text-center">
+                    {{'addLoginExplanation_L1' | i18n}}<br>{{'addLoginExplanation_L2' | i18n}}
+                </p>
+                <button type="button" class="btn link block" (click)="addCipher()">
+                    {{'addLogin' | i18n}}
+                </button>
             </div>
-        </div>
     </div>
 
     <!-- ************************************ -->
     <!-- CARDS PANEL                          -->
     <div *ngIf="showCardsPanel()" class="ciphersPanel" [@toggleClick]="isPannelVisible" [@.disabled]="!enableAnimations">
-        <div class="box list">
+        <cdk-virtual-scroll-viewport itemSize="46" minBufferPx="400" maxBufferPx="600"
+            *ngIf="ciphersByType[3].length"  class="box list">
             <div class="box-header">
                 {{'cards' | i18n}}
             </div>
+            <div id="loading" *ngIf="!loaded"><i class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></i></div>
             <div class="box-content">
-                <div id="loading" *ngIf="!loaded"><i class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></i></div>
-                <app-ciphers-list [ciphers]="ciphersByType[3]" title="{{'viewItem' | i18n}}" [showGlobe]="true"
-                (onSelected)="viewCipher($event)" *ngIf="loaded">
-                </app-ciphers-list>
-                <div class="box-content-row padded no-hover explanation" *ngIf="loaded && !ciphersByType[3].length">
-                    <p class="text-center">{{'addCardExplanation' | i18n}}</p>
-                    <button type="button" class="btn link block" (click)="addCardCipher()">
-                        {{'addCard' | i18n}}
-                    </button>
-                </div>
+                <app-cipher-row *cdkVirtualFor="let cipherT3 of ciphersByType[3]" [cipher]="cipherT3"
+                    title="{{'viewItem' | i18n}}" (onSelected)="viewCipher($event)"
+                    (launchEvent)="launchCipher($event)" [showGlobe]="true"></app-cipher-row>
             </div>
+        </cdk-virtual-scroll-viewport>
+        <div class="box-content-row padded no-hover explanation" *ngIf="loaded && !ciphersByType[3].length">
+            <p class="text-center">{{'addCardExplanation' | i18n}}</p>
+            <button type="button" class="btn link block" (click)="addCardCipher()">
+                {{'addCard' | i18n}}
+            </button>
         </div>
     </div>
 
     <!-- ************************************ -->
     <!-- IDENTITIES PANEL                     -->
     <div *ngIf="showIdentitiesPanel()" class="ciphersPanel" [@toggleClick]="isPannelVisible" [@.disabled]="!enableAnimations">
-        <div class="box list">
+        <cdk-virtual-scroll-viewport itemSize="46" minBufferPx="400" maxBufferPx="600"
+        *ngIf="ciphersByType[4].length"  class="box list">
             <div class="box-header">
                 {{'identities' | i18n}}
             </div>
+            <div id="loading" *ngIf="!loaded"><i class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></i></div>
             <div class="box-content">
-                <div id="loading" *ngIf="!loaded"><i class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></i></div>
-                <app-ciphers-list [ciphers]="ciphersByType[4]" title="{{'viewItem' | i18n}}" [showGlobe]="true"
-                    (onSelected)="viewCipher($event)" *ngIf="loaded">
-                </app-ciphers-list>
-                <div class="box-content-row padded no-hover explanation" *ngIf="loaded && !ciphersByType[4].length" >
-                    <p class="text-center">{{'addIdentityExplanation' | i18n}}</p>
-                    <button type="button" class="btn link block" (click)="addIdentityCipher()">
-                        {{'addIdentity' | i18n}}
-                    </button>
-                </div>
+                <app-cipher-row *cdkVirtualFor="let cipherT4 of ciphersByType[4]" [cipher]="cipherT4"
+                    title="{{'viewItem' | i18n}}" (onSelected)="viewCipher($event)"
+                    (launchEvent)="launchCipher($event)" [showGlobe]="true"></app-cipher-row>
             </div>
+        </cdk-virtual-scroll-viewport>
+        <div class="box-content-row padded no-hover explanation" *ngIf="loaded && !ciphersByType[4].length" >
+            <p class="text-center">{{'addIdentityExplanation' | i18n}}</p>
+            <button type="button" class="btn link block" (click)="addIdentityCipher()">
+                {{'addIdentity' | i18n}}
+            </button>
         </div>
     </div>
 
     <!-- ************************************ -->
-    <!-- FOLDER PANEL                         -->
-    <div *ngIf="showFolderPanel()" class="ciphersPanel" [@toggleClick]="isPannelVisible" [@.disabled]="!enableAnimations">
-        <div class="box list">
+    <!-- FOLDER PANEL (& trash)               -->
+
+    <div *ngIf="showFolderPanel()" class="ciphersPanel" [@toggleClick]="isPannelVisible" [@.disabled]="!enableAnimations" >
+        <cdk-virtual-scroll-viewport itemSize="46" minBufferPx="400" maxBufferPx="600" 
+            *ngIf="ciphersForFolder.length" class="box list">
             <div class="box-header">
                 {{selectedFolderTitle}}
             </div>
+            <div id="loading" *ngIf="!loaded"><i class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></i></div>
             <div class="box-content">
-                <div id="loading" *ngIf="!loaded"><i class="fa fa-spinner fa-spin fa-lg" aria-hidden="true"></i></div>
-                <cdk-virtual-scroll-viewport itemSize="46" minBufferPx="400" maxBufferPx="600"
-                    *ngIf="loaded">
-                    <div class="box list full-list">
-                        <div class="box-content">
-                            <app-cipher-row *cdkVirtualFor="let cipherForFolder of ciphersForFolder" [cipher]="cipherForFolder"
-                                title="{{'viewItem' | i18n}}" (onSelected)="viewCipher($event)"
-                            </app-cipher-row>
-                        </div>
-                    </div>
-                </cdk-virtual-scroll-viewport>
-                <div class="box-content-row padded no-hover explanation" *ngIf="loaded && !ciphersForFolder.length" >
-                    <p class="text-center">
-                        {{'addLoginExplanation_L1' | i18n}}<br>{{'addLoginExplanation_L2' | i18n}}
-                    </p>
-                    <button type="button" class="btn link block" (click)="addIdentityCipher()">
-                        {{'addLogin' | i18n}}
-                    </button>
-                </div>
+                <app-cipher-row *cdkVirtualFor="let cipherForFolder of ciphersForFolder" [cipher]="cipherForFolder"
+                    title="{{'viewItem' | i18n}}" (onSelected)="viewCipher($event)">
+                </app-cipher-row>
             </div>
+        </cdk-virtual-scroll-viewport>
+        <div class="box-content-row padded no-hover explanation" *ngIf="loaded && !ciphersForFolder.length && selectedFolderId !== 'trash'" >
+            <p class="text-center">
+                {{'emptyDirectoryExplanation' | i18n}}
+            </p>
+            <button type="button" class="btn link block" (click)="addIdentityCipher()">
+                {{'addLogin' | i18n}}
+            </button>
+        </div>
+        <div class="box-content-row padded no-hover explanation" *ngIf="loaded && !ciphersForFolder.length && selectedFolderId === 'trash'" >
+            <p class="text-center">
+                {{'emptyTrashExplanation' | i18n}}
+            </p>
         </div>
     </div>
 

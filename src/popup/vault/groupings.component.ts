@@ -221,8 +221,13 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
                 }
                 if (params.scrollTopBack) {
                     setTimeout(() => {
-                        this.groupingContentEl.nativeElement.scrollTop = params.scrollTopBack;
-                    }, 150);
+                        let scrollTop = 0;
+                        if (params.activatedPanel === PanelNames.Search) {
+                            this.groupingContentEl.nativeElement.scrollTop = params.scrollTopBack;
+                        } else {
+                            this.groupingContentEl.nativeElement.querySelector("cdk-virtual-scroll-viewport").scrollTop = params.scrollTopBack;
+                        }
+                    }, 50);
                 }
             } else {
                 this.unActivatePanel();
@@ -660,8 +665,6 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     async fillOrLaunchCipher(cipher: CipherView) {
-        // console.log('fillOrLaunchCipher()');
-
         // Get default matching setting for urls
         let defaultMatch = await this.storageService.get<UriMatchType>(ConstantsService.defaultUriMatch);
         if (defaultMatch == null) {
@@ -680,10 +683,16 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
     viewCipher(cipher: CipherView) {
         // console.log('viewCipher()', this.currentPannel, this.groupingContentEl.nativeElement.scrollTop);
+        let scrollTop = 0;
+        if (this.hasSearched) {
+            scrollTop = this.groupingContentEl.nativeElement.scrollTop
+        } else {
+            scrollTop = this.groupingContentEl.nativeElement.querySelector("cdk-virtual-scroll-viewport").scrollTop
+        }
         this.router.navigate(['/view-cipher'], { queryParams: {
             cipherId: cipher.id,
             pannelBack: this.currentPannel,
-            scrollTopBack : this.groupingContentEl.nativeElement.scrollTop,
+            scrollTopBack : scrollTop,
             folderBack : this.selectedFolderId,
          } });
     }
@@ -702,7 +711,6 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     private async saveState() {
-        // console.log('saveState()');
         this.state = {
             scrollY: this.popupUtils.getContentScrollY(window),
             searchText: this.searchText,
@@ -718,7 +726,6 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     }
 
     private async restoreState(): Promise<boolean> {
-        // console.log('restoreState()');
         this.scopeState = await this.stateService.get<any>(ScopeStateId);
         if (this.scopeState == null) {
             return false;

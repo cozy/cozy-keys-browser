@@ -67,7 +67,7 @@ import { I18nPipe } from 'jslib-angular/pipes/i18n.pipe';
 import { SearchCiphersPipe } from 'jslib-angular/pipes/search-ciphers.pipe';
 
 import { ActionButtonsComponent } from './components/action-buttons.component';
-import { CipherRowComponent } from './components/cipher-row.componimpor
+import { CipherRowComponent } from './components/cipher-row.component';
 import { SendListComponent } from './components/send-list.component';
 
 import { CalloutComponent } from 'jslib-angular/components/callout.component';

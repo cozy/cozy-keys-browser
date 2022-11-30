@@ -2,7 +2,7 @@ import { CozySanitizeUrlService } from '../services/cozySanitizeUrl.service';
 import { LoginComponent } from './login.component';
 
 describe('url input', () => {
-    const loginComponent = new LoginComponent(null, null, null, null, null, null, null, null, new CozySanitizeUrlService(), null);
+    const loginComponent = new LoginComponent(null, null, null, null, null, null, null, null, null, null, new CozySanitizeUrlService(), null);
     it('should return undefined if the input is empty', () => {
         const inputUrl = '';
         expect(() => {

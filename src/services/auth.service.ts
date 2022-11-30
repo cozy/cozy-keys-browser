@@ -135,14 +135,14 @@ export class AuthService extends BaseAuthService {
 
     private async _logInHelper(email: string, hashedPassword: string, localHashedPassword: string, code: string,
         codeVerifier: string, redirectUrl: string, clientId: string, clientSecret: string, key: SymmetricCryptoKey,
-        twoFactorProvider?: TwoFactorProviderType, twoFactorToken?: string, remember?: boolean): Promise<AuthResult> {
+        twoFactorProvider?: TwoFactorProviderType, twoFactorToken?: string, remember?: boolean, captchaToken?: string): Promise<AuthResult> {
         const storedTwoFactorToken = await this.tokenService.getTwoFactorToken(email);
         const appId = await this.appIdService.getAppId();
         const deviceRequest = new DeviceRequest(appId, this.platformUtilsService);
 
         let emailPassword: string[] = [];
         let codeCodeVerifier: string[] = [];
-        let clientIdClientSecret: string[] = [];
+        let clientIdClientSecret: [string, string] = [null, null];
 
         if (email != null && hashedPassword != null) {
             emailPassword = [email, hashedPassword];
@@ -163,13 +163,13 @@ export class AuthService extends BaseAuthService {
         let request: TokenRequest;
         if (twoFactorToken != null && twoFactorProvider != null) {
             request = new TokenRequest(emailPassword, codeCodeVerifier, clientIdClientSecret, twoFactorProvider,
-                twoFactorToken, remember, deviceRequest);
+                twoFactorToken, remember, captchaToken, deviceRequest);
         } else if (storedTwoFactorToken != null) {
             request = new TokenRequest(emailPassword, codeCodeVerifier, clientIdClientSecret, TwoFactorProviderType.Remember,
-                storedTwoFactorToken, false, deviceRequest);
+                storedTwoFactorToken, false, captchaToken, deviceRequest);
         } else {
             request = new TokenRequest(emailPassword, codeCodeVerifier, clientIdClientSecret, null,
-                null, false, deviceRequest);
+                null, false, captchaToken, deviceRequest);
         }
 
         const response = await this.apiService.postIdentityToken(request);
@@ -201,7 +201,7 @@ export class AuthService extends BaseAuthService {
             await this.tokenService.setTwoFactorToken(tokenResponse.twoFactorToken, email);
         }
 
-        await this.tokenService.setTokens(tokenResponse.accessToken, tokenResponse.refreshToken);
+        await this.tokenService.setTokens(tokenResponse.accessToken, tokenResponse.refreshToken, clientIdClientSecret);
         await this._userService.setInformation(this.tokenService.getUserId(), this.tokenService.getEmail(),
             tokenResponse.kdf, tokenResponse.kdfIterations);
         if (this._setCryptoKeys) {

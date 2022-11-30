@@ -49,10 +49,10 @@ export class IconComponent implements OnChanges {
     private iconsUrl: string;
 
     constructor(environmentService: EnvironmentService, protected stateService: StateService) {
-        this.iconsUrl = environmentService.iconsUrl;
+        this.iconsUrl = environmentService.getIconsUrl();
         if (!this.iconsUrl) {
-            if (environmentService.baseUrl) {
-                this.iconsUrl = environmentService.baseUrl + '/icons';
+            if (environmentService.getUrls().base) {
+                this.iconsUrl = environmentService.getUrls().base + '/icons';
             } else {
                 this.iconsUrl = 'https://icons.bitwarden.net';
             }

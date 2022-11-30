@@ -3,7 +3,6 @@
 .box {
     position: relative;
     width: 100%;
-    margin: 10px 0;
 
     &.first {
         margin-top: 0;
@@ -109,11 +108,6 @@
 
                 &.padded {
                     padding-top: 10px;
-                    padding-bottom: 10px;
-                }
-
-                &.explanation {
-                    padding-top: 20px;
                     padding-bottom: 10px;
                 }
 
@@ -601,7 +595,7 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        margin-bottom: 5px;
+        margin: 0, 0, 5px, 15px;
 
         input {
             flex-grow: 0;
@@ -619,6 +613,12 @@
             }
         }
     }
+}
+
+
+.explanation {
+    padding-top: 60px;
+    padding-bottom: 10px;
 }
 
 .options-row {

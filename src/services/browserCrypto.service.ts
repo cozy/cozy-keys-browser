@@ -6,6 +6,7 @@ import { StorageService } from 'jslib-common/abstractions/storage.service';
 
 import { CryptoService } from 'jslib-common/services/crypto.service';
 
+import { ProfileProviderOrganizationResponse } from 'jslib-common/models/response/profileProviderOrganizationResponse';
 import { ProfileOrganizationResponse } from 'jslib-common/models/response/profileOrganizationResponse';
 
 const Keys = {
@@ -41,10 +42,10 @@ export class BrowserCryptoService extends CryptoService {
         await this.localStorageService.save(Keys.encOrgKeys, encOrgKeys);
     }
 
-    setOrgKeys(orgs: ProfileOrganizationResponse[]): Promise<{}> {
+    setOrgKeys(orgs: ProfileOrganizationResponse[], providerOrgs: ProfileProviderOrganizationResponse[]): Promise<{}> {
         const validOrgs = orgs.filter(org => org.key !== '');
 
-        return super.setOrgKeys(validOrgs);
+        return super.setOrgKeys(validOrgs, providerOrgs);
     }
 
     protected async retrieveKeyFromStorage(keySuffix: KeySuffixOptions) {

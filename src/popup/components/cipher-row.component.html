@@ -1,7 +1,19 @@
 <a (click)="selectCipher(cipher)" (dblclick)="launchCipher(cipher)" href="#" appStopClick
     title="{{title}} - {{cipher.name}}" class="box-content-row box-content-row-flex virtual-scroll-item">
     <div class="row-main">
-        <app-vault-icon [cipher]="cipher"></app-vault-icon>
+        <ng-container *ngIf="cipher.type === cipherType.Login">
+            <app-vault-icon [cipher]="cipher"></app-vault-icon>
+        </ng-container>
+        <ng-container *ngIf="cipher.type === cipherType.Card">
+            <div class="icon" aria-hidden="true">
+                <i class="icon-cozy icon-bank"></i>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="cipher.type === cipherType.Identity">
+            <div class="icon" aria-hidden="true">
+                <i class="icon-cozy icon-identity"></i>
+            </div>
+        </ng-container>
         <div class="row-main-content">
             <span class="text">
                 {{cipher.name}}
@@ -17,7 +29,7 @@
             <span class="detail">{{cipher.subTitle}}</span>
         </div>
     </div>
-    <app-action-buttons [cipher]="cipher" [showView]="showView" (onView)="viewCipher(cipher)" (launchEvent)="launchCipher(cipher)" 
+    <app-action-buttons [cipher]="cipher" (onView)="viewCipher(cipher)" (launchEvent)="launchCipher(cipher)" [showGlobe]="showGlobe" (onAutofill)="autofill(cipher)"
         class="action-buttons">
     </app-action-buttons>
 </a>

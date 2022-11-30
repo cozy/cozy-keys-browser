@@ -130,6 +130,12 @@
   "addCardExplanation": {
     "message": "No longer type you credit card numbers, no longuer loose your PIN: enjoy Cozy Pass filling the purchase forms..."
   },
+  "emptyDirectoryExplanation": {
+    "message": "Empty folder"
+  },
+  "emptyTrashExplanation": {
+    "message": "Trahs is empty"
+  },
   "addLogin": {
     "message": "Add a Login"
   },

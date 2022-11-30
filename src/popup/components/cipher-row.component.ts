@@ -7,6 +7,7 @@ import {
 
 import { CipherView } from 'jslib-common/models/view/cipherView';
 import { zeroPadLeftUntilTwoChars } from '../../tools/strings';
+import { CipherType } from 'jslib-common/enums/cipherType';
 
 @Component({
     selector: 'app-cipher-row',
@@ -20,6 +21,8 @@ export class CipherRowComponent {
     @Input() cipher: CipherView;
     @Input() showGlobe = false;
     @Input() title: string;
+
+    cipherType = CipherType;
 
     selectCipher(c: CipherView) {
         this.onSelected.emit(c);

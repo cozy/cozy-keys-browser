@@ -6,6 +6,7 @@ import { ErrorResponse } from 'jslib-common/models/response/errorResponse';
 import { IdentityTwoFactorResponse } from 'jslib-common/models/response/identityTwoFactorResponse';
 import { ApiService as BaseApiService } from 'jslib-common/services/api.service';
 
+import { EnvironmentService } from 'jslib-common/abstractions';
 import { IdentityTokenResponse } from '../models/response/identityTokenResponse';
 
 function getDeviceName(deviceType: DeviceType): string {
@@ -51,6 +52,8 @@ export class ApiService extends BaseApiService {
         /* tslint:disable-next-line */
         private _platformUtilsService: PlatformUtilsService,
         /* tslint:disable-next-line */
+        private _environmentService: EnvironmentService,
+        /* tslint:disable-next-line */
         private _logoutCallback: (expired: boolean) => Promise<void>,
         /* tslint:disable-next-line */
         private _customUserAgent: string = null
@@ -58,6 +61,7 @@ export class ApiService extends BaseApiService {
         super(
             _tokenService,
             _platformUtilsService,
+            _environmentService,
             _logoutCallback,
             _customUserAgent,
         );
@@ -85,7 +89,7 @@ export class ApiService extends BaseApiService {
             clientName: `Cozy Passwords (${getDeviceName(this._device)})`,
         };
         const body = this._qsStringify(bodyData);
-        const response = await this.fetch(new Request(this.identityBaseUrl + '/connect/token', {
+        const response = await this.fetch(new Request(this._environmentService.getIdentityUrl() + '/connect/token', {
             body: body,
             credentials: this._getCredentials(),
             cache: 'no-cache',

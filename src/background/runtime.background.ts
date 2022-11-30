@@ -29,7 +29,7 @@ import { BrowserApi } from '../browser/browserApi';
 
 import MainBackground from './main.background';
 
-import { CipherWithIds as CipherExport } from 'jslib-common/models/export/cipherWithIds.ts';
+import { CipherWithIds as CipherExport } from 'jslib-common/models/export/cipherWithIds';
 import { PasswordVerificationRequest } from 'jslib-common/models/request/passwordVerificationRequest';
 
 import { Utils } from 'jslib-common/misc/utils';
@@ -877,7 +877,7 @@ export default class RuntimeBackground {
     private async loggedinAndUnlocked(command: string) {
         await this.main.setIcon();
         await this.main.refreshBadgeAndMenu(false);
-        this.notificationsService.init(this.environmentService);
+        this.notificationsService.init();
         this.notificationsService.updateConnection(command === 'unlocked');
         this.systemService.cancelProcessReload();
 

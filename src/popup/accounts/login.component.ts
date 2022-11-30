@@ -1,5 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+    Directive,
+    Input,
+    OnInit,
+    Component,
+} from '@angular/core';
+
 import { Router } from '@angular/router';
+
+import { AuthResult } from 'jslib-common/models/domain/authResult';
 
 import { EnvironmentService as EnvironmentServiceAbstraction } from 'jslib-common/abstractions';
 import { ApiService } from 'jslib-common/abstractions/api.service';
@@ -11,13 +19,16 @@ import { PasswordGenerationService } from 'jslib-common/abstractions/passwordGen
 import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
 import { StateService } from 'jslib-common/abstractions/state.service';
 import { StorageService } from 'jslib-common/abstractions/storage.service';
+
 import { SyncService } from 'jslib-common/abstractions/sync.service';
-// import { UserService } from 'jslib-common/abstractions/user.service'; TODO BJA : DELETE
-import { Utils } from 'jslib-common/misc/utils';
-import { AuthResult } from 'jslib-common/models/domain/authResult';
 import { PreloginRequest } from 'jslib-common/models/request/preloginRequest';
 import { PreloginResponse } from 'jslib-common/models/response/preloginResponse';
+
 import { ConstantsService } from 'jslib-common/services/constants.service';
+
+import { Utils } from 'jslib-common/misc/utils';
+
+import { CaptchaProtectedComponent } from 'jslib-angular/components/captchaProtected.component';
 
 import BrowserMessagingService from '../../services/browserMessaging.service';
 
@@ -54,6 +65,9 @@ const getCozyPassWebURL = (cozyUrl: string, cozyConfiguration: CozyConfiguration
     return link;
 };
 
+const getPassphraseResetURL = (cozyUrl: string) => {
+    return `${cozyUrl}/auth/passphrase_reset`;
+};
 
 const shouldRedirectToOIDCPasswordPage = (cozyConfiguration: CozyConfiguration) => {
     const shouldRedirect = cozyConfiguration.OIDC && !cozyConfiguration.HasCiphers;
@@ -75,7 +89,7 @@ const shouldRedirectToOIDCPasswordPage = (cozyConfiguration: CozyConfiguration) 
  *    https://github.com/bitwarden/browser/blob/
  *    af8274247b2242fe93ad2f7ca4c13f9f7ecf2860/src/popup/accounts/login.component.ts
  */
-export class LoginComponent implements OnInit {
+export class LoginComponent extends CaptchaProtectedComponent implements OnInit {
     @Input() cozyUrl: string = '';
     @Input() rememberCozyUrl = true;
 
@@ -92,10 +106,12 @@ export class LoginComponent implements OnInit {
 
     constructor(protected authService: AuthService, protected router: Router,
         protected platformUtilsService: PlatformUtilsService, protected i18nService: I18nService,
-        protected syncService: SyncService, private storageService: StorageService,
         protected stateService: StorageService, protected environmentService: EnvironmentService,
-        protected cozySanitizeUrlService: CozySanitizeUrlService, private apiService: ApiService) {
-
+        protected passwordGenerationService: PasswordGenerationService,
+        protected cryptoFunctionService: CryptoFunctionService, private storageService: StorageService,
+        protected syncService: SyncService, protected cozySanitizeUrlService: CozySanitizeUrlService,
+        private apiService: ApiService) {
+            super(environmentService, i18nService, platformUtilsService);
             this.authService = authService;
             this.router = router;
             this.platformUtilsService = platformUtilsService;
@@ -124,23 +140,6 @@ export class LoginComponent implements OnInit {
         }
     }
 
-    sanitizeUrlInput(inputUrl: string): string {
-        // Prevent empty url
-        if (!inputUrl) {
-            throw new Error('cozyUrlRequired');
-        }
-        // Prevent email input
-        if (inputUrl.includes('@')) {
-            throw new Error('noEmailAsCozyUrl');
-        }
-        
-        if (this.cozySanitizeUrlService.hasMispelledCozy(inputUrl)){
-            throw new Error('hasMispelledCozy');
-        }
-        
-        return this.cozySanitizeUrlService.normalizeURL(inputUrl, this.cozySanitizeUrlService.cozyDomain);
-    }
-
     async submit() {
         try {
             const loginUrl = this.sanitizeUrlInput(this.cozyUrl);
@@ -158,7 +157,7 @@ export class LoginComponent implements OnInit {
             // The email is based on the URL and necessary for login
             const hostname = Utils.getHostname(loginUrl);
             this.email = 'me@' + hostname;
-
+            console.log("toto")
             this.formPromise = this.authService.logIn(this.email, this.masterPassword).catch( e => {
                 if (e.response && e.response.error && e.response.error === 'invalid password') {
                     this.platformUtilsService.showToast('error',  this.i18nService.t('errorOccurred'),
@@ -167,10 +166,6 @@ export class LoginComponent implements OnInit {
                     // does not consider the result of the call as an error, otherwise
                     // we would have a double toast
                     return null;
-        super.onSuccessfulLogin = async () => {
-            await syncService.fullSync(true).then(async () => {
-                if (await this.userService.getForcePasswordReset()) {
-                    this.router.navigate(['update-temp-password']);
                 }
                 throw e;
             });
@@ -186,7 +181,9 @@ export class LoginComponent implements OnInit {
             } else {
                 await this.storageService.remove(Keys.rememberedCozyUrl);
             }
-            if (response.twoFactor) {
+            if (this.handleCaptchaRequired(response)) {
+                return;
+            } else if (response.twoFactor) {
                 if (this.onSuccessfulLoginTwoFactorNavigate != null) {
                     this.onSuccessfulLoginTwoFactorNavigate();
                 } else {
@@ -212,7 +209,7 @@ export class LoginComponent implements OnInit {
                 'noEmailAsCozyUrl',
                 'hasMispelledCozy'
             ]
-            
+
             if (translatableMessages.includes(e.message)) {
                 this.platformUtilsService.showToast('error', this.i18nService.t('errorOccurred'),
                     this.i18nService.t(e.message));
@@ -225,6 +222,34 @@ export class LoginComponent implements OnInit {
     togglePassword() {
         this.showPassword = !this.showPassword;
         document.getElementById('masterPassword').focus();
+    }
+
+    async launchSsoBrowser(clientId: string, ssoRedirectUri: string) {
+        // Generate necessary sso params
+        const passwordOptions: any = {
+            type: 'password',
+            length: 64,
+            uppercase: true,
+            lowercase: true,
+            numbers: true,
+            special: false,
+        };
+        const state = await this.passwordGenerationService.generatePassword(passwordOptions);
+        const ssoCodeVerifier = await this.passwordGenerationService.generatePassword(passwordOptions);
+        const codeVerifierHash = await this.cryptoFunctionService.hash(ssoCodeVerifier, 'sha256');
+        const codeChallenge = Utils.fromBufferToUrlB64(codeVerifierHash);
+
+        // Save sso params
+        await this.storageService.save(ConstantsService.ssoStateKey, state);
+        await this.storageService.save(ConstantsService.ssoCodeVerifierKey, ssoCodeVerifier);
+
+        // Build URI
+        const webUrl = this.environmentService.getWebVaultUrl();
+
+        // Launch browser
+        this.platformUtilsService.launchUri(webUrl + '/#/sso?clientId=' + clientId +
+            '&redirectUri=' + encodeURIComponent(ssoRedirectUri) +
+            '&state=' + state + '&codeChallenge=' + codeChallenge);
     }
 
     async forgotPassword() {
@@ -246,7 +271,7 @@ export class LoginComponent implements OnInit {
                 this.i18nService.t('invalidCozyUrl'));
             return;
         }
-        
+
         const shouldRedirectToOidc = shouldRedirectToOIDCPasswordPage(cozyConfiguration);
 
         const url = shouldRedirectToOidc
@@ -266,12 +291,33 @@ export class LoginComponent implements OnInit {
         }
     }
 
+    sanitizeUrlInput(inputUrl: string): string {
+        // Prevent empty url
+        if (!inputUrl) {
+            throw new Error('cozyUrlRequired');
+        }
+        // Prevent email input
+        if (inputUrl.includes('@')) {
+            throw new Error('noEmailAsCozyUrl');
+        }
+
+        if (this.cozySanitizeUrlService.hasMispelledCozy(inputUrl)){
+            throw new Error('hasMispelledCozy');
+        }
+
+        return this.cozySanitizeUrlService.normalizeURL(inputUrl, this.cozySanitizeUrlService.cozyDomain);
+    }
+
+    protected focusInput() {
+        document.getElementById(this.email == null || this.email === '' ? 'email' : 'masterPassword').focus();
+    }
+
     private getCozyConfiguration = async (): Promise<CozyConfiguration> => {
         const preloginResponse = await this.apiService.postPrelogin(new PreloginRequest(this.cozyUrl));
 
         const { HasCiphers, OIDC, FlatSubdomains } = (preloginResponse as any).response;
 
-        return { HasCiphers, OIDC, FlatSubdomains }
+        return { HasCiphers: HasCiphers, OIDC: OIDC, FlatSubdomains: FlatSubdomains }
     }
 
     /**
