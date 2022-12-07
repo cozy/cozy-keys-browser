@@ -1,20 +1,22 @@
 <header>
     <div class="left">
         <button type="button" appBlurClick (click)="back()">
-            <span class="header-icon"><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
-            <span>{{'back' | i18n}}</span>
+            <span class="header-icon" title="{{'back' | i18n}}"><i class="icon-cozy icon-back"></i></span>
         </button>
     </div>
     <div class="search">
+        <i class="fa fa-search"></i>
         <input type="{{searchTypeSearch ? 'search' : 'text'}}"
             placeholder="{{searchPlaceholder || ('searchVault' | i18n)}}" id="search" [(ngModel)]="searchText"
             (input)="search(200)" autocomplete="off" appAutofocus appInputVerbatim>
-        <i class="fa fa-search" aria-hidden="true"></i>
         <i class="fa fa-close" aria-hidden="true" (click)="emptySearch()"></i>
     </div>
     <div class="right">
-        <button type="button" appBlurClick (click)="addCipher()" appA11yTitle="{{'addItem' | i18n}}">
-            <i class="fa fa-plus fa-lg fa-fw" aria-hidden="true"></i>
+        <button (click)="openWebApp()" appA11yTitle="{{'popOutNewWindow' | i18n}}">
+            <i class="icon-cozy icon-out-w"  aria-hidden="true"></i>
+        </button>
+        <button appBlurClick (click)="addCipher()" appA11yTitle="{{'addItem' | i18n}}">
+            <i class="icon-cozy icon-plus"  aria-hidden="true"></i>
         </button>
     </div>
 </header>
@@ -69,7 +71,7 @@
             <div class="box list only-list">
                 <div class="box-header">
                     {{groupingTitle}}
-                    <span class="flex-right">{{isSearching() ? ciphers.length : ciphers.length}}</span>
+                    <span class="flex-right">{{isSearching() ? ciphers.length : ''}}</span>
                 </div>
                 <div class="box-content">
                     <app-cipher-row *cdkVirtualFor="let c of ciphers" [cipher]="c" title="{{'viewItem' | i18n}}"

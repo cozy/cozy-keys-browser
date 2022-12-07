@@ -155,11 +155,14 @@ header {
     }
 
     .left, .right {
-        flex: 1;
+        // flex: 1;
         display: flex;
         min-width: -webkit-min-content; /* Workaround to Chrome bug */
         .header-icon {
             margin-right: 5px;
+        }
+        &.empty {
+            padding-left: 10px;
         }
     }
 
@@ -172,6 +175,7 @@ header {
         align-items: center;
         text-align: center;
         min-width: 0;
+        flex-grow: 1;
     }
 
     div > button, div > a {
@@ -214,6 +218,7 @@ header {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        width: 100%;
     }
 
     .search {

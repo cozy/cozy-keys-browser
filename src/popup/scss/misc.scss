@@ -258,7 +258,7 @@ app-vault-icon {
     color: $gray-light;
     display: flex;
     justify-content: center;
-    &:hover, &:active {
+    &:hover, &:active, &.active {
       color: $brand-primary;
       svg {
         fill: $brand-primary;

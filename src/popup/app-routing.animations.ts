@@ -1,11 +1,13 @@
 import {
     animate,
+    animateChild,
     group,
     query,
     style,
     transition,
     trigger,
 } from '@angular/animations';
+import { relative } from 'path';
 
 import { BrowserApi } from '../browser/browserApi';
 
@@ -140,6 +142,11 @@ export const routerTransition = trigger('routerTransition', [
 
     transition(ciphersToView, inSlideUp),
     transition(viewToCiphers, outSlideDown),
+
+    /** Start Cozy transitions */
+    transition('tabs_current => tabs_vault', outSlideRight),
+    transition('tabs_vault => tabs_current', inSlideLeft),
+    /** End Cozy transitions */
 
     transition('tabs => view-cipher', inSlideUp),
     transition('view-cipher => tabs', outSlideDown),

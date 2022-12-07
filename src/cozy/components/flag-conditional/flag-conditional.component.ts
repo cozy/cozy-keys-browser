@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { MessagingService } from 'jslib-common/abstractions/messaging.service';
-import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
+import { BroadcasterService } from 'jslib-common/abstractions/broadcaster.service';
 
 import * as uuid from 'uuid';
 

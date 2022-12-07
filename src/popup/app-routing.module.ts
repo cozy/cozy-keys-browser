@@ -12,10 +12,14 @@ import { LockGuardService } from 'jslib-angular/services/lock-guard.service';
 import { DebounceNavigationService } from './services/debounceNavigationService';
 import { LaunchGuardService } from './services/launch-guard.service';
 
+// import { EnvironmentComponent } from './accounts/environment.component';
 import { HintComponent } from './accounts/hint.component';
 import { HomeComponent } from './accounts/home.component';
 import { LockComponent } from './accounts/lock.component';
 import { LoginComponent } from './accounts/login.component';
+// import { RegisterComponent } from './accounts/register.component';
+import { RemovePasswordComponent } from './accounts/remove-password.component';
+import { SetPasswordComponent } from './accounts/set-password.component';
 import { SsoComponent } from './accounts/sso.component';
 import { TwoFactorOptionsComponent } from './accounts/two-factor-options.component';
 import { TwoFactorComponent } from './accounts/two-factor.component';
@@ -29,10 +33,10 @@ import { TabsComponent } from './tabs.component';
 
 import { ExcludedDomainsComponent } from './settings/excluded-domains.component';
 import { ExportComponent } from './settings/export.component';
-
 import { FolderAddEditComponent } from './settings/folder-add-edit.component';
 import { FoldersComponent } from './settings/folders.component';
 import { OptionsComponent } from './settings/options.component';
+// import { PremiumComponent } from './settings/premium.component';
 import { SettingsComponent } from './settings/settings.component';
 import { SyncComponent } from './settings/sync.component';
 
@@ -40,6 +44,7 @@ import { AddEditComponent } from './vault/add-edit.component';
 import { AttachmentsComponent } from './vault/attachments.component';
 import { CiphersComponent } from './vault/ciphers.component';
 import { CollectionsComponent } from './vault/collections.component';
+import { CurrentTabComponent } from './vault/current-tab.component';
 import { GroupingsComponent } from './vault/groupings.component';
 import { PasswordHistoryComponent } from './vault/password-history.component';
 import { ShareComponent } from './vault/share.component';
@@ -91,17 +96,54 @@ const routes: Routes = [
         data: { state: '2fa-options' },
     },
     {
+        path: 'sso',
+        component: SsoComponent,
+        canActivate: [LaunchGuardService],
+        data: { state: 'sso' },
+    },
+    {
+        path: 'set-password',
+        component: SetPasswordComponent,
+        data: { state: 'set-password' },
+    },
+    {
+        path: 'remove-password',
+        component: RemovePasswordComponent,
+        canActivate: [AuthGuardService],
+        data: { state: 'remove-password' },
+    },
+    // {
+    //     path: 'register',
+    //     component: RegisterComponent,
+    //     canActivate: [LaunchGuardService],
+    //     data: { state: 'register' },
+    // },
+    {
         path: 'hint',
         component: HintComponent,
         canActivate: [LaunchGuardService],
         data: { state: 'hint' },
     },
+    // {
+    //     path: 'environment',
+    //     component: EnvironmentComponent,
+    //     canActivate: [LaunchGuardService],
+    //     data: { state: 'environment' },
+    // },
     {
         path: 'ciphers',
         component: CiphersComponent,
         canActivate: [AuthGuardService],
         data: { state: 'ciphers' },
     },
+    // {
+    //     path: 'current',
+    //     component: CurrentTabComponent,
+    //     canActivate: [AuthGuardService],
+    //     // data: { state: 'tabs_current' },
+    //     data: { state: 'ciphers' },
+    //     runGuardsAndResolvers: 'always',
+    // },
     {
         path: 'view-cipher',
         component: ViewComponent,
@@ -194,6 +236,12 @@ const routes: Routes = [
         canActivate: [AuthGuardService],
         data: { state: 'excluded-domains' },
     },
+    // {
+    //     path: 'premium',
+    //     component: PremiumComponent,
+    //     canActivate: [AuthGuardService],
+    //     data: { state: 'premium' },
+    // },
     {
         path: 'options',
         component: OptionsComponent,
@@ -246,15 +294,17 @@ const routes: Routes = [
                 pathMatch: 'full',
             },
             {
+                path: 'current',
+                component: CurrentTabComponent,
+                canActivate: [AuthGuardService],
+                data: { state: 'tabs_current' },
+                runGuardsAndResolvers: 'always',
+            },
+            {
                 path: 'vault',
                 component: GroupingsComponent,
                 canActivate: [AuthGuardService],
                 data: { state: 'tabs_vault' },
-            },
-            {
-                path: 'vault-current-page',
-                redirectTo: '/tabs/vault?activatedPanel=currentPageCiphers',
-                pathMatch: 'full',
             },
             {
                 path: 'generator',
@@ -295,7 +345,15 @@ export class NoRouteReuseStrategy implements RouteReuseStrategy {
     }
 
     shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot) {
-        return false;
+        /** 
+         * Cozy modification : 
+         * with the Bitwarden modification of the default behaviour of the standard Angular the
+         * 'tabs_current => tabs_vault' and 'tabs_vault => tabs_current'
+         * were not working. Might introduce unexpected behaviour since we don't understand the
+         * motivations of Bitwarden.
+          */
+        // return false;
+        return future.routeConfig === curr.routeConfig;
     }
 }
 
@@ -303,7 +361,7 @@ export class NoRouteReuseStrategy implements RouteReuseStrategy {
     imports: [RouterModule.forRoot(routes, {
         useHash: true,
         onSameUrlNavigation: 'reload',
-        // enableTracing: true,
+        /*enableTracing: true,*/
     })],
     exports: [RouterModule],
     providers: [

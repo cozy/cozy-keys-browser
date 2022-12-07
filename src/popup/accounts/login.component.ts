@@ -199,8 +199,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
                 if (this.onSuccessfulLoginNavigate != null) {
                     this.onSuccessfulLoginNavigate();
                 } else {
-                    this.router.navigate([this.successRoute], { queryParams: {activatedPanel : 'currentPageCiphers'},
-                    });
+                    this.router.navigate([this.successRoute]);
                 }
             }
         } catch (e) {

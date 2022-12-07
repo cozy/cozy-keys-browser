@@ -42,6 +42,9 @@ import { LocalConstantsService as ConstantsService } from '../services/constants
 import { KonnectorsService } from '../services/konnectors.service';
 import { PopupUtilsService } from '../services/popup-utils.service';
 
+/** Start Cozy imports */
+import { CozyClientService } from '../services/cozyClient.service';
+/** End Cozy imports */
 const ComponentId = 'CiphersComponent';
 
 @Component({
@@ -72,7 +75,8 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
         private folderService: FolderService, private collectionService: CollectionService,
         private platformUtilsService: PlatformUtilsService,
         private cipherService: CipherService, private storageService: StorageService,
-        private konnectorsService: KonnectorsService, private autofillService: AutofillService) {
+        private cozyClientService: CozyClientService,private konnectorsService: KonnectorsService,
+        private autofillService: AutofillService,) {
         super(searchService);
         this.applySavedState = (window as any).previousPopupUrl != null &&
             !(window as any).previousPopupUrl.startsWith('/ciphers');
@@ -296,8 +300,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
     }
 
     back() {
-        (window as any).routeDirection = 'b';
-        this.router.navigate(['tabs/vault'], { queryParams: { activatedPanel: 'none' } });
+        this.location.back();
     }
 
     showGroupings() {
@@ -320,6 +323,10 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
             searchText: this.searchText,
         };
         await this.stateService.save(ComponentId, this.state);
+    }
+
+    openWebApp() {
+        window.open(this.cozyClientService.getAppURL('passwords',''));
     }
 
 }

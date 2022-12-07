@@ -309,15 +309,7 @@ export class ViewComponent extends BaseViewComponent {
     }
 
     close() {
-        if (this.pannelBack) {
-            this.router.navigate(['tabs/vault'], { queryParams: {
-                activatedPanel : this.pannelBack,
-                folderId : this.folderBack,
-                scrollTopBack: this.scrollTopBack,
-            }});
-            return;
-        }
-        this.router.navigate(['tabs/vault']);
+        this.location.back();
     }
 
     openWebApp() {
