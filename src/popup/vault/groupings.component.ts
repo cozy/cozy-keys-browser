@@ -1,5 +1,3 @@
-import { ToasterService } from 'angular2-toaster';
-
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Location } from '@angular/common';
 import {
@@ -150,7 +148,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         private stateService: StateService, private popupUtils: PopupUtilsService,
         private syncService: SyncService, private platformUtilsService: PlatformUtilsService,
         private searchService: SearchService, private location: Location,
-        private toasterService: ToasterService, private i18nService: I18nService,
+        private i18nService: I18nService,
         private autofillService: AutofillService, private konnectorsService: KonnectorsService,
         private cozyClientService: CozyClientService) {
         super(collectionService, folderService, storageService, userService);
@@ -637,7 +635,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
         let totpCode = null;
 
         if (this.pageDetails == null || this.pageDetails.length === 0) {
-            this.toasterService.popAsync('error', null, this.i18nService.t('autofillError'));
+            this.platformUtilsService.showToast('error', null, this.i18nService.t('autofillError'));
             return;
         }
 
@@ -656,7 +654,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
             }
         } catch (e) {
             this.ngZone.run(() => {
-                this.toasterService.popAsync('error', null, this.i18nService.t('autofillError'));
+                this.platformUtilsService.showToast('error', null, this.i18nService.t('errorOccurred'));
                 this.changeDetectorRef.detectChanges();
             });
         }

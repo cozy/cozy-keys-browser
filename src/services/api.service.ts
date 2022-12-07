@@ -1,13 +1,17 @@
+import { DeviceType } from 'jslib-common/enums/deviceType';
+
+import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
 import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
 import { TokenService } from 'jslib-common/abstractions/token.service';
-import { DeviceType } from 'jslib-common/enums/deviceType';
+
 import { TokenRequest } from 'jslib-common/models/request/tokenRequest';
+
 import { ErrorResponse } from 'jslib-common/models/response/errorResponse';
+import { IdentityTokenResponse } from '../models/response/identityTokenResponse';
 import { IdentityTwoFactorResponse } from 'jslib-common/models/response/identityTwoFactorResponse';
+
 import { ApiService as BaseApiService } from 'jslib-common/services/api.service';
 
-import { EnvironmentService } from 'jslib-common/abstractions';
-import { IdentityTokenResponse } from '../models/response/identityTokenResponse';
 
 function getDeviceName(deviceType: DeviceType): string {
     switch (deviceType) {

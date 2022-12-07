@@ -296,7 +296,7 @@ export default class MainBackground {
             this.folderService, this.cipherService, this.cryptoService, this.collectionService,
             this.storageService, this.messagingService, this.policyService, this.sendService,
             this.logService, this.tokenService, this.keyConnectorService,
-            async (expired: boolean) => await this.logout(expired), this.cozyClientService, this.tokenService);
+            async (expired: boolean) => await this.logout(expired), this.cozyClientService);
         this.eventService = new EventService(this.storageService, this.apiService, this.userService,
             this.cipherService, this.logService);
         this.passwordGenerationService = new PasswordGenerationService(this.cryptoService, this.storageService,
@@ -361,16 +361,17 @@ export default class MainBackground {
                     that.runtimeBackground.processMessage(message, that, null);
                 }
             }(), this.vaultTimeoutService, this.logService, this.cryptoFunctionService, this.environmentService,
-            this.keyConnectorService,
-            true, this.cozyClientService);
+            this.keyConnectorService, true,
+            this.cozyClientService);
 
         // Background
         this.runtimeBackground = new RuntimeBackground(this, this.autofillService,
             this.platformUtilsService as BrowserPlatformUtilsService, this.storageService, this.i18nService,
             this.notificationsService, this.systemService, this.environmentService, this.messagingService,
             this.logService,
-            this.cipherService, this.vaultTimeoutService, this.policyService, this.userService, this.cozyClientService,
-            this.konnectorsService, this.syncService, this.authService, this.cryptoService, this.apiService);
+            this.cozyClientService, this.konnectorsService,
+            this.syncService, this.authService, this.cryptoService, this.apiService,
+            this.cipherService, this.userService, this.vaultTimeoutService);
         this.messagingService.setRuntimeBackground(this.runtimeBackground);
 
     }

@@ -68,6 +68,9 @@ import { PopupUtilsService } from './popup-utils.service';
 import { ThemeType } from 'jslib-common/enums/themeType';
 
 import { AuthService } from '../../services/auth.service';
+import { ModalService } from 'jslib-angular/services/modal.service';
+
+
 function getBgService<T>(service: string) {
     return (): T => {
         const page = BrowserApi.getBackgroundPage();
@@ -77,6 +80,13 @@ function getBgService<T>(service: string) {
 
 const isPrivateMode = BrowserApi.getBackgroundPage() == null;
 
+const stateService = new StateService();
+const messagingService = new BrowserMessagingService();
+const searchService = isPrivateMode ? null : new PopupSearchService(getBgService<SearchService>('searchService')(),
+    getBgService<CipherService>('cipherService')(), getBgService<ConsoleLogService>('consoleLogService')(),
+    getBgService<I18nService>('i18nService')());
+const passwordRepromptService = isPrivateMode ? null : new PasswordRepromptService(getBgService<ModalService>('modalService')(), getBgService<KeyConnectorService>('keyConnectorService')());
+    
 const cozyClientService = new CozyClientService(getBgService<EnvironmentService>('environmentService')(),
     getBgService<ApiService>('apiService')(), messagingService);
 export const cozySanitizeUrlService = new CozySanitizeUrlService();

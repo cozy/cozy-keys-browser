@@ -25,7 +25,7 @@ The Cozy browser extension is written using the Web Extension API and Angular. I
 ## Build for developement
 
 ```
-npm install
+npm install --legacy-peer-deps
 npm run start
 ```
 

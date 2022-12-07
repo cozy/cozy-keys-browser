@@ -1,16 +1,17 @@
 import {
-    Directive,
+    // Directive,
     Input,
+    NgZone,
     OnInit,
     Component,
-    NgZone,
 } from '@angular/core';
 
 import { Router } from '@angular/router';
 
+// import { take } from 'rxjs/operators';
+
 import { AuthResult } from 'jslib-common/models/domain/authResult';
 
-import { EnvironmentService as EnvironmentServiceAbstraction } from 'jslib-common/abstractions';
 import { ApiService } from 'jslib-common/abstractions/api.service';
 import { AuthService } from 'jslib-common/abstractions/auth.service';
 import { CryptoFunctionService } from 'jslib-common/abstractions/cryptoFunction.service';
@@ -24,7 +25,6 @@ import { StorageService } from 'jslib-common/abstractions/storage.service';
 
 import { SyncService } from 'jslib-common/abstractions/sync.service';
 import { PreloginRequest } from 'jslib-common/models/request/preloginRequest';
-import { PreloginResponse } from 'jslib-common/models/response/preloginResponse';
 
 import { ConstantsService } from 'jslib-common/services/constants.service';
 
@@ -36,8 +36,6 @@ import BrowserMessagingService from '../../services/browserMessaging.service';
 
 /* start Cozy imports */
 import { generateWebLink, Q } from 'cozy-client';
-
-import { CozyClientService } from '../services/cozyClient.service';
 import { CozySanitizeUrlService } from "../services/cozySanitizeUrl.service";
 /* end Cozy imports */
 
@@ -108,11 +106,12 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
 
     constructor(protected authService: AuthService, protected router: Router,
         protected platformUtilsService: PlatformUtilsService, protected i18nService: I18nService,
-        protected stateService: StorageService, protected environmentService: EnvironmentService,
+        protected stateService: StateService, protected environmentService: EnvironmentService,
         protected passwordGenerationService: PasswordGenerationService,
         protected cryptoFunctionService: CryptoFunctionService, private storageService: StorageService,
-        protected syncService: SyncService, logService: Lo        protected syncSer
-         protected cozySanitizeUrlService: CozySanitizeUrlService, private apiService: ApiService) {
+        protected logService: LogService, protected ngZone: NgZone,
+        protected syncService: SyncService, protected cozySanitizeUrlService: CozySanitizeUrlService,
+        private apiService: ApiService) {
             super(environmentService, i18nService, platformUtilsService);
             this.authService = authService;
             this.router = router;
@@ -159,7 +158,6 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
             // The email is based on the URL and necessary for login
             const hostname = Utils.getHostname(loginUrl);
             this.email = 'me@' + hostname;
-            console.log("toto")
             this.formPromise = this.authService.logIn(this.email, this.masterPassword).catch( e => {
                 if (e.response && e.response.error && e.response.error === 'invalid password') {
                     this.platformUtilsService.showToast('error',  this.i18nService.t('errorOccurred'),

@@ -1,5 +1,3 @@
-import { ToasterService } from 'angular2-toaster';
-
 import { Location } from '@angular/common';
 import {
     ChangeDetectorRef,
@@ -74,8 +72,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
         private folderService: FolderService, private collectionService: CollectionService,
         private platformUtilsService: PlatformUtilsService,
         private cipherService: CipherService, private storageService: StorageService,
-        private konnectorsService: KonnectorsService, private toasterService: ToasterService,
-        private autofillService: AutofillService) {
+        private konnectorsService: KonnectorsService, private autofillService: AutofillService) {
         super(searchService);
         this.applySavedState = (window as any).previousPopupUrl != null &&
             !(window as any).previousPopupUrl.startsWith('/ciphers');
@@ -259,7 +256,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
         let totpCode = null;
 
         if (this.pageDetails == null || this.pageDetails.length === 0) {
-            this.toasterService.popAsync('error', null, this.i18nService.t('autofillError'));
+            this.platformUtilsService.showToast('error', null, this.i18nService.t('errorOccurred'))
             return;
         }
 
@@ -278,7 +275,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
             }
         } catch (e) {
             this.ngZone.run(() => {
-                this.toasterService.popAsync('error', null, this.i18nService.t('autofillError'));
+                this.platformUtilsService.showToast('error', null, this.i18nService.t('autofillError'));
                 this.changeDetectorRef.detectChanges();
             });
         }

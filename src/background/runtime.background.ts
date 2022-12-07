@@ -22,7 +22,7 @@ import { BrowserApi } from '../browser/browserApi';
 import MainBackground from './main.background';
 
 import { CipherWithIds as CipherExport } from 'jslib-common/models/export/cipherWithIds';
-import { PasswordVerificationRequest } from 'jslib-common/models/request/passwordVerificationRequest';
+import { PasswordRequest } from 'jslib-common/models/request/passwordRequest';
 
 import { Utils } from 'jslib-common/misc/utils';
 import LockedVaultPendingNotificationsItem from './models/lockedVaultPendingNotificationsItem';
@@ -31,7 +31,10 @@ import { HashPurpose } from 'jslib-common/enums/hashPurpose';
 import { CozyClientService } from 'src/popup/services/cozyClient.service';
 import { KonnectorsService } from '../popup/services/konnectors.service';
 import { AuthService } from '../services/auth.service';
-
+import { CipherService } from 'jslib-common/abstractions/cipher.service';
+import { CipherType } from 'jslib-common/enums/cipherType';
+import { UserService } from 'jslib-common/abstractions/user.service';
+import { VaultTimeoutService } from 'jslib-common/abstractions/vaultTimeout.service';
 
 export default class RuntimeBackground {
     private autofillTimeout: any;
@@ -47,8 +50,8 @@ export default class RuntimeBackground {
         private logService: LogService,
         private cozyClientService: CozyClientService, private konnectorsService: KonnectorsService,
         private syncService: SyncService, private authService: AuthService,
-        private cryptoService: CryptoService, private apiService: ApiService
-    ) {
+        private cryptoService: CryptoService, private apiService: ApiService,
+        private cipherService: CipherService, private userService: UserService, private vaultTimeoutService: VaultTimeoutService) {
 
         // onInstalled listener must be wired up before anything else, so we do it in the ctor
         chrome.runtime.onInstalled.addListener((details: any) => {
@@ -62,7 +65,7 @@ export default class RuntimeBackground {
         }
 
         await this.checkOnInstalled();
-        BrowserApi.messageListener('runtime.background', (msg: any, sender: sender: chrome.runtime.MessageSender, sendResponse: any) => {
+        BrowserApi.messageListener('runtime.background', (msg: any, sender: chrome.runtime.MessageSender, sendResponse: any) => {
             this.processMessage(msg, sender, sendResponse);
         });
     }
@@ -83,6 +86,8 @@ export default class RuntimeBackground {
             case 'loggedIn':
             case 'unlocked':
                 let item: LockedVaultPendingNotificationsItem;
+                let enableInPageMenu: boolean;
+                let allTabs: chrome.tabs.Tab[];
 
                 if (this.lockedVaultPendingNotifications.length > 0) {
                     await BrowserApi.closeLoginTab();
@@ -103,7 +108,7 @@ export default class RuntimeBackground {
                 await this.cozyClientService.createClient();
                 
                 // ask notificationbar of all tabs to retry to collect pageDetails in order to activate in-page-menu
-                let enableInPageMenu = await this.storageService.get<boolean>(
+                enableInPageMenu = await this.storageService.get<boolean>(
                     LocalConstantsService.enableInPageMenuKey);
                 if (enableInPageMenu === null) { // if not yet set, then default to true
                     enableInPageMenu = true;
@@ -113,7 +118,7 @@ export default class RuntimeBackground {
                     subCommand = 'autofilIPMenuActivate';
                 }
                 await this.syncService.fullSync(true);
-                const allTabs = await BrowserApi.getAllTabs();
+                allTabs = await BrowserApi.getAllTabs();
                 for (const tab of allTabs) {
                     BrowserApi.tabSendMessage(tab, {
                         command   : 'autofillAnswerRequest',
@@ -132,7 +137,7 @@ export default class RuntimeBackground {
                 await this.authService.clear(); // moved from the logout to avoid potential infinite loop
                 await this.main.logout(msg.expired);
                 // 2- ask all frames of all tabs to activate login-in-page-menu
-                const allTabs = await BrowserApi.getAllTabs();
+                allTabs = await BrowserApi.getAllTabs();
                 for (const tab of allTabs) {
                     BrowserApi.tabSendMessage(tab, {
                         command           : 'autofillAnswerRequest',
@@ -266,7 +271,7 @@ export default class RuntimeBackground {
                 break;
             case 'bgGetLoginMenuFillScript':
                 // addon has been disconnected or the page was loaded while addon was not connected
-                let enableInPageMenu = await this.storageService.get<boolean>(
+                enableInPageMenu = await this.storageService.get<boolean>(
                     LocalConstantsService.enableInPageMenuKey);
                 if (enableInPageMenu === null) {enableInPageMenu = true; }
                 if (!enableInPageMenu) { break; }
@@ -497,7 +502,7 @@ export default class RuntimeBackground {
         if (storedKeyHash != null) {
             passwordValid = await this.cryptoService.compareAndUpdateKeyHash(pwd, key);
         } else {
-            const request = new PasswordVerificationRequest();
+            const request = new PasswordRequest();
             const serverKeyHash = await this.cryptoService.hashPassword(pwd, key,
                 HashPurpose.ServerAuthorization);
             request.masterPasswordHash = serverKeyHash;

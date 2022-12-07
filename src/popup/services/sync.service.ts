@@ -14,6 +14,8 @@ import { ApiService } from 'jslib-common/abstractions/api.service';
 import { CipherService } from 'jslib-common/abstractions/cipher.service';
 import { CollectionService } from 'jslib-common/abstractions/collection.service';
 import { FolderService } from 'jslib-common/abstractions/folder.service';
+import { KeyConnectorService } from 'jslib-common/abstractions/keyConnector.service';
+import { LogService } from 'jslib-common/abstractions/log.service';
 import { MessagingService } from 'jslib-common/abstractions/messaging.service';
 import { PolicyService } from 'jslib-common/abstractions/policy.service';
 import { TokenService } from 'jslib-common/abstractions/token.service';
@@ -62,9 +64,11 @@ export class SyncService extends BaseSyncService {
         private localMessagingService: MessagingService,
         policyService: PolicyService,
         sendService: SendService,
+        logService: LogService,
+        private localTtokenService: TokenService,
+        keyConnectorService: KeyConnectorService,
         logoutCallback: (expired: boolean) => Promise<void>,
-        private cozyClientService: CozyClientService,
-        private tokenService: TokenService
+        private cozyClientService: CozyClientService
     ) {
             super(
                 localUserService,
@@ -78,7 +82,10 @@ export class SyncService extends BaseSyncService {
                 localMessagingService,
                 policyService,
                 sendService,
-                logoutCallback,
+                logService,
+                localTtokenService,
+                keyConnectorService,
+                logoutCallback
             );
     }
 
@@ -105,16 +112,16 @@ export class SyncService extends BaseSyncService {
 
         const client = await this.cozyClientService.getClientInstance();
 
-        const currentToken = await this.tokenService.getToken();
+        const currentToken = await this.localTtokenService.getToken();
 
         await this.localApiService.refreshIdentityToken();
-        const refreshedToken = await this.tokenService.getToken();
+        const refreshedToken = await this.localTtokenService.getToken();
         client.getStackClient().setToken(refreshedToken);
         client.options.token = refreshedToken;
 
         if (currentToken !== refreshedToken) {
-            const newUserId = this.tokenService.getUserId();
-            const email = this.tokenService.getEmail();
+            const newUserId = this.localTtokenService.getUserId();
+            const email = this.localTtokenService.getEmail();
             const kdf = await this.localUserService.getKdf();
             const kdfIterations = await this.localUserService.getKdfIterations();
 

@@ -4,16 +4,25 @@ import { TwoFactorProviderType } from 'jslib-common/enums/twoFactorProviderType'
 
 import { AuthResult } from 'jslib-common/models/domain/authResult';
 import { SymmetricCryptoKey } from 'jslib-common/models/domain/symmetricCryptoKey';
+
+// import { SetKeyConnectorKeyRequest } from '../models/request/account/setKeyConnectorKeyRequest';
 import { DeviceRequest } from 'jslib-common/models/request/deviceRequest';
+// import { KeyConnectorUserKeyRequest } from '../models/request/keyConnectorUserKeyRequest';
 import { KeysRequest } from 'jslib-common/models/request/keysRequest';
 import { PreloginRequest } from 'jslib-common/models/request/preloginRequest';
 import { TokenRequest } from 'jslib-common/models/request/tokenRequest';
+
+import { IdentityTokenResponse } from '../models/response/identityTokenResponse';
 import { IdentityTwoFactorResponse } from 'jslib-common/models/response/identityTwoFactorResponse';
 
 import { ApiService } from 'jslib-common/abstractions/api.service';
 import { AppIdService } from 'jslib-common/abstractions/appId.service';
+// import { AuthService as AuthServiceAbstraction } from 'jslib-common/abstractions/auth.service';
 import { CryptoService } from 'jslib-common/abstractions/crypto.service';
+import { CryptoFunctionService } from 'jslib-common/abstractions/cryptoFunction.service';
+import { EnvironmentService } from 'jslib-common/abstractions/environment.service';
 import { I18nService } from 'jslib-common/abstractions/i18n.service';
+import { KeyConnectorService } from 'jslib-common/abstractions/keyConnector.service';
 import { LogService } from 'jslib-common/abstractions/log.service';
 import { MessagingService } from 'jslib-common/abstractions/messaging.service';
 import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
@@ -21,9 +30,64 @@ import { TokenService } from 'jslib-common/abstractions/token.service';
 import { UserService } from 'jslib-common/abstractions/user.service';
 import { VaultTimeoutService } from 'jslib-common/abstractions/vaultTimeout.service';
 
+import { Utils } from 'jslib-common/misc/utils';
+
+/**
+export const TwoFactorProviders = {
+    [TwoFactorProviderType.Authenticator]: {
+        type: TwoFactorProviderType.Authenticator,
+        name: null as string,
+        description: null as string,
+        priority: 1,
+        sort: 1,
+        premium: false,
+    },
+    [TwoFactorProviderType.Yubikey]: {
+        type: TwoFactorProviderType.Yubikey,
+        name: null as string,
+        description: null as string,
+        priority: 3,
+        sort: 2,
+        premium: true,
+    },
+    [TwoFactorProviderType.Duo]: {
+        type: TwoFactorProviderType.Duo,
+        name: 'Duo',
+        description: null as string,
+        priority: 2,
+        sort: 3,
+        premium: true,
+    },
+    [TwoFactorProviderType.OrganizationDuo]: {
+        type: TwoFactorProviderType.OrganizationDuo,
+        name: 'Duo (Organization)',
+        description: null as string,
+        priority: 10,
+        sort: 4,
+        premium: false,
+    },
+    [TwoFactorProviderType.Email]: {
+        type: TwoFactorProviderType.Email,
+        name: null as string,
+        description: null as string,
+        priority: 0,
+        sort: 6,
+        premium: false,
+    },
+    [TwoFactorProviderType.WebAuthn]: {
+        type: TwoFactorProviderType.WebAuthn,
+        name: null as string,
+        description: null as string,
+        priority: 4,
+        sort: 5,
+        premium: true,
+    },
+};
+**/
+
 import { AuthService as BaseAuthService } from 'jslib-common/services/auth.service';
 
-import { IdentityTokenResponse } from '../models/response/identityTokenResponse';
+
 
 import { CozyClientService } from '../popup/services/cozyClient.service';
 
@@ -72,6 +136,12 @@ export class AuthService extends BaseAuthService {
         /* tslint:disable-next-line */
         private   _logService: LogService,
         /* tslint:disable-next-line */
+        private _cryptoFunctionService: CryptoFunctionService, 
+        /* tslint:disable-next-line */
+        private _environmentService: EnvironmentService,
+        /* tslint:disable-next-line */
+        private _keyConnectorService: KeyConnectorService,
+        /* tslint:disable-next-line */
         private   _setCryptoKeys = true,
         /* tslint:disable-next-line */
         private   _cozyClientService: CozyClientService,
@@ -87,6 +157,9 @@ export class AuthService extends BaseAuthService {
             _messagingService,
             _vaultTimeoutService,
             _logService,
+            _cryptoFunctionService,
+            _environmentService,
+            _keyConnectorService,
             _setCryptoKeys,
         );
     }

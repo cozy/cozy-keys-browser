@@ -37,6 +37,8 @@ export class LockComponent extends BaseLockComponent {
         apiService: ApiService, logService: LogService, keyConnectorService: KeyConnectorService,
         ngZone: NgZone) {
         super(router, i18nService, platformUtilsService, messagingService, userService, cryptoService,
+            storageService, vaultTimeoutService, environmentService, stateService, apiService, logService,
+            keyConnectorService, ngZone);
         this.successRoute = '/tabs/vault-current-page';
         this.isInitialLockScreen = (window as any).previousPopupUrl == null;
     }

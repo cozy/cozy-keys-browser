@@ -25,6 +25,8 @@ import { PopupUtilsService } from '../services/popup-utils.service';
 
 import { BrowserApi } from '../../browser/browserApi';
 
+import { UserService } from 'jslib-common/abstractions/user.service';
+
 const BroadcasterSubscriptionId = 'TwoFactorComponent';
 
 @Component({
@@ -40,7 +42,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
         environmentService: EnvironmentService, private broadcasterService: BroadcasterService,
         private popupUtilsService: PopupUtilsService, stateService: StateService,
         storageService: StorageService, route: ActivatedRoute, protected messagingService: MessagingService,
-        logService: LogService) {
+        logService: LogService, private userService: UserService) {
         super(authService, router, i18nService, apiService, platformUtilsService, window, environmentService,
             stateService, storageService, route, logService);
         super.onSuccessfulLogin = () => {

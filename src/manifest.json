@@ -20,7 +20,7 @@
       "js": [
         "content/autofill.js",
         "content/autofiller.js",
-        "content/contextMenuHandler.js"
+        "content/contextMenuHandler.js",
         "content/appInfo.js"
       ],
       "matches": [
@@ -129,6 +129,7 @@
     }
   },
   "web_accessible_resources": [
+    "notification/bar.html",
     "images/icon38.png",
     "images/icon38_locked.png",
     "images/close.png",
