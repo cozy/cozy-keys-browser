@@ -5,9 +5,9 @@
                 <i class="icon-cozy icon-cross"  aria-hidden="true"></i>
             </button>
         </div>
-        <div class="center">
+        <h1 class="center">
             <span class="title">{{title}}</span>
-        </div>
+        </h1>
         <div class="right">
             <button type="submit" appBlurClick [disabled]="form.loading">
                 <span [hidden]="form.loading">{{'save' | i18n}}</span>
@@ -20,9 +20,9 @@
             {{'personalOwnershipPolicyInEffect' | i18n}}
         </app-callout>
         <div class="box">
-            <div class="box-header">
+            <h2 class="box-header">
                 {{'itemInformation' | i18n}}
-            </div>
+            </h2>
             <div class="box-content">
                 <div class="box-content-row" *ngIf="!editMode" appBoxRow>
                     <label for="type">{{'type' | i18n}}</label>
@@ -60,7 +60,7 @@
                             </button>
                             <button type="button" class="row-btn" appStopClick appBlurClick
                                 appA11yTitle="{{'toggleVisibility' | i18n}}" (click)="togglePassword()"
-                                *ngIf="cipher.viewPassword">
+                                *ngIf="cipher.viewPassword" [attr.aria-pressed]="showPassword">
                                 <i class="fa fa-lg" aria-hidden="true"
                                     [ngClass]="{'fa-eye': !showPassword, 'fa-eye-slash': showPassword}"></i>
                             </button>
@@ -93,7 +93,7 @@
                         </div>
                         <div class="action-buttons">
                             <button type="button" class="row-btn" appStopClick appBlurClick
-                                appA11yTitle="{{'toggleVisibility' | i18n}}" (click)="toggleCardNumber()">
+                                appA11yTitle="{{'toggleVisibility' | i18n}}" (click)="toggleCardNumber()" [attr.aria-pressed]="showCardNumber">
                                 <i class="fa fa-lg" aria-hidden="true"
                                     [ngClass]="{'fa-eye': !showCardNumber, 'fa-eye-slash': showCardNumber}"></i>
                             </button>
@@ -124,7 +124,7 @@
                         </div>
                         <div class="action-buttons">
                             <button type="button" class="row-btn" appStopClick appBlurClick
-                                appA11yTitle="{{'toggleVisibility' | i18n}}" (click)="toggleCardCode()">
+                                appA11yTitle="{{'toggleVisibility' | i18n}}" (click)="toggleCardCode()" [attr.aria-pressed]="showCardCode">
                                 <i class="fa fa-lg" aria-hidden="true"
                                     [ngClass]="{'fa-eye': !showCardCode, 'fa-eye-slash': showCardCode}"></i>
                             </button>
@@ -316,9 +316,9 @@
             </div>
         </div>
         <div class="box">
-            <div class="box-header">
+            <h2 class="box-header">
                 <label for="notes">{{'notes' | i18n}}</label>
-            </div>
+            </h2>
             <div class="box-content">
                 <div class="box-content-row" appBoxRow>
                     <textarea id="notes" name="Notes" rows="6" [(ngModel)]="cipher.notes" appInputVerbatim></textarea>
@@ -328,9 +328,9 @@
         <app-vault-add-edit-custom-fields [cipher]="cipher" [thisCipherType]="cipher.type" [editMode]="editMode">
         </app-vault-add-edit-custom-fields>
         <div class="box" *ngIf="allowOwnershipOptions()">
-            <div class="box-header">
+            <h2 class="box-header">
                 {{'ownership' | i18n}}
-            </div>
+            </h2>
             <div class="box-content">
                 <div class="box-content-row" appBoxRow>
                     <label for="organizationId">{{'whoOwnsThisItem' | i18n}}</label>
@@ -342,9 +342,9 @@
             </div>
         </div>
         <div class="box" *ngIf="(!editMode || cloneMode )&& cipher.organizationId">
-            <div class="box-header">
+            <h2 class="box-header">
                 {{'collections' | i18n}}
-            </div>
+            </h2>
             <div class="box-content" *ngIf="!collections || !collections.length">
                 <div class="box-content-row padded no-hover">
                     {{'noCollectionsInList' | i18n}}
