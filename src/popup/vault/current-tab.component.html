@@ -22,7 +22,7 @@
         <button (click)="openWebApp()" appA11yTitle="{{'popOutNewWindow' | i18n}}">
             <i class="icon-cozy icon-out-w"  aria-hidden="true"></i>
         </button>
-        <button appBlurClick (click)="addCipher()" appA11yTitle="{{'addItem' | i18n}}">
+        <button appBlurClick (click)="addLoginCipher()" appA11yTitle="{{'addItem' | i18n}}">
             <i class="icon-cozy icon-plus"  aria-hidden="true"></i>
         </button>
     </div>
@@ -38,12 +38,12 @@
             </div>
             <div class="box-content">
                 <app-cipher-row *ngFor="let loginCipher of loginCiphers" [cipher]="loginCipher" 
-                    title="{{'autoFill' | i18n}}" [showView]="true" (onSelected)="viewCipher($event)" 
-                    (onView)="viewCipher($event)">
+                    title="{{'viewItem' | i18n}}" [showView]="true" (onSelected)="viewCipher($event)" 
+                    (onView)="viewCipher($event)" (onAutofill)="fillCipher(loginCipher)">
                 </app-cipher-row>
                 <div class="box-content-row padded no-hover" *ngIf="loginCiphers && !loginCiphers.length">
                     <p class="text-center">{{'autoFillInfo' | i18n}}</p>
-                    <button type="button" class="btn link block" (click)="addCardCipher()">
+                    <button type="button" class="btn link block" (click)="addLoginCipher()">
                             {{'addLogin' | i18n}}
                     </button>
                 </div>
@@ -54,8 +54,8 @@
                 {{'cards' | i18n}}
             </div>
             <div class="box-content">
-                <app-cipher-row *ngFor="let cardCipher of cardCiphers" [cipher]="cardCipher" title="{{'autoFill' | i18n}}" [showView]="true"
-                    (onSelected)="viewCipher($event)" (onView)="viewCipher($event)"></app-cipher-row>
+                <app-cipher-row *ngFor="let cardCipher of cardCiphers" [cipher]="cardCipher" title="{{'viewItem' | i18n}}" [showView]="true"
+                    (onSelected)="viewCipher($event)" (onView)="viewCipher($event)" (onAutofill)="fillCipher(cardCipher)"></app-cipher-row>
                 <div class="box-content-row padded no-hover" *ngIf="cardCiphers && !cardCiphers.length">
                     <p class="text-center">{{'addCardExplanation' | i18n}}</p>
                     <button type="button" class="btn link block" (click)="addCardCipher()">
@@ -69,11 +69,11 @@
                 {{'identities' | i18n}}
             </div>
             <div class="box-content">
-                <app-cipher-row *ngFor="let identityCipher of identityCiphers" [cipher]="identityCipher" title="{{'autoFill' | i18n}}" [showView]="true"
-                    (onSelected)="viewCipher($event)" (onView)="viewCipher($event)"></app-cipher-row>
+                <app-cipher-row *ngFor="let identityCipher of identityCiphers" [cipher]="identityCipher" title="{{'viewItem' | i18n}}" [showView]="true"
+                    (onSelected)="viewCipher($event)" (onView)="viewCipher($event)" (onAutofill)="fillCipher(identityCipher)"></app-cipher-row>
                 <div class="box-content-row padded no-hover" *ngIf="identityCiphers && !identityCiphers.length">
                     <p class="text-center">{{'addIdentityExplanation' | i18n}}</p>
-                    <button type="button" class="btn link block" (click)="addCardCipher()">
+                    <button type="button" class="btn link block" (click)="addIdentityCipher()">
                             {{'addIdentity' | i18n}}
                     </button>
                 </div>
