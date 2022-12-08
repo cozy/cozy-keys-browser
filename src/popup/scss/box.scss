@@ -596,6 +596,9 @@
         }
     }
 
+    > .row-icon {
+      width: 28px;}
+
     &.totp {
         .totp-code {
             font-family: $font-family-monospace;
