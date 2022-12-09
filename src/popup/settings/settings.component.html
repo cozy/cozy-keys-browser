@@ -1,128 +1,201 @@
 <header>
-    <div class="left">
-    </div>
-    <h1 class="center">
-        <span class="title">{{'settings' | i18n}}</span>
-    </h1>
-    <div class="right"></div>
+  <div class="left"></div>
+  <h1 class="center">
+    <span class="title">{{ "settings" | i18n }}</span>
+  </h1>
+  <div class="right"></div>
 </header>
 <content>
-    <div class="box list">
-        <h2 class="box-header">{{'manage' | i18n}}</h2>
-        <div class="box-content box-content-settings single-line">
-            <a class="box-content-row settings-row box-content-row-flex text-default" href="#" appStopClick appBlurClick
-                (click)="lock()">
-                <div class="row-main">{{'lockNow' | i18n}}</div>
-                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </a>
-            <!-- <a class="box-content-row settings-row box-content-row-flex text-default" routerLink="/folders">
+  <div class="box list">
+    <h2 class="box-header">{{ "manage" | i18n }}</h2>
+    <div class="box-content box-content-settings single-line">
+      <a
+        class="box-content-row settings-row box-content-row-flex text-default"
+        href="#"
+        appStopClick
+        appBlurClick
+        (click)="lock()"
+      >
+        <div class="row-main">{{ "lockNow" | i18n }}</div>
+        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+      </a>
+      <!-- <a class="box-content-row settings-row box-content-row-flex text-default" routerLink="/folders">
                 <div class="row-main">{{'folders' | i18n}}</div>
                 <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
             </a> -->
-            <a class="box-content-row settings-row box-content-row-flex text-default" routerLink="/sync">
-                <div class="row-main">{{'sync' | i18n}}</div>
-                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </a>
-            <a class="box-content-row box-content-row-flex text-default" routerLink="/excluded-domains">
-                <div class="row-main">{{'excludedDomains' | i18n}}</div>
-                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </a>
-        </div>
+      <a class="box-content-row settings-row box-content-row-flex text-default" routerLink="/sync">
+        <div class="row-main">{{ "sync" | i18n }}</div>
+        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+      </a>
+      <a class="box-content-row box-content-row-flex text-default" routerLink="/excluded-domains">
+        <div class="row-main">{{ "excludedDomains" | i18n }}</div>
+        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+      </a>
     </div>
-    <div class="box list">
-        <h2 class="box-header">{{'security' | i18n}}</h2>
-        <div class="box-content single-line">
-            <app-vault-timeout-input [vaultTimeouts]="vaultTimeouts" [formControl]="vaultTimeout" ngDefaultControl></app-vault-timeout-input>
-            <div class="box-content-row settings-row display-block" appBoxRow>
-                <label for="vaultTimeoutAction">{{'vaultTimeoutAction' | i18n}}</label>
-                <select #vaultTimeoutActionSelect id="vaultTimeoutAction" name="VaultTimeoutActions"
-                    [ngModel]="vaultTimeoutAction" (ngModelChange)="saveVaultTimeoutAction($event)">
-                    <option *ngFor="let o of vaultTimeoutActions" [ngValue]="o.value">{{o.name}}</option>
-                </select>
-            </div>
-            <div class="box-content-row settings-row box-content-row-checkbox" appBoxRow>
-                <label for="pin">{{'unlockWithPin' | i18n}}</label>
-                <input id="pin" type="checkbox" (change)="updatePin()" [(ngModel)]="pin">
-            </div>
-        </div>
+  </div>
+  <div class="box list">
+    <h2 class="box-header">{{ "security" | i18n }}</h2>
+    <div class="box-content single-line">
+      <app-vault-timeout-input
+        [vaultTimeouts]="vaultTimeouts"
+        [formControl]="vaultTimeout"
+        ngDefaultControl
+      ></app-vault-timeout-input>
+      <div class="box-content-row settings-row display-block" appBoxRow>
+        <label for="vaultTimeoutAction">{{ "vaultTimeoutAction" | i18n }}</label>
+        <select
+          #vaultTimeoutActionSelect
+          id="vaultTimeoutAction"
+          name="VaultTimeoutActions"
+          [ngModel]="vaultTimeoutAction"
+          (ngModelChange)="saveVaultTimeoutAction($event)"
+        >
+          <option *ngFor="let o of vaultTimeoutActions" [ngValue]="o.value">{{ o.name }}</option>
+        </select>
+      </div>
+      <div class="box-content-row settings-row box-content-row-checkbox" appBoxRow>
+        <label for="pin">{{ "unlockWithPin" | i18n }}</label>
+        <input id="pin" type="checkbox" (change)="updatePin()" [(ngModel)]="pin" />
+      </div>
     </div>
-    <div class="box list">
-        <h2 class="box-header">{{'account' | i18n}}</h2>
-        <div class="box-content box-content-settings single-line">
-            <a class="box-content-row settings-row" href="#" (click)="premium()" *ngIf="isPremiumEnabled()">
-                <div class="row-main">
-                    <div class="icon text-primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 2 32 32" style="overflow: visible;">
-                            <g fill="none" fill-rule="evenodd">
-                                <circle cx="16" cy="16" r="16" fill="#297EF1" fill-rule="nonzero"/>
-                                <path fill="#FFF" d="M19.314 17.561a.555.555 0 0 1-.82.12 4.044 4.044 0 0 1-2.499.862 4.04 4.04 0 0 1-2.494-.86.557.557 0 0 1-.815-.12.547.547 0 0 1 .156-.748c.214-.14.229-.421.229-.424a.555.555 0 0 1 .176-.385.504.504 0 0 1 .386-.145.544.544 0 0 1 .528.553c0 .004 0 .153-.054.36a2.954 2.954 0 0 0 3.784-.008 1.765 1.765 0 0 1-.053-.344.546.546 0 0 1 .536-.561h.01c.294 0 .538.237.545.532 0 0 .015.282.227.422a.544.544 0 0 1 .158.746m2.322-6.369a5.94 5.94 0 0 0-1.69-3.506A5.651 5.651 0 0 0 15.916 6a5.648 5.648 0 0 0-4.029 1.687 5.936 5.936 0 0 0-1.691 3.524 5.677 5.677 0 0 0-3.433 1.737 5.966 5.966 0 0 0-1.643 4.137C5.12 20.347 7.704 23 10.882 23h10.236c3.176 0 5.762-2.653 5.762-5.915 0-3.083-2.31-5.623-5.244-5.893"/>
-                            </g>
-                        </svg>
-                    </div>
-                    <span class="text text-primary"><b>{{'premiumMembership' | i18n}}</b></span>
-                </div>
-                <span><i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i></span>
-            </a>
-            <!-- TODO: enable this with Cozy's password change
+  </div>
+  <div class="box list">
+    <h2 class="box-header">{{ "account" | i18n }}</h2>
+    <div class="box-content box-content-settings single-line">
+      <a
+        class="box-content-row settings-row"
+        href="#"
+        (click)="premium()"
+        *ngIf="isPremiumEnabled()"
+      >
+        <div class="row-main">
+          <div class="icon text-primary">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              viewBox="0 2 32 32"
+              style="overflow: visible"
+            >
+              <g fill="none" fill-rule="evenodd">
+                <circle cx="16" cy="16" r="16" fill="#297EF1" fill-rule="nonzero" />
+                <path
+                  fill="#FFF"
+                  d="M19.314 17.561a.555.555 0 0 1-.82.12 4.044 4.044 0 0 1-2.499.862 4.04 4.04 0 0 1-2.494-.86.557.557 0 0 1-.815-.12.547.547 0 0 1 .156-.748c.214-.14.229-.421.229-.424a.555.555 0 0 1 .176-.385.504.504 0 0 1 .386-.145.544.544 0 0 1 .528.553c0 .004 0 .153-.054.36a2.954 2.954 0 0 0 3.784-.008 1.765 1.765 0 0 1-.053-.344.546.546 0 0 1 .536-.561h.01c.294 0 .538.237.545.532 0 0 .015.282.227.422a.544.544 0 0 1 .158.746m2.322-6.369a5.94 5.94 0 0 0-1.69-3.506A5.651 5.651 0 0 0 15.916 6a5.648 5.648 0 0 0-4.029 1.687 5.936 5.936 0 0 0-1.691 3.524 5.677 5.677 0 0 0-3.433 1.737 5.966 5.966 0 0 0-1.643 4.137C5.12 20.347 7.704 23 10.882 23h10.236c3.176 0 5.762-2.653 5.762-5.915 0-3.083-2.31-5.623-5.244-5.893"
+                />
+              </g>
+            </svg>
+          </div>
+          <span class="text text-primary"
+            ><b>{{ "premiumMembership" | i18n }}</b></span
+          >
+        </div>
+        <span><i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i></span>
+      </a>
+      <!-- TODO: enable this with Cozy's password change
           -->
-            <button type="button" class="box-content-row box-content-row-flex text-default" appStopClick appBlurClick
-                (click)="changePassword()" *ngIf="showChangeMasterPass">
-                <div class="row-main">{{'changeMasterPassword' | i18n}}</div>
-                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </button>
-            <ng-container *ifFlag="CAN_SHARE_ORGANIZATION">
-            <button type="button" class="box-content-row box-content-row-flex text-default" appStopClick appBlurClick
-                (click)="fingerprint()">
-                <div class="row-main">{{'fingerprintPhrase' | i18n}}</div>
-                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </button>
-            </ng-container>
-            <button type="button" class="box-content-row settings-row box-content-row-flex text-default" appStopClick appBlurClick
-                (click)="logOut()">
-                <div class="row-main">{{'logOut' | i18n}}</div>
-                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </button>
-        </div>
+      <button
+        type="button"
+        class="box-content-row box-content-row-flex text-default"
+        appStopClick
+        appBlurClick
+        (click)="changePassword()"
+        *ngIf="showChangeMasterPass"
+      >
+        <div class="row-main">{{ "changeMasterPassword" | i18n }}</div>
+        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+      </button>
+      <ng-container *ifFlag="CAN_SHARE_ORGANIZATION">
+        <button
+          type="button"
+          class="box-content-row box-content-row-flex text-default"
+          appStopClick
+          appBlurClick
+          (click)="fingerprint()"
+        >
+          <div class="row-main">{{ "fingerprintPhrase" | i18n }}</div>
+          <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+        </button>
+      </ng-container>
+      <button
+        type="button"
+        class="box-content-row settings-row box-content-row-flex text-default"
+        appStopClick
+        appBlurClick
+        (click)="logOut()"
+      >
+        <div class="row-main">{{ "logOut" | i18n }}</div>
+        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+      </button>
     </div>
-    <div class="box list">
-        <h2 class="box-header">{{'tools' | i18n}}</h2>
-        <div class="box-content box-content-settings single-line">
-            <button type="button" class="box-content-row settings-row box-content-row-flex text-default" appStopClick appBlurClick
-                (click)="import()">
-                <div class="row-main">{{'importItems' | i18n}}</div>
-                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </button>
-            <button type="button" class="box-content-row settings-row box-content-row-flex text-default" appStopClick appBlurClick
-                (click)="export()">
-                <div class="row-main">{{'exportVault' | i18n}}</div>
-                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </button>
-        </div>
+  </div>
+  <div class="box list">
+    <h2 class="box-header">{{ "tools" | i18n }}</h2>
+    <div class="box-content box-content-settings single-line">
+      <button
+        type="button"
+        class="box-content-row settings-row box-content-row-flex text-default"
+        appStopClick
+        appBlurClick
+        (click)="import()"
+      >
+        <div class="row-main">{{ "importItems" | i18n }}</div>
+        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+      </button>
+      <button
+        type="button"
+        class="box-content-row settings-row box-content-row-flex text-default"
+        appStopClick
+        appBlurClick
+        (click)="export()"
+      >
+        <div class="row-main">{{ "exportVault" | i18n }}</div>
+        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+      </button>
     </div>
-    <div class="box list">
-        <h2 class="box-header">{{'other' | i18n}}</h2>
-        <div class="box-content box-content-settings single-line">
-            <a class="box-content-row settings-row box-content-row-flex text-default" routerLink="/options">
-                <div class="row-main">{{'options' | i18n}}</div>
-                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </a>
-            <button type="button" class="box-content-row settings-row box-content-row-flex text-default" appStopClick appBlurClick
-                (click)="about()">
-                <div class="row-main">{{'about' | i18n}}</div>
-                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </button>
-            <button type="button" class="box-content-row settings-row box-content-row-flex text-default" appStopClick appBlurClick
-                (click)="help()">
-                <div class="row-main">{{'helpFeedback' | i18n}}</div>
-                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </button>
-            <button type="button" class="box-content-row settings-row box-content-row-multi-wrap text-default" appStopClick appBlurClick
-                (click)="rate()">
-                <div class="row-main">{{'rateExtension' | i18n}}</div>
-                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-                <div class="box-footer in-flex-row-full-width">{{'rateExtensionDesc' | i18n}}</div>
-            </button>
-        </div>
-        <div class="box-footer">{{'connectedCozy' | i18n}} {{getCozyURL()}}</div>
+  </div>
+  <div class="box list">
+    <h2 class="box-header">{{ "other" | i18n }}</h2>
+    <div class="box-content box-content-settings single-line">
+      <a
+        class="box-content-row settings-row box-content-row-flex text-default"
+        routerLink="/options"
+      >
+        <div class="row-main">{{ "options" | i18n }}</div>
+        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+      </a>
+      <button
+        type="button"
+        class="box-content-row settings-row box-content-row-flex text-default"
+        appStopClick
+        appBlurClick
+        (click)="about()"
+      >
+        <div class="row-main">{{ "about" | i18n }}</div>
+        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+      </button>
+      <button
+        type="button"
+        class="box-content-row settings-row box-content-row-flex text-default"
+        appStopClick
+        appBlurClick
+        (click)="help()"
+      >
+        <div class="row-main">{{ "helpFeedback" | i18n }}</div>
+        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+      </button>
+      <button
+        type="button"
+        class="box-content-row settings-row box-content-row-multi-wrap text-default"
+        appStopClick
+        appBlurClick
+        (click)="rate()"
+      >
+        <div class="row-main">{{ "rateExtension" | i18n }}</div>
+        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+        <div class="box-footer in-flex-row-full-width">{{ "rateExtensionDesc" | i18n }}</div>
+      </button>
     </div>
+    <div class="box-footer">{{ "connectedCozy" | i18n }} {{ getCozyURL() }}</div>
+  </div>
 </content>

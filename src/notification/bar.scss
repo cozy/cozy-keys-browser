@@ -1,135 +1,133 @@
 @import "../popup/scss/variables.scss";
 
 body {
-    background-color: $brand-primary;
-    padding: 0;
-    margin: 0;
-    font-size: $font-size-large;
-    line-height: 16px;
-    font-family: $font-family-sans-serif;
+  background-color: $brand-primary;
+  padding: 0;
+  margin: 0;
+  font-size: $font-size-large;
+  line-height: 16px;
+  font-family: $font-family-sans-serif;
 }
 
 table {
-    width: 100%;
+  width: 100%;
 }
 
 .outter-table > tbody > tr > td {
-    padding: 0 0 0 15px;
-    border-bottom: 2px solid $brand-primary;
-    vertical-align: top;
+  padding: 0 0 0 15px;
+  border-bottom: 2px solid $brand-primary;
+  vertical-align: top;
 }
 
 .outter-table > tbody > tr > td:last-child {
-    padding-right: 15px;
+  padding-right: 15px;
 }
 
 .inner-table td {
-    padding: 0 15px 0 0;
+  padding: 0 15px 0 0;
 }
 
 .inner-table td:last-child {
-    padding: 0;
+  padding: 0;
 }
 
 .inner-table td button {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 .desc-text {
-    color: $bar-text-color;
-    margin-top: 15px;
-    font-weight: 600;
+  color: $bar-text-color;
+  margin-top: 15px;
+  font-weight: 600;
 }
 
 .more-options {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 
 .more-options-label {
-    color: $bar-text-color-alt;
-    text-decoration: none;
+  color: $bar-text-color-alt;
+  text-decoration: none;
 }
 
 .more-options-list {
-    margin-top: 15px;
-    color: $bar-text-color;
-    background-color: $background-color-lighter;
-    padding: 0px 15px 15px 15px;
-    border-radius: $border-radius-large;
+  margin-top: 15px;
+  color: $bar-text-color;
+  background-color: $background-color-lighter;
+  padding: 0px 15px 15px 15px;
+  border-radius: $border-radius-large;
 }
 
 .option-entry {
-    padding: 15px 0px 0px 0px;
+  padding: 15px 0px 0px 0px;
 }
 
 .checkbox-custom {
-    -webkit-appearance: none;
-    background-color: $background-color;
-    border: 1px solid $brand-primary;
-    padding: 9px;
-    border-radius: $border-radius;
-    display: inline-block;
-    position: relative;
-    vertical-align: middle;
+  -webkit-appearance: none;
+  background-color: $background-color;
+  border: 1px solid $brand-primary;
+  padding: 9px;
+  border-radius: $border-radius;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
 }
 
 .checkbox-custom:checked:after {
-	content: '\2714';
-	font-size: $font-size-large;
-	position: absolute;
-	top: 0px;
-	left: 2px;
-	color: $brand-primary;
+  content: "\2714";
+  font-size: $font-size-large;
+  position: absolute;
+  top: 0px;
+  left: 2px;
+  color: $brand-primary;
 }
 
-
 svg {
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 button {
-    border: 1px solid white;
-    font-weight: bold;
-    text-transform: uppercase;
-    padding: 10px 10px 10px 10px;
+  border: 1px solid white;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 10px 10px 10px 10px;
 
-    &:hover {
-        cursor: pointer;
-    }
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .submit-buttons {
-    position: relative;
-    top: 15px;
-    float: right;
-    border-radius: $border-radius-large;
-    display: flex;
+  position: relative;
+  top: 15px;
+  float: right;
+  border-radius: $border-radius-large;
+  display: flex;
 }
 
 .add-or-change {
-    background-color: $bar-text-color;
-    color: $brand-primary;
-    margin-left: 5px;
+  background-color: $bar-text-color;
+  color: $brand-primary;
+  margin-left: 5px;
 }
 
 .dont-save {
-    background-color: $brand-primary;
-    color: $bar-text-color;
+  background-color: $brand-primary;
+  color: $bar-text-color;
 }
 
-
-body[class*='lang-en'] .add-buttons {
-    width: 175px;
+body[class*="lang-en"] .add-buttons {
+  width: 175px;
 }
 
 @media (min-width: 768px) {
-    body[class*='lang-en'] .add-buttons {
-        width: 320px;
-    }
+  body[class*="lang-en"] .add-buttons {
+    width: 320px;
+  }
 }
 
 @media (print) {
-    body {
-        display: none;
-    }
+  body {
+    display: none;
+  }
 }

@@ -1,17 +1,14 @@
 # What's Cozy?
 
-
 ![Cozy Logo](https://cdn.rawgit.com/cozy/cozy-guidelines/master/templates/cozy_logo_small.svg)
 
-[Cozy] is a platform that brings all your web services in the same private space.  With it, your webapps and your devices can share data easily, providing you with a new experience. You can install Cozy on your own hardware where no one's tracking you.
-
+[Cozy] is a platform that brings all your web services in the same private space. With it, your webapps and your devices can share data easily, providing you with a new experience. You can install Cozy on your own hardware where no one's tracking you.
 
 # Cozy Browser Extension
 
 Securely store your passwords and make it easy to add and update your Cozy connectors!
 
 The Cozy browser extension is written using the Web Extension API and Angular. It is based on [Bitwarden](https://github.com/bitwarden/browser).
-
 
 # Build/Run
 
@@ -48,9 +45,11 @@ Out of the box, the desktop application can only communicate with the production
 npm install
 npm run dist:<firefox|chrome|opera|safari>`
 ```
+
 Manifests are located in the `browser` subdirectory of the Bitwarden configuration directory. For instance, on Windows the manifests are located at `C:\Users\<user>\AppData\Roaming\Bitwarden\browsers` and on macOS these are in `Application Support` for various browsers ([for example](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#manifest_location)). Note that disabling the desktop integration will delete the manifests, and the files will need to be updated again.
 
 You can also build all of them in once by running:
+
 ```
 npm install
 npm run dist
@@ -59,6 +58,7 @@ npm run dist
 ## Source archive
 
 In case you need to create an archive of the source code, which can be required for an add-on submission on some platforms:
+
 ```
 npm run dist:sources
 ```

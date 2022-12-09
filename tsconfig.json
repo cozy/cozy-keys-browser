@@ -10,21 +10,15 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "jslib-common/*": [
-        "jslib/common/src/*"
-      ],
-      "jslib-angular/*": [
-        "jslib/angular/src/*"
-      ]
+      "jslib-common/*": ["jslib/common/src/*"],
+      "jslib-angular/*": ["jslib/angular/src/*"]
     },
     "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "preserveWhitespaces": true
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "exclude": [
     "node_modules",
     "jslib/node_modules",

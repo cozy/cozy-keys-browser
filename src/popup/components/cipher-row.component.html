@@ -1,35 +1,51 @@
-<button type="button" (click)="selectCipher(cipher)" (dblclick)="launchCipher(cipher)" appStopClick
-    title="{{title}} - {{cipher.name}}" class="box-content-row box-content-row-flex virtual-scroll-item">
-    <div class="row-main">
-        <ng-container *ngIf="cipher.type === cipherType.Login">
-            <app-vault-icon [cipher]="cipher"></app-vault-icon>
+<button
+  type="button"
+  (click)="selectCipher(cipher)"
+  (dblclick)="launchCipher(cipher)"
+  appStopClick
+  title="{{ title }} - {{ cipher.name }}"
+  class="box-content-row box-content-row-flex virtual-scroll-item"
+>
+  <div class="row-main">
+    <ng-container *ngIf="cipher.type === cipherType.Login">
+      <app-vault-icon [cipher]="cipher"></app-vault-icon>
+    </ng-container>
+    <ng-container *ngIf="cipher.type === cipherType.Card">
+      <div class="icon" aria-hidden="true">
+        <i class="icon-cozy icon-bank"></i>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="cipher.type === cipherType.Identity">
+      <div class="icon" aria-hidden="true">
+        <i class="icon-cozy icon-identity"></i>
+      </div>
+    </ng-container>
+    <div class="row-main-content">
+      <span class="text">
+        {{ cipher.name }}
+        <ng-container *ngIf="cipher.organizationId">
+          <i class="fa fa-cube text-muted" title="{{ 'shared' | i18n }}" aria-hidden="true"></i>
+          <span class="sr-only">{{ "shared" | i18n }}</span>
         </ng-container>
-        <ng-container *ngIf="cipher.type === cipherType.Card">
-            <div class="icon" aria-hidden="true">
-                <i class="icon-cozy icon-bank"></i>
-            </div>
+        <ng-container *ngIf="cipher.hasAttachments">
+          <i
+            class="fa fa-paperclip text-muted"
+            title="{{ 'attachments' | i18n }}"
+            aria-hidden="true"
+          ></i>
+          <span class="sr-only">{{ "attachments" | i18n }}</span>
         </ng-container>
-        <ng-container *ngIf="cipher.type === cipherType.Identity">
-            <div class="icon" aria-hidden="true">
-                <i class="icon-cozy icon-identity"></i>
-            </div>
-        </ng-container>
-        <div class="row-main-content">
-            <span class="text">
-                {{cipher.name}}
-                <ng-container *ngIf="cipher.organizationId">
-                    <i class="fa fa-cube text-muted" title="{{'shared' | i18n}}" aria-hidden="true"></i>
-                    <span class="sr-only">{{'shared' | i18n}}</span>
-                </ng-container>
-                <ng-container *ngIf="cipher.hasAttachments">
-                    <i class="fa fa-paperclip text-muted" title="{{'attachments' | i18n}}" aria-hidden="true"></i>
-                    <span class="sr-only">{{'attachments' | i18n}}</span>
-                </ng-container>
-            </span>
-            <span class="detail">{{getSubtitle(cipher)}}</span>
-        </div>
+      </span>
+      <span class="detail">{{ getSubtitle(cipher) }}</span>
     </div>
-    <app-action-buttons [cipher]="cipher" (onView)="viewCipher(cipher)" (launchEvent)="launchCipher(cipher)" [showGlobe]="showGlobe" (onAutofill)="autofill(cipher)"
-        class="action-buttons">
-    </app-action-buttons>
+  </div>
+  <app-action-buttons
+    [cipher]="cipher"
+    (onView)="viewCipher(cipher)"
+    (launchEvent)="launchCipher(cipher)"
+    [showGlobe]="showGlobe"
+    (onAutofill)="autofill(cipher)"
+    class="action-buttons"
+  >
+  </app-action-buttons>
 </button>
