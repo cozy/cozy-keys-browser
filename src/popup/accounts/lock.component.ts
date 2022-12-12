@@ -59,7 +59,7 @@ export class LockComponent extends BaseLockComponent {
       ngZone
     );
     this.successRoute = "/tabs/current";
-    // this.successRoute = 'current';
+    // this.successRoute = "current";
   }
 
   async ngOnInit() {

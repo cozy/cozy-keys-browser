@@ -1,11 +1,10 @@
-import { CryptoFunctionService } from "jslib-common/abstractions/cryptoFunction.service";
 import { KeySuffixOptions } from "jslib-common/abstractions/storage.service";
+import { CryptoService } from "jslib-common/services/crypto.service";
+
+import { CryptoFunctionService } from "jslib-common/abstractions/cryptoFunction.service";
 import { LogService } from "jslib-common/abstractions/log.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
 import { StorageService } from "jslib-common/abstractions/storage.service";
-
-import { CryptoService } from "jslib-common/services/crypto.service";
-
 import { ProfileProviderOrganizationResponse } from "jslib-common/models/response/profileProviderOrganizationResponse";
 import { ProfileOrganizationResponse } from "jslib-common/models/response/profileOrganizationResponse";
 

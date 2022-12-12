@@ -14,6 +14,7 @@ import { ConstantsService } from "jslib-common/services/constants.service";
 import { ContainerService } from "jslib-common/services/container.service";
 import { EnvironmentService } from "jslib-common/services/environment.service";
 import { EventService } from "jslib-common/services/event.service";
+import { ExportService } from "jslib-common/services/export.service";
 import { FileUploadService } from "jslib-common/services/fileUpload.service";
 import { FolderService } from "jslib-common/services/folder.service";
 import { KeyConnectorService } from "jslib-common/services/keyConnector.service";
@@ -31,11 +32,6 @@ import { TotpService } from "jslib-common/services/totp.service";
 // import { UserService } from 'jslib-common/services/user.service';
 import { UserVerificationService } from "jslib-common/services/userVerification.service";
 import { WebCryptoFunctionService } from "jslib-common/services/webCryptoFunction.service";
-
-import { SyncService } from "../popup/services/sync.service";
-import { ExportService } from "../services/export.service";
-import { ApiService } from "../services/api.service";
-import { AuthService } from "../services/auth.service";
 
 import { ApiService as ApiServiceAbstraction } from "jslib-common/abstractions/api.service";
 import { AppIdService as AppIdServiceAbstraction } from "jslib-common/abstractions/appId.service";
@@ -73,9 +69,6 @@ import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "jslib-com
 
 import { AutofillService as AutofillServiceAbstraction } from "../services/abstractions/autofill.service";
 
-import { CozyClientService } from "../popup/services/cozyClient.service";
-import { KonnectorsService } from "../popup/services/konnectors.service";
-
 import { BrowserApi } from "../browser/browserApi";
 import { SafariApp } from "../browser/safariApp";
 
@@ -98,12 +91,17 @@ import BrowserStorageService from "../services/browserStorage.service";
 import I18nService from "../services/i18n.service";
 import VaultTimeoutService from "../services/vaultTimeout.service";
 
-import { MessagingService as MessagingServiceAbstraction } from "../services/abstractions/messaging.service";
-
 /* start Cozy imports */
-import { CipherService } from "../popup/services/cipher.service";
-import { UserService } from "../popup/services/user.service";
+import { ApiService } from "../services/api.service";
+import { AuthService } from "../services/auth.service";
 import { BrowserCryptoService as CryptoService } from "../services/browserCrypto.service";
+import { CipherService } from "../popup/services/cipher.service";
+import { CozyClientService } from "../popup/services/cozyClient.service";
+import { ExportService } from "../services/export.service";
+import { KonnectorsService } from "../popup/services/konnectors.service";
+import { MessagingService as MessagingServiceAbstraction } from "../services/abstractions/messaging.service";
+import { SyncService } from "../popup/services/sync.service";
+import { UserService } from "../popup/services/user.service";
 /* end Cozy imports */
 
 export default class MainBackground {
@@ -366,8 +364,7 @@ export default class MainBackground {
       this.logService,
       this.tokenService,
       this.keyConnectorService,
-      async (expired: boolean) => await this.logout(expired),
-      this.cozyClientService
+      async (expired: boolean) => await this.logout(expired), this.cozyClientService,
     );
     this.eventService = new EventService(
       this.storageService,
@@ -448,6 +445,32 @@ export default class MainBackground {
       : (window as any).chrome.sidebarAction;
 
     // Background
+    /** creation Commented and moved further by Cozy 
+    this.runtimeBackground = new RuntimeBackground(
+      this,
+      this.autofillService,
+      this.platformUtilsService as BrowserPlatformUtilsService,
+      this.storageService,
+      this.i18nService,
+      this.notificationsService,
+      this.systemService,
+      this.environmentService,
+      this.messagingService,
+      this.logService
+    );
+    this.nativeMessagingBackground = new NativeMessagingBackground(
+      this.storageService,
+      this.cryptoService,
+      this.cryptoFunctionService,
+      this.vaultTimeoutService,
+      this.runtimeBackground,
+      this.i18nService,
+      this.userService,
+      this.messagingService,
+      this.appIdService,
+      this.platformUtilsService
+    );
+    END commented by Cozy */
     this.commandsBackground = new CommandsBackground(
       this,
       this.passwordGenerationService,
@@ -519,7 +542,7 @@ export default class MainBackground {
       this.cozyClientService
     );
 
-    // Background
+    // Background (Cozy version)
     this.runtimeBackground = new RuntimeBackground(
       this,
       this.autofillService,
@@ -561,6 +584,7 @@ export default class MainBackground {
     await this.webRequestBackground.init();
     await this.windowsBackground.init();
 
+    /** added by Cozy */
     const checkCurrentStatus = async (msg: any) => {
       const isAuthenticatedNow = await this.userService.isAuthenticated();
       const status = isAuthenticatedNow ? "connected" : "installed";
@@ -592,6 +616,7 @@ export default class MainBackground {
         this.cozyClientService.notifyFlagStatus(msg.flagName);
       }
     });
+    /** END added by Cozy */
 
     return new Promise<void>((resolve) => {
       setTimeout(async () => {
@@ -656,6 +681,7 @@ export default class MainBackground {
     await Promise.all([
       this.eventService.clearEvents(),
       this.syncService.setLastSync(new Date(0)),
+      // this.tokenService.clearToken(),
       this.cryptoService.clearKeys(),
       this.userService.clear(),
       this.settingsService.clear(userId),
@@ -668,7 +694,7 @@ export default class MainBackground {
       this.keyConnectorService.clear(),
     ]);
 
-    // Clear auth and token afterwards, as previous services might need it
+    // Clear auth and token afterwards, as previous services might need it (by Cozy)
     await this.tokenService.clearToken();
 
     this.searchService.clearIndex();

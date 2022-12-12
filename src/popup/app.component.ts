@@ -20,6 +20,7 @@ import { routerTransition } from "./app-routing.animations";
 
 @Component({
   selector: "app-root",
+  // styles: [],
   animations: [routerTransition],
   template: ` <main [@routerTransition]="getState(o)">
     <router-outlet #o="outlet"></router-outlet>

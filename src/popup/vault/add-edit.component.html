@@ -514,37 +514,70 @@
     </div>
     <div class="box">
       <div class="box-content">
-        <!-- <div class="box-content-row" appBoxRow>
-                    <label for="folder">{{'folder' | i18n}}</label>
-                    <select id="folder" name="FolderId" [(ngModel)]="cipher.folderId">
-                        <option *ngFor="let f of folders" [ngValue]="f.id">{{f.name}}</option>
-                    </select>
-                </div> -->
-        <!-- <div class="box-content-row box-content-row-checkbox" appBoxRow>
-                    <label for="favorite">{{'favorite' | i18n}}</label>
-                    <input id="favorite" type="checkbox" name="Favorite" [(ngModel)]="cipher.favorite">
-                </div>
-                <div class="box-content-row box-content-row-checkbox" appBoxRow *ngIf="canUseReprompt">
-                    <label for="passwordPrompt">
-                        {{'passwordPrompt' | i18n}}
-                        <a target="_blank" rel="noopener" appA11yTitle="{{'learnMore' | i18n}}"
-                            href="https://bitwarden.com/help/article/managing-items/#protect-individual-items">
-                            <i class="fa fa-question-circle-o" aria-hidden="true"></i>
-                        </a>
-                    </label>
-                    <input id="passwordPrompt" type="checkbox" name="PasswordPrompt" [ngModel]="reprompt" (change)="repromptChanged()">
-                </div>
-                <button type="button" class="box-content-row box-content-row-flex text-default" appStopClick appBlurClick
-                    (click)="attachments()" *ngIf="editMode && showAttachments && !cloneMode">
-                    <div class="row-main">{{'attachments' | i18n}}</div>
-                    <i class="fa fa-external-link fa-lg fa-fw" aria-hidden="true" *ngIf="openAttachmentsInPopup"></i>
-                    <i class="fa fa-chevron-right row-sub-icon" aria-hidden="true" *ngIf="!openAttachmentsInPopup"></i>
-                </button>
-                <button type="button" class="box-content-row box-content-row-flex text-default" appStopClick appBlurClick
-                    (click)="editCollections()" *ngIf="editMode && cipher.organizationId && !cloneMode">
-                    <div class="row-main">{{'collections' | i18n}}</div>
-                    <i class="fa fa-chevron-right row-sub-icon" aria-hidden="true"></i>
-                </button> -->
+        <!-- Commented by Cozy
+        <div class="box-content-row" appBoxRow>
+          <label for="folder">{{ "folder" | i18n }}</label>
+          <select id="folder" name="FolderId" [(ngModel)]="cipher.folderId">
+            <option *ngFor="let f of folders" [ngValue]="f.id">{{ f.name }}</option>
+          </select>
+        </div>
+        <div class="box-content-row box-content-row-checkbox" appBoxRow>
+          <label for="favorite">{{ "favorite" | i18n }}</label>
+          <input id="favorite" type="checkbox" name="Favorite" [(ngModel)]="cipher.favorite" />
+        </div>
+        <div class="box-content-row box-content-row-checkbox" appBoxRow *ngIf="canUseReprompt">
+          <label for="passwordPrompt">
+            {{ "passwordPrompt" | i18n }}
+            <a
+              target="_blank"
+              rel="noopener"
+              appA11yTitle="{{ 'learnMore' | i18n }}"
+              href="https://bitwarden.com/help/article/managing-items/#protect-individual-items"
+            >
+              <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+            </a>
+          </label>
+          <input
+            id="passwordPrompt"
+            type="checkbox"
+            name="PasswordPrompt"
+            [ngModel]="reprompt"
+            (change)="repromptChanged()"
+          />
+        </div>
+        <button
+          type="button"
+          class="box-content-row box-content-row-flex text-default"
+          appStopClick
+          appBlurClick
+          (click)="attachments()"
+          *ngIf="editMode && showAttachments && !cloneMode"
+        >
+          <div class="row-main">{{ "attachments" | i18n }}</div>
+          <i
+            class="fa fa-external-link fa-lg fa-fw"
+            aria-hidden="true"
+            *ngIf="openAttachmentsInPopup"
+          ></i>
+          <i
+            class="fa fa-chevron-right row-sub-icon"
+            aria-hidden="true"
+            *ngIf="!openAttachmentsInPopup"
+          ></i>
+        </button>
+        <button
+          type="button"
+          class="box-content-row box-content-row-flex text-default"
+          appStopClick
+          appBlurClick
+          (click)="editCollections()"
+          *ngIf="editMode && cipher.organizationId && !cloneMode"
+        >
+          <div class="row-main">{{ "collections" | i18n }}</div>
+          <i class="fa fa-chevron-right row-sub-icon" aria-hidden="true"></i>
+        </button>
+        END -->
+
       </div>
     </div>
     <div class="box">
@@ -553,13 +586,7 @@
       </h2>
       <div class="box-content">
         <div class="box-content-row" appBoxRow>
-          <textarea
-            id="notes"
-            name="Notes"
-            rows="6"
-            [(ngModel)]="cipher.notes"
-            appInputVerbatim
-          ></textarea>
+          <textarea id="notes" name="Notes" rows="6" [(ngModel)]="cipher.notes" appInputVerbatim></textarea>
         </div>
       </div>
     </div>

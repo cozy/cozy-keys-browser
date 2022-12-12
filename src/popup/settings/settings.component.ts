@@ -52,7 +52,7 @@ const RateUrls = {
 export class SettingsComponent implements OnInit {
   @ViewChild("vaultTimeoutActionSelect", { read: ElementRef, static: true })
   vaultTimeoutActionSelectRef: ElementRef;
-  CAN_SHARE_ORGANIZATION = CAN_SHARE_ORGANIZATION;
+  CAN_SHARE_ORGANIZATION = CAN_SHARE_ORGANIZATION; // Cozy need
   vaultTimeouts: any[];
   vaultTimeoutActions: any[];
   vaultTimeoutAction: string;
@@ -317,7 +317,6 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  // TODO: redirect to the Cozy settings
   async changePassword() {
     const confirmed = await this.platformUtilsService.showDialog(
       this.i18nService.t("changeMasterPasswordConfirmation"),
@@ -330,11 +329,38 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  getCozyURL() {
-    return this.cozyClientService.getAppURL("", "");
+  /* commented by Cozy
+  async twoStep() {
+    const confirmed = await this.platformUtilsService.showDialog(
+      this.i18nService.t("twoStepLoginConfirmation"),
+      this.i18nService.t("twoStepLogin"),
+      this.i18nService.t("yes"),
+      this.i18nService.t("cancel")
+    );
+    if (confirmed) {
+      BrowserApi.createNewTab("https://help.bitwarden.com/article/setup-two-step-login/");
+    }
   }
 
-  // TODO: Add a Cozy help
+  async share() {
+    const confirmed = await this.platformUtilsService.showDialog(
+      this.i18nService.t("learnOrgConfirmation"),
+      this.i18nService.t("learnOrg"),
+      this.i18nService.t("yes"),
+      this.i18nService.t("cancel")
+    );
+    if (confirmed) {
+      BrowserApi.createNewTab("https://help.bitwarden.com/article/what-is-an-organization/");
+    }
+  }
+
+  async webVault() {
+    const url = this.environmentService.getWebVaultUrl();
+    BrowserApi.createNewTab(url);
+  }
+  END */
+
+
   async import() {
     const client = await this.cozyClientService.getClientInstance();
 
@@ -355,7 +381,6 @@ export class SettingsComponent implements OnInit {
     BrowserApi.createNewTab(link);
   }
 
-  // TODO: Add a Cozy help
   export() {
     this.router.navigate(["/export"]);
   }
@@ -417,10 +442,16 @@ export class SettingsComponent implements OnInit {
     const deviceType = this.platformUtilsService.getDevice();
     BrowserApi.createNewTab((RateUrls as any)[deviceType]);
   }
+
   isPremiumEnabled() {
     return !this.platformUtilsService.isSafari();
   }
+
   premium() {
     BrowserApi.createNewTab("https://cozy.io/fr/pricing/");
+  }
+
+  getCozyURL() {
+    return this.cozyClientService.getAppURL("", "");
   }
 }

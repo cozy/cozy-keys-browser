@@ -1,11 +1,13 @@
 import AddLoginRuntimeMessage from "src/background/models/addLoginRuntimeMessage";
 import ChangePasswordRuntimeMessage from "src/background/models/changePasswordRuntimeMessage";
 
+// Cozy Imports
 import { cancelButtonNames } from "./consts";
 import { changePasswordButtonContainsNames } from "./consts";
 import { changePasswordButtonNames } from "./consts";
 import { logInButtonNames } from "./consts";
 import { ConstantsService } from "jslib-common/services/constants.service";
+// END Cozy Imports
 
 // See original file:
 // https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/content/notificationBar.ts
@@ -46,6 +48,9 @@ chrome.storage.local.get(ConstantsService.environmentUrlsKey, (urls: any) => {
 });
 
 document.addEventListener("DOMContentLoaded", (event) => {
+  if (window.location.hostname.indexOf("vault.bitwarden.com") > -1) {
+    return;
+  }
   const pageDetails: any[] = [];
   const formData: any[] = [];
   let barType: string = null;
@@ -68,7 +73,27 @@ document.addEventListener("DOMContentLoaded", (event) => {
     'input[type="submit"], input[type="image"], ' + 'button[type="submit"]';
   let domObservationCollectTimeout: number = null;
   let collectIfNeededTimeout: number = null;
+  // let observeDomTimeout: number = null;
   const inIframe = isInIframe();
+/** commented by Cozy
+  const cancelButtonNames = new Set(["cancel", "close", "back"]);
+  const logInButtonNames = new Set([
+    "log in",
+    "sign in",
+    "login",
+    "go",
+    "submit",
+    "continue",
+    "next",
+  ]);
+  const changePasswordButtonNames = new Set([
+    "save password",
+    "update password",
+    "change password",
+    "change",
+  ]);
+  const changePasswordButtonContainsNames = new Set(["pass", "change", "contras", "senha"]);
+END commented by Cozy */
   let disabledAddLoginNotification = false;
   let disabledChangedPasswordNotification = false;
   const formEls = new Set();
@@ -101,7 +126,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         @override by Cozy :
         This log is very useful for reverse engineer the code, keep it for tests
         console.log('notificationBar.js HEARD MESSAGE : ', {'msg.command': msg.command,'msg': msg});
-        */
+    */
 
     if (msg.command === "openNotificationBar") {
       if (inIframe) {
@@ -312,6 +337,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       locateFields(formDataObj);
       formData.push(formDataObj);
       listen(formEl);
+      // formEl.dataset.bitwardenWatching = "1";
     });
   }
 
@@ -621,16 +647,26 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const barPageUrl: string = chrome.extension.getURL(barPage);
 
     const iframe = document.createElement("iframe");
+    // iframe.style.cssText = "height: 42px; width: 100%; border: 0; min-height: initial;";
     iframe.id = "notification-bar-iframe";
     iframe.src = barPageUrl;
 
     const frameDiv = document.createElement("div");
     frameDiv.setAttribute("aria-live", "polite");
     frameDiv.id = "notification-bar";
+    // frameDiv.style.cssText =
+    //   "height: 42px; width: 100%; top: 0; left: 0; padding: 0; position: fixed; " +
+    //   "z-index: 2147483647; visibility: visible;";
     frameDiv.appendChild(iframe);
     document.body.appendChild(frameDiv);
 
     (iframe.contentWindow.location as any) = barPageUrl; // todo BJA : utile ? cf au dessus `iframe.src = barPageUrl;`
+    /** commented by Cozy
+    const spacer = document.createElement("div");
+    spacer.id = "bit-notification-bar-spacer";
+    spacer.style.cssText = "height: 42px;";
+    document.body.insertBefore(spacer, document.body.firstChild);
+    END commented by Cozy*/
   }
 
   function closeBar(explicitClose: boolean) {
@@ -638,6 +674,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (barEl != null) {
       barEl.parentElement.removeChild(barEl);
     }
+    /** commented by Cozy
+    const spacerEl = document.getElementById("bit-notification-bar-spacer");
+    if (spacerEl) {
+      spacerEl.parentElement.removeChild(spacerEl);
+    }
+    END commented by Cozy */
     if (!explicitClose) {
       return;
     }

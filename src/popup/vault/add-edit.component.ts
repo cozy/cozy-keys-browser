@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
 import { BrowserApi } from "../../browser/browserApi";
-import { KonnectorsService } from "../services/konnectors.service";
 
 import { AuditService } from "jslib-common/abstractions/audit.service";
 import { CipherService } from "jslib-common/abstractions/cipher.service";
@@ -32,7 +31,10 @@ import { AddEditComponent as BaseAddEditComponent } from "jslib-angular/componen
 
 import { CipherType } from "jslib-common/enums/cipherType";
 
+/* Cozy imports */
 import { deleteCipher } from "./utils";
+import { KonnectorsService } from "../services/konnectors.service";
+/* END */
 
 @Component({
   selector: "app-vault-add-edit",
@@ -185,6 +187,7 @@ export class AddEditComponent extends BaseAddEditComponent {
       }
       return true;
     }
+
     return false;
   }
 

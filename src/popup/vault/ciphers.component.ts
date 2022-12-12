@@ -1,12 +1,5 @@
 import { Location } from "@angular/common";
-import {
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  NgZone,
-  OnDestroy,
-  OnInit,
-} from "@angular/core";
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { first } from "rxjs/operators";
@@ -21,10 +14,8 @@ import { I18nService } from "jslib-common/abstractions/i18n.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
 import { SearchService } from "jslib-common/abstractions/search.service";
 import { StateService } from "jslib-common/abstractions/state.service";
-import { StorageService } from "jslib-common/abstractions/storage.service";
 
 import { CipherType } from "jslib-common/enums/cipherType";
-import { UriMatchType } from "jslib-common/enums/uriMatchType";
 
 import { CipherView } from "jslib-common/models/view/cipherView";
 import { CollectionView } from "jslib-common/models/view/collectionView";
@@ -34,14 +25,18 @@ import { TreeNode } from "jslib-common/models/domain/treeNode";
 
 import { CiphersComponent as BaseCiphersComponent } from "jslib-angular/components/ciphers.component";
 
-import { AutofillService } from "../../services/abstractions/autofill.service";
-import { LocalConstantsService as ConstantsService } from "../services/constants.service";
-import { KonnectorsService } from "../services/konnectors.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
 
 /** Start Cozy imports */
+import { AutofillService } from "../../services/abstractions/autofill.service";
 import { CozyClientService } from "../services/cozyClient.service";
+import { HostListener } from "@angular/core";
+import { KonnectorsService } from "../services/konnectors.service";
+import { LocalConstantsService as ConstantsService } from "../services/constants.service";
+import { StorageService } from "jslib-common/abstractions/storage.service";
+import { UriMatchType } from "jslib-common/enums/uriMatchType";
 /** End Cozy imports */
+
 const ComponentId = "CiphersComponent";
 
 @Component({
@@ -254,6 +249,40 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
       BrowserApi.closePopup(window);
     }
   }
+  addCipher() {
+    if (this.deleted) {
+      return false;
+    }
+    super.addCipher();
+    this.router.navigate(["/add-cipher"], {
+      queryParams: {
+        folderId: this.folderId,
+        type: this.type,
+        collectionId: this.collectionId,
+      },
+    });
+  }
+
+  back() {
+    // (window as any).routeDirection = "b";
+    this.location.back();
+  }
+
+  showGroupings() {
+    return (
+      !this.isSearching() &&
+      ((this.nestedFolders && this.nestedFolders.length) ||
+        (this.nestedCollections && this.nestedCollections.length))
+    );
+  }
+
+  private async saveState() {
+    this.state = {
+      scrollY: this.popupUtils.getContentScrollY(window, this.scrollingContainer),
+      searchText: this.searchText,
+    };
+    await this.stateService.save(ComponentId, this.state);
+  }
 
   async fillOrLaunchCipher(cipher: CipherView) {
     // console.log('fillOrLaunchCipher()');
@@ -308,30 +337,8 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
     }
   }
 
-  addCipher() {
-    if (this.deleted) {
-      return false;
-    }
-    super.addCipher();
-    this.router.navigate(["/add-cipher"], {
-      queryParams: {
-        folderId: this.folderId,
-        type: this.type,
-        collectionId: this.collectionId,
-      },
-    });
-  }
-
-  back() {
-    this.location.back();
-  }
-
-  showGroupings() {
-    return (
-      !this.isSearching() &&
-      ((this.nestedFolders && this.nestedFolders.length) ||
-        (this.nestedCollections && this.nestedCollections.length))
-    );
+  openWebApp() {
+    window.open(this.cozyClientService.getAppURL("passwords", ""));
   }
 
   emptySearch() {
@@ -342,15 +349,4 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
     this.router.navigate(["/view-cipher"], { queryParams: { cipherId: cipher.id } });
   }
 
-  private async saveState() {
-    this.state = {
-      scrollY: this.popupUtils.getContentScrollY(window, this.scrollingContainer),
-      searchText: this.searchText,
-    };
-    await this.stateService.save(ComponentId, this.state);
-  }
-
-  openWebApp() {
-    window.open(this.cozyClientService.getAppURL("passwords", ""));
-  }
 }

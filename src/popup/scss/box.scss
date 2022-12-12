@@ -286,6 +286,7 @@
     @include themify($themes) {
       color: themed("mutedColor");
     }
+  }
 
     .sub-label {
       margin-left: 10px;
@@ -301,6 +302,7 @@
     @include themify($themes) {
       color: themed("mutedColor");
     }
+  }
 
     > a {
       flex-grow: 0;
@@ -371,6 +373,7 @@
     input + label.sr-only + select {
       margin-top: 5px;
     }
+  }
 
     > a,
     > button {
@@ -522,6 +525,7 @@
           color: themed("disabledIconColor");
           opacity: themed("disabledBoxOpacity");
         }
+      }
 
         &:hover {
           @include themify($themes) {

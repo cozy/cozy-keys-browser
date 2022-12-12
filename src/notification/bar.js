@@ -1,7 +1,10 @@
 require("./bar.scss");
 
-// See original file:
-// https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/notification/bar.js
+/** This file is haevyly personnalized by Cozy
+ * do not try to merge upstream.
+ * See original file:
+ * https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/notification/bar.js
+ */
 document.addEventListener("DOMContentLoaded", () => {
   var i18n = {};
   var lang = window.navigator.language;

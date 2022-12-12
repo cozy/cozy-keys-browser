@@ -1,5 +1,3 @@
-import { BrowserApi } from "../../browser/browserApi";
-
 import { Component, OnInit } from "@angular/core";
 
 import { ThemeType } from "jslib-common/enums/themeType";
@@ -11,7 +9,12 @@ import { StateService } from "jslib-common/abstractions/state.service";
 import { StorageService } from "jslib-common/abstractions/storage.service";
 import { TotpService } from "jslib-common/abstractions/totp.service";
 
+// import { ConstantsService } from "jslib-common/services/constants.service";
+
+/* Cozy imports */
 import { LocalConstantsService as ConstantsService } from "..//services/constants.service";
+import { BrowserApi } from "../../browser/browserApi";
+/* END */
 
 @Component({
   selector: "app-options",

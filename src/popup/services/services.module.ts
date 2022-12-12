@@ -12,10 +12,6 @@ import { UnauthGuardService as BaseUnauthGuardService } from "jslib-angular/serv
 
 import { BrowserApi } from "../../browser/browserApi";
 
-import { CozyClientService } from "./cozyClient.service";
-import { CozySanitizeUrlService } from "./cozySanitizeUrl.service";
-import { KonnectorsService } from "./konnectors.service";
-
 import { ApiService } from "jslib-common/abstractions/api.service";
 import { AppIdService } from "jslib-common/abstractions/appId.service";
 import { AuditService } from "jslib-common/abstractions/audit.service";
@@ -53,6 +49,7 @@ import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.serv
 import { AutofillService } from "../../services/abstractions/autofill.service";
 import BrowserMessagingService from "../../services/browserMessaging.service";
 
+// import { AuthService } from "jslib-common/services/auth.service";
 import { ConsoleLogService } from "jslib-common/services/consoleLog.service";
 import { ConstantsService } from "jslib-common/services/constants.service";
 import { SearchService } from "jslib-common/services/search.service";
@@ -63,8 +60,13 @@ import { PopupUtilsService } from "./popup-utils.service";
 
 import { ThemeType } from "jslib-common/enums/themeType";
 
+/** Cozy imports */
+import { CozyClientService } from "./cozyClient.service";
+import { CozySanitizeUrlService } from "./cozySanitizeUrl.service";
+import { KonnectorsService } from "./konnectors.service";
 import { AuthService } from "../../services/auth.service";
 import { ModalService } from "jslib-angular/services/modal.service";
+/* END */
 
 function getBgService<T>(service: string) {
   return (): T => {

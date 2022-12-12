@@ -14,7 +14,9 @@ import { BrowserApi } from "../browser/browserApi";
 const queryShown = query(
   ":enter, :leave",
   [style({ position: "fixed", width: "100%", height: "100%" })],
-  { optional: true }
+  {
+    optional: true,
+  }
 );
 
 // ref: https://github.com/angular/angular/issues/15477

@@ -48,8 +48,7 @@ describe("Browser Utils Service", () => {
       Object.defineProperty(navigator, "userAgent", {
         configurable: true,
         value:
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)" +
-          "Chrome/62.0.3175.3 Safari/537.36 OPR/49.0.2695.0 (Edition developer)",
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3175.3 Safari/537.36 OPR/49.0.2695.0 (Edition developer)",
       });
 
       Object.defineProperty(window, "opr", {
@@ -76,8 +75,7 @@ describe("Browser Utils Service", () => {
       Object.defineProperty(navigator, "userAgent", {
         configurable: true,
         value:
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko)" +
-          "Version/10.0.3 Safari/602.4.8",
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/602.4.8 (KHTML, like Gecko) Version/10.0.3 Safari/602.4.8",
       });
 
       Object.defineProperty(window, "safariAppExtension", {
@@ -98,8 +96,7 @@ describe("Browser Utils Service", () => {
       Object.defineProperty(navigator, "userAgent", {
         configurable: true,
         value:
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)" +
-          "Chrome/62.0.3202.97 Safari/537.36 Vivaldi/1.94.1008.40",
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.97 Safari/537.36 Vivaldi/1.94.1008.40",
       });
 
       const browserPlatformUtilsService = platformUtilsFactory();

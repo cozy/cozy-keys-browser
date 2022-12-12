@@ -148,6 +148,5 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       // TODO BJA : prompt a message in case 2FA failed, explaining a new code is sent.
     } else {
       this.messagingService.send("loggedIn");
-    }
   }
 }

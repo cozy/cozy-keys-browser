@@ -1,5 +1,5 @@
 import { Location } from "@angular/common";
-import { ChangeDetectorRef, Component, HostListener, NgZone } from "@angular/core";
+import { ChangeDetectorRef, Component, NgZone } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { first } from "rxjs/operators";
@@ -27,15 +27,15 @@ import { CipherType } from "jslib-common/enums/cipherType";
 import { ViewComponent as BaseViewComponent } from "jslib-angular/components/view.component";
 import { BrowserApi } from "../../browser/browserApi";
 import { AutofillService } from "../../services/abstractions/autofill.service";
-import { CozyClientService } from "../services/cozyClient.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
 
 const BroadcasterSubscriptionId = "ChildViewComponent";
 
-import { deleteCipher } from "./utils";
-
 /* start Cozy imports */
+import { deleteCipher } from "./utils";
+import { CozyClientService } from "../services/cozyClient.service";
 import { CAN_SHARE_ORGANIZATION } from "../../cozy/flags";
+import { HostListener } from "@angular/core";
 /* end Cozy imports */
 
 @Component({
@@ -43,16 +43,13 @@ import { CAN_SHARE_ORGANIZATION } from "../../cozy/flags";
   templateUrl: "view.component.html",
 })
 export class ViewComponent extends BaseViewComponent {
-  CAN_SHARE_ORGANIZATION = CAN_SHARE_ORGANIZATION;
   showAttachments = true;
   pageDetails: any[] = [];
   tab: any;
   loadPageDetailsTimeout: number;
   inPopout = false;
-  pannelBack: string = undefined;
-  folderBack: string = undefined;
-  scrollTopBack: number = undefined;
   cipherType = CipherType;
+  CAN_SHARE_ORGANIZATION = CAN_SHARE_ORGANIZATION;
 
   constructor(
     cipherService: CipherService,
@@ -113,18 +110,6 @@ export class ViewComponent extends BaseViewComponent {
         this.cipherId = params.cipherId;
       } else {
         this.close();
-      }
-
-      if (params.pannelBack) {
-        this.pannelBack = params.pannelBack;
-      }
-
-      if (params.folderBack) {
-        this.folderBack = params.folderBack;
-      }
-
-      if (params.scrollTopBack) {
-        this.scrollTopBack = params.scrollTopBack;
       }
 
       await this.load();
@@ -264,7 +249,6 @@ export class ViewComponent extends BaseViewComponent {
       return false;
     }
     if (await super.restore()) {
-      this.pannelBack = undefined;
       this.close();
       return true;
     }
@@ -288,6 +272,52 @@ export class ViewComponent extends BaseViewComponent {
       return true;
     }
     return false;
+  }
+
+  close() {
+    this.location.back();
+  }
+
+  private async loadPageDetails() {
+    this.pageDetails = [];
+    this.tab = await BrowserApi.getTabFromCurrentWindow();
+    if (this.tab == null) {
+      return;
+    }
+    BrowserApi.tabSendMessage(this.tab, {
+      command: "collectPageDetails",
+      tab: this.tab,
+      sender: BroadcasterSubscriptionId,
+    });
+  }
+
+  private async doAutofill() {
+    if (!(await this.promptPassword())) {
+      return false;
+    }
+
+    if (this.pageDetails == null || this.pageDetails.length === 0) {
+      this.platformUtilsService.showToast("error", null, this.i18nService.t("autofillError"));
+      return false;
+    }
+
+    try {
+      this.totpCode = await this.autofillService.doAutoFill({
+        cipher: this.cipher,
+        pageDetails: this.pageDetails,
+        doc: window.document,
+        fillNewPassword: true,
+      });
+      if (this.totpCode != null) {
+        this.platformUtilsService.copyToClipboard(this.totpCode, { window: window });
+      }
+    } catch {
+      this.platformUtilsService.showToast("error", null, this.i18nService.t("autofillError"));
+      this.changeDetectorRef.detectChanges();
+      return false;
+    }
+
+    return true;
   }
 
   /* ---------------------------------------------------------------
@@ -339,8 +369,58 @@ export class ViewComponent extends BaseViewComponent {
     return fullAdress;
   }
 
-  close() {
-    this.location.back();
+  openWebApp() {
+    const hash = "#/vault?action=view&cipherId=" + this.cipherId;
+    window.open(this.cozyClientService.getAppURL("passwords", hash));
+  }
+
+  /* ---------------------------------------------------------------
+    @added by Cozy
+    returns the postal adress as a string
+    the adress will be formated according to the local standard
+    ------------------------------------------------------------------- */
+  getLocalizedAdress(): string {
+    const id = this.cipher.identity;
+    let fullAdress: string;
+    switch (navigator.language.substr(0, 2)) {
+      case "fr":
+        /* for the french official format, see : AFNOR XPZ10-011 (no free acces)
+                a free summary
+                for an individual :
+                    1- CIVILITE-TITRE ou QUALITE-PRENOM-NOM
+                       permet d’identifier le destinataire, la ligne 2 le point de remise.
+                    2- N° APP ou BAL-ETAGE-COULOIR-ESC
+                       correspond à tout ce qui est situé à l’intérieur d’un bâtiment,
+                    3- ENTREE-BATIMENT-IMMEUBLE-RESIDENCE
+                       tout ce qui est à l’extérieur.
+                    4- NUMERO-LIBELLE DE LA VOIE
+                    5- LIEU DIT ou SERVICE PARTICULIER DE DISTRIBUTION
+                    6- CODE POSTAL et LOCALITE DE DESTINATION ou CODE CEDEX et LIBELLE CEDEX
+                for a company :
+                    1. RAISON SOCIALE ou DENOMINATION
+                    2. IDENTITE DU DESTINATAIRE et/ou SERVICE
+                    3. ENTREE-BATIMENT-IMMEUBLE-RES-ZI
+                    4. NUMERO-LIBELLE DE LA VOIE
+                    5. MENTION SPECIALE et COMMUNE GEOGRAPHIQUE - si différente de celle indiquée ligne 6
+                    6. (CODE POSTAL et LOCALITE DE DESTINATION) ou (CODE CEDEX et LIBELLE CEDEX)
+                */
+        fullAdress =
+          (id.address1 ? id.address1 : "") +
+          (id.address2 ? "\n" + id.address2 : "") +
+          (id.address3 ? "\n" + id.address3 : "") +
+          (id.postalCode || id.city ? "\n" + id.postalCode + " " + id.city : "") +
+          (id.country ? "\n" + id.country : "");
+        break;
+      default:
+        fullAdress =
+          (id.address1 ? id.address1 : "") +
+          (id.address2 ? "\n" + id.address2 : "") +
+          (id.address3 ? "\n" + id.address3 : "") +
+          (id.fullAddressPart2 ? "\n" + id.fullAddressPart2 : "") +
+          (id.country ? "\n" + id.country : "");
+        break;
+    }
+    return fullAdress;
   }
 
   openWebApp() {
@@ -348,45 +428,4 @@ export class ViewComponent extends BaseViewComponent {
     window.open(this.cozyClientService.getAppURL("passwords", hash));
   }
 
-  private async loadPageDetails() {
-    this.pageDetails = [];
-    this.tab = await BrowserApi.getTabFromCurrentWindow();
-    if (this.tab == null) {
-      return;
-    }
-    BrowserApi.tabSendMessage(this.tab, {
-      command: "collectPageDetails",
-      tab: this.tab,
-      sender: BroadcasterSubscriptionId,
-    });
-  }
-
-  private async doAutofill() {
-    if (!(await this.promptPassword())) {
-      return false;
-    }
-
-    if (this.pageDetails == null || this.pageDetails.length === 0) {
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("autofillError"));
-      return false;
-    }
-
-    try {
-      this.totpCode = await this.autofillService.doAutoFill({
-        cipher: this.cipher,
-        pageDetails: this.pageDetails,
-        doc: window.document,
-        fillNewPassword: true,
-      });
-      if (this.totpCode != null) {
-        this.platformUtilsService.copyToClipboard(this.totpCode, { window: window });
-      }
-    } catch {
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("autofillError"));
-      this.changeDetectorRef.detectChanges();
-      return false;
-    }
-
-    return true;
-  }
 }

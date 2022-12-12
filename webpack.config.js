@@ -24,6 +24,7 @@ const moduleRules = [
   {
     test: /.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
     include: [path.resolve("src/popup/css/webfonts/"), path.resolve("node_modules/font-awesome")],
+    exclude: /loading.svg/,
     generator: {
       filename: "popup/fonts/[name].[ext]",
     },

@@ -7,12 +7,12 @@ import { LockGuardService } from "jslib-angular/services/lock-guard.service";
 import { DebounceNavigationService } from "./services/debounceNavigationService";
 import { LaunchGuardService } from "./services/launch-guard.service";
 
-// import { EnvironmentComponent } from './accounts/environment.component';
+// import { EnvironmentComponent } from "./accounts/environment.component";
 import { HintComponent } from "./accounts/hint.component";
 import { HomeComponent } from "./accounts/home.component";
 import { LockComponent } from "./accounts/lock.component";
 import { LoginComponent } from "./accounts/login.component";
-// import { RegisterComponent } from './accounts/register.component';
+// import { RegisterComponent } from "./accounts/register.component";
 import { RemovePasswordComponent } from "./accounts/remove-password.component";
 import { SetPasswordComponent } from "./accounts/set-password.component";
 import { SsoComponent } from "./accounts/sso.component";
@@ -31,7 +31,7 @@ import { ExportComponent } from "./settings/export.component";
 import { FolderAddEditComponent } from "./settings/folder-add-edit.component";
 import { FoldersComponent } from "./settings/folders.component";
 import { OptionsComponent } from "./settings/options.component";
-// import { PremiumComponent } from './settings/premium.component';
+// import { PremiumComponent } from "./settings/premium.component";
 import { SettingsComponent } from "./settings/settings.component";
 import { SyncComponent } from "./settings/sync.component";
 
@@ -108,10 +108,10 @@ const routes: Routes = [
     data: { state: "remove-password" },
   },
   // {
-  //     path: 'register',
+  //     path: "register",
   //     component: RegisterComponent,
   //     canActivate: [LaunchGuardService],
-  //     data: { state: 'register' },
+  //     data: { state: "register" },
   // },
   {
     path: "hint",
@@ -120,10 +120,10 @@ const routes: Routes = [
     data: { state: "hint" },
   },
   // {
-  //     path: 'environment',
+  //     path: "environment",
   //     component: EnvironmentComponent,
   //     canActivate: [LaunchGuardService],
-  //     data: { state: 'environment' },
+  //     data: { state: "environment" },
   // },
   {
     path: "ciphers",
@@ -131,14 +131,6 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
     data: { state: "ciphers" },
   },
-  // {
-  //     path: 'current',
-  //     component: CurrentTabComponent,
-  //     canActivate: [AuthGuardService],
-  //     // data: { state: 'tabs_current' },
-  //     data: { state: 'ciphers' },
-  //     runGuardsAndResolvers: 'always',
-  // },
   {
     path: "view-cipher",
     component: ViewComponent,
@@ -232,10 +224,10 @@ const routes: Routes = [
     data: { state: "excluded-domains" },
   },
   // {
-  //     path: 'premium',
+  //     path: "premium",
   //     component: PremiumComponent,
   //     canActivate: [AuthGuardService],
-  //     data: { state: 'premium' },
+  //     data: { state: "premium" },
   // },
   {
     path: "options",

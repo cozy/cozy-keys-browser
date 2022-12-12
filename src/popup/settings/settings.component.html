@@ -1,5 +1,7 @@
 <header>
-  <div class="left"></div>
+  <div class="left">
+    <!-- <app-pop-out></app-pop-out> -->
+  </div>
   <h1 class="center">
     <span class="title">{{ "settings" | i18n }}</span>
   </h1>
@@ -19,10 +21,12 @@
         <div class="row-main">{{ "lockNow" | i18n }}</div>
         <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
       </a>
-      <!-- <a class="box-content-row settings-row box-content-row-flex text-default" routerLink="/folders">
-                <div class="row-main">{{'folders' | i18n}}</div>
-                <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
-            </a> -->
+      <!-- 
+      <a class="box-content-row settings-row box-content-row-flex text-default" routerLink="/folders">
+        <div class="row-main">{{'folders' | i18n}}</div>
+        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+      </a>
+      -->
       <a class="box-content-row settings-row box-content-row-flex text-default" routerLink="/sync">
         <div class="row-main">{{ "sync" | i18n }}</div>
         <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
@@ -92,7 +96,7 @@
         </div>
         <span><i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i></span>
       </a>
-      <!-- TODO: enable this with Cozy's password change
+      <!-- TODO BJA : enable this with Cozy's password change
           -->
       <button
         type="button"
@@ -105,6 +109,7 @@
         <div class="row-main">{{ "changeMasterPassword" | i18n }}</div>
         <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
       </button>
+      <!-- Cozy modifications (added) -->
       <ng-container *ifFlag="CAN_SHARE_ORGANIZATION">
         <button
           type="button"
@@ -117,6 +122,7 @@
           <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
         </button>
       </ng-container>
+      <!-- END Cozy      -->
       <button
         type="button"
         class="box-content-row settings-row box-content-row-flex text-default"
@@ -174,9 +180,21 @@
         <div class="row-main">{{ "about" | i18n }}</div>
         <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
       </button>
+      <!-- Commented by Cozy
       <button
         type="button"
-        class="box-content-row settings-row box-content-row-flex text-default"
+        class="box-content-row box-content-row-flex text-default"
+        appStopClick
+        appBlurClick
+        (click)="share()"
+      >
+        <div class="row-main">{{ "learnOrg" | i18n }}</div>
+        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+      </button>
+      -->
+      <button
+        type="button"
+        class="box-content-row box-content-row-flex text-default"
         appStopClick
         appBlurClick
         (click)="help()"

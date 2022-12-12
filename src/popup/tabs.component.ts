@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 
-import { CozyClientService } from "./services/cozyClient.service";
 import { PopupUtilsService } from "./services/popup-utils.service";
+
+import { CozyClientService } from "./services/cozyClient.service";
 import { Router, NavigationStart, Event as NavigationEvent, RouterOutlet } from "@angular/router";
 import { routerTransition } from "./app-routing.animations";
 

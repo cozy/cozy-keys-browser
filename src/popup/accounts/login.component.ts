@@ -131,6 +131,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     this.onSuccessfulLogin = () => {
       return syncService.fullSync(true);
     };
+    // super.successRoute = "/tabs/vault";
   }
 
   async ngOnInit() {
@@ -329,7 +330,6 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     // Prevent email input
     if (inputUrl.includes("@")) {
       throw new Error("noEmailAsCozyUrl");
-    }
 
     if (this.cozySanitizeUrlService.hasMispelledCozy(inputUrl)) {
       throw new Error("hasMispelledCozy");

@@ -33,25 +33,34 @@
 <content [ngClass]="{ 'stacked-boxes': showGroupings() }">
   <ng-container *ngIf="showGroupings()">
     <!-- 
-        <div class="box list" *ngIf="nestedFolders && nestedFolders.length">
-            <h2 class="box-header">
-                {{'folders' | i18n}}
-            </h2>
-            <div class="box-content single-line">
-                <button type="button" *ngFor="let f of nestedFolders" class="box-content-row" appStopClick appBlurClick
-                    (click)="selectFolder(f.node)">
-                    <div class="row-main">
-                        <div class="icon">
-                            <i class="fa fa-fw fa-lg" aria-hidden="true"
-                                [ngClass]="{'fa-folder-open': f.node.id, 'fa-folder-open-o': !f.node.id}"></i>
-                        </div>
-                        <span class="text">{{f.node.name}}</span>
-                    </div>
-                    <span><i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i></span>
-                </button>
+    <div class="box list" *ngIf="nestedFolders && nestedFolders.length">
+      <h2 class="box-header">
+        {{ "folders" | i18n }}
+      </h2>
+      <div class="box-content single-line">
+        <button
+          type="button"
+          *ngFor="let f of nestedFolders"
+          class="box-content-row"
+          appStopClick
+          appBlurClick
+          (click)="selectFolder(f.node)"
+        >
+          <div class="row-main">
+            <div class="icon">
+              <i
+                class="fa fa-fw fa-lg"
+                aria-hidden="true"
+                [ngClass]="{ 'fa-folder-open': f.node.id, 'fa-folder-open-o': !f.node.id }"
+              ></i>
             </div>
-        </div> 
-        -->
+            <span class="text">{{ f.node.name }}</span>
+          </div>
+          <span><i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i></span>
+        </button>
+      </div>
+    </div>
+    -->
     <div class="box list" *ngIf="nestedCollections && nestedCollections.length">
       <h2 class="box-header">
         {{ "folders" | i18n }}

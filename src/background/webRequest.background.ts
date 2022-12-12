@@ -51,7 +51,9 @@ export default class WebRequestBackground {
     });
     this.webRequest.onErrorOccurred.addListener(
       (details: any) => this.completeAuthRequest(details),
-      { urls: ["http://*/*"] }
+      {
+        urls: ["http://*/*"],
+      }
     );
   }
 

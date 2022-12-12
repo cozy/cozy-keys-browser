@@ -1,40 +1,38 @@
-import { LocalConstantsService } from "../popup/services/constants.service";
-import { ApiService } from "jslib-common/abstractions/api.service";
-
 import { EnvironmentService } from "jslib-common/abstractions/environment.service";
 import { I18nService } from "jslib-common/abstractions/i18n.service";
 import { LogService } from "jslib-common/abstractions/log.service";
 import { MessagingService } from "jslib-common/abstractions/messaging.service";
 import { NotificationsService } from "jslib-common/abstractions/notifications.service";
 import { StorageService } from "jslib-common/abstractions/storage.service";
-import { SyncService } from "jslib-common/abstractions/sync.service";
 import { SystemService } from "jslib-common/abstractions/system.service";
 import { ConstantsService } from "jslib-common/services/constants.service";
 
 import { AutofillService } from "../services/abstractions/autofill.service";
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
 
-import { CryptoService } from "jslib-common/abstractions/crypto.service";
-import { EncString } from "jslib-common/models/domain/encString";
-
 import { BrowserApi } from "../browser/browserApi";
 
 import MainBackground from "./main.background";
 
-import { CipherWithIds as CipherExport } from "jslib-common/models/export/cipherWithIds";
-import { PasswordRequest } from "jslib-common/models/request/passwordRequest";
-
 import { Utils } from "jslib-common/misc/utils";
 import LockedVaultPendingNotificationsItem from "./models/lockedVaultPendingNotificationsItem";
 
-import { HashPurpose } from "jslib-common/enums/hashPurpose";
-import { CozyClientService } from "src/popup/services/cozyClient.service";
-import { KonnectorsService } from "../popup/services/konnectors.service";
+// Cozy Imports
 import { AuthService } from "../services/auth.service";
+import { ApiService } from "jslib-common/abstractions/api.service";
 import { CipherService } from "jslib-common/abstractions/cipher.service";
 import { CipherType } from "jslib-common/enums/cipherType";
+import { CozyClientService } from "src/popup/services/cozyClient.service";
+import { CryptoService } from "jslib-common/abstractions/crypto.service";
+import { EncString } from "jslib-common/models/domain/encString";
+import { HashPurpose } from "jslib-common/enums/hashPurpose";
+import { KonnectorsService } from "../popup/services/konnectors.service";
+import { LocalConstantsService } from "../popup/services/constants.service";
+import { PasswordRequest } from "jslib-common/models/request/passwordRequest";
+import { SyncService } from "jslib-common/abstractions/sync.service";
 import { UserService } from "jslib-common/abstractions/user.service";
 import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
+// End Cozy imports
 
 export default class RuntimeBackground {
   private autofillTimeout: any;
@@ -482,6 +480,7 @@ export default class RuntimeBackground {
     setTimeout(async () => {
       if (this.onInstalledReason != null) {
         if (this.onInstalledReason === "install") {
+          // BrowserApi.createNewTab("https://bitwarden.com/browser-start/");
           await this.setDefaultSettings();
         }
 
