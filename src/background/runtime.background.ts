@@ -20,6 +20,7 @@ import LockedVaultPendingNotificationsItem from "./models/lockedVaultPendingNoti
 // Cozy Imports
 import { AuthService } from "../services/auth.service";
 import { ApiService } from "jslib-common/abstractions/api.service";
+import { CipherWithIds as CipherExport } from "jslib-common/models/export/cipherWithIds";
 import { CipherService } from "jslib-common/abstractions/cipher.service";
 import { CipherType } from "jslib-common/enums/cipherType";
 import { CozyClientService } from "src/popup/services/cozyClient.service";

@@ -548,15 +548,13 @@ import menuCtrler from './menuCtrler';
 
           // walk the tree
           for (var pointEl = el.ownerDocument.elementFromPoint(leftOffset + (rect.right > window.innerWidth ? (window.innerWidth - leftOffset) / 2 : rect.width / 2), topOffset + (rect.bottom > window.innerHeight ? (window.innerHeight - topOffset) / 2 : rect.height / 2)); pointEl && pointEl !== el && pointEl !== document;) {
-              if (pointEl.tagName && 'string' === typeof pointEl.tagName && 'label' === pointEl.tagName.toLowerCase()
-                  && el.labels && 0 < el.labels.length) {
-                  return 0 <= Array.prototype.slice.call(el.labels).indexOf(pointEl);
-              }
+            if (pointEl.tagName && 'string' === typeof pointEl.tagName && 'label' === pointEl.tagName.toLowerCase()
+                && el.labels && 0 < el.labels.length) {
+                return 0 <= Array.prototype.slice.call(el.labels).indexOf(pointEl);
+            }
 
-                pointEl && pointEl !== el && pointEl !== document;) {
-
-              // walk up
-              pointEl = pointEl.parentNode;
+            // walk up
+            pointEl = pointEl.parentNode;
           }
 
           return pointEl === el;

@@ -386,7 +386,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
   cancelSearch() {
     this.searchText = "";
-    this.search();
+    this.search(50);
   }
 
   openWebApp() {

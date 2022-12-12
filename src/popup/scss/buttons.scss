@@ -60,7 +60,6 @@
       background-color: darken(themed("buttonBackgroundColor"), 6%);
       border-color: darken(themed("buttonBorderColor"), 25%);
     }
-  }
 
     &.primary {
       @include themify($themes) {

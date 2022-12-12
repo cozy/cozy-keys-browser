@@ -54,6 +54,7 @@ export class CipherRowComponent {
       }
 
       return subTitleParts.join(", ");
+    }
 
     return c.subTitle;
   }

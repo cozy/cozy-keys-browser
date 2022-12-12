@@ -343,6 +343,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
 
   emptySearch() {
     this.searchText = "";
+    this.search(50);
   }
 
   viewCipher(cipher: CipherView) {

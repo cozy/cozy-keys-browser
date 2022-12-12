@@ -26,6 +26,7 @@ import { PopupUtilsService } from "../services/popup-utils.service";
 import { Utils } from "jslib-common/misc/utils";
 
 /** Start Cozy imports */
+import { HostListener } from "@angular/core";
 import { Location } from "@angular/common";
 import { CozyClientService } from "../services/cozyClient.service";
 /** End Cozy imports */
@@ -198,10 +199,17 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     }, 200);
   }
 
+  @HostListener("window:keydown", ["$event"])
   closeOnEsc(e: KeyboardEvent) {
+    /**
     // If input not empty, use browser default behavior of clearing input instead
     if (e.key === "Escape" && (this.searchText == null || this.searchText === "")) {
       BrowserApi.closePopup(window);
+    }
+    */
+      if (e.key === "Escape") {
+      this.back();
+      e.preventDefault();
     }
   }
 
