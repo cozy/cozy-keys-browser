@@ -18,20 +18,19 @@ import { KeyConnectorService } from "jslib-common/abstractions/keyConnector.serv
 import { LogService } from "jslib-common/abstractions/log.service";
 import { MessagingService } from "jslib-common/abstractions/messaging.service";
 import { PolicyService } from "jslib-common/abstractions/policy.service";
-import { TokenService } from "jslib-common/abstractions/token.service";
 import { SendService } from "jslib-common/abstractions/send.service";
 import { SettingsService } from "jslib-common/abstractions/settings.service";
-import { StorageService } from "jslib-common/abstractions/storage.service";
 
 /* start Cozy imports */
+import { TokenService as TokenServiceAbstraction } from "jslib-common/abstractions/token.service";
 import { SyncCipherNotification } from "jslib-common/models/response/notificationResponse";
 import { ProfileOrganizationResponse } from "jslib-common/models/response/profileOrganizationResponse";
 import { SyncService as BaseSyncService } from "jslib-common/services/sync.service";
-
 import { CozyClientService } from "./cozyClient.service";
-import { UserService } from "./user.service";
-
 import { BrowserCryptoService as CryptoService } from "../../services/browserCrypto.service";
+import { StateService } from "jslib-common/services/state.service";
+import { OrganizationService } from "./organization.service";
+import { ProviderService } from "jslib-common/abstractions/provider.service";
 /* end Cozy imports */
 
 const Keys = {
@@ -53,39 +52,40 @@ let fullSyncPromise: Promise<boolean>;
 
 export class SyncService extends BaseSyncService {
   constructor(
-    private localUserService: UserService,
     private localApiService: ApiService,
     settingsService: SettingsService,
     folderService: FolderService,
     cipherService: CipherService,
     private localCryptoService: CryptoService,
     private localCollectionService: CollectionService,
-    storageService: StorageService,
     private localMessagingService: MessagingService,
     policyService: PolicyService,
     sendService: SendService,
     logService: LogService,
-    private localTtokenService: TokenService,
     keyConnectorService: KeyConnectorService,
+    private localStateService: StateService,
+    private localOrganizationService: OrganizationService,
+    providerService: ProviderService,
     logoutCallback: (expired: boolean) => Promise<void>,
-    private cozyClientService: CozyClientService
+    private cozyClientService: CozyClientService,
+    private tokenService : TokenServiceAbstraction
   ) {
     super(
-      localUserService,
       localApiService,
       settingsService,
       folderService,
       cipherService,
       localCryptoService,
       localCollectionService,
-      storageService,
       localMessagingService,
       policyService,
       sendService,
       logService,
-      localTtokenService,
       keyConnectorService,
-      logoutCallback
+      localStateService,
+      localOrganizationService,
+      providerService,
+      logoutCallback,
     );
   }
 
@@ -105,36 +105,37 @@ export class SyncService extends BaseSyncService {
    * This method allows to synchronize user identity from the server
    */
   async refreshIdentityToken() {
-    const isAuthenticated = await this.localUserService.isAuthenticated();
+    const isAuthenticated = await this.localStateService.getIsAuthenticated();
     if (!isAuthenticated) {
       return;
     }
 
     const client = await this.cozyClientService.getClientInstance();
 
-    const currentToken = await this.localTtokenService.getToken();
+    const currentToken = await this.tokenService.getToken();
 
     await this.localApiService.refreshIdentityToken();
-    const refreshedToken = await this.localTtokenService.getToken();
+    const refreshedToken = await this.tokenService.getToken();
     client.getStackClient().setToken(refreshedToken);
     client.options.token = refreshedToken;
 
     if (currentToken !== refreshedToken) {
-      const newUserId = this.localTtokenService.getUserId();
-      const email = this.localTtokenService.getEmail();
-      const kdf = await this.localUserService.getKdf();
-      const kdfIterations = await this.localUserService.getKdfIterations();
+      const newUserId = this.tokenService.getUserId();
+      const email = this.tokenService.getEmail();
+      const kdf = await this.localStateService.getKdfType();
+      const kdfIterations = await this.localStateService.getKdfIterations();
 
-      await this.localUserService.setInformation(newUserId, email, kdf, kdfIterations);
+      await this.localStateService.setKdfType(kdf);
+      await this.localStateService.setKdfIterations(kdfIterations);
     }
   }
 
   /*
-        Using this function instead of the super :
-            * checks if a fullSync is already running
-            * if yes, the promise of the currently running fullSync is returned
-            * otherwise the promise of a new fullSync is created and returned
-     */
+    Using this function instead of the super :
+      * checks if a fullSync is already running
+      * if yes, the promise of the currently running fullSync is returned
+      * otherwise the promise of a new fullSync is created and returned
+  */
   async fullSync(forceSync: boolean, allowThrowOnError = false): Promise<boolean> {
     if (isfullSyncRunning) {
       return fullSyncPromise;
@@ -150,7 +151,7 @@ export class SyncService extends BaseSyncService {
   }
 
   async syncUpsertCipher(notification: SyncCipherNotification, isEdit: boolean): Promise<boolean> {
-    const isAuthenticated = await this.localUserService.isAuthenticated();
+    const isAuthenticated = await this.localStateService.getIsAuthenticated();
     if (!isAuthenticated) return false;
 
     this.localSyncStarted();
@@ -172,7 +173,7 @@ export class SyncService extends BaseSyncService {
       []
     );
 
-    const userId = await this.localUserService.getUserId();
+    const userId = await this.localStateService.getUserId();
 
     const remoteOrganizationUser = Object.values(remoteOrganizationData.members).find(
       (member) => member.user_id === userId
@@ -192,7 +193,7 @@ export class SyncService extends BaseSyncService {
       return;
     }
 
-    const storedOrganization = await this.localUserService.getOrganization(organizationId);
+    const storedOrganization = await this.localOrganizationService.get(organizationId);
     const storedOrganizationkey = await this.localCryptoService.getOrgKey(organizationId);
 
     if (storedOrganization !== null && storedOrganizationkey != null) {
@@ -206,7 +207,7 @@ export class SyncService extends BaseSyncService {
     );
 
     if (remoteOrganization !== null) {
-      await this.localUserService.upsertOrganization(remoteProfileOrganizationResponse);
+      await this.localOrganizationService.upsertOrganization(remoteProfileOrganizationResponse);
 
       await this.syncUpsertOrganizationKey(organizationId);
 

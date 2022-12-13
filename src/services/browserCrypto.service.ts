@@ -1,50 +1,27 @@
 import { KeySuffixOptions } from "jslib-common/enums/keySuffixOptions";
 import { CryptoService } from "jslib-common/services/crypto.service";
 
-import { CryptoFunctionService } from "jslib-common/abstractions/cryptoFunction.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { StorageService } from "jslib-common/abstractions/storage.service";
 import { ProfileProviderOrganizationResponse } from "jslib-common/models/response/profileProviderOrganizationResponse";
 import { ProfileOrganizationResponse } from "jslib-common/models/response/profileOrganizationResponse";
 
-const Keys = {
-  encOrgKeys: "encOrgKeys",
-};
-
 export class BrowserCryptoService extends CryptoService {
-  constructor(
-    private localStorageService: StorageService,
-    secureStorageService: StorageService,
-    cryptoFunctionService: CryptoFunctionService,
-    platformUtilService: PlatformUtilsService,
-    logService: LogService
-  ) {
-    super(
-      localStorageService,
-      secureStorageService,
-      cryptoFunctionService,
-      platformUtilService,
-      logService
-    );
-  }
 
   async upsertOrganizationKey(organizationId: string, key: string) {
     if (key === "") {
       return;
     }
-    const encOrgKeys = await this.localStorageService.get<any>(Keys.encOrgKeys);
+    const encOrgKeys = await this.stateService.getEncryptedOrganizationKeys();
 
     encOrgKeys[organizationId] = key;
 
     await this.clearOrgKeys();
-    await this.localStorageService.save(Keys.encOrgKeys, encOrgKeys);
+    await this.stateService.setEncryptedOrganizationKeys(encOrgKeys);
   }
 
   setOrgKeys(
     orgs: ProfileOrganizationResponse[],
     providerOrgs: ProfileProviderOrganizationResponse[]
-  ): Promise<{}> {
+  ): Promise<void> {
     const validOrgs = orgs.filter((org) => org.key !== "");
 
     return super.setOrgKeys(validOrgs, providerOrgs);

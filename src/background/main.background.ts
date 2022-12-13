@@ -20,7 +20,7 @@ import { FileUploadService } from "jslib-common/services/fileUpload.service";
 import { FolderService } from "jslib-common/services/folder.service";
 import { KeyConnectorService } from "jslib-common/services/keyConnector.service";
 import { NotificationsService } from "jslib-common/services/notifications.service";
-import { OrganizationService } from "jslib-common/services/organization.service";
+// import { OrganizationService } from "jslib-common/services/organization.service";
 import { PasswordGenerationService } from "jslib-common/services/passwordGeneration.service";
 import { PolicyService } from "jslib-common/services/policy.service";
 import { ProviderService } from "jslib-common/services/provider.service";
@@ -112,6 +112,7 @@ import { CozyClientService } from "../popup/services/cozyClient.service";
 import { ExportService } from "../services/export.service";
 import { KonnectorsService } from "../popup/services/konnectors.service";
 import { MessagingService as MessagingServiceAbstraction } from "../services/abstractions/messaging.service";
+import { OrganizationService } from "../popup/services/organization.service";
 import { SyncService } from "../popup/services/sync.service";
 import { UserService } from "../popup/services/user.service";
 /* end Cozy imports */
@@ -399,7 +400,8 @@ export default class MainBackground {
       this.organizationService,
       this.providerService,
       async (expired: boolean) => await this.logout(expired),
-      this.cozyClientService
+      this.cozyClientService,
+      this.tokenService
     );
     this.eventService = new EventService(
       this.apiService,
@@ -621,16 +623,16 @@ export default class MainBackground {
 
     /** added by Cozy */
     const checkCurrentStatus = async (msg: any) => {
-      const isAuthenticatedNow = await this.userService.isAuthenticated();
+      const isAuthenticatedNow = await this.stateService.getIsAuthenticated();
       const status = isAuthenticatedNow ? "connected" : "installed";
       return status;
     };
 
-    const isAuthenticated = await this.userService.isAuthenticated(); // = connected or installed
+    const isAuthenticated = await this.stateService.getIsAuthenticated(); // = connected or installed
     const isLocked = await this.vaultTimeoutService.isLocked();
     // Cozy explanations :
     // For information, to make the difference betweend locked and loggedout :
-    // const isAuthenticated = await this.userService.isAuthenticated(); // = connected or installed
+    // const isAuthenticated = await this.stateService.getIsAuthenticated(); // = connected or installed
     // const isLocked        = await this.vaultTimeoutService.isLocked()
     //    if  isAuthenticated == false  &  isLocked == true   => loggedout
     //    if  isAuthenticated == true   &  isLocked == true   => locked

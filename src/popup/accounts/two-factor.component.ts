@@ -143,7 +143,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
 
   async submit() {
     await super.submit();
-    const isAuthed = await this.userService.isAuthenticated();
+    const isAuthed = await this.stateService.getIsAuthenticated();
     if (!isAuthed) {
       // TODO BJA : prompt a message in case 2FA failed, explaining a new code is sent.
     } else {

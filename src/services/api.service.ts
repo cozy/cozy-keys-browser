@@ -4,7 +4,7 @@ import { EnvironmentService } from "jslib-common/abstractions/environment.servic
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
 import { TokenService } from "jslib-common/abstractions/token.service";
 
-import { TokenRequest } from "jslib-common/models/request/tokenRequest";
+import { TokenRequest } from "jslib-common/models/request/identityToken/tokenRequest";
 
 import { ErrorResponse } from "jslib-common/models/response/errorResponse";
 import { IdentityTokenResponse } from "../models/response/identityTokenResponse";

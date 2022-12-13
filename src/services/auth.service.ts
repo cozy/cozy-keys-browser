@@ -10,7 +10,7 @@ import { DeviceRequest } from "jslib-common/models/request/deviceRequest";
 // import { KeyConnectorUserKeyRequest } from '../models/request/keyConnectorUserKeyRequest';
 import { KeysRequest } from "jslib-common/models/request/keysRequest";
 import { PreloginRequest } from "jslib-common/models/request/preloginRequest";
-import { TokenRequest } from "jslib-common/models/request/tokenRequest";
+import { TokenRequest } from "jslib-common/models/request/identityToken/tokenRequest";
 
 import { IdentityTokenResponse } from "../models/response/identityTokenResponse";
 import { IdentityTwoFactorResponse } from "jslib-common/models/response/identityTwoFactorResponse";

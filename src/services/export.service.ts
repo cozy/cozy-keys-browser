@@ -5,6 +5,8 @@ import { ExportService as BaseExportService } from "jslib-common/services/export
 import { ApiService } from "jslib-common/abstractions/api.service";
 import { CipherService } from "jslib-common/abstractions/cipher.service";
 import { CryptoService } from "jslib-common/abstractions/crypto.service";
+import { CryptoFunctionService } from "jslib-common/abstractions/cryptoFunction.service";
+
 import { FolderService } from "jslib-common/abstractions/folder.service";
 
 import { CipherWithIds as CipherExport } from "jslib-common/models/export/cipherWithIds";
@@ -38,9 +40,10 @@ export class ExportService extends BaseExportService {
     folderService: FolderService,
     cipherService: CipherService,
     apiService: ApiService,
-    cryptoService: CryptoService
+    cryptoService: CryptoService,
+    cryptoFunctionService: CryptoFunctionService
   ) {
-    super(folderService, cipherService, apiService, cryptoService);
+    super(folderService, cipherService, apiService, cryptoService, cryptoFunctionService);
 
     this._folderService = folderService;
     this._cipherService = cipherService;
@@ -119,6 +122,7 @@ export class ExportService extends BaseExportService {
     cipher.name = c.name;
     cipher.notes = c.notes;
     cipher.fields = null;
+    cipher.reprompt = c.reprompt;
     // Login props
     cipher.login_uri = null;
     cipher.login_username = null;

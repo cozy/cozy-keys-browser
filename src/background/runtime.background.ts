@@ -316,7 +316,7 @@ export default class RuntimeBackground {
           msg.pageDetails.forms,
           msg.pageDetails.fields
         );
-        const isAuthenticated = await this.userService.isAuthenticated(); // = connected or installed
+        const isAuthenticated = await this.stateService.getIsAuthenticated(); // = connected or installed
         const isLocked = isAuthenticated && (await this.vaultTimeoutService.isLocked());
         const pinSet = await this.vaultTimeoutService.isPinLockSet();
         const isPinLocked =
