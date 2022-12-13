@@ -3,9 +3,8 @@ import { I18nService } from "jslib-common/abstractions/i18n.service";
 import { LogService } from "jslib-common/abstractions/log.service";
 import { MessagingService } from "jslib-common/abstractions/messaging.service";
 import { NotificationsService } from "jslib-common/abstractions/notifications.service";
-import { StorageService } from "jslib-common/abstractions/storage.service";
+import { StateService } from "jslib-common/abstractions/state.service";
 import { SystemService } from "jslib-common/abstractions/system.service";
-import { ConstantsService } from "jslib-common/services/constants.service";
 
 import { AutofillService } from "../services/abstractions/autofill.service";
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
@@ -45,12 +44,12 @@ export default class RuntimeBackground {
     private main: MainBackground,
     private autofillService: AutofillService,
     private platformUtilsService: BrowserPlatformUtilsService,
-    private storageService: StorageService,
     private i18nService: I18nService,
     private notificationsService: NotificationsService,
     private systemService: SystemService,
     private environmentService: EnvironmentService,
     private messagingService: MessagingService,
+    private stateService: StateService,
     private logService: LogService,
     private cozyClientService: CozyClientService,
     private konnectorsService: KonnectorsService,
@@ -153,7 +152,7 @@ export default class RuntimeBackground {
         // 1- logout
         await this.cozyClientService.logout();
         await this.authService.clear(); // moved from the logout to avoid potential infinite loop
-        await this.main.logout(msg.expired);
+        await this.main.logout(msg.expired, msg.userId);
         // 2- ask all frames of all tabs to activate login-in-page-menu
         allTabs = await BrowserApi.getAllTabs();
         for (const tab of allTabs) {
@@ -482,7 +481,6 @@ export default class RuntimeBackground {
       if (this.onInstalledReason != null) {
         if (this.onInstalledReason === "install") {
           // BrowserApi.createNewTab("https://bitwarden.com/browser-start/");
-          await this.setDefaultSettings();
         }
 
         // Execute the content-script on all tabs in case cozy-passwords is waiting for an answer

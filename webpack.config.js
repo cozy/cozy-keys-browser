@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { AngularWebpackPlugin } = require("@ngtools/webpack");
+const TerserPlugin = require("terser-webpack-plugin");
 
 if (process.env.NODE_ENV == null) {
   process.env.NODE_ENV = "development";
@@ -26,15 +27,15 @@ const moduleRules = [
     include: [path.resolve("src/popup/css/webfonts/"), path.resolve("node_modules/font-awesome")],
     exclude: /loading.svg/,
     generator: {
-      filename: "popup/fonts/[name].[ext]",
+      filename: "popup/fonts/[name][ext]",
     },
     type: "asset/resource",
   },
   {
     test: /\.(jpe?g|png|gif|svg)$/i,
-    exclude: /.*(fontawesome-webfont|glyphicons-halflings-regular)\.svg/,
+    exclude: /.*(bwi-font|glyphicons-halflings-regular)\.svg/,
     generator: {
-      filename: "popup/images/[name].[ext]",
+      filename: "popup/images/[name][ext]",
     },
     type: "asset/resource",
   },
@@ -99,9 +100,6 @@ const plugins = [
       { from: "./node_modules/font-awesome/fonts/*", to: "inPageMenu/fonts/[name][ext]" },
     ],
   }),
-  new webpack.SourceMapDevToolPlugin({
-    include: ["popup/main.js", "background.js"],
-  }),
   new MiniCssExtractPlugin({
     filename: "[name].css",
     chunkFilename: "chunk-[id].css",
@@ -121,6 +119,10 @@ const plugins = [
   }),
   new webpack.ProvidePlugin({
     process: "process/browser",
+  }),
+  new webpack.SourceMapDevToolPlugin({
+    exclude: [/content\/.*/, /notification\/.*/],
+    filename: "[file].map",
   }),
 ];
 
@@ -143,7 +145,12 @@ const config = {
     "inPageMenu/loginMenu": "./src/inPageMenu/loginMenu.js",
   },
   optimization: {
-    minimize: ENV === "production",
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        exclude: [/content\/.*/, /notification\/.*/],
+      }),
+    ],
     splitChunks: {
       cacheGroups: {
         commons: {

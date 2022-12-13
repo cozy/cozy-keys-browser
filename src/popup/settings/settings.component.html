@@ -19,21 +19,20 @@
         (click)="lock()"
       >
         <div class="row-main">{{ "lockNow" | i18n }}</div>
-        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
       </a>
       <!-- 
       <a class="box-content-row settings-row box-content-row-flex text-default" routerLink="/folders">
         <div class="row-main">{{'folders' | i18n}}</div>
-        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
       </a>
       -->
       <a class="box-content-row settings-row box-content-row-flex text-default" routerLink="/sync">
         <div class="row-main">{{ "sync" | i18n }}</div>
-        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
       </a>
       <a class="box-content-row box-content-row-flex text-default" routerLink="/excluded-domains">
         <div class="row-main">{{ "excludedDomains" | i18n }}</div>
-        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
       </a>
     </div>
   </div>
@@ -44,7 +43,8 @@
         [vaultTimeouts]="vaultTimeouts"
         [formControl]="vaultTimeout"
         ngDefaultControl
-      ></app-vault-timeout-input>
+      >
+      </app-vault-timeout-input>
       <div class="box-content-row settings-row display-block" appBoxRow>
         <label for="vaultTimeoutAction">{{ "vaultTimeoutAction" | i18n }}</label>
         <select
@@ -94,7 +94,7 @@
             ><b>{{ "premiumMembership" | i18n }}</b></span
           >
         </div>
-        <span><i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i></span>
+        <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i></span>
       </a>
       <!-- TODO BJA : enable this with Cozy's password change
           -->
@@ -107,7 +107,7 @@
         *ngIf="showChangeMasterPass"
       >
         <div class="row-main">{{ "changeMasterPassword" | i18n }}</div>
-        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
       </button>
       <!-- Cozy modifications (added) -->
       <ng-container *ifFlag="CAN_SHARE_ORGANIZATION">
@@ -131,7 +131,7 @@
         (click)="logOut()"
       >
         <div class="row-main">{{ "logOut" | i18n }}</div>
-        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
       </button>
     </div>
   </div>
@@ -146,7 +146,7 @@
         (click)="import()"
       >
         <div class="row-main">{{ "importItems" | i18n }}</div>
-        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
       </button>
       <button
         type="button"
@@ -156,7 +156,7 @@
         (click)="export()"
       >
         <div class="row-main">{{ "exportVault" | i18n }}</div>
-        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
       </button>
     </div>
   </div>
@@ -168,7 +168,7 @@
         routerLink="/options"
       >
         <div class="row-main">{{ "options" | i18n }}</div>
-        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
       </a>
       <button
         type="button"
@@ -178,7 +178,7 @@
         (click)="about()"
       >
         <div class="row-main">{{ "about" | i18n }}</div>
-        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
       </button>
       <!-- Commented by Cozy
       <button
@@ -189,7 +189,7 @@
         (click)="share()"
       >
         <div class="row-main">{{ "learnOrg" | i18n }}</div>
-        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
       </button>
       -->
       <button
@@ -200,7 +200,7 @@
         (click)="help()"
       >
         <div class="row-main">{{ "helpFeedback" | i18n }}</div>
-        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
       </button>
       <button
         type="button"
@@ -210,7 +210,7 @@
         (click)="rate()"
       >
         <div class="row-main">{{ "rateExtension" | i18n }}</div>
-        <i class="fa fa-chevron-right fa-lg row-sub-icon" aria-hidden="true"></i>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
         <div class="box-footer in-flex-row-full-width">{{ "rateExtensionDesc" | i18n }}</div>
       </button>
     </div>

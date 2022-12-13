@@ -1,18 +1,11 @@
-import {
-  // Directive,
-  Input,
-  NgZone,
-  OnInit,
-  Component,
-} from "@angular/core";
+import { Directive, Input, NgZone, OnInit } from "@angular/core";
 
 import { Router } from "@angular/router";
 
-// import { take } from 'rxjs/operators';
+import { take } from "rxjs/operators";
 
 import { AuthResult } from "jslib-common/models/domain/authResult";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
 import { AuthService } from "jslib-common/abstractions/auth.service";
 import { CryptoFunctionService } from "jslib-common/abstractions/cryptoFunction.service";
 import { EnvironmentService } from "jslib-common/abstractions/environment.service";
@@ -23,19 +16,22 @@ import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.se
 import { StateService } from "jslib-common/abstractions/state.service";
 import { StorageService } from "jslib-common/abstractions/storage.service";
 
-import { SyncService } from "jslib-common/abstractions/sync.service";
-import { PreloginRequest } from "jslib-common/models/request/preloginRequest";
-
 import { ConstantsService } from "jslib-common/services/constants.service";
 
 import { Utils } from "jslib-common/misc/utils";
 
-import { CaptchaProtectedComponent } from "jslib-angular/components/captchaProtected.component";
-
-import BrowserMessagingService from "../../services/browserMessaging.service";
+import { CaptchaProtectedComponent } from "./captchaProtected.component";
 
 /* start Cozy imports */
+import BrowserMessagingService from "../../services/browserMessaging.service";
+import { SyncService } from "jslib-common/abstractions/sync.service";
+import { AuthResult } from "jslib-common/models/domain/authResult";
+import { PreloginRequest } from "jslib-common/models/request/preloginRequest";
+import { PreloginResponse } from "jslib-common/models/response/preloginResponse";
 import { generateWebLink, Q } from "cozy-client";
+import { ApiService } from "jslib-common/abstractions/api.service";
+import { Component } from "@angular/core";
+import { CozyClientService } from "../services/cozyClient.service";
 import { CozySanitizeUrlService } from "../services/cozySanitizeUrl.service";
 /* end Cozy imports */
 
@@ -89,7 +85,7 @@ const shouldRedirectToOIDCPasswordPage = (cozyConfiguration: CozyConfiguration) 
  *    https://github.com/bitwarden/browser/blob/
  *    af8274247b2242fe93ad2f7ca4c13f9f7ecf2860/src/popup/accounts/login.component.ts
  */
-export class LoginComponent extends CaptchaProtectedComponent implements OnInit {
+export class LoginComponent implements OnInit {
   @Input() cozyUrl: string = "";
   @Input() rememberCozyUrl = true;
 
@@ -100,9 +96,11 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
   onSuccessfulLogin: () => Promise<any>;
   onSuccessfulLoginNavigate: () => Promise<any>;
   onSuccessfulLoginTwoFactorNavigate: () => Promise<any>;
+  onSuccessfulLoginForceResetNavigate: () => Promise<any>;
 
   protected twoFactorRoute = "2fa";
   protected successRoute = "/tabs/vault";
+  protected forcePasswordResetRoute = "update-temp-password";
 
   constructor(
     protected authService: AuthService,
@@ -116,11 +114,11 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     private storageService: StorageService,
     protected logService: LogService,
     protected ngZone: NgZone,
-    protected syncService: SyncService,
     protected cozySanitizeUrlService: CozySanitizeUrlService,
+    protected syncService: SyncService,
+    protected stateService: StorageService,
     private apiService: ApiService
   ) {
-    super(environmentService, i18nService, platformUtilsService);
     this.authService = authService;
     this.router = router;
     this.platformUtilsService = platformUtilsService;
@@ -131,7 +129,6 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     this.onSuccessfulLogin = () => {
       return syncService.fullSync(true);
     };
-    // super.successRoute = "/tabs/vault";
   }
 
   async ngOnInit() {
@@ -172,6 +169,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
       // The email is based on the URL and necessary for login
       const hostname = Utils.getHostname(loginUrl);
       this.email = "me@" + hostname;
+
       this.formPromise = this.authService.logIn(this.email, this.masterPassword).catch((e) => {
         if (e.response && e.response.error && e.response.error === "invalid password") {
           this.platformUtilsService.showToast(
@@ -198,9 +196,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
       } else {
         await this.storageService.remove(Keys.rememberedCozyUrl);
       }
-      if (this.handleCaptchaRequired(response)) {
-        return;
-      } else if (response.twoFactor) {
+      if (response.twoFactor) {
         if (this.onSuccessfulLoginTwoFactorNavigate != null) {
           this.onSuccessfulLoginTwoFactorNavigate();
         } else {
@@ -218,7 +214,9 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
         if (this.onSuccessfulLoginNavigate != null) {
           this.onSuccessfulLoginNavigate();
         } else {
-          this.router.navigate([this.successRoute]);
+          this.router.navigate([this.successRoute], {
+            queryParams: { activatedPanel: "currentPageCiphers" },
+          });
         }
       }
     } catch (e) {
@@ -240,42 +238,39 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     this.showPassword = !this.showPassword;
     document.getElementById("masterPassword").focus();
   }
+  /** Commented by Cozy
+    async launchSsoBrowser(clientId: string, ssoRedirectUri: string) {
+        // Generate necessary sso params
+        const passwordOptions: any = {
+            type: 'password',
+            length: 64,
+            uppercase: true,
+            lowercase: true,
+            numbers: true,
+            special: false,
+        };
+        const state = await this.passwordGenerationService.generatePassword(passwordOptions);
+        const ssoCodeVerifier = await this.passwordGenerationService.generatePassword(passwordOptions);
+        const codeVerifierHash = await this.cryptoFunctionService.hash(ssoCodeVerifier, 'sha256');
+        const codeChallenge = Utils.fromBufferToUrlB64(codeVerifierHash);
 
-  async launchSsoBrowser(clientId: string, ssoRedirectUri: string) {
-    // Generate necessary sso params
-    const passwordOptions: any = {
-      type: "password",
-      length: 64,
-      uppercase: true,
-      lowercase: true,
-      numbers: true,
-      special: false,
-    };
-    const state = await this.passwordGenerationService.generatePassword(passwordOptions);
-    const ssoCodeVerifier = await this.passwordGenerationService.generatePassword(passwordOptions);
-    const codeVerifierHash = await this.cryptoFunctionService.hash(ssoCodeVerifier, "sha256");
-    const codeChallenge = Utils.fromBufferToUrlB64(codeVerifierHash);
+        // Save sso params
+        await this.storageService.save(ConstantsService.ssoStateKey, state);
+        await this.storageService.save(ConstantsService.ssoCodeVerifierKey, ssoCodeVerifier);
 
-    // Save sso params
-    await this.storageService.save(ConstantsService.ssoStateKey, state);
-    await this.storageService.save(ConstantsService.ssoCodeVerifierKey, ssoCodeVerifier);
+        // Build URI
+        const webUrl = this.environmentService.getWebVaultUrl();
 
-    // Build URI
-    const webUrl = this.environmentService.getWebVaultUrl();
+        // Launch browser
+        this.platformUtilsService.launchUri(webUrl + '/#/sso?clientId=' + clientId +
+            '&redirectUri=' + encodeURIComponent(ssoRedirectUri) +
+            '&state=' + state + '&codeChallenge=' + codeChallenge);
+    }
 
-    // Launch browser
-    this.platformUtilsService.launchUri(
-      webUrl +
-        "/#/sso?clientId=" +
-        clientId +
-        "&redirectUri=" +
-        encodeURIComponent(ssoRedirectUri) +
-        "&state=" +
-        state +
-        "&codeChallenge=" +
-        codeChallenge
-    );
-  }
+    protected focusInput() {
+        document.getElementById(this.email == null || this.email === '' ? 'email' : 'masterPassword').focus();
+    }
+    END */
 
   async forgotPassword() {
     if (!this.cozyUrl) {
@@ -322,6 +317,26 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
     }
   }
 
+  private getCozyConfiguration = async (): Promise<CozyConfiguration> => {
+    const preloginResponse = await this.apiService.postPrelogin(new PreloginRequest(this.cozyUrl));
+
+    const { HasCiphers, OIDC, FlatSubdomains } = (preloginResponse as any).response;
+
+    return { HasCiphers, OIDC, FlatSubdomains };
+  };
+
+  /**
+   * Initialize EnvironmentService with cozyUrl input so it can be used by ApiService
+   * Also save cozyUrl input in storageService so it will be pre-filled on next popup opening
+   * @param cozyUrl - The Cozy address
+   */
+  private initializeEnvForCozy = async (cozyUrl: string) => {
+    await this.environmentService.setUrls({
+      base: cozyUrl + "/bitwarden",
+    });
+    this.storageService.save(Keys.rememberedCozyUrl, cozyUrl);
+  };
+
   sanitizeUrlInput(inputUrl: string): string {
     // Prevent empty url
     if (!inputUrl) {
@@ -341,30 +356,4 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit 
       this.cozySanitizeUrlService.cozyDomain
     );
   }
-
-  protected focusInput() {
-    document
-      .getElementById(this.email == null || this.email === "" ? "email" : "masterPassword")
-      .focus();
-  }
-
-  private getCozyConfiguration = async (): Promise<CozyConfiguration> => {
-    const preloginResponse = await this.apiService.postPrelogin(new PreloginRequest(this.cozyUrl));
-
-    const { HasCiphers, OIDC, FlatSubdomains } = (preloginResponse as any).response;
-
-    return { HasCiphers: HasCiphers, OIDC: OIDC, FlatSubdomains: FlatSubdomains };
-  };
-
-  /**
-   * Initialize EnvironmentService with cozyUrl input so it can be used by ApiService
-   * Also save cozyUrl input in storageService so it will be pre-filled on next popup opening
-   * @param cozyUrl - The Cozy address
-   */
-  private initializeEnvForCozy = async (cozyUrl: string) => {
-    await this.environmentService.setUrls({
-      base: cozyUrl + "/bitwarden",
-    });
-    this.storageService.save(Keys.rememberedCozyUrl, cozyUrl);
-  };
 }

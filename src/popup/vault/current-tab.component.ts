@@ -14,10 +14,8 @@ import { I18nService } from "jslib-common/abstractions/i18n.service";
 import { PasswordRepromptService } from "jslib-common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
 import { SearchService } from "jslib-common/abstractions/search.service";
-import { StorageService } from "jslib-common/abstractions/storage.service";
+import { StateService } from "jslib-common/abstractions/state.service";
 import { SyncService } from "jslib-common/abstractions/sync.service";
-
-import { ConstantsService } from "jslib-common/services/constants.service";
 
 import { AutofillService } from "../../services/abstractions/autofill.service";
 
@@ -66,7 +64,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private syncService: SyncService,
     private searchService: SearchService,
-    private storageService: StorageService,
+    private stateService: StateService,
     private passwordRepromptService: PasswordRepromptService,
     private cozyClientService: CozyClientService,
     private location: Location
@@ -232,12 +230,8 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     });
 
     const otherTypes: CipherType[] = [];
-    const dontShowCards = await this.storageService.get<boolean>(
-      ConstantsService.dontShowCardsCurrentTab
-    );
-    const dontShowIdentities = await this.storageService.get<boolean>(
-      ConstantsService.dontShowIdentitiesCurrentTab
-    );
+    const dontShowCards = await this.stateService.getDontShowCardsCurrentTab();
+    const dontShowIdentities = await this.stateService.getDontShowIdentitiesCurrentTab();
     if (!dontShowCards) {
       otherTypes.push(CipherType.Card);
     }

@@ -1,20 +1,18 @@
 import { BrowserApi } from "../browser/browserApi";
 import { SafariApp } from "../browser/safariApp";
 
+import { ClientType } from "jslib-common/enums/clientType";
 import { DeviceType } from "jslib-common/enums/deviceType";
 import { ThemeType } from "jslib-common/enums/themeType";
 
 import { MessagingService } from "jslib-common/abstractions/messaging.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { StorageService } from "jslib-common/abstractions/storage.service";
 
-import { ConstantsService } from "jslib-common/services/constants.service";
+import { StateService } from "../services/abstractions/state.service";
 
 const DialogPromiseExpiration = 600000; // 10 minutes
 
 export default class BrowserPlatformUtilsService implements PlatformUtilsService {
-  identityClientId: string = "browser";
-
   private showDialogResolves = new Map<number, { resolve: (value: boolean) => void; date: Date }>();
   private passwordDialogResolves = new Map<
     number,
@@ -25,7 +23,7 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
 
   constructor(
     private messagingService: MessagingService,
-    private storageService: StorageService,
+    private stateService: StateService,
     private clipboardWriteCallback: (clipboardValue: string, clearMs: number) => void,
     private biometricCallback: () => Promise<boolean>
   ) {}
@@ -62,6 +60,10 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
   getDeviceString(): string {
     const device = DeviceType[this.getDevice()].toLowerCase();
     return device.replace("extension", "");
+  }
+
+  getClientType(): ClientType {
+    return ClientType.Browser;
   }
 
   isFirefox(): boolean {
@@ -367,7 +369,7 @@ export default class BrowserPlatformUtilsService implements PlatformUtilsService
   }
 
   async getEffectiveTheme() {
-    const theme = await this.storageService.get<ThemeType>(ConstantsService.themeKey);
+    const theme = (await this.stateService.getTheme()) as ThemeType;
     if (theme == null || theme === ThemeType.System) {
       return this.getDefaultSystemTheme();
     } else {

@@ -70,3 +70,23 @@ Native Messaging (communication between the desktop application and browser exte
 Out of the box, the desktop application can only communicate with the production browser extension. When you enable browser integration in the desktop application, the application generates manifests which contain the production IDs of the browser extensions. To enable communication between the desktop application and development versions of browser extensions, add the development IDs to the `allowed_extensions` section of the corresponding manifests.
 
 Manifests are located in the `browser` subdirectory of the Bitwarden configuration directory. For instance, on Windows the manifests are located at `C:\Users\<user>\AppData\Roaming\Bitwarden\browsers` and on macOS these are in `Application Support` for various browsers ([for example](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#manifest_location)). Note that disabling the desktop integration will delete the manifests, and the files will need to be updated again.
+
+## Prettier
+
+We recently migrated to using Prettier as code formatter. All previous branches will need to updated to avoid large merge conflicts using the following steps:
+
+1. Check out your local Branch
+2. Run `git merge cebee8aa81b87cc26157e5bd0f879db254db9319`
+3. Resolve any merge conflicts, commit.
+4. Run `npm run prettier`
+5. Commit
+6. Run `git merge -Xours 8fe821b9a3f9728bcb02d607ca75add468d380c1`
+7. Push
+
+### Git blame
+
+We also recommend that you configure git to ignore the prettier revision using:
+
+```bash
+git config blame.ignoreRevsFile .git-blame-ignore-revs
+```

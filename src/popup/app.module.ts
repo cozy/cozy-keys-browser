@@ -185,7 +185,6 @@ import { IconComponent } from "./components/icon.component";
 import { IfFlagDirective } from "../cozy/components/flag-conditional/if-flag.directive";
 /* end Cozy imports */
 
-
 @NgModule({
   imports: [
     A11yModule,

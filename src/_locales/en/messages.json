@@ -112,11 +112,11 @@
   "noMatchingLogins": {
     "message": "No matching logins."
   },
-  "vaultLocked": {
-    "message": "Vault is locked."
+  "unlockVaultMenu": {
+    "message": "Unlock your vault"
   },
-  "vaultLoggedOut": {
-    "message": "Vault is logged out."
+  "loginToVaultMenu": {
+    "message": "Log in to your vault"
   },
   "autoFillInfo": {
     "message": "You don't have any recorded login to fill the current web page."

@@ -112,11 +112,11 @@
   "noMatchingLogins": {
     "message": "Aucun site correspondant."
   },
-  "vaultLocked": {
-    "message": "Le coffre est verrouillé."
+  "unlockVaultMenu": {
+    "message": "Déverrouillez votre coffre"
   },
-  "vaultLoggedOut": {
-    "message": "Le coffre est déconnecté."
+  "loginToVaultMenu": {
+    "message": "Connectez-vous à votre coffre"
   },
   "autoFillInfo": {
     "message": "Aucun identifiant enregistré pour remplir la page actuelle."
@@ -271,6 +271,18 @@
   "length": {
     "message": "Longueur"
   },
+  "uppercase": {
+    "message": "Majuscules (A-Z)"
+  },
+  "lowercase": {
+    "message": "Minuscules (a-z)"
+  },
+  "numbers": {
+    "message": "Chiffres (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Caractères spéciaux (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Nombre de mots"
   },
@@ -369,7 +381,7 @@
     "message": "Confirmer votre identité"
   },
   "yourVaultIsLocked": {
-    "message": "Votre coffre est verrouillé, confirmez votre mot de passe pour continuer."
+    "message": "Votre coffre est verrouillé. Vérifiez votre identité pour continuer."
   },
   "unlock": {
     "message": "Déverrouiller"
@@ -1909,16 +1921,16 @@
     "message": "Sélectionnez un dossier..."
   },
   "ssoCompleteRegistration": {
-    "message": "Afin de terminer la connexion avec SSO, veuillez définir un mot de passe maître pour accéder à votre coffre-fort et le protéger."
+    "message": "Afin de terminer la connexion avec SSO, veuillez définir un mot de passe maître pour accéder à votre coffre et le protéger."
   },
   "hours": {
-    "message": "heures"
+    "message": "Heures"
   },
   "minutes": {
-    "message": "minutes"
+    "message": "Minutes"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Les politiques de votre organisation affectent le délai d'expiration de votre coffre-fort. Le délai d'expiration maximal autorisé est de $HOURS$ heure(s) et $MINUTES$ minute(s).",
+    "message": "Les politiques de votre organisation affectent le délai d'expiration de votre coffre-fort. Le délai d'expiration maximal autorisé est de $HOURS$ heure(s) et $MINUTES$ minute(s)",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1931,16 +1943,16 @@
     }
   },
   "vaultTimeoutToLarge": {
-    "message": "Le délai d'expiration de votre coffre-fort dépasse la restriction définie par votre organisation."
+    "message": "Le délai d'expiration de votre coffre dépasse les restrictions définies par votre organisation."
   },
   "vaultExportDisabled": {
-    "message": "Exportation du coffre-fort désactivée"
+    "message": "Export du coffre désactivé"
   },
   "personalVaultExportPolicyInEffect": {
-    "message": "Une ou plusieurs politiques d'entreprise vous empêchent d'exporter votre coffre-fort personnel."
+    "message": "Une ou plusieurs politiques d'organisation vous empêchent d'exporter votre coffre personnel."
   },
   "copyCustomFieldNameInvalidElement": {
-    "message": "Un élément de formulaire valide n'a pu être identifié. Essayez plutôt d'inspecter le HTML."
+    "message": "Aucun élément de formulaire valide n'a pu être identifié. Essayez plutôt d'inspecter le HTML."
   },
   "copyCustomFieldNameNotUnique": {
     "message": "Aucun identifiant unique trouvé."

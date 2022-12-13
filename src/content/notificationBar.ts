@@ -48,7 +48,7 @@ chrome.storage.local.get(ConstantsService.environmentUrlsKey, (urls: any) => {
 });
 
 document.addEventListener("DOMContentLoaded", (event) => {
-  if (window.location.hostname.indexOf("vault.bitwarden.com") > -1) {
+  if (window.location.hostname.endsWith("vault.bitwarden.com")) {
     return;
   }
   const pageDetails: any[] = [];
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let collectIfNeededTimeout: number = null;
   // let observeDomTimeout: number = null;
   const inIframe = isInIframe();
-/** commented by Cozy
+  /** commented by Cozy
   const cancelButtonNames = new Set(["cancel", "close", "back"]);
   const logInButtonNames = new Set([
     "log in",
@@ -93,28 +93,37 @@ document.addEventListener("DOMContentLoaded", (event) => {
     "change",
   ]);
   const changePasswordButtonContainsNames = new Set(["pass", "change", "contras", "senha"]);
-END commented by Cozy */
+  END commented by Cozy */
   let disabledAddLoginNotification = false;
   let disabledChangedPasswordNotification = false;
   const formEls = new Set();
 
-  chrome.storage.local.get("neverDomains", (ndObj: any) => {
-    const domains = ndObj.neverDomains;
+  const activeUserIdKey = "activeUserId";
+  let activeUserId: string;
+  chrome.storage.local.get(activeUserIdKey, (obj: any) => {
+    if (obj == null || obj[activeUserIdKey] == null) {
+      return;
+    }
+    activeUserId = obj[activeUserIdKey];
+  });
+
+  chrome.storage.local.get(activeUserId, (obj: any) => {
+    if (obj?.[activeUserId] == null) {
+      return;
+    }
+
+    const domains = obj[activeUserId].settings.neverDomains;
     if (domains != null && domains.hasOwnProperty(window.location.hostname)) {
       return;
     }
 
-    chrome.storage.local.get("disableAddLoginNotification", (disAddObj: any) => {
-      disabledAddLoginNotification =
-        disAddObj != null && disAddObj.disableAddLoginNotification === true;
-      chrome.storage.local.get("disableChangedPasswordNotification", (disChangedObj: any) => {
-        disabledChangedPasswordNotification =
-          disChangedObj != null && disChangedObj.disableChangedPasswordNotification === true;
-        if (!disabledAddLoginNotification || !disabledChangedPasswordNotification) {
-          collectIfNeededWithTimeout();
-        }
-      });
-    });
+    disabledAddLoginNotification = obj[activeUserId].settings.disableAddLoginNotification;
+    disabledChangedPasswordNotification =
+      obj[activeUserId].settings.disableChangedPasswordNotification;
+
+    if (!disabledAddLoginNotification || !disabledChangedPasswordNotification) {
+      collectIfNeededWithTimeout();
+    }
   });
 
   chrome.runtime.onMessage.addListener((msg: any, sender: any, sendResponse: Function) => {

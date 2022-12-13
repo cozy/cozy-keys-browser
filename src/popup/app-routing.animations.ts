@@ -208,6 +208,9 @@ export const routerTransition = trigger("routerTransition", [
   transition("tabs => sync", inSlideLeft),
   transition("sync => tabs", outSlideRight),
 
+  transition("tabs => excluded-domains", inSlideLeft),
+  transition("excluded-domains => tabs", outSlideRight),
+
   transition("tabs => options", inSlideLeft),
   transition("options => tabs", outSlideRight),
 

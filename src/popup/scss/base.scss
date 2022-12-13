@@ -249,23 +249,13 @@ header {
       color: themed("headerInputColor");
     }
 
-    .fa {
-      width: 15px;
+    .bwi {
+      position: absolute;
+      top: 15px;
+      left: 20px;
+
       @include themify($themes) {
         color: themed("headerInputPlaceholderColor");
-      }
-    }
-
-    .fa-search {
-      margin-left: 7px;
-      margin-right: 7px;
-    }
-
-    .fa-close {
-      margin-left: 0px;
-      margin-right: 7px;
-      &:hover {
-        color: white !important;
       }
     }
 
@@ -322,6 +312,7 @@ header {
 
       &:focus {
         outline: none;
+
         @include themify($themes) {
           background-color: themed("headerInputBackgroundFocusColor");
         }
@@ -342,25 +333,26 @@ header {
         display: none;
         padding: 0;
       }
+  }
+
+  .left + .search,
+  .left + .sr-only + .search {
+    padding-left: 0;
+
+    .bwi {
+      left: 10px;
     }
   }
+
+  /* Commented by Cozy
+  .search + .right {
+    margin-left: -10px;
+  }
+  */
 }
 
 .content {
   padding: 15px;
-}
-
-.ciphersPanel {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  @include themify($themes) {
-    background-color: themed("backgroundColor");
-  }
-  transform: translateX(100%);
-  width: 100%;
-  z-index: 10;
-  box-shadow: -3px 0 2px -2px gray;
 }
 
 .tabs {
@@ -512,7 +504,13 @@ content {
 .full-loading-spinner {
   text-align: center;
 
-  .fa {
+  .no-items-image {
+    @include themify($themes) {
+      content: url("../images/search-desktop" + themed("svgSuffix"));
+    }
+  }
+
+  .bwi {
     margin-bottom: 10px;
 
     @include themify($themes) {

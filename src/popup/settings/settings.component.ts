@@ -7,16 +7,13 @@ import { BrowserApi } from "../../browser/browserApi";
 
 import { DeviceType } from "jslib-common/enums/deviceType";
 
-import { ConstantsService } from "jslib-common/services/constants.service";
-
 import { CryptoService } from "jslib-common/abstractions/crypto.service";
 import { EnvironmentService } from "jslib-common/abstractions/environment.service";
 import { I18nService } from "jslib-common/abstractions/i18n.service";
 import { KeyConnectorService } from "jslib-common/abstractions/keyConnector.service";
 import { MessagingService } from "jslib-common/abstractions/messaging.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { StorageService } from "jslib-common/abstractions/storage.service";
-import { UserService } from "jslib-common/abstractions/user.service";
+import { StateService } from "jslib-common/abstractions/state.service";
 import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
 
@@ -69,12 +66,11 @@ export class SettingsComponent implements OnInit {
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private vaultTimeoutService: VaultTimeoutService,
-    private storageService: StorageService,
     public messagingService: MessagingService,
     private router: Router,
     private environmentService: EnvironmentService,
     private cryptoService: CryptoService,
-    private userService: UserService,
+    private stateService: StateService,
     private popupUtilsService: PopupUtilsService,
     private modalService: ModalService,
     private keyConnectorService: KeyConnectorService,
@@ -117,11 +113,11 @@ export class SettingsComponent implements OnInit {
       this.vaultTimeout.setValue(timeout);
     }
     this.previousVaultTimeout = this.vaultTimeout.value;
-    this.vaultTimeout.valueChanges.subscribe((value) => {
-      this.saveVaultTimeout(value);
+    this.vaultTimeout.valueChanges.subscribe(async (value) => {
+      await this.saveVaultTimeout(value);
     });
 
-    const action = await this.storageService.get<string>(ConstantsService.vaultTimeoutActionKey);
+    const action = await this.stateService.getVaultTimeoutAction();
     this.vaultTimeoutAction = action == null ? "lock" : action;
 
     const pinSet = await this.vaultTimeoutService.isPinLockSet();
@@ -130,8 +126,7 @@ export class SettingsComponent implements OnInit {
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
     this.biometric = await this.vaultTimeoutService.isBiometricLockSet();
     this.disableAutoBiometricsPrompt =
-      (await this.storageService.get<boolean>(ConstantsService.disableAutoBiometricsPromptKey)) ??
-      true;
+      (await this.stateService.getDisableAutoBiometricsPrompt()) ?? true;
     this.showChangeMasterPass = !(await this.keyConnectorService.getUsesKeyConnector());
   }
 
@@ -252,21 +247,21 @@ export class SettingsComponent implements OnInit {
         titleText: this.i18nService.t("awaitDesktop"),
         text: this.i18nService.t("awaitDesktopDesc"),
         icon: "info",
-        iconHtml: '<i class="swal-custom-icon fa fa-info-circle text-info"></i>',
+        iconHtml: '<i class="swal-custom-icon bwi bwi-info-circle text-info"></i>',
         showCancelButton: true,
         cancelButtonText: this.i18nService.t("cancel"),
         showConfirmButton: false,
         allowOutsideClick: false,
       });
 
-      await this.storageService.save(ConstantsService.biometricAwaitingAcceptance, true);
+      await this.stateService.setBiometricAwaitingAcceptance(true);
       await this.cryptoService.toggleKey();
 
       await Promise.race([
-        submitted.then((result) => {
+        submitted.then(async (result) => {
           if (result.dismiss === Swal.DismissReason.cancel) {
             this.biometric = false;
-            this.storageService.remove(ConstantsService.biometricAwaitingAcceptance);
+            await this.stateService.setBiometricAwaitingAcceptance(null);
           }
         }),
         this.platformUtilsService
@@ -289,16 +284,13 @@ export class SettingsComponent implements OnInit {
           }),
       ]);
     } else {
-      await this.storageService.remove(ConstantsService.biometricUnlockKey);
-      this.vaultTimeoutService.biometricLocked = false;
+      await this.stateService.setBiometricUnlock(null);
+      await this.stateService.setBiometricLocked(false);
     }
   }
 
   async updateAutoBiometricsPrompt() {
-    await this.storageService.save(
-      ConstantsService.disableAutoBiometricsPromptKey,
-      this.disableAutoBiometricsPrompt
-    );
+    await this.stateService.setDisableAutoBiometricsPrompt(this.disableAutoBiometricsPrompt);
   }
 
   async lock() {
@@ -338,7 +330,7 @@ export class SettingsComponent implements OnInit {
       this.i18nService.t("cancel")
     );
     if (confirmed) {
-      BrowserApi.createNewTab("https://help.bitwarden.com/article/setup-two-step-login/");
+      BrowserApi.createNewTab("https://bitwarden.com/help/setup-two-step-login/");
     }
   }
 
@@ -350,7 +342,7 @@ export class SettingsComponent implements OnInit {
       this.i18nService.t("cancel")
     );
     if (confirmed) {
-      BrowserApi.createNewTab("https://help.bitwarden.com/article/what-is-an-organization/");
+      BrowserApi.createNewTab("https://bitwarden.com/help/about-organizations/");
     }
   }
 
@@ -414,7 +406,9 @@ export class SettingsComponent implements OnInit {
   }
 
   async fingerprint() {
-    const fingerprint = await this.cryptoService.getFingerprint(await this.userService.getUserId());
+    const fingerprint = await this.cryptoService.getFingerprint(
+      await this.stateService.getUserId()
+    );
     const p = document.createElement("p");
     p.innerText = this.i18nService.t("yourAccountsFingerprint") + ":";
     const p2 = document.createElement("p");
@@ -434,7 +428,7 @@ export class SettingsComponent implements OnInit {
     });
 
     if (result.value) {
-      this.platformUtilsService.launchUri("https://help.bitwarden.com/article/fingerprint-phrase/");
+      this.platformUtilsService.launchUri("https://bitwarden.com/help/fingerprint-phrase/");
     }
   }
 

@@ -6,10 +6,7 @@ import { UriMatchType } from "jslib-common/enums/uriMatchType";
 import { I18nService } from "jslib-common/abstractions/i18n.service";
 import { MessagingService } from "jslib-common/abstractions/messaging.service";
 import { StateService } from "jslib-common/abstractions/state.service";
-import { StorageService } from "jslib-common/abstractions/storage.service";
 import { TotpService } from "jslib-common/abstractions/totp.service";
-
-// import { ConstantsService } from "jslib-common/services/constants.service";
 
 /* Cozy imports */
 import { LocalConstantsService as ConstantsService } from "..//services/constants.service";
@@ -35,7 +32,7 @@ export class OptionsComponent implements OnInit {
   dontShowCards = false;
   dontShowIdentities = false;
   showClearClipboard = true;
-  theme: string;
+  theme: ThemeType;
   themeOptions: any[];
   defaultUriMatch = UriMatchType.Domain;
   uriMatchOptions: any[];
@@ -47,13 +44,12 @@ export class OptionsComponent implements OnInit {
 
   constructor(
     private messagingService: MessagingService,
-    private storageService: StorageService,
     private stateService: StateService,
     private totpService: TotpService,
     i18nService: I18nService
   ) {
     this.themeOptions = [
-      { name: i18nService.t("default"), value: null },
+      { name: i18nService.t("default"), value: ThemeType.System },
       { name: i18nService.t("light"), value: ThemeType.Light },
       { name: i18nService.t("dark"), value: ThemeType.Dark },
       { name: "Nord", value: ThemeType.Nord },
@@ -87,6 +83,8 @@ export class OptionsComponent implements OnInit {
       ConstantsService.disableKonnectorsSuggestionsKey
     );
 
+    this.enableAutoFillOnPageLoad = await this.stateService.getEnableAutoFillOnPageLoad();
+
     this.enableInPageMenu = await this.storageService.get<boolean>(
       ConstantsService.enableInPageMenuKey
     );
@@ -95,80 +93,54 @@ export class OptionsComponent implements OnInit {
       this.enableInPageMenu = true;
     }
 
-    this.enableAutoFillOnPageLoad = await this.storageService.get<boolean>(
-      ConstantsService.enableAutoFillOnPageLoadKey
-    );
 
     this.autoFillOnPageLoadDefault =
-      (await this.storageService.get<boolean>(ConstantsService.autoFillOnPageLoadDefaultKey)) ??
-      true;
+      (await this.stateService.getAutoFillOnPageLoadDefault()) ?? true;
 
-    this.disableAddLoginNotification = await this.storageService.get<boolean>(
-      ConstantsService.disableAddLoginNotificationKey
-    );
+    this.disableAddLoginNotification = await this.stateService.getDisableAddLoginNotification();
 
-    this.disableChangedPasswordNotification = await this.storageService.get<boolean>(
-      ConstantsService.disableChangedPasswordNotificationKey
-    );
+    this.disableChangedPasswordNotification =
+      await this.stateService.getDisableChangedPasswordNotification();
 
-    this.disableContextMenuItem = await this.storageService.get<boolean>(
-      ConstantsService.disableContextMenuItemKey
-    );
+    this.disableContextMenuItem = await this.stateService.getDisableContextMenuItem();
 
-    this.dontShowCards = await this.storageService.get<boolean>(
-      ConstantsService.dontShowCardsCurrentTab
-    );
-    this.dontShowIdentities = await this.storageService.get<boolean>(
-      ConstantsService.dontShowIdentitiesCurrentTab
-    );
+    this.dontShowCards = await this.stateService.getDontShowCardsCurrentTab();
+    this.dontShowIdentities = await this.stateService.getDontShowIdentitiesCurrentTab();
 
     this.disableAutoTotpCopy = !(await this.totpService.isAutoCopyEnabled());
 
-    this.disableFavicon = await this.storageService.get<boolean>(
-      ConstantsService.disableFaviconKey
-    );
+    this.disableFavicon = await this.stateService.getDisableFavicon();
 
-    this.disableBadgeCounter = await this.storageService.get<boolean>(
-      ConstantsService.disableBadgeCounterKey
-    );
+    this.disableBadgeCounter = await this.stateService.getDisableBadgeCounter();
 
-    this.theme = await this.storageService.get<string>(ConstantsService.themeKey);
+    this.theme = await this.stateService.getTheme();
 
-    const defaultUriMatch = await this.storageService.get<UriMatchType>(
-      ConstantsService.defaultUriMatch
-    );
+    const defaultUriMatch = await this.stateService.getDefaultUriMatch();
     this.defaultUriMatch = defaultUriMatch == null ? UriMatchType.Domain : defaultUriMatch;
 
-    this.clearClipboard = await this.storageService.get<number>(ConstantsService.clearClipboardKey);
+    this.clearClipboard = await this.stateService.getClearClipboard();
   }
 
   async updateAddLoginNotification() {
-    await this.storageService.save(
-      ConstantsService.disableAddLoginNotificationKey,
-      this.disableAddLoginNotification
-    );
+    await this.stateService.setDisableAddLoginNotification(this.disableAddLoginNotification);
   }
 
   async updateChangedPasswordNotification() {
-    await this.storageService.save(
-      ConstantsService.disableChangedPasswordNotificationKey,
+    await this.stateService.setDisableChangedPasswordNotification(
       this.disableChangedPasswordNotification
     );
   }
 
   async updateDisableContextMenuItem() {
-    await this.storageService.save(
-      ConstantsService.disableContextMenuItemKey,
-      this.disableContextMenuItem
-    );
+    await this.stateService.setDisableContextMenuItem(this.disableContextMenuItem);
     this.messagingService.send("bgUpdateContextMenu");
   }
 
   /*
     TODO: enable back when TOTP is available
     async updateAutoTotpCopy() {
-        await this.storageService.save(ConstantsService.disableAutoTotpCopyKey, this.disableAutoTotpCopy);
-    }
+    await this.stateService.setDisableAutoTotpCopy(this.disableAutoTotpCopy);
+  }
     */
 
   async updateKonnectorsSuggestions() {
@@ -192,59 +164,40 @@ export class OptionsComponent implements OnInit {
   }
 
   async updateAutoFillOnPageLoad() {
-    await this.storageService.save(
-      ConstantsService.enableAutoFillOnPageLoadKey,
-      this.enableAutoFillOnPageLoad
-    );
+    await this.stateService.setEnableAutoFillOnPageLoad(this.enableAutoFillOnPageLoad);
   }
 
   async updateAutoFillOnPageLoadDefault() {
-    await this.storageService.save(
-      ConstantsService.autoFillOnPageLoadDefaultKey,
-      this.autoFillOnPageLoadDefault
-    );
+    await this.stateService.setAutoFillOnPageLoadDefault(this.autoFillOnPageLoadDefault);
   }
 
   async updateDisableFavicon() {
-    await this.storageService.save(ConstantsService.disableFaviconKey, this.disableFavicon);
-    await this.stateService.save(ConstantsService.disableFaviconKey, this.disableFavicon);
+    await this.stateService.setDisableFavicon(this.disableFavicon);
   }
 
   async updateDisableBadgeCounter() {
-    await this.storageService.save(
-      ConstantsService.disableBadgeCounterKey,
-      this.disableBadgeCounter
-    );
-    await this.stateService.save(ConstantsService.disableBadgeCounterKey, this.disableBadgeCounter);
+    await this.stateService.setDisableBadgeCounter(this.disableBadgeCounter);
     this.messagingService.send("bgUpdateContextMenu");
   }
 
   async updateShowCards() {
-    await this.storageService.save(ConstantsService.dontShowCardsCurrentTab, this.dontShowCards);
-    await this.stateService.save(ConstantsService.dontShowCardsCurrentTab, this.dontShowCards);
+    await this.stateService.setDontShowCardsCurrentTab(this.dontShowCards);
   }
 
   async updateShowIdentities() {
-    await this.storageService.save(
-      ConstantsService.dontShowIdentitiesCurrentTab,
-      this.dontShowIdentities
-    );
-    await this.stateService.save(
-      ConstantsService.dontShowIdentitiesCurrentTab,
-      this.dontShowIdentities
-    );
+    await this.stateService.setDontShowIdentitiesCurrentTab(this.dontShowIdentities);
   }
 
   async saveTheme() {
-    await this.storageService.save(ConstantsService.themeKey, this.theme);
+    await this.stateService.setTheme(this.theme);
     window.setTimeout(() => window.location.reload(), 200);
   }
 
   async saveDefaultUriMatch() {
-    await this.storageService.save(ConstantsService.defaultUriMatch, this.defaultUriMatch);
+    await this.stateService.setDefaultUriMatch(this.defaultUriMatch);
   }
 
   async saveClearClipboard() {
-    await this.storageService.save(ConstantsService.clearClipboardKey, this.clearClipboard);
+    await this.stateService.setClearClipboard(this.clearClipboard);
   }
 }
