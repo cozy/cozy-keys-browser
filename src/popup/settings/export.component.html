@@ -21,7 +21,12 @@
                     <select id="format" name="Format" [(ngModel)]="format">
                         <option value="json">.json</option>
                         <option value="csv">.csv</option>
+                        <!-- Cozy customization -->
+                        <!-- Remove encrypted_json option until we fix the bug that does not apply encryption on the exported json -->
+                        <!-- TODO: re-enable this when bug is fixed -->
+                        <!--
                         <option value="encrypted_json">.json (Encrypted)</option>
+                        -->
                     </select>
                 </div>
                 <div class="box-content-row box-content-row-flex" appBoxRow>
