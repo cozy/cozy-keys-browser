@@ -3,8 +3,8 @@ import { EventEmitter } from "@angular/core";
 import { CipherService } from "jslib-common/abstractions/cipher.service";
 import { I18nService } from "jslib-common/abstractions/i18n.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { UserService } from "jslib-common/abstractions/user.service";
 import { CipherView } from "jslib-common/models/view/cipherView";
+import { StateService } from "jslib-common/abstractions/state.service";
 
 /**
  * @override by Cozy
@@ -16,13 +16,13 @@ import { CipherView } from "jslib-common/models/view/cipherView";
  */
 export const deleteCipher = async (
   cipherService: CipherService,
-  userService: UserService,
   i18nService: I18nService,
   platformUtilsService: PlatformUtilsService,
-  cipher: CipherView
+  cipher: CipherView,
+  stateService: StateService
 ): Promise<boolean> => {
-  const organizations = await userService.getAllOrganizations();
-  const [cozyOrganization] = organizations.filter((org) => org.name === "Cozy");
+  const organizations = await stateService.getOrganizations();
+  const [cozyOrganization] = Object.values(organizations).filter((org) => org.name === "Cozy");
   const isCozyOrganization = cipher.organizationId === cozyOrganization.id;
 
   const confirmationMessage = isCozyOrganization

@@ -11,6 +11,9 @@ import { IdentityTokenResponse } from "../models/response/identityTokenResponse"
 import { IdentityTwoFactorResponse } from "jslib-common/models/response/identityTwoFactorResponse";
 
 import { ApiService as BaseApiService } from "jslib-common/services/api.service";
+import { ApiTokenRequest } from "jslib-common/models/request/identityToken/apiTokenRequest";
+import { PasswordTokenRequest } from "jslib-common/models/request/identityToken/passwordTokenRequest";
+import { SsoTokenRequest } from "jslib-common/models/request/identityToken/ssoTokenRequest";
 
 function getDeviceName(deviceType: DeviceType): string {
   switch (deviceType) {
@@ -82,8 +85,10 @@ export class ApiService extends BaseApiService {
       this._device === DeviceType.VivaldiBrowser;
   }
 
+  // Auth APIs
+
   async postIdentityToken(
-    request: TokenRequest
+    request: ApiTokenRequest | PasswordTokenRequest | SsoTokenRequest
   ): Promise<IdentityTokenResponse | IdentityTwoFactorResponse> {
     const headers = new Headers({
       "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
@@ -93,7 +98,9 @@ export class ApiService extends BaseApiService {
     if (this._customUserAgent != null) {
       headers.set("User-Agent", this._customUserAgent);
     }
+    // request.alterIdentityTokenHeaders(headers);
 
+    /* TODO REFACTO : was our version, commented in order to adapt it to the new BW way of doing 
     const bodyData = {
       ...request.toIdentityToken(this._platformUtilsService.identityClientId),
       clientName: `Cozy Passwords (${getDeviceName(this._device)})`,
@@ -108,6 +115,26 @@ export class ApiService extends BaseApiService {
         method: "POST",
       })
     );
+    */
+    /* TODO REFACTO : new way of doing things by BW, but should be adapted */
+    const identityToken =
+      request instanceof ApiTokenRequest
+        ? request.toIdentityToken()
+        : request.toIdentityToken(this._platformUtilsService.getClientType());
+    const bodyData = {
+      ...identityToken,
+      clientName: `Cozy Passwords (${getDeviceName(this._device)})`,
+    };
+    const response = await this.fetch(
+      new Request(this._environmentService.getIdentityUrl() + "/connect/token", {
+        body: this._qsStringify(bodyData),
+        credentials: this._getCredentials(),
+        cache: "no-store",
+        headers: headers,
+        method: "POST",
+      })
+    );
+    /* END new BW way of doing things */
 
     let responseJson: any = null;
     if (this._isJsonResponse(response)) {
@@ -122,7 +149,7 @@ export class ApiService extends BaseApiService {
         responseJson.TwoFactorProviders2 &&
         Object.keys(responseJson.TwoFactorProviders2).length
       ) {
-        await this._tokenService.clearTwoFactorToken(request.email);
+        await this._tokenService.clearTwoFactorToken();
         return new IdentityTwoFactorResponse(responseJson);
       }
     }
@@ -136,7 +163,7 @@ export class ApiService extends BaseApiService {
   }
 
   private _getCredentials(): RequestCredentials {
-    if (this._device !== DeviceType.SafariExtension && (!this._isWebClient || this._usingBaseUrl)) {
+    if (!this._isWebClient || this._environmentService.hasBaseUrl()) {
       return "include";
     }
     return undefined;

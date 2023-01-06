@@ -22,8 +22,6 @@ import { PopupUtilsService } from "../services/popup-utils.service";
 
 import { BrowserApi } from "../../browser/browserApi";
 
-import { UserService } from "jslib-common/abstractions/user.service";
-
 const BroadcasterSubscriptionId = "TwoFactorComponent";
 
 @Component({
@@ -47,8 +45,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     route: ActivatedRoute,
     protected messagingService: MessagingService,
     logService: LogService,
-    twoFactorService: TwoFactorService,
-    private userService: UserService
+    twoFactorService: TwoFactorService
   ) {
     super(
       authService,

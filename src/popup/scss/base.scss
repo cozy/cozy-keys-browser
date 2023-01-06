@@ -249,13 +249,23 @@ header {
       color: themed("headerInputColor");
     }
 
-    .bwi {
-      position: absolute;
-      top: 15px;
-      left: 20px;
-
+    .icon-search {
+      flex-grow: 0;
+      flex-shrink: 0;
+      margin-left: 7px;
+      margin-right: 7px;
       @include themify($themes) {
-        color: themed("headerInputPlaceholderColor");
+        background-color: themed("headerInputPlaceholderColor");
+      }
+    }
+
+    .icon-cross {
+      width: 11px;
+      flex-shrink: 0;
+      margin-left: 0px;
+      margin-right: 7px;
+      &:hover {
+        color: white !important;
       }
     }
 
@@ -333,6 +343,7 @@ header {
         display: none;
         padding: 0;
       }
+    }
   }
 
   .left + .search,

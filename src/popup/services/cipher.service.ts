@@ -9,7 +9,7 @@ import { SearchService } from "jslib-common/abstractions/search.service";
 import { sequentialize } from "jslib-common/misc/sequentialize";
 import { SettingsService } from "jslib-common/abstractions/settings.service";
 import { StorageService } from "jslib-common/abstractions/storage.service";
-import { UserService } from "jslib-common/abstractions/user.service";
+import { StateService } from "jslib-common/abstractions/state.service";
 
 /**
  * Cozy : we overcharge this class in order to modify `getAllDecrypted()`
@@ -18,39 +18,37 @@ import { UserService } from "jslib-common/abstractions/user.service";
 export class CipherService extends CipherServiceBase {
   constructor(
     private localCryptoService: CryptoService,
-    private localUserService: UserService,
     settingsService: SettingsService,
     apiService: ApiService,
     fileUploadService: FileUploadService,
-    storageService: StorageService,
     i18nService: I18nService,
     private localSearchService: () => SearchService,
-    logService: LogService
+    logService: LogService,
+    private localStateService: StateService
   ) {
     super(
       localCryptoService,
-      localUserService,
       settingsService,
       apiService,
       fileUploadService,
-      storageService,
       i18nService,
       localSearchService,
-      logService
+      logService,
+      localStateService
     );
   }
 
   @sequentialize(() => "getAllDecrypted")
   async getAllDecrypted(): Promise<CipherView[]> {
-    if (this.decryptedCipherCache != null) {
-      const userId = await this.localUserService.getUserId();
+    const userId = await this.localStateService.getUserId();
+    if ((await this.getDecryptedCipherCache()) != null) {
       if (
         this.localSearchService != null &&
         (this.localSearchService().indexedEntityId ?? userId) !== userId
       ) {
-        await this.localSearchService().indexCiphers(userId, this.decryptedCipherCache);
+        await this.localSearchService().indexCiphers(userId, await this.getDecryptedCipherCache());
       }
-      return this.decryptedCipherCache;
+      return await this.getDecryptedCipherCache();
     }
 
     const decCiphers: CipherView[] = [];
@@ -70,13 +68,13 @@ export class CipherService extends CipherServiceBase {
     );
     /** end Cozy modifications */
 
-    ciphers.forEach((cipher) => {
+    ciphers.forEach(async (cipher) => {
       promises.push(cipher.decrypt().then((c) => decCiphers.push(c)));
     });
 
     await Promise.all(promises);
     decCiphers.sort(this.getLocaleSortingFunction());
-    this.decryptedCipherCache = decCiphers;
-    return this.decryptedCipherCache;
+    await this.setDecryptedCipherCache(decCiphers);
+    return decCiphers;
   }
 }

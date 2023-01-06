@@ -13,9 +13,8 @@ describe("url input", () => {
     null,
     null,
     null,
-    null,
-    null,
     new CozySanitizeUrlService(),
+    null,
     null
   );
   it("should return undefined if the input is empty", () => {

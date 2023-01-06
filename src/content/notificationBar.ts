@@ -6,15 +6,12 @@ import { cancelButtonNames } from "./consts";
 import { changePasswordButtonContainsNames } from "./consts";
 import { changePasswordButtonNames } from "./consts";
 import { logInButtonNames } from "./consts";
-import { ConstantsService } from "jslib-common/services/constants.service";
 // END Cozy Imports
 
 // See original file:
 // https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/content/notificationBar.ts
 
-/*
-    Returns a cozy app url based on the cozyUrl and the app name
-*/
+// Returns a cozy app url based on the cozyUrl and the app name
 function getAppURLCozy(cozyUrl: string, appName: string, hash: string) {
   if (!appName) {
     return new URL(cozyUrl).toString();
@@ -28,10 +25,8 @@ function getAppURLCozy(cozyUrl: string, appName: string, hash: string) {
   return url.toString();
 }
 
-/*
-    The aim is to not activate the inPageMenu in somme Cozy applications so that there is no menu in
-    their forms (contacts, pass...)
-*/
+// The aim is to not activate the inPageMenu in somme Cozy applications so that there is no menu in
+// their forms (contacts, pass...)
 let cozyPasswordsHostname: string;
 let cozyContactsHostname: string;
 function shouldTrigerMenu() {
@@ -40,12 +35,12 @@ function shouldTrigerMenu() {
     cozyContactsHostname === window.location.hostname
   );
 }
-
-chrome.storage.local.get(ConstantsService.environmentUrlsKey, (urls: any) => {
+chrome.storage.local.get("environmentUrls", (urls: any) => {
   cozyPasswordsHostname = new URL(getAppURLCozy(urls.environmentUrls.base, "passwords", ""))
     .hostname;
   cozyContactsHostname = new URL(getAppURLCozy(urls.environmentUrls.base, "contacts", "")).hostname;
 });
+/* END Cozy modifications  */
 
 document.addEventListener("DOMContentLoaded", (event) => {
   if (window.location.hostname.endsWith("vault.bitwarden.com")) {
@@ -75,7 +70,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let collectIfNeededTimeout: number = null;
   // let observeDomTimeout: number = null;
   const inIframe = isInIframe();
-  /** commented by Cozy
+  /* commented by Cozy
   const cancelButtonNames = new Set(["cancel", "close", "back"]);
   const logInButtonNames = new Set([
     "log in",
@@ -278,6 +273,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       // The DOM might change during the collect: watch the DOM body for changes.
       // Note: a setTimeout was present here, apparently related to the autofill:
       // https://github.com/bitwarden/browser/commit/d19fcd6e4ccf062b595c2823267ffd32fd8e5a3d
+
       observeDom();
     }
 
@@ -285,11 +281,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
       window.clearTimeout(collectIfNeededTimeout);
     }
 
-    // @override by Cozy :
+    /* @override by Cozy :
     // this loop waiting for (pageHref !== window.location.href) to become true seems useless :
     // we only need to react to dom modifications, already taken into account by observeDom()
     // so we comment the loop waiting for "production tests"
-    // collectIfNeededTimeout = window.setTimeout(collectIfNeeded, 1000);
+    collectIfNeededTimeout = window.setTimeout(collectIfNeeded, 1000);
+    */
   }
 
   function collect() {

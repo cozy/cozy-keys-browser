@@ -114,7 +114,6 @@ import { KonnectorsService } from "../popup/services/konnectors.service";
 import { MessagingService as MessagingServiceAbstraction } from "../services/abstractions/messaging.service";
 import { OrganizationService } from "../popup/services/organization.service";
 import { SyncService } from "../popup/services/sync.service";
-import { UserService } from "../popup/services/user.service";
 /* end Cozy imports */
 
 export default class MainBackground {
@@ -130,7 +129,6 @@ export default class MainBackground {
   appIdService: AppIdServiceAbstraction;
   apiService: ApiServiceAbstraction;
   environmentService: EnvironmentServiceAbstraction;
-  userService: UserService;
   settingsService: SettingsServiceAbstraction;
   cipherService: CipherService;
   folderService: FolderServiceAbstraction;
@@ -154,7 +152,8 @@ export default class MainBackground {
   popupUtilsService: PopupUtilsService;
   sendService: SendServiceAbstraction;
   fileUploadService: FileUploadServiceAbstraction;
-  organizationService: OrganizationServiceAbstraction;
+  // organizationService: OrganizationServiceAbstraction;
+  organizationService: OrganizationService; // target Cozy version
   providerService: ProviderServiceAbstraction;
   keyConnectorService: KeyConnectorServiceAbstraction;
   userVerificationService: UserVerificationServiceAbstraction;
@@ -240,14 +239,13 @@ export default class MainBackground {
       (expired: boolean) => this.logout(expired),
       this.buildUserAgent()
     );
-    this.userService = new UserService(this.tokenService, this.storageService);
     this.cozyClientService = new CozyClientService(
       this.environmentService,
       this.apiService,
       this.messagingService
     );
 
-    this.settingsService = new SettingsService(this.userService);
+    this.settingsService = new SettingsService(this.stateService);
     this.fileUploadService = new FileUploadService(this.logService, this.apiService);
     this.cipherService = new CipherService(
       this.cryptoService,
@@ -350,10 +348,10 @@ export default class MainBackground {
       },
       logout: async (userId?: string) => {
         /* @override by Cozy :
-                This callback is the loggedOutCallback of the VaultTimeoutService
-                (see jslib/src/services/vaultTimeout.service.ts )
-                When CB is fired, ask all tabs to activate login-in-page-menu
-                */
+          This callback is the loggedOutCallback of the VaultTimeoutService
+          (see jslib/src/services/vaultTimeout.service.ts )
+          When CB is fired, ask all tabs to activate login-in-page-menu
+        */
         const allTabs = await BrowserApi.getAllTabs();
         for (const tab of allTabs) {
           BrowserApi.tabSendMessage(tab, {
@@ -363,6 +361,7 @@ export default class MainBackground {
             tab: tab,
           });
         }
+
         /* end @override by Cozy */
         await this.logout(false, userId);
       },
@@ -474,7 +473,8 @@ export default class MainBackground {
       this.cipherService,
       this.storageService,
       this.settingsService,
-      this.cozyClientService
+      this.cozyClientService,
+      this.stateService
     );
 
     // Other fields
@@ -525,7 +525,8 @@ export default class MainBackground {
       this.vaultTimeoutService,
       this.policyService,
       this.folderService,
-      this.stateService
+      this.stateService,
+      this.konnectorsService
     );
 
     this.tabsBackground = new TabsBackground(this, this.notificationBackground);
@@ -571,9 +572,7 @@ export default class MainBackground {
       this.keyConnectorService,
       this.environmentService,
       this.stateService,
-      this.twoFactorService,
-      true,
-      this.cozyClientService
+      this.twoFactorService
     );
 
     // Background (Cozy version)
@@ -581,22 +580,20 @@ export default class MainBackground {
       this,
       this.autofillService,
       this.platformUtilsService as BrowserPlatformUtilsService,
-      this.storageService,
       this.i18nService,
       this.notificationsService,
       this.systemService,
       this.environmentService,
       this.messagingService,
+      this.stateService,
       this.logService,
-      this.cozyClientService,
-      this.konnectorsService,
       this.syncService,
       this.authService,
       this.cryptoService,
       this.apiService,
       this.cipherService,
-      this.userService,
-      this.vaultTimeoutService
+      this.vaultTimeoutService,
+      this.cozyClientService
     );
     this.messagingService.setRuntimeBackground(this.runtimeBackground);
   }
@@ -628,8 +625,6 @@ export default class MainBackground {
       return status;
     };
 
-    const isAuthenticated = await this.stateService.getIsAuthenticated(); // = connected or installed
-    const isLocked = await this.vaultTimeoutService.isLocked();
     // Cozy explanations :
     // For information, to make the difference betweend locked and loggedout :
     // const isAuthenticated = await this.stateService.getIsAuthenticated(); // = connected or installed
@@ -637,10 +632,6 @@ export default class MainBackground {
     //    if  isAuthenticated == false  &  isLocked == true   => loggedout
     //    if  isAuthenticated == true   &  isLocked == true   => locked
     //    if  isAuthenticated == true   &  isLocked == false  => logged in
-    const pinSet = await this.vaultTimeoutService.isPinLockSet();
-    const isPinLocked =
-      (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1];
-
     BrowserApi.messageListener("main.background", (msg: any, sender: any, sendResponse: any) => {
       if (msg.command === "checkextensionstatus") {
         checkCurrentStatus(msg).then(sendResponse);

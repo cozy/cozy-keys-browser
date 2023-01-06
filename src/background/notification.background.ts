@@ -26,6 +26,7 @@ import AddLoginRuntimeMessage from "./models/addLoginRuntimeMessage";
 import ChangePasswordRuntimeMessage from "./models/changePasswordRuntimeMessage";
 import LockedVaultPendingNotificationsItem from "./models/lockedVaultPendingNotificationsItem";
 import { NotificationQueueMessageType } from "./models/notificationQueueMessageType";
+import { KonnectorsService } from "src/popup/services/konnectors.service";
 
 export default class NotificationBackground {
   private notificationQueue: (AddLoginQueueMessage | AddChangePasswordQueueMessage)[] = [];
@@ -37,7 +38,8 @@ export default class NotificationBackground {
     private vaultTimeoutService: VaultTimeoutService,
     private policyService: PolicyService,
     private folderService: FolderService,
-    private stateService: StateService
+    private stateService: StateService,
+    private konnectorsService: KonnectorsService
   ) {}
 
   async init() {
@@ -398,6 +400,7 @@ export default class NotificationBackground {
 
     const cipher = await this.cipherService.encrypt(model);
     await this.cipherService.saveWithServer(cipher);
+    this.konnectorsService.createSuggestions();
   }
 
   private async getDecryptedCipherById(cipherId: string) {

@@ -28,7 +28,7 @@ import { ProfileOrganizationResponse } from "jslib-common/models/response/profil
 import { SyncService as BaseSyncService } from "jslib-common/services/sync.service";
 import { CozyClientService } from "./cozyClient.service";
 import { BrowserCryptoService as CryptoService } from "../../services/browserCrypto.service";
-import { StateService } from "jslib-common/services/state.service";
+import { StateService } from "jslib-common/abstractions/state.service";
 import { OrganizationService } from "./organization.service";
 import { ProviderService } from "jslib-common/abstractions/provider.service";
 /* end Cozy imports */
@@ -68,7 +68,7 @@ export class SyncService extends BaseSyncService {
     providerService: ProviderService,
     logoutCallback: (expired: boolean) => Promise<void>,
     private cozyClientService: CozyClientService,
-    private tokenService : TokenServiceAbstraction
+    private tokenService: TokenServiceAbstraction
   ) {
     super(
       localApiService,
@@ -85,7 +85,7 @@ export class SyncService extends BaseSyncService {
       localStateService,
       localOrganizationService,
       providerService,
-      logoutCallback,
+      logoutCallback
     );
   }
 

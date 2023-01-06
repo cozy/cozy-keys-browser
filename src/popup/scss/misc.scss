@@ -347,6 +347,54 @@ li.active .icon-cozy-inline > svg {
   background-image: url("../images/icons-16-icon-key.svg");
 }
 
+.icon-search {
+  mask-image: url("../images/icons-16-magnifier.svg");
+  -webkit-mask-image: url("../images/icons-16-magnifier.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-note {
+  mask-image: url("../images/icons-16-note.svg");
+  -webkit-mask-image: url("../images/icons-16-note.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-folder {
+  mask-image: url("../images/icons-16-folder.svg");
+  -webkit-mask-image: url("../images/icons-16-folder.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-trash {
+  mask-image: url("../images/icons-16-trash.svg");
+  -webkit-mask-image: url("../images/icons-16-trash.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
 .icon-profile {
   background-image: url("../images/icons-16-icon-profile.svg");
 }

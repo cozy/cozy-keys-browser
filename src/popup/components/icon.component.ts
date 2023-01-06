@@ -7,17 +7,21 @@ import { CipherView } from "jslib-common/models/view/cipherView";
 import { EnvironmentService } from "jslib-common/abstractions/environment.service";
 import { StateService } from "jslib-common/abstractions/state.service";
 
-import { ConstantsService } from "jslib-common/services/constants.service";
-
 import { Utils } from "jslib-common/misc/utils";
 
-const IconMap: any = {
-  "fa-globe": String.fromCharCode(0xf0ac),
-  "fa-sticky-note-o": String.fromCharCode(0xf24a),
-  "fa-id-card-o": String.fromCharCode(0xf2c3),
-  "fa-credit-card": String.fromCharCode(0xf09d),
-  "fa-android": String.fromCharCode(0xf17b),
-  "fa-apple": String.fromCharCode(0xf179),
+/**
+ * Provides a mapping from supported card brands to
+ * the filenames of icon that should be present in images/cards folder of clients.
+ */
+const cardIcons: Record<string, string> = {
+  Visa: "card-visa",
+  Mastercard: "card-mastercard",
+  Amex: "card-amex",
+  Discover: "card-discover",
+  "Diners Club": "card-diners-club",
+  JCB: "card-jcb",
+  Maestro: "card-maestro",
+  UnionPay: "card-union-pay",
 };
 
 /*  -------------------------------------------------------------------
@@ -32,7 +36,6 @@ The reason for this duplication is :
 
 @Component({
   selector: "app-vault-icon",
-  // templateUrl: '../../../jslib/src/angular/components/icon.component.html',
   templateUrl: "icon.component.html",
 })
 export class IconComponent implements OnChanges {
@@ -56,12 +59,12 @@ export class IconComponent implements OnChanges {
   }
 
   async ngOnChanges() {
-    this.imageEnabled = !(await this.stateService.get<boolean>(ConstantsService.disableFaviconKey));
+    // Components may be re-used when using cdk-virtual-scroll. Which puts the component in a weird state,
+    // to avoid this we reset all state variables.
+    this.image = null;
+    this.fallbackImage = null;
+    this.imageEnabled = !(await this.stateService.getDisableFavicon());
     this.load();
-  }
-
-  get iconCode(): string {
-    return IconMap[this.icon];
   }
 
   protected load() {
@@ -71,13 +74,14 @@ export class IconComponent implements OnChanges {
         this.setLoginIcon();
         break;
       case CipherType.SecureNote:
-        this.icon = "fa-sticky-note-o";
+        this.icon = "bwi-sticky-note";
         break;
       case CipherType.Card:
-        this.icon = "fa-credit-card";
+        this.icon = "bwi-credit-card";
+        this.setCardIcon();
         break;
       case CipherType.Identity:
-        this.icon = "fa-id-card-o";
+        this.icon = "bwi-id-card";
         break;
       default:
         break;
@@ -90,10 +94,10 @@ export class IconComponent implements OnChanges {
       let isWebsite = false;
 
       if (hostnameUri.indexOf("androidapp://") === 0) {
-        this.icon = "fa-android";
+        this.icon = "bwi-android";
         this.image = null;
       } else if (hostnameUri.indexOf("iosapp://") === 0) {
-        this.icon = "fa-apple";
+        this.icon = "bwi-apple";
         this.image = null;
       } else if (
         this.imageEnabled &&
@@ -110,10 +114,19 @@ export class IconComponent implements OnChanges {
         try {
           this.image = this.iconsUrl + "/" + Utils.getHostname(hostnameUri) + "/icon.png";
           this.fallbackImage = "images/icons-login.svg";
-        } catch (e) {}
+        } catch (e) {
+          // Ignore error since the fallback icon will be shown if image is null.
+        }
       }
     } else {
       this.image = null;
+    }
+  }
+
+  private setCardIcon() {
+    const brand = this.cipher.card.brand;
+    if (this.imageEnabled && brand in cardIcons) {
+      this.icon = "credit-card-icon " + cardIcons[brand];
     }
   }
 }

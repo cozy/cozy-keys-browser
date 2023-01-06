@@ -24,7 +24,7 @@ const moduleRules = [
   },
   {
     test: /.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
-    include: [path.resolve("src/popup/css/webfonts/"), path.resolve("node_modules/font-awesome")],
+    include: [path.resolve("src/popup/css/webfonts/")],
     exclude: /loading.svg/,
     generator: {
       filename: "popup/fonts/[name][ext]",
@@ -97,7 +97,6 @@ const plugins = [
       { from: "./src/inPageMenu/images", to: "inPageMenu/images" },
       { from: "./src/content/autofill.css", to: "content" },
       { from: "./src/content/notification.css", to: "content" },
-      { from: "./node_modules/font-awesome/fonts/*", to: "inPageMenu/fonts/[name][ext]" },
     ],
   }),
   new MiniCssExtractPlugin({

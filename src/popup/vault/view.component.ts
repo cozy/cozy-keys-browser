@@ -16,6 +16,7 @@ import { MessagingService } from "jslib-common/abstractions/messaging.service";
 import { PasswordRepromptService } from "jslib-common/abstractions/passwordReprompt.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
 import { StateService } from "jslib-common/abstractions/state.service";
+
 import { TokenService } from "jslib-common/abstractions/token.service";
 import { TotpService } from "jslib-common/abstractions/totp.service";
 
@@ -262,10 +263,10 @@ export class ViewComponent extends BaseViewComponent {
   async delete(): Promise<boolean> {
     const deleted = await deleteCipher(
       this.cipherService,
-      this.userService,
       this.i18nService,
       this.platformUtilsService,
-      this.cipher
+      this.cipher,
+      this.stateService
     );
     if (deleted) {
       this.messagingService.send("deletedCipher");
@@ -374,5 +375,4 @@ export class ViewComponent extends BaseViewComponent {
     const hash = "#/vault?action=view&cipherId=" + this.cipherId;
     window.open(this.cozyClientService.getAppURL("passwords", hash));
   }
-
 }

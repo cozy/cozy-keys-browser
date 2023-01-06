@@ -40,7 +40,10 @@ import { SearchService as SearchServiceAbstraction } from "jslib-common/abstract
 import { SendService } from "jslib-common/abstractions/send.service";
 import { SettingsService } from "jslib-common/abstractions/settings.service";
 import { StateService as BaseStateServiceAbstraction } from "jslib-common/abstractions/state.service";
-import { StorageService as StorageServiceAbstraction } from "jslib-common/abstractions/storage.service";
+import {
+  StorageService,
+  StorageService as StorageServiceAbstraction,
+} from "jslib-common/abstractions/storage.service";
 import { SyncService } from "jslib-common/abstractions/sync.service";
 import { TokenService } from "jslib-common/abstractions/token.service";
 import { TotpService } from "jslib-common/abstractions/totp.service";
@@ -78,7 +81,6 @@ function getBgService<T>(service: string) {
 
 const isPrivateMode = BrowserApi.getBackgroundPage() == null;
 
-const stateService = new StateService();
 const messagingService = new BrowserMessagingService();
 const searchService = isPrivateMode
   ? null
@@ -105,7 +107,8 @@ export const konnectorsService = new KonnectorsService(
   getBgService<CipherService>("cipherService")(),
   getBgService<StorageService>("storageService")(),
   getBgService<SettingsService>("settingsService")(),
-  cozyClientService
+  cozyClientService,
+  getBgService<StateServiceAbstraction>("stateService")()
 );
 const authService = getBgService<AuthService>("authService")();
 
@@ -154,9 +157,6 @@ export function initFactory(
         htmlEl.classList.add("force_redraw");
         logService.info("Force redraw is on");
       }
-
-      // conservé brut du merge upstream, à adapter TODO BJA
-      authService.init();
     }
   };
 }
@@ -165,6 +165,9 @@ export function initFactory(
   imports: [JslibServicesModule],
   declarations: [],
   providers: [
+    { provide: CozyClientService, useValue: cozyClientService },
+    { provide: CozySanitizeUrlService, useValue: cozySanitizeUrlService },
+    { provide: KonnectorsService, useValue: konnectorsService },
     {
       provide: LOCALE_ID,
       useFactory: () =>

@@ -289,9 +289,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
     // console.log('fillOrLaunchCipher()');
 
     // Get default matching setting for urls
-    let defaultMatch = await this.storageService.get<UriMatchType>(
-      ConstantsService.defaultUriMatch
-    );
+    let defaultMatch = await this.stateService.getDefaultUriMatch();
     if (defaultMatch == null) {
       defaultMatch = UriMatchType.Domain;
     }
@@ -350,5 +348,4 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
   viewCipher(cipher: CipherView) {
     this.router.navigate(["/view-cipher"], { queryParams: { cipherId: cipher.id } });
   }
-
 }

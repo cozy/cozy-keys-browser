@@ -614,6 +614,38 @@
       color: themed("mutedColor");
     }
 
+    .icon-search {
+      width: 20px;
+      height: 20px;
+      @include themify($themes) {
+        background-color: themed("mutedColor");
+      }
+    }
+
+    .icon-note {
+      width: 20px;
+      height: 20px;
+      @include themify($themes) {
+        background-color: themed("mutedColor");
+      }
+    }
+
+    .icon-folder {
+      width: 20px;
+      height: 20px;
+      @include themify($themes) {
+        background-color: themed("mutedColor");
+      }
+    }
+
+    .icon-trash {
+      width: 20px;
+      height: 20px;
+      @include themify($themes) {
+        background-color: themed("mutedColor");
+      }
+    }
+
     &.icon-small {
       min-width: 25px;
     }

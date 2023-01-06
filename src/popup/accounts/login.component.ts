@@ -5,6 +5,7 @@ import { Router } from "@angular/router";
 import { take } from "rxjs/operators";
 
 import { AuthResult } from "jslib-common/models/domain/authResult";
+import { PasswordLogInCredentials } from "jslib-common/models/domain/logInCredentials";
 
 import { AuthService } from "jslib-common/abstractions/auth.service";
 import { CryptoFunctionService } from "jslib-common/abstractions/cryptoFunction.service";
@@ -16,16 +17,14 @@ import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.se
 import { StateService } from "jslib-common/abstractions/state.service";
 import { StorageService } from "jslib-common/abstractions/storage.service";
 
-import { ConstantsService } from "jslib-common/services/constants.service";
-
 import { Utils } from "jslib-common/misc/utils";
 
-import { CaptchaProtectedComponent } from "./captchaProtected.component";
+// import { CaptchaProtectedComponent } from "@bitwarden/jslib-angular/src/components/captchaProtected.component";
+import { LoginComponent as BaseLoginComponent } from "jslib-angular/components/login.component";
 
 /* start Cozy imports */
 import BrowserMessagingService from "../../services/browserMessaging.service";
 import { SyncService } from "jslib-common/abstractions/sync.service";
-import { AuthResult } from "jslib-common/models/domain/authResult";
 import { PreloginRequest } from "jslib-common/models/request/preloginRequest";
 import { PreloginResponse } from "jslib-common/models/response/preloginResponse";
 import { generateWebLink, Q } from "cozy-client";
@@ -85,11 +84,10 @@ const shouldRedirectToOIDCPasswordPage = (cozyConfiguration: CozyConfiguration) 
  *    https://github.com/bitwarden/browser/blob/
  *    af8274247b2242fe93ad2f7ca4c13f9f7ecf2860/src/popup/accounts/login.component.ts
  */
-export class LoginComponent implements OnInit {
+export class LoginComponent extends BaseLoginComponent implements OnInit {
   @Input() cozyUrl: string = "";
   @Input() rememberCozyUrl = true;
 
-  email: string = "";
   masterPassword: string = "";
   showPassword: boolean = false;
   formPromise: Promise<AuthResult>;
@@ -101,6 +99,7 @@ export class LoginComponent implements OnInit {
   protected twoFactorRoute = "2fa";
   protected successRoute = "/tabs/vault";
   protected forcePasswordResetRoute = "update-temp-password";
+  protected alwaysRememberCozyUrl: boolean = false;
 
   constructor(
     protected authService: AuthService,
@@ -111,27 +110,48 @@ export class LoginComponent implements OnInit {
     protected environmentService: EnvironmentService,
     protected passwordGenerationService: PasswordGenerationService,
     protected cryptoFunctionService: CryptoFunctionService,
-    private storageService: StorageService,
     protected logService: LogService,
     protected ngZone: NgZone,
     protected cozySanitizeUrlService: CozySanitizeUrlService,
     protected syncService: SyncService,
-    protected stateService: StorageService,
     private apiService: ApiService
   ) {
-    this.authService = authService;
-    this.router = router;
-    this.platformUtilsService = platformUtilsService;
-    this.i18nService = i18nService;
-    this.storageService = storageService;
-    this.stateService = stateService;
-    this.environmentService = environmentService;
+    super(
+      authService,
+      router,
+      platformUtilsService,
+      i18nService,
+      stateService,
+      environmentService,
+      passwordGenerationService,
+      cryptoFunctionService,
+      logService,
+      ngZone
+    );
     this.onSuccessfulLogin = () => {
       return syncService.fullSync(true);
     };
   }
 
   async ngOnInit() {
+    if (this.cozyUrl == null || this.cozyUrl === "") {
+      this.cozyUrl = await this.stateService.getRememberedEmail();
+      if (this.cozyUrl == null) {
+        this.cozyUrl = "";
+      }
+    }
+    if (!this.alwaysRememberCozyUrl) {
+      this.rememberCozyUrl = (await this.stateService.getRememberedEmail()) != null;
+    }
+    if (Utils.isBrowser) {
+      document
+        .getElementById(this.cozyUrl == null || this.cozyUrl === "" ? "cozyUrl" : "masterPassword")
+        .focus();
+    }
+  }
+
+  /*
+  async ngOnInit_old() {
     if (this.cozyUrl == null || this.cozyUrl === "") {
       this.cozyUrl = await this.storageService.get<string>(Keys.rememberedCozyUrl);
       if (this.cozyUrl == null) {
@@ -148,7 +168,75 @@ export class LoginComponent implements OnInit {
         .focus();
     }
   }
+  */
+  async submit() {
+    console.log("submit login");
 
+    try {
+      const loginUrl = this.sanitizeUrlInput(this.cozyUrl);
+
+      if (this.masterPassword == null || this.masterPassword === "") {
+        this.platformUtilsService.showToast(
+          "error",
+          this.i18nService.t("errorOccurred"),
+          this.i18nService.t("masterPassRequired")
+        );
+        return;
+      }
+
+      // This adds the scheme if missing
+      await this.environmentService.setUrls({
+        base: loginUrl + "/bitwarden",
+      });
+      // The email is based on the URL and necessary for login
+      const hostname = Utils.getHostname(loginUrl);
+      this.cozyUrl = "me@" + hostname;
+
+      const credentials = new PasswordLogInCredentials(
+        this.cozyUrl,
+        this.masterPassword,
+        null,
+        null
+      );
+      this.formPromise = this.authService.logIn(credentials);
+      const response = await this.formPromise;
+      if (this.rememberCozyUrl || this.alwaysRememberCozyUrl) {
+        await this.stateService.setRememberedEmail(this.cozyUrl);
+      } else {
+        await this.stateService.setRememberedEmail(null);
+      }
+      if (this.handleCaptchaRequired(response)) {
+        return;
+      } else if (response.requiresTwoFactor) {
+        if (this.onSuccessfulLoginTwoFactorNavigate != null) {
+          this.onSuccessfulLoginTwoFactorNavigate();
+        } else {
+          this.router.navigate([this.twoFactorRoute]);
+        }
+      } else if (response.forcePasswordReset) {
+        if (this.onSuccessfulLoginForceResetNavigate != null) {
+          this.onSuccessfulLoginForceResetNavigate();
+        } else {
+          this.router.navigate([this.forcePasswordResetRoute]);
+        }
+      } else {
+        const disableFavicon = await this.stateService.getDisableFavicon();
+        await this.stateService.setDisableFavicon(!!disableFavicon);
+        if (this.onSuccessfulLogin != null) {
+          this.onSuccessfulLogin();
+        }
+        if (this.onSuccessfulLoginNavigate != null) {
+          this.onSuccessfulLoginNavigate();
+        } else {
+          this.router.navigate([this.successRoute]);
+        }
+      }
+    } catch (e) {
+      this.logService.error(e);
+    }
+  }
+
+  /*
   async submit() {
     try {
       const loginUrl = this.sanitizeUrlInput(this.cozyUrl);
@@ -233,6 +321,7 @@ export class LoginComponent implements OnInit {
       }
     }
   }
+  */
 
   togglePassword() {
     this.showPassword = !this.showPassword;
@@ -325,16 +414,15 @@ export class LoginComponent implements OnInit {
     return { HasCiphers, OIDC, FlatSubdomains };
   };
 
-  /**
+  /*
    * Initialize EnvironmentService with cozyUrl input so it can be used by ApiService
    * Also save cozyUrl input in storageService so it will be pre-filled on next popup opening
-   * @param cozyUrl - The Cozy address
    */
   private initializeEnvForCozy = async (cozyUrl: string) => {
     await this.environmentService.setUrls({
       base: cozyUrl + "/bitwarden",
     });
-    this.storageService.save(Keys.rememberedCozyUrl, cozyUrl);
+    this.stateService.setRememberedEmail(cozyUrl);
   };
 
   sanitizeUrlInput(inputUrl: string): string {

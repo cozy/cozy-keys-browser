@@ -54,9 +54,15 @@ export class TestStorageService implements StorageService {
 }
 
 describe("Konnectors Service", () => {
-  const settingsService = new SettingsService(null, null);
+  const settingsService = new SettingsService(null);
   const storageService = new TestStorageService();
-  const konnectorsService = new KonnectorsService(null, storageService, settingsService, null);
+  const konnectorsService = new KonnectorsService(
+    null,
+    storageService,
+    settingsService,
+    null,
+    null
+  );
 
   beforeEach(() => {
     spyOn(settingsService, "getEquivalentDomains").and.returnValue(Promise.resolve([]));

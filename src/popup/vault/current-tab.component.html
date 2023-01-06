@@ -18,7 +18,7 @@
     </button>
   </div>
   <div class="search" (click)="back()">
-    <i class="fa fa-search"></i>
+    <i class="icon-cozy icon-search"></i>
     <div id="search-tag">
       <span id="search-tag-text">{{ "forThisWebSite" | i18n }}</span>
       <span>X</span>
@@ -33,7 +33,7 @@
       appAutofocus
       (keydown)="closeOnEsc($event)"
     />
-    <i class="bwi bwi-search" aria-hidden="true" (click)="back()"></i>
+    <i class="icon-cozy icon-cross" aria-hidden="true" (click)="back()"></i>
   </div>
   <div class="right">
     <button (click)="openWebApp()" appA11yTitle="{{ 'popOutNewWindow' | i18n }}">

@@ -11,6 +11,7 @@ import { TotpService } from "jslib-common/abstractions/totp.service";
 /* Cozy imports */
 import { LocalConstantsService as ConstantsService } from "..//services/constants.service";
 import { BrowserApi } from "../../browser/browserApi";
+import { StorageService } from "jslib-common/abstractions/storage.service";
 /* END */
 
 @Component({
@@ -46,7 +47,8 @@ export class OptionsComponent implements OnInit {
     private messagingService: MessagingService,
     private stateService: StateService,
     private totpService: TotpService,
-    i18nService: I18nService
+    i18nService: I18nService,
+    private storageService: StorageService
   ) {
     this.themeOptions = [
       { name: i18nService.t("default"), value: ThemeType.System },
@@ -79,6 +81,8 @@ export class OptionsComponent implements OnInit {
   }
 
   async ngOnInit() {
+    // TODO REFACTO : where to set and get our keys ? sotrageService or stateService ?
+    // other cases in this file & others
     this.disableKonnectorsSuggestions = await this.storageService.get(
       ConstantsService.disableKonnectorsSuggestionsKey
     );
@@ -92,7 +96,6 @@ export class OptionsComponent implements OnInit {
       // if not yet set, then default to true
       this.enableInPageMenu = true;
     }
-
 
     this.autoFillOnPageLoadDefault =
       (await this.stateService.getAutoFillOnPageLoadDefault()) ?? true;

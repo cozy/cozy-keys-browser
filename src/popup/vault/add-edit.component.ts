@@ -214,10 +214,10 @@ export class AddEditComponent extends BaseAddEditComponent {
   async delete(): Promise<boolean> {
     const deleted = await deleteCipher(
       this.cipherService,
-      this.userService,
       this.i18nService,
       this.platformUtilsService,
-      this.cipher
+      this.cipher,
+      this.stateService
     );
     if (deleted) {
       // add a timeout in order to prevent to display the vault home

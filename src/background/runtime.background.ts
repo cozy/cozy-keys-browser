@@ -26,12 +26,13 @@ import { CozyClientService } from "src/popup/services/cozyClient.service";
 import { CryptoService } from "jslib-common/abstractions/crypto.service";
 import { EncString } from "jslib-common/models/domain/encString";
 import { HashPurpose } from "jslib-common/enums/hashPurpose";
-import { KonnectorsService } from "../popup/services/konnectors.service";
 import { LocalConstantsService } from "../popup/services/constants.service";
 import { PasswordRequest } from "jslib-common/models/request/passwordRequest";
 import { SyncService } from "jslib-common/abstractions/sync.service";
-import { UserService } from "jslib-common/abstractions/user.service";
 import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
+import { AuthResult } from "jslib-common/models/domain/authResult";
+import { PasswordLogInCredentials } from "jslib-common/models/domain/logInCredentials";
+import { LogInStrategy } from "jslib-common/misc/logInStrategies/logIn.strategy";
 // End Cozy imports
 
 export default class RuntimeBackground {
@@ -51,15 +52,13 @@ export default class RuntimeBackground {
     private messagingService: MessagingService,
     private stateService: StateService,
     private logService: LogService,
-    private cozyClientService: CozyClientService,
-    private konnectorsService: KonnectorsService,
     private syncService: SyncService,
     private authService: AuthService,
     private cryptoService: CryptoService,
     private apiService: ApiService,
     private cipherService: CipherService,
-    private userService: UserService,
-    private vaultTimeoutService: VaultTimeoutService
+    private vaultTimeoutService: VaultTimeoutService,
+    private cozyClientService: CozyClientService
   ) {
     // onInstalled listener must be wired up before anything else, so we do it in the ctor
     chrome.runtime.onInstalled.addListener((details: any) => {
@@ -119,9 +118,11 @@ export default class RuntimeBackground {
         await this.cozyClientService.createClient();
 
         // ask notificationbar of all tabs to retry to collect pageDetails in order to activate in-page-menu
-        enableInPageMenu = await this.storageService.get<boolean>(
-          LocalConstantsService.enableInPageMenuKey
-        );
+        enableInPageMenu = true;
+        // TODO REFACTO
+        // enableInPageMenu = await this.storageService.get<boolean>(
+        //   LocalConstantsService.enableInPageMenuKey
+        // );
         if (enableInPageMenu === null) {
           // if not yet set, then default to true
           enableInPageMenu = true;
@@ -151,7 +152,6 @@ export default class RuntimeBackground {
       case "logout":
         // 1- logout
         await this.cozyClientService.logout();
-        await this.authService.clear(); // moved from the logout to avoid potential infinite loop
         await this.main.logout(msg.expired, msg.userId);
         // 2- ask all frames of all tabs to activate login-in-page-menu
         allTabs = await BrowserApi.getAllTabs();
@@ -251,7 +251,7 @@ export default class RuntimeBackground {
             await this.twoFaCheck(msg.token, sender.tab);
             break;
           case "getRememberedCozyUrl":
-            let rememberedCozyUrl = await this.storageService.get<string>("rememberedCozyUrl");
+            let rememberedCozyUrl = await this.stateService.getRememberedEmail();
             if (!rememberedCozyUrl) {
               rememberedCozyUrl = "";
             }
@@ -296,9 +296,11 @@ export default class RuntimeBackground {
         break;
       case "bgGetLoginMenuFillScript":
         // addon has been disconnected or the page was loaded while addon was not connected
-        enableInPageMenu = await this.storageService.get<boolean>(
-          LocalConstantsService.enableInPageMenuKey
-        );
+        // TODO REFACTO
+        enableInPageMenu = true;
+        // enableInPageMenu = await this.storageService.get<boolean>(
+        //   LocalConstantsService.enableInPageMenuKey
+        // );
         if (enableInPageMenu === null) {
           enableInPageMenu = true;
         }
@@ -319,8 +321,7 @@ export default class RuntimeBackground {
         const isAuthenticated = await this.stateService.getIsAuthenticated(); // = connected or installed
         const isLocked = isAuthenticated && (await this.vaultTimeoutService.isLocked());
         const pinSet = await this.vaultTimeoutService.isPinLockSet();
-        const isPinLocked =
-          (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1];
+        const isPinLocked = (pinSet[0] && this.stateService.getProtectedPin != null) || pinSet[1];
         await BrowserApi.tabSendMessage(
           sender.tab,
           {
@@ -493,24 +494,6 @@ export default class RuntimeBackground {
     }, 100);
   }
 
-  private async setDefaultSettings() {
-    // Default timeout option to "on restart".
-    const currentVaultTimeout = await this.storageService.get<number>(
-      LocalConstantsService.vaultTimeoutKey
-    );
-    if (currentVaultTimeout == null) {
-      await this.storageService.save(LocalConstantsService.vaultTimeoutKey, -1);
-    }
-
-    // Default action to "lock".
-    const currentVaultTimeoutAction = await this.storageService.get<string>(
-      LocalConstantsService.vaultTimeoutActionKey
-    );
-    if (currentVaultTimeoutAction == null) {
-      await this.storageService.save(LocalConstantsService.vaultTimeoutActionKey, "lock");
-    }
-  }
-
   /*
     @override by Cozy
     this function is based on the submit() function in src\popup\accounts\login.component.ts
@@ -522,24 +505,16 @@ export default class RuntimeBackground {
         base: loginUrl + "/bitwarden",
       });
       // logIn
-      const response = await this.authService.logIn(email, pwd);
+      const cred = new PasswordLogInCredentials(email, pwd);
+      const response = await this.authService.logIn(cred);
 
-      if (response.twoFactor) {
+      if (response.requiresTwoFactor) {
         await BrowserApi.tabSendMessage(tab, {
           command: "autofillAnswerRequest",
           subcommand: "2faRequested",
         });
       } else {
-        // Save the URL for next time (default to yes)
-        let rememberCozyUrl = await this.storageService.get<boolean>("rememberCozyUrl");
-        if (rememberCozyUrl == null) {
-          rememberCozyUrl = true;
-        }
-        if (rememberCozyUrl) {
-          await this.storageService.save("rememberedCozyUrl", loginUrl);
-        } else {
-          await this.storageService.remove("rememberedCozyUrl");
-        }
+        await this.stateService.setRememberedEmail(loginUrl);
         await BrowserApi.tabSendMessage(tab, {
           command: "menuAnswerRequest",
           subcommand: "loginOK",
@@ -561,8 +536,8 @@ export default class RuntimeBackground {
     this function is based on the submit() function in src\popup\accounts\login.component.ts
     */
   private async unlock(email: string, pwd: string, tab: any, loginUrl: string) {
-    const kdf = await this.userService.getKdf();
-    const kdfIterations = await this.userService.getKdfIterations();
+    const kdf = await this.stateService.getKdfType();
+    const kdfIterations = await this.stateService.getKdfIterations();
     const key = await this.cryptoService.makeKey(pwd, email, kdf, kdfIterations);
     const storedKeyHash = await this.cryptoService.getKeyHash();
 
@@ -615,8 +590,8 @@ export default class RuntimeBackground {
     this function is based on the submit() function in jslib/src/angular/components/lock.component.ts
     */
   private async unPinlock(email: string, pin: string, tab: any, loginUrl: string) {
-    const kdf = await this.userService.getKdf();
-    const kdfIterations = await this.userService.getKdfIterations();
+    const kdf = await this.stateService.getKdfType();
+    const kdfIterations = await this.stateService.getKdfIterations();
     const pinSet = await this.vaultTimeoutService.isPinLockSet();
     let failed = true;
     try {
@@ -626,10 +601,10 @@ export default class RuntimeBackground {
           email,
           kdf,
           kdfIterations,
-          this.vaultTimeoutService.pinProtectedKey
+          await this.stateService.getDecryptedPinProtected()
         );
         const encKey = await this.cryptoService.getEncKey(key);
-        const protectedPin = await this.storageService.get<string>(ConstantsService.protectedPin);
+        const protectedPin = await this.stateService.getProtectedPin();
         const decPin = await this.cryptoService.decryptToUtf8(new EncString(protectedPin), encKey);
 
         failed = decPin !== pin;
@@ -670,23 +645,24 @@ export default class RuntimeBackground {
   /*
     @override by Cozy
     this function is based on the submit() function in jslib/src/angular/components/two-factor.component.ts
+    TODO REFACTO
     */
   private async twoFaCheck(token: string, tab: any) {
     try {
       const selectedProviderType = 1; // value observed in running code
       const remember = false; // value observed in running code
-      const resp = await this.authService.logInTwoFactor(selectedProviderType, token, remember);
-
-      if (resp.twoFactor) {
-        // validation failed, a new token will be sent to the user.
-        await BrowserApi.tabSendMessage(tab, {
-          command: "menuAnswerRequest",
-          subcommand: "2faCheckNOK",
-        });
-      } else {
-        // validation succeeded
-        this.processMessage({ command: "loggedIn" }, "runtime.background.ts.twoFaCheck()", null);
-      }
-    } catch (e) {}
+      const resp: AuthResult = await this.authService.logInTwoFactor({
+        provider: selectedProviderType,
+        token,
+        remember,
+      });
+      // validation succeeded
+      this.processMessage({ command: "loggedIn" }, "runtime.background.ts.twoFaCheck()", null);
+    } catch (e) {
+      await BrowserApi.tabSendMessage(tab, {
+        command: "menuAnswerRequest",
+        subcommand: "2faCheckNOK",
+      });
+    }
   }
 }

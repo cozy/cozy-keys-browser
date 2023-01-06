@@ -1,6 +1,7 @@
 import { Registry } from "cozy-client/dist/registry";
 import { CipherService } from "jslib-common/abstractions/cipher.service";
 import { SettingsService } from "jslib-common/abstractions/settings.service";
+import { StateService } from "jslib-common/abstractions/state.service";
 import { StorageService } from "jslib-common/abstractions/storage.service";
 import { CipherType } from "jslib-common/enums/cipherType";
 import { UriMatchType } from "jslib-common/enums/uriMatchType";
@@ -18,7 +19,8 @@ export class KonnectorsService {
     private cipherService: CipherService,
     private storageService: StorageService,
     private settingsService: SettingsService,
-    private cozyClientService: CozyClientService
+    private cozyClientService: CozyClientService,
+    private stateService: StateService
   ) {}
 
   /**
@@ -30,6 +32,7 @@ export class KonnectorsService {
    */
   async createSuggestions() {
     try {
+      // TODO REFACTO : use storage service or stateservice ?
       const isDisabled = await this.storageService.get<boolean>(
         ConstantsService.disableKonnectorsSuggestionsKey
       );
@@ -207,9 +210,7 @@ export class KonnectorsService {
       suggestedKonnectors
     );
     // Get default matching setting for urls
-    let defaultMatch = await this.storageService.get<UriMatchType>(
-      ConstantsService.defaultUriMatch
-    );
+    let defaultMatch = await this.stateService.getDefaultUriMatch();
     if (defaultMatch == null) {
       defaultMatch = UriMatchType.Domain;
     }
