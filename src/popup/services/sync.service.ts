@@ -140,6 +140,7 @@ export class SyncService extends BaseSyncService {
     if (isfullSyncRunning) {
       return fullSyncPromise;
     } else {
+      this.syncInProgress = true;
       isfullSyncRunning = true;
       await this.refreshIdentityToken();
       fullSyncPromise = super.fullSync(forceSync, allowThrowOnError).then((resp) => {

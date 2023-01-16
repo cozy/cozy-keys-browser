@@ -51,7 +51,7 @@ export class LockComponent extends BaseLockComponent {
       ngZone
     );
     this.successRoute = "/tabs/current";
-    // this.successRoute = "current";
+    this.isInitialLockScreen = (window as any).previousPopupUrl == null;
   }
 
   async ngOnInit() {

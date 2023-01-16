@@ -88,6 +88,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
   @Input() cozyUrl: string = "";
   @Input() rememberCozyUrl = true;
 
+  email: string = "";
   masterPassword: string = "";
   showPassword: boolean = false;
   formPromise: Promise<AuthResult>;
@@ -135,7 +136,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
 
   async ngOnInit() {
     if (this.cozyUrl == null || this.cozyUrl === "") {
-      this.cozyUrl = await this.stateService.getRememberedEmail();
+      this.email = await this.stateService.getRememberedEmail();
+      this.cozyUrl = this.email.slice(3);
       if (this.cozyUrl == null) {
         this.cozyUrl = "";
       }
@@ -190,18 +192,13 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
       });
       // The email is based on the URL and necessary for login
       const hostname = Utils.getHostname(loginUrl);
-      this.cozyUrl = "me@" + hostname;
+      this.email = "me@" + hostname;
 
-      const credentials = new PasswordLogInCredentials(
-        this.cozyUrl,
-        this.masterPassword,
-        null,
-        null
-      );
+      const credentials = new PasswordLogInCredentials(this.email, this.masterPassword, null, null);
       this.formPromise = this.authService.logIn(credentials);
       const response = await this.formPromise;
       if (this.rememberCozyUrl || this.alwaysRememberCozyUrl) {
-        await this.stateService.setRememberedEmail(this.cozyUrl);
+        await this.stateService.setRememberedEmail(this.email);
       } else {
         await this.stateService.setRememberedEmail(null);
       }

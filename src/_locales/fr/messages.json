@@ -644,6 +644,9 @@
   "notificationAddSave": {
     "message": "Enregistrer"
   },
+  "notificationDontSave": {
+    "message": "Non, pas maintenant"
+  },
   "notificationAddSavePassword": {
     "message": "Enregistrer le mot de passe"
   },

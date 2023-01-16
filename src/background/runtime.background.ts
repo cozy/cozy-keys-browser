@@ -131,7 +131,6 @@ export default class RuntimeBackground {
         if (enableInPageMenu) {
           subCommand = "autofilIPMenuActivate";
         }
-        await this.syncService.fullSync(true);
         allTabs = await BrowserApi.getAllTabs();
         for (const tab of allTabs) {
           BrowserApi.tabSendMessage(tab, {
@@ -148,6 +147,9 @@ export default class RuntimeBackground {
             item
           );
         }
+        break;
+      case "addToLockedVaultPendingNotifications":
+        this.lockedVaultPendingNotifications.push(msg.data);
         break;
       case "logout":
         // 1- logout

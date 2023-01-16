@@ -20,6 +20,7 @@
       "js": [
         "content/autofill.js",
         "content/autofiller.js",
+        "content/notificationBar.js",
         "content/contextMenuHandler.js",
         "content/appInfo.js"
       ],
