@@ -1480,7 +1480,7 @@
     "message": "Cloner l’élément"
   },
   "clone": {
-    "message": "Cloner"
+    "message": "Cloné"
   },
   "passwordGeneratorPolicyInEffect": {
     "message": "Une ou plusieurs politiques d'organisation affectent les paramètres de votre générateur."
