@@ -24,6 +24,8 @@ import { CozyClientService } from "../services/cozyClient.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
 
 /** Start Cozy imports */
+import { HistoryService } from "../services/history.service";
+import { HostListener } from "@angular/core";
 /** End Cozy imports */
 
 const ComponentId = "GroupingsComponent";
@@ -81,7 +83,8 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     private searchService: SearchService,
     private location: Location,
     private browserStateService: StateService,
-    private cozyClientService: CozyClientService
+    private cozyClientService: CozyClientService,
+    private historyService: HistoryService
   ) {
     super(collectionService, folderService, browserStateService);
     this.noFolderListSize = 100;
@@ -144,7 +147,16 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
       window.clearTimeout(this.selectedTimeout);
     }
     this.saveState();
+    this.unloadMnger();
     this.broadcasterService.unsubscribe(ComponentId);
+  }
+
+  // note Cozy : beforeunload event would be better but is not triggered in webextension...
+  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
+  @HostListener("window:unload", ["$event"])
+  async unloadMnger(event?: any) {
+    // save search state when popup is closed.
+    this.historyService.updateQueryParamInCurrentUrl("searchText", this.searchText);
   }
 
   async load() {
@@ -373,6 +385,7 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
 
   cancelSearch() {
     this.searchText = "";
+    document.getElementById("search").focus();
     this.search(50);
   }
 

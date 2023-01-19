@@ -8,6 +8,10 @@ import { CipherService } from "jslib-common/abstractions/cipher.service";
 import { I18nService } from "jslib-common/abstractions/i18n.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
 
+// Cozy imports
+import { HistoryService } from "../services/history.service";
+// end
+
 @Component({
   selector: "app-password-history",
   templateUrl: "password-history.component.html",
@@ -18,7 +22,8 @@ export class PasswordHistoryComponent extends BasePasswordHistoryComponent {
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private historyService: HistoryService
   ) {
     super(cipherService, platformUtilsService, i18nService, window);
   }
@@ -35,6 +40,7 @@ export class PasswordHistoryComponent extends BasePasswordHistoryComponent {
   }
 
   close() {
-    this.location.back();
+    // this.location.back();
+    this.historyService.gotoPreviousUrl();
   }
 }

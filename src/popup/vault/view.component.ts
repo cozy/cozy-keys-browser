@@ -33,6 +33,7 @@ const BroadcasterSubscriptionId = "ChildViewComponent";
 import { deleteCipher } from "./utils";
 import { CozyClientService } from "../services/cozyClient.service";
 import { CAN_SHARE_ORGANIZATION } from "../../cozy/flags";
+import { HistoryService } from "../services/history.service";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -71,7 +72,8 @@ export class ViewComponent extends BaseViewComponent {
     apiService: ApiService,
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
-    private cozyClientService: CozyClientService
+    private cozyClientService: CozyClientService,
+    private historyService: HistoryService
   ) {
     super(
       cipherService,
@@ -274,7 +276,8 @@ export class ViewComponent extends BaseViewComponent {
   }
 
   close() {
-    this.location.back();
+    // this.location.back();
+    this.historyService.gotoPreviousUrl();
   }
 
   private async loadPageDetails() {

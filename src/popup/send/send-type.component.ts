@@ -19,6 +19,10 @@ import { BrowserComponentState } from "../../models/browserComponentState";
 import { StateService } from "../../services/abstractions/state.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
 
+/** Start Cozy imports */
+import { HistoryService } from "../services/history.service";
+/** End Cozy imports */
+
 const ComponentId = "SendTypeComponent";
 
 @Component({
@@ -47,7 +51,8 @@ export class SendTypeComponent extends BaseSendComponent {
     private changeDetectorRef: ChangeDetectorRef,
     private broadcasterService: BroadcasterService,
     private router: Router,
-    logService: LogService
+    logService: LogService,
+    private historyService: HistoryService
   ) {
     super(
       sendService,
@@ -151,7 +156,10 @@ export class SendTypeComponent extends BaseSendComponent {
 
   back() {
     (window as any).routeDirection = "b";
-    this.location.back();
+    // note Cozy : collections are not displayed in Cozy Pass Addon, but we modify nevertheless
+    // this back in case one day we decide to use this component
+    // this.location.back();
+    this.historyService.gotoPreviousUrl();
   }
 
   private async saveState() {

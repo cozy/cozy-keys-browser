@@ -15,6 +15,10 @@ import { SendService } from "jslib-common/abstractions/send.service";
 import { StateService } from "../../services/abstractions/state.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
 
+/** Start Cozy imports */
+import { HistoryService } from "../services/history.service";
+/** End Cozy imports */
+
 @Component({
   selector: "app-send-add-edit",
   templateUrl: "send-add-edit.component.html",
@@ -42,7 +46,8 @@ export class SendAddEditComponent extends BaseAddEditComponent {
     private router: Router,
     private location: Location,
     private popupUtilsService: PopupUtilsService,
-    logService: LogService
+    logService: LogService,
+    private historyService: HistoryService
   ) {
     super(
       i18nService,
@@ -135,11 +140,16 @@ export class SendAddEditComponent extends BaseAddEditComponent {
   }
 
   cancel() {
-    // If true, the window was pop'd out on the add-send page. location.back will not work
-    if ((window as any).previousPopupUrl.startsWith("/add-send")) {
-      this.router.navigate(["tabs/send"]);
-    } else {
-      this.location.back();
-    }
+    // // If true, the window was pop'd out on the add-send page. location.back will not work
+    // if ((window as any).previousPopupUrl.startsWith("/add-send")) {
+    //   this.router.navigate(["tabs/send"]);
+    // } else {
+    //   this.location.back();
+    // }
+
+    // note Cozy 1 : collections are not displayed in Cozy Pass Addon, but we modify nevertheless
+    // this back in case one day we decide to use this component
+    // note Cozy 2 : the routing pb mentionned above by BW is not relevant for the historyService
+    this.historyService.gotoPreviousUrl();
   }
 }

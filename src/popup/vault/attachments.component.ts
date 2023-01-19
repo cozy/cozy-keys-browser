@@ -12,6 +12,10 @@ import { LogService } from "jslib-common/abstractions/log.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
 import { StateService } from "jslib-common/abstractions/state.service";
 
+/* Cozy imports */
+import { HistoryService } from "../services/history.service";
+/* END */
+
 @Component({
   selector: "app-vault-attachments",
   templateUrl: "attachments.component.html",
@@ -28,7 +32,8 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     private location: Location,
     private route: ActivatedRoute,
     stateService: StateService,
-    logService: LogService
+    logService: LogService,
+    private historyService: HistoryService
   ) {
     super(
       cipherService,
@@ -52,7 +57,10 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
   }
 
   back() {
-    this.location.back();
+    // note Cozy : attachements are not displayed in Cozy Pass Addon, but we modify nevertheless
+    // this back in case one day we decide to use this component
+    // this.location.back();
+    this.historyService.gotoPreviousUrl();
   }
 
   close() {

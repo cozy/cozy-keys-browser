@@ -28,6 +28,7 @@ import { CozyClientService } from "../services/cozyClient.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
 
 /** Start Cozy imports */
+import { HistoryService } from "../services/history.service";
 /** End Cozy imports */
 
 const BroadcasterSubscriptionId = "CurrentTabComponent";
@@ -68,7 +69,8 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private passwordRepromptService: PasswordRepromptService,
     private cozyClientService: CozyClientService,
-    private location: Location
+    private location: Location,
+    private historyService: HistoryService
   ) {}
 
   async ngOnInit() {
@@ -272,7 +274,8 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    this.router.navigate(["/tabs/vault"]);
+    // this.router.navigate(["/tabs/vault"]);
+    this.historyService.gotoPreviousUrl();
   }
 
   openWebApp() {

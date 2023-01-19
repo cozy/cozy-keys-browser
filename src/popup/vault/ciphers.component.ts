@@ -36,6 +36,7 @@ import { CozyClientService } from "../services/cozyClient.service";
 import { KonnectorsService } from "../services/konnectors.service";
 import { StorageService } from "jslib-common/abstractions/storage.service";
 import { UriMatchType } from "jslib-common/enums/uriMatchType";
+import { HistoryService } from "../services/history.service";
 /* eslint-enable */
 /** End Cozy imports */
 
@@ -79,7 +80,8 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
     private storageService: StorageService,
     private cozyClientService: CozyClientService,
     private konnectorsService: KonnectorsService,
-    private autofillService: AutofillService
+    private autofillService: AutofillService,
+    private historyService: HistoryService
   ) {
     super(searchService);
     this.applySavedState =
@@ -103,6 +105,10 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
         if (this.state?.searchText) {
           this.searchText = this.state.searchText;
         }
+      }
+      if (params.searchText) {
+        this.searchText = params.searchText;
+        this.search(50);
       }
 
       if (params.deleted) {
@@ -213,7 +219,15 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
 
   ngOnDestroy() {
     this.saveState();
+    this.unloadMnger();
     this.broadcasterService.unsubscribe(ComponentId);
+  }
+
+  // note Cozy : beforeunload event would be better but is not triggered in webextension...
+  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
+  @HostListener("window:unload", ["$event"])
+  async unloadMnger(event?: any) {
+    this.historyService.updateQueryParamInCurrentUrl("searchText", this.searchText);
   }
 
   selectCipher(cipher: CipherView) {
@@ -267,7 +281,8 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
 
   back() {
     // (window as any).routeDirection = "b";
-    this.location.back();
+    // this.location.back();
+    this.historyService.gotoPreviousUrl();
   }
 
   showGroupings() {
@@ -287,8 +302,6 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
   }
 
   async fillOrLaunchCipher(cipher: CipherView) {
-    // console.log('fillOrLaunchCipher()');
-
     // Get default matching setting for urls
     let defaultMatch = await this.stateService.getDefaultUriMatch();
     if (defaultMatch == null) {
@@ -343,6 +356,7 @@ export class CiphersComponent extends BaseCiphersComponent implements OnInit, On
 
   emptySearch() {
     this.searchText = "";
+    document.getElementById("search").focus();
     this.search(50);
   }
 

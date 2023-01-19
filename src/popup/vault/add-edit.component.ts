@@ -27,6 +27,7 @@ import { PopupUtilsService } from "../services/popup-utils.service";
 /* eslint-disable */
 import { deleteCipher } from "./utils";
 import { KonnectorsService } from "../services/konnectors.service";
+import { HistoryService } from "../services/history.service";
 /* eslint-enable */
 /* END */
 
@@ -64,7 +65,8 @@ export class AddEditComponent extends BaseAddEditComponent {
     organizationService: OrganizationService,
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
-    private konnectorsService: KonnectorsService
+    private konnectorsService: KonnectorsService,
+    private historyService: HistoryService
   ) {
     super(
       cipherService,
@@ -124,6 +126,10 @@ export class AddEditComponent extends BaseAddEditComponent {
       }
       await this.load();
 
+      if (params.tempCipher) {
+        deepCopy(this.cipher, JSON.parse(params.tempCipher));
+      }
+
       if (!this.editMode || this.cloneMode) {
         if (
           !this.popupUtilsService.inPopout(window) &&
@@ -163,6 +169,14 @@ export class AddEditComponent extends BaseAddEditComponent {
     }, 200);
   }
 
+  // note Cozy : beforeunload event would be better but is not triggered in webextension...
+  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
+  @HostListener("window:unload", ["$event"])
+  async unloadMnger(event: any) {
+    // save cipher state if edition in progress when popup is closed.
+    this.historyService.saveTempCipherInHistory(this.cipher);
+  }
+
   async load() {
     await super.load();
     this.showAutoFillOnPageLoadOptions =
@@ -173,10 +187,14 @@ export class AddEditComponent extends BaseAddEditComponent {
   async submit(): Promise<boolean> {
     if (await super.submit()) {
       if (this.cloneMode) {
-        this.router.navigate(["/tabs/vault"]);
+        // note Cozy : why should we go back to vault after cloning a cipher ?
+        // we prefer go back un history twice (from where the initial cipher has bee opened)
+        // this.router.navigate(["/tabs/vault"]);
+        this.historyService.gotoPreviousUrl(2);
       } else {
         this.konnectorsService.createSuggestions();
-        this.location.back();
+        // this.location.back();
+        this.historyService.gotoPreviousUrl();
       }
       return true;
     }
@@ -186,7 +204,8 @@ export class AddEditComponent extends BaseAddEditComponent {
 
   cancel() {
     super.cancel();
-    this.location.back();
+    // this.location.back();
+    this.historyService.gotoPreviousUrl();
   }
 
   async generateUsername(): Promise<boolean> {
@@ -202,6 +221,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     const confirmed = await super.generatePassword();
     if (confirmed) {
       await this.saveCipherState();
+      this.historyService.saveTempCipherInHistory(this.cipher); // save cipher state if edition in progress when popup is closed.
       this.router.navigate(["generator"], { queryParams: { type: "password" } });
     }
     return confirmed;
@@ -221,7 +241,8 @@ export class AddEditComponent extends BaseAddEditComponent {
     );
     if (deleted) {
       // add a timeout in order to prevent to display the vault home
-      this.location.back();
+      // this.location.back();
+      this.historyService.gotoPreviousUrl();
       return true;
     }
     return false;
@@ -248,5 +269,22 @@ export class AddEditComponent extends BaseAddEditComponent {
           ? []
           : this.collections.filter((c) => (c as any).checked).map((c) => c.id),
     });
+  }
+}
+
+// Cozy Helper
+// copy source object attributes into target object
+function deepCopy(target: any, source: any) {
+  for (const key in source) {
+    console.log(key);
+    if (typeof source[key] === "object") {
+      if (Array.isArray(source[key])) {
+        target[key] = source[key].slice();
+      } else {
+        deepCopy(target[key], source[key]);
+      }
+    } else {
+      target[key] = source[key];
+    }
   }
 }

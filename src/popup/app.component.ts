@@ -14,6 +14,7 @@ import { BrowserApi } from "../browser/browserApi";
 import { StateService } from "../services/abstractions/state.service";
 
 import { routerTransition } from "./app-routing.animations";
+import { HistoryService } from "./services/history.service";
 
 @Component({
   selector: "app-root",
@@ -38,13 +39,16 @@ export class AppComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private ngZone: NgZone,
     private sanitizer: DomSanitizer,
-    private platformUtilsService: PlatformUtilsService
+    private platformUtilsService: PlatformUtilsService,
+    private historyService: HistoryService
   ) {}
 
   async ngOnInit() {
     // Component states must not persist between closing and reopening the popup, otherwise they become dead objects
     // Clear them aggressively to make sure this doesn't occur
     await this.clearComponentStates();
+
+    this.historyService.init();
 
     this.stateService.activeAccount.subscribe((userId) => {
       this.activeUserId = userId;
