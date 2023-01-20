@@ -4,7 +4,7 @@ import { PopupUtilsService } from "./services/popup-utils.service"; // eslint-di
 /* COZY IMPORTS */
 /* eslint-disable */
 import { CozyClientService } from "./services/cozyClient.service";
-import { Router, NavigationStart, Event as NavigationEvent, RouterOutlet } from "@angular/router";
+import { Router, NavigationEnd, Event as NavigationEvent, RouterOutlet } from "@angular/router";
 import { routerTransition } from "./app-routing.animations";
 /* eslint-enable */
 /* END */
@@ -26,7 +26,7 @@ export class TabsComponent implements OnInit {
     private router: Router
   ) {
     this.event$ = this.router.events.subscribe((event: NavigationEvent) => {
-      if (event instanceof NavigationStart) {
+      if (event instanceof NavigationEnd) {
         if (event.url === "/tabs/current") {
           this.isVaultTabActive = true;
         } else {
