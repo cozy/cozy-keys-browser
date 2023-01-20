@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
 import { CipherView } from "jslib-common/models/view/cipherView";
+import { BrowserApi } from "../../browser/browserApi";
+import { StateService } from "../../services/state.service";
 
 /* 
 
@@ -9,8 +11,11 @@ This class is added by Cozy
 It is in charge to manage a navigation history and to persist some contextual data 
 so that when the popup is closed the user can find back its navigation when re-opening
 the popup.
-This navigation state is taken only two minutes after closing the popup in order to come
-back to the page displaying what is relevant for the current tab browser.
+This navigation state is used only two minutes after closing the popup. Beyond 2 mn the
+popup will be opened on the default homePage.
+
+The persistence is operated by BW stateService, in memory, thus is cleared 
+on logout and on lock.
 
 */
 
@@ -22,9 +27,15 @@ export class HistoryService {
   private rootPaths: string[] = ["/tabs/vault", "/tabs/generator", "/tabs/settings"];
   private currentUrlInProgress: boolean = false;
   private previousUrlInProgress: boolean = false;
+  private stateService: StateService;
 
   constructor(private router: Router) {
-    router.events.subscribe((event) => {
+    // retrieve the stateService (standard injection was not working ?)
+    const page = BrowserApi.getBackgroundPage();
+    this.stateService = page.bitwardenMain["stateService"];
+
+    // listen to router to feed the history
+    router.events.subscribe(async (event) => {
       if (event instanceof NavigationEnd) {
         if (this.currentUrlInProgress) {
           this.currentUrlInProgress = false;
@@ -32,8 +43,7 @@ export class HistoryService {
           this.hist.shift();
           this.hist[0] = event.url;
           this.previousUrlInProgress = false;
-          localStorage.setItem(
-            "popupHistory",
+          await this.stateService.setHistoryState(
             JSON.stringify({
               hist: this.hist,
               timestamp: new Date().valueOf(),
@@ -46,8 +56,7 @@ export class HistoryService {
           } else {
             this.hist.unshift(event.url);
           }
-          localStorage.setItem(
-            "popupHistory",
+          await this.stateService.setHistoryState(
             JSON.stringify({
               hist: this.hist,
               timestamp: new Date().valueOf(),
@@ -58,8 +67,8 @@ export class HistoryService {
     });
   }
 
-  public init() {
-    const histStr = localStorage.getItem("popupHistory");
+  public async init() {
+    const histStr: string = await this.stateService.getHistoryState();
 
     if (histStr === "/" || !histStr) {
       this.hist = this.defaultHist.slice();
@@ -125,10 +134,8 @@ export class HistoryService {
     }
   }
 
-  public clear() {
-    // TODO BJA : à appeler au lock et logout
-    // TODO BJA : use chrome.storage instead of localStorage
-    localStorage.removeItem("popupHistory");
+  private async clear() {
+    await this.stateService.setHistoryState(null);
   }
 
   public saveTempCipherInHistory(cipher: CipherView) {
@@ -152,10 +159,9 @@ export class HistoryService {
     this.updateCurrentUrl(words[0] + (queryParamSt !== "" ? "?" + queryParamSt : ""));
   }
 
-  public updateCurrentUrl(url: string) {
+  public async updateCurrentUrl(url: string) {
     this.hist[0] = url;
-    localStorage.setItem(
-      "popupHistory",
+    await this.stateService.setHistoryState(
       JSON.stringify({
         hist: this.hist,
         timestamp: new Date().valueOf(),

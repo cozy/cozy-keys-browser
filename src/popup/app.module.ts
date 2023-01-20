@@ -253,7 +253,7 @@ import { HistoryService } from "./services/history.service";
     IfFlagDirective,
   ],
   entryComponents: [],
-  providers: [CurrencyPipe, DatePipe, HistoryService],
+  providers: [CurrencyPipe, DatePipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

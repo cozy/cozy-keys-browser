@@ -17,6 +17,7 @@ export class Account extends BaseAccount {
   send?: BrowserSendComponentState;
   ciphers?: BrowserComponentState;
   sendType?: BrowserComponentState;
+  history?: string;
 
   constructor(init: Partial<Account>) {
     super(init);

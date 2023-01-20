@@ -138,4 +138,14 @@ export class StateService
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
     );
   }
+
+  async setHistoryState(value: string): Promise<void> {
+    const account = await this.getAccount(this.defaultInMemoryOptions);
+    account.history = value;
+    await this.saveAccount(account, this.defaultInMemoryOptions);
+  }
+
+  async getHistoryState(): Promise<string> {
+    return (await this.getAccount(this.defaultInMemoryOptions))?.history;
+  }
 }

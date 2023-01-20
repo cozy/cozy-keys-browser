@@ -67,6 +67,7 @@ import { CozySanitizeUrlService } from "./cozySanitizeUrl.service";
 import { KonnectorsService } from "./konnectors.service";
 import { AuthService } from "../../services/auth.service";
 import { ModalService } from "jslib-angular/services/modal.service";
+import { HistoryService } from "./history.service";
 /* eslint-enable */
 /* END */
 
@@ -132,6 +133,7 @@ export const konnectorsService = new KonnectorsService(
     { provide: CozyClientService, useValue: cozyClientService },
     { provide: CozySanitizeUrlService, useValue: cozySanitizeUrlService },
     { provide: KonnectorsService, useValue: konnectorsService },
+    { provide: HistoryService },
     InitService,
     DebounceNavigationService,
     {
