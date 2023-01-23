@@ -23,7 +23,7 @@ on logout and on lock.
 export class HistoryService {
   private hist: any[] = [undefined];
   private homepage = "tabs/current";
-  private defaultHist: string[] = ["tabs/current", "tabs/vault"];
+  private defaultHist: string[] = ["/tabs/current", "/tabs/vault"];
   private rootPaths: string[] = ["/tabs/vault", "/tabs/generator", "/tabs/settings"];
   private currentUrlInProgress: boolean = false;
   private previousUrlInProgress: boolean = false;
@@ -53,6 +53,10 @@ export class HistoryService {
           if (this.rootPaths.includes(event.url)) {
             // back to a root of a tab : delete history
             this.hist = [event.url];
+          } else if (event.url === "/lock") {
+            this.hist = this.defaultHist.slice();
+          } else if (event.url === this.hist[0]) {
+            return;
           } else {
             this.hist.unshift(event.url);
           }
@@ -76,7 +80,6 @@ export class HistoryService {
     }
 
     const retrievedData = JSON.parse(histStr);
-    console.log("histroryService.init : retrievedData", retrievedData);
 
     const time = new Date().valueOf();
     if (retrievedData.hist === undefined || retrievedData.timestamp + 120000 < time) {
@@ -86,11 +89,9 @@ export class HistoryService {
       return;
     }
     this.hist = retrievedData.hist;
-    console.log("oninit historyService history = ", this.hist);
   }
 
   public gotoPreviousUrl(steps: number = 1) {
-    console.log("gotoPreviousUrl()");
     this.previousUrlInProgress = true;
     if (steps > 1) {
       this.hist.shift();
@@ -135,6 +136,7 @@ export class HistoryService {
   }
 
   private async clear() {
+    this.hist = [];
     await this.stateService.setHistoryState(null);
   }
 

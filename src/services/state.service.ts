@@ -141,6 +141,9 @@ export class StateService
 
   async setHistoryState(value: string): Promise<void> {
     const account = await this.getAccount(this.defaultInMemoryOptions);
+    if (!account) {
+      return;
+    }
     account.history = value;
     await this.saveAccount(account, this.defaultInMemoryOptions);
   }
