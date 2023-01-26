@@ -765,6 +765,27 @@ export default class MainBackground {
       return;
     }
 
+    if (await this.vaultTimeoutService.isLocked()) {
+      // For information, to make the difference betweend locked and loggedout :
+      // const isAuthenticated = await this.userService.isAuthenticated(); // = connected or installed
+      // const isLocked        = await this.vaultTimeoutService.isLocked()
+      //    if  isAuthenticated == false  &  isLocked == true   => loggedout
+      //    if  isAuthenticated == true   &  isLocked == true   => locked
+      //    if  isAuthenticated == true   &  isLocked == false  => logged in
+      // const pinSet = await this.vaultTimeoutService.isPinLockSet();
+      // const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1];
+      BrowserApi.tabSendMessage(
+        tab,
+        {
+          command: "autofillAnswerRequest",
+          subcommand: "loginIPMenuActivate",
+          tab: tab,
+        },
+        { frameId: frameId }
+      );
+      return;
+    }
+
     const options: any = {};
     if (frameId != null) {
       options.frameId = frameId;

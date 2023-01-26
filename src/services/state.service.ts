@@ -1,4 +1,7 @@
+/* Cozy
 import { GlobalState } from "jslib-common/models/domain/globalState";
+*/
+import { GlobalState } from "src/models/globalState";
 import { StorageOptions } from "jslib-common/models/domain/storageOptions";
 import { StateService as BaseStateService } from "jslib-common/services/state.service";
 
@@ -81,5 +84,47 @@ export class StateService
     );
     account.sendType = value;
     await this.saveAccount(account, this.reconcileOptions(options, this.defaultInMemoryOptions));
+  }
+
+  async getEnableInPageMenu(options?: StorageOptions): Promise<boolean> {
+    return (
+      (
+        await this.getGlobals(
+          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+        )
+      )?.enableInPageMenu ?? true // defaults to true
+    );
+  }
+
+  async setEnableInPageMenu(value: boolean, options?: StorageOptions): Promise<void> {
+    const globals = await this.getGlobals(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    globals.enableInPageMenu = value;
+    await this.saveGlobals(
+      globals,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
+  async getDisableKonnectorsSuggestions(options?: StorageOptions): Promise<boolean> {
+    return (
+      (
+        await this.getGlobals(
+          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+        )
+      )?.disableKonnectorsSuggestions ?? false // defaults to false
+    );
+  }
+
+  async setDisableKonnectorsSuggestions(value: boolean, options?: StorageOptions): Promise<void> {
+    const globals = await this.getGlobals(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    globals.disableKonnectorsSuggestions = value;
+    await this.saveGlobals(
+      globals,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
   }
 }

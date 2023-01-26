@@ -5,13 +5,12 @@ import { UriMatchType } from "jslib-common/enums/uriMatchType";
 
 import { I18nService } from "jslib-common/abstractions/i18n.service";
 import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { StateService } from "jslib-common/abstractions/state.service";
+// import { StateService } from "jslib-common/abstractions/state.service";
 import { TotpService } from "jslib-common/abstractions/totp.service";
 
 /* Cozy imports */
-import { LocalConstantsService as ConstantsService } from "..//services/constants.service";
 import { BrowserApi } from "../../browser/browserApi";
-import { StorageService } from "jslib-common/abstractions/storage.service";
+import { StateService } from "../../services/abstractions/state.service";
 /* END */
 
 @Component({
@@ -47,8 +46,7 @@ export class OptionsComponent implements OnInit {
     private messagingService: MessagingService,
     private stateService: StateService,
     private totpService: TotpService,
-    i18nService: I18nService,
-    private storageService: StorageService
+    i18nService: I18nService
   ) {
     this.themeOptions = [
       { name: i18nService.t("default"), value: ThemeType.System },
@@ -81,21 +79,11 @@ export class OptionsComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // TODO REFACTO : where to set and get our keys ? sotrageService or stateService ?
-    // other cases in this file & others
-    this.disableKonnectorsSuggestions = await this.storageService.get(
-      ConstantsService.disableKonnectorsSuggestionsKey
-    );
+    this.disableKonnectorsSuggestions = await this.stateService.getDisableKonnectorsSuggestions();
 
     this.enableAutoFillOnPageLoad = await this.stateService.getEnableAutoFillOnPageLoad();
 
-    this.enableInPageMenu = await this.storageService.get<boolean>(
-      ConstantsService.enableInPageMenuKey
-    );
-    if (this.enableInPageMenu === null) {
-      // if not yet set, then default to true
-      this.enableInPageMenu = true;
-    }
+    this.enableInPageMenu = await this.stateService.getEnableInPageMenu();
 
     this.autoFillOnPageLoadDefault =
       (await this.stateService.getAutoFillOnPageLoadDefault()) ?? true;
@@ -139,22 +127,17 @@ export class OptionsComponent implements OnInit {
     this.messagingService.send("bgUpdateContextMenu");
   }
 
-  /*
-    TODO: enable back when TOTP is available
-    async updateAutoTotpCopy() {
+  async updateAutoTotpCopy() {
     await this.stateService.setDisableAutoTotpCopy(this.disableAutoTotpCopy);
   }
-    */
 
   async updateKonnectorsSuggestions() {
-    await this.storageService.save(
-      ConstantsService.disableKonnectorsSuggestionsKey,
-      this.disableKonnectorsSuggestions
-    );
+    await this.stateService.setDisableKonnectorsSuggestions(this.disableKonnectorsSuggestions);
   }
 
   async updateEnableInPageMenu() {
-    await this.storageService.save(ConstantsService.enableInPageMenuKey, this.enableInPageMenu);
+    await this.stateService.setEnableInPageMenu(this.enableInPageMenu);
+
     // activate or deactivate the menu from all tabs
     let subcommand = "autofilIPMenuActivate";
     if (!this.enableInPageMenu) {

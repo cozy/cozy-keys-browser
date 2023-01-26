@@ -142,12 +142,17 @@ export class SyncService extends BaseSyncService {
     } else {
       this.syncInProgress = true;
       isfullSyncRunning = true;
-      await this.refreshIdentityToken();
-      fullSyncPromise = super.fullSync(forceSync, allowThrowOnError).then((resp) => {
-        isfullSyncRunning = false;
-        return resp;
-      });
-      return fullSyncPromise;
+      fullSyncPromise = super
+        .fullSync(forceSync, allowThrowOnError)
+        .catch((e) => {
+          isfullSyncRunning = false;
+          return false;
+        })
+        .then((resp) => {
+          isfullSyncRunning = false;
+          return resp;
+        });
+      return this.refreshIdentityToken().then(() => fullSyncPromise);
     }
   }
 

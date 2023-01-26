@@ -30,4 +30,16 @@ export abstract class StateService extends BaseStateServiceAbstraction<Account> 
     value: BrowserComponentState,
     options?: StorageOptions
   ) => Promise<void>;
+
+  setHistoryState: (value: string) => Promise<void>;
+
+  getHistoryState: () => Promise<string>;
+
+  getEnableInPageMenu: (options?: StorageOptions) => Promise<boolean>;
+
+  setEnableInPageMenu: (value: boolean, options?: StorageOptions) => Promise<void>;
+
+  getDisableKonnectorsSuggestions: (options?: StorageOptions) => Promise<boolean>;
+
+  setDisableKonnectorsSuggestions: (value: boolean, options?: StorageOptions) => Promise<void>;
 }

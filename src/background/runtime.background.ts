@@ -3,7 +3,7 @@ import { I18nService } from "jslib-common/abstractions/i18n.service";
 import { LogService } from "jslib-common/abstractions/log.service";
 import { MessagingService } from "jslib-common/abstractions/messaging.service";
 import { NotificationsService } from "jslib-common/abstractions/notifications.service";
-import { StateService } from "jslib-common/abstractions/state.service";
+// import { StateService } from "jslib-common/abstractions/state.service";
 import { SystemService } from "jslib-common/abstractions/system.service";
 
 import { AutofillService } from "../services/abstractions/autofill.service";
@@ -26,13 +26,12 @@ import { CozyClientService } from "src/popup/services/cozyClient.service";
 import { CryptoService } from "jslib-common/abstractions/crypto.service";
 import { EncString } from "jslib-common/models/domain/encString";
 import { HashPurpose } from "jslib-common/enums/hashPurpose";
-import { LocalConstantsService } from "../popup/services/constants.service";
 import { PasswordRequest } from "jslib-common/models/request/passwordRequest";
 import { SyncService } from "jslib-common/abstractions/sync.service";
 import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
 import { AuthResult } from "jslib-common/models/domain/authResult";
 import { PasswordLogInCredentials } from "jslib-common/models/domain/logInCredentials";
-import { LogInStrategy } from "jslib-common/misc/logInStrategies/logIn.strategy";
+import { StateService } from "src/services/state.service";
 // End Cozy imports
 
 export default class RuntimeBackground {
@@ -90,14 +89,14 @@ export default class RuntimeBackground {
             'full.msg': msg,
             'full.sender': sender,
         });
-        */
+    */
 
     switch (msg.command) {
       case "loggedIn":
       case "unlocked":
         let item: LockedVaultPendingNotificationsItem;
-        let enableInPageMenu: boolean;
-        let allTabs: chrome.tabs.Tab[];
+        var enableInPageMenu: boolean;
+        var allTabs: chrome.tabs.Tab[];
 
         if (this.lockedVaultPendingNotifications.length > 0) {
           await BrowserApi.closeLoginTab();
@@ -118,15 +117,7 @@ export default class RuntimeBackground {
         await this.cozyClientService.createClient();
 
         // ask notificationbar of all tabs to retry to collect pageDetails in order to activate in-page-menu
-        enableInPageMenu = true;
-        // TODO REFACTO
-        // enableInPageMenu = await this.storageService.get<boolean>(
-        //   LocalConstantsService.enableInPageMenuKey
-        // );
-        if (enableInPageMenu === null) {
-          // if not yet set, then default to true
-          enableInPageMenu = true;
-        }
+        enableInPageMenu = await this.stateService.getEnableInPageMenu();
         let subCommand = "inPageMenuDeactivate";
         if (enableInPageMenu) {
           subCommand = "autofilIPMenuActivate";
@@ -253,7 +244,7 @@ export default class RuntimeBackground {
             await this.twoFaCheck(msg.token, sender.tab);
             break;
           case "getRememberedCozyUrl":
-            let rememberedCozyUrl = await this.stateService.getRememberedEmail();
+            let rememberedCozyUrl = (await this.stateService.getRememberedEmail()).slice(3);
             if (!rememberedCozyUrl) {
               rememberedCozyUrl = "";
             }
@@ -298,14 +289,7 @@ export default class RuntimeBackground {
         break;
       case "bgGetLoginMenuFillScript":
         // addon has been disconnected or the page was loaded while addon was not connected
-        // TODO REFACTO
-        enableInPageMenu = true;
-        // enableInPageMenu = await this.storageService.get<boolean>(
-        //   LocalConstantsService.enableInPageMenuKey
-        // );
-        if (enableInPageMenu === null) {
-          enableInPageMenu = true;
-        }
+        enableInPageMenu = await this.stateService.getEnableInPageMenu();
         if (!enableInPageMenu) {
           break;
         }
@@ -339,6 +323,26 @@ export default class RuntimeBackground {
         break;
       case "bgGetAutofillMenuScript":
         // If goes here : means that addon has just been connected (page was already loaded)
+        const that = this;
+        this.syncService.fullSync(false).then(async () => {
+          const script = await that.autofillService.generateFieldsForInPageMenuScripts(
+            msg.details,
+            true,
+            sender.frameId
+          );
+          await that.autofillService.doAutoFillActiveTab(
+            [
+              {
+                frameId: sender.frameId,
+                tab: sender.tab,
+                details: msg.details,
+                fieldsForInPageMenuScripts: script,
+                sender: "notifBarForInPageMenu", // to prepare a fillscript for the in-page-menu
+              },
+            ],
+            true
+          );
+        });
         const script = await this.autofillService.generateFieldsForInPageMenuScripts(
           msg.details,
           true,
@@ -359,6 +363,60 @@ export default class RuntimeBackground {
         break;
       case "collectPageDetailsResponse":
         switch (msg.sender) {
+          case "notificationBar":
+            /* auttofill.js sends the page details requested by the notification bar.
+                Result will be used by both the notificationBar and for the inPageMenu.
+                inPageMenu requires a fillscrip to know wich fields are relevant for the menu and which
+                is the type of each field in order to adapt the menu content (cards, identities, login or
+                existing logins)
+              */
+            // 1- request a fill script for the in-page-menu (if activated)
+            // let enableInPageMenu2 = await this.storageService.get<any>(
+            //   LocalConstantsService.enableInPageMenuKey);
+            let enableInPageMenu2 = await this.stateService.getEnableInPageMenu();
+            // default to true
+            if (enableInPageMenu2 === null) {
+              enableInPageMenu2 = true;
+            }
+            if (enableInPageMenu2) {
+              // If goes here : means that the page has just been loaded while addon was already connected
+              // get scripts for logins, cards and identities
+
+              const fieldsForAutofillMenuScripts =
+                await this.autofillService.generateFieldsForInPageMenuScripts(
+                  msg.details,
+                  true,
+                  sender.frameId
+                );
+              // get script for existing logins.
+              // the 4 scripts (existing logins, logins, cards and identities) will be sent
+              // to autofill.js by autofill.service
+              try {
+                const totpCode1 = await this.autofillService.doAutoFillActiveTab(
+                  [
+                    {
+                      frameId: sender.frameId,
+                      tab: msg.tab,
+                      details: msg.details,
+                      fieldsForInPageMenuScripts: fieldsForAutofillMenuScripts,
+                      sender: "notifBarForInPageMenu", // to prepare a fillscript for the in-page-menu
+                    },
+                  ],
+                  true
+                );
+              } catch (error) {
+                // the `doAutoFillActiveTab` is run in a `try` because the original BW code
+                // casts an error when no autofill is detected;
+              }
+            }
+            // 2- send page details to the notification bar
+            const forms = this.autofillService.getFormsWithPasswordFields(msg.details);
+            await BrowserApi.tabSendMessageData(msg.tab, "notificationBarPageDetails", {
+              details: msg.details,
+              forms: forms,
+            });
+
+            break;
           case "autofiller":
           case "autofill_cmd":
             const totpCode = await this.autofillService.doAutoFillActiveTab(
@@ -516,7 +574,7 @@ export default class RuntimeBackground {
           subcommand: "2faRequested",
         });
       } else {
-        await this.stateService.setRememberedEmail(loginUrl);
+        await this.stateService.setRememberedEmail(email);
         await BrowserApi.tabSendMessage(tab, {
           command: "menuAnswerRequest",
           subcommand: "loginOK",
