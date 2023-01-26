@@ -43,12 +43,7 @@ export class HistoryService {
           this.hist.shift();
           this.hist[0] = event.url;
           this.previousUrlInProgress = false;
-          await this.stateService.setHistoryState(
-            JSON.stringify({
-              hist: this.hist,
-              timestamp: new Date().valueOf(),
-            })
-          );
+          await this.saveHistoryState();
         } else {
           if (this.rootPaths.includes(event.url)) {
             // back to a root of a tab : delete history
@@ -60,12 +55,7 @@ export class HistoryService {
           } else {
             this.hist.unshift(event.url);
           }
-          await this.stateService.setHistoryState(
-            JSON.stringify({
-              hist: this.hist,
-              timestamp: new Date().valueOf(),
-            })
-          );
+          await this.saveHistoryState();
         }
       }
     });
@@ -73,19 +63,17 @@ export class HistoryService {
 
   public async init() {
     const histStr: string = await this.stateService.getHistoryState();
-
     if (histStr === "/" || !histStr) {
       this.hist = this.defaultHist.slice();
       return;
     }
 
     const retrievedData = JSON.parse(histStr);
-
     const time = new Date().valueOf();
-    if (retrievedData.hist === undefined || retrievedData.timestamp + 120000 < time) {
+    if (retrievedData.hist === undefined || retrievedData.timestamp + 2 * 60 * 1000 < time) {
       // reset history if it is more than 2mn old
       this.hist = this.defaultHist.slice();
-      this.clear();
+      this.saveHistoryState();
       return;
     }
     this.hist = retrievedData.hist;
@@ -135,9 +123,13 @@ export class HistoryService {
     }
   }
 
-  private async clear() {
-    this.hist = [];
-    await this.stateService.setHistoryState(null);
+  private async saveHistoryState() {
+    await this.stateService.setHistoryState(
+      JSON.stringify({
+        hist: this.hist,
+        timestamp: new Date().valueOf(),
+      })
+    );
   }
 
   public saveTempCipherInHistory(cipher: CipherView) {
@@ -163,12 +155,11 @@ export class HistoryService {
 
   public async updateCurrentUrl(url: string) {
     this.hist[0] = url;
-    await this.stateService.setHistoryState(
-      JSON.stringify({
-        hist: this.hist,
-        timestamp: new Date().valueOf(),
-      })
-    );
+    await this.saveHistoryState();
+  }
+
+  public async updateTimeStamp() {
+    await this.saveHistoryState();
   }
 }
 
