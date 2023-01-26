@@ -371,8 +371,6 @@ export default class RuntimeBackground {
                 existing logins)
               */
             // 1- request a fill script for the in-page-menu (if activated)
-            // let enableInPageMenu2 = await this.storageService.get<any>(
-            //   LocalConstantsService.enableInPageMenuKey);
             let enableInPageMenu2 = await this.stateService.getEnableInPageMenu();
             // default to true
             if (enableInPageMenu2 === null) {

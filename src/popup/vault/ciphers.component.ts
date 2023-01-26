@@ -33,7 +33,6 @@ import { AutofillService } from "../../services/abstractions/autofill.service";
 import { CozyClientService } from "../services/cozyClient.service";
 import { HostListener } from "@angular/core";
 import { KonnectorsService } from "../services/konnectors.service";
-import { LocalConstantsService as ConstantsService } from "../services/constants.service";
 import { StorageService } from "jslib-common/abstractions/storage.service";
 import { UriMatchType } from "jslib-common/enums/uriMatchType";
 /** End Cozy imports */

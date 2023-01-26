@@ -1,13 +1,15 @@
 import { Registry } from "cozy-client/dist/registry";
 import { CipherService } from "jslib-common/abstractions/cipher.service";
 import { SettingsService } from "jslib-common/abstractions/settings.service";
+/*
 import { StateService } from "jslib-common/abstractions/state.service";
+*/
+import { StateService } from "../../services/abstractions/state.service";
 import { StorageService } from "jslib-common/abstractions/storage.service";
 import { CipherType } from "jslib-common/enums/cipherType";
 import { UriMatchType } from "jslib-common/enums/uriMatchType";
 import { Utils } from "jslib-common/misc/utils";
 import { CipherView } from "jslib-common/models/view/cipherView";
-import { LocalConstantsService as ConstantsService } from "../services/constants.service";
 import { CozyClientService } from "./cozyClient.service";
 
 const DomainMatchBlacklist = new Map<string, Set<string>>([
@@ -32,10 +34,7 @@ export class KonnectorsService {
    */
   async createSuggestions() {
     try {
-      // TODO REFACTO : use storage service or stateservice ?
-      const isDisabled = await this.storageService.get<boolean>(
-        ConstantsService.disableKonnectorsSuggestionsKey
-      );
+      const isDisabled = await this.stateService.getDisableKonnectorsSuggestions();
       if (!isDisabled) {
         const cozyClient = await this.cozyClientService.getClientInstance();
         const allKonnectors = await this.getRegistryKonnectors(cozyClient);
