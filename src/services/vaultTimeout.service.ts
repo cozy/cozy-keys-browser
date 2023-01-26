@@ -1,7 +1,4 @@
-import { VaultTimeoutService as BaseVaultTimeoutService } from "jslib-common/services/vaultTimeout.service";
-
-import { SafariApp } from "../browser/safariApp";
-
+import { AuthService } from "jslib-common/abstractions/auth.service";
 import { CipherService } from "jslib-common/abstractions/cipher.service";
 import { CollectionService } from "jslib-common/abstractions/collection.service";
 import { CryptoService } from "jslib-common/abstractions/crypto.service";
@@ -11,8 +8,13 @@ import { MessagingService } from "jslib-common/abstractions/messaging.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
 import { PolicyService } from "jslib-common/abstractions/policy.service";
 import { SearchService } from "jslib-common/abstractions/search.service";
-import { StateService } from "./state.service";
+// import { StateService } from "jslib-common/abstractions/state.service";
 import { TokenService } from "jslib-common/abstractions/token.service";
+import { VaultTimeoutService as BaseVaultTimeoutService } from "jslib-common/services/vaultTimeout.service";
+
+import { SafariApp } from "../browser/safariApp";
+
+import { StateService } from "./state.service";
 
 export default class VaultTimeoutService extends BaseVaultTimeoutService {
   constructor(
@@ -27,8 +29,9 @@ export default class VaultTimeoutService extends BaseVaultTimeoutService {
     protected _policyService: PolicyService,
     protected _keyConnectorService: KeyConnectorService,
     protected _stateService: StateService,
+    protected _authService: AuthService,
     protected _lockedCallback: (userId?: string) => Promise<void> = null,
-    protected _loggedOutCallback: (userId?: string) => Promise<void> = null
+    protected _loggedOutCallback: (expired: boolean, userId?: string) => Promise<void> = null
   ) {
     super(
       _cipherService,
@@ -42,6 +45,7 @@ export default class VaultTimeoutService extends BaseVaultTimeoutService {
       _policyService,
       _keyConnectorService,
       _stateService,
+      _authService,
       _lockedCallback,
       _loggedOutCallback
     );

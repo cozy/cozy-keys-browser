@@ -666,7 +666,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     frameDiv.appendChild(iframe);
     document.body.appendChild(frameDiv);
 
-    (iframe.contentWindow.location as any) = barPageUrl; // todo BJA : utile ? cf au dessus `iframe.src = barPageUrl;`
+    (iframe.contentWindow.location as any) = barPageUrl;
     /** commented by Cozy
     const spacer = document.createElement("div");
     spacer.id = "bit-notification-bar-spacer";
