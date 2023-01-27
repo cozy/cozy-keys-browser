@@ -127,7 +127,7 @@ export default class AutofillService implements AutofillServiceInterface {
       throw new Error("Nothing to auto-fill.");
     }
 
-    const canAccessPremium = false;
+    const canAccessPremium = true;
     let didAutofill = false;
     options.pageDetails.forEach((pd: any) => {
       // make sure we're still on correct tab
@@ -194,7 +194,6 @@ export default class AutofillService implements AutofillServiceInterface {
       if (!fillScript) {
         return;
       }
-
       if (
         options.cipher.type !== CipherType.Login ||
         totpPromise ||

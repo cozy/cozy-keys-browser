@@ -178,6 +178,12 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
       });
       if (this.totpCode != null) {
         this.platformUtilsService.copyToClipboard(this.totpCode, { window: window });
+        this.platformUtilsService.showToast(
+          "success",
+          this.i18nService.t("TOTP"),
+          this.i18nService.t("TOTPCopiedInClipboard")
+        );
+        return;
       }
       if (this.popupUtilsService.inPopup(window)) {
         if (this.platformUtilsService.isFirefox() || this.platformUtilsService.isSafari()) {

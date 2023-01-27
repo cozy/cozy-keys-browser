@@ -674,6 +674,9 @@
   "notificationChangeDesc": {
     "message": "Update the password in my Cozy?"
   },
+  "notificationTOTP": {
+    "message": "TOTP copied in your clipboard"
+  },
   "notificationChangeSave": {
     "message": "Update"
   },
@@ -2027,5 +2030,11 @@
   },
   "apiKey": {
     "message": "API Key"
+  },
+  "TOTPCopiedInClipboard": {
+    "message": "TOTP copied in your clipboard !"
+  },
+  "TOTP": {
+    "message": "One Time PassWord"
   }
 }

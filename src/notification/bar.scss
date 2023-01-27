@@ -2,88 +2,40 @@
 
 body {
   background-color: $brand-primary;
-  padding: 0;
   margin: 0;
+  margin-top: 6px;
+  padding: 8px 18px 8px 8px;
   font-size: $font-size-large;
   line-height: 16px;
   font-family: $font-family-sans-serif;
+  display: flex;
+  color: white;
 }
 
-table {
-  width: 100%;
+#logo-link {
+  margin-right: 18px;
 }
 
-.outter-table > tbody > tr > td {
-  padding: 0 0 0 15px;
-  border-bottom: 2px solid $brand-primary;
-  vertical-align: top;
+#content {
+  flex-grow: 1;
+  display: flex;
 }
 
-.outter-table > tbody > tr > td:last-child {
-  padding-right: 15px;
-}
-
-.inner-table td {
-  padding: 0 15px 0 0;
-}
-
-.inner-table td:last-child {
-  padding: 0;
-}
-
-.inner-table td button {
-  margin-left: 5px;
+#template-totp-copied-clone {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
 }
 
 .desc-text {
-  color: $bar-text-color;
-  margin-top: 15px;
-  font-weight: 600;
+  flex-grow: 1;
 }
 
-.more-options {
-  margin-top: 15px;
-}
-
-.more-options-label {
-  color: $bar-text-color-alt;
-  text-decoration: none;
-}
-
-.more-options-list {
-  margin-top: 15px;
-  color: $bar-text-color;
-  background-color: $background-color-lighter;
-  padding: 0px 15px 15px 15px;
-  border-radius: $border-radius-large;
-}
-
-.option-entry {
-  padding: 15px 0px 0px 0px;
-}
-
-.checkbox-custom {
-  -webkit-appearance: none;
-  background-color: $background-color;
-  border: 1px solid $brand-primary;
-  padding: 9px;
-  border-radius: $border-radius;
-  display: inline-block;
-  position: relative;
-  vertical-align: middle;
-}
-
-.checkbox-custom:checked:after {
-  content: "\2714";
-  font-size: $font-size-large;
-  position: absolute;
-  top: 0px;
-  left: 2px;
-  color: $brand-primary;
-}
-
-svg {
-  margin-top: 5px;
+svg.dont-save {
+  fill: white;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 button {
@@ -91,7 +43,6 @@ button {
   font-weight: bold;
   text-transform: uppercase;
   padding: 10px 10px 10px 10px;
-
   &:hover {
     cursor: pointer;
   }

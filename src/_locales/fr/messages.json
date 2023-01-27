@@ -668,6 +668,9 @@
   "notificationChangeDesc": {
     "message": "Mettre à jour le mot de passe dans mon Cozy ?"
   },
+  "notificationTOTP": {
+    "message": "TOTP copié dans votre presse papier !"
+  },
   "notificationChangeSave": {
     "message": "Mettre à jour"
   },
@@ -2059,5 +2062,11 @@
   },
   "service": {
     "message": "Service"
+  },
+  "TOTPCopiedInClipboard": {
+    "message": "TOTP copié dans votre presse papier !"
+  },
+  "TOTP": {
+    "message": "Mot de passe à usage unique"
   }
 }

@@ -319,6 +319,11 @@ export class ViewComponent extends BaseViewComponent {
       });
       if (this.totpCode != null) {
         this.platformUtilsService.copyToClipboard(this.totpCode, { window: window });
+        this.platformUtilsService.showToast(
+          "success",
+          this.i18nService.t("TOTP"),
+          this.i18nService.t("TOTPCopiedInClipboard")
+        );
       }
     } catch {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("autofillError"));

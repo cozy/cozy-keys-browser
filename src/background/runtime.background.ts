@@ -469,6 +469,10 @@ export default class RuntimeBackground {
             });
             if (totpCode2 != null) {
               this.platformUtilsService.copyToClipboard(totpCode2, { window: window });
+              BrowserApi.tabSendMessageData(tab, "openNotificationBar", {
+                type: "TOTPCopied",
+                typeData: {},
+              });
             }
             break;
 
