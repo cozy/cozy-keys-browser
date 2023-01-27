@@ -132,7 +132,7 @@ export class HistoryService {
     );
   }
 
-  public saveTempCipherInHistory(cipher: CipherView) {
+  public saveTempCipherInHistory(cipher: any) {
     const cleanedCipher: any = cleanCipher(cipher);
     this.updateQueryParamInCurrentUrl("tempCipher", JSON.stringify(cleanedCipher));
   }

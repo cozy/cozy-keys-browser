@@ -46,6 +46,7 @@ export class AddEditComponent extends BaseAddEditComponent {
   currentUris: string[];
   openAttachmentsInPopup: boolean;
   showAutoFillOnPageLoadOptions: boolean;
+  private initialPwd: string;
 
   constructor(
     cipherService: CipherService,
@@ -126,8 +127,26 @@ export class AddEditComponent extends BaseAddEditComponent {
       }
       await this.load();
 
+      this.initialPwd = this.cipher.login.password;
       if (params.tempCipher) {
-        deepCopy(this.cipher, JSON.parse(params.tempCipher));
+        // the cipher was already in edition and popup has been closed or navigation in pwd generator
+        // we have to select the correct pwd
+        // first retrive data form url
+        var histCipher = JSON.parse(params.tempCipher);
+        this.initialPwd = histCipher.initialPwd;
+        delete histCipher.initialPwd;
+        if (histCipher.login.password !== this.cipher.login.password) {
+          // url pwd and state pwd are different : one of them has been modified compared to initial pwd
+          if (this.initialPwd !== this.cipher.login.password) {
+            // initial pwd and state differs, we keep the state pwd
+            histCipher.login.password = this.cipher.login.password;
+          } else {
+            // initial pwd and state are identical, we keep the url pwd
+          }
+        } else {
+          // url pwd and state pwd are identical, keep url pwd
+        }
+        deepCopy(this.cipher, histCipher);
       }
 
       if (!this.editMode || this.cloneMode) {
@@ -173,8 +192,8 @@ export class AddEditComponent extends BaseAddEditComponent {
   // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
   @HostListener("window:unload", ["$event"])
   async unloadMnger(event: any) {
-    // save cipher state if edition in progress when popup is closed.
-    this.historyService.saveTempCipherInHistory(this.cipher);
+    // save cipher state in url when popup is closed.
+    this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, ...this.cipher });
   }
 
   async load() {
@@ -221,7 +240,8 @@ export class AddEditComponent extends BaseAddEditComponent {
     const confirmed = await super.generatePassword();
     if (confirmed) {
       await this.saveCipherState();
-      this.historyService.saveTempCipherInHistory(this.cipher); // save cipher state if edition in progress when popup is closed.
+      // save cipher state in url when popup is closed.
+      this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, ...this.cipher });
       this.router.navigate(["generator"], { queryParams: { type: "password" } });
     }
     return confirmed;
@@ -276,7 +296,6 @@ export class AddEditComponent extends BaseAddEditComponent {
 // copy source object attributes into target object
 function deepCopy(target: any, source: any) {
   for (const key in source) {
-    console.log(key);
     if (typeof source[key] === "object") {
       if (Array.isArray(source[key])) {
         target[key] = source[key].slice();
