@@ -1,5 +1,5 @@
 import { Location } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, HostListener } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -42,5 +42,13 @@ export class PasswordHistoryComponent extends BasePasswordHistoryComponent {
   close() {
     // this.location.back();
     this.historyService.gotoPreviousUrl();
+  }
+
+  @HostListener("window:keydown", ["$event"])
+  closeOnEsc(e: KeyboardEvent) {
+    if (e.key === "Escape") {
+      this.close();
+      e.preventDefault();
+    }
   }
 }

@@ -96,6 +96,8 @@ export class AddEditComponent extends BaseAddEditComponent {
     if (event.key === "Escape") {
       this.cancel();
       event.preventDefault();
+    } else if (event.key === "Enter" && event.getModifierState("Control")) {
+      this.submit();
     }
   }
 

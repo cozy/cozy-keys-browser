@@ -34,8 +34,14 @@
   "cancel": {
     "message": "Cancel"
   },
+  "cancel_shortcut": {
+    "message": "Cancel (esc)"
+  },
   "close": {
     "message": "Close"
+  },
+  "close_shortcut": {
+    "message": "Close (esc)"
   },
   "submit": {
     "message": "Submit"
@@ -206,6 +212,9 @@
   },
   "save": {
     "message": "Save"
+  },
+  "save_shorcut": {
+    "message": "Save (Ctrl+Enter)"
   },
   "move": {
     "message": "Move"
@@ -1266,6 +1275,9 @@
   },
   "back": {
     "message": "Back"
+  },
+  "back_shortcut": {
+    "message": "Back (esc)"
   },
   "collections": {
     "message": "Collections"

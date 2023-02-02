@@ -34,8 +34,14 @@
   "cancel": {
     "message": "Annuler"
   },
+  "cancel_shortcut": {
+    "message": "Annuler (esc)"
+  },
   "close": {
     "message": "Fermer"
+  },
+  "close_shortcut": {
+    "message": "Fermer (esc)"
   },
   "submit": {
     "message": "Soumettre"
@@ -203,6 +209,9 @@
   },
   "save": {
     "message": "Enregistrer"
+  },
+  "save_shorcut": {
+    "message": "Enregistrer (Ctrl+Enter)"
   },
   "move": {
     "message": "Déplacer"
@@ -1314,6 +1323,9 @@
   },
   "back": {
     "message": "Retour"
+  },
+  "back_shortcut": {
+    "message": "Retour (esc)"
   },
   "collections": {
     "message": "Collections"
