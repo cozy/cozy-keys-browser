@@ -108,6 +108,7 @@
           appStopClick
           appBlurClick
           (click)="selectType(cipherType.SecureNote)"
+          *ngIf="typeCounts.get(cipherType.SecureNote)"
         >
           <div class="row-main">
             <div class="icon"><i class="icon-cozy icon-note"></i></div>

@@ -88,10 +88,27 @@
     <div class="no-items" *ngIf="!ciphers.length">
       <i class="bwi bwi-spinner bwi-spin bwi-3x" *ngIf="!loaded" aria-hidden="true"></i>
       <ng-container *ngIf="loaded">
-        <p>{{ "noItemsInList" | i18n }}</p>
-        <button type="button" (click)="addCipher()" class="btn block primary link">
-          {{ "addItem" | i18n }}
-        </button>
+        <ng-container *ngIf="type===1">
+          <div class="icon"><i class="icon-cozy icon-login icon-double"></i></div>
+          <p>{{ "noItemsInList" | i18n }}</p>
+          <button type="button" (click)="addCipher()" class="btn block primary link">
+            {{ "addLogin" | i18n }}
+          </button>
+        </ng-container>
+        <ng-container *ngIf="type===3">
+          <div class="icon"><i class="icon-cozy icon-bank icon-double"></i></div>
+          <p>{{ "addCardExplanation" | i18n }}</p>
+          <button type="button" (click)="addCipher()" class="btn block primary link">
+            {{ "addCard" | i18n }}
+          </button>
+        </ng-container>
+        <ng-container *ngIf="type===4">
+          <div class="icon"><i class="icon-cozy icon-identity icon-double"></i></div>
+          <p>{{ "addIdentityExplanation" | i18n }}</p>
+          <button type="button" (click)="addCipher()" class="btn block primary link">
+            {{ "addIdentity" | i18n }}
+          </button>
+        </ng-container>
       </ng-container>
     </div>
     <cdk-virtual-scroll-viewport

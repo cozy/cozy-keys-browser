@@ -128,10 +128,10 @@
     "message": "your passwords..."
   },
   "addIdentityExplanation": {
-    "message": "Automatically fill forms with you adresses, emails, phone numbers, birth dates..."
+    "message": "Automatically fill forms with you adresses, emails, phone numbers, birth dates... 💪"
   },
   "addCardExplanation": {
-    "message": "No longer type you credit card numbers, no longuer loose your PIN: enjoy Cozy Pass filling the purchase forms..."
+    "message": "Enjoy watching Cozy Pass automatically fill out those awful payment forms 🙂. No more typing your credit card numbers, no more losing your PIN."
   },
   "emptyDirectoryExplanation": {
     "message": "Empty folder"
@@ -319,6 +319,9 @@
   },
   "noItemsInList": {
     "message": "There are no items to list."
+  },
+  "noItemsSaved": {
+    "message": "No logins."
   },
   "itemInformation": {
     "message": "Item Information"
