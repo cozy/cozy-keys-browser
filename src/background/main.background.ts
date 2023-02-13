@@ -144,7 +144,8 @@ export default class MainBackground {
   exportService: ExportServiceAbstraction;
   searchService: SearchServiceAbstraction;
   notificationsService: NotificationsServiceAbstraction;
-  stateService: StateServiceAbstraction;
+  // stateService: StateServiceAbstraction;
+  stateService: StateService;
   stateMigrationService: StateMigrationService;
   systemService: SystemServiceAbstraction;
   eventService: EventServiceAbstraction;

@@ -31,10 +31,6 @@ export abstract class StateService extends BaseStateServiceAbstraction<Account> 
     options?: StorageOptions
   ) => Promise<void>;
 
-  setHistoryState: (value: string) => Promise<void>;
-
-  getHistoryState: () => Promise<string>;
-
   getEnableInPageMenu: (options?: StorageOptions) => Promise<boolean>;
 
   setEnableInPageMenu: (value: boolean, options?: StorageOptions) => Promise<void>;
