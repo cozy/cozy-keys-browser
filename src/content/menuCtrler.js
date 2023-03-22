@@ -239,6 +239,7 @@ function _onClick(event) {
     } else {
         show(this)
     }
+    console.log('end _onCliek')
 }
 
 function _onKeyDown(event) {
@@ -291,6 +292,7 @@ function _onKeyDown(event) {
 //
 function show(targetEl) {
     // console.log('menuCtrler.show() ');
+    console.log('SHOW()')
     if (state.isFrozen) return
     if (!state.isHidden && (state.lastFocusedEl === targetEl)) return
     state.lastFocusedEl = targetEl
@@ -431,7 +433,7 @@ function moveSelection(n) {
     }
     state.selectedCipher = newCipherNode
 
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         command      : 'bgAnswerMenuRequest',
         subcommand   : 'menuMoveSelection',
         targetCipher : newCipherNode.data.id,
@@ -457,7 +459,7 @@ function getPossibleTypesForField(fieldEl) {
 /* --------------------------------------------------------------------- */
 // Submit the currently selected cypher for autofill
 function submit() {
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         command    : 'bgAnswerMenuRequest',
         subcommand : 'fillFormWithCipher',
         sender     : 'menuCtrler',
@@ -470,7 +472,7 @@ menuCtrler.submit = submit
 /* --------------------------------------------------------------------- */
 // autofill the focused field with the detail of the currently selected cypher
 function submitDetail() {
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         command    : 'bgAnswerMenuRequest',
         subcommand : 'askMenuTofillFieldWithData',
         sender     : 'menuCtrler',
@@ -520,6 +522,7 @@ menuCtrler.setCiphers = setCiphers
 // Run this function so that menuCtrler.state.selectedCipher corresponds
 // to the initial selection within the menu
 function selectFirstCipherToSuggestFor(fieldEl) {
+    console.log('selectFirstCipherToSuggestFor')
     if (state.isHidden) return
     if (!ciphers || ciphers._length == 0) return
     if (!fieldEl) return
@@ -576,13 +579,13 @@ function _setIframeURLforMenuType(menuType, isPinLocked, isLocked) {
     const hash = '#' + encodeURIComponent(JSON.stringify(state.iFrameHash));
     const rand = '?' + Math.floor((Math.random()*1000000)+1)
     if (menuType === 'autofillMenu') {
-        menuEl.src = chrome.runtime.getURL('inPageMenu/menu.html' + rand) + hash
+        menuEl.src = browser.runtime.getURL('inPageMenu/menu.html' + rand) + hash
     } else if (menuType === 'loginMenu') {
         let searchParams = ''
         if (isPinLocked) searchParams = 'isPinLocked=true'
         if (isLocked) searchParams += 'isLocked=true'
-        if (searchParams) searchParams = '?' + searchParams
-        menuEl.src = chrome.runtime.getURL('inPageMenu/loginMenu.html' + searchParams + rand) + hash
+        if (searchParams) searchParams = '&' + searchParams
+        menuEl.src = browser.runtime.getURL('inPageMenu/loginMenu.html' + rand + searchParams) + hash
     }
 }
 
@@ -594,7 +597,7 @@ function _forceIframeRefresh() {
     if (!menuEl || !menuEl.src) return
     const url = new URL(menuEl.src)
     const rand = '?' + Math.floor((Math.random()*1000000)+1)
-    menuEl.src = url.origin + url.pathname + url.search + rand + url.hash
+    menuEl.src = url.origin + url.pathname + rand + url.search + url.hash
 }
 
 
@@ -630,17 +633,21 @@ function _updateHash() {
 // send informations to the iframe through the url's hash (no reload)
 // the hash is a Json string
 function _setApplyFadeInUrl(doApply, fieldTypes) {
+    console.log('_setApplyFadeInUrl', doApply, fieldTypes)
     if (!menuEl || !menuEl.src) return
     const url = new URL(menuEl.src)
+    console.log('url', url)
     if (doApply) {
         fieldTypes = {...{login: false, identity: false, card: false, fieldFormat:false},...fieldTypes}
+        console.log('setHash')
         state.iFrameHash = {...state.iFrameHash, ...fieldTypes, applyFadeIn: true}
-        menuEl.src = url.origin + url.pathname + url.search + '#' +
-            encodeURIComponent(JSON.stringify(state.iFrameHash))
+        console.log('end setHash')
+        menuEl.src = url.origin + url.pathname + url.search + '#' +'%7B%22arrowD%22%3A0%2C%22hostFrameId%22%3A0%7D'
+            // encodeURIComponent(JSON.stringify(state.iFrameHash))
     } else {
         state.iFrameHash.applyFadeIn = false
-        menuEl.src = url.origin + url.pathname + url.search + '#' +
-            encodeURIComponent(JSON.stringify(state.iFrameHash))
+        menuEl.src = url.origin + url.pathname + url.search + '#' + '%7B%22arrowD%22%3A0%2C%22hostFrameId%22%3A0%7D'
+            // encodeURIComponent(JSON.stringify(state.iFrameHash))
     }
 }
 

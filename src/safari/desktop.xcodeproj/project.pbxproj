@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C24FE7E2757BFA5003CB360 /* inPageMenu in Resources */ = {isa = PBXBuildFile; fileRef = 2C24FE7D2757BFA5003CB360 /* inPageMenu */; };
 		55E0374D2577FA6B00979016 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E0374C2577FA6B00979016 /* AppDelegate.swift */; };
 		55E037502577FA6B00979016 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55E0374E2577FA6B00979016 /* Main.storyboard */; };
 		55E037522577FA6B00979016 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E037512577FA6B00979016 /* ViewController.swift */; };
@@ -50,6 +51,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2C24FE7D2757BFA5003CB360 /* inPageMenu */ = {isa = PBXFileReference; lastKnownFileType = folder; name = inPageMenu; path = ../../../build/inPageMenu; sourceTree = "<group>"; };
 		5508DD7926051B5900A85C58 /* libswiftAppKit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libswiftAppKit.tbd; path = usr/lib/swift/libswiftAppKit.tbd; sourceTree = SDKROOT; };
 		55E037482577FA6B00979016 /* desktop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = desktop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55E0374B2577FA6B00979016 /* desktop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = desktop.entitlements; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 		55E0376F2577FA6F00979016 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2C24FE7D2757BFA5003CB360 /* inPageMenu */,
 				55E037702577FA6F00979016 /* popup */,
 				55E037712577FA6F00979016 /* background.js */,
 				55E037722577FA6F00979016 /* images */,
@@ -258,6 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				55E037812577FA6F00979016 /* _locales in Resources */,
+				2C24FE7E2757BFA5003CB360 /* inPageMenu in Resources */,
 				55E0377B2577FA6F00979016 /* images in Resources */,
 				55E0377F2577FA6F00979016 /* manifest.json in Resources */,
 				55E037802577FA6F00979016 /* background.html in Resources */,
@@ -435,7 +439,7 @@
 				CODE_SIGN_ENTITLEMENTS = safari/safari.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = LTZ2PFU5D6;
+				DEVELOPMENT_TEAM = 3AKXFMV43J;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = safari/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -444,7 +448,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bitwarden.desktop.safari;
+				PRODUCT_BUNDLE_IDENTIFIER = io.cozy.pass.desktop.safari;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -459,7 +463,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = LTZ2PFU5D6;
+				DEVELOPMENT_TEAM = 3AKXFMV43J;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = safari/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -468,7 +472,7 @@
 					"@executable_path/../../../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bitwarden.desktop.safari;
+				PRODUCT_BUNDLE_IDENTIFIER = io.cozy.pass.desktop.safari;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -484,7 +488,7 @@
 				CODE_SIGN_ENTITLEMENTS = desktop/desktop.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = LTZ2PFU5D6;
+				DEVELOPMENT_TEAM = 3AKXFMV43J;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = desktop/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -492,7 +496,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bitwarden.desktop;
+				PRODUCT_BUNDLE_IDENTIFIER = io.cozy.pass.desktop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -508,7 +512,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = LTZ2PFU5D6;
+				DEVELOPMENT_TEAM = 3AKXFMV43J;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = desktop/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -516,7 +520,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bitwarden.desktop;
+				PRODUCT_BUNDLE_IDENTIFIER = io.cozy.pass.desktop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};

@@ -36,7 +36,7 @@ var panel               ,
 document.addEventListener('DOMContentLoaded', () => {
 
     // 0- ask rememberedCozyUrl
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest',
         subcommand: 'getRememberedCozyUrl',
         sender    : 'loginMenu.js',
@@ -84,20 +84,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }, false);
     } else {
         // retrieve i18n values and set elements textcontent
-        const i18nGetMessage = chrome.i18n.getMessage
-        urlLabelTxt                                           = i18nGetMessage('cozyUrl'             )
-        twoFaLabelTxt                                         = i18nGetMessage('verificationCode'    )
-        visiPwdBtn.title                                      = i18nGetMessage('toggleVisibility'    )
-        visi2faBtn.title                                      = i18nGetMessage('toggleVisibility'    )
-        submitBtn.textContent                                 = i18nGetMessage('login'               )
+        urlLabelTxt                                           = browser.i18n.getMessage('cozyUrl'             )
+        twoFaLabelTxt                                         = browser.i18n.getMessage('verificationCode'    )
+        visiPwdBtn.title                                      = browser.i18n.getMessage('toggleVisibility'    )
+        visi2faBtn.title                                      = browser.i18n.getMessage('toggleVisibility'    )
+        submitBtn.textContent                                 = browser.i18n.getMessage('login'               )
         if (isPinLocked) {
-            title.textContent                                 = i18nGetMessage('unlockWithPin'       )
-            pwdLabelTxt                                       = i18nGetMessage('pin'                 )
+            title.textContent                                 = browser.i18n.getMessage('unlockWithPin'       )
+            pwdLabelTxt                                       = browser.i18n.getMessage('pin'                 )
             urlInput.disabled = true
             document.getElementById('url-row').classList.add('disabled')
         } else {
-            title.textContent                                 = i18nGetMessage('loginInPageMenuTitle')
-            pwdLabelTxt                                       = i18nGetMessage('masterPass'          )
+            title.textContent                                 = browser.i18n.getMessage('loginInPageMenuTitle')
+            pwdLabelTxt                                       = browser.i18n.getMessage('masterPass'          )
+
+            console.log('title.textContent', browser.i18n.getMessage('loginInPageMenuTitle'))
         }
     }
 
@@ -115,17 +116,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 8- listen to the commands sent by the addon
-    chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+    console.log('addListener')
+    browser.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+        console.log('Received message ', msg)
         // console.log('loginMenu heared msg', msg);
         if (msg.command !== 'menuAnswerRequest') return
         switch (msg.subcommand) {
             case 'loginNOK':
                 // console.log("loginNOK heard in loginInPageMenu");
-                setError(chrome.i18n.getMessage('inPageMenuLoginError'))
+                setError(browser.i18n.getMessage('inPageMenuLoginError'))
                 break;
             case '2faCheckNOK':
                 // console.log("2faCheckNOK heard in loginInPageMenu");
-                setError(chrome.i18n.getMessage('inPageMenuLogin2FACheckError'))
+                setError(browser.i18n.getMessage('inPageMenuLogin2FACheckError'))
                 adjustMenuHeight()
                 break;
             case 'setRememberedCozyUrl':
@@ -189,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function adjustMenuHeight() {
     if (lastSentHeight === panel.offsetHeight) return
     lastSentHeight = panel.offsetHeight
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest' ,
         subcommand: 'setMenuHeight'       ,
         height    : lastSentHeight        ,
@@ -227,7 +230,7 @@ async function submit() {
             subcommand = 'unlock'
         }
 
-        chrome.runtime.sendMessage({
+        browser.runtime.sendMessage({
             command   : 'bgAnswerMenuRequest',
             subcommand: subcommand           ,
             sender    : 'loginMenu.js'       ,
@@ -243,9 +246,9 @@ async function submit() {
     ]
 
     if (translatableMessages.includes(e.message)) {
-        setError(chrome.i18n.getMessage(e.message))
+        setError(browser.i18n.getMessage(e.message))
     } else {
-        setError(chrome.i18n.getMessage('errorOccurred'))
+        setError(browser.i18n.getMessage('errorOccurred'))
     }
 }
 }
@@ -262,7 +265,7 @@ async function submit2fa() {
         return;
     }
 
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest',
         subcommand: '2faCheck'           ,
         sender    : 'loginMenu.js'       ,
@@ -391,7 +394,7 @@ function setFocusOnEmptyField(){
 /* --------------------------------------------------------------------- */
 // Request the menu controler to close the iframe of the menu
 function close(force) {
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
         command   : 'bgAnswerMenuRequest',
         force     : force,
         subcommand: 'closeMenu'          ,

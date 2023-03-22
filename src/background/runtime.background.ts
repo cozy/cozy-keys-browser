@@ -138,6 +138,7 @@ export default class RuntimeBackground {
                 await this.main.collectPageDetailsForContentScript(sender.tab, msg.sender, sender.frameId);
                 break;
             case 'bgAnswerMenuRequest':
+                console.log('received bgAnswerMenuRequest')
                 switch (msg.subcommand) {
                     case 'getCiphersForTab':
                         const logins = await this.cipherService.getAllDecryptedForUrl(sender.tab.url, null);
@@ -881,6 +882,7 @@ export default class RuntimeBackground {
     }
 
     private async loggedinAndUnlocked(command: string) {
+        console.log('loggedinAndUnlocked')
         await this.main.setIcon();
         await this.main.refreshBadgeAndMenu(false);
         this.notificationsService.init(this.environmentService);

@@ -82,6 +82,7 @@
   },
   "permissions": [
     "tabs",
+    "activeTab",
     "contextMenus",
     "storage",
     "unlimitedStorage",

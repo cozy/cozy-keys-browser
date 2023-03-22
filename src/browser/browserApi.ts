@@ -14,7 +14,7 @@ export class BrowserApi {
     static async getTabFromCurrentWindowId(): Promise<any> {
         return await BrowserApi.tabsQueryFirst({
             active: true,
-            windowId: chrome.windows.WINDOW_ID_CURRENT,
+            windowId: browser.windows.WINDOW_ID_CURRENT,
         });
     }
 
@@ -37,7 +37,7 @@ export class BrowserApi {
 
     static async tabsQuery(options: any): Promise<any[]> {
         return new Promise(resolve => {
-            chrome.tabs.query(options, (tabs: any[]) => {
+            browser.tabs.query(options).then((tabs: any[]) => {
                 resolve(tabs);
             });
         });
@@ -65,13 +65,15 @@ export class BrowserApi {
     }
 
     static async tabSendMessage(tab: any, obj: any, options: any = null): Promise<any> {
+        console.log('tabSendMessage')
         if (!tab || !tab.id) {
             return;
         }
 
+        console.log('tabSendMessage',tab.id, obj, options)
         return new Promise<void>(resolve => {
-            chrome.tabs.sendMessage(tab.id, obj, options, () => {
-                if (chrome.runtime.lastError) {
+            browser.tabs.sendMessage(tab.id, obj, options).then(() => {
+                if (browser.runtime.lastError) {
                     // Some error happened
                 }
                 resolve();
@@ -80,23 +82,24 @@ export class BrowserApi {
     }
 
     static getBackgroundPage(): any {
-        return chrome.extension.getBackgroundPage();
+        return browser.extension.getBackgroundPage();
     }
 
     static getApplicationVersion(): string {
-        return chrome.runtime.getManifest().version;
+        return browser.runtime.getManifest().version;
     }
 
     static async isPopupOpen(): Promise<boolean> {
-        return Promise.resolve(chrome.extension.getViews({ type: 'popup' }).length > 0);
+        return Promise.resolve(browser.extension.getViews({ type: 'popup' }).length > 0);
     }
 
     static createNewTab(url: string, extensionPage: boolean = false, active: boolean = true) {
-        chrome.tabs.create({ url: url, active: active });
+        browser.tabs.create({ url: url, active: active });
     }
 
     static messageListener(name: string, callback: (message: any, sender: any, response: any) => void) {
-        chrome.runtime.onMessage.addListener((msg: any, sender: any, response: any) => {
+        browser.runtime.onMessage.addListener((msg: any, sender: any, response: any) => {
+            console.log('messageListenerFrombrowserApi', msg)
             callback(msg, sender, response);
         });
     }
@@ -146,19 +149,19 @@ export class BrowserApi {
     }
 
     static getUILanguage(win: Window) {
-        return chrome.i18n.getUILanguage();
+        return browser.i18n.getUILanguage();
     }
 
     static reloadExtension(win: Window) {
         if (win != null) {
             return win.location.reload(true);
         } else {
-            return chrome.runtime.reload();
+            return browser.runtime.reload();
         }
     }
 
     static reloadOpenWindows() {
-        const views = chrome.extension.getViews() as Window[];
+        const views = browser.extension.getViews() as Window[];
         views.filter(w => w.location.href != null).forEach(w => {
             w.location.reload();
         });
