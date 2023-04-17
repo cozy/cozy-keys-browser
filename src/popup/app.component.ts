@@ -2,16 +2,15 @@ import { ChangeDetectorRef, Component, NgZone, OnInit, SecurityContext } from "@
 import { DomSanitizer } from "@angular/platform-browser";
 import { NavigationEnd, Router, RouterOutlet } from "@angular/router";
 import { IndividualConfig, ToastrService } from "ngx-toastr";
-import Swal, { SweetAlertIcon } from "sweetalert2/src/sweetalert2.js";
-import { BrowserApi } from "../browser/browserApi";
+import Swal, { SweetAlertIcon } from "sweetalert2";
 
 import { AuthService } from "jslib-common/abstractions/auth.service";
 import { BroadcasterService } from "jslib-common/abstractions/broadcaster.service";
 import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { KeyConnectorService } from "jslib-common/abstractions/keyConnector.service";
 import { MessagingService } from "jslib-common/abstractions/messaging.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
 
+import { BrowserApi } from "../browser/browserApi";
 import { StateService } from "../services/abstractions/state.service";
 
 import { routerTransition } from "./app-routing.animations";
@@ -20,9 +19,9 @@ import { routerTransition } from "./app-routing.animations";
   selector: "app-root",
   // styles: [],
   animations: [routerTransition],
-  template: ` <main [@routerTransition]="getState(o)">
+  template: ` <div [@routerTransition]="getState(o)">
     <router-outlet #o="outlet"></router-outlet>
-  </main>`,
+  </div>`,
 })
 export class AppComponent implements OnInit {
   private lastActivity: number = null;
@@ -39,14 +38,14 @@ export class AppComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private ngZone: NgZone,
     private sanitizer: DomSanitizer,
-    private platformUtilsService: PlatformUtilsService,
-    private keyConnectoService: KeyConnectorService
+    private platformUtilsService: PlatformUtilsService
   ) {}
 
-  ngOnInit() {
-    if (BrowserApi.getBackgroundPage() == null) {
-      return;
-    }
+  async ngOnInit() {
+    // Component states must not persist between closing and reopening the popup, otherwise they become dead objects
+    // Clear them aggressively to make sure this doesn't occur
+    await this.clearComponentStates();
+
     this.stateService.activeAccount.subscribe((userId) => {
       this.activeUserId = userId;
     });
@@ -130,10 +129,7 @@ export class AppComponent implements OnInit {
           (window as any).previousPopupUrl != null &&
           (window as any).previousPopupUrl.startsWith("/tabs/")
         ) {
-          await this.stateService.setBrowserGroupingComponentState(null);
-          await this.stateService.setBrowserCipherComponentState(null);
-          await this.stateService.setBrowserSendComponentState(null);
-          await this.stateService.setBrowserSendTypeComponentState(null);
+          await this.clearComponentStates();
         }
         if (url.startsWith("/tabs/")) {
           await this.stateService.setAddEditCipherInfo(null);
@@ -254,5 +250,18 @@ export class AppComponent implements OnInit {
       dialogId: msg.dialogId,
       confirmed: confirmed.value,
     });
+  }
+
+  private async clearComponentStates() {
+    if (!(await this.stateService.getIsAuthenticated())) {
+      return;
+    }
+
+    await Promise.all([
+      this.stateService.setBrowserGroupingComponentState(null),
+      this.stateService.setBrowserCipherComponentState(null),
+      this.stateService.setBrowserSendComponentState(null),
+      this.stateService.setBrowserSendTypeComponentState(null),
+    ]);
   }
 }

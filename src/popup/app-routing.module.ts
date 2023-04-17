@@ -3,9 +3,7 @@ import { ActivatedRouteSnapshot, RouteReuseStrategy, RouterModule, Routes } from
 
 import { AuthGuardService } from "jslib-angular/services/auth-guard.service";
 import { LockGuardService } from "jslib-angular/services/lock-guard.service";
-
-import { DebounceNavigationService } from "./services/debounceNavigationService";
-import { LaunchGuardService } from "./services/launch-guard.service";
+import { UnauthGuardService } from "jslib-angular/services/unauth-guard.service";
 
 // import { EnvironmentComponent } from "./accounts/environment.component";
 import { HintComponent } from "./accounts/hint.component";
@@ -19,13 +17,12 @@ import { SsoComponent } from "./accounts/sso.component";
 import { TwoFactorOptionsComponent } from "./accounts/two-factor-options.component";
 import { TwoFactorComponent } from "./accounts/two-factor.component";
 import { UpdateTempPasswordComponent } from "./accounts/update-temp-password.component";
-
+import { GeneratorComponent } from "./generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "./generator/password-generator-history.component";
-import { PasswordGeneratorComponent } from "./generator/password-generator.component";
-
-import { PrivateModeComponent } from "./private-mode.component";
-import { TabsComponent } from "./tabs.component";
-
+import { SendAddEditComponent } from "./send/send-add-edit.component";
+import { SendGroupingsComponent } from "./send/send-groupings.component";
+import { SendTypeComponent } from "./send/send-type.component";
+import { DebounceNavigationService } from "./services/debounceNavigationService";
 import { ExcludedDomainsComponent } from "./settings/excluded-domains.component";
 import { ExportComponent } from "./settings/export.component";
 import { FolderAddEditComponent } from "./settings/folder-add-edit.component";
@@ -34,7 +31,7 @@ import { OptionsComponent } from "./settings/options.component";
 // import { PremiumComponent } from "./settings/premium.component";
 import { SettingsComponent } from "./settings/settings.component";
 import { SyncComponent } from "./settings/sync.component";
-
+import { TabsComponent } from "./tabs.component";
 import { AddEditComponent } from "./vault/add-edit.component";
 import { AttachmentsComponent } from "./vault/attachments.component";
 import { CiphersComponent } from "./vault/ciphers.component";
@@ -44,10 +41,6 @@ import { GroupingsComponent } from "./vault/groupings.component";
 import { PasswordHistoryComponent } from "./vault/password-history.component";
 import { ShareComponent } from "./vault/share.component";
 import { ViewComponent } from "./vault/view.component";
-
-import { SendAddEditComponent } from "./send/send-add-edit.component";
-import { SendGroupingsComponent } from "./send/send-groupings.component";
-import { SendTypeComponent } from "./send/send-type.component";
 
 const routes: Routes = [
   {
@@ -63,13 +56,13 @@ const routes: Routes = [
   {
     path: "home",
     component: HomeComponent,
-    canActivate: [LaunchGuardService],
+    canActivate: [UnauthGuardService],
     data: { state: "home" },
   },
   {
     path: "login",
     component: LoginComponent,
-    canActivate: [LaunchGuardService],
+    canActivate: [UnauthGuardService],
     data: { state: "login" },
   },
   {
@@ -81,19 +74,19 @@ const routes: Routes = [
   {
     path: "2fa",
     component: TwoFactorComponent,
-    canActivate: [LaunchGuardService],
+    canActivate: [UnauthGuardService],
     data: { state: "2fa" },
   },
   {
     path: "2fa-options",
     component: TwoFactorOptionsComponent,
-    canActivate: [LaunchGuardService],
+    canActivate: [UnauthGuardService],
     data: { state: "2fa-options" },
   },
   {
     path: "sso",
     component: SsoComponent,
-    canActivate: [LaunchGuardService],
+    canActivate: [UnauthGuardService],
     data: { state: "sso" },
   },
   {
@@ -108,22 +101,22 @@ const routes: Routes = [
     data: { state: "remove-password" },
   },
   // {
-  //     path: "register",
-  //     component: RegisterComponent,
-  //     canActivate: [LaunchGuardService],
-  //     data: { state: "register" },
+  //   path: "register",
+  //   component: RegisterComponent,
+  //   canActivate: [UnauthGuardService],
+  //   data: { state: "register" },
   // },
   {
     path: "hint",
     component: HintComponent,
-    canActivate: [LaunchGuardService],
+    canActivate: [UnauthGuardService],
     data: { state: "hint" },
   },
   // {
-  //     path: "environment",
-  //     component: EnvironmentComponent,
-  //     canActivate: [LaunchGuardService],
-  //     data: { state: "environment" },
+  //   path: "environment",
+  //   component: EnvironmentComponent,
+  //   canActivate: [UnauthGuardService],
+  //   data: { state: "environment" },
   // },
   {
     path: "ciphers",
@@ -177,7 +170,7 @@ const routes: Routes = [
   },
   {
     path: "generator",
-    component: PasswordGeneratorComponent,
+    component: GeneratorComponent,
     canActivate: [AuthGuardService],
     data: { state: "generator" },
   },
@@ -236,11 +229,6 @@ const routes: Routes = [
     data: { state: "options" },
   },
   {
-    path: "private-mode",
-    component: PrivateModeComponent,
-    data: { state: "private-mode" },
-  },
-  {
     path: "clone-cipher",
     component: AddEditComponent,
     canActivate: [AuthGuardService],
@@ -295,7 +283,7 @@ const routes: Routes = [
       },
       {
         path: "generator",
-        component: PasswordGeneratorComponent,
+        component: GeneratorComponent,
         canActivate: [AuthGuardService],
         data: { state: "tabs_generator" },
       },
@@ -321,6 +309,7 @@ export class NoRouteReuseStrategy implements RouteReuseStrategy {
     return false;
   }
 
+  // eslint-disable-next-line
   store(route: ActivatedRouteSnapshot, handle: {}) {
     /* Nothing */
   }

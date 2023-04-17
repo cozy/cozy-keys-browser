@@ -107,17 +107,17 @@ textarea {
   resize: vertical;
 }
 
-main {
+app-root > div {
   height: 100%;
 }
 
-content::-webkit-scrollbar,
+main::-webkit-scrollbar,
 cdk-virtual-scroll-viewport::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
-content::-webkit-scrollbar-track {
+main::-webkit-scrollbar-track {
   background-color: transparent;
 }
 
@@ -127,7 +127,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-track {
   }
 }
 
-content::-webkit-scrollbar-thumb,
+main::-webkit-scrollbar-thumb,
 cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
   border-radius: 10px;
   margin-right: 1px;
@@ -393,7 +393,8 @@ header {
       padding: 0;
       margin: 0;
 
-      a {
+      a,
+      button {
         text-align: center;
         display: block;
         padding: 7px 0;
@@ -403,6 +404,7 @@ header {
         overflow: hidden;
         text-overflow: ellipsis;
         color: $text-muted;
+        width: 100%;
 
         &:hover,
         &:focus {
@@ -420,7 +422,8 @@ header {
 
       &.active * {
         color: $brand-primary;
-        a {
+        a,
+        button {
           @include themify($themes) {
             color: themed("primaryColor"); //used to keep tab colored when active
           }
@@ -445,7 +448,7 @@ app-root {
     padding: 0 calc((100% - 500px) / 2);
   }
 
-  app-login content {
+  app-login main {
     padding: 0 calc((100% - 500px) / 2);
   }
 
@@ -453,7 +456,7 @@ app-root {
     padding: 0 calc((100% - 500px) / 2);
   }
 
-  app-two-factor content {
+  app-two-factor main {
     padding: 0 calc((100% - 500px) / 2);
   }
 
@@ -461,12 +464,12 @@ app-root {
     padding: 0 calc((100% - 500px) / 2);
   }
 
-  app-lock content {
+  app-lock main {
     padding: 0 calc((100% - 500px) / 2);
   }
 }
 
-content {
+main {
   position: absolute;
   top: 44px;
   bottom: 0;
@@ -495,7 +498,7 @@ content {
 }
 
 .tab-page {
-  content {
+  main {
     bottom: 55px;
   }
 }
@@ -509,6 +512,11 @@ content {
   height: 100%;
   flex-direction: column;
   flex-grow: 1;
+}
+
+.no-items-centered-up {
+  height: unset;
+  margin: 123px 20px 0 20px;
 }
 
 .no-items,

@@ -2,8 +2,13 @@
   <router-outlet #o="outlet"></router-outlet>
   <nav class="tabs">
     <ul>
-      <li routerLinkActive="active">
-        <a class="icon-cozy-inline" routerLink="vault" appA11yTitle="{{ 'myVault' | i18n }}">
+      <li routerLinkActive="active" #rlaMyVault="routerLinkActive">
+        <button
+          class="icon-cozy-inline"
+          routerLink="vault"
+          appA11yTitle="{{ 'myVault' | i18n }}"
+          [attr.aria-pressed]="rlaMyVault.isActive"
+        >
           <div [ngClass]="{ 'icon-cozy-inline': true, active: isVaultTabActive }">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
               <path
@@ -13,10 +18,15 @@
             </svg>
           </div>
           {{ "myVault" | i18n }}
-        </a>
+        </button>
       </li>
-      <li routerLinkActive="active">
-        <a class="icon-cozy-inline" routerLink="generator" appA11yTitle="{{ 'passGen' | i18n }}">
+      <li routerLinkActive="active" #rlaGenerator="routerLinkActive">
+        <button
+          class="icon-cozy-inline"
+          routerLink="generator"
+          appA11yTitle="{{ 'passGen' | i18n }}"
+          [attr.aria-pressed]="rlaGenerator.isActive"
+        >
           <div class="icon-cozy-inline">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16">
               <path
@@ -26,10 +36,15 @@
             </svg>
           </div>
           {{ "generator" | i18n }}
-        </a>
+        </button>
       </li>
-      <li routerLinkActive="active">
-        <a class="icon-cozy-inline" routerLink="settings" appA11yTitle="{{ 'settings' | i18n }}">
+      <li routerLinkActive="active" #rlaSettings="routerLinkActive">
+        <button
+          class="icon-cozy-inline"
+          routerLink="settings"
+          appA11yTitle="{{ 'settings' | i18n }}"
+          [attr.aria-pressed]="rlaSettings.isActive"
+        >
           <div class="icon-cozy-inline">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32">
               <path
@@ -39,7 +54,7 @@
             </svg>
           </div>
           {{ "settings" | i18n }}
-        </a>
+        </button>
       </li>
 
       <li>

@@ -15,7 +15,7 @@
       </button>
     </div>
   </header>
-  <content *ngIf="cipher">
+  <main tabindex="-1" *ngIf="cipher">
     <app-callout type="info" *ngIf="allowOwnershipOptions() && !allowPersonal">
       {{ "personalOwnershipPolicyInEffect" | i18n }}
     </app-callout>
@@ -36,16 +36,30 @@
         </div>
         <!-- Login -->
         <div *ngIf="cipher.type === cipherType.Login">
-          <div class="box-content-row" appBoxRow>
-            <label for="loginUsername">{{ "username" | i18n }}</label>
-            <input
-              id="loginUsername"
-              type="text"
-              name="Login.Username"
-              [(ngModel)]="cipher.login.username"
-              inputmode="email"
-              appInputVerbatim
-            />
+          <div class="box-content-row box-content-row-flex" appBoxRow>
+            <div class="row-main">
+              <label for="loginUsername">{{ "username" | i18n }}</label>
+              <input
+                id="loginUsername"
+                type="text"
+                name="Login.Username"
+                [(ngModel)]="cipher.login.username"
+                inputmode="email"
+                appInputVerbatim
+              />
+            </div>
+            <div class="action-buttons">
+              <button
+                type="button"
+                class="row-btn"
+                appStopClick
+                appBlurClick
+                appA11yTitle="{{ 'generateUsername' | i18n }}"
+                (click)="generateUsername()"
+              >
+                <i class="bwi bwi-lg bwi-generate" aria-hidden="true"></i>
+              </button>
+            </div>
           </div>
           <div class="box-content-row box-content-row-flex" appBoxRow>
             <div class="row-main">
@@ -577,7 +591,6 @@
           <i class="bwi bwi-angle-right row-sub-icon" aria-hidden="true"></i>
         </button>
         END -->
-
       </div>
     </div>
     <div class="box">
@@ -586,7 +599,13 @@
       </h2>
       <div class="box-content">
         <div class="box-content-row" appBoxRow>
-          <textarea id="notes" name="Notes" rows="6" [(ngModel)]="cipher.notes" appInputVerbatim></textarea>
+          <textarea
+            id="notes"
+            name="Notes"
+            rows="6"
+            [(ngModel)]="cipher.notes"
+            appInputVerbatim
+          ></textarea>
         </div>
       </div>
     </div>
@@ -661,5 +680,5 @@
         </button>
       </div>
     </div>
-  </content>
+  </main>
 </form>

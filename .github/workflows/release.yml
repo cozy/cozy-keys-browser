@@ -12,6 +12,7 @@ on:
         options:
           - Initial Release
           - Redeploy
+          - Dry Run
 
 
 jobs:
@@ -23,16 +24,17 @@ jobs:
       branch-name: ${{ steps.branch.outputs.branch-name }}
     steps:
       - name: Branch check
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         run: |
-          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix" ]]; then
+          if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix-rc" ]]; then
             echo "==================================="
-            echo "[!] Can only release from the 'rc' or 'hotfix' branches"
+            echo "[!] Can only release from the 'rc' or 'hotfix-rc' branches"
             echo "==================================="
             exit 1
           fi
 
       - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
 
       - name: Check Release Version
         id: version
@@ -63,7 +65,7 @@ jobs:
     needs: setup
     steps:
       - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
 
       - name: Testing locales - extName length
         run: |
@@ -98,7 +100,7 @@ jobs:
       - locales-test
     steps:
       - name: Download latest RC build artifacts
-        uses: bitwarden/gh-actions/download-artifacts@23433be15ed6fd046ce12b6889c5184a8d9c8783
+        uses: bitwarden/gh-actions/download-artifacts@c1fa8e09871a860862d6bbe36184b06d2c7e35a8
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -120,7 +122,8 @@ jobs:
           mv dist-edge.zip dist-edge-$PACKAGE_VERSION.zip
 
       - name: Create release
-        uses: ncipollo/release-action@95215a3cb6e6a1908b3c44e00b4fdb15548b1e09
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
+        uses: ncipollo/release-action@40bb172bd05f266cf9ba4ff965cb61e9ee5f6d01
         with:
           artifacts: 'browser-source-${{ needs.setup.outputs.release-version }}.zip,
                       dist-chrome-${{ needs.setup.outputs.release-version }}.zip,

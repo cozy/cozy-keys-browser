@@ -1,19 +1,17 @@
-import { DeviceType } from "jslib-common/enums/deviceType";
-
+// import { TokenRequest } from "jslib-common/models/request/identityToken/tokenRequest";
+import { AppIdService } from "jslib-common/abstractions/appId.service";
 import { EnvironmentService } from "jslib-common/abstractions/environment.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
 import { TokenService } from "jslib-common/abstractions/token.service";
-
-import { TokenRequest } from "jslib-common/models/request/identityToken/tokenRequest";
-
-import { ErrorResponse } from "jslib-common/models/response/errorResponse";
-import { IdentityTokenResponse } from "../models/response/identityTokenResponse";
-import { IdentityTwoFactorResponse } from "jslib-common/models/response/identityTwoFactorResponse";
-
-import { ApiService as BaseApiService } from "jslib-common/services/api.service";
+import { DeviceType } from "jslib-common/enums/deviceType";
 import { ApiTokenRequest } from "jslib-common/models/request/identityToken/apiTokenRequest";
 import { PasswordTokenRequest } from "jslib-common/models/request/identityToken/passwordTokenRequest";
 import { SsoTokenRequest } from "jslib-common/models/request/identityToken/ssoTokenRequest";
+import { ErrorResponse } from "jslib-common/models/response/errorResponse";
+import { IdentityTwoFactorResponse } from "jslib-common/models/response/identityTwoFactorResponse";
+import { ApiService as BaseApiService } from "jslib-common/services/api.service";
+
+import { IdentityTokenResponse } from "../models/response/identityTokenResponse";
 
 function getDeviceName(deviceType: DeviceType): string {
   switch (deviceType) {
@@ -60,6 +58,8 @@ export class ApiService extends BaseApiService {
     /* tslint:disable-next-line */
     private _environmentService: EnvironmentService,
     /* tslint:disable-next-line */
+    private _appIdService: AppIdService,
+    /* tslint:disable-next-line */
     private _logoutCallback: (expired: boolean) => Promise<void>,
     /* tslint:disable-next-line */
     private _customUserAgent: string = null
@@ -68,6 +68,7 @@ export class ApiService extends BaseApiService {
       _tokenService,
       _platformUtilsService,
       _environmentService,
+      _appIdService,
       _logoutCallback,
       _customUserAgent
     );

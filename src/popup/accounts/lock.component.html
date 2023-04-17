@@ -6,7 +6,7 @@
     </h1>
     <div class="right"></div>
   </header>
-  <content>
+  <main tabindex="-1">
     <div class="box unlock-box">
       <div class="box-content">
         <div class="box-content-row box-content-row-flex" appBoxRow *ngIf="!hideInput">
@@ -65,10 +65,21 @@
     </div>
     <div class="box" *ngIf="biometricLock">
       <div class="box-footer">
-        <button type="button" class="btn primary block" (click)="unlockBiometric()" appStopClick>
+        <button
+          type="button"
+          class="btn primary block"
+          (click)="unlockBiometric()"
+          appStopClick
+          [disabled]="pendingBiometric"
+        >
           {{ "unlockWithBiometrics" | i18n }}
         </button>
       </div>
     </div>
-  </content>
+    <app-private-mode-warning></app-private-mode-warning>
+    <app-callout *ngIf="biometricError" type="error">{{ biometricError }}</app-callout>
+    <p class="text-center text-muted" *ngIf="pendingBiometric">
+      <i class="bwi bwi-spinner bwi-spin" aria-hidden="true"></i> {{ "awaitDesktop" | i18n }}
+    </p>
+  </main>
 </form>

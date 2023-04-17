@@ -1,17 +1,18 @@
 @import "variables.scss";
 
 app-sync {
-  content {
+  main {
     .btn {
       margin-bottom: 10px;
     }
   }
 }
 
-app-password-generator .password-block {
+app-generator .generated-block {
   font-size: $font-size-large;
   font-family: $font-family-sans-serif;
   margin: 20px;
+  display: flex;
   box-sizing: border-box;
   border-radius: 0.188rem;
   border: 0.063rem solid $gray;
@@ -19,9 +20,27 @@ app-password-generator .password-block {
     background-color: themed("boxBackgroundColor");
   }
 
-  .password-wrapper {
-    text-align: center;
+  .generated-wrapper {
+    text-align: left;
+    width: 100%;
+    min-width: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
   }
+
+  .action-buttons {
+    display: flex;
+    align-self: center;
+
+    button {
+      padding: 5px;
+      // margin: -5px -5px 5px 5px;
+    }
+  }
+}
+
+app-generator .box-content-row:before {
+  width: 100%;
 }
 
 app-home {
@@ -84,6 +103,11 @@ app-home {
     margin-top: 32px;
     cursor: pointer;
   }
+}
+
+app-private-mode-warning {
+  display: block;
+  padding-top: 1rem;
 }
 
 body.body-sm,

@@ -108,6 +108,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     const domains = obj[activeUserId].settings.neverDomains;
+    // eslint-disable-next-line
     if (domains != null && domains.hasOwnProperty(window.location.hostname)) {
       return;
     }
@@ -121,17 +122,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   });
 
-  chrome.runtime.onMessage.addListener((msg: any, sender: any, sendResponse: Function) => {
+  chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     processMessages(msg, sendResponse);
   });
 
-  function processMessages(msg: any, sendResponse: Function) {
+  function processMessages(msg: any, sendResponse: (response?: any) => void) {
     /*
         @override by Cozy :
         This log is very useful for reverse engineer the code, keep it for tests
         console.log('notificationBar.js HEARD MESSAGE : ', {'msg.command': msg.command,'msg': msg});
     */
-
     if (msg.command === "openNotificationBar") {
       if (inIframe) {
         return;
@@ -420,7 +420,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       el = form.querySelector('input[name="' + fieldData.htmlName + '"]');
     }
     if (el == null && fieldData.opid != null) {
-      // @ts-expect-error
+      // @ts-expect-error opid is not an html property
       el = inputs.find((e) => e.opid === fieldData.opid);
     }
     if (el == null && fieldData.elementNumber != null) {

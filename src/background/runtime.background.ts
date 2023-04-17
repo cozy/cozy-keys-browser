@@ -3,23 +3,22 @@ import { I18nService } from "jslib-common/abstractions/i18n.service";
 import { LogService } from "jslib-common/abstractions/log.service";
 import { MessagingService } from "jslib-common/abstractions/messaging.service";
 import { NotificationsService } from "jslib-common/abstractions/notifications.service";
-// import { StateService } from "jslib-common/abstractions/state.service";
 import { SystemService } from "jslib-common/abstractions/system.service";
+import { Utils } from "jslib-common/misc/utils";
 
+import { BrowserApi } from "../browser/browserApi";
 import { AutofillService } from "../services/abstractions/autofill.service";
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
 
-import { BrowserApi } from "../browser/browserApi";
-
 import MainBackground from "./main.background";
-
-import { Utils } from "jslib-common/misc/utils";
 import LockedVaultPendingNotificationsItem from "./models/lockedVaultPendingNotificationsItem";
 
 // Cozy Imports
+/* eslint-disable */
 import { AuthService } from "../services/auth.service";
+import { AuthenticationStatus } from "jslib-common/enums/authenticationStatus";
 import { ApiService } from "jslib-common/abstractions/api.service";
-import { CipherWithIds as CipherExport } from "jslib-common/models/export/cipherWithIds";
+import { CipherWithIdExport as CipherExport } from "jslib-common/models/export/cipherWithIdsExport";
 import { CipherService } from "jslib-common/abstractions/cipher.service";
 import { CipherType } from "jslib-common/enums/cipherType";
 import { CozyClientService } from "src/popup/services/cozyClient.service";
@@ -27,11 +26,11 @@ import { CryptoService } from "jslib-common/abstractions/crypto.service";
 import { EncString } from "jslib-common/models/domain/encString";
 import { HashPurpose } from "jslib-common/enums/hashPurpose";
 import { PasswordRequest } from "jslib-common/models/request/passwordRequest";
-import { SyncService } from "jslib-common/abstractions/sync.service";
-import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
-import { AuthResult } from "jslib-common/models/domain/authResult";
 import { PasswordLogInCredentials } from "jslib-common/models/domain/logInCredentials";
+import { SyncService } from "jslib-common/abstractions/sync.service";
 import { StateService } from "src/services/state.service";
+import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
+/* eslint-enable */
 // End Cozy imports
 
 export default class RuntimeBackground {
@@ -71,12 +70,18 @@ export default class RuntimeBackground {
     }
 
     await this.checkOnInstalled();
-    BrowserApi.messageListener(
-      "runtime.background",
-      (msg: any, sender: chrome.runtime.MessageSender, sendResponse: any) => {
-        this.processMessage(msg, sender, sendResponse);
-      }
-    );
+    const backgroundMessageListener = async (
+      msg: any,
+      sender: chrome.runtime.MessageSender,
+      sendResponse: any
+    ) => {
+      await this.processMessage(msg, sender, sendResponse);
+    };
+
+    BrowserApi.messageListener("runtime.background", backgroundMessageListener);
+    if (this.main.isPrivateMode) {
+      (window as any).bitwardenBackgroundMessageListener = backgroundMessageListener;
+    }
   }
 
   async processMessage(msg: any, sender: any, sendResponse: any) {
@@ -90,15 +95,34 @@ export default class RuntimeBackground {
             'full.sender': sender,
         });
     */
+    let logins,
+      allCiphers,
+      ciphers,
+      cozyUrl,
+      rememberedCozyUrl,
+      fieldsForInPageMenuScripts,
+      isAuthenticated,
+      fieldsForAutofillMenuScripts,
+      isLocked,
+      pinSet,
+      isPinLocked,
+      that: any,
+      script,
+      enableInPageMenu,
+      enableInPageMenu2,
+      forms,
+      tab,
+      c,
+      cipher,
+      totpCode2,
+      authStatus;
 
     switch (msg.command) {
       case "loggedIn":
-      case "unlocked":
+      case "unlocked": {
         let item: LockedVaultPendingNotificationsItem;
-        var enableInPageMenu: boolean;
-        var allTabs: chrome.tabs.Tab[];
 
-        if (this.lockedVaultPendingNotifications.length > 0) {
+        if (this.lockedVaultPendingNotifications?.length > 0) {
           await BrowserApi.closeLoginTab();
 
           item = this.lockedVaultPendingNotifications.pop();
@@ -117,13 +141,12 @@ export default class RuntimeBackground {
         await this.cozyClientService.createClient();
 
         // ask notificationbar of all tabs to retry to collect pageDetails in order to activate in-page-menu
-        enableInPageMenu = await this.stateService.getEnableInPageMenu();
+        const enableInPageMenu = await this.stateService.getEnableInPageMenu();
         let subCommand = "inPageMenuDeactivate";
         if (enableInPageMenu) {
           subCommand = "autofilIPMenuActivate";
         }
-        allTabs = await BrowserApi.getAllTabs();
-        for (const tab of allTabs) {
+        for (const tab of await BrowserApi.getAllTabs()) {
           BrowserApi.tabSendMessage(tab, {
             command: "autofillAnswerRequest",
             subcommand: subCommand,
@@ -139,6 +162,7 @@ export default class RuntimeBackground {
           );
         }
         break;
+      }
       case "addToLockedVaultPendingNotifications":
         this.lockedVaultPendingNotifications.push(msg.data);
         break;
@@ -147,8 +171,7 @@ export default class RuntimeBackground {
         await this.cozyClientService.logout();
         await this.main.logout(msg.expired, msg.userId);
         // 2- ask all frames of all tabs to activate login-in-page-menu
-        allTabs = await BrowserApi.getAllTabs();
-        for (const tab of allTabs) {
+        for (const tab of await BrowserApi.getAllTabs()) {
           BrowserApi.tabSendMessage(tab, {
             command: "autofillAnswerRequest",
             subcommand: "loginIPMenuActivate",
@@ -178,10 +201,10 @@ export default class RuntimeBackground {
       case "bgAnswerMenuRequest":
         switch (msg.subcommand) {
           case "getCiphersForTab":
-            const logins = await this.cipherService.getAllDecryptedForUrl(sender.tab.url, null);
+            logins = await this.cipherService.getAllDecryptedForUrl(sender.tab.url, null);
             logins.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
-            const allCiphers = await this.cipherService.getAllDecrypted();
-            const ciphers = { logins: logins, cards: new Array(), identities: new Array() };
+            allCiphers = await this.cipherService.getAllDecrypted();
+            ciphers = { logins: logins, cards: [], identities: [] };
             for (const cipher of allCiphers) {
               if (cipher.isDeleted) {
                 continue;
@@ -197,7 +220,7 @@ export default class RuntimeBackground {
                   break;
               }
             }
-            const cozyUrl = new URL(this.environmentService.getWebVaultUrl()).origin;
+            cozyUrl = new URL(this.environmentService.getWebVaultUrl()).origin;
             await BrowserApi.tabSendMessageData(sender.tab, "updateMenuCiphers", {
               ciphers: ciphers,
               cozyUrl: cozyUrl,
@@ -244,7 +267,7 @@ export default class RuntimeBackground {
             await this.twoFaCheck(msg.token, sender.tab);
             break;
           case "getRememberedCozyUrl":
-            let rememberedCozyUrl = (await this.stateService.getRememberedEmail()).slice(3);
+            rememberedCozyUrl = (await this.stateService.getRememberedEmail()).slice(3);
             if (!rememberedCozyUrl) {
               rememberedCozyUrl = "";
             }
@@ -293,21 +316,21 @@ export default class RuntimeBackground {
         if (!enableInPageMenu) {
           break;
         }
-        const fieldsForInPageMenuScripts =
-          await this.autofillService.generateFieldsForInPageMenuScripts(
-            msg.pageDetails,
-            false,
-            sender.frameId
-          );
+        fieldsForInPageMenuScripts = await this.autofillService.generateFieldsForInPageMenuScripts(
+          msg.pageDetails,
+          false,
+          sender.frameId
+        );
         this.autofillService.postFilterFieldsForInPageMenu(
           fieldsForInPageMenuScripts,
           msg.pageDetails.forms,
           msg.pageDetails.fields
         );
-        const isAuthenticated = await this.stateService.getIsAuthenticated(); // = connected or installed
-        const isLocked = isAuthenticated && (await this.vaultTimeoutService.isLocked());
-        const pinSet = await this.vaultTimeoutService.isPinLockSet();
-        const isPinLocked = (pinSet[0] && this.stateService.getProtectedPin != null) || pinSet[1];
+        isAuthenticated = await this.stateService.getIsAuthenticated(); // = connected or installed
+        authStatus = await this.authService.getAuthStatus();
+        isLocked = isAuthenticated && authStatus === AuthenticationStatus.Locked;
+        pinSet = await this.vaultTimeoutService.isPinLockSet();
+        isPinLocked = (pinSet[0] && this.stateService.getProtectedPin != null) || pinSet[1];
         await BrowserApi.tabSendMessage(
           sender.tab,
           {
@@ -323,7 +346,7 @@ export default class RuntimeBackground {
         break;
       case "bgGetAutofillMenuScript":
         // If goes here : means that addon has just been connected (page was already loaded)
-        const that = this;
+        that = this;
         this.syncService.fullSync(false).then(async () => {
           const script = await that.autofillService.generateFieldsForInPageMenuScripts(
             msg.details,
@@ -343,7 +366,7 @@ export default class RuntimeBackground {
             true
           );
         });
-        const script = await this.autofillService.generateFieldsForInPageMenuScripts(
+        script = await this.autofillService.generateFieldsForInPageMenuScripts(
           msg.details,
           true,
           sender.frameId
@@ -371,7 +394,7 @@ export default class RuntimeBackground {
                 existing logins)
               */
             // 1- request a fill script for the in-page-menu (if activated)
-            let enableInPageMenu2 = await this.stateService.getEnableInPageMenu();
+            enableInPageMenu2 = await this.stateService.getEnableInPageMenu();
             // default to true
             if (enableInPageMenu2 === null) {
               enableInPageMenu2 = true;
@@ -380,7 +403,7 @@ export default class RuntimeBackground {
               // If goes here : means that the page has just been loaded while addon was already connected
               // get scripts for logins, cards and identities
 
-              const fieldsForAutofillMenuScripts =
+              fieldsForAutofillMenuScripts =
                 await this.autofillService.generateFieldsForInPageMenuScripts(
                   msg.details,
                   true,
@@ -390,7 +413,7 @@ export default class RuntimeBackground {
               // the 4 scripts (existing logins, logins, cards and identities) will be sent
               // to autofill.js by autofill.service
               try {
-                const totpCode1 = await this.autofillService.doAutoFillActiveTab(
+                await this.autofillService.doAutoFillActiveTab(
                   [
                     {
                       frameId: sender.frameId,
@@ -408,7 +431,7 @@ export default class RuntimeBackground {
               }
             }
             // 2- send page details to the notification bar
-            const forms = this.autofillService.getFormsWithPasswordFields(msg.details);
+            forms = this.autofillService.getFormsWithPasswordFields(msg.details);
             await BrowserApi.tabSendMessageData(msg.tab, "notificationBarPageDetails", {
               details: msg.details,
               forms: forms,
@@ -416,7 +439,7 @@ export default class RuntimeBackground {
 
             break;
           case "autofiller":
-          case "autofill_cmd":
+          case "autofill_cmd": {
             const totpCode = await this.autofillService.doAutoFillActiveTab(
               [
                 {
@@ -432,13 +455,14 @@ export default class RuntimeBackground {
               this.platformUtilsService.copyToClipboard(totpCode, { window: window });
             }
             break;
+          }
 
           // autofill request for a specific cipher from menu.js
           case "autofillForMenu.js":
-            const tab = await BrowserApi.getTabFromCurrentWindow();
-            const c = await this.cipherService.get(msg.cipherId);
-            const cipher = await c.decrypt();
-            const totpCode2 = await this.autofillService.doAutoFill({
+            tab = await BrowserApi.getTabFromCurrentWindow();
+            c = await this.cipherService.get(msg.cipherId);
+            cipher = await c.decrypt();
+            totpCode2 = await this.autofillService.doAutoFill({
               cipher: cipher,
               pageDetails: [
                 {
@@ -466,7 +490,7 @@ export default class RuntimeBackground {
             break;
         }
         break;
-      case "authResult":
+      case "authResult": {
         const vaultUrl = this.environmentService.getWebVaultUrl();
 
         if (msg.referrer == null || Utils.getHostname(vaultUrl) !== msg.referrer) {
@@ -484,10 +508,11 @@ export default class RuntimeBackground {
           this.logService.error("Unable to open sso popout tab");
         }
         break;
-      case "webAuthnResult":
-        const vaultUrl2 = this.environmentService.getWebVaultUrl();
+      }
+      case "webAuthnResult": {
+        const vaultUrl = this.environmentService.getWebVaultUrl();
 
-        if (msg.referrer == null || Utils.getHostname(vaultUrl2) !== msg.referrer) {
+        if (msg.referrer == null || Utils.getHostname(vaultUrl) !== msg.referrer) {
           return;
         }
 
@@ -500,6 +525,7 @@ export default class RuntimeBackground {
           false
         );
         break;
+      }
       case "reloadPopup":
         this.messagingService.send("reloadPopup");
         break;
@@ -514,6 +540,7 @@ export default class RuntimeBackground {
         break;
       case "getClickedElementResponse":
         this.platformUtilsService.copyToClipboard(msg.identifier, { window: window });
+        break;
       default:
         break;
     }
@@ -620,7 +647,9 @@ export default class RuntimeBackground {
           HashPurpose.LocalAuthorization
         );
         await this.cryptoService.setKeyHash(localKeyHash);
-      } catch {}
+      } catch {
+        //
+      }
     }
 
     if (passwordValid) {
@@ -709,11 +738,14 @@ export default class RuntimeBackground {
     try {
       const selectedProviderType = 1; // value observed in running code
       const remember = false; // value observed in running code
-      const resp: AuthResult = await this.authService.logInTwoFactor({
-        provider: selectedProviderType,
-        token,
-        remember,
-      });
+      await this.authService.logInTwoFactor(
+        {
+          provider: selectedProviderType,
+          token,
+          remember,
+        },
+        null
+      );
       // validation succeeded
       this.processMessage({ command: "loggedIn" }, "runtime.background.ts.twoFaCheck()", null);
     } catch (e) {

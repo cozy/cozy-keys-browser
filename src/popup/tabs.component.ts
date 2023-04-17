@@ -1,10 +1,13 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
-import { PopupUtilsService } from "./services/popup-utils.service";
-
+import { PopupUtilsService } from "./services/popup-utils.service"; // eslint-disable-line
+/* COZY IMPORTS */
+/* eslint-disable */
 import { CozyClientService } from "./services/cozyClient.service";
 import { Router, NavigationStart, Event as NavigationEvent, RouterOutlet } from "@angular/router";
 import { routerTransition } from "./app-routing.animations";
+/* eslint-enable */
+/* END */
 
 @Component({
   selector: "app-tabs",
@@ -12,10 +15,10 @@ import { routerTransition } from "./app-routing.animations";
   animations: [routerTransition],
 })
 export class TabsComponent implements OnInit {
-  showCurrentTab: boolean = false;
+  showCurrentTab = true;
   cozyUrl: string;
   event$;
-  isVaultTabActive: boolean = true;
+  isVaultTabActive = true;
 
   constructor(
     private popupUtilsService: PopupUtilsService,

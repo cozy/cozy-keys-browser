@@ -1,12 +1,7 @@
-import { Directive, Input, NgZone, OnInit } from "@angular/core";
-
+import { Input, NgZone, OnInit , Component } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { take } from "rxjs/operators";
-
-import { AuthResult } from "jslib-common/models/domain/authResult";
-import { PasswordLogInCredentials } from "jslib-common/models/domain/logInCredentials";
-
+import { LoginComponent as BaseLoginComponent } from "jslib-angular/components/login.component";
 import { AuthService } from "jslib-common/abstractions/auth.service";
 import { CryptoFunctionService } from "jslib-common/abstractions/cryptoFunction.service";
 import { EnvironmentService } from "jslib-common/abstractions/environment.service";
@@ -15,36 +10,23 @@ import { LogService } from "jslib-common/abstractions/log.service";
 import { PasswordGenerationService } from "jslib-common/abstractions/passwordGeneration.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
 import { StateService } from "jslib-common/abstractions/state.service";
-import { StorageService } from "jslib-common/abstractions/storage.service";
-
-import { Utils } from "jslib-common/misc/utils";
-
-// import { CaptchaProtectedComponent } from "@bitwarden/jslib-angular/src/components/captchaProtected.component";
-import { LoginComponent as BaseLoginComponent } from "jslib-angular/components/login.component";
-
 /* start Cozy imports */
-import BrowserMessagingService from "../../services/browserMessaging.service";
+/* eslint-disable */
+import { Utils } from "jslib-common/misc/utils";
+import { AuthResult } from "jslib-common/models/domain/authResult";
+import { PasswordLogInCredentials } from "jslib-common/models/domain/logInCredentials";
 import { SyncService } from "jslib-common/abstractions/sync.service";
 import { PreloginRequest } from "jslib-common/models/request/preloginRequest";
-import { PreloginResponse } from "jslib-common/models/response/preloginResponse";
 import { generateWebLink, Q } from "cozy-client";
 import { ApiService } from "jslib-common/abstractions/api.service";
-import { Component } from "@angular/core";
-import { CozyClientService } from "../services/cozyClient.service";
 import { CozySanitizeUrlService } from "../services/cozySanitizeUrl.service";
+/* eslint-enable */
 /* end Cozy imports */
 
 type CozyConfiguration = {
   HasCiphers?: boolean;
   OIDC?: boolean;
   FlatSubdomains?: boolean;
-};
-
-const messagingService = new BrowserMessagingService();
-
-const Keys = {
-  rememberedCozyUrl: "rememberedCozyUrl",
-  rememberCozyUrl: "rememberCozyUrl",
 };
 
 const getCozyPassWebURL = (cozyUrl: string, cozyConfiguration: CozyConfiguration) => {
@@ -85,12 +67,12 @@ const shouldRedirectToOIDCPasswordPage = (cozyConfiguration: CozyConfiguration) 
  *    af8274247b2242fe93ad2f7ca4c13f9f7ecf2860/src/popup/accounts/login.component.ts
  */
 export class LoginComponent extends BaseLoginComponent implements OnInit {
-  @Input() cozyUrl: string = "";
+  @Input() cozyUrl = "";
   @Input() rememberCozyUrl = true;
 
-  email: string = "";
-  masterPassword: string = "";
-  showPassword: boolean = false;
+  email = "";
+  masterPassword = "";
+  showPassword = false;
   formPromise: Promise<AuthResult>;
   onSuccessfulLogin: () => Promise<any>;
   onSuccessfulLoginNavigate: () => Promise<any>;
@@ -100,7 +82,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
   protected twoFactorRoute = "2fa";
   protected successRoute = "/tabs/vault";
   protected forcePasswordResetRoute = "update-temp-password";
-  protected alwaysRememberCozyUrl: boolean = false;
+  protected alwaysRememberCozyUrl = false;
 
   constructor(
     protected authService: AuthService,
@@ -152,28 +134,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     }
   }
 
-  /*
-  async ngOnInit_old() {
-    if (this.cozyUrl == null || this.cozyUrl === "") {
-      this.cozyUrl = await this.storageService.get<string>(Keys.rememberedCozyUrl);
-      if (this.cozyUrl == null) {
-        this.cozyUrl = "";
-      }
-    }
-    this.rememberCozyUrl = await this.storageService.get<boolean>(Keys.rememberCozyUrl);
-    if (this.rememberCozyUrl == null) {
-      this.rememberCozyUrl = true;
-    }
-    if (Utils.isBrowser) {
-      document
-        .getElementById(this.cozyUrl == null || this.cozyUrl === "" ? "cozyUrl" : "masterPassword")
-        .focus();
-    }
-  }
-  */
   async submit() {
-    console.log("submit login");
-
     try {
       const loginUrl = this.sanitizeUrlInput(this.cozyUrl);
 
@@ -232,93 +193,6 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
       this.logService.error(e);
     }
   }
-
-  /*
-  async submit() {
-    try {
-      const loginUrl = this.sanitizeUrlInput(this.cozyUrl);
-
-      if (this.masterPassword == null || this.masterPassword === "") {
-        this.platformUtilsService.showToast(
-          "error",
-          this.i18nService.t("errorOccurred"),
-          this.i18nService.t("masterPassRequired")
-        );
-        return;
-      }
-
-      // This adds the scheme if missing
-      await this.environmentService.setUrls({
-        base: loginUrl + "/bitwarden",
-      });
-      // The email is based on the URL and necessary for login
-      const hostname = Utils.getHostname(loginUrl);
-      this.email = "me@" + hostname;
-
-      this.formPromise = this.authService.logIn(this.email, this.masterPassword).catch((e) => {
-        if (e.response && e.response.error && e.response.error === "invalid password") {
-          this.platformUtilsService.showToast(
-            "error",
-            this.i18nService.t("errorOccurred"),
-            this.i18nService.t("invalidMasterPassword")
-          );
-          // Returning null here so that the validation service in jslib
-          // does not consider the result of the call as an error, otherwise
-          // we would have a double toast
-          return null;
-        }
-        throw e;
-      });
-      const response = await this.formPromise;
-      if (!response) {
-        return;
-      }
-
-      // Save the URL for next time
-      await this.storageService.save(Keys.rememberCozyUrl, this.rememberCozyUrl);
-      if (this.rememberCozyUrl) {
-        await this.storageService.save(Keys.rememberedCozyUrl, loginUrl);
-      } else {
-        await this.storageService.remove(Keys.rememberedCozyUrl);
-      }
-      if (response.twoFactor) {
-        if (this.onSuccessfulLoginTwoFactorNavigate != null) {
-          this.onSuccessfulLoginTwoFactorNavigate();
-        } else {
-          this.router.navigate([this.twoFactorRoute]);
-        }
-      } else {
-        messagingService.send("loggedIn");
-        const disableFavicon = await this.storageService.get<boolean>(
-          ConstantsService.disableFaviconKey
-        );
-        await this.stateService.save(ConstantsService.disableFaviconKey, !!disableFavicon);
-        if (this.onSuccessfulLogin != null) {
-          this.onSuccessfulLogin();
-        }
-        if (this.onSuccessfulLoginNavigate != null) {
-          this.onSuccessfulLoginNavigate();
-        } else {
-          this.router.navigate([this.successRoute], {
-            queryParams: { activatedPanel: "currentPageCiphers" },
-          });
-        }
-      }
-    } catch (e) {
-      const translatableMessages = ["cozyUrlRequired", "noEmailAsCozyUrl", "hasMispelledCozy"];
-
-      if (translatableMessages.includes(e.message)) {
-        this.platformUtilsService.showToast(
-          "error",
-          this.i18nService.t("errorOccurred"),
-          this.i18nService.t(e.message)
-        );
-      } else {
-        this.platformUtilsService.showToast("error", this.i18nService.t("errorOccurred"), "");
-      }
-    }
-  }
-  */
 
   togglePassword() {
     this.showPassword = !this.showPassword;

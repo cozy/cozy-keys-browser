@@ -1,13 +1,17 @@
-<button
-  type="button"
-  (click)="selectCipher(cipher)"
-  (dblclick)="launchCipher(cipher)"
-  appStopClick
-  title="{{ title }} - {{ cipher.name }}"
+<div
+  role="group"
+  appA11yTitle="{{ cipher.name }}"
   class="box-content-row box-content-row-flex virtual-scroll-item"
   [ngClass]="{ 'override-last': !last }"
 >
-  <div class="row-main">
+  <button
+    type="button"
+    (click)="selectCipher(cipher)"
+    (dblclick)="launchCipher(cipher)"
+    appStopClick
+    title="{{ title }} - {{ cipher.name }}"
+    class="row-main"
+  >
     <ng-container *ngIf="cipher.type === cipherType.Login">
       <app-vault-icon [cipher]="cipher"></app-vault-icon>
     </ng-container>
@@ -43,7 +47,7 @@
       </span>
       <span class="detail">{{ getSubtitle(cipher) }}</span>
     </div>
-  </div>
+  </button>
   <app-action-buttons
     [cipher]="cipher"
     (onView)="viewCipher(cipher)"
@@ -53,4 +57,4 @@
     class="action-buttons"
   >
   </app-action-buttons>
-</button>
+</div>

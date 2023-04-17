@@ -317,6 +317,7 @@
   .text,
   .detail {
     display: block;
+    text-align: left;
 
     @include themify($themes) {
       color: themed("textColor");
@@ -506,6 +507,11 @@
     display: flex;
     margin-left: 5px;
 
+    &.action-buttons-fixed {
+      align-self: start;
+      margin-top: 2px;
+    }
+
     .row-btn {
       cursor: pointer;
       padding: 10px 8px;
@@ -548,7 +554,7 @@
 
   &:not(.box-draggable-row) {
     .action-buttons .row-btn:last-child {
-      padding-right: 2px !important;
+      margin-right: -3px;
     }
   }
 
@@ -742,6 +748,15 @@
 
       @include themify($themes) {
         color: themed("textColor");
+      }
+    }
+
+    &.align-start {
+      align-items: start;
+      margin-top: 10px;
+
+      label {
+        margin-top: -4px;
       }
     }
   }

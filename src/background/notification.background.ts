@@ -1,41 +1,35 @@
+import { AuthService } from "jslib-common/abstractions/auth.service";
+import { CipherService } from "jslib-common/abstractions/cipher.service";
+import { FolderService } from "jslib-common/abstractions/folder.service";
+import { PolicyService } from "jslib-common/abstractions/policy.service";
+import { AuthenticationStatus } from "jslib-common/enums/authenticationStatus";
 import { CipherType } from "jslib-common/enums/cipherType";
-
+import { PolicyType } from "jslib-common/enums/policyType";
+import { Utils } from "jslib-common/misc/utils";
 import { CipherView } from "jslib-common/models/view/cipherView";
 import { LoginUriView } from "jslib-common/models/view/loginUriView";
 import { LoginView } from "jslib-common/models/view/loginView";
 
-import { CipherService } from "jslib-common/abstractions/cipher.service";
-import { FolderService } from "jslib-common/abstractions/folder.service";
-import { PolicyService } from "jslib-common/abstractions/policy.service";
-import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
-
-import { AutofillService } from "../services/abstractions/autofill.service";
+import { KonnectorsService } from "src/popup/services/konnectors.service";
 
 import { BrowserApi } from "../browser/browserApi";
-
-import MainBackground from "./main.background";
-
-import { Utils } from "jslib-common/misc/utils";
-
-import { PolicyType } from "jslib-common/enums/policyType";
-
+import { AutofillService } from "../services/abstractions/autofill.service";
 import { StateService } from "../services/abstractions/state.service";
+
 import AddChangePasswordQueueMessage from "./models/addChangePasswordQueueMessage";
 import AddLoginQueueMessage from "./models/addLoginQueueMessage";
 import AddLoginRuntimeMessage from "./models/addLoginRuntimeMessage";
 import ChangePasswordRuntimeMessage from "./models/changePasswordRuntimeMessage";
 import LockedVaultPendingNotificationsItem from "./models/lockedVaultPendingNotificationsItem";
 import { NotificationQueueMessageType } from "./models/notificationQueueMessageType";
-import { KonnectorsService } from "src/popup/services/konnectors.service";
 
 export default class NotificationBackground {
   private notificationQueue: (AddLoginQueueMessage | AddChangePasswordQueueMessage)[] = [];
 
   constructor(
-    private main: MainBackground,
     private autofillService: AutofillService,
     private cipherService: CipherService,
-    private vaultTimeoutService: VaultTimeoutService,
+    private authService: AuthService,
     private policyService: PolicyService,
     private folderService: FolderService,
     private stateService: StateService,
@@ -86,7 +80,7 @@ export default class NotificationBackground {
         break;
       case "bgAddSave":
       case "bgChangeSave":
-        if (await this.vaultTimeoutService.isLocked()) {
+        if ((await this.authService.getAuthStatus()) < AuthenticationStatus.Unlocked) {
           const retryMessage: LockedVaultPendingNotificationsItem = {
             commandToRetry: {
               msg: msg,
@@ -109,13 +103,14 @@ export default class NotificationBackground {
         break;
       case "collectPageDetailsResponse":
         switch (msg.sender) {
-          case "notificationBar":
+          case "notificationBar": {
             const forms = this.autofillService.getFormsWithPasswordFields(msg.details);
             await BrowserApi.tabSendMessageData(msg.tab, "notificationBarPageDetails", {
               details: msg.details,
               forms: forms,
             });
             break;
+          }
           default:
             break;
         }
@@ -196,7 +191,8 @@ export default class NotificationBackground {
   }
 
   private async addLogin(loginInfo: AddLoginRuntimeMessage, tab: chrome.tabs.Tab) {
-    if (!(await this.stateService.getIsAuthenticated())) {
+    const authStatus = await this.authService.getAuthStatus();
+    if (authStatus === AuthenticationStatus.LoggedOut) {
       return;
     }
 
@@ -211,7 +207,7 @@ export default class NotificationBackground {
     }
 
     const disabledAddLogin = await this.stateService.getDisableAddLoginNotification();
-    if (await this.vaultTimeoutService.isLocked()) {
+    if (authStatus === AuthenticationStatus.Locked) {
       if (disabledAddLogin) {
         return;
       }
@@ -255,7 +251,7 @@ export default class NotificationBackground {
     loginDomain: string,
     loginInfo: AddLoginRuntimeMessage,
     tab: chrome.tabs.Tab,
-    isVaultLocked: boolean = false
+    isVaultLocked = false
   ) {
     // remove any old messages for this tab
     this.removeTabFromNotificationQueue(tab);
@@ -279,7 +275,7 @@ export default class NotificationBackground {
       return;
     }
 
-    if (await this.vaultTimeoutService.isLocked()) {
+    if ((await this.authService.getAuthStatus()) < AuthenticationStatus.Unlocked) {
       this.pushChangePasswordToQueue(null, loginDomain, changeData.newPassword, tab, true);
       return;
     }
@@ -306,7 +302,7 @@ export default class NotificationBackground {
     loginDomain: string,
     newPassword: string,
     tab: chrome.tabs.Tab,
-    isVaultLocked: boolean = false
+    isVaultLocked = false
   ) {
     // remove any old messages for this tab
     this.removeTabFromNotificationQueue(tab);

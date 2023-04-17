@@ -1,17 +1,8 @@
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from "@angular/core";
 
-import { DebounceNavigationService } from "./debounceNavigationService";
-import { LaunchGuardService } from "./launch-guard.service";
-import { LockGuardService } from "./lock-guard.service";
-import { PasswordRepromptService } from "./password-reprompt.service";
-import { UnauthGuardService } from "./unauth-guard.service";
-
-import { JslibServicesModule } from "jslib-angular/services/jslib-services.module";
+import { JslibServicesModule, SECURE_STORAGE } from "jslib-angular/services/jslib-services.module";
 import { LockGuardService as BaseLockGuardService } from "jslib-angular/services/lock-guard.service";
 import { UnauthGuardService as BaseUnauthGuardService } from "jslib-angular/services/unauth-guard.service";
-
-import { BrowserApi } from "../../browser/browserApi";
-
 import { ApiService } from "jslib-common/abstractions/api.service";
 import { AppIdService } from "jslib-common/abstractions/appId.service";
 import { AuditService } from "jslib-common/abstractions/audit.service";
@@ -49,58 +40,78 @@ import { TokenService } from "jslib-common/abstractions/token.service";
 import { TotpService } from "jslib-common/abstractions/totp.service";
 import { TwoFactorService } from "jslib-common/abstractions/twoFactor.service";
 import { UserVerificationService } from "jslib-common/abstractions/userVerification.service";
+import { UsernameGenerationService } from "jslib-common/abstractions/usernameGeneration.service";
 import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
-
-import { AutofillService } from "../../services/abstractions/autofill.service";
-import BrowserMessagingService from "../../services/browserMessaging.service";
-
 // import { AuthService } from "jslib-common/services/auth.service";
 import { ConsoleLogService } from "jslib-common/services/consoleLog.service";
 import { SearchService } from "jslib-common/services/search.service";
 
+import MainBackground from "../../background/main.background";
+import { BrowserApi } from "../../browser/browserApi";
+import { AutofillService } from "../../services/abstractions/autofill.service";
+import { StateService as StateServiceAbstraction } from "../../services/abstractions/state.service";
+import BrowserMessagingService from "../../services/browserMessaging.service";
+import BrowserMessagingPrivateModePopupService from "../../services/browserMessagingPrivateModePopup.service";
+
+import { DebounceNavigationService } from "./debounceNavigationService";
+import { InitService } from "./init.service";
+import { LockGuardService } from "./lock-guard.service";
+import { PasswordRepromptService } from "./password-reprompt.service";
 import { PopupSearchService } from "./popup-search.service";
 import { PopupUtilsService } from "./popup-utils.service";
-
-import { ThemeType } from "jslib-common/enums/themeType";
-
-import { StateService as StateServiceAbstraction } from "../../services/abstractions/state.service";
-
-/** Cozy imports */
+import { UnauthGuardService } from "./unauth-guard.service";
+/** COZY IMPORTS */
+/* eslint-disable */
 import { CozyClientService } from "./cozyClient.service";
 import { CozySanitizeUrlService } from "./cozySanitizeUrl.service";
 import { KonnectorsService } from "./konnectors.service";
 import { AuthService } from "../../services/auth.service";
 import { ModalService } from "jslib-angular/services/modal.service";
+/* eslint-enable */
 /* END */
-function getBgService<T>(service: string) {
+
+const isPrivateMode = BrowserApi.getBackgroundPage() == null;
+const mainBackground: MainBackground = isPrivateMode
+  ? createLocalBgService()
+  : BrowserApi.getBackgroundPage().bitwardenMain;
+
+function createLocalBgService() {
+  const localBgService = new MainBackground(true);
+  localBgService.bootstrap();
+  return localBgService;
+}
+
+function getBgService<T>(service: keyof MainBackground) {
   return (): T => {
-    const page = BrowserApi.getBackgroundPage();
-    return page ? (page.bitwardenMain[service] as T) : null;
+    return mainBackground ? (mainBackground[service] as any as T) : null;
   };
 }
 
-const isPrivateMode = BrowserApi.getBackgroundPage() == null;
+/* COZY START */
+const cozyMessagingService = isPrivateMode
+  ? new BrowserMessagingPrivateModePopupService()
+  : new BrowserMessagingService();
 
-const messagingService = new BrowserMessagingService();
-const searchService = isPrivateMode
-  ? null
-  : new PopupSearchService(
-      getBgService<SearchService>("searchService")(),
-      getBgService<CipherService>("cipherService")(),
-      getBgService<ConsoleLogService>("consoleLogService")(),
-      getBgService<I18nService>("i18nService")()
-    );
-const passwordRepromptService = isPrivateMode
-  ? null
-  : new PasswordRepromptService(
-      getBgService<ModalService>("modalService")(),
-      getBgService<KeyConnectorService>("keyConnectorService")()
-    );
+// TODO REFACTO : à supprimer ?
+// const searchService = isPrivateMode
+//   ? null
+//   : new PopupSearchService(
+//       getBgService<SearchService>("searchService")(),
+//       getBgService<CipherService>("cipherService")(),
+//       getBgService<ConsoleLogService>("logService")(),
+//       getBgService<I18nService>("i18nService")()
+//     );
+// const passwordRepromptService = isPrivateMode
+//   ? null
+//   : new PasswordRepromptService(
+//       getBgService<ModalService>("modalService")(),
+//       getBgService<KeyConnectorService>("keyConnectorService")()
+//     );
 
 const cozyClientService = new CozyClientService(
   getBgService<EnvironmentService>("environmentService")(),
   getBgService<ApiService>("apiService")(),
-  messagingService
+  cozyMessagingService
 );
 export const cozySanitizeUrlService = new CozySanitizeUrlService();
 export const konnectorsService = new KonnectorsService(
@@ -110,56 +121,9 @@ export const konnectorsService = new KonnectorsService(
   cozyClientService,
   getBgService<StateServiceAbstraction>("stateService")()
 );
-const authService = getBgService<AuthService>("authService")();
+// const authService = getBgService<AuthService>("authService")();
 
-export function initFactory(
-  platformUtilsService: PlatformUtilsService,
-  i18nService: I18nService,
-  popupUtilsService: PopupUtilsService,
-  stateService: StateServiceAbstraction,
-  logService: LogServiceAbstraction
-): Function {
-  return async () => {
-    await stateService.init();
-
-    if (!popupUtilsService.inPopup(window)) {
-      window.document.body.classList.add("body-full");
-    } else if (window.screen.availHeight < 600) {
-      window.document.body.classList.add("body-xs");
-    } else if (window.screen.availHeight <= 800) {
-      window.document.body.classList.add("body-sm");
-    }
-
-    if (!isPrivateMode) {
-      const htmlEl = window.document.documentElement;
-      const theme = await platformUtilsService.getEffectiveTheme();
-      htmlEl.classList.add("theme_" + theme);
-      platformUtilsService.onDefaultSystemThemeChange(async (sysTheme) => {
-        const bwTheme = await stateService.getTheme();
-        if (bwTheme == null || bwTheme === ThemeType.System) {
-          htmlEl.classList.remove("theme_" + ThemeType.Light, "theme_" + ThemeType.Dark);
-          htmlEl.classList.add("theme_" + sysTheme);
-        }
-      });
-      htmlEl.classList.add("locale_" + i18nService.translationLocale);
-
-      // Workaround for slow performance on external monitors on Chrome + MacOS
-      // See: https://bugs.chromium.org/p/chromium/issues/detail?id=971701#c64
-      if (
-        platformUtilsService.isChrome() &&
-        navigator.platform.indexOf("Mac") > -1 &&
-        popupUtilsService.inPopup(window) &&
-        (window.screenLeft < 0 ||
-          window.screenTop < 0 ||
-          window.screenLeft > window.screen.width ||
-          window.screenTop > window.screen.height)
-      ) {
-        htmlEl.classList.add("force_redraw");
-        logService.info("Force redraw is on");
-      }
-    }
-  };
-}
+/* COZY END */
 
 @NgModule({
   imports: [JslibServicesModule],
@@ -168,35 +132,30 @@ export function initFactory(
     { provide: CozyClientService, useValue: cozyClientService },
     { provide: CozySanitizeUrlService, useValue: cozySanitizeUrlService },
     { provide: KonnectorsService, useValue: konnectorsService },
+    InitService,
+    DebounceNavigationService,
     {
       provide: LOCALE_ID,
-      useFactory: () =>
-        isPrivateMode ? null : getBgService<I18nService>("i18nService")().translationLocale,
+      useFactory: () => getBgService<I18nService>("i18nService")().translationLocale,
       deps: [],
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: initFactory,
-      deps: [
-        PlatformUtilsService,
-        I18nService,
-        PopupUtilsService,
-        StateServiceAbstraction,
-        LogServiceAbstraction,
-      ],
+      useFactory: (initService: InitService) => initService.init(),
+      deps: [InitService],
       multi: true,
     },
-    LaunchGuardService,
     { provide: BaseLockGuardService, useClass: LockGuardService },
     { provide: BaseUnauthGuardService, useClass: UnauthGuardService },
-    DebounceNavigationService,
-    PopupUtilsService,
-
-    { provide: CozyClientService, useValue: cozyClientService },
-    { provide: CozySanitizeUrlService, useValue: cozySanitizeUrlService },
-    { provide: KonnectorsService, useValue: konnectorsService },
-
-    { provide: MessagingService, useClass: BrowserMessagingService },
+    { provide: PopupUtilsService, useFactory: () => new PopupUtilsService(isPrivateMode) },
+    {
+      provide: MessagingService,
+      useFactory: () => {
+        return isPrivateMode
+          ? new BrowserMessagingPrivateModePopupService()
+          : new BrowserMessagingService();
+      },
+    },
     {
       provide: TwoFactorService,
       useFactory: getBgService<TwoFactorService>("twoFactorService"),
@@ -214,14 +173,12 @@ export function initFactory(
         logService: ConsoleLogService,
         i18nService: I18nService
       ) => {
-        return isPrivateMode
-          ? null
-          : new PopupSearchService(
-              getBgService<SearchService>("searchService")(),
-              cipherService,
-              logService,
-              i18nService
-            );
+        return new PopupSearchService(
+          getBgService<SearchService>("searchService")(),
+          cipherService,
+          logService,
+          i18nService
+        );
       },
       deps: [CipherService, LogServiceAbstraction, I18nService],
     },
@@ -326,13 +283,18 @@ export function initFactory(
       deps: [],
     },
     {
-      provide: "SECURE_STORAGE",
+      provide: SECURE_STORAGE,
       useFactory: getBgService<StorageServiceAbstraction>("secureStorageService"),
       deps: [],
     },
     {
       provide: StateServiceAbstraction,
       useFactory: getBgService<StateServiceAbstraction>("stateService"),
+      deps: [],
+    },
+    {
+      provide: UsernameGenerationService,
+      useFactory: getBgService<UsernameGenerationService>("usernameGenerationService"),
       deps: [],
     },
     {

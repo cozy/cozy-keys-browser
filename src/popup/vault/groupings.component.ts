@@ -1,17 +1,9 @@
 import { Location } from "@angular/common";
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-
 import { first } from "rxjs/operators";
 
-import { BrowserApi } from "../../browser/browserApi";
-
-import { CipherType } from "jslib-common/enums/cipherType";
-
-import { CipherView } from "jslib-common/models/view/cipherView";
-import { CollectionView } from "jslib-common/models/view/collectionView";
-import { FolderView } from "jslib-common/models/view/folderView";
-
+import { GroupingsComponent as BaseGroupingsComponent } from "jslib-angular/components/groupings.component";
 import { BroadcasterService } from "jslib-common/abstractions/broadcaster.service";
 import { CipherService } from "jslib-common/abstractions/cipher.service";
 import { CollectionService } from "jslib-common/abstractions/collection.service";
@@ -19,17 +11,19 @@ import { FolderService } from "jslib-common/abstractions/folder.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
 import { SearchService } from "jslib-common/abstractions/search.service";
 import { SyncService } from "jslib-common/abstractions/sync.service";
-
-import { GroupingsComponent as BaseGroupingsComponent } from "jslib-angular/components/groupings.component";
-
-import { StateService } from "../../services/abstractions/state.service";
-
-import { PopupUtilsService } from "../services/popup-utils.service";
+import { CipherType } from "jslib-common/enums/cipherType";
+import { CipherView } from "jslib-common/models/view/cipherView";
+import { CollectionView } from "jslib-common/models/view/collectionView";
+import { FolderView } from "jslib-common/models/view/folderView";
 
 import { BrowserGroupingsComponentState } from "src/models/browserGroupingsComponentState";
 
-/** Start Cozy imports */
+import { BrowserApi } from "../../browser/browserApi";
+import { StateService } from "../../services/abstractions/state.service";
 import { CozyClientService } from "../services/cozyClient.service";
+import { PopupUtilsService } from "../services/popup-utils.service";
+
+/** Start Cozy imports */
 /** End Cozy imports */
 
 const ComponentId = "GroupingsComponent";
@@ -86,8 +80,8 @@ export class GroupingsComponent extends BaseGroupingsComponent implements OnInit
     private platformUtilsService: PlatformUtilsService,
     private searchService: SearchService,
     private location: Location,
-    private browserStateService: StateService
-    , private cozyClientService: CozyClientService
+    private browserStateService: StateService,
+    private cozyClientService: CozyClientService
   ) {
     super(collectionService, folderService, browserStateService);
     this.noFolderListSize = 100;

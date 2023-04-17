@@ -602,6 +602,12 @@
   "overwritePasswordConfirmation": {
     "message": "Êtes-vous sûr de vouloir écraser le mot de passe actuel ?"
   },
+  "overwriteUsername": {
+    "message": "Remplacer le nom d'utilisateur"
+  },
+  "overwriteUsernameConfirmation": {
+    "message": "Êtes-vous sûr(e) de vouloir remplacer le nom d'utilisateur actuel ?"
+  },
   "searchFolder": {
     "message": "Rechercher dans le dossier"
   },
@@ -1088,8 +1094,8 @@
   "commandLockVaultDesc": {
     "message": "Verrouiller le coffre"
   },
-  "privateModeMessage": {
-    "message": "Malheureusement cette fenêtre n'est pas disponible en navigation privée pour ce navigateur."
+  "privateModeWarning": {
+    "message": "La prise en charge de la navigation privée est expérimentale et certaines fonctionnalités sont limitées."
   },
   "customFields": {
     "message": "Champs personnalisés"
@@ -1347,7 +1353,12 @@
     "message": "Ce mot de passe n'a été trouvé dans aucune fuite de données connue. Il semble sécurisé."
   },
   "baseDomain": {
-    "message": "Domaine de base"
+    "message": "Domaine de base",
+    "description": "Domain name. Ex. website.com"
+  },
+  "domainName": {
+    "message": "Nom de domaine",
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Hôte",
@@ -1614,7 +1625,7 @@
     "message": "Démarrer l'application de bureau Bitwarden."
   },
   "startDesktopDesc": {
-    "message": "L'application de bureau Bitwarden doit être démarrée avant que cette fonction puisse être utilisée."
+    "message": "L'application de bureau Bitwarden doit être démarrée avant que le déverrouillage par biométrie puisse être utilisé."
   },
   "errorEnableBiometricTitle": {
     "message": "Impossible d'activer la biométrie"
@@ -1702,7 +1713,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Nombre maximum d'accès atteint"
+    "message": "Nombre maximum d'accès atteint",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
     "message": "Expiré"
@@ -1986,5 +1998,66 @@
   },
   "leftOrganization": {
     "message": "Vous avez quitté l'organisation."
+  },
+  "toggleCharacterCount": {
+    "message": "Activer/désactiver le compteur de caractères"
+  },
+  "sessionTimeout": {
+    "message": "Votre session a expiré. Veuillez revenir en arrière et essayer de vous connecter à nouveau."
+  },
+  "exportingPersonalVaultTitle": {
+    "message": "Export du coffre personnel"
+  },
+  "exportingPersonalVaultDescription": {
+    "message": "Seuls les éléments du coffre personnel associé à l'adresse e-mail $EMAIL$ seront exportés. Les éléments du coffre de l'organisation ne seront pas inclus.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "error": {
+    "message": "Erreur"
+  },
+  "regenerateUsername": {
+    "message": "Régénérer un nom d'utilisateur"
+  },
+  "generateUsername": {
+    "message": "Générer un nom d'utilisateur"
+  },
+  "usernameType": {
+    "message": "Type de nom d'utilisateur"
+  },
+  "plusAddressedEmail": {
+    "message": "E-mail suffixé",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
+  },
+  "plusAddressedEmailDesc": {
+    "message": "Utilisez les capacités de sous-adressage de votre fournisseur d'e-mail."
+  },
+  "catchallEmail": {
+    "message": "Collecteur d'e-mail"
+  },
+  "catchallEmailDesc": {
+    "message": "Utilisez la boîte de réception du collecteur configurée de votre domaine."
+  },
+  "random": {
+    "message": "Aléatoire"
+  },
+  "randomWord": {
+    "message": "Mots aléatoire"
+  },
+  "websiteName": {
+    "message": "Nom du site Web"
+  },
+  "whatWouldYouLikeToGenerate": {
+    "message": "Que souhaitez-vous générer ?"
+  },
+  "passwordType": {
+    "message": "Type de mot de passe"
+  },
+  "service": {
+    "message": "Service"
   }
 }

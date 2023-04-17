@@ -1,4 +1,5 @@
-<span
+<button
+  type="button"
   class="row-btn"
   (click)="autofill()"
   appStopClick
@@ -15,9 +16,10 @@
       />
     </svg>
   </div>
-</span>
+</button>
 <ng-container *ngIf="cipher.type === cipherType.Login">
-  <span
+  <button
+    type="button"
     class="row-btn"
     appStopClick
     appStopProp
@@ -25,6 +27,7 @@
     (click)="launchCipher()"
     *ngIf="showGlobe"
     [ngClass]="{ disabled: !cipher.login.canLaunch }"
+    [attr.disabled]="!cipher.login.canLaunch ? '' : null"
   >
     <div class="icon-cozy-inline">
       <svg
@@ -40,14 +43,16 @@
         ></path>
       </svg>
     </div>
-  </span>
-  <span
+  </button>
+  <button
+    type="button"
     class="row-btn"
     appStopClick
     appStopProp
     appA11yTitle="{{ 'copyUsername' | i18n }}"
     (click)="copy(cipher, cipher.login.username, 'username', 'Username')"
     [ngClass]="{ disabled: !cipher.login.username }"
+    [attr.disabled]="!cipher.login.username ? '' : null"
   >
     <div class="icon-cozy-inline">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
@@ -57,14 +62,16 @@
         />
       </svg>
     </div>
-  </span>
-  <span
+  </button>
+  <button
+    type="button"
     class="row-btn"
     appStopClick
     appStopProp
     appA11yTitle="{{ 'copyPassword' | i18n }}"
     (click)="copy(cipher, cipher.login.password, 'password', 'Password')"
     [ngClass]="{ disabled: !cipher.login.password || !cipher.viewPassword }"
+    [attr.disabled]="!cipher.login.password ? '' : null"
   >
     <div class="icon-cozy-inline">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
@@ -74,14 +81,16 @@
         />
       </svg>
     </div>
-  </span>
-  <span
+  </button>
+  <button
+    type="button"
     class="row-btn"
     appStopClick
     appStopProp
     appA11yTitle="{{ 'copyVerificationCode' | i18n }}"
     (click)="copy(cipher, cipher.login.totp, 'verificationCodeTotp', 'TOTP')"
     [ngClass]="{ disabled: !displayTotpCopyButton(cipher) }"
+    [attr.disabled]="!displayTotpCopyButton(cipher) ? '' : null"
   >
     <div class="icon-cozy-inline">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
@@ -91,16 +100,18 @@
         />
       </svg>
     </div>
-  </span>
+  </button>
 </ng-container>
 <ng-container *ngIf="cipher.type === cipherType.Card">
-  <span
+  <button
+    type="button"
     class="row-btn"
     appStopClick
     appStopProp
     appA11yTitle="{{ 'copyNumber' | i18n }}"
     (click)="copy(cipher, cipher.card.number, 'number', 'Card Number')"
     [ngClass]="{ disabled: !cipher.card.number }"
+    [attr.disabled]="!cipher.card.number ? '' : null"
   >
     <div class="icon-cozy-inline">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
@@ -110,14 +121,16 @@
         />
       </svg>
     </div>
-  </span>
-  <span
+  </button>
+  <button
+    type="button"
     class="row-btn"
     appStopClick
     appStopProp
     appA11yTitle="{{ 'copySecurityCode' | i18n }}"
     (click)="copy(cipher, cipher.card.code, 'securityCode', 'Security Code')"
     [ngClass]="{ disabled: !cipher.card.code }"
+    [attr.disabled]="!cipher.card.code ? '' : null"
   >
     <div class="icon-cozy-inline">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
@@ -127,5 +140,5 @@
         />
       </svg>
     </div>
-  </span>
+  </button>
 </ng-container>

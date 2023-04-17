@@ -30,7 +30,7 @@
     </button>
   </div>
 </header>
-<content [ngClass]="{ 'stacked-boxes': showGroupings() }">
+<main tabindex="-1" [ngClass]="{ 'stacked-boxes': showGroupings() }">
   <ng-container *ngIf="showGroupings()">
     <!-- 
     <div class="box list" *ngIf="nestedFolders && nestedFolders.length">
@@ -85,24 +85,24 @@
     </div>
   </ng-container>
   <ng-container *ngIf="ciphers">
-    <div class="no-items" *ngIf="!ciphers.length">
+    <div class="no-items no-items-centered-up" *ngIf="!ciphers.length">
       <i class="bwi bwi-spinner bwi-spin bwi-3x" *ngIf="!loaded" aria-hidden="true"></i>
       <ng-container *ngIf="loaded">
-        <ng-container *ngIf="type===1">
+        <ng-container *ngIf="type === 1">
           <div class="icon"><i class="icon-cozy icon-login icon-double"></i></div>
           <p>{{ "noItemsInList" | i18n }}</p>
           <button type="button" (click)="addCipher()" class="btn block primary link">
             {{ "addLogin" | i18n }}
           </button>
         </ng-container>
-        <ng-container *ngIf="type===3">
+        <ng-container *ngIf="type === 3">
           <div class="icon"><i class="icon-cozy icon-bank icon-double"></i></div>
           <p>{{ "addCardExplanation" | i18n }}</p>
           <button type="button" (click)="addCipher()" class="btn block primary link">
             {{ "addCard" | i18n }}
           </button>
         </ng-container>
-        <ng-container *ngIf="type===4">
+        <ng-container *ngIf="type === 4">
           <div class="icon"><i class="icon-cozy icon-identity icon-double"></i></div>
           <p>{{ "addIdentityExplanation" | i18n }}</p>
           <button type="button" (click)="addCipher()" class="btn block primary link">
@@ -139,4 +139,4 @@
       </div>
     </cdk-virtual-scroll-viewport>
   </ng-container>
-</content>
+</main>

@@ -15,10 +15,11 @@
       </button>
     </div>
   </header>
-  <content>
+  <main tabindex="-1">
     <app-callout type="warning" title="{{ 'vaultExportDisabled' | i18n }}" *ngIf="disabledByPolicy">
       {{ "personalVaultExportPolicyInEffect" | i18n }}
     </app-callout>
+    <app-export-scope-callout *ngIf="!disabledByPolicy"></app-export-scope-callout>
 
     <div class="box">
       <div class="box-content">
@@ -28,12 +29,12 @@
             <option *ngFor="let f of formatOptions" [value]="f.value">{{ f.name }}</option>
           </select>
         </div>
-        <app-verify-master-password ngDefaultControl formControlName="secret" name="Secret">
-        </app-verify-master-password>
+        <app-user-verification ngDefaultControl formControlName="secret" name="Secret">
+        </app-user-verification>
       </div>
       <div class="box-footer">
         <p>{{ "confirmIdentity" | i18n }}</p>
       </div>
     </div>
-  </content>
+  </main>
 </form>

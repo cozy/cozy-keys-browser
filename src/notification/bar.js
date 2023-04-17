@@ -6,8 +6,8 @@ require("./bar.scss");
  * https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/notification/bar.js
  */
 document.addEventListener("DOMContentLoaded", () => {
-  var i18n = {};
-  var lang = window.navigator.language;
+  let i18n = {};
+  let lang = window.navigator.language;
 
   i18n.appName = chrome.i18n.getMessage("appName");
   i18n.close = chrome.i18n.getMessage("close");
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   i18n.notificationAddDesc = chrome.i18n.getMessage("notificationAddDesc");
   i18n.notificationChangeSave = chrome.i18n.getMessage("notificationChangeSave");
   i18n.notificationChangeDesc = chrome.i18n.getMessage("notificationChangeDesc");
-  lang = chrome.i18n.getUILanguage();
+  lang = chrome.i18n.getUILanguage(); // eslint-disable-line
 
   // delay 50ms so that we get proper body dimensions
   setTimeout(load, 50);

@@ -1,14 +1,16 @@
 /* Cozy
 import { GlobalState } from "jslib-common/models/domain/globalState";
 */
-import { GlobalState } from "src/models/globalState";
 import { StorageOptions } from "jslib-common/models/domain/storageOptions";
 import { StateService as BaseStateService } from "jslib-common/services/state.service";
+
+import { GlobalState } from "src/models/globalState";
 
 import { Account } from "../models/account";
 import { BrowserComponentState } from "../models/browserComponentState";
 import { BrowserGroupingsComponentState } from "../models/browserGroupingsComponentState";
 import { BrowserSendComponentState } from "../models/browserSendComponentState";
+
 import { StateService as StateServiceAbstraction } from "./abstractions/state.service";
 
 export class StateService
@@ -19,6 +21,15 @@ export class StateService
     // Apply browser overrides to default account values
     account = new Account(account);
     await super.addAccount(account);
+  }
+
+  async getIsAuthenticated(options?: StorageOptions): Promise<boolean> {
+    // Firefox Private Mode can clash with non-Private Mode because they both read from the same onDiskOptions
+    // Check that there is an account in memory before considering the user authenticated
+    return (
+      (await super.getIsAuthenticated(options)) &&
+      (await this.getAccount(this.defaultInMemoryOptions)) != null
+    );
   }
 
   async getBrowserGroupingComponentState(

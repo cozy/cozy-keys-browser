@@ -2,11 +2,9 @@ import { Injectable } from "@angular/core";
 
 import { BrowserApi } from "../../browser/browserApi";
 
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-
 @Injectable()
 export class PopupUtilsService {
-  constructor(private platformUtilsService: PlatformUtilsService) {}
+  constructor(private privateMode: boolean = false) {}
 
   inSidebar(win: Window): boolean {
     return win.location.search !== "" && win.location.search.indexOf("uilocation=sidebar") > -1;
@@ -28,12 +26,16 @@ export class PopupUtilsService {
     );
   }
 
-  getContentScrollY(win: Window, scrollingContainer: string = "content"): number {
+  inPrivateMode(): boolean {
+    return this.privateMode;
+  }
+
+  getContentScrollY(win: Window, scrollingContainer = "content"): number {
     const content = win.document.getElementsByTagName(scrollingContainer)[0];
     return content.scrollTop;
   }
 
-  setContentScrollY(win: Window, scrollY: number, scrollingContainer: string = "content"): void {
+  setContentScrollY(win: Window, scrollY: number, scrollingContainer = "content"): void {
     if (scrollY != null) {
       const content = win.document.getElementsByTagName(scrollingContainer)[0];
       content.scrollTop = scrollY;

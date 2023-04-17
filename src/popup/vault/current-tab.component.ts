@@ -1,12 +1,6 @@
-import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { Location } from "@angular/common";
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit , HostListener } from "@angular/core";
 import { Router } from "@angular/router";
-
-import { BrowserApi } from "../../browser/browserApi";
-
-import { CipherRepromptType } from "jslib-common/enums/cipherRepromptType";
-import { CipherType } from "jslib-common/enums/cipherType";
-
-import { CipherView } from "jslib-common/models/view/cipherView";
 
 import { BroadcasterService } from "jslib-common/abstractions/broadcaster.service";
 import { CipherService } from "jslib-common/abstractions/cipher.service";
@@ -16,17 +10,17 @@ import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.se
 import { SearchService } from "jslib-common/abstractions/search.service";
 import { StateService } from "jslib-common/abstractions/state.service";
 import { SyncService } from "jslib-common/abstractions/sync.service";
+import { CipherRepromptType } from "jslib-common/enums/cipherRepromptType";
+import { CipherType } from "jslib-common/enums/cipherType";
+import { Utils } from "jslib-common/misc/utils";
+import { CipherView } from "jslib-common/models/view/cipherView";
 
+import { BrowserApi } from "../../browser/browserApi";
 import { AutofillService } from "../../services/abstractions/autofill.service";
-
+import { CozyClientService } from "../services/cozyClient.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
 
-import { Utils } from "jslib-common/misc/utils";
-
 /** Start Cozy imports */
-import { HostListener } from "@angular/core";
-import { Location } from "@angular/common";
-import { CozyClientService } from "../services/cozyClient.service";
 /** End Cozy imports */
 
 const BroadcasterSubscriptionId = "CurrentTabComponent";
@@ -205,7 +199,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
       BrowserApi.closePopup(window);
     }
     */
-      if (e.key === "Escape") {
+    if (e.key === "Escape") {
       this.back();
       e.preventDefault();
     }
