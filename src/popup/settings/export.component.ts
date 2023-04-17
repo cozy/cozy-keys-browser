@@ -41,6 +41,11 @@ export class ExportComponent extends BaseExportComponent {
       userVerificationService,
       formBuilder
     );
+    this.formatOptions = [
+      { name: ".json", value: "json" },
+      { name: ".csv", value: "csv" },
+      // { name: ".json (Encrypted)", value: "encrypted_json" }, // commented by Cozy
+    ];
   }
 
   protected saved() {
