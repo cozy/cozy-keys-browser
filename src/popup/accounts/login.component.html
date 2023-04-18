@@ -6,7 +6,9 @@
     <h1 class="center">
       <span class="title">{{ "appName" | i18n }}</span>
     </h1>
-    <div class="right"></div>
+    <div class="right" style="visibility: hidden">
+      <a routerLink="/home">{{ "cancel" | i18n }}</a>
+    </div>
   </header>
   <main tabindex="-1">
     <div class="box login-box">

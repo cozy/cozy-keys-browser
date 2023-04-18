@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let i18n = {};
   let lang = window.navigator.language;
 
-  i18n.appName = chrome.i18n.getMessage("appName");
   i18n.close = chrome.i18n.getMessage("close");
   i18n.yes = chrome.i18n.getMessage("yes");
   i18n.never = chrome.i18n.getMessage("never");
@@ -29,8 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // i18n
     body.classList.add("lang-" + lang.slice(0, 2));
-
-    document.getElementById("logo-link").title = i18n.appName;
 
     // Set text in popup
     document.querySelector("#template-notif .dont-save").textContent = i18n.notificationDontSave;
