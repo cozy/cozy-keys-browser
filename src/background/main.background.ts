@@ -78,10 +78,7 @@ import { PopupUtilsService } from "../popup/services/popup-utils.service";
 import { AutofillService as AutofillServiceAbstraction } from "../services/abstractions/autofill.service";
 import { StateService as StateServiceAbstraction } from "../services/abstractions/state.service";
 import AutofillService from "../services/autofill.service";
-import {
-  BrowserCryptoService,
-  BrowserCryptoService as CryptoService,
-} from "../services/browserCrypto.service";
+import { BrowserCryptoService , BrowserCryptoService as CryptoService } from "../services/browserCrypto.service";
 import BrowserMessagingService from "../services/browserMessaging.service";
 import BrowserMessagingPrivateModeBackgroundService from "../services/browserMessagingPrivateModeBackground.service";
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
@@ -241,6 +238,12 @@ export default class MainBackground {
       (expired: boolean) => this.logout(expired),
       this.buildUserAgent()
     );
+    this.cozyClientService = new CozyClientService(
+      this.environmentService,
+      this.apiService,
+      this.messagingService
+    );
+
     this.settingsService = new SettingsService(this.stateService);
     this.fileUploadService = new FileUploadService(this.logService, this.apiService);
     this.cipherService = new CipherService(
@@ -592,6 +595,22 @@ export default class MainBackground {
     await this.idleBackground.init();
     await this.webRequestBackground.init();
 
+    if (this.platformUtilsService.isFirefox() && !this.isPrivateMode) {
+      // Set Private Mode windows to the default icon - they do not share state with the background page
+      const privateWindows = await BrowserApi.getPrivateModeWindows();
+      privateWindows.forEach(async (win) => {
+        await this.actionSetIcon(chrome.browserAction, "", win.id);
+        await this.actionSetIcon(this.sidebarAction, "", win.id);
+      });
+
+      BrowserApi.onWindowCreated(async (win) => {
+        if (win.incognito) {
+          await this.actionSetIcon(chrome.browserAction, "", win.id);
+          await this.actionSetIcon(this.sidebarAction, "", win.id);
+        }
+      });
+    }
+
     /** added by Cozy */
     const checkCurrentStatus = async (msg: any) => {
       const isAuthenticatedNow = await this.stateService.getIsAuthenticated();
@@ -619,23 +638,6 @@ export default class MainBackground {
       }
     });
     /** END added by Cozy */
-
-    if (this.platformUtilsService.isFirefox() && !this.isPrivateMode) {
-      // Set Private Mode windows to the default icon - they do not share state with the background page
-      const privateWindows = await BrowserApi.getPrivateModeWindows();
-      privateWindows.forEach(async (win) => {
-        await this.actionSetIcon(chrome.browserAction, "", win.id);
-        await this.actionSetIcon(this.sidebarAction, "", win.id);
-      });
-
-      BrowserApi.onWindowCreated(async (win) => {
-        if (win.incognito) {
-          await this.actionSetIcon(chrome.browserAction, "", win.id);
-          await this.actionSetIcon(this.sidebarAction, "", win.id);
-        }
-      });
-    }
-
     return new Promise<void>((resolve) => {
       setTimeout(async () => {
         await this.environmentService.setUrlsFromStorage();
