@@ -659,6 +659,12 @@
   "notificationAddSave": {
     "message": "Save"
   },
+  "notificationDontSave": {
+    "message": "Not now"
+  },
+  "notificationAddSavePassword": {
+    "message": "Save password"
+  },
   "disableChangedPasswordNotification": {
     "message": "Disable Changed Password Notification"
   },
