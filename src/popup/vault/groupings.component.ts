@@ -1,744 +1,382 @@
-import { ToasterService } from 'angular2-toaster';
+import { Location } from "@angular/common";
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { first } from "rxjs/operators";
 
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Location } from '@angular/common';
-import {
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    HostListener,
-    NgZone,
-    OnDestroy,
-    OnInit,
-    ViewChild,
-} from '@angular/core';
-import {
-    ActivatedRoute,
-    Router,
-} from '@angular/router';
+import { GroupingsComponent as BaseGroupingsComponent } from "jslib-angular/components/groupings.component";
+import { BroadcasterService } from "jslib-common/abstractions/broadcaster.service";
+import { CipherService } from "jslib-common/abstractions/cipher.service";
+import { CollectionService } from "jslib-common/abstractions/collection.service";
+import { FolderService } from "jslib-common/abstractions/folder.service";
+import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
+import { SearchService } from "jslib-common/abstractions/search.service";
+import { SyncService } from "jslib-common/abstractions/sync.service";
+import { CipherType } from "jslib-common/enums/cipherType";
+import { CipherView } from "jslib-common/models/view/cipherView";
+import { CollectionView } from "jslib-common/models/view/collectionView";
+import { FolderView } from "jslib-common/models/view/folderView";
 
-import { BrowserApi } from '../../browser/browserApi';
+import { BrowserGroupingsComponentState } from "src/models/browserGroupingsComponentState";
 
-import { CipherType } from 'jslib-common/enums/cipherType';
-import { UriMatchType } from 'jslib-common/enums/uriMatchType';
+import { BrowserApi } from "../../browser/browserApi";
+import { StateService } from "../../services/abstractions/state.service";
+import { CozyClientService } from "../services/cozyClient.service";
+import { PopupUtilsService } from "../services/popup-utils.service";
 
-import { CipherView } from 'jslib-common/models/view/cipherView';
-import { FolderView } from 'jslib-common/models/view/folderView';
+/** Start Cozy imports */
+/** End Cozy imports */
 
-import { CipherService } from 'jslib-common/abstractions/cipher.service';
-import { CollectionService } from 'jslib-common/abstractions/collection.service';
-import { FolderService } from 'jslib-common/abstractions/folder.service';
-import { I18nService } from 'jslib-common/abstractions/i18n.service';
-import { PlatformUtilsService } from 'jslib-common/abstractions/platformUtils.service';
-import { SearchService } from 'jslib-common/abstractions/search.service';
-import { StateService } from 'jslib-common/abstractions/state.service';
-import { StorageService } from 'jslib-common/abstractions/storage.service';
-import { SyncService } from 'jslib-common/abstractions/sync.service';
-import { UserService } from 'jslib-common/abstractions/user.service';
-
-import { BroadcasterService } from 'jslib-angular/services/broadcaster.service';
-
-import { GroupingsComponent as BaseGroupingsComponent } from 'jslib-angular/components/groupings.component';
-
-import { Utils } from 'jslib-common/misc/utils';
-
-import { AutofillService } from '../../services/abstractions/autofill.service';
-import { LocalConstantsService as ConstantsService } from '../services/constants.service';
-import { CozyClientService } from '../services/cozyClient.service';
-import { KonnectorsService } from '../services/konnectors.service';
-import { PopupUtilsService } from '../services/popup-utils.service';
-
-const ComponentId = 'GroupingsComponent';
-const ScopeStateId = ComponentId + 'Scope';
-
-const enum PanelNames {
-    CurrentPageCiphers = 'currentPageCiphers',
-    Cards = 'Card',
-    Folder = 'Folder',
-    Identities = 'Identity',
-    Logins = 'Login',
-    None = 'none',
-    Search = 'search',
-}
+const ComponentId = "GroupingsComponent";
 
 @Component({
-    selector: 'app-vault-groupings',
-    templateUrl: 'groupings.component.html',
-    animations: [
-        trigger('toggleClick', [
-            state('true', style({
-                transform: 'translateX(0%)',
-            })),
-            transition('void => *', animate(
-                '0.4s' + ' ease-in-out',
-                style({ transform: 'translateX(0%)' }),
-            )),
-            state('false', style({
-                transform: 'translateX(100%)',
-            })),
-            transition('* => void', animate(
-                '0.4s' + ' ease-in-out',
-                style({ transform: 'translateX(100%)' }),
-            )),
-        ]),
-    ],
+  selector: "app-vault-groupings",
+  templateUrl: "groupings.component.html",
 })
-
-/**
- *  See the original component:
- *
- *  https://github.com/bitwarden/browser/blob/
- *  0bbe17f6e2becdf5146677d51cbc71cc099aaec9/src/popup/vault/groupings.component.ts
- */
 export class GroupingsComponent extends BaseGroupingsComponent implements OnInit, OnDestroy {
+  get showNoFolderCiphers(): boolean {
+    return (
+      this.noFolderCiphers != null &&
+      this.noFolderCiphers.length < this.noFolderListSize &&
+      this.collections.length === 0
+    );
+  }
 
-    get showNoFolderCiphers(): boolean {
-        return this.noFolderCiphers != null && this.noFolderCiphers.length < this.noFolderListSize &&
-            this.collections.length === 0;
-    }
+  get folderCount(): number {
+    return this.nestedFolders.length - (this.showNoFolderCiphers ? 0 : 1);
+  }
+  ciphers: CipherView[];
+  favoriteCiphers: CipherView[];
+  noFolderCiphers: CipherView[];
+  folderCounts = new Map<string, number>();
+  collectionCounts = new Map<string, number>();
+  typeCounts = new Map<CipherType, number>();
+  searchText: string;
+  state: BrowserGroupingsComponentState;
+  showLeftHeader = true;
+  searchPending = false;
+  searchTypeSearch = false;
+  deletedCount = 0;
 
-    get folderCount(): number {
-        return this.nestedFolders.length - (this.showNoFolderCiphers ? 0 : 1);
-    }
-    ciphers: CipherView[];
-    favoriteCiphers: CipherView[];
-    deletedCiphers: CipherView[];
-    noFolderCiphers: CipherView[];
-    folderCounts = new Map<string, number>();
-    collectionCounts = new Map<string, number>();
-    typeCounts = new Map<CipherType, number>();
-    searchText: string;
-    state: any;
-    scopeState: any;
-    showLeftHeader = true;
-    searchPending = false;
-    searchTypeSearch = false;
-    deletedCount = 0;
-    ciphersForCurrentPage: CipherView[] = [];
-    selectedFolderTitle: string;
-    selectedFolderId: string;
-    searchTagClass: string = 'hideSearchTag';
-    searchTagText: string;
-    enableAnimations: boolean = false;
-    currentPannel: PanelNames = PanelNames.None;
-    ciphersForFolder: CipherView[] = [];
-    isPannelVisible: string = 'false';
-    allCiphers: CipherView[] = null;
-    isInPopOut: boolean = false;
+  private loadedTimeout: number;
+  private selectedTimeout: number;
+  private preventSelected = false;
+  private noFolderListSize = 100;
+  private searchTimeout: any = null;
+  private hasSearched = false;
+  private hasLoadedAllCiphers = false;
+  private allCiphers: CipherView[] = null;
 
-    @ViewChild('groupingContent') groupingContentEl: ElementRef;
-    @ViewChild('searchInput') searchInputEl: ElementRef;
+  constructor(
+    collectionService: CollectionService,
+    folderService: FolderService,
+    private cipherService: CipherService,
+    private router: Router,
+    private ngZone: NgZone,
+    private broadcasterService: BroadcasterService,
+    private changeDetectorRef: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private popupUtils: PopupUtilsService,
+    private syncService: SyncService,
+    private platformUtilsService: PlatformUtilsService,
+    private searchService: SearchService,
+    private location: Location,
+    private browserStateService: StateService,
+    private cozyClientService: CozyClientService
+  ) {
+    super(collectionService, folderService, browserStateService);
+    this.noFolderListSize = 100;
+  }
 
-    private loadedTimeout: number;
-    private selectedTimeout: number;
-    private preventSelected = false;
-    private noFolderListSize = 100;
-    private searchTimeout: any = null;
-    private hasSearched = false;
-    private hasLoadedAllCiphers = false;
-    private ciphersByType: any;
-    private pageDetails: any[] = [];
-    private url: string = '';
-    private hostname: string = '';
+  async ngOnInit() {
+    this.searchTypeSearch = !this.platformUtilsService.isSafari();
+    this.showLeftHeader = !(
+      this.popupUtils.inSidebar(window) && this.platformUtilsService.isFirefox()
+    );
+    await this.browserStateService.setBrowserCipherComponentState(null);
 
-    constructor(collectionService: CollectionService, folderService: FolderService,
-        storageService: StorageService, userService: UserService,
-        private cipherService: CipherService, private router: Router,
-        private ngZone: NgZone, private broadcasterService: BroadcasterService,
-        private changeDetectorRef: ChangeDetectorRef, private route: ActivatedRoute,
-        private stateService: StateService, private popupUtils: PopupUtilsService,
-        private syncService: SyncService, private platformUtilsService: PlatformUtilsService,
-        private searchService: SearchService, private location: Location,
-        private toasterService: ToasterService, private i18nService: I18nService,
-        private autofillService: AutofillService, private konnectorsService: KonnectorsService,
-        private cozyClientService: CozyClientService) {
-        super(collectionService, folderService, storageService, userService);
-        this.noFolderListSize = 100;
-        this.isInPopOut = this.popupUtils.inPopout(window);
-    }
-
-    @HostListener('window:keydown', ['$event'])
-    handleKeyDown(event: KeyboardEvent) {
-        if (event.key === 'Escape' && this.currentPannel !== PanelNames.None) {
-            this.unActivatePanel();
-            event.preventDefault();
-        }
-    }
-
-    async ngOnInit() {
-        // console.log('ngOnInit()', 'isPannelVisible', this.isPannelVisible);
-        this.ciphersByType = {};
-        this.ciphersByType[CipherType.Card] = [];
-        this.ciphersByType[CipherType.Identity] = [];
-        this.ciphersByType[CipherType.Login] = [];
-        this.searchTypeSearch = !this.platformUtilsService.isSafari();
-        this.showLeftHeader = !(this.popupUtils.inSidebar(window) && this.platformUtilsService.isFirefox());
-        this.stateService.remove('CiphersComponent');
-
-        setTimeout(() => {
-            // Enable panels animations only after a delay so that only user actions triger an animation.
-            // when component is initied, if a panel is displayed, we don't want the apparition of the panel
-            // to be animated.
-            this.enableAnimations = true;
-        }, 300);
-
-        this.broadcasterService.subscribe(ComponentId, (message: any) => {
-            this.ngZone.run(async () => {
-                // console.log('broadcasterService.heard :', message.command);
-                switch (message.command) {
-                    case 'syncCompleted':
-                        window.setTimeout(() => {
-                            this.load();
-                        }, 500);
-                        break;
-                    case 'collectPageDetailsResponse':
-                        if (message.sender === ComponentId) {
-                            this.pageDetails.push({
-                                frameId: message.webExtSender.frameId,
-                                tab: message.tab,
-                                details: message.details,
-                            });
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                this.changeDetectorRef.detectChanges();
-            });
-        });
-
-        const restoredScopeState = await this.restoreState();
-
-        this.route.queryParams.subscribe(async params => {
-            // console.log('groupings.queryParams.heard :', params);
-            if (params.activatedPanel) {
-                let folderId: string;
-                if (params.activatedPanel !== PanelNames.Folder) {
-                    this.activatePanel(params.activatedPanel);
-                } else {
-                    folderId = params.folderId === 'null' ? null : params.folderId ;
-                    this.activatePanel(params.activatedPanel, folderId);
-                }
-                if (params.scrollTopBack) {
-                    setTimeout(() => {
-                        this.groupingContentEl.nativeElement.scrollTop = params.scrollTopBack;
-                    }, 150);
-                }
-            } else {
-                this.unActivatePanel();
-            }
-        });
-
-        const queryParamsSub = this.route.queryParams.subscribe(async params => {
-            this.state = (await this.stateService.get<any>(ComponentId)) || {};
-            if (this.state.searchText) {
-                this.searchText = this.state.searchText;
-            } else if (params.searchText) {
-                this.searchText = params.searchText;
-                this.location.replaceState('vault');
-            }
-            this.selectedFolderId = params.folderId ? params.folderId : undefined;
-
-            if (!this.syncService.syncInProgress) {
-                this.load();
-            } else {
-                this.loadedTimeout = window.setTimeout(() => {
-                    if (!this.loaded) {
-                        this.load();
-                    }
-                }, 5000);
-            }
-
-            if (!this.syncService.syncInProgress || restoredScopeState) {
-                window.setTimeout(() => this.popupUtils.setContentScrollY(window, this.state.scrollY), 0);
-            }
-            if (queryParamsSub != null) {
-                queryParamsSub.unsubscribe();
-            }
-        });
-    }
-
-    ngOnDestroy() {
-        if (this.loadedTimeout != null) {
-            window.clearTimeout(this.loadedTimeout);
-        }
-        if (this.selectedTimeout != null) {
-            window.clearTimeout(this.selectedTimeout);
-        }
-        this.saveState();
-        this.broadcasterService.unsubscribe(ComponentId);
-    }
-
-    async load() {
-        // console.log('grouping.component.load()', this.route);
-        // request page detail from current tab
-        const tab = await BrowserApi.getTabFromCurrentWindow();
-        if (tab != null) {
-            this.url = tab.url;
-            this.hostname = Utils.getHostname(this.url);
+    this.broadcasterService.subscribe(ComponentId, (message: any) => {
+      this.ngZone.run(async () => {
+        switch (message.command) {
+          case "syncCompleted":
+            window.setTimeout(() => {
+              this.load();
+            }, 500);
+            break;
+          default:
+            break;
         }
 
-        this.pageDetails = [];
-        BrowserApi.tabSendMessage(tab, {
-            command: 'collectPageDetails',
-            tab: tab,
-            sender: ComponentId,
+        this.changeDetectorRef.detectChanges();
+      });
+    });
+
+    const restoredScopeState = await this.restoreState();
+    this.route.queryParams.pipe(first()).subscribe(async (params) => {
+      this.state = await this.browserStateService.getBrowserGroupingComponentState();
+      if (this.state?.searchText) {
+        this.searchText = this.state.searchText;
+      } else if (params.searchText) {
+        this.searchText = params.searchText;
+        this.location.replaceState("vault");
+      }
+
+      if (!this.syncService.syncInProgress) {
+        this.load();
+      } else {
+        this.loadedTimeout = window.setTimeout(() => {
+          if (!this.loaded) {
+            this.load();
+          }
+        }, 5000);
+      }
+
+      if (!this.syncService.syncInProgress || restoredScopeState) {
+        window.setTimeout(() => this.popupUtils.setContentScrollY(window, this.state?.scrollY), 0);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.loadedTimeout != null) {
+      window.clearTimeout(this.loadedTimeout);
+    }
+    if (this.selectedTimeout != null) {
+      window.clearTimeout(this.selectedTimeout);
+    }
+    this.saveState();
+    this.broadcasterService.unsubscribe(ComponentId);
+  }
+
+  async load() {
+    await super.load(false);
+    await this.loadCiphers();
+    if (this.showNoFolderCiphers && this.nestedFolders.length > 0) {
+      // Remove "No Folder" from folder listing
+      this.nestedFolders = this.nestedFolders.slice(0, this.nestedFolders.length - 1);
+    }
+
+    super.loaded = true;
+  }
+
+  async loadCiphers() {
+    this.allCiphers = await this.cipherService.getAllDecrypted();
+    if (!this.hasLoadedAllCiphers) {
+      this.hasLoadedAllCiphers = !this.searchService.isSearchable(this.searchText);
+    }
+    this.deletedCount = this.allCiphers.filter((c) => c.isDeleted).length;
+    await this.search(null);
+    let favoriteCiphers: CipherView[] = null;
+    let noFolderCiphers: CipherView[] = null;
+    const folderCounts = new Map<string, number>();
+    const collectionCounts = new Map<string, number>();
+    const typeCounts = new Map<CipherType, number>();
+
+    this.ciphers.forEach((c) => {
+      if (c.isDeleted) {
+        return;
+      }
+      if (c.favorite) {
+        if (favoriteCiphers == null) {
+          favoriteCiphers = [];
+        }
+        favoriteCiphers.push(c);
+      }
+
+      if (c.folderId == null) {
+        if (noFolderCiphers == null) {
+          noFolderCiphers = [];
+        }
+        noFolderCiphers.push(c);
+      }
+
+      if (typeCounts.has(c.type)) {
+        typeCounts.set(c.type, typeCounts.get(c.type) + 1);
+      } else {
+        typeCounts.set(c.type, 1);
+      }
+
+      if (folderCounts.has(c.folderId)) {
+        folderCounts.set(c.folderId, folderCounts.get(c.folderId) + 1);
+      } else {
+        folderCounts.set(c.folderId, 1);
+      }
+
+      if (c.collectionIds != null) {
+        c.collectionIds.forEach((colId) => {
+          if (collectionCounts.has(colId)) {
+            collectionCounts.set(colId, collectionCounts.get(colId) + 1);
+          } else {
+            collectionCounts.set(colId, 1);
+          }
         });
-        // rest of loading
-        await super.load(false);
+      }
+    });
+
+    this.favoriteCiphers = favoriteCiphers;
+    this.noFolderCiphers = noFolderCiphers;
+    this.typeCounts = typeCounts;
+    this.folderCounts = folderCounts;
+    this.collectionCounts = collectionCounts;
+  }
+
+  async search(timeout: number = null) {
+    this.searchPending = false;
+    if (this.searchTimeout != null) {
+      clearTimeout(this.searchTimeout);
+    }
+    const filterDeleted = (c: CipherView) => !c.isDeleted;
+    if (timeout == null) {
+      this.hasSearched = this.searchService.isSearchable(this.searchText);
+      this.ciphers = await this.searchService.searchCiphers(
+        this.searchText,
+        filterDeleted,
+        this.allCiphers
+      );
+      return;
+    }
+    this.searchPending = true;
+    this.searchTimeout = setTimeout(async () => {
+      this.hasSearched = this.searchService.isSearchable(this.searchText);
+      if (!this.hasLoadedAllCiphers && !this.hasSearched) {
         await this.loadCiphers();
-        if (this.showNoFolderCiphers && this.nestedFolders.length > 0) {
-            // Remove "No Folder" from folder listing
-            this.nestedFolders = this.nestedFolders.slice(0, this.nestedFolders.length - 1);
-        }
-        await this.getCiphersForCurrentPage();
-        if (this.selectedFolderId === 'trash') {
-            this.searchTagText  = this.i18nService.t('trash');
-            this.selectedFolderTitle = this.searchTagText;
-            this.ciphersForFolder = this.deletedCiphers;
-        } else if (this.selectedFolderId === 'noneFolder') {
-            this.searchTagText  = this.i18nService.t('noneFolder');
-            this.selectedFolderTitle = this.searchTagText;
-            this.ciphersForFolder = this.noFolderCiphers;
-        } else if (this.selectedFolderId !== undefined) {
-            this.selectedFolderTitle =
-                this.nestedFolders.find( f => f.node.id === this.selectedFolderId ).node.name;
-            this.searchTagText  = this.selectedFolderTitle;
-            this.ciphersForFolder = this.ciphers.filter( c => c.folderId === this.selectedFolderId);
-        }
-        super.loaded = true;
+      } else {
+        this.ciphers = await this.searchService.searchCiphers(
+          this.searchText,
+          filterDeleted,
+          this.allCiphers
+        );
+      }
+      this.searchPending = false;
+    }, timeout);
+  }
+
+  async selectType(type: CipherType) {
+    super.selectType(type);
+    this.router.navigate(["/ciphers"], { queryParams: { type: type } });
+  }
+
+  async selectFolder(folder: FolderView) {
+    super.selectFolder(folder);
+    this.router.navigate(["/ciphers"], { queryParams: { folderId: folder.id || "none" } });
+  }
+
+  async selectCollection(collection: CollectionView) {
+    super.selectCollection(collection);
+    this.router.navigate(["/ciphers"], { queryParams: { collectionId: collection.id } });
+  }
+
+  async selectTrash() {
+    super.selectTrash();
+    this.router.navigate(["/ciphers"], { queryParams: { deleted: true } });
+  }
+
+  async selectCipher(cipher: CipherView) {
+    this.selectedTimeout = window.setTimeout(() => {
+      if (!this.preventSelected) {
+        this.router.navigate(["/view-cipher"], { queryParams: { cipherId: cipher.id } });
+      }
+      this.preventSelected = false;
+    }, 200);
+  }
+
+  async launchCipher(cipher: CipherView) {
+    if (cipher.type !== CipherType.Login || !cipher.login.canLaunch) {
+      return;
     }
 
-    async loadCiphers() {
-        // console.log(`loadCiphers()`);
+    if (this.selectedTimeout != null) {
+      window.clearTimeout(this.selectedTimeout);
+    }
+    this.preventSelected = true;
+    await this.cipherService.updateLastLaunchedDate(cipher.id);
+    BrowserApi.createNewTab(cipher.login.launchUri);
+    if (this.popupUtils.inPopup(window)) {
+      BrowserApi.closePopup(window);
+    }
+  }
 
-        this.allCiphers = await this.cipherService.getAllDecrypted();
-        if (!this.hasLoadedAllCiphers) {
-            this.hasLoadedAllCiphers = !this.searchService.isSearchable(this.searchText);
-        }
-        this.deletedCiphers = this.allCiphers.filter(c => c.isDeleted);
-        this.deletedCount = this.deletedCiphers.length;
-        await this.search(null);
-        let favoriteCiphers: CipherView[] = null;
-        let noFolderCiphers: CipherView[] = null;
-        const folderCounts = new Map<string, number>();
-        const collectionCounts = new Map<string, number>();
-        const typeCounts = new Map<CipherType, number>();
-        this.ciphers.forEach(c => {
-            if (c.isDeleted) {
-                return;
-            }
-            if (c.favorite) {
-                if (favoriteCiphers == null) {
-                    favoriteCiphers = [];
-                }
-                favoriteCiphers.push(c);
-            }
+  async addCipher() {
+    this.router.navigate(["/add-cipher"]);
+  }
 
-            if (c.folderId == null) {
-                if (noFolderCiphers == null) {
-                    noFolderCiphers = [];
-                }
-                noFolderCiphers.push(c);
-            }
+  showSearching() {
+    return (
+      this.hasSearched || (!this.searchPending && this.searchService.isSearchable(this.searchText))
+    );
+  }
 
-            if (typeCounts.has(c.type)) {
-                typeCounts.set(c.type, typeCounts.get(c.type) + 1);
-            } else {
-                typeCounts.set(c.type, 1);
-            }
+  closeOnEsc(e: KeyboardEvent) {
+    // If input not empty, use browser default behavior of clearing input instead
+    if (e.key === "Escape" && (this.searchText == null || this.searchText === "")) {
+      BrowserApi.closePopup(window);
+    }
+  }
 
-            if (folderCounts.has(c.folderId)) {
-                folderCounts.set(c.folderId, folderCounts.get(c.folderId) + 1);
-            } else {
-                folderCounts.set(c.folderId, 1);
-            }
+  private async saveState() {
+    this.state = {
+      scrollY: this.popupUtils.getContentScrollY(window),
+      searchText: this.searchText,
+      favoriteCiphers: this.favoriteCiphers,
+      noFolderCiphers: this.noFolderCiphers,
+      ciphers: this.ciphers,
+      collectionCounts: this.collectionCounts,
+      folderCounts: this.folderCounts,
+      typeCounts: this.typeCounts,
+      folders: this.folders,
+      collections: this.collections,
+      deletedCount: this.deletedCount,
+    };
+    await this.browserStateService.setBrowserGroupingComponentState(this.state);
+  }
 
-            if (c.collectionIds != null) {
-                c.collectionIds.forEach(colId => {
-                    if (collectionCounts.has(colId)) {
-                        collectionCounts.set(colId, collectionCounts.get(colId) + 1);
-                    } else {
-                        collectionCounts.set(colId, 1);
-                    }
-                });
-            }
-        });
-        this.ciphersByType = {};
-        this.ciphersByType[CipherType.Card] = this._ciphersByType(CipherType.Card);
-        this.ciphersByType[CipherType.Identity] = this._ciphersByType(CipherType.Identity);
-        this.ciphersByType[CipherType.Login] = this._ciphersByType(CipherType.Login);
-
-        this.favoriteCiphers = favoriteCiphers;
-        this.noFolderCiphers = noFolderCiphers;
-        this.typeCounts = typeCounts;
-        this.folderCounts = folderCounts;
-        this.collectionCounts = collectionCounts;
+  private async restoreState(): Promise<boolean> {
+    this.state = await this.browserStateService.getBrowserGroupingComponentState();
+    if (this.state == null) {
+      return false;
     }
 
-    async search(timeout: number = null) {
-        this.searchPending = false;
-        if (this.searchTimeout != null) {
-            window.clearTimeout(this.searchTimeout);
-        }
-        const filterDeleted = (c: CipherView) => !c.isDeleted;
-        if (timeout == null) {
-            this.hasSearched = this.searchService.isSearchable(this.searchText);
-            if (this.hasSearched) {
-                this.activatePanel(PanelNames.Search);
-            }
-
-            this.ciphers = await this.searchService.searchCiphers(this.searchText, filterDeleted, this.allCiphers);
-            this.sortAllCiphersByType();
-            return;
-        }
-        this.searchPending = true;
-        this.searchTimeout = setTimeout(async () => {
-            this.hasSearched = this.searchService.isSearchable(this.searchText);
-            if (this.hasSearched) {
-                this.activatePanel(PanelNames.Search);
-            } else {
-                this.unActivatePanel();
-            }
-            if (!this.hasLoadedAllCiphers && !this.hasSearched) {
-                await this.loadCiphers();
-            } else {
-                this.ciphers = await this.searchService.searchCiphers(this.searchText, filterDeleted, this.allCiphers);
-                this.sortAllCiphersByType();
-            }
-            this.searchPending = false;
-        }, timeout);
+    if (this.state.favoriteCiphers != null) {
+      this.favoriteCiphers = this.state.favoriteCiphers;
+    }
+    if (this.state.noFolderCiphers != null) {
+      this.noFolderCiphers = this.state.noFolderCiphers;
+    }
+    if (this.state.ciphers != null) {
+      this.ciphers = this.state.ciphers;
+    }
+    if (this.state.collectionCounts != null) {
+      this.collectionCounts = this.state.collectionCounts;
+    }
+    if (this.state.folderCounts != null) {
+      this.folderCounts = this.state.folderCounts;
+    }
+    if (this.state.typeCounts != null) {
+      this.typeCounts = this.state.typeCounts;
+    }
+    if (this.state.folders != null) {
+      this.folders = this.state.folders;
+    }
+    if (this.state.collections != null) {
+      this.collections = this.state.collections;
+    }
+    if (this.state.deletedCount != null) {
+      this.deletedCount = this.state.deletedCount;
     }
 
-    unActivatePanel() {
-        // console.log(`unActivatePanel('${this.currentPannel}')`);
-        this.location.go('/tabs/vault');
-        switch (this.currentPannel) {
-            case PanelNames.None:
-                return;
-            case PanelNames.Search:
-                this.searchText = '';
-                this.search(null);
-                this.hasSearched = false;
-                break;
-            default:
-                break;
-        }
-        this.searchTagClass = 'hideSearchTag';
-        this.isPannelVisible = 'false';
-        this.searchInputEl.nativeElement.focus();
-        this.currentPannel = PanelNames.None;
-    }
+    return true;
+  }
 
-    activatePanel(panelName: string, folderId?: string) {
-        // console.log(`activatePanel('${panelName}', '${folderId}')`);
-        let folderIdQueryParam: string = '';
-        switch (panelName) {
-            case PanelNames.CurrentPageCiphers:
-                this.searchTagClass = 'showSearchTag';
-                this.searchTagText  = this.i18nService.t('forThisWebSite');
-                this.currentPannel = PanelNames.CurrentPageCiphers;
-                this.isPannelVisible = 'true';
-                break;
-            case PanelNames.Search:
-                this.searchTagClass = 'hideSearchTag';
-                this.currentPannel = PanelNames.Search;
-                this.isPannelVisible = 'true';
-                break;
-            case PanelNames.Logins:
-                this.searchTagClass = 'showSearchTag';
-                this.searchTagText  = this.i18nService.t('logins');
-                this.currentPannel = PanelNames.Logins;
-                this.isPannelVisible = 'true';
-                break;
-            case PanelNames.Cards:
-                this.searchTagClass = 'showSearchTag';
-                this.searchTagText  = this.i18nService.t('cards');
-                this.currentPannel = PanelNames.Cards;
-                this.isPannelVisible = 'true';
-                break;
-            case PanelNames.Identities:
-                this.searchTagClass = 'showSearchTag';
-                this.searchTagText  = this.i18nService.t('identities');
-                this.currentPannel = PanelNames.Identities;
-                this.isPannelVisible = 'true';
-                break;
-            case PanelNames.Folder:
-                folderIdQueryParam = '&folderId=' + folderId ;
-                this.selectedFolderId = folderId;
-                this.searchTagClass = 'showSearchTag';
-                this.currentPannel = PanelNames.Folder;
-                this.isPannelVisible = 'true';
-                break;
-            default:
-                break;
-        }
-        this.location.go('/tabs/vault?activatedPanel=' + panelName + folderIdQueryParam);
-    }
+  selectCurrent() {
+    this.router.navigate(["/tabs/current"]);
+    // this.router.navigate(['current'])
+  }
 
-    async getCiphersForCurrentPage(): Promise<any[]> {
-        // console.log('getCiphersForCurrentPage()');
-        const tab = await BrowserApi.getTabFromCurrentWindow();
-        if (tab == null) { return []; }
-        let ciphersForCurrentPage = await this.cipherService.getAllDecryptedForUrl(tab.url, null);
-        ciphersForCurrentPage = ciphersForCurrentPage.sort((a, b): number => {
-            return this.cipherService.sortCiphersByLastUsedThenName(a, b);
-        });
-        this.ciphersForCurrentPage = ciphersForCurrentPage;
-    }
+  cancelSearch() {
+    this.searchText = "";
+    this.search(50);
+  }
 
-    _ciphersByType(type: CipherType) {
-        return this.ciphers.filter( c => c.type === type);
-    }
-
-    sortAllCiphersByType() {
-        this.ciphersByType = {};
-        this.ciphersByType[CipherType.Card] = [];
-        this.ciphersByType[CipherType.Identity] = [];
-        this.ciphersByType[CipherType.Login] = [];
-        this.ciphersByType[CipherType.SecureNote] = [];
-        for (const c of this.ciphers) {
-            this.ciphersByType[c.type].push(c);
-        }
-    }
-
-    countByType(type: CipherType) {
-        return this.typeCounts.get(type);
-    }
-
-    async selectType(type: CipherType) {
-        super.selectType(type);
-        switch (type) {
-            case CipherType.Login:
-                this.activatePanel(PanelNames.Logins);
-                break;
-            case CipherType.Card:
-                this.activatePanel(PanelNames.Cards);
-                break;
-            case CipherType.Identity:
-                this.activatePanel(PanelNames.Identities);
-                break;
-            default:
-                break;
-        }
-    }
-
-    async selectFolder(folder: FolderView) {
-        // console.log(`selectFolder()`, folder.id);
-        this.selectedFolderTitle = folder.name;
-        this.searchTagText  = this.selectedFolderTitle;
-        this.ciphersForFolder = this.ciphers.filter( c => c.folderId === folder.id);
-        this.activatePanel(PanelNames.Folder, folder.id === null ? 'noneFolder' : folder.id );
-    }
-
-    async selectTrash() {
-        // console.log(`selectTrash()`);
-        this.ciphersForFolder = this.deletedCiphers;
-        this.selectedFolderTitle = this.i18nService.t('trash');
-        this.searchTagText  = this.selectedFolderTitle;
-        this.activatePanel(PanelNames.Folder, 'trash');
-    }
-
-    async selectCipher(cipher: CipherView) {
-        // console.log(`selectCipher()`, this.currentPannel, this.selectedFolderId);
-        this.selectedTimeout = window.setTimeout(() => {
-            if (!this.preventSelected) {
-                this.router.navigate(['/view-cipher'], { queryParams: {
-                    cipherId  : cipher.id,
-                    pannelBack: this.currentPannel,
-                    folderBack : this.selectedFolderId,
-                }});
-            }
-            this.preventSelected = false;
-        }, 200);
-    }
-
-    async launchCipher(cipher: CipherView) {
-        if (cipher.type !== CipherType.Login || !cipher.login.canLaunch) {
-            return;
-        }
-
-        if (this.selectedTimeout != null) {
-            window.clearTimeout(this.selectedTimeout);
-        }
-        this.preventSelected = true;
-        await this.cipherService.updateLastLaunchedDate(cipher.id);
-        BrowserApi.createNewTab(cipher.login.launchUri);
-        if (this.popupUtils.inPopup(window)) {
-            BrowserApi.closePopup(window);
-        }
-    }
-
-    async addCipher() {
-        switch (this.currentPannel) {
-            case PanelNames.Cards:
-                this.addCardCipher();
-                break;
-            case PanelNames.Identities:
-                this.addIdentityCipher();
-                break;
-            default:
-                this.router.navigate(['/add-cipher'], { queryParams: { name: this.hostname, uri: this.url } });
-                break;
-        }
-    }
-
-    closeOnEsc(e: KeyboardEvent) {
-        // If input not empty, use browser default behavior of clearing input instead
-        if (e.key === 'Escape' && (this.searchText == null || this.searchText === '')) {
-            BrowserApi.closePopup(window);
-        }
-    }
-
-    async addIdentityCipher() {
-        this.router.navigate(['/add-cipher'], { queryParams: { type: this.cipherType.Identity } });
-    }
-
-    async addCardCipher() {
-        this.router.navigate(['/add-cipher'], { queryParams: { type: this.cipherType.Card } });
-    }
-
-    showSearchPanel() {
-        return this.hasSearched;
-    }
-
-    showCurrentPageCiphersPanel() {
-        return this.currentPannel === PanelNames.CurrentPageCiphers;
-    }
-
-    showLoginsPanel() {
-        return this.currentPannel === PanelNames.Logins;
-    }
-
-    showCardsPanel() {
-        return this.currentPannel === PanelNames.Cards;
-    }
-
-    showIdentitiesPanel() {
-        return this.currentPannel === PanelNames.Identities;
-    }
-
-    showCurrentPagePanel() {
-        if (this.currentPannel === PanelNames.CurrentPageCiphers) {
-            this.unActivatePanel();
-        } else {
-            this.activatePanel(PanelNames.CurrentPageCiphers);
-        }
-    }
-
-    showFolderPanel() {
-        return this.currentPannel === PanelNames.Folder;
-    }
-
-    async fillCipher(cipher: CipherView) {
-        let totpCode = null;
-
-        if (this.pageDetails == null || this.pageDetails.length === 0) {
-            this.toasterService.popAsync('error', null, this.i18nService.t('autofillError'));
-            return;
-        }
-
-        try {
-            totpCode = await this.autofillService.doAutoFill({
-                cipher: cipher,
-                pageDetails: this.pageDetails,
-                doc: window.document,
-                fillNewPassword: true,
-            });
-            if (totpCode != null) {
-                this.platformUtilsService.copyToClipboard(totpCode, { window: window });
-            }
-            if (this.popupUtils.inPopup(window)) {
-                BrowserApi.closePopup(window);
-            }
-        } catch (e) {
-            this.ngZone.run(() => {
-                this.toasterService.popAsync('error', null, this.i18nService.t('autofillError'));
-                this.changeDetectorRef.detectChanges();
-            });
-        }
-    }
-
-    async fillOrLaunchCipher(cipher: CipherView) {
-        // console.log('fillOrLaunchCipher()');
-
-        // Get default matching setting for urls
-        let defaultMatch = await this.storageService.get<UriMatchType>(ConstantsService.defaultUriMatch);
-        if (defaultMatch == null) {
-            defaultMatch = UriMatchType.Domain;
-        }
-        // Get the current url
-        const tab = await BrowserApi.getTabFromCurrentWindow();
-        const isCipherMatchinghUrl =
-            await this.konnectorsService.hasURLMatchingCiphers(tab.url, [cipher], defaultMatch);
-        if (isCipherMatchinghUrl) {
-            this.fillCipher(cipher);
-        } else {
-            this.launchCipher(cipher);
-        }
-    }
-
-    viewCipher(cipher: CipherView) {
-        // console.log('viewCipher()', this.currentPannel, this.groupingContentEl.nativeElement.scrollTop);
-        this.router.navigate(['/view-cipher'], { queryParams: {
-            cipherId: cipher.id,
-            pannelBack: this.currentPannel,
-            scrollTopBack : this.groupingContentEl.nativeElement.scrollTop,
-            folderBack : this.selectedFolderId,
-         } });
-    }
-
-    openWebApp() {
-        let hash = '';
-        const noHashPanels = [
-            PanelNames.CurrentPageCiphers,
-            PanelNames.Search,
-            PanelNames.None,
-        ];
-        if (!noHashPanels.includes(this.currentPannel)) {
-            hash = '#/vault?action=view&type=' + this.cipherType[this.currentPannel as any];
-        }
-        window.open(this.cozyClientService.getAppURL('passwords', hash));
-    }
-
-    private async saveState() {
-        // console.log('saveState()');
-        this.state = {
-            scrollY: this.popupUtils.getContentScrollY(window),
-            searchText: this.searchText,
-        };
-        await this.stateService.save(ComponentId, this.state);
-
-        this.scopeState = {
-            ciphers: this.ciphers,
-            typeCounts: this.typeCounts,
-            deletedCount: this.deletedCount,
-        };
-        await this.stateService.save(ScopeStateId, this.scopeState);
-    }
-
-    private async restoreState(): Promise<boolean> {
-        // console.log('restoreState()');
-        this.scopeState = await this.stateService.get<any>(ScopeStateId);
-        if (this.scopeState == null) {
-            return false;
-        }
-
-        if (this.scopeState.ciphers != null) {
-            this.ciphers = this.scopeState.ciphers;
-        }
-        if (this.scopeState.typeCounts != null) {
-            this.typeCounts = this.scopeState.typeCounts;
-        }
-        if (this.scopeState.deletedCiphers != null) {
-            this.deletedCount = this.scopeState.deletedCount;
-        }
-
-        if (this.scopeState.deletedCiphers != null) {
-            this.deletedCount = this.scopeState.deletedCount;
-        }
-
-        return true;
-    }
-
+  openWebApp() {
+    window.open(this.cozyClientService.getAppURL("passwords", ""));
+  }
 }

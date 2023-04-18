@@ -1,0 +1,126 @@
+<header>
+  <h1 class="sr-only">{{ "currentTab" | i18n }}</h1>
+  <div class="left">
+    <!-- <app-pop-out [show]="!inSidebar"></app-pop-out> -->
+    <button
+      type="button"
+      appBlurClick
+      (click)="refresh()"
+      appA11yTitle="{{ 'refresh' | i18n }}"
+      *ngIf="inSidebar"
+    >
+      <i class="bwi bwi-refresh-tab bwi-lg bwi-fw" aria-hidden="true"></i>
+    </button>
+    <button type="button" appBlurClick (click)="back()">
+      <span class="header-icon" title="{{ 'back' | i18n }}"
+        ><i class="icon-cozy icon-back"></i
+      ></span>
+    </button>
+  </div>
+  <div class="search" (click)="back()">
+    <i class="icon-cozy icon-search"></i>
+    <div id="search-tag">
+      <span id="search-tag-text">{{ "forThisWebSite" | i18n }}</span>
+      <span>X</span>
+    </div>
+    <input
+      type="{{ searchTypeSearch ? 'search' : 'text' }}"
+      placeholder=""
+      id="search"
+      [(ngModel)]="searchText"
+      (input)="searchVault()"
+      autocomplete="off"
+      appAutofocus
+      (keydown)="closeOnEsc($event)"
+    />
+    <i class="icon-cozy icon-cross" aria-hidden="true" (click)="back()"></i>
+  </div>
+  <div class="right">
+    <button (click)="openWebApp()" appA11yTitle="{{ 'popOutNewWindow' | i18n }}">
+      <i class="icon-cozy icon-out-w" aria-hidden="true"></i>
+    </button>
+    <button appBlurClick (click)="addLoginCipher()" appA11yTitle="{{ 'addItem' | i18n }}">
+      <i class="icon-cozy icon-plus" aria-hidden="true"></i>
+    </button>
+  </div>
+</header>
+<main tabindex="-1">
+  <div class="no-items" *ngIf="!loaded">
+    <i class="bwi bwi-spinner bwi-spin bwi-3x" aria-hidden="true"></i>
+  </div>
+  <ng-container *ngIf="loaded">
+    <div class="box list">
+      <h2 class="box-header">
+        {{ "typeLogins" | i18n }}
+        <!-- <span class="flex-right">{{ loginCiphers.length }}</span> -->
+      </h2>
+      <div class="box-content">
+        <app-cipher-row
+          *ngFor="let loginCipher of loginCiphers"
+          [cipher]="loginCipher"
+          title="{{ 'viewItem' | i18n }}"
+          [showView]="true"
+          (onSelected)="viewCipher($event)"
+          (onView)="viewCipher($event)"
+          (onAutofill)="fillCipher(loginCipher)"
+        >
+        </app-cipher-row>
+        <div class="box-content-row padded no-hover" *ngIf="loginCiphers && !loginCiphers.length">
+          <p class="text-center">{{ "autoFillInfo" | i18n }}</p>
+          <button type="button" class="btn link block" (click)="addLoginCipher()">
+            {{ "addLogin" | i18n }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="box list">
+      <h2 class="box-header">
+        {{ "cards" | i18n }}
+        <!-- <span class="flex-right">{{ cardCiphers.length }}</span> -->
+      </h2>
+      <div class="box-content">
+        <app-cipher-row
+          *ngFor="let cardCipher of cardCiphers"
+          [cipher]="cardCipher"
+          title="{{ 'viewItem' | i18n }}"
+          [showView]="true"
+          (onSelected)="viewCipher($event)"
+          (onView)="viewCipher($event)"
+          (onAutofill)="fillCipher(cardCipher)"
+        ></app-cipher-row>
+        <div class="box-content-row padded no-hover" *ngIf="cardCiphers && !cardCiphers.length">
+          <p class="text-center">{{ "addCardExplanation" | i18n }}</p>
+          <button type="button" class="btn link block" (click)="addCardCipher()">
+            {{ "addCard" | i18n }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="box list">
+      <h2 class="box-header">
+        {{ "identities" | i18n }}
+        <!-- <span class="flex-right">{{ identityCiphers.length }}</span> -->
+      </h2>
+      <div class="box-content">
+        <app-cipher-row
+          *ngFor="let identityCipher of identityCiphers"
+          [cipher]="identityCipher"
+          title="{{ 'viewItem' | i18n }}"
+          [showView]="true"
+          (onSelected)="viewCipher($event)"
+          (onView)="viewCipher($event)"
+          (onAutofill)="fillCipher(identityCipher)"
+        ></app-cipher-row>
+        <div
+          class="box-content-row padded no-hover"
+          *ngIf="identityCiphers && !identityCiphers.length"
+        >
+          <p class="text-center">{{ "addIdentityExplanation" | i18n }}</p>
+          <button type="button" class="btn link block" (click)="addIdentityCipher()">
+            {{ "addIdentity" | i18n }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</main>

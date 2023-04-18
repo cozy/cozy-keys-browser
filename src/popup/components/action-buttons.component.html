@@ -1,59 +1,144 @@
-<span class="row-btn" (click)="autofill()" appStopClick appStopProp appA11yTitle="{{'autofill' | i18n}}" *ngIf="!showGlobe">
-    <div class="icon-cozy-inline">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.7847 9.63712C15.9175 9.70962 16 9.84884 16 10.0001C16 10.1513 15.9175 10.2903 15.7849 10.363L12.2798 12.2799L10.3631 15.7847C10.2905 15.9175 10.1513 16 10.0001 16C9.84863 16 9.70962 15.9175 9.63685 15.7849L7.72012 12.2799L4.21528 10.363C4.08247 10.2905 4 10.1513 4 10.0001C4 9.84884 4.08247 9.70962 4.21528 9.63712L7.72012 7.72007L9.63685 4.21523C9.70962 4.08263 9.84863 4 10.0001 4C10.1513 4 10.2904 4.08263 10.3631 4.21523L12.2798 7.72007L15.7847 9.63712ZM6.87442 3.28832C6.95189 3.33061 7 3.41182 7 3.50006C7 3.58827 6.95189 3.66936 6.87454 3.71178L4.8299 4.82993L3.71181 6.87442C3.66948 6.95189 3.58827 7 3.50006 7C3.4117 7 3.33061 6.95189 3.28816 6.87454L2.17007 4.82993L0.12558 3.71178C0.0481097 3.66948 0 3.58827 0 3.50006C0 3.41182 0.0481097 3.33061 0.12558 3.28832L2.17007 2.17004L3.28816 0.125549C3.33061 0.0482025 3.4117 0 3.50006 0C3.58827 0 3.66939 0.0482025 3.71181 0.125549L4.8299 2.17004L6.87442 3.28832Z"/>
-        </svg>
-    </div>
-</span>
+<button
+  type="button"
+  class="row-btn"
+  (click)="autofill()"
+  appStopClick
+  appStopProp
+  appA11yTitle="{{ 'autofill' | i18n }}"
+  *ngIf="!showGlobe"
+>
+  <div class="icon-cozy-inline">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M15.7847 9.63712C15.9175 9.70962 16 9.84884 16 10.0001C16 10.1513 15.9175 10.2903 15.7849 10.363L12.2798 12.2799L10.3631 15.7847C10.2905 15.9175 10.1513 16 10.0001 16C9.84863 16 9.70962 15.9175 9.63685 15.7849L7.72012 12.2799L4.21528 10.363C4.08247 10.2905 4 10.1513 4 10.0001C4 9.84884 4.08247 9.70962 4.21528 9.63712L7.72012 7.72007L9.63685 4.21523C9.70962 4.08263 9.84863 4 10.0001 4C10.1513 4 10.2904 4.08263 10.3631 4.21523L12.2798 7.72007L15.7847 9.63712ZM6.87442 3.28832C6.95189 3.33061 7 3.41182 7 3.50006C7 3.58827 6.95189 3.66936 6.87454 3.71178L4.8299 4.82993L3.71181 6.87442C3.66948 6.95189 3.58827 7 3.50006 7C3.4117 7 3.33061 6.95189 3.28816 6.87454L2.17007 4.82993L0.12558 3.71178C0.0481097 3.66948 0 3.58827 0 3.50006C0 3.41182 0.0481097 3.33061 0.12558 3.28832L2.17007 2.17004L3.28816 0.125549C3.33061 0.0482025 3.4117 0 3.50006 0C3.58827 0 3.66939 0.0482025 3.71181 0.125549L4.8299 2.17004L6.87442 3.28832Z"
+      />
+    </svg>
+  </div>
+</button>
 <ng-container *ngIf="cipher.type === cipherType.Login">
-    <span class="row-btn" appStopClick appStopProp appA11yTitle="{{'launch' | i18n}}" (click)="launchCipher()"
-        *ngIf="showGlobe" [ngClass]="{disabled: !cipher.login.canLaunch}">
-        <div class="icon-cozy-inline">
-            <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                        <path d="M7.88866394,13.9989877 L7,10 L6,9 L4,6 L3.64539075,3.87234452 C2.62559227,4.94785733 2,6.40087117 2,8 C2,11.2765166 4.62632955,13.9396208 7.88866394,13.9989877 L7.88866394,13.9989877 Z M8.12663738,2.00130991 L10,3.5 L10,5 L8,6.5 L6.5,7.5 L7,8.5 L10,9 L11,10 L11,11.5 L9.45110858,13.8233371 C12.0637207,13.1744316 14,10.8133371 14,8 C14,4.72860754 11.3818787,2.06871043 8.12663738,2.00130991 L8.12663738,2.00130991 Z M8,16 C3.58172178,16 0,12.4182782 0,8 C0,3.58172178 3.58172178,0 8,0 C12.4182782,0 16,3.58172178 16,8 C16,12.4182782 12.4182782,16 8,16 Z"></path>
-            </svg>
-        </div>
-    </span>
-    <span class="row-btn" appStopClick appStopProp appA11yTitle="{{'copyUsername' | i18n}}"
-        (click)="copy(cipher, cipher.login.username, 'username', 'Username')"
-        [ngClass]="{disabled: !cipher.login.username}">
-        <div class="icon-cozy-inline">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M8 9C5.79 9 4 6.985 4 4.5S5.79 0 8 0s4 2.015 4 4.5S10.21 9 8 9zm-8 5c0-1 2-4 4-4s1 1 4 1 2-1 4-1 4 3 4 4 0 2-1 2H1c-1 0-1-1-1-2z"/>
-            </svg>
-        </div>
-    </span>
-    <span class="row-btn" appStopClick appStopProp appA11yTitle="{{'copyPassword' | i18n}}"
-        (click)="copy(cipher, cipher.login.password, 'password', 'Password')"
-        [ngClass]="{disabled: (!cipher.login.password || !cipher.viewPassword)}">
-        <div class="icon-cozy-inline">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M6.416 7H6v1.5a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5V15a1 1 0 0 0 1 1h1.586a1 1 0 0 0 .707-.293l6.004-6.004A5 5 0 1 0 6.416 7zm7.58-2.07c0 .232-.027.466-.082.694a1.003 1.003 0 0 1-1.626.522l-.056-.053-2.328-2.328a1.003 1.003 0 0 1 .395-1.66l.074-.022a2.926 2.926 0 0 1 2.666.68l.1.095c.536.536.821 1.229.854 1.93l.004.141z"/>
-            </svg>
-        </div>
-    </span>
-    <span class="row-btn" appStopClick appStopProp appA11yTitle="{{'copyVerificationCode' | i18n}}"
-        (click)="copy(cipher, cipher.login.totp, 'verificationCodeTotp', 'TOTP')"
-        [ngClass]="{disabled: (!displayTotpCopyButton(cipher))}">
-        <i class="fa fa-lg fa-clock-o" aria-hidden="true"></i>
-    </span>
+  <button
+    type="button"
+    class="row-btn"
+    appStopClick
+    appStopProp
+    appA11yTitle="{{ 'launch' | i18n }}"
+    (click)="launchCipher()"
+    *ngIf="showGlobe"
+    [ngClass]="{ disabled: !cipher.login.canLaunch }"
+    [attr.disabled]="!cipher.login.canLaunch ? '' : null"
+  >
+    <div class="icon-cozy-inline">
+      <svg
+        width="16px"
+        height="16px"
+        viewBox="0 0 16 16"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+      >
+        <path
+          d="M7.88866394,13.9989877 L7,10 L6,9 L4,6 L3.64539075,3.87234452 C2.62559227,4.94785733 2,6.40087117 2,8 C2,11.2765166 4.62632955,13.9396208 7.88866394,13.9989877 L7.88866394,13.9989877 Z M8.12663738,2.00130991 L10,3.5 L10,5 L8,6.5 L6.5,7.5 L7,8.5 L10,9 L11,10 L11,11.5 L9.45110858,13.8233371 C12.0637207,13.1744316 14,10.8133371 14,8 C14,4.72860754 11.3818787,2.06871043 8.12663738,2.00130991 L8.12663738,2.00130991 Z M8,16 C3.58172178,16 0,12.4182782 0,8 C0,3.58172178 3.58172178,0 8,0 C12.4182782,0 16,3.58172178 16,8 C16,12.4182782 12.4182782,16 8,16 Z"
+        ></path>
+      </svg>
+    </div>
+  </button>
+  <button
+    type="button"
+    class="row-btn"
+    appStopClick
+    appStopProp
+    appA11yTitle="{{ 'copyUsername' | i18n }}"
+    (click)="copy(cipher, cipher.login.username, 'username', 'Username')"
+    [ngClass]="{ disabled: !cipher.login.username }"
+    [attr.disabled]="!cipher.login.username ? '' : null"
+  >
+    <div class="icon-cozy-inline">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+        <path
+          fill-rule="evenodd"
+          d="M8 9C5.79 9 4 6.985 4 4.5S5.79 0 8 0s4 2.015 4 4.5S10.21 9 8 9zm-8 5c0-1 2-4 4-4s1 1 4 1 2-1 4-1 4 3 4 4 0 2-1 2H1c-1 0-1-1-1-2z"
+        />
+      </svg>
+    </div>
+  </button>
+  <button
+    type="button"
+    class="row-btn"
+    appStopClick
+    appStopProp
+    appA11yTitle="{{ 'copyPassword' | i18n }}"
+    (click)="copy(cipher, cipher.login.password, 'password', 'Password')"
+    [ngClass]="{ disabled: !cipher.login.password || !cipher.viewPassword }"
+    [attr.disabled]="!cipher.login.password ? '' : null"
+  >
+    <div class="icon-cozy-inline">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+        <path
+          fill-rule="evenodd"
+          d="M6.416 7H6v1.5a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5V15a1 1 0 0 0 1 1h1.586a1 1 0 0 0 .707-.293l6.004-6.004A5 5 0 1 0 6.416 7zm7.58-2.07c0 .232-.027.466-.082.694a1.003 1.003 0 0 1-1.626.522l-.056-.053-2.328-2.328a1.003 1.003 0 0 1 .395-1.66l.074-.022a2.926 2.926 0 0 1 2.666.68l.1.095c.536.536.821 1.229.854 1.93l.004.141z"
+        />
+      </svg>
+    </div>
+  </button>
+  <button
+    type="button"
+    class="row-btn"
+    appStopClick
+    appStopProp
+    appA11yTitle="{{ 'copyVerificationCode' | i18n }}"
+    (click)="copy(cipher, cipher.login.totp, 'verificationCodeTotp', 'TOTP')"
+    [ngClass]="{ disabled: !displayTotpCopyButton(cipher) }"
+    [attr.disabled]="!displayTotpCopyButton(cipher) ? '' : null"
+  >
+    <div class="icon-cozy-inline">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+        <path
+          fill-rule="evenodd"
+          d="M8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0ZM8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2ZM8 4C8.51284 4 8.93551 4.38604 8.99327 4.88338L9 5V7.60046L11 9.5C11.3905 9.89052 11.3905 10.5237 11 10.9142C10.6395 11.2747 10.0723 11.3024 9.67999 10.9974L9.58579 10.9142L7.29289 8.70711C7.13661 8.55083 7.0374 8.34814 7.00867 8.13144L7 8V5C7 4.44772 7.44772 4 8 4Z"
+        />
+      </svg>
+    </div>
+  </button>
 </ng-container>
 <ng-container *ngIf="cipher.type === cipherType.Card">
-    <span class="row-btn" appStopClick appStopProp appA11yTitle="{{'copyNumber' | i18n}}"
-        (click)="copy(cipher, cipher.card.number, 'number', 'Card Number')" [ngClass]="{disabled: !cipher.card.number}">
-        <div class="icon-cozy-inline">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M11.768 1.024a1.5 1.5 0 0 1 1.227 1.601l-.02.143L12.752 4h.749a1.5 1.5 0 0 1 .144 2.993L13.5 7h-1.294l-.364 2H13.5a1.5 1.5 0 0 1 .144 2.993L13.5 12h-2.203l-.321 1.768a1.5 1.5 0 0 1-2.97-.393l.018-.143L8.248 12H6.297l-.321 1.768a1.5 1.5 0 0 1-2.97-.393l.018-.143L3.248 12H2.5a1.5 1.5 0 0 1-.144-2.993L2.5 9h1.293l.364-2H2.5a1.5 1.5 0 0 1-.144-2.993L2.5 4h2.202l.322-1.768a1.5 1.5 0 0 1 2.97.393l-.018.143L7.75 4h1.951l.322-1.768a1.5 1.5 0 0 1 1.744-1.208zM9.157 7H7.206l-.364 2h1.951l.364-2z"/>
-            </svg>
-        </div>
-    </span>
-    <span class="row-btn" appStopClick appStopProp appA11yTitle="{{'copySecurityCode' | i18n}}"
-        (click)="copy(cipher, cipher.card.code, 'securityCode', 'Security Code')"
-        [ngClass]="{disabled: !cipher.card.code}">
-        <div class="icon-cozy-inline">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M6.416 7H6v1.5a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5V15a1 1 0 0 0 1 1h1.586a1 1 0 0 0 .707-.293l6.004-6.004A5 5 0 1 0 6.416 7zm7.58-2.07c0 .232-.027.466-.082.694a1.003 1.003 0 0 1-1.626.522l-.056-.053-2.328-2.328a1.003 1.003 0 0 1 .395-1.66l.074-.022a2.926 2.926 0 0 1 2.666.68l.1.095c.536.536.821 1.229.854 1.93l.004.141z"/>
-            </svg>
-        </div>
-    </span>
+  <button
+    type="button"
+    class="row-btn"
+    appStopClick
+    appStopProp
+    appA11yTitle="{{ 'copyNumber' | i18n }}"
+    (click)="copy(cipher, cipher.card.number, 'number', 'Card Number')"
+    [ngClass]="{ disabled: !cipher.card.number }"
+    [attr.disabled]="!cipher.card.number ? '' : null"
+  >
+    <div class="icon-cozy-inline">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+        <path
+          fill-rule="evenodd"
+          d="M11.768 1.024a1.5 1.5 0 0 1 1.227 1.601l-.02.143L12.752 4h.749a1.5 1.5 0 0 1 .144 2.993L13.5 7h-1.294l-.364 2H13.5a1.5 1.5 0 0 1 .144 2.993L13.5 12h-2.203l-.321 1.768a1.5 1.5 0 0 1-2.97-.393l.018-.143L8.248 12H6.297l-.321 1.768a1.5 1.5 0 0 1-2.97-.393l.018-.143L3.248 12H2.5a1.5 1.5 0 0 1-.144-2.993L2.5 9h1.293l.364-2H2.5a1.5 1.5 0 0 1-.144-2.993L2.5 4h2.202l.322-1.768a1.5 1.5 0 0 1 2.97.393l-.018.143L7.75 4h1.951l.322-1.768a1.5 1.5 0 0 1 1.744-1.208zM9.157 7H7.206l-.364 2h1.951l.364-2z"
+        />
+      </svg>
+    </div>
+  </button>
+  <button
+    type="button"
+    class="row-btn"
+    appStopClick
+    appStopProp
+    appA11yTitle="{{ 'copySecurityCode' | i18n }}"
+    (click)="copy(cipher, cipher.card.code, 'securityCode', 'Security Code')"
+    [ngClass]="{ disabled: !cipher.card.code }"
+    [attr.disabled]="!cipher.card.code ? '' : null"
+  >
+    <div class="icon-cozy-inline">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+        <path
+          fill-rule="evenodd"
+          d="M6.416 7H6v1.5a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 0-.5.5V15a1 1 0 0 0 1 1h1.586a1 1 0 0 0 .707-.293l6.004-6.004A5 5 0 1 0 6.416 7zm7.58-2.07c0 .232-.027.466-.082.694a1.003 1.003 0 0 1-1.626.522l-.056-.053-2.328-2.328a1.003 1.003 0 0 1 .395-1.66l.074-.022a2.926 2.926 0 0 1 2.666.68l.1.095c.536.536.821 1.229.854 1.93l.004.141z"
+        />
+      </svg>
+    </div>
+  </button>
 </ng-container>

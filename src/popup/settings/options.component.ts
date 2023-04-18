@@ -1,206 +1,188 @@
-import { BrowserApi } from '../../browser/browserApi';
+import { Component, OnInit } from "@angular/core";
 
-import {
-    Component,
-    OnInit,
-} from '@angular/core';
+import { I18nService } from "jslib-common/abstractions/i18n.service";
+import { MessagingService } from "jslib-common/abstractions/messaging.service";
+// import { StateService } from "jslib-common/abstractions/state.service";
+import { TotpService } from "jslib-common/abstractions/totp.service";
+import { ThemeType } from "jslib-common/enums/themeType";
+import { UriMatchType } from "jslib-common/enums/uriMatchType";
 
-import { UriMatchType } from 'jslib-common/enums/uriMatchType';
-
-import { I18nService } from 'jslib-common/abstractions/i18n.service';
-import { MessagingService } from 'jslib-common/abstractions/messaging.service';
-import { StateService } from 'jslib-common/abstractions/state.service';
-import { StorageService } from 'jslib-common/abstractions/storage.service';
-import { TotpService } from 'jslib-common/abstractions/totp.service';
-
-import { LocalConstantsService as ConstantsService } from '..//services/constants.service';
+/* Cozy imports */
+import { BrowserApi } from "../../browser/browserApi";
+import { StateService } from "../../services/abstractions/state.service";
+/* END */
 
 @Component({
-    selector: 'app-options',
-    templateUrl: 'options.component.html',
+  selector: "app-options",
+  templateUrl: "options.component.html",
 })
 export class OptionsComponent implements OnInit {
-    disableFavicon = false;
-    disableKonnectorsSuggestions = false;
-    enableInPageMenu = true;
-    disableBadgeCounter = false;
-    enableAutoFillOnPageLoad = false;
-    autoFillOnPageLoadDefault = false;
-    autoFillOnPageLoadOptions: any[];
-    disableAutoTotpCopy = false;
-    disableContextMenuItem = false;
-    disableAddLoginNotification = false;
-    disableChangedPasswordNotification = false;
-    dontShowCards = false;
-    dontShowIdentities = false;
-    showClearClipboard = true;
-    theme: string;
-    themeOptions: any[];
-    defaultUriMatch = UriMatchType.Domain;
-    uriMatchOptions: any[];
-    clearClipboard: number;
-    clearClipboardOptions: any[];
-    showGeneral: boolean = true;
-    showAutofill: boolean = true;
-    showDisplay: boolean = true;
+  disableFavicon = false;
+  disableKonnectorsSuggestions = false;
+  enableInPageMenu = true;
+  disableBadgeCounter = false;
+  enableAutoFillOnPageLoad = false;
+  autoFillOnPageLoadDefault = false;
+  autoFillOnPageLoadOptions: any[];
+  disableAutoTotpCopy = false;
+  disableContextMenuItem = false;
+  disableAddLoginNotification = false;
+  disableChangedPasswordNotification = false;
+  dontShowCards = false;
+  dontShowIdentities = false;
+  showClearClipboard = true;
+  theme: ThemeType;
+  themeOptions: any[];
+  defaultUriMatch = UriMatchType.Domain;
+  uriMatchOptions: any[];
+  clearClipboard: number;
+  clearClipboardOptions: any[];
+  showGeneral = true;
+  showAutofill = true;
+  showDisplay = true;
 
-    constructor(private messagingService: MessagingService, private storageService: StorageService,
-        private stateService: StateService, private totpService: TotpService, i18nService: I18nService) {
-        this.themeOptions = [
-            { name: i18nService.t('default'), value: null },
-            { name: i18nService.t('light'), value: 'light' },
-            { name: i18nService.t('dark'), value: 'dark' },
-            { name: 'Nord', value: 'nord' },
-            { name: i18nService.t('solarizedDark'), value: 'solarizedDark' },
-        ];
-        this.uriMatchOptions = [
-            { name: i18nService.t('baseDomain'), value: UriMatchType.Domain },
-            { name: i18nService.t('host'), value: UriMatchType.Host },
-            { name: i18nService.t('startsWith'), value: UriMatchType.StartsWith },
-            { name: i18nService.t('regEx'), value: UriMatchType.RegularExpression },
-            { name: i18nService.t('exact'), value: UriMatchType.Exact },
-            { name: i18nService.t('never'), value: UriMatchType.Never },
-        ];
-        this.clearClipboardOptions = [
-            { name: i18nService.t('never'), value: null },
-            { name: i18nService.t('tenSeconds'), value: 10 },
-            { name: i18nService.t('twentySeconds'), value: 20 },
-            { name: i18nService.t('thirtySeconds'), value: 30 },
-            { name: i18nService.t('oneMinute'), value: 60 },
-            { name: i18nService.t('twoMinutes'), value: 120 },
-            { name: i18nService.t('fiveMinutes'), value: 300 },
-        ];
-        this.autoFillOnPageLoadOptions = [
-            { name: i18nService.t('autoFillOnPageLoadYes'), value: true },
-            { name: i18nService.t('autoFillOnPageLoadNo'), value: false },
-        ];
+  constructor(
+    private messagingService: MessagingService,
+    private stateService: StateService,
+    private totpService: TotpService,
+    i18nService: I18nService
+  ) {
+    this.themeOptions = [
+      { name: i18nService.t("default"), value: ThemeType.System },
+      { name: i18nService.t("light"), value: ThemeType.Light },
+      { name: i18nService.t("dark"), value: ThemeType.Dark },
+      { name: "Nord", value: ThemeType.Nord },
+      { name: i18nService.t("solarizedDark"), value: ThemeType.SolarizedDark },
+    ];
+    this.uriMatchOptions = [
+      { name: i18nService.t("baseDomain"), value: UriMatchType.Domain },
+      { name: i18nService.t("host"), value: UriMatchType.Host },
+      { name: i18nService.t("startsWith"), value: UriMatchType.StartsWith },
+      { name: i18nService.t("regEx"), value: UriMatchType.RegularExpression },
+      { name: i18nService.t("exact"), value: UriMatchType.Exact },
+      { name: i18nService.t("never"), value: UriMatchType.Never },
+    ];
+    this.clearClipboardOptions = [
+      { name: i18nService.t("never"), value: null },
+      { name: i18nService.t("tenSeconds"), value: 10 },
+      { name: i18nService.t("twentySeconds"), value: 20 },
+      { name: i18nService.t("thirtySeconds"), value: 30 },
+      { name: i18nService.t("oneMinute"), value: 60 },
+      { name: i18nService.t("twoMinutes"), value: 120 },
+      { name: i18nService.t("fiveMinutes"), value: 300 },
+    ];
+    this.autoFillOnPageLoadOptions = [
+      { name: i18nService.t("autoFillOnPageLoadYes"), value: true },
+      { name: i18nService.t("autoFillOnPageLoadNo"), value: false },
+    ];
+  }
+
+  async ngOnInit() {
+    this.disableKonnectorsSuggestions = await this.stateService.getDisableKonnectorsSuggestions();
+
+    this.enableAutoFillOnPageLoad = await this.stateService.getEnableAutoFillOnPageLoad();
+
+    this.enableInPageMenu = await this.stateService.getEnableInPageMenu();
+
+    this.autoFillOnPageLoadDefault =
+      (await this.stateService.getAutoFillOnPageLoadDefault()) ?? true;
+
+    this.disableAddLoginNotification = await this.stateService.getDisableAddLoginNotification();
+
+    this.disableChangedPasswordNotification =
+      await this.stateService.getDisableChangedPasswordNotification();
+
+    this.disableContextMenuItem = await this.stateService.getDisableContextMenuItem();
+
+    this.dontShowCards = await this.stateService.getDontShowCardsCurrentTab();
+    this.dontShowIdentities = await this.stateService.getDontShowIdentitiesCurrentTab();
+
+    this.disableAutoTotpCopy = !(await this.totpService.isAutoCopyEnabled());
+
+    this.disableFavicon = await this.stateService.getDisableFavicon();
+
+    this.disableBadgeCounter = await this.stateService.getDisableBadgeCounter();
+
+    this.theme = await this.stateService.getTheme();
+
+    const defaultUriMatch = await this.stateService.getDefaultUriMatch();
+    this.defaultUriMatch = defaultUriMatch == null ? UriMatchType.Domain : defaultUriMatch;
+
+    this.clearClipboard = await this.stateService.getClearClipboard();
+  }
+
+  async updateAddLoginNotification() {
+    await this.stateService.setDisableAddLoginNotification(this.disableAddLoginNotification);
+  }
+
+  async updateChangedPasswordNotification() {
+    await this.stateService.setDisableChangedPasswordNotification(
+      this.disableChangedPasswordNotification
+    );
+  }
+
+  async updateDisableContextMenuItem() {
+    await this.stateService.setDisableContextMenuItem(this.disableContextMenuItem);
+    this.messagingService.send("bgUpdateContextMenu");
+  }
+
+  async updateAutoTotpCopy() {
+    await this.stateService.setDisableAutoTotpCopy(this.disableAutoTotpCopy);
+  }
+
+  async updateKonnectorsSuggestions() {
+    await this.stateService.setDisableKonnectorsSuggestions(this.disableKonnectorsSuggestions);
+  }
+
+  async updateEnableInPageMenu() {
+    await this.stateService.setEnableInPageMenu(this.enableInPageMenu);
+
+    // activate or deactivate the menu from all tabs
+    let subcommand = "autofilIPMenuActivate";
+    if (!this.enableInPageMenu) {
+      subcommand = "inPageMenuDeactivate";
     }
-
-    async ngOnInit() {
-        this.disableKonnectorsSuggestions = await this.storageService.get(
-            ConstantsService.disableKonnectorsSuggestionsKey,
-        );
-
-        this.enableInPageMenu = await this.storageService.get<boolean>(
-            ConstantsService.enableInPageMenuKey);
-        if (this.enableInPageMenu === null) { // if not yet set, then default to true
-            this.enableInPageMenu = true;
-        }
-
-        this.enableAutoFillOnPageLoad = await this.storageService.get<boolean>(
-            ConstantsService.enableAutoFillOnPageLoadKey);
-
-        this.autoFillOnPageLoadDefault = await this.storageService.get<boolean>(
-            ConstantsService.autoFillOnPageLoadDefaultKey) ?? true;
-
-        this.disableAddLoginNotification = await this.storageService.get<boolean>(
-            ConstantsService.disableAddLoginNotificationKey);
-
-        this.disableChangedPasswordNotification = await this.storageService.get<boolean>(
-            ConstantsService.disableChangedPasswordNotificationKey);
-
-        this.disableContextMenuItem = await this.storageService.get<boolean>(
-            ConstantsService.disableContextMenuItemKey);
-
-        this.dontShowCards = await this.storageService.get<boolean>(ConstantsService.dontShowCardsCurrentTab);
-        this.dontShowIdentities = await this.storageService.get<boolean>(ConstantsService.dontShowIdentitiesCurrentTab);
-
-        this.disableAutoTotpCopy = !(await this.totpService.isAutoCopyEnabled());
-
-        this.disableFavicon = await this.storageService.get<boolean>(ConstantsService.disableFaviconKey);
-
-        this.disableBadgeCounter = await this.storageService.get<boolean>(ConstantsService.disableBadgeCounterKey);
-
-        this.theme = await this.storageService.get<string>(ConstantsService.themeKey);
-
-        const defaultUriMatch = await this.storageService.get<UriMatchType>(ConstantsService.defaultUriMatch);
-        this.defaultUriMatch = defaultUriMatch == null ? UriMatchType.Domain : defaultUriMatch;
-
-        this.clearClipboard = await this.storageService.get<number>(ConstantsService.clearClipboardKey);
+    const allTabs = await BrowserApi.getAllTabs();
+    for (const tab of allTabs) {
+      BrowserApi.tabSendMessage(tab, { command: "autofillAnswerRequest", subcommand: subcommand });
     }
+  }
 
-    async updateAddLoginNotification() {
-        await this.storageService.save(ConstantsService.disableAddLoginNotificationKey,
-            this.disableAddLoginNotification);
-    }
+  async updateAutoFillOnPageLoad() {
+    await this.stateService.setEnableAutoFillOnPageLoad(this.enableAutoFillOnPageLoad);
+  }
 
-    async updateChangedPasswordNotification() {
-        await this.storageService.save(ConstantsService.disableChangedPasswordNotificationKey,
-            this.disableChangedPasswordNotification);
-    }
+  async updateAutoFillOnPageLoadDefault() {
+    await this.stateService.setAutoFillOnPageLoadDefault(this.autoFillOnPageLoadDefault);
+  }
 
-    async updateDisableContextMenuItem() {
-        await this.storageService.save(ConstantsService.disableContextMenuItemKey,
-            this.disableContextMenuItem);
-        this.messagingService.send('bgUpdateContextMenu');
-    }
+  async updateDisableFavicon() {
+    await this.stateService.setDisableFavicon(this.disableFavicon);
+  }
 
-    /*
-    TODO: enable back when TOTP is available
-    async updateAutoTotpCopy() {
-        await this.storageService.save(ConstantsService.disableAutoTotpCopyKey, this.disableAutoTotpCopy);
-    }
-    */
+  async updateDisableBadgeCounter() {
+    await this.stateService.setDisableBadgeCounter(this.disableBadgeCounter);
+    this.messagingService.send("bgUpdateContextMenu");
+  }
 
-    async updateKonnectorsSuggestions() {
-        await this.storageService.save(
-            ConstantsService.disableKonnectorsSuggestionsKey,
-            this.disableKonnectorsSuggestions,
-        );
-    }
+  async updateShowCards() {
+    await this.stateService.setDontShowCardsCurrentTab(this.dontShowCards);
+  }
 
-    async updateEnableInPageMenu() {
-        await this.storageService.save(ConstantsService.enableInPageMenuKey, this.enableInPageMenu);
-        // activate or deactivate the menu from all tabs
-        let subcommand = 'autofilIPMenuActivate';
-        if (!this.enableInPageMenu) {
-            subcommand = 'inPageMenuDeactivate';
-        }
-        const allTabs = await BrowserApi.getAllTabs();
-        for (const tab of allTabs) {
-            BrowserApi.tabSendMessage(tab, {command: 'autofillAnswerRequest', subcommand: subcommand});
-        }
-    }
+  async updateShowIdentities() {
+    await this.stateService.setDontShowIdentitiesCurrentTab(this.dontShowIdentities);
+  }
 
-    async updateAutoFillOnPageLoad() {
-        await this.storageService.save(ConstantsService.enableAutoFillOnPageLoadKey, this.enableAutoFillOnPageLoad);
-    }
+  async saveTheme() {
+    await this.stateService.setTheme(this.theme);
+    window.setTimeout(() => window.location.reload(), 200);
+  }
 
-    async updateAutoFillOnPageLoadDefault() {
-        await this.storageService.save(ConstantsService.autoFillOnPageLoadDefaultKey, this.autoFillOnPageLoadDefault);
-    }
+  async saveDefaultUriMatch() {
+    await this.stateService.setDefaultUriMatch(this.defaultUriMatch);
+  }
 
-    async updateDisableFavicon() {
-        await this.storageService.save(ConstantsService.disableFaviconKey, this.disableFavicon);
-        await this.stateService.save(ConstantsService.disableFaviconKey, this.disableFavicon);
-    }
-
-    async updateDisableBadgeCounter() {
-        await this.storageService.save(ConstantsService.disableBadgeCounterKey, this.disableBadgeCounter);
-        await this.stateService.save(ConstantsService.disableBadgeCounterKey, this.disableBadgeCounter);
-        this.messagingService.send('bgUpdateContextMenu');
-    }
-
-    async updateShowCards() {
-        await this.storageService.save(ConstantsService.dontShowCardsCurrentTab, this.dontShowCards);
-        await this.stateService.save(ConstantsService.dontShowCardsCurrentTab, this.dontShowCards);
-    }
-
-    async updateShowIdentities() {
-        await this.storageService.save(ConstantsService.dontShowIdentitiesCurrentTab, this.dontShowIdentities);
-        await this.stateService.save(ConstantsService.dontShowIdentitiesCurrentTab, this.dontShowIdentities);
-    }
-
-    async saveTheme() {
-        await this.storageService.save(ConstantsService.themeKey, this.theme);
-        window.setTimeout(() => window.location.reload(), 200);
-    }
-
-    async saveDefaultUriMatch() {
-        await this.storageService.save(ConstantsService.defaultUriMatch, this.defaultUriMatch);
-    }
-
-    async saveClearClipboard() {
-        await this.storageService.save(ConstantsService.clearClipboardKey, this.clearClipboard);
-    }
+  async saveClearClipboard() {
+    await this.stateService.setClearClipboard(this.clearClipboard);
+  }
 }

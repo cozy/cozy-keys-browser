@@ -21,50 +21,28 @@
         "content/autofill.js",
         "content/autofiller.js",
         "content/notificationBar.js",
+        "content/contextMenuHandler.js",
         "content/appInfo.js"
       ],
-      "matches": [
-        "http://*/*",
-        "https://*/*",
-        "file:///*"
-      ],
+      "matches": ["http://*/*", "https://*/*", "file:///*"],
       "run_at": "document_start"
     },
     {
       "all_frames": false,
-      "js": [
-        "content/shortcuts.js"
-      ],
-      "matches": [
-        "http://*/*",
-        "https://*/*",
-        "file:///*"
-      ],
+      "js": ["content/shortcuts.js"],
+      "matches": ["http://*/*", "https://*/*", "file:///*"],
       "run_at": "document_start"
     },
     {
       "all_frames": false,
-      "js": [
-        "content/message_handler.js"
-      ],
-      "matches": [
-        "http://*/*",
-        "https://*/*",
-        "file:///*"
-      ],
+      "js": ["content/message_handler.js"],
+      "matches": ["http://*/*", "https://*/*", "file:///*"],
       "run_at": "document_start"
     },
     {
       "all_frames": true,
-      "css": [
-        "content/autofill.css",
-        "content/notification.css"
-      ],
-      "matches": [
-        "http://*/*",
-        "https://*/*",
-        "file:///*"
-      ],
+      "css": ["content/autofill.css", "content/notification.css"],
+      "matches": ["http://*/*", "https://*/*", "file:///*"],
       "run_at": "document_end"
     }
   ],
@@ -93,9 +71,7 @@
     "webRequest",
     "webRequestBlocking"
   ],
-  "optional_permissions": [
-    "nativeMessaging"
-  ],
+  "optional_permissions": ["nativeMessaging"],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "commands": {
     "_execute_browser_action": {
@@ -130,6 +106,9 @@
   },
   "web_accessible_resources": [
     "notification/bar.html",
+    "images/icon38.png",
+    "images/icon38_locked.png",
+    "images/close.png",
     "inPageMenu/menu.html",
     "inPageMenu/loginMenu.html"
   ],

@@ -1,6 +1,4 @@
-import {
-    IdentityTokenResponse as BaseIdentityTokenResponse,
-} from 'jslib-common/models/response/identityTokenResponse';
+import { IdentityTokenResponse as BaseIdentityTokenResponse } from "jslib-common/models/response/identityTokenResponse";
 
 /**
  * We need to extend the jslib's IdentityTokenResponse to add the clientId and
@@ -8,12 +6,12 @@ import {
  * properties are used to delete oauth client created by the stack on logout
  */
 export class IdentityTokenResponse extends BaseIdentityTokenResponse {
-    clientId: string;
-    registrationAccessToken: string;
+  clientId: string;
+  registrationAccessToken: string;
 
-    constructor(response: any) {
-        super(response);
-        this.clientId = response.client_id;
-        this.registrationAccessToken = response.registration_access_token;
-    }
+  constructor(response: any) {
+    super(response);
+    this.clientId = response.client_id;
+    this.registrationAccessToken = response.registration_access_token;
+  }
 }
