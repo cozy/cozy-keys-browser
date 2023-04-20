@@ -4,7 +4,6 @@ import * as uuid from "uuid";
 import { BroadcasterService } from "jslib-common/abstractions/broadcaster.service";
 import { MessagingService } from "jslib-common/abstractions/messaging.service";
 
-
 const BroadcasterSubscriptionId = "FlagConditionalComponent";
 
 /**

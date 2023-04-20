@@ -1,7 +1,5 @@
 import { Component, Input, OnChanges } from "@angular/core";
 
-
-
 import { EnvironmentService } from "jslib-common/abstractions/environment.service";
 import { StateService } from "jslib-common/abstractions/state.service";
 import { CipherType } from "jslib-common/enums/cipherType";

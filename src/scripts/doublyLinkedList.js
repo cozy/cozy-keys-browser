@@ -195,7 +195,7 @@ module.exports = (function () {
       }
       rank++;
       currentNode = currentNode.prev;
-    } while (currentNode !== null)
+    } while (currentNode !== null);
     return void 0;
   };
 

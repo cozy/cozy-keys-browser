@@ -78,7 +78,10 @@ import { PopupUtilsService } from "../popup/services/popup-utils.service";
 import { AutofillService as AutofillServiceAbstraction } from "../services/abstractions/autofill.service";
 import { StateService as StateServiceAbstraction } from "../services/abstractions/state.service";
 import AutofillService from "../services/autofill.service";
-import { BrowserCryptoService , BrowserCryptoService as CryptoService } from "../services/browserCrypto.service";
+import {
+  BrowserCryptoService,
+  BrowserCryptoService as CryptoService,
+} from "../services/browserCrypto.service";
 import BrowserMessagingService from "../services/browserMessaging.service";
 import BrowserMessagingPrivateModeBackgroundService from "../services/browserMessagingPrivateModeBackground.service";
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";

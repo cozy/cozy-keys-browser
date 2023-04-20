@@ -3,7 +3,6 @@ import { ProfileOrganizationResponse } from "jslib-common/models/response/profil
 import { ProfileProviderOrganizationResponse } from "jslib-common/models/response/profileProviderOrganizationResponse";
 import { CryptoService } from "jslib-common/services/crypto.service";
 
-
 export class BrowserCryptoService extends CryptoService {
   async upsertOrganizationKey(organizationId: string, key: string) {
     if (key === "") {
