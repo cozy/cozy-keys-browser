@@ -1,3 +1,4 @@
+import { StateService } from "jslib-common/abstractions/state.service";
 import { StorageService } from "jslib-common/abstractions/storage.service";
 import { CipherType } from "jslib-common/enums/cipherType";
 import { CipherView } from "jslib-common/models/view/cipherView";
@@ -8,6 +9,7 @@ import { SettingsService } from "jslib-common/services/settings.service";
 import BrowserStorageService from "../../services/browserStorage.service";
 
 import { KonnectorsService } from "./konnectors.service";
+
 
 const buildKonnectors = (konnectors: any[]) => {
   return konnectors.map((konnector) => {
@@ -55,6 +57,14 @@ export class TestStorageService implements StorageService {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+/* @ts-ignore */
+export class TestStateService implements StateService {
+  async getDefaultUriMatch(): Promise<any> {
+    return new Promise((resolve) => resolve(null));
+  }
+}
+
 describe("Konnectors Service", () => {
   const settingsService = new SettingsService(null);
   const storageService = new TestStorageService();
@@ -63,7 +73,9 @@ describe("Konnectors Service", () => {
     storageService,
     settingsService,
     null,
-    null
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    /* @ts-ignore */
+    new TestStateService()
   );
 
   beforeEach(() => {
