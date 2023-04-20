@@ -27,8 +27,7 @@
     "lint:fix": "eslint . --fix",
     "test": "karma start --single-run",
     "test:watch": "karma start",
-    "prettier": "prettier --write .",
-    "prepare": "husky install"
+    "prettier": "prettier --write ."
   },
   "devDependencies": {
     "@angular/compiler-cli": "^12.2.13",
