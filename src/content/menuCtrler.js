@@ -1,5 +1,7 @@
 import { createPopper } from "@popperjs/core";
+
 import { CipherType } from "jslib-common/enums/cipherType";
+
 import LinkedList from "../scripts/doublyLinkedList";
 
 /* =========================================================================
@@ -509,6 +511,7 @@ function setCiphers(newCiphers) {
   ciphers = new LinkedList();
   ciphersById = {};
   for (var cipherListId in newCiphers) {
+    // eslint-disable-next-line no-prototype-builtins
     if (!newCiphers.hasOwnProperty(cipherListId)) continue;
     for (var cipher of newCiphers[cipherListId]) {
       ciphers.append(cipher);

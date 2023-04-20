@@ -2,6 +2,7 @@
   "root": true,
   "env": {
     "browser": true,
+    "node": true,
     "webextensions": true
   },
   "extends": ["./jslib/shared/eslintrc.json"],

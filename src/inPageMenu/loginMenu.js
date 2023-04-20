@@ -3,6 +3,7 @@ require("./loginMenu.scss");
 import { AuthService } from "jslib-common/abstractions/auth.service";
 import { EnvironmentService } from "jslib-common/abstractions/environment.service";
 import { Utils } from "jslib-common/misc/utils";
+
 import { CozySanitizeUrlService } from "../popup/services/cozySanitizeUrl.service";
 
 /* --------------------------------------------------------------------- */
@@ -70,16 +71,19 @@ document.addEventListener("DOMContentLoaded", () => {
   var i18n = {};
   if (typeof safari !== "undefined") {
     const responseCommand = "notificationBarFrameDataResponse"; // to be adapted to loginMenu
+    // eslint-disable-next-line no-undef
     sendPlatformMessage({
       command: "bgGetDataForTab",
       responseCommand: responseCommand,
     });
+    // eslint-disable-next-line no-undef
     safari.self.addEventListener(
       "message",
       (msgEvent) => {
         const msg = JSON.parse(msgEvent.message.msg);
         if (msg.command === responseCommand && msg.data) {
           i18n = msg.data.i18n;
+          // eslint-disable-next-line no-undef
           load();
         }
       },

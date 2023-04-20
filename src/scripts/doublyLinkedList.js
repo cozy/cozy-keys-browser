@@ -189,16 +189,13 @@ module.exports = (function () {
     // id = parseInt(id)
     // index = this._length
     currentNode = this._head;
-    while (true) {
+    do {
       if (currentNode === node) {
         return rank;
       }
       rank++;
       currentNode = currentNode.prev;
-      if (currentNode === null) {
-        break;
-      }
-    }
+    } while (currentNode !== null)
     return void 0;
   };
 

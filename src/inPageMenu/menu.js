@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
         case "menuSelectionValidate":
           requestFormFillingWithCipher(document.querySelector(".selected").dataset.cipherId);
           break;
-        case "trigerFillFieldWithData":
+        case "trigerFillFieldWithData": {
           if (hostFrameId !== msg.frameTargetId || !isDisplayed) return;
           const dataTxt = document
             .querySelector(".selected")
@@ -128,6 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (!dataTxt) return;
           requestFieldFillingWithData(dataTxt);
           break;
+        }
       }
     }
   });
@@ -293,6 +294,7 @@ function formatCipherData(cipherData, key, format) {
       return year + format.separator + fullMonth;
     }
   } else {
+    //
   }
 }
 
@@ -351,6 +353,7 @@ function mapData2CipherView(cData, cView) {
   }
   const propNotTocopy = ["card", "login", "identity", "secureNote"];
   for (var key in cData) {
+    // eslint-disable-next-line no-prototype-builtins
     if (cData.hasOwnProperty(key) && !propNotTocopy.includes(key)) {
       cView[key] = cData[key];
     }
@@ -360,6 +363,7 @@ function mapData2CipherView(cData, cView) {
 
 function _mapData2Obj(dataObj, obj) {
   for (var key in dataObj) {
+    // eslint-disable-next-line no-prototype-builtins
     if (dataObj.hasOwnProperty(key)) {
       obj[key] = dataObj[key];
     }

@@ -5,5 +5,5 @@ karma.conf.js
 gulpfile.js
 src/content/autofill.js
 src/scripts/duo.js
-
+docs/
 **/node_modules
