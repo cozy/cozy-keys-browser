@@ -1,4 +1,4 @@
-import { Registry } from "cozy-client/dist/registry";
+import Registry from "cozy-client/dist/registry";
 
 import { CipherService } from "jslib-common/abstractions/cipher.service";
 import { SettingsService } from "jslib-common/abstractions/settings.service";
