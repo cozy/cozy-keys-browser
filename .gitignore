@@ -5,10 +5,8 @@
 node_modules
 npm-debug.log
 vwd.webinfo
-css/
 dist/
 dist-safari/
-webfonts/
 *.crx
 *.pem
 *.zip
