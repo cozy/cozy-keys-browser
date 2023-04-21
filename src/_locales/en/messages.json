@@ -1,6 +1,6 @@
 {
   "appName": {
-    "message": "Cozy"
+    "message": "Cozy Pass"
   },
   "extName": {
     "message": "Cozy - Personal Cloud",
@@ -34,8 +34,14 @@
   "cancel": {
     "message": "Cancel"
   },
+  "cancel_shortcut": {
+    "message": "Cancel (esc)"
+  },
   "close": {
     "message": "Close"
+  },
+  "close_shortcut": {
+    "message": "Close (esc)"
   },
   "submit": {
     "message": "Submit"
@@ -206,6 +212,9 @@
   },
   "save": {
     "message": "Save"
+  },
+  "save_shorcut": {
+    "message": "Save (Ctrl+Enter)"
   },
   "move": {
     "message": "Move"
@@ -673,6 +682,9 @@
   },
   "notificationChangeDesc": {
     "message": "Update the password in my Cozy?"
+  },
+  "notificationTOTP": {
+    "message": "TOTP copied in your clipboard"
   },
   "notificationChangeSave": {
     "message": "Update"
@@ -1263,6 +1275,9 @@
   },
   "back": {
     "message": "Back"
+  },
+  "back_shortcut": {
+    "message": "Back (esc)"
   },
   "collections": {
     "message": "Collections"
@@ -2027,5 +2042,11 @@
   },
   "apiKey": {
     "message": "API Key"
+  },
+  "TOTPCopiedInClipboard": {
+    "message": "TOTP copied in your clipboard !"
+  },
+  "TOTP": {
+    "message": "One Time PassWord"
   }
 }

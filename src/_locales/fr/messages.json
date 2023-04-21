@@ -1,6 +1,6 @@
 {
   "appName": {
-    "message": "Cozy"
+    "message": "Cozy Pass"
   },
   "extName": {
     "message": "Cozy - Cloud personnel",
@@ -34,8 +34,14 @@
   "cancel": {
     "message": "Annuler"
   },
+  "cancel_shortcut": {
+    "message": "Annuler (esc)"
+  },
   "close": {
     "message": "Fermer"
+  },
+  "close_shortcut": {
+    "message": "Fermer (esc)"
   },
   "submit": {
     "message": "Soumettre"
@@ -203,6 +209,9 @@
   },
   "save": {
     "message": "Enregistrer"
+  },
+  "save_shorcut": {
+    "message": "Enregistrer (Ctrl+Enter)"
   },
   "move": {
     "message": "Déplacer"
@@ -667,6 +676,9 @@
   },
   "notificationChangeDesc": {
     "message": "Mettre à jour le mot de passe dans mon Cozy ?"
+  },
+  "notificationTOTP": {
+    "message": "TOTP copié dans votre presse papier !"
   },
   "notificationChangeSave": {
     "message": "Mettre à jour"
@@ -1311,6 +1323,9 @@
   },
   "back": {
     "message": "Retour"
+  },
+  "back_shortcut": {
+    "message": "Retour (esc)"
   },
   "collections": {
     "message": "Collections"
@@ -2059,5 +2074,11 @@
   },
   "service": {
     "message": "Service"
+  },
+  "TOTPCopiedInClipboard": {
+    "message": "TOTP copié dans votre presse papier !"
+  },
+  "TOTP": {
+    "message": "Mot de passe à usage unique"
   }
 }

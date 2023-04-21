@@ -177,6 +177,7 @@ registerLocaleData(localeFr, "fr");
 // import { IconComponent } from "./components/icon.component";
 import { FlagConditionalComponent } from "../cozy/components/flag-conditional/flag-conditional.component";
 import { IfFlagDirective } from "../cozy/components/flag-conditional/if-flag.directive";
+import { HistoryService } from "./services/history.service";
 /* eslint-enable */
 /* end Cozy imports */
 

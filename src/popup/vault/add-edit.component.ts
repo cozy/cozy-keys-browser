@@ -27,6 +27,7 @@ import { PopupUtilsService } from "../services/popup-utils.service";
 /* eslint-disable */
 import { deleteCipher } from "./utils";
 import { KonnectorsService } from "../services/konnectors.service";
+import { HistoryService } from "../services/history.service";
 /* eslint-enable */
 /* END */
 
@@ -45,6 +46,7 @@ export class AddEditComponent extends BaseAddEditComponent {
   currentUris: string[];
   openAttachmentsInPopup: boolean;
   showAutoFillOnPageLoadOptions: boolean;
+  private initialPwd: string;
 
   constructor(
     cipherService: CipherService,
@@ -64,7 +66,8 @@ export class AddEditComponent extends BaseAddEditComponent {
     organizationService: OrganizationService,
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
-    private konnectorsService: KonnectorsService
+    private konnectorsService: KonnectorsService,
+    private historyService: HistoryService
   ) {
     super(
       cipherService,
@@ -93,6 +96,8 @@ export class AddEditComponent extends BaseAddEditComponent {
     if (event.key === "Escape") {
       this.cancel();
       event.preventDefault();
+    } else if (event.key === "Enter" && event.getModifierState("Control")) {
+      this.submit();
     }
   }
 
@@ -123,6 +128,28 @@ export class AddEditComponent extends BaseAddEditComponent {
         this.cloneMode = params.cloneMode === "true";
       }
       await this.load();
+
+      this.initialPwd = this.cipher.login.password;
+      if (params.tempCipher) {
+        // the cipher was already in edition and popup has been closed or navigation in pwd generator
+        // we have to select the correct pwd
+        // first retrive data form url
+        const histCipher = JSON.parse(params.tempCipher);
+        this.initialPwd = histCipher.initialPwd;
+        delete histCipher.initialPwd;
+        if (histCipher.login.password !== this.cipher.login.password) {
+          // url pwd and state pwd are different : one of them has been modified compared to initial pwd
+          if (this.initialPwd !== this.cipher.login.password) {
+            // initial pwd and state differs, we keep the state pwd
+            histCipher.login.password = this.cipher.login.password;
+          } else {
+            // initial pwd and state are identical, we keep the url pwd
+          }
+        } else {
+          // url pwd and state pwd are identical, keep url pwd
+        }
+        deepCopy(this.cipher, histCipher);
+      }
 
       if (!this.editMode || this.cloneMode) {
         if (
@@ -163,6 +190,14 @@ export class AddEditComponent extends BaseAddEditComponent {
     }, 200);
   }
 
+  // note Cozy : beforeunload event would be better but is not triggered in webextension...
+  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
+  @HostListener("window:unload", ["$event"])
+  async unloadMnger(event: any) {
+    // save cipher state in url when popup is closed.
+    this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, ...this.cipher });
+  }
+
   async load() {
     await super.load();
     this.showAutoFillOnPageLoadOptions =
@@ -173,10 +208,14 @@ export class AddEditComponent extends BaseAddEditComponent {
   async submit(): Promise<boolean> {
     if (await super.submit()) {
       if (this.cloneMode) {
-        this.router.navigate(["/tabs/vault"]);
+        // note Cozy : why should we go back to vault after cloning a cipher ?
+        // we prefer go back un history twice (from where the initial cipher has bee opened)
+        // this.router.navigate(["/tabs/vault"]);
+        this.historyService.gotoPreviousUrl(2);
       } else {
         this.konnectorsService.createSuggestions();
-        this.location.back();
+        // this.location.back();
+        this.historyService.gotoPreviousUrl();
       }
       return true;
     }
@@ -186,7 +225,8 @@ export class AddEditComponent extends BaseAddEditComponent {
 
   cancel() {
     super.cancel();
-    this.location.back();
+    // this.location.back();
+    this.historyService.gotoPreviousUrl();
   }
 
   async generateUsername(): Promise<boolean> {
@@ -202,6 +242,8 @@ export class AddEditComponent extends BaseAddEditComponent {
     const confirmed = await super.generatePassword();
     if (confirmed) {
       await this.saveCipherState();
+      // save cipher state in url when popup is closed.
+      this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, ...this.cipher });
       this.router.navigate(["generator"], { queryParams: { type: "password" } });
     }
     return confirmed;
@@ -221,7 +263,8 @@ export class AddEditComponent extends BaseAddEditComponent {
     );
     if (deleted) {
       // add a timeout in order to prevent to display the vault home
-      this.location.back();
+      // this.location.back();
+      this.historyService.gotoPreviousUrl();
       return true;
     }
     return false;
@@ -248,5 +291,21 @@ export class AddEditComponent extends BaseAddEditComponent {
           ? []
           : this.collections.filter((c) => (c as any).checked).map((c) => c.id),
     });
+  }
+}
+
+// Cozy Helper
+// copy source object attributes into target object
+function deepCopy(target: any, source: any) {
+  for (const key in source) {
+    if (typeof source[key] === "object") {
+      if (Array.isArray(source[key])) {
+        target[key] = source[key].slice();
+      } else {
+        deepCopy(target[key], source[key]);
+      }
+    } else {
+      target[key] = source[key];
+    }
   }
 }

@@ -630,6 +630,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
       case "change":
         barPage = barPage + "?change=1&isVaultLocked=" + typeData.isVaultLocked;
         break;
+      case "TOTPCopied":
+        barPage = barPage + "?totp=1";
+        break;
       default:
         break;
     }
@@ -663,10 +666,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
     // frameDiv.style.cssText =
     //   "height: 42px; width: 100%; top: 0; left: 0; padding: 0; position: fixed; " +
     //   "z-index: 2147483647; visibility: visible;";
+    frameDiv.style.cssText = "visibility: hidden;";
     frameDiv.appendChild(iframe);
     document.body.appendChild(frameDiv);
 
-    (iframe.contentWindow.location as any) = barPageUrl; // todo BJA : utile ? cf au dessus `iframe.src = barPageUrl;`
+    (iframe.contentWindow.location as any) = barPageUrl;
     /** commented by Cozy
     const spacer = document.createElement("div");
     spacer.id = "bit-notification-bar-spacer";
@@ -718,6 +722,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const el = document.getElementById(elId);
     if (el != null) {
       el.style.height = heightStyle;
+      el.style.removeProperty("visibility");
     }
   }
 

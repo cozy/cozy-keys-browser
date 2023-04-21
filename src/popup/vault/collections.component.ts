@@ -10,6 +10,10 @@ import { I18nService } from "jslib-common/abstractions/i18n.service";
 import { LogService } from "jslib-common/abstractions/log.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
 
+/** Start Cozy imports */
+import { HistoryService } from "../services/history.service";
+/** End Cozy imports */
+
 @Component({
   selector: "app-vault-collections",
   templateUrl: "collections.component.html",
@@ -22,7 +26,8 @@ export class CollectionsComponent extends BaseCollectionsComponent {
     cipherService: CipherService,
     private route: ActivatedRoute,
     private location: Location,
-    logService: LogService
+    logService: LogService,
+    private historyService: HistoryService
   ) {
     super(collectionService, platformUtilsService, i18nService, cipherService, logService);
   }
@@ -38,6 +43,9 @@ export class CollectionsComponent extends BaseCollectionsComponent {
   }
 
   back() {
-    this.location.back();
+    // note Cozy : collections are not displayed in Cozy Pass Addon, but we modify nevertheless
+    // this back in case one day we decide to use this component
+    // this.location.back();
+    this.historyService.gotoPreviousUrl();
   }
 }

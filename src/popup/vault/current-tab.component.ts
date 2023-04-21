@@ -26,8 +26,10 @@ import { BrowserApi } from "../../browser/browserApi";
 import { AutofillService } from "../../services/abstractions/autofill.service";
 import { CozyClientService } from "../services/cozyClient.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
-
 /** Start Cozy imports */
+/* eslint-disable */
+import { HistoryService } from "../services/history.service";
+/* eslint-enable */
 /** End Cozy imports */
 
 const BroadcasterSubscriptionId = "CurrentTabComponent";
@@ -68,7 +70,8 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private passwordRepromptService: PasswordRepromptService,
     private cozyClientService: CozyClientService,
-    private location: Location
+    private location: Location,
+    private historyService: HistoryService
   ) {}
 
   async ngOnInit() {
@@ -122,6 +125,13 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
 
+  // note Cozy : beforeunload event would be better but is not triggered in webextension...
+  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
+  @HostListener("window:unload", ["$event"])
+  async unloadMnger(event?: any) {
+    this.historyService.updateTimeStamp();
+  }
+
   async refresh() {
     await this.load();
   }
@@ -169,6 +179,12 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
       });
       if (this.totpCode != null) {
         this.platformUtilsService.copyToClipboard(this.totpCode, { window: window });
+        this.platformUtilsService.showToast(
+          "success",
+          this.i18nService.t("TOTP"),
+          this.i18nService.t("TOTPCopiedInClipboard")
+        );
+        return;
       }
       if (this.popupUtilsService.inPopup(window)) {
         if (this.platformUtilsService.isFirefox() || this.platformUtilsService.isSafari()) {
@@ -272,7 +288,8 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    this.router.navigate(["/tabs/vault"]);
+    // this.router.navigate(["/tabs/vault"]);
+    this.historyService.gotoPreviousUrl();
   }
 
   openWebApp() {

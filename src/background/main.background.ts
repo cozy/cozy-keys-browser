@@ -711,7 +711,9 @@ export default class MainBackground {
       this.keyConnectorService.clear(),
     ]);
 
-    // Clear auth and token afterwards, as previous services might need it (by Cozy) note TODO BJA : the cmd `await this.stateService.clean({ userId: userId });` has been added by bw, our `tokenService.clean()` might be useless now.
+    // Clear auth and token afterwards, as previous services might need it (by Cozy)
+    // note TODO BJA : the cmd `await this.stateService.clean({ userId: userId });` has been added by bw, our `tokenService.clean()` might be useless now.
+    // a test shows that tokenService.clearToken() is called once => we should keep it ? what is its rôle ?
     await this.tokenService.clearToken();
     await this.stateService.clean({ userId: userId });
 
@@ -724,32 +726,6 @@ export default class MainBackground {
     await this.refreshBadgeAndMenu(true);
     await this.reseedStorage();
     this.notificationsService.updateConnection(false);
-    /* @override by Cozy : TODO BJA : BW has adde `await this.reloadProcess();` below : it might correct the bug, this comment might be useless.
-        BUG :
-        * if you lock or logout, the background script is reloaded, preventing current injected content
-           script to communicate with the background
-           (see for exemple : https://stackoverflow.com/questions/53939205)
-        * Consequence : when user locks ou logouts, then background is reloaded, and then all
-          content scripts no longer can exchange with background script : form filling will not work until
-          you reload the web page and therefore its content scripts
-        * Analysis of the background lifecycle :
-            * in browserApi `reloadExtension()` => `chrome.runtime.reload()` or `win.location.reload()`
-              (if win is a frame, ie the popup or other window)
-            * `reloadExtension()` is called
-                - by  `SystemService.startProcessReload()`
-                    - which is called a two places, in main.background, in lockedCallback and in logout
-                - by the msg 'reloadProcess' in popup/app.component.ts (which only triggers the reload of
-                  the frame because the window is transmited in the parameters
-                  `BrowserApi.reloadExtension(window)`)
-                  => 'reloadProcess' has no impact on the background script, therefore not involved in
-                  the bug.
-        * solutions :
-            1. reload content script on background init => then content scripts are loaded multiple
-              times : not clean at all...
-            2. don't reload... solution used here.
-        */
-    // this.systemService.startProcessReload();
-    /* end @override by Cozy */
     await this.systemService.clearPendingClipboard();
     await this.reloadProcess();
   }

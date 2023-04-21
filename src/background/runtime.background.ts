@@ -133,7 +133,6 @@ export default class RuntimeBackground {
 
         await this.main.setIcon();
         await this.main.refreshBadgeAndMenu(false);
-        // this.notificationsService.init(); // TODO BJA : removed from upstream
         this.notificationsService.updateConnection(msg.command === "unlocked");
         this.systemService.cancelProcessReload();
 
@@ -297,10 +296,6 @@ export default class RuntimeBackground {
             break;
         }
         break;
-      //             case 'bgGetCiphersForTab': // todo BJA : supprimé de l'upstream ! laissé pour voir, supprimer qd ok.
-      //             case 'bgAddLogin':         // todo BJA : supprimé de l'upstream !
-      //                await this.addLogin(msg.login, sender.tab);
-      //                break;
       case "bgUpdateContextMenu":
       case "editedCipher":
       case "addedCipher":
@@ -474,6 +469,10 @@ export default class RuntimeBackground {
             });
             if (totpCode2 != null) {
               this.platformUtilsService.copyToClipboard(totpCode2, { window: window });
+              BrowserApi.tabSendMessageData(tab, "openNotificationBar", {
+                type: "TOTPCopied",
+                typeData: {},
+              });
             }
             break;
 

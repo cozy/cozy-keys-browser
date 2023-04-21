@@ -48,6 +48,11 @@ export class ExportComponent extends BaseExportComponent {
     ];
   }
 
+  formatOptions = [
+    { name: ".json", value: "json" },
+    { name: ".csv (logins & notes only)", value: "csv" },
+  ];
+
   protected saved() {
     super.saved();
     this.router.navigate(["/tabs/settings"]);

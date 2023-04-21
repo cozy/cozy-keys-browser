@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let i18n = {};
   let lang = window.navigator.language;
 
-  i18n.appName = chrome.i18n.getMessage("appName");
   i18n.close = chrome.i18n.getMessage("close");
   i18n.yes = chrome.i18n.getMessage("yes");
   i18n.never = chrome.i18n.getMessage("never");
@@ -18,19 +17,17 @@ document.addEventListener("DOMContentLoaded", () => {
   i18n.notificationAddDesc = chrome.i18n.getMessage("notificationAddDesc");
   i18n.notificationChangeSave = chrome.i18n.getMessage("notificationChangeSave");
   i18n.notificationChangeDesc = chrome.i18n.getMessage("notificationChangeDesc");
+  i18n.notificationTOTP = chrome.i18n.getMessage("notificationTOTP");
   lang = chrome.i18n.getUILanguage(); // eslint-disable-line
 
   // delay 50ms so that we get proper body dimensions
   setTimeout(load, 50);
 
   function load() {
-    const body = document.querySelector("body"),
-      bodyRect = body.getBoundingClientRect();
+    const body = document.querySelector("body");
 
     // i18n
     body.classList.add("lang-" + lang.slice(0, 2));
-
-    document.getElementById("logo-link").title = i18n.appName;
 
     // Set text in popup
     document.querySelector("#template-notif .dont-save").textContent = i18n.notificationDontSave;
@@ -39,29 +36,41 @@ document.addEventListener("DOMContentLoaded", () => {
     // See original file commit at the beggining of this fine.
     const addContext = getQueryVariable("add");
     const changeContext = getQueryVariable("change");
+    const totpContext = getQueryVariable("totp");
 
     if (addContext) {
       document.querySelector("#template-notif .add-or-change").textContent =
         i18n.notificationAddSave;
       document.querySelector("#template-notif .desc-text").textContent = i18n.notificationAddDesc;
+      // Set DOM content
+      setContent(document.getElementById("template-notif"));
     } else if (changeContext) {
       document.querySelector("#template-notif .add-or-change").textContent =
         i18n.notificationChangeSave;
       document.querySelector("#template-notif .desc-text").textContent =
         i18n.notificationChangeDesc;
+      // Set DOM content
+      setContent(document.getElementById("template-notif"));
+    } else if (totpContext) {
+      document.querySelector("#template-totp-copied .desc-text").textContent =
+        i18n.notificationTOTP;
+      // Set DOM content
+      setContent(document.getElementById("template-totp-copied"));
+      window.setTimeout(() => {
+        sendPlatformMessage({
+          command: "bgCloseNotificationBar",
+        });
+      }, 5000);
     } else {
       return;
     }
 
-    // Set DOM content
-    setContent(document.getElementById("template-notif"));
-
     // Set listeners
     // TODO: the checkboxes options are not active yet
-    const addOrChangeButton = document.querySelector("#template-notif-clone .add-or-change"),
-      dontSaveButton = document.querySelector("#template-notif-clone .dont-save");
+    const addOrChangeButton = document.querySelector("#content .add-or-change");
+    const dontSaveButton = document.querySelector("#content .dont-save");
 
-    addOrChangeButton.addEventListener("click", (e) => {
+    addOrChangeButton?.addEventListener("click", (e) => {
       e.preventDefault();
       const command = changeContext ? "bgChangeSave" : "bgAddSave";
       sendPlatformMessage({
@@ -69,12 +78,13 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    dontSaveButton.addEventListener("click", (e) => {
+    dontSaveButton?.addEventListener("click", (e) => {
       e.preventDefault();
       sendPlatformMessage({
         command: "bgCloseNotificationBar",
       });
     });
+
     sendAdjustBodyHeight(body);
   }
 

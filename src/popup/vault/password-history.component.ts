@@ -1,5 +1,5 @@
 import { Location } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, HostListener } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -7,6 +7,10 @@ import { PasswordHistoryComponent as BasePasswordHistoryComponent } from "jslib-
 import { CipherService } from "jslib-common/abstractions/cipher.service";
 import { I18nService } from "jslib-common/abstractions/i18n.service";
 import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
+
+// Cozy imports
+import { HistoryService } from "../services/history.service";
+// end
 
 @Component({
   selector: "app-password-history",
@@ -18,7 +22,8 @@ export class PasswordHistoryComponent extends BasePasswordHistoryComponent {
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private historyService: HistoryService
   ) {
     super(cipherService, platformUtilsService, i18nService, window);
   }
@@ -35,6 +40,15 @@ export class PasswordHistoryComponent extends BasePasswordHistoryComponent {
   }
 
   close() {
-    this.location.back();
+    // this.location.back();
+    this.historyService.gotoPreviousUrl();
+  }
+
+  @HostListener("window:keydown", ["$event"])
+  closeOnEsc(e: KeyboardEvent) {
+    if (e.key === "Escape") {
+      this.close();
+      e.preventDefault();
+    }
   }
 }

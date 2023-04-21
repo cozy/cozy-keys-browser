@@ -33,6 +33,7 @@ const BroadcasterSubscriptionId = "ChildViewComponent";
 import { deleteCipher } from "./utils";
 import { CozyClientService } from "../services/cozyClient.service";
 import { CAN_SHARE_ORGANIZATION } from "../../cozy/flags";
+import { HistoryService } from "../services/history.service";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -71,7 +72,8 @@ export class ViewComponent extends BaseViewComponent {
     apiService: ApiService,
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
-    private cozyClientService: CozyClientService
+    private cozyClientService: CozyClientService,
+    private historyService: HistoryService
   ) {
     super(
       cipherService,
@@ -144,6 +146,13 @@ export class ViewComponent extends BaseViewComponent {
   ngOnDestroy() {
     super.ngOnDestroy();
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
+  }
+
+  // note Cozy : beforeunload event would be better but is not triggered in webextension...
+  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
+  @HostListener("window:unload", ["$event"])
+  async unloadMnger(event?: any) {
+    this.historyService.updateTimeStamp();
   }
 
   async load() {
@@ -274,7 +283,8 @@ export class ViewComponent extends BaseViewComponent {
   }
 
   close() {
-    this.location.back();
+    // this.location.back();
+    this.historyService.gotoPreviousUrl();
   }
 
   private async loadPageDetails() {
@@ -309,6 +319,11 @@ export class ViewComponent extends BaseViewComponent {
       });
       if (this.totpCode != null) {
         this.platformUtilsService.copyToClipboard(this.totpCode, { window: window });
+        this.platformUtilsService.showToast(
+          "success",
+          this.i18nService.t("TOTP"),
+          this.i18nService.t("TOTPCopiedInClipboard")
+        );
       }
     } catch {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("autofillError"));
