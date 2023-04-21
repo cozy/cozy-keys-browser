@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" media="screen" type="text/css" href="TXX.css"/>
+    </head>
+
+    <body>
+
+        <a href="./">Back to menu</a>
+        <hr>
+        <h2>Standard login form</h2>
+        <p>✅ normal behaviour for login and autofill menu</p>
+        <p>A custom field label must :</p>
+        <ul>
+            <li>Either start by :
+                <ul>
+                    <li>'regex='</li>
+                    <li>'csv='</li>
+                </ul>
+                and the expression will be evaluated againts the following field's attributes : htmlID, htmlName, label-tag, label-aria, placeholder, label-left. (see `fieldPropertyIsMatch` in autofil.service.ts) 
+            </li>
+            <br>
+            <li> or exactly match the content of :
+                <ul>
+                    <li>htmlID</li>
+                    <li>htmlName</li>
+                    <li>label-tag</li>
+                    <li>label-aria</li>
+                    <li>placeholder</li>
+                    <li>label-left</li>
+                </ul>
+            </li>
+        </ul>
+
+        <form action="" method="get" class="form-example" style="max-width: 400px;">
+
+            <div class="form-row">
+                <label for="département">Enter your département: </label>
+                <input type="text" name="departement" id="departement" value="" autocomplete="off" style="width:100%; box-sizing: border-box;" >
+            </div>
+
+          <div class="form-row">
+            <label for="email">Enter your email: </label>
+            <input type="text" name="email" id="email" value="" autocomplete="off" style="width:100%; box-sizing: border-box;" >
+          </div>
+
+          <div class="form-row">
+            <label for="password">Enter your password: </label>
+            <input type="text" name="password" id="password" value="" autocomplete=“off” style="width:100%; box-sizing: border-box;" autofocus >
+          </div>
+
+          <div class="form-row">
+            <br>
+            <input type="submit" value="login" onClick="document.querySelector('form').submit(); console.log('toto')">
+          </div>
+
+        </form>
+
+    </body>
+</html>
