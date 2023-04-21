@@ -1,18 +1,16 @@
-import * as papa from 'papaparse';
+import * as papa from "papaparse";
 
-import { ExportService as BaseExportService } from 'jslib-common/services/export.service';
-
-import { ApiService } from 'jslib-common/abstractions/api.service';
-import { CipherService } from 'jslib-common/abstractions/cipher.service';
-import { CryptoService } from 'jslib-common/abstractions/crypto.service';
-import { FolderService } from 'jslib-common/abstractions/folder.service';
-
-import { CipherWithIds as CipherExport } from 'jslib-common/models/export/cipherWithIds';
-import { FolderWithId as FolderExport } from 'jslib-common/models/export/folderWithId';
-import { CipherView } from 'jslib-common/models/view/cipherView';
-import { FolderView } from 'jslib-common/models/view/folderView';
-
-import { CipherType } from 'jslib-common/enums/cipherType';
+import { ApiService } from "jslib-common/abstractions/api.service";
+import { CipherService } from "jslib-common/abstractions/cipher.service";
+import { CryptoService } from "jslib-common/abstractions/crypto.service";
+import { CryptoFunctionService } from "jslib-common/abstractions/cryptoFunction.service";
+import { FolderService } from "jslib-common/abstractions/folder.service";
+import { CipherType } from "jslib-common/enums/cipherType";
+import { CipherWithIdExport as CipherExport } from "jslib-common/models/export/cipherWithIdsExport";
+import { FolderWithIdExport as FolderExport } from "jslib-common/models/export/folderWithIdExport";
+import { CipherView } from "jslib-common/models/view/cipherView";
+import { FolderView } from "jslib-common/models/view/folderView";
+import { ExportService as BaseExportService } from "jslib-common/services/export.service";
 
 /**
  * By default the ciphers that have an organizationId and not included in the
@@ -27,133 +25,139 @@ import { CipherType } from 'jslib-common/enums/cipherType';
  * child class.
  */
 export class ExportService extends BaseExportService {
-    /* tslint:disable-next-line */
-    private _folderService: FolderService;
-    /* tslint:disable-next-line */
-    private _cipherService: CipherService;
-    /* tslint:disable-next-line */
-    private _apiService: ApiService;
+  /* tslint:disable-next-line */
+  private _folderService: FolderService;
+  /* tslint:disable-next-line */
+  private _cipherService: CipherService;
+  /* tslint:disable-next-line */
+  private _apiService: ApiService;
 
-    constructor(
-        folderService: FolderService,
-        cipherService: CipherService,
-        apiService: ApiService,
-        cryptoService: CryptoService
-    ) {
-        super(folderService, cipherService, apiService, cryptoService);
+  constructor(
+    folderService: FolderService,
+    cipherService: CipherService,
+    apiService: ApiService,
+    cryptoService: CryptoService,
+    cryptoFunctionService: CryptoFunctionService
+  ) {
+    super(folderService, cipherService, apiService, cryptoService, cryptoFunctionService);
 
-        this._folderService = folderService;
-        this._cipherService = cipherService;
-        this._apiService = apiService;
+    this._folderService = folderService;
+    this._cipherService = cipherService;
+    this._apiService = apiService;
+  }
+
+  async getExport(format: "csv" | "json" = "csv"): Promise<string> {
+    let decFolders: FolderView[] = [];
+    let decCiphers: CipherView[] = [];
+    const promises = [];
+
+    promises.push(
+      this._folderService.getAllDecrypted().then((folders) => {
+        decFolders = folders;
+      })
+    );
+
+    promises.push(
+      this._cipherService.getAllDecrypted().then((ciphers) => {
+        decCiphers = ciphers;
+      })
+    );
+
+    await Promise.all(promises);
+
+    if (format === "csv") {
+      const foldersMap = new Map<string, FolderView>();
+      decFolders.forEach((f) => {
+        foldersMap.set(f.id, f);
+      });
+
+      const exportCiphers: any[] = [];
+      decCiphers.forEach((c) => {
+        // only export logins and secure notes
+        if (c.type !== CipherType.Login && c.type !== CipherType.SecureNote) {
+          return;
+        }
+
+        const cipher: any = {};
+        cipher.folder =
+          c.folderId != null && foldersMap.has(c.folderId) ? foldersMap.get(c.folderId).name : null;
+        cipher.favorite = c.favorite ? 1 : null;
+        this._buildCommonCipher(cipher, c);
+        exportCiphers.push(cipher);
+      });
+
+      return papa.unparse(exportCiphers);
+    } else {
+      const jsonDoc: any = {
+        folders: [],
+        items: [],
+      };
+
+      decFolders.forEach((f) => {
+        if (f.id == null) {
+          return;
+        }
+        const folder = new FolderExport();
+        folder.build(f);
+        jsonDoc.folders.push(folder);
+      });
+
+      decCiphers.forEach((c) => {
+        const cipher = new CipherExport();
+        cipher.build(c);
+        cipher.collectionIds = null;
+        jsonDoc.items.push(cipher);
+      });
+
+      return JSON.stringify(jsonDoc, null, "  ");
     }
+  }
 
-    async getExport(format: 'csv' | 'json' = 'csv'): Promise<string> {
-        let decFolders: FolderView[] = [];
-        let decCiphers: CipherView[] = [];
-        const promises = [];
+  private _buildCommonCipher(cipher: any, c: CipherView) {
+    cipher.type = null;
+    cipher.name = c.name;
+    cipher.notes = c.notes;
+    cipher.fields = null;
+    cipher.reprompt = c.reprompt;
+    // Login props
+    cipher.login_uri = null;
+    cipher.login_username = null;
+    cipher.login_password = null;
+    cipher.login_totp = null;
 
-        promises.push(this._folderService.getAllDecrypted().then(folders => {
-            decFolders = folders;
-        }));
-
-        promises.push(this._cipherService.getAllDecrypted().then(ciphers => {
-            decCiphers = ciphers;
-        }));
-
-        await Promise.all(promises);
-
-        if (format === 'csv') {
-            const foldersMap = new Map<string, FolderView>();
-            decFolders.forEach(f => {
-                foldersMap.set(f.id, f);
-            });
-
-            const exportCiphers: any[] = [];
-            decCiphers.forEach(c => {
-                // only export logins and secure notes
-                if (c.type !== CipherType.Login && c.type !== CipherType.SecureNote) {
-                    return;
-                }
-
-                const cipher: any = {};
-                cipher.folder = c.folderId != null && foldersMap.has(c.folderId) ?
-                    foldersMap.get(c.folderId).name : null;
-                cipher.favorite = c.favorite ? 1 : null;
-                this._buildCommonCipher(cipher, c);
-                exportCiphers.push(cipher);
-            });
-
-            return papa.unparse(exportCiphers);
+    if (c.fields) {
+      c.fields.forEach((f: any) => {
+        if (!cipher.fields) {
+          cipher.fields = "";
         } else {
-            const jsonDoc: any = {
-                folders: [],
-                items: [],
-            };
-
-            decFolders.forEach(f => {
-                if (f.id == null) {
-                    return;
-                }
-                const folder = new FolderExport();
-                folder.build(f);
-                jsonDoc.folders.push(folder);
-            });
-
-            decCiphers.forEach(c => {
-                const cipher = new CipherExport();
-                cipher.build(c);
-                cipher.collectionIds = null;
-                jsonDoc.items.push(cipher);
-            });
-
-            return JSON.stringify(jsonDoc, null, '  ');
+          cipher.fields += "\n";
         }
+
+        cipher.fields += (f.name || "") + ": " + f.value;
+      });
     }
 
-    private _buildCommonCipher(cipher: any, c: CipherView) {
-        cipher.type = null;
-        cipher.name = c.name;
-        cipher.notes = c.notes;
-        cipher.fields = null;
-        // Login props
-        cipher.login_uri = null;
-        cipher.login_username = null;
-        cipher.login_password = null;
-        cipher.login_totp = null;
+    switch (c.type) {
+      case CipherType.Login:
+        cipher.type = "login";
+        cipher.login_username = c.login.username;
+        cipher.login_password = c.login.password;
+        cipher.login_totp = c.login.totp;
 
-        if (c.fields) {
-            c.fields.forEach((f: any) => {
-                if (!cipher.fields) {
-                    cipher.fields = '';
-                } else {
-                    cipher.fields += '\n';
-                }
-
-                cipher.fields += ((f.name || '') + ': ' + f.value);
-            });
+        if (c.login.uris) {
+          cipher.login_uri = [];
+          c.login.uris.forEach((u) => {
+            cipher.login_uri.push(u.uri);
+          });
         }
-
-        switch (c.type) {
-            case CipherType.Login:
-                cipher.type = 'login';
-                cipher.login_username = c.login.username;
-                cipher.login_password = c.login.password;
-                cipher.login_totp = c.login.totp;
-
-                if (c.login.uris) {
-                    cipher.login_uri = [];
-                    c.login.uris.forEach(u => {
-                        cipher.login_uri.push(u.uri);
-                    });
-                }
-                break;
-            case CipherType.SecureNote:
-                cipher.type = 'note';
-                break;
-            default:
-                return;
-        }
-
-        return cipher;
+        break;
+      case CipherType.SecureNote:
+        cipher.type = "note";
+        break;
+      default:
+        return;
     }
+
+    return cipher;
+  }
 }

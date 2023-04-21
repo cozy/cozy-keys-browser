@@ -1,104 +1,134 @@
 @import "variables.scss";
 
 app-sync {
-    content {
-        .btn {
-            margin-bottom: 10px;
-        }
+  main {
+    .btn {
+      margin-bottom: 10px;
     }
+  }
 }
 
-app-password-generator .password-block {
-    font-size: $font-size-large;
-    font-family: $font-family-sans-serif;
-    margin: 20px;
-    box-sizing: border-box;
-    border-radius: .188rem;
-    border: .063rem solid $gray;
-    @include themify($themes) {
-        background-color: themed('boxBackgroundColor');
-    }
+app-generator .generated-block {
+  font-size: $font-size-large;
+  font-family: $font-family-sans-serif;
+  margin: 20px;
+  display: flex;
+  box-sizing: border-box;
+  border-radius: 0.188rem;
+  border: 0.063rem solid $gray;
+  @include themify($themes) {
+    background-color: themed("boxBackgroundColor");
+  }
 
-    .password-wrapper {
-        text-align: center;
+  .generated-wrapper {
+    text-align: left;
+    width: 100%;
+    min-width: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .action-buttons {
+    display: flex;
+    align-self: center;
+
+    button {
+      padding: 5px;
+      // margin: -5px -5px 5px 5px;
     }
+  }
+}
+
+app-generator .box-content-row:before {
+  width: 100%;
 }
 
 app-home {
-    position: fixed;
-    height: 100%;
-    width: 100%;
+  position: fixed;
+  height: 100%;
+  width: 100%;
 
-    .center-content {
-        margin-top: -50px;
-        height: calc(100% + 50px);
+  .center-content {
+    margin-top: -50px;
+    height: calc(100% + 50px);
+  }
+
+  img {
+    width: 284px;
+    margin: 0 auto;
+  }
+
+  p.lead {
+    margin: 30px 0;
+  }
+
+  .btn + .btn {
+    margin-top: 10px;
+  }
+
+  a.settings-icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+
+    @include themify($themes) {
+      color: themed("mutedColor");
     }
 
-    img {
-        width: 284px;
-        margin: 0 auto;
+    &:not(:hover):not(:focus) {
+      span {
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+      }
+    }
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+
+      @include themify($themes) {
+        color: themed("primaryColor");
+      }
+    }
+  }
+
+  .signup-link {
+    display: block;
+    text-align: center;
+    margin-top: 32px;
+    cursor: pointer;
+  }
+}
+
+app-private-mode-warning {
+  display: block;
+  padding-top: 1rem;
+}
+
+body.body-sm,
+body.body-xs {
+  app-home {
+    .center-content {
+      margin-top: 0;
+      height: 100%;
     }
 
     p.lead {
-        margin: 30px 0;
+      margin: 15px 0;
     }
-
-    .btn + .btn {
-        margin-top: 10px;
-    }
-
-    a.settings-icon {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-
-        @include themify($themes) {
-            color: themed('mutedColor');
-        }
-
-        span {
-            visibility: hidden;
-        }
-
-        &:hover {
-            text-decoration: none;
-
-            @include themify($themes) {
-                color: themed('primaryColor');
-            }
-
-            span {
-                visibility: visible;
-            }
-        }
-    }
-
-    .signup-link {
-        display: block;
-        text-align: center;
-        margin-top: 32px;
-        cursor: pointer;
-    }
-}
-
-body.body-sm, body.body-xs {
-    app-home {
-        .center-content {
-            margin-top: 0;
-            height: 100%;
-        }
-
-        p.lead {
-            margin: 15px 0;
-        }
-    }
+  }
 }
 
 body.body-full {
-    app-home {
-        .center-content {
-            margin-top: -80px;
-            height: calc(100% + 80px);
-        }
+  app-home {
+    .center-content {
+      margin-top: -80px;
+      height: calc(100% + 80px);
     }
+  }
 }

@@ -106,14 +106,17 @@
   "generatePasswordCopied": {
     "message": "Générer un mot de passe (copié)"
   },
+  "copyElementIdentifier": {
+    "message": "Copier le nom du champ personnalisé"
+  },
   "noMatchingLogins": {
     "message": "Aucun site correspondant."
   },
-  "vaultLocked": {
-    "message": "Le coffre est verrouillé."
+  "unlockVaultMenu": {
+    "message": "Déverrouillez votre coffre"
   },
-  "vaultLoggedOut": {
-    "message": "Le coffre est déconnecté."
+  "loginToVaultMenu": {
+    "message": "Connectez-vous à votre coffre"
   },
   "autoFillInfo": {
     "message": "Aucun identifiant enregistré pour remplir la page actuelle."
@@ -125,10 +128,16 @@
     "message": "vos mots de passe..."
   },
   "addIdentityExplanation": {
-    "message": "Remplissez automatiquement les formulaires avec vos adresses, email, téléphone, date de naissance..."
+    "message": "Simplifiez vous la vie, remplissez automatiquement les formulaires avec vos adresses, email, téléphone, date de naissance... 💪"
   },
   "addCardExplanation": {
-    "message": "Simplifiez vous la vie : ne recopiez plus vos numéros de carte de crédit, ne perdez plus votre code, laissez Cozy Pass remplir pour vous vos formulaires d'achats en ligne..."
+    "message": "Délectez vous de voir Cozy Pass remplir automatiquement ces horribles formulaires de paiements 🙂. Ne tapez plus vos numéros de carte de crédit, ne perdez plus votre code PIN."
+  },
+  "emptyDirectoryExplanation": {
+    "message": "Répertoire vide"
+  },
+  "emptyTrashExplanation": {
+    "message": "La corbeille est vide"
   },
   "addLogin": {
     "message": "Ajouter un identifiant"
@@ -154,8 +163,20 @@
   "continue": {
     "message": "Continuer"
   },
+  "sendVerificationCode": {
+    "message": "Envoyer un code de vérification à votre adresse email"
+  },
+  "sendCode": {
+    "message": "Envoyer le code"
+  },
+  "codeSent": {
+    "message": "Code envoyé"
+  },
   "verificationCode": {
     "message": "Code de vérification"
+  },
+  "confirmIdentity": {
+    "message": "Confirmez votre identité pour continuer."
   },
   "account": {
     "message": "Compte"
@@ -184,7 +205,7 @@
     "message": "Enregistrer"
   },
   "move": {
-    "message": "Move"
+    "message": "Déplacer"
   },
   "addFolder": {
     "message": "Ajouter un dossier"
@@ -250,6 +271,18 @@
   "length": {
     "message": "Longueur"
   },
+  "uppercase": {
+    "message": "Majuscules (A-Z)"
+  },
+  "lowercase": {
+    "message": "Minuscules (a-z)"
+  },
+  "numbers": {
+    "message": "Chiffres (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Caractères spéciaux (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Nombre de mots"
   },
@@ -283,6 +316,9 @@
   },
   "noItemsInList": {
     "message": "Aucun identifiant à afficher."
+  },
+  "noItemsSaved": {
+    "message": "Aucun identifiant."
   },
   "itemInformation": {
     "message": "Informations sur l'élément"
@@ -344,11 +380,11 @@
   "browserNotSupportClipboard": {
     "message": "Votre navigateur web ne supporte pas la copie rapide depuis le presse-papier. Copiez-le manuellement à la place."
   },
-  "verifyMasterPassword": {
-    "message": "Authentification"
+  "verifyIdentity": {
+    "message": "Confirmer votre identité"
   },
   "yourVaultIsLocked": {
-    "message": "Votre coffre est verrouillé, confirmez votre mot de passe pour continuer."
+    "message": "Votre coffre est verrouillé. Vérifiez votre identité pour continuer."
   },
   "unlock": {
     "message": "Déverrouiller"
@@ -459,6 +495,9 @@
   "verificationCodeRequired": {
     "message": "Le code de vérification est requis."
   },
+  "invalidVerificationCode": {
+    "message": "Code de vérification invalide"
+  },
   "valueCopied": {
     "message": "$VALUE$ copié",
     "description": "Value has been copied to the clipboard.",
@@ -563,6 +602,12 @@
   "overwritePasswordConfirmation": {
     "message": "Êtes-vous sûr de vouloir écraser le mot de passe actuel ?"
   },
+  "overwriteUsername": {
+    "message": "Remplacer le nom d'utilisateur"
+  },
+  "overwriteUsernameConfirmation": {
+    "message": "Êtes-vous sûr(e) de vouloir remplacer le nom d'utilisateur actuel ?"
+  },
   "searchFolder": {
     "message": "Rechercher dans le dossier"
   },
@@ -608,11 +653,11 @@
   "notificationAddSave": {
     "message": "Enregistrer"
   },
-  "notificationAddSavePassword": {
-    "message": "Enregistrer le mot de passe"
-  },
   "notificationDontSave": {
     "message": "Non, pas maintenant"
+  },
+  "notificationAddSavePassword": {
+    "message": "Enregistrer le mot de passe"
   },
   "disableChangedPasswordNotification": {
     "message": "Désactiver la notification de changement de mot de passe"
@@ -685,14 +730,14 @@
   "shared": {
     "message": "Partagé"
   },
-  "shareItem": {
-    "message": "Partager l'élément"
+  "moveToOrganization": {
+    "message": "Déplacer vers l'organisation"
   },
   "share": {
     "message": "Partager"
   },
   "movedItemToOrg": {
-    "message": "$ITEMNAME$ moved to $ORGNAME$",
+    "message": "$ITEMNAME$ a été déplacé vers $ORGNAME$",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -705,7 +750,7 @@
     }
   },
   "moveToOrgDesc": {
-    "message": "Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved."
+    "message": "Choisissez une organisation vers laquelle vous souhaitez déplacer cet élément. Déplacer un élément vers une organisation transfère la propriété de l'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu'il aura été déplacé."
   },
   "learnMore": {
     "message": "En savoir plus"
@@ -815,6 +860,15 @@
   "disableAutoTotpCopyDesc": {
     "message": "Si une clé d'authentification est rattachée à votre identifiant, alors le code de vérification TOTP est automatiquement copié dans le presse-papiers lorsque vous renseignez l'identifiant."
   },
+  "disableAutoBiometricsPrompt": {
+    "message": "Ne pas demander de biométrie au démarrage"
+  },
+  "premiumRequired": {
+    "message": "Adhésion Premium requise"
+  },
+  "premiumRequiredDesc": {
+    "message": "Une adhésion premium est requise pour utiliser cette fonctionnalité."
+  },
   "enterVerificationCodeApp": {
     "message": "Saisissez le code de vérification à 6 chiffres depuis votre application d'authentification."
   },
@@ -855,7 +909,7 @@
     "message": "Poursuivez la vérification 2FA WebAuthn dans le nouvel onglet."
   },
   "webAuthnNewTabOpen": {
-    "message": "Open new tab"
+    "message": "Ouvrir un nouvel onglet"
   },
   "webAuthnAuthenticate": {
     "message": "Authentifier WebAuthn"
@@ -956,11 +1010,23 @@
   "enableAutoFillOnPageLoadDesc": {
     "message": "Si un formulaire de connexion est détecté, remplir automatiquement les champs au chargement de la page web."
   },
-  "enableAutoTotpCopyOnAutoFill": {
-    "message": "Automatic TOTP Copy after Page Load"
+  "experimentalFeature": {
+    "message": "Ceci est actuellement une fonctionnalité expérimentale. À utiliser avec prudence."
   },
-  "enableAutoTotpCopyOnAutoFillDesc": {
-    "message": "If Auto-fill On Page Load is enabled, the TOTP verification code is automatically copied to your clipboard after loading the web page. This is overridden by Disable Automatic TOTP Copy."
+  "defaultAutoFillOnPageLoad": {
+    "message": "Paramètre de saisie automatique par défaut pour les identifiants"
+  },
+  "defaultAutoFillOnPageLoadDesc": {
+    "message": "Après avoir activé le remplissage automatique au chargement de la page, vous pourrez activer ou désactiver la fonctionnalité pour chaque identifiant. Ceci est le paramètre par défaut pour les identifiants qui ne sont pas configurés individuellement."
+  },
+  "itemAutoFillOnPageLoad": {
+    "message": "Remplissage automatique au chargement de la page (si activé dans les options)"
+  },
+  "autoFillOnPageLoadUseDefault": {
+    "message": "Utiliser le paramètre par défaut"
+  },
+  "autoFillOnPageLoadYes": {
+    "message": "Remplissage automatique au chargement de la page"
   },
   "enableInPageMenu": {
     "message": "Activer le menu de sélection dans la page web"
@@ -992,8 +1058,8 @@
   "inPageMenuOnlyThisField": {
     "message": "seulement ce champ (Ctrl+Enter)"
   },
-  "experimentalFeature": {
-    "message": "Ceci est actuellement une fonctionnalité expérimentale. À utiliser avec prudence."
+  "autoFillOnPageLoadNo": {
+    "message": "Ne pas remplir automatiquement au chargement de la page"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Default autofill setting for login items"
@@ -1028,8 +1094,8 @@
   "commandLockVaultDesc": {
     "message": "Verrouiller le coffre"
   },
-  "privateModeMessage": {
-    "message": "Malheureusement cette fenêtre n'est pas disponible en navigation privée pour ce navigateur."
+  "privateModeWarning": {
+    "message": "La prise en charge de la navigation privée est expérimentale et certaines fonctionnalités sont limitées."
   },
   "customFields": {
     "message": "Champs personnalisés"
@@ -1054,6 +1120,14 @@
   },
   "cfTypeBoolean": {
     "message": "Booléen"
+  },
+  "cfTypeLinked": {
+    "message": "Lié",
+    "description": "This describes a field that is 'linked' (tied) to another field."
+  },
+  "linkedValue": {
+    "message": "Valeur liée",
+    "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
     "message": "Le fait de cliquer à l'extérieur de la fenêtre pop-up pour vérifier votre e-mail avec votre code de vérification fermera cette pop-up. Voulez-vous ouvrir cette pop-up dans une nouvelle fenêtre pour qu'elle ne soit pas fermée ?"
@@ -1156,6 +1230,9 @@
   },
   "lastName": {
     "message": "Nom"
+  },
+  "fullName": {
+    "message": "Nom et prénom"
   },
   "identityName": {
     "message": "Nom complet"
@@ -1276,7 +1353,12 @@
     "message": "Ce mot de passe n'a été trouvé dans aucune fuite de données connue. Il semble sécurisé."
   },
   "baseDomain": {
-    "message": "Domaine de base"
+    "message": "Domaine de base",
+    "description": "Domain name. Ex. website.com"
+  },
+  "domainName": {
+    "message": "Nom de domaine",
+    "description": "Domain name. Ex. website.com"
   },
   "host": {
     "message": "Hôte",
@@ -1387,12 +1469,6 @@
   "invalidPin": {
     "message": "Code PIN invalide."
   },
-  "verifyPin": {
-    "message": "Saisie du code PIN"
-  },
-  "yourVaultIsLockedPinCode": {
-    "message": "Votre coffre est verrouillé. Saisissez votre code PIN pour continuer."
-  },
   "unlockWithBiometrics": {
     "message": "Déverrouiller par biométrie"
   },
@@ -1418,7 +1494,7 @@
     "message": "Cloner l’élément"
   },
   "clone": {
-    "message": "Cloner"
+    "message": "Cloné"
   },
   "passwordGeneratorPolicyInEffect": {
     "message": "Une ou plusieurs politiques d'organisation affectent les paramètres de votre générateur."
@@ -1549,7 +1625,7 @@
     "message": "Démarrer l'application de bureau Bitwarden."
   },
   "startDesktopDesc": {
-    "message": "L'application de bureau Bitwarden doit être démarrée avant que cette fonction puisse être utilisée."
+    "message": "L'application de bureau Bitwarden doit être démarrée avant que le déverrouillage par biométrie puisse être utilisé."
   },
   "errorEnableBiometricTitle": {
     "message": "Impossible d'activer la biométrie"
@@ -1637,7 +1713,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCountReached": {
-    "message": "Nombre maximum d'accès atteint"
+    "message": "Nombre maximum d'accès atteint",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "expired": {
     "message": "Expiré"
@@ -1838,9 +1915,149 @@
     "message": "Cette action est protégée. Pour continuer, veuillez ressaisir votre mot de passe maître pour vérifier votre identité."
   },
   "emailVerificationRequired": {
-    "message": "Email Verification Required"
+    "message": "Vérification de l'adresse e-mail nécessaire"
   },
   "emailVerificationRequiredDesc": {
-    "message": "You must verify your email to use this feature. You can verify your email in the web vault."
+    "message": "Vous devez vérifier votre adresse e-mail pour utiliser cette fonctionnalité. Vous pouvez vérifier votre adresse e-mail dans le coffre web."
+  },
+  "updatedMasterPassword": {
+    "message": "Mot de passe maître mis à jour"
+  },
+  "updateMasterPassword": {
+    "message": "Mettre à jour le mot de passe maître"
+  },
+  "updateMasterPasswordWarning": {
+    "message": "Votre mot de passe maître a récemment été modifié par un administrateur de votre organisation. Pour pouvoir accéder au coffre-fort, vous devez mettre à jour votre mot de passe maître maintenant. Poursuivre vous déconnectera de votre session actuelle, vous obligeant à vous reconnecter. Les sessions actives sur d'autres appareils peuvent rester actives jusqu'à une heure."
+  },
+  "resetPasswordPolicyAutoEnroll": {
+    "message": "Inscription automatique"
+  },
+  "resetPasswordAutoEnrollInviteWarning": {
+    "message": "Cette organisation a une politique d'entreprise qui vous inscrira automatiquement à la réinitialisation du mot de passe. L'inscription permettra aux administrateurs de l'organisation de changer votre mot de passe maître."
+  },
+  "selectFolder": {
+    "message": "Sélectionnez un dossier..."
+  },
+  "ssoCompleteRegistration": {
+    "message": "Afin de terminer la connexion avec SSO, veuillez définir un mot de passe maître pour accéder à votre coffre et le protéger."
+  },
+  "hours": {
+    "message": "Heures"
+  },
+  "minutes": {
+    "message": "Minutes"
+  },
+  "vaultTimeoutPolicyInEffect": {
+    "message": "Les politiques de votre organisation affectent le délai d'expiration de votre coffre-fort. Le délai d'expiration maximal autorisé est de $HOURS$ heure(s) et $MINUTES$ minute(s)",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutToLarge": {
+    "message": "Le délai d'expiration de votre coffre dépasse les restrictions définies par votre organisation."
+  },
+  "vaultExportDisabled": {
+    "message": "Export du coffre désactivé"
+  },
+  "personalVaultExportPolicyInEffect": {
+    "message": "Une ou plusieurs politiques d'organisation vous empêchent d'exporter votre coffre personnel."
+  },
+  "copyCustomFieldNameInvalidElement": {
+    "message": "Aucun élément de formulaire valide n'a pu être identifié. Essayez plutôt d'inspecter le HTML."
+  },
+  "copyCustomFieldNameNotUnique": {
+    "message": "Aucun identifiant unique trouvé."
+  },
+  "convertOrganizationEncryptionDesc": {
+    "message": "$ORGANIZATION$ utilise SSO avec un serveur de clés auto-hébergé. Un mot de passe maître n'est plus nécessaire aux membres de cette organisation pour se connecter.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "leaveOrganization": {
+    "message": "Quitter l'organisation"
+  },
+  "removeMasterPassword": {
+    "message": "Supprimer le mot de passe maître"
+  },
+  "removedMasterPassword": {
+    "message": "Mot de passe maître supprimé."
+  },
+  "leaveOrganizationConfirmation": {
+    "message": "Êtes-vous sûr·e de vouloir quitter cette organisation ?"
+  },
+  "leftOrganization": {
+    "message": "Vous avez quitté l'organisation."
+  },
+  "toggleCharacterCount": {
+    "message": "Activer/désactiver le compteur de caractères"
+  },
+  "sessionTimeout": {
+    "message": "Votre session a expiré. Veuillez revenir en arrière et essayer de vous connecter à nouveau."
+  },
+  "exportingPersonalVaultTitle": {
+    "message": "Export du coffre personnel"
+  },
+  "exportingPersonalVaultDescription": {
+    "message": "Seuls les éléments du coffre personnel associé à l'adresse e-mail $EMAIL$ seront exportés. Les éléments du coffre de l'organisation ne seront pas inclus.",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "error": {
+    "message": "Erreur"
+  },
+  "regenerateUsername": {
+    "message": "Régénérer un nom d'utilisateur"
+  },
+  "generateUsername": {
+    "message": "Générer un nom d'utilisateur"
+  },
+  "usernameType": {
+    "message": "Type de nom d'utilisateur"
+  },
+  "plusAddressedEmail": {
+    "message": "E-mail suffixé",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
+  },
+  "plusAddressedEmailDesc": {
+    "message": "Utilisez les capacités de sous-adressage de votre fournisseur d'e-mail."
+  },
+  "catchallEmail": {
+    "message": "Collecteur d'e-mail"
+  },
+  "catchallEmailDesc": {
+    "message": "Utilisez la boîte de réception du collecteur configurée de votre domaine."
+  },
+  "random": {
+    "message": "Aléatoire"
+  },
+  "randomWord": {
+    "message": "Mots aléatoire"
+  },
+  "websiteName": {
+    "message": "Nom du site Web"
+  },
+  "whatWouldYouLikeToGenerate": {
+    "message": "Que souhaitez-vous générer ?"
+  },
+  "passwordType": {
+    "message": "Type de mot de passe"
+  },
+  "service": {
+    "message": "Service"
   }
 }

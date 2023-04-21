@@ -1,21 +1,29 @@
 <header>
-    <div class="left">
-        <a routerLink="/tabs/settings">
-            <span class="header-icon" title="{{'back' | i18n}}"><i class="icon-cozy icon-back"></i></span>
-        </a>
-    </div>
-    <div class="center">
-        <span class="title">{{'sync' | i18n}}</span>
-    </div>
-    <div class="right"></div>
+  <div class="left">
+    <a routerLink="/tabs/settings">
+      <span class="header-icon" title="{{ 'back' | i18n }}"
+        ><i class="icon-cozy icon-back"></i
+      ></span>
+    </a>
+  </div>
+  <h1 class="center">
+    <span class="title">{{ "sync" | i18n }}</span>
+  </h1>
+  <div class="right"></div>
 </header>
-<content>
-    <div class="content center-content">
-        <button type="button" class="btn block primary" (click)="sync()" #syncBtn [disabled]="syncBtn.loading"
-            [appApiAction]="syncPromise">
-            <span [hidden]="syncBtn.loading">{{'syncVaultNow' | i18n}}</span>
-            <i class="fa fa-spinner fa-lg fa-spin" [hidden]="!syncBtn.loading" aria-hidden="true"></i>
-        </button>
-        <p class="text-center text-muted small">{{'lastSync' | i18n}} {{lastSync}}</p>
-    </div>
-</content>
+<main tabindex="-1">
+  <div class="content center-content">
+    <button
+      type="button"
+      class="btn block primary"
+      (click)="sync()"
+      #syncBtn
+      [disabled]="syncBtn.loading"
+      [appApiAction]="syncPromise"
+    >
+      <span [hidden]="syncBtn.loading">{{ "syncVaultNow" | i18n }}</span>
+      <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!syncBtn.loading" aria-hidden="true"></i>
+    </button>
+    <p class="text-center text-muted small">{{ "lastSync" | i18n }} {{ lastSync }}</p>
+  </div>
+</main>

@@ -1,116 +1,119 @@
-require('./bar.scss');
+require("./bar.scss");
 
-// See original file:
-// https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/notification/bar.js
-document.addEventListener('DOMContentLoaded', () => {
-    var i18n = {};
-    var lang = window.navigator.language;
+/** This file is haevyly personnalized by Cozy
+ * do not try to merge upstream.
+ * See original file:
+ * https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/notification/bar.js
+ */
+document.addEventListener("DOMContentLoaded", () => {
+  let i18n = {};
+  let lang = window.navigator.language;
 
-    i18n.appName = chrome.i18n.getMessage('appName');
-    i18n.close = chrome.i18n.getMessage('close');
-    i18n.yes = chrome.i18n.getMessage('yes');
-    i18n.never = chrome.i18n.getMessage('never');
-    i18n.notificationAddSave = chrome.i18n.getMessage('notificationAddSave');
-    i18n.notificationDontSave = chrome.i18n.getMessage('notificationDontSave');
-    i18n.notificationAddDesc = chrome.i18n.getMessage('notificationAddDesc');
-    i18n.notificationChangeSave = chrome.i18n.getMessage('notificationChangeSave');
-    i18n.notificationChangeDesc = chrome.i18n.getMessage('notificationChangeDesc');
-    lang = chrome.i18n.getUILanguage();
+  i18n.appName = chrome.i18n.getMessage("appName");
+  i18n.close = chrome.i18n.getMessage("close");
+  i18n.yes = chrome.i18n.getMessage("yes");
+  i18n.never = chrome.i18n.getMessage("never");
+  i18n.notificationAddSave = chrome.i18n.getMessage("notificationAddSave");
+  i18n.notificationDontSave = chrome.i18n.getMessage("notificationDontSave");
+  i18n.notificationAddDesc = chrome.i18n.getMessage("notificationAddDesc");
+  i18n.notificationChangeSave = chrome.i18n.getMessage("notificationChangeSave");
+  i18n.notificationChangeDesc = chrome.i18n.getMessage("notificationChangeDesc");
+  lang = chrome.i18n.getUILanguage(); // eslint-disable-line
 
-    // delay 50ms so that we get proper body dimensions
-    setTimeout(load, 50);
+  // delay 50ms so that we get proper body dimensions
+  setTimeout(load, 50);
 
+  function load() {
+    const body = document.querySelector("body"),
+      bodyRect = body.getBoundingClientRect();
 
-    function load() {
+    // i18n
+    body.classList.add("lang-" + lang.slice(0, 2));
 
-        const body = document.querySelector('body'),
-            bodyRect = body.getBoundingClientRect();
+    document.getElementById("logo-link").title = i18n.appName;
 
-        // i18n
-        body.classList.add('lang-' + lang.slice(0, 2));
+    // Set text in popup
+    document.querySelector("#template-notif .dont-save").textContent = i18n.notificationDontSave;
 
-        document.getElementById('logo-link').title = i18n.appName;
+    // NOTE: the info context was removed in absence of use-case yet.
+    // See original file commit at the beggining of this fine.
+    const addContext = getQueryVariable("add");
+    const changeContext = getQueryVariable("change");
 
-        // Set text in popup
-        document.querySelector('#template-notif .dont-save').textContent = i18n.notificationDontSave;
-
-        // NOTE: the info context was removed in absence of use-case yet.
-        // See original file commit at the beggining of this fine.
-        const addContext = getQueryVariable('add');
-        const changeContext = getQueryVariable('change');
-
-        if (addContext) {
-            document.querySelector('#template-notif .add-or-change').textContent = i18n.notificationAddSave;
-            document.querySelector('#template-notif .desc-text').textContent = i18n.notificationAddDesc;
-        } else if (changeContext) {
-            document.querySelector('#template-notif .add-or-change').textContent = i18n.notificationChangeSave;
-            document.querySelector('#template-notif .desc-text').textContent = i18n.notificationChangeDesc;
-        } else {
-            return;
-        }
-
-        // Set DOM content
-        setContent(document.getElementById('template-notif'));
-
-        // Set listeners
-        // TODO: the checkboxes options are not active yet
-        const addOrChangeButton = document.querySelector('#template-notif-clone .add-or-change'),
-            dontSaveButton = document.querySelector('#template-notif-clone .dont-save');
-
-        addOrChangeButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            const command = changeContext ? 'bgChangeSave' : 'bgAddSave';
-            sendPlatformMessage({
-                command: command
-            });
-        });
-
-        dontSaveButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            sendPlatformMessage({
-                command: 'bgCloseNotificationBar'
-            });
-        });
-        sendAdjustBodyHeight(body);
+    if (addContext) {
+      document.querySelector("#template-notif .add-or-change").textContent =
+        i18n.notificationAddSave;
+      document.querySelector("#template-notif .desc-text").textContent = i18n.notificationAddDesc;
+    } else if (changeContext) {
+      document.querySelector("#template-notif .add-or-change").textContent =
+        i18n.notificationChangeSave;
+      document.querySelector("#template-notif .desc-text").textContent =
+        i18n.notificationChangeDesc;
+    } else {
+      return;
     }
 
-    // Adjust height dynamically
-    function sendAdjustBodyHeight(body) {
-        sendPlatformMessage({
-            command: 'bgAdjustNotificationBar',
-            data: {
-                height: body.scrollHeight + 15 // Add 15px for margin
-            }
-        });
+    // Set DOM content
+    setContent(document.getElementById("template-notif"));
+
+    // Set listeners
+    // TODO: the checkboxes options are not active yet
+    const addOrChangeButton = document.querySelector("#template-notif-clone .add-or-change"),
+      dontSaveButton = document.querySelector("#template-notif-clone .dont-save");
+
+    addOrChangeButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      const command = changeContext ? "bgChangeSave" : "bgAddSave";
+      sendPlatformMessage({
+        command: command,
+      });
+    });
+
+    dontSaveButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      sendPlatformMessage({
+        command: "bgCloseNotificationBar",
+      });
+    });
+    sendAdjustBodyHeight(body);
+  }
+
+  // Adjust height dynamically
+  function sendAdjustBodyHeight(body) {
+    sendPlatformMessage({
+      command: "bgAdjustNotificationBar",
+      data: {
+        height: body.scrollHeight + 15, // Add 15px for margin
+      },
+    });
+  }
+
+  function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split("=");
+      if (pair[0] === variable) {
+        return pair[1];
+      }
     }
 
-    function getQueryVariable(variable) {
-        var query = window.location.search.substring(1);
-        var vars = query.split('&');
+    return null;
+  }
 
-        for (var i = 0; i < vars.length; i++) {
-            var pair = vars[i].split('=');
-            if (pair[0] === variable) {
-                return pair[1];
-            }
-        }
-
-        return null;
+  function setContent(element) {
+    const content = document.getElementById("content");
+    while (content.firstChild) {
+      content.removeChild(content.firstChild);
     }
 
-    function setContent(element) {
-        const content = document.getElementById('content');
-        while (content.firstChild) {
-            content.removeChild(content.firstChild);
-        }
+    var newElement = element.cloneNode(true);
+    newElement.id = newElement.id + "-clone";
+    content.appendChild(newElement);
+  }
 
-        var newElement = element.cloneNode(true);
-        newElement.id = newElement.id + '-clone';
-        content.appendChild(newElement);
-    }
-
-    function sendPlatformMessage(msg) {
-        chrome.runtime.sendMessage(msg);
-    }
-
+  function sendPlatformMessage(msg) {
+    chrome.runtime.sendMessage(msg);
+  }
 });

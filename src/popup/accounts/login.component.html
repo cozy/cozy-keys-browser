@@ -1,51 +1,80 @@
 <form #form (ngSubmit)="submit()" [appApiAction]="formPromise">
-    <header>
-        <div class="left">
-            <a routerLink="/home">{{'cancel' | i18n}}</a>
+  <header>
+    <div class="left">
+      <a routerLink="/home">{{ "cancel" | i18n }}</a>
+    </div>
+    <h1 class="center">
+      <span class="title">{{ "appName" | i18n }}</span>
+    </h1>
+    <div class="right"></div>
+  </header>
+  <main tabindex="-1">
+    <div class="box login-box">
+      <div class="box-content login-content">
+        <div class="box-content-row" appBoxRow>
+          <label for="cozyUrl">{{ "cozyUrl" | i18n }}</label>
+          <input
+            id="cozyUrl"
+            type="text"
+            name="CozyUrl"
+            [(ngModel)]="cozyUrl"
+            required
+            inputmode="url"
+            placeholder="ex. https://claude.mycozy.cloud"
+            appInputVerbatim="false"
+          />
         </div>
-        <div class="center">
-            <span class="title">{{'appName' | i18n}}</span>
+        <div class="box-content-row box-content-row-flex" appBoxRow>
+          <div class="row-main">
+            <label for="masterPassword">{{ "masterPass" | i18n }}</label>
+            <input
+              id="masterPassword"
+              type="{{ showPassword ? 'text' : 'password' }}"
+              name="MasterPassword"
+              class="monospaced"
+              [(ngModel)]="masterPassword"
+              required
+              appInputVerbatim
+            />
+          </div>
+          <div class="action-buttons">
+            <button
+              type="button"
+              class="row-btn"
+              appStopClick
+              appBlurClick
+              appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+              (click)="togglePassword()"
+              [attr.aria-pressed]="showPassword"
+            >
+              <i
+                class="bwi bwi-lg"
+                [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
+                aria-hidden="true"
+              ></i>
+            </button>
+          </div>
         </div>
-        <div class="right">
+        <div class="box-content-row" [hidden]="!showCaptcha()">
+          <iframe id="hcaptcha_iframe" height="80"></iframe>
         </div>
-    </header>
-    <content>
-        <div class="box login-box">
-            <div class="box-content login-content">
-                <div class="box-content-row" appBoxRow>
-                    <label for="cozyUrl">{{'cozyUrl' | i18n}}</label>
-                    <input id="cozyUrl" type="text" name="CozyUrl" [(ngModel)]="cozyUrl" required inputmode="url"
-                        placeholder="ex. https://claude.mycozy.cloud" appInputVerbatim="false">
-                </div>
-                <div class="box-content-row box-content-row-flex" appBoxRow>
-                    <div class="row-main">
-                        <label for="masterPassword">{{'masterPass' | i18n}}</label>
-                        <input id="masterPassword" type="{{showPassword ? 'text' : 'password'}}" name="MasterPassword"
-                            class="monospaced" [(ngModel)]="masterPassword" required
-                            appInputVerbatim>
-                    </div>
-                    <div class="action-buttons">
-                        <a class="row-btn" href="#" appStopClick appBlurClick
-                            appA11yTitle="{{'toggleVisibility' | i18n}}" (click)="togglePassword()">
-                            <i class="fa fa-lg" [ngClass]="{'fa-eye': !showPassword, 'fa-eye-slash': showPassword}"
-                                aria-hidden="true"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
+      </div>
 
-            <div class="content">
-                <button class="btn primary block" type="submit" appBlurClick [disabled]="form.loading">
-                    <span [hidden]="form.loading">{{'login' | i18n}}</span>
-                    <i class="fa fa-spinner fa-lg fa-spin" [hidden]="!form.loading" aria-hidden="true"></i>
-                </button>
-            </div>
+      <div class="content">
+        <button class="btn primary block" type="submit" appBlurClick [disabled]="form.loading">
+          <span [hidden]="form.loading">{{ "login" | i18n }}</span>
+          <i
+            class="bwi bwi-spinner bwi-lg bwi-spin"
+            [hidden]="!form.loading"
+            aria-hidden="true"
+          ></i>
+        </button>
+      </div>
 
-            <div class="box-content-row box-content-row-flex">
-                <a style="cursor: pointer" (click)="forgotPassword()">{{'forgotPassword' | i18n}}</a>
-            </div>
-        </div>
-
-
-    </content>
+      <div class="box-content-row box-content-row-flex">
+        <a style="cursor: pointer" (click)="forgotPassword()">{{ "forgotPassword" | i18n }}</a>
+      </div>
+    </div>
+    <app-private-mode-warning></app-private-mode-warning>
+  </main>
 </form>
