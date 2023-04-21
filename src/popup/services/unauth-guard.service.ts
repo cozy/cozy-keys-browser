@@ -49,5 +49,4 @@ export class UnauthGuardService extends BaseUnauthGuardService implements CanAct
     // return this.router.createUrlTree([this.homepage]);
     this.historyService.gotoCurrentUrl();
   }
-
 }
