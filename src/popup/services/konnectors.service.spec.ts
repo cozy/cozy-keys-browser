@@ -10,7 +10,6 @@ import BrowserStorageService from "../../services/browserStorage.service";
 
 import { KonnectorsService } from "./konnectors.service";
 
-
 const buildKonnectors = (konnectors: any[]) => {
   return konnectors.map((konnector) => {
     return {
