@@ -14,9 +14,10 @@ import { SendService } from "jslib-common/abstractions/send.service";
 
 import { StateService } from "../../services/abstractions/state.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
-
 /** Start Cozy imports */
+/* eslint-disable */
 import { HistoryService } from "../services/history.service";
+/* eslint-enable */
 /** End Cozy imports */
 
 @Component({

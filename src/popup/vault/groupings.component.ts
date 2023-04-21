@@ -22,10 +22,11 @@ import { BrowserApi } from "../../browser/browserApi";
 import { StateService } from "../../services/abstractions/state.service";
 import { CozyClientService } from "../services/cozyClient.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
-
 /** Start Cozy imports */
+/* eslint-disable */
 import { HistoryService } from "../services/history.service";
 import { HostListener } from "@angular/core";
+/* eslint-enable */
 /** End Cozy imports */
 
 const ComponentId = "GroupingsComponent";

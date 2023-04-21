@@ -18,9 +18,10 @@ import { SendView } from "jslib-common/models/view/sendView";
 import { BrowserComponentState } from "../../models/browserComponentState";
 import { StateService } from "../../services/abstractions/state.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
-
 /** Start Cozy imports */
+/* eslint-disable */
 import { HistoryService } from "../services/history.service";
+/* eslint-enable */
 /** End Cozy imports */
 
 const ComponentId = "SendTypeComponent";

@@ -26,9 +26,10 @@ import { BrowserApi } from "../../browser/browserApi";
 import { AutofillService } from "../../services/abstractions/autofill.service";
 import { CozyClientService } from "../services/cozyClient.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
-
 /** Start Cozy imports */
+/* eslint-disable */
 import { HistoryService } from "../services/history.service";
+/* eslint-enable */
 /** End Cozy imports */
 
 const BroadcasterSubscriptionId = "CurrentTabComponent";

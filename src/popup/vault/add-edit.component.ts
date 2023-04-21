@@ -134,7 +134,7 @@ export class AddEditComponent extends BaseAddEditComponent {
         // the cipher was already in edition and popup has been closed or navigation in pwd generator
         // we have to select the correct pwd
         // first retrive data form url
-        var histCipher = JSON.parse(params.tempCipher);
+        const histCipher = JSON.parse(params.tempCipher);
         this.initialPwd = histCipher.initialPwd;
         delete histCipher.initialPwd;
         if (histCipher.login.password !== this.cipher.login.password) {

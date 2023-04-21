@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
+
 import { CipherView } from "jslib-common/models/view/cipherView";
+
 import { BrowserApi } from "../../browser/browserApi";
 import { StateService } from "../../services/state.service";
 
@@ -25,8 +27,8 @@ export class HistoryService {
   private homepage = "tabs/current";
   private defaultHist: string[] = ["/tabs/current", "/tabs/vault"];
   private rootPaths: string[] = ["/tabs/vault", "/tabs/generator", "/tabs/settings"];
-  private currentUrlInProgress: boolean = false;
-  private previousUrlInProgress: boolean = false;
+  private currentUrlInProgress = false;
+  private previousUrlInProgress = false;
   private stateService: StateService;
 
   constructor(private router: Router) {
@@ -61,7 +63,7 @@ export class HistoryService {
     });
   }
 
-  public async init() {
+  async init() {
     const histStr: string = await this.stateService.getHistoryState();
     if (histStr === "/" || !histStr) {
       this.hist = this.defaultHist.slice();
@@ -79,7 +81,7 @@ export class HistoryService {
     this.hist = retrievedData.hist;
   }
 
-  public gotoPreviousUrl(steps: number = 1) {
+  gotoPreviousUrl(steps = 1) {
     this.previousUrlInProgress = true;
     if (steps > 1) {
       this.hist.shift();
@@ -94,13 +96,13 @@ export class HistoryService {
     }
   }
 
-  public gotoCurrentUrl() {
+  gotoCurrentUrl() {
     this.currentUrlInProgress = true;
     this.gotoToUrl(this.hist[0]);
   }
 
   private gotoToUrl(urlStr: any) {
-    var tempCipher: CipherView = undefined;
+    let tempCipher: CipherView = undefined;
     if (typeof urlStr !== "string") {
       tempCipher = urlStr.tempCipher;
       urlStr = urlStr.url;
@@ -132,13 +134,13 @@ export class HistoryService {
     );
   }
 
-  public saveTempCipherInHistory(cipher: any) {
+  saveTempCipherInHistory(cipher: any) {
     const cleanedCipher: any = cleanCipher(cipher);
     this.updateQueryParamInCurrentUrl("tempCipher", JSON.stringify(cleanedCipher));
   }
 
-  public updateQueryParamInCurrentUrl(key: string, value: string) {
-    const words = this.hist[0].split("?"); // words[0]=>url | words[1] => queryParams string
+  updateQueryParamInCurrentUrl(key: string, value: string) {
+    const words = this.hist[0].split("?"); // words[0]=>url | words[1] => queryParams string
     const params = new URLSearchParams(words[1]);
     const queryParamsObj: any = {};
     for (const [key, value] of params) {
@@ -153,12 +155,12 @@ export class HistoryService {
     this.updateCurrentUrl(words[0] + (queryParamSt !== "" ? "?" + queryParamSt : ""));
   }
 
-  public async updateCurrentUrl(url: string) {
+  async updateCurrentUrl(url: string) {
     this.hist[0] = url;
     await this.saveHistoryState();
   }
 
-  public async updateTimeStamp() {
+  async updateTimeStamp() {
     await this.saveHistoryState();
   }
 }
