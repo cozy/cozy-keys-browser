@@ -339,16 +339,15 @@ export default class RuntimeBackground {
           { frameId: sender.frameId }
         );
         break;
-      case "bgGetAutofillMenuScript":
+      case "bgGetAutofillMenuScript": {
         // If goes here : means that addon has just been connected (page was already loaded)
-        that = this;
-        this.syncService.fullSync(false).then(async () => {
-          const script = await that.autofillService.generateFieldsForInPageMenuScripts(
+        const activateMenu = async () => {
+          const script = await this.autofillService.generateFieldsForInPageMenuScripts(
             msg.details,
             true,
             sender.frameId
           );
-          await that.autofillService.doAutoFillActiveTab(
+          await this.autofillService.doAutoFillActiveTab(
             [
               {
                 frameId: sender.frameId,
@@ -360,25 +359,11 @@ export default class RuntimeBackground {
             ],
             true
           );
-        });
-        script = await this.autofillService.generateFieldsForInPageMenuScripts(
-          msg.details,
-          true,
-          sender.frameId
-        );
-        await this.autofillService.doAutoFillActiveTab(
-          [
-            {
-              frameId: sender.frameId,
-              tab: sender.tab,
-              details: msg.details,
-              fieldsForInPageMenuScripts: script,
-              sender: "notifBarForInPageMenu", // to prepare a fillscript for the in-page-menu
-            },
-          ],
-          true
-        );
+        }
+        this.syncService.fullSync(false).then(activateMenu.bind(this));
+        await activateMenu()
         break;
+      }
       case "collectPageDetailsResponse":
         switch (msg.sender) {
           case "notificationBar":
