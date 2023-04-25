@@ -1,0 +1,65 @@
+<div class="content org-filter-content" *ngIf="loaded && show">
+  <button
+    #toggleVaults
+    class="org-filter"
+    (click)="openOverlay()"
+    aria-haspopup="menu"
+    aria-controls="cdk-overlay-container"
+    [attr.aria-expanded]="isOpen"
+    [attr.aria-label]="vaultFilterDisplay"
+  >
+    {{ vaultFilterDisplay | ellipsis: 45 }}&nbsp;
+    <i
+      class="bwi bwi-sm"
+      aria-hidden="true"
+      [ngClass]="{ 'bwi-angle-down': !isOpen, 'bwi-chevron-up': isOpen }"
+    ></i>
+  </button>
+  <ng-template class="vault-select-container" #vaultSelectorTemplate>
+    <div
+      class="vault-select"
+      [@transformPanel]="'open'"
+      cdkTrapFocus
+      cdkTrapFocusAutoCapture
+      role="dialog"
+      aria-modal="true"
+    >
+      <button
+        appStopClick
+        appBlurClick
+        (click)="selectAllVaults()"
+        [ngClass]="{ active: !myVaultOnly && !selectOrganizationId }"
+      >
+        <i class="bwi bwi-fw bwi-filter" aria-hidden="true"></i>
+        &nbsp;{{ "allVaults" | i18n }}
+      </button>
+      <button
+        *ngIf="!enforcePersonalOwnwership"
+        appStopClick
+        appBlurClick
+        (click)="selectMyVault()"
+      >
+        <i class="bwi bwi-fw bwi-user" aria-hidden="true"></i>
+        &nbsp;{{ "myVault" | i18n }}
+      </button>
+      <button
+        *ngFor="let organization of organizations"
+        appStopClick
+        appBlurClick
+        (click)="selectOrganization(organization)"
+      >
+        <i
+          *ngIf="organization.planProductType !== 1"
+          class="bwi bwi-fw bwi-business"
+          aria-hidden="true"
+        ></i>
+        <i
+          *ngIf="organization.planProductType === 1"
+          class="bwi bwi-fw bwi-family"
+          aria-hidden="true"
+        ></i>
+        <span>&nbsp;{{ organization.name | ellipsis: 21:true }}</span>
+      </button>
+    </div>
+  </ng-template>
+</div>

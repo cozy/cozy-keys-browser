@@ -444,6 +444,9 @@ li.active .icon-cozy-inline > svg {
   height: 75px;
 }
 
+.invisible {
+  visibility: hidden;
+}
 [hidden] {
   display: none !important;
 }

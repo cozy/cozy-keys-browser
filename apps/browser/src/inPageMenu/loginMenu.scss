@@ -291,6 +291,18 @@ button {
   display: block;
 }
 
+.icon-eye {
+  background-image: url(./images/icon-eye.svg); 
+  width: 16px;
+  height: 16px;
+}
+
+.icon-hide {
+  background-image: url(./images/icon-hide.svg);
+  width: 16px;
+  height: 16px;
+}
+
 @media (max-width: 300px) {
   #title-content {
     font-size: 0.9em;

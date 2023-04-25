@@ -53,7 +53,7 @@
       [innerHTML]="username | colorPassword"
       appSelectCopy
     ></div>
-    <div class="action-buttons">
+    <div class="action-buttons" #form [appApiAction]="usernameGeneratingPromise">
       <button
         type="button"
         class="row-btn"
@@ -69,6 +69,7 @@
         appBlurClick
         appA11yTitle="{{ 'regenerateUsername' | i18n }}"
         (click)="regenerate()"
+        [disabled]="form.loading"
       >
         <i class="icon-cozy icon-refresh" aria-hidden="true"></i>
       </button>
@@ -384,16 +385,6 @@
               type="password"
               name="SimpleLoginApiKey"
               [(ngModel)]="usernameOptions.forwardedSimpleLoginApiKey"
-              (blur)="saveUsernameOptions()"
-            />
-          </div>
-          <div class="box-content-row" appBoxRow>
-            <label for="simplelogin-hostname">{{ "hostname" | i18n }}</label>
-            <input
-              id="simplelogin-hostname"
-              type="text"
-              name="SimpleLoginHostname"
-              [(ngModel)]="usernameOptions.forwardedSimpleLoginHostname"
               (blur)="saveUsernameOptions()"
             />
           </div>

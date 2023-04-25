@@ -439,10 +439,10 @@ function _turnIntoMaterialInput(inputEl, labelText) {
 function _togglePwdVisibility() {
   if (isPwdHidden) {
     pwdInput.type = "text";
-    visiPwdBtn.firstElementChild.classList.replace("fa-eye", "fa-eye-slash");
+    visiPwdBtn.firstElementChild.classList.replace("icon-eye", "icon-hide");
   } else {
     pwdInput.type = "password";
-    visiPwdBtn.firstElementChild.classList.replace("fa-eye-slash", "fa-eye");
+    visiPwdBtn.firstElementChild.classList.replace("icon-hide", "icon-eye");
   }
   isPwdHidden = !isPwdHidden;
 }
@@ -451,7 +451,7 @@ function _togglePwdVisibility() {
 // Hide the visibility of the password
 function _hidePwdVisibility() {
   pwdInput.type = "password";
-  visiPwdBtn.firstElementChild.classList.replace("fa-eye-slash", "fa-eye");
+  visiPwdBtn.firstElementChild.classList.replace("icon-hide", "icon-eye");
   isPwdHidden = true;
 }
 
@@ -459,6 +459,6 @@ function _hidePwdVisibility() {
 // unHide the visibility of the password
 function _unHidePwdVisibility() {
   pwdInput.type = "text";
-  visiPwdBtn.firstElementChild.classList.replace("fa-eye", "fa-eye-slash");
+  visiPwdBtn.firstElementChild.classList.replace("icon-eye", "icon-hide");
   isPwdHidden = false;
 }

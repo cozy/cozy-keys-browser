@@ -134,10 +134,10 @@
     "message": "vos mots de passe..."
   },
   "addIdentityExplanation": {
-    "message": "Simplifiez vous la vie, remplissez automatiquement les formulaires avec vos adresses, email, téléphone, date de naissance... 💪"
+    "message": "Remplissez automatiquement les formulaires avec vos adresses, email, téléphone, date de naissance..."
   },
   "addCardExplanation": {
-    "message": "Délectez vous de voir Cozy Pass remplir automatiquement ces horribles formulaires de paiements 🙂. Ne tapez plus vos numéros de carte de crédit, ne perdez plus votre code PIN."
+    "message": "Ne tapez plus vos numéros de carte de crédit, ne perdez plus votre code PIN."
   },
   "emptyDirectoryExplanation": {
     "message": "Répertoire vide"

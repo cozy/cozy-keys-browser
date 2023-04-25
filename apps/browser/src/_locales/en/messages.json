@@ -76,8 +76,14 @@
   "myCozyTab_toolTip": {
     "message": "Open my Cozy"
   },
+  "vault": {
+    "message": "Vault"
+  },
   "myVault": {
     "message": "Passwords & co"
+  },
+  "allVaults": {
+    "message": "All Vaults"
   },
   "tools": {
     "message": "Tools"
@@ -134,10 +140,10 @@
     "message": "your passwords..."
   },
   "addIdentityExplanation": {
-    "message": "Automatically fill forms with you adresses, emails, phone numbers, birth dates... 💪"
+    "message": "Automatically fill in the forms with your address, email, phone, date of birth..."
   },
   "addCardExplanation": {
-    "message": "Enjoy watching Cozy Pass automatically fill out those awful payment forms 🙂. No more typing your credit card numbers, no more losing your PIN."
+    "message": "Don't type in your credit card numbers, don't lose your PIN code."
   },
   "emptyDirectoryExplanation": {
     "message": "Empty folder"
@@ -2042,6 +2048,9 @@
   },
   "apiKey": {
     "message": "API Key"
+  },
+  "ssoKeyConnectorError": {
+    "message": "Key Connector error: make sure Key Connector is available and working correctly."
   },
   "TOTPCopiedInClipboard": {
     "message": "TOTP copied in your clipboard !"

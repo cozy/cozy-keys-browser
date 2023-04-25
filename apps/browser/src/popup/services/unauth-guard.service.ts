@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
-import { CanActivate, Router } from "@angular/router";
 
-import { AuthService } from "jslib-common/abstractions/auth.service";
-import { AuthenticationStatus } from "jslib-common/enums/authenticationStatus";
+import { UnauthGuard as BaseUnauthGuardService } from "jslib-angular/guards/unauth.guard";
+
 /* COZY IMPORTS */
 /* eslint-disable */
-import { UnauthGuardService as BaseUnauthGuardService } from "jslib-angular/services/unauth-guard.service";
+import { CanActivate, Router } from "@angular/router";
+import { AuthenticationStatus } from "jslib-common/enums/authenticationStatus";
+import { AuthService } from "jslib-common/abstractions/auth.service";
 import { HistoryService } from "./history.service";
 /* eslint-enable */
 /* END COZY IMPORTS */

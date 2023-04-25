@@ -112,12 +112,14 @@ app-root > div {
 }
 
 main::-webkit-scrollbar,
-cdk-virtual-scroll-viewport::-webkit-scrollbar {
+cdk-virtual-scroll-viewport::-webkit-scrollbar,
+.vault-select::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
-main::-webkit-scrollbar-track {
+main::-webkit-scrollbar-track,
+.vault-select::-webkit-scrollbar-track {
   background-color: transparent;
 }
 
@@ -128,7 +130,8 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-track {
 }
 
 main::-webkit-scrollbar-thumb,
-cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
+cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb,
+.vault-select::-webkit-scrollbar-thumb {
   border-radius: 10px;
   margin-right: 1px;
 
@@ -172,7 +175,7 @@ header {
   .right {
     // flex: 1;
     display: flex;
-    min-width: -webkit-min-content; /* Workaround to Chrome bug */
+    min-width: 10px;
     .header-icon {
       margin-right: 5px;
     }
@@ -216,10 +219,6 @@ header {
       }
     }
 
-    &:focus {
-      text-decoration: underline;
-    }
-
     &[disabled] {
       opacity: 0.65;
       cursor: default !important;
@@ -228,6 +227,11 @@ header {
     i + span {
       margin-left: 5px;
     }
+  }
+
+  app-pop-out {
+    display: flex;
+    padding-right: 0.5em;
   }
 
   .title {
@@ -517,12 +521,16 @@ main {
 
 .no-items-centered-up {
   height: unset;
-  margin: 123px 20px 0 20px;
 }
 
 .no-items,
 .full-loading-spinner {
   text-align: center;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 252px;
 
   .no-items-image {
     @include themify($themes) {
@@ -549,4 +557,64 @@ main {
 
 .cdk-virtual-scroll-content-wrapper {
   width: 100%;
+}
+
+.org-filter-content {
+  padding-bottom: 5px;
+  padding-left: 7px;
+  .org-filter {
+    @include themify($themes) {
+      background-color: themed("backgroundColor");
+    }
+    border: 1px solid;
+    padding: 7px;
+    border-radius: $border-radius;
+  }
+}
+.vault-select {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+
+  @include themify($themes) {
+    background-color: themed("boxBackgroundColor");
+  }
+  margin-right: 5px;
+  margin-top: 1px;
+  width: 160px;
+  @include themify($themes) {
+    border: 1px solid themed("borderColor");
+  }
+  border-radius: $border-radius;
+  button {
+    border: none;
+    background: transparent;
+    width: 100%;
+    padding: 5px 10px;
+    text-align: start;
+    @include themify($themes) {
+      color: themed("textColor");
+    }
+
+    a {
+      @include themify($themes) {
+        color: themed("textColor");
+      }
+    }
+
+    &:hover {
+      @include themify($themes) {
+        background-color: themed("boxBackgroundHoverColor");
+      }
+    }
+  }
+  .border {
+    @include themify($themes) {
+      background: themed("borderColor");
+    }
+    left: 10px;
+    width: calc(100% - 20px);
+    height: 1px;
+    position: relative;
+  }
 }

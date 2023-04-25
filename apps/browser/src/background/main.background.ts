@@ -88,6 +88,7 @@ import BrowserPlatformUtilsService from "../services/browserPlatformUtils.servic
 import BrowserStorageService from "../services/browserStorage.service";
 import I18nService from "../services/i18n.service";
 import { StateService } from "../services/state.service";
+import { VaultFilterService } from "../services/vaultFilter.service";
 import VaultTimeoutService from "../services/vaultTimeout.service";
 
 import CommandsBackground from "./commands.background";
@@ -157,6 +158,7 @@ export default class MainBackground {
   keyConnectorService: KeyConnectorServiceAbstraction;
   userVerificationService: UserVerificationServiceAbstraction;
   twoFactorService: TwoFactorServiceAbstraction;
+  vaultFilterService: VaultFilterService;
   usernameGenerationService: UsernameGenerationServiceAbstraction;
   cozyClientService: CozyClientService;
   konnectorsService: KonnectorsService;
@@ -182,6 +184,51 @@ export default class MainBackground {
 
   constructor(public isPrivateMode: boolean = false) {
     // Services
+    const lockedCallback = async (userId?: string) => {
+      /* @override by Cozy :
+        This callback is the lockedCallback of the VaultTimeoutService
+        (see jslib/src/services/vaultTimeout.service.ts )
+        When CB is fired, ask all tabs to activate login-in-page-menu
+      */
+      const allTabs = await BrowserApi.getAllTabs();
+      for (const tab of allTabs) {
+        BrowserApi.tabSendMessage(tab, {
+          command: "autofillAnswerRequest",
+          subcommand: "loginIPMenuActivate",
+          tab: tab,
+        });
+      }
+      /* end @override by Cozy */
+      if (this.notificationsService != null) {
+        this.notificationsService.updateConnection(false);
+      }
+      await this.setIcon();
+      await this.refreshBadgeAndMenu(true);
+      if (this.systemService != null) {
+        await this.systemService.clearPendingClipboard();
+        await this.reloadProcess();
+      }
+    };
+
+    const logoutCallback = async (expired: boolean, userId?: string) => {
+      /* @override by Cozy :
+        This callback is the loggedOutCallback of the VaultTimeoutService
+        (see jslib/src/services/vaultTimeout.service.ts )
+        When CB is fired, ask all tabs to activate login-in-page-menu
+      */
+      const allTabs = await BrowserApi.getAllTabs();
+      for (const tab of allTabs) {
+        BrowserApi.tabSendMessage(tab, {
+          command: "autofillAnswerRequest",
+          subcommand: "loginIPMenuActivate",
+          isPinLocked: false,
+          tab: tab,
+        });
+      }
+      /* end @override by Cozy */
+      await this.logout(expired, userId);
+    };
+
     this.messagingService = isPrivateMode
       ? new BrowserMessagingPrivateModeBackgroundService()
       : new BrowserMessagingService();
@@ -293,7 +340,16 @@ export default class MainBackground {
       this.tokenService,
       this.logService,
       this.organizationService,
-      this.cryptoFunctionService
+      this.cryptoFunctionService,
+      logoutCallback
+    );
+    this.vaultFilterService = new VaultFilterService(
+      this.stateService,
+      this.organizationService,
+      this.folderService,
+      this.cipherService,
+      this.collectionService,
+      this.policyService
     );
 
     this.twoFactorService = new TwoFactorService(this.i18nService, this.platformUtilsService);
@@ -321,51 +377,6 @@ export default class MainBackground {
       this.twoFactorService,
       this.i18nService
     );
-
-    const lockedCallback = async (userId?: string) => {
-      /* @override by Cozy :
-        This callback is the lockedCallback of the VaultTimeoutService
-        (see jslib/src/services/vaultTimeout.service.ts )
-        When CB is fired, ask all tabs to activate login-in-page-menu
-      */
-      const allTabs = await BrowserApi.getAllTabs();
-      for (const tab of allTabs) {
-        BrowserApi.tabSendMessage(tab, {
-          command: "autofillAnswerRequest",
-          subcommand: "loginIPMenuActivate",
-          tab: tab,
-        });
-      }
-      /* end @override by Cozy */
-      if (this.notificationsService != null) {
-        this.notificationsService.updateConnection(false);
-      }
-      await this.setIcon();
-      await this.refreshBadgeAndMenu(true);
-      if (this.systemService != null) {
-        await this.systemService.clearPendingClipboard();
-        await this.reloadProcess();
-      }
-    };
-
-    const logoutCallback = async (expired: boolean, userId?: string) => {
-      /* @override by Cozy :
-        This callback is the loggedOutCallback of the VaultTimeoutService
-        (see jslib/src/services/vaultTimeout.service.ts )
-        When CB is fired, ask all tabs to activate login-in-page-menu
-      */
-      const allTabs = await BrowserApi.getAllTabs();
-      for (const tab of allTabs) {
-        BrowserApi.tabSendMessage(tab, {
-          command: "autofillAnswerRequest",
-          subcommand: "loginIPMenuActivate",
-          isPinLocked: false,
-          tab: tab,
-        });
-      }
-      /* end @override by Cozy */
-      await this.logout(expired, userId);
-    };
 
     this.vaultTimeoutService = new VaultTimeoutService(
       this.cipherService,
@@ -709,6 +720,7 @@ export default class MainBackground {
       this.passwordGenerationService.clear(userId),
       this.vaultTimeoutService.clear(userId),
       this.keyConnectorService.clear(),
+      this.vaultFilterService.clear(),
     ]);
 
     // Clear auth and token afterwards, as previous services might need it (by Cozy)

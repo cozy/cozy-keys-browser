@@ -1,3 +1,6 @@
+$icomoon-font-path: "../../../jslib/angular/src/scss/bwicons/fonts/";
+$card-icons-base: "../../../jslib/angular/src/images/cards/";
+
 @import "../css/webfonts.css";
 @import "../../../jslib/angular/src/scss/bwicons/styles/style.scss";
 @import "variables.scss";
@@ -11,3 +14,4 @@
 @import "plugins.scss";
 @import "environment.scss";
 @import "pages.scss";
+@import "~@angular/cdk/overlay-prebuilt.css";

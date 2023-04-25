@@ -2,8 +2,11 @@
   <img src="https://raw.githubusercontent.com/bitwarden/brand/master/screenshots/apps-combo-logo.png" alt="Bitwarden" />
 </p>
 <p align="center">
-  <a href="https://github.com/bitwarden/bitwarden/actions/workflows/build-browser.yml?query=branch:master" target="_blank">
-    <img src="https://github.com/bitwarden/bitwarden/actions/workflows/build-browser.yml/badge.svg?branch=master" alt="Github Workflow browser build on master" />
+  <a href="https://github.com/bitwarden/clients/actions/workflows/build-browser.yml?query=branch:master" target="_blank">
+    <img src="https://github.com/bitwarden/clients/actions/workflows/build-browser.yml/badge.svg?branch=master" alt="Github Workflow browser build on master" />
+  </a>
+  <a href="https://github.com/bitwarden/clients/actions/workflows/build-desktop.yml?query=branch:master" target="_blank">
+    <img src="https://github.com/bitwarden/clients/actions/workflows/build-desktop.yml/badge.svg?branch=master" alt="Github Workflow desktop build on master" />
   </a>
   <a href="https://gitter.im/bitwarden/Lobby" target="_blank">
     <img src="https://badges.gitter.im/bitwarden/Lobby.svg" alt="gitter chat" />
@@ -40,4 +43,71 @@ We recommend that you configure git to ignore specific revision using:
 
 ```bash
 git config blame.ignoreRevsFile .git-blame-ignore-revs
+```
+
+## Migrate PRs from old repositories
+
+We recently migrated from individual client repositories. And some PRs were unfortunately left behind in the old repositories. Luckily it's fairly straightforward to sync them up again. Please follow all the instructions below in order to avoid most merge conflicts.
+
+### Desktop
+
+```
+# Merge master
+git merge master
+
+# Merge branch mono-repo-prep
+git merge 28bc4113b9bbae4dba2b5af14d460764fce79acf
+
+# Verify files are placed in apps/desktop
+
+# Add remote
+git remote add clients git@github.com:bitwarden/clients.git
+
+# Merge against clients master
+git fetch clients
+git merge clients/master
+
+# Push to clients or your own fork
+```
+
+### CLI
+
+```
+# Merge master
+git merge master
+
+# Merge branch mono-repo-prep
+git merge 980429f4bdcb178d8d92d8202cbdacfaa45c917e
+
+# Verify files are placed in apps/cli
+
+# Add remote
+git remote add clients git@github.com:bitwarden/clients.git
+
+# Merge against clients master
+git fetch clients
+git merge clients/master
+
+# Push to clients or your own fork
+```
+
+### Web
+
+```
+# Merge master
+git merge master
+
+# Merge branch mono-repo-prep
+git merge 02fe7159034b04d763a61fcf0200869e3209fa33
+
+# Verify files are placed in apps/web
+
+# Add remote
+git remote add clients git@github.com:bitwarden/clients.git
+
+# Merge against clients master
+git fetch clients
+git merge clients/master
+
+# Push to clients or your own fork
 ```

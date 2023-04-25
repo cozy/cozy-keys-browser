@@ -127,6 +127,9 @@ export class AddEditComponent extends BaseAddEditComponent {
       if (params.cloneMode != null) {
         this.cloneMode = params.cloneMode === "true";
       }
+      if (params.selectedVault) {
+        this.organizationId = params.selectedVault;
+      }
       await this.load();
 
       this.initialPwd = this.cipher.login.password;
@@ -194,7 +197,7 @@ export class AddEditComponent extends BaseAddEditComponent {
   // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
   @HostListener("window:unload", ["$event"])
   async unloadMnger(event: any) {
-    // save cipher state in url when popup is closed.
+    // save cipher state in url for when popup will be closed.
     this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, ...this.cipher });
   }
 
@@ -233,6 +236,8 @@ export class AddEditComponent extends BaseAddEditComponent {
     const confirmed = await super.generateUsername();
     if (confirmed) {
       await this.saveCipherState();
+      // save cipher state in url for when popup will be closed.
+      this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, ...this.cipher });
       this.router.navigate(["generator"], { queryParams: { type: "username" } });
     }
     return confirmed;
@@ -242,7 +247,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     const confirmed = await super.generatePassword();
     if (confirmed) {
       await this.saveCipherState();
-      // save cipher state in url when popup is closed.
+      // save cipher state in url for when popup will be closed.
       this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, ...this.cipher });
       this.router.navigate(["generator"], { queryParams: { type: "password" } });
     }

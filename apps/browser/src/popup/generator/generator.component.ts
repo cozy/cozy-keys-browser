@@ -11,6 +11,12 @@ import { StateService } from "jslib-common/abstractions/state.service";
 import { UsernameGenerationService } from "jslib-common/abstractions/usernameGeneration.service";
 import { CipherView } from "jslib-common/models/view/cipherView";
 
+/* Cozy imports */
+/* eslint-disable */
+import { HistoryService } from "../services/history.service";
+/* eslint-enable */
+/* END */
+
 @Component({
   selector: "app-generator",
   templateUrl: "generator.component.html",
@@ -27,7 +33,8 @@ export class GeneratorComponent extends BaseGeneratorComponent {
     stateService: StateService,
     route: ActivatedRoute,
     logService: LogService,
-    private location: Location
+    private location: Location,
+    private historyService: HistoryService,
   ) {
     super(
       passwordGenerationService,
@@ -66,6 +73,7 @@ export class GeneratorComponent extends BaseGeneratorComponent {
   }
 
   close() {
-    this.location.back();
+    // this.location.back();
+    this.historyService.gotoPreviousUrl();
   }
 }

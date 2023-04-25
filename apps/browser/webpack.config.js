@@ -198,7 +198,7 @@ const config = {
       //'cozy-client': path.join(__dirname, 'node_modules/cozy-client/dist/node')
     },
     symlinks: false,
-    modules: [path.resolve("node_modules")],
+    modules: [path.resolve("../../node_modules")],
     alias: {
       sweetalert2: require.resolve("sweetalert2/dist/sweetalert2.js"),
       "#sweetalert2": require.resolve("sweetalert2/src/sweetalert2.scss"),
