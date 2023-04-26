@@ -3,9 +3,9 @@
     @override by Cozy
 
     COZY DUPLICATE -
-    This file extends the JSlib file : jslib/services/sync.service
+    This file extends the JSlib class : jslib/services/sync.service
     For more context, see commit f1956682454d00328dea38d37257ab32dc80129f
-    The copied file version is here :
+    The original extended file version is here :
        https://github.com/bitwarden/jslib/blob/669f6ddf93bbfe8acd18a4834fff5e1c7f9c91ba/src/services/sync.service.ts
 
    ----------------------------------------------------------------------------------- */
@@ -34,9 +34,6 @@ import { ProviderService } from "jslib-common/abstractions/provider.service";
 /* eslint-enable */
 /* end Cozy imports */
 
-const Keys = {
-  lastSyncPrefix: "lastSync_",
-};
 interface Member {
   user_id: string;
   key?: string;
@@ -121,11 +118,8 @@ export class SyncService extends BaseSyncService {
     client.options.token = refreshedToken;
 
     if (currentToken !== refreshedToken) {
-      const newUserId = this.tokenService.getUserId();
-      const email = this.tokenService.getEmail();
       const kdf = await this.localStateService.getKdfType();
       const kdfIterations = await this.localStateService.getKdfIterations();
-
       await this.localStateService.setKdfType(kdf);
       await this.localStateService.setKdfIterations(kdfIterations);
     }

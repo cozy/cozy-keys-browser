@@ -15,36 +15,22 @@ import { HistoryService } from "./history.service";
 export class UnauthGuardService extends BaseUnauthGuardService implements CanActivate {
   protected homepage = "tabs/current";
   constructor(
-    private _authService: AuthService,
-    private _router: Router,
+    authService: AuthService,
+    router: Router,
     private historyService: HistoryService
   ) {
-    super(_authService, _router);
+    super(authService, router);
   }
 
-  // async canActivate() {
-  //   const isAuthed = await this._stateService.getIsAuthenticated();
-  //   if (isAuthed) {
-  //     const locked = await this._vaultTimeoutService.isLocked();
-  //     if (locked) {
-  //       this._router.navigate(["lock"]);
-  //     } else {
-  //       // this.router.navigate([this.homepage]);
-  //       this.historyService.gotoCurrentUrl();
-  //     }
-  //     return false;
-  //   }
-  //   return true;
-  // }
   async canActivate() {
-    const authStatus = await this._authService.getAuthStatus();
+    const authStatus = await this.authService.getAuthStatus();
 
     if (authStatus === AuthenticationStatus.LoggedOut) {
       return true;
     }
 
     if (authStatus === AuthenticationStatus.Locked) {
-      return this._router.createUrlTree(["lock"]);
+      return this.router.createUrlTree(["lock"]);
     }
 
     // return this.router.createUrlTree([this.homepage]);

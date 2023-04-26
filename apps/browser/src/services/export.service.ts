@@ -25,13 +25,6 @@ import { ExportService as BaseExportService } from "jslib-common/services/export
  * child class.
  */
 export class ExportService extends BaseExportService {
-  /* tslint:disable-next-line */
-  private _folderService: FolderService;
-  /* tslint:disable-next-line */
-  private _cipherService: CipherService;
-  /* tslint:disable-next-line */
-  private _apiService: ApiService;
-
   constructor(
     folderService: FolderService,
     cipherService: CipherService,
@@ -40,10 +33,6 @@ export class ExportService extends BaseExportService {
     cryptoFunctionService: CryptoFunctionService
   ) {
     super(folderService, cipherService, apiService, cryptoService, cryptoFunctionService);
-
-    this._folderService = folderService;
-    this._cipherService = cipherService;
-    this._apiService = apiService;
   }
 
   async getExport(format: "csv" | "json" = "csv"): Promise<string> {
@@ -52,13 +41,13 @@ export class ExportService extends BaseExportService {
     const promises = [];
 
     promises.push(
-      this._folderService.getAllDecrypted().then((folders) => {
+      this.folderService.getAllDecrypted().then((folders) => {
         decFolders = folders;
       })
     );
 
     promises.push(
-      this._cipherService.getAllDecrypted().then((ciphers) => {
+      this.cipherService.getAllDecrypted().then((ciphers) => {
         decCiphers = ciphers;
       })
     );
@@ -82,7 +71,7 @@ export class ExportService extends BaseExportService {
         cipher.folder =
           c.folderId != null && foldersMap.has(c.folderId) ? foldersMap.get(c.folderId).name : null;
         cipher.favorite = c.favorite ? 1 : null;
-        this._buildCommonCipher(cipher, c);
+        this.buildCommonCipher(cipher, c);
         exportCiphers.push(cipher);
       });
 
@@ -111,53 +100,5 @@ export class ExportService extends BaseExportService {
 
       return JSON.stringify(jsonDoc, null, "  ");
     }
-  }
-
-  private _buildCommonCipher(cipher: any, c: CipherView) {
-    cipher.type = null;
-    cipher.name = c.name;
-    cipher.notes = c.notes;
-    cipher.fields = null;
-    cipher.reprompt = c.reprompt;
-    // Login props
-    cipher.login_uri = null;
-    cipher.login_username = null;
-    cipher.login_password = null;
-    cipher.login_totp = null;
-
-    if (c.fields) {
-      c.fields.forEach((f: any) => {
-        if (!cipher.fields) {
-          cipher.fields = "";
-        } else {
-          cipher.fields += "\n";
-        }
-
-        cipher.fields += (f.name || "") + ": " + f.value;
-      });
-    }
-
-    switch (c.type) {
-      case CipherType.Login:
-        cipher.type = "login";
-        cipher.login_username = c.login.username;
-        cipher.login_password = c.login.password;
-        cipher.login_totp = c.login.totp;
-
-        if (c.login.uris) {
-          cipher.login_uri = [];
-          c.login.uris.forEach((u) => {
-            cipher.login_uri.push(u.uri);
-          });
-        }
-        break;
-      case CipherType.SecureNote:
-        cipher.type = "note";
-        break;
-      default:
-        return;
-    }
-
-    return cipher;
   }
 }

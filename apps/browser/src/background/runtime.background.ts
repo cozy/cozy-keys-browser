@@ -15,7 +15,7 @@ import LockedVaultPendingNotificationsItem from "./models/lockedVaultPendingNoti
 
 // Cozy Imports
 /* eslint-disable */
-import { AuthService } from "../services/auth.service";
+import { AuthService } from "jslib-common/services/auth.service";
 import { AuthenticationStatus } from "jslib-common/enums/authenticationStatus";
 import { ApiService } from "jslib-common/abstractions/api.service";
 import { CipherWithIdExport as CipherExport } from "jslib-common/models/export/cipherWithIdsExport";

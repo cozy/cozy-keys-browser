@@ -29,9 +29,9 @@ import { FolderView } from "../models/view/folderView";
 
 export class ExportService implements ExportServiceAbstraction {
   constructor(
-    private folderService: FolderService,
-    private cipherService: CipherService,
-    private apiService: ApiService,
+    protected folderService: FolderService,
+    protected cipherService: CipherService,
+    protected apiService: ApiService,
     private cryptoService: CryptoService,
     private cryptoFunctionService: CryptoFunctionService
   ) {}
@@ -394,7 +394,7 @@ export class ExportService implements ExportServiceAbstraction {
       : new Array(width - numString.length + 1).join(padCharacter) + numString;
   }
 
-  private buildCommonCipher(cipher: any, c: CipherView) {
+  protected buildCommonCipher(cipher: any, c: CipherView) {
     cipher.type = null;
     cipher.name = c.name;
     cipher.notes = c.notes;

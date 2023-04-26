@@ -42,7 +42,7 @@ import { CipherView } from "jslib-common/models/view/cipherView";
 // import { ApiService } from "jslib-common/services/api.service";
 import { AppIdService } from "jslib-common/services/appId.service";
 import { AuditService } from "jslib-common/services/audit.service";
-// import { AuthService } from "jslib-common/services/auth.service";
+import { AuthService } from "jslib-common/services/auth.service";
 // import { CipherService } from "jslib-common/services/cipher.service";
 import { CollectionService } from "jslib-common/services/collection.service";
 import { ConsoleLogService } from "jslib-common/services/consoleLog.service";
@@ -104,7 +104,6 @@ import WebRequestBackground from "./webRequest.background";
 /* start Cozy imports */
 /* eslint-disable */
 import { ApiService } from "../services/api.service";
-import { AuthService } from "../services/auth.service";
 import { CipherService } from "../popup/services/cipher.service";
 import { CozyClientService } from "../popup/services/cozyClient.service";
 import { ExportService } from "../services/export.service";
@@ -498,7 +497,7 @@ export default class MainBackground {
       : (window as any).chrome.sidebarAction;
 
     // Background
-    /** creation Commented and moved further by Cozy 
+    /** creation Commented and moved further by Cozy
     this.runtimeBackground = new RuntimeBackground(
       this,
       this.autofillService,

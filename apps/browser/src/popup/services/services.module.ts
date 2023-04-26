@@ -42,7 +42,7 @@ import { TwoFactorService } from "jslib-common/abstractions/twoFactor.service";
 import { UserVerificationService } from "jslib-common/abstractions/userVerification.service";
 import { UsernameGenerationService } from "jslib-common/abstractions/usernameGeneration.service";
 import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
-// import { AuthService } from "jslib-common/services/auth.service";
+import { AuthService } from "jslib-common/services/auth.service";
 import { ConsoleLogService } from "jslib-common/services/consoleLog.service";
 import { SearchService } from "jslib-common/services/search.service";
 
@@ -66,8 +66,6 @@ import { UnauthGuardService } from "./unauth-guard.service";
 import { CozyClientService } from "./cozyClient.service";
 import { CozySanitizeUrlService } from "./cozySanitizeUrl.service";
 import { KonnectorsService } from "./konnectors.service";
-import { AuthService } from "../../services/auth.service";
-import { ModalService } from "jslib-angular/services/modal.service";
 import { HistoryService } from "./history.service";
 /* eslint-enable */
 /* END */
@@ -94,22 +92,6 @@ const cozyMessagingService = isPrivateMode
   ? new BrowserMessagingPrivateModePopupService()
   : new BrowserMessagingService();
 
-// TODO REFACTO : à supprimer ?
-// const searchService = isPrivateMode
-//   ? null
-//   : new PopupSearchService(
-//       getBgService<SearchService>("searchService")(),
-//       getBgService<CipherService>("cipherService")(),
-//       getBgService<ConsoleLogService>("logService")(),
-//       getBgService<I18nService>("i18nService")()
-//     );
-// const passwordRepromptService = isPrivateMode
-//   ? null
-//   : new PasswordRepromptService(
-//       getBgService<ModalService>("modalService")(),
-//       getBgService<KeyConnectorService>("keyConnectorService")()
-//     );
-
 const cozyClientService = new CozyClientService(
   getBgService<EnvironmentService>("environmentService")(),
   getBgService<ApiService>("apiService")(),
@@ -123,8 +105,6 @@ export const konnectorsService = new KonnectorsService(
   cozyClientService,
   getBgService<StateServiceAbstraction>("stateService")()
 );
-// const authService = getBgService<AuthService>("authService")();
-
 /* COZY END */
 
 @NgModule({

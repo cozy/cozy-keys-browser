@@ -7,7 +7,7 @@ import { AuthenticationStatus } from "jslib-common/enums/authenticationStatus";
 @Injectable()
 export class UnauthGuard implements CanActivate {
   protected homepage = "vault";
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(protected authService: AuthService, protected router: Router) {}
 
   async canActivate() {
     const authStatus = await this.authService.getAuthStatus();
