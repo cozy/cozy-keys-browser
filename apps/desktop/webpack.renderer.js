@@ -5,14 +5,31 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { AngularWebpackPlugin } = require("@ngtools/webpack");
 const TerserPlugin = require("terser-webpack-plugin");
+const configurator = require("./config/config");
 
 const NODE_ENV = process.env.NODE_ENV == null ? "development" : process.env.NODE_ENV;
+
+console.log("Renderer process config");
+const envConfig = configurator.load(NODE_ENV);
+configurator.log(envConfig);
 
 const common = {
   module: {
     rules: [
       {
-        test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
+        test: /\.[cm]?js$/,
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              configFile: false,
+              plugins: ["@angular/compiler-cli/linker/babel"],
+            },
+          },
+        ],
+      },
+      {
+        test: /\.[jt]sx?$/,
         loader: "@ngtools/webpack",
       },
       {
@@ -22,6 +39,11 @@ const common = {
           filename: "images/[name][ext]",
         },
         type: "asset/resource",
+      },
+      {
+        test: /\.wasm$/,
+        loader: "base64-loader",
+        type: "javascript/auto",
       },
     ],
   },
@@ -105,6 +127,11 @@ const renderer = {
         test: /[\/\\]@angular[\/\\].+\.js$/,
         parser: { system: true },
       },
+      {
+        test: /\.wasm$/,
+        loader: "base64-loader",
+        type: "javascript/auto",
+      },
     ],
   },
   plugins: [
@@ -129,6 +156,10 @@ const renderer = {
     new MiniCssExtractPlugin({
       filename: "[name].[contenthash].css",
       chunkFilename: "[id].[contenthash].css",
+    }),
+    new webpack.EnvironmentPlugin({
+      FLAGS: envConfig.flags,
+      DEV_FLAGS: NODE_ENV === "development" ? envConfig.devFlags : {},
     }),
   ],
 };

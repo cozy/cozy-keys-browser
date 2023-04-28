@@ -1,4 +1,4 @@
-import { I18nService as BaseI18nService } from "jslib-common/services/i18n.service";
+import { I18nService as BaseI18nService } from "@bitwarden/common/services/i18n.service";
 
 export default class I18nService extends BaseI18nService {
   constructor(systemLanguage: string) {
@@ -11,6 +11,7 @@ export default class I18nService extends BaseI18nService {
     // Please leave 'en' where it is, as it's our fallback language in case no translation can be found
     this.supportedTranslationLocales = [
       "en",
+      "ar",
       "az",
       "be",
       "bg",
@@ -25,6 +26,7 @@ export default class I18nService extends BaseI18nService {
       "en-IN",
       "es",
       "et",
+      "eu",
       "fa",
       "fi",
       "fil",

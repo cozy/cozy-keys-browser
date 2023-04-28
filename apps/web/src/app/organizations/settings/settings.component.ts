@@ -1,28 +1,22 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { Observable, switchMap } from "rxjs";
 
-import { OrganizationService } from "jslib-common/abstractions/organization.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { Organization } from "@bitwarden/common/models/domain/organization";
 
 @Component({
   selector: "app-org-settings",
   templateUrl: "settings.component.html",
 })
-export class SettingsComponent {
-  access2fa = false;
-  showBilling: boolean;
+export class SettingsComponent implements OnInit {
+  organization$: Observable<Organization>;
 
-  constructor(
-    private route: ActivatedRoute,
-    private organizationService: OrganizationService,
-    private platformUtilsService: PlatformUtilsService
-  ) {}
+  constructor(private route: ActivatedRoute, private organizationService: OrganizationService) {}
 
   ngOnInit() {
-    this.route.parent.params.subscribe(async (params) => {
-      const organization = await this.organizationService.get(params.organizationId);
-      this.showBilling = !this.platformUtilsService.isSelfHost() && organization.canManageBilling;
-      this.access2fa = organization.use2fa;
-    });
+    this.organization$ = this.route.params.pipe(
+      switchMap((params) => this.organizationService.get$(params.organizationId))
+    );
   }
 }

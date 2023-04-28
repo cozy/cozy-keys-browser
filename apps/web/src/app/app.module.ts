@@ -1,13 +1,14 @@
 import { DragDropModule } from "@angular/cdk/drag-drop";
+import { LayoutModule } from "@angular/cdk/layout";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
 
 import { AppComponent } from "./app.component";
+import { CoreModule } from "./core";
 import { OssRoutingModule } from "./oss-routing.module";
 import { OssModule } from "./oss.module";
-import { ServicesModule } from "./services/services.module";
 import { WildcardRoutingModule } from "./wildcard-routing.module";
 
 @NgModule({
@@ -15,9 +16,10 @@ import { WildcardRoutingModule } from "./wildcard-routing.module";
     OssModule,
     BrowserAnimationsModule,
     FormsModule,
-    ServicesModule,
+    CoreModule,
     InfiniteScrollModule,
     DragDropModule,
+    LayoutModule,
     OssRoutingModule,
     WildcardRoutingModule, // Needs to be last to catch all non-existing routes
   ],

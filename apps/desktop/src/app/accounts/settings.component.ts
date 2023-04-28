@@ -1,31 +1,35 @@
 import { Component, OnInit } from "@angular/core";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { debounceTime } from "rxjs/operators";
 
-import { ModalService } from "jslib-angular/services/modal.service";
-import { CryptoService } from "jslib-common/abstractions/crypto.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
-import { DeviceType } from "jslib-common/enums/deviceType";
-import { StorageLocation } from "jslib-common/enums/storageLocation";
-import { ThemeType } from "jslib-common/enums/themeType";
-import { Utils } from "jslib-common/misc/utils";
-import { isWindowsStore } from "jslib-electron/utils";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { DeviceType } from "@bitwarden/common/enums/deviceType";
+import { StorageLocation } from "@bitwarden/common/enums/storageLocation";
+import { ThemeType } from "@bitwarden/common/enums/themeType";
+import { Utils } from "@bitwarden/common/misc/utils";
 
+import { flagEnabled } from "../../flags";
+import { isWindowsStore } from "../../utils";
 import { SetPinComponent } from "../components/set-pin.component";
 
 @Component({
   selector: "app-settings",
   templateUrl: "settings.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class SettingsComponent implements OnInit {
   vaultTimeoutAction: string;
   pin: boolean = null;
-  disableFavicons = false;
+  enableFavicons = false;
   enableBrowserIntegration = false;
+  enableDuckDuckGoBrowserIntegration = false;
   enableBrowserIntegrationFingerprint = false;
   enableMinToTray = false;
   enableCloseToTray = false;
@@ -43,12 +47,14 @@ export class SettingsComponent implements OnInit {
   supportsBiometric: boolean;
   biometric: boolean;
   biometricText: string;
-  noAutoPromptBiometrics: boolean;
-  noAutoPromptBiometricsText: string;
+  autoPromptBiometrics: boolean;
+  autoPromptBiometricsText: string;
   alwaysShowDock: boolean;
   showAlwaysShowDock = false;
   openAtLogin: boolean;
   requireEnableTray = false;
+  showDuckDuckGoIntegrationOption = false;
+  approveLoginRequests = false;
 
   enableTrayText: string;
   enableTrayDescText: string;
@@ -59,7 +65,7 @@ export class SettingsComponent implements OnInit {
   startToTrayText: string;
   startToTrayDescText: string;
 
-  vaultTimeout: FormControl = new FormControl(null);
+  vaultTimeout: UntypedFormControl = new UntypedFormControl(null);
 
   showSecurity = true;
   showAccountPreferences = true;
@@ -67,14 +73,17 @@ export class SettingsComponent implements OnInit {
 
   currentUserEmail: string;
 
+  previousVaultTimeout: number = null;
+
   constructor(
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
-    private vaultTimeoutService: VaultTimeoutService,
+    private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private stateService: StateService,
     private messagingService: MessagingService,
     private cryptoService: CryptoService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private themingService: AbstractThemingService
   ) {
     const isMac = this.platformUtilsService.getDevice() === DeviceType.MacOsDesktop;
 
@@ -96,6 +105,9 @@ export class SettingsComponent implements OnInit {
     const startToTrayKey = isMac ? "startToMenuBar" : "startToTray";
     this.startToTrayText = this.i18nService.t(startToTrayKey);
     this.startToTrayDescText = this.i18nService.t(startToTrayKey + "Desc");
+
+    // DuckDuckGo browser is only for macos initially
+    this.showDuckDuckGoIntegrationOption = flagEnabled("showDDGSetting") && isMac;
 
     this.vaultTimeouts = [
       // { name: i18nService.t('immediately'), value: 0 },
@@ -160,7 +172,7 @@ export class SettingsComponent implements OnInit {
     this.showAlwaysShowDock = this.platformUtilsService.getDevice() === DeviceType.MacOsDesktop;
     this.openAtLogin = await this.stateService.getOpenAtLogin();
 
-    this.locale = await this.stateService.getLocale();
+    this.locale = (await this.stateService.getLocale()) ?? null;
     this.theme = await this.stateService.getTheme();
 
     if ((await this.stateService.getUserId()) == null) {
@@ -171,28 +183,47 @@ export class SettingsComponent implements OnInit {
     // Security
     this.vaultTimeout.setValue(await this.stateService.getVaultTimeout());
     this.vaultTimeoutAction = await this.stateService.getVaultTimeoutAction();
+    this.previousVaultTimeout = this.vaultTimeout.value;
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.vaultTimeout.valueChanges.pipe(debounceTime(500)).subscribe(() => {
       this.saveVaultTimeoutOptions();
     });
 
-    const pinSet = await this.vaultTimeoutService.isPinLockSet();
+    const pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
     this.pin = pinSet[0] || pinSet[1];
+    this.approveLoginRequests = await this.stateService.getApproveLoginRequests();
 
     // Account preferences
-    this.disableFavicons = await this.stateService.getDisableFavicon();
+    this.enableFavicons = !(await this.stateService.getDisableFavicon());
     this.enableBrowserIntegration = await this.stateService.getEnableBrowserIntegration();
+    this.enableDuckDuckGoBrowserIntegration =
+      await this.stateService.getEnableDuckDuckGoBrowserIntegration();
     this.enableBrowserIntegrationFingerprint =
       await this.stateService.getEnableBrowserIntegrationFingerprint();
     this.clearClipboard = await this.stateService.getClearClipboard();
     this.minimizeOnCopyToClipboard = await this.stateService.getMinimizeOnCopyToClipboard();
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
-    this.biometric = await this.vaultTimeoutService.isBiometricLockSet();
+    this.biometric = await this.vaultTimeoutSettingsService.isBiometricLockSet();
     this.biometricText = await this.stateService.getBiometricText();
-    this.noAutoPromptBiometrics = await this.stateService.getNoAutoPromptBiometrics();
-    this.noAutoPromptBiometricsText = await this.stateService.getNoAutoPromptBiometricsText();
+    this.autoPromptBiometrics = !(await this.stateService.getNoAutoPromptBiometrics());
+    this.autoPromptBiometricsText = await this.stateService.getNoAutoPromptBiometricsText();
   }
 
   async saveVaultTimeoutOptions() {
+    if (this.vaultTimeout.value == null) {
+      const confirmed = await this.platformUtilsService.showDialog(
+        this.i18nService.t("neverLockWarning"),
+        "",
+        this.i18nService.t("yes"),
+        this.i18nService.t("cancel"),
+        "warning"
+      );
+      if (!confirmed) {
+        this.vaultTimeout.setValue(this.previousVaultTimeout);
+        return;
+      }
+    }
+
     if (this.vaultTimeoutAction === "logOut") {
       const confirmed = await this.platformUtilsService.showDialog(
         this.i18nService.t("vaultTimeoutLogOutConfirmation"),
@@ -221,7 +252,9 @@ export class SettingsComponent implements OnInit {
       return;
     }
 
-    await this.vaultTimeoutService.setVaultTimeoutOptions(
+    this.previousVaultTimeout = this.vaultTimeout.value;
+
+    await this.vaultTimeoutSettingsService.setVaultTimeoutOptions(
       this.vaultTimeout.value,
       this.vaultTimeoutAction
     );
@@ -240,46 +273,46 @@ export class SettingsComponent implements OnInit {
     }
     if (!this.pin) {
       await this.cryptoService.clearPinProtectedKey();
-      await this.vaultTimeoutService.clear();
+      await this.vaultTimeoutSettingsService.clear();
     }
   }
 
-  async updateBiometric() {
-    const current = this.biometric;
-    if (this.biometric) {
+  async updateBiometric(newValue: boolean) {
+    // NOTE: A bug in angular causes [ngModel] to not reflect the backing field value
+    // causing the checkbox to remain checked even if authentication fails.
+    // The bug should resolve itself once the angular issue is resolved.
+    // See: https://github.com/angular/angular/issues/13063
+
+    if (!newValue || !this.supportsBiometric) {
       this.biometric = false;
-    } else if (this.supportsBiometric) {
-      this.biometric = await this.platformUtilsService.authenticateBiometric();
-    }
-    if (this.biometric === current) {
+      await this.stateService.setBiometricUnlock(null);
+      await this.cryptoService.toggleKey();
       return;
     }
-    if (this.biometric) {
-      await this.stateService.setBiometricUnlock(true);
-    } else {
-      await this.stateService.setBiometricUnlock(null);
-      await this.stateService.setNoAutoPromptBiometrics(null);
-      this.noAutoPromptBiometrics = false;
+
+    const authResult = await this.platformUtilsService.authenticateBiometric();
+
+    if (!authResult) {
+      this.biometric = false;
+      return;
     }
-    await this.stateService.setBiometricLocked(false);
+
+    this.biometric = true;
+    await this.stateService.setBiometricUnlock(true);
     await this.cryptoService.toggleKey();
   }
 
-  async updateNoAutoPromptBiometrics() {
-    if (!this.biometric) {
-      this.noAutoPromptBiometrics = false;
-    }
-
-    if (this.noAutoPromptBiometrics) {
-      await this.stateService.setNoAutoPromptBiometrics(true);
-    } else {
+  async updateAutoPromptBiometrics() {
+    if (this.autoPromptBiometrics) {
       await this.stateService.setNoAutoPromptBiometrics(null);
+    } else {
+      await this.stateService.setNoAutoPromptBiometrics(true);
     }
   }
 
   async saveFavicons() {
-    await this.stateService.setDisableFavicon(this.disableFavicons);
-    await this.stateService.setDisableFavicon(this.disableFavicons, {
+    await this.stateService.setDisableFavicon(!this.enableFavicons);
+    await this.stateService.setDisableFavicon(!this.enableFavicons, {
       storageLocation: StorageLocation.Disk,
     });
     this.messagingService.send("refreshCiphers");
@@ -342,8 +375,7 @@ export class SettingsComponent implements OnInit {
   }
 
   async saveTheme() {
-    await this.stateService.setTheme(this.theme);
-    window.setTimeout(() => window.location.reload(), 200);
+    await this.themingService.updateConfiguredTheme(this.theme);
   }
 
   async saveMinOnCopyToClipboard() {
@@ -410,9 +442,29 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+  async saveDdgBrowserIntegration() {
+    await this.stateService.setEnableDuckDuckGoBrowserIntegration(
+      this.enableDuckDuckGoBrowserIntegration
+    );
+
+    if (!this.enableBrowserIntegration) {
+      await this.stateService.setDuckDuckGoSharedKey(null);
+    }
+
+    this.messagingService.send(
+      this.enableDuckDuckGoBrowserIntegration
+        ? "enableDuckDuckGoBrowserIntegration"
+        : "disableDuckDuckGoBrowserIntegration"
+    );
+  }
+
   async saveBrowserIntegrationFingerprint() {
     await this.stateService.setEnableBrowserIntegrationFingerprint(
       this.enableBrowserIntegrationFingerprint
     );
+  }
+
+  async updateApproveLoginRequests() {
+    await this.stateService.setApproveLoginRequests(this.approveLoginRequests);
   }
 }

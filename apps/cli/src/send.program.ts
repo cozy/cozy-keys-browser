@@ -4,9 +4,8 @@ import * as path from "path";
 import * as chalk from "chalk";
 import * as program from "commander";
 
-import { SendType } from "jslib-common/enums/sendType";
-import { Utils } from "jslib-common/misc/utils";
-import { Response } from "jslib-node/cli/models/response";
+import { SendType } from "@bitwarden/common/enums/sendType";
+import { Utils } from "@bitwarden/common/misc/utils";
 
 import { Main } from "./bw";
 import { GetCommand } from "./commands/get.command";
@@ -16,10 +15,11 @@ import { SendEditCommand } from "./commands/send/edit.command";
 import { SendGetCommand } from "./commands/send/get.command";
 import { SendListCommand } from "./commands/send/list.command";
 import { SendReceiveCommand } from "./commands/send/receive.command";
-import { SendRemovePasswordCommand } from "./commands/send/removePassword.command";
-import { SendFileResponse } from "./models/response/sendFileResponse";
-import { SendResponse } from "./models/response/sendResponse";
-import { SendTextResponse } from "./models/response/sendTextResponse";
+import { SendRemovePasswordCommand } from "./commands/send/remove-password.command";
+import { Response } from "./models/response";
+import { SendFileResponse } from "./models/response/send-file.response";
+import { SendTextResponse } from "./models/response/send-text.response";
+import { SendResponse } from "./models/response/send.response";
 import { Program } from "./program";
 import { CliUtils } from "./utils";
 
@@ -139,7 +139,7 @@ export class SendProgram extends Program {
     return new program.Command("template")
       .arguments("<object>")
       .description("Get json templates for send objects", {
-        object: "Valid objects are: send, send.text, send.file",
+        object: "Valid objects are: send.text, send.file",
       })
       .action(async (object) => {
         const cmd = new GetCommand(
@@ -176,12 +176,12 @@ export class SendProgram extends Program {
         writeLn("");
         writeLn("  Examples:");
         writeLn("");
-        writeLn("    bw get send searchText");
-        writeLn("    bw get send id");
-        writeLn("    bw get send searchText --text");
-        writeLn("    bw get send searchText --file");
-        writeLn("    bw get send searchText --file --output ../Photos/photo.jpg");
-        writeLn("    bw get send searchText --file --raw");
+        writeLn("    bw send get searchText");
+        writeLn("    bw send get id");
+        writeLn("    bw send get searchText --text");
+        writeLn("    bw send get searchText --file");
+        writeLn("    bw send get searchText --file --output ../Photos/photo.jpg");
+        writeLn("    bw send get searchText --file --raw");
         writeLn("", true);
       })
       .action(async (id: string, options: program.OptionValues) => {

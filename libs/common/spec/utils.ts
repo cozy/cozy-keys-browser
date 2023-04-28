@@ -1,6 +1,7 @@
-import Substitute, { Arg } from "@fluffy-spoon/substitute";
+// eslint-disable-next-line no-restricted-imports
+import { Substitute, Arg } from "@fluffy-spoon/substitute";
 
-import { EncString } from "jslib-common/models/domain/encString";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
 
 function newGuid() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
@@ -28,10 +29,15 @@ export function mockEnc(s: string): EncString {
   return mock;
 }
 
-export function makeStaticByteArray(length: number) {
+export function makeStaticByteArray(length: number, start = 0) {
   const arr = new Uint8Array(length);
   for (let i = 0; i < length; i++) {
-    arr[i] = i;
+    arr[i] = start + i;
   }
   return arr;
 }
+
+/**
+ * Use to mock a return value of a static fromJSON method.
+ */
+export const mockFromJson = (stub: any) => (stub + "_fromJSON") as any;

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 function load(envName) {
   return {
     ...loadConfig(envName),

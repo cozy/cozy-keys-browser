@@ -2,10 +2,10 @@ import { ApiService } from "../abstractions/api.service";
 import { FileUploadService as FileUploadServiceAbstraction } from "../abstractions/fileUpload.service";
 import { LogService } from "../abstractions/log.service";
 import { FileUploadType } from "../enums/fileUploadType";
-import { EncArrayBuffer } from "../models/domain/encArrayBuffer";
-import { EncString } from "../models/domain/encString";
-import { AttachmentUploadDataResponse } from "../models/response/attachmentUploadDataResponse";
-import { SendFileUploadDataResponse } from "../models/response/sendFileUploadDataResponse";
+import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
+import { EncString } from "../models/domain/enc-string";
+import { SendFileUploadDataResponse } from "../models/response/send-file-upload-data.response";
+import { AttachmentUploadDataResponse } from "../vault/models/response/attachment-upload-data.response";
 
 import { AzureFileUploadService } from "./azureFileUpload.service";
 import { BitwardenFileUploadService } from "./bitwardenFileUpload.service";
@@ -16,7 +16,7 @@ export class FileUploadService implements FileUploadServiceAbstraction {
 
   constructor(private logService: LogService, private apiService: ApiService) {
     this.azureFileUploadService = new AzureFileUploadService(logService);
-    this.bitwardenFileUploadService = new BitwardenFileUploadService(apiService);
+    this.bitwardenFileUploadService = new BitwardenFileUploadService();
   }
 
   async uploadSendFile(

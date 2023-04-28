@@ -1,54 +1,39 @@
-import { CommonModule } from "@angular/common";
-import { NgModule, Pipe, PipeTransform } from "@angular/core";
+import { NgModule } from "@angular/core";
 
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-
+import { FormControlModule } from "../form-control";
 import { BitInputDirective } from "../input/input.directive";
 import { InputModule } from "../input/input.module";
+import { MultiSelectComponent } from "../multi-select/multi-select.component";
+import { MultiSelectModule } from "../multi-select/multi-select.module";
+import { SharedModule } from "../shared";
 
 import { BitErrorSummary } from "./error-summary.component";
 import { BitErrorComponent } from "./error.component";
 import { BitFormFieldComponent } from "./form-field.component";
-import { BitHintComponent } from "./hint.component";
-import { BitLabel } from "./label.directive";
+import { BitPasswordInputToggleDirective } from "./password-input-toggle.directive";
 import { BitPrefixDirective } from "./prefix.directive";
 import { BitSuffixDirective } from "./suffix.directive";
 
-/**
- * Temporarily duplicate this pipe
- */
-@Pipe({
-  name: "i18n",
-})
-export class I18nPipe implements PipeTransform {
-  constructor(private i18nService: I18nService) {}
-
-  transform(id: string, p1?: string, p2?: string, p3?: string): string {
-    return this.i18nService.t(id, p1, p2, p3);
-  }
-}
-
 @NgModule({
-  imports: [CommonModule, InputModule],
-  exports: [
-    BitErrorComponent,
-    BitErrorSummary,
-    BitFormFieldComponent,
-    BitHintComponent,
-    BitInputDirective,
-    BitLabel,
-    BitPrefixDirective,
-    BitSuffixDirective,
-  ],
+  imports: [SharedModule, FormControlModule, InputModule, MultiSelectModule],
   declarations: [
     BitErrorComponent,
     BitErrorSummary,
     BitFormFieldComponent,
-    BitHintComponent,
-    BitLabel,
+    BitPasswordInputToggleDirective,
     BitPrefixDirective,
     BitSuffixDirective,
-    I18nPipe,
+  ],
+  exports: [
+    BitErrorComponent,
+    BitErrorSummary,
+    BitFormFieldComponent,
+    BitInputDirective,
+    BitPasswordInputToggleDirective,
+    BitPrefixDirective,
+    BitSuffixDirective,
+    MultiSelectComponent,
+    FormControlModule,
   ],
 })
 export class FormFieldModule {}

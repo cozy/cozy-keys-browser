@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { SyncService } from "jslib-common/abstractions/sync.service";
-import { TokenService } from "jslib-common/abstractions/token.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 import { PaymentComponent } from "./payment.component";
 import { TaxInfoComponent } from "./tax-info.component";
@@ -24,6 +24,7 @@ export class PremiumComponent implements OnInit {
   canAccessPremium = false;
   selfHosted = false;
   premiumPrice = 10;
+  familyPlanMaxUserCount = 6;
   storageGbPrice = 4;
   additionalStorage = 0;
 
@@ -45,8 +46,8 @@ export class PremiumComponent implements OnInit {
 
   async ngOnInit() {
     this.canAccessPremium = await this.stateService.getCanAccessPremium();
-    const premium = await this.tokenService.getPremium();
-    if (premium) {
+    const premiumPersonally = await this.stateService.getHasPremiumPersonally();
+    if (premiumPersonally) {
       this.router.navigate(["/settings/subscription/user-subscription"]);
       return;
     }

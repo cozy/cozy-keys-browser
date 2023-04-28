@@ -6,7 +6,7 @@
     "message": "Filters"
   },
   "allItems": {
-    "message": "All Items"
+    "message": "All items"
   },
   "favorites": {
     "message": "Favorites"
@@ -24,7 +24,7 @@
     "message": "Identity"
   },
   "typeSecureNote": {
-    "message": "Secure Note"
+    "message": "Secure note"
   },
   "folders": {
     "message": "Folders"
@@ -33,10 +33,10 @@
     "message": "Collections"
   },
   "searchVault": {
-    "message": "Search Vault"
+    "message": "Search vault"
   },
   "addItem": {
-    "message": "Add Item"
+    "message": "Add item"
   },
   "shared": {
     "message": "Shared"
@@ -45,7 +45,7 @@
     "message": "Share"
   },
   "moveToOrganization": {
-    "message": "Move to Organization"
+    "message": "Move to organization"
   },
   "movedItemToOrg": {
     "message": "$ITEMNAME$ moved to $ORGNAME$",
@@ -67,7 +67,7 @@
     "message": "Attachments"
   },
   "viewItem": {
-    "message": "View Item"
+    "message": "View item"
   },
   "name": {
     "message": "Name"
@@ -98,13 +98,13 @@
     "message": "Passphrase"
   },
   "editItem": {
-    "message": "Edit Item"
+    "message": "Edit item"
   },
   "emailAddress": {
-    "message": "Email Address"
+    "message": "Email address"
   },
   "verificationCodeTotp": {
-    "message": "Verification Code (TOTP)"
+    "message": "Verification code (TOTP)"
   },
   "website": {
     "message": "Website"
@@ -113,30 +113,30 @@
     "message": "Notes"
   },
   "customFields": {
-    "message": "Custom Fields"
+    "message": "Custom fields"
   },
   "launch": {
     "message": "Launch"
   },
   "copyValue": {
-    "message": "Copy Value",
+    "message": "Copy value",
     "description": "Copy value to clipboard"
   },
   "minimizeOnCopyToClipboard": {
     "message": "Minimize when copying to clipboard"
   },
   "minimizeOnCopyToClipboardDesc": {
-    "message": "Minimize when copying an item's data to the clipboard."
+    "message": "Minimize application when copying an item's data to the clipboard."
   },
   "toggleVisibility": {
-    "message": "Toggle Visibility"
+    "message": "Toggle visibility"
   },
   "toggleCollapse": {
-    "message": "Toggle Collapse",
+    "message": "Toggle collapse",
     "description": "Toggling an expand/collapse state."
   },
   "cardholderName": {
-    "message": "Cardholder Name"
+    "message": "Cardholder name"
   },
   "number": {
     "message": "Number"
@@ -148,22 +148,22 @@
     "message": "Expiration"
   },
   "securityCode": {
-    "message": "Security Code"
+    "message": "Security code"
   },
   "identityName": {
-    "message": "Identity Name"
+    "message": "Identity name"
   },
   "company": {
     "message": "Company"
   },
   "ssn": {
-    "message": "Social Security Number"
+    "message": "Social Security number"
   },
   "passportNumber": {
-    "message": "Passport Number"
+    "message": "Passport number"
   },
   "licenseNumber": {
-    "message": "License Number"
+    "message": "License number"
   },
   "email": {
     "message": "Email"
@@ -175,10 +175,10 @@
     "message": "Address"
   },
   "premiumRequired": {
-    "message": "Premium Required"
+    "message": "Premium required"
   },
   "premiumRequiredDesc": {
-    "message": "A premium membership is required to use this feature."
+    "message": "A Premium membership is required to use this feature."
   },
   "errorOccurred": {
     "message": "An error has occurred."
@@ -238,14 +238,17 @@
   "ms": {
     "message": "Ms"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
   "expirationMonth": {
-    "message": "Expiration Month"
+    "message": "Expiration month"
   },
   "expirationYear": {
-    "message": "Expiration Year"
+    "message": "Expiration year"
   },
   "select": {
     "message": "Select"
@@ -254,22 +257,22 @@
     "message": "Other"
   },
   "generatePassword": {
-    "message": "Generate Password"
+    "message": "Generate password"
   },
   "type": {
     "message": "Type"
   },
   "firstName": {
-    "message": "First Name"
+    "message": "First name"
   },
   "middleName": {
-    "message": "Middle Name"
+    "message": "Middle name"
   },
   "lastName": {
-    "message": "Last Name"
+    "message": "Last name"
   },
   "fullName": {
-    "message": "Full Name"
+    "message": "Full name"
   },
   "address1": {
     "message": "Address 1"
@@ -287,7 +290,7 @@
     "message": "State / Province"
   },
   "zipPostalCode": {
-    "message": "Zip / Postal Code"
+    "message": "Zip / Postal code"
   },
   "country": {
     "message": "Country"
@@ -308,13 +311,13 @@
     "message": "Edit"
   },
   "authenticatorKeyTotp": {
-    "message": "Authenticator Key (TOTP)"
+    "message": "Authenticator key (TOTP)"
   },
   "folder": {
     "message": "Folder"
   },
   "newCustomField": {
-    "message": "New Custom Field"
+    "message": "New custom field"
   },
   "value": {
     "message": "Value"
@@ -346,56 +349,56 @@
     "message": "Name is required."
   },
   "addedItem": {
-    "message": "Added item"
+    "message": "Item added"
   },
   "editedItem": {
-    "message": "Edited item"
+    "message": "Item saved"
   },
   "deleteItem": {
-    "message": "Delete Item"
+    "message": "Delete item"
   },
   "deleteFolder": {
-    "message": "Delete Folder"
+    "message": "Delete folder"
   },
   "deleteAttachment": {
-    "message": "Delete Attachment"
+    "message": "Delete attachment"
   },
   "deleteItemConfirmation": {
     "message": "Do you really want to send to the trash?"
   },
   "deletedItem": {
-    "message": "Sent item to trash"
+    "message": "Item sent to trash"
   },
   "overwritePasswordConfirmation": {
     "message": "Are you sure you want to overwrite the current password?"
   },
   "overwriteUsername": {
-    "message": "Overwrite Username"
+    "message": "Overwrite username"
   },
   "overwriteUsernameConfirmation": {
     "message": "Are you sure you want to overwrite the current username?"
   },
   "noneFolder": {
-    "message": "No Folder",
+    "message": "No folder",
     "description": "This is the folder for uncategorized items"
   },
   "addFolder": {
-    "message": "Add Folder"
+    "message": "Add folder"
   },
   "editFolder": {
-    "message": "Edit Folder"
+    "message": "Edit folder"
   },
   "regeneratePassword": {
-    "message": "Regenerate Password"
+    "message": "Regenerate password"
   },
   "copyPassword": {
-    "message": "Copy Password"
+    "message": "Copy password"
   },
   "copyUri": {
     "message": "Copy URI"
   },
   "copyVerificationCodeTotp": {
-    "message": "Copy Verification Code (TOTP)"
+    "message": "Copy verification code (TOTP)"
   },
   "length": {
     "message": "Length"
@@ -410,64 +413,64 @@
     "message": "Numbers (0-9)"
   },
   "specialCharacters": {
-    "message": "Special Characters (!@#$%^&*)"
+    "message": "Special characters (!@#$%^&*)"
   },
   "numWords": {
-    "message": "Number of Words"
+    "message": "Number of words"
   },
   "wordSeparator": {
-    "message": "Word Separator"
+    "message": "Word separator"
   },
   "capitalize": {
     "message": "Capitalize",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
-    "message": "Include Number"
+    "message": "Include number"
   },
   "close": {
     "message": "Close"
   },
   "minNumbers": {
-    "message": "Minimum Numbers"
+    "message": "Minimum numbers"
   },
   "minSpecial": {
-    "message": "Minimum Special",
+    "message": "Minimum special",
     "description": "Minimum Special Characters"
   },
   "ambiguous": {
-    "message": "Avoid Ambiguous Characters"
+    "message": "Avoid ambiguous characters"
   },
   "searchCollection": {
-    "message": "Search Collection"
+    "message": "Search collection"
   },
   "searchFolder": {
-    "message": "Search Folder"
+    "message": "Search folder"
   },
   "searchFavorites": {
-    "message": "Search Favorites"
+    "message": "Search favorites"
   },
   "searchType": {
-    "message": "Search Type",
+    "message": "Search type",
     "description": "Search item type"
   },
   "newAttachment": {
-    "message": "Add New Attachment"
+    "message": "Add new attachment"
   },
   "deletedAttachment": {
-    "message": "Deleted attachment"
+    "message": "Attachment deleted"
   },
   "deleteAttachmentConfirmation": {
     "message": "Are you sure you want to delete this attachment?"
   },
   "attachmentSaved": {
-    "message": "The attachment has been saved."
+    "message": "Attachment saved"
   },
   "file": {
     "message": "File"
   },
   "selectFile": {
-    "message": "Select a file."
+    "message": "Select a file"
   },
   "maxFileSize": {
     "message": "Maximum file size is 500 MB."
@@ -476,31 +479,31 @@
     "message": "You cannot use this feature until you update your encryption key."
   },
   "editedFolder": {
-    "message": "Edited folder"
+    "message": "Folder saved"
   },
   "addedFolder": {
-    "message": "Added folder"
+    "message": "Folder added"
   },
   "deleteFolderConfirmation": {
     "message": "Are you sure you want to delete this folder?"
   },
   "deletedFolder": {
-    "message": "Deleted folder"
+    "message": "Folder deleted"
   },
   "loginOrCreateNewAccount": {
     "message": "Log in or create a new account to access your secure vault."
   },
   "createAccount": {
-    "message": "Create Account"
+    "message": "Create account"
   },
   "logIn": {
-    "message": "Log In"
+    "message": "Log in"
   },
   "submit": {
     "message": "Submit"
   },
   "masterPass": {
-    "message": "Master Password"
+    "message": "Master password"
   },
   "masterPassDesc": {
     "message": "The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it."
@@ -509,16 +512,16 @@
     "message": "A master password hint can help you remember your password if you forget it."
   },
   "reTypeMasterPass": {
-    "message": "Re-type Master Password"
+    "message": "Re-type master password"
   },
   "masterPassHint": {
-    "message": "Master Password Hint (optional)"
+    "message": "Master password hint (optional)"
   },
   "settings": {
     "message": "Settings"
   },
   "passwordHint": {
-    "message": "Password Hint"
+    "message": "Password hint"
   },
   "enterEmailToGetHint": {
     "message": "Enter your account email address to receive your master password hint."
@@ -532,11 +535,21 @@
   "invalidEmail": {
     "message": "Invalid email address."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Master password is required."
   },
-  "masterPassLength": {
-    "message": "Master password must be at least 8 characters long."
+  "confirmMasterPasswordRequired": {
+    "message": "Master password retype is required."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Master password confirmation does not match."
@@ -551,7 +564,7 @@
     "message": "An unexpected error has occurred."
   },
   "itemInformation": {
-    "message": "Item Information"
+    "message": "Item information"
   },
   "noItemsInList": {
     "message": "There are no items to list."
@@ -560,13 +573,13 @@
     "message": "Send a verification code to your email"
   },
   "sendCode": {
-    "message": "Send Code"
+    "message": "Send code"
   },
   "codeSent": {
-    "message": "Code Sent"
+    "message": "Code sent"
   },
   "verificationCode": {
-    "message": "Verification Code"
+    "message": "Verification code"
   },
   "confirmIdentity": {
     "message": "Confirm your identity to continue."
@@ -617,20 +630,20 @@
     "message": "Insert your security key into your computer's USB port. If it has a button, touch it."
   },
   "recoveryCodeDesc": {
-    "message": "Lost access to all of your two-factor providers? Use your recovery code to disable all two-factor providers from your account."
+    "message": "Lost access to all of your two-factor providers? Use your recovery code to turn off all two-factor providers on your account."
   },
   "recoveryCodeTitle": {
-    "message": "Recovery Code"
+    "message": "Recovery code"
   },
   "authenticatorAppTitle": {
-    "message": "Authenticator App"
+    "message": "Authenticator app"
   },
   "authenticatorAppDesc": {
     "message": "Use an authenticator app (such as Authy or Google Authenticator) to generate time-based verification codes.",
     "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
   },
   "yubiKeyTitle": {
-    "message": "YubiKey OTP Security Key"
+    "message": "YubiKey OTP security key"
   },
   "yubiKeyDesc": {
     "message": "Use a YubiKey to access your account. Works with YubiKey 4, 4 Nano, 4C, and NEO devices."
@@ -647,7 +660,7 @@
     "message": "FIDO2 WebAuthn"
   },
   "webAuthnDesc": {
-    "message": "Use any WebAuthn enabled security key to access your account."
+    "message": "Use any WebAuthn compatible security key to access your account."
   },
   "emailTitle": {
     "message": "Email"
@@ -656,25 +669,25 @@
     "message": "Verification codes will be emailed to you."
   },
   "loginUnavailable": {
-    "message": "Login Unavailable"
+    "message": "Login unavailable"
   },
   "noTwoStepProviders": {
-    "message": "This account has two-step login enabled, however, none of the configured two-step providers are supported by this device."
+    "message": "This account has two-step login set up, however, none of the configured two-step providers are supported by this device."
   },
   "noTwoStepProviders2": {
     "message": "Please add additional providers that are better supported across devices (such as an authenticator app)."
   },
   "twoStepOptions": {
-    "message": "Two-step Login Options"
+    "message": "Two-step login options"
   },
   "selfHostedEnvironment": {
-    "message": "Self-hosted Environment"
+    "message": "Self-hosted environment"
   },
   "selfHostedEnvironmentFooter": {
     "message": "Specify the base URL of your on-premises hosted Bitwarden installation."
   },
   "customEnvironment": {
-    "message": "Custom Environment"
+    "message": "Custom environment"
   },
   "customEnvironmentFooter": {
     "message": "For advanced users. You can specify the base URL of each service independently."
@@ -683,22 +696,22 @@
     "message": "Server URL"
   },
   "apiUrl": {
-    "message": "API Server URL"
+    "message": "API server URL"
   },
   "webVaultUrl": {
-    "message": "Web Vault Server URL"
+    "message": "Web vault server URL"
   },
   "identityUrl": {
-    "message": "Identity Server URL"
+    "message": "Identity server URL"
   },
   "notificationsUrl": {
-    "message": "Notifications Server URL"
+    "message": "Notifications server URL"
   },
   "iconsUrl": {
-    "message": "Icons Server URL"
+    "message": "Icons server URL"
   },
   "environmentSaved": {
-    "message": "The environment URLs have been saved."
+    "message": "Environment URLs saved"
   },
   "ok": {
     "message": "Ok"
@@ -710,13 +723,13 @@
     "message": "No"
   },
   "overwritePassword": {
-    "message": "Overwrite Password"
+    "message": "Overwrite password"
   },
   "learnMore": {
     "message": "Learn more"
   },
   "featureUnavailable": {
-    "message": "Feature Unavailable"
+    "message": "Feature unavailable"
   },
   "loggedOut": {
     "message": "Logged out"
@@ -728,16 +741,16 @@
     "message": "Are you sure you want to log out?"
   },
   "logOut": {
-    "message": "Log Out"
+    "message": "Log out"
   },
   "addNewLogin": {
-    "message": "Add New Login"
+    "message": "New login"
   },
   "addNewItem": {
-    "message": "Add New Item"
+    "message": "New item"
   },
   "addNewFolder": {
-    "message": "Add New Folder"
+    "message": "New folder"
   },
   "view": {
     "message": "View"
@@ -749,37 +762,37 @@
     "message": "Loading..."
   },
   "lockVault": {
-    "message": "Lock Vault"
+    "message": "Lock vault"
   },
   "passwordGenerator": {
-    "message": "Password Generator"
+    "message": "Password generator"
   },
   "contactUs": {
-    "message": "Contact Us"
+    "message": "Contact us"
   },
   "getHelp": {
-    "message": "Get Help"
+    "message": "Get help"
   },
   "fileBugReport": {
-    "message": "File a Bug Report"
+    "message": "File a bug report"
   },
   "blog": {
     "message": "Blog"
   },
   "followUs": {
-    "message": "Follow Us"
+    "message": "Follow us"
   },
   "syncVault": {
-    "message": "Sync Vault"
+    "message": "Sync vault"
   },
   "changeMasterPass": {
-    "message": "Change Master Password"
+    "message": "Change master password"
   },
   "changeMasterPasswordConfirmation": {
     "message": "You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?"
   },
   "fingerprintPhrase": {
-    "message": "Fingerprint Phrase",
+    "message": "Fingerprint phrase",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
@@ -787,13 +800,13 @@
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "goToWebVault": {
-    "message": "Go to Web Vault"
+    "message": "Go to web vault"
   },
   "getMobileApp": {
-    "message": "Get Mobile App"
+    "message": "Get mobile app"
   },
   "getBrowserExtension": {
-    "message": "Get Browser Extension"
+    "message": "Get browser extension"
   },
   "syncingComplete": {
     "message": "Syncing complete"
@@ -824,16 +837,16 @@
     "message": "Invalid master password"
   },
   "twoStepLoginConfirmation": {
-    "message": "Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?"
+    "message": "Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be set up on the bitwarden.com web vault. Do you want to visit the website now?"
   },
   "twoStepLogin": {
-    "message": "Two-step Login"
+    "message": "Two-step login"
   },
   "vaultTimeout": {
-    "message": "Vault Timeout"
+    "message": "Vault timeout"
   },
   "vaultTimeoutDesc": {
-    "message": "Choose when your vault will timeout and perform the selected action."
+    "message": "Choose when your vault will take the vault timeout action."
   },
   "immediately": {
     "message": "Immediately"
@@ -869,16 +882,16 @@
     "message": "4 hours"
   },
   "onIdle": {
-    "message": "On System Idle"
+    "message": "On system idle"
   },
   "onSleep": {
-    "message": "On System Sleep"
+    "message": "On system sleep"
   },
   "onLocked": {
-    "message": "On System Lock"
+    "message": "On system lock"
   },
   "onRestart": {
-    "message": "On Restart"
+    "message": "On restart"
   },
   "never": {
     "message": "Never"
@@ -887,21 +900,21 @@
     "message": "Security"
   },
   "clearClipboard": {
-    "message": "Clear Clipboard",
+    "message": "Clear clipboard",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "clearClipboardDesc": {
     "message": "Automatically clear copied values from your clipboard.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Disable Website Icons"
+  "enableFavicon": {
+    "message": "Show website icons"
   },
-  "disableFaviconDesc": {
-    "message": "Website Icons provide a recognizable image next to each login item in your vault."
+  "faviconDesc": {
+    "message": "Show a recognizable image next to each login."
   },
   "enableMinToTray": {
-    "message": "Minimize to Tray Icon"
+    "message": "Minimize to tray icon"
   },
   "enableMinToTrayDesc": {
     "message": "When minimizing the window, show an icon in the system tray instead."
@@ -913,7 +926,7 @@
     "message": "When minimizing the window, show an icon in the menu bar instead."
   },
   "enableCloseToTray": {
-    "message": "Close to Tray Icon"
+    "message": "Close to tray icon"
   },
   "enableCloseToTrayDesc": {
     "message": "When closing the window, show an icon in the system tray instead."
@@ -925,13 +938,13 @@
     "message": "When closing the window, show an icon in the menu bar instead."
   },
   "enableTray": {
-    "message": "Enable Tray Icon"
+    "message": "Show tray icon"
   },
   "enableTrayDesc": {
     "message": "Always show an icon in the system tray."
   },
   "startToTray": {
-    "message": "Start To Tray Icon"
+    "message": "Start to tray icon"
   },
   "startToTrayDesc": {
     "message": "When the application is first started, only show an icon in the system tray."
@@ -946,7 +959,7 @@
     "message": "Start automatically on login"
   },
   "openAtLoginDesc": {
-    "message": "Start the Bitwarden Desktop application automatically on login."
+    "message": "Start the Bitwarden desktop application automatically on login."
   },
   "alwaysShowDock": {
     "message": "Always show in the Dock"
@@ -955,10 +968,10 @@
     "message": "Show the Bitwarden icon in the Dock even when minimized to the menu bar."
   },
   "confirmTrayTitle": {
-    "message": "Confirm disable tray"
+    "message": "Confirm hiding tray"
   },
   "confirmTrayDesc": {
-    "message": "Disabling this setting will also disable all other tray related settings."
+    "message": "Turning off this setting will also turn off all other tray related settings."
   },
   "language": {
     "message": "Language"
@@ -985,7 +998,7 @@
     "description": "Copy to clipboard"
   },
   "checkForUpdates": {
-    "message": "Check for Updates…"
+    "message": "Check for updates…"
   },
   "version": {
     "message": "Version $VERSION_NUM$",
@@ -997,7 +1010,7 @@
     }
   },
   "restartToUpdate": {
-    "message": "Restart to Update"
+    "message": "Restart to update"
   },
   "restartToUpdateDesc": {
     "message": "Version $VERSION_NUM$ is ready to install. You must restart the application to complete the installation. Do you want to restart and update now?",
@@ -1009,7 +1022,7 @@
     }
   },
   "updateAvailable": {
-    "message": "Update Available"
+    "message": "Update available"
   },
   "updateAvailableDesc": {
     "message": "An update was found. Do you want to download it now?"
@@ -1024,39 +1037,39 @@
     "message": "No updates are currently available. You are using the latest version."
   },
   "updateError": {
-    "message": "Update Error"
+    "message": "Update error"
   },
   "unknown": {
     "message": "Unknown"
   },
   "copyUsername": {
-    "message": "Copy Username"
+    "message": "Copy username"
   },
   "copyNumber": {
-    "message": "Copy Number",
+    "message": "Copy number",
     "description": "Copy credit card number"
   },
   "copySecurityCode": {
-    "message": "Copy Security Code",
+    "message": "Copy security code",
     "description": "Copy credit card security code (CVV)"
   },
   "premiumMembership": {
-    "message": "Premium Membership"
+    "message": "Premium membership"
   },
   "premiumManage": {
-    "message": "Manage Membership"
+    "message": "Manage membership"
   },
   "premiumManageAlert": {
     "message": "You can manage your membership on the bitwarden.com web vault. Do you want to visit the website now?"
   },
   "premiumRefresh": {
-    "message": "Refresh Membership"
+    "message": "Refresh membership"
   },
   "premiumNotCurrentMember": {
-    "message": "You are not currently a premium member."
+    "message": "You are not currently a Premium member."
   },
   "premiumSignUpAndGet": {
-    "message": "Sign up for a premium membership and get:"
+    "message": "Sign up for a Premium membership and get:"
   },
   "premiumSignUpStorage": {
     "message": "1 GB encrypted storage for file attachments."
@@ -1101,7 +1114,7 @@
     "message": "Refresh complete"
   },
   "passwordHistory": {
-    "message": "Password History"
+    "message": "Password history"
   },
   "clear": {
     "message": "Clear",
@@ -1125,25 +1138,25 @@
     "description": "Paste from clipboard"
   },
   "selectAll": {
-    "message": "Select All"
+    "message": "Select all"
   },
   "zoomIn": {
-    "message": "Zoom In"
+    "message": "Zoom in"
   },
   "zoomOut": {
-    "message": "Zoom Out"
+    "message": "Zoom out"
   },
   "resetZoom": {
-    "message": "Reset Zoom"
+    "message": "Reset zoom"
   },
   "toggleFullScreen": {
-    "message": "Toggle Full Screen"
+    "message": "Toggle full screen"
   },
   "reload": {
     "message": "Reload"
   },
   "toggleDevTools": {
-    "message": "Toggle Developer Tools"
+    "message": "Toggle developer tools"
   },
   "minimize": {
     "message": "Minimize",
@@ -1153,7 +1166,7 @@
     "message": "Zoom"
   },
   "bringAllToFront": {
-    "message": "Bring All to Front",
+    "message": "Bring all to front",
     "description": "Bring all windows to front (foreground)"
   },
   "aboutBitwarden": {
@@ -1166,10 +1179,10 @@
     "message": "Hide Bitwarden"
   },
   "hideOthers": {
-    "message": "Hide Others"
+    "message": "Hide others"
   },
   "showAll": {
-    "message": "Show All"
+    "message": "Show all"
   },
   "quitBitwarden": {
     "message": "Quit Bitwarden"
@@ -1210,7 +1223,7 @@
     "description": "Domain name. Ex. website.com"
   },
   "domainName": {
-    "message": "Domain Name",
+    "message": "Domain name",
     "description": "Domain name. Ex. website.com"
   },
   "host": {
@@ -1228,7 +1241,7 @@
     "description": "A programming term, also known as 'RegEx'."
   },
   "matchDetection": {
-    "message": "Match Detection",
+    "message": "Match detection",
     "description": "URI match detection for auto-fill."
   },
   "defaultMatchDetection": {
@@ -1236,7 +1249,7 @@
     "description": "Default URI match detection for auto-fill."
   },
   "toggleOptions": {
-    "message": "Toggle Options"
+    "message": "Toggle options"
   },
   "organization": {
     "message": "Organization",
@@ -1253,32 +1266,70 @@
     "description": "Text for a button that toggles the visibility of the window. Shows the window when it is hidden or hides the window if it is currently open."
   },
   "hideToTray": {
-    "message": "Hide to Tray"
+    "message": "Hide to tray"
   },
   "alwaysOnTop": {
-    "message": "Always on Top",
+    "message": "Always on top",
     "description": "Application window should always stay on top of other windows"
   },
   "dateUpdated": {
     "message": "Updated",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Created",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
-    "message": "Password Updated",
+    "message": "Password updated",
     "description": "ex. Date this password was updated"
   },
   "exportVault": {
-    "message": "Export Vault"
+    "message": "Export vault"
   },
   "fileFormat": {
-    "message": "File Format"
+    "message": "File format"
+  },
+  "hCaptchaUrl": {
+    "message": "hCaptcha Url",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Load accessibility cookie"
+  },
+  "registerAccessibilityUser": {
+    "message": "Register as an accessibility user at",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Copy and paste the link sent to your email below"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Enter URL to load accessibility cookie for hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "hCaptcha Url is required",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Invalid Url"
+  },
+  "done": {
+    "message": "Done"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Accessibility cookie saved!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "No accessibility cookie saved"
   },
   "warning": {
     "message": "WARNING",
     "description": "WARNING (should stay in capitalized letters if the language permits)"
   },
   "confirmVaultExport": {
-    "message": "Confirm Vault Export"
+    "message": "Confirm vault export"
   },
   "exportWarningDesc": {
     "message": "This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it."
@@ -1314,7 +1365,7 @@
     "description": "ex. A weak password. Scale: Weak -> Good -> Strong"
   },
   "weakMasterPassword": {
-    "message": "Weak Master Password"
+    "message": "Weak master password"
   },
   "weakMasterPasswordDesc": {
     "message": "The master password you have chosen is weak. You should use a strong master password (or a passphrase) to properly protect your Bitwarden account. Are you sure you want to use this master password?"
@@ -1347,32 +1398,47 @@
   "touchIdConsentMessage": {
     "message": "unlock your vault"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Do not prompt for Windows Hello on launch."
+  "autoPromptWindowsHello": {
+    "message": "Ask for Windows Hello on launch"
   },
-  "noAutoPromptTouchId": {
-    "message": "Do not prompt for Touch ID on launch."
+  "autoPromptTouchId": {
+    "message": "Ask for Touch ID on launch"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Lock with master password on restart"
+  },
+  "deleteAccount": {
+    "message": "Delete account"
+  },
+  "deleteAccountDesc": {
+    "message": "Proceed below to delete your account and all vault data."
+  },
+  "deleteAccountWarning": {
+    "message": "Deleting your account is permanent. It cannot be undone."
+  },
+  "accountDeleted": {
+    "message": "Account deleted"
+  },
+  "accountDeletedDesc": {
+    "message": "Your account has been closed and all associated data has been deleted."
   },
   "preferences": {
     "message": "Preferences"
   },
   "enableMenuBar": {
-    "message": "Enable Menu Bar Icon"
+    "message": "Show menu bar icon"
   },
   "enableMenuBarDesc": {
     "message": "Always show an icon in the menu bar."
   },
   "hideToMenuBar": {
-    "message": "Hide to Menu Bar"
+    "message": "Hide to menu bar"
   },
   "selectOneCollection": {
     "message": "You must select at least one collection."
   },
   "premiumUpdated": {
-    "message": "You've upgraded to premium."
+    "message": "You've upgraded to Premium."
   },
   "restore": {
     "message": "Restore"
@@ -1394,7 +1460,7 @@
     "message": "Are you sure you want to leave? If you leave now then your current information will not be saved."
   },
   "unsavedChangesTitle": {
-    "message": "Unsaved Changes"
+    "message": "Unsaved changes"
   },
   "clone": {
     "message": "Clone"
@@ -1403,13 +1469,13 @@
     "message": "One or more organization policies are affecting your generator settings."
   },
   "vaultTimeoutAction": {
-    "message": "Vault Timeout Action"
+    "message": "Vault timeout action"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "A locked vault requires that you re-enter your master password to access it again."
+    "message": "Master password or other unlock method is required to access your vault again."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "A logged out vault requires that you re-authenticate to access it again."
+    "message": "Re-authentication is required to access your vault again."
   },
   "lock": {
     "message": "Lock",
@@ -1420,49 +1486,49 @@
     "description": "Noun: a special folder to hold deleted items"
   },
   "searchTrash": {
-    "message": "Search Trash"
+    "message": "Search trash"
   },
   "permanentlyDeleteItem": {
-    "message": "Permanently Delete Item"
+    "message": "Permanently delete item"
   },
   "permanentlyDeleteItemConfirmation": {
     "message": "Are you sure you want to permanently delete this item?"
   },
   "permanentlyDeletedItem": {
-    "message": "Permanently Deleted item"
+    "message": "Item permanently deleted"
   },
   "restoreItem": {
-    "message": "Restore Item"
+    "message": "Restore item"
   },
   "restoreItemConfirmation": {
     "message": "Are you sure you want to restore this item?"
   },
   "restoredItem": {
-    "message": "Restored Item"
+    "message": "Item restored"
   },
   "permanentlyDelete": {
-    "message": "Permanently Delete"
+    "message": "Permanently delete"
   },
   "vaultTimeoutLogOutConfirmation": {
     "message": "Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?"
   },
   "vaultTimeoutLogOutConfirmationTitle": {
-    "message": "Timeout Action Confirmation"
+    "message": "Timeout action confirmation"
   },
   "enterpriseSingleSignOn": {
-    "message": "Enterprise Single Sign-On"
+    "message": "Enterprise single sign-on"
   },
   "setMasterPassword": {
-    "message": "Set Master Password"
+    "message": "Set master password"
   },
   "ssoCompleteRegistration": {
     "message": "In order to complete logging in with SSO, please set a master password to access and protect your vault."
   },
   "newMasterPass": {
-    "message": "New Master Password"
+    "message": "New master password"
   },
   "confirmNewMasterPass": {
-    "message": "Confirm New Master Password"
+    "message": "Confirm new master password"
   },
   "masterPasswordPolicyInEffect": {
     "message": "One or more organization policies require your master password to meet the following requirements:"
@@ -1509,14 +1575,20 @@
   "acceptPolicies": {
     "message": "By checking this box you agree to the following:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "enableBrowserIntegration": {
-    "message": "Enable browser integration"
+    "message": "Allow browser integration"
   },
   "enableBrowserIntegrationDesc": {
-    "message": "Browser integration is used for biometrics in browser."
+    "message": "Used for biometrics in browser."
+  },
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Allow DuckDuckGo browser integration"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Use your Bitwarden vault when browsing with DuckDuckGo."
   },
   "browserIntegrationUnsupportedTitle": {
     "message": "Browser integration not supported"
@@ -1525,7 +1597,7 @@
     "message": "Unfortunately browser integration is only supported in the Mac App Store version for now."
   },
   "browserIntegrationWindowsStoreDesc": {
-    "message": "Unfortunately browser integration is currently not supported in the Windows Store version."
+    "message": "Unfortunately browser integration is currently not supported in the Microsoft Store version."
   },
   "browserIntegrationLinuxDesc": {
     "message": "Unfortunately browser integration is currently not supported in the linux version."
@@ -1534,7 +1606,7 @@
     "message": "Require verification for browser integration"
   },
   "enableBrowserIntegrationFingerprintDesc": {
-    "message": "Enable an additional layer of security by requiring fingerprint phrase validation when establishing a link between your desktop and browser. When enabled, this requires user intervention and verification each time a connection is established."
+    "message": "Add an additional layer of security by requiring fingerprint phrase confirmation when establishing a link between your desktop and browser. This requires user action and verification each time a connection is created."
   },
   "approve": {
     "message": "Approve"
@@ -1545,14 +1617,29 @@
   "verifyBrowserDesc": {
     "message": "Please ensure the shown fingerprint is identical to the fingerprint showed in the browser extension."
   },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ wants to connect to Bitwarden",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Would you like to approve this request?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "If you did not initiate this request, do not approve it."
+  },
   "biometricsNotEnabledTitle": {
-    "message": "Biometrics not enabled"
+    "message": "Biometrics not set up"
   },
   "biometricsNotEnabledDesc": {
-    "message": "Browser biometrics requires desktop biometrics to be enabled in the settings first."
+    "message": "Browser biometrics requires desktop biometrics to be set up in the settings first."
   },
   "personalOwnershipSubmitError": {
-    "message": "Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections."
+    "message": "Due to an enterprise policy, you are restricted from saving items to your individual vault. Change the ownership option to an organization and choose from available collections."
   },
   "hintEqualsPassword": {
     "message": "Your password hint cannot be the same as your password."
@@ -1579,27 +1666,27 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "myVault": {
-    "message": "My Vault"
+    "message": "My vault"
   },
   "text": {
     "message": "Text"
   },
   "deletionDate": {
-    "message": "Deletion Date"
+    "message": "Deletion date"
   },
   "deletionDateDesc": {
     "message": "The Send will be permanently deleted on the specified date and time.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "expirationDate": {
-    "message": "Expiration Date"
+    "message": "Expiration date"
   },
   "expirationDateDesc": {
     "message": "If set, access to this Send will expire on the specified date and time.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Maximum Access Count",
+    "message": "Maximum access count",
     "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
@@ -1607,10 +1694,10 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "currentAccessCount": {
-    "message": "Current Access Count"
+    "message": "Current access count"
   },
   "disableSend": {
-    "message": "Disable this Send so that no one can access it.",
+    "message": "Deactivate this Send so that no one can access it.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendPasswordDesc": {
@@ -1626,7 +1713,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLinkLabel": {
-    "message": "Send Link",
+    "message": "Send link",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "textHiddenByDefault": {
@@ -1634,26 +1721,26 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSend": {
-    "message": "Created Send",
+    "message": "Send added",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "Edited Send",
+    "message": "Send saved",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletedSend": {
-    "message": "Deleted Send",
+    "message": "Send deleted",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "newPassword": {
-    "message": "New Password"
+    "message": "New password"
   },
   "whatTypeOfSend": {
     "message": "What type of Send is this?",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createSend": {
-    "message": "Create Send",
+    "message": "New Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendTextDesc": {
@@ -1689,7 +1776,7 @@
     "message": "Copy the link to share this Send to my clipboard upon save."
   },
   "sendDisabled": {
-    "message": "Send disabled",
+    "message": "Send removed",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
@@ -1701,6 +1788,15 @@
   },
   "disabled": {
     "message": "Disabled"
+  },
+  "removePassword": {
+    "message": "Remove password"
+  },
+  "removedPassword": {
+    "message": "Password removed"
+  },
+  "removePasswordConfirmation": {
+    "message": "Are you sure you want to remove the password?"
   },
   "maxAccessCountReached": {
     "message": "Max access count reached"
@@ -1721,7 +1817,7 @@
     "message": "One or more organization policies are affecting your Send options."
   },
   "emailVerificationRequired": {
-    "message": "Email Verification Required"
+    "message": "Email verification required"
   },
   "emailVerificationRequiredDesc": {
     "message": "You must verify your email to use this feature."
@@ -1736,13 +1832,13 @@
     "message": "This action is protected. To continue, please re-enter your master password to verify your identity."
   },
   "updatedMasterPassword": {
-    "message": "Updated Master Password"
+    "message": "Updated master password"
   },
   "updateMasterPassword": {
-    "message": "Update Master Password"
+    "message": "Update master password"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "hours": {
     "message": "Hours"
@@ -1751,7 +1847,7 @@
     "message": "Minutes"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1767,25 +1863,25 @@
     "message": "Your vault timeout exceeds the restrictions set by your organization."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatic Enrollment"
+    "message": "Automatic enrollment"
   },
   "resetPasswordAutoEnrollInviteWarning": {
     "message": "This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
   },
   "vaultExportDisabled": {
-    "message": "Vault Export Disabled"
+    "message": "Vault export removed"
   },
   "personalVaultExportPolicyInEffect": {
     "message": "One or more organization policies prevents you from exporting your personal vault."
   },
   "addAccount": {
-    "message": "Add Account"
+    "message": "Add account"
   },
   "removeMasterPassword": {
-    "message": "Remove Master Password"
+    "message": "Remove master password"
   },
   "removedMasterPassword": {
-    "message": "Master password removed."
+    "message": "Master password removed"
   },
   "convertOrganizationEncryptionDesc": {
     "message": "$ORGANIZATION$ is using SSO with a self-hosted key server. A master password is no longer required to log in for members of this organization.",
@@ -1797,7 +1893,7 @@
     }
   },
   "leaveOrganization": {
-    "message": "Leave Organization"
+    "message": "Leave organization"
   },
   "leaveOrganizationConfirmation": {
     "message": "Are you sure you want to leave this organization?"
@@ -1806,10 +1902,10 @@
     "message": "You have left the organization."
   },
   "ssoKeyConnectorError": {
-    "message": "Key Connector error: make sure Key Connector is available and working correctly."
+    "message": "Key connector error: make sure key connector is available and working correctly."
   },
   "lockAllVaults": {
-    "message": "Lock All Vaults"
+    "message": "Lock all vaults"
   },
   "accountLimitReached": {
     "message": "No more than 5 accounts may be logged in at the same time."
@@ -1818,7 +1914,7 @@
     "message": "Preferences"
   },
   "appPreferences": {
-    "message": "App Settings (All Accounts)"
+    "message": "App settings (all accounts)"
   },
   "accountSwitcherLimitReached": {
     "message": "Account limit reached. Log out of an account to add another."
@@ -1833,7 +1929,7 @@
     }
   },
   "switchAccount": {
-    "message": "Switch Account"
+    "message": "Switch account"
   },
   "options": {
     "message": "Options"
@@ -1842,10 +1938,10 @@
     "message": "Your session has timed out. Please go back and try logging in again."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exporting Personal Vault"
+    "message": "Exporting individual vault"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1866,26 +1962,26 @@
     "message": "What would you like to generate?"
   },
   "passwordType": {
-    "message": "Password Type"
+    "message": "Password type"
   },
   "regenerateUsername": {
-    "message": "Regenerate Username"
+    "message": "Regenerate username"
   },
   "generateUsername": {
-    "message": "Generate Username"
+    "message": "Generate username"
   },
   "usernameType": {
-    "message": "Username Type"
+    "message": "Username type"
   },
   "plusAddressedEmail": {
-    "message": "Plus Addressed Email",
+    "message": "Plus addressed email",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Use your email provider's sub-addressing capabilities."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Catch-all email"
   },
   "catchallEmailDesc": {
     "message": "Use your domain's configured catch-all inbox."
@@ -1894,25 +1990,25 @@
     "message": "Random"
   },
   "randomWord": {
-    "message": "Random Word"
+    "message": "Random word"
   },
   "websiteName": {
-    "message": "Website Name"
+    "message": "Website name"
   },
   "service": {
     "message": "Service"
   },
   "allVaults": {
-    "message": "All Vaults"
+    "message": "All vaults"
   },
   "searchOrganization": {
-    "message": "Search Organization"
+    "message": "Search organization"
   },
   "searchMyVault": {
-    "message": "Search My Vault"
+    "message": "Search my vault"
   },
   "forwardedEmail": {
-    "message": "Forwarded Email Alias"
+    "message": "Forwarded email alias"
   },
   "forwardedEmailDesc": {
     "message": "Generate an email alias with an external forwarding service."
@@ -1925,6 +2021,182 @@
     "message": "API Access Token"
   },
   "apiKey": {
-    "message": "API Key"
+    "message": "API key"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Premium subscription required"
+  },
+  "organizationIsDisabled": {
+    "message": "Organization suspended"
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in suspended organizations cannot be accessed. Contact your organization owner for assistance."
+  },
+  "neverLockWarning": {
+    "message": "Are you sure you want to use the \"Never\" option? Setting your lock options to \"Never\" stores your vault's encryption key on your device. If you use this option you should ensure that you keep your device properly protected."
+  },
+  "vault": {
+    "message": "Vault"
+  },
+  "loginWithMasterPassword": {
+    "message": "Log in with master password"
+  },
+  "loggingInAs": {
+    "message": "Logging in as"
+  },
+  "rememberEmail": {
+    "message": "Remember email"
+  },
+  "notYou": {
+    "message": "Not you?"
+  },
+  "newAroundHere": {
+    "message": "New around here?"
+  },
+  "loggingInTo": {
+    "message": "Logging in to $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Log in with another device"
+  },
+  "logInInitiated": {
+    "message": "Log in initiated"
+  },
+  "notificationSentDevice": {
+    "message": "A notification has been sent to your device."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingerprint phrase"
+  },
+  "needAnotherOption": {
+    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+  },
+  "viewAllLoginOptions": {
+    "message": "View all login options"
+  },
+  "resendNotification": {
+    "message": "Resend notification"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Are you trying to log in?"
+  },
+  "logInAttemptBy": {
+    "message": "Login attempt by $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Device Type"
+  },
+  "ipAddress": {
+    "message": "IP Address"
+  },
+  "time": {
+    "message": "Time"
+  },
+  "confirmLogIn": {
+    "message": "Confirm login"
+  },
+  "denyLogIn": {
+    "message": "Deny login"
+  },
+  "approveLoginRequests": {
+    "message": "Approve login requests"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Login confirmed for $EMAIL$ on $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "You denied a login attempt from another device. If this really was you, try to log in with the device again."
+  },
+  "justNow": {
+    "message": "Just now"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Requested $MINUTES$ minutes ago",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Login request has already expired."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "This request is no longer valid."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Use this device to approve login requests made from other devices."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Confirm login attempt for $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Log in requested"
+  },
+  "exposedMasterPassword": {
+    "message": "Exposed Master Password"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Weak and Exposed Master Password"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+  },
+  "checkForBreaches": {
+    "message": "Check known data breaches for this password"
+  },
+  "important": {
+    "message": "Important:"
+  },
+  "masterPasswordHint": {
+    "message": "Your master password cannot be recovered if you forget it!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ character minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

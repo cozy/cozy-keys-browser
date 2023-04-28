@@ -1,6 +1,7 @@
 ﻿@import "variables.scss";
 
 #login-page,
+#login-with-device-page,
 #lock-page,
 #sso-page,
 #set-password-page,
@@ -25,6 +26,7 @@
   }
 }
 
+#accessibility-cookie-page,
 #register-page,
 #hint-page,
 #two-factor-page,
@@ -45,6 +47,7 @@
   }
 }
 
+#accessibility-cookie-page,
 #login-page,
 #register-page,
 #hint-page,
@@ -52,7 +55,7 @@
 #lock-page,
 #update-temp-password-page {
   .content {
-    width: 300px;
+    width: 325px;
     transition: width 0.25s linear;
 
     p {
@@ -69,10 +72,6 @@
 
     .box {
       margin-bottom: 20px;
-
-      &.last {
-        margin-bottom: 15px;
-      }
     }
 
     .buttons {
@@ -109,39 +108,12 @@
         }
       }
     }
-
-    a.settings-icon {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-
-      @include themify($themes) {
-        color: themed("mutedColor");
-      }
-
-      span {
-        visibility: hidden;
-      }
-
-      &:hover,
-      &:focus {
-        text-decoration: none;
-
-        @include themify($themes) {
-          color: themed("primaryColor");
-        }
-
-        span {
-          visibility: visible;
-        }
-      }
-    }
   }
 }
 
 #sso-page {
   .content {
-    width: 300px;
+    width: 325px;
 
     .box {
       margin-top: 30px;
@@ -216,8 +188,11 @@
   }
 }
 
-#login-page {
+#login-page,
+#login-with-device-page {
   flex-direction: column;
+  justify-content: unset;
+  padding-top: 20px;
 
   .login-header {
     align-self: flex-start;
@@ -239,6 +214,60 @@
         @include themify($themes) {
           color: themed("primaryColor");
         }
+      }
+    }
+  }
+}
+
+#login-with-device-page {
+  .content {
+    display: block;
+    width: 350px !important;
+
+    .fingerprint {
+      margin: auto;
+      width: 315px;
+
+      .fingerpint-header {
+        padding-left: 15px;
+      }
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .another-method {
+      display: flex;
+      margin: auto;
+      .description-text {
+        padding-right: 5px;
+      }
+    }
+
+    code {
+      @include themify($themes) {
+        color: themed("codeColor");
+      }
+    }
+  }
+}
+
+#login-approval-page {
+  .section-title {
+    padding: 20px;
+  }
+  .content {
+    padding: 16px;
+    .section {
+      margin-bottom: 30px;
+      code {
+        @include themify($themes) {
+          color: themed("codeColor");
+        }
+      }
+      h4.label {
+        font-weight: bold;
       }
     }
   }

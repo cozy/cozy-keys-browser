@@ -1,11 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-// import { StateService } from "jslib-common/abstractions/state.service";
-import { TotpService } from "jslib-common/abstractions/totp.service";
-import { ThemeType } from "jslib-common/enums/themeType";
-import { UriMatchType } from "jslib-common/enums/uriMatchType";
+import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+// import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { TotpService } from "@bitwarden/common/abstractions/totp.service";
+import { ThemeType } from "@bitwarden/common/enums/themeType";
+import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
 
 /* Cozy imports */
 import { BrowserApi } from "../../browser/browserApi";
@@ -17,19 +18,17 @@ import { StateService } from "../../services/abstractions/state.service";
   templateUrl: "options.component.html",
 })
 export class OptionsComponent implements OnInit {
-  disableFavicon = false;
-  disableKonnectorsSuggestions = false;
-  enableInPageMenu = true;
-  disableBadgeCounter = false;
+  enableFavicon = false;
+  enableBadgeCounter = false;
   enableAutoFillOnPageLoad = false;
   autoFillOnPageLoadDefault = false;
   autoFillOnPageLoadOptions: any[];
-  disableAutoTotpCopy = false;
-  disableContextMenuItem = false;
-  disableAddLoginNotification = false;
-  disableChangedPasswordNotification = false;
-  dontShowCards = false;
-  dontShowIdentities = false;
+  enableAutoTotpCopy = false; // TODO: Does it matter if this is set to false or true?
+  enableContextMenuItem = false;
+  enableAddLoginNotification = false;
+  enableChangedPasswordNotification = false;
+  showCardsCurrentTab = false;
+  showIdentitiesCurrentTab = false;
   showClearClipboard = true;
   theme: ThemeType;
   themeOptions: any[];
@@ -40,12 +39,17 @@ export class OptionsComponent implements OnInit {
   showGeneral = true;
   showAutofill = true;
   showDisplay = true;
+  // Cozy custo
+  disableKonnectorsSuggestions = false;
+  enableInPageMenu = true;
+  // end custo
 
   constructor(
     private messagingService: MessagingService,
     private stateService: StateService,
     private totpService: TotpService,
-    i18nService: I18nService
+    i18nService: I18nService,
+    private themingService: AbstractThemingService
   ) {
     this.themeOptions = [
       { name: i18nService.t("default"), value: ThemeType.System },
@@ -87,21 +91,21 @@ export class OptionsComponent implements OnInit {
     this.autoFillOnPageLoadDefault =
       (await this.stateService.getAutoFillOnPageLoadDefault()) ?? true;
 
-    this.disableAddLoginNotification = await this.stateService.getDisableAddLoginNotification();
+    this.enableAddLoginNotification = !(await this.stateService.getDisableAddLoginNotification());
 
-    this.disableChangedPasswordNotification =
-      await this.stateService.getDisableChangedPasswordNotification();
+    this.enableChangedPasswordNotification =
+      !(await this.stateService.getDisableChangedPasswordNotification());
 
-    this.disableContextMenuItem = await this.stateService.getDisableContextMenuItem();
+    this.enableContextMenuItem = !(await this.stateService.getDisableContextMenuItem());
 
-    this.dontShowCards = await this.stateService.getDontShowCardsCurrentTab();
-    this.dontShowIdentities = await this.stateService.getDontShowIdentitiesCurrentTab();
+    this.showCardsCurrentTab = !(await this.stateService.getDontShowCardsCurrentTab());
+    this.showIdentitiesCurrentTab = !(await this.stateService.getDontShowIdentitiesCurrentTab());
 
-    this.disableAutoTotpCopy = !(await this.totpService.isAutoCopyEnabled());
+    this.enableAutoTotpCopy = !(await this.stateService.getDisableAutoTotpCopy());
 
-    this.disableFavicon = await this.stateService.getDisableFavicon();
+    this.enableFavicon = !(await this.stateService.getDisableFavicon());
 
-    this.disableBadgeCounter = await this.stateService.getDisableBadgeCounter();
+    this.enableBadgeCounter = !(await this.stateService.getDisableBadgeCounter());
 
     this.theme = await this.stateService.getTheme();
 
@@ -112,22 +116,22 @@ export class OptionsComponent implements OnInit {
   }
 
   async updateAddLoginNotification() {
-    await this.stateService.setDisableAddLoginNotification(this.disableAddLoginNotification);
+    await this.stateService.setDisableAddLoginNotification(!this.enableAddLoginNotification);
   }
 
   async updateChangedPasswordNotification() {
     await this.stateService.setDisableChangedPasswordNotification(
-      this.disableChangedPasswordNotification
+      !this.enableChangedPasswordNotification
     );
   }
 
-  async updateDisableContextMenuItem() {
-    await this.stateService.setDisableContextMenuItem(this.disableContextMenuItem);
+  async updateContextMenuItem() {
+    await this.stateService.setDisableContextMenuItem(!this.enableContextMenuItem);
     this.messagingService.send("bgUpdateContextMenu");
   }
 
   async updateAutoTotpCopy() {
-    await this.stateService.setDisableAutoTotpCopy(this.disableAutoTotpCopy);
+    await this.stateService.setDisableAutoTotpCopy(!this.enableAutoTotpCopy);
   }
 
   async updateKonnectorsSuggestions() {
@@ -156,26 +160,25 @@ export class OptionsComponent implements OnInit {
     await this.stateService.setAutoFillOnPageLoadDefault(this.autoFillOnPageLoadDefault);
   }
 
-  async updateDisableFavicon() {
-    await this.stateService.setDisableFavicon(this.disableFavicon);
+  async updateFavicon() {
+    await this.stateService.setDisableFavicon(!this.enableFavicon);
   }
 
-  async updateDisableBadgeCounter() {
-    await this.stateService.setDisableBadgeCounter(this.disableBadgeCounter);
+  async updateBadgeCounter() {
+    await this.stateService.setDisableBadgeCounter(!this.enableBadgeCounter);
     this.messagingService.send("bgUpdateContextMenu");
   }
 
-  async updateShowCards() {
-    await this.stateService.setDontShowCardsCurrentTab(this.dontShowCards);
+  async updateShowCardsCurrentTab() {
+    await this.stateService.setDontShowCardsCurrentTab(!this.showCardsCurrentTab);
   }
 
-  async updateShowIdentities() {
-    await this.stateService.setDontShowIdentitiesCurrentTab(this.dontShowIdentities);
+  async updateShowIdentitiesCurrentTab() {
+    await this.stateService.setDontShowIdentitiesCurrentTab(!this.showIdentitiesCurrentTab);
   }
 
   async saveTheme() {
-    await this.stateService.setTheme(this.theme);
-    window.setTimeout(() => window.location.reload(), 200);
+    await this.themingService.updateConfiguredTheme(this.theme);
   }
 
   async saveDefaultUriMatch() {

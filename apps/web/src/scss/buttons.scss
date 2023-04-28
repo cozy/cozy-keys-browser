@@ -175,6 +175,7 @@
   }
 
   &:disabled:not(.manual),
+  &[aria-disabled="true"]:not(.manual),
   &.loading {
     .bwi-spinner {
       display: flex;
@@ -191,7 +192,6 @@ button.no-btn {
   border: none;
   padding: 0;
   color: inherit;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
@@ -203,51 +203,16 @@ button.no-btn {
   }
 }
 
-.badge-primary {
-  @include themify($themes) {
-    background-color: themed("badgePrimaryBackground");
-    color: themed("badgePrimaryText");
-  }
-
-  &:hover {
-    @include themify($themes) {
-      background-color: themed("badgePrimaryBackgroundHover");
-      color: themed("badgePrimaryText");
-    }
-  }
+button.header-expandable {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+  margin-bottom: 5px;
+  text-transform: uppercase;
 }
 
-.badge-secondary {
-  @include themify($themes) {
-    background-color: themed("badgeSecondaryBackground");
-    color: themed("badgeSecondaryText");
-  }
-}
-
-.badge-info {
-  @include themify($themes) {
-    background-color: themed("badgeInfoBackground");
-    color: themed("badgeInfoText");
-  }
-}
-
-.badge-danger {
-  @include themify($themes) {
-    background-color: themed("badgeDangerBackground");
-    color: themed("badgeDangerText");
-  }
-}
-
-.badge-warning {
-  @include themify($themes) {
-    background-color: themed("warning");
-    color: themed("textWarningColor");
-  }
-}
-
-.badge-success {
-  @include themify($themes) {
-    background-color: themed("success");
-    color: themed("textSuccessColor");
-  }
+/* special case for Send options */
+h3 button.header-expandable .bwi {
+  line-height: 1.5;
 }

@@ -1,13 +1,13 @@
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
-import { I18nService } from "jslib-common/abstractions/i18n.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
 import { I18nMockService } from "../utils/i18n-mock.service";
 
 import { CalloutComponent } from "./callout.component";
 
 export default {
-  title: "Jslib/Callout",
+  title: "Component Library/Callout",
   component: CalloutComponent,
   decorators: [
     moduleMetadata({
@@ -30,7 +30,7 @@ export default {
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/file/f32LSg3jaegICkMu7rPARm/Tailwind-Component-Library-Update?node-id=1881%3A17484",
+      url: "https://www.figma.com/file/Zt3YSeb6E6lebAffrNLa0h/Tailwind-Component-Library?node-id=1881%3A17484",
     },
   },
 } as Meta;

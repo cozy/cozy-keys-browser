@@ -29,12 +29,6 @@
     },
     {
       "all_frames": false,
-      "js": ["content/shortcuts.js"],
-      "matches": ["http://*/*", "https://*/*", "file:///*"],
-      "run_at": "document_start"
-    },
-    {
-      "all_frames": false,
       "js": ["content/message_handler.js"],
       "matches": ["http://*/*", "https://*/*", "file:///*"],
       "run_at": "document_start"
@@ -72,7 +66,7 @@
     "webRequestBlocking"
   ],
   "optional_permissions": ["nativeMessaging"],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "content_security_policy": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
@@ -108,7 +102,6 @@
     "notification/bar.html",
     "images/icon38.png",
     "images/icon38_locked.png",
-    "images/close.png",
     "inPageMenu/menu.html",
     "inPageMenu/loginMenu.html"
   ],
@@ -122,5 +115,8 @@
     "default_title": "Cozy",
     "default_panel": "popup/index.html?uilocation=sidebar",
     "default_icon": "images/icon19.png"
+  },
+  "storage": {
+    "managed_schema": "managed_schema.json"
   }
 }

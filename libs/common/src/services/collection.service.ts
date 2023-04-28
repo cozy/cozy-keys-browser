@@ -4,10 +4,10 @@ import { I18nService } from "../abstractions/i18n.service";
 import { StateService } from "../abstractions/state.service";
 import { ServiceUtils } from "../misc/serviceUtils";
 import { Utils } from "../misc/utils";
-import { CollectionData } from "../models/data/collectionData";
+import { CollectionData } from "../models/data/collection.data";
 import { Collection } from "../models/domain/collection";
-import { TreeNode } from "../models/domain/treeNode";
-import { CollectionView } from "../models/view/collectionView";
+import { TreeNode } from "../models/domain/tree-node";
+import { CollectionView } from "../models/view/collection.view";
 
 const NestingDelimiter = "/";
 
@@ -86,6 +86,7 @@ export class CollectionService implements CollectionServiceAbstraction {
 
     const collections = await this.getAll();
     decryptedCollections = await this.decryptMany(collections);
+
     await this.stateService.setDecryptedCollections(decryptedCollections);
     return decryptedCollections;
   }
@@ -105,9 +106,13 @@ export class CollectionService implements CollectionServiceAbstraction {
     return nodes;
   }
 
+  /**
+   * @deprecated August 30 2022: Moved to new Vault Filter Service
+   * Remove when Desktop and Browser are updated
+   */
   async getNested(id: string): Promise<TreeNode<CollectionView>> {
     const collections = await this.getAllNested();
-    return ServiceUtils.getTreeNodeObject(collections, id) as TreeNode<CollectionView>;
+    return ServiceUtils.getTreeNodeObjectFromList(collections, id) as TreeNode<CollectionView>;
   }
 
   async upsert(collection: CollectionData | CollectionData[]): Promise<any> {

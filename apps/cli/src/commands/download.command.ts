@@ -1,10 +1,11 @@
 import * as fet from "node-fetch";
 
-import { CryptoService } from "jslib-common/abstractions/crypto.service";
-import { SymmetricCryptoKey } from "jslib-common/models/domain/symmetricCryptoKey";
-import { Response } from "jslib-node/cli/models/response";
-import { FileResponse } from "jslib-node/cli/models/response/fileResponse";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EncArrayBuffer } from "@bitwarden/common/models/domain/enc-array-buffer";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 
+import { Response } from "../models/response";
+import { FileResponse } from "../models/response/file.response";
 import { CliUtils } from "../utils";
 
 export abstract class DownloadCommand {
@@ -24,8 +25,8 @@ export abstract class DownloadCommand {
     }
 
     try {
-      const buf = await response.arrayBuffer();
-      const decBuf = await this.cryptoService.decryptFromBytes(buf, key);
+      const encBuf = await EncArrayBuffer.fromResponse(response);
+      const decBuf = await this.cryptoService.decryptFromBytes(encBuf, key);
       if (process.env.BW_SERVE === "true") {
         const res = new FileResponse(Buffer.from(decBuf), fileName);
         return Response.success(res);

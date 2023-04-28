@@ -1,16 +1,17 @@
 import { Component, NgZone, ViewChild, ViewContainerRef } from "@angular/core";
 
-import { SendComponent as BaseSendComponent } from "jslib-angular/components/send/send.component";
-import { ModalService } from "jslib-angular/services/modal.service";
-import { BroadcasterService } from "jslib-common/abstractions/broadcaster.service";
-import { EnvironmentService } from "jslib-common/abstractions/environment.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { PolicyService } from "jslib-common/abstractions/policy.service";
-import { SearchService } from "jslib-common/abstractions/search.service";
-import { SendService } from "jslib-common/abstractions/send.service";
-import { SendView } from "jslib-common/models/view/sendView";
+import { SendComponent as BaseSendComponent } from "@bitwarden/angular/components/send/send.component";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
+import { SearchService } from "@bitwarden/common/abstractions/search.service";
+import { SendService } from "@bitwarden/common/abstractions/send.service";
+import { SendView } from "@bitwarden/common/models/view/send.view";
+import { Icons } from "@bitwarden/components";
 
 import { AddEditComponent } from "./add-edit.component";
 
@@ -23,6 +24,7 @@ const BroadcasterSubscriptionId = "SendComponent";
 export class SendComponent extends BaseSendComponent {
   @ViewChild("sendAddEdit", { read: ViewContainerRef, static: true })
   sendAddEditModalRef: ViewContainerRef;
+  noItemIcon = Icons.Search;
 
   constructor(
     sendService: SendService,
@@ -85,10 +87,12 @@ export class SendComponent extends BaseSendComponent {
       this.sendAddEditModalRef,
       (comp) => {
         comp.sendId = send == null ? null : send.id;
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
         comp.onSavedSend.subscribe(async () => {
           modal.close();
           await this.load();
         });
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
         comp.onDeletedSend.subscribe(async () => {
           modal.close();
           await this.load();

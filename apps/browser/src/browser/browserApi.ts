@@ -1,6 +1,5 @@
-import { Utils } from "jslib-common/misc/utils";
-
-import { SafariApp } from "./safariApp";
+import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
+import { TabMessage } from "../types/tab-messages";
 
 export class BrowserApi {
   static isWebExtensionsApi: boolean = typeof browser !== "undefined";
@@ -12,11 +11,22 @@ export class BrowserApi {
   static isFirefoxOnAndroid: boolean =
     navigator.userAgent.indexOf("Firefox/") !== -1 && navigator.userAgent.indexOf("Android") !== -1;
 
+  static get manifestVersion() {
+    return chrome.runtime.getManifest().manifest_version;
+  }
+
   static async getTabFromCurrentWindowId(): Promise<chrome.tabs.Tab> | null {
     return await BrowserApi.tabsQueryFirst({
       active: true,
       windowId: chrome.windows.WINDOW_ID_CURRENT,
     });
+  }
+
+  static async getTab(tabId: number) {
+    if (tabId == null) {
+      return null;
+    }
+    return await chrome.tabs.get(tabId);
   }
 
   static async getTabFromCurrentWindow(): Promise<chrome.tabs.Tab> | null {
@@ -38,7 +48,7 @@ export class BrowserApi {
 
   static async tabsQuery(options: chrome.tabs.QueryInfo): Promise<chrome.tabs.Tab[]> {
     return new Promise((resolve) => {
-      chrome.tabs.query(options, (tabs: any[]) => {
+      chrome.tabs.query(options, (tabs) => {
         resolve(tabs);
       });
     });
@@ -57,7 +67,7 @@ export class BrowserApi {
     tab: chrome.tabs.Tab,
     command: string,
     data: any = null
-  ): Promise<any[]> {
+  ): Promise<void> {
     const obj: any = {
       command: command,
     };
@@ -69,11 +79,11 @@ export class BrowserApi {
     return BrowserApi.tabSendMessage(tab, obj);
   }
 
-  static async tabSendMessage(
+  static async tabSendMessage<T>(
     tab: chrome.tabs.Tab,
-    obj: any,
+    obj: T,
     options: chrome.tabs.MessageSendOptions = null
-  ): Promise<any> {
+  ): Promise<void> {
     if (!tab || !tab.id) {
       return;
     }
@@ -88,6 +98,15 @@ export class BrowserApi {
     });
   }
 
+  static sendTabsMessage<T>(
+    tabId: number,
+    message: TabMessage,
+    options?: chrome.tabs.MessageSendOptions,
+    responseCallback?: (response: T) => void
+  ) {
+    chrome.tabs.sendMessage<TabMessage, T>(tabId, message, options, responseCallback);
+  }
+
   static async getPrivateModeWindows(): Promise<browser.windows.Window[]> {
     return (await browser.windows.getAll()).filter((win) => win.incognito);
   }
@@ -100,6 +119,10 @@ export class BrowserApi {
     return chrome.extension.getBackgroundPage();
   }
 
+  static isBackgroundPage(window: Window & typeof globalThis): boolean {
+    return window === chrome.extension.getBackgroundPage();
+  }
+
   static getApplicationVersion(): string {
     return chrome.runtime.getManifest().version;
   }
@@ -108,8 +131,44 @@ export class BrowserApi {
     return Promise.resolve(chrome.extension.getViews({ type: "popup" }).length > 0);
   }
 
-  static createNewTab(url: string, extensionPage = false, active = true) {
-    chrome.tabs.create({ url: url, active: active });
+  static createNewTab(url: string, active = true, openerTab?: chrome.tabs.Tab) {
+    chrome.tabs.create({ url: url, active: active, openerTabId: openerTab?.id });
+  }
+
+  static openBitwardenExtensionTab(
+    relativeUrl: string,
+    active = true,
+    openerTab?: chrome.tabs.Tab
+  ) {
+    if (relativeUrl.includes("uilocation=tab")) {
+      this.createNewTab(relativeUrl, active, openerTab);
+      return;
+    }
+
+    const fullUrl = chrome.extension.getURL(relativeUrl);
+    const parsedUrl = new URL(fullUrl);
+    parsedUrl.searchParams.set("uilocation", "tab");
+    this.createNewTab(parsedUrl.toString(), active, openerTab);
+  }
+
+  static async closeBitwardenExtensionTab() {
+    const tabs = await BrowserApi.tabsQuery({
+      active: true,
+      title: "Bitwarden",
+      windowType: "normal",
+      currentWindow: true,
+    });
+
+    if (tabs.length === 0) {
+      return;
+    }
+
+    const tabToClose = tabs[tabs.length - 1];
+    chrome.tabs.remove(tabToClose.id);
+
+    if (tabToClose.openerTabId) {
+      this.focusTab(tabToClose.openerTabId);
+    }
   }
 
   static messageListener(
@@ -123,23 +182,12 @@ export class BrowserApi {
     );
   }
 
-  static async closeLoginTab() {
-    const tabs = await BrowserApi.tabsQuery({
-      active: true,
-      title: "Bitwarden",
-      windowType: "normal",
-      currentWindow: true,
-    });
-
-    if (tabs.length === 0) {
-      return;
-    }
-
-    const tabToClose = tabs[tabs.length - 1].id;
-    chrome.tabs.remove(tabToClose);
+  static sendMessage(subscriber: string, arg: any = {}) {
+    const message = Object.assign({}, { command: subscriber }, arg);
+    return chrome.runtime.sendMessage(message);
   }
 
-  static async focusSpecifiedTab(tabId: number) {
+  static async focusTab(tabId: number) {
     chrome.tabs.update(tabId, { active: true, highlighted: true });
   }
 
@@ -154,39 +202,6 @@ export class BrowserApi {
     }
   }
 
-  static downloadFile(win: Window, blobData: any, blobOptions: any, fileName: string) {
-    if (BrowserApi.isSafariApi) {
-      const type = blobOptions != null ? blobOptions.type : null;
-      let data: string = null;
-      if (type === "text/plain" && typeof blobData === "string") {
-        data = blobData;
-      } else {
-        data = Utils.fromBufferToB64(blobData);
-      }
-      SafariApp.sendMessageToApp(
-        "downloadFile",
-        JSON.stringify({
-          blobData: data,
-          blobOptions: blobOptions,
-          fileName: fileName,
-        }),
-        true
-      );
-    } else {
-      const blob = new Blob([blobData], blobOptions);
-      if (navigator.msSaveOrOpenBlob) {
-        navigator.msSaveBlob(blob, fileName);
-      } else {
-        const a = win.document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = fileName;
-        win.document.body.appendChild(a);
-        a.click();
-        win.document.body.removeChild(a);
-      }
-    }
-  }
-
   static gaFilter() {
     return process.env.ENV !== "production";
   }
@@ -197,7 +212,7 @@ export class BrowserApi {
 
   static reloadExtension(win: Window) {
     if (win != null) {
-      return win.location.reload(true);
+      return (win.location as any).reload(true);
     } else {
       return chrome.runtime.reload();
     }
@@ -236,5 +251,17 @@ export class BrowserApi {
     return new Promise((resolve) => {
       chrome.runtime.getPlatformInfo(resolve);
     });
+  }
+
+  static getBrowserAction() {
+    return BrowserApi.manifestVersion === 3 ? chrome.action : chrome.browserAction;
+  }
+
+  static getSidebarAction(win: Window & typeof globalThis) {
+    return BrowserPlatformUtilsService.isSafari(win)
+      ? null
+      : typeof win.opr !== "undefined" && win.opr.sidebarAction
+      ? win.opr.sidebarAction
+      : win.chrome.sidebarAction;
   }
 }

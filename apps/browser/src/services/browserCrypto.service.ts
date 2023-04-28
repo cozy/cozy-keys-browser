@@ -1,7 +1,8 @@
-import { KeySuffixOptions } from "jslib-common/enums/keySuffixOptions";
-import { ProfileOrganizationResponse } from "jslib-common/models/response/profileOrganizationResponse";
-import { ProfileProviderOrganizationResponse } from "jslib-common/models/response/profileProviderOrganizationResponse";
-import { CryptoService } from "jslib-common/services/crypto.service";
+import { KeySuffixOptions } from "@bitwarden/common/enums/keySuffixOptions";
+import { CryptoService } from "@bitwarden/common/services/crypto.service";
+
+import { ProfileOrganizationResponse } from "@bitwarden/common/models/response/profileOrganizationResponse";
+import { ProfileProviderOrganizationResponse } from "@bitwarden/common/models/response/profileProviderOrganizationResponse";
 
 export class BrowserCryptoService extends CryptoService {
   async upsertOrganizationKey(organizationId: string, key: string) {

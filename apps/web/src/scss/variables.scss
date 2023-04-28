@@ -201,9 +201,6 @@ $themes: (
     navBackgroundAlt: $secondary-alt,
     navOrgBackgroundColor: #fbfbfb,
     navWeight: 600,
-    pwLetter: $body-color,
-    pwNumber: #007fde,
-    pwSpecial: #c40800,
     pwStrengthBackground: #e9ecef,
     separator: $secondary,
     separatorHr: rgb(0, 0, 0, 0.1),
@@ -219,6 +216,7 @@ $themes: (
     textMuted: #6c757d,
     textSuccessColor: $white,
     textWarningColor: $white,
+    svgSuffix: "-light.svg",
   ),
   dark: (
     primary: $darkPrimary,
@@ -312,9 +310,6 @@ $themes: (
     navBackgroundAlt: $darkDarkBlue1,
     navOrgBackgroundColor: #161c26,
     navWeight: 400,
-    pwLetter: $white,
-    pwNumber: #52bdfb,
-    pwSpecial: #ff7c70,
     pwStrengthBackground: $darkBlue2,
     separator: $darkBlue1,
     separatorHr: $darkBlue1,
@@ -330,6 +325,7 @@ $themes: (
     textMuted: $darkGrey1,
     textSuccessColor: $darkDarkBlue2,
     textWarningColor: $darkDarkBlue2,
+    svgSuffix: "-dark.svg",
   ),
 );
 

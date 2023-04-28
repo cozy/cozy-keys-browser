@@ -1,29 +1,36 @@
-import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { firstValueFrom, map, Observable, Subject, takeUntil } from "rxjs";
 
-import { CipherService } from "jslib-common/abstractions/cipher.service";
-import { CollectionService } from "jslib-common/abstractions/collection.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { OrganizationService } from "jslib-common/abstractions/organization.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { OrganizationUserStatusType } from "jslib-common/enums/organizationUserStatusType";
-import { Utils } from "jslib-common/misc/utils";
-import { Organization } from "jslib-common/models/domain/organization";
-import { CipherView } from "jslib-common/models/view/cipherView";
-import { CollectionView } from "jslib-common/models/view/collectionView";
+import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import {
+  isNotProviderUser,
+  OrganizationService,
+} from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { OrganizationUserStatusType } from "@bitwarden/common/enums/organizationUserStatusType";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { Organization } from "@bitwarden/common/models/domain/organization";
+import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+import { Checkable, isChecked } from "@bitwarden/common/types/checkable";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 @Directive()
-export class ShareComponent implements OnInit {
+export class ShareComponent implements OnInit, OnDestroy {
   @Input() cipherId: string;
   @Input() organizationId: string;
   @Output() onSharedCipher = new EventEmitter();
 
-  formPromise: Promise<any>;
+  formPromise: Promise<void>;
   cipher: CipherView;
-  collections: CollectionView[] = [];
-  organizations: Organization[] = [];
+  collections: Checkable<CollectionView>[] = [];
+  organizations$: Observable<Organization[]>;
 
-  protected writeableCollections: CollectionView[] = [];
+  protected writeableCollections: Checkable<CollectionView>[] = [];
+
+  private _destroy = new Subject<void>();
 
   constructor(
     protected collectionService: CollectionService,
@@ -38,24 +45,40 @@ export class ShareComponent implements OnInit {
     await this.load();
   }
 
+  ngOnDestroy(): void {
+    this._destroy.next();
+    this._destroy.complete();
+  }
+
   async load() {
     const allCollections = await this.collectionService.getAllDecrypted();
     this.writeableCollections = allCollections.map((c) => c).filter((c) => !c.readOnly);
-    const orgs = await this.organizationService.getAll();
-    this.organizations = orgs
-      .sort(Utils.getSortFunction(this.i18nService, "name"))
-      .filter((o) => o.enabled && o.status === OrganizationUserStatusType.Confirmed);
+
+    this.organizations$ = this.organizationService.organizations$.pipe(
+      map((orgs) => {
+        return orgs
+          .filter(
+            (o) =>
+              o.enabled && o.status === OrganizationUserStatusType.Confirmed && isNotProviderUser(o)
+          )
+          .sort(Utils.getSortFunction(this.i18nService, "name"));
+      })
+    );
+
+    this.organizations$.pipe(takeUntil(this._destroy)).subscribe((orgs) => {
+      if (this.organizationId == null && orgs.length > 0) {
+        this.organizationId = orgs[0].id;
+      }
+    });
 
     const cipherDomain = await this.cipherService.get(this.cipherId);
     this.cipher = await cipherDomain.decrypt();
-    if (this.organizationId == null && this.organizations.length > 0) {
-      this.organizationId = this.organizations[0].id;
-    }
+
     this.filterCollections();
   }
 
   filterCollections() {
-    this.writeableCollections.forEach((c) => ((c as any).checked = false));
+    this.writeableCollections.forEach((c) => (c.checked = false));
     if (this.organizationId == null || this.writeableCollections.length === 0) {
       this.collections = [];
     } else {
@@ -66,9 +89,7 @@ export class ShareComponent implements OnInit {
   }
 
   async submit(): Promise<boolean> {
-    const selectedCollectionIds = this.collections
-      .filter((c) => !!(c as any).checked)
-      .map((c) => c.id);
+    const selectedCollectionIds = this.collections.filter(isChecked).map((c) => c.id);
     if (selectedCollectionIds.length === 0) {
       this.platformUtilsService.showToast(
         "error",
@@ -80,9 +101,9 @@ export class ShareComponent implements OnInit {
 
     const cipherDomain = await this.cipherService.get(this.cipherId);
     const cipherView = await cipherDomain.decrypt();
+    const orgs = await firstValueFrom(this.organizations$);
     const orgName =
-      this.organizations.find((o) => o.id === this.organizationId)?.name ??
-      this.i18nService.t("organization");
+      orgs.find((o) => o.id === this.organizationId)?.name ?? this.i18nService.t("organization");
 
     try {
       this.formPromise = this.cipherService
@@ -106,7 +127,7 @@ export class ShareComponent implements OnInit {
   get canSave() {
     if (this.collections != null) {
       for (let i = 0; i < this.collections.length; i++) {
-        if ((this.collections[i] as any).checked) {
+        if (this.collections[i].checked) {
           return true;
         }
       }

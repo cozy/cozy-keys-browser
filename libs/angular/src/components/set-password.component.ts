@@ -2,25 +2,28 @@ import { Directive } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { CryptoService } from "jslib-common/abstractions/crypto.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { PasswordGenerationService } from "jslib-common/abstractions/passwordGeneration.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { PolicyService } from "jslib-common/abstractions/policy.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { SyncService } from "jslib-common/abstractions/sync.service";
-import { HashPurpose } from "jslib-common/enums/hashPurpose";
-import { DEFAULT_KDF_ITERATIONS, DEFAULT_KDF_TYPE } from "jslib-common/enums/kdfType";
-import { Utils } from "jslib-common/misc/utils";
-import { EncString } from "jslib-common/models/domain/encString";
-import { SymmetricCryptoKey } from "jslib-common/models/domain/symmetricCryptoKey";
-import { KeysRequest } from "jslib-common/models/request/keysRequest";
-import { OrganizationUserResetPasswordEnrollmentRequest } from "jslib-common/models/request/organizationUserResetPasswordEnrollmentRequest";
-import { SetPasswordRequest } from "jslib-common/models/request/setPasswordRequest";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
+import { OrganizationUserResetPasswordEnrollmentRequest } from "@bitwarden/common/abstractions/organization-user/requests";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { PolicyApiServiceAbstraction } from "@bitwarden/common/abstractions/policy/policy-api.service.abstraction";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { SetPasswordRequest } from "@bitwarden/common/auth/models/request/set-password.request";
+import { HashPurpose } from "@bitwarden/common/enums/hashPurpose";
+import { DEFAULT_KDF_TYPE, DEFAULT_KDF_CONFIG } from "@bitwarden/common/enums/kdfType";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
-import { ChangePasswordComponent as BaseChangePasswordComponent } from "./change-password.component";
+import { ChangePasswordComponent as BaseChangePasswordComponent } from "../auth/components/change-password.component";
 
 @Directive()
 export class SetPasswordComponent extends BaseChangePasswordComponent {
@@ -31,21 +34,24 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
   orgId: string;
   resetPasswordAutoEnroll = false;
 
-  onSuccessfulChangePassword: () => Promise<any>;
+  onSuccessfulChangePassword: () => Promise<void>;
   successRoute = "vault";
 
   constructor(
     i18nService: I18nService,
     cryptoService: CryptoService,
     messagingService: MessagingService,
-    passwordGenerationService: PasswordGenerationService,
+    passwordGenerationService: PasswordGenerationServiceAbstraction,
     platformUtilsService: PlatformUtilsService,
+    private policyApiService: PolicyApiServiceAbstraction,
     policyService: PolicyService,
     protected router: Router,
     private apiService: ApiService,
     private syncService: SyncService,
     private route: ActivatedRoute,
-    stateService: StateService
+    stateService: StateService,
+    private organizationApiService: OrganizationApiServiceAbstraction,
+    private organizationUserService: OrganizationUserService
   ) {
     super(
       i18nService,
@@ -62,6 +68,7 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
     await this.syncService.fullSync(true);
     this.syncLoading = false;
 
+    // eslint-disable-next-line rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       if (qParams.identifier != null) {
         this.identifier = qParams.identifier;
@@ -71,11 +78,11 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
     // Automatic Enrollment Detection
     if (this.identifier != null) {
       try {
-        const response = await this.apiService.getOrganizationAutoEnrollStatus(this.identifier);
+        const response = await this.organizationApiService.getAutoEnrollStatus(this.identifier);
         this.orgId = response.id;
         this.resetPasswordAutoEnroll = response.resetPasswordEnabled;
         this.enforcedPolicyOptions =
-          await this.policyService.getMasterPasswordPoliciesForInvitedUsers(this.orgId);
+          await this.policyApiService.getMasterPasswordPoliciesForInvitedUsers(this.orgId);
       } catch {
         this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
       }
@@ -86,7 +93,7 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
 
   async setupSubmitActions() {
     this.kdf = DEFAULT_KDF_TYPE;
-    this.kdfIterations = DEFAULT_KDF_ITERATIONS;
+    this.kdfConfig = DEFAULT_KDF_CONFIG;
     return true;
   }
 
@@ -100,10 +107,12 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
       masterPasswordHash,
       encKey[1].encryptedString,
       this.hint,
-      this.kdf,
-      this.kdfIterations,
       this.identifier,
-      new KeysRequest(keys[0], keys[1].encryptedString)
+      new KeysRequest(keys[0], keys[1].encryptedString),
+      this.kdf,
+      this.kdfConfig.iterations,
+      this.kdfConfig.memory,
+      this.kdfConfig.parallelism
     );
     try {
       if (this.resetPasswordAutoEnroll) {
@@ -111,7 +120,7 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
           .setPassword(request)
           .then(async () => {
             await this.onSetPasswordSuccess(key, encKey, keys);
-            return this.apiService.getOrganizationKeys(this.orgId);
+            return this.organizationApiService.getKeys(this.orgId);
           })
           .then(async (response) => {
             if (response == null) {
@@ -128,9 +137,10 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
             );
 
             const resetRequest = new OrganizationUserResetPasswordEnrollmentRequest();
+            resetRequest.masterPasswordHash = masterPasswordHash;
             resetRequest.resetPasswordKey = encryptedKey.encryptedString;
 
-            return this.apiService.putOrganizationUserResetPasswordEnrollment(
+            return this.organizationUserService.putOrganizationUserResetPasswordEnrollment(
               this.orgId,
               userId,
               resetRequest
@@ -165,7 +175,7 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
     keys: [string, EncString]
   ) {
     await this.stateService.setKdfType(this.kdf);
-    await this.stateService.setKdfIterations(this.kdfIterations);
+    await this.stateService.setKdfConfig(this.kdfConfig);
     await this.cryptoService.setKey(key);
     await this.cryptoService.setEncKey(encKey[1].encryptedString);
     await this.cryptoService.setEncPrivateKey(keys[1].encryptedString);

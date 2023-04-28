@@ -1,11 +1,11 @@
-<div class="modal fade" role="dialog" aria-modal="true" attr.aria-label="{{ 'settings' | i18n }}">
+<div class="modal fade" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body form">
         <div class="box">
-          <div class="box-header">
+          <h1 class="box-header" id="settingsTitle">
             {{ "settingsTitle" | i18n: currentUserEmail }}
-          </div>
+          </h1>
           <div class="box-content box-content-padded">
             <h2>
               <button
@@ -16,17 +16,17 @@
                 [attr.aria-expanded]="showSecurity"
                 appAutofocus
               >
-                {{ "security" | i18n }}
                 <i
                   *ngIf="!showSecurity"
-                  class="bwi bwi-angle-down bwi-sm icon"
+                  class="bwi bwi-angle-right bwi-sm icon"
                   aria-hidden="true"
                 ></i>
                 <i
                   *ngIf="showSecurity"
-                  class="bwi bwi-chevron-up bwi-sm icon"
+                  class="bwi bwi-angle-down bwi-sm icon"
                   aria-hidden="true"
                 ></i>
+                {{ "security" | i18n }}
               </button>
             </h2>
             <ng-container *ngIf="showSecurity">
@@ -44,13 +44,16 @@
                       name="VaultTimeoutAction"
                       id="vaultTimeoutActionLock"
                       value="lock"
+                      aria-describedby="vaultTimeoutActionLockHelp"
                       [(ngModel)]="vaultTimeoutAction"
                       (change)="saveVaultTimeoutOptions()"
                     />
                     {{ "lock" | i18n }}
                   </label>
                 </div>
-                <small class="help-block">{{ "vaultTimeoutActionLockDesc" | i18n }}</small>
+                <small id="vaultTimeoutActionLockHelp" class="help-block">{{
+                  "vaultTimeoutActionLockDesc" | i18n
+                }}</small>
                 <div class="radio">
                   <label for="vaultTimeoutActionLogOut">
                     <input
@@ -58,13 +61,16 @@
                       name="VaultTimeoutAction"
                       id="vaultTimeoutActionLogOut"
                       value="logOut"
+                      aria-describedby="vaultTimeoutActionLogOutHelp"
                       [(ngModel)]="vaultTimeoutAction"
                       (change)="saveVaultTimeoutOptions()"
                     />
                     {{ "logOut" | i18n }}
                   </label>
                 </div>
-                <small class="help-block">{{ "vaultTimeoutActionLogOutDesc" | i18n }}</small>
+                <small id="vaultTimeoutActionLogOutHelp" class="help-block">{{
+                  "vaultTimeoutActionLogOutDesc" | i18n
+                }}</small>
               </div>
               <div class="form-group">
                 <div class="checkbox">
@@ -87,27 +93,41 @@
                       id="biometric"
                       type="checkbox"
                       name="biometric"
-                      [checked]="biometric"
-                      (change)="updateBiometric()"
+                      [ngModel]="biometric"
+                      (ngModelChange)="updateBiometric($event)"
                     />
                     {{ biometricText | i18n }}
                   </label>
                 </div>
               </div>
-              <div class="form-group" *ngIf="supportsBiometric">
+              <div class="form-group" *ngIf="supportsBiometric && biometric">
                 <div class="checkbox">
-                  <label for="noAutoPromptBiometrics">
+                  <label for="autoPromptBiometrics">
                     <input
-                      id="noAutoPromptBiometrics"
+                      id="autoPromptBiometrics"
                       type="checkbox"
-                      name="noAutoPromptBiometrics"
-                      [(ngModel)]="noAutoPromptBiometrics"
-                      [disabled]="!biometric"
-                      (change)="updateNoAutoPromptBiometrics()"
+                      name="autoPromptBiometrics"
+                      [(ngModel)]="autoPromptBiometrics"
+                      (change)="updateAutoPromptBiometrics()"
                     />
-                    {{ noAutoPromptBiometricsText | i18n }}
+                    {{ autoPromptBiometricsText | i18n }}
                   </label>
                 </div>
+              </div>
+              <div class="form-group">
+                <div class="checkbox">
+                  <label for="approveLoginRequests">
+                    <input
+                      id="approveLoginRequests"
+                      type="checkbox"
+                      name="approveLoginRequests"
+                      [(ngModel)]="approveLoginRequests"
+                      (change)="updateApproveLoginRequests()"
+                    />
+                    {{ "approveLoginRequests" | i18n }}
+                  </label>
+                </div>
+                <small class="help-block">{{ "approveLoginRequestDesc" | i18n }}</small>
               </div>
             </ng-container>
           </div>
@@ -121,17 +141,17 @@
                 (click)="showAccountPreferences = !showAccountPreferences"
                 [attr.aria-expanded]="showAccountPreferences"
               >
-                {{ "accountPreferences" | i18n }}
                 <i
                   *ngIf="!showAccountPreferences"
-                  class="bwi bwi-angle-down bwi-sm icon"
+                  class="bwi bwi-angle-right bwi-sm icon"
                   aria-hidden="true"
                 ></i>
                 <i
                   *ngIf="showAccountPreferences"
-                  class="bwi bwi-chevron-up bwi-sm icon"
+                  class="bwi bwi-angle-down bwi-sm icon"
                   aria-hidden="true"
                 ></i>
+                {{ "accountPreferences" | i18n }}
               </button>
             </h2>
             <ng-container *ngIf="showAccountPreferences">
@@ -140,6 +160,7 @@
                 <select
                   id="clearClipboard"
                   name="ClearClipboard"
+                  aria-describedby="clearClipboardHelp"
                   [(ngModel)]="clearClipboard"
                   (change)="saveClearClipboard()"
                 >
@@ -147,7 +168,9 @@
                     {{ o.name }}
                   </option>
                 </select>
-                <small class="help-block">{{ "clearClipboardDesc" | i18n }}</small>
+                <small id="clearClipboardHelp" class="help-block">{{
+                  "clearClipboardDesc" | i18n
+                }}</small>
               </div>
               <div class="form-group">
                 <div class="checkbox">
@@ -156,28 +179,32 @@
                       id="minimizeOnCopyToClipboard"
                       type="checkbox"
                       name="MinimizeOnCopyToClipboard"
+                      aria-describedby="minimizeOnCopyToClipboardHelp"
                       [(ngModel)]="minimizeOnCopyToClipboard"
                       (change)="saveMinOnCopyToClipboard()"
                     />
                     {{ "minimizeOnCopyToClipboard" | i18n }}
                   </label>
                 </div>
-                <small class="help-block">{{ "minimizeOnCopyToClipboardDesc" | i18n }}</small>
+                <small id="minimizeOnCopyToClipboardHelp" class="help-block">{{
+                  "minimizeOnCopyToClipboardDesc" | i18n
+                }}</small>
               </div>
               <div class="form-group">
                 <div class="checkbox">
-                  <label for="disableFavicons">
+                  <label for="enableFavicons">
                     <input
-                      id="disableFavicons"
+                      id="enableFavicons"
                       type="checkbox"
-                      name="DisableFavicons"
-                      [(ngModel)]="disableFavicons"
+                      name="enableFavicons"
+                      aria-describedby="enableFaviconsHelp"
+                      [(ngModel)]="enableFavicons"
                       (change)="saveFavicons()"
                     />
-                    {{ "disableFavicon" | i18n }}
+                    {{ "enableFavicon" | i18n }}
                   </label>
                 </div>
-                <small class="help-block">{{ "disableFaviconDesc" | i18n }}</small>
+                <small id="enableFaviconsHelp" class="help-block">{{ "faviconDesc" | i18n }}</small>
               </div>
             </ng-container>
           </div>
@@ -191,17 +218,17 @@
                 (click)="showAppPreferences = !showAppPreferences"
                 [attr.aria-expanded]="showAppPreferences"
               >
-                {{ "appPreferences" | i18n }}
                 <i
                   *ngIf="!showAppPreferences"
-                  class="bwi bwi-angle-down bwi-sm icon"
+                  class="bwi bwi-angle-right bwi-sm icon"
                   aria-hidden="true"
                 ></i>
                 <i
                   *ngIf="showAppPreferences"
-                  class="bwi bwi-chevron-up bwi-sm icon"
+                  class="bwi bwi-angle-down bwi-sm icon"
                   aria-hidden="true"
                 ></i>
+                {{ "appPreferences" | i18n }}
               </button>
             </h2>
             <ng-container *ngIf="showAppPreferences">
@@ -212,13 +239,14 @@
                       id="enableTray"
                       type="checkbox"
                       name="EnableTray"
+                      aria-describedby="enableTrayHelp"
                       [(ngModel)]="enableTray"
                       (change)="saveTray()"
                     />
                     {{ enableTrayText }}
                   </label>
                 </div>
-                <small class="help-block">{{ enableTrayDescText }}</small>
+                <small id="enableTrayHelp" class="help-block">{{ enableTrayDescText }}</small>
               </div>
               <div class="form-group" *ngIf="showMinToTray">
                 <div class="checkbox">
@@ -227,13 +255,16 @@
                       id="enableMinToTray"
                       type="checkbox"
                       name="EnableMinToTray"
+                      aria-describedby="enableMinToTrayHelp"
                       [(ngModel)]="enableMinToTray"
                       (change)="saveMinToTray()"
                     />
                     {{ enableMinToTrayText }}
                   </label>
                 </div>
-                <small class="help-block">{{ enableMinToTrayDescText }}</small>
+                <small id="enableMinToTrayHelp" class="help-block">{{
+                  enableMinToTrayDescText
+                }}</small>
               </div>
               <div class="form-group">
                 <div class="checkbox">
@@ -242,13 +273,16 @@
                       id="enableCloseToTray"
                       type="checkbox"
                       name="EnableCloseToTray"
+                      aria-describedby="enableCloseToTrayHelp"
                       [(ngModel)]="enableCloseToTray"
                       (change)="saveCloseToTray()"
                     />
                     {{ enableCloseToTrayText }}
                   </label>
                 </div>
-                <small class="help-block">{{ enableCloseToTrayDescText }}</small>
+                <small id="enableCloseToTrayHelp" class="help-block">{{
+                  enableCloseToTrayDescText
+                }}</small>
               </div>
               <div class="form-group">
                 <div class="checkbox">
@@ -257,13 +291,14 @@
                       id="startToTray"
                       type="checkbox"
                       name="StartToTray"
+                      aria-describedby="startToTrayHelp"
                       [(ngModel)]="startToTray"
                       (change)="saveStartToTray()"
                     />
                     {{ startToTrayText }}
                   </label>
                 </div>
-                <small class="help-block">{{ startToTrayDescText }}</small>
+                <small id="startToTrayHelp" class="help-block">{{ startToTrayDescText }}</small>
               </div>
               <div class="form-group">
                 <div class="checkbox">
@@ -272,13 +307,16 @@
                       id="openAtLogin"
                       type="checkbox"
                       name="OpenAtLogin"
+                      aria-describedby="openAtLoginHelp"
                       [(ngModel)]="openAtLogin"
                       (change)="saveOpenAtLogin()"
                     />
                     {{ "openAtLogin" | i18n }}
                   </label>
                 </div>
-                <small class="help-block">{{ "openAtLoginDesc" | i18n }}</small>
+                <small id="openAtLoginHelp" class="help-block">{{
+                  "openAtLoginDesc" | i18n
+                }}</small>
               </div>
               <div class="form-group" *ngIf="showAlwaysShowDock">
                 <div class="checkbox">
@@ -287,13 +325,16 @@
                       id="alwaysShowDock"
                       type="checkbox"
                       name="AlwaysShowDock"
+                      aria-describedby="alwaysShowDockHelp"
                       [(ngModel)]="alwaysShowDock"
                       (change)="saveAlwaysShowDock()"
                     />
                     {{ "alwaysShowDock" | i18n }}
                   </label>
                 </div>
-                <small class="help-block">{{ "alwaysShowDockDesc" | i18n }}</small>
+                <small id="alwaysShowDockHelp" class="help-block">{{
+                  "alwaysShowDockDesc" | i18n
+                }}</small>
               </div>
               <div class="form-group">
                 <div class="checkbox">
@@ -302,13 +343,16 @@
                       id="enableBrowserIntegration"
                       type="checkbox"
                       name="EnableBrowserIntegration"
+                      aria-describedby="enableBrowserIntegrationHelp"
                       [(ngModel)]="enableBrowserIntegration"
                       (change)="saveBrowserIntegration()"
                     />
                     {{ "enableBrowserIntegration" | i18n }}
                   </label>
                 </div>
-                <small class="help-block">{{ "enableBrowserIntegrationDesc" | i18n }}</small>
+                <small id="enableBrowserIntegrationHelp" class="help-block">{{
+                  "enableBrowserIntegrationDesc" | i18n
+                }}</small>
               </div>
               <div class="form-group">
                 <div class="checkbox">
@@ -317,6 +361,7 @@
                       id="enableBrowserIntegrationFingerprint"
                       type="checkbox"
                       name="EnableBrowserIntegrationFingerprint"
+                      aria-describedby="enableBrowserIntegrationFingerprintHelp"
                       [(ngModel)]="enableBrowserIntegrationFingerprint"
                       (change)="saveBrowserIntegrationFingerprint()"
                       [disabled]="!enableBrowserIntegration"
@@ -324,23 +369,52 @@
                     {{ "enableBrowserIntegrationFingerprint" | i18n }}
                   </label>
                 </div>
-                <small class="help-block">{{
+                <small id="enableBrowserIntegrationFingerprintHelp" class="help-block">{{
                   "enableBrowserIntegrationFingerprintDesc" | i18n
+                }}</small>
+              </div>
+              <div class="form-group" *ngIf="showDuckDuckGoIntegrationOption">
+                <div class="checkbox">
+                  <label for="enableDuckDuckGoBrowserIntegration">
+                    <input
+                      id="enableDuckDuckGoBrowserIntegration"
+                      type="checkbox"
+                      name="enableDuckDuckGoBrowserIntegration"
+                      [(ngModel)]="enableDuckDuckGoBrowserIntegration"
+                      (change)="saveDdgBrowserIntegration()"
+                    />
+                    {{ "enableDuckDuckGoBrowserIntegration" | i18n }}
+                  </label>
+                </div>
+                <small class="help-block">{{
+                  "enableDuckDuckGoBrowserIntegrationDesc" | i18n
                 }}</small>
               </div>
               <div class="form-group">
                 <label for="theme">{{ "theme" | i18n }}</label>
-                <select id="theme" name="Theme" [(ngModel)]="theme" (change)="saveTheme()">
+                <select
+                  id="theme"
+                  name="Theme"
+                  aria-describedby="themeHelp"
+                  [(ngModel)]="theme"
+                  (change)="saveTheme()"
+                >
                   <option *ngFor="let o of themeOptions" [ngValue]="o.value">{{ o.name }}</option>
                 </select>
-                <small class="help-block">{{ "themeDesc" | i18n }}</small>
+                <small id="themeHelp" class="help-block">{{ "themeDesc" | i18n }}</small>
               </div>
               <div class="form-group">
                 <label for="locale">{{ "language" | i18n }}</label>
-                <select id="locale" name="Locale" [(ngModel)]="locale" (change)="saveLocale()">
+                <select
+                  id="locale"
+                  name="Locale"
+                  aria-describedby="localeHelp"
+                  [(ngModel)]="locale"
+                  (change)="saveLocale()"
+                >
                   <option *ngFor="let o of localeOptions" [ngValue]="o.value">{{ o.name }}</option>
                 </select>
-                <small class="help-block">{{ "languageDesc" | i18n }}</small>
+                <small id="localeHelp" class="help-block">{{ "languageDesc" | i18n }}</small>
               </div>
             </ng-container>
           </div>

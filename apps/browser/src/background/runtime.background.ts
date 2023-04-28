@@ -1,13 +1,13 @@
-import { EnvironmentService } from "jslib-common/abstractions/environment.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { NotificationsService } from "jslib-common/abstractions/notifications.service";
-import { SystemService } from "jslib-common/abstractions/system.service";
-import { Utils } from "jslib-common/misc/utils";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
+import { SystemService } from "@bitwarden/common/abstractions/system.service";
+import { Utils } from "@bitwarden/common/misc/utils";
 
+import { AutofillService } from "../autofill/services/abstractions/autofill.service";
 import { BrowserApi } from "../browser/browserApi";
-import { AutofillService } from "../services/abstractions/autofill.service";
+import { BrowserEnvironmentService } from "../services/browser-environment.service";
 import BrowserPlatformUtilsService from "../services/browserPlatformUtils.service";
 
 import MainBackground from "./main.background";
@@ -46,7 +46,7 @@ export default class RuntimeBackground {
     private i18nService: I18nService,
     private notificationsService: NotificationsService,
     private systemService: SystemService,
-    private environmentService: EnvironmentService,
+    private environmentService: BrowserEnvironmentService,
     private messagingService: MessagingService,
     private stateService: StateService,
     private logService: LogService,
@@ -79,12 +79,12 @@ export default class RuntimeBackground {
     };
 
     BrowserApi.messageListener("runtime.background", backgroundMessageListener);
-    if (this.main.isPrivateMode) {
+    if (this.main.popupOnlyContext) {
       (window as any).bitwardenBackgroundMessageListener = backgroundMessageListener;
     }
   }
 
-  async processMessage(msg: any, sender: any, sendResponse: any) {
+  async processMessage(msg: any, sender: chrome.runtime.MessageSender, sendResponse: any) {
     /*
         @override by Cozy : this log is very useful for reverse engineering the code, keep it for tests
         console.log('runtime.background PROCESS MESSAGE ', {
@@ -123,16 +123,12 @@ export default class RuntimeBackground {
         let item: LockedVaultPendingNotificationsItem;
 
         if (this.lockedVaultPendingNotifications?.length > 0) {
-          await BrowserApi.closeLoginTab();
-
           item = this.lockedVaultPendingNotifications.pop();
-          if (item.commandToRetry.sender?.tab?.id) {
-            await BrowserApi.focusSpecifiedTab(item.commandToRetry.sender.tab.id);
-          }
+          BrowserApi.closeBitwardenExtensionTab();
         }
 
-        await this.main.setIcon();
-        await this.main.refreshBadgeAndMenu(false);
+        await this.main.refreshBadge();
+        await this.main.refreshMenu(false);
         this.notificationsService.updateConnection(msg.command === "unlocked");
         this.systemService.cancelProcessReload();
 
@@ -179,7 +175,11 @@ export default class RuntimeBackground {
         break;
       case "syncCompleted":
         if (msg.successfully) {
-          setTimeout(async () => await this.main.refreshBadgeAndMenu(), 2000);
+          setTimeout(async () => {
+            await this.main.refreshBadge();
+            await this.main.refreshMenu();
+          }, 2000);
+          this.main.avatarUpdateService.loadColorFromState();
         }
         break;
       case "fullSync":
@@ -189,7 +189,21 @@ export default class RuntimeBackground {
         await this.main.openPopup();
         break;
       case "promptForLogin":
-        await BrowserApi.createNewTab("popup/index.html?uilocation=popout", true, true);
+        BrowserApi.openBitwardenExtensionTab("popup/index.html", true, sender.tab);
+        break;
+      case "openAddEditCipher": {
+        const addEditCipherUrl =
+          msg.data?.cipherId == null
+            ? "popup/index.html#/edit-cipher"
+            : "popup/index.html#/edit-cipher?cipherId=" + msg.data.cipherId;
+
+        BrowserApi.openBitwardenExtensionTab(addEditCipherUrl, true, sender.tab);
+        break;
+      }
+      case "closeTab":
+        setTimeout(() => {
+          BrowserApi.closeBitwardenExtensionTab();
+        }, msg.delay ?? 0);
         break;
       case "showDialogResolve":
         this.platformUtilsService.resolveDialogPromise(msg.dialogId, msg.confirmed);
@@ -300,7 +314,8 @@ export default class RuntimeBackground {
       case "editedCipher":
       case "addedCipher":
       case "deletedCipher":
-        await this.main.refreshBadgeAndMenu();
+        await this.main.refreshBadge();
+        await this.main.refreshMenu();
         break;
       case "bgReseedStorage":
         await this.main.reseedStorage();
@@ -468,7 +483,7 @@ export default class RuntimeBackground {
               tab: msg.tab,
               details: msg.details,
             });
-            this.autofillTimeout = setTimeout(async () => await this.autofillPage(), 300);
+            this.autofillTimeout = setTimeout(async () => await this.autofillPage(msg.tab), 300);
             break;
           default:
             break;
@@ -503,11 +518,7 @@ export default class RuntimeBackground {
         const params =
           `webAuthnResponse=${encodeURIComponent(msg.data)};` +
           `remember=${encodeURIComponent(msg.remember)}`;
-        BrowserApi.createNewTab(
-          `popup/index.html?uilocation=popout#/2fa;${params}`,
-          undefined,
-          false
-        );
+        BrowserApi.openBitwardenExtensionTab(`popup/index.html#/2fa;${params}`, false);
         break;
       }
       case "reloadPopup":
@@ -530,8 +541,9 @@ export default class RuntimeBackground {
     }
   }
 
-  private async autofillPage() {
+  private async autofillPage(tabToAutoFill: chrome.tabs.Tab) {
     const totpCode = await this.autofillService.doAutoFill({
+      tab: tabToAutoFill,
       cipher: this.main.loginToAutoFill,
       pageDetails: this.pageDetailsToAutoFill,
       fillNewPassword: true,
@@ -550,7 +562,13 @@ export default class RuntimeBackground {
     setTimeout(async () => {
       if (this.onInstalledReason != null) {
         if (this.onInstalledReason === "install") {
-          // BrowserApi.createNewTab("https://bitwarden.com/browser-start/");
+          /* Cozy custo (commented)
+          BrowserApi.createNewTab("https://bitwarden.com/browser-start/");
+
+          if (await this.environmentService.hasManagedEnvironment()) {
+            await this.environmentService.setUrlsToManagedEnvironment();
+          }
+        end custo */
         }
 
         // Execute the content-script on all tabs in case cozy-passwords is waiting for an answer

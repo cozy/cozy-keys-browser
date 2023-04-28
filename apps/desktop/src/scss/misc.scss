@@ -112,6 +112,10 @@ p.lead {
   border: 0 !important;
 }
 
+:not(:focus) > .exists-only-on-parent-focus {
+  display: none;
+}
+
 .totp {
   .totp-code {
     font-family: $font-family-monospace;
@@ -187,23 +191,34 @@ p.lead {
 .generated-block {
   font-size: $font-size-large;
   font-family: $font-family-monospace;
-  min-height: 50px;
+  padding: 8px 10px 8px 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: $border-radius;
+  border: 1px solid;
+
+  @include themify($themes) {
+    background-color: transparent;
+    border-color: themed("borderColorAlt");
+  }
 
   .modal-body & {
-    margin: 10px;
+    margin-top: 10px;
   }
 
   .generated-wrapper {
     text-align: left;
     width: 100%;
+    min-width: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    padding: 15px;
   }
 
   .action-buttons {
     display: flex;
     align-self: center;
+    height: 100%;
+    margin-left: 10px;
 
     button {
       margin-left: 10px;
@@ -211,8 +226,8 @@ p.lead {
   }
 }
 
-.generated-wrapper {
-  word-break: break-all;
+.password-wrapper {
+  overflow-wrap: break-word;
   white-space: pre-wrap;
   min-width: 0;
 }
@@ -226,6 +241,30 @@ p.lead {
 .password-special {
   @include themify($themes) {
     color: themed("passwordSpecialColor");
+  }
+}
+
+.password-character {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30px;
+  height: 36px;
+  font-weight: 600;
+
+  &:nth-child(odd) {
+    @include themify($themes) {
+      background-color: themed("backgroundColorAlt2");
+    }
+  }
+}
+
+.password-count {
+  white-space: nowrap;
+  font-size: 8px;
+
+  @include themify($themes) {
+    color: themed("passwordCountText") !important;
   }
 }
 
@@ -262,7 +301,7 @@ p.lead {
 form,
 .form {
   .form-group {
-    margin-bottom: 10px;
+    margin-bottom: 1.25rem;
 
     &:last-child {
       margin-bottom: 0;
@@ -306,6 +345,11 @@ form,
       margin-top: 4px;
       margin-left: -18px;
     }
+
+    &.remember-email {
+      padding-left: 20px;
+      padding-bottom: 5px;
+    }
   }
 
   .radio {
@@ -328,13 +372,32 @@ form,
       margin-left: -18px;
     }
   }
+}
 
-  .help-block {
-    margin-top: 3px;
-    display: block;
+.help-block {
+  margin-top: 3px;
+  display: block;
+
+  @include themify($themes) {
+    color: themed("mutedColor");
+  }
+
+  a {
+    @extend .btn;
+    @extend .link;
+
+    padding: 0;
+    font-size: inherit;
+    font-weight: bold;
 
     @include themify($themes) {
       color: themed("mutedColor");
+    }
+
+    &:hover {
+      @include themify($themes) {
+        color: darken(themed("mutedColor"), 6%);
+      }
     }
   }
 }
@@ -459,6 +522,10 @@ app-root > #loading,
   margin-top: 15px;
 }
 
+.password-hint-btn {
+  margin-bottom: 10px;
+}
+
 .set-pin-modal {
   .box {
     margin-bottom: 15px;
@@ -467,4 +534,44 @@ app-root > #loading,
 
 .rounded-circle {
   border-radius: 50% !important;
+}
+
+// Text selection styles
+// Set explicit selection styles (assumes primary accent color has sufficient
+// contrast against the background, so its inversion is also still readable)
+// and suppress user selection for most elements (to make it more app-like)
+
+::selection {
+  @include themify($themes) {
+    color: themed("backgroundColor");
+    background-color: themed("primaryAccentColor");
+  }
+}
+
+h1,
+h2,
+h3,
+label,
+a,
+button,
+p,
+img,
+.box-header,
+.box-footer,
+.row-label,
+.modal-title,
+.overlay-container,
+.help-block,
+.form-text.text-muted {
+  user-select: none;
+}
+
+app-vault-view .box-footer {
+  user-select: auto;
+}
+
+/* tweak for inconsistent line heights in cipher view */
+.box-footer button,
+.box-footer a {
+  line-height: 1;
 }

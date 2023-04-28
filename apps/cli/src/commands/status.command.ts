@@ -1,11 +1,11 @@
-import { AuthService } from "jslib-common/abstractions/auth.service";
-import { EnvironmentService } from "jslib-common/abstractions/environment.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { SyncService } from "jslib-common/abstractions/sync.service";
-import { AuthenticationStatus } from "jslib-common/enums/authenticationStatus";
-import { Response } from "jslib-node/cli/models/response";
+import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
-import { TemplateResponse } from "../models/response/templateResponse";
+import { Response } from "../models/response";
+import { TemplateResponse } from "../models/response/template.response";
 
 export class StatusCommand {
   constructor(

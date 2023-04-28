@@ -1,13 +1,13 @@
 <form #form (ngSubmit)="submit()" [appApiAction]="formPromise">
   <header>
     <div class="left">
-      <a routerLink="/folders">{{ "cancel" | i18n }}</a>
+      <button type="button" routerLink="/folders">{{ "cancel" | i18n }}</button>
     </div>
     <h1 class="center">
       <span class="title">{{ title }}</span>
     </h1>
     <div class="right">
-      <button type="submit" appBlurClick [disabled]="form.loading">
+      <button type="submit" [disabled]="form.loading">
         <span [hidden]="form.loading">{{ "save" | i18n }}</span>
         <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!form.loading" aria-hidden="true"></i>
       </button>
@@ -35,15 +35,17 @@
           type="button"
           class="box-content-row"
           appStopClick
-          appBlurClick
           (click)="delete()"
           [appApiAction]="deletePromise"
           #deleteBtn
         >
           <div class="row-main text-danger">
             <div class="icon text-danger" aria-hidden="true">
-              <i class="bwi bwi-trash bwi-lg bwi-fw" [hidden]="deleteBtn.loading"></i>
-              <i class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw" [hidden]="!deleteBtn.loading"></i>
+              <i class="bwi bwi-trash bwi-lg bwi-fw" [hidden]="$any(deleteBtn).loading"></i>
+              <i
+                class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw"
+                [hidden]="!$any(deleteBtn).loading"
+              ></i>
             </div>
             <span>{{ "deleteFolder" | i18n }}</span>
           </div>

@@ -1,11 +1,12 @@
 import { formatDate } from "@angular/common";
 import { Component, EventEmitter, Input, Output, OnInit } from "@angular/core";
+import { firstValueFrom } from "rxjs";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { Organization } from "jslib-common/models/domain/organization";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { Organization } from "@bitwarden/common/models/domain/organization";
 
 @Component({
   selector: "[sponsoring-org-row]",
@@ -23,6 +24,8 @@ export class SponsoringOrgRowComponent implements OnInit {
   revokeSponsorshipPromise: Promise<any>;
   resendEmailPromise: Promise<any>;
 
+  private locale = "";
+
   constructor(
     private apiService: ApiService,
     private i18nService: I18nService,
@@ -30,7 +33,9 @@ export class SponsoringOrgRowComponent implements OnInit {
     private platformUtilsService: PlatformUtilsService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    this.locale = await firstValueFrom(this.i18nService.locale$);
+
     this.setStatus(
       this.isSelfHosted,
       this.sponsoringOrg.familySponsorshipToDelete,
@@ -98,7 +103,7 @@ export class SponsoringOrgRowComponent implements OnInit {
       // They want to delete but there is a valid until date which means there is an active sponsorship
       this.statusMessage = this.i18nService.t(
         "revokeWhenExpired",
-        formatDate(validUntil, "MM/dd/yyyy", this.i18nService.locale)
+        formatDate(validUntil, "MM/dd/yyyy", this.locale)
       );
       this.statusClass = "text-danger";
     } else if (toDelete) {

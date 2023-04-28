@@ -1,18 +1,17 @@
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { UntypedFormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-
-import { InputModule } from "src/input/input.module";
-import { I18nMockService } from "src/utils/i18n-mock.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 
 import { ButtonModule } from "../button";
+import { InputModule } from "../input/input.module";
+import { I18nMockService } from "../utils/i18n-mock.service";
 
 import { BitFormFieldComponent } from "./form-field.component";
 import { FormFieldModule } from "./form-field.module";
 
 export default {
-  title: "Jslib/Form Error Summary",
+  title: "Component Library/Form/Error Summary",
   component: BitFormFieldComponent,
   decorators: [
     moduleMetadata({
@@ -35,12 +34,12 @@ export default {
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/file/f32LSg3jaegICkMu7rPARm/Tailwind-Component-Library-Update?node-id=1881%3A17689",
+      url: "https://www.figma.com/file/Zt3YSeb6E6lebAffrNLa0h/Tailwind-Component-Library?node-id=1881%3A17689",
     },
   },
 } as Meta;
 
-const fb = new FormBuilder();
+const fb = new UntypedFormBuilder();
 
 const formObj = fb.group({
   name: ["", [Validators.required]],

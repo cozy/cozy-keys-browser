@@ -238,6 +238,9 @@
   "ms": {
     "message": "ಎಂ ಎಸ್"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -269,7 +272,7 @@
     "message": "ಕೊನೆ ಹೆಸರು"
   },
   "fullName": {
-    "message": "Full Name"
+    "message": "Full name"
   },
   "address1": {
     "message": "ವಿಳಾಸ 1"
@@ -370,7 +373,7 @@
     "message": "ಪ್ರಸ್ತುತ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ತಿದ್ದಿಬರೆಯಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?"
   },
   "overwriteUsername": {
-    "message": "Overwrite Username"
+    "message": "Overwrite username"
   },
   "overwriteUsernameConfirmation": {
     "message": "Are you sure you want to overwrite the current username?"
@@ -400,6 +403,18 @@
   "length": {
     "message": "ಉದ್ದ"
   },
+  "uppercase": {
+    "message": "Uppercase (A-Z)"
+  },
+  "lowercase": {
+    "message": "Lowercase (a-z)"
+  },
+  "numbers": {
+    "message": "Numbers (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Special characters (!@#$%^&*)"
+  },
   "numWords": {
     "message": "ಪದಗಳ ಸಂಖ್ಯೆ"
   },
@@ -408,7 +423,7 @@
   },
   "capitalize": {
     "message": "ದೊಡ್ಡಕ್ಷರ ಮಾಡಿ",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "ಸಂಖ್ಯೆಯನ್ನು ಸೇರಿಸಿ"
@@ -520,11 +535,21 @@
   "invalidEmail": {
     "message": "ಅಮಾನ್ಯ ಇಮೇಲ್ ವಿಳಾಸ."
   },
-  "masterPassRequired": {
-    "message": "ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ಅಗತ್ಯವಿದೆ."
+  "masterPasswordRequired": {
+    "message": "Master password is required."
   },
-  "masterPassLength": {
-    "message": "ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಕನಿಷ್ಠ 8 ಅಕ್ಷರಗಳಷ್ಟು ಉದ್ದವಾಗಿರಬೇಕು."
+  "confirmMasterPasswordRequired": {
+    "message": "Master password retype is required."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ದೃಢೀಕರಣವು ಹೊಂದಿಕೆಯಾಗುವುದಿಲ್ಲ."
@@ -548,10 +573,10 @@
     "message": "Send a verification code to your email"
   },
   "sendCode": {
-    "message": "Send Code"
+    "message": "Send code"
   },
   "codeSent": {
-    "message": "Code Sent"
+    "message": "Code sent"
   },
   "verificationCode": {
     "message": "ಪರಿಶೀಲನಾ ಕೋಡ್‌ಗಳು"
@@ -737,16 +762,16 @@
     "message": "ಲೋಡ್‌ಆಗುತ್ತಿದೆ..."
   },
   "lockVault": {
-    "message": "Lock Vault"
+    "message": "Lock vault"
   },
   "passwordGenerator": {
     "message": "ಪಾಸ್ವರ್ಡ್ ಜನರೇಟರ್"
   },
   "contactUs": {
-    "message": "Contact Us"
+    "message": "Contact us"
   },
   "getHelp": {
-    "message": "Get Help"
+    "message": "Get help"
   },
   "fileBugReport": {
     "message": "ದೋಷ ವರದಿಯನ್ನು ಫೈಲ್ ಮಾಡಿ"
@@ -882,11 +907,11 @@
     "message": "ನಿಮ್ಮ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನಿಂದ ನಕಲಿಸಿದ ಮೌಲ್ಯಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತೆರವುಗೊಳಿಸಿ.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "ವೆಬ್‌ಸೈಟ್ ಚಿಹ್ನೆಗಳನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ"
+  "enableFavicon": {
+    "message": "Show website icons"
   },
-  "disableFaviconDesc": {
-    "message": "ವೆಬ್‌ಸೈಟ್ ಐಕಾನ್‌ಗಳು ನಿಮ್ಮ ವಾಲ್ಟ್‌ನಲ್ಲಿರುವ ಪ್ರತಿ ಲಾಗಿನ್ ಐಟಂನ ಪಕ್ಕದಲ್ಲಿ ಗುರುತಿಸಬಹುದಾದ ಚಿತ್ರವನ್ನು ಒದಗಿಸುತ್ತದೆ."
+  "faviconDesc": {
+    "message": "Show a recognizable image next to each login."
   },
   "enableMinToTray": {
     "message": "ಟ್ರೇ ಐಕಾನ್‌ಗೆ ಕಡಿಮೆ ಮಾಡಿ"
@@ -1198,7 +1223,7 @@
     "description": "Domain name. Ex. website.com"
   },
   "domainName": {
-    "message": "Domain Name",
+    "message": "Domain name",
     "description": "Domain name. Ex. website.com"
   },
   "host": {
@@ -1251,6 +1276,10 @@
     "message": "ಅಪ್‌ಡೇಟ್",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Created",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "ಪಾಸ್ವರ್ಡ್ ನವೀಕರಿಸಲಾಗಿದೆ",
     "description": "ex. Date this password was updated"
@@ -1260,6 +1289,40 @@
   },
   "fileFormat": {
     "message": "ಕಡತದ ಮಾದರಿ"
+  },
+  "hCaptchaUrl": {
+    "message": "hCaptcha Url",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Load accessibility cookie"
+  },
+  "registerAccessibilityUser": {
+    "message": "Register as an accessibility user at",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Copy and paste the link sent to your email below"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Enter URL to load accessibility cookie for hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "hCaptcha Url is required",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Invalid Url"
+  },
+  "done": {
+    "message": "Done"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Accessibility cookie saved!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "No accessibility cookie saved"
   },
   "warning": {
     "message": "ಎಚ್ಚರಿಕೆ",
@@ -1335,14 +1398,29 @@
   "touchIdConsentMessage": {
     "message": "ನಿಮ್ಮ ವಾಲ್ಟ್ ಅನ್ನು ಅನ್ಲಾಕ್ ಮಾಡಿ"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "ಪ್ರಾರಂಭದಲ್ಲಿ ವಿಂಡೋಸ್ ಹಲೋಗಾಗಿ ಕೇಳಬೇಡಿ."
+  "autoPromptWindowsHello": {
+    "message": "Ask for Windows Hello on launch"
   },
-  "noAutoPromptTouchId": {
-    "message": "ಪ್ರಾರಂಭದಲ್ಲಿ ಟಚ್ ಐಡಿಗಾಗಿ ಕೇಳಬೇಡಿ."
+  "autoPromptTouchId": {
+    "message": "Ask for Touch ID on launch"
   },
   "lockWithMasterPassOnRestart": {
     "message": "ಮರುಪ್ರಾರಂಭಿಸಿದಾಗ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್‌ನೊಂದಿಗೆ ಲಾಕ್ ಮಾಡಿ"
+  },
+  "deleteAccount": {
+    "message": "Delete account"
+  },
+  "deleteAccountDesc": {
+    "message": "Proceed below to delete your account and all vault data."
+  },
+  "deleteAccountWarning": {
+    "message": "Deleting your account is permanent. It cannot be undone."
+  },
+  "accountDeleted": {
+    "message": "Account deleted"
+  },
+  "accountDeletedDesc": {
+    "message": "Your account has been closed and all associated data has been deleted."
   },
   "preferences": {
     "message": "ಆದ್ಯತೆಗಳು"
@@ -1497,8 +1575,8 @@
   "acceptPolicies": {
     "message": "ಈ ಪೆಟ್ಟಿಗೆಯನ್ನು ಪರಿಶೀಲಿಸುವ ಮೂಲಕ ನೀವು ಈ ಕೆಳಗಿನವುಗಳನ್ನು ಒಪ್ಪುತ್ತೀರಿ:"
   },
-  "acceptPoliciesError": {
-    "message": "ಸೇವಾ ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆ ನೀತಿಯನ್ನು ಅಂಗೀಕರಿಸಲಾಗಿಲ್ಲ."
+  "acceptPoliciesRequired": {
+    "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "enableBrowserIntegration": {
     "message": "ಬ್ರೌಸರ್ ಏಕೀಕರಣವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ"
@@ -1506,17 +1584,23 @@
   "enableBrowserIntegrationDesc": {
     "message": "ಬ್ರೌಸರ್ನಲ್ಲಿ ಬಯೋಮೆಟ್ರಿಕ್ಸ್ಗಾಗಿ ಬ್ರೌಸರ್ ಏಕೀಕರಣವನ್ನು ಬಳಸಲಾಗುತ್ತದೆ."
   },
-  "browserIntegrationMasOnlyTitle": {
-    "message": "ಬ್ರೌಸರ್ ಏಕೀಕರಣವನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ"
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Allow DuckDuckGo browser integration"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Use your Bitwarden vault when browsing with DuckDuckGo."
+  },
+  "browserIntegrationUnsupportedTitle": {
+    "message": "Browser integration not supported"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "ದುರದೃಷ್ಟವಶಾತ್ ಬ್ರೌಸರ್ ಏಕೀಕರಣವನ್ನು ಇದೀಗ ಮ್ಯಾಕ್ ಆಪ್ ಸ್ಟೋರ್ ಆವೃತ್ತಿಯಲ್ಲಿ ಮಾತ್ರ ಬೆಂಬಲಿಸಲಾಗುತ್ತದೆ."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "ಬ್ರೌಸರ್ ಏಕೀಕರಣವನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "ದುರದೃಷ್ಟವಶಾತ್ ವಿಂಡೋಸ್ ಸ್ಟೋರ್ ಆವೃತ್ತಿಯಲ್ಲಿ ಬ್ರೌಸರ್ ಏಕೀಕರಣವನ್ನು ಪ್ರಸ್ತುತ ಬೆಂಬಲಿಸುವುದಿಲ್ಲ."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Unfortunately browser integration is currently not supported in the linux version."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "ಬ್ರೌಸರ್ ಏಕೀಕರಣಕ್ಕಾಗಿ ಪರಿಶೀಲನೆ ಅಗತ್ಯವಿದೆ"
@@ -1532,6 +1616,21 @@
   },
   "verifyBrowserDesc": {
     "message": "ತೋರಿಸಿದ ಫಿಂಗರ್‌ಪ್ರಿಂಟ್ ಬ್ರೌಸರ್ ವಿಸ್ತರಣೆಯಲ್ಲಿ ತೋರಿಸಿರುವ ಫಿಂಗರ್‌ಪ್ರಿಂಟ್‌ಗೆ ಹೋಲುತ್ತದೆ ಎಂಬುದನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ wants to connect to Bitwarden",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Would you like to approve this request?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "If you did not initiate this request, do not approve it."
   },
   "biometricsNotEnabledTitle": {
     "message": "ಬಯೊಮಿಟ್ರಿಕ್ಸ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿಲ್ಲ"
@@ -1587,7 +1686,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "ಗರಿಷ್ಠ ಪ್ರವೇಶ ಎಣಿಕೆ"
+    "message": "ಗರಿಷ್ಠ ಪ್ರವೇಶ ಎಣಿಕೆ",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "ಹೊಂದಿಸಿದ್ದರೆ, ಗರಿಷ್ಠ ಪ್ರವೇಶ ಎಣಿಕೆ ತಲುಪಿದ ನಂತರ ಬಳಕೆದಾರರಿಗೆ ಈ ಕಳುಹಿಸುವಿಕೆಯನ್ನು ಪ್ರವೇಶಿಸಲು ಸಾಧ್ಯವಾಗುವುದಿಲ್ಲ.",
@@ -1689,6 +1789,15 @@
   "disabled": {
     "message": "ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ"
   },
+  "removePassword": {
+    "message": "Remove password"
+  },
+  "removedPassword": {
+    "message": "Password removed"
+  },
+  "removePasswordConfirmation": {
+    "message": "Are you sure you want to remove the password?"
+  },
   "maxAccessCountReached": {
     "message": "ಗರಿಷ್ಠ ಪ್ರವೇಶ ಎಣಿಕೆ ತಲುಪಿದೆ"
   },
@@ -1723,13 +1832,13 @@
     "message": "ಮುಂದುವರಿಯಲು ಈ ಕ್ರಿಯೆಯನ್ನು ರಕ್ಷಿಸಲಾಗಿದೆ, ದಯವಿಟ್ಟು ನಿಮ್ಮ ಗುರುತನ್ನು ಪರಿಶೀಲಿಸಲು ನಿಮ್ಮ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ಮರು ನಮೂದಿಸಿ."
   },
   "updatedMasterPassword": {
-    "message": "Updated Master Password"
+    "message": "Updated master password"
   },
   "updateMasterPassword": {
-    "message": "Update Master Password"
+    "message": "Update master password"
   },
   "updateMasterPasswordWarning": {
-    "message": "Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+    "message": "Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update it now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "hours": {
     "message": "Hours"
@@ -1738,7 +1847,7 @@
     "message": "Minutes"
   },
   "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s)",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1754,25 +1863,25 @@
     "message": "Your vault timeout exceeds the restrictions set by your organization."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatic Enrollment"
+    "message": "Automatic enrollment"
   },
   "resetPasswordAutoEnrollInviteWarning": {
     "message": "This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password."
   },
   "vaultExportDisabled": {
-    "message": "Vault Export Disabled"
+    "message": "Vault export removed"
   },
   "personalVaultExportPolicyInEffect": {
     "message": "One or more organization policies prevents you from exporting your personal vault."
   },
   "addAccount": {
-    "message": "Add Account"
+    "message": "Add account"
   },
   "removeMasterPassword": {
-    "message": "Remove Master Password"
+    "message": "Remove master password"
   },
   "removedMasterPassword": {
-    "message": "Master password removed."
+    "message": "Master password removed"
   },
   "convertOrganizationEncryptionDesc": {
     "message": "$ORGANIZATION$ is using SSO with a self-hosted key server. A master password is no longer required to log in for members of this organization.",
@@ -1784,7 +1893,7 @@
     }
   },
   "leaveOrganization": {
-    "message": "Leave Organization"
+    "message": "Leave organization"
   },
   "leaveOrganizationConfirmation": {
     "message": "Are you sure you want to leave this organization?"
@@ -1792,11 +1901,11 @@
   "leftOrganization": {
     "message": "You have left the organization."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Unable to reach the key connector, try again later."
+  "ssoKeyConnectorError": {
+    "message": "Key connector error: make sure key connector is available and working correctly."
   },
   "lockAllVaults": {
-    "message": "Lock All Vaults"
+    "message": "Lock all vaults"
   },
   "accountLimitReached": {
     "message": "No more than 5 accounts may be logged in at the same time."
@@ -1805,7 +1914,7 @@
     "message": "Preferences"
   },
   "appPreferences": {
-    "message": "App Settings (All Accounts)"
+    "message": "App settings (all accounts)"
   },
   "accountSwitcherLimitReached": {
     "message": "Account limit reached. Log out of an account to add another."
@@ -1820,7 +1929,7 @@
     }
   },
   "switchAccount": {
-    "message": "Switch Account"
+    "message": "Switch account"
   },
   "options": {
     "message": "Options"
@@ -1829,16 +1938,22 @@
     "message": "Your session has timed out. Please go back and try logging in again."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exporting Personal Vault"
+    "message": "Exporting individual vault"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
     "placeholders": {
       "email": {
         "content": "$1",
         "example": "name@example.com"
       }
     }
+  },
+  "locked": {
+    "message": "Locked"
+  },
+  "unlocked": {
+    "message": "Unlocked"
   },
   "generator": {
     "message": "Generator"
@@ -1847,25 +1962,26 @@
     "message": "What would you like to generate?"
   },
   "passwordType": {
-    "message": "Password Type"
+    "message": "Password type"
   },
   "regenerateUsername": {
-    "message": "Regenerate Username"
+    "message": "Regenerate username"
   },
   "generateUsername": {
-    "message": "Generate Username"
+    "message": "Generate username"
   },
   "usernameType": {
-    "message": "Username Type"
+    "message": "Username type"
   },
   "plusAddressedEmail": {
-    "message": "Plus Addressed Email"
+    "message": "Plus addressed email",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Use your email provider's sub-addressing capabilities."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Catch-all email"
   },
   "catchallEmailDesc": {
     "message": "Use your domain's configured catch-all inbox."
@@ -1874,12 +1990,216 @@
     "message": "Random"
   },
   "randomWord": {
-    "message": "Random Word"
+    "message": "Random word"
   },
   "websiteName": {
-    "message": "Website Name"
+    "message": "Website name"
   },
   "service": {
     "message": "Service"
+  },
+  "allVaults": {
+    "message": "All vaults"
+  },
+  "searchOrganization": {
+    "message": "Search organization"
+  },
+  "searchMyVault": {
+    "message": "Search my vault"
+  },
+  "forwardedEmail": {
+    "message": "Forwarded email alias"
+  },
+  "forwardedEmailDesc": {
+    "message": "Generate an email alias with an external forwarding service."
+  },
+  "hostname": {
+    "message": "Hostname",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API Access Token"
+  },
+  "apiKey": {
+    "message": "API key"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Premium subscription required"
+  },
+  "organizationIsDisabled": {
+    "message": "Organization suspended"
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in suspended organizations cannot be accessed. Contact your organization owner for assistance."
+  },
+  "neverLockWarning": {
+    "message": "Are you sure you want to use the \"Never\" option? Setting your lock options to \"Never\" stores your vault's encryption key on your device. If you use this option you should ensure that you keep your device properly protected."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "Vault"
+  },
+  "loginWithMasterPassword": {
+    "message": "Log in with master password"
+  },
+  "loggingInAs": {
+    "message": "Logging in as"
+  },
+  "rememberEmail": {
+    "message": "Remember email"
+  },
+  "notYou": {
+    "message": "Not you?"
+  },
+  "newAroundHere": {
+    "message": "New around here?"
+  },
+  "loggingInTo": {
+    "message": "Logging in to $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Log in with another device"
+  },
+  "logInInitiated": {
+    "message": "Log in initiated"
+  },
+  "notificationSentDevice": {
+    "message": "A notification has been sent to your device."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingerprint phrase"
+  },
+  "needAnotherOption": {
+    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+  },
+  "viewAllLoginOptions": {
+    "message": "View all login options"
+  },
+  "resendNotification": {
+    "message": "Resend notification"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Are you trying to log in?"
+  },
+  "logInAttemptBy": {
+    "message": "Login attempt by $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Device Type"
+  },
+  "ipAddress": {
+    "message": "IP Address"
+  },
+  "time": {
+    "message": "Time"
+  },
+  "confirmLogIn": {
+    "message": "Confirm login"
+  },
+  "denyLogIn": {
+    "message": "Deny login"
+  },
+  "approveLoginRequests": {
+    "message": "Approve login requests"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Login confirmed for $EMAIL$ on $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "You denied a login attempt from another device. If this really was you, try to log in with the device again."
+  },
+  "justNow": {
+    "message": "Just now"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Requested $MINUTES$ minutes ago",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Login request has already expired."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "This request is no longer valid."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Use this device to approve login requests made from other devices."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Confirm login attempt for $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Log in requested"
+  },
+  "exposedMasterPassword": {
+    "message": "Exposed Master Password"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Weak and Exposed Master Password"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+  },
+  "checkForBreaches": {
+    "message": "Check known data breaches for this password"
+  },
+  "important": {
+    "message": "Important:"
+  },
+  "masterPasswordHint": {
+    "message": "Your master password cannot be recovered if you forget it!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ character minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

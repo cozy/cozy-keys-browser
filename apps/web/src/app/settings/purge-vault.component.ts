@@ -1,12 +1,13 @@
 import { Component, Input } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { UserVerificationService } from "jslib-common/abstractions/userVerification.service";
-import { Verification } from "jslib-common/types/verification";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { UserVerificationService } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
+import { Verification } from "@bitwarden/common/types/verification";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 @Component({
   selector: "app-purge-vault",
@@ -16,7 +17,7 @@ export class PurgeVaultComponent {
   @Input() organizationId?: string = null;
 
   masterPassword: Verification;
-  formPromise: Promise<any>;
+  formPromise: Promise<unknown>;
 
   constructor(
     private apiService: ApiService,
@@ -24,7 +25,8 @@ export class PurgeVaultComponent {
     private platformUtilsService: PlatformUtilsService,
     private userVerificationService: UserVerificationService,
     private router: Router,
-    private logService: LogService
+    private logService: LogService,
+    private syncService: SyncService
   ) {}
 
   async submit() {
@@ -34,6 +36,7 @@ export class PurgeVaultComponent {
         .then((request) => this.apiService.postPurgeCiphers(request, this.organizationId));
       await this.formPromise;
       this.platformUtilsService.showToast("success", null, this.i18nService.t("vaultPurged"));
+      this.syncService.fullSync(true);
       if (this.organizationId != null) {
         this.router.navigate(["organizations", this.organizationId, "vault"]);
       } else {

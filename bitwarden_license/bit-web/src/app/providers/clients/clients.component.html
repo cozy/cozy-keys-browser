@@ -1,3 +1,5 @@
+<!-- Please remove this disable statement when editing this file! -->
+<!-- eslint-disable @angular-eslint/template/button-has-type -->
 <div class="page-header d-flex">
   <h1>{{ "clients" | i18n }}</h1>
 
@@ -48,18 +50,28 @@
       [infiniteScrollDisabled]="!isPaging()"
       (scrolled)="loadMore()"
     >
+      <thead>
+        <tr>
+          <th colspan="2">{{ "name" | i18n }}</th>
+          <th>{{ "numberOfUsers" | i18n }}</th>
+          <th>{{ "billingPlan" | i18n }}</th>
+          <th></th>
+        </tr>
+      </thead>
       <tbody>
         <tr *ngFor="let o of searchedClients">
           <td width="30">
-            <app-avatar
-              [data]="o.organizationName"
-              size="25"
-              [circle]="true"
-              [fontSize]="14"
-            ></app-avatar>
+            <bit-avatar [text]="o.organizationName" [id]="o.id" size="small"></bit-avatar>
           </td>
           <td>
             <a [routerLink]="['/organizations', o.organizationId]">{{ o.organizationName }}</a>
+          </td>
+          <td>
+            <span>{{ o.userCount }}</span>
+            <span *ngIf="o.seats != null"> / {{ o.seats }}</span>
+          </td>
+          <td>
+            <span>{{ o.plan }}</span>
           </td>
           <td class="table-list-options" *ngIf="manageOrganizations">
             <div class="dropdown" appListDropdown>

@@ -3,8 +3,14 @@ const { merge } = require("webpack-merge");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const configurator = require("./config/config");
+const { EnvironmentPlugin } = require("webpack");
 
 const NODE_ENV = process.env.NODE_ENV == null ? "development" : process.env.NODE_ENV;
+
+console.log("Main process config");
+const envConfig = configurator.load(NODE_ENV);
+configurator.log(envConfig);
 
 const common = {
   module: {
@@ -67,15 +73,17 @@ const main = {
         "./src/package.json",
         { from: "./src/images", to: "images" },
         { from: "./src/locales", to: "locales" },
+        "../../node_modules/argon2-browser/dist/argon2.wasm",
       ],
+    }),
+    new EnvironmentPlugin({
+      FLAGS: envConfig.flags,
+      DEV_FLAGS: NODE_ENV === "development" ? envConfig.devFlags : {},
     }),
   ],
   externals: {
     "electron-reload": "commonjs2 electron-reload",
-    "@nodert-win10-rs4/windows.security.credentials.ui":
-      "commonjs2 @nodert-win10-rs4/windows.security.credentials.ui",
-    forcefocus: "commonjs2 forcefocus",
-    keytar: "commonjs2 keytar",
+    "@bitwarden/desktop-native": "commonjs2 @bitwarden/desktop-native",
   },
 };
 

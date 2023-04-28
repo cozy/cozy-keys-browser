@@ -1,8 +1,9 @@
 import { BrowserWindow, dialog, MenuItemConstructorOptions, shell } from "electron";
 
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { isMacAppStore, isWindowsStore } from "jslib-electron/utils";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+
+import { isMacAppStore, isWindowsStore } from "../../utils";
 
 import { IMenubarMenu } from "./menubar";
 
@@ -19,6 +20,8 @@ export class AccountMenu implements IMenubarMenu {
       this.changeMasterPassword,
       this.twoStepLogin,
       this.fingerprintPhrase,
+      this.separator,
+      this.deleteAccount,
     ];
   }
 
@@ -103,6 +106,19 @@ export class AccountMenu implements IMenubarMenu {
       click: () => this.sendMessage("showFingerprintPhrase"),
       enabled: !this._isLocked,
     };
+  }
+
+  private get deleteAccount(): MenuItemConstructorOptions {
+    return {
+      label: this.localize("deleteAccount"),
+      id: "deleteAccount",
+      click: () => this.sendMessage("deleteAccount"),
+      enabled: !this._isLocked,
+    };
+  }
+
+  private get separator(): MenuItemConstructorOptions {
+    return { type: "separator" };
   }
 
   private localize(s: string) {

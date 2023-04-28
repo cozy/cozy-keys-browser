@@ -1,26 +1,32 @@
-import { Component, OnInit } from "@angular/core";
+import { ViewChild, ViewContainerRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { Subject, takeUntil } from "rxjs";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { CryptoService } from "jslib-common/abstractions/crypto.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { KeyConnectorService } from "jslib-common/abstractions/keyConnector.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { UpdateProfileRequest } from "jslib-common/models/request/updateProfileRequest";
-import { ProfileResponse } from "jslib-common/models/response/profileResponse";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { UpdateProfileRequest } from "@bitwarden/common/auth/models/request/update-profile.request";
+import { ProfileResponse } from "@bitwarden/common/models/response/profile.response";
+
+import { ChangeAvatarComponent } from "./change-avatar.component";
 
 @Component({
   selector: "app-profile",
   templateUrl: "profile.component.html",
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   loading = true;
   profile: ProfileResponse;
   fingerprint: string;
-  hidePasswordHint = false;
 
   formPromise: Promise<any>;
+  @ViewChild("avatarModalTemplate", { read: ViewContainerRef, static: true })
+  avatarModalRef: ViewContainerRef;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private apiService: ApiService,
@@ -29,7 +35,8 @@ export class ProfileComponent implements OnInit {
     private cryptoService: CryptoService,
     private logService: LogService,
     private keyConnectorService: KeyConnectorService,
-    private stateService: StateService
+    private stateService: StateService,
+    private modalService: ModalService
   ) {}
 
   async ngOnInit() {
@@ -41,7 +48,24 @@ export class ProfileComponent implements OnInit {
     if (fingerprint != null) {
       this.fingerprint = fingerprint.join("-");
     }
-    this.hidePasswordHint = await this.keyConnectorService.getUsesKeyConnector();
+  }
+
+  async ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  async openChangeAvatar() {
+    const modalOpened = await this.modalService.openViewRef(
+      ChangeAvatarComponent,
+      this.avatarModalRef,
+      (modal) => {
+        modal.profile = this.profile;
+        modal.changeColor.pipe(takeUntil(this.destroy$)).subscribe(() => {
+          modalOpened[0].close();
+        });
+      }
+    );
   }
 
   async submit() {

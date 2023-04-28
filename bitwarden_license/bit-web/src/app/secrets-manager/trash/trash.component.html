@@ -1,0 +1,12 @@
+<sm-header>
+  <sm-new-menu></sm-new-menu>
+</sm-header>
+<bit-callout type="warning" [title]="'warning' | i18n">{{
+  "trashCleanupWarning" | i18n
+}}</bit-callout>
+<sm-secrets-list
+  (deleteSecretsEvent)="openDeleteSecret($event)"
+  (restoreSecretsEvent)="openRestoreSecret($event)"
+  [secrets]="secrets$ | async"
+  [trash]="true"
+></sm-secrets-list>

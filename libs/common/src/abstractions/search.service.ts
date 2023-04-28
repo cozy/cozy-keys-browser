@@ -1,5 +1,5 @@
-import { CipherView } from "../models/view/cipherView";
-import { SendView } from "../models/view/sendView";
+import { SendView } from "../models/view/send.view";
+import { CipherView } from "../vault/models/view/cipher.view";
 
 export abstract class SearchService {
   indexedEntityId?: string = null;

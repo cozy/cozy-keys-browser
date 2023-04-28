@@ -1,28 +1,29 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { first } from "rxjs/operators";
+import { Observable, Subject } from "rxjs";
+import { first, map, takeUntil } from "rxjs/operators";
 
-import { ModalService } from "jslib-angular/services/modal.service";
-import { ValidationService } from "jslib-angular/services/validation.service";
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { OrganizationService } from "jslib-common/abstractions/organization.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { SyncService } from "jslib-common/abstractions/sync.service";
-import { PlanSponsorshipType } from "jslib-common/enums/planSponsorshipType";
-import { PlanType } from "jslib-common/enums/planType";
-import { ProductType } from "jslib-common/enums/productType";
-import { Organization } from "jslib-common/models/domain/organization";
-import { OrganizationSponsorshipRedeemRequest } from "jslib-common/models/request/organization/organizationSponsorshipRedeemRequest";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
+import { PlanSponsorshipType } from "@bitwarden/common/enums/planSponsorshipType";
+import { PlanType } from "@bitwarden/common/enums/planType";
+import { ProductType } from "@bitwarden/common/enums/productType";
+import { Organization } from "@bitwarden/common/models/domain/organization";
+import { OrganizationSponsorshipRedeemRequest } from "@bitwarden/common/models/request/organization/organization-sponsorship-redeem.request";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
-import { DeleteOrganizationComponent } from "src/app/organizations/settings/delete-organization.component";
-import { OrganizationPlansComponent } from "src/app/settings/organization-plans.component";
+import { DeleteOrganizationComponent } from "../../organizations/settings";
+import { OrganizationPlansComponent } from "../../settings/organization-plans.component";
 
 @Component({
   selector: "families-for-enterprise-setup",
   templateUrl: "families-for-enterprise-setup.component.html",
 })
-export class FamiliesForEnterpriseSetupComponent implements OnInit {
+export class FamiliesForEnterpriseSetupComponent implements OnInit, OnDestroy {
   @ViewChild(OrganizationPlansComponent, { static: false })
   set organizationPlansComponent(value: OrganizationPlansComponent) {
     if (!value) {
@@ -32,6 +33,7 @@ export class FamiliesForEnterpriseSetupComponent implements OnInit {
     value.plan = PlanType.FamiliesAnnually;
     value.product = ProductType.Families;
     value.acceptingSponsorship = true;
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     value.onSuccess.subscribe(this.onOrganizationCreateSuccess.bind(this));
   }
 
@@ -44,10 +46,13 @@ export class FamiliesForEnterpriseSetupComponent implements OnInit {
 
   token: string;
   existingFamilyOrganizations: Organization[];
+  existingFamilyOrganizations$: Observable<Organization[]>;
 
   showNewOrganization = false;
   _organizationPlansComponent: OrganizationPlansComponent;
   _selectedFamilyOrganizationId = "";
+
+  private _destroy = new Subject<void>();
 
   constructor(
     private router: Router,
@@ -63,6 +68,7 @@ export class FamiliesForEnterpriseSetupComponent implements OnInit {
 
   async ngOnInit() {
     document.body.classList.remove("layout_frontend");
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       const error = qParams.token == null;
       if (error) {
@@ -81,15 +87,22 @@ export class FamiliesForEnterpriseSetupComponent implements OnInit {
       await this.syncService.fullSync(true);
       this.badToken = !(await this.apiService.postPreValidateSponsorshipToken(this.token));
       this.loading = false;
+    });
 
-      this.existingFamilyOrganizations = (await this.organizationService.getAll()).filter(
-        (o) => o.planProductType === ProductType.Families
-      );
+    this.existingFamilyOrganizations$ = this.organizationService.organizations$.pipe(
+      map((orgs) => orgs.filter((o) => o.planProductType === ProductType.Families))
+    );
 
-      if (this.existingFamilyOrganizations.length === 0) {
+    this.existingFamilyOrganizations$.pipe(takeUntil(this._destroy)).subscribe((orgs) => {
+      if (orgs.length === 0) {
         this.selectedFamilyOrganizationId = "createNew";
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   async submit() {
@@ -130,6 +143,7 @@ export class FamiliesForEnterpriseSetupComponent implements OnInit {
           (comp) => {
             comp.organizationId = organizationId;
             comp.deleteOrganizationRequestType = "InvalidFamiliesForEnterprise";
+            // eslint-disable-next-line rxjs-angular/prefer-takeuntil
             comp.onSuccess.subscribe(() => {
               this.router.navigate(["/"]);
             });

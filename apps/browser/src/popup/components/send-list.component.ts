@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
-import { SendType } from "jslib-common/enums/sendType";
-import { SendView } from "jslib-common/models/view/sendView";
+import { SendType } from "@bitwarden/common/enums/sendType";
+import { SendView } from "@bitwarden/common/models/view/send.view";
 
 @Component({
   selector: "app-send-list",

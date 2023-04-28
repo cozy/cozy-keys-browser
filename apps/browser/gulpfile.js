@@ -34,6 +34,9 @@ const filters = {
 
 function buildString() {
   var build = "";
+  if (process.env.MANIFEST_VERSION) {
+    build = `-mv${process.env.MANIFEST_VERSION}`;
+  }
   if (process.env.BUILD_NUMBER && process.env.BUILD_NUMBER !== "") {
     build = `-${process.env.BUILD_NUMBER}`;
   }
@@ -56,8 +59,7 @@ function dist(browserName, manifest) {
 
 function distFirefox() {
   return dist("firefox", (manifest) => {
-    delete manifest.content_security_policy;
-    removeShortcuts(manifest);
+    delete manifest.storage;
     return manifest;
   });
 }
@@ -65,8 +67,6 @@ function distFirefox() {
 function distOpera() {
   return dist("opera", (manifest) => {
     delete manifest.applications;
-    delete manifest.content_security_policy;
-    removeShortcuts(manifest);
     return manifest;
   });
 }
@@ -74,7 +74,6 @@ function distOpera() {
 function distChrome() {
   return dist("chrome", (manifest) => {
     delete manifest.applications;
-    delete manifest.content_security_policy;
     delete manifest.sidebar_action;
     delete manifest.commands._execute_sidebar_action;
     return manifest;
@@ -84,20 +83,10 @@ function distChrome() {
 function distEdge() {
   return dist("edge", (manifest) => {
     delete manifest.applications;
-    delete manifest.content_security_policy;
     delete manifest.sidebar_action;
     delete manifest.commands._execute_sidebar_action;
     return manifest;
   });
-}
-
-function removeShortcuts(manifest) {
-  if (manifest.content_scripts && manifest.content_scripts.length > 1) {
-    const shortcutsScript = manifest.content_scripts[1];
-    if (shortcutsScript.js.indexOf("content/shortcuts.js") > -1) {
-      manifest.content_scripts.splice(1, 1);
-    }
-  }
 }
 
 function distSafariMas(cb) {
@@ -209,6 +198,8 @@ function safariCopyBuild(source, dest) {
         gulpif(
           "manifest.json",
           jeditor((manifest) => {
+            delete manifest.sidebar_action;
+            delete manifest.commands._execute_sidebar_action;
             delete manifest.optional_permissions;
             manifest.permissions.push("nativeMessaging");
             return manifest;

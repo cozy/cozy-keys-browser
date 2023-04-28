@@ -132,7 +132,12 @@ p.lead {
 }
 
 .img-rounded {
-  border-radius: 6px;
+  border-radius: $border-radius;
+}
+
+.select-index-top {
+  position: relative;
+  z-index: 100;
 }
 
 .sr-only {
@@ -144,6 +149,10 @@ p.lead {
   overflow: hidden !important;
   clip: rect(0, 0, 0, 0) !important;
   border: 0 !important;
+}
+
+:not(:focus) > .exists-only-on-parent-focus {
+  display: none;
 }
 
 .password-wrapper {
@@ -184,7 +193,7 @@ p.lead {
   font-size: 8px;
 
   @include themify($themes) {
-    color: themed("mutedColor") !important;
+    color: themed("passwordCountText") !important;
   }
 }
 
@@ -578,6 +587,47 @@ input[type="password"]::-ms-reveal {
   }
 }
 
+// Text selection styles
+// Set explicit selection styles (assumes primary accent color has sufficient
+// contrast against the background, so its inversion is also still readable)
+// and suppress user selection for most elements (to make it more app-like)
+
+::selection {
+  @include themify($themes) {
+    color: themed("backgroundColor");
+    background-color: themed("primaryAccentColor");
+  }
+}
+
+h1,
+h2,
+h3,
+label,
+a,
+button,
+p,
+img,
+.box-header,
+.box-footer,
+.callout,
+.row-label,
+.modal-title,
+.overlay-container,
+.swal2-container {
+  user-select: none;
+}
+
+app-about .modal-body > *,
+app-vault-view .box-footer {
+  user-select: auto;
+}
+
+/* tweak for inconsistent line heights in cipher view */
+.box-footer button,
+.box-footer a {
+  line-height: 1;
+}
+
 // Workaround for slow performance on external monitors on Chrome + MacOS
 // See: https://bugs.chromium.org/p/chromium/issues/detail?id=971701#c64
 @keyframes redraw {
@@ -590,4 +640,8 @@ input[type="password"]::-ms-reveal {
 }
 html.force_redraw {
   animation: redraw 1s linear infinite;
+}
+
+.rounded-circle {
+  border-radius: 50% !important;
 }

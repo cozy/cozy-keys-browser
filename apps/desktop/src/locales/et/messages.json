@@ -238,6 +238,9 @@
   "ms": {
     "message": "Pr"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -400,6 +403,18 @@
   "length": {
     "message": "Pikkus"
   },
+  "uppercase": {
+    "message": "Suurtäht (A-Z)"
+  },
+  "lowercase": {
+    "message": "Väiketäht (a-z)"
+  },
+  "numbers": {
+    "message": "Numbrid (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Erimärgid (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Sõnade arv"
   },
@@ -408,7 +423,7 @@
   },
   "capitalize": {
     "message": "Suurtäht",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Lisa number"
@@ -520,11 +535,21 @@
   "invalidEmail": {
     "message": "Vigane e-posti aadress."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Vajalik on ülemparooli sisestamine."
   },
-  "masterPassLength": {
-    "message": "Ülemparool peab olema vähemalt 8 tähemärgi pikkune."
+  "confirmMasterPasswordRequired": {
+    "message": "Vajalik on ülemparooli uuesti sisestamine."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Ülemparoolid ei ühti."
@@ -882,11 +907,11 @@
     "message": "Puhastab automaatselt lõikelauale kopeeritud sisu.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Keela veebilehel ikoonid"
+  "enableFavicon": {
+    "message": "Kuva veebilehtede ikoone"
   },
-  "disableFaviconDesc": {
-    "message": "Ikoonid aitavad hoidlas olevaid veebilehti paremini ära tunda."
+  "faviconDesc": {
+    "message": "Kuvab iga kirje kõrval lehekülje ikooni."
   },
   "enableMinToTray": {
     "message": "Minimeeri tegumiribale"
@@ -1251,6 +1276,10 @@
     "message": "Uuendatud",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Loodud",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Parool on uuendatud",
     "description": "ex. Date this password was updated"
@@ -1260,6 +1289,40 @@
   },
   "fileFormat": {
     "message": "Failivorming"
+  },
+  "hCaptchaUrl": {
+    "message": "hCaptcha Url",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Lae juurdepääsetavuse küpsis"
+  },
+  "registerAccessibilityUser": {
+    "message": "Registreeri juurdepääsetavuse kasutajana lehel",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Kopeeri ja kleebi link, mis saadeti sinu e-postile"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Sisesta URL, et laadida ligipääsetavuse küpsis hCaptchale",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "hCaptcha Url on nõutud",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Vale Url"
+  },
+  "done": {
+    "message": "Valmis"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Ligipääsetavuse küpsis on salvestatud!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Ligipääsetavuse küpsis pole salvestatud"
   },
   "warning": {
     "message": "HOIATUS",
@@ -1335,14 +1398,29 @@
   "touchIdConsentMessage": {
     "message": "Kinnita Bitwardenisse sisselogimine."
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Ära küsi käivitudes Windows Hello't."
+  "autoPromptWindowsHello": {
+    "message": "Küsi avamisel Windows Hello tuvastust"
   },
-  "noAutoPromptTouchId": {
-    "message": "Ära küsi käivitudes Touch ID'd."
+  "autoPromptTouchId": {
+    "message": "Küsi avamisel Touch ID tuvastust"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Lukusta ülemparooliga, kui rakendus taaskäivitatakse"
+  },
+  "deleteAccount": {
+    "message": "Kustuta konto"
+  },
+  "deleteAccountDesc": {
+    "message": "Jätkates kustutatakse sinu konto ja kõik hoidla andmed."
+  },
+  "deleteAccountWarning": {
+    "message": "Konto kustutamine on ühekordne tegevus. Seda ei saa tagasi võtta."
+  },
+  "accountDeleted": {
+    "message": "Konto on kustutatud"
+  },
+  "accountDeletedDesc": {
+    "message": "Konto on suletud ja kõik sellega seonduvad andmed on kustutatud."
   },
   "preferences": {
     "message": "Eelistused"
@@ -1497,7 +1575,7 @@
   "acceptPolicies": {
     "message": "Märkeruudu markeerimisel nõustud järgnevaga:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Kasutustingimuste ja Privaatsuspoliitikaga pole nõustutud."
   },
   "enableBrowserIntegration": {
@@ -1506,17 +1584,23 @@
   "enableBrowserIntegrationDesc": {
     "message": "Brauseri integratsioon on vajalik biomeetria kasutamiseks brauseris."
   },
-  "browserIntegrationMasOnlyTitle": {
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Lubage DuckDuckGo brauseri integreerimine"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Kasutage DuckDuckGoga sirvimisel oma Bitwardeni varahoidlat."
+  },
+  "browserIntegrationUnsupportedTitle": {
     "message": "Brauseri integratsioon ei ole toetatud"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Paraku on brauseri integratsioon hetkel toetatud ainult Mac App Store'i versioonis."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Brauseri integratsioon ei ole toetatud"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "Paraku ei ole brauseri integratsioon hetkel Microsoft Store versioonis toetatud."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Paraku ei ole brauseri integratsioon hetkel Linuxi versioonis toetatud."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Nõua brauseri integratsiooni ülekinnitamist"
@@ -1532,6 +1616,21 @@
   },
   "verifyBrowserDesc": {
     "message": "Veendu, et kuvatav sõrmejälje fraas on identne sellega, mida kuvatakse brauseri lisas."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ soovib Bitwardeniga ühendust luua",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Kas soovite selle taotluse heaks kiita?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "Kui te seda taotlust ei algatanud, ärge kinnitage seda."
   },
   "biometricsNotEnabledTitle": {
     "message": "Biomeetria ei ole sisse lülitatud"
@@ -1587,7 +1686,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Maksimaalne ligipääsude arv"
+    "message": "Maksimaalne ligipääsude arv",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Selle valimisel ei saa kasutajad pärast maksimaalse ligipääsude arvu saavutamist sellele Sendile enam ligi.",
@@ -1688,6 +1788,15 @@
   },
   "disabled": {
     "message": "Keelatud"
+  },
+  "removePassword": {
+    "message": "Eemalda parool"
+  },
+  "removedPassword": {
+    "message": "Parool on eemaldatud"
+  },
+  "removePasswordConfirmation": {
+    "message": "Oled kindel, et soovid selle parooli eemaldada?"
   },
   "maxAccessCountReached": {
     "message": "Maksimaalne ligipääsude arv on saavutatud"
@@ -1792,8 +1901,8 @@
   "leftOrganization": {
     "message": "Oled organisatsioonist lahkunud."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Ühenduse loomine ebaõnnestus. Proovi hiljem uuesti."
+  "ssoKeyConnectorError": {
+    "message": "Key Connectori viga: veendu, et Key Connector on saadaval ja töötab korrektselt."
   },
   "lockAllVaults": {
     "message": "Lukusta kõik hoidlad"
@@ -1840,6 +1949,12 @@
       }
     }
   },
+  "locked": {
+    "message": "Lukustatud"
+  },
+  "unlocked": {
+    "message": "Lukustamata"
+  },
   "generator": {
     "message": "Genereerija"
   },
@@ -1859,7 +1974,8 @@
     "message": "Kasutajanime tüüp"
   },
   "plusAddressedEmail": {
-    "message": "Lisaks e-post"
+    "message": "Plussiga e-posti aadress",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Kasuta e-posti teenuspakkuja alamadressimise võimalusi."
@@ -1881,5 +1997,209 @@
   },
   "service": {
     "message": "Teenus"
+  },
+  "allVaults": {
+    "message": "Kõik hoidlad"
+  },
+  "searchOrganization": {
+    "message": "Otsi organisatsiooni"
+  },
+  "searchMyVault": {
+    "message": "Otsi hoidlast"
+  },
+  "forwardedEmail": {
+    "message": "Edastav e-posti alias"
+  },
+  "forwardedEmailDesc": {
+    "message": "Genereeri e-posti alias, kasutades selleks välist teenuspakkujat."
+  },
+  "hostname": {
+    "message": "Hosti nimi",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API ligipääsu märk"
+  },
+  "apiKey": {
+    "message": "API võti"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Vajalik on Premium versioon"
+  },
+  "organizationIsDisabled": {
+    "message": "Organisatsiooni ligipääs on keelatud."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Organisatsiooni alla kuuluvatele kirjetele ei ole ligipääsu. Kontakteeru oma organisatsiooni omanikuga."
+  },
+  "neverLockWarning": {
+    "message": "Oled kindel, et soovid kasutada valikut \"Mitte kunagi\"? Sellega talletatakse sinu hoidla krüpteerimise võtit seadme mälus. Peaksid olema väga hoolas ja kindel, et seade on ohutu ja selles ei ole pahavara."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "Hoidla"
+  },
+  "loginWithMasterPassword": {
+    "message": "Logi sisse ülemparooliga"
+  },
+  "loggingInAs": {
+    "message": "Sisselogimas kui"
+  },
+  "rememberEmail": {
+    "message": "Mäleta e-posti aadressi"
+  },
+  "notYou": {
+    "message": "Pole sina?"
+  },
+  "newAroundHere": {
+    "message": "Oled siin uus?"
+  },
+  "loggingInTo": {
+    "message": "Sisselogimas $DOMAIN$-le",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Logi sisse läbi teise seadme"
+  },
+  "logInInitiated": {
+    "message": "Sisselogimine on käivitatud"
+  },
+  "notificationSentDevice": {
+    "message": "Sinu seadmesse saadeti teavitus."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Veendu, et hoidla on lahti lukustatud ja sõrmejälje fraasid seadmete vahel ühtivad."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Sõrmejälje fraas"
+  },
+  "needAnotherOption": {
+    "message": "Bitwardeni rakenduse seadistuses peab olema konfigureeritud sisselogimine läbi seadme. Vajad teist valikut?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Vaata kõiki valikuid"
+  },
+  "resendNotification": {
+    "message": "Saada märguanne uuesti"
+  },
+  "toggleCharacterCount": {
+    "message": "Loenda kirjatähtede hulka",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Oled sisse logimas?"
+  },
+  "logInAttemptBy": {
+    "message": "Sisselogimise päring $EMAIL$-lt",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Seadme tüüp"
+  },
+  "ipAddress": {
+    "message": "IP aadress"
+  },
+  "time": {
+    "message": "Aeg"
+  },
+  "confirmLogIn": {
+    "message": "Kinnita sisselogimine"
+  },
+  "denyLogIn": {
+    "message": "Tühista sisselogimine"
+  },
+  "approveLoginRequests": {
+    "message": "Sisselogimise päringute kinnitamine"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "$EMAIL$ sisselogimine seadmes $DEVICE$ on kinnitatud",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Sisselogimise päring on tühistatud. Vajadusel proovi uuesti."
+  },
+  "justNow": {
+    "message": "Just praegu"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Päring saabus $MINUTES$ minuti eest",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Sisselogimise päring on juba aegunud."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "See päring ei ole enam kehtiv."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Kasuta seda seadet, et kinnitada teistes seadmetes tehtavad sisselogimised."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Kinnita sisselogimise katse $EMAIL$-le",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Sisselogimise päring on saadetud"
+  },
+  "exposedMasterPassword": {
+    "message": "Ülemparool on haavatav"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Ülemparool on varasemalt lekkinud. Kasuta konto kaitsmiseks unikaalset parooli. Oled kindel, et soovid kasutada varem lekkinud parooli?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Nõrk ja haavatav ülemparool"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Tuvastati nõrk ning andmelekkes lekkinud ülemparool. Kasuta konto paremaks turvamiseks tugevamat parooli. Oled kindel, et soovid nõrga parooliga jätkata?"
+  },
+  "checkForBreaches": {
+    "message": "Otsi seda parooli teadaolevatest andmeleketest"
+  },
+  "important": {
+    "message": "Tähtis:"
+  },
+  "masterPasswordHint": {
+    "message": "Ülemparooli ei saa taastada, kui sa selle unustama peaksid!"
+  },
+  "characterMinimum": {
+    "message": "Minimaalselt $LENGTH$ tähemärki",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

@@ -2,29 +2,31 @@ import * as path from "path";
 
 import { app } from "electron";
 
-import { StateFactory } from "jslib-common/factories/stateFactory";
-import { GlobalState } from "jslib-common/models/domain/globalState";
-import { StateService } from "jslib-common/services/state.service";
-import { ElectronLogService } from "jslib-electron/services/electronLog.service";
-import { ElectronMainMessagingService } from "jslib-electron/services/electronMainMessaging.service";
-import { ElectronStorageService } from "jslib-electron/services/electronStorage.service";
-import { TrayMain } from "jslib-electron/tray.main";
-import { UpdaterMain } from "jslib-electron/updater.main";
-import { WindowMain } from "jslib-electron/window.main";
+import { StateFactory } from "@bitwarden/common/factories/stateFactory";
+import { GlobalState } from "@bitwarden/common/models/domain/global-state";
+import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.service";
+import { StateService } from "@bitwarden/common/services/state.service";
 
-import { BiometricMain } from "./main/biometric/biometric.main";
-import { DesktopCredentialStorageListener } from "./main/desktopCredentialStorageListener";
+import { BiometricsService, BiometricsServiceAbstraction } from "./main/biometric/index";
+import { DesktopCredentialStorageListener } from "./main/desktop-credential-storage-listener";
 import { MenuMain } from "./main/menu/menu.main";
 import { MessagingMain } from "./main/messaging.main";
-import { NativeMessagingMain } from "./main/nativeMessaging.main";
-import { PowerMonitorMain } from "./main/powerMonitor.main";
+import { NativeMessagingMain } from "./main/native-messaging.main";
+import { PowerMonitorMain } from "./main/power-monitor.main";
+import { TrayMain } from "./main/tray.main";
+import { UpdaterMain } from "./main/updater.main";
+import { WindowMain } from "./main/window.main";
 import { Account } from "./models/account";
+import { ElectronLogService } from "./services/electron-log.service";
+import { ElectronMainMessagingService } from "./services/electron-main-messaging.service";
+import { ElectronStorageService } from "./services/electron-storage.service";
 import { I18nService } from "./services/i18n.service";
 
 export class Main {
   logService: ElectronLogService;
   i18nService: I18nService;
   storageService: ElectronStorageService;
+  memoryStorageService: MemoryStorageService;
   messagingService: ElectronMainMessagingService;
   stateService: StateService;
   desktopCredentialStorageListener: DesktopCredentialStorageListener;
@@ -35,7 +37,7 @@ export class Main {
   menuMain: MenuMain;
   powerMonitorMain: PowerMonitorMain;
   trayMain: TrayMain;
-  biometricMain: BiometricMain;
+  biometricsService: BiometricsServiceAbstraction;
   nativeMessagingMain: NativeMessagingMain;
 
   constructor() {
@@ -62,8 +64,12 @@ export class Main {
     const watch = args.some((val) => val === "--watch");
 
     if (watch) {
+      const execName = process.platform === "win32" ? "electron.cmd" : "electron";
       // eslint-disable-next-line
-      require("electron-reload")(__dirname, {});
+      require("electron-reload")(__dirname, {
+        electron: path.join(__dirname, "../../../", "node_modules", ".bin", execName),
+        electronArgv: ["--inspect=5858", "--watch"],
+      });
     }
 
     this.logService = new ElectronLogService(null, app.getPath("userData"));
@@ -74,6 +80,7 @@ export class Main {
     storageDefaults["global.vaultTimeout"] = -1;
     storageDefaults["global.vaultTimeoutAction"] = "lock";
     this.storageService = new ElectronStorageService(app.getPath("userData"), storageDefaults);
+    this.memoryStorageService = new MemoryStorageService();
 
     // TODO: this state service will have access to on disk storage, but not in memory storage.
     // If we could get this to work using the stateService singleton that the rest of the app uses we could save
@@ -81,6 +88,7 @@ export class Main {
     this.stateService = new StateService(
       this.storageService,
       null,
+      this.memoryStorageService,
       this.logService,
       null,
       new StateFactory(GlobalState, Account),
@@ -90,48 +98,37 @@ export class Main {
     this.windowMain = new WindowMain(
       this.stateService,
       this.logService,
-      true,
-      undefined,
-      undefined,
       (arg) => this.processDeepLink(arg),
       (win) => this.trayMain.setupWindowListeners(win)
     );
     this.messagingMain = new MessagingMain(this, this.stateService);
-    this.updaterMain = new UpdaterMain(
-      this.i18nService,
-      this.windowMain,
-      "desktop",
-      null,
-      null,
-      null,
-      "bitwarden"
-    );
-    this.menuMain = new MenuMain(this);
-    this.powerMonitorMain = new PowerMonitorMain(this);
+    this.updaterMain = new UpdaterMain(this.i18nService, this.windowMain);
     this.trayMain = new TrayMain(this.windowMain, this.i18nService, this.stateService);
 
     this.messagingService = new ElectronMainMessagingService(this.windowMain, (message) => {
       this.messagingMain.onMessage(message);
     });
+    this.powerMonitorMain = new PowerMonitorMain(this.messagingService);
+    this.menuMain = new MenuMain(
+      this.i18nService,
+      this.messagingService,
+      this.stateService,
+      this.windowMain,
+      this.updaterMain
+    );
 
-    if (process.platform === "win32") {
-      // eslint-disable-next-line
-      const BiometricWindowsMain = require("./main/biometric/biometric.windows.main").default;
-      this.biometricMain = new BiometricWindowsMain(
-        this.i18nService,
-        this.windowMain,
-        this.stateService,
-        this.logService
-      );
-    } else if (process.platform === "darwin") {
-      // eslint-disable-next-line
-      const BiometricDarwinMain = require("./main/biometric/biometric.darwin.main").default;
-      this.biometricMain = new BiometricDarwinMain(this.i18nService, this.stateService);
-    }
+    this.biometricsService = new BiometricsService(
+      this.i18nService,
+      this.windowMain,
+      this.stateService,
+      this.logService,
+      this.messagingService,
+      process.platform
+    );
 
     this.desktopCredentialStorageListener = new DesktopCredentialStorageListener(
       "Bitwarden",
-      this.biometricMain
+      this.biometricsService
     );
 
     this.nativeMessagingMain = new NativeMessagingMain(
@@ -163,11 +160,14 @@ export class Main {
         }
         this.powerMonitorMain.init();
         await this.updaterMain.init();
-        if (this.biometricMain != null) {
-          await this.biometricMain.init();
+        if (this.biometricsService != null) {
+          await this.biometricsService.init();
         }
 
-        if (await this.stateService.getEnableBrowserIntegration()) {
+        if (
+          (await this.stateService.getEnableBrowserIntegration()) ||
+          (await this.stateService.getEnableDuckDuckGoBrowserIntegration())
+        ) {
           this.nativeMessagingMain.listen();
         }
 

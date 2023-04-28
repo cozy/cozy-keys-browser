@@ -1,29 +1,34 @@
-import { Observable, Subject } from "rxjs";
+import { concatMap, Observable, Subject } from "rxjs";
 
 import {
   EnvironmentService as EnvironmentServiceAbstraction,
   Urls,
 } from "../abstractions/environment.service";
 import { StateService } from "../abstractions/state.service";
-import { EnvironmentUrls } from "../models/domain/environmentUrls";
+import { EnvironmentUrls } from "../auth/models/domain/environment-urls";
 
 export class EnvironmentService implements EnvironmentServiceAbstraction {
   private readonly urlsSubject = new Subject<Urls>();
   urls: Observable<Urls> = this.urlsSubject;
 
-  private baseUrl: string;
-  private webVaultUrl: string;
-  private apiUrl: string;
-  private identityUrl: string;
-  private iconsUrl: string;
-  private notificationsUrl: string;
-  private eventsUrl: string;
+  protected baseUrl: string;
+  protected webVaultUrl: string;
+  protected apiUrl: string;
+  protected identityUrl: string;
+  protected iconsUrl: string;
+  protected notificationsUrl: string;
+  protected eventsUrl: string;
   private keyConnectorUrl: string;
+  private scimUrl: string = null;
 
   constructor(private stateService: StateService) {
-    this.stateService.activeAccount.subscribe(async () => {
-      await this.setUrlsFromStorage();
-    });
+    this.stateService.activeAccount$
+      .pipe(
+        concatMap(async () => {
+          await this.setUrlsFromStorage();
+        })
+      )
+      .subscribe();
   }
 
   hasBaseUrl() {
@@ -111,6 +116,16 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     return this.keyConnectorUrl;
   }
 
+  getScimUrl() {
+    if (this.scimUrl != null) {
+      return this.scimUrl + "/v2";
+    }
+
+    return this.getWebVaultUrl() === "https://vault.bitwarden.com"
+      ? "https://scim.bitwarden.com/v2"
+      : this.getWebVaultUrl() + "/scim/v2";
+  }
+
   async setUrlsFromStorage(): Promise<void> {
     const urls: any = await this.stateService.getEnvironmentUrls();
     const envUrls = new EnvironmentUrls();
@@ -123,6 +138,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     this.notificationsUrl = urls.notifications;
     this.eventsUrl = envUrls.events = urls.events;
     this.keyConnectorUrl = urls.keyConnector;
+    // scimUrl is not saved to storage
   }
 
   async setUrls(urls: Urls): Promise<Urls> {
@@ -135,6 +151,9 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     urls.events = this.formatUrl(urls.events);
     urls.keyConnector = this.formatUrl(urls.keyConnector);
 
+    // scimUrl cannot be cleared
+    urls.scim = this.formatUrl(urls.scim) ?? this.scimUrl;
+
     await this.stateService.setEnvironmentUrls({
       base: urls.base,
       api: urls.api,
@@ -144,6 +163,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
       notifications: urls.notifications,
       events: urls.events,
       keyConnector: urls.keyConnector,
+      // scimUrl is not saved to storage
     });
 
     this.baseUrl = urls.base;
@@ -154,6 +174,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     this.notificationsUrl = urls.notifications;
     this.eventsUrl = urls.events;
     this.keyConnectorUrl = urls.keyConnector;
+    this.scimUrl = urls.scim;
 
     this.urlsSubject.next(urls);
 
@@ -170,6 +191,7 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
       notifications: this.notificationsUrl,
       events: this.eventsUrl,
       keyConnector: this.keyConnectorUrl,
+      scim: this.scimUrl,
     };
   }
 
@@ -184,5 +206,20 @@ export class EnvironmentService implements EnvironmentServiceAbstraction {
     }
 
     return url.trim();
+  }
+
+  isCloud(): boolean {
+    return ["https://api.bitwarden.com", "https://vault.bitwarden.com/api"].includes(
+      this.getApiUrl()
+    );
+  }
+
+  isSelfHosted(): boolean {
+    return ![
+      "http://vault.bitwarden.com",
+      "https://vault.bitwarden.com",
+      "http://vault.qa.bitwarden.pw",
+      "https://vault.qa.bitwarden.pw",
+    ].includes(this.getWebVaultUrl());
   }
 }

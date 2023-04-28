@@ -1,43 +1,37 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { ModalService } from "jslib-angular/services/modal.service";
-import { CipherService } from "jslib-common/abstractions/cipher.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { OrganizationService } from "jslib-common/abstractions/organization.service";
-import { PasswordRepromptService } from "jslib-common/abstractions/passwordReprompt.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { CipherView } from "jslib-common/models/view/cipherView";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import { InactiveTwoFactorReportComponent as BaseInactiveTwoFactorReportComponent } from "../../reports/inactive-two-factor-report.component";
+// eslint-disable-next-line no-restricted-imports
+import { InactiveTwoFactorReportComponent as BaseInactiveTwoFactorReportComponent } from "../../reports/pages/inactive-two-factor-report.component";
 
 @Component({
   selector: "app-inactive-two-factor-report",
-  templateUrl: "../../reports/inactive-two-factor-report.component.html",
+  templateUrl: "../../reports/pages/inactive-two-factor-report.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class InactiveTwoFactorReportComponent extends BaseInactiveTwoFactorReportComponent {
   constructor(
     cipherService: CipherService,
     modalService: ModalService,
     messagingService: MessagingService,
-    stateService: StateService,
     private route: ActivatedRoute,
     logService: LogService,
     passwordRepromptService: PasswordRepromptService,
     private organizationService: OrganizationService
   ) {
-    super(
-      cipherService,
-      modalService,
-      messagingService,
-      stateService,
-      logService,
-      passwordRepromptService
-    );
+    super(cipherService, modalService, messagingService, logService, passwordRepromptService);
   }
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.parent.params.subscribe(async (params) => {
       this.organization = await this.organizationService.get(params.organizationId);
       await super.ngOnInit();

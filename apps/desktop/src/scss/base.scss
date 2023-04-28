@@ -31,10 +31,8 @@ h4,
 h5,
 h6 {
   font-family: $font-family-sans-serif;
-
-  @include themify($themes) {
-    color: themed("textColor");
-  }
+  font-size: $font-size-base;
+  font-weight: normal;
 }
 
 p {
@@ -83,11 +81,15 @@ button {
   line-height: $line-height-base;
 }
 
+select {
+  width: 100%;
+  padding: 0.35rem;
+}
+
 button {
   border: none;
   background: transparent;
   color: inherit;
-  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -135,4 +137,10 @@ div:not(.modal)::-webkit-scrollbar-thumb,
 
 .cdk-virtual-scroll-content-wrapper {
   width: 100%;
+}
+
+//taken from bootstrap for replicating functionality
+.ml-auto,
+.mx-auto {
+  margin-left: auto !important;
 }

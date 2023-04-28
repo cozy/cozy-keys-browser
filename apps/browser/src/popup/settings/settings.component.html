@@ -10,30 +10,42 @@
 <main tabindex="-1">
   <div class="box list">
     <h2 class="box-header">{{ "manage" | i18n }}</h2>
-    <div class="box-content box-content-settings single-line">
-      <a
-        class="box-content-row settings-row box-content-row-flex text-default"
-        href="#"
-        appStopClick
-        appBlurClick
-        (click)="lock()"
+   <!-- Cozy custo
+    <div class="box-content single-line">
+      <button
+        type="button"
+        class="box-content-row box-content-row-flex text-default"
+        routerLink="/autofill"
       >
-        <div class="row-main">{{ "lockNow" | i18n }}</div>
+        <div class="row-main">{{ "autofill" | i18n }}</div>
         <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
-      </a>
-      <!-- 
-      <a class="box-content-row settings-row box-content-row-flex text-default" routerLink="/folders">
-        <div class="row-main">{{'folders' | i18n}}</div>
-      </a>
-      -->
-      <a class="box-content-row settings-row box-content-row-flex text-default" routerLink="/sync">
+      </button>
+   -->
+    <div class="box-content single-line box-content-settings">
+      <button
+        type="button"
+        class="box-content-row box-content-row-flex text-default settings-row"
+      >
+               <div class="row-mailockNow" | i18n }}</div>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
+      </button>
+      <!-- end custo -->
+      <button
+        type="button"
+        class="box-content-row box-content-row-flex text-default"
+        routerLink="/sync"
+      >
         <div class="row-main">{{ "sync" | i18n }}</div>
         <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
-      </a>
-      <a class="box-content-row box-content-row-flex text-default" routerLink="/excluded-domains">
+      </button>
+      <button
+        type="button"
+        class="box-content-row box-content-row-flex text-default"
+        routerLink="/excluded-domains"
+      >
         <div class="row-main">{{ "excludedDomains" | i18n }}</div>
         <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
-      </a>
+      </button>
     </div>
   </div>
   <div class="box list">
@@ -61,17 +73,55 @@
         <label for="pin">{{ "unlockWithPin" | i18n }}</label>
         <input id="pin" type="checkbox" (change)="updatePin()" [(ngModel)]="pin" />
       </div>
+      <!-- Cozy custo
+      <div class="box-content-row box-content-row-checkbox" appBoxRow *ngIf="supportsBiometric">
+        <label for="biometric">{{ "unlockWithBiometrics" | i18n }}</label>
+        <input
+          id="biometric"
+          type="checkbox"
+          (change)="updateBiometric()"
+          [(ngModel)]="biometric"
+        />
+      </div>
+      <div
+        class="box-content-row box-content-row-checkbox"
+        appBoxRow
+        *ngIf="supportsBiometric && biometric"
+      >
+        <label for="autoBiometricsPrompt">{{ "enableAutoBiometricsPrompt" | i18n }}</label>
+        <input
+          id="autoBiometricsPrompt"
+          type="checkbox"
+          (change)="updateAutoBiometricsPrompt()"
+          [disabled]="!biometric"
+          [(ngModel)]="enableAutoBiometricsPrompt"
+        />
+      </div>
+      <button
+        type="button"
+        class="box-content-row box-content-row-flex text-default"
+        appStopClick
+        (click)="lock()"
+      >
+        <div class="row-main">{{ "lockNow" | i18n }}</div>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
+      </button>
+      <button
+        type="button"
+        class="box-content-row box-content-row-flex text-default"
+        appStopClick
+        (click)="twoStep()"
+      >
+        <div class="row-main">{{ "twoStepLogin" | i18n }}</div>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
+      </button>
+      -->
     </div>
   </div>
   <div class="box list">
     <h2 class="box-header">{{ "account" | i18n }}</h2>
-    <div class="box-content box-content-settings single-line">
-      <a
-        class="box-content-row settings-row"
-        href="#"
-        (click)="premium()"
-        *ngIf="isPremiumEnabled()"
-      >
+    <div class="box-content single-line">
+      <button type="button" class="box-content-row" routerLink="/premium">
         <div class="row-main">
           <div class="icon text-primary">
             <svg
@@ -95,12 +145,11 @@
           >
         </div>
         <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i></span>
-      </a>
+      </button>
       <button
         type="button"
         class="box-content-row box-content-row-flex text-default"
         appStopClick
-        appBlurClick
         (click)="changePassword()"
         *ngIf="showChangeMasterPass"
       >
@@ -121,11 +170,21 @@
         </button>
       </ng-container>
       <!-- END Cozy      -->
+      <!-- Cozy commented
       <button
         type="button"
         class="box-content-row settings-row box-content-row-flex text-default"
         appStopClick
-        appBlurClick
+        (click)="fingerprint()"
+      >
+        <div class="row-main">{{ "fingerprintPhrase" | i18n }}</div>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
+      </button>
+      -->
+      <button
+        type="button"
+        class="box-content-row box-content-row-flex text-default"
+        appStopClick
         (click)="logOut()"
       >
         <div class="row-main">{{ "logOut" | i18n }}</div>
@@ -140,7 +199,6 @@
         type="button"
         class="box-content-row settings-row box-content-row-flex text-default"
         appStopClick
-        appBlurClick
         (click)="import()"
       >
         <div class="row-main">{{ "importItems" | i18n }}</div>
@@ -150,29 +208,39 @@
         type="button"
         class="box-content-row settings-row box-content-row-flex text-default"
         appStopClick
-        appBlurClick
         (click)="export()"
       >
         <div class="row-main">{{ "exportVault" | i18n }}</div>
         <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
       </button>
+      <!-- commented by Cozy
+      <button
+        type="button"
+        class="box-content-row box-content-row-flex text-default"
+        appStopClick
+        (click)="webVault()"
+      >
+        <div class="row-main">{{ "bitWebVault" | i18n }}</div>
+        <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
+      </button>
+      -->
     </div>
   </div>
   <div class="box list">
     <h2 class="box-header">{{ "other" | i18n }}</h2>
-    <div class="box-content box-content-settings single-line">
-      <a
-        class="box-content-row settings-row box-content-row-flex text-default"
+    <div class="box-content single-line box-content-settings ">
+      <button
+        type="button"
+        class="box-content-row box-content-row-flex text-default settings-row"
         routerLink="/options"
       >
         <div class="row-main">{{ "options" | i18n }}</div>
         <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
-      </a>
+      </button>
       <button
         type="button"
         class="box-content-row settings-row box-content-row-flex text-default"
         appStopClick
-        appBlurClick
         (click)="about()"
       >
         <div class="row-main">{{ "about" | i18n }}</div>
@@ -183,7 +251,6 @@
         type="button"
         class="box-content-row box-content-row-flex text-default"
         appStopClick
-        appBlurClick
         (click)="share()"
       >
         <div class="row-main">{{ "learnOrg" | i18n }}</div>
@@ -193,18 +260,16 @@
       <button
         type="button"
         class="box-content-row box-content-row-flex text-default"
-        appStopClick
-        appBlurClick
-        (click)="help()"
+        routerLink="/help-and-feedback"
       >
         <div class="row-main">{{ "helpFeedback" | i18n }}</div>
         <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
       </button>
       <button
         type="button"
-        class="box-content-row settings-row box-content-row-multi-wrap text-default"
+        aria-describedby="rateExtensionHelp"
+        class="box-content-row box-content-row-flex text-default settings-row"
         appStopClick
-        appBlurClick
         (click)="rate()"
       >
         <div class="row-main">{{ "rateExtension" | i18n }}</div>
@@ -212,6 +277,6 @@
         <div class="box-footer in-flex-row-full-width">{{ "rateExtensionDesc" | i18n }}</div>
       </button>
     </div>
-    <div class="box-footer">{{ "connectedCozy" | i18n }} {{ getCozyURL() }}</div>
+    <div id="rateExtensionHelp" class="box-footer">{{ "connectedCozy" | i18n }} {{ getCozyURL() }}</div>
   </div>
 </main>

@@ -1,34 +1,33 @@
 import * as chalk from "chalk";
 import * as program from "commander";
 
-import { AuthenticationStatus } from "jslib-common/enums/authenticationStatus";
-import { KeySuffixOptions } from "jslib-common/enums/keySuffixOptions";
-import { BaseProgram } from "jslib-node/cli/baseProgram";
-import { LogoutCommand } from "jslib-node/cli/commands/logout.command";
-import { UpdateCommand } from "jslib-node/cli/commands/update.command";
-import { Response } from "jslib-node/cli/models/response";
-import { MessageResponse } from "jslib-node/cli/models/response/messageResponse";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { KeySuffixOptions } from "@bitwarden/common/enums/keySuffixOptions";
 
+import { LockCommand } from "./auth/commands/lock.command";
+import { LoginCommand } from "./auth/commands/login.command";
+import { LogoutCommand } from "./auth/commands/logout.command";
+import { UnlockCommand } from "./auth/commands/unlock.command";
 import { Main } from "./bw";
 import { CompletionCommand } from "./commands/completion.command";
 import { ConfigCommand } from "./commands/config.command";
 import { EncodeCommand } from "./commands/encode.command";
-import { GenerateCommand } from "./commands/generate.command";
-import { LockCommand } from "./commands/lock.command";
-import { LoginCommand } from "./commands/login.command";
 import { ServeCommand } from "./commands/serve.command";
 import { StatusCommand } from "./commands/status.command";
-import { SyncCommand } from "./commands/sync.command";
-import { UnlockCommand } from "./commands/unlock.command";
-import { TemplateResponse } from "./models/response/templateResponse";
+import { UpdateCommand } from "./commands/update.command";
+import { Response } from "./models/response";
+import { ListResponse } from "./models/response/list.response";
+import { MessageResponse } from "./models/response/message.response";
+import { StringResponse } from "./models/response/string.response";
+import { TemplateResponse } from "./models/response/template.response";
+import { GenerateCommand } from "./tools/generate.command";
 import { CliUtils } from "./utils";
+import { SyncCommand } from "./vault/sync.command";
 
 const writeLn = CliUtils.writeLn;
 
-export class Program extends BaseProgram {
-  constructor(protected main: Main) {
-    super(main.stateService, writeLn);
-  }
+export class Program {
+  constructor(protected main: Main) {}
 
   async register() {
     program
@@ -144,7 +143,6 @@ export class Program extends BaseProgram {
             this.main.authService,
             this.main.apiService,
             this.main.cryptoFunctionService,
-            this.main.i18nService,
             this.main.environmentService,
             this.main.passwordGenerationService,
             this.main.platformUtilsService,
@@ -260,6 +258,7 @@ export class Program extends BaseProgram {
             this.main.keyConnectorService,
             this.main.environmentService,
             this.main.syncService,
+            this.main.organizationApiService,
             async () => await this.main.logout()
           );
           const response = await command.run(password, cmd);
@@ -281,7 +280,7 @@ export class Program extends BaseProgram {
         writeLn("", true);
       })
       .action(async (cmd) => {
-        await this.exitIfLocked();
+        await this.exitIfNotAuthed();
         const command = new SyncCommand(this.main.syncService);
         const response = await command.run(cmd);
         this.processResponse(response);
@@ -404,13 +403,7 @@ export class Program extends BaseProgram {
         writeLn("", true);
       })
       .action(async () => {
-        const command = new UpdateCommand(
-          this.main.platformUtilsService,
-          this.main.i18nService,
-          "cli",
-          "bw",
-          true
-        );
+        const command = new UpdateCommand(this.main.platformUtilsService);
         const response = await command.run();
         this.processResponse(response);
       });
@@ -470,41 +463,133 @@ export class Program extends BaseProgram {
         this.processResponse(response);
       });
 
-    if (CliUtils.flagEnabled("serve")) {
-      program
-        .command("serve")
-        .description("Start a RESTful API webserver.")
-        .option("--hostname <hostname>", "The hostname to bind your API webserver to.")
-        .option("--port <port>", "The port to run your API webserver on.")
-        .on("--help", () => {
-          writeLn("\n  Notes:");
-          writeLn("");
-          writeLn("    Default hostname is `localhost`.");
-          writeLn("    Use hostname `all` for no hostname binding.");
-          writeLn("    Default port is `8087`.");
-          writeLn("");
-          writeLn("  Examples:");
-          writeLn("");
-          writeLn("    bw serve");
-          writeLn("    bw serve --port 8080");
-          writeLn("    bw serve --hostname bwapi.mydomain.com --port 80");
-          writeLn("", true);
-        })
-        .action(async (cmd) => {
-          await this.exitIfNotAuthed();
-          const command = new ServeCommand(this.main);
-          await command.run(cmd);
-        });
-    }
+    program
+      .command("serve")
+      .description("Start a RESTful API webserver.")
+      .option("--hostname <hostname>", "The hostname to bind your API webserver to.")
+      .option("--port <port>", "The port to run your API webserver on.")
+      .option(
+        "--disable-origin-protection",
+        "If set, allows requests with origin header. Warning, this option exists for backwards compatibility reasons and exposes your environment to known CSRF attacks."
+      )
+      .on("--help", () => {
+        writeLn("\n  Notes:");
+        writeLn("");
+        writeLn("    Default hostname is `localhost`.");
+        writeLn("    Use hostname `all` for no hostname binding.");
+        writeLn("    Default port is `8087`.");
+        writeLn("");
+        writeLn("  Examples:");
+        writeLn("");
+        writeLn("    bw serve");
+        writeLn("    bw serve --port 8080");
+        writeLn("    bw serve --hostname bwapi.mydomain.com --port 80");
+        writeLn("", true);
+      })
+      .action(async (cmd) => {
+        await this.exitIfNotAuthed();
+        const command = new ServeCommand(this.main);
+        await command.run(cmd);
+      });
   }
 
   protected processResponse(response: Response, exitImmediately = false) {
-    super.processResponse(response, exitImmediately, () => {
-      if (response.data.object === "template") {
-        return this.getJson((response.data as TemplateResponse).template);
+    if (!response.success) {
+      if (process.env.BW_QUIET !== "true") {
+        if (process.env.BW_RESPONSE === "true") {
+          writeLn(this.getJson(response), true, false);
+        } else {
+          writeLn(chalk.redBright(response.message), true, true);
+        }
       }
-      return null;
-    });
+      const exitCode = process.env.BW_CLEANEXIT ? 0 : 1;
+      if (exitImmediately) {
+        process.exit(exitCode);
+      } else {
+        process.exitCode = exitCode;
+      }
+      return;
+    }
+
+    if (process.env.BW_RESPONSE === "true") {
+      writeLn(this.getJson(response), true, false);
+    } else if (response.data != null) {
+      let out: string = null;
+
+      if (response.data.object === "template") {
+        out = this.getJson((response.data as TemplateResponse).template);
+      }
+
+      if (out == null) {
+        if (response.data.object === "string") {
+          const data = (response.data as StringResponse).data;
+          if (data != null) {
+            out = data;
+          }
+        } else if (response.data.object === "list") {
+          out = this.getJson((response.data as ListResponse).data);
+        } else if (response.data.object === "message") {
+          out = this.getMessage(response);
+        } else {
+          out = this.getJson(response.data);
+        }
+      }
+
+      if (out != null && process.env.BW_QUIET !== "true") {
+        writeLn(out, true, false);
+      }
+    }
+    if (exitImmediately) {
+      process.exit(0);
+    } else {
+      process.exitCode = 0;
+    }
+  }
+
+  private getJson(obj: any): string {
+    if (process.env.BW_PRETTY === "true") {
+      return JSON.stringify(obj, null, "  ");
+    } else {
+      return JSON.stringify(obj);
+    }
+  }
+
+  private getMessage(response: Response): string {
+    const message = response.data as MessageResponse;
+    if (process.env.BW_RAW === "true") {
+      return message.raw;
+    }
+
+    let out = "";
+    if (message.title != null) {
+      if (message.noColor) {
+        out = message.title;
+      } else {
+        out = chalk.greenBright(message.title);
+      }
+    }
+    if (message.message != null) {
+      if (message.title != null) {
+        out += "\n";
+      }
+      out += message.message;
+    }
+    return out.trim() === "" ? null : out;
+  }
+
+  private async exitIfAuthed() {
+    const authed = await this.main.stateService.getIsAuthenticated();
+    if (authed) {
+      const email = await this.main.stateService.getEmail();
+      this.processResponse(Response.error("You are already logged in as " + email + "."), true);
+    }
+  }
+
+  private async exitIfNotAuthed() {
+    const authed = await this.main.stateService.getIsAuthenticated();
+    if (!authed) {
+      this.processResponse(Response.error("You are not logged in."), true);
+    }
   }
 
   protected async exitIfLocked() {
@@ -532,6 +617,7 @@ export class Program extends BaseProgram {
           this.main.keyConnectorService,
           this.main.environmentService,
           this.main.syncService,
+          this.main.organizationApiService,
           this.main.logout
         );
         const response = await command.run(null, null);

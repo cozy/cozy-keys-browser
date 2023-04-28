@@ -1,3 +1,4 @@
+// Increment by 100 for each new set of events
 export enum EventType {
   User_LoggedIn = 1000,
   User_ChangedPassword = 1001,
@@ -48,10 +49,12 @@ export enum EventType {
   OrganizationUser_AdminResetPassword = 1508,
   OrganizationUser_ResetSsoLink = 1509,
   OrganizationUser_FirstSsoLogin = 1510,
+  OrganizationUser_Revoked = 1511,
+  OrganizationUser_Restored = 1512,
 
   Organization_Updated = 1600,
   Organization_PurgedVault = 1601,
-  // Organization_ClientExportedVault = 1602,
+  Organization_ClientExportedVault = 1602,
   Organization_VaultAccessed = 1603,
   Organization_EnabledSso = 1604,
   Organization_DisabledSso = 1605,
@@ -70,4 +73,11 @@ export enum EventType {
   ProviderOrganization_Added = 1901,
   ProviderOrganization_Removed = 1902,
   ProviderOrganization_VaultAccessed = 1903,
+
+  OrganizationDomain_Added = 2000,
+  OrganizationDomain_Removed = 2001,
+  OrganizationDomain_Verified = 2002,
+  OrganizationDomain_NotVerified = 2003,
+
+  Secret_Retrieved = 2100,
 }

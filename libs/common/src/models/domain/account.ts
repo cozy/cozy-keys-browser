@@ -1,28 +1,66 @@
-import { AuthenticationStatus } from "../../enums/authenticationStatus";
+import { Jsonify } from "type-fest";
+
+import { AuthenticationStatus } from "../../auth/enums/authentication-status";
+import { EnvironmentUrls } from "../../auth/models/domain/environment-urls";
 import { KdfType } from "../../enums/kdfType";
 import { UriMatchType } from "../../enums/uriMatchType";
-import { CipherData } from "../data/cipherData";
-import { CollectionData } from "../data/collectionData";
-import { EventData } from "../data/eventData";
-import { FolderData } from "../data/folderData";
-import { OrganizationData } from "../data/organizationData";
-import { PolicyData } from "../data/policyData";
-import { ProviderData } from "../data/providerData";
-import { SendData } from "../data/sendData";
-import { CipherView } from "../view/cipherView";
-import { CollectionView } from "../view/collectionView";
-import { FolderView } from "../view/folderView";
-import { SendView } from "../view/sendView";
+import { Utils } from "../../misc/utils";
+import { GeneratedPasswordHistory } from "../../tools/generator/password";
+import { DeepJsonify } from "../../types/deep-jsonify";
+import { CipherData } from "../../vault/models/data/cipher.data";
+import { FolderData } from "../../vault/models/data/folder.data";
+import { CipherView } from "../../vault/models/view/cipher.view";
+import { CollectionData } from "../data/collection.data";
+import { EncryptedOrganizationKeyData } from "../data/encrypted-organization-key.data";
+import { EventData } from "../data/event.data";
+import { OrganizationData } from "../data/organization.data";
+import { PolicyData } from "../data/policy.data";
+import { ProviderData } from "../data/provider.data";
+import { SendData } from "../data/send.data";
+import { ServerConfigData } from "../data/server-config.data";
+import { CollectionView } from "../view/collection.view";
+import { SendView } from "../view/send.view";
 
-import { EncString } from "./encString";
-import { EnvironmentUrls } from "./environmentUrls";
-import { GeneratedPasswordHistory } from "./generatedPasswordHistory";
+import { EncString } from "./enc-string";
 import { Policy } from "./policy";
-import { SymmetricCryptoKey } from "./symmetricCryptoKey";
+import { SymmetricCryptoKey } from "./symmetric-crypto-key";
 
 export class EncryptionPair<TEncrypted, TDecrypted> {
   encrypted?: TEncrypted;
   decrypted?: TDecrypted;
+
+  toJSON() {
+    return {
+      encrypted: this.encrypted,
+      decrypted:
+        this.decrypted instanceof ArrayBuffer
+          ? Utils.fromBufferToByteString(this.decrypted)
+          : this.decrypted,
+    };
+  }
+
+  static fromJSON<TEncrypted, TDecrypted>(
+    obj: { encrypted?: Jsonify<TEncrypted>; decrypted?: string | Jsonify<TDecrypted> },
+    decryptedFromJson?: (decObj: Jsonify<TDecrypted> | string) => TDecrypted,
+    encryptedFromJson?: (encObj: Jsonify<TEncrypted>) => TEncrypted
+  ) {
+    if (obj == null) {
+      return null;
+    }
+
+    const pair = new EncryptionPair<TEncrypted, TDecrypted>();
+    if (obj?.encrypted != null) {
+      pair.encrypted = encryptedFromJson
+        ? encryptedFromJson(obj.encrypted)
+        : (obj.encrypted as TEncrypted);
+    }
+    if (obj?.decrypted != null) {
+      pair.decrypted = decryptedFromJson
+        ? decryptedFromJson(obj.decrypted)
+        : (obj.decrypted as TDecrypted);
+    }
+    return pair;
+  }
 }
 
 export class DataEncryptionPair<TEncrypted, TDecrypted> {
@@ -30,15 +68,19 @@ export class DataEncryptionPair<TEncrypted, TDecrypted> {
   decrypted?: TDecrypted[];
 }
 
+// This is a temporary structure to handle migrated `DataEncryptionPair` to
+//  avoid needing a data migration at this stage. It should be replaced with
+//  proper data migrations when `DataEncryptionPair` is deprecated.
+export class TemporaryDataEncryption<TEncrypted> {
+  encrypted?: { [id: string]: TEncrypted };
+}
+
 export class AccountData {
   ciphers?: DataEncryptionPair<CipherData, CipherView> = new DataEncryptionPair<
     CipherData,
     CipherView
   >();
-  folders?: DataEncryptionPair<FolderData, FolderView> = new DataEncryptionPair<
-    FolderData,
-    FolderView
-  >();
+  folders? = new TemporaryDataEncryption<FolderData>();
   localData?: any;
   sends?: DataEncryptionPair<SendData, SendView> = new DataEncryptionPair<SendData, SendView>();
   collections?: DataEncryptionPair<CollectionData, CollectionView> = new DataEncryptionPair<
@@ -65,24 +107,75 @@ export class AccountKeys {
     string,
     SymmetricCryptoKey
   >();
-  organizationKeys?: EncryptionPair<any, Map<string, SymmetricCryptoKey>> = new EncryptionPair<
-    any,
-    Map<string, SymmetricCryptoKey>
+  organizationKeys?: EncryptionPair<
+    { [orgId: string]: EncryptedOrganizationKeyData },
+    Record<string, SymmetricCryptoKey>
+  > = new EncryptionPair<
+    { [orgId: string]: EncryptedOrganizationKeyData },
+    Record<string, SymmetricCryptoKey>
   >();
-  providerKeys?: EncryptionPair<any, Map<string, SymmetricCryptoKey>> = new EncryptionPair<
+  providerKeys?: EncryptionPair<any, Record<string, SymmetricCryptoKey>> = new EncryptionPair<
     any,
-    Map<string, SymmetricCryptoKey>
+    Record<string, SymmetricCryptoKey>
   >();
   privateKey?: EncryptionPair<string, ArrayBuffer> = new EncryptionPair<string, ArrayBuffer>();
-  legacyEtmKey?: SymmetricCryptoKey;
   publicKey?: ArrayBuffer;
   apiKeyClientSecret?: string;
+
+  toJSON() {
+    return Utils.merge(this, {
+      publicKey: Utils.fromBufferToByteString(this.publicKey),
+    });
+  }
+
+  static fromJSON(obj: DeepJsonify<AccountKeys>): AccountKeys {
+    if (obj == null) {
+      return null;
+    }
+
+    return Object.assign(
+      new AccountKeys(),
+      { cryptoMasterKey: SymmetricCryptoKey.fromJSON(obj?.cryptoMasterKey) },
+      {
+        cryptoSymmetricKey: EncryptionPair.fromJSON(
+          obj?.cryptoSymmetricKey,
+          SymmetricCryptoKey.fromJSON
+        ),
+      },
+      { organizationKeys: AccountKeys.initRecordEncryptionPairsFromJSON(obj?.organizationKeys) },
+      { providerKeys: AccountKeys.initRecordEncryptionPairsFromJSON(obj?.providerKeys) },
+      {
+        privateKey: EncryptionPair.fromJSON<string, ArrayBuffer>(
+          obj?.privateKey,
+          (decObj: string) => Utils.fromByteStringToArray(decObj).buffer
+        ),
+      },
+      {
+        publicKey: Utils.fromByteStringToArray(obj?.publicKey)?.buffer,
+      }
+    );
+  }
+
+  static initRecordEncryptionPairsFromJSON(obj: any) {
+    return EncryptionPair.fromJSON(obj, (decObj: any) => {
+      if (obj == null) {
+        return null;
+      }
+
+      const record: Record<string, SymmetricCryptoKey> = {};
+      for (const id in decObj) {
+        record[id] = SymmetricCryptoKey.fromJSON(decObj[id]);
+      }
+      return record;
+    });
+  }
 }
 
 export class AccountProfile {
   apiKeyClientId?: string;
   authenticationStatus?: AuthenticationStatus;
   convertAccountToKeyConnector?: boolean;
+  name?: string;
   email?: string;
   emailVerified?: boolean;
   entityId?: string;
@@ -90,18 +183,28 @@ export class AccountProfile {
   everBeenUnlocked?: boolean;
   forcePasswordReset?: boolean;
   hasPremiumPersonally?: boolean;
+  hasPremiumFromOrganization?: boolean;
   lastSync?: string;
   userId?: string;
   usesKeyConnector?: boolean;
   keyHash?: string;
   kdfIterations?: number;
+  kdfMemory?: number;
+  kdfParallelism?: number;
   kdfType?: KdfType;
+
+  static fromJSON(obj: Jsonify<AccountProfile>): AccountProfile {
+    if (obj == null) {
+      return null;
+    }
+
+    return Object.assign(new AccountProfile(), obj);
+  }
 }
 
 export class AccountSettings {
   autoConfirmFingerPrints?: boolean;
   autoFillOnPageLoadDefault?: boolean;
-  biometricLocked?: boolean;
   biometricUnlock?: boolean;
   clearClipboard?: number;
   collapsedGroupings?: string[];
@@ -113,13 +216,13 @@ export class AccountSettings {
   disableChangedPasswordNotification?: boolean;
   disableContextMenuItem?: boolean;
   disableGa?: boolean;
+  dismissedAutoFillOnPageLoadCallout?: boolean;
   dontShowCardsCurrentTab?: boolean;
   dontShowIdentitiesCurrentTab?: boolean;
   enableAlwaysOnTop?: boolean;
   enableAutoFillOnPageLoad?: boolean;
   enableBiometric?: boolean;
   enableFullWidth?: boolean;
-  enableGravitars?: boolean;
   environmentUrls: EnvironmentUrls = new EnvironmentUrls();
   equivalentDomains?: any;
   minimizeOnCopyToClipboard?: boolean;
@@ -129,16 +232,47 @@ export class AccountSettings {
   generatorOptions?: any;
   pinProtected?: EncryptionPair<string, EncString> = new EncryptionPair<string, EncString>();
   protectedPin?: string;
-  settings?: any; // TODO: Merge whatever is going on here into the AccountSettings model properly
+  settings?: AccountSettingsSettings; // TODO: Merge whatever is going on here into the AccountSettings model properly
   vaultTimeout?: number;
   vaultTimeoutAction?: string = "lock";
+  serverConfig?: ServerConfigData;
+  approveLoginRequests?: boolean;
+  avatarColor?: string;
+  activateAutoFillOnPageLoadFromPolicy?: boolean;
+  smOnboardingTasks?: Record<string, Record<string, boolean>>;
+
+  static fromJSON(obj: Jsonify<AccountSettings>): AccountSettings {
+    if (obj == null) {
+      return null;
+    }
+
+    return Object.assign(new AccountSettings(), obj, {
+      environmentUrls: EnvironmentUrls.fromJSON(obj?.environmentUrls),
+      pinProtected: EncryptionPair.fromJSON<string, EncString>(
+        obj?.pinProtected,
+        EncString.fromJSON
+      ),
+      serverConfig: ServerConfigData.fromJSON(obj?.serverConfig),
+    });
+  }
 }
+
+export type AccountSettingsSettings = {
+  equivalentDomains?: string[][];
+};
 
 export class AccountTokens {
   accessToken?: string;
-  decodedToken?: any;
   refreshToken?: string;
   securityStamp?: string;
+
+  static fromJSON(obj: Jsonify<AccountTokens>): AccountTokens {
+    if (obj == null) {
+      return null;
+    }
+
+    return Object.assign(new AccountTokens(), obj);
+  }
 }
 
 export class Account {
@@ -170,6 +304,19 @@ export class Account {
         ...new AccountTokens(),
         ...init?.tokens,
       },
+    });
+  }
+
+  static fromJSON(json: Jsonify<Account>): Account {
+    if (json == null) {
+      return null;
+    }
+
+    return Object.assign(new Account({}), json, {
+      keys: AccountKeys.fromJSON(json?.keys),
+      profile: AccountProfile.fromJSON(json?.profile),
+      settings: AccountSettings.fromJSON(json?.settings),
+      tokens: AccountTokens.fromJSON(json?.tokens),
     });
   }
 }

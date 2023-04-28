@@ -1,19 +1,20 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import { generateWebLink, Q } from "cozy-client";
 import Swal from "sweetalert2";
 
-import { ModalService } from "jslib-angular/services/modal.service";
-import { CryptoService } from "jslib-common/abstractions/crypto.service";
-import { EnvironmentService } from "jslib-common/abstractions/environment.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { KeyConnectorService } from "jslib-common/abstractions/keyConnector.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
-import { DeviceType } from "jslib-common/enums/deviceType";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { DeviceType } from "@bitwarden/common/enums/deviceType";
 
 import { BrowserApi } from "../../browser/browserApi";
 import { CAN_SHARE_ORGANIZATION } from "../../cozy/flags";
@@ -22,11 +23,8 @@ import { SetPinComponent } from "../components/set-pin.component";
 import { CozyClientService } from "../services/cozyClient.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
 
-/* start Cozy imports */
+import { AboutComponent } from "./about.component";
 
-/* end Cozy imports */
-
-// TODO: Add Safari URL when published
 const RateUrls = {
   [DeviceType.ChromeExtension]:
     "https://chrome.google.com/webstore/detail/cozy-personal-cloud/jplochopoaajoochpoccajmgelpfbbic/reviews",
@@ -44,6 +42,7 @@ const RateUrls = {
  * https://github.com/bitwarden/browser/blob/
  * 60f6863e4f96fbf8d012e5691e4e2cc5f18ac7a8/src/popup/settings/settings.component.ts
  */
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class SettingsComponent implements OnInit {
   @ViewChild("vaultTimeoutActionSelect", { read: ElementRef, static: true })
   vaultTimeoutActionSelectRef: ElementRef;
@@ -54,16 +53,17 @@ export class SettingsComponent implements OnInit {
   pin: boolean = null;
   supportsBiometric: boolean;
   biometric = false;
-  disableAutoBiometricsPrompt = true;
+  enableAutoBiometricsPrompt = true;
   previousVaultTimeout: number = null;
   showChangeMasterPass = true;
 
-  vaultTimeout: FormControl = new FormControl(null);
+  vaultTimeout: UntypedFormControl = new UntypedFormControl(null);
 
   constructor(
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private vaultTimeoutService: VaultTimeoutService,
+    private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     public messagingService: MessagingService,
     private router: Router,
     private environmentService: EnvironmentService,
@@ -103,7 +103,7 @@ export class SettingsComponent implements OnInit {
       { name: this.i18nService.t("logOut"), value: "logOut" },
     ];
 
-    let timeout = await this.vaultTimeoutService.getVaultTimeout();
+    let timeout = await this.vaultTimeoutSettingsService.getVaultTimeout();
     if (timeout != null) {
       if (timeout === -2 && !showOnLocked) {
         timeout = -1;
@@ -111,6 +111,7 @@ export class SettingsComponent implements OnInit {
       this.vaultTimeout.setValue(timeout);
     }
     this.previousVaultTimeout = this.vaultTimeout.value;
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.vaultTimeout.valueChanges.subscribe(async (value) => {
       await this.saveVaultTimeout(value);
     });
@@ -118,13 +119,12 @@ export class SettingsComponent implements OnInit {
     const action = await this.stateService.getVaultTimeoutAction();
     this.vaultTimeoutAction = action == null ? "lock" : action;
 
-    const pinSet = await this.vaultTimeoutService.isPinLockSet();
+    const pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
     this.pin = pinSet[0] || pinSet[1];
 
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
-    this.biometric = await this.vaultTimeoutService.isBiometricLockSet();
-    this.disableAutoBiometricsPrompt =
-      (await this.stateService.getDisableAutoBiometricsPrompt()) ?? true;
+    this.biometric = await this.vaultTimeoutSettingsService.isBiometricLockSet();
+    this.enableAutoBiometricsPrompt = !(await this.stateService.getDisableAutoBiometricsPrompt());
     this.showChangeMasterPass = !(await this.keyConnectorService.getUsesKeyConnector());
   }
 
@@ -143,14 +143,20 @@ export class SettingsComponent implements OnInit {
       }
     }
 
-    if (!this.vaultTimeout.valid) {
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("vaultTimeoutToLarge"));
+    // The minTimeoutError does not apply to browser because it supports Immediately
+    // So only check for the policyError
+    if (this.vaultTimeout.hasError("policyError")) {
+      this.platformUtilsService.showToast(
+        "error",
+        null,
+        this.i18nService.t("vaultTimeoutTooLarge")
+      );
       return;
     }
 
     this.previousVaultTimeout = this.vaultTimeout.value;
 
-    await this.vaultTimeoutService.setVaultTimeoutOptions(
+    await this.vaultTimeoutSettingsService.setVaultTimeoutOptions(
       this.vaultTimeout.value,
       this.vaultTimeoutAction
     );
@@ -179,13 +185,17 @@ export class SettingsComponent implements OnInit {
       }
     }
 
-    if (!this.vaultTimeout.valid) {
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("vaultTimeoutToLarge"));
+    if (this.vaultTimeout.hasError("policyError")) {
+      this.platformUtilsService.showToast(
+        "error",
+        null,
+        this.i18nService.t("vaultTimeoutTooLarge")
+      );
       return;
     }
 
     this.vaultTimeoutAction = newValue;
-    await this.vaultTimeoutService.setVaultTimeoutOptions(
+    await this.vaultTimeoutSettingsService.setVaultTimeoutOptions(
       this.vaultTimeout.value,
       this.vaultTimeoutAction
     );
@@ -203,7 +213,7 @@ export class SettingsComponent implements OnInit {
       this.pin = await ref.onClosedPromise();
     } else {
       await this.cryptoService.clearPinProtectedKey();
-      await this.vaultTimeoutService.clear();
+      await this.vaultTimeoutSettingsService.clear();
     }
   }
 
@@ -293,16 +303,16 @@ export class SettingsComponent implements OnInit {
       ]);
     } else {
       await this.stateService.setBiometricUnlock(null);
-      await this.stateService.setBiometricLocked(false);
+      await this.stateService.setBiometricFingerprintValidated(false);
     }
   }
 
   async updateAutoBiometricsPrompt() {
-    await this.stateService.setDisableAutoBiometricsPrompt(this.disableAutoBiometricsPrompt);
+    await this.stateService.setDisableAutoBiometricsPrompt(!this.enableAutoBiometricsPrompt);
   }
 
   async lock() {
-    await this.vaultTimeoutService.lock(true);
+    await this.vaultTimeoutService.lock();
   }
 
   async logOut() {
@@ -389,27 +399,7 @@ export class SettingsComponent implements OnInit {
   }
 
   about() {
-    const versionText = document.createTextNode(
-      this.i18nService.t("version") + ": " + BrowserApi.getApplicationVersion()
-    );
-    const div = document.createElement("div");
-    /* tslint:disable */
-    div.innerHTML = `<p class="text-center"><svg id="cozy" width="50" height="50" viewBox="0 0 52 52">
-        <title>CozyCloud SVG logo. Same as cozy-ui #cozy</title>
-        <path fill="#297EF2" fill-rule="evenodd" d="M558.23098,44 L533.76902,44 C526.175046,44 520,37.756072 520,30.0806092 C520,26.4203755 521.393962,22.9628463 523.927021,20.3465932 C526.145918,18.0569779 529.020185,16.6317448 532.129554,16.2609951 C532.496769,13.1175003 533.905295,10.2113693 536.172045,7.96901668 C538.760238,5.40737823 542.179607,4 545.800788,4 C549.420929,4 552.841339,5.40737823 555.429532,7.96796639 C557.686919,10.2008665 559.091284,13.0912433 559.467862,16.2179336 C566.482405,16.8533543 572,22.8284102 572,30.0816594 C572,37.756072 565.820793,44 558.22994,44 L558.23098,44 Z M558.068077,40.9989547 L558.171599,40.9989547 C564.142748,40.9989547 569,36.0883546 569,30.0520167 C569,24.0167241 564.142748,19.1061239 558.171599,19.1061239 L558.062901,19.1061239 C557.28338,19.1061239 556.644649,18.478972 556.627051,17.6887604 C556.492472,11.7935317 551.63729,7 545.802791,7 C539.968291,7 535.111039,11.7956222 534.977495,17.690851 C534.959896,18.4664289 534.34187,19.0914904 533.573737,19.1092597 C527.743378,19.2451426 523,24.1536522 523,30.0530619 C523,36.0893999 527.857252,41 533.828401,41 L533.916395,41 L533.950557,40.9979094 C533.981614,40.9979094 534.01267,40.9979094 534.043727,41 L558.064971,41 L558.068077,40.9989547 Z M553.766421,29.2227318 C552.890676,28.6381003 552.847676,27.5643091 552.845578,27.5171094 C552.839285,27.2253301 552.606453,26.9957683 552.32118,27.0000592 C552.035908,27.0054228 551.809368,27.2467844 551.814612,27.5364185 C551.81671,27.5750363 551.831393,28.0792139 552.066323,28.6735 C548.949302,31.6942753 544.051427,31.698566 540.928113,28.6917363 C541.169336,28.0888684 541.185068,27.576109 541.185068,27.5374911 C541.190312,27.2478572 540.964821,27.0086409 540.681646,27.0011319 C540.401618,26.9925502 540.163541,27.2264027 540.154102,27.5160368 C540.154102,27.5589455 540.11215,28.6370275 539.234308,29.2216592 C538.995183,29.3825669 538.92806,29.7097461 539.08433,29.9532532 C539.182917,30.1077246 539.346529,30.1924694 539.516434,30.1924694 C539.612923,30.1924694 539.710461,30.1645787 539.797512,30.1066519 C540.023003,29.9564713 540.211786,29.7848363 540.370154,29.6024742 C542.104862,31.2008247 544.296845,32 546.488828,32 C548.686055,32 550.883282,31.1976066 552.621136,29.5917471 C552.780553,29.7762546 552.971434,29.9521804 553.203218,30.1066519 C553.289219,30.1645787 553.387806,30.1924694 553.484295,30.1924694 C553.652102,30.1924694 553.816763,30.1066519 553.916399,29.9521804 C554.07162,29.7076006 554.004497,29.3793488 553.766421,29.2205864 L553.766421,29.2227318 Z" transform="translate(-520)"></path>
-      </svg></p>
-            <p class="text-center"><b>Cozy</b><br>Made by Cozy Cloud, based on
-            <span>Bitwarden</span></p>`;
-    div.appendChild(versionText);
-
-    Swal.fire({
-      heightAuto: false,
-      buttonsStyling: false,
-      html: div,
-      showConfirmButton: false,
-      showCancelButton: true,
-      cancelButtonText: this.i18nService.t("close"),
-    });
+    this.modalService.open(AboutComponent);
   }
 
   async fingerprint() {

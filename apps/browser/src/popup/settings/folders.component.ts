@@ -1,30 +1,33 @@
-import { Component, HostListener, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { map, Observable } from "rxjs";
 
-import { FolderService } from "jslib-common/abstractions/folder.service";
-import { FolderView } from "jslib-common/models/view/folderView";
+import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
+import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
+
+/** Start Cozy imports */
+/* eslint-disable */
+import { HostListener } from "@angular/core";
+/* eslint-enable */
+/** End Cozy imports */
 
 @Component({
   selector: "app-folders",
   templateUrl: "folders.component.html",
 })
-export class FoldersComponent implements OnInit {
-  folders: FolderView[];
+export class FoldersComponent {
+  folders$: Observable<FolderView[]>;
 
-  constructor(private folderService: FolderService, private router: Router) {}
+  constructor(private folderService: FolderService, private router: Router) {
+    this.folders$ = this.folderService.folderViews$.pipe(
+      map((folders) => {
+        if (folders.length > 0) {
+          folders = folders.slice(0, folders.length - 1);
+        }
 
-  @HostListener("window:keydown", ["$event"])
-  handleKeyDown(event: KeyboardEvent) {
-    this.router.navigate(["/tabs/settings"]);
-    event.preventDefault();
-  }
-
-  async ngOnInit() {
-    this.folders = await this.folderService.getAllDecrypted();
-    // Remove "No Folder"
-    if (this.folders.length > 0) {
-      this.folders = this.folders.slice(0, this.folders.length - 1);
-    }
+        return folders;
+      })
+    );
   }
 
   folderSelected(folder: FolderView) {
@@ -34,4 +37,12 @@ export class FoldersComponent implements OnInit {
   addFolder() {
     this.router.navigate(["/add-folder"]);
   }
+
+  // Cozy custo
+  @HostListener("window:keydown", ["$event"])
+  handleKeyDown(event: KeyboardEvent) {
+    this.router.navigate(["/tabs/settings"]);
+    event.preventDefault();
+  }
+  // end custo
 }

@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 
-import { I18nService as BaseI18nService } from "jslib-common/services/i18n.service";
+import { I18nService as BaseI18nService } from "@bitwarden/common/services/i18n.service";
 
 export class I18nService extends BaseI18nService {
   constructor(systemLanguage: string, localesDirectory: string) {
@@ -19,6 +19,7 @@ export class I18nService extends BaseI18nService {
     this.supportedTranslationLocales = [
       "en",
       "af",
+      "ar",
       "az",
       "be",
       "bg",
@@ -34,6 +35,7 @@ export class I18nService extends BaseI18nService {
       "eo",
       "es",
       "et",
+      "eu",
       "fa",
       "fi",
       "fil",

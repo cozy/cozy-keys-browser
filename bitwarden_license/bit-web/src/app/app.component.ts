@@ -1,7 +1,8 @@
 import { Component } from "@angular/core";
 
-import { AppComponent as BaseAppComponent } from "src/app/app.component";
+import { AppComponent as BaseAppComponent } from "@bitwarden/web-vault/app/app.component";
 
+import { ActivateAutofillPolicy } from "./policies/activate-autofill.component";
 import { DisablePersonalVaultExportPolicy } from "./policies/disable-personal-vault-export.component";
 import { MaximumVaultTimeoutPolicy } from "./policies/maximum-vault-timeout.component";
 
@@ -16,6 +17,7 @@ export class AppComponent extends BaseAppComponent {
     this.policyListService.addPolicies([
       new MaximumVaultTimeoutPolicy(),
       new DisablePersonalVaultExportPolicy(),
+      new ActivateAutofillPolicy(),
     ]);
   }
 }

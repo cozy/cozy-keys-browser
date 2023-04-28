@@ -1,16 +1,16 @@
-import { AppIdService } from "jslib-common/abstractions/appId.service";
-import { AuthService } from "jslib-common/abstractions/auth.service";
-import { CryptoService } from "jslib-common/abstractions/crypto.service";
-import { CryptoFunctionService } from "jslib-common/abstractions/cryptoFunction.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { AuthenticationStatus } from "jslib-common/enums/authenticationStatus";
-import { Utils } from "jslib-common/misc/utils";
-import { EncString } from "jslib-common/models/domain/encString";
-import { SymmetricCryptoKey } from "jslib-common/models/domain/symmetricCryptoKey";
+import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 
 import { BrowserApi } from "../browser/browserApi";
 
@@ -238,7 +238,18 @@ export class NativeMessagingBackground {
   private postMessage(message: OuterMessage) {
     // Wrap in try-catch to when the port disconnected without triggering `onDisconnect`.
     try {
-      this.port.postMessage(message);
+      const msg: any = message;
+      if (message.message instanceof EncString) {
+        // Alternative, backwards-compatible serialization of EncString
+        msg.message = {
+          encryptedString: message.message.encryptedString,
+          encryptionType: message.message.encryptionType,
+          data: message.message.data,
+          iv: message.message.iv,
+          mac: message.message.mac,
+        };
+      }
+      this.port.postMessage(msg);
     } catch (e) {
       this.logService.error("NativeMessaging port disconnected, disconnecting.");
 
@@ -323,7 +334,6 @@ export class NativeMessagingBackground {
             return;
           }
 
-          await this.stateService.setBiometricLocked(false);
           this.runtimeBackground.processMessage({ command: "unlocked" }, null, null);
         }
         break;

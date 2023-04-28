@@ -1,29 +1,25 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Subject, takeUntil } from "rxjs";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { PaymentMethodType } from "jslib-common/enums/paymentMethodType";
-import { ThemeType } from "jslib-common/enums/themeType";
-
-import ThemeVariables from "src/scss/export.module.scss";
-
-const lightInputColor = ThemeVariables.lightInputColor;
-const lightInputPlaceholderColor = ThemeVariables.lightInputPlaceholderColor;
-const darkInputColor = ThemeVariables.darkInputColor;
-const darkInputPlaceholderColor = ThemeVariables.darkInputPlaceholderColor;
+import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { PaymentMethodType } from "@bitwarden/common/enums/paymentMethodType";
 
 @Component({
   selector: "app-payment",
   templateUrl: "payment.component.html",
 })
-export class PaymentComponent implements OnInit {
+export class PaymentComponent implements OnInit, OnDestroy {
   @Input() showMethods = true;
   @Input() showOptions = true;
   @Input() method = PaymentMethodType.Card;
   @Input() hideBank = false;
   @Input() hidePaypal = false;
   @Input() hideCredit = false;
+  @Input() trialFlow = false;
+
+  private destroy$ = new Subject<void>();
 
   bank: any = {
     routing_number: null,
@@ -48,12 +44,12 @@ export class PaymentComponent implements OnInit {
   private StripeElementClasses: any;
 
   constructor(
-    private platformUtilsService: PlatformUtilsService,
     private apiService: ApiService,
-    private logService: LogService
+    private logService: LogService,
+    private themingService: AbstractThemingService
   ) {
     this.stripeScript = window.document.createElement("script");
-    this.stripeScript.src = "https://js.stripe.com/v3/";
+    this.stripeScript.src = "https://js.stripe.com/v3/?advancedFraudSignals=false";
     this.stripeScript.async = true;
     this.stripeScript.onload = () => {
       this.stripe = (window as any).Stripe(process.env.STRIPE_KEY);
@@ -92,7 +88,7 @@ export class PaymentComponent implements OnInit {
       this.hideBank = this.method !== PaymentMethodType.BankAccount;
       this.hideCredit = this.method !== PaymentMethodType.Credit;
     }
-    await this.setTheme();
+    this.subscribeToTheme();
     window.document.head.appendChild(this.stripeScript);
     if (!this.hidePaypal) {
       window.document.head.appendChild(this.btScript);
@@ -100,6 +96,8 @@ export class PaymentComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
     window.document.head.removeChild(this.stripeScript);
     window.setTimeout(() => {
       Array.from(window.document.querySelectorAll("iframe")).forEach((el) => {
@@ -274,16 +272,17 @@ export class PaymentComponent implements OnInit {
     }, 50);
   }
 
-  private async setTheme() {
-    const theme = await this.platformUtilsService.getEffectiveTheme();
-    if (theme === ThemeType.Dark) {
-      this.StripeElementStyle.base.color = darkInputColor;
-      this.StripeElementStyle.base["::placeholder"].color = darkInputPlaceholderColor;
-      this.StripeElementStyle.invalid.color = darkInputColor;
-    } else {
-      this.StripeElementStyle.base.color = lightInputColor;
-      this.StripeElementStyle.base["::placeholder"].color = lightInputPlaceholderColor;
-      this.StripeElementStyle.invalid.color = lightInputColor;
-    }
+  private subscribeToTheme() {
+    this.themingService.theme$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      const style = getComputedStyle(document.documentElement);
+      this.StripeElementStyle.base.color = `rgb(${style.getPropertyValue("--color-text-main")})`;
+      this.StripeElementStyle.base["::placeholder"].color = `rgb(${style.getPropertyValue(
+        "--color-text-muted"
+      )})`;
+      this.StripeElementStyle.invalid.color = `rgb(${style.getPropertyValue("--color-text-main")})`;
+      this.StripeElementStyle.invalid.borderColor = `rgb(${style.getPropertyValue(
+        "--color-danger-500"
+      )})`;
+    });
   }
 }

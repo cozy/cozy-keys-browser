@@ -1,17 +1,24 @@
-import { Meta, Story } from "@storybook/angular";
+import { CommonModule } from "@angular/common";
+import { Meta, moduleMetadata, Story } from "@storybook/angular";
 
 import { BadgeDirective } from "./badge.directive";
 
 export default {
-  title: "Jslib/Badge",
+  title: "Component Library/Badge",
   component: BadgeDirective,
+  decorators: [
+    moduleMetadata({
+      imports: [CommonModule],
+      declarations: [BadgeDirective],
+    }),
+  ],
   args: {
     badgeType: "primary",
   },
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/file/f32LSg3jaegICkMu7rPARm/Tailwind-Component-Library-Update?node-id=1881%3A16956",
+      url: "https://www.figma.com/file/Zt3YSeb6E6lebAffrNLa0h/Tailwind-Component-Library?node-id=1881%3A16956",
     },
   },
 } as Meta;

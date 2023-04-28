@@ -1,10 +1,7 @@
-import { ApiService } from "../abstractions/api.service";
 import { Utils } from "../misc/utils";
-import { EncArrayBuffer } from "../models/domain/encArrayBuffer";
+import { EncArrayBuffer } from "../models/domain/enc-array-buffer";
 
 export class BitwardenFileUploadService {
-  constructor(private apiService: ApiService) {}
-
   async upload(
     encryptedFileName: string,
     encryptedFileData: EncArrayBuffer,

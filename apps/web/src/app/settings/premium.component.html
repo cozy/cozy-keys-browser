@@ -45,7 +45,10 @@
     </li>
   </ul>
   <p class="text-lg" [ngClass]="{ 'mb-0': !selfHosted }">
-    {{ "premiumPrice" | i18n: (premiumPrice | currency: "$") }}
+    {{ "premiumPriceWithFamilyPlan" | i18n: (premiumPrice | currency: "$"):familyPlanMaxUserCount }}
+    <a routerLink="/create-organization" [queryParams]="{ plan: 'families' }">{{
+      "bitwardenFamiliesPlan" | i18n
+    }}</a>
   </p>
   <a
     bitButton
@@ -68,15 +71,8 @@
         "licenseFileDesc" | i18n: "bitwarden_premium_license.json"
       }}</small>
     </div>
-    <button
-      bitButton
-      buttonType="primary"
-      type="submit"
-      class="btn-submit"
-      [disabled]="form.loading"
-    >
-      <i class="bwi bwi-spinner bwi-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
-      <span>{{ "submit" | i18n }}</span>
+    <button type="submit" buttonType="primary" bitButton [loading]="form.loading">
+      {{ "submit" | i18n }}
     </button>
   </form>
 </ng-container>
@@ -125,8 +121,7 @@
     </p>
   </div>
   <small class="text-muted font-italic">{{ "paymentChargedAnnually" | i18n }}</small>
-  <button bitButton buttonType="primary" type="submit" class="btn-submit" [disabled]="form.loading">
-    <i class="bwi bwi-spinner bwi-spin" title="{{ 'loading' | i18n }}" aria-hidden="true"></i>
-    <span>{{ "submit" | i18n }}</span>
+  <button type="submit" bitButton [loading]="form.loading">
+    {{ "submit" | i18n }}
   </button>
 </form>

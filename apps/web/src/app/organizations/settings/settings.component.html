@@ -3,28 +3,70 @@
     <div class="col-3">
       <div class="card">
         <div class="card-header">{{ "settings" | i18n }}</div>
-        <div class="list-group list-group-flush">
-          <a routerLink="account" class="list-group-item" routerLinkActive="active">
-            {{ "myOrganization" | i18n }}
-          </a>
-          <a routerLink="subscription" class="list-group-item" routerLinkActive="active">
-            {{ "subscription" | i18n }}
-          </a>
+        <div class="list-group list-group-flush" *ngIf="organization$ | async as org">
           <a
-            routerLink="billing"
+            routerLink="account"
             class="list-group-item"
             routerLinkActive="active"
-            *ngIf="showBilling"
+            *ngIf="org.isOwner"
           >
-            {{ "billing" | i18n }}
+            {{ "organizationInfo" | i18n }}
+          </a>
+          <a
+            routerLink="policies"
+            class="list-group-item"
+            routerLinkActive="active"
+            *ngIf="org.canManagePolicies"
+          >
+            {{ "policies" | i18n }}
           </a>
           <a
             routerLink="two-factor"
             class="list-group-item"
             routerLinkActive="active"
-            *ngIf="access2fa"
+            *ngIf="org.use2fa && org.isOwner"
           >
             {{ "twoStepLogin" | i18n }}
+          </a>
+          <a
+            routerLink="tools/import"
+            class="list-group-item"
+            routerLinkActive="active"
+            *ngIf="org.canAccessImportExport"
+          >
+            {{ "importData" | i18n }}
+          </a>
+          <a
+            routerLink="tools/export"
+            class="list-group-item"
+            routerLinkActive="active"
+            *ngIf="org.canAccessImportExport"
+          >
+            {{ "exportVault" | i18n }}
+          </a>
+          <a
+            routerLink="domain-verification"
+            class="list-group-item"
+            routerLinkActive="active"
+            *ngIf="org?.canManageDomainVerification"
+          >
+            {{ "domainVerification" | i18n }}
+          </a>
+          <a
+            routerLink="sso"
+            class="list-group-item"
+            routerLinkActive="active"
+            *ngIf="org.canManageSso"
+          >
+            {{ "singleSignOn" | i18n }}
+          </a>
+          <a
+            routerLink="scim"
+            class="list-group-item"
+            routerLinkActive="active"
+            *ngIf="org.canManageScim"
+          >
+            {{ "scim" | i18n }}
           </a>
         </div>
       </div>

@@ -1,21 +1,23 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { ModalService } from "jslib-angular/services/modal.service";
-import { CipherService } from "jslib-common/abstractions/cipher.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { OrganizationService } from "jslib-common/abstractions/organization.service";
-import { PasswordRepromptService } from "jslib-common/abstractions/passwordReprompt.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { Cipher } from "jslib-common/models/domain/cipher";
-import { CipherView } from "jslib-common/models/view/cipherView";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { PasswordRepromptService } from "@bitwarden/common/vault/abstractions/password-reprompt.service";
+import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import { ReusedPasswordsReportComponent as BaseReusedPasswordsReportComponent } from "../../reports/reused-passwords-report.component";
+// eslint-disable-next-line no-restricted-imports
+import { ReusedPasswordsReportComponent as BaseReusedPasswordsReportComponent } from "../../reports/pages/reused-passwords-report.component";
 
 @Component({
   selector: "app-reused-passwords-report",
-  templateUrl: "../../reports/reused-passwords-report.component.html",
+  templateUrl: "../../reports/pages/reused-passwords-report.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class ReusedPasswordsReportComponent extends BaseReusedPasswordsReportComponent {
   manageableCiphers: Cipher[];
 
@@ -32,6 +34,7 @@ export class ReusedPasswordsReportComponent extends BaseReusedPasswordsReportCom
   }
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.parent.params.subscribe(async (params) => {
       this.organization = await this.organizationService.get(params.organizationId);
       this.manageableCiphers = await this.cipherService.getAll();

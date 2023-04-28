@@ -1,15 +1,14 @@
 import { Component, Input } from "@angular/core";
 
-import { ProviderUserStatusType } from "jslib-common/enums/providerUserStatusType";
-import { ProviderUserBulkConfirmRequest } from "jslib-common/models/request/provider/providerUserBulkConfirmRequest";
-import { ProviderUserBulkRequest } from "jslib-common/models/request/provider/providerUserBulkRequest";
-
-import { BulkConfirmComponent as OrganizationBulkConfirmComponent } from "src/app/organizations/manage/bulk/bulk-confirm.component";
-import { BulkUserDetails } from "src/app/organizations/manage/bulk/bulk-status.component";
+import { ProviderUserStatusType } from "@bitwarden/common/enums/providerUserStatusType";
+import { ProviderUserBulkConfirmRequest } from "@bitwarden/common/models/request/provider/provider-user-bulk-confirm.request";
+import { ProviderUserBulkRequest } from "@bitwarden/common/models/request/provider/provider-user-bulk.request";
+import { BulkConfirmComponent as OrganizationBulkConfirmComponent } from "@bitwarden/web-vault/app/organizations/members/components/bulk/bulk-confirm.component";
+import { BulkUserDetails } from "@bitwarden/web-vault/app/organizations/members/components/bulk/bulk-status.component";
 
 @Component({
   templateUrl:
-    "../../../../../../../apps/web/src/app/organizations/manage/bulk/bulk-confirm.component.html",
+    "../../../../../../../apps/web/src/app/organizations/members/components/bulk/bulk-confirm.component.html",
 })
 export class BulkConfirmComponent extends OrganizationBulkConfirmComponent {
   @Input() providerId: string;

@@ -10,7 +10,7 @@
     }
   },
   "whatTypeOfItem": {
-    "message": "Hvilken type gjenstand er dette?"
+    "message": "Hva slags element er dette?"
   },
   "name": {
     "message": "Navn"
@@ -71,10 +71,10 @@
     "message": "Firma"
   },
   "ssn": {
-    "message": "Nummer for sosial stønad"
+    "message": "Fødselsnummer"
   },
   "passportNumber": {
-    "message": "Pass-nummer"
+    "message": "Passnummer"
   },
   "licenseNumber": {
     "message": "Lisens-/førerkort-nummer"
@@ -133,6 +133,9 @@
   "ms": {
     "message": "Frøken"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr․"
   },
@@ -174,7 +177,7 @@
     "message": "Fjern"
   },
   "unassigned": {
-    "message": "Utilegnet"
+    "message": "Utildelt"
   },
   "noneFolder": {
     "message": "Ingen mappe",
@@ -188,11 +191,11 @@
   },
   "baseDomain": {
     "message": "Grunndomene",
-    "description": "Domain name. Ex. website.com"
+    "description": "Domain name. Example: website.com"
   },
   "domainName": {
     "message": "Domene",
-    "description": "Domain name. Ex. website.com"
+    "description": "Domain name. Example: website.com"
   },
   "host": {
     "message": "Vert",
@@ -277,15 +280,39 @@
   "searchFavorites": {
     "message": "Søk i favoritter"
   },
-  "searchType": {
-    "message": "Søk i type",
-    "description": "Search item type"
+  "searchLogin": {
+    "message": "Søk i innlogginger",
+    "description": "Search Login type"
+  },
+  "searchCard": {
+    "message": "Søk i kort",
+    "description": "Search Card type"
+  },
+  "searchIdentity": {
+    "message": "Søk i identiteter",
+    "description": "Search Identity type"
+  },
+  "searchSecureNote": {
+    "message": "Søk i sikre notater",
+    "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "Søk i hvelvet"
   },
+  "searchMyVault": {
+    "message": "Søk i hvelvet mitt"
+  },
+  "searchOrganization": {
+    "message": "Søk i organisasjoner"
+  },
+  "searchMembers": {
+    "message": "Søk i medlemmer"
+  },
+  "searchGroups": {
+    "message": "Søk i grupper"
+  },
   "allItems": {
-    "message": "Alle gjenstander"
+    "message": "Alle elementer"
   },
   "favorites": {
     "message": "Favoritter"
@@ -303,7 +330,7 @@
     "message": "Identitet"
   },
   "typeSecureNote": {
-    "message": "Sikker notis"
+    "message": "Sikkert notat"
   },
   "typeLoginPlural": {
     "message": "Innlogginger"
@@ -365,14 +392,24 @@
   "select": {
     "message": "Velg"
   },
+  "newItem": {
+    "message": "Nytt element"
+  },
   "addItem": {
-    "message": "Legg til en gjenstand"
+    "message": "Legg til element"
   },
   "editItem": {
-    "message": "Rediger gjenstanden"
+    "message": "Rediger element"
   },
   "viewItem": {
-    "message": "Vis objektet"
+    "message": "Vis elementet"
+  },
+  "new": {
+    "message": "Ny",
+    "description": "for adding new items"
+  },
+  "item": {
+    "message": "Element"
   },
   "ex": {
     "message": "f.eks.",
@@ -421,11 +458,26 @@
     "message": "Kopier URIen",
     "description": "Copy URI to clipboard"
   },
+  "me": {
+    "message": "Meg"
+  },
   "myVault": {
     "message": "Mitt hvelv"
   },
+  "allVaults": {
+    "message": "Alle hvelv"
+  },
   "vault": {
     "message": "Hvelv"
+  },
+  "vaults": {
+    "message": "Hvelv"
+  },
+  "vaultItems": {
+    "message": "Hvelvobjekter"
+  },
+  "filter": {
+    "message": "Filter"
   },
   "moveSelectedToOrg": {
     "message": "Flytt valgte til organisasjon"
@@ -470,10 +522,10 @@
     "message": "Du kan ikke bruke denne funksjonen før du oppdaterer krypteringsnøkkelen din."
   },
   "addedItem": {
-    "message": "La til gjenstanden"
+    "message": "La til element"
   },
   "editedItem": {
-    "message": "Redigerte gjenstanden"
+    "message": "Endret elementet"
   },
   "movedItemToOrg": {
     "message": "$ITEMNAME$ flyttet til $ORGNAME$",
@@ -498,7 +550,7 @@
     }
   },
   "deleteItem": {
-    "message": "Slett objektet"
+    "message": "Slett element"
   },
   "deleteFolder": {
     "message": "Slett mappen"
@@ -507,22 +559,22 @@
     "message": "Slett vedlegget"
   },
   "deleteItemConfirmation": {
-    "message": "Er du sikker på at du vil slette denne gjenstanden?"
+    "message": "Vil du virkelig sende til papirkurven?"
   },
   "deletedItem": {
-    "message": "Slettet objektet"
+    "message": "Element sendt til papirkurv"
   },
   "deletedItems": {
-    "message": "Slettet objektene"
+    "message": "Elementer sendt til papirkurv"
   },
   "movedItems": {
-    "message": "Flyttede gjenstander"
+    "message": "Flyttede elementer"
   },
   "overwritePasswordConfirmation": {
     "message": "Er du sikker på at du vil overskrive det nåværende passordet?"
   },
   "editedFolder": {
-    "message": "Redigerte mappen"
+    "message": "Endret mappe"
   },
   "addedFolder": {
     "message": "La til en mappe"
@@ -532,6 +584,12 @@
   },
   "deletedFolder": {
     "message": "Slettet mappen"
+  },
+  "editInfo": {
+    "message": "Rediger info"
+  },
+  "access": {
+    "message": "Tilgang"
   },
   "loggedOut": {
     "message": "Logget av"
@@ -557,11 +615,29 @@
   "loginOrCreateNewAccount": {
     "message": "Logg på eller opprett en ny konto for å få tilgang til ditt sikre hvelv."
   },
+  "loginWithDevice": {
+    "message": "Logg på med enhet"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "Logg på med enhet må settes opp i innstillingene i Bitwarden appen. Trenger du et annet valg?"
+  },
+  "loginWithMasterPassword": {
+    "message": "Logg på med hovedpassord"
+  },
   "createAccount": {
     "message": "Opprett en konto"
   },
+  "newAroundHere": {
+    "message": "Er du ny her?"
+  },
+  "startTrial": {
+    "message": "Start prøveperiode"
+  },
   "logIn": {
     "message": "Logg på"
+  },
+  "logInInitiated": {
+    "message": "Pålogging startet"
   },
   "submit": {
     "message": "Send inn"
@@ -579,10 +655,13 @@
     "message": "Hovedpassord"
   },
   "masterPassDesc": {
-    "message": "Superpassordet er passordet du bruker for å få tilgang til hvelvet ditt. Det er veldig viktig at du aldri glemmer ditt superpassord. Det er ingen måter å få tilbake passordet på dersom du noensinne skulle klare å glemme det."
+    "message": "Hovedpassordet er passordet du bruker for å få tilgang til hvelvet ditt. Det er svært viktig at du aldri glemmer det. Det er ingen måter å gjenopprette hovedpassordet på dersom du glemmer det."
+  },
+  "masterPassImportant": {
+    "message": "Hovedpassord kan ikke gjenopprettes hvis du glemmer det!"
   },
   "masterPassHintDesc": {
-    "message": "Et hint for superpassordet kan hjelpe deg med å huske på passordet dersom du skulle glemme det."
+    "message": "Et hint for hovedpassordet kan hjelpe deg med å huske på passordet dersom du skulle glemme det."
   },
   "reTypeMasterPass": {
     "message": "Skriv inn hovedpassordet på nytt"
@@ -600,10 +679,10 @@
     "message": "Passordhint"
   },
   "enterEmailToGetHint": {
-    "message": "Skriv inn din kontos E-postadresse for å motta hintet til ditt superpassord."
+    "message": "Skriv inn e-postadressen til kontoen din for å motta hintet til ditt hovedpassord."
   },
   "getMasterPasswordHint": {
-    "message": "Få et hint om superpassordet"
+    "message": "Få et hint om hovedpassordet"
   },
   "emailRequired": {
     "message": "E-postadressen er påkrevd."
@@ -611,20 +690,33 @@
   "invalidEmail": {
     "message": "Ugyldig E-postadresse."
   },
-  "masterPassRequired": {
-    "message": "Superpassordet er påkrevd."
+  "masterPasswordRequired": {
+    "message": "Hovedpassord er obligatorisk."
   },
-  "masterPassLength": {
-    "message": "Superpassordet må være ≥8 tegn langt."
+  "confirmMasterPasswordRequired": {
+    "message": "Skriv inn hovedpassordet på nytt."
+  },
+  "masterPasswordMinlength": {
+    "message": "Hovedpassordet må være minst $VALUE$ tegn.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
-    "message": "Superpassord-bekreftelsen er ikke samsvarende."
+    "message": "Hovedpassord-bekreftelsen samsvarer ikke."
   },
   "newAccountCreated": {
     "message": "Din nye konto har blitt opprettet! Du kan nå logge på."
   },
+  "trialAccountCreated": {
+    "message": "Kontoen ble opprettet."
+  },
   "masterPassSent": {
-    "message": "Vi har sendt deg en E-post med hintet til superpassordet."
+    "message": "Vi har sendt deg en e-post med hintet til hovedpassordet."
   },
   "unexpectedError": {
     "message": "En uventet feil har oppstått."
@@ -633,7 +725,7 @@
     "message": "E-postadresse"
   },
   "yourVaultIsLocked": {
-    "message": "Hvelvet ditt er låst. Kontroller superpassordet ditt for å fortsette."
+    "message": "Hvelvet ditt er låst. Kontroller hovedpassordet ditt for å fortsette."
   },
   "unlock": {
     "message": "Lås opp"
@@ -652,13 +744,19 @@
     }
   },
   "invalidMasterPassword": {
-    "message": "Ugyldig superpassord"
+    "message": "Ugyldig hovedpassord"
+  },
+  "invalidFilePassword": {
+    "message": "Ugyldig filpassord, bruk passordet du skrev inn da du opprettet eksportfilen."
   },
   "lockNow": {
     "message": "Lås nå"
   },
   "noItemsInList": {
-    "message": "Det er ingen gjenstander å liste opp."
+    "message": "Det er ingen elementer å vise."
+  },
+  "noPermissionToViewAllCollectionItems": {
+    "message": "Du har ikke tillatelse til å se alle elementer i denne samlingen."
   },
   "noCollectionsInList": {
     "message": "Det er ingen samlinger å liste opp."
@@ -669,6 +767,9 @@
   "noUsersInList": {
     "message": "Det er ingen brukere å liste opp."
   },
+  "noMembersInList": {
+    "message": "Det er ingen medlemmer å vise."
+  },
   "noEventsInList": {
     "message": "Det er ingen hendelser å liste opp."
   },
@@ -676,7 +777,10 @@
     "message": "Ny organisasjon"
   },
   "noOrganizationsList": {
-    "message": "Du tilhører ikke noen organisasjoner. Organisasjoner gjør det mulig for deg å trygt dele objekter med andre brukere."
+    "message": "Du tilhører ikke noen organisasjoner. Organisasjoner gjør det mulig for deg å trygt dele elementer med andre brukere."
+  },
+  "notificationSentDevice": {
+    "message": "Et varsel har blitt sendt til enheten din."
   },
   "versionNumber": {
     "message": "Versjon $VERSION_NUMBER$",
@@ -793,22 +897,34 @@
     "message": "Organisasjoner"
   },
   "moveToOrgDesc": {
-    "message": "Velg en organisasjon som du ønsker å flytte denne gjenstanden til. Flytting til en organisasjon overfører eierskap til den aktuelle organisasjonen. Du vil ikke lenger være den direkte eieren av denne varen når den er flyttet."
+    "message": "Velg en organisasjon som du ønsker å flytte dette elementet til. Flytting til en organisasjon overfører eierskap til den aktuelle organisasjonen. Du vil ikke lenger være den direkte eieren av dette elementet når det er flyttet."
   },
   "moveManyToOrgDesc": {
-    "message": "Velg en organisasjon som du ønsker å flytte denne gjenstanden til. Flytting til en organisasjon overfører eierskap til den aktuelle organisasjonen. Du vil ikke lenger være den direkte eieren av denne varen når den er flyttet."
+    "message": "Velg en organisasjon som du ønsker å flytte dette elementet til. Flytting til en organisasjon overfører eierskap til den aktuelle organisasjonen. Du vil ikke lenger være den direkte eieren av dette elementet når det er flyttet."
   },
   "collectionsDesc": {
-    "message": "Rediger samlingene som dette objektet blir delt med. Kun organisasjonsbrukere med tilgang til disse samlingene vil kunne se dette objektet."
+    "message": "Rediger samlingene som dette elementet blir delt med. Kun organisasjonsbrukere med tilgang til disse samlingene vil kunne se dette elementet."
   },
   "deleteSelectedItemsDesc": {
-    "message": "Du har valgt $COUNT$ gjenstand(er) som skal slettes. Er du sikker på du vil slette alle disse gjenstandene?",
+    "message": "Du har valgt $COUNT$ elementer(er) for sletting. Er du sikker på du vil slette alle disse elementene?",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "150"
       }
     }
+  },
+  "deleteSelectedCollectionsDesc": {
+    "message": "$COUNT$ samling(er) slettes permanent.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "150"
+      }
+    }
+  },
+  "deleteSelectedConfirmation": {
+    "message": "Er du sikker på at du vil fortsette?"
   },
   "moveSelectedItemsDesc": {
     "message": "Velg en mappe som du ønsker å flytte $COUNT$ valgt(e) gjenstand(er) til.",
@@ -820,7 +936,7 @@
     }
   },
   "moveSelectedItemsCountDesc": {
-    "message": "Du har valgt $COUNT$ gjenstand(er). $MOVEABLE_COUNT$ gjenstand(er) kan flyttes til en organisasjon, $NONMOVEABLE_COUNT$ kan ikke.",
+    "message": "Du har valgt $COUNT$ element(er). $MOVEABLE_COUNT$ element(er) kan flyttes til en organisasjon, $NONMOVEABLE_COUNT$ kan ikke.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -866,6 +982,48 @@
   "fileFormat": {
     "message": "Filformat"
   },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Denne fileksporten vil bli passordbeskyttet og vil kreve filpassordet ved dekryptering."
+  },
+  "exportPasswordDescription": {
+    "message": "Dette passordet brukes for eksport og import av denne filen"
+  },
+  "confirmMasterPassword": {
+    "message": "Bekreft hovedpassord"
+  },
+  "confirmFormat": {
+    "message": "Bekreft format"
+  },
+  "filePassword": {
+    "message": "Filpassord"
+  },
+  "confirmFilePassword": {
+    "message": "Bekreft filpassord"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Bruk kontokrypteringsnøkkelen, avledet fra ditt kontobrukernavn og hovedpassord, for å kryptere eksporten og hindre import til andre kontoer enn den aktuelle Bitwarden-kontoen."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Sett et filpassord for kryptering av eksporten. Bruk passordet for å dekryptere og importere til en hvilken som helst Bitwarden-konto."
+  },
+  "exportTypeHeading": {
+    "message": "Eksport-type"
+  },
+  "accountRestricted": {
+    "message": "Kontoen begrenset"
+  },
+  "passwordProtected": {
+    "message": "Passord beskyttet"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "\"Filpassord\" og \"bekreft filpassord\" stemmer ikke overens."
+  },
+  "confirmVaultImport": {
+    "message": "Bekreft hvelvimportering"
+  },
+  "confirmVaultImportDesc": {
+    "message": "Denne filen er passordbeskyttet. Skriv inn filpassordet for å importere data."
+  },
   "exportSuccess": {
     "message": "Ditt hvelvs data har blitt eksportert."
   },
@@ -880,7 +1038,7 @@
   },
   "minSpecial": {
     "message": "Minste antall spesialtegn",
-    "description": "Minimum Special Characters"
+    "description": "Minimum special characters"
   },
   "ambiguous": {
     "message": "Unngå tvetydige tegn"
@@ -891,6 +1049,20 @@
   "length": {
     "message": "Lengde"
   },
+  "uppercase": {
+    "message": "Store bokstaver (A-Z)",
+    "description": "Include uppercase letters in the password generator."
+  },
+  "lowercase": {
+    "message": "Små bokstaver (a-z)",
+    "description": "Include lowercase letters in the password generator."
+  },
+  "numbers": {
+    "message": "Siffer (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Spesialtegn (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Antall ord"
   },
@@ -899,7 +1071,7 @@
   },
   "capitalize": {
     "message": "Stor forbokstav",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Inkluder siffer"
@@ -912,7 +1084,7 @@
   },
   "clear": {
     "message": "Tøm",
-    "description": "To clear something out. example: To clear browser history."
+    "description": "To clear something out. Example: To clear browser history."
   },
   "accountUpdated": {
     "message": "Konto oppdatert"
@@ -975,7 +1147,7 @@
     "message": "KDF-iterasjoner"
   },
   "kdfIterationsDesc": {
-    "message": "Flere KDF-gjentakelser kan hjelpe til med å beskytte superpassordet fra å bli tvunget inn i av en angriper. Vi anbefaler en verdi på $VALUE$ eller mer.",
+    "message": "Flere KDF-gjentakelser kan hjelpe til med å beskytte hovedpassordet fra å bli tvunget inn i av en angriper. Vi anbefaler en verdi på $VALUE$ eller mer.",
     "placeholders": {
       "value": {
         "content": "$1",
@@ -991,6 +1163,19 @@
         "example": "50,000"
       }
     }
+  },
+  "kdfMemory": {
+    "message": "KDF-minne (MB)",
+    "description": "Memory refers to computer memory (RAM). MB is short for megabytes."
+  },
+  "argon2Warning": {
+    "message": "Å velge for mange KDF-iterasjoner kan føre til dårlig ytelse når du logger inn (og låser opp) Bitwarden på enheter med tregere CPUer. Vi anbefaler at du øker verdien trinnvis for å deretter teste alle dine enheter."
+  },
+  "kdfParallelism": {
+    "message": "KDF-parallellitet"
+  },
+  "argon2Desc": {
+    "message": "Høyere KDF-iterasjoner, minne og parallellitet kan hjelpe til med å beskytte hovedpassordet ditt fra å bli gjettet med rå kraft av en angriper."
   },
   "changeKdf": {
     "message": "Endre KDF"
@@ -1026,10 +1211,10 @@
     "message": "Hvelv tilgjengelig av leverandør."
   },
   "purgeVaultDesc": {
-    "message": "Fortsett nedenfor for å slette alle objektet og mapper i ditt hvelv. Objekter som tilhører en organisasjon som du deler med, vil ikke bli slettet."
+    "message": "Fortsett nedenfor for å slette alle elementer og mapper i ditt hvelv. Elementer som tilhører en organisasjon som du deler med, vil ikke bli slettet."
   },
   "purgeOrgVaultDesc": {
-    "message": "Fortsett nedenfor for å slette alle objektene i organisasjonens hvelv."
+    "message": "Fortsett nedenfor for å slette alle elementer i organisasjonens hvelv."
   },
   "purgeVaultWarning": {
     "message": "Å tømme hvelvet ditt er permanent. Det kan ikke bli angret på."
@@ -1070,6 +1255,9 @@
   "importSuccess": {
     "message": "Dataene har blitt vellykket importert inn i hvelvet ditt."
   },
+  "dataExportSuccess": {
+    "message": "Data-eksporten var vellykket"
+  },
   "importWarning": {
     "message": "Du importerer data til $ORGANIZATION$. Dataene kan deles med medlemmer av denne organisasjonen. Vil du fortsette?",
     "placeholders": {
@@ -1094,6 +1282,12 @@
   "selectImportFile": {
     "message": "Velg importfilen"
   },
+  "chooseFile": {
+    "message": "Velg fil"
+  },
+  "noFileChosen": {
+    "message": "Ingen fil er valgt"
+  },
   "orCopyPasteFileContents": {
     "message": "eller kopier og lim inn importfilens innhold"
   },
@@ -1110,11 +1304,14 @@
   "options": {
     "message": "Alternativer"
   },
-  "optionsDesc": {
-    "message": "Tilpass din netthvelvopplevelse."
+  "preferences": {
+    "message": "Innstillinger"
   },
-  "optionsUpdated": {
-    "message": "Innstillingene er oppdatert"
+  "preferencesDesc": {
+    "message": "Tilpass opplevelsen i nett-hvelvet ditt."
+  },
+  "preferencesUpdated": {
+    "message": "Innstillingene oppdatert"
   },
   "language": {
     "message": "Språk"
@@ -1122,18 +1319,11 @@
   "languageDesc": {
     "message": "Endre språket som brukes av netthvelvet."
   },
-  "disableIcons": {
-    "message": "Skru av nettstedsikoner"
+  "enableFavicon": {
+    "message": "Vis nettsideikoner"
   },
-  "disableIconsDesc": {
-    "message": "Nettstedsikoner sørger for et gjenkjennelig bilde ved siden av hvert innloggingsobjekt i hvelvet ditt."
-  },
-  "enableGravatars": {
-    "message": "Skru på Gravatarer",
-    "description": "'Gravatar' is the name of a service. See www.gravatar.com"
-  },
-  "enableGravatarsDesc": {
-    "message": "Bruk avatarbilder som har blitt lastet inn fra gravatar.com."
+  "faviconDesc": {
+    "message": "Vis et gjenkjennelig bilde ved siden av hver innlogging."
   },
   "enableFullWidth": {
     "message": "Aktiver fullbreddeoppsett",
@@ -1187,11 +1377,24 @@
   "twoStepLogin": {
     "message": "2-trinnsinnlogging"
   },
+  "twoStepLoginEnforcement": {
+    "message": "Tofaktor-innlogging kreves"
+  },
   "twoStepLoginDesc": {
     "message": "Sikre kontoen din ved å kreve et ekstra trinn når du logger på."
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "Krev 2-trinnsinnlogging for din organisasjons brukere, ved å sette opp leverandører på organisasjonsnivået."
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Håndhev Bitwarden tofaktor-innloggingsalternativer for medlemmer ved å bruke ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "Tofaktor-innloggingsregler"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "For å kreve tofaktor-innlogging via Duo, bruk valgene under."
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "Dersom du har satt opp SSO eller planlegger det, så kan det være tofaktor-innlogging allerede kreves via din identitetstjeneste."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Å skru på 2-trinnsinnlogging kan låse deg permanent ut av din Bitwarden-konto. En gjenopprettingskode gir deg tilgang til kontoen din i det tilfellet at du ikke lenger kan bruke din vanlige 2-trinnsinnloggingsleverandør (f.eks. at du mister enheten din). Bitwarden-kundestøtten vil ikke kunne hjelpe deg dersom du mister tilgang til kontoen din. Vi anbefaler at du skriver ned eller skriver ut gjenopprettingskoden og legger den på en trygg plass."
@@ -1209,9 +1412,12 @@
   "enabled": {
     "message": "Aktivert"
   },
+  "restoreAccess": {
+    "message": "Gjenopprett tilgang"
+  },
   "premium": {
     "message": "Premium",
-    "description": "Premium Membership"
+    "description": "Premium membership"
   },
   "premiumMembership": {
     "message": "Premium-medlemskap"
@@ -1234,11 +1440,14 @@
   "disable": {
     "message": "Deaktiver"
   },
+  "revokeAccess": {
+    "message": "Opphev tilgang"
+  },
   "twoStepLoginProviderEnabled": {
     "message": "Denne 2-trinnsleverandøren er aktivert på din konto."
   },
   "twoStepLoginAuthDesc": {
-    "message": "Skriv inn ditt superpassord for å endre på 2-trinnsinnloggingsinnstillingene."
+    "message": "Skriv inn ditt hovedpassord for å endre på 2-trinnsinnloggingsinnstillingene."
   },
   "twoStepAuthenticatorDesc": {
     "message": "Følg disse trinnene for å sette opp 2-trinnsinnlogging med en autentiseringsapp:"
@@ -1298,7 +1507,7 @@
     "message": "På grunn av plattformbegrensninger, kan YubiKey-er ikke bli brukt på alle Bitwarden-apper. Du burde skru på en annen 2-trinnsinnloggingsleverandør, sånn at du kan få tilgang til din konto når YubiKeys ikke kan bli brukt. Støttede plattformer:"
   },
   "twoFactorYubikeySupportUsb": {
-    "message": "Netthvelvet, datamaskinprogrammet, CLI, og alle nettleserutvidelser, på en enhet med en USB-port som støtter din YubiKey."
+    "message": "Netthvelvet, datamaskinprogrammet, ledetekst, og alle nettleserutvidelser, på en enhet med en USB-port som støtter din YubiKey."
   },
   "twoFactorYubikeySupportMobile": {
     "message": "Mobilapper på en enhet med NFC-funksjoner, eller som har en USB-port som støtter din YubiKey."
@@ -1431,7 +1640,12 @@
     "message": "Rapporter"
   },
   "reportsDesc": {
-    "message": "Identifiser og løs sikkerhetsavvik i kontoene dine på nettet ved å klikke på rapportene nedenfor."
+    "message": "Identifiser og løs sikkerhetsavvik i kontoene dine på nettet ved å klikke på rapportene nedenfor.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+  },
+  "orgsReportsDesc": {
+    "message": "Identifiser og steng sikkerhetshull i din organisasjons kontoer ved å klikke på rapportene nedenfor.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
     "message": "Rapport om usikrede nettsteder"
@@ -1443,7 +1657,7 @@
     "message": "Usikrede nettsteder ble funnet"
   },
   "unsecuredWebsitesFoundDesc": {
-    "message": "Vi fant $COUNT$ elementer i hvelvet ditt som benytter usikrede URIer. Du burde endre deres URI til å benytte https://, dersom det nettstedet tillater det.",
+    "message": "Vi fant $COUNT$ objekter i hvelvet ditt som benytter usikrede URI-er. Du burde endre deres URI-er til å benytte https://, dersom det nettstedet tillater det.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1452,7 +1666,7 @@
     }
   },
   "noUnsecuredWebsites": {
-    "message": "Ingen gjenstander i hvelvet ditt har usikrede URI-er."
+    "message": "Ingen elementer i hvelvet ditt har usikrede URI-er."
   },
   "inactive2faReport": {
     "message": "Rapport om 2FA-nettsteder"
@@ -1464,7 +1678,7 @@
     "message": "Pålogginger som støtter 2FA ble funnet"
   },
   "inactive2faFoundDesc": {
-    "message": "Vi fant $COUNT$ nettsted(er) i hvelvet ditt som kanskje eller kanskje ikke er satt opp for 2-trinnsinnlogging (i følge twofactorauth.org). For å beskytte disse kontoene ytterligere, burde du skru på 2-trinnsinnlogging.",
+    "message": "Vi fant $COUNT$ nettsted(er) i hvelvet ditt som kanskje ikke har blitt satt opp med 2-trinnspålogging (i følge 2fa.directory). For å beskytte disse kontoene ytterligere, burde du sette opp 2-trinnspålogging.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1488,7 +1702,7 @@
     "message": "Eksponerte passord ble funnet"
   },
   "exposedPasswordsFoundDesc": {
-    "message": "Vi fant $COUNT$ gjenstander i hvelvet ditt som har passord som er eksponert i kjente databrudd. Du burde endre passordene deres til noe nytt.",
+    "message": "Vi fant $COUNT$ elementer i hvelvet ditt med passord eksponert i kjente datainnbrudd. Du bør endre passordet på dem.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1497,7 +1711,7 @@
     }
   },
   "noExposedPasswords": {
-    "message": "Ingen elementer i hvelvet ditt har passord som har vært eksponert i kjente databrudd."
+    "message": "Ingen objekter i hvelvet ditt har passord som har vært eksponert i kjente databrudd."
   },
   "checkExposedPasswords": {
     "message": "Sjekk eksponerte passord"
@@ -1521,7 +1735,7 @@
     "message": "Svake passord ble funnet"
   },
   "weakPasswordsFoundDesc": {
-    "message": "Vi fant $COUNT$ elementer i hvelvet ditt som har passord som ikke er sterke. Du burde endre dem slik at de har sterkere passord.",
+    "message": "Vi fant $COUNT$ objekter i hvelvet ditt som har passord som ikke er sterke. Du burde oppdatere dem til å bruke sterkere passord.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1530,7 +1744,7 @@
     }
   },
   "noWeakPasswords": {
-    "message": "Ingen elementer i hvelvet ditt har svake passord."
+    "message": "Ingen objekter i hvelvet ditt har svake passord."
   },
   "reusedPasswordsReport": {
     "message": "Rapport om gjenbrukte passord"
@@ -1569,7 +1783,7 @@
     "message": "Kontoer som har blitt avslørt kan lekke personlig informasjon. Gjør kontoene tryggere ved å aktivere 2FA eller ved å lage et sterkere passord."
   },
   "breachCheckUsernameEmail": {
-    "message": "Sjekk noen av brukernavnene eller E-postadressene som du bruker."
+    "message": "Sjekk de brukernavnene eller E-postadressene du bruker."
   },
   "checkBreaches": {
     "message": "Sjekk databrudd"
@@ -1624,6 +1838,12 @@
   "billing": {
     "message": "Fakturering"
   },
+  "billingPlanLabel": {
+    "message": "Betalingsplan"
+  },
+  "paymentType": {
+    "message": "Betalingstype"
+  },
   "accountCredit": {
     "message": "Kontokreditt",
     "description": "Financial term. In the case of Bitwarden, a positive balance means that you owe money, while a negative balance means that you have a credit (Bitwarden owes you money)."
@@ -1651,7 +1871,7 @@
   },
   "goPremium": {
     "message": "Oppgrader til Premium",
-    "description": "Another way of saying \"Get a premium membership\""
+    "description": "Another way of saying \"Get a Premium membership\""
   },
   "premiumUpdated": {
     "message": "Du har oppgradert til Premium."
@@ -1688,6 +1908,22 @@
         "example": "$10"
       }
     }
+  },
+  "premiumPriceWithFamilyPlan": {
+    "message": "Kjøp premium for kun $PRICE$/år, eller kjøp premiumkontoer for $FAMILYPLANUSERCOUNT$ brukere og ubegrenset familiedeling med et ",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      },
+      "familyplanusercount": {
+        "content": "$2",
+        "example": "6"
+      }
+    }
+  },
+  "bitwardenFamiliesPlan": {
+    "message": "Bitwarden Familie-plan."
   },
   "addons": {
     "message": "Utvidelser"
@@ -1740,6 +1976,9 @@
   "year": {
     "message": "år"
   },
+  "yr": {
+    "message": "år"
+  },
   "month": {
     "message": "måned"
   },
@@ -1767,6 +2006,9 @@
   },
   "billingInformation": {
     "message": "Faktureringsdetaljer"
+  },
+  "billingTrialSubLabel": {
+    "message": "Din betalingsmetode vil ikke bli belastet i løpet av prøveperioden på 7 dager."
   },
   "creditCard": {
     "message": "Bankkort"
@@ -1819,11 +2061,11 @@
   "updateLicense": {
     "message": "Oppdater lisens"
   },
-  "updatedLicense": {
-    "message": "Oppdaterte lisensen"
-  },
   "manageSubscription": {
     "message": "Behandle abonnementet"
+  },
+  "launchCloudSubscription": {
+    "message": "Start Sky-abonnement"
   },
   "storage": {
     "message": "Lagring"
@@ -2124,10 +2366,34 @@
       }
     }
   },
+  "trialThankYou": {
+    "message": "Takk for at du registrerte deg hos Bitwarden for $PLAN$!",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "trialPaidInfoMessage": {
+    "message": "Din $PLAN$ 7-dagers gratis prøveversjon blir konvertert til et betalt abonnement etter 7 dager.",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "trialConfirmationEmail": {
+    "message": "Vi har sendt en e-post til faktureringseposten til ditt team på "
+  },
   "monthly": {
     "message": "Månedlig"
   },
   "annually": {
+    "message": "Årlig"
+  },
+  "annual": {
     "message": "Årlig"
   },
   "basePrice": {
@@ -2193,8 +2459,23 @@
   "deleteGroupConfirmation": {
     "message": "Er du sikker på at du vil slette denne gruppen?"
   },
+  "deleteMultipleGroupsConfirmation": {
+    "message": "Er du sikker på at du vil slette følgende $QUANTITY$ grupp(er)?",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removeUserConfirmation": {
     "message": "Er du sikker på at du vil slette denne brukeren?"
+  },
+  "removeOrgUserConfirmation": {
+    "message": "Når et medlem fjernes, har de ikke lenger tilgang til organisasjonsdata og dette handlingen er ugjenkallelig. For å legge til medlemmet tilbake i organisasjonen, må de inviteres og legges til på nytt."
+  },
+  "revokeUserConfirmation": {
+    "message": "Når et medlem blir fjernet, har de ikke lenger tilgang til organisasjonsdata. For raskt å gjenopprette medlemstilgang, gå til kategorien Tilbakekall."
   },
   "removeUserConfirmationKeyConnector": {
     "message": "Advarsel! Denne brukeren krever nøkkelkobling for å administrere krypteringen. Fjerner du denne brukeren fra organisasjonen din vil deaktivere kontoen sin. Denne handlingen kan ikke angres. Vil du fortsette?"
@@ -2205,11 +2486,14 @@
   "externalIdDesc": {
     "message": "Den eksterne Id-en kan brukes som referanse eller for å koble denne ressursen til et eksternt system, for eksempel en brukerkatalog."
   },
+  "nestCollectionUnder": {
+    "message": "Plasser samling under"
+  },
   "accessControl": {
     "message": "Tilgangsstyring"
   },
   "groupAccessAllItems": {
-    "message": "Denne gruppen kan få tilgang til og modifisere alle gjenstander."
+    "message": "Denne gruppen kan få tilgang til og endre alle elementer."
   },
   "groupAccessSelectedCollections": {
     "message": "Denne gruppen har bare tilgang til de valgte samlingene."
@@ -2226,14 +2510,23 @@
   "editCollection": {
     "message": "Rediger samling"
   },
+  "collectionInfo": {
+    "message": "Informasjon om samlingen"
+  },
   "deleteCollectionConfirmation": {
     "message": "Er du sikker på at du vil slette denne samlingen?"
   },
-  "editUser": {
-    "message": "Rediger bruker"
+  "editMember": {
+    "message": "Rediger medlem"
   },
-  "inviteUser": {
-    "message": "Inviter bruker"
+  "fieldOnTabRequiresAttention": {
+    "message": "Et felt på '$TAB$' fanen behøver din oppmerksomhet.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "Collection info"
+      }
+    }
   },
   "inviteUserDesc": {
     "message": "Inviter en ny bruker til din organisasjon ved å skrive inn E-postadressen til Bitwarden-kontoen deres nedenfor. Hvis de ikke allerede har en Bitwarden-konto, vil de bli forespurt om å lage en ny konto."
@@ -2251,7 +2544,7 @@
     "message": "Denne brukeren bruker 2-trinnsinnlogging til å beskytte kontoen sin."
   },
   "userAccessAllItems": {
-    "message": "Denne brukeren kan få tilgang til og modifisere alle gjenstander."
+    "message": "Denne brukeren kan få tilgang til og endre alle elementer."
   },
   "userAccessSelectedCollections": {
     "message": "Denne brukeren har bare tilgang til de valgte samlingene."
@@ -2284,7 +2577,7 @@
     "message": "Admin"
   },
   "adminDesc": {
-    "message": "Administratorer kan få tilgang til og behandle alle objekter, samlinger og brukere i din organisasjon."
+    "message": "Administratorer kan få tilgang til og behandle alle elementer, samlinger og brukere i din organisasjon."
   },
   "user": {
     "message": "Bruker"
@@ -2359,7 +2652,7 @@
     "message": "Eksportert organisasjonshvelv."
   },
   "editedOrgSettings": {
-    "message": "Redigerte organisasjonens innstillinger."
+    "message": "Endret innstillinger for organisasjonen."
   },
   "createdItemId": {
     "message": "Lagde $ID$-gjenstanden.",
@@ -2380,7 +2673,7 @@
     }
   },
   "deletedItemId": {
-    "message": "Slettet $ID$-objektet.",
+    "message": "Sendte element $ID$ til papirkurven.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2396,6 +2689,9 @@
         "example": "'Google'"
       }
     }
+  },
+  "viewAllLoginOptions": {
+    "message": "Vis alle påloggingsalternativer"
   },
   "viewedItemId": {
     "message": "Vist $ID$.",
@@ -2421,6 +2717,15 @@
       "id": {
         "content": "$1",
         "example": "Google"
+      }
+    }
+  },
+  "viewedCardNumberItemId": {
+    "message": "Kortnummer for element $ID$ ble vist.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
       }
     }
   },
@@ -2487,6 +2792,9 @@
       }
     }
   },
+  "deletedCollections": {
+    "message": "Samlinger slettet"
+  },
   "deletedCollectionId": {
     "message": "Slettet $ID$-samlingen.",
     "placeholders": {
@@ -2532,8 +2840,53 @@
       }
     }
   },
+  "deletedManyGroups": {
+    "message": "Slettet $QUANTITY$ gruppe(r).",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removedUserId": {
     "message": "Fjernet brukeren $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "removeUserIdAccess": {
+    "message": "Fjern $ID$ tilgang",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "revokedUserId": {
+    "message": "Tilbakekalt organisasjonstilgang for $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "restoredUserId": {
+    "message": "Gjenopprettet organisasjonstilgang for $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "revokeUserId": {
+    "message": "Opphev tilgangen til $ID$",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2728,7 +3081,7 @@
     "message": "E-postadressen til kontoen din må verifiseres først."
   },
   "checkInboxForVerification": {
-    "message": "Se etter i din E-postkontos innboks for en verifiseringslenke."
+    "message": "Se i din E-postinnboks for en verifiseringslenke."
   },
   "emailVerified": {
     "message": "Din E-postadresse har blitt bekreftet."
@@ -2768,7 +3121,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must enable 2FA on your user account before you can join this organization."
+        "example": "You must set up 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -2798,6 +3151,9 @@
   },
   "myOrganization": {
     "message": "Min organisasjon"
+  },
+  "organizationInfo": {
+    "message": "Organisasjonsinfo"
   },
   "deleteOrganization": {
     "message": "Slett organisasjonen"
@@ -2840,15 +3196,15 @@
   },
   "billingPlan": {
     "message": "Funksjonsplan",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlan": {
     "message": "Endre abonnement",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Oppgrader kontoen din til et annet abonnement ved å fylle inn informasjonen nedenfor. Sørg for at du har en aktiv betalingsmetode lagt til kontoen.",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Faktura #$NUMBER$",
@@ -2914,7 +3270,7 @@
     "message": "Individuelt (Personlig)"
   },
   "enterInstallationId": {
-    "message": "Skriv inn din installasjons-ID"
+    "message": "Skriv inn din installasjons-id"
   },
   "limitSubscriptionDesc": {
     "message": "Angi en seteramme for ditt abonnement. Når denne grensen er nådd, vil du ikke kunne invitere nye brukere."
@@ -3043,7 +3399,7 @@
     "message": "Du bruker for øyeblikket et utdatert krypteringsoppsett."
   },
   "updateEncryptionKeyDesc": {
-    "message": "Vi har byttet over til lengre krypteringsnøkler som sørger for bedre sikkerhet og tilgang til nyere funksjoner. Å oppdatere krypteringsnøkkelen din er raskt og enkelt. Bare skriv inn superpassordet ditt nedenfor. Denne oppdateringen vil etter hvert bli påbudt."
+    "message": "Vi har byttet over til lengre krypteringsnøkler som sørger for bedre sikkerhet og tilgang til nyere funksjoner. Å oppdatere krypteringsnøkkelen din er raskt og enkelt. Bare skriv inn hovedpassordet ditt nedenfor. Denne oppdateringen vil etter hvert bli påbudt."
   },
   "updateEncryptionKeyWarning": {
     "message": "Etter å ha oppdatert krypteringsnøkkelen din, er du påkrevd å logge av og på på alle Bitwarden-appene og -programmene som du bruker for øyeblikket (deriblant mobilappen og nettleserutvidelsene). Å ikke logge av og på igjen (noe som vil laste ned din nye krypteringsnøkkel) kan føre til datakorrumpering. Vi vil forsøke å logge deg av automatisk, men det kan kanskje bli forsinket."
@@ -3081,7 +3437,7 @@
   "acceptPolicies": {
     "message": "Ved å huke av denne boksen sier du deg enig i følgende:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Bruksvilkårene og personvernerklæring er ikke godkjent."
   },
   "termsOfService": {
@@ -3124,12 +3480,19 @@
     "message": "Oppdatert den",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Opprettet",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Passordet ble oppdatert den",
     "description": "ex. Date this password was updated"
   },
   "organizationIsDisabled": {
     "message": "Organisasjonen er skrudd av."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Gjenstander i deaktiverte organisasjoner kan ikke åpnes. Ta kontakt med eieren av organisasjonen for hjelp."
   },
   "licenseIsExpired": {
     "message": "Lisensen har utløpt."
@@ -3166,7 +3529,7 @@
     "message": "Svakt hovedpassord"
   },
   "weakMasterPasswordDesc": {
-    "message": "Superpassordet du har valgt er svakt. Du bør bruke et sterkt superpassord (eller en passordfrase) for å sikre Bitwarden-kontoen din på en forsvarlig måte. Er du sikker på at du vil bruke dette superpassordet?"
+    "message": "Hovedpassordet du har valgt er svakt. Du bør bruke et sterkt hovedpassord (eller en passordfrase) for å sikre Bitwarden-kontoen din på en forsvarlig måte. Er du sikker på at du vil bruke dette superpassordet?"
   },
   "rotateAccountEncKey": {
     "message": "Oppdater også krypteringsnøkkelen til kontoen min"
@@ -3197,6 +3560,12 @@
   "fingerprintEnsureIntegrityVerify": {
     "message": "For å sikre integriteten til krypteringsnøkene dine, vær vennlig å bekrefte brukerens fingeravtrykksfrase før du fortsetter.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Kontroller om hvelvet ditt er låst opp og at fingeravtrykkfrasen stemmer overens med den andre enheten."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingeravtrykksfrase"
   },
   "dontAskFingerprintAgain": {
     "message": "Ikke be om bekreftelse av fingeravtrykksfrase flere ganger",
@@ -3255,8 +3624,14 @@
   "clone": {
     "message": "Klon"
   },
+  "masterPassPolicyTitle": {
+    "message": "Krav til hovedpassord"
+  },
   "masterPassPolicyDesc": {
     "message": "Sett minimumskrav til hovedpassordets styrke."
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "Krev 2-trinnsinnlogging"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Krev at brukere konfigurere totrinns pålogging på sine personlige kontoer."
@@ -3301,7 +3676,7 @@
     "message": "Inneholder ett eller flere små tegn"
   },
   "policyInEffectNumbers": {
-    "message": "Inneholde ett eller flere tall"
+    "message": "Inneholder ett eller flere tall"
   },
   "policyInEffectSpecial": {
     "message": "Inneholder ett eller flere av følgende spesialtegn $CHARS$",
@@ -3476,6 +3851,12 @@
   "ssoIdentifierRequired": {
     "message": "Organisasjonsidentifikator er påkrevd."
   },
+  "ssoIdentifier": {
+    "message": "SSO-identifikator"
+  },
+  "ssoIdentifierHint": {
+    "message": "Oppgi denne IDen til dine medlemmer for å logge inn med SSO."
+  },
   "unlinkSso": {
     "message": "Koble fra SSO"
   },
@@ -3522,7 +3903,7 @@
     "message": "Tekst"
   },
   "createSend": {
-    "message": "Opprett ny Send",
+    "message": "Lag ny Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editSend": {
@@ -3530,19 +3911,19 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSend": {
-    "message": "Opprettet Send",
+    "message": "Laget Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "Redigerte Send",
+    "message": "Endret Send-en",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletedSend": {
-    "message": "Slettet Send",
+    "message": "Slettet Send-en",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deleteSend": {
-    "message": "Slett Send",
+    "message": "Slett Send-en",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deleteSendConfirmation": {
@@ -3557,28 +3938,28 @@
     "message": "Dato for sletting"
   },
   "deletionDateDesc": {
-    "message": "Send-en vil bli slettet permanent på den angitte dato og klokkeslett.",
+    "message": "Send-en vil bli permanent slettet på angitt dato og klokkeslett.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "expirationDate": {
     "message": "Utløpsdato"
   },
   "expirationDateDesc": {
-    "message": "Hvis satt, vil tilgang til denne Send gå ut på angitt dato og klokkeslett.",
+    "message": "Hvis satt, vil tilgang til denne Send-en opphøre på angitt dato og klokkeslett.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
     "message": "Maksimal antall tilganger"
   },
   "maxAccessCountDesc": {
-    "message": "Hvis satt, vil ikke brukere lenger ha tilgang til dette Send når maksimal antall tilgang er nådd.",
+    "message": "Hvis satt, vil ikke brukere lenger ha tilgang til denne Send-en når maksimalt antall aksesseringer er nådd.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "currentAccessCount": {
     "message": "Antall nåværende tilganger"
   },
   "sendPasswordDesc": {
-    "message": "Eventuelt krever et passord for brukere å få tilgang til denne Send.",
+    "message": "Valgfritt passordkrav for å få tilgang til denne Send-en.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendNotesDesc": {
@@ -3587,6 +3968,9 @@
   },
   "disabled": {
     "message": "Deaktivert"
+  },
+  "revoked": {
+    "message": "Opphevet"
   },
   "sendLink": {
     "message": "Send lenke",
@@ -3609,14 +3993,14 @@
     "message": "Skjul min e-postadresse fra mottakere."
   },
   "disableThisSend": {
-    "message": "Deaktiver denne Send-en, slik at ingen får tilgang til den.",
+    "message": "Deaktiver denne Send-en slik at ingen får tilgang til den.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "allSends": {
     "message": "Alle Send-er"
   },
   "maxAccessCountReached": {
-    "message": "Maksimalt antall tilganger nådd",
+    "message": "Maksimalt antall aksesseringer nådd",
     "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "pendingDeletion": {
@@ -3630,7 +4014,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendProtectedPassword": {
-    "message": "Send er beskyttet med et passord. Skriv inn passordet nedenfor for å fortsette.",
+    "message": "Send-en er beskyttet med et passord. Skriv inn passordet nedenfor for å fortsette.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendProtectedPasswordDontKnow": {
@@ -3638,22 +4022,22 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendHiddenByDefault": {
-    "message": "Denne sendingen er skjult som standard. Du kan velge å vise den ved å bruke knappen nedenfor.",
+    "message": "Denne Send-en er skjult som standard. Du kan veksle synlighet ved å bruke knappen nedenfor.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "downloadFile": {
     "message": "Last ned fil"
   },
   "sendAccessUnavailable": {
-    "message": "Sende du prøver å få tilgang eksisterer ikke, eller er ikke lenger tilgjengelig.",
+    "message": "Send-en du forsøker å få tilgang til finnes ikke eller er ikke lenger tilgjengelig.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "missingSendFile": {
-    "message": "Filen knyttet til sendingen ble ikke funnet.",
+    "message": "Filen knyttet til Send-en ble ikke funnet.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "noSendsInList": {
-    "message": "Det er ingen Sends å vise.",
+    "message": "Det er ingen Send-er å vise.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "emergencyAccess": {
@@ -3736,7 +4120,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must enable 2FA on your user account before you can join this organization."
+        "example": "You must set up 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3802,19 +4186,19 @@
     "message": "Personlig eierskap"
   },
   "personalOwnershipPolicyDesc": {
-    "message": "Krev at brukere lagrer hvelvgjenstander i en organisasjon ved å fjerne den personlige eierskapsmodulen."
+    "message": "Krev at brukere lagrer hvelv-elementer i en organisasjon ved å fjerne den personlige eierskapsmodulen."
   },
   "personalOwnershipExemption": {
     "message": "Organisasjonens eiere og administratorer er unntatt fra denne policyens håndheving."
   },
   "personalOwnershipSubmitError": {
-    "message": "På grunn av en virksomhetsregel er du begrenset fra å lagre gjenstander til ditt personlige hvelv. Endre eierskapet til en organisasjon og velg blant tilgjengelige samlinger."
+    "message": "På grunn av en virksomhetsregel er du begrenset fra å lagre elementer til ditt personlige hvelv. Endre eierskapet til en organisasjon og velg blant tilgjengelige samlinger."
   },
   "disableSend": {
     "message": "Deaktiver Send"
   },
   "disableSendPolicyDesc": {
-    "message": "Ikke tillat brukere å opprette eller redigere en Bitwarden Send. Å slette en eksisterende Send er fortsatt tillatt.",
+    "message": "Ikke tillat brukere å opprette eller endre en Bitwarden Send. Å slette en eksisterende Send er fortsatt tillatt.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disableSendExemption": {
@@ -3829,25 +4213,25 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptions": {
-    "message": "Alternativer for sending",
+    "message": "Alternativer for Send-er",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsPolicyDesc": {
-    "message": "Angi alternativer for oppretting og redigering av Sends.",
+    "message": "Angi alternativer for oppretting og redigering av Send-er.",
     "description": "'Sends' is a plural noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsExemption": {
     "message": "Organisasjonsbrukere som kan håndtere organisasjonens regler, er unntatt fra håndheving av denne reglen."
   },
   "disableHideEmail": {
-    "message": "Ikke tillat brukere å skjule sin e-postadresse fra mottakere når de oppretter eller redigerer en Send.",
+    "message": "Ikke tillat brukere å skjule sin e-postadresse fra mottakere når de oppretter eller endrer en Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsPolicyInEffect": {
     "message": "Følgende organisasjonspolicyer er for tiden i virkning:"
   },
   "sendDisableHideEmailInEffect": {
-    "message": "Brukere kan ikke skjule sin e-postadresse fra mottakere når de oppretter eller redigerer en Send.",
+    "message": "Brukere kan ikke skjule sin e-postadresse fra mottakere når de oppretter eller endrer en Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "modifiedPolicyId": {
@@ -3871,8 +4255,32 @@
   "customDesc": {
     "message": "Tillater mer granatær kontroll med brukertillatelser for avanserte konfigurasjoner."
   },
+  "customDescNonEnterpriseStart": {
+    "message": "Tilpassede roller er en ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "enterprise-funksjon",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Kontakt vårt supportteam for å oppgradere abonnementet ditt",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "Aktivering av tilpassede rettigheter krever at organisasjonen er på et Enterprise 2020 abonnement."
+  },
   "permissions": {
     "message": "Rettigheter"
+  },
+  "permission": {
+    "message": "Tillatelse"
+  },
+  "managerPermissions": {
+    "message": "Ledertillatelser"
+  },
+  "adminPermissions": {
+    "message": "Admin-tillatelser"
   },
   "accessEventLogs": {
     "message": "Få tilgang til hendelseslogger"
@@ -3935,7 +4343,7 @@
     "message": "En bedriftsretningslinje påvirker dine eierskapsinnstillinger."
   },
   "personalOwnershipPolicyInEffectImports": {
-    "message": "En organisasjonspolicy har deaktivert import av gjenstander til ditt personlige hvelv."
+    "message": "En virksomhetsregel har deaktivert import av elementer til ditt personlige hvelv."
   },
   "personalOwnershipCheckboxDesc": {
     "message": "Deaktiver personlig eierskap for organisasjonsbrukere"
@@ -3945,14 +4353,14 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendNameDesc": {
-    "message": "Et vennlig navn for å beskrive dette Send.",
+    "message": "Beskrivende navn for denne Send-en.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendTextDesc": {
-    "message": "Teksten du ønsker å send."
+    "message": "Teksten du ønsker å sende."
   },
   "sendFileDesc": {
-    "message": "Filen du vil send."
+    "message": "Filen du vil sende."
   },
   "copySendLinkOnSave": {
     "message": "Kopier lenken for å dele denne Send-en til utklippstavlen min ved lagring."
@@ -4166,10 +4574,10 @@
     "message": "Tilbakestilling av passorddetaljer er null"
   },
   "trashCleanupWarning": {
-    "message": "Elementer som har vært i papirkurv mer enn 30 dager vil automatisk bli slettet."
+    "message": "Elementer som har vært i papirkurven mer enn 30 dager vil bli slettet automatisk."
   },
   "trashCleanupWarningSelfHosted": {
-    "message": "Elementer som har vært i papirkurven for en stund vil bli slettet automatisk."
+    "message": "Elementer som har vært i papirkurven en stund vil bli slettet automatisk."
   },
   "passwordPrompt": {
     "message": "Forespørsel om hovedpassord på nytt"
@@ -4178,16 +4586,25 @@
     "message": "Superpassord bekreftelse"
   },
   "passwordConfirmationDesc": {
-    "message": "Denne handlingen er beskyttet. For å fortsette, skriv inn superpassordet på nytt for å bekrefte identiteten din."
+    "message": "Denne handlingen er beskyttet. For å fortsette, skriv inn hovedpassordet på nytt for å bekrefte identiteten din."
   },
   "reinviteSelected": {
     "message": "Send invitasjoner på nytt"
+  },
+  "resendNotification": {
+    "message": "Send varsel på nytt"
   },
   "noSelectedUsersApplicable": {
     "message": "Denne handlingen er ikke relevant for noen av de valgte brukerne."
   },
   "removeUsersWarning": {
     "message": "Er du sikker på at du vil fjerne følgende brukere? Prosessen kan ta noen sekunder å fullføre og ikke kan avbrytes eller avbrytes."
+  },
+  "removeOrgUsersConfirmation": {
+    "message": "Når medlemer fjernes har de ikke lenger tilgang til organisasjonsdata og denne handlingen er ugjenkallelig. For å legge til medlemmet tilbake i organisasjonen, må de inviteres og legges til på nytt. Det kan ta noen sekunder før prosessen fullføres og den kan ikke avbrytes."
+  },
+  "revokeUsersWarning": {
+    "message": "Når medlemer tilbakekalles, har de ikke lenger tilgang til organisasjonsdata. For raskt å gjenopprette medlemstilgang, gå til kategorien Tilbakekall. Det kan ta noen sekunder før prosessen fullføres og den kan ikke avbrytes."
   },
   "theme": {
     "message": "Tema"
@@ -4219,6 +4636,12 @@
   "bulkRemovedMessage": {
     "message": "Fjernet"
   },
+  "bulkRevokedMessage": {
+    "message": "Organisasjonsadgang opphevet"
+  },
+  "bulkRestoredMessage": {
+    "message": "Organisasjonsadgang gjennopprettet"
+  },
   "bulkFilteredMessage": {
     "message": "Unntatt dette, gjelder ikke for dette tiltaket."
   },
@@ -4227,6 +4650,12 @@
   },
   "removeUsers": {
     "message": "Fjern brukere"
+  },
+  "revokeUsers": {
+    "message": "Fjern brukere"
+  },
+  "restoreUsers": {
+    "message": "Gjenopprett brukere"
   },
   "error": {
     "message": "Feil"
@@ -4251,6 +4680,10 @@
   },
   "clients": {
     "message": "Klienter"
+  },
+  "client": {
+    "message": "Klient",
+    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "Administrator for søkeleverandør"
@@ -4401,6 +4834,12 @@
   "vaultTimeoutToLarge": {
     "message": "Tidsavbrudd i hvelvet ditt overskrider begrensningen fastsatt av organisasjonen din."
   },
+  "vaultCustomTimeoutMinimum": {
+    "message": "Tilpasset timeout må minst være 1 minutt."
+  },
+  "vaultTimeoutRangeError": {
+    "message": "Hvelv-timeout er utenfor gyldig intervall."
+  },
   "disablePersonalVaultExport": {
     "message": "Deaktivere personlig hvelv eksport"
   },
@@ -4426,7 +4865,7 @@
     "message": "SAML tjenesteleverandør konfigurasjon"
   },
   "samlIdpConfig": {
-    "message": "SAML ID-leverandør konfigurasjon"
+    "message": "Konfigurasjon av SAML identitetstjeneste"
   },
   "callbackPath": {
     "message": "Sti for tilbakeringing"
@@ -4580,7 +5019,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families Organization."
+        "example": "You must have at least one existing Families organization."
       }
     }
   },
@@ -4632,9 +5071,6 @@
   "sponsorshipCreated": {
     "message": "Sponsor fjernet"
   },
-  "revoke": {
-    "message": "Tilbakekall"
-  },
   "emailSent": {
     "message": "E-post sendt"
   },
@@ -4644,8 +5080,8 @@
   "removeSponsorshipSuccess": {
     "message": "Sponsor fjernet"
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Kan ikke nå nøkkelkontakt. Prøv igjen senere."
+  "ssoKeyConnectorError": {
+    "message": "Key Connector feil: Sjekk at Key Connector er tilgjengelig og fungerer."
   },
   "keyConnectorUrl": {
     "message": "Tast Connector URL"
@@ -4693,19 +5129,19 @@
     "message": "Tillat SSO-autentisering"
   },
   "allowSsoDesc": {
-    "message": "Når du er konfigurert, vil konfigurasjonen din bli lagret, og medlemmer vil kunne godkjenne med deres legitimasjon fra leverandøren."
+    "message": "Når dette er satt opp vil konfigurasjonen din lagres og medlemmer vil kunne autentiseres ved å bruke legitimasjon fra deres identitetstilbyder."
   },
   "ssoPolicyHelpStart": {
     "message": "Skru på",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
     "message": "SSO godkjenningspolicy",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "for å få alle medlemmer til å logge inn med SSO.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
     "message": "SSO-autentisering og Enslig organisasjons politikk er nødvendig for å sette opp nøkkel Connector dekryptering."
@@ -4773,6 +5209,72 @@
   "freeWithSponsorship": {
     "message": "GRATIS med sponsorat"
   },
+  "viewBillingSyncToken": {
+    "message": "Vis faktureringssynkroniseringstoken"
+  },
+  "generateBillingSyncToken": {
+    "message": "Generer faktureringssynkroniseringstoken"
+  },
+  "copyPasteBillingSync": {
+    "message": "Kopier og lim inn dette tokenet i faktureringsynkroniserings-innstillingene for din selvbetjente organisasjon."
+  },
+  "billingSyncCanAccess": {
+    "message": "Din faktureringssynkroniserings-token kan få tilgang til og endre denne organisasjonens abonnementsinnstillinger."
+  },
+  "manageBillingSync": {
+    "message": "Administrer faktureringssynkronisering"
+  },
+  "setUpBillingSync": {
+    "message": "Sett opp faktureringssynkronisering"
+  },
+  "generateToken": {
+    "message": "Generer Token"
+  },
+  "rotateToken": {
+    "message": "Roter token"
+  },
+  "rotateBillingSyncTokenWarning": {
+    "message": "Hvis du fortsetter må du opprette faktureringssynkronisering på serveren din på nytt."
+  },
+  "rotateBillingSyncTokenTitle": {
+    "message": "Rotasjon av faktureringssynkroniserings-token vil gjøre den forrige token ugyldig."
+  },
+  "selfHostingTitle": {
+    "message": "Selvhosting"
+  },
+  "selfHostingEnterpriseOrganizationSectionCopy": {
+    "message": "For å konfigurere din organisasjon på egen server, må du laste opp din lisensfil. For å støtte gratis familie-planer og avanserte faktureringsmuligheter for din egen organisasjon må du sette opp faktureringssynkronisering."
+  },
+  "billingSyncApiKeyRotated": {
+    "message": "Token rotert."
+  },
+  "billingSyncDesc": {
+    "message": "Faktureringssynkronisering gir gratis familie-planer for medlemmer og avanserte faktureringsmuligheter ved å koble din selvbetjente Bitwarden til Bitwardens sky-server."
+  },
+  "billingSyncKeyDesc": {
+    "message": "Det kreves en faktureringssynkroniserings-token fra skyens abonnementsinnstillinger for å fylle ut dette skjemaet."
+  },
+  "billingSyncKey": {
+    "message": "Vis faktureringssynkroniseringstoken"
+  },
+  "active": {
+    "message": "Aktiv"
+  },
+  "inactive": {
+    "message": "Inaktiv"
+  },
+  "sentAwaitingSync": {
+    "message": "Sendt (avventer synkronisering)"
+  },
+  "sent": {
+    "message": "Sendt"
+  },
+  "requestRemoved": {
+    "message": "Fjernet (avventer synkronisering)"
+  },
+  "requested": {
+    "message": "Forespurt"
+  },
   "formErrorSummaryPlural": {
     "message": "$COUNT$ felt trenger din oppmerksomhet.",
     "placeholders": {
@@ -4797,6 +5299,15 @@
   "required": {
     "message": "obligatorisk"
   },
+  "characterMaximum": {
+    "message": "Maksimalt $MAX$ tegn",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
+  },
   "idpSingleSignOnServiceUrlRequired": {
     "message": "Kreves hvis enhets-ID ikke er en URL."
   },
@@ -4804,7 +5315,7 @@
     "message": "Valgfrie tilpasninger"
   },
   "openIdAuthorityRequired": {
-    "message": "Required if Authority is not valid."
+    "message": "Påkrevd dersom Authority er ugyldig."
   },
   "separateMultipleWithComma": {
     "message": "Avskill flere med komma."
@@ -4819,7 +5330,7 @@
     "message": "Eksporterer organisasjonshvelv"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Bare de personlige hvelvets gjenstandene som er knyttet til $EMAIL$ vil bli eksportert. Organisasjonshvelvets gjenstander vil ikke bli inkludert.",
+    "message": "Bare de personlige hvelv-elementene som er knyttet til $EMAIL$ vil bli eksportert. Organisasjonshvelvets elementer vil ikke bli inkludert.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -4828,7 +5339,7 @@
     }
   },
   "exportingOrganizationVaultDescription": {
-    "message": "Bare organisasjonens hvelv knyttet til $ORGANIZATION$ vil bli eksportert. Personlige hvelvelementer og gjenstander fra andre organisasjoner vil ikke bli inkludert.",
+    "message": "Bare organisasjonens hvelv knyttet til $ORGANIZATION$ vil bli eksportert. Personlige hvelvelementer og elementer fra andre organisasjoner vil ikke bli inkludert.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -4836,8 +5347,33 @@
       }
     }
   },
+  "accessDenied": {
+    "message": "Ingen tilgang. Du har ikke tillatelse til å se denne siden."
+  },
+  "masterPassword": {
+    "message": "Hovedpassord"
+  },
+  "security": {
+    "message": "Sikkerhet"
+  },
+  "keys": {
+    "message": "Nøkler"
+  },
+  "billingHistory": {
+    "message": "Faktureringshistorikk"
+  },
   "backToReports": {
     "message": "Tilbake til rapporter"
+  },
+  "organizationPicker": {
+    "message": "Organisasjonsvelger"
+  },
+  "currentOrganization": {
+    "message": "Nåværende organisasjon",
+    "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
+  },
+  "accountSettings": {
+    "message": "Kontoinnstillinger"
   },
   "generator": {
     "message": "Generator"
@@ -4871,12 +5407,1258 @@
     "message": "Bruk domenets konfigurerte catch-all innboks."
   },
   "random": {
-    "message": "Vilkårlig"
+    "message": "Vilkårlig",
+    "description": "Generates domain-based username using random letters"
   },
   "randomWord": {
     "message": "Vilkårlig ord"
   },
   "service": {
     "message": "Tjeneste"
+  },
+  "unknownCipher": {
+    "message": "Ukjent element, du må kanskje logge inn med en annen konto for å få tilgang til dette elementet."
+  },
+  "cannotSponsorSelf": {
+    "message": "Du kan ikke innløse for den aktive kontoen. Skriv inn en annen e-post."
+  },
+  "revokeWhenExpired": {
+    "message": "Utløper $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "12/31/2020"
+      }
+    }
+  },
+  "awaitingSyncSingular": {
+    "message": "Token roterte for $DAYS$ dag siden. Oppdater faktureringsynk under self-hosted organisasjonsinnstillinger.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "1"
+      }
+    }
+  },
+  "awaitingSyncPlural": {
+    "message": "Token roterte for $DAYS$ dager siden. Oppdater faktureringsynk under self-hosted organisasjonsinnstillinger.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "1"
+      }
+    }
+  },
+  "lastSync": {
+    "message": "Forrige synkronisering",
+    "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
+  },
+  "sponsorshipsSynced": {
+    "message": "Selv-hosted sponsorater synkronisert."
+  },
+  "billingManagedByProvider": {
+    "message": "Administrert av $PROVIDER$",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Managed Services Company"
+      }
+    }
+  },
+  "billingContactProviderForAssistance": {
+    "message": "Vennligst ta kontakt med dem for ytterligere hjelp",
+    "description": "This text is displayed if an organization's billing is managed by a Provider. It tells the user to contact the Provider for assistance."
+  },
+  "forwardedEmail": {
+    "message": "Videresendt e-post alias"
+  },
+  "forwardedEmailDesc": {
+    "message": "Generer et e-postalias med en ekstern videresendingstjeneste."
+  },
+  "hostname": {
+    "message": "Vertsnavn",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API tilgangstoken"
+  },
+  "deviceVerification": {
+    "message": "Enhetsverifisering"
+  },
+  "enableDeviceVerification": {
+    "message": "Skru på enhetsverifisering"
+  },
+  "deviceVerificationDesc": {
+    "message": "Verifiseringskoder sendes til e-postadressen din når du logger inn fra en ukjent enhet"
+  },
+  "updatedDeviceVerification": {
+    "message": "Oppdaterte enhetsverifiseringen"
+  },
+  "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
+    "message": "Er du sikker på at du vil skru på enhetsverifisering? E-postene med verifiseringskode blir sendt til: $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "My Email"
+      }
+    }
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Krever Premium-abonnement"
+  },
+  "scim": {
+    "message": "SCIM klargjøring",
+    "description": "The text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "scimDescription": {
+    "message": "Genererer brukere og grupper automatisk med den foretrukne identitetstjenesten din via SCIM-klargjøring",
+    "description": "the text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "scimEnabledCheckboxDesc": {
+    "message": "Skru på SCIM",
+    "description": "the text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "scimEnabledCheckboxDescHelpText": {
+    "message": "Sett opp din foretrukne identitetstjeneste ved å konfigurere URL og SCIM API nøkkel",
+    "description": "the text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "scimApiKeyHelperText": {
+    "message": "Denne API nøkkelen har tilgang til å administrere brukere i din organisasjon. Den bør holdes hemmelig."
+  },
+  "copyScimKey": {
+    "message": "Kopier SCIM API nøkkelen til utklippstavlen",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "rotateScimKey": {
+    "message": "Skift SCIM API nøkkelen",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "rotateScimKeyWarning": {
+    "message": "Er du sikker du vil skifte SCIM API nøkkelen? Den nåværende nøkkelen vil ikke lenger fungere for eksisterende integrasjoner.",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "rotateKey": {
+    "message": "Skift nøkkel"
+  },
+  "scimApiKey": {
+    "message": "SCIM API-nøkkel",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "copyScimUrl": {
+    "message": "Kopier SCIM-endepunkt URL til utklippstavlen",
+    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
+  },
+  "scimUrl": {
+    "message": "SCIM-URL",
+    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
+  },
+  "scimApiKeyRotated": {
+    "message": "SCIM API-nøkkel ble skiftet ut",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "scimSettingsSaved": {
+    "message": "SCIM innstillinger lagret",
+    "description": "the text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "inputRequired": {
+    "message": "Inndata er påkrevd."
+  },
+  "inputEmail": {
+    "message": "Inndataen er ikke en E-postadresse."
+  },
+  "inputMinLength": {
+    "message": "Inndataen må være minst $COUNT$ tegn.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxLength": {
+    "message": "Inndataen kan ikke ha mer enn $COUNT$ tegn.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "inputForbiddenCharacters": {
+    "message": "Følgende tegn er ikke tillatt: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
+      }
+    }
+  },
+  "multipleInputEmails": {
+    "message": "1 eller flere e-postadresser er ugyldige"
+  },
+  "tooManyEmails": {
+    "message": "Du kan kun sende inn opptil $COUNT$ e-poster om gangen",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ felt(er) over trenger din oppmerksomhet.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "Slå på"
+  },
+  "on": {
+    "message": "På"
+  },
+  "members": {
+    "message": "Medlemmer"
+  },
+  "reporting": {
+    "message": "Rapportering"
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "numberOfUsers": {
+    "message": "Antall brukere"
+  },
+  "loggingInAs": {
+    "message": "Logger på som"
+  },
+  "notYou": {
+    "message": "Ikke deg?"
+  },
+  "pickAnAvatarColor": {
+    "message": "Velg en avatarfarge"
+  },
+  "customizeAvatar": {
+    "message": "Tilpass avatar"
+  },
+  "avatarUpdated": {
+    "message": "Avatar oppdatert"
+  },
+  "brightBlue": {
+    "message": "Lys blå"
+  },
+  "green": {
+    "message": "Grønn"
+  },
+  "orange": {
+    "message": "Oransje"
+  },
+  "lavender": {
+    "message": "Lavendel"
+  },
+  "yellow": {
+    "message": "Gul"
+  },
+  "indigo": {
+    "message": "Indigo"
+  },
+  "teal": {
+    "message": "Blågrønn"
+  },
+  "salmon": {
+    "message": "Laksefarge"
+  },
+  "pink": {
+    "message": "Rosa"
+  },
+  "customColor": {
+    "message": "Egendefinert farge"
+  },
+  "selectPlaceholder": {
+    "message": "-- Velg --"
+  },
+  "multiSelectPlaceholder": {
+    "message": "-- Skriv for å filtrere --"
+  },
+  "multiSelectLoading": {
+    "message": "Henter innstillinger..."
+  },
+  "multiSelectNotFound": {
+    "message": "Ingen oppføringer funnet"
+  },
+  "multiSelectClearAll": {
+    "message": "Tøm alle"
+  },
+  "toggleCharacterCount": {
+    "message": "Vis/skjul antall tegn",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Antall tegn i passord",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Skjul"
+  },
+  "projects": {
+    "message": "Prosjekter",
+    "description": "Description for the Projects field."
+  },
+  "lastEdited": {
+    "message": "Sist endret",
+    "description": "The label for the date and time when a item was last edited."
+  },
+  "editSecret": {
+    "message": "Rediger hemmelighet",
+    "description": "Action to modify an existing secret."
+  },
+  "addSecret": {
+    "message": "Legg til hemmelighet",
+    "description": "Action to create a new secret."
+  },
+  "copySecretName": {
+    "message": "Kopier hemmelighetsnavn",
+    "description": "Action to copy the name of a secret to the system's clipboard."
+  },
+  "copySecretValue": {
+    "message": "Kopier hemmelighetsverdi",
+    "description": "Action to copy the value of a secret to the system's clipboard."
+  },
+  "deleteSecret": {
+    "message": "Slett hemmelighet",
+    "description": "Action to delete a single secret from the system."
+  },
+  "deleteSecrets": {
+    "message": "Slett hemmeligheter",
+    "description": "The action to delete multiple secrets from the system."
+  },
+  "hardDeleteSecret": {
+    "message": "Slett hemmelighet permanent"
+  },
+  "hardDeleteSecrets": {
+    "message": "Slett hemmeligheter permanent"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Velg prosjekter som hemmeligheten skal tilknyttes. Bare organisasjonsbrukere med tilgang til disse prosjektene vil kunne se hemmeligheten.",
+    "description": "A prompt explaining how secrets can be associated with projects."
+  },
+  "selectProjects": {
+    "message": "Velg prosjekter",
+    "description": "A label for a type-to-filter input field to choose projects."
+  },
+  "searchProjects": {
+    "message": "Søk i prosjekter",
+    "description": "Label for the search bar used to search projects."
+  },
+  "project": {
+    "message": "Prosjekt",
+    "description": "Similar to collections, projects can be used to group secrets."
+  },
+  "editProject": {
+    "message": "Rediger prosjekt",
+    "description": "The action to modify an existing project."
+  },
+  "viewProject": {
+    "message": "Vis prosjekt",
+    "description": "The action to view details of a project."
+  },
+  "deleteProject": {
+    "message": "Slett prosjekt",
+    "description": "The action to delete a project from the system."
+  },
+  "deleteProjects": {
+    "message": "Slett prosjekter",
+    "description": "The action to delete multiple projects from the system."
+  },
+  "secret": {
+    "message": "Hemmelighet",
+    "description": "Label for a secret (key/value pair)"
+  },
+  "serviceAccount": {
+    "message": "Tjenestekonto",
+    "description": "A machine user which can be used to automate processes and access secrets in the system."
+  },
+  "serviceAccounts": {
+    "message": "Tjenestekontoer",
+    "description": "The title for the section that deals with service accounts."
+  },
+  "secrets": {
+    "message": "Hemmelighet",
+    "description": "The title for the section of the application that deals with secrets."
+  },
+  "nameValuePair": {
+    "message": "Navn/verdipar",
+    "description": "Title for a name/ value pair. Secrets typically consist of a name and value pair."
+  },
+  "secretEdited": {
+    "message": "Hemmelighet redigert",
+    "description": "Notification for the successful editing of a secret."
+  },
+  "secretCreated": {
+    "message": "Hemmelighet opprettet",
+    "description": "Notification for the successful creation of a secret."
+  },
+  "newSecret": {
+    "message": "Ny hemmelighet",
+    "description": "Title for creating a new secret."
+  },
+  "newServiceAccount": {
+    "message": "Ny tjenestekonto",
+    "description": "Title for creating a new service account."
+  },
+  "secretsNoItemsTitle": {
+    "message": "Ingen hemmeligheter å vise",
+    "description": "Empty state to indicate that there are no secrets to display."
+  },
+  "secretsNoItemsMessage": {
+    "message": "For å komme i gang, legg til en ny hemmelighet eller importer hemmeligheter.",
+    "description": "Message to encourage the user to start adding secrets."
+  },
+  "secretsTrashNoItemsMessage": {
+    "message": "Det er ingen hemmeligheter i papirkurven."
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Opprett en ny tjenestekonto for å komme i gang med å automatisere tilgang til hemmeligheter.",
+    "description": "Message to encourage the user to start creating service accounts."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Intet å vise ennå",
+    "description": "Title to indicate that there are no service accounts to display."
+  },
+  "searchSecrets": {
+    "message": "Søk hemmeligheter",
+    "description": "Placeholder text for searching secrets."
+  },
+  "deleteServiceAccounts": {
+    "message": "Slett tjenestekontoer",
+    "description": "Title for the action to delete one or multiple service accounts."
+  },
+  "deleteServiceAccount": {
+    "message": "Slett tjenestekonto",
+    "description": "Title for the action to delete a single service account."
+  },
+  "viewServiceAccount": {
+    "message": "Vis tjenestekonto",
+    "description": "Action to view the details of a service account."
+  },
+  "deleteServiceAccountDialogMessage": {
+    "message": "Sletting av tjenestekonto $SERVICE_ACCOUNT$ er permanent og ugjenkallelig.",
+    "placeholders": {
+      "service_account": {
+        "content": "$1",
+        "example": "Service account name"
+      }
+    }
+  },
+  "deleteServiceAccountsDialogMessage": {
+    "message": "Sletting av tjenestekontoer er permanent og ugjenkallelig."
+  },
+  "deleteServiceAccountsConfirmMessage": {
+    "message": "Slett $COUNT$ tjenestekontoer",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteServiceAccountToast": {
+    "message": "Tjenestekontoen er slettet"
+  },
+  "deleteServiceAccountsToast": {
+    "message": "Tjenestekontoer slettet"
+  },
+  "searchServiceAccounts": {
+    "message": "Søk etter tjenestekontoer",
+    "description": "Placeholder text for searching service accounts."
+  },
+  "editServiceAccount": {
+    "message": "Rediger tjenestekonto",
+    "description": "Title for editing a service account."
+  },
+  "addProject": {
+    "message": "Legg til prosjekt",
+    "description": "Title for creating a new project."
+  },
+  "projectEdited": {
+    "message": "Prosjektet er redigert",
+    "description": "Notification for the successful editing of a project."
+  },
+  "projectSaved": {
+    "message": "Prosjektet er lagret",
+    "description": "Notification for the successful saving of a project."
+  },
+  "projectCreated": {
+    "message": "Prosjekt opprettet",
+    "description": "Notification for the successful creation of a project."
+  },
+  "projectName": {
+    "message": "Prosjektnavn",
+    "description": "Label for entering the name of a project."
+  },
+  "newProject": {
+    "message": "Nytt prosjekt",
+    "description": "Title for creating a new project."
+  },
+  "softDeleteSecretWarning": {
+    "message": "Sletting av hemmeligheter kan påvirke eksisterende integrasjoner.",
+    "description": "Warns that deleting secrets can have consequences on integrations"
+  },
+  "softDeletesSuccessToast": {
+    "message": "Hemmeligheter sendt til papirkurven",
+    "description": "Notifies that the selected secrets have been moved to the trash"
+  },
+  "hardDeleteSecretConfirmation": {
+    "message": "Er du sikker på at du vil permanent slette denne hemmeligheten?"
+  },
+  "hardDeleteSecretsConfirmation": {
+    "message": "Er du sikker på at du vil permanent slette disse hemmelighetene?"
+  },
+  "hardDeletesSuccessToast": {
+    "message": "Hemmeligheter permanent slettet"
+  },
+  "smAccess": {
+    "message": "Tilgang",
+    "description": "Title indicating what permissions a service account has"
+  },
+  "projectCommaSecret": {
+    "message": "Prosjekt, Hemmelighet",
+    "description": ""
+  },
+  "serviceAccountName": {
+    "message": "Tjenestekontonavn",
+    "description": "Label for the name of a service account"
+  },
+  "serviceAccountCreated": {
+    "message": "Tjenestekonto opprettet",
+    "description": "Notifies that a new service account has been created"
+  },
+  "serviceAccountUpdated": {
+    "message": "Tjenestekonto oppdatert",
+    "description": "Notifies that a service account has been updated"
+  },
+  "newSaSelectAccess": {
+    "message": "Skriv inn eller velg prosjekter eller hemmeligheter",
+    "description": "Instructions for selecting projects or secrets for a new service account"
+  },
+  "newSaTypeToFilter": {
+    "message": "Skriv for å filtrere",
+    "description": "Instructions for filtering a list of projects or secrets"
+  },
+  "deleteProjectsToast": {
+    "message": "Prosjekter slettet",
+    "description": "Notifies that the selected projects have been deleted"
+  },
+  "deleteProjectToast": {
+    "message": "Prosjektet og alle tilknyttede hemmeligheter er slettet",
+    "description": "Notifies that a project has been deleted"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "Sletting av prosjekt $PROJECT$ er permanent og kan ikke angres.",
+    "description": "Informs users that projects are hard deleted and not sent to trash",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "Skriv inn \"$CONFIRM$\" for å fortsette",
+    "description": "Users are prompted to type 'confirm' to delete a project",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "Slett $PROJECT$",
+    "description": "Confirmation prompt to delete a specific project, where '$PROJECT$' is a placeholder for the name of the project.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "Slett $COUNT$ prosjekter",
+    "description": "Confirmation prompt to delete multiple projects, where '$COUNT$' is a placeholder for the number of projects to be deleted.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "Sletting av prosjekter er permanent og kan ikke angres.",
+    "description": "This message is displayed in a dialog box as a warning before proceeding with project deletion."
+  },
+  "projectsNoItemsTitle": {
+    "message": "Ingen prosjekter å vise",
+    "description": "Empty state to be displayed when there are no projects to display in the list."
+  },
+  "projectsNoItemsMessage": {
+    "message": "Legg til et nytt prosjekt for å komme i gang med å organisere hemmeligheter.",
+    "description": "Message to be displayed when there are no projects to display in the list."
+  },
+  "smConfirmationRequired": {
+    "message": "Bekreftelse kreves",
+    "description": "Indicates that user confirmation is required for an action to proceed."
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "Følgende prosjekter kunne ikke slettes:",
+    "description": "Message to be displayed when there is an error during bulk project deletion."
+  },
+  "softDeleteSuccessToast": {
+    "message": "Hemmelighet sendt til papirkurven",
+    "description": "Notification to be displayed when a secret is successfully sent to the trash."
+  },
+  "hardDeleteSuccessToast": {
+    "message": "Hemmelighet permanent slettet"
+  },
+  "accessTokens": {
+    "message": "Tilgangstoken",
+    "description": "Title for the section displaying access tokens."
+  },
+  "createAccessToken": {
+    "message": "Opprett tilgangstoken",
+    "description": "Button label for creating a new access token."
+  },
+  "expires": {
+    "message": "Utløper",
+    "description": "Label for the expiration date of an access token."
+  },
+  "canRead": {
+    "message": "Kan lese",
+    "description": "Label for the access level of an access token (Read only)."
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "Ingen tilgangstokens å vise",
+    "description": "Title to be displayed when there are no access tokens to display in the list."
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "Opprett et tilgangstoken for å komme i gang",
+    "description": "Message to be displayed when there are no access tokens to display in the list."
+  },
+  "downloadAccessToken": {
+    "message": "Last ned eller kopier før lukking.",
+    "description": "Message to be displayed before closing an access token, reminding the user to download or copy it."
+  },
+  "expiresOnAccessToken": {
+    "message": "Utløper den:",
+    "description": "Label for the expiration date of an access token."
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Tilgangstokens er ikke lagret og kan ikke hentes",
+    "description": "Notification to inform the user that access tokens are only displayed once and cannot be retrieved again."
+  },
+  "copyToken": {
+    "message": "Kopier token",
+    "description": "Copies the generated access token to the user's clipboard."
+  },
+  "accessToken": {
+    "message": "Tilgangstoken",
+    "description": "A unique string that gives a client application (eg. CLI) access to a secret or set of secrets."
+  },
+  "accessTokenExpirationRequired": {
+    "message": "Utløpsdato kreves",
+    "description": "Error message indicating that an expiration date for the access token must be set."
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Tilgangstoken er opprettet og kopiert til utklippstavlen",
+    "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "Administrasjon av tilganger er ikke tilgjengelig i beta.",
+    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
+  },
+  "revokeAccessToken": {
+    "message": "Opphev tilgangstoken",
+    "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
+  },
+  "revokeAccessTokens": {
+    "message": "Opphev tilgangstokener"
+  },
+  "revokeAccessTokenDesc": {
+    "message": "Oppheving av tilgangstokener er permanent og irreversibelt."
+  },
+  "accessTokenRevoked": {
+    "message": "Tilgangtokener opphevet",
+    "description": "Toast message after deleting one or multiple access tokens."
+  },
+  "submenu": {
+    "message": "Undermeny"
+  },
+  "from": {
+    "message": "Fra"
+  },
+  "to": {
+    "message": "Til"
+  },
+  "member": {
+    "message": "Medlem"
+  },
+  "update": {
+    "message": "Oppdater"
+  },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ til",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "groupInfo": {
+    "message": "Gruppeinfo"
+  },
+  "editGroupMembersDesc": {
+    "message": "Gi medlemmer tilgang til gruppens tildelte samlinger."
+  },
+  "editGroupCollectionsDesc": {
+    "message": "Gi tilgang til samlinger ved å legge dem til i denne gruppen."
+  },
+  "accessAllCollectionsDesc": {
+    "message": "Gi tilgang til alle nåværende og fremtidige samlinger."
+  },
+  "accessAllCollectionsHelp": {
+    "message": "Hvis merket av, vil dette erstatte alle andre samlingstillatelser."
+  },
+  "selectMembers": {
+    "message": "Velg medlemmer"
+  },
+  "selectCollections": {
+    "message": "Velg samlinger"
+  },
+  "role": {
+    "message": "Rolle"
+  },
+  "removeMember": {
+    "message": "Fjern medlem"
+  },
+  "collection": {
+    "message": "Samling"
+  },
+  "noCollection": {
+    "message": "Ingen samling"
+  },
+  "canView": {
+    "message": "Kan vise"
+  },
+  "canViewExceptPass": {
+    "message": "Kan vise, bortsett fra passord"
+  },
+  "canEdit": {
+    "message": "Kan redigere"
+  },
+  "canEditExceptPass": {
+    "message": "Kan redigere, bortsett fra passord"
+  },
+  "noCollectionsAdded": {
+    "message": "Ingen samlinger lagt til"
+  },
+  "noMembersAdded": {
+    "message": "Ingen medlemmer lagt til"
+  },
+  "noGroupsAdded": {
+    "message": "Ingen grupper er lagt til"
+  },
+  "group": {
+    "message": "Gruppe"
+  },
+  "groupAccessAll": {
+    "message": "Denne gruppen har tilgang til og kan endre alle elementer."
+  },
+  "memberAccessAll": {
+    "message": "Dette medlemmet har tilgang til og kan endre alle elementer."
+  },
+  "domainVerification": {
+    "message": "Domenebekreftelse"
+  },
+  "newDomain": {
+    "message": "Nytt domene"
+  },
+  "noDomains": {
+    "message": "Ingen domener"
+  },
+  "noDomainsSubText": {
+    "message": "Tilslutning av et domene lar medlemmer hoppe over SSO-identifikasjonsfeltet under SSO-basert innlogging."
+  },
+  "verifyDomain": {
+    "message": "Bekreft domene"
+  },
+  "reverifyDomain": {
+    "message": "Bekreft domene på nytt"
+  },
+  "copyDnsTxtRecord": {
+    "message": "Kopier DNS TXT oppføring"
+  },
+  "dnsTxtRecord": {
+    "message": "DNS TXT oppføring"
+  },
+  "dnsTxtRecordInputHint": {
+    "message": "Kopier og lim inn TXT oppføringen til din DNS-tilbyder."
+  },
+  "domainNameInputHint": {
+    "message": "Eksempel: mittdomene.com. Underdomener krever separate oppføringer for å bekreftes."
+  },
+  "automaticDomainVerification": {
+    "message": "Automatisk domenebekreftelse"
+  },
+  "automaticDomainVerificationProcess": {
+    "message": "Bitwarden vil forsøke å verifisere domenet tre ganger de første 72 timene. Hvis domenet ikke kan bekreftes, sjekk DNS-oppføringen i verten og bekreft manuelt. Domenet vil bli fjernet fra organisasjonen din i løpet av syv dager hvis det ikke er bekreftet"
+  },
+  "invalidDomainNameMessage": {
+    "message": "Input er ikke i et gyldig format. Format: mittdomene.com. Underdomener krever separate oppføringer for å bekreftes."
+  },
+  "removeDomain": {
+    "message": "Fjern domene"
+  },
+  "removeDomainWarning": {
+    "message": "Fjerning av et domene kan ikke angres. Er du sikker på at du vil fortsette?"
+  },
+  "domainRemoved": {
+    "message": "Domene fjernet"
+  },
+  "domainSaved": {
+    "message": "Domene lagret"
+  },
+  "domainVerified": {
+    "message": "Domene bekreftet"
+  },
+  "duplicateDomainError": {
+    "message": "Du kan ikke kreve det samme domenet to ganger."
+  },
+  "domainNotAvailable": {
+    "message": "Noen andre bruker $DOMAIN$. Bruk et annet domene for å fortsette.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerified": {
+    "message": "$DOMAIN$ ikke bekreftet. Sjekk DNS-oppføringen.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainStatusVerified": {
+    "message": "Bekreftet"
+  },
+  "domainStatusUnverified": {
+    "message": "Ubekreftet"
+  },
+  "domainNameTh": {
+    "message": "Navn"
+  },
+  "domainStatusTh": {
+    "message": "Status"
+  },
+  "lastChecked": {
+    "message": "Sist sjekket"
+  },
+  "editDomain": {
+    "message": "Rediger domene"
+  },
+  "domainFormInvalid": {
+    "message": "Det er feil i skjemaet som trenger din oppmerksomhet"
+  },
+  "addedDomain": {
+    "message": "Lagt til domene $DOMAIN$",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "removedDomain": {
+    "message": "Fjernet domene $DOMAIN$",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainVerifiedEvent": {
+    "message": "$DOMAIN$ bekreftet",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerifiedEvent": {
+    "message": "$DOMAIN$ ikke bekreftet",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "membersColumnHeader": {
+    "message": "Medlem/gruppe"
+  },
+  "groupAndMemberColumnHeader": {
+    "message": "Medlem"
+  },
+  "selectGroupsAndMembers": {
+    "message": "Velg grupper og medlemmer"
+  },
+  "selectGroups": {
+    "message": "Velg grupper"
+  },
+  "userPermissionOverrideHelper": {
+    "message": "Tilganger satt for et medlem vil erstatte tilganger satt av medlemmets gruppe"
+  },
+  "noMembersOrGroupsAdded": {
+    "message": "Ingen medlemmer eller grupper er lagt til"
+  },
+  "deleted": {
+    "message": "Slettet"
+  },
+  "memberStatusFilter": {
+    "message": "Medlemsstatusfilter"
+  },
+  "inviteMember": {
+    "message": "Inviter medlem"
+  },
+  "needsConfirmation": {
+    "message": "Behøver bekreftelse"
+  },
+  "memberRole": {
+    "message": "Medlemsrolle"
+  },
+  "moreFromBitwarden": {
+    "message": "Mer fra Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Bytt produkter"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Gratis-organisasjoner kan ha opp til $SEATCOUNT$ medlemmer. Oppgrader til en betalt plan for å invitere flere medlemmer.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Gratis-organisasjoner kan ha opptil $SEATCOUNT$ medlemmer. Kontakt organisasjonens eier for å oppgradere.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Gratis-organisasjoner kan ha opp til $COLLECTIONCOUNT$ medlemmer. Oppgrader til en betalt plan for å invitere flere medlemmer.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Gratis-organisasjoner kan ha opptil $COLLECTIONCOUNT$ samlinger. Kontakt eieren av organisasjonen din for å oppgradere.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "server": {
+    "message": "Server"
+  },
+  "exportData": {
+    "message": "Eksporter data"
+  },
+  "exportingOrganizationSecretDataTitle": {
+    "message": "Eksporterer organisasjonens hemmelige data"
+  },
+  "exportingOrganizationSecretDataDescription": {
+    "message": "Kun Secrets Manager-data tilknyttet $ORGANIZATION$ eksporteres. Elementer i andre produkter, eller fra andre organisasjoner, tas ikke med.",
+    "placeholders": {
+      "ORGANIZATION": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "fileUpload": {
+    "message": "Filopplasting"
+  },
+  "acceptedFormats": {
+    "message": "Aksepterte formater:"
+  },
+  "copyPasteImportContents": {
+    "message": "Kopier og lim inn import-innhold:"
+  },
+  "or": {
+    "message": "eller"
+  },
+  "licenseAndBillingManagement": {
+    "message": "Håndtering av lisens og fakturering"
+  },
+  "automaticSync": {
+    "message": "Automatisk synkronisering"
+  },
+  "manualUpload": {
+    "message": "Manuell opplasting"
+  },
+  "manualUploadDesc": {
+    "message": "Hvis du ikke ønsker å innmelding i faktureringssynkronisering kan du laste opp lisensen din her."
+  },
+  "syncLicense": {
+    "message": "Synkroniser lisens"
+  },
+  "licenseSyncSuccess": {
+    "message": "Lisensen ble synkronisert"
+  },
+  "licenseUploadSuccess": {
+    "message": "Lisensen ble lastet opp"
+  },
+  "lastLicenseSync": {
+    "message": "Forrige lisenssynkronisering"
+  },
+  "billingSyncHelp": {
+    "message": "Hjelp til fakturasynkronisering"
+  },
+  "uploadLicense": {
+    "message": "Last opp lisens"
+  },
+  "projectPeopleDescription": {
+    "message": "Grant groups or people access to this project."
+  },
+  "projectPeopleSelectHint": {
+    "message": "Type or select people or groups"
+  },
+  "projectServiceAccountsDescription": {
+    "message": "Grant service accounts access to this project."
+  },
+  "projectServiceAccountsSelectHint": {
+    "message": "Type or select service accounts"
+  },
+  "projectEmptyPeopleAccessPolicies": {
+    "message": "Add people or groups to start collaborating"
+  },
+  "projectEmptyServiceAccountAccessPolicies": {
+    "message": "Add service accounts to grant access"
+  },
+  "serviceAccountPeopleDescription": {
+    "message": "Grant groups or people access to this service account."
+  },
+  "serviceAccountProjectsDescription": {
+    "message": "Assign projects to this service account. "
+  },
+  "serviceAccountEmptyProjectAccesspolicies": {
+    "message": "Add projects to grant access"
+  },
+  "canReadWrite": {
+    "message": "Can read, write"
+  },
+  "groupSlashUser": {
+    "message": "Group/User"
+  },
+  "lowKdfIterations": {
+    "message": "Low KDF Iterations"
+  },
+  "lowKdfIterationsDesc": {
+    "message": "Increase your KDF encryption settings to improve the security of your account."
+  },
+  "changeKdfSettings": {
+    "message": "Change KDF settings"
+  },
+  "changeKdfLoggedOutWarning": {
+    "message": "Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour. We recommend exporting your vault before changing your encryption settings to prevent data loss."
+  },
+  "secretsManagerBeta": {
+    "message": "Secrets Manager Beta"
+  },
+  "secretsManagerBetaDesc": {
+    "message": "Enable user access to the Secrets Manager at no charge during the Beta program."
+  },
+  "userAccessSecretsManager": {
+    "message": "This user can access the Secrets Manager Beta"
+  },
+  "important": {
+    "message": "Important:"
+  },
+  "viewAll": {
+    "message": "View all"
+  },
+  "showingPortionOfTotal": {
+    "message": "Showing $PORTION$ of $TOTAL$",
+    "placeholders": {
+      "portion": {
+        "content": "$1",
+        "example": "2"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Resolve the errors below and try again."
+  },
+  "description": {
+    "message": "Description"
+  },
+  "errorReadingImportFile": {
+    "message": "An error occurred when trying to read the import file"
+  },
+  "accessedSecret": {
+    "message": "Accessed secret $SECRET_ID$.",
+    "placeholders": {
+      "secret_id": {
+        "content": "$1",
+        "example": "4d34e8a8"
+      }
+    }
+  },
+  "sdk": {
+    "message": "SDK",
+    "description": "Software Development Kit"
+  },
+  "createSecret": {
+    "message": "Create a secret"
+  },
+  "createProject": {
+    "message": "Create a project"
+  },
+  "createServiceAccount": {
+    "message": "Create a service account"
+  },
+  "downloadThe": {
+    "message": "Download the",
+    "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
+  },
+  "smCLI": {
+    "message": "Secrets Manager CLI"
+  },
+  "importSecrets": {
+    "message": "Import secrets"
+  },
+  "getStarted": {
+    "message": "Get started"
+  },
+  "complete": {
+    "message": "$COMPLETED$/$TOTAL$ Complete",
+    "placeholders": {
+      "COMPLETED": {
+        "content": "$1",
+        "example": "1"
+      },
+      "TOTAL": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "restoreSecret": {
+    "message": "Restore secret"
+  },
+  "restoreSecrets": {
+    "message": "Restore secrets"
+  },
+  "restoreSecretPrompt": {
+    "message": "Are you sure you want to restore this secret?"
+  },
+  "restoreSecretsPrompt": {
+    "message": "Are you sure you want to restore these secrets?"
+  },
+  "secretRestoredSuccessToast": {
+    "message": "Secret restored"
+  },
+  "secretsRestoredSuccessToast": {
+    "message": "Secrets restored"
+  },
+  "selectionIsRequired": {
+    "message": "Selection is required."
+  },
+  "secretsManagerSubscriptionDesc": {
+    "message": "Turn on organization access to the Secrets Manager at no charge during the Beta program. Users can be granted access to the Beta in Members."
+  },
+  "secretsManagerEnable": {
+    "message": "Enable Secrets Manager Beta"
+  },
+  "saPeopleWarningTitle": {
+    "message": "Access tokens still available"
+  },
+  "saPeopleWarningMessage": {
+    "message": "Removing people from a service account does not remove the access tokens they created. For security best practice, it is recommended to revoke access tokens created by people removed from a service account."
+  },
+  "smAccessRemovalWarningProjectTitle": {
+    "message": "Remove access to this project"
+  },
+  "smAccessRemovalWarningProjectMessage": {
+    "message": "This action will remove your access to the project."
+  },
+  "smAccessRemovalWarningSaTitle": {
+    "message": "Remove access to this service account"
+  },
+  "smAccessRemovalWarningSaMessage": {
+    "message": "This action will remove your access to the service account."
+  },
+  "removeAccess": {
+    "message": "Fjern tilgang"
+  },
+  "checkForBreaches": {
+    "message": "Sjekk kjente databrudd for dette passordet"
+  },
+  "exposedMasterPassword": {
+    "message": "Kompromittert hovedpassord"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Passord funnet i et databrudd. Bruk et unikt passord for å beskytte kontoen din. Er du sikker på at du vil bruke et utsatt passord?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Svakt og kompromittert hovedpassord"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Svakt passord identifisert og funnet i et databrudd. Bruk et sterkt og unikt passord for å beskytte kontoen din. Er du sikker på at du vil bruke dette passordet?"
+  },
+  "characterMinimum": {
+    "message": "Minimum $LENGTH$ tegn",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "masterPasswordMinimumlength": {
+    "message": "Hovedpassordet må være minst $LENGTH$ tegn.",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Avvis"
   }
 }

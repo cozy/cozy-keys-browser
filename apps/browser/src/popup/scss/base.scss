@@ -98,8 +98,31 @@ button {
   font-family: $font-family-sans-serif;
 }
 
+input[type*="date"] {
+  @include themify($themes) {
+    color-scheme: themed("dateInputColorScheme");
+  }
+}
+
+::-webkit-calendar-picker-indicator {
+  @include themify($themes) {
+    filter: themed("webkitCalendarPickerFilter");
+  }
+}
+
+::-webkit-calendar-picker-indicator:hover {
+  @include themify($themes) {
+    filter: themed("webkitCalendarPickerHoverFilter");
+  }
+  cursor: pointer;
+}
+
+select {
+  width: 100%;
+  padding: 0.35rem;
+}
+
 button {
-  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -186,6 +209,11 @@ header {
 
   .right {
     justify-content: flex-end;
+    align-items: center;
+    app-avatar {
+      max-height: 30px;
+      margin-right: 5px;
+    }
   }
 
   .center {
@@ -196,6 +224,11 @@ header {
     flex-grow: 1;
   }
 
+  .login-center {
+    margin: auto;
+  }
+
+  app-pop-out > button,
   div > button,
   div > a {
     border: none;
@@ -205,6 +238,7 @@ header {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    height: 100%;
 
     @include themify($themes) {
       color: themed("headerColor");
@@ -367,8 +401,16 @@ header {
   */
 }
 
+.no-bg {
+  background-color: transparent;
+}
+
+.no-pad {
+  padding: 0 !important;
+}
+
 .content {
-  padding: 15px;
+  padding: 15px 5px;
 }
 
 .tabs {
@@ -405,7 +447,6 @@ header {
         padding: 7px 0;
         text-decoration: none;
         font-size: 12px;
-        white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         color: $text-muted;
@@ -448,28 +489,10 @@ app-root {
   }
 }
 
+// Adds padding on each side of the content if opened in a tab
 @media only screen and (min-width: 601px) {
-  app-login header {
-    padding: 0 calc((100% - 500px) / 2);
-  }
-
-  app-login main {
-    padding: 0 calc((100% - 500px) / 2);
-  }
-
-  app-two-factor header {
-    padding: 0 calc((100% - 500px) / 2);
-  }
-
-  app-two-factor main {
-    padding: 0 calc((100% - 500px) / 2);
-  }
-
-  app-lock header {
-    padding: 0 calc((100% - 500px) / 2);
-  }
-
-  app-lock main {
+  header,
+  main {
     padding: 0 calc((100% - 500px) / 2);
   }
 }
@@ -505,6 +528,19 @@ main {
 .tab-page {
   main {
     bottom: 55px;
+  }
+
+  [type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 15px;
+    width: 15px;
+    background-repeat: no-repeat;
+    mask-image: url("../images/close-button-white.svg");
+    -webkit-mask-image: url("../images/close-button-white.svg");
+    @include themify($themes) {
+      background-color: themed("headerInputColor");
+    }
   }
 }
 
@@ -564,11 +600,27 @@ main {
   padding-left: 7px;
   .org-filter {
     @include themify($themes) {
-      background-color: themed("backgroundColor");
+      background-color: themed("buttonBackgroundColor");
     }
-    border: 1px solid;
-    padding: 7px;
     border-radius: $border-radius;
+    padding: 6px 10px;
+    width: auto;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .org-filter-text-container {
+      // src: https://css-tricks.com/snippets/css/truncate-string-with-ellipsis/
+      display: flex;
+      flex: 1;
+      min-width: 0;
+
+      .org-filter-text-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
   }
 }
 .vault-select {
@@ -579,9 +631,8 @@ main {
   @include themify($themes) {
     background-color: themed("boxBackgroundColor");
   }
-  margin-right: 5px;
+  margin-right: 18px;
   margin-top: 1px;
-  width: 160px;
   @include themify($themes) {
     border: 1px solid themed("borderColor");
   }
@@ -589,7 +640,9 @@ main {
   button {
     border: none;
     background: transparent;
-    width: 100%;
+    width: auto;
+    max-width: 100%;
+
     padding: 5px 10px;
     text-align: start;
     @include themify($themes) {
@@ -607,6 +660,25 @@ main {
         background-color: themed("boxBackgroundHoverColor");
       }
     }
+
+    i.vault-select-prefix-icon {
+      margin-right: 5px;
+    }
+    i.vault-select-suffix-icon {
+      margin-left: 5px;
+    }
+
+    .vault-select-org-text-container {
+      display: flex;
+      flex: 1;
+      min-width: 0;
+      align-items: center;
+      .vault-select-org-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
   }
   .border {
     @include themify($themes) {
@@ -616,5 +688,37 @@ main {
     width: calc(100% - 20px);
     height: 1px;
     position: relative;
+  }
+}
+
+.login-with-device {
+  .fingerprint-phrase-header {
+    padding-top: 1rem;
+    display: block;
+  }
+
+  @include themify($themes) {
+    .fingerprint-text {
+      color: themed("codeColor");
+      font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+        monospace;
+      padding: 1rem 0;
+    }
+  }
+
+  .resend-notification {
+    padding-bottom: 1rem;
+    a {
+      cursor: pointer;
+    }
+  }
+
+  .footer {
+    padding-top: 1rem;
+
+    a {
+      padding-top: 1rem;
+      display: block;
+    }
   }
 }

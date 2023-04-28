@@ -238,6 +238,9 @@
   "ms": {
     "message": "Srta"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -400,6 +403,18 @@
   "length": {
     "message": "Longitud"
   },
+  "uppercase": {
+    "message": "Mayúsculas (A-Z)"
+  },
+  "lowercase": {
+    "message": "Minúsculas (a-z)"
+  },
+  "numbers": {
+    "message": "Números (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Carácteres especiales (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Número de palabras"
   },
@@ -408,7 +423,7 @@
   },
   "capitalize": {
     "message": "Mayúsculas iniciales",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Incluir número"
@@ -520,11 +535,21 @@
   "invalidEmail": {
     "message": "Correo electrónico no válido."
   },
-  "masterPassRequired": {
-    "message": "Contraseña maestra requerida."
+  "masterPasswordRequired": {
+    "message": "Se requiere una contraseña maestra."
   },
-  "masterPassLength": {
-    "message": "La contraseña maestra debe tener al menos 8 caracteres."
+  "confirmMasterPasswordRequired": {
+    "message": "Se requiere volver a teclear la contraseña maestra."
+  },
+  "masterPasswordMinlength": {
+    "message": "La contraseña maestra debe tener al menos $VALUE$ caracteres.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "La confirmación de contraseña maestra no coincide."
@@ -818,7 +843,7 @@
     "message": "Autenticación en dos pasos"
   },
   "vaultTimeout": {
-    "message": "Tiempo de espera de la caja fuerte"
+    "message": "Tiempo de espera de la caja fuerte excedido"
   },
   "vaultTimeoutDesc": {
     "message": "Elije cuando se agotará el tiempo de espera de tu caja fuerte y se ejecutará la acción seleccionada."
@@ -882,11 +907,11 @@
     "message": "Borrar automáticamente los valores copiados de su portapapeles.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Deshabilitar iconos de sitio web"
+  "enableFavicon": {
+    "message": "Mostrar iconos del sitio web"
   },
-  "disableFaviconDesc": {
-    "message": "Los iconos de sitio web añaden una imagen reconocible al lado de cada entrada de tu caja fuerte."
+  "faviconDesc": {
+    "message": "Mostrar una imagen reconocible junto a cada inicio de sesión."
   },
   "enableMinToTray": {
     "message": "Minimizar a icono en la bandeja"
@@ -1251,6 +1276,10 @@
     "message": "Actualizada",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Creado",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Contraseña actualizada",
     "description": "ex. Date this password was updated"
@@ -1261,12 +1290,46 @@
   "fileFormat": {
     "message": "Formato de archivo"
   },
+  "hCaptchaUrl": {
+    "message": "hCaptcha Url",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Cargar cookie de accesibilidad"
+  },
+  "registerAccessibilityUser": {
+    "message": "Registrarse como usuario de accesibilidad en",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Copia y pega el enlace enviado a tu correo electrónico"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Introduzca la URL para cargar la cookie de accesibilidad de hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "hCaptcha Url es obligatorio",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Url inválida"
+  },
+  "done": {
+    "message": "Hecho"
+  },
+  "accessibilityCookieSaved": {
+    "message": "¡Cookie de accesibilidad guardada!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "No hay ninguna cookie de accesibilidad guardada"
+  },
   "warning": {
     "message": "ADVERTENCIA",
     "description": "WARNING (should stay in capitalized letters if the language permits)"
   },
   "confirmVaultExport": {
-    "message": "Confirmar la exportación de la bóveda"
+    "message": "Confirmar la exportación de la caja fuerte"
   },
   "exportWarningDesc": {
     "message": "Esta exportación contiene tus datos de la caja fuerte en un formato no cifrado. No deberías almacenar o enviar el archivo exportado por canales no seguros (como el correo electrónico). Elimínalo inmediatamente cuando termines de utilizarlo."
@@ -1335,14 +1398,29 @@
   "touchIdConsentMessage": {
     "message": "Verificar para Bitwarden."
   },
-  "noAutoPromptWindowsHello": {
-    "message": "No solicite Windows Hello al empezar."
+  "autoPromptWindowsHello": {
+    "message": "Solicitar Windows Hello al iniciar"
   },
-  "noAutoPromptTouchId": {
-    "message": "No solicite Touch ID al empezar."
+  "autoPromptTouchId": {
+    "message": "Solicitar Touch ID al iniciar"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Bloquear con contraseña maestra al reiniciar"
+  },
+  "deleteAccount": {
+    "message": "Eliminar cuenta"
+  },
+  "deleteAccountDesc": {
+    "message": "Si procede eliminará su cuenta y todo el contenido asociado a ella."
+  },
+  "deleteAccountWarning": {
+    "message": "El borrado de su cuenta es una operación permanente. No se puede deshacer."
+  },
+  "accountDeleted": {
+    "message": "Cuenta eliminada"
+  },
+  "accountDeletedDesc": {
+    "message": "Su cuenta ha sido cerrada y toda la información asociada ha sido eliminada."
   },
   "preferences": {
     "message": "Preferencias"
@@ -1497,8 +1575,8 @@
   "acceptPolicies": {
     "message": "Al seleccionar esta casilla, acepto lo siguiente:"
   },
-  "acceptPoliciesError": {
-    "message": "Todavía no has aceptado los términos del servicio y la política de privacidad."
+  "acceptPoliciesRequired": {
+    "message": "No ha aceptado los términos del servicio y la política de privacidad."
   },
   "enableBrowserIntegration": {
     "message": "Habilitar integración con el navegador"
@@ -1506,17 +1584,23 @@
   "enableBrowserIntegrationDesc": {
     "message": "La integración del navegador se usa para la biometría en el mismo."
   },
-  "browserIntegrationMasOnlyTitle": {
-    "message": "La integración del navegador no está soportada"
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Permitir integración con el navegador DuckDuckGo"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Usa tu caja fuerte de Bitwarden cuando navegas con DuckDuckGo."
+  },
+  "browserIntegrationUnsupportedTitle": {
+    "message": "La integración con el navegador no está soportada"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Por desgracia la integración del navegador sólo está soportada por ahora en la versión de la Mac App Store."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "La integración del navegador no está soportada"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "Por desgracia la integración del navegador sólo está soportada por ahora en la versión de Microsoft Store."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Por desgracia la integración con el navegador actualmente sólo está soportada en la versión de Microsoft Store."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Requiere verificación para la integración del navegador"
@@ -1533,6 +1617,21 @@
   "verifyBrowserDesc": {
     "message": "Por favor, asegúrese de que la huella digital mostrada es idéntica a la huella que aparece en la extensión del navegador."
   },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ quiere conectarse a Bitwarden",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "¿Quieres aprobar esta solicitud?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "Si no iniciaste esta solicitud, no la apruebes."
+  },
   "biometricsNotEnabledTitle": {
     "message": "Biometría no habilitada"
   },
@@ -1540,7 +1639,7 @@
     "message": "La biometría del navegador requiere habilitar primero la biometría de escritorio en los ajustes."
   },
   "personalOwnershipSubmitError": {
-    "message": "Debido a una política de organización, tiene restringido el guardar elementos a su bóveda personal. Cambie la configuración de propietario a organización y elija entre las colecciones disponibles."
+    "message": "Debido a una política de organización, tiene restringido el guardar elementos a su caja fuerte personal. Cambie la configuración de propietario a organización y elija entre las colecciones disponibles."
   },
   "hintEqualsPassword": {
     "message": "La pista para la contraseña no puede ser igual que la contraseña."
@@ -1567,7 +1666,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "myVault": {
-    "message": "Mi bóveda"
+    "message": "Mi caja fuerte"
   },
   "text": {
     "message": "Texto"
@@ -1587,7 +1686,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Número máximo de accesos"
+    "message": "Número máximo de accesos",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Si se establece, los usuarios ya no podrán acceder a este Send una vez que se alcance el número máximo de accesos.",
@@ -1688,6 +1788,15 @@
   },
   "disabled": {
     "message": "Deshabilitado"
+  },
+  "removePassword": {
+    "message": "Eliminar contraseña"
+  },
+  "removedPassword": {
+    "message": "Contraseña eliminada"
+  },
+  "removePasswordConfirmation": {
+    "message": "¿Está seguro que desea eliminar la contraseña?"
   },
   "maxAccessCountReached": {
     "message": "Se ha alcanzado el número máximo de accesos"
@@ -1792,8 +1901,8 @@
   "leftOrganization": {
     "message": "Has abandonado la organización."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "No se puede acceder al conector de clave. Inténtalo de nuevo más tarde."
+  "ssoKeyConnectorError": {
+    "message": "Error en el conector de claves: asegúrate de que el conector de claves está disponible y que funciona correctamente."
   },
   "lockAllVaults": {
     "message": "Bloquear todas las cajas fuertes"
@@ -1829,16 +1938,22 @@
     "message": "Su sesión ha expirado. Por favor, vuelva e intente iniciar sesión de nuevo."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exportando bóveda personal"
+    "message": "Exportando caja fuerte personal"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Solo se exportarán los elementos de la bóveda personal asociados con $EMAIL$. Los elementos de la bóveda de la organización no se incluirán.",
+    "message": "Solo se exportarán los elementos de la caja fuerte personal asociados con $EMAIL$. Los elementos de la bóveda de la organización no se incluirán.",
     "placeholders": {
       "email": {
         "content": "$1",
         "example": "name@example.com"
       }
     }
+  },
+  "locked": {
+    "message": "Bloqueado"
+  },
+  "unlocked": {
+    "message": "Desbloqueado"
   },
   "generator": {
     "message": "Generador"
@@ -1859,16 +1974,17 @@
     "message": "Tipo de nombre de usuario"
   },
   "plusAddressedEmail": {
-    "message": "Dirección adicional de correo electrónico"
+    "message": "Dirección adicional de correo electrónico",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
-    "message": "Use your email provider's sub-addressing capabilities."
+    "message": "Utiliza las capacidades de subdirección de tu proveedor de correo electrónico."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Correo Catch-All"
   },
   "catchallEmailDesc": {
-    "message": "Use your domain's configured catch-all inbox."
+    "message": "Utiliza la bandeja de entrada Catch-All configurada por tu dominio."
   },
   "random": {
     "message": "Aleatorio"
@@ -1881,5 +1997,209 @@
   },
   "service": {
     "message": "Servicio"
+  },
+  "allVaults": {
+    "message": "Todas las cajas fuertes"
+  },
+  "searchOrganization": {
+    "message": "Buscar organizaciones"
+  },
+  "searchMyVault": {
+    "message": "Buscar en mi caja fuerte"
+  },
+  "forwardedEmail": {
+    "message": "Alias de correo"
+  },
+  "forwardedEmailDesc": {
+    "message": "Generar un alias de correo electrónico con un servicio de reenvío externo."
+  },
+  "hostname": {
+    "message": "Nombre del host",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "Token de acceso API"
+  },
+  "apiKey": {
+    "message": "Clave API"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Se requiere una Suscripción Premium"
+  },
+  "organizationIsDisabled": {
+    "message": "La organización está desactivada."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "No se puede acceder a los elementos que pertenecen a organizaciones que estén deshabilitadas. Por favor, póngase en contacto con el propietario de la organización para obtener ayuda."
+  },
+  "neverLockWarning": {
+    "message": "¿Está seguro de que quieres usar la opción \"Nunca\"? Al ajustar las opciones de bloqueo a \"Nunca\", la clave de cifrado de su caja fuerte se guardará en tu dispositivo. Si usas esta opción, asegúrate de mantener tu dispositivo debidamente protegido."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "Caja fuerte"
+  },
+  "loginWithMasterPassword": {
+    "message": "Iniciar sesión con contraseña maestra"
+  },
+  "loggingInAs": {
+    "message": "Iniciando sesión como"
+  },
+  "rememberEmail": {
+    "message": "Recordar email"
+  },
+  "notYou": {
+    "message": "¿No eres tú?"
+  },
+  "newAroundHere": {
+    "message": "¿Nuevo por aquí?"
+  },
+  "loggingInTo": {
+    "message": "Iniciando sesión en $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Iniciar sesión con otro dispositivo"
+  },
+  "logInInitiated": {
+    "message": "Inicio de sesión en proceso"
+  },
+  "notificationSentDevice": {
+    "message": "Se ha enviado una notificación a tu dispositivo."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Por favor, asegúrese de que su caja fuerte está desbloqueada y la frase de huella dactilar coincide con el otro dispositivo."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Frase de huella dactilar"
+  },
+  "needAnotherOption": {
+    "message": "Iniciar sesión con el dispositivo debe estar habilitado en los ajustes de la aplicación móvil Bitwarden. ¿Necesitas otra opción?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Ver todas las opciones de inicio de sesión"
+  },
+  "resendNotification": {
+    "message": "Reenviar notificación"
+  },
+  "toggleCharacterCount": {
+    "message": "Activar recuento de caracteres",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "¿Estás intentando iniciar sesión?"
+  },
+  "logInAttemptBy": {
+    "message": "Intento de inicio de sesión de $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Tipo de dispositivo"
+  },
+  "ipAddress": {
+    "message": "Dirección IP"
+  },
+  "time": {
+    "message": "Hora"
+  },
+  "confirmLogIn": {
+    "message": "Confirmar inicio de sesión"
+  },
+  "denyLogIn": {
+    "message": "Denegar inicio de sesión"
+  },
+  "approveLoginRequests": {
+    "message": "Aprobar solicitudes de inicio de sesión"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Inicio de sesión confirmado para $EMAIL$ en $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Has denegado un intento de inicio de sesión desde otro dispositivo. Si realmente fuiste tú, intenta iniciar sesión con el dispositivo de nuevo."
+  },
+  "justNow": {
+    "message": "Justo ahora"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Solicitado hace $MINUTES$ minutos",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "La solicitud de acceso ya ha caducado."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Esta solicitud ya no es válida."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Utilice este dispositivo para aprobar las peticiones de inicio de sesión realizadas desde otros dispositivos."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Confirmar intento de inicio de sesión para $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Inicio de sesión solicitado"
+  },
+  "exposedMasterPassword": {
+    "message": "Contraseña maestra comprometida"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Contraseña encontrada en una filtración de datos. Utilice una contraseña única para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña comprometida?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Contraseña maestra débil y comprometida"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Contraseña débil encontrada en una filtración de datos. Utilice una contraseña única para proteger su cuenta. ¿Está seguro de que desea utilizar una contraseña comprometida?"
+  },
+  "checkForBreaches": {
+    "message": "Comprobar filtración de datos conocidos para esta contraseña"
+  },
+  "important": {
+    "message": "Importante:"
+  },
+  "masterPasswordHint": {
+    "message": "Tu contraseña maestra no se puede recuperar si la olvidas"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ caracteres mínimo",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

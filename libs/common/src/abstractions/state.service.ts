@@ -1,32 +1,37 @@
-import { BehaviorSubject } from "rxjs";
+import { Observable } from "rxjs";
 
+import { EnvironmentUrls } from "../auth/models/domain/environment-urls";
+import { KdfConfig } from "../auth/models/domain/kdf-config";
 import { KdfType } from "../enums/kdfType";
 import { ThemeType } from "../enums/themeType";
 import { UriMatchType } from "../enums/uriMatchType";
-import { CipherData } from "../models/data/cipherData";
-import { CollectionData } from "../models/data/collectionData";
-import { EventData } from "../models/data/eventData";
-import { FolderData } from "../models/data/folderData";
-import { OrganizationData } from "../models/data/organizationData";
-import { PolicyData } from "../models/data/policyData";
-import { ProviderData } from "../models/data/providerData";
-import { SendData } from "../models/data/sendData";
-import { Account } from "../models/domain/account";
-import { EncString } from "../models/domain/encString";
-import { EnvironmentUrls } from "../models/domain/environmentUrls";
-import { GeneratedPasswordHistory } from "../models/domain/generatedPasswordHistory";
+import { CollectionData } from "../models/data/collection.data";
+import { EncryptedOrganizationKeyData } from "../models/data/encrypted-organization-key.data";
+import { EventData } from "../models/data/event.data";
+import { OrganizationData } from "../models/data/organization.data";
+import { PolicyData } from "../models/data/policy.data";
+import { ProviderData } from "../models/data/provider.data";
+import { SendData } from "../models/data/send.data";
+import { ServerConfigData } from "../models/data/server-config.data";
+import { Account, AccountSettingsSettings } from "../models/domain/account";
+import { EncString } from "../models/domain/enc-string";
 import { Policy } from "../models/domain/policy";
-import { StorageOptions } from "../models/domain/storageOptions";
-import { SymmetricCryptoKey } from "../models/domain/symmetricCryptoKey";
-import { WindowState } from "../models/domain/windowState";
-import { CipherView } from "../models/view/cipherView";
-import { CollectionView } from "../models/view/collectionView";
-import { FolderView } from "../models/view/folderView";
-import { SendView } from "../models/view/sendView";
+import { StorageOptions } from "../models/domain/storage-options";
+import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
+import { WindowState } from "../models/domain/window-state";
+import { CollectionView } from "../models/view/collection.view";
+import { SendView } from "../models/view/send.view";
+import { GeneratedPasswordHistory } from "../tools/generator/password";
+import { CipherData } from "../vault/models/data/cipher.data";
+import { FolderData } from "../vault/models/data/folder.data";
+import { LocalData } from "../vault/models/data/local.data";
+import { CipherView } from "../vault/models/view/cipher.view";
+import { AddEditCipherInfo } from "../vault/types/add-edit-cipher-info";
 
 export abstract class StateService<T extends Account = Account> {
-  accounts: BehaviorSubject<{ [userId: string]: T }>;
-  activeAccount: BehaviorSubject<string>;
+  accounts$: Observable<{ [userId: string]: T }>;
+  activeAccount$: Observable<string>;
+  activeAccountUnlocked$: Observable<boolean>;
 
   addAccount: (account: T) => Promise<void>;
   setActiveUser: (userId: string) => Promise<void>;
@@ -35,8 +40,8 @@ export abstract class StateService<T extends Account = Account> {
 
   getAccessToken: (options?: StorageOptions) => Promise<string>;
   setAccessToken: (value: string, options?: StorageOptions) => Promise<void>;
-  getAddEditCipherInfo: (options?: StorageOptions) => Promise<any>;
-  setAddEditCipherInfo: (value: any, options?: StorageOptions) => Promise<void>;
+  getAddEditCipherInfo: (options?: StorageOptions) => Promise<AddEditCipherInfo>;
+  setAddEditCipherInfo: (value: AddEditCipherInfo, options?: StorageOptions) => Promise<void>;
   getAlwaysShowDock: (options?: StorageOptions) => Promise<boolean>;
   setAlwaysShowDock: (value: boolean, options?: StorageOptions) => Promise<void>;
   getApiKeyClientId: (options?: StorageOptions) => Promise<string>;
@@ -51,14 +56,15 @@ export abstract class StateService<T extends Account = Account> {
   setBiometricAwaitingAcceptance: (value: boolean, options?: StorageOptions) => Promise<void>;
   getBiometricFingerprintValidated: (options?: StorageOptions) => Promise<boolean>;
   setBiometricFingerprintValidated: (value: boolean, options?: StorageOptions) => Promise<void>;
-  getBiometricLocked: (options?: StorageOptions) => Promise<boolean>;
-  setBiometricLocked: (value: boolean, options?: StorageOptions) => Promise<void>;
   getBiometricText: (options?: StorageOptions) => Promise<string>;
   setBiometricText: (value: string, options?: StorageOptions) => Promise<void>;
   getBiometricUnlock: (options?: StorageOptions) => Promise<boolean>;
   setBiometricUnlock: (value: boolean, options?: StorageOptions) => Promise<void>;
   getCanAccessPremium: (options?: StorageOptions) => Promise<boolean>;
-  setCanAccessPremium: (value: boolean, options?: StorageOptions) => Promise<void>;
+  getHasPremiumPersonally: (options?: StorageOptions) => Promise<boolean>;
+  setHasPremiumPersonally: (value: boolean, options?: StorageOptions) => Promise<void>;
+  setHasPremiumFromOrganization: (value: boolean, options?: StorageOptions) => Promise<void>;
+  getHasPremiumFromOrganization: (options?: StorageOptions) => Promise<boolean>;
   getClearClipboard: (options?: StorageOptions) => Promise<number>;
   setClearClipboard: (value: number, options?: StorageOptions) => Promise<void>;
   getCollapsedGroupings: (options?: StorageOptions) => Promise<string[]>;
@@ -74,8 +80,6 @@ export abstract class StateService<T extends Account = Account> {
   getCryptoMasterKeyBiometric: (options?: StorageOptions) => Promise<string>;
   hasCryptoMasterKeyBiometric: (options?: StorageOptions) => Promise<boolean>;
   setCryptoMasterKeyBiometric: (value: string, options?: StorageOptions) => Promise<void>;
-  getDecodedToken: (options?: StorageOptions) => Promise<any>;
-  setDecodedToken: (value: any, options?: StorageOptions) => Promise<void>;
   getDecryptedCiphers: (options?: StorageOptions) => Promise<CipherView[]>;
   setDecryptedCiphers: (value: CipherView[], options?: StorageOptions) => Promise<void>;
   getDecryptedCollections: (options?: StorageOptions) => Promise<CollectionView[]>;
@@ -85,8 +89,6 @@ export abstract class StateService<T extends Account = Account> {
     value: SymmetricCryptoKey,
     options?: StorageOptions
   ) => Promise<void>;
-  getDecryptedFolders: (options?: StorageOptions) => Promise<FolderView[]>;
-  setDecryptedFolders: (value: FolderView[], options?: StorageOptions) => Promise<void>;
   getDecryptedOrganizationKeys: (
     options?: StorageOptions
   ) => Promise<Map<string, SymmetricCryptoKey>>;
@@ -103,7 +105,13 @@ export abstract class StateService<T extends Account = Account> {
   ) => Promise<void>;
   getDecryptedPinProtected: (options?: StorageOptions) => Promise<EncString>;
   setDecryptedPinProtected: (value: EncString, options?: StorageOptions) => Promise<void>;
+  /**
+   * @deprecated Do not call this, use PolicyService
+   */
   getDecryptedPolicies: (options?: StorageOptions) => Promise<Policy[]>;
+  /**
+   * @deprecated Do not call this, use PolicyService
+   */
   setDecryptedPolicies: (value: Policy[], options?: StorageOptions) => Promise<void>;
   getDecryptedPrivateKey: (options?: StorageOptions) => Promise<ArrayBuffer>;
   setDecryptedPrivateKey: (value: ArrayBuffer, options?: StorageOptions) => Promise<void>;
@@ -135,10 +143,14 @@ export abstract class StateService<T extends Account = Account> {
   setDisableFavicon: (value: boolean, options?: StorageOptions) => Promise<void>;
   getDisableGa: (options?: StorageOptions) => Promise<boolean>;
   setDisableGa: (value: boolean, options?: StorageOptions) => Promise<void>;
+  getDismissedAutofillCallout: (options?: StorageOptions) => Promise<boolean>;
+  setDismissedAutofillCallout: (value: boolean, options?: StorageOptions) => Promise<void>;
   getDontShowCardsCurrentTab: (options?: StorageOptions) => Promise<boolean>;
   setDontShowCardsCurrentTab: (value: boolean, options?: StorageOptions) => Promise<void>;
   getDontShowIdentitiesCurrentTab: (options?: StorageOptions) => Promise<boolean>;
   setDontShowIdentitiesCurrentTab: (value: boolean, options?: StorageOptions) => Promise<void>;
+  getDuckDuckGoSharedKey: (options?: StorageOptions) => Promise<string>;
+  setDuckDuckGoSharedKey: (value: string, options?: StorageOptions) => Promise<void>;
   getEmail: (options?: StorageOptions) => Promise<string>;
   setEmail: (value: string, options?: StorageOptions) => Promise<void>;
   getEmailVerified: (options?: StorageOptions) => Promise<boolean>;
@@ -158,10 +170,13 @@ export abstract class StateService<T extends Account = Account> {
   ) => Promise<void>;
   getEnableCloseToTray: (options?: StorageOptions) => Promise<boolean>;
   setEnableCloseToTray: (value: boolean, options?: StorageOptions) => Promise<void>;
+  getEnableDuckDuckGoBrowserIntegration: (options?: StorageOptions) => Promise<boolean>;
+  setEnableDuckDuckGoBrowserIntegration: (
+    value: boolean,
+    options?: StorageOptions
+  ) => Promise<void>;
   getEnableFullWidth: (options?: StorageOptions) => Promise<boolean>;
   setEnableFullWidth: (value: boolean, options?: StorageOptions) => Promise<void>;
-  getEnableGravitars: (options?: StorageOptions) => Promise<boolean>;
-  setEnableGravitars: (value: boolean, options?: StorageOptions) => Promise<void>;
   getEnableMinimizeToTray: (options?: StorageOptions) => Promise<boolean>;
   setEnableMinimizeToTray: (value: boolean, options?: StorageOptions) => Promise<void>;
   getEnableStartToTray: (options?: StorageOptions) => Promise<boolean>;
@@ -180,14 +195,22 @@ export abstract class StateService<T extends Account = Account> {
   ) => Promise<void>;
   getEncryptedCryptoSymmetricKey: (options?: StorageOptions) => Promise<string>;
   setEncryptedCryptoSymmetricKey: (value: string, options?: StorageOptions) => Promise<void>;
+  /**
+   * @deprecated Do not call this directly, use FolderService
+   */
   getEncryptedFolders: (options?: StorageOptions) => Promise<{ [id: string]: FolderData }>;
+  /**
+   * @deprecated Do not call this directly, use FolderService
+   */
   setEncryptedFolders: (
     value: { [id: string]: FolderData },
     options?: StorageOptions
   ) => Promise<void>;
-  getEncryptedOrganizationKeys: (options?: StorageOptions) => Promise<any>;
+  getEncryptedOrganizationKeys: (
+    options?: StorageOptions
+  ) => Promise<{ [orgId: string]: EncryptedOrganizationKeyData }>;
   setEncryptedOrganizationKeys: (
-    value: Map<string, SymmetricCryptoKey>,
+    value: { [orgId: string]: EncryptedOrganizationKeyData },
     options?: StorageOptions
   ) => Promise<void>;
   getEncryptedPasswordGenerationHistory: (
@@ -199,7 +222,13 @@ export abstract class StateService<T extends Account = Account> {
   ) => Promise<void>;
   getEncryptedPinProtected: (options?: StorageOptions) => Promise<string>;
   setEncryptedPinProtected: (value: string, options?: StorageOptions) => Promise<void>;
+  /**
+   * @deprecated Do not call this directly, use PolicyService
+   */
   getEncryptedPolicies: (options?: StorageOptions) => Promise<{ [id: string]: PolicyData }>;
+  /**
+   * @deprecated Do not call this directly, use PolicyService
+   */
   setEncryptedPolicies: (
     value: { [id: string]: PolicyData },
     options?: StorageOptions
@@ -216,7 +245,7 @@ export abstract class StateService<T extends Account = Account> {
   setEntityType: (value: string, options?: StorageOptions) => Promise<void>;
   getEnvironmentUrls: (options?: StorageOptions) => Promise<EnvironmentUrls>;
   setEnvironmentUrls: (value: EnvironmentUrls, options?: StorageOptions) => Promise<void>;
-  getEquivalentDomains: (options?: StorageOptions) => Promise<any>;
+  getEquivalentDomains: (options?: StorageOptions) => Promise<string[][]>;
   setEquivalentDomains: (value: string, options?: StorageOptions) => Promise<void>;
   getEventCollection: (options?: StorageOptions) => Promise<EventData[]>;
   setEventCollection: (value: EventData[], options?: StorageOptions) => Promise<void>;
@@ -227,8 +256,8 @@ export abstract class StateService<T extends Account = Account> {
   getInstalledVersion: (options?: StorageOptions) => Promise<string>;
   setInstalledVersion: (value: string, options?: StorageOptions) => Promise<void>;
   getIsAuthenticated: (options?: StorageOptions) => Promise<boolean>;
-  getKdfIterations: (options?: StorageOptions) => Promise<number>;
-  setKdfIterations: (value: number, options?: StorageOptions) => Promise<void>;
+  getKdfConfig: (options?: StorageOptions) => Promise<KdfConfig>;
+  setKdfConfig: (kdfConfig: KdfConfig, options?: StorageOptions) => Promise<void>;
   getKdfType: (options?: StorageOptions) => Promise<KdfType>;
   setKdfType: (value: KdfType, options?: StorageOptions) => Promise<void>;
   getKeyHash: (options?: StorageOptions) => Promise<string>;
@@ -237,10 +266,11 @@ export abstract class StateService<T extends Account = Account> {
   setLastActive: (value: number, options?: StorageOptions) => Promise<void>;
   getLastSync: (options?: StorageOptions) => Promise<string>;
   setLastSync: (value: string, options?: StorageOptions) => Promise<void>;
-  getLegacyEtmKey: (options?: StorageOptions) => Promise<SymmetricCryptoKey>;
-  setLegacyEtmKey: (value: SymmetricCryptoKey, options?: StorageOptions) => Promise<void>;
-  getLocalData: (options?: StorageOptions) => Promise<any>;
-  setLocalData: (value: string, options?: StorageOptions) => Promise<void>;
+  getLocalData: (options?: StorageOptions) => Promise<{ [cipherId: string]: LocalData }>;
+  setLocalData: (
+    value: { [cipherId: string]: LocalData },
+    options?: StorageOptions
+  ) => Promise<void>;
   getLocale: (options?: StorageOptions) => Promise<string>;
   setLocale: (value: string, options?: StorageOptions) => Promise<void>;
   getMainWindowSize: (options?: StorageOptions) => Promise<number>;
@@ -257,7 +287,13 @@ export abstract class StateService<T extends Account = Account> {
   setOpenAtLogin: (value: boolean, options?: StorageOptions) => Promise<void>;
   getOrganizationInvitation: (options?: StorageOptions) => Promise<any>;
   setOrganizationInvitation: (value: any, options?: StorageOptions) => Promise<void>;
+  /**
+   * @deprecated Do not call this directly, use OrganizationService
+   */
   getOrganizations: (options?: StorageOptions) => Promise<{ [id: string]: OrganizationData }>;
+  /**
+   * @deprecated Do not call this directly, use OrganizationService
+   */
   setOrganizations: (
     value: { [id: string]: OrganizationData },
     options?: StorageOptions
@@ -280,8 +316,14 @@ export abstract class StateService<T extends Account = Account> {
   setRememberedEmail: (value: string, options?: StorageOptions) => Promise<void>;
   getSecurityStamp: (options?: StorageOptions) => Promise<string>;
   setSecurityStamp: (value: string, options?: StorageOptions) => Promise<void>;
-  getSettings: (options?: StorageOptions) => Promise<any>;
-  setSettings: (value: string, options?: StorageOptions) => Promise<void>;
+  /**
+   * @deprecated Do not call this directly, use SettingsService
+   */
+  getSettings: (options?: StorageOptions) => Promise<AccountSettingsSettings>;
+  /**
+   * @deprecated Do not call this directly, use SettingsService
+   */
+  setSettings: (value: AccountSettingsSettings, options?: StorageOptions) => Promise<void>;
   getSsoCodeVerifier: (options?: StorageOptions) => Promise<string>;
   setSsoCodeVerifier: (value: string, options?: StorageOptions) => Promise<void>;
   getSsoOrgIdentifier: (options?: StorageOptions) => Promise<string>;
@@ -299,8 +341,35 @@ export abstract class StateService<T extends Account = Account> {
   setVaultTimeout: (value: number, options?: StorageOptions) => Promise<void>;
   getVaultTimeoutAction: (options?: StorageOptions) => Promise<string>;
   setVaultTimeoutAction: (value: string, options?: StorageOptions) => Promise<void>;
+  getApproveLoginRequests: (options?: StorageOptions) => Promise<boolean>;
+  setApproveLoginRequests: (value: boolean, options?: StorageOptions) => Promise<void>;
   getStateVersion: () => Promise<number>;
   setStateVersion: (value: number) => Promise<void>;
   getWindow: () => Promise<WindowState>;
   setWindow: (value: WindowState) => Promise<void>;
+  /**
+   * @deprecated Do not call this directly, use ConfigService
+   */
+  getServerConfig: (options?: StorageOptions) => Promise<ServerConfigData>;
+  /**
+   * @deprecated Do not call this directly, use ConfigService
+   */
+  setServerConfig: (value: ServerConfigData, options?: StorageOptions) => Promise<void>;
+
+  getAvatarColor: (options?: StorageOptions) => Promise<string | null | undefined>;
+  setAvatarColor: (value: string, options?: StorageOptions) => Promise<void>;
+  getActivateAutoFillOnPageLoadFromPolicy: (
+    options?: StorageOptions
+  ) => Promise<boolean | undefined>;
+  setActivateAutoFillOnPageLoadFromPolicy: (
+    value: boolean,
+    options?: StorageOptions
+  ) => Promise<void>;
+  getSMOnboardingTasks: (
+    options?: StorageOptions
+  ) => Promise<Record<string, Record<string, boolean>>>;
+  setSMOnboardingTasks: (
+    value: Record<string, Record<string, boolean>>,
+    options?: StorageOptions
+  ) => Promise<void>;
 }

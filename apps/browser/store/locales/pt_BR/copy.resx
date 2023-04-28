@@ -124,15 +124,32 @@
     <value>Um gerenciador de senhas gratuito e seguro para todos os seus dispositivos</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>O Bitwarden é a maneira mais fácil e segura de armazenar todos os seus usuários e senhas mantendo-os convenientemente sincronizados entre todos os seus dispositivos.
+    <value>Bitwarden, Inc. é a empresa matriz da 8bit Solutions LLC.
 
-O furto de senhas é um problema sério. Os sites e aplicativos que os utiliza estão sob ataque todos os dias. Brechas de segurança ocorrem e as suas senhas são furtadas. Quando você reutiliza as mesmas senhas entre aplicativos e sites, os hackers podem facilmente acessar o seu e-mail, banco, e outras contas importantes.
+NOMEADA MELHOR GERENCIADORA DE SENHAS PELA VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, E MUITO MAIS.
 
-Os especialistas de segurança recomendam que utilize uma senha diferente e aleatoriamente gerada para todas as contas que você cria. Mas como gerenciar todas essas senhas? O Bitwarden torna-lhe fácil criar, armazenar, e acessar as suas senhas.
+Gerenciar, armazenar, proteger e compartilhar senhas ilimitadas através de dispositivos ilimitados de qualquer lugar. Bitwarden fornece soluções de gerenciamento de senhas de código aberto para todos, seja em casa, no trabalho ou em viagem.
 
-O Bitwarden armazena todas as suas credenciais num cofre encriptado que sincroniza entre todos os seus dispositivos. Como são completamente encriptados antes de se quer sair do seu dispositivo, apenas você tem acesso aos seus dados. Nem se quer a equipe do Bitwarden pode ler os seus dados, mesmo se quiséssemos. Os seus dados são selados com encriptação AES-256 bits, salted hashing, e PBKDF2 SHA-256.
+Gere senhas fortes, únicas e aleatórias com base nos requisitos de segurança para cada site que você frequenta.
 
-Bitwarden é um software 100% de código aberto. O código-fonte do Bitwarden está hospedado no GitHub e todos são livres para revisar, auditar e contribuir com a base de códigos do Bitwarden.</value>
+A Bitwarden Send transmite rapidamente informações criptografadas --- arquivos e texto em formato de placa -- diretamente para qualquer pessoa.
+
+Bitwarden oferece equipes e planos empresariais para empresas para que você possa compartilhar senhas com colegas com segurança.
+
+Por que escolher Bitwarden:
+
+Criptografia de Classe Mundial
+As senhas são protegidas com criptografia avançada de ponta a ponta (AES-256 bit, salted hashing e PBKDF2 SHA-256) para que seus dados permaneçam seguros e privados.
+
+Gerador de senhas embutido
+Gerar senhas fortes, únicas e aleatórias com base nos requisitos de segurança para cada site que você freqüenta.
+
+Traduções globais 
+As traduções Bitwarden existem em 40 idiomas e estão crescendo, graças à nossa comunidade global.
+
+Aplicações multiplataforma 
+Proteja e compartilhe dados sensíveis dentro de seu Bitwarden Vault a partir de qualquer navegador, dispositivo móvel ou SO desktop, e muito mais.
+</value>
   </data>
   <data name="AssetTitle" xml:space="preserve">
     <value>Um gerenciador de senhas gratuito e seguro para todos os seus dispositivos</value>

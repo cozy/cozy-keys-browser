@@ -1,5 +1,6 @@
-import { CipherService } from "jslib-common/abstractions/cipher.service";
-import { Response } from "jslib-node/cli/models/response";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+
+import { Response } from "../models/response";
 
 export class RestoreCommand {
   constructor(private cipherService: CipherService) {}

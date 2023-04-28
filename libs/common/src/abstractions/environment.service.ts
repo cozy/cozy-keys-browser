@@ -9,6 +9,7 @@ export type Urls = {
   notifications?: string;
   events?: string;
   keyConnector?: string;
+  scim?: string;
 };
 
 export type PayPalConfig = {
@@ -28,7 +29,14 @@ export abstract class EnvironmentService {
   getIdentityUrl: () => string;
   getEventsUrl: () => string;
   getKeyConnectorUrl: () => string;
+  getScimUrl: () => string;
   setUrlsFromStorage: () => Promise<void>;
   setUrls: (urls: Urls) => Promise<Urls>;
   getUrls: () => Urls;
+  isCloud: () => boolean;
+  /**
+   * @remarks For desktop and browser use only.
+   * For web, use PlatformUtilsService.isSelfHost()
+   */
+  isSelfHosted: () => boolean;
 }

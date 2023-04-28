@@ -33,6 +33,7 @@ $background-color-alt2: #ededed;
 $box-background-color: $background-color;
 $box-background-hover-color: $list-item-hover;
 $box-border-color: $border-color;
+$border-color-alt: #c3c5c7;
 
 $button-border-color: darken($border-color-dark, 12%);
 $button-background-color: white;
@@ -40,11 +41,14 @@ $button-color: lighten($text-color, 40%);
 $button-color-primary: darken($brand-primary, 8%);
 $button-color-danger: darken($brand-danger, 10%);
 
+$code-color: #e83e8c;
+
 $themes: (
   light: (
     textColor: $text-color,
     borderColor: $border-color-dark,
     backgroundColor: $background-color,
+    borderColorAlt: $border-color-alt,
     backgroundColorAlt: $background-color-alt,
     backgroundColorAlt2: $background-color-alt2,
     scrollbarColor: rgba(100, 100, 100, 0.2),
@@ -88,17 +92,20 @@ $themes: (
     logoSuffix: "dark",
     passwordNumberColor: #007fde,
     passwordSpecialColor: #c40800,
+    passwordCountText: #212529,
     calloutBorderColor: $border-color-dark,
     calloutBackgroundColor: $background-color,
     accountSwitcherBackgroundColor: $background-color,
     accountSwitcherTextColor: #ffffff,
     svgSuffix: "-light.svg",
     hrColor: #eeeeee,
+    codeColor: $code-color,
   ),
   dark: (
     textColor: #ffffff,
     borderColor: #2f2f2f,
     backgroundColor: #363636,
+    borderColorAlt: #6e788a,
     backgroundColorAlt: #3d3d3d,
     backgroundColorAlt2: #222222,
     scrollbarColor: #4d4d4d,
@@ -142,17 +149,20 @@ $themes: (
     logoSuffix: "white",
     passwordNumberColor: #52bdfb,
     passwordSpecialColor: #ff7c70,
+    passwordCountText: #ffffff,
     calloutBorderColor: #2f2f2f,
     calloutBackgroundColor: #363636,
     accountSwitcherBackgroundColor: #2f2f2f,
     accountSwitcherTextColor: #ffffff,
     svgSuffix: "-dark.svg",
     hrColor: #a3a3a3,
+    codeColor: $code-color,
   ),
   nord: (
     textColor: $nord5,
     borderColor: $nord0,
     backgroundColor: $nord2,
+    borderColorAlt: $nord5,
     backgroundColorAlt: $nord1,
     backgroundColorAlt2: $nord1,
     scrollbarColor: $nord4,
@@ -196,12 +206,14 @@ $themes: (
     logoSuffix: "white",
     passwordNumberColor: $nord8,
     passwordSpecialColor: $nord12,
+    passwordCountText: $nord5,
     calloutBorderColor: $nord1,
     calloutBackgroundColor: $nord2,
     accountSwitcherBackgroundColor: $nord0,
     accountSwitcherTextColor: $nord5,
     svgSuffix: "-dark.svg",
     hrColor: $nord4,
+    codeColor: $code-color,
   ),
 );
 

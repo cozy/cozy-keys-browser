@@ -1,6 +1,6 @@
 import { Meta } from "@storybook/addon-docs";
 
-<Meta title="Common/Colors" />
+<Meta title="Documentation/Colors" />
 
 export const Row = (name) => (
   <tr class="tw-h-16">
@@ -10,7 +10,7 @@ export const Row = (name) => (
 );
 
 export const Table = (args) => (
-  <table class={"tw-table-auto border !tw-text-main " + args.class}>
+  <table class={"border tw-table-auto !tw-text-main " + args.class}>
     <thead>
       <tr>
         <th>General usage</th>
@@ -21,6 +21,8 @@ export const Table = (args) => (
       {Row("background")}
       {Row("background-alt")}
       {Row("background-alt2")}
+      {Row("background-alt3")}
+      {Row("background-alt4")}
     </tbody>
     <tbody>
       {Row("primary-300")}
@@ -49,11 +51,18 @@ export const Table = (args) => (
       {Row("info-500")}
       {Row("info-700")}
     </tbody>
+    <thead>
+      <tr>
+        <th>Text</th>
+        <th class="tw-w-20"></th>
+      </tr>
+    </thead>
     <tbody>
       {Row("text-main")}
       {Row("text-muted")}
       {Row("text-contrast")}
       {Row("text-alt2")}
+      {Row("text-code")}
     </tbody>
   </table>
 );

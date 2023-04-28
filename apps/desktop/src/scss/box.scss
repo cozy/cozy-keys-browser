@@ -48,7 +48,7 @@
     }
 
     &:hover,
-    &:focus,
+    &:focus-visible,
     &.active {
       @include themify($themes) {
         background-color: themed("boxBackgroundHoverColor");
@@ -58,7 +58,7 @@
     .icon {
       display: flex;
       align-items: flex-end;
-      margin-left: 5px;
+      margin-right: 5px;
 
       @include themify($themes) {
         color: themed("headingColor");
@@ -77,6 +77,10 @@
 
     &.box-content-padded {
       padding: 10px 15px;
+
+      .box-header-expandable[aria-expanded="true"] {
+        margin-bottom: 1rem;
+      }
     }
 
     &.condensed .box-content-row,
@@ -92,6 +96,10 @@
         background-color: initial;
       }
     }
+
+    &.row-top-padding {
+      padding-top: 10px;
+    }
   }
 
   .box-footer {
@@ -101,6 +109,10 @@
     @include themify($themes) {
       color: themed("mutedColor");
     }
+  }
+
+  &.last {
+    margin-bottom: 15px;
   }
 }
 
@@ -339,7 +351,7 @@
       }
     }
 
-    &:focus {
+    &:not([type="file"]):focus {
       outline: none;
     }
   }
@@ -357,6 +369,11 @@
   .action-buttons {
     display: flex;
     margin-left: 5px;
+
+    &.action-buttons-fixed {
+      align-self: start;
+      margin-top: 2px;
+    }
 
     .row-btn {
       @extend .icon-btn;

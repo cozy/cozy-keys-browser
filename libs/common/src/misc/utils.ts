@@ -1,9 +1,24 @@
 /* eslint-disable no-useless-escape */
-import * as tldjs from "tldjs";
+import * as path from "path";
 
+import { getHostname, parse } from "tldts";
+import { Merge } from "type-fest";
+
+import { CryptoService } from "../abstractions/crypto.service";
+import { EncryptService } from "../abstractions/encrypt.service";
 import { I18nService } from "../abstractions/i18n.service";
 
 const nodeURL = typeof window === "undefined" ? require("url") : null;
+
+declare global {
+  /* eslint-disable-next-line no-var */
+  var bitwardenContainerService: BitwardenContainerService;
+}
+
+interface BitwardenContainerService {
+  getCryptoService: () => CryptoService;
+  getEncryptService: () => EncryptService;
+}
 
 export class Utils {
   static inited = false;
@@ -11,12 +26,15 @@ export class Utils {
   static isBrowser = true;
   static isMobileBrowser = false;
   static isAppleMobileBrowser = false;
-  static global: any = null;
-  static tldEndingRegex =
-    /.*\.(com|net|org|edu|uk|gov|ca|de|jp|fr|au|ru|ch|io|es|us|co|xyz|info|ly|mil)$/;
+  static global: typeof global = null;
   // Transpiled version of /\p{Emoji_Presentation}/gu using https://mothereff.in/regexpu. Used for compatability in older browsers.
   static regexpEmojiPresentation =
     /(?:[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u270A\u270B\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55]|\uD83C[\uDC04\uDCCF\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF7C\uDF7E-\uDF93\uDFA0-\uDFCA\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF4\uDFF8-\uDFFF]|\uD83D[\uDC00-\uDC3E\uDC40\uDC42-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDD7A\uDD95\uDD96\uDDA4\uDDFB-\uDE4F\uDE80-\uDEC5\uDECC\uDED0-\uDED2\uDED5-\uDED7\uDEEB\uDEEC\uDEF4-\uDEFC\uDFE0-\uDFEB]|\uD83E[\uDD0C-\uDD3A\uDD3C-\uDD45\uDD47-\uDD78\uDD7A-\uDDCB\uDDCD-\uDDFF\uDE70-\uDE74\uDE78-\uDE7A\uDE80-\uDE86\uDE90-\uDEA8\uDEB0-\uDEB6\uDEC0-\uDEC2\uDED0-\uDED6])/g;
+  static readonly validHosts: string[] = ["localhost"];
+  static readonly minimumPasswordLength = 12;
+  static readonly DomainMatchBlacklist = new Map<string, Set<string>>([
+    ["google.com", new Set(["script.google.com"])],
+  ]);
 
   static init() {
     if (Utils.inited) {
@@ -29,16 +47,29 @@ export class Utils {
       (process as any).release != null &&
       (process as any).release.name === "node";
     Utils.isBrowser = typeof window !== "undefined";
+
     Utils.isMobileBrowser = Utils.isBrowser && this.isMobile(window);
     Utils.isAppleMobileBrowser = Utils.isBrowser && this.isAppleMobile(window);
-    Utils.global = Utils.isNode && !Utils.isBrowser ? global : window;
+
+    if (Utils.isNode) {
+      Utils.global = global;
+    } else if (Utils.isBrowser) {
+      Utils.global = window;
+    } else {
+      // If it's not browser or node then it must be a service worker
+      Utils.global = self;
+    }
   }
 
   static fromB64ToArray(str: string): Uint8Array {
+    if (str == null) {
+      return null;
+    }
+
     if (Utils.isNode) {
       return new Uint8Array(Buffer.from(str, "base64"));
     } else {
-      const binaryString = window.atob(str);
+      const binaryString = Utils.global.atob(str);
       const bytes = new Uint8Array(binaryString.length);
       for (let i = 0; i < binaryString.length; i++) {
         bytes[i] = binaryString.charCodeAt(i);
@@ -77,6 +108,9 @@ export class Utils {
   }
 
   static fromByteStringToArray(str: string): Uint8Array {
+    if (str == null) {
+      return null;
+    }
     const arr = new Uint8Array(str.length);
     for (let i = 0; i < str.length; i++) {
       arr[i] = str.charCodeAt(i);
@@ -85,6 +119,9 @@ export class Utils {
   }
 
   static fromBufferToB64(buffer: ArrayBuffer): string {
+    if (buffer == null) {
+      return null;
+    }
     if (Utils.isNode) {
       return Buffer.from(buffer).toString("base64");
     } else {
@@ -93,7 +130,7 @@ export class Utils {
       for (let i = 0; i < bytes.byteLength; i++) {
         binary += String.fromCharCode(bytes[i]);
       }
-      return window.btoa(binary);
+      return Utils.global.btoa(binary);
     }
   }
 
@@ -157,7 +194,7 @@ export class Utils {
     if (Utils.isNode) {
       return Buffer.from(utfStr, "utf8").toString("base64");
     } else {
-      return decodeURIComponent(escape(window.btoa(utfStr)));
+      return decodeURIComponent(escape(Utils.global.btoa(utfStr)));
     }
   }
 
@@ -169,7 +206,7 @@ export class Utils {
     if (Utils.isNode) {
       return Buffer.from(b64Str, "base64").toString("utf8");
     } else {
-      return decodeURIComponent(escape(window.atob(b64Str)));
+      return decodeURIComponent(escape(Utils.global.atob(b64Str)));
     }
   }
 
@@ -190,12 +227,39 @@ export class Utils {
   }
 
   static getHostname(uriString: string): string {
-    const url = Utils.getUrl(uriString);
+    if (Utils.isNullOrWhitespace(uriString)) {
+      return null;
+    }
+
+    uriString = uriString.trim();
+
+    if (uriString.startsWith("data:")) {
+      return null;
+    }
+
+    if (uriString.startsWith("about:")) {
+      return null;
+    }
+
+    if (uriString.startsWith("file:")) {
+      return null;
+    }
+
+    // Does uriString contain invalid characters
+    // TODO Needs to possibly be extended, although '!' is a reserved character
+    if (uriString.indexOf("!") > 0) {
+      return null;
+    }
+
     try {
-      return url != null && url.hostname !== "" ? url.hostname : null;
+      const hostname = getHostname(uriString, { validHosts: this.validHosts });
+      if (hostname != null) {
+        return hostname;
+      }
     } catch {
       return null;
     }
+    return null;
   }
 
   static getHost(uriString: string): string {
@@ -208,60 +272,35 @@ export class Utils {
   }
 
   static getDomain(uriString: string): string {
-    if (uriString == null) {
+    if (Utils.isNullOrWhitespace(uriString)) {
       return null;
     }
 
     uriString = uriString.trim();
-    if (uriString === "") {
-      return null;
-    }
 
     if (uriString.startsWith("data:")) {
       return null;
     }
 
-    let httpUrl = uriString.startsWith("http://") || uriString.startsWith("https://");
-    if (
-      !httpUrl &&
-      uriString.indexOf("://") < 0 &&
-      Utils.tldEndingRegex.test(uriString) &&
-      uriString.indexOf("@") < 0
-    ) {
-      uriString = "http://" + uriString;
-      httpUrl = true;
-    }
-
-    if (httpUrl) {
-      try {
-        const url = Utils.getUrlObject(uriString);
-        const validHostname = tldjs?.isValid != null ? tldjs.isValid(url.hostname) : true;
-        if (!validHostname) {
-          return null;
-        }
-
-        if (url.hostname === "localhost" || Utils.validIpAddress(url.hostname)) {
-          return url.hostname;
-        }
-
-        const urlDomain =
-          tldjs != null && tldjs.getDomain != null ? tldjs.getDomain(url.hostname) : null;
-        return urlDomain != null ? urlDomain : url.hostname;
-      } catch (e) {
-        // Invalid domain, try another approach below.
-      }
+    if (uriString.startsWith("about:")) {
+      return null;
     }
 
     try {
-      const domain = tldjs != null && tldjs.getDomain != null ? tldjs.getDomain(uriString) : null;
+      const parseResult = parse(uriString, { validHosts: this.validHosts });
+      if (parseResult != null && parseResult.hostname != null) {
+        if (parseResult.hostname === "localhost" || parseResult.isIp) {
+          return parseResult.hostname;
+        }
 
-      if (domain != null) {
-        return domain;
+        if (parseResult.domain != null) {
+          return parseResult.domain;
+        }
+        return null;
       }
     } catch {
       return null;
     }
-
     return null;
   }
 
@@ -285,8 +324,11 @@ export class Utils {
     return map;
   }
 
-  static getSortFunction(i18nService: I18nService, prop: string) {
-    return (a: any, b: any) => {
+  static getSortFunction<T>(
+    i18nService: I18nService,
+    prop: { [K in keyof T]: T[K] extends string ? K : never }[keyof T]
+  ): (a: T, b: T) => number {
+    return (a, b) => {
       if (a[prop] == null && b[prop] != null) {
         return -1;
       }
@@ -297,9 +339,10 @@ export class Utils {
         return 0;
       }
 
+      // The `as unknown as string` here is unfortunate because typescript doesn't property understand that the return of T[prop] will be a string
       return i18nService.collator
-        ? i18nService.collator.compare(a[prop], b[prop])
-        : a[prop].localeCompare(b[prop]);
+        ? i18nService.collator.compare(a[prop] as unknown as string, b[prop] as unknown as string)
+        : (a[prop] as unknown as string).localeCompare(b[prop] as unknown as string);
     };
   }
 
@@ -309,6 +352,12 @@ export class Utils {
 
   static isNullOrEmpty(str: string): boolean {
     return str == null || typeof str !== "string" || str == "";
+  }
+
+  static isPromise(obj: any): obj is Promise<unknown> {
+    return (
+      obj != undefined && typeof obj["then"] === "function" && typeof obj["catch"] === "function"
+    );
   }
 
   static nameOf<T>(name: string & keyof T) {
@@ -324,14 +373,11 @@ export class Utils {
   }
 
   static getUrl(uriString: string): URL {
-    if (uriString == null) {
+    if (this.isNullOrWhitespace(uriString)) {
       return null;
     }
 
     uriString = uriString.trim();
-    if (uriString === "") {
-      return null;
-    }
 
     let url = Utils.getUrlObject(uriString);
     if (url == null) {
@@ -348,10 +394,123 @@ export class Utils {
     return s.charAt(0).toUpperCase() + s.slice(1);
   }
 
-  private static validIpAddress(ipString: string): boolean {
-    const ipRegex =
-      /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    return ipRegex.test(ipString);
+  /**
+   * There are a few ways to calculate text color for contrast, this one seems to fit accessibility guidelines best.
+   * https://stackoverflow.com/a/3943023/6869691
+   *
+   * @param {string} bgColor
+   * @param {number} [threshold] see stackoverflow link above
+   * @param {boolean} [svgTextFill]
+   * Indicates if this method is performed on an SVG <text> 'fill' attribute (e.g. <text fill="black"></text>).
+   * This check is necessary because the '!important' tag cannot be used in a 'fill' attribute.
+   */
+  static pickTextColorBasedOnBgColor(bgColor: string, threshold = 186, svgTextFill = false) {
+    const bgColorHexNums = bgColor.charAt(0) === "#" ? bgColor.substring(1, 7) : bgColor;
+    const r = parseInt(bgColorHexNums.substring(0, 2), 16); // hexToR
+    const g = parseInt(bgColorHexNums.substring(2, 4), 16); // hexToG
+    const b = parseInt(bgColorHexNums.substring(4, 6), 16); // hexToB
+    const blackColor = svgTextFill ? "black" : "black !important";
+    const whiteColor = svgTextFill ? "white" : "white !important";
+    return r * 0.299 + g * 0.587 + b * 0.114 > threshold ? blackColor : whiteColor;
+  }
+
+  static stringToColor(str: string): string {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let color = "#";
+    for (let i = 0; i < 3; i++) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += ("00" + value.toString(16)).substr(-2);
+    }
+    return color;
+  }
+
+  /**
+   * @throws Will throw an error if the ContainerService has not been attached to the window object
+   */
+  static getContainerService(): BitwardenContainerService {
+    if (this.global.bitwardenContainerService == null) {
+      throw new Error("global bitwardenContainerService not initialized.");
+    }
+    return this.global.bitwardenContainerService;
+  }
+
+  static validateHexColor(color: string) {
+    return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(color);
+  }
+
+  /**
+   * Converts map to a Record<string, V> with the same data. Inverse of recordToMap
+   * Useful in toJSON methods, since Maps are not serializable
+   * @param map
+   * @returns
+   */
+  static mapToRecord<K extends string | number, V>(map: Map<K, V>): Record<string, V> {
+    if (map == null) {
+      return null;
+    }
+    if (!(map instanceof Map)) {
+      return map;
+    }
+    return Object.fromEntries(map);
+  }
+
+  /**
+   * Converts record to a Map<string, V> with the same data. Inverse of mapToRecord
+   * Useful in fromJSON methods, since Maps are not serializable
+   *
+   * Warning: If the record has string keys that are numbers, they will be converted to numbers in the map
+   * @param record
+   * @returns
+   */
+  static recordToMap<K extends string | number, V>(record: Record<K, V>): Map<K, V> {
+    if (record == null) {
+      return null;
+    } else if (record instanceof Map) {
+      return record;
+    }
+
+    const entries = Object.entries(record);
+    if (entries.length === 0) {
+      return new Map();
+    }
+
+    if (isNaN(Number(entries[0][0]))) {
+      return new Map(entries) as Map<K, V>;
+    } else {
+      return new Map(entries.map((e) => [Number(e[0]), e[1]])) as Map<K, V>;
+    }
+  }
+
+  /** Applies Object.assign, but converts the type nicely using Type-Fest Merge<Destination, Source> */
+  static merge<Destination, Source>(
+    destination: Destination,
+    source: Source
+  ): Merge<Destination, Source> {
+    return Object.assign(destination, source) as unknown as Merge<Destination, Source>;
+  }
+
+  /**
+   * encodeURIComponent escapes all characters except the following:
+   * alphabetic, decimal digits, - _ . ! ~ * ' ( )
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent#encoding_for_rfc3986
+   */
+  static encodeRFC3986URIComponent(str: string): string {
+    return encodeURIComponent(str).replace(
+      /[!'()*]/g,
+      (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`
+    );
+  }
+
+  /**
+   * Normalizes a path for defense against attacks like traversals
+   * @param denormalizedPath
+   * @returns
+   */
+  static normalizePath(denormalizedPath: string): string {
+    return path.normalize(decodeURIComponent(denormalizedPath)).replace(/^(\.\.(\/|\\|$))+/, "");
   }
 
   private static isMobile(win: Window) {
@@ -371,6 +530,10 @@ export class Utils {
     return mobile || win.navigator.userAgent.match(/iPad/i) != null;
   }
 
+  static delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   private static isAppleMobile(win: Window) {
     return (
       win.navigator.userAgent.match(/iPhone/i) != null ||
@@ -384,7 +547,7 @@ export class Utils {
         return new nodeURL.URL(uriString);
       } else if (typeof URL === "function") {
         return new URL(uriString);
-      } else if (window != null) {
+      } else if (typeof window !== "undefined") {
         const hasProtocol = uriString.indexOf("://") > -1;
         if (!hasProtocol && uriString.indexOf(".") > -1) {
           uriString = "http://" + uriString;

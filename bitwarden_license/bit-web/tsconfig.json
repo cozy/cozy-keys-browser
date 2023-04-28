@@ -1,27 +1,12 @@
 {
-  "extends": "../../apps/web/jslib/shared/tsconfig",
+  "extends": "../../apps/web/tsconfig",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "tldjs": ["../../apps/web/jslib/common/src/misc/tldjs.noop"],
-      "jslib-common/*": ["../../apps/web/jslib/common/src/*"],
-      "jslib-angular/*": ["../../apps/web/jslib/angular/src/*"],
-      "@bitwarden/components": ["../../apps/web/jslib/components/src"],
-      "src/*": ["../../apps/web/src/*"]
+      "@bitwarden/web-vault/*": ["../../apps/web/src/*"],
+      "@bitwarden/common/*": ["../../libs/common/src/*"],
+      "@bitwarden/angular/*": ["../../libs/angular/src/*"],
+      "@bitwarden/components": ["../../libs/components/src"]
     }
   },
-  "angularCompilerOptions": {
-    "preserveWhitespaces": true
-  },
-  "files": [
-    "../../apps/web/src/app/polyfills.ts",
-    "../../apps/web/src/app/main.ts",
-    "src/app/main.ts"
-  ],
-  "include": [
-    "../../apps/web/src/connectors/*.ts",
-    "../../apps/web/src/models/*.ts",
-    "../../apps/web/src/services/*.ts",
-    "../../apps/web/src/abstractions/*.ts"
-  ]
+  "include": ["src/**/*.stories.ts"]
 }

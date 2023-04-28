@@ -1,14 +1,13 @@
 import { Component } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { UntypedFormBuilder } from "@angular/forms";
 
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { PolicyType } from "jslib-common/enums/policyType";
-import { PolicyRequest } from "jslib-common/models/request/policyRequest";
-
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { PolicyType } from "@bitwarden/common/enums/policyType";
+import { PolicyRequest } from "@bitwarden/common/models/request/policy.request";
 import {
   BasePolicy,
   BasePolicyComponent,
-} from "src/app/organizations/policies/base-policy.component";
+} from "@bitwarden/web-vault/app/organizations/policies/base-policy.component";
 
 export class MaximumVaultTimeoutPolicy extends BasePolicy {
   name = "maximumVaultTimeout";
@@ -27,7 +26,7 @@ export class MaximumVaultTimeoutPolicyComponent extends BasePolicyComponent {
     minutes: [null],
   });
 
-  constructor(private formBuilder: FormBuilder, private i18nService: I18nService) {
+  constructor(private formBuilder: UntypedFormBuilder, private i18nService: I18nService) {
     super();
   }
 

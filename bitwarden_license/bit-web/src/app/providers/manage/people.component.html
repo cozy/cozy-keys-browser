@@ -1,3 +1,5 @@
+<!-- Please remove this disable statement when editing this file! -->
+<!-- eslint-disable @angular-eslint/template/button-has-type -->
 <div class="page-header d-flex">
   <h1>{{ "people" | i18n }}</h1>
   <div class="ml-auto d-flex">
@@ -9,7 +11,7 @@
         (click)="filter(null)"
       >
         {{ "all" | i18n }}
-        <span class="badge badge-pill badge-info" *ngIf="allCount">{{ allCount }}</span>
+        <span bitBadge badgeType="info" *ngIf="allCount">{{ allCount }}</span>
       </button>
       <button
         type="button"
@@ -18,7 +20,7 @@
         (click)="filter(userStatusType.Invited)"
       >
         {{ "invited" | i18n }}
-        <span class="badge badge-pill badge-info" *ngIf="invitedCount">{{ invitedCount }}</span>
+        <span bitBadge badgeType="info" *ngIf="invitedCount">{{ invitedCount }}</span>
       </button>
       <button
         type="button"
@@ -27,9 +29,7 @@
         (click)="filter(userStatusType.Accepted)"
       >
         {{ "accepted" | i18n }}
-        <span class="badge badge-pill badge-warning" *ngIf="acceptedCount">{{
-          acceptedCount
-        }}</span>
+        <span bitBadge badgeType="warning" *ngIf="acceptedCount">{{ acceptedCount }}</span>
       </button>
     </div>
     <div class="ml-3">
@@ -123,30 +123,23 @@
       <tbody>
         <tr *ngFor="let u of searchedUsers">
           <td (click)="checkUser(u)" class="table-list-checkbox">
-            <input type="checkbox" [(ngModel)]="u.checked" appStopProp />
+            <input type="checkbox" [(ngModel)]="$any(u).checked" appStopProp />
           </td>
           <td width="30">
-            <app-avatar
-              [data]="u | userName"
-              [email]="u.email"
-              size="25"
-              [circle]="true"
-              [fontSize]="14"
-            >
-            </app-avatar>
+            <bit-avatar [text]="u | userName" [id]="u.userId" size="small"></bit-avatar>
           </td>
           <td>
             <a href="#" appStopClick (click)="edit(u)">{{ u.email }}</a>
-            <span class="badge badge-secondary" *ngIf="u.status === userStatusType.Invited">{{
+            <span bitBadge badgeType="secondary" *ngIf="u.status === userStatusType.Invited">{{
               "invited" | i18n
             }}</span>
-            <span class="badge badge-warning" *ngIf="u.status === userStatusType.Accepted">{{
+            <span bitBadge badgeType="warning" *ngIf="u.status === userStatusType.Accepted">{{
               "accepted" | i18n
             }}</span>
             <small class="text-muted d-block" *ngIf="u.name">{{ u.name }}</small>
           </td>
           <td>
-            <ng-container *ngIf="u.twoFactorEnabled">
+            <ng-container *ngIf="$any(u).twoFactorEnabled">
               <i
                 class="bwi bwi-lock"
                 title="{{ 'userUsingTwoStep' | i18n }}"
@@ -158,7 +151,6 @@
           <td>
             <span *ngIf="u.type === userType.ProviderAdmin">{{ "providerAdmin" | i18n }}</span>
             <span *ngIf="u.type === userType.ServiceUser">{{ "serviceUser" | i18n }}</span>
-            <span *ngIf="u.type === userType.Custom">{{ "custom" | i18n }}</span>
           </td>
           <td class="table-list-options">
             <div class="dropdown" appListDropdown>
@@ -192,16 +184,6 @@
                 >
                   <i class="bwi bwi-fw bwi-check" aria-hidden="true"></i>
                   {{ "confirm" | i18n }}
-                </a>
-                <a
-                  class="dropdown-item"
-                  href="#"
-                  appStopClick
-                  (click)="groups(u)"
-                  *ngIf="accessGroups"
-                >
-                  <i class="bwi bwi-fw bwi-sitemap" aria-hidden="true"></i>
-                  {{ "groups" | i18n }}
                 </a>
                 <a
                   class="dropdown-item"

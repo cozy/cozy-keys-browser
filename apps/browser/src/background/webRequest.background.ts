@@ -1,8 +1,10 @@
-import { AuthService } from "jslib-common/abstractions/auth.service";
-import { CipherService } from "jslib-common/abstractions/cipher.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { AuthenticationStatus } from "jslib-common/enums/authenticationStatus";
-import { UriMatchType } from "jslib-common/enums/uriMatchType";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+
+import { BrowserApi } from "../browser/browserApi";
 
 export default class WebRequestBackground {
   private pendingAuthRequests: any[] = [];
@@ -14,7 +16,9 @@ export default class WebRequestBackground {
     private cipherService: CipherService,
     private authService: AuthService
   ) {
-    this.webRequest = (window as any).chrome.webRequest;
+    if (BrowserApi.manifestVersion === 2) {
+      this.webRequest = (window as any).chrome.webRequest;
+    }
     this.isFirefox = platformUtilsService.isFirefox();
   }
 

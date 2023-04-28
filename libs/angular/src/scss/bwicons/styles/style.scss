@@ -1,5 +1,5 @@
 $icomoon-font-family: "bwi-font" !default;
-$icomoon-font-path: "~@bitwarden/jslib-angular/src/scss/bwicons/fonts/" !default;
+$icomoon-font-path: "~@bitwarden/angular/src/scss/bwicons/fonts/" !default;
 
 // New font sheet? Update the font-face information below
 @font-face {
@@ -128,9 +128,9 @@ $icons: (
   "dbl-angle-left": "\e970",
   "dbl-angle-right": "\e971",
   "hamburger": "\e972",
-  "bw-folder-open-f": "\e93e",
+  "bw-folder-open-f1": "\e93e",
   "desktop": "\e96a",
-  "angle-left": "\e96b",
+  "angle-up": "\e96b",
   "user": "\e900",
   "user-f": "\e901",
   "key": "\e902",
@@ -158,7 +158,7 @@ $icons: (
   "plus": "\e918",
   "star": "\e919",
   "list": "\e91a",
-  "angle-right": "\e91b",
+  "angle-down": "\e91b",
   "external-link": "\e91c",
   "refresh": "\e91d",
   "search": "\e91f",
@@ -175,8 +175,8 @@ $icons: (
   "sign-out": "\e92a",
   "share": "\e92b",
   "clock": "\e92c",
-  "angle-down": "\e92d",
-  "caret-down": "\e92e",
+  "angle-left": "\e92d",
+  "caret-left": "\e92e",
   "square": "\e92f",
   "collection": "\e930",
   "bank": "\e931",
@@ -225,7 +225,7 @@ $icons: (
   "wrench": "\e965",
   "ban": "\e967",
   "camera": "\e968",
-  "chevron-up": "\e969",
+  "angle-right": "\e969",
   "eye-slash": "\e96d",
   "file": "\e96e",
   "paste": "\e96f",
@@ -246,6 +246,22 @@ $icons: (
   "family": "\e98b",
   "provider": "\e98c",
   "business": "\e98d",
+  "learning": "\e98e",
+  "chat": "\e990",
+  "server": "\e98f",
+  "search-book": "\e992",
+  "twitch": "\e993",
+  "community": "\e994",
+  "mastodon": "\e995",
+  "insurance": "\e996",
+  "wireless": "\e997",
+  "software-license": "\e998",
+  "instagram": "\e999",
+  "down-solid": "\e99a",
+  "up-solid": "\e99b",
+  "up-down-btn": "\e99c",
+  "caret-up": "\e99d",
+  "caret-down": "\e99e",
 );
 
 @each $name, $glyph in $icons {

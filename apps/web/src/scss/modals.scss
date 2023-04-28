@@ -6,6 +6,21 @@
   }
 }
 
+.modal-footer-content {
+  border: none;
+  border-radius: none;
+  @include themify($themes) {
+    background-color: themed("footerBackgroundColor");
+  }
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-clip: padding-box;
+  outline: 0;
+}
+
 .modal-dialog {
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 0.3rem;
@@ -25,6 +40,10 @@
     background-color: themed("foregroundColor");
     border-bottom: 1px solid themed("separator");
     color: themed("textColor");
+  }
+
+  .modal-title {
+    font-size: 1.3rem;
   }
 }
 
@@ -116,6 +135,25 @@
       fill: none;
       @include themify($themes) {
         stroke: themed("primary");
+      }
+
+      &.inner {
+        stroke-dasharray: 78.6;
+        stroke-dashoffset: 0;
+        stroke-width: 3;
+      }
+
+      &.outer {
+        stroke-dasharray: 88;
+        stroke-dashoffset: 0;
+        stroke-width: 2;
+      }
+    }
+
+    .totp-circle-muted {
+      fill: none;
+      @include themify($themes) {
+        stroke: themed("info");
       }
 
       &.inner {

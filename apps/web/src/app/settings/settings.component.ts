@@ -1,12 +1,12 @@
 import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { BroadcasterService } from "jslib-common/abstractions/broadcaster.service";
-import { OrganizationService } from "jslib-common/abstractions/organization.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { TokenService } from "jslib-common/abstractions/token.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 
-import { StateService } from "../../abstractions/state.service";
+import { StateService } from "../core";
 
 const BroadcasterSubscriptionId = "SettingsComponent";
 
@@ -51,9 +51,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   async load() {
-    this.premium = await this.tokenService.getPremium();
+    this.premium = await this.stateService.getHasPremiumPersonally();
     this.hasFamilySponsorshipAvailable = await this.organizationService.canManageSponsorships();
-    const hasPremiumFromOrg = await this.stateService.getCanAccessPremium();
+    const hasPremiumFromOrg = await this.stateService.getHasPremiumFromOrganization();
     let billing = null;
     if (!this.selfHosted) {
       billing = await this.apiService.getUserBillingHistory();

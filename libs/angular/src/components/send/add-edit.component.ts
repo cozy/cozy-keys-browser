@@ -1,24 +1,25 @@
 import { DatePipe } from "@angular/common";
-import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+import { Subject, takeUntil } from "rxjs";
 
-import { EnvironmentService } from "jslib-common/abstractions/environment.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { PolicyService } from "jslib-common/abstractions/policy.service";
-import { SendService } from "jslib-common/abstractions/send.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { PolicyType } from "jslib-common/enums/policyType";
-import { SendType } from "jslib-common/enums/sendType";
-import { EncArrayBuffer } from "jslib-common/models/domain/encArrayBuffer";
-import { Send } from "jslib-common/models/domain/send";
-import { SendFileView } from "jslib-common/models/view/sendFileView";
-import { SendTextView } from "jslib-common/models/view/sendTextView";
-import { SendView } from "jslib-common/models/view/sendView";
+import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
+import { SendService } from "@bitwarden/common/abstractions/send.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { PolicyType } from "@bitwarden/common/enums/policyType";
+import { SendType } from "@bitwarden/common/enums/sendType";
+import { EncArrayBuffer } from "@bitwarden/common/models/domain/enc-array-buffer";
+import { Send } from "@bitwarden/common/models/domain/send";
+import { SendFileView } from "@bitwarden/common/models/view/send-file.view";
+import { SendTextView } from "@bitwarden/common/models/view/send-text.view";
+import { SendView } from "@bitwarden/common/models/view/send.view";
 
 @Directive()
-export class AddEditComponent implements OnInit {
+export class AddEditComponent implements OnInit, OnDestroy {
   @Input() sendId: string;
   @Input() type: SendType;
 
@@ -44,7 +45,9 @@ export class AddEditComponent implements OnInit {
   alertShown = false;
   showOptions = false;
 
+  protected componentName = "";
   private sendLinkBaseUrl: string;
+  private destroy$ = new Subject<void>();
 
   constructor(
     protected i18nService: I18nService,
@@ -80,7 +83,26 @@ export class AddEditComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.policyService
+      .policyAppliesToActiveUser$(PolicyType.DisableSend)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((policyAppliesToActiveUser) => {
+        this.disableSend = policyAppliesToActiveUser;
+      });
+
+    this.policyService
+      .policyAppliesToActiveUser$(PolicyType.SendOptions, (p) => p.data.disableHideEmail)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((policyAppliesToActiveUser) => {
+        this.disableHideEmail = policyAppliesToActiveUser;
+      });
+
     await this.load();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get editMode(): boolean {
@@ -97,12 +119,6 @@ export class AddEditComponent implements OnInit {
   }
 
   async load() {
-    this.disableSend = await this.policyService.policyAppliesToUser(PolicyType.DisableSend);
-    this.disableHideEmail = await this.policyService.policyAppliesToUser(
-      PolicyType.SendOptions,
-      (p) => p.data.disableHideEmail
-    );
-
     this.canAccessPremium = await this.stateService.getCanAccessPremium();
     this.emailVerified = await this.stateService.getEmailVerified();
     if (!this.canAccessPremium || !this.emailVerified) {
@@ -185,25 +201,14 @@ export class AddEditComponent implements OnInit {
       }
       this.onSavedSend.emit(this.send);
       if (this.copyLink && this.link != null) {
-        const copySuccess = await this.copyLinkToClipboard(this.link);
-        if (copySuccess ?? true) {
-          this.platformUtilsService.showToast(
-            "success",
-            null,
-            this.i18nService.t(this.editMode ? "editedSend" : "createdSend")
-          );
-        } else {
-          await this.platformUtilsService.showDialog(
-            this.i18nService.t(this.editMode ? "editedSend" : "createdSend"),
-            null,
-            this.i18nService.t("ok"),
-            null,
-            "success",
-            null
-          );
-          await this.copyLinkToClipboard(this.link);
-        }
+        await this.handleCopyLinkToClipboard();
+        return;
       }
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t(this.editMode ? "editedSend" : "createdSend")
+      );
     });
     try {
       await this.formPromise;
@@ -227,7 +232,9 @@ export class AddEditComponent implements OnInit {
       this.i18nService.t("deleteSend"),
       this.i18nService.t("yes"),
       this.i18nService.t("no"),
-      "warning"
+      "warning",
+      false,
+      this.componentName != "" ? this.componentName + " .modal-content" : null
     );
     if (!confirmed) {
       return false;
@@ -289,5 +296,25 @@ export class AddEditComponent implements OnInit {
   protected togglePasswordVisible() {
     this.showPassword = !this.showPassword;
     document.getElementById("password").focus();
+  }
+  private async handleCopyLinkToClipboard() {
+    const copySuccess = await this.copyLinkToClipboard(this.link);
+    if (copySuccess ?? true) {
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t(this.editMode ? "editedSend" : "createdSend")
+      );
+    } else {
+      await this.platformUtilsService.showDialog(
+        this.i18nService.t(this.editMode ? "editedSend" : "createdSend"),
+        null,
+        this.i18nService.t("ok"),
+        null,
+        "success",
+        null
+      );
+      await this.copyLinkToClipboard(this.link);
+    }
   }
 }

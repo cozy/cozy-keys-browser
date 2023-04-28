@@ -238,6 +238,9 @@
   "ms": {
     "message": "Ms"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -364,7 +367,7 @@
     "message": "정말로 휴지통으로 이동시킬까요?"
   },
   "deletedItem": {
-    "message": "삭제한 항목"
+    "message": "항목 삭제함"
   },
   "overwritePasswordConfirmation": {
     "message": "정말 현재 비밀번호를 덮어쓰시겠습니까?"
@@ -400,6 +403,18 @@
   "length": {
     "message": "길이"
   },
+  "uppercase": {
+    "message": "대문자 (A-Z)"
+  },
+  "lowercase": {
+    "message": "소문자 (a-z)"
+  },
+  "numbers": {
+    "message": "숫자 (0-9)"
+  },
+  "specialCharacters": {
+    "message": "특수 문자 (!@#$%^&*)"
+  },
   "numWords": {
     "message": "단어 수"
   },
@@ -408,7 +423,7 @@
   },
   "capitalize": {
     "message": "첫 글자를 대문자로",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "숫자 포함"
@@ -520,11 +535,21 @@
   "invalidEmail": {
     "message": "잘못된 이메일 주소입니다."
   },
-  "masterPassRequired": {
-    "message": "마스터 비밀번호는 반드시 입력해야 합니다."
+  "masterPasswordRequired": {
+    "message": "마스터 비밀번호가 필요합니다."
   },
-  "masterPassLength": {
-    "message": "마스터 비밀번호는 최소 8자 이상이어야 합니다."
+  "confirmMasterPasswordRequired": {
+    "message": "마스터 비밀번호를 재입력해야 합니다."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "마스터 비밀번호 확인과 마스터 비밀번호가 일치하지 않습니다."
@@ -882,11 +907,11 @@
     "message": "자동으로 클립보드에 복사된 값을 제거합니다.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "웹 사이트 아이콘 사용 안 함"
+  "enableFavicon": {
+    "message": "웹사이트 아이콘 표시하기"
   },
-  "disableFaviconDesc": {
-    "message": "웹 사이트 아이콘을 사용하면 보관함 각 항목 옆에 이미지를 보여줍니다."
+  "faviconDesc": {
+    "message": "Show a recognizable image next to each login."
   },
   "enableMinToTray": {
     "message": "알림 영역으로 최소화"
@@ -1251,6 +1276,10 @@
     "message": "업데이트됨",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Created",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "비밀번호 업데이트됨",
     "description": "ex. Date this password was updated"
@@ -1260,6 +1289,40 @@
   },
   "fileFormat": {
     "message": "파일 형식"
+  },
+  "hCaptchaUrl": {
+    "message": "hCaptcha URL",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "접근성 쿠키 불러오기"
+  },
+  "registerAccessibilityUser": {
+    "message": "Register as an accessibility user at",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Copy and paste the link sent to your email below"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Enter URL to load accessibility cookie for hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "hCaptcha URL이 필요합니다",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "잘못된 URL"
+  },
+  "done": {
+    "message": "완료"
+  },
+  "accessibilityCookieSaved": {
+    "message": "접근성 쿠키가 저장되었습니다!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "접근성 쿠키가 저장되지 않았습니다"
   },
   "warning": {
     "message": "경고",
@@ -1335,14 +1398,29 @@
   "touchIdConsentMessage": {
     "message": "보관함 잠금 해제"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "시작할 때 Windows Hello 요구하지 않음"
+  "autoPromptWindowsHello": {
+    "message": "실행 시 Windows Hello 요구하기"
   },
-  "noAutoPromptTouchId": {
-    "message": "시작할 때 Touch ID 요구하지 않음"
+  "autoPromptTouchId": {
+    "message": "실행 시 Touch ID 요구하기"
   },
   "lockWithMasterPassOnRestart": {
     "message": "다시 시작 시 마스터 비밀번호로 잠금"
+  },
+  "deleteAccount": {
+    "message": "Delete account"
+  },
+  "deleteAccountDesc": {
+    "message": "Proceed below to delete your account and all vault data."
+  },
+  "deleteAccountWarning": {
+    "message": "Deleting your account is permanent. It cannot be undone."
+  },
+  "accountDeleted": {
+    "message": "Account deleted"
+  },
+  "accountDeletedDesc": {
+    "message": "Your account has been closed and all associated data has been deleted."
   },
   "preferences": {
     "message": "설정"
@@ -1497,8 +1575,8 @@
   "acceptPolicies": {
     "message": "이 박스를 체크하면 다음에 동의하는 것으로 간주됩니다:"
   },
-  "acceptPoliciesError": {
-    "message": "서비스 약관 및 개인 정보 보호 정책을 확인하지 않았습니다."
+  "acceptPoliciesRequired": {
+    "message": "Terms of Service and Privacy Policy have not been acknowledged."
   },
   "enableBrowserIntegration": {
     "message": "브라우저와 연결 활성화"
@@ -1506,17 +1584,23 @@
   "enableBrowserIntegrationDesc": {
     "message": "브라우저와 연결하면 브라우저에서 생체 인식을 사용할 수 있습니다."
   },
-  "browserIntegrationMasOnlyTitle": {
-    "message": "브라우저와 연결 지원되지 않음"
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Allow DuckDuckGo browser integration"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Use your Bitwarden vault when browsing with DuckDuckGo."
+  },
+  "browserIntegrationUnsupportedTitle": {
+    "message": "Browser integration not supported"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "브라우저와 연결은 현재 Mac App Store 버전에서만 지원됩니다."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "브라우저와 연결 지원되지 않음"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "현재 Microsoft Store 버전에서는 브라우저와 연결이 지원되지 않습니다."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Unfortunately browser integration is currently not supported in the linux version."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "브라우저와 연결을 위해 인증이 필요함"
@@ -1532,6 +1616,21 @@
   },
   "verifyBrowserDesc": {
     "message": "다음의 지문 구절이 브라우저 확장 프로그램에 표시된 지문 구절과 동일한지 확인해주세요."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ wants to connect to Bitwarden",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Would you like to approve this request?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "If you did not initiate this request, do not approve it."
   },
   "biometricsNotEnabledTitle": {
     "message": "생체 인식이 활성화되지 않음"
@@ -1587,7 +1686,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "최대 접근 횟수"
+    "message": "최대 접근 횟수",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "설정할 경우, 최대 접근 횟수에 도달할 때 이 Send에 접근할 수 없게 됩니다.",
@@ -1688,6 +1788,15 @@
   },
   "disabled": {
     "message": "비활성화됨"
+  },
+  "removePassword": {
+    "message": "Remove password"
+  },
+  "removedPassword": {
+    "message": "Password removed"
+  },
+  "removePasswordConfirmation": {
+    "message": "Are you sure you want to remove the password?"
   },
   "maxAccessCountReached": {
     "message": "최대 접근 횟수 도달"
@@ -1792,8 +1901,8 @@
   "leftOrganization": {
     "message": "조직을 떠났습니다."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "키 제공자와 통신할 수 없습니다. 다시 시도해보세요."
+  "ssoKeyConnectorError": {
+    "message": "키 커넥터 오류: 키 커넥터가 사용 가능한지 및 정상적으로 작동하고 있는지 확인해주세요."
   },
   "lockAllVaults": {
     "message": "모든 보관함 잠그기"
@@ -1832,13 +1941,19 @@
     "message": "개인 보관함을 내보내는 중"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "message": "$EMAIL$ 이메일과 관련이 있는 개인 보관함 항목만 내보내집니다. 조직의 보관함 항목은 포함되지 않습니다.",
     "placeholders": {
       "email": {
         "content": "$1",
         "example": "name@example.com"
       }
     }
+  },
+  "locked": {
+    "message": "잠김"
+  },
+  "unlocked": {
+    "message": "잠금 해제됨"
   },
   "generator": {
     "message": "생성기"
@@ -1859,16 +1974,17 @@
     "message": "아이디 유형"
   },
   "plusAddressedEmail": {
-    "message": "Plus Addressed Email"
+    "message": "플러스 주소 이메일",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
-    "message": "Use your email provider's sub-addressing capabilities."
+    "message": "이메일 제공업체의 하위 이메일 주소 생성을 사용하세요."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Catch-all 이메일"
   },
   "catchallEmailDesc": {
-    "message": "Use your domain's configured catch-all inbox."
+    "message": "catch-all이 설정된 내 도메인의 메일함을 사용하세요."
   },
   "random": {
     "message": "무작위"
@@ -1881,5 +1997,209 @@
   },
   "service": {
     "message": "서비스"
+  },
+  "allVaults": {
+    "message": "모든 보관함"
+  },
+  "searchOrganization": {
+    "message": "조직 검색"
+  },
+  "searchMyVault": {
+    "message": "내 보관함 검색"
+  },
+  "forwardedEmail": {
+    "message": "포워딩된 이메일 별칭"
+  },
+  "forwardedEmailDesc": {
+    "message": "외부 포워딩 서비스를 사용해서 이메일 주소 별칭을 만들어보세요."
+  },
+  "hostname": {
+    "message": "호스트 이름",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API 액세스 토큰"
+  },
+  "apiKey": {
+    "message": "API 키"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Premium subscription required"
+  },
+  "organizationIsDisabled": {
+    "message": "Organization suspended"
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in suspended organizations cannot be accessed. Contact your organization owner for assistance."
+  },
+  "neverLockWarning": {
+    "message": "Are you sure you want to use the \"Never\" option? Setting your lock options to \"Never\" stores your vault's encryption key on your device. If you use this option you should ensure that you keep your device properly protected."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "Vault"
+  },
+  "loginWithMasterPassword": {
+    "message": "Log in with master password"
+  },
+  "loggingInAs": {
+    "message": "Logging in as"
+  },
+  "rememberEmail": {
+    "message": "Remember email"
+  },
+  "notYou": {
+    "message": "Not you?"
+  },
+  "newAroundHere": {
+    "message": "New around here?"
+  },
+  "loggingInTo": {
+    "message": "Logging in to $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Log in with another device"
+  },
+  "logInInitiated": {
+    "message": "Log in initiated"
+  },
+  "notificationSentDevice": {
+    "message": "A notification has been sent to your device."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingerprint phrase"
+  },
+  "needAnotherOption": {
+    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+  },
+  "viewAllLoginOptions": {
+    "message": "View all login options"
+  },
+  "resendNotification": {
+    "message": "Resend notification"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Are you trying to log in?"
+  },
+  "logInAttemptBy": {
+    "message": "Login attempt by $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Device Type"
+  },
+  "ipAddress": {
+    "message": "IP Address"
+  },
+  "time": {
+    "message": "Time"
+  },
+  "confirmLogIn": {
+    "message": "Confirm login"
+  },
+  "denyLogIn": {
+    "message": "Deny login"
+  },
+  "approveLoginRequests": {
+    "message": "Approve login requests"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Login confirmed for $EMAIL$ on $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "You denied a login attempt from another device. If this really was you, try to log in with the device again."
+  },
+  "justNow": {
+    "message": "Just now"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Requested $MINUTES$ minutes ago",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Login request has already expired."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "This request is no longer valid."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Use this device to approve login requests made from other devices."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Confirm login attempt for $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Log in requested"
+  },
+  "exposedMasterPassword": {
+    "message": "Exposed Master Password"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Weak and Exposed Master Password"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+  },
+  "checkForBreaches": {
+    "message": "Check known data breaches for this password"
+  },
+  "important": {
+    "message": "Important:"
+  },
+  "masterPasswordHint": {
+    "message": "Your master password cannot be recovered if you forget it!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ character minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

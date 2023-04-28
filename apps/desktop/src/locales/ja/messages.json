@@ -238,6 +238,9 @@
   "ms": {
     "message": "Ms"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr"
   },
@@ -346,10 +349,10 @@
     "message": "名前は必須項目です。"
   },
   "addedItem": {
-    "message": "追加しました"
+    "message": "追加されたアイテム"
   },
   "editedItem": {
-    "message": "編集しました"
+    "message": "編集されたアイテム"
   },
   "deleteItem": {
     "message": "アイテムの削除"
@@ -400,6 +403,18 @@
   "length": {
     "message": "長さ"
   },
+  "uppercase": {
+    "message": "大文字（A-Z）"
+  },
+  "lowercase": {
+    "message": "小文字（a-z）"
+  },
+  "numbers": {
+    "message": "数字 (0～9)"
+  },
+  "specialCharacters": {
+    "message": "特殊文字（!@#$%^&*)"
+  },
   "numWords": {
     "message": "単語数"
   },
@@ -408,7 +423,7 @@
   },
   "capitalize": {
     "message": "先頭を大文字",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "数字を含む"
@@ -520,11 +535,21 @@
   "invalidEmail": {
     "message": "無効なメールアドレスです。"
   },
-  "masterPassRequired": {
-    "message": "マスターパスワードは必須です。"
+  "masterPasswordRequired": {
+    "message": "マスターパスワードが必要です。"
   },
-  "masterPassLength": {
-    "message": "マスターパスワードは、少なくとも8文字以上で設定してください。"
+  "confirmMasterPasswordRequired": {
+    "message": "マスターパスワードの再入力が必要です。"
+  },
+  "masterPasswordMinlength": {
+    "message": "マスターパスワードは少なくとも $VALUE$ 文字以上でなければなりません。",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "マスターパスワードが一致しません。"
@@ -882,11 +907,11 @@
     "message": "選択した時間が経過した後、自動的にクリップボードを消去します。",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "ウェブサイトアイコンの無効化"
+  "enableFavicon": {
+    "message": "ウェブサイトのアイコンを表示"
   },
-  "disableFaviconDesc": {
-    "message": "保管庫のアイテム毎にウェブサイトのアイコンを表示します。"
+  "faviconDesc": {
+    "message": "ログイン情報の隣にアイコン画像を表示します"
   },
   "enableMinToTray": {
     "message": "トレイアイコンに最小化"
@@ -1251,6 +1276,10 @@
     "message": "更新日",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "作成日",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "パスワード更新日",
     "description": "ex. Date this password was updated"
@@ -1260,6 +1289,40 @@
   },
   "fileFormat": {
     "message": "ファイル形式"
+  },
+  "hCaptchaUrl": {
+    "message": "hCaptcha URL",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "アクセシビリティクッキーを読み込む"
+  },
+  "registerAccessibilityUser": {
+    "message": "アクセシビリティユーザーとして登録する",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "以下のメールに送信されたリンクをコピーして貼り付けてください"
+  },
+  "enterhCaptchaUrl": {
+    "message": "hCaptcha のアクセシビリティクッキーを読み込むための URL を入力してください",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "hCaptcha URL が必要です",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "無効な URL"
+  },
+  "done": {
+    "message": "完了"
+  },
+  "accessibilityCookieSaved": {
+    "message": "アクセシビリティクッキーを保存しました！"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "アクセシビリティクッキーが保存されていません"
   },
   "warning": {
     "message": "警告",
@@ -1335,14 +1398,29 @@
   "touchIdConsentMessage": {
     "message": "Bitwarden の認証を行います。"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "起動時に Windows Hello のプロンプトを表示しない"
+  "autoPromptWindowsHello": {
+    "message": "起動時に Windows Hello を要求する"
   },
-  "noAutoPromptTouchId": {
-    "message": "起動時に Touch ID を要求しない"
+  "autoPromptTouchId": {
+    "message": "起動時に Touch ID を要求する"
   },
   "lockWithMasterPassOnRestart": {
     "message": "再起動時にマスターパスワードでロック"
+  },
+  "deleteAccount": {
+    "message": "アカウントを削除"
+  },
+  "deleteAccountDesc": {
+    "message": "アカウントとすべての保管庫データを削除するには、以下に進んでください。"
+  },
+  "deleteAccountWarning": {
+    "message": "アカウントを恒久的に削除します。元に戻すことはできません。"
+  },
+  "accountDeleted": {
+    "message": "アカウントが削除されました"
+  },
+  "accountDeletedDesc": {
+    "message": "アカウントが削除され、すべての関連するデータが削除されました。"
   },
   "preferences": {
     "message": "設定"
@@ -1497,7 +1575,7 @@
   "acceptPolicies": {
     "message": "以下に同意しチェックします:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "利用規約とプライバシーポリシーを確認してください。"
   },
   "enableBrowserIntegration": {
@@ -1506,17 +1584,23 @@
   "enableBrowserIntegrationDesc": {
     "message": "ブラウザでの生体認証のためにブラウザ統合を使用します。"
   },
-  "browserIntegrationMasOnlyTitle": {
-    "message": "ブラウザ統合はサポートされていません"
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "DuckDuckGo ブラウザの統合を許可する"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "DuckDuckGo でブラウズするときに Bitwarden 保管庫を使用します。"
+  },
+  "browserIntegrationUnsupportedTitle": {
+    "message": "ブラウザー統合はサポートされていません"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "残念ながら、ブラウザ統合は、Mac App Storeのバージョンでのみサポートされています。"
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "ブラウザ統合に対応していません"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "残念ながらお使いの Microsoft Store のバージョンではブラウザの統合に対応していません。"
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "残念ながら、Linux バージョンではブラウザー統合は現在サポートされていません。"
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "ブラウザ統合には認証を必要とする。"
@@ -1532,6 +1616,21 @@
   },
   "verifyBrowserDesc": {
     "message": "表示されているパスフレーズがブラウザ拡張に表示されているものと同じであることを確認してください。"
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ が Bitwarden に接続しようとしています",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "このリクエストを承認しますか？"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "このリクエストが自身でしたものでない場合は、承認しないでください。"
   },
   "biometricsNotEnabledTitle": {
     "message": "生体認証が有効になっていません。"
@@ -1587,7 +1686,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "最大アクセス数"
+    "message": "最大アクセス数",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "設定されている場合、最大アクセス数に達するとユーザーはこの Send にアクセスできなくなります。",
@@ -1688,6 +1788,15 @@
   },
   "disabled": {
     "message": "無効"
+  },
+  "removePassword": {
+    "message": "パスワードを削除"
+  },
+  "removedPassword": {
+    "message": "パスワードを削除しました"
+  },
+  "removePasswordConfirmation": {
+    "message": "パスワードを削除してもよろしいですか？"
   },
   "maxAccessCountReached": {
     "message": "最大アクセス数に達しました"
@@ -1792,8 +1901,8 @@
   "leftOrganization": {
     "message": "組織から脱退しました。"
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "キーコネクターに到達できません。後でもう一度お試しください。"
+  "ssoKeyConnectorError": {
+    "message": "キーコネクターエラー: キーコネクターが使用可能で、正常に動作しているか確認してください。"
   },
   "lockAllVaults": {
     "message": "すべての保管庫をロック"
@@ -1840,6 +1949,12 @@
       }
     }
   },
+  "locked": {
+    "message": "ロック中"
+  },
+  "unlocked": {
+    "message": "ロック解除済み"
+  },
   "generator": {
     "message": "ジェネレーター"
   },
@@ -1859,7 +1974,8 @@
     "message": "ユーザー名の種類"
   },
   "plusAddressedEmail": {
-    "message": "プラス付きのメールアドレス"
+    "message": "プラス付きのメールアドレス",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "メールプロバイダのエイリアス機能を使用します。"
@@ -1881,5 +1997,209 @@
   },
   "service": {
     "message": "サービス"
+  },
+  "allVaults": {
+    "message": "すべての保管庫"
+  },
+  "searchOrganization": {
+    "message": "組織の検索"
+  },
+  "searchMyVault": {
+    "message": "保管庫を検索"
+  },
+  "forwardedEmail": {
+    "message": "転送されたメールエイリアス"
+  },
+  "forwardedEmailDesc": {
+    "message": "外部転送サービスを使用してメールエイリアスを生成します。"
+  },
+  "hostname": {
+    "message": "ホスト名",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API アクセストークン"
+  },
+  "apiKey": {
+    "message": "API キー"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "プレミアム版が必要です"
+  },
+  "organizationIsDisabled": {
+    "message": "組織は無効です。"
+  },
+  "disabledOrganizationFilterError": {
+    "message": "無効な組織のアイテムにアクセスすることはできません。組織の所有者に連絡してください。"
+  },
+  "neverLockWarning": {
+    "message": "本当に「なし」オプションを使用しますか？ロックオプションを「なし」に設定すると、保管庫の暗号化キーがデバイスに保存されます。 このオプションを使用する場合は、デバイスを適切に保護する必要があります。"
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "保管庫"
+  },
+  "loginWithMasterPassword": {
+    "message": "マスターパスワードでログイン"
+  },
+  "loggingInAs": {
+    "message": "ログイン中:"
+  },
+  "rememberEmail": {
+    "message": "メールアドレスを保存"
+  },
+  "notYou": {
+    "message": "あなたではないですか？"
+  },
+  "newAroundHere": {
+    "message": "初めてですか?"
+  },
+  "loggingInTo": {
+    "message": "$DOMAIN$ にログイン中",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "別のデバイスでログイン"
+  },
+  "logInInitiated": {
+    "message": "ログイン開始"
+  },
+  "notificationSentDevice": {
+    "message": "デバイスに通知を送信しました。"
+  },
+  "fingerprintMatchInfo": {
+    "message": "保管庫がロックされていることと、パスフレーズが他のデバイスと一致していることを確認してください。"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "パスフレーズ"
+  },
+  "needAnotherOption": {
+    "message": "Bitwarden アプリの設定でデバイスでログインする必要があります。別のオプションが必要ですか？"
+  },
+  "viewAllLoginOptions": {
+    "message": "すべてのログインオプションを表示"
+  },
+  "resendNotification": {
+    "message": "通知を再送信する"
+  },
+  "toggleCharacterCount": {
+    "message": "文字カウントを切り替える",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "ログインしようとしていますか？"
+  },
+  "logInAttemptBy": {
+    "message": "$EMAIL$ によるログインの試行",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "デバイス種別"
+  },
+  "ipAddress": {
+    "message": "IP アドレス"
+  },
+  "time": {
+    "message": "時間"
+  },
+  "confirmLogIn": {
+    "message": "ログインを承認"
+  },
+  "denyLogIn": {
+    "message": "ログインを拒否"
+  },
+  "approveLoginRequests": {
+    "message": "ログインリクエストを承認する"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "$EMAIL$ に $DEVICE$ でのログインを承認しました",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "別のデバイスからのログイン試行を拒否しました。本当にあなたであった場合は、もう一度デバイスでログインしてみてください。"
+  },
+  "justNow": {
+    "message": "たった今"
+  },
+  "requestedXMinutesAgo": {
+    "message": "$MINUTES$ 分前",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "ログインリクエストの有効期限が切れています。"
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "このリクエストは無効になりました。"
+  },
+  "approveLoginRequestDesc": {
+    "message": "このデバイスを使用して、他のデバイスからのログインリクエストを承認します。"
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "$EMAIL$ のログイン試行を確認",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "ログインリクエスト済み"
+  },
+  "exposedMasterPassword": {
+    "message": "流出したマスターパスワード"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "入力したパスワードはデータ流出結果に含まれていました。アカウントを保護するためには一意のパスワードを使用してください。本当に流出済みのパスワードを使用しますか？"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "脆弱で流出済みのマスターパスワード"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "入力されたパスワードは脆弱かつすでに流出済みです。アカウントを守るためより強力で一意なパスワードを使用してください。本当にこの脆弱なパスワードを使用しますか？"
+  },
+  "checkForBreaches": {
+    "message": "このパスワードの既知のデータ流出を確認"
+  },
+  "important": {
+    "message": "重要"
+  },
+  "masterPasswordHint": {
+    "message": "マスターパスワードを忘れた場合は復元できません！"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ 文字以上",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

@@ -4,7 +4,6 @@
 
 .filter-heading {
   display: flex;
-  text-transform: uppercase;
   align-items: center;
 
   * {
@@ -26,20 +25,24 @@
     }
   }
 
-  button.filter-button {
-    &:hover,
-    &:focus,
-    &.active {
-      @include themify($themes) {
-        color: themed("linkColor") !important;
+  .filter-button {
+    h3,
+    button {
+      &:hover,
+      &:focus,
+      &.active {
+        @include themify($themes) {
+          color: themed("linkColor") !important;
+        }
       }
-    }
-    &.active {
-      font-weight: bold;
+      &.active {
+        font-weight: bold;
+      }
     }
   }
 
-  button.toggle-button {
+  button.toggle-button,
+  button.add-button {
     &:hover,
     &:focus {
       @include themify($themes) {
@@ -90,6 +93,10 @@
     @extend .no-btn;
   }
 
+  .contents {
+    display: contents;
+  }
+
   .toggle-button {
     &:hover,
     &:focus {
@@ -100,6 +107,9 @@
   }
 
   .filter-button {
+    max-width: 90%;
+    white-space: nowrap;
+
     &:hover,
     &:focus,
     &:active {
@@ -108,7 +118,10 @@
       }
       text-decoration: none;
     }
-    max-width: 90%;
+
+    &.disabled-organization {
+      max-width: 78%;
+    }
   }
 
   .edit-button {
@@ -125,6 +138,10 @@
         color: themed("iconHover") !important;
       }
     }
+  }
+
+  .filter-options-icon {
+    padding: 0 2px;
   }
 }
 
@@ -147,7 +164,6 @@
 
     h3 {
       font-weight: normal;
-      text-transform: uppercase;
       @include themify($themes) {
         color: themed("textMuted");
       }
@@ -161,11 +177,6 @@
       @include themify($themes) {
         color: themed("textHeadingColor");
         font-weight: themed("linkWeight");
-      }
-
-      &:hover {
-        &.text-muted {
-        }
       }
     }
     .show-active {

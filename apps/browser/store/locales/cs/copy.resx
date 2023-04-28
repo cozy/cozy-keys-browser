@@ -124,13 +124,32 @@
     <value>Bezpečný a bezplatný správce hesel pro všechna vaše zařízení</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden je nejjednodušší a nejbezpečnější způsob, jak uchovávat veškeré své přihlašovací údaje a zároveň je mít pohodlně synchronizované mezi všemi svými zařízeními.
+    <value>Bitwarden, Inc. je mateřskou společností 8bit Solutions LLC.
 
-Krádež hesla je velice vážný problém. Stránky a aplikace, které každodenně používáte, jsou často pod útokem a vaše hesla mohou být odcizena. Pokud používáte stejné heslo mezi více aplikacemi nebo stránkami, hackeři se mohou snadno dostat k vaší emailové schránce, bankovnímu účtu či do jiných důležitých účtů.
+THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET A DALŠÍ JI OZNAČILY ZA NEJLEPŠÍHO SPRÁVCE HESEL.
 
-Bezpečnostní experti proto doporučují používat různá, silná a náhodně generovaná hesla pro každý účet zvlášť. Ale jak tato všechna hesla spravovat? bitwarden vám ulehčí jejich správu, ale také jejich generování nebo sdílení.
+Spravujte, ukládejte, zabezpečujte a sdílejte neomezený počet hesel na neomezeném počtu zařízení odkudkoliv. Bitwarden poskytuje open source řešení pro správu hesel všem, ať už doma, v práci nebo na cestách.
 
-bitwarden uchovává veškeré vaše přihlašovací údaje v zašifrovaném trezoru, který se synchronizuje mezi všemi vašimi zařízeními. Jelikož jsou zašifrována ještě před opuštěním vašeho zařízení, máte přístup ke svým datům pouze vy. Dokonce ani tým v bitwardenu nemůže číst vaše data a to ani kdybychom chtěli. Vaše data jsou totiž zakódována pomocí šifrovávání AES-256, náhodným hashem a PBKDF2 SHA-256.</value>
+Generujte silná, jedinečná a náhodná hesla na základě bezpečnostních požadavků pro každou webovou stránku, kterou navštěvujete.
+
+Bitwarden Send rychle přenáší šifrované informace --- soubory a prostý text -- přímo komukoliv.
+
+Bitwarden nabízí plány Teams a Enterprise pro firmy, takže můžete bezpečně sdílet hesla s kolegy.
+
+Proč si vybrat Bitwarden:
+
+Šifrování na světové úrovni
+Hesla jsou chráněna pokročilým koncovým šifrováním (AES-256 bit, salted hashování a PBKDF2 SHA-256), takže vaše data zůstanou bezpečná a soukromá.
+
+Vestavěný generátor hesel
+Generujte silná, jedinečná a náhodná hesla na základě bezpečnostních požadavků pro každou webovou stránku, kterou navštěvujete.
+
+Globální překlady
+Překlady Bitwarden existují ve 40 jazycích a díky naší globální komunitě se stále rozšiřují.
+
+Aplikace pro více platforem
+Zabezpečte a sdílejte citlivá data v rámci svého trezoru Bitwarden z jakéhokoliv prohlížeče, mobilního zařízení nebo desktopového operačního systému a dalších.
+</value>
   </data>
   <data name="AssetTitle" xml:space="preserve">
     <value>Bezpečný a bezplatný správce hesel pro všechna vaše zařízení</value>

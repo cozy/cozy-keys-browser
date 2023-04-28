@@ -72,20 +72,17 @@
 
   &.active {
     .filter-button {
-      h2 {
-        @include themify($themes) {
-          color: themed("primaryColor");
-        }
+      font-weight: bold;
+      @include themify($themes) {
+        color: themed("primaryColor");
       }
     }
   }
 
   .filter-button {
     &:hover {
-      h2 {
-        @include themify($themes) {
-          color: themed("primaryColor");
-        }
+      @include themify($themes) {
+        color: themed("primaryColor");
       }
     }
   }
@@ -134,15 +131,6 @@
   align-items: center;
   width: 100%;
 
-  &:hover,
-  &:focus {
-    .filter-button {
-      @include themify($themes) {
-        color: themed("primaryColor");
-      }
-    }
-  }
-
   button {
     @extend .no-btn;
   }
@@ -165,6 +153,10 @@
     visibility: hidden;
     margin-left: auto;
     margin-right: 5px;
+  }
+
+  .filter-button {
+    white-space: nowrap;
   }
 }
 

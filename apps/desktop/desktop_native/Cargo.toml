@@ -8,26 +8,31 @@ version = "0.0.0"
 [lib]
 crate-type = ["cdylib"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+default=[]
+manual_test=[]
 
 [dependencies]
 anyhow = "1.0"
-napi = {version = "2", features = ["async"]}
-napi-derive = "2"
+napi = {version = "2.9.1", features = ["async"]}
+napi-derive = "2.9.1"
 scopeguard = "1.1.0"
 tokio = {version = "1.17.0", features = ["full"]}
 
 [build-dependencies]
-napi-build = "1"
+napi-build = "2.0.1"
 
 [target.'cfg(windows)'.dependencies]
 widestring = "0.5.1"
-windows = {version = "0.32.0", features = [
-  "alloc",
+windows = {version = "0.39.0", features = [
   "Foundation",
+  "Security_Credentials_UI",
   "Storage_Streams",
   "Win32_Foundation",
   "Win32_Security_Credentials",
+  "Win32_System_WinRT",
+  "Win32_UI_Input_KeyboardAndMouse",
+  "Win32_UI_WindowsAndMessaging",
 ]}
 
 [target.'cfg(windows)'.dev-dependencies]

@@ -136,7 +136,7 @@
     "description": "Toggling an expand/collapse state."
   },
   "cardholderName": {
-    "message": "Vlasnik kartice"
+    "message": "Vlasnik platne kartice"
   },
   "number": {
     "message": "Broj"
@@ -151,13 +151,13 @@
     "message": "Kontrolni broj"
   },
   "identityName": {
-    "message": "identityName"
+    "message": "Ime identiteta"
   },
   "company": {
     "message": "Tvrtka"
   },
   "ssn": {
-    "message": "Broj socijalnog osiguranja"
+    "message": "Broj zdravstvenog osiguranja"
   },
   "passportNumber": {
     "message": "Broj putovnice"
@@ -175,10 +175,10 @@
     "message": "Adresa"
   },
   "premiumRequired": {
-    "message": "Potrebno premium članstvo"
+    "message": "Potrebno Premium članstvo"
   },
   "premiumRequiredDesc": {
-    "message": "Za korištenje ove značajke potrebno je premium članstvo."
+    "message": "Za korištenje ove značajke potrebno je Premium članstvo."
   },
   "errorOccurred": {
     "message": "Došlo je do pogreške."
@@ -237,6 +237,9 @@
   },
   "ms": {
     "message": "gđica."
+  },
+  "mx": {
+    "message": "Mx"
   },
   "dr": {
     "message": "dr."
@@ -349,7 +352,7 @@
     "message": "Stavka dodana"
   },
   "editedItem": {
-    "message": "Stavka izmijenjena"
+    "message": "Stavka spremljena"
   },
   "deleteItem": {
     "message": "Izbriši stavku"
@@ -370,10 +373,10 @@
     "message": "Sigurno želiš prebrisati trenutnu lozinku?"
   },
   "overwriteUsername": {
-    "message": "Overwrite Username"
+    "message": "Prebriši korisničko ime"
   },
   "overwriteUsernameConfirmation": {
-    "message": "Are you sure you want to overwrite the current username?"
+    "message": "Sigurno želiš prebrisati trenutno korisničko ime?"
   },
   "noneFolder": {
     "message": "Nema mape",
@@ -400,6 +403,18 @@
   "length": {
     "message": "Duljina"
   },
+  "uppercase": {
+    "message": "Velika slova (A - Z)"
+  },
+  "lowercase": {
+    "message": "Mala slova (a - z)"
+  },
+  "numbers": {
+    "message": "Brojevi (0 - 9)"
+  },
+  "specialCharacters": {
+    "message": "Posebni znakovi (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Broj riječi"
   },
@@ -408,7 +423,7 @@
   },
   "capitalize": {
     "message": "Prva slova velika",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Uključi broj"
@@ -420,7 +435,7 @@
     "message": "Najmanje brojeva"
   },
   "minSpecial": {
-    "message": "Najmanje specijalnih",
+    "message": "Najmanje posebnih",
     "description": "Minimum Special Characters"
   },
   "ambiguous": {
@@ -443,19 +458,19 @@
     "message": "Dodaj novi privitak"
   },
   "deletedAttachment": {
-    "message": "Izbrisani privitak"
+    "message": "Privitak izbrisan"
   },
   "deleteAttachmentConfirmation": {
     "message": "Sigurno želiš izbrisati ovaj privitak?"
   },
   "attachmentSaved": {
-    "message": "Privitak je spremljen."
+    "message": "Privitak spremljen"
   },
   "file": {
     "message": "Datoteka"
   },
   "selectFile": {
-    "message": "Odaberi datoteku."
+    "message": "Odaberi datoteku"
   },
   "maxFileSize": {
     "message": "Najveća veličina datoteke je 500 MB."
@@ -464,7 +479,7 @@
     "message": "Ne možeš koristiti ovu značajku prije nego ažuriraš ključ za šifriranje."
   },
   "editedFolder": {
-    "message": "Uređena mapa"
+    "message": "Mapa spremljena"
   },
   "addedFolder": {
     "message": "Mapa dodana"
@@ -520,11 +535,21 @@
   "invalidEmail": {
     "message": "Nevažeća adresa e-pošte."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Potrebna je glavna lozinka."
   },
-  "masterPassLength": {
-    "message": "Glavna lozinka mora imati najmanje 8 znakova."
+  "confirmMasterPasswordRequired": {
+    "message": "Potreban je ponovni unos glavne lozinke."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Potvrda glavne lozinke se ne podudara."
@@ -596,7 +621,7 @@
     "message": "Ponovno slanje kontrolnog koda e-poštom"
   },
   "useAnotherTwoStepMethod": {
-    "message": "Koristiti drugi način prijave u dva koraka"
+    "message": "Koristiti drugi način prijave dvostrukom autentifikacijom"
   },
   "insertYubiKey": {
     "message": "Umetni svoj YubiKey u USB priključak računala, a zatim dodirni njegovu tipku."
@@ -647,13 +672,13 @@
     "message": "Prijava nije dostupna"
   },
   "noTwoStepProviders": {
-    "message": "Ovaj račun ima omogućenu prijavu u dva koraka, međutim, niti jedan od konfiguriranih pružatelja prijave u dva koraka ne podržava ovaj uređaj."
+    "message": "Ovaj račun ima omogućenu prijavu dvostrukom autentifikacijom, međutim, niti jedan od konfiguriranih pružatelja prijave dvostrukom autentifikacijom ne podržava ovaj uređaj."
   },
   "noTwoStepProviders2": {
     "message": "Dodaj dodatne pružatelje, bolje podržane na uređajima (npr. aplikacija Autentifikator)."
   },
   "twoStepOptions": {
-    "message": "Mogućnosti prijave u dva koraka"
+    "message": "Mogućnosti prijave dvostrukom autentifikacijom"
   },
   "selfHostedEnvironment": {
     "message": "Vlastito hosting okruženje"
@@ -719,13 +744,13 @@
     "message": "Odjavi se"
   },
   "addNewLogin": {
-    "message": "Dodaj novu prijavu"
+    "message": "Nova prijava"
   },
   "addNewItem": {
-    "message": "Dodaj novu stavku"
+    "message": "Nova stavka"
   },
   "addNewFolder": {
-    "message": "Dodaj novu mapu"
+    "message": "Nova mapa"
   },
   "view": {
     "message": "Prikaz"
@@ -743,10 +768,10 @@
     "message": "Generator lozinki"
   },
   "contactUs": {
-    "message": "Contact Us"
+    "message": "Kontaktiraj nas"
   },
   "getHelp": {
-    "message": "Get Help"
+    "message": "Potraži pomoć"
   },
   "fileBugReport": {
     "message": "Podnesi izvješće o grešci"
@@ -758,7 +783,7 @@
     "message": "Prati nas"
   },
   "syncVault": {
-    "message": "Odmah sinkroniziraj trezor"
+    "message": "Sinkronizraj trezor"
   },
   "changeMasterPass": {
     "message": "Promjeni glavnu lozinku"
@@ -812,10 +837,10 @@
     "message": "Neispravna glavna lozinka"
   },
   "twoStepLoginConfirmation": {
-    "message": "Prijava u dva koraka čini tvoj račun još sigurnijim tako što će zahtijevati da potvrdiš prijavu putem drugog uređaja sigurnosnim ključem, autentifikatorskom aplikacijom, SMS-om, pozivom ili e-poštom. Prijavu u dva koraka možeš omogućiti na web trezoru. Želiš li sada posjetiti bitwarden.com?"
+    "message": "Prijava dvostrukom autentifikacijom čini tvoj račun još sigurnijim tako što će zahtijevati potvrdu prijave putem drugog uređaja kao što su sigurnosni ključ, autentifikatorske aplikacije, SMS-om, pozivom ili e-poštom. Prijavu dvostrukom autentifikacijom možeš omogućiti na web trezoru. Želiš li sada posjetiti bitwarden.com?"
   },
   "twoStepLogin": {
-    "message": "Prijava u dva koraka"
+    "message": "Prijava dvostrukom autentifikacijom"
   },
   "vaultTimeout": {
     "message": "Istek trezora"
@@ -882,11 +907,11 @@
     "message": "Automatski očisti kopirane vrijednosti iz međuspremnika.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Onemogući ikone web mjesta"
+  "enableFavicon": {
+    "message": "Prikaži ikone mrežnih mjesta"
   },
-  "disableFaviconDesc": {
-    "message": "Prepoznatljive ikone web mjesta prikazuju se pored prijava u tvojem trezoru."
+  "faviconDesc": {
+    "message": "Prikaži prepoznatljivu sliku pored svake prijave."
   },
   "enableMinToTray": {
     "message": "Minimiziraj u područje obavijesti"
@@ -1050,7 +1075,7 @@
     "message": "1 GB šifriranog prostora za pohranu podataka."
   },
   "premiumSignUpTwoStep": {
-    "message": "Dodatne mogućnosti za prijavu u dva koraka kao što su YubiKey, FIDO U2F i Duo."
+    "message": "Dodatne mogućnosti za prijavu dvostrukom autentifikacijom kao što su YubiKey, FIDO U2F i Duo."
   },
   "premiumSignUpReports": {
     "message": "Higijenu lozinki, zdravlje računa i izvještaje o krađi podatak radi zaštite svojeg trezora."
@@ -1125,7 +1150,7 @@
     "message": "Poništi zumiranje"
   },
   "toggleFullScreen": {
-    "message": "Uključi/isključi prikaz preko cijelog zaslona"
+    "message": "Prikaz preko cijelog zaslona"
   },
   "reload": {
     "message": "Ponovno učitaj"
@@ -1198,7 +1223,7 @@
     "description": "Domain name. Ex. website.com"
   },
   "domainName": {
-    "message": "Domain Name",
+    "message": "Naziv domene",
     "description": "Domain name. Ex. website.com"
   },
   "host": {
@@ -1251,6 +1276,10 @@
     "message": "Ažurirano",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Stvoreno",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Lozinka ažurirana",
     "description": "ex. Date this password was updated"
@@ -1260,6 +1289,40 @@
   },
   "fileFormat": {
     "message": "Format datoteke"
+  },
+  "hCaptchaUrl": {
+    "message": "hCaptcha Url",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Učitaj kolačić pristupačnosti"
+  },
+  "registerAccessibilityUser": {
+    "message": "Registriraj se kao korisnik pristupačnosti na",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Kopiraj i zalijepi vezu poslanu na e-poštu u nastavku"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Unesi URL za učitavanje kolačića pristupačnosti za hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "hCaptcha Url je obavezan",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Neispravan Url"
+  },
+  "done": {
+    "message": "Gotovo"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Kolačić pristupačnosti spremljen!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Nije spremljen kolačić pristupačnosti"
   },
   "warning": {
     "message": "UPOZORENJE",
@@ -1335,14 +1398,29 @@
   "touchIdConsentMessage": {
     "message": "Otključaj trezor"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Ne traži Windows Hello pri pokretanju."
+  "autoPromptWindowsHello": {
+    "message": "Zahtijevaj Windows Hello pri pokretanju"
   },
-  "noAutoPromptTouchId": {
-    "message": "Ne traži Touch ID pri pokretanju."
+  "autoPromptTouchId": {
+    "message": "Zahtijevaj Touch ID pri pokretanju"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Zaključaj glavnom lozinkom kod svakog pokretanja"
+  },
+  "deleteAccount": {
+    "message": "Obriši račun"
+  },
+  "deleteAccountDesc": {
+    "message": "Nastavi za brisanje svojeg računa i SVIH podataka u trezoru."
+  },
+  "deleteAccountWarning": {
+    "message": "Brisanje računa je TRAJNO i NEPOVRATNO i naknadno ga nije moguće vratiti."
+  },
+  "accountDeleted": {
+    "message": "Račun izbrisan"
+  },
+  "accountDeletedDesc": {
+    "message": "Tvoj račun je zatvoren i svi povezani podaci su obrisani."
   },
   "preferences": {
     "message": "Postavke"
@@ -1394,10 +1472,10 @@
     "message": "Nakon isteka trezora"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "Zaključani trezor, za ponovni pristup, zahtijeva ponovni unos tvoje glavne lozinke."
+    "message": "Potrebno je ponovno unijeti glavnu lozinku ili na drugi način otključati za pristup tvom trezoru."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "Odjavljeni trezor, za ponovni pristup, zahtijeva ponovnu provjeru autentičnosti."
+    "message": "Potrebno je ponovno unijeti korisničko ime i glavnu lozinku za pristup tvom trezoru."
   },
   "lock": {
     "message": "Zaključaj",
@@ -1417,7 +1495,7 @@
     "message": "Želiš li zaista trajno izbrisati ovu stavku?"
   },
   "permanentlyDeletedItem": {
-    "message": "Trajno izbirsana stavka"
+    "message": "Stavka trajno izbrisana"
   },
   "restoreItem": {
     "message": "Vrati stavku"
@@ -1497,8 +1575,8 @@
   "acceptPolicies": {
     "message": "Označavanjem ove kućice slažete se sa sljedećim:"
   },
-  "acceptPoliciesError": {
-    "message": "Uvjeti korištenja i Pravila privatnosti nisu prihvaćeni."
+  "acceptPoliciesRequired": {
+    "message": "Uvjeti korištenja i Politika privatnosti nisu prihvaćeni."
   },
   "enableBrowserIntegration": {
     "message": "Uključi integraciju s web preglednikom"
@@ -1506,17 +1584,23 @@
   "enableBrowserIntegrationDesc": {
     "message": "Integracija s preglednikom koristi se za biometriju u pregledniku."
   },
-  "browserIntegrationMasOnlyTitle": {
-    "message": "Integracija s preglednikom nije omogućena"
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Dozvoli integraciju s DuckDuckGo preglednikom"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Koristi svoj Bitwarden trezor prilikom korištenje DuckDuckGo preglednika."
+  },
+  "browserIntegrationUnsupportedTitle": {
+    "message": "Integracija preglednika nije podržana"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Nažalost, za sada je integracija s preglednikom podržana samo u Mac App Store verziji aplikacije."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Integracija s preglednikom nije podržana"
-  },
   "browserIntegrationWindowsStoreDesc": {
-    "message": "Nažalost, integracija s preglednikom nije podržana u Windows Store verziji aplikacije."
+    "message": "Nažalost, integracija s preglednikom trenutno nije podržana u Windows Store verziji aplikacije."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Nažalost, integracija preglednika trenutno nije podržana u Linux verziji aplikacije."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Traži verifikaciju za integraciju s preglednikom"
@@ -1533,8 +1617,23 @@
   "verifyBrowserDesc": {
     "message": "Provjeri da je prikazana jedinstvena fraza identična onoj prikazanoj u proširenju preglednika."
   },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ se želi spojiti s Bitwardenom",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Želiš li odobriti ovaj zahtijev?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "Ako nisi pokrenuo ovaj zahtijev, nemoj ga odobriti."
+  },
   "biometricsNotEnabledTitle": {
-    "message": "Biometrija nije omogućena"
+    "message": "Biometrija nije postavljena"
   },
   "biometricsNotEnabledDesc": {
     "message": "Biometrija preglednika zahtijeva prethodno omogućenu biometriju u Bitwarden desktop aplikaciji."
@@ -1587,7 +1686,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Ograničeni broj pristupanja"
+    "message": "Ograničeni broj pristupanja",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Ako je određen, ovom Sendu će se moći pristupiti samo ograničeni broj puta.",
@@ -1688,6 +1788,15 @@
   },
   "disabled": {
     "message": "Onemogućeno"
+  },
+  "removePassword": {
+    "message": "Ukloni lozinku"
+  },
+  "removedPassword": {
+    "message": "Lozinka uklonjena"
+  },
+  "removePasswordConfirmation": {
+    "message": "Sigurno želiš ukloniti lozinku?"
   },
   "maxAccessCountReached": {
     "message": "Dostignut najveći broj pristupanja"
@@ -1792,8 +1901,8 @@
   "leftOrganization": {
     "message": "Organizacija napuštena."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Nije moguće spajanje s konektorom za ključ, pokušaj kasnije."
+  "ssoKeyConnectorError": {
+    "message": "Pogreška konektora ključa: provjeri je li konektor ključa dostupan i radi li ispravno."
   },
   "lockAllVaults": {
     "message": "Zaključaj sve trezore"
@@ -1808,7 +1917,7 @@
     "message": "Postavke aplikacije (svi računi)"
   },
   "accountSwitcherLimitReached": {
-    "message": "Dosegnuto je ograničenje računa. Odjavite se s računa da dodate drugi."
+    "message": "Dosegnuto je ograničenje računa. Odjavite se s računa za dodavanje drugog."
   },
   "settingsTitle": {
     "message": "Postavke aplikacije za $EMAIL$",
@@ -1823,16 +1932,16 @@
     "message": "Promijeni račun"
   },
   "options": {
-    "message": "Options"
+    "message": "Mogućnosti"
   },
   "sessionTimeout": {
-    "message": "Your session has timed out. Please go back and try logging in again."
+    "message": "Tvoja sesija je istekla. Vrati se i pokušaj s ponovnom prijavom."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exporting Personal Vault"
+    "message": "Izvoz osobnog trezora u tijeku"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "message": "Izvest će se samo stavke osobnog trezora povezanog s $EMAIL$. Stavke organizacijskog trezora neće biti uključene.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1840,46 +1949,257 @@
       }
     }
   },
+  "locked": {
+    "message": "Zaključano"
+  },
+  "unlocked": {
+    "message": "Otključano"
+  },
   "generator": {
     "message": "Generator"
   },
   "whatWouldYouLikeToGenerate": {
-    "message": "What would you like to generate?"
+    "message": "Što želiš generirati?"
   },
   "passwordType": {
-    "message": "Password Type"
+    "message": "Tip lozinke"
   },
   "regenerateUsername": {
-    "message": "Regenerate Username"
+    "message": "Ponovno generiraj korisničko ime"
   },
   "generateUsername": {
-    "message": "Generate Username"
+    "message": "Generiraj korisničko ime"
   },
   "usernameType": {
-    "message": "Username Type"
+    "message": "Tip korisničkog imena"
   },
   "plusAddressedEmail": {
-    "message": "Plus Addressed Email"
+    "message": "Plus adresa e-pošte",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
-    "message": "Use your email provider's sub-addressing capabilities."
+    "message": "Koristi mogućnosti podadresiranja svog davatelja e-pošte."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Dohvati sve (catch-all) e-pošta"
   },
   "catchallEmailDesc": {
-    "message": "Use your domain's configured catch-all inbox."
+    "message": "Koristi konfigurirani catch-all sandučić svoje domene."
   },
   "random": {
-    "message": "Random"
+    "message": "Nasumično"
   },
   "randomWord": {
-    "message": "Random Word"
+    "message": "Nasumična riječ"
   },
   "websiteName": {
-    "message": "Website Name"
+    "message": "Naziv web mjesta"
   },
   "service": {
-    "message": "Service"
+    "message": "Usluga"
+  },
+  "allVaults": {
+    "message": "Svi trezori"
+  },
+  "searchOrganization": {
+    "message": "Pretraži organizaciju"
+  },
+  "searchMyVault": {
+    "message": "Pretraži moj trezor"
+  },
+  "forwardedEmail": {
+    "message": "Proslijeđeni pseudonim e-pošte"
+  },
+  "forwardedEmailDesc": {
+    "message": "Generiraj pseudonim e-pošte s vanjskom uslugom prosljeđivanja."
+  },
+  "hostname": {
+    "message": "Naziv poslužitelja",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API pristupni token"
+  },
+  "apiKey": {
+    "message": "API ključ"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Potrebna Premium pretplata"
+  },
+  "organizationIsDisabled": {
+    "message": "Organizacija suspendirana"
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Stavkama u suspendiranoj Organizaciji se ne može pristupiti. Kontaktiraj vlasnika Organizacije za pomoć."
+  },
+  "neverLockWarning": {
+    "message": "Sigurno želiš koristiti opciju „Nikada”? Postavljanje opcija zaključavanja na „Nikada” pohranjuje šifru tvojeg trezora na tvom uređaju. Ako koristiš ovu opciju, trebalo bi osigurati da je uređaj pravilno zaštićen."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "Trezor"
+  },
+  "loginWithMasterPassword": {
+    "message": "Prijava glavnom lozinkom"
+  },
+  "loggingInAs": {
+    "message": "Prijava kao"
+  },
+  "rememberEmail": {
+    "message": "Zapamti adresu e-pošte"
+  },
+  "notYou": {
+    "message": "Nisi ti?"
+  },
+  "newAroundHere": {
+    "message": "Novi korisnik?"
+  },
+  "loggingInTo": {
+    "message": "Prijava u $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Prijava drugim uređajem"
+  },
+  "logInInitiated": {
+    "message": "Log in initiated"
+  },
+  "notificationSentDevice": {
+    "message": "A notification has been sent to your device."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fingerprint phrase"
+  },
+  "needAnotherOption": {
+    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+  },
+  "viewAllLoginOptions": {
+    "message": "View all login options"
+  },
+  "resendNotification": {
+    "message": "Resend notification"
+  },
+  "toggleCharacterCount": {
+    "message": "Toggle character count",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Are you trying to log in?"
+  },
+  "logInAttemptBy": {
+    "message": "Login attempt by $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Device Type"
+  },
+  "ipAddress": {
+    "message": "IP Address"
+  },
+  "time": {
+    "message": "Time"
+  },
+  "confirmLogIn": {
+    "message": "Confirm login"
+  },
+  "denyLogIn": {
+    "message": "Deny login"
+  },
+  "approveLoginRequests": {
+    "message": "Approve login requests"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Login confirmed for $EMAIL$ on $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "You denied a login attempt from another device. If this really was you, try to log in with the device again."
+  },
+  "justNow": {
+    "message": "Just now"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Requested $MINUTES$ minutes ago",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Login request has already expired."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "This request is no longer valid."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Use this device to approve login requests made from other devices."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Confirm login attempt for $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Log in requested"
+  },
+  "exposedMasterPassword": {
+    "message": "Exposed Master Password"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Weak and Exposed Master Password"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+  },
+  "checkForBreaches": {
+    "message": "Check known data breaches for this password"
+  },
+  "important": {
+    "message": "Important:"
+  },
+  "masterPasswordHint": {
+    "message": "Your master password cannot be recovered if you forget it!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ character minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

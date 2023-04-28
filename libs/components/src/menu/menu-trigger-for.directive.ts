@@ -19,7 +19,9 @@ import { MenuComponent } from "./menu.component";
 })
 export class MenuTriggerForDirective implements OnDestroy {
   @HostBinding("attr.aria-expanded") isOpen = false;
-  @HostBinding("attr.aria-haspopup") hasPopup = "menu";
+  @HostBinding("attr.aria-haspopup") get hasPopup(): "menu" | "dialog" {
+    return this.menu?.ariaRole || "menu";
+  }
   @HostBinding("attr.role") role = "button";
 
   @Input("bitMenuTriggerFor") menu: MenuComponent;
@@ -49,7 +51,7 @@ export class MenuTriggerForDirective implements OnDestroy {
       ])
       .withLockedPosition(true)
       .withFlexibleDimensions(false)
-      .withPush(false),
+      .withPush(true),
   };
   private closedEventsSub: Subscription;
   private keyDownEventsSub: Subscription;
@@ -80,15 +82,17 @@ export class MenuTriggerForDirective implements OnDestroy {
     this.overlayRef.attach(templatePortal);
 
     this.closedEventsSub = this.getClosedEvents().subscribe((event: KeyboardEvent | undefined) => {
-      if (event?.key === "Tab") {
+      if (["Tab", "Escape"].includes(event?.key)) {
         // Required to ensure tab order resumes correctly
         this.elementRef.nativeElement.focus();
       }
       this.destroyMenu();
     });
-    this.keyDownEventsSub = this.overlayRef
-      .keydownEvents()
-      .subscribe((event: KeyboardEvent) => this.menu.keyManager.onKeydown(event));
+    this.keyDownEventsSub =
+      this.menu.keyManager &&
+      this.overlayRef
+        .keydownEvents()
+        .subscribe((event: KeyboardEvent) => this.menu.keyManager.onKeydown(event));
   }
 
   private destroyMenu() {
@@ -102,9 +106,12 @@ export class MenuTriggerForDirective implements OnDestroy {
 
   private getClosedEvents(): Observable<any> {
     const detachments = this.overlayRef.detachments();
-    const escKey = this.overlayRef
-      .keydownEvents()
-      .pipe(filter((event: KeyboardEvent) => event.key === "Escape" || event.key === "Tab"));
+    const escKey = this.overlayRef.keydownEvents().pipe(
+      filter((event: KeyboardEvent) => {
+        const keys = this.menu.ariaRole === "menu" ? ["Escape", "Tab"] : ["Escape"];
+        return keys.includes(event.key);
+      })
+    );
     const backdrop = this.overlayRef.backdropClick();
     const menuClosed = this.menu.closed;
 

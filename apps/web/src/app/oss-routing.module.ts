@@ -1,45 +1,51 @@
 import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { Route, RouterModule, Routes } from "@angular/router";
 
-import { AuthGuard } from "jslib-angular/guards/auth.guard";
-import { LockGuard } from "jslib-angular/guards/lock.guard";
-import { UnauthGuard } from "jslib-angular/guards/unauth.guard";
+import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
+import { LockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
+import { UnauthGuard } from "@bitwarden/angular/auth/guards/unauth.guard";
 
-import { AcceptEmergencyComponent } from "./accounts/accept-emergency.component";
-import { AcceptOrganizationComponent } from "./accounts/accept-organization.component";
-import { HintComponent } from "./accounts/hint.component";
-import { LockComponent } from "./accounts/lock.component";
-import { LoginComponent } from "./accounts/login.component";
-import { RecoverDeleteComponent } from "./accounts/recover-delete.component";
-import { RecoverTwoFactorComponent } from "./accounts/recover-two-factor.component";
-import { RegisterComponent } from "./accounts/register.component";
-import { RemovePasswordComponent } from "./accounts/remove-password.component";
-import { SetPasswordComponent } from "./accounts/set-password.component";
-import { SsoComponent } from "./accounts/sso.component";
-import { TwoFactorComponent } from "./accounts/two-factor.component";
-import { UpdatePasswordComponent } from "./accounts/update-password.component";
-import { UpdateTempPasswordComponent } from "./accounts/update-temp-password.component";
-import { VerifyEmailTokenComponent } from "./accounts/verify-email-token.component";
-import { VerifyRecoverDeleteComponent } from "./accounts/verify-recover-delete.component";
+import { AcceptEmergencyComponent } from "../auth/accept-emergency.component";
+import { AcceptOrganizationComponent } from "../auth/accept-organization.component";
+import { HintComponent } from "../auth/hint.component";
+import { LockComponent } from "../auth/lock.component";
+import { LoginWithDeviceComponent } from "../auth/login/login-with-device.component";
+import { LoginComponent } from "../auth/login/login.component";
+import { RecoverDeleteComponent } from "../auth/recover-delete.component";
+import { RecoverTwoFactorComponent } from "../auth/recover-two-factor.component";
+import { RemovePasswordComponent } from "../auth/remove-password.component";
+import { SetPasswordComponent } from "../auth/set-password.component";
+import { EmergencyAccessViewComponent } from "../auth/settings/emergency-access/emergency-access-view.component";
+import { EmergencyAccessComponent } from "../auth/settings/emergency-access/emergency-access.component";
+import { SsoComponent } from "../auth/sso.component";
+import { TwoFactorComponent } from "../auth/two-factor.component";
+import { UpdatePasswordComponent } from "../auth/update-password.component";
+import { UpdateTempPasswordComponent } from "../auth/update-temp-password.component";
+import { VerifyEmailTokenComponent } from "../auth/verify-email-token.component";
+import { VerifyRecoverDeleteComponent } from "../auth/verify-recover-delete.component";
+import { flagEnabled, Flags } from "../utils/flags";
+
+import { TrialInitiationComponent } from "./accounts/trial-initiation/trial-initiation.component";
 import { HomeGuard } from "./guards/home.guard";
 import { FrontendLayoutComponent } from "./layouts/frontend-layout.component";
 import { UserLayoutComponent } from "./layouts/user-layout.component";
+import { OrganizationModule } from "./organizations/organization.module";
 import { AcceptFamilySponsorshipComponent } from "./organizations/sponsorships/accept-family-sponsorship.component";
 import { FamiliesForEnterpriseSetupComponent } from "./organizations/sponsorships/families-for-enterprise-setup.component";
+import { ReportsModule } from "./reports";
 import { AccessComponent } from "./send/access.component";
 import { SendComponent } from "./send/send.component";
 import { AccountComponent } from "./settings/account.component";
 import { CreateOrganizationComponent } from "./settings/create-organization.component";
 import { DomainRulesComponent } from "./settings/domain-rules.component";
-import { EmergencyAccessViewComponent } from "./settings/emergency-access-view.component";
-import { EmergencyAccessComponent } from "./settings/emergency-access.component";
 import { PreferencesComponent } from "./settings/preferences.component";
+import { SecurityRoutingModule } from "./settings/security-routing.module";
 import { SettingsComponent } from "./settings/settings.component";
 import { SponsoredFamiliesComponent } from "./settings/sponsored-families.component";
-import { ExportComponent } from "./tools/export.component";
+import { SubscriptionRoutingModule } from "./settings/subscription-routing.module";
 import { GeneratorComponent } from "./tools/generator.component";
-import { ImportComponent } from "./tools/import.component";
 import { ToolsComponent } from "./tools/tools.component";
+import { VaultModule } from "./vault/individual-vault/vault.module";
 
 const routes: Routes = [
   {
@@ -54,12 +60,22 @@ const routes: Routes = [
         canActivate: [HomeGuard], // Redirects either to vault, login or lock page.
       },
       { path: "login", component: LoginComponent, canActivate: [UnauthGuard] },
+      {
+        path: "login-with-device",
+        component: LoginWithDeviceComponent,
+        data: { titleId: "loginWithDevice" },
+      },
       { path: "2fa", component: TwoFactorComponent, canActivate: [UnauthGuard] },
       {
         path: "register",
-        component: RegisterComponent,
+        component: TrialInitiationComponent,
         canActivate: [UnauthGuard],
         data: { titleId: "createAccount" },
+      },
+      {
+        path: "trial",
+        redirectTo: "register",
+        pathMatch: "full",
       },
       {
         path: "sso",
@@ -150,9 +166,7 @@ const routes: Routes = [
     children: [
       {
         path: "vault",
-        loadChildren: async () =>
-          (await import("./modules/vault/modules/individual-vault/individual-vault.module"))
-            .IndividualVaultModule,
+        loadChildren: () => VaultModule,
       },
       { path: "sends", component: SendComponent, data: { title: "Send" } },
       {
@@ -173,8 +187,7 @@ const routes: Routes = [
           },
           {
             path: "security",
-            loadChildren: async () =>
-              (await import("./settings/security-routing.module")).SecurityRoutingModule,
+            loadChildren: () => SecurityRoutingModule,
           },
           {
             path: "domain-rules",
@@ -183,8 +196,7 @@ const routes: Routes = [
           },
           {
             path: "subscription",
-            loadChildren: async () =>
-              (await import("./settings/subscription-routing.module")).SubscriptionRoutingModule,
+            loadChildren: () => SubscriptionRoutingModule,
           },
           {
             path: "emergency-access",
@@ -214,8 +226,13 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         children: [
           { path: "", pathMatch: "full", redirectTo: "generator" },
-          { path: "import", component: ImportComponent, data: { titleId: "importData" } },
-          { path: "export", component: ExportComponent, data: { titleId: "exportVault" } },
+          {
+            path: "",
+            loadChildren: () =>
+              import("./tools/import-export/import-export.module").then(
+                (m) => m.ImportExportModule
+              ),
+          },
           {
             path: "generator",
             component: GeneratorComponent,
@@ -225,18 +242,14 @@ const routes: Routes = [
       },
       {
         path: "reports",
-        loadChildren: async () =>
-          (await import("./reports/reports-routing.module")).ReportsRoutingModule,
+        loadChildren: () => ReportsModule,
       },
       { path: "setup/families-for-enterprise", component: FamiliesForEnterpriseSetupComponent },
     ],
   },
   {
     path: "organizations",
-    loadChildren: () =>
-      import("./organizations/organization-routing.module").then(
-        (m) => m.OrganizationsRoutingModule
-      ),
+    loadChildren: () => OrganizationModule,
   },
 ];
 
@@ -251,3 +264,12 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class OssRoutingModule {}
+
+export function buildFlaggedRoute(flagName: keyof Flags, route: Route): Route {
+  return flagEnabled(flagName)
+    ? route
+    : {
+        path: route.path,
+        redirectTo: "/",
+      };
+}

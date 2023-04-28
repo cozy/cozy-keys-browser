@@ -2,16 +2,14 @@ import { CommonModule } from "@angular/common";
 import { ComponentFactoryResolver, NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 
-import { JslibModule } from "jslib-angular/jslib.module";
-import { ModalService } from "jslib-angular/services/modal.service";
-
-import { OssModule } from "src/app/oss.module";
+import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { OssModule } from "@bitwarden/web-vault/app/oss.module";
 
 import { AddOrganizationComponent } from "./clients/add-organization.component";
 import { ClientsComponent } from "./clients/clients.component";
 import { CreateOrganizationComponent } from "./clients/create-organization.component";
-import { PermissionsGuard } from "./guards/provider-type.guard";
-import { ProviderGuard } from "./guards/provider.guard";
+import { ProviderPermissionsGuard } from "./guards/provider-permissions.guard";
 import { AcceptProviderComponent } from "./manage/accept-provider.component";
 import { BulkConfirmComponent } from "./manage/bulk/bulk-confirm.component";
 import { BulkRemoveComponent } from "./manage/bulk/bulk-remove.component";
@@ -46,7 +44,7 @@ import { SetupComponent } from "./setup/setup.component";
     SetupProviderComponent,
     UserAddEditComponent,
   ],
-  providers: [WebProviderService, ProviderGuard, PermissionsGuard],
+  providers: [WebProviderService, ProviderPermissionsGuard],
 })
 export class ProvidersModule {
   constructor(modalService: ModalService, componentFactoryResolver: ComponentFactoryResolver) {

@@ -1,6 +1,7 @@
 import {
   Component,
   NgZone,
+  OnDestroy,
   OnInit,
   SecurityContext,
   Type,
@@ -10,42 +11,45 @@ import {
 import { DomSanitizer } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { IndividualConfig, ToastrService } from "ngx-toastr";
+import { firstValueFrom, Subject, takeUntil } from "rxjs";
 
-import { ModalRef } from "jslib-angular/components/modal/modal.ref";
-import { ModalService } from "jslib-angular/services/modal.service";
-import { AuthService } from "jslib-common/abstractions/auth.service";
-import { BroadcasterService } from "jslib-common/abstractions/broadcaster.service";
-import { CipherService } from "jslib-common/abstractions/cipher.service";
-import { CollectionService } from "jslib-common/abstractions/collection.service";
-import { CryptoService } from "jslib-common/abstractions/crypto.service";
-import { EventService } from "jslib-common/abstractions/event.service";
-import { FolderService } from "jslib-common/abstractions/folder.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { KeyConnectorService } from "jslib-common/abstractions/keyConnector.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { NotificationsService } from "jslib-common/abstractions/notifications.service";
-import { PasswordGenerationService } from "jslib-common/abstractions/passwordGeneration.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { PolicyService } from "jslib-common/abstractions/policy.service";
-import { SearchService } from "jslib-common/abstractions/search.service";
-import { SettingsService } from "jslib-common/abstractions/settings.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { SyncService } from "jslib-common/abstractions/sync.service";
-import { SystemService } from "jslib-common/abstractions/system.service";
-import { TokenService } from "jslib-common/abstractions/token.service";
-import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
-import { AuthenticationStatus } from "jslib-common/enums/authenticationStatus";
-import { CipherType } from "jslib-common/enums/cipherType";
+import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { InternalPolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
+import { SearchService } from "@bitwarden/common/abstractions/search.service";
+import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { SystemService } from "@bitwarden/common/abstractions/system.service";
+import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 
+import { DeleteAccountComponent } from "../auth/delete-account.component";
+import { LoginApprovalComponent } from "../auth/login/login-approval.component";
 import { MenuUpdateRequest } from "../main/menu/menu.updater";
+import { PremiumComponent } from "../vault/app/accounts/premium.component";
+import { FolderAddEditComponent } from "../vault/app/vault/folder-add-edit.component";
 
-import { PremiumComponent } from "./accounts/premium.component";
 import { SettingsComponent } from "./accounts/settings.component";
+import { GeneratorComponent } from "./tools/generator.component";
+import { PasswordGeneratorHistoryComponent } from "./tools/password-generator-history.component";
 import { ExportComponent } from "./vault/export.component";
-import { FolderAddEditComponent } from "./vault/folder-add-edit.component";
-import { GeneratorComponent } from "./vault/generator.component";
-import { PasswordGeneratorHistoryComponent } from "./vault/password-generator-history.component";
 
 const BroadcasterSubscriptionId = "AppComponent";
 const IdleTimeout = 60000 * 10; // 10 minutes
@@ -67,6 +71,7 @@ const systemTimeoutOptions = {
     <ng-template #appFolderAddEdit></ng-template>
     <ng-template #exportVault></ng-template>
     <ng-template #appGenerator></ng-template>
+    <ng-template #loginApproval></ng-template>
     <app-header></app-header>
     <div id="container">
       <div class="loading" *ngIf="loading">
@@ -76,7 +81,7 @@ const systemTimeoutOptions = {
     </div>
   `,
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   @ViewChild("settings", { read: ViewContainerRef, static: true }) settingsRef: ViewContainerRef;
   @ViewChild("premium", { read: ViewContainerRef, static: true }) premiumRef: ViewContainerRef;
   @ViewChild("passwordHistory", { read: ViewContainerRef, static: true })
@@ -87,6 +92,8 @@ export class AppComponent implements OnInit {
   folderAddEditModalRef: ViewContainerRef;
   @ViewChild("appGenerator", { read: ViewContainerRef, static: true })
   generatorModalRef: ViewContainerRef;
+  @ViewChild("loginApproval", { read: ViewContainerRef, static: true })
+  loginApprovalModalRef: ViewContainerRef;
 
   loading = false;
 
@@ -96,13 +103,14 @@ export class AppComponent implements OnInit {
   private isIdle = false;
   private activeUserId: string = null;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private broadcasterService: BroadcasterService,
-    private tokenService: TokenService,
-    private folderService: FolderService,
+    private folderService: InternalFolderService,
     private settingsService: SettingsService,
     private syncService: SyncService,
-    private passwordGenerationService: PasswordGenerationService,
+    private passwordGenerationService: PasswordGenerationServiceAbstraction,
     private cipherService: CipherService,
     private authService: AuthService,
     private router: Router,
@@ -111,6 +119,7 @@ export class AppComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private ngZone: NgZone,
     private vaultTimeoutService: VaultTimeoutService,
+    private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private cryptoService: CryptoService,
     private logService: LogService,
     private messagingService: MessagingService,
@@ -120,16 +129,17 @@ export class AppComponent implements OnInit {
     private platformUtilsService: PlatformUtilsService,
     private systemService: SystemService,
     private stateService: StateService,
-    private eventService: EventService,
-    private policyService: PolicyService,
+    private eventUploadService: EventUploadService,
+    private policyService: InternalPolicyService,
     private modalService: ModalService,
     private keyConnectorService: KeyConnectorService
   ) {}
 
   ngOnInit() {
-    this.stateService.activeAccount.subscribe((userId) => {
+    this.stateService.activeAccount$.pipe(takeUntil(this.destroy$)).subscribe((userId) => {
       this.activeUserId = userId;
     });
+
     this.ngZone.runOutsideAngular(() => {
       setTimeout(async () => {
         await this.updateAppMenu();
@@ -146,18 +156,17 @@ export class AppComponent implements OnInit {
         switch (message.command) {
           case "loggedIn":
           case "unlocked":
+            this.recordActivity();
             this.notificationsService.updateConnection();
             this.updateAppMenu();
             this.systemService.cancelProcessReload();
             break;
           case "loggedOut":
-            if (this.modal != null) {
-              this.modal.close();
-            }
+            this.modalService.closeAll();
             this.notificationsService.updateConnection();
             this.updateAppMenu();
             await this.systemService.clearPendingClipboard();
-            await this.reloadProcess();
+            await this.systemService.startProcessReload(this.authService);
             break;
           case "authBlocked":
             this.router.navigate(["login"]);
@@ -168,19 +177,17 @@ export class AppComponent implements OnInit {
             this.loading = false;
             break;
           case "lockVault":
-            await this.vaultTimeoutService.lock(true, message.userId);
+            await this.vaultTimeoutService.lock(message.userId);
             break;
           case "lockAllVaults":
-            for (const userId in this.stateService.accounts.getValue()) {
+            for (const userId in await firstValueFrom(this.stateService.accounts$)) {
               if (userId != null) {
-                await this.vaultTimeoutService.lock(true, userId);
+                await this.vaultTimeoutService.lock(userId);
               }
             }
             break;
           case "locked":
-            if (this.modal != null) {
-              this.modal.close();
-            }
+            this.modalService.closeAll();
             if (
               message.userId == null ||
               message.userId === (await this.stateService.getUserId())
@@ -190,10 +197,16 @@ export class AppComponent implements OnInit {
             this.notificationsService.updateConnection();
             await this.updateAppMenu();
             await this.systemService.clearPendingClipboard();
-            await this.reloadProcess();
+            await this.systemService.startProcessReload(this.authService);
+            break;
+          case "startProcessReload":
+            this.systemService.startProcessReload(this.authService);
+            break;
+          case "cancelProcessReload":
+            this.systemService.cancelProcessReload();
             break;
           case "reloadProcess":
-            window.location.reload(true);
+            (window.location as any).reload(true);
             break;
           case "syncStarted":
             break;
@@ -221,6 +234,9 @@ export class AppComponent implements OnInit {
             }
             break;
           }
+          case "deleteAccount":
+            this.modalService.open(DeleteAccountComponent, { replaceTopModal: true });
+            break;
           case "openPasswordHistory":
             await this.openModal<PasswordGeneratorHistoryComponent>(
               PasswordGeneratorHistoryComponent,
@@ -354,19 +370,24 @@ export class AppComponent implements OnInit {
           case "systemIdle":
             await this.checkForSystemTimeout(systemTimeoutOptions.onIdle);
             break;
+          case "openLoginApproval":
+            if (message.notificationId != null) {
+              await this.openLoginApproval(message.notificationId);
+            }
+            break;
         }
       });
     });
   }
 
   ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
 
   async openExportVault() {
-    if (this.modal != null) {
-      this.modal.close();
-    }
+    this.modalService.closeAll();
 
     const [modal, childComponent] = await this.modalService.openViewRef(
       ExportComponent,
@@ -374,19 +395,19 @@ export class AppComponent implements OnInit {
     );
     this.modal = modal;
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     childComponent.onSaved.subscribe(() => {
       this.modal.close();
     });
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.modal.onClosed.subscribe(() => {
       this.modal = null;
     });
   }
 
   async addFolder() {
-    if (this.modal != null) {
-      this.modal.close();
-    }
+    this.modalService.closeAll();
 
     const [modal, childComponent] = await this.modalService.openViewRef(
       FolderAddEditComponent,
@@ -395,20 +416,20 @@ export class AppComponent implements OnInit {
     );
     this.modal = modal;
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     childComponent.onSavedFolder.subscribe(async () => {
       this.modal.close();
       this.syncService.fullSync(false);
     });
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.modal.onClosed.subscribe(() => {
       this.modal = null;
     });
   }
 
   async openGenerator() {
-    if (this.modal != null) {
-      this.modal.close();
-    }
+    this.modalService.closeAll();
 
     [this.modal] = await this.modalService.openViewRef(
       GeneratorComponent,
@@ -416,6 +437,20 @@ export class AppComponent implements OnInit {
       (comp) => (comp.comingFromAddEdit = false)
     );
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+    this.modal.onClosed.subscribe(() => {
+      this.modal = null;
+    });
+  }
+
+  async openLoginApproval(notificationId: string) {
+    this.modalService.closeAll();
+
+    this.modal = await this.modalService.open(LoginApprovalComponent, {
+      data: { notificationId: notificationId },
+    });
+
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.modal.onClosed.subscribe(() => {
       this.modal = null;
     });
@@ -423,7 +458,7 @@ export class AppComponent implements OnInit {
 
   private async updateAppMenu() {
     let updateRequest: MenuUpdateRequest;
-    const stateAccounts = this.stateService.accounts?.getValue();
+    const stateAccounts = await firstValueFrom(this.stateService.accounts$);
     if (stateAccounts == null || Object.keys(stateAccounts).length < 1) {
       updateRequest = {
         accounts: null,
@@ -459,7 +494,7 @@ export class AppComponent implements OnInit {
   private async logOut(expired: boolean, userId?: string) {
     const userBeingLoggedOut = await this.stateService.getUserId({ userId: userId });
     await Promise.all([
-      this.eventService.uploadEvents(userBeingLoggedOut),
+      this.eventUploadService.uploadEvents(userBeingLoggedOut),
       this.syncService.setLastSync(new Date(0), userBeingLoggedOut),
       this.cryptoService.clearKeys(userBeingLoggedOut),
       this.settingsService.clear(userBeingLoggedOut),
@@ -467,12 +502,10 @@ export class AppComponent implements OnInit {
       this.folderService.clear(userBeingLoggedOut),
       this.collectionService.clear(userBeingLoggedOut),
       this.passwordGenerationService.clear(userBeingLoggedOut),
-      this.vaultTimeoutService.clear(userBeingLoggedOut),
+      this.vaultTimeoutSettingsService.clear(userBeingLoggedOut),
       this.policyService.clear(userBeingLoggedOut),
       this.keyConnectorService.clear(),
     ]);
-
-    await this.stateService.setBiometricLocked(true, { userId: userBeingLoggedOut });
 
     if (userBeingLoggedOut === this.activeUserId) {
       this.searchService.clearIndex();
@@ -538,12 +571,11 @@ export class AppComponent implements OnInit {
   }
 
   private async openModal<T>(type: Type<T>, ref: ViewContainerRef) {
-    if (this.modal != null) {
-      this.modal.close();
-    }
+    this.modalService.closeAll();
 
     [this.modal] = await this.modalService.openViewRef(type, ref);
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.modal.onClosed.subscribe(() => {
       this.modal = null;
     });
@@ -589,23 +621,9 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private async reloadProcess(): Promise<void> {
-    const accounts = this.stateService.accounts.getValue();
-    if (accounts != null) {
-      const keys = Object.keys(accounts);
-      if (keys.length > 0) {
-        for (const userId of keys) {
-          if ((await this.authService.getAuthStatus(userId)) === AuthenticationStatus.Unlocked) {
-            return;
-          }
-        }
-      }
-    }
-    await this.systemService.startProcessReload();
-  }
-
   private async checkForSystemTimeout(timeout: number): Promise<void> {
-    for (const userId in this.stateService.accounts.getValue()) {
+    const accounts = await firstValueFrom(this.stateService.accounts$);
+    for (const userId in accounts) {
       if (userId == null) {
         continue;
       }
@@ -613,7 +631,7 @@ export class AppComponent implements OnInit {
       if (options[0] === timeout) {
         options[1] === "logOut"
           ? this.logOut(false, userId)
-          : await this.vaultTimeoutService.lock(true, userId);
+          : await this.vaultTimeoutService.lock(userId);
       }
     }
   }

@@ -1,13 +1,23 @@
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { ConnectedPosition } from "@angular/cdk/overlay";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { concatMap, Subject, takeUntil } from "rxjs";
 
-import { AuthService } from "jslib-common/abstractions/auth.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { AuthenticationStatus } from "jslib-common/enums/authenticationStatus";
-import { Utils } from "jslib-common/misc/utils";
-import { Account } from "jslib-common/models/domain/account";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { Account } from "@bitwarden/common/models/domain/account";
+
+type ActiveAccount = {
+  id: string;
+  name: string;
+  email: string;
+  avatarColor: string;
+};
 
 export class SwitcherAccount extends Account {
   get serverUrl() {
@@ -17,6 +27,8 @@ export class SwitcherAccount extends Account {
         "https://bitwarden.com"
     );
   }
+
+  avatarColor: string;
 
   private removeWebProtocolFromString(urlString: string) {
     const regex = /http(s)?(:)?(\/\/)?|(\/\/)?(www\.)?/g;
@@ -48,10 +60,12 @@ export class SwitcherAccount extends Account {
     ]),
   ],
 })
-export class AccountSwitcherComponent implements OnInit {
+export class AccountSwitcherComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+
   isOpen = false;
   accounts: { [userId: string]: SwitcherAccount } = {};
-  activeAccountEmail: string;
+  activeAccount?: ActiveAccount;
   serverUrl: string;
   authStatus = AuthenticationStatus;
   overlayPostition: ConnectedPosition[] = [
@@ -64,7 +78,7 @@ export class AccountSwitcherComponent implements OnInit {
   ];
 
   get showSwitcher() {
-    const userIsInAVault = !Utils.isNullOrWhitespace(this.activeAccountEmail);
+    const userIsInAVault = !Utils.isNullOrWhitespace(this.activeAccount?.email);
     const userIsAddingAnAdditionalAccount = Object.keys(this.accounts).length > 0;
     return userIsInAVault || userIsAddingAnAdditionalAccount;
   }
@@ -80,20 +94,41 @@ export class AccountSwitcherComponent implements OnInit {
   constructor(
     private stateService: StateService,
     private authService: AuthService,
-    private messagingService: MessagingService
+    private messagingService: MessagingService,
+    private router: Router,
+    private tokenService: TokenService
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.stateService.accounts.subscribe(async (accounts: { [userId: string]: Account }) => {
-      for (const userId in accounts) {
-        accounts[userId].profile.authenticationStatus = await this.authService.getAuthStatus(
-          userId
-        );
-      }
+    this.stateService.accounts$
+      .pipe(
+        concatMap(async (accounts: { [userId: string]: Account }) => {
+          for (const userId in accounts) {
+            accounts[userId].profile.authenticationStatus = await this.authService.getAuthStatus(
+              userId
+            );
+          }
 
-      this.accounts = await this.createSwitcherAccounts(accounts);
-      this.activeAccountEmail = await this.stateService.getEmail();
-    });
+          this.accounts = await this.createSwitcherAccounts(accounts);
+          try {
+            this.activeAccount = {
+              id: await this.tokenService.getUserId(),
+              name: (await this.tokenService.getName()) ?? (await this.tokenService.getEmail()),
+              email: await this.tokenService.getEmail(),
+              avatarColor: await this.stateService.getAvatarColor(),
+            };
+          } catch {
+            this.activeAccount = undefined;
+          }
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   toggle() {
@@ -113,6 +148,8 @@ export class AccountSwitcherComponent implements OnInit {
   async addAccount() {
     this.close();
     await this.stateService.setActiveUser(null);
+    await this.stateService.setRememberedEmail(null);
+    this.router.navigate(["/login"]);
   }
 
   private async createSwitcherAccounts(baseAccounts: {
@@ -129,6 +166,9 @@ export class AccountSwitcherComponent implements OnInit {
         userId: userId,
       });
       switcherAccounts[userId] = new SwitcherAccount(baseAccounts[userId]);
+      switcherAccounts[userId].avatarColor = await this.stateService.getAvatarColor({
+        userId: userId,
+      });
     }
     return switcherAccounts;
   }

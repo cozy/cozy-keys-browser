@@ -1,14 +1,15 @@
 import { Directive } from "@angular/core";
 
-import { ExportService } from "jslib-common/abstractions/export.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { EventResponse } from "jslib-common/models/response/eventResponse";
-import { ListResponse } from "jslib-common/models/response/listResponse";
-import { EventView } from "jslib-common/models/view/eventView";
+import { ExportService } from "@bitwarden/common/abstractions/export.service";
+import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { EventResponse } from "@bitwarden/common/models/response/event.response";
+import { ListResponse } from "@bitwarden/common/models/response/list.response";
+import { EventView } from "@bitwarden/common/models/view/event.view";
 
-import { EventService } from "src/app/services/event.service";
+import { EventService } from "../core";
 
 @Directive()
 export abstract class BaseEventsComponent {
@@ -30,7 +31,8 @@ export abstract class BaseEventsComponent {
     protected i18nService: I18nService,
     protected exportService: ExportService,
     protected platformUtilsService: PlatformUtilsService,
-    protected logService: LogService
+    protected logService: LogService,
+    protected fileDownloadService: FileDownloadService
   ) {
     const defaultDates = this.eventService.getDefaultDateFilters();
     this.start = defaultDates[0];
@@ -130,12 +132,14 @@ export abstract class BaseEventsComponent {
           appIcon: eventInfo.appIcon,
           appName: eventInfo.appName,
           userId: userId,
-          userName: r.installationId != null ? `Installation: ${r.installationId}` : userName,
+          userName: userName,
           userEmail: user != null ? user.email : "",
           date: r.date,
           ip: r.ipAddress,
           type: r.type,
           installationId: r.installationId,
+          systemUser: r.systemUser,
+          serviceAccountId: r.serviceAccountId,
         });
       })
     );
@@ -173,6 +177,10 @@ export abstract class BaseEventsComponent {
 
     const data = await this.exportService.getEventExport(events);
     const fileName = this.exportService.getFileName(this.exportFileName, "csv");
-    this.platformUtilsService.saveFile(window, data, { type: "text/plain" }, fileName);
+    this.fileDownloadService.download({
+      fileName,
+      blobData: data,
+      blobOptions: { type: "text/plain" },
+    });
   }
 }

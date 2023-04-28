@@ -1,6 +1,11 @@
+import { Observable } from "rxjs";
+
+import { AccountSettingsSettings } from "../models/domain/account";
+
 export abstract class SettingsService {
-  clearCache: () => Promise<void>;
-  getEquivalentDomains: () => Promise<any>;
+  settings$: Observable<AccountSettingsSettings>;
+
   setEquivalentDomains: (equivalentDomains: string[][]) => Promise<any>;
+  getEquivalentDomains: (url: string) => string[];
   clear: (userId?: string) => Promise<void>;
 }

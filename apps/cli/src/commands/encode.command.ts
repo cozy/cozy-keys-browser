@@ -1,6 +1,5 @@
-import { Response } from "jslib-node/cli/models/response";
-import { StringResponse } from "jslib-node/cli/models/response/stringResponse";
-
+import { Response } from "../models/response";
+import { StringResponse } from "../models/response/string.response";
 import { CliUtils } from "../utils";
 
 export class EncodeCommand {

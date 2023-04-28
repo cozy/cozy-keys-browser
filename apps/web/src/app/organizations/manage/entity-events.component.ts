@@ -1,14 +1,15 @@
 import { Component, Input, OnInit } from "@angular/core";
 
-import { UserNamePipe } from "jslib-angular/pipes/user-name.pipe";
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { EventResponse } from "jslib-common/models/response/eventResponse";
-import { ListResponse } from "jslib-common/models/response/listResponse";
+import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { OrganizationUserService } from "@bitwarden/common/abstractions/organization-user/organization-user.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { EventResponse } from "@bitwarden/common/models/response/event.response";
+import { ListResponse } from "@bitwarden/common/models/response/list.response";
 
-import { EventService } from "../../services/event.service";
+import { EventService } from "../../core";
 
 @Component({
   selector: "app-entity-events",
@@ -40,7 +41,8 @@ export class EntityEventsComponent implements OnInit {
     private eventService: EventService,
     private platformUtilsService: PlatformUtilsService,
     private userNamePipe: UserNamePipe,
-    private logService: LogService
+    private logService: LogService,
+    private organizationUserService: OrganizationUserService
   ) {}
 
   async ngOnInit() {
@@ -52,7 +54,7 @@ export class EntityEventsComponent implements OnInit {
 
   async load() {
     if (this.showUser) {
-      const response = await this.apiService.getOrganizationUsers(this.organizationId);
+      const response = await this.organizationUserService.getAllUsers(this.organizationId);
       response.data.forEach((u) => {
         const name = this.userNamePipe.transform(u);
         this.orgUsersIdMap.set(u.id, { name: name, email: u.email });

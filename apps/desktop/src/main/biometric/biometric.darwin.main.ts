@@ -1,23 +1,20 @@
 import { ipcMain, systemPreferences } from "electron";
 
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { StateService } from "jslib-common/abstractions/state.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
 
-import { BiometricMain } from "../biometric/biometric.main";
+import { BiometricsServiceAbstraction } from "./biometrics.service.abstraction";
 
-export default class BiometricDarwinMain implements BiometricMain {
-  isError = false;
-
+export default class BiometricDarwinMain implements BiometricsServiceAbstraction {
   constructor(private i18nservice: I18nService, private stateService: StateService) {}
 
   async init() {
     await this.stateService.setEnableBiometric(await this.supportsBiometric());
     await this.stateService.setBiometricText("unlockWithTouchId");
-    await this.stateService.setNoAutoPromptBiometricsText("noAutoPromptTouchId");
+    await this.stateService.setNoAutoPromptBiometricsText("autoPromptTouchId");
 
-    // eslint-disable-next-line
-    ipcMain.on("biometric", async (event: any, message: any) => {
-      event.returnValue = await this.authenticateBiometric();
+    ipcMain.handle("biometric", async () => {
+      return await this.authenticateBiometric();
     });
   }
 

@@ -1,6 +1,6 @@
 import { Directive, ElementRef, HostBinding, Input } from "@angular/core";
 
-type BadgeTypes = "primary" | "secondary" | "success" | "danger" | "warning" | "info";
+export type BadgeTypes = "primary" | "secondary" | "success" | "danger" | "warning" | "info";
 
 const styles: Record<BadgeTypes, string[]> = {
   primary: ["tw-bg-primary-500"],
@@ -26,17 +26,16 @@ const hoverStyles: Record<BadgeTypes, string[]> = {
 export class BadgeDirective {
   @HostBinding("class") get classList() {
     return [
-      "tw-inline-block",
-      "tw-py-1",
+      "tw-inline",
+      "tw-py-0.5",
       "tw-px-1.5",
       "tw-font-bold",
-      "tw-leading-none",
       "tw-text-center",
       "!tw-text-contrast",
       "tw-rounded",
       "tw-border-none",
       "tw-box-border",
-      "tw-whitespace-no-wrap",
+      "tw-whitespace-nowrap",
       "tw-text-xs",
       "hover:tw-no-underline",
       "focus:tw-outline-none",

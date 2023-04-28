@@ -28,20 +28,21 @@
   }
 
   .box-header-expandable {
-    padding: 0 10px;
-    margin-bottom: 5px;
+    padding: 10px 5px;
+    margin: 0 5px;
     text-transform: uppercase;
     display: flex;
-    width: 100%;
+    width: calc(100% - 10px);
     box-sizing: border-box;
     align-items: center;
+    border-radius: $border-radius;
 
     @include themify($themes) {
       color: themed("headingColor");
     }
 
     &:hover,
-    &:focus,
+    &:focus-visible,
     &.active {
       @include themify($themes) {
         background-color: themed("boxBackgroundHoverColor");
@@ -51,7 +52,7 @@
     .icon {
       display: flex;
       align-items: center;
-      margin-left: 5px;
+      margin-right: 5px;
 
       @include themify($themes) {
         color: themed("headingColor");
@@ -61,7 +62,7 @@
 
   .box-content {
     @include themify($themes) {
-      background-color: themed("boxBackgroundColor");
+      background-color: themed("backgroundColor");
       border-color: themed("borderColor");
     }
 
@@ -87,14 +88,45 @@
     .box-content-row.no-hover {
       &:hover,
       &:focus {
-        background-color: initial !important;
+        @include themify($themes) {
+          background-color: themed("boxBackgroundColor") !important;
+        }
       }
+    }
+
+    &.single-line .box-content-row,
+    .box-content-row.single-line {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      margin: 5px;
+    }
+
+    &.row-top-padding {
+      padding-top: 10px;
     }
   }
 
   .box-footer {
+    // margin: 0 5px 5px 5px;
     padding: 5px 10px;
     font-size: $font-size-small;
+    button.btn {
+      font-size: $font-size-small;
+      padding: 0;
+    }
+
+    button.btn.primary {
+      font-size: $font-size-base;
+      padding: 7px 15px;
+      width: 100%;
+
+      &:hover {
+        @include themify($themes) {
+          border-color: themed("borderHoverColor") !important;
+        }
+      }
+    }
+
     @include themify($themes) {
       color: themed("mutedColor");
     }
@@ -105,19 +137,36 @@
   }
 
   &.list {
+    margin: 10px 0 20px 0;
     .box-content {
       background-color: white;
+      .virtual-scroll-item {
+        display: inline-block;
+        width: 100%;
+      }
+
       .box-content-row {
         padding: 5px 10px;
         text-decoration: none;
+        border-radius: $border-radius;
+        // background-color: $background-color;
 
         @include themify($themes) {
           color: themed("textColor");
+          background-color: themed("boxBackgroundColor");
         }
 
         &.padded {
           padding-top: 10px;
           padding-bottom: 10px;
+        }
+
+        &.no-hover {
+          &:hover {
+            @include themify($themes) {
+              background-color: themed("boxBackgroundColor") !important;
+            }
+          }
         }
 
         &:hover,
@@ -168,6 +217,8 @@
           align-items: center;
           padding-top: 10px;
           padding-bottom: 10px;
+          margin: 5px;
+          border-radius: $border-radius;
         }
       }
     }
@@ -205,7 +256,6 @@
 
 .box-section-divider {
   border-top: 1px solid #000000;
-  padding-top: 10px;
 
   @include themify($themes) {
     border-color: themed("borderColor");
@@ -214,22 +264,18 @@
 
 .box-content-row {
   display: block;
-  padding: 10px 15px;
+  padding: 5px 10px;
   position: relative;
   z-index: 1;
+  border-radius: $border-radius;
+  margin: 3px 5px;
 
-  &:before {
-    content: "";
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    width: calc(100% - 40px);
-    border-bottom: 1px solid #000000;
+  @include themify($themes) {
+    background-color: themed("boxBackgroundColor");
+  }
 
-    @include themify($themes) {
-      border-bottom-color: themed("boxBorderColor");
-    }
+  &.no-bg {
+    background-color: rgba(0, 0, 0, 0) !important;
   }
 
   &.settings-row {
@@ -346,6 +392,7 @@
   &.box-content-row-flex,
   .box-content-row-flex,
   &.box-content-row-checkbox,
+  &.box-content-row-link,
   &.box-content-row-input,
   &.box-content-row-slider,
   &.box-content-row-multi {
@@ -371,8 +418,6 @@
   }
 
   &.box-content-row-multi {
-    width: 100%;
-
     input:not([type="checkbox"]) {
       width: 100%;
     }
@@ -404,8 +449,13 @@
   }
 
   &.box-content-row-checkbox,
+  &.box-content-row-link,
   &.box-content-row-input,
   &.box-content-row-slider {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: 5px;
+
     label,
     .row-label {
       //cozy-customisations
@@ -489,7 +539,7 @@
       }
     }
 
-    &:focus {
+    &:not([type="file"]):focus {
       outline: none;
     }
   }
@@ -498,6 +548,7 @@
     width: 100%;
     border: 1px solid #000000;
     border-radius: $border-radius;
+    padding: 7px 4px;
 
     @include themify($themes) {
       border-color: themed("inputBorderColor");
@@ -764,6 +815,36 @@
   }
 }
 
+.truncate-box {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.truncate {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+form {
+  .box {
+    .box-content {
+      .box-content-row {
+        &.no-hover {
+          &:hover {
+            @include themify($themes) {
+              background-color: themed("transparentColor") !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Cozy custo
 .explanation {
   padding-top: 60px;
   padding-bottom: 10px;
@@ -772,3 +853,4 @@
 .options-row {
   padding: 15px 15px 0px 10px;
 }
+// end custo

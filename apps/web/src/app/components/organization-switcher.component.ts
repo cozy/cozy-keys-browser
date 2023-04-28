@@ -1,11 +1,14 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { map, Observable } from "rxjs";
 
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { OrganizationService } from "jslib-common/abstractions/organization.service";
-import { Utils } from "jslib-common/misc/utils";
-import { Organization } from "jslib-common/models/domain/organization";
-
-import { NavigationPermissionsService } from "../organizations/services/navigation-permissions.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import {
+  canAccessAdmin,
+  isNotProviderUser,
+  OrganizationService,
+} from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { Organization } from "@bitwarden/common/models/domain/organization";
 
 @Component({
   selector: "app-organization-switcher",
@@ -15,19 +18,16 @@ export class OrganizationSwitcherComponent implements OnInit {
   constructor(private organizationService: OrganizationService, private i18nService: I18nService) {}
 
   @Input() activeOrganization: Organization = null;
-  organizations: Organization[] = [];
+  organizations$: Observable<Organization[]>;
 
   loaded = false;
 
   async ngOnInit() {
-    await this.load();
-  }
-
-  async load() {
-    const orgs = await this.organizationService.getAll();
-    this.organizations = orgs
-      .filter((org) => NavigationPermissionsService.canAccessAdmin(org))
-      .sort(Utils.getSortFunction(this.i18nService, "name"));
+    this.organizations$ = this.organizationService.organizations$.pipe(
+      map((orgs) => orgs.filter(isNotProviderUser)),
+      canAccessAdmin(this.i18nService),
+      map((orgs) => orgs.sort(Utils.getSortFunction(this.i18nService, "name")))
+    );
 
     this.loaded = true;
   }

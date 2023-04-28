@@ -1,5 +1,6 @@
-import { SendService } from "jslib-common/abstractions/send.service";
-import { Response } from "jslib-node/cli/models/response";
+import { SendService } from "@bitwarden/common/abstractions/send.service";
+
+import { Response } from "../../models/response";
 
 export class SendDeleteCommand {
   constructor(private sendService: SendService) {}

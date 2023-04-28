@@ -33,7 +33,7 @@
     "message": "Zbierky"
   },
   "searchVault": {
-    "message": "Hľadať v trezore"
+    "message": "Search vault"
   },
   "addItem": {
     "message": "Pridať položku"
@@ -126,7 +126,7 @@
     "message": "Minimalizovať pri kopírovaní do schránky"
   },
   "minimizeOnCopyToClipboardDesc": {
-    "message": "Minimalizovať pri kopírovaní údajov z položky do schránky."
+    "message": "Minimalizovať aplikáciu pri kopírovaní údajov z položky do schránky."
   },
   "toggleVisibility": {
     "message": "Prepnúť viditeľnosť"
@@ -151,7 +151,7 @@
     "message": "Bezpečnostný kód"
   },
   "identityName": {
-    "message": "Názov identity"
+    "message": "Meno identity"
   },
   "company": {
     "message": "Spoločnosť"
@@ -178,7 +178,7 @@
     "message": "Vyžaduje prémiový účet"
   },
   "premiumRequiredDesc": {
-    "message": "Pre použitie tejto funkcie je potrebné prémiové členstvo."
+    "message": "Na použitie tejto funkcie je potrebné prémiové členstvo."
   },
   "errorOccurred": {
     "message": "Vyskytla sa chyba."
@@ -237,6 +237,9 @@
   },
   "ms": {
     "message": "Slečna"
+  },
+  "mx": {
+    "message": "Vážený"
   },
   "dr": {
     "message": "Dr."
@@ -389,7 +392,7 @@
     "message": "Vygenerovať nové heslo"
   },
   "copyPassword": {
-    "message": "Kopírovať heslo"
+    "message": "Skopírovať heslo"
   },
   "copyUri": {
     "message": "Kopírovať URI"
@@ -400,6 +403,18 @@
   "length": {
     "message": "Dĺžka"
   },
+  "uppercase": {
+    "message": "Veľké písmená (A-Z)"
+  },
+  "lowercase": {
+    "message": "Malé písmená (a-z)"
+  },
+  "numbers": {
+    "message": "Čísla (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Špeciálne znaky (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Počet slov"
   },
@@ -408,7 +423,7 @@
   },
   "capitalize": {
     "message": "Veľké prvé písmená slov",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Zahrnúť číslo"
@@ -427,16 +442,16 @@
     "message": "Vyhnúť sa zameniteľným znakom"
   },
   "searchCollection": {
-    "message": "Hľadať v zbierke"
+    "message": "Search collection"
   },
   "searchFolder": {
-    "message": "Hľadať v priečinku"
+    "message": "Search folder"
   },
   "searchFavorites": {
-    "message": "Hľadať v obľúbených"
+    "message": "Search favorites"
   },
   "searchType": {
-    "message": "Hľadať podľa typu",
+    "message": "Search type",
     "description": "Search item type"
   },
   "newAttachment": {
@@ -520,11 +535,21 @@
   "invalidEmail": {
     "message": "Neplatná emailová adresa."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Hlavné heslo je povinné."
   },
-  "masterPassLength": {
-    "message": "Hlavné heslo musí obsahovať aspoň 8 znakov."
+  "confirmMasterPasswordRequired": {
+    "message": "Vyžaduje sa opätovné zadanie hlavného hesla."
+  },
+  "masterPasswordMinlength": {
+    "message": "Master password must be at least $VALUE$ characters long.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Potvrdenie hlavného hesla sa nezhoduje."
@@ -683,7 +708,7 @@
     "message": "URL adresa servera pre oznámenia"
   },
   "iconsUrl": {
-    "message": "URL servera ikon"
+    "message": "URL servera ikôn"
   },
   "environmentSaved": {
     "message": "URL prostredia boli uložené."
@@ -882,20 +907,20 @@
     "message": "Automaticky vymazať skopírované hodnoty zo schránky.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Nezobrazovať ikony stránok"
+  "enableFavicon": {
+    "message": "Zobrazovať favikony stránok"
   },
-  "disableFaviconDesc": {
-    "message": "Ikony stránok poskytujú rozoznateľný obrázok vedľa každého prihlasovacieho údaju vo webovom trezore."
+  "faviconDesc": {
+    "message": "Pri každom prihlásení zobrazí rozpoznateľný obrázok."
   },
   "enableMinToTray": {
-    "message": "Minimalizovať na panel úloh"
+    "message": "Minimalizovať do systémovej lišty"
   },
   "enableMinToTrayDesc": {
     "message": "Namiesto minimalizácie okna zobraziť ikonu v systémovej lište."
   },
   "enableMinToMenuBar": {
-    "message": "Minimalizovať na panel úloh"
+    "message": "Minimalizovať do lišty"
   },
   "enableMinToMenuBarDesc": {
     "message": "Namiesto minimalizácie okna zobraziť ikonu na paneli úloh."
@@ -973,7 +998,7 @@
     "description": "Copy to clipboard"
   },
   "checkForUpdates": {
-    "message": "Skontrolovať aktualizácie"
+    "message": "Skontrolovať aktualizácie…"
   },
   "version": {
     "message": "Verzia $VERSION_NUM$",
@@ -1251,6 +1276,10 @@
     "message": "Aktualizované",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Vytvorené",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Heslo bolo aktualizované",
     "description": "ex. Date this password was updated"
@@ -1260,6 +1289,40 @@
   },
   "fileFormat": {
     "message": "Formát Súboru"
+  },
+  "hCaptchaUrl": {
+    "message": "URL hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Načítať súbor cookie prístupnosti"
+  },
+  "registerAccessibilityUser": {
+    "message": "Zaregistrujte sa ako používateľ prístupnosti na",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Skopírujte a vložte odkaz zaslaný na váš e-mail nižšie"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Zadajte adresu URL na načítanie súboru cookie prístupnosti pre hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "Vyžaduje sa URL hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Neplatná URL"
+  },
+  "done": {
+    "message": "Hotovo"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Súbor cookie prístupnosti uložený!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Nie je uložený žiadny súbor cookie prístupnosti"
   },
   "warning": {
     "message": "UPOZORNENIE",
@@ -1335,14 +1398,29 @@
   "touchIdConsentMessage": {
     "message": "odomknúť svoj trezor"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Pri spustení nezobrazovať výzvu na Windows Hello."
+  "autoPromptWindowsHello": {
+    "message": "Pri spustení požiadať o Windows Hello"
   },
-  "noAutoPromptTouchId": {
-    "message": "Pri spustení nezobrazovať výzvu na Touch ID."
+  "autoPromptTouchId": {
+    "message": "Pri spustení požiadať o Touch ID"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Pri reštarte zamknúť s hlavným heslom"
+  },
+  "deleteAccount": {
+    "message": "Odstrániť účet"
+  },
+  "deleteAccountDesc": {
+    "message": "Pokračujte, ak chcete odstrániť účet a všetky súvisiace dáta."
+  },
+  "deleteAccountWarning": {
+    "message": "Odstránenie účtu je trvalé. Operáciu nie je možné vrátiť späť."
+  },
+  "accountDeleted": {
+    "message": "Účet bol odstránený"
+  },
+  "accountDeletedDesc": {
+    "message": "Váš účet bol zrušený a všetky súvisiace dáta odstránené."
   },
   "preferences": {
     "message": "Predvoľby"
@@ -1354,7 +1432,7 @@
     "message": "Vždy zobraziť ikonu na paneli úloh."
   },
   "hideToMenuBar": {
-    "message": "Skryť do panela úloh"
+    "message": "Skryť do lišty"
   },
   "selectOneCollection": {
     "message": "Musíte vybrať aspoň jednu zbierku."
@@ -1394,7 +1472,7 @@
     "message": "Akcia pri vypršaní času pre trezor"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "Uzamknutý trezor sa dá odomknúť opätovným zadaním hlavného hesla."
+    "message": "Uzamknutý trezor sa dá odomknúť opätovným zadaním hlavného hesla alebo inou metódou odomknutia."
   },
   "vaultTimeoutActionLogOutDesc": {
     "message": "Odhlásený trezor bude vyžadovať opätovné prihlásenie aby ste k nemu mohli pristupovať."
@@ -1497,26 +1575,32 @@
   "acceptPolicies": {
     "message": "Označením tohto políčka súhlasíte s nasledovným:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Neboli akceptované Podmienky používania a zásady Ochrany osobných údajov."
   },
   "enableBrowserIntegration": {
-    "message": "Povoliť integráciu v prehliadači"
+    "message": "Povoliť integráciu v prehliadiači"
   },
   "enableBrowserIntegrationDesc": {
     "message": "Integrácia v prehliadači sa používa na biometriu v prehliadači."
   },
-  "browserIntegrationMasOnlyTitle": {
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Povoliť integráciu prehliadača DuckDuckGo"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Používajte svoj trezor Bitwarden pri prehliadaní pomocou DuckDuckGo."
+  },
+  "browserIntegrationUnsupportedTitle": {
     "message": "Integrácia v prehliadači nie je podporovaná"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Bohužiaľ, integrácia v prehliadači je zatiaľ podporovaná iba vo verzii Mac App Store."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Integrácia v prehliadači nie je podporovaná"
-  },
   "browserIntegrationWindowsStoreDesc": {
-    "message": "Bohužiaľ, integrácia v prehliadači je zatiaľ podporovaná iba vo verzii Windows Store."
+    "message": "Bohužiaľ, integrácia v prehliadači zatiaľ nie je podporovaná, ak je aplikácia nainštalovaná cez Microsoft Store."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Bohužiaľ, integrácia prehliadača nie je v súčasnosti podporovaná vo verzii pre Linux."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Vyžadovať overenie pre integráciu v prehliadači"
@@ -1532,6 +1616,21 @@
   },
   "verifyBrowserDesc": {
     "message": "Uistite sa, že zobrazený odtlačok prsta je identický s odtlačkom prsta zobrazeným v rozšírení prehliadača."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ sa chce pripojiť k Bitwarden",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Chcete túto žiadosť schváliť?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "Ak ste túto žiadosť neiniciovali, neschvaľujte ju."
   },
   "biometricsNotEnabledTitle": {
     "message": "Biometria nie je aktivovaná"
@@ -1587,7 +1686,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Maximálny počet prístupov"
+    "message": "Maximálny počet prístupov",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Ak je nastavené, používatelia už nebudú mať prístup k tomuto Sendu po dosiahnutí maximálneho počtu prístupov.",
@@ -1688,6 +1788,15 @@
   },
   "disabled": {
     "message": "Zakázané"
+  },
+  "removePassword": {
+    "message": "Odstrániť heslo"
+  },
+  "removedPassword": {
+    "message": "Heslo bolo odstránené"
+  },
+  "removePasswordConfirmation": {
+    "message": "Naozaj chcete odstrániť heslo?"
   },
   "maxAccessCountReached": {
     "message": "Bol dosiahnutý maximálny počet prístupov"
@@ -1792,8 +1901,8 @@
   "leftOrganization": {
     "message": "Opustili ste organizáciu."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Nie je možné kontaktovať kľúčový konektor, skúste to znova neskôr."
+  "ssoKeyConnectorError": {
+    "message": "Chyba Key Connector: uistite sa, že je Key Connector k dispozícii a funguje správne."
   },
   "lockAllVaults": {
     "message": "Zamknúť všetky trezory"
@@ -1840,6 +1949,12 @@
       }
     }
   },
+  "locked": {
+    "message": "Zamknutý"
+  },
+  "unlocked": {
+    "message": "Odomknutý"
+  },
   "generator": {
     "message": "Generátor"
   },
@@ -1859,7 +1974,8 @@
     "message": "Typ používateľského mena"
   },
   "plusAddressedEmail": {
-    "message": "E-mail s plusovým aliasom"
+    "message": "E-mail s plusovým aliasom",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Použiť možnosti subadresovania svojho poskytovateľa e-mailu."
@@ -1881,5 +1997,209 @@
   },
   "service": {
     "message": "Služba"
+  },
+  "allVaults": {
+    "message": "Všetky trezory"
+  },
+  "searchOrganization": {
+    "message": "Vyhľadať organizáciu"
+  },
+  "searchMyVault": {
+    "message": "Prehľadávať môj trezor"
+  },
+  "forwardedEmail": {
+    "message": "Alias preposlaného e-mailu"
+  },
+  "forwardedEmailDesc": {
+    "message": "Vytvoriť e-mailový alias pomocou externej služby preposielania."
+  },
+  "hostname": {
+    "message": "Názov hostiteľa",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "Prístupový token API"
+  },
+  "apiKey": {
+    "message": "API kľúč"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Vyžaduje sa predplatné Prémium"
+  },
+  "organizationIsDisabled": {
+    "message": "Organizácia je vypnutá."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "K položkám vo vypnutej organizácii nie je možné pristupovať. Požiadajte o pomoc vlastníka organizácie."
+  },
+  "neverLockWarning": {
+    "message": "Ste si istí, že chcete použiť možnosť \"Nikdy\"? Táto predvoľba ukladá šifrovací kľúč od trezora priamo na zariadení. Ak použijete túto možnosť, mali by ste svoje zariadenie náležite zabezpečiť."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "Trezor"
+  },
+  "loginWithMasterPassword": {
+    "message": "Prihlásenie pomocou hlavného hesla"
+  },
+  "loggingInAs": {
+    "message": "Prihlasujete sa ako"
+  },
+  "rememberEmail": {
+    "message": "Zapamätať si e-mail"
+  },
+  "notYou": {
+    "message": "Nie ste to vy?"
+  },
+  "newAroundHere": {
+    "message": "Ste tu nový?"
+  },
+  "loggingInTo": {
+    "message": "Prihlásenie do $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Prihlásenie pomocou iného zariadenia"
+  },
+  "logInInitiated": {
+    "message": "Iniciované prihlásenie"
+  },
+  "notificationSentDevice": {
+    "message": "Do vášho zariadenia bolo odoslané upozornenie."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Skontrolujte, či je trezor odomknutý a či sa fráza odtlačku prsta zhoduje s druhým zariadením."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Fráza odtlačku prsta"
+  },
+  "needAnotherOption": {
+    "message": "Prihlásenie pomocou zariadenia musí byť nastavené v nastaveniach aplikácie Bitwarden. Potrebujete inú možnosť?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Zobraziť všetky možnosti prihlásenia"
+  },
+  "resendNotification": {
+    "message": "Znova odoslať upozornenie"
+  },
+  "toggleCharacterCount": {
+    "message": "Prepnúť počítadlo znakov",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Snažíte sa prihlásiť?"
+  },
+  "logInAttemptBy": {
+    "message": "Pokus o prihlásenie pomocou $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Typ zariadenia"
+  },
+  "ipAddress": {
+    "message": "IP adresa"
+  },
+  "time": {
+    "message": "Čas"
+  },
+  "confirmLogIn": {
+    "message": "Potvrdiť prihlásenie"
+  },
+  "denyLogIn": {
+    "message": "Odmietnuť prihlásenie"
+  },
+  "approveLoginRequests": {
+    "message": "Schvaľovanie žiadostí o prihlásenie"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Potvrdené prihlásenie pomocou $EMAIL$ na $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Odmietli ste pokus o prihlásenie z iného zariadenia. Ak ste to boli naozaj vy, skúste sa prihlásiť pomocou zariadenia znova."
+  },
+  "justNow": {
+    "message": "Práve teraz"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Vyžiadané pred $MINUTES$ minútami",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Platnosť žiadosti o prihlásenie už vypršala."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Táto žiadosť už nie je platná."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Použiť toto zariadenie na schvaľovanie požiadaviek na prihlásenie z iných zariadení."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Potvrdiť pokus o prihlásenie pomocou $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Požadované prihlásenie"
+  },
+  "exposedMasterPassword": {
+    "message": "Odhalené hlavné heslo"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Nájdené heslo v uniknuných údajoch. Na ochranu svojho účtu používajte jedinečné heslo. Naozaj chcete používať odhalené heslo?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Slabé a odhalené hlavné heslo"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Nájdené slabé heslo v uniknuných údajoch. Na ochranu svojho účtu používajte silné a jedinečné heslo. Naozaj chcete používať toto heslo?"
+  },
+  "checkForBreaches": {
+    "message": "Skontrolovať známe úniky údajov pre toto heslo"
+  },
+  "important": {
+    "message": "Dôležité:"
+  },
+  "masterPasswordHint": {
+    "message": "Vaše hlavné heslo sa nebude dať obnoviť, ak ho zabudnete!"
+  },
+  "characterMinimum": {
+    "message": "Minimálny počet znakov $LENGTH$",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

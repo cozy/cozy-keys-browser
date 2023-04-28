@@ -1,18 +1,19 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { SyncService } from "jslib-common/abstractions/sync.service";
-import { ProviderUpdateRequest } from "jslib-common/models/request/provider/providerUpdateRequest";
-import { ProviderResponse } from "jslib-common/models/response/provider/providerResponse";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { ProviderUpdateRequest } from "@bitwarden/common/models/request/provider/provider-update.request";
+import { ProviderResponse } from "@bitwarden/common/models/response/provider/provider.response";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 @Component({
   selector: "provider-account",
   templateUrl: "account.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class AccountComponent {
   selfHosted = false;
   loading = true;
@@ -33,6 +34,7 @@ export class AccountComponent {
 
   async ngOnInit() {
     this.selfHosted = this.platformUtilsService.isSelfHost();
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.parent.params.subscribe(async (params) => {
       this.providerId = params.providerId;
       try {

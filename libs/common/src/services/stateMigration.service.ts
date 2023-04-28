@@ -1,24 +1,29 @@
-import { StorageService } from "../abstractions/storage.service";
+import { AbstractStorageService } from "../abstractions/storage.service";
+import { EnvironmentUrls } from "../auth/models/domain/environment-urls";
+import { TokenService } from "../auth/services/token.service";
 import { HtmlStorageLocation } from "../enums/htmlStorageLocation";
 import { KdfType } from "../enums/kdfType";
 import { StateVersion } from "../enums/stateVersion";
 import { ThemeType } from "../enums/themeType";
 import { StateFactory } from "../factories/stateFactory";
-import { CipherData } from "../models/data/cipherData";
-import { CollectionData } from "../models/data/collectionData";
-import { EventData } from "../models/data/eventData";
-import { FolderData } from "../models/data/folderData";
-import { OrganizationData } from "../models/data/organizationData";
-import { PolicyData } from "../models/data/policyData";
-import { ProviderData } from "../models/data/providerData";
-import { SendData } from "../models/data/sendData";
-import { Account, AccountSettings } from "../models/domain/account";
-import { EnvironmentUrls } from "../models/domain/environmentUrls";
-import { GeneratedPasswordHistory } from "../models/domain/generatedPasswordHistory";
-import { GlobalState } from "../models/domain/globalState";
-import { StorageOptions } from "../models/domain/storageOptions";
-
-import { TokenService } from "./token.service";
+import { CollectionData } from "../models/data/collection.data";
+import { EventData } from "../models/data/event.data";
+import { OrganizationData } from "../models/data/organization.data";
+import { PolicyData } from "../models/data/policy.data";
+import { ProviderData } from "../models/data/provider.data";
+import { SendData } from "../models/data/send.data";
+import {
+  Account,
+  AccountSettings,
+  AccountSettingsSettings,
+  EncryptionPair,
+} from "../models/domain/account";
+import { EncString } from "../models/domain/enc-string";
+import { GlobalState } from "../models/domain/global-state";
+import { StorageOptions } from "../models/domain/storage-options";
+import { GeneratedPasswordHistory } from "../tools/generator/password";
+import { CipherData } from "../vault/models/data/cipher.data";
+import { FolderData } from "../vault/models/data/folder.data";
 
 // Originally (before January 2022) storage was handled as a flat key/value pair store.
 // With the move to a typed object for state storage these keys should no longer be in use anywhere outside of this migration.
@@ -55,7 +60,6 @@ const v1Keys: { [key: string]: string } = {
   enableBrowserIntegrationFingerprint: "enableBrowserIntegrationFingerprint",
   enableCloseToTray: "enableCloseToTray",
   enableFullWidth: "enableFullWidth",
-  enableGravatars: "enableGravatars",
   enableMinimizeToTray: "enableMinimizeToTray",
   enableStartToTray: "enableStartToTrayKey",
   enableTray: "enableTray",
@@ -132,8 +136,8 @@ export class StateMigrationService<
   TAccount extends Account = Account
 > {
   constructor(
-    protected storageService: StorageService,
-    protected secureStorageService: StorageService,
+    protected storageService: AbstractStorageService,
+    protected secureStorageService: AbstractStorageService,
     protected stateFactory: StateFactory<TGlobalState, TAccount>
   ) {}
 
@@ -155,6 +159,24 @@ export class StateMigrationService<
         case StateVersion.Three:
           await this.migrateStateFrom3To4();
           break;
+        case StateVersion.Four: {
+          const authenticatedAccounts = await this.getAuthenticatedAccounts();
+          for (const account of authenticatedAccounts) {
+            const migratedAccount = await this.migrateAccountFrom4To5(account);
+            await this.set(account.profile.userId, migratedAccount);
+          }
+          await this.setCurrentStateVersion(StateVersion.Five);
+          break;
+        }
+        case StateVersion.Five: {
+          const authenticatedAccounts = await this.getAuthenticatedAccounts();
+          for (const account of authenticatedAccounts) {
+            const migratedAccount = await this.migrateAccountFrom5To6(account);
+            await this.set(account.profile.userId, migratedAccount);
+          }
+          await this.setCurrentStateVersion(StateVersion.Six);
+          break;
+        }
       }
 
       currentStateVersion += 1;
@@ -237,7 +259,6 @@ export class StateMigrationService<
       autoFillOnPageLoadDefault:
         (await this.get<boolean>(v1Keys.autoFillOnPageLoadDefault)) ??
         defaultAccount.settings.autoFillOnPageLoadDefault,
-      biometricLocked: null,
       biometricUnlock:
         (await this.get<boolean>(v1Keys.biometricUnlock)) ??
         defaultAccount.settings.biometricUnlock,
@@ -282,9 +303,6 @@ export class StateMigrationService<
       enableFullWidth:
         (await this.get<boolean>(v1Keys.enableFullWidth)) ??
         defaultAccount.settings.enableFullWidth,
-      enableGravitars:
-        (await this.get<boolean>(v1Keys.enableGravatars)) ??
-        defaultAccount.settings.enableGravitars,
       environmentUrls: globals.environmentUrls ?? defaultAccount.settings.environmentUrls,
       equivalentDomains:
         (await this.get<any>(v1Keys.equivalentDomains)) ??
@@ -297,12 +315,15 @@ export class StateMigrationService<
       passwordGenerationOptions:
         (await this.get<any>(v1Keys.passwordGenerationOptions)) ??
         defaultAccount.settings.passwordGenerationOptions,
-      pinProtected: {
+      pinProtected: Object.assign(new EncryptionPair<string, EncString>(), {
         decrypted: null,
         encrypted: await this.get<string>(v1Keys.pinProtected),
-      },
+      }),
       protectedPin: await this.get<string>(v1Keys.protectedPin),
-      settings: userId == null ? null : await this.get<any>(v1KeyPrefixes.settings + userId),
+      settings:
+        userId == null
+          ? null
+          : await this.get<AccountSettingsSettings>(v1KeyPrefixes.settings + userId),
       vaultTimeout:
         (await this.get<number>(v1Keys.vaultTimeout)) ?? defaultAccount.settings.vaultTimeout,
       vaultTimeoutAction:
@@ -488,6 +509,25 @@ export class StateMigrationService<
     await this.set(keys.global, globals);
   }
 
+  protected async migrateAccountFrom4To5(account: TAccount): Promise<TAccount> {
+    const encryptedOrgKeys = account.keys?.organizationKeys?.encrypted;
+    if (encryptedOrgKeys != null) {
+      for (const [orgId, encKey] of Object.entries(encryptedOrgKeys)) {
+        encryptedOrgKeys[orgId] = {
+          type: "organization",
+          key: encKey as unknown as string, // Account v4 does not reflect the current account model so we have to cast
+        };
+      }
+    }
+
+    return account;
+  }
+
+  protected async migrateAccountFrom5To6(account: TAccount): Promise<TAccount> {
+    delete (account as any).keys?.legacyEtmKey;
+    return account;
+  }
+
   protected get options(): StorageOptions {
     return { htmlStorageLocation: HtmlStorageLocation.Local };
   }
@@ -509,5 +549,16 @@ export class StateMigrationService<
 
   protected async getCurrentStateVersion(): Promise<StateVersion> {
     return (await this.getGlobals())?.stateVersion ?? StateVersion.One;
+  }
+
+  protected async setCurrentStateVersion(newVersion: StateVersion): Promise<void> {
+    const globals = await this.getGlobals();
+    globals.stateVersion = newVersion;
+    await this.set(keys.global, globals);
+  }
+
+  protected async getAuthenticatedAccounts(): Promise<TAccount[]> {
+    const authenticatedUserIds = await this.get<string[]>(keys.authenticatedAccounts);
+    return Promise.all(authenticatedUserIds.map((id) => this.get<TAccount>(id)));
   }
 }

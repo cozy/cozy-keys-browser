@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { StorageRequest } from "jslib-common/models/request/storageRequest";
-import { PaymentResponse } from "jslib-common/models/response/paymentResponse";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { StorageRequest } from "@bitwarden/common/models/request/storage.request";
+import { PaymentResponse } from "@bitwarden/common/models/response/payment.response";
 
 import { PaymentComponent } from "./payment.component";
 
@@ -25,7 +26,7 @@ export class AdjustStorageComponent {
   @ViewChild(PaymentComponent, { static: true }) paymentComponent: PaymentComponent;
 
   storageAdjustment = 0;
-  formPromise: Promise<any>;
+  formPromise: Promise<PaymentResponse | void>;
 
   constructor(
     private apiService: ApiService,
@@ -33,7 +34,8 @@ export class AdjustStorageComponent {
     private platformUtilsService: PlatformUtilsService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private logService: LogService
+    private logService: LogService,
+    private organizationApiService: OrganizationApiServiceAbstraction
   ) {}
 
   async submit() {
@@ -50,7 +52,7 @@ export class AdjustStorageComponent {
         if (this.organizationId == null) {
           response = this.formPromise = this.apiService.postAccountStorage(request);
         } else {
-          response = this.formPromise = this.apiService.postOrganizationStorage(
+          response = this.formPromise = this.organizationApiService.updateStorage(
             this.organizationId,
             request
           );

@@ -238,6 +238,9 @@
   "ms": {
     "message": "Pani"
   },
+  "mx": {
+    "message": "Pan(i)"
+  },
   "dr": {
     "message": "Doktor"
   },
@@ -254,7 +257,7 @@
     "message": "Inne"
   },
   "generatePassword": {
-    "message": "Generuj hasło"
+    "message": "Wygeneruj hasło"
   },
   "type": {
     "message": "Rodzaj"
@@ -308,7 +311,7 @@
     "message": "Edytuj"
   },
   "authenticatorKeyTotp": {
-    "message": "Klucz Uwierzytelniający (TOTP)"
+    "message": "Klucz uwierzytelniający (TOTP)"
   },
   "folder": {
     "message": "Folder"
@@ -349,7 +352,7 @@
     "message": "Element został dodany"
   },
   "editedItem": {
-    "message": "Element został zaktualizowany"
+    "message": "Element został zapisany"
   },
   "deleteItem": {
     "message": "Usuń element"
@@ -373,7 +376,7 @@
     "message": "Nadpisz nazwę użytkownika"
   },
   "overwriteUsernameConfirmation": {
-    "message": "Are you sure you want to overwrite the current username?"
+    "message": "Czy na pewno chcesz nadpisać obecną nazwę użytkownika?"
   },
   "noneFolder": {
     "message": "Nieprzypisane",
@@ -386,7 +389,7 @@
     "message": "Edytuj folder"
   },
   "regeneratePassword": {
-    "message": "Wygeneruj hasło ponownie"
+    "message": "Wygeneruj ponownie hasło"
   },
   "copyPassword": {
     "message": "Kopiuj hasło"
@@ -400,6 +403,18 @@
   "length": {
     "message": "Długość"
   },
+  "uppercase": {
+    "message": "Wielkie litery (A-Z)"
+  },
+  "lowercase": {
+    "message": "Małe litery (a-z)"
+  },
+  "numbers": {
+    "message": "Cyfry (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Znaki specjalne (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Liczba słów"
   },
@@ -408,7 +423,7 @@
   },
   "capitalize": {
     "message": "Wielkie litery",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Uwzględnij cyfry"
@@ -449,13 +464,13 @@
     "message": "Czy na pewno chcesz usunąć ten załącznik?"
   },
   "attachmentSaved": {
-    "message": "Załącznik został zapisany."
+    "message": "Załącznik został zapisany"
   },
   "file": {
     "message": "Plik"
   },
   "selectFile": {
-    "message": "Wybierz plik."
+    "message": "Wybierz plik"
   },
   "maxFileSize": {
     "message": "Maksymalny rozmiar pliku to 500 MB."
@@ -464,7 +479,7 @@
     "message": "Nie możesz używać tej funkcji, dopóki nie zaktualizujesz klucza szyfrowania."
   },
   "editedFolder": {
-    "message": "Folder został zaktualizowany"
+    "message": "Folder został zapisany"
   },
   "addedFolder": {
     "message": "Folder został dodany"
@@ -520,11 +535,21 @@
   "invalidEmail": {
     "message": "Adres e-mail jest nieprawidłowy."
   },
-  "masterPassRequired": {
+  "masterPasswordRequired": {
     "message": "Hasło główne jest wymagane."
   },
-  "masterPassLength": {
-    "message": "Hasło główne musi zawierać co najmniej 8 znaków."
+  "confirmMasterPasswordRequired": {
+    "message": "Wymagane jest ponowne wpisanie hasła głównego."
+  },
+  "masterPasswordMinlength": {
+    "message": "Hasło główne musi zawierać co najmniej $VALUE$ znaki(-ów).",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Hasła nie pasują do siebie."
@@ -671,7 +696,7 @@
     "message": "Adres URL serwera"
   },
   "apiUrl": {
-    "message": "Adres URL serwera interfejsu API"
+    "message": "Adres URL serwera API"
   },
   "webVaultUrl": {
     "message": "Adres URL serwera sejfu internetowego"
@@ -686,7 +711,7 @@
     "message": "Adres URL serwera ikon"
   },
   "environmentSaved": {
-    "message": "Adresy URL środowiska zostały zapisane."
+    "message": "Adresy URL środowiska zostały zapisane"
   },
   "ok": {
     "message": "Ok"
@@ -719,13 +744,13 @@
     "message": "Wyloguj się"
   },
   "addNewLogin": {
-    "message": "Dodaj dane logowania"
+    "message": "Nowe dane logowania"
   },
   "addNewItem": {
-    "message": "Dodaj element"
+    "message": "Nowy element"
   },
   "addNewFolder": {
-    "message": "Dodaj folder"
+    "message": "Nowy folder"
   },
   "view": {
     "message": "Widok"
@@ -821,7 +846,7 @@
     "message": "Blokowanie sejfu"
   },
   "vaultTimeoutDesc": {
-    "message": "Wybierz kiedy sejf zostanie zablokowany i wykonaj następującą akcję."
+    "message": "Wybierz, kiedy sejf zostanie zablokowany i wykonaj następującą akcję."
   },
   "immediately": {
     "message": "Natychmiast"
@@ -857,7 +882,7 @@
     "message": "4 godziny"
   },
   "onIdle": {
-    "message": "Po bezczynności przez 5 minut"
+    "message": "Podczas bezczynności systemu"
   },
   "onSleep": {
     "message": "Po uśpieniu komputera"
@@ -882,11 +907,11 @@
     "message": "Automatycznie wyczyść skopiowaną wartość ze schowka.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Wyłącz ikony stron"
+  "enableFavicon": {
+    "message": "Pokaż ikony witryn"
   },
-  "disableFaviconDesc": {
-    "message": "Wyświetlaj rozpoznawalną ikonę serwisu obok danych logowania w sejfie."
+  "faviconDesc": {
+    "message": "Pokaż rozpoznawalny obraz obok danych logowania."
   },
   "enableMinToTray": {
     "message": "Minimalizuj do zasobnika systemowego"
@@ -913,7 +938,7 @@
     "message": "Po zamknięciu okna, pokaż ikonę w pasku menu."
   },
   "enableTray": {
-    "message": "Włącz ikonę w zasobniku systemowym"
+    "message": "Pokaż ikonę w zasobniku systemowym"
   },
   "enableTrayDesc": {
     "message": "Zawsze pokazuj ikonę w zasobniku systemowym."
@@ -943,7 +968,7 @@
     "message": "Pokaż ikonę Bitwarden w Docku po zminimalizowaniu do paska menu."
   },
   "confirmTrayTitle": {
-    "message": "Potwierdź wyłączenie zasobnika systemowego"
+    "message": "Potwierdź ukrycie zasobnika systemowego"
   },
   "confirmTrayDesc": {
     "message": "Wyłączenie tej opcji spowoduje wyłącznie wszystkich innych powiązanych ustawień z zasobnikiem systemowym."
@@ -973,7 +998,7 @@
     "description": "Copy to clipboard"
   },
   "checkForUpdates": {
-    "message": "Sprawdź dostępność aktualizacji"
+    "message": "Sprawdź dostępność aktualizacji…"
   },
   "version": {
     "message": "Wersja $VERSION_NUM$",
@@ -1021,7 +1046,7 @@
     "message": "Kopiuj nazwę użytkownika"
   },
   "copyNumber": {
-    "message": "Kopiuj numer karty",
+    "message": "Kopiuj numer",
     "description": "Copy credit card number"
   },
   "copySecurityCode": {
@@ -1089,7 +1114,7 @@
     "message": "Odświeżanie zostało zakończone"
   },
   "passwordHistory": {
-    "message": "Historia haseł"
+    "message": "Historia hasła"
   },
   "clear": {
     "message": "Wyczyść",
@@ -1154,7 +1179,7 @@
     "message": "Ukryj Bitwarden"
   },
   "hideOthers": {
-    "message": "Ukryj pozostałe"
+    "message": "Ukryj inne"
   },
   "showAll": {
     "message": "Pokaż wszystkie"
@@ -1251,8 +1276,12 @@
     "message": "Zaktualizowano",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Utworzono",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
-    "message": "Aktualizacja hasła",
+    "message": "Hasło zostało zaktualizowane",
     "description": "ex. Date this password was updated"
   },
   "exportVault": {
@@ -1260,6 +1289,40 @@
   },
   "fileFormat": {
     "message": "Format pliku"
+  },
+  "hCaptchaUrl": {
+    "message": "Adres URL hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Załaduj pliki cookies ułatwień dostępu"
+  },
+  "registerAccessibilityUser": {
+    "message": "Zarejestruj się jako użytkownik ułatwień dostępu na",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Skopiuj i wklej link wysłany na poniższy adres e-mail"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Wpisz adres URL, aby załadować pliki cookies ułatwień dostępu dla hCaptcha",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "Adres URL hCaptcha jest wymagany",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Adres URL jest nieprawidłowy"
+  },
+  "done": {
+    "message": "Gotowe"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Pliki cookies ułatwień dostępu zostały zapisane!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Brak zapisanych plików cookies ułatwień dostępu"
   },
   "warning": {
     "message": "UWAGA",
@@ -1335,14 +1398,29 @@
   "touchIdConsentMessage": {
     "message": "odblokuj sejf"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Zapamiętaj autoryzację Windows Hello."
+  "autoPromptWindowsHello": {
+    "message": "Poproś o Windows Hello przy uruchomieniu"
   },
-  "noAutoPromptTouchId": {
-    "message": "Zapamiętaj autoryzację Touch ID."
+  "autoPromptTouchId": {
+    "message": "Poproś o Touch ID przy uruchomieniu"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Zablokuj hasłem głównym po uruchomieniu ponownym"
+  },
+  "deleteAccount": {
+    "message": "Usuń konto"
+  },
+  "deleteAccountDesc": {
+    "message": "Kontynuuj poniżej, aby usunąć swoje konto i wszystkie dane sejfu."
+  },
+  "deleteAccountWarning": {
+    "message": "Usunięcie konta jest nieodwracalne. Ta czynność nie może zostać cofnięta."
+  },
+  "accountDeleted": {
+    "message": "Konto zostało usunięte"
+  },
+  "accountDeletedDesc": {
+    "message": "Konto zostało zamknięte i wszystkie powiązane z nim dane zostały usunięte."
   },
   "preferences": {
     "message": "Ustawienia"
@@ -1394,10 +1472,10 @@
     "message": "Sposób blokowania sejfu"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "Po zablokowaniu sejfu, musisz ponownie wpisać hasło główne, aby uzyskać do niego dostęp."
+    "message": "Wpisz hasło główne lub odblokuj sejf inną metodą, aby uzyskać do niego dostęp."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "Po wylogowaniu się z sejfu, musisz ponownie zalogować się, aby uzyskać do niego dostęp."
+    "message": "Zaloguj się ponownie, aby uzyskać dostęp do sejfu."
   },
   "lock": {
     "message": "Zablokuj",
@@ -1497,32 +1575,38 @@
   "acceptPolicies": {
     "message": "Zaznaczając tę opcję, akceptujesz:"
   },
-  "acceptPoliciesError": {
-    "message": "Nie zaakceptowałeś regulaminu i polityki prywatności."
+  "acceptPoliciesRequired": {
+    "message": "Regulamin i polityka prywatności nie zostały zaakceptowane."
   },
   "enableBrowserIntegration": {
     "message": "Włącz połączenie z przeglądarką"
   },
   "enableBrowserIntegrationDesc": {
-    "message": "Połączenie z przeglądarką jest używane do odblokowania danymi biometrycznymi."
+    "message": "Używane do odblokowania danymi biometrycznymi."
   },
-  "browserIntegrationMasOnlyTitle": {
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Włącz połączenie z przeglądarką DuckDuckGo"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Korzystaj z sejfu Bitwarden podczas przeglądania za pomocą przeglądarki DuckDuckGo."
+  },
+  "browserIntegrationUnsupportedTitle": {
     "message": "Połączenie z przeglądarką nie jest obsługiwane"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Połączenie z przeglądarką jest obsługiwane tylko z wersją aplikacji ze sklepu Mac App Store."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Połączenie z przeglądarką nie jest obsługiwane"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "Połączenie z przeglądarką nie jest obecnie obsługiwane w aplikacji w wersji Windows Store."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Połączenie z przeglądarką nie jest obecnie obsługiwane w aplikacji na Linuksa."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Wymagaj weryfikacji połączenia z przeglądarką"
   },
   "enableBrowserIntegrationFingerprintDesc": {
-    "message": "Wymagaj sprawdzenia identyfikatora podczas tworzenia połączenia między aplikacją a przeglądarką. Po włączeniu tej funkcji, musisz zweryfikować każde nawiązywane połączenie."
+    "message": "Dodaj dodatkową warstwę zabezpieczeń, weryfikując unikalny identyfikator konta podczas tworzenia linku między aplikacją a przeglądarką. Funkcja ta wymaga weryfikacji identyfikatora przy każdym nawiązaniu połączenia."
   },
   "approve": {
     "message": "Zatwierdź"
@@ -1533,6 +1617,21 @@
   "verifyBrowserDesc": {
     "message": "Upewnij się, że wyświetlony identyfikator jest identyczny z pokazanym w rozszerzeniu przeglądarki."
   },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "Aplikacja $APPID$ chce połączyć się z Bitwarden",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Czy chcesz zatwierdzić to żądanie?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "Jeśli to żądanie nie zostało zainicjowane przez Ciebie, nie zatwierdzaj go."
+  },
   "biometricsNotEnabledTitle": {
     "message": "Dane biometryczne są wyłączone"
   },
@@ -1540,7 +1639,7 @@
     "message": "Aby włączyć dane biometryczne w przeglądarce, musisz włączyć tę samą funkcję w ustawianiach aplikacji."
   },
   "personalOwnershipSubmitError": {
-    "message": "Ze względu na zasadę przedsiębiorstwa, nie możesz zapisywać elementów w osobistym sejfie. Zmień właściciela elementu na organizację i wybierz jedną z dostępnych kolekcji,."
+    "message": "Ze względu na zasadę przedsiębiorstwa, nie możesz zapisywać elementów w osobistym sejfie. Zmień właściciela elementu na organizację i wybierz jedną z dostępnych kolekcji."
   },
   "hintEqualsPassword": {
     "message": "Podpowiedź do hasła nie może być taka sama jak hasło."
@@ -1587,7 +1686,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Maksymalna liczba dostępów"
+    "message": "Maksymalna liczba dostępów",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Jeśli funkcja jest włączona, po osiągnięciu maksymalnej liczby dostępów, użytkownicy nie będą mieli dostępu do tej wysyłki.",
@@ -1621,11 +1721,11 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSend": {
-    "message": "Wysyłka została utworzona",
+    "message": "Wysyłka została dodana",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "Wysyłka została zaktualizowana",
+    "message": "Wysyłka została zapisana",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletedSend": {
@@ -1640,7 +1740,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createSend": {
-    "message": "Utwórz wysyłkę",
+    "message": "Nowa wysyłka",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendTextDesc": {
@@ -1676,7 +1776,7 @@
     "message": "Po zapisaniu wysyłki, skopiuj link do schowka."
   },
   "sendDisabled": {
-    "message": "Wysyłka została wyłączona",
+    "message": "Wysyłka została usunięta",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
@@ -1688,6 +1788,15 @@
   },
   "disabled": {
     "message": "Wyłączona"
+  },
+  "removePassword": {
+    "message": "Usuń hasło"
+  },
+  "removedPassword": {
+    "message": "Hasło zostało usunięte"
+  },
+  "removePasswordConfirmation": {
+    "message": "Czy na pewno chcesz usunąć hasło?"
   },
   "maxAccessCountReached": {
     "message": "Maksymalna liczba dostępów została osiągnięta"
@@ -1754,7 +1863,7 @@
     "message": "Czas blokowania sejfu przekracza limit określony przez organizację."
   },
   "resetPasswordPolicyAutoEnroll": {
-    "message": "Automatyczne rejestrowanie użytkowników do resetowania hasła"
+    "message": "Automatyczne rejestrowanie użytkowników"
   },
   "resetPasswordAutoEnrollInviteWarning": {
     "message": "Ta organizacja posługuje się zasadą, która automatycznie rejestruje użytkowników do resetowania hasła. Rejestracja umożliwia administratorom organizacji zmianę Twojego hasła głównego."
@@ -1772,7 +1881,7 @@
     "message": "Usuń hasło główne"
   },
   "removedMasterPassword": {
-    "message": "Hasło główne zostało usunięte."
+    "message": "Hasło główne zostało usunięte"
   },
   "convertOrganizationEncryptionDesc": {
     "message": "Organizacja $ORGANIZATION$ używa jednokrotnego logowania SSO z własnym serwerem kluczy. Użytkownicy nie muszą logować się za pomocą hasła głównego.",
@@ -1792,8 +1901,8 @@
   "leftOrganization": {
     "message": "Nie należysz już do tej organizacji."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Nie można nawiązać połączenia z serwerem Key Connector. Spróbuj ponownie później."
+  "ssoKeyConnectorError": {
+    "message": "Błąd serwera Key Connector: upewnij się, że serwer Key Connector jest dostępny i działa poprawnie."
   },
   "lockAllVaults": {
     "message": "Zablokuj wszystkie sejfy"
@@ -1840,6 +1949,12 @@
       }
     }
   },
+  "locked": {
+    "message": "Zablokowany"
+  },
+  "unlocked": {
+    "message": "Odblokowany"
+  },
   "generator": {
     "message": "Generator"
   },
@@ -1859,7 +1974,8 @@
     "message": "Rodzaj nazwy użytkownika"
   },
   "plusAddressedEmail": {
-    "message": "Adres e-mail z plusem"
+    "message": "Adres e-mail z plusem",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
     "message": "Użyj możliwości dodawania aliasów u swojego dostawcy poczty e-mail."
@@ -1871,15 +1987,219 @@
     "message": "Użyj skonfigurowanej skrzynki catch-all w swojej domenie."
   },
   "random": {
-    "message": "Random"
+    "message": "Losowa"
   },
   "randomWord": {
     "message": "Losowe słowo"
   },
   "websiteName": {
-    "message": "Nazwa witryny"
+    "message": "Nazwa strony"
   },
   "service": {
     "message": "Usługa"
+  },
+  "allVaults": {
+    "message": "Wszystkie sejfy"
+  },
+  "searchOrganization": {
+    "message": "Szukaj w organizacji"
+  },
+  "searchMyVault": {
+    "message": "Szukaj w sejfie"
+  },
+  "forwardedEmail": {
+    "message": "Alias przekierowania"
+  },
+  "forwardedEmailDesc": {
+    "message": "Wygeneruj alias adresu e-mail z zewnętrznej usługi przekazywania."
+  },
+  "hostname": {
+    "message": "Nazwa hosta",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "Token dostępu API"
+  },
+  "apiKey": {
+    "message": "Klucz API"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Wymagana jest subskrypcja Premium"
+  },
+  "organizationIsDisabled": {
+    "message": "Organizacja została zawieszona"
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Nie można uzyskać dostępu do elementów w zawieszonych organizacjach. Skontaktuj się z właścicielem organizacji, aby uzyskać pomoc."
+  },
+  "neverLockWarning": {
+    "message": "Czy na pewno chcesz użyć opcji „Nigdy”? Ustawienie opcji blokady na „Nigdy” spowoduje zapisanie klucza szyfrowania sejfu na urządzeniu. Jeśli korzystasz z tej opcji, upewnij się, że urządzenie jest odpowiednio chronione."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "Sejf"
+  },
+  "loginWithMasterPassword": {
+    "message": "Logowanie hasłem głównym"
+  },
+  "loggingInAs": {
+    "message": "Logowanie jako"
+  },
+  "rememberEmail": {
+    "message": "Zapamiętaj adres e-mail"
+  },
+  "notYou": {
+    "message": "To nie Ty?"
+  },
+  "newAroundHere": {
+    "message": "Nowy użytkownik?"
+  },
+  "loggingInTo": {
+    "message": "Logowanie do $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Logowanie innym urządzeniem"
+  },
+  "logInInitiated": {
+    "message": "Logowanie rozpoczęte"
+  },
+  "notificationSentDevice": {
+    "message": "Powiadomienie zostało wysłane na urządzenie."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Upewnij się, że sejf jest odblokowany, a unikalny identyfikator konta pasuje do innego urządzenia."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Unikalny identyfikator konta"
+  },
+  "needAnotherOption": {
+    "message": "Logowanie za pomocą urządzenia musi być włączone w ustawieniach aplikacji Bitwarden. Potrzebujesz innej opcji?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Zobacz wszystkie sposoby logowania"
+  },
+  "resendNotification": {
+    "message": "Wyślij ponownie powiadomienie"
+  },
+  "toggleCharacterCount": {
+    "message": "Pokaż / Ukryj licznik znaków",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Próbujesz się zalogować?"
+  },
+  "logInAttemptBy": {
+    "message": "Próba logowania przez $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Typ urządenia"
+  },
+  "ipAddress": {
+    "message": "Adres IP"
+  },
+  "time": {
+    "message": "Godzina"
+  },
+  "confirmLogIn": {
+    "message": "Potwierdź logowanie"
+  },
+  "denyLogIn": {
+    "message": "Odrzuć logowanie"
+  },
+  "approveLoginRequests": {
+    "message": "Zatwierdź prośby logowania"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Logowanie potwierdzone dla $EMAIL$ dnia $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Odrzucono próby logowania z innego urządzenia. Jeśli to naprawdę Ty, spróbuj ponownie zalogować się za pomocą urządzenia."
+  },
+  "justNow": {
+    "message": "Teraz"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Poproszono $MINUTES$ minut temu",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Prośba logowania wygasła."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Ta prośba nie jest już ważna."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Użyj tego urządzenia, aby zatwierdzić prośby logowania z innych urządzeń."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Potwierdź próbę logowania dla $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Wysłano prośbę logowania"
+  },
+  "exposedMasterPassword": {
+    "message": "Ujawnione hasło główne"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Hasło ujawnione w wyniku naruszenia ochrony danych. Użyj unikalnego hasła, aby chronić swoje konto. Czy na pewno chcesz użyć ujawnionego hasła?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Słabe i ujawnione hasło główne"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Słabe hasło ujawnione w wyniku naruszenia ochrony danych. Użyj silnego i unikalnego hasła, aby chronić swoje konto. Czy na pewno chcesz użyć tego hasła?"
+  },
+  "checkForBreaches": {
+    "message": "Sprawdź znane naruszenia ochrony danych tego hasła"
+  },
+  "important": {
+    "message": "Ważne:"
+  },
+  "masterPasswordHint": {
+    "message": "Twoje hasło główne nie może zostać odzyskane, jeśli je zapomnisz!"
+  },
+  "characterMinimum": {
+    "message": "Minimum znaków: $LENGTH$",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

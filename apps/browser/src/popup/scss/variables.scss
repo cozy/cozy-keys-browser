@@ -6,6 +6,8 @@ $font-family-sans-serif: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $font-family-monospace: Menlo, Monaco, Consolas, "Courier New", monospace;
 $font-size-base: 14px;
 $font-size-large: 16px;
+$font-size-xlarge: 22px;
+$font-size-xxlarge: 28px;
 $font-size-small: 12px;
 $text-color: #000000;
 $border-color: #f0f0f0;
@@ -14,8 +16,9 @@ $list-item-hover: #fbfbfb;
 $list-icon-color: #c7c7cd;
 $border-radius-large: 8px;
 $disabled-box-opacity: 1;
-$border-radius: 3px;
+$border-radius: 6px;
 $line-height-base: 1.42857143;
+$icon-hover-color: lighten($text-color, 50%);
 
 $charcoal-grey: #32363f;
 $gray: #5d6165;
@@ -41,6 +44,7 @@ $bar-text-color-alt: #aecdf6;
 $box-background-color: white;
 $box-background-hover-color: $list-item-hover;
 $box-border-color: $border-color;
+$border-color-alt: #c3c5c7;
 
 $button-border-color: darken($border-color-dark, 12%);
 $button-background-color: white;
@@ -70,8 +74,10 @@ $solarizedDarkGreen: #859900;
 $themes: (
   light: (
     textColor: $text-color,
+    hoverColorTransparent: rgba($text-color, 0.15),
     borderColor: $border-color-dark,
     backgroundColor: $background-color,
+    borderColorAlt: $border-color-alt,
     backgroundColorAlt: #ffffff,
     scrollbarColor: rgba(100, 100, 100, 0.2),
     scrollbarHoverColor: rgba(100, 100, 100, 0.4),
@@ -114,15 +120,27 @@ $themes: (
     logoSuffix: "dark",
     passwordNumberColor: #007fde,
     passwordSpecialColor: #c40800,
+    passwordCountText: #212529,
     calloutBorderColor: $border-color-dark,
     calloutBackgroundColor: $box-background-color,
     toastTextColor: #ffffff,
     svgSuffix: "-light.svg",
+    transparentColor: rgba(0, 0, 0, 0),
+    dateInputColorScheme: light,
+    // https://stackoverflow.com/a/53336754
+    webkitCalendarPickerFilter: invert(46%) sepia(69%) saturate(6397%) hue-rotate(211deg)
+      brightness(85%) contrast(103%),
+    // light has no hover so use same color
+    webkitCalendarPickerHoverFilter: invert(46%) sepia(69%) saturate(6397%) hue-rotate(211deg)
+      brightness(85%) contrast(103%),
+    codeColor: #e83e8c,
   ),
   dark: (
     textColor: #ffffff,
+    hoverColorTransparent: rgba($text-color, 0.15),
     borderColor: #161c26,
     backgroundColor: #161c26,
+    borderColorAlt: #6e788a,
     backgroundColorAlt: #2f343d,
     scrollbarColor: #6e788a,
     scrollbarHoverColor: #8d94a5,
@@ -165,15 +183,26 @@ $themes: (
     logoSuffix: "white",
     passwordNumberColor: #6f9df1,
     passwordSpecialColor: #ff8d85,
+    passwordCountText: #ffffff,
     calloutBorderColor: #4c525f,
     calloutBackgroundColor: #3c424e,
     toastTextColor: #1f242e,
     svgSuffix: "-dark.svg",
+    transparentColor: rgba(0, 0, 0, 0),
+    dateInputColorScheme: dark,
+    // https://stackoverflow.com/a/53336754 - must prepend brightness(0) saturate(100%) to dark themed date inputs
+    webkitCalendarPickerFilter: brightness(0) saturate(100%) invert(86%) sepia(19%) saturate(152%)
+      hue-rotate(184deg) brightness(87%) contrast(93%),
+    webkitCalendarPickerHoverFilter: brightness(0) saturate(100%) invert(100%) sepia(0%)
+      saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%),
+    codeColor: #e83e8c,
   ),
   nord: (
     textColor: $nord5,
+    hoverColorTransparent: rgba($text-color, 0.15),
     borderColor: $nord0,
     backgroundColor: $nord1,
+    borderColorAlt: $nord5,
     backgroundColorAlt: $nord2,
     scrollbarColor: $nord4,
     scrollbarHoverColor: $nord6,
@@ -216,20 +245,31 @@ $themes: (
     logoSuffix: "white",
     passwordNumberColor: $nord8,
     passwordSpecialColor: $nord12,
+    passwordCountText: $nord5,
     calloutBorderColor: $nord0,
     calloutBackgroundColor: $nord2,
     toastTextColor: #ffffff,
     svgSuffix: "-dark.svg",
+    transparentColor: rgba(0, 0, 0, 0),
+    dateInputColorScheme: dark,
+    webkitCalendarPickerFilter: brightness(0) saturate(100%) invert(94%) sepia(5%) saturate(454%)
+      hue-rotate(185deg) brightness(93%) contrast(96%),
+    // has no hover so use same color
+    webkitCalendarPickerHoverFilter: brightness(0) saturate(100%) invert(94%) sepia(5%)
+      saturate(454%) hue-rotate(185deg) brightness(93%) contrast(96%),
+    codeColor: #e83e8c,
   ),
   solarizedDark: (
     textColor: $solarizedDarkBase2,
+    hoverColorTransparent: rgba($text-color, 0.15),
     borderColor: $solarizedDarkBase03,
     backgroundColor: $solarizedDarkBase03,
+    borderColorAlt: $solarizedDarkBase01,
     backgroundColorAlt: $solarizedDarkBase02,
     scrollbarColor: $solarizedDarkBase0,
     scrollbarHoverColor: $solarizedDarkBase2,
-    boxBackgroundColor: $solarizedDarkBase03,
-    boxBackgroundHoverColor: $solarizedDarkBase02,
+    boxBackgroundColor: $solarizedDarkBase02,
+    boxBackgroundHoverColor: lighten($solarizedDarkBase02, 5%),
     boxBorderColor: $solarizedDarkBase02,
     tabBackgroundColor: $solarizedDarkBase02,
     tabBackgroundHoverColor: $solarizedDarkBase01,
@@ -241,7 +281,7 @@ $themes: (
     headerInputBackgroundFocusColor: $solarizedDarkBase1,
     headerInputColor: $solarizedDarkBase01,
     headerInputPlaceholderColor: $solarizedDarkBase00,
-    listItemBackgroundHoverColor: $solarizedDarkBase02,
+    listItemBackgroundHoverColor: lighten($solarizedDarkBase02, 5%),
     disabledIconColor: $solarizedDarkBase0,
     disabledBoxOpacity: 0.5,
     headingColor: $solarizedDarkBase0,
@@ -267,10 +307,18 @@ $themes: (
     logoSuffix: "white",
     passwordNumberColor: $solarizedDarkCyan,
     passwordSpecialColor: $solarizedDarkYellow,
+    passwordCountText: $solarizedDarkBase2,
     calloutBorderColor: $solarizedDarkBase03,
     calloutBackgroundColor: $solarizedDarkBase01,
     toastTextColor: #ffffff,
     svgSuffix: "-solarized.svg",
+    transparentColor: rgba(0, 0, 0, 0),
+    dateInputColorScheme: dark,
+    webkitCalendarPickerFilter: brightness(0) saturate(100%) invert(61%) sepia(13%) saturate(289%)
+      hue-rotate(138deg) brightness(92%) contrast(90%),
+    webkitCalendarPickerHoverFilter: brightness(0) saturate(100%) invert(94%) sepia(10%)
+      saturate(462%) hue-rotate(345deg) brightness(103%) contrast(87%),
+    codeColor: #e83e8c,
   ),
 );
 

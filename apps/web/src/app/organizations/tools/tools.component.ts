@@ -1,14 +1,15 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { OrganizationService } from "jslib-common/abstractions/organization.service";
-import { Organization } from "jslib-common/models/domain/organization";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { Organization } from "@bitwarden/common/models/domain/organization";
 
 @Component({
   selector: "app-org-tools",
   templateUrl: "tools.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class ToolsComponent {
   organization: Organization;
   accessReports = false;
@@ -21,6 +22,7 @@ export class ToolsComponent {
   ) {}
 
   ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.params.subscribe(async (params) => {
       this.organization = await this.organizationService.get(params.organizationId);
       // TODO: Maybe we want to just make sure they are not on a free plan? Just compare useTotp for now

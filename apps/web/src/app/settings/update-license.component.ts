@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 
 @Component({
   selector: "app-update-license",
@@ -11,16 +12,18 @@ import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.se
 })
 export class UpdateLicenseComponent {
   @Input() organizationId: string;
+  @Input() showCancel = true;
   @Output() onUpdated = new EventEmitter();
   @Output() onCanceled = new EventEmitter();
 
-  formPromise: Promise<any>;
+  formPromise: Promise<void>;
 
   constructor(
     private apiService: ApiService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
-    private logService: LogService
+    private logService: LogService,
+    private organizationApiService: OrganizationApiServiceAbstraction
   ) {}
 
   async submit() {
@@ -39,11 +42,11 @@ export class UpdateLicenseComponent {
       const fd = new FormData();
       fd.append("license", files[0]);
 
-      let updatePromise: Promise<any> = null;
+      let updatePromise: Promise<void | unknown> = null;
       if (this.organizationId == null) {
         updatePromise = this.apiService.postAccountLicense(fd);
       } else {
-        updatePromise = this.apiService.postOrganizationLicenseUpdate(this.organizationId, fd);
+        updatePromise = this.organizationApiService.updateLicense(this.organizationId, fd);
       }
 
       this.formPromise = updatePromise.then(() => {
@@ -51,7 +54,11 @@ export class UpdateLicenseComponent {
       });
 
       await this.formPromise;
-      this.platformUtilsService.showToast("success", null, this.i18nService.t("updatedLicense"));
+      this.platformUtilsService.showToast(
+        "success",
+        null,
+        this.i18nService.t("licenseUploadSuccess")
+      );
       this.onUpdated.emit();
     } catch (e) {
       this.logService.error(e);

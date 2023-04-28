@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { first } from "rxjs/operators";
 
-import { PlanType } from "jslib-common/enums/planType";
-import { ProductType } from "jslib-common/enums/productType";
+import { PlanType } from "@bitwarden/common/enums/planType";
+import { ProductType } from "@bitwarden/common/enums/productType";
 
 import { OrganizationPlansComponent } from "./organization-plans.component";
 
@@ -11,6 +11,7 @@ import { OrganizationPlansComponent } from "./organization-plans.component";
   selector: "app-create-organization",
   templateUrl: "create-organization.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class CreateOrganizationComponent implements OnInit {
   @ViewChild(OrganizationPlansComponent, { static: true })
   orgPlansComponent: OrganizationPlansComponent;
@@ -18,6 +19,7 @@ export class CreateOrganizationComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       if (qParams.plan === "families") {
         this.orgPlansComponent.plan = PlanType.FamiliesAnnually;

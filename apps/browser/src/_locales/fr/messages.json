@@ -47,7 +47,7 @@
     "message": "Soumettre"
   },
   "emailAddress": {
-    "message": "Adresse e-mail"
+    "message": "Adresse électronique"
   },
   "cozyUrl": {
     "message": "Adresse de mon Cozy"
@@ -59,13 +59,13 @@
     "message": "Le mot de passe maître est le mot de passe que vous utilisez pour accéder à votre Cozy. Il est très important de ne pas l'oublier. Il n'existe aucun moyen de le récupérer si vous le perdez."
   },
   "masterPassHintDesc": {
-    "message": "Un indice de mot de passe maître peut vous aider à vous rappeler de votre mot de passe en cas d'oubli."
+    "message": "Un indice de mot de passe principal peut vous aider à vous souvenir de votre mot de passe si vous l'oubliez."
   },
   "reTypeMasterPass": {
-    "message": "Saisissez à nouveau le mot de passe maître"
+    "message": "Ressaisir le mot de passe principal"
   },
   "masterPassHint": {
-    "message": "Indice du mot de passe maître (facultatif)"
+    "message": "Indice du mot de passe principal (facultatif)"
   },
   "tab": {
     "message": "Ce site web"
@@ -76,8 +76,14 @@
   "myCozyTab_toolTip": {
     "message": "Accéder à mon Cozy"
   },
+  "vault": {
+    "message": "Coffre"
+  },
   "myVault": {
     "message": "Mots de passe"
+  },
+  "allVaults": {
+    "message": "Tous les coffres"
   },
   "tools": {
     "message": "Outils"
@@ -86,7 +92,7 @@
     "message": "Paramètres"
   },
   "currentTab": {
-    "message": "Onglet actif"
+    "message": "Onglet actuel"
   },
   "copyPassword": {
     "message": "Copier le mot de passe"
@@ -107,7 +113,7 @@
     "message": "Copier le code de sécurité"
   },
   "autoFill": {
-    "message": "Remplissage automatique"
+    "message": "Saisie automatique"
   },
   "generatePasswordCopied": {
     "message": "Générer un mot de passe (copié)"
@@ -116,7 +122,7 @@
     "message": "Copier le nom du champ personnalisé"
   },
   "noMatchingLogins": {
-    "message": "Aucun site correspondant."
+    "message": "Aucun identifiant correspondant."
   },
   "unlockVaultMenu": {
     "message": "Déverrouillez votre coffre"
@@ -158,19 +164,19 @@
     "message": "Ajouter un élément"
   },
   "passwordHint": {
-    "message": "Indice du mot de passe"
+    "message": "Indice mot de passe"
   },
   "enterEmailToGetHint": {
-    "message": "Saisissez l'adresse e-mail de votre compte pour recevoir l'indice de votre mot de passe maître."
+    "message": "Saisissez l'adresse électronique de votre compte pour recevoir l'indice de votre mot de passe principal."
   },
   "getMasterPasswordHint": {
-    "message": "Obtenir l'indice du mot de passe maître"
+    "message": "Obtenir l'indice du mot de passe principal"
   },
   "continue": {
     "message": "Continuer"
   },
   "sendVerificationCode": {
-    "message": "Envoyer un code de vérification à votre adresse email"
+    "message": "Envoyez un code de vérification à votre courriel"
   },
   "sendCode": {
     "message": "Envoyer le code"
@@ -197,6 +203,9 @@
   "yourAccountsFingerprint": {
     "message": "La phrase de sécurité de votre compte",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
+  },
+  "twoStepLogin": {
+    "message": "Authentification à deux facteurs"
   },
   "logOut": {
     "message": "Se déconnecter"
@@ -240,6 +249,15 @@
   "helpLink": {
     "message": "https://support.cozy.io/category/378-gestionnaire-de-mots-de-passe"
   },
+  "helpCenter": {
+    "message": "Bitwarden Help center"
+  },
+  "communityForums": {
+    "message": "Explore Bitwarden community forums"
+  },
+  "contactSupport": {
+    "message": "Contact Bitwarden support"
+  },
   "sync": {
     "message": "Synchroniser"
   },
@@ -257,10 +275,10 @@
     "description": "Short for 'Password Generator'."
   },
   "passGenInfo": {
-    "message": "Générer automatiquement des mots de passe forts et uniques pour vos identifiants."
+    "message": "Générer automatiquement des mots de passe robustes et uniques pour vos identifiants."
   },
   "bitWebVault": {
-    "message": "Coffre en ligne de Bitwarden"
+    "message": "Coffre web bitwarden"
   },
   "importItems": {
     "message": "Importer des éléments"
@@ -272,7 +290,7 @@
     "message": "Générer un mot de passe"
   },
   "regeneratePassword": {
-    "message": "Générer un nouveau mot de passe"
+    "message": "Régénérer un mot de passe"
   },
   "options": {
     "message": "Options"
@@ -303,13 +321,13 @@
     "description": "Make the first letter of a work uppercase."
   },
   "includeNumber": {
-    "message": "Inclure un chiffre"
+    "message": "Inclure le numéro"
   },
   "minNumbers": {
-    "message": "Nombre minimum de chiffres"
+    "message": "Minimum de chiffres"
   },
   "minSpecial": {
-    "message": "Nombre minimum de caractères spéciaux"
+    "message": "Minimum de caractères spéciaux"
   },
   "avoidAmbChar": {
     "message": "Éviter les caractères ambigus"
@@ -348,7 +366,7 @@
     "message": "Note"
   },
   "editItem": {
-    "message": "Modifier l'élément"
+    "message": "Éditer l'élément"
   },
   "folder": {
     "message": "Dossier"
@@ -390,7 +408,7 @@
     "message": "Votre navigateur web ne supporte pas la copie rapide depuis le presse-papier. Copiez-le manuellement à la place."
   },
   "verifyIdentity": {
-    "message": "Confirmer votre identité"
+    "message": "Vérifier l'identité"
   },
   "yourVaultIsLocked": {
     "message": "Votre coffre est verrouillé. Vérifiez votre identité pour continuer."
@@ -454,7 +472,7 @@
     "message": "4 heures"
   },
   "onLocked": {
-    "message": "Au verrouillage du système"
+    "message": "Au verrouillage"
   },
   "onRestart": {
     "message": "Au redémarrage du navigateur"
@@ -469,10 +487,10 @@
     "message": "Une erreur est survenue"
   },
   "emailRequired": {
-    "message": "L'adresse e-mail est requise."
+    "message": "L'adresse électronique est requise."
   },
   "invalidEmail": {
-    "message": "Adresse e-mail invalide."
+    "message": "Adresse électronique invalide."
   },
   "cozyUrlRequired": {
     "message": "L'adresse du Cozy est requise"
@@ -486,20 +504,30 @@
   "hasMispelledCozy": {
     "message": "Oups, ce n'est pas la bonne adresse. Essayez d'écrire \"cozy\" avec un \"z\" !"
   },
-  "masterPassRequired": {
-    "message": "Le mot de passe est requis."
+  "masterPasswordRequired": {
+    "message": "Le mot de passe principal est requis."
   },
-  "masterPassLength": {
-    "message": "Le mot de passe maître doit au moins contenir 8 caractères."
+  "confirmMasterPasswordRequired": {
+    "message": "Une nouvelle saisie du mot de passe principal est nécessaire."
+  },
+  "masterPasswordMinlength": {
+    "message": "Le mot de passe principal doit comporter au moins $VALUE$ caractères.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
-    "message": "La confirmation du mot de passe maître ne correspond pas."
+    "message": "La confirmation du mot de passe principal ne correspond pas."
   },
   "newAccountCreated": {
     "message": "Votre nouveau compte a été créé ! Vous pouvez maintenant vous authentifier."
   },
   "masterPassSent": {
-    "message": "Nous vous avons envoyé un e-mail contenant votre indice de mot de passe maître."
+    "message": "Nous vous avons envoyé un courriel avec votre indice de mot de passe principal."
   },
   "verificationCodeRequired": {
     "message": "Le code de vérification est requis."
@@ -518,7 +546,7 @@
     }
   },
   "autofillError": {
-    "message": "Impossible de remplir automatiquement le site sélectionné sur cette page. Copiez/collez plutôt votre nom d'utilisateur et/ou votre mot de passe."
+    "message": "Impossible de saisir automatiquement l'élément sélectionné sur cette page. Copiez-collez plutôt l'information."
   },
   "loggedOut": {
     "message": "Déconnecté"
@@ -545,13 +573,16 @@
     "message": "Dossier ajouté"
   },
   "changeMasterPass": {
-    "message": "Modifier le mot de passe maître"
+    "message": "Changer le mot de passe principal"
   },
   "changeMasterPasswordConfirmation": {
-    "message": "Modifier votre mot de passe doit se faire directement depuis votre Cozy. Voulez vous l'ouvrir maintenant ?"
+    "message": "Vous pouvez changer votre mot de passe depuis votre Cozy en ligne. Voulez-vous l'ouvrir maintenant ?"
+  },
+  "twoStepLoginConfirmation": {
+    "message": "L'authentification à deux facteurs rend votre compte plus sûr en vous demandant de vérifier votre connexion avec un autre dispositif tel qu'une clé de sécurité, une application d'authentification, un SMS, un appel téléphonique ou un courriel. L'authentification à deux facteurs peut être configurée sur le coffre web de bitwarden.com. Voulez-vous visiter le site web maintenant ?"
   },
   "editedFolder": {
-    "message": "Dossier modifié"
+    "message": "Dossier sauvegardé"
   },
   "deleteFolderConfirmation": {
     "message": "Êtes-vous sûr de vouloir supprimer ce dossier ?"
@@ -560,7 +591,7 @@
     "message": "Dossier supprimé"
   },
   "gettingStartedTutorial": {
-    "message": "Tutoriel"
+    "message": "Didacticiel"
   },
   "gettingStartedTutorialVideo": {
     "message": "Regardez notre didacticiel pour savoir comment parfaitement utiliser l'extension du navigateur."
@@ -591,10 +622,10 @@
     "message": "Nouvel URI"
   },
   "addedItem": {
-    "message": "Identifiant ajouté"
+    "message": "Élément ajouté"
   },
   "editedItem": {
-    "message": "Identifiant modifié"
+    "message": "Élément enregistré"
   },
   "deleteItemConfirmation": {
     "message": "Êtes-vous sûr de vouloir supprimer cet identifiant ?"
@@ -603,7 +634,7 @@
     "message": "Cet identifiant permet actuellement d'importer les données du compte dans votre Cozy. En le supprimant, cet import automatique sera interrompu. Etes-vous sûr ?"
   },
   "deletedItem": {
-    "message": "L'élément a été envoyé dans la corbeille"
+    "message": "Élément envoyé à la corbeille"
   },
   "overwritePassword": {
     "message": "Écraser le mot de passe"
@@ -612,7 +643,7 @@
     "message": "Êtes-vous sûr de vouloir écraser le mot de passe actuel ?"
   },
   "overwriteUsername": {
-    "message": "Remplacer le nom d'utilisateur"
+    "message": "Écraser le nom d'utilisateur"
   },
   "overwriteUsernameConfirmation": {
     "message": "Êtes-vous sûr(e) de vouloir remplacer le nom d'utilisateur actuel ?"
@@ -630,23 +661,23 @@
     "message": "Non classés",
     "description": "Répertoire avec les éléments non classés"
   },
-  "disableAddLoginNotification": {
-    "message": "Désactiver la notification d'ajout d'identifiant"
+  "enableAddLoginNotification": {
+    "message": "Demander à ajouter un identifiant"
   },
   "addLoginNotificationDesc": {
-    "message": "La \"Notification de demande d'ajout d'identifiant\" apparaît automatiquement pour vous proposer d'enregistrer dans votre coffre les identifiants que vous utilisez pour la première fois."
+    "message": "Demander à ajouter un élément si aucun n'est trouvé dans votre coffre."
   },
-  "dontShowCardsCurrentTab": {
-    "message": "Ne pas afficher les cartes sur la page Onglet courant"
+  "showCardsCurrentTab": {
+    "message": "Afficher les cartes sur la page de l'onglet"
   },
-  "dontShowCardsCurrentTabDesc": {
-    "message": "Les cartes stockées dans votre coffre sont listées sur la page \"Onglet courant\" pour un accès facile lors du remplissage automatique."
+  "showCardsCurrentTabDesc": {
+    "message": "Lister les éléments de la carte sur la page de l'onglet pour faciliter la saisie automatique."
   },
   "dontShowIdentitiesCurrentTab": {
     "message": "Ne pas afficher les profils sur la page Onglet courant"
   },
-  "dontShowIdentitiesCurrentTabDesc": {
-    "message": "Les profils stockés dans votre coffre sont listées sur la page \"Onglet courant\" pour un accès facile lors du remplissage automatique."
+  "showIdentitiesCurrentTabDesc": {
+    "message": "Lister les profils sur la page de l'onglet en cours pour faciliter la saisie automatique."
   },
   "clearClipboard": {
     "message": "Effacer le presse-papiers",
@@ -668,11 +699,12 @@
   "notificationAddSavePassword": {
     "message": "Enregistrer le mot de passe"
   },
-  "disableChangedPasswordNotification": {
-    "message": "Désactiver la notification de changement de mot de passe"
   },
-  "disableChangedPasswordNotificationDesc": {
-    "message": "La \"Notification de changement de mot de passe\" vous propose automatiquement de mettre à jour un mot de passe dans votre coffre lorsqu'il est changé sur un site web."
+  "enableChangedPasswordNotification": {
+    "message": "Demander à mettre à jour l'identifiant existant"
+  },
+  "changedPasswordNotificationDesc": {
+    "message": "Demander à mettre à jour le mot de passe d'un identifiant lorsqu'un changement est détecté sur un site Web."
   },
   "notificationChangeDesc": {
     "message": "Mettre à jour le mot de passe dans mon Cozy ?"
@@ -683,18 +715,18 @@
   "notificationChangeSave": {
     "message": "Mettre à jour"
   },
-  "disableContextMenuItem": {
-    "message": "Désactiver les options de menu contextuel"
+  "enableContextMenuItem": {
+    "message": "Afficher les options du menu contextuel"
   },
-  "disableContextMenuItemDesc": {
-    "message": "Les options du menu contextuel permettent un accès rapide à la génération de mots de passe et aux identifiants enregistrés pour le site web de l'onglet actuel."
+  "contextMenuItemDesc": {
+    "message": "Utilisez un clic secondaire pour accéder à la génération de mots de passe et les identifiants correspondants pour le site Web. "
   },
   "defaultUriMatchDetection": {
     "message": "Détection de correspondance URI par défaut",
     "description": "Default URI match detection for auto-fill."
   },
   "defaultUriMatchDetectionDesc": {
-    "message": "Choisissez la manière par défaut dont la détection de correspondance URI est gérée pour les connexions lors de l'exécution d'actions telles que le remplissage automatique."
+    "message": "Choisissez la manière de gestion par défaut de la détection de correspondance URI pour les identifiants lors de l'exécution d'actions telles que la saisie automatique."
   },
   "theme": {
     "message": "Thème"
@@ -728,7 +760,7 @@
     "message": "Confirmer l'export du coffre"
   },
   "exportWarningDesc": {
-    "message": "Cet export contient les données de votre coffre dans un format non chiffré. Vous ne devriez ni le stocker ni l'envoyer via des canaux non sécurisés (tel que l'e-mail). Supprimez-le immédiatement après l'avoir utilisé."
+    "message": "Cet export contient vos données de coffre dans un format non chiffré. Vous ne devriez pas stocker ou envoyer le fichier exporté par des canaux non sécurisés (comme le courriel). Supprimez-le immédiatement dès que vous avez fini de l'utiliser."
   },
   "encExportKeyWarningDesc": {
     "message": "Cet export chiffre vos données en utilisant la clé de chiffrement de votre compte. Si jamais vous modifiez la clé de chiffrement de votre compte, vous devriez exporter à nouveau car vous ne pourrez pas déchiffrer ce fichier."
@@ -737,7 +769,7 @@
     "message": "Les clés de chiffrement du compte sont spécifiques à chaque utilisateur Bitwarden. Vous ne pouvez donc pas importer d'export chiffré dans un compte différent."
   },
   "exportMasterPassword": {
-    "message": "Saisissez votre mot de passe maître pour exporter les données de votre coffre."
+    "message": "Saisissez votre mot de passe principal pour exporter les données de votre coffre."
   },
   "shared": {
     "message": "Partagé"
@@ -822,64 +854,73 @@
     "message": "Gérer l'adhésion"
   },
   "premiumManageAlert": {
-    "message": "Vous pouvez gérer votre adhésion depuis le coffre web sur bitwarden.com. Souhaitez-vous visiter le site web maintenant ?"
+    "message": "Vous pouvez gérer votre adhésion sur le coffre web de bitwarden.com. Voulez-vous visiter le site web maintenant ?"
   },
   "premiumRefresh": {
     "message": "Actualiser l'adhésion"
   },
   "premiumNotCurrentMember": {
-    "message": "Vous n'êtes actuellement pas un membre premium."
+    "message": "Vous n'êtes pas actuellement un membre Premium."
   },
   "premiumSignUpAndGet": {
-    "message": "Devenez un membre premium et obtenez :"
+    "message": "Inscrivez-vous pour une adhésion Premium et obtenez :"
   },
   "ppremiumSignUpStorage": {
-    "message": "1 Go de stockage de fichiers chiffrés."
+    "message": "1 Go de stockage chiffré pour les fichiers joints."
   },
   "ppremiumSignUpTwoStep": {
-    "message": "Options d'identification en deux étapes additionnelles comme YubiKey, FIDO U2F et Duo."
+    "message": "Options additionnelles d'identification à deux étapes telles que YubiKey, FIDO U2F et Duo."
   },
   "ppremiumSignUpReports": {
-    "message": "Rapports sur l'hygiène des mots de passe, la santé des comptes et les fuites de données pour assurer la sécurité de votre coffre."
+    "message": "Hygiène du mot de passe, santé du compte et rapports sur les brèches de données pour assurer la sécurité de votre coffre."
   },
   "ppremiumSignUpTotp": {
-    "message": "Génération d'un code de vérification TOTP (2FA) pour les identifiants de votre coffre."
+    "message": "Générateur de code de vérification TOTP (2FA) pour les identifiants dans votre coffre."
   },
   "ppremiumSignUpSupport": {
-    "message": "Support client prioritaire."
+    "message": "Assistance client prioritaire."
   },
   "ppremiumSignUpFuture": {
-    "message": "Toutes les futures options premium. D'autres suivront prochainement !"
+    "message": "Toutes les futures fonctionnalités Premium. Plus à venir prochainement !"
   },
   "premiumPurchase": {
     "message": "Acheter Premium"
   },
   "premiumPurchaseAlert": {
-    "message": "Vous pouvez opter pour une adhésion premium depuis le coffre web sur bitwarden.com. Souhaitez-vous visiter le site web maintenant ?"
+    "message": "Vous pouvez acheter une adhésion Premium sur le coffre web de bitwarden.com. Voulez-vous visiter le site web maintenant ?"
   },
   "premiumCurrentMember": {
-    "message": "Vous êtes un adhérent premium !"
+    "message": "Vous êtes un membre Premium !"
   },
   "premiumCurrentMemberThanks": {
     "message": "Merci de supporter Cozy."
   },
+  "premiumPrice": {
+    "message": "Tout pour seulement $PRICE$/an !",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      }
+    }
+  },
   "refreshComplete": {
     "message": "Actualisation terminée"
   },
-  "disableAutoTotpCopy": {
-    "message": "Désactiver la copie automatique du TOTP"
+  "enableAutoTotpCopy": {
+    "message": "Copier le code TOTP automatiquement"
   },
   "disableAutoTotpCopyDesc": {
-    "message": "Si une clé d'authentification est rattachée à votre identifiant, alors le code de vérification TOTP est automatiquement copié dans le presse-papiers lorsque vous renseignez l'identifiant."
+    "message": "Si un identifiant possède une clé d'authentification, copiez le code de vérification TOTP dans votre presse-papiers lorsque vous saisissez automatiquement l'identifiant."
   },
-  "disableAutoBiometricsPrompt": {
-    "message": "Ne pas demander de biométrie au démarrage"
+  "enableAutoBiometricsPrompt": {
+    "message": "Demander la biométrie au lancement"
   },
   "premiumRequired": {
-    "message": "Adhésion Premium requise"
+    "message": "Premium requis"
   },
   "premiumRequiredDesc": {
-    "message": "Une adhésion premium est requise pour utiliser cette fonctionnalité."
+    "message": "Une adhésion Premium est requise pour utiliser cette fonctionnalité."
   },
   "enterVerificationCodeApp": {
     "message": "Saisissez le code de vérification à 6 chiffres depuis votre application d'authentification."
@@ -894,7 +935,7 @@
     }
   },
   "verificationCodeEmailSent": {
-    "message": "E-mail de vérification envoyé.",
+    "message": "Courriel de vérification envoyé.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -906,7 +947,7 @@
     "message": "Rester connecté"
   },
   "sendVerificationCodeEmailAgain": {
-    "message": "Envoyer à nouveau l'e-mail du code de vérification"
+    "message": "Envoyer à nouveau le courriel de code de vérification"
   },
   "useAnotherTwoStepMethod": {
      "message": "Utiliser une autre méthode d'identification en deux étapes"
@@ -927,16 +968,16 @@
     "message": "Authentifier WebAuthn"
   },
   "loginUnavailable": {
-    "message": "Connexion impossible"
+    "message": "Identifiant non disponible"
   },
   "noTwoStepProviders": {
-    "message": "Ce compte dispose d'une identification en deux étapes. Cependant, aucun service d'identification en deux étapes n'est supporté par ce navigateur web."
+    "message": "Ce compte dispose d'une authentification à deux facteurs de configurée, cependant, aucun des fournisseurs à deux facteurs configurés n'est pris en charge par ce navigateur web."
   },
   "noTwoStepProviders2": {
     "message": "Merci d'utiliser un navigateur web compatible (comme Chrome) et/ou d'ajouter des services additionnels d'identification en deux étapes qui sont mieux supportés par les navigateurs web (comme par exemple une application d'authentification)."
   },
   "twoStepOptions": {
-    "message": "Options d'identification en deux étapes"
+    "message": "Options d'authentification à feux facteurs"
   },
   "recoveryCodeDesc": {
     "message": "Accès perdu à tous vos services d'authentification à double facteurs ? Utilisez votre code de récupération pour désactiver tous les services de double authentifications sur votre compte."
@@ -972,10 +1013,10 @@
     "message": "Utilisez n'importe quelle clé de sécurité compatible WebAuthn pour accéder à votre compte."
   },
   "emailTitle": {
-    "message": "E-mail"
+    "message": "Courriel"
   },
   "emailDesc": {
-    "message": "Les codes de vérification vont vous être envoyés par e-mail."
+    "message": "Les codes de vérification vous seront envoyés par courriel."
   },
   "selfHostedEnvironment": {
     "message": "Environnement auto-hébergé"
@@ -1020,25 +1061,28 @@
     "message": "Activer l’auto-complétion au chargement de la page"
   },
   "enableAutoFillOnPageLoadDesc": {
-    "message": "Si un formulaire de connexion est détecté, remplir automatiquement les champs au chargement de la page web."
+    "message": "Si un formulaire de connexion est détecté, saisir automatiquement lors du chargement de la page web."
   },
   "experimentalFeature": {
-    "message": "Ceci est actuellement une fonctionnalité expérimentale. À utiliser avec prudence."
+    "message": "Les sites web compromis ou non fiables peuvent exploiter la saisie automatique au chargement de la page."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "En savoir plus sur la saisie automatique"
   },
   "defaultAutoFillOnPageLoad": {
-    "message": "Paramètre de saisie automatique par défaut pour les identifiants"
+    "message": "Paramètre de saisie automatique par défaut pour les éléments de connexion"
   },
   "defaultAutoFillOnPageLoadDesc": {
-    "message": "Après avoir activé le remplissage automatique au chargement de la page, vous pourrez activer ou désactiver la fonctionnalité pour chaque identifiant. Ceci est le paramètre par défaut pour les identifiants qui ne sont pas configurés individuellement."
+    "message": "Vous pouvez désactiver la saisie automatique au chargement de la page pour les éléments de connexion individuels à partir de la vue Éditer l'élément."
   },
   "itemAutoFillOnPageLoad": {
-    "message": "Remplissage automatique au chargement de la page (si activé dans les options)"
+    "message": "Saisir automatiquement au chargement de la page (si configuré dans les options)"
   },
   "autoFillOnPageLoadUseDefault": {
     "message": "Utiliser le paramètre par défaut"
   },
   "autoFillOnPageLoadYes": {
-    "message": "Remplissage automatique au chargement de la page"
+    "message": "Saisir automatique au chargement de la page"
   },
   "enableInPageMenu": {
     "message": "Activer le menu de sélection dans la page web"
@@ -1071,7 +1115,7 @@
     "message": "seulement ce champ (Ctrl+Enter)"
   },
   "autoFillOnPageLoadNo": {
-    "message": "Ne pas remplir automatiquement au chargement de la page"
+    "message": "Ne pas saisir automatiquement au chargement de la page"
   },
   "defaultAutoFillOnPageLoad": {
     "message": "Default autofill setting for login items"
@@ -1098,7 +1142,7 @@
     "message": "Ouvrir le coffre dans la barre latérale"
   },
   "commandAutofillDesc": {
-    "message": "Remplir automatiquement le dernier identifiant utilisé pour le site web actuel."
+    "message": "Saisir automatiquement le dernier identifiant utilisé pour le site web actuel"
   },
   "commandGeneratePasswordDesc": {
     "message": "Générer et copier un nouveau mot de passe aléatoire dans le presse-papiers."
@@ -1142,22 +1186,22 @@
     "description": "This describes a value that is 'linked' (tied) to another value."
   },
   "popup2faCloseMessage": {
-    "message": "Le fait de cliquer à l'extérieur de la fenêtre pop-up pour vérifier votre e-mail avec votre code de vérification fermera cette pop-up. Voulez-vous ouvrir cette pop-up dans une nouvelle fenêtre pour qu'elle ne soit pas fermée ?"
+    "message": "Cliquer en dehors de la fenêtre popup pour vérifier votre courriel avec le code de vérification va causer la fermeture de cette fenêtre popup. Voulez-vous ouvrir cette fenêtre popup dans une nouvelle fenêtre afin qu'elle ne se ferme pas ?"
   },
   "popupU2fCloseMessage": {
-    "message": "Ce navigateur ne peut pas traiter les requêtes U2F dans cette popup. Voulez-vous ouvrir cette popup dans une nouvelle fenêtre pour que vous puissiez vous connecter en utilisant U2F ?"
+    "message": "Ce navigateur ne peut pas traiter les demandes U2F dans cette fenêtre popup. Voulez-vous ouvrir cette popup dans une nouvelle fenêtre afin de pouvoir vous connecter à l'aide de l'U2F ?"
   },
-  "disableFavicon": {
-    "message": "Désactiver les icônes des sites web"
+  "enableFavicon": {
+    "message": "Afficher les icônes du site web"
   },
-  "disableFaviconDesc": {
-    "message": "Les icônes des sites web permettent d'avoir une icône reconnaissable à côté de chaque identifiant dans votre coffre."
+  "faviconDesc": {
+    "message": "Afficher une image reconnaissable à côté de chaque identifiant."
   },
-  "disableBadgeCounter": {
-    "message": "Désactiver le compteur de badge"
+  "enableBadgeCounter": {
+    "message": "Afficher le compteur de badge"
   },
-  "disableBadgeCounterDesc": {
-    "message": "Le compteur de badge indique le nombre d'identifiants vous avez pour la page actuelle dans votre coffre."
+  "badgeCounterDesc": {
+    "message": "Indique le nombre d'identifiants que vous avez pour la page web actuelle."
   },
   "cardholderName": {
     "message": "Nom du titulaire de la carte"
@@ -1234,6 +1278,9 @@
   "dr": {
     "message": "Dr"
   },
+  "mx": {
+    "message": "Mx"
+  },
   "firstName": {
     "message": "Prénom"
   },
@@ -1241,7 +1288,7 @@
     "message": "Deuxième prénom"
   },
   "lastName": {
-    "message": "Nom"
+    "message": "Nom de famille"
   },
   "fullName": {
     "message": "Nom et prénom"
@@ -1259,10 +1306,10 @@
     "message": "Numéro de passeport"
   },
   "licenseNumber": {
-    "message": "Numéro de permis"
+    "message": "Numéro de permis de Conduire"
   },
   "email": {
-    "message": "E-mail"
+    "message": "Courriel"
   },
   "phone": {
     "message": "Téléphone"
@@ -1398,7 +1445,7 @@
     "description": "Default URI match detection for auto-fill."
   },
   "toggleOptions": {
-    "message": "Afficher/masquer les options"
+    "message": "Options de basculement"
   },
   "toggleCurrentUris": {
     "message": "Afficher/masquer les URIs actuels",
@@ -1430,6 +1477,10 @@
   "dateUpdated": {
     "message": "Mis à jour",
     "description": "ex. Date this item was updated"
+  },
+  "dateCreated": {
+    "message": "Créé",
+    "description": "ex. Date this item was created"
   },
   "datePasswordUpdated": {
     "message": "Mot de passe mis à jour",
@@ -1463,10 +1514,10 @@
     "description": "ex. A weak password. Scale: Weak -> Good -> Strong"
   },
   "weakMasterPassword": {
-    "message": "Mot de passe maître faible"
+    "message": "Mot de passe principal faible"
   },
   "weakMasterPasswordDesc": {
-    "message": "Le mot de passe maître que vous avez choisi est faible. Vous devriez utiliser un mot de passe (ou une phrase de passe) fort(e) pour protéger correctement votre compte Bitwarden. Êtes-vous sûr de vouloir utiliser ce mot de passe maître ?"
+    "message": "Le mot de passe principal que vous avez choisi est faible. Vous devriez utiliser un mot de passe principal fort (ou une phrase de passe) pour protéger correctement votre compte Bitwarden. Êtes-vous sûr de vouloir utiliser ce mot de passe principal ?"
   },
   "pin": {
     "message": "Code PIN",
@@ -1494,7 +1545,7 @@
     "message": "Veuillez confirmer l'utilisation de la biométrie dans l'application Bitwarden de bureau pour activer la biométrie dans le navigateur."
   },
   "lockWithMasterPassOnRestart": {
-    "message": "Verrouiller avec le mot de passe maître lors du redémarrage du navigateur."
+    "message": "Verrouiller avec le mot de passe principal au redémarrage du navigateur"
   },
   "selectOneCollection": {
     "message": "Vous devez sélectionner au moins une collection."
@@ -1506,7 +1557,7 @@
     "message": "Renseigner un formulaire"
   },
   "cloneItem": {
-    "message": "Cloner l’élément"
+    "message": "Cloner l'élément"
   },
   "clone": {
     "message": "Cloné"
@@ -1515,7 +1566,7 @@
     "message": "Une ou plusieurs politiques d'organisation affectent les paramètres de votre générateur."
   },
   "vaultTimeoutAction": {
-    "message": "Action lors de l'expiration du délai du coffre"
+    "message": "Action après délai d'expiration du coffre"
   },
   "lock": {
     "message": "Verrouiller",
@@ -1535,7 +1586,7 @@
     "message": "Êtes-vous sûr de vouloir supprimer définitivement cet élément ?"
   },
   "permanentlyDeletedItem": {
-    "message": "Élément supprimé définitivement"
+    "message": "Élément définitivement supprimé"
   },
   "restoreItem": {
     "message": "Restaurer l'élément"
@@ -1547,25 +1598,25 @@
     "message": "Élément restauré"
   },
   "vaultTimeoutLogOutConfirmation": {
-    "message": "La déconnexion supprimera tous les accès à votre coffre et nécessite une authentification en ligne après la période d'expiration. Êtes-vous sûr de vouloir utiliser ce paramètre?"
+    "message": "La déconnexion supprimera tout accès à votre coffre et nécessitera une authentification en ligne après la période d'expiration. Êtes-vous sûr de vouloir utiliser ce paramètre ?"
   },
   "vaultTimeoutLogOutConfirmationTitle": {
     "message": "Confirmation de l'action lors de l'expiration du délai"
   },
   "autoFillAndSave": {
-    "message": "Remplir automatiquement et enregistrer"
+    "message": "Saisir automatiquement et sauvegarder"
   },
   "autoFillSuccessAndSavedUri": {
-    "message": "Élément rempli automatiquement et URI sauvegardée"
+    "message": "Élément saisi automatiquement et URI sauvegardé"
   },
   "autoFillSuccess": {
-    "message": "Élément rempli automatiquement"
+    "message": "Élément saisi automatiquement"
   },
   "setMasterPassword": {
-    "message": "Définir le mot de passe maître"
+    "message": "Définir le mot de passe principal"
   },
   "masterPasswordPolicyInEffect": {
-    "message": "Une ou plusieurs politiques de l'organisation exigent que votre mot de passe maître réponde aux exigences suivantes :"
+    "message": "Une ou plusieurs politiques de l'organisation exigent que votre mot de passe principal réponde aux exigences suivantes :"
   },
   "policyInEffectMinComplexity": {
     "message": "Score de complexité minimum de $SCORE$",
@@ -1604,13 +1655,13 @@
     }
   },
   "masterPasswordPolicyRequirementsNotMet": {
-    "message": "Votre nouveau mot de passe maître ne répond pas aux exigences de la politique."
+    "message": "Votre nouveau mot de passe principal ne répond pas aux exigences en matière de politique de sécurité."
   },
   "acceptPolicies": {
     "message": "En cochant cette case, vous acceptez les éléments suivants :"
   },
-  "acceptPoliciesError": {
-    "message": "Les conditions d'utilisation et la politique de confidentialité n'ont pas été acceptées."
+  "acceptPoliciesRequired": {
+    "message": "Les Conditions d'Utilisation et la Politique de Confidentialité n'ont pas été acceptées."
   },
   "termsOfService": {
     "message": "Conditions d'utilisation"
@@ -1685,7 +1736,7 @@
     "message": "Cette action ne peut pas être effectuée dans la barre latérale, veuillez réessayer l'action dans la popup ou la nouvelle fenêtre."
   },
   "personalOwnershipSubmitError": {
-    "message": "En raison d'une politique d'entreprise, il vous est interdit d'enregistrer des éléments dans votre coffre personnel. Sélectionnez une organisation dans l'option Propriété et choisissez parmi les collections disponibles."
+    "message": "En raison d'une politique d'entreprise, il vous est interdit d'enregistrer des éléments dans votre coffre personnel. Changez l'option Propriété au profit d'une organisation et choisissez parmi les collections disponibles."
   },
   "personalOwnershipPolicyInEffect": {
     "message": "Une politique d'organisation affecte vos options de propriété."
@@ -1846,21 +1897,21 @@
     "message": "Le texte que vous voulez envoyer."
   },
   "sendHideText": {
-    "message": "Cacher par défaut le texte de ce Send.",
+    "message": "Masquer le texte de ce Send par défaut.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "currentAccessCount": {
     "message": "Nombre d'accès actuel"
   },
   "createSend": {
-    "message": "Créer un nouveau Send",
+    "message": "Nouveau Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "newPassword": {
     "message": "Nouveau mot de passe"
   },
   "sendDisabled": {
-    "message": "Send désactivé",
+    "message": "Send supprimé",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
@@ -1872,7 +1923,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "Send modifié",
+    "message": "Send sauvegardé",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLinuxChromiumFileWarning": {
@@ -1915,46 +1966,46 @@
     "message": "Une erreur s'est produite lors de l'enregistrement de vos dates de suppression et d'expiration."
   },
   "hideEmail": {
-    "message": "Cacher mon adresse e-mail aux destinataires."
+    "message": "Masquer mon adresse électronique aux destinataires."
   },
   "sendOptionsPolicyInEffect": {
     "message": "Une ou plusieurs politiques d'organisation affectent vos options Send."
   },
   "passwordPrompt": {
-    "message": "Ressaisie du mot de passe maître"
+    "message": "Ressaisir le mot de passe principal"
   },
   "passwordConfirmation": {
-    "message": "Confirmation du mot de passe maître"
+    "message": "Confirmation du mot de passe principal"
   },
   "passwordConfirmationDesc": {
-    "message": "Cette action est protégée. Pour continuer, veuillez ressaisir votre mot de passe maître pour vérifier votre identité."
+    "message": "Cette action est protégée. Pour continuer, veuillez saisir à nouveau votre mot de passe principal pour vérifier votre identité."
   },
   "emailVerificationRequired": {
-    "message": "Vérification de l'adresse e-mail nécessaire"
+    "message": "Vérification de courriel requise"
   },
   "emailVerificationRequiredDesc": {
-    "message": "Vous devez vérifier votre adresse e-mail pour utiliser cette fonctionnalité. Vous pouvez vérifier votre adresse e-mail dans le coffre web."
+    "message": "Vous devez vérifier votre courriel pour utiliser cette fonctionnalité. Vous pouvez vérifier votre courriel dans le coffre web."
   },
   "updatedMasterPassword": {
-    "message": "Mot de passe maître mis à jour"
+    "message": "Mot de passe principal mis à jour"
   },
   "updateMasterPassword": {
-    "message": "Mettre à jour le mot de passe maître"
+    "message": "Mettre à jour le mot de passe principal"
   },
   "updateMasterPasswordWarning": {
-    "message": "Votre mot de passe maître a récemment été modifié par un administrateur de votre organisation. Pour pouvoir accéder au coffre-fort, vous devez mettre à jour votre mot de passe maître maintenant. Poursuivre vous déconnectera de votre session actuelle, vous obligeant à vous reconnecter. Les sessions actives sur d'autres appareils peuvent rester actives jusqu'à une heure."
+    "message": "Votre mot de passe principal a été récemment changé par un administrateur de votre organisation. Pour pouvoir accéder au coffre, vous devez le mettre à jour maintenant. En poursuivant, vous serez déconnecté de votre session actuelle et vous devrez vous reconnecter. Les sessions actives sur d'autres appareils peuvent rester actives pendant encore une heure."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Inscription automatique"
   },
   "resetPasswordAutoEnrollInviteWarning": {
-    "message": "Cette organisation a une politique d'entreprise qui vous inscrira automatiquement à la réinitialisation du mot de passe. L'inscription permettra aux administrateurs de l'organisation de changer votre mot de passe maître."
+    "message": "Cette organisation dispose d'une politique d'entreprise qui vous inscrira automatiquement à la réinitialisation du mot de passe. L'inscription permettra aux administrateurs de l'organisation de changer votre mot de passe principal."
   },
   "selectFolder": {
     "message": "Sélectionnez un dossier..."
   },
   "ssoCompleteRegistration": {
-    "message": "Afin de terminer la connexion avec SSO, veuillez définir un mot de passe maître pour accéder à votre coffre et le protéger."
+    "message": "Afin de finaliser la connexion avec SSO, veuillez définir un mot de passe principal pour accéder et protéger votre coffre."
   },
   "hours": {
     "message": "Heures"
@@ -1975,8 +2026,8 @@
       }
     }
   },
-  "vaultTimeoutToLarge": {
-    "message": "Le délai d'expiration de votre coffre dépasse les restrictions définies par votre organisation."
+  "vaultTimeoutTooLarge": {
+    "message": "Le délai d'expiration de votre coffre-fort dépasse les restrictions définies par votre organisation."
   },
   "vaultExportDisabled": {
     "message": "Export du coffre désactivé"
@@ -1991,7 +2042,7 @@
     "message": "Aucun identifiant unique trouvé."
   },
   "convertOrganizationEncryptionDesc": {
-    "message": "$ORGANIZATION$ utilise SSO avec un serveur de clés auto-hébergé. Un mot de passe maître n'est plus nécessaire aux membres de cette organisation pour se connecter.",
+    "message": "$ORGANIZATION$ utilise le SSO avec un serveur de clés auto-hébergé. Un mot de passe principal n'est plus nécessaire aux membres de cette organisation pour se connecter.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -2003,10 +2054,10 @@
     "message": "Quitter l'organisation"
   },
   "removeMasterPassword": {
-    "message": "Supprimer le mot de passe maître"
+    "message": "Supprimer le mot de passe principal"
   },
   "removedMasterPassword": {
-    "message": "Mot de passe maître supprimé."
+    "message": "Mot de passe principal supprimé"
   },
   "leaveOrganizationConfirmation": {
     "message": "Êtes-vous sûr·e de vouloir quitter cette organisation ?"
@@ -2024,7 +2075,7 @@
     "message": "Export du coffre personnel"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Seuls les éléments du coffre personnel associé à l'adresse e-mail $EMAIL$ seront exportés. Les éléments du coffre de l'organisation ne seront pas inclus.",
+    "message": "Seuls les éléments individuels du coffre associés à $EMAIL$ seront exportés. Les éléments du coffre de l'organisation ne seront pas inclus.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2045,14 +2096,14 @@
     "message": "Type de nom d'utilisateur"
   },
   "plusAddressedEmail": {
-    "message": "E-mail suffixé",
+    "message": "Courriel sous-adressé",
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
-    "message": "Utilisez les capacités de sous-adressage de votre fournisseur d'e-mail."
+    "message": "Utilisez les capacités de sous-adressage de votre fournisseur de messagerie électronique."
   },
   "catchallEmail": {
-    "message": "Collecteur d'e-mail"
+    "message": "Courriel \"catch-all\""
   },
   "catchallEmailDesc": {
     "message": "Utilisez la boîte de réception du collecteur configurée de votre domaine."
@@ -2061,10 +2112,10 @@
     "message": "Aléatoire"
   },
   "randomWord": {
-    "message": "Mots aléatoire"
+    "message": "Mot aléatoire"
   },
   "websiteName": {
-    "message": "Nom du site Web"
+    "message": "Nom du site web"
   },
   "whatWouldYouLikeToGenerate": {
     "message": "Que souhaitez-vous générer ?"
@@ -2075,6 +2126,196 @@
   "service": {
     "message": "Service"
   },
+  "forwardedEmail": {
+    "message": "Alias d'email transféré"
+  },
+  "forwardedEmailDesc": {
+    "message": "Générer un alias de courriel avec un service de transfert externe."
+  },
+  "hostname": {
+    "message": "Nom d'hôte",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "Jeton d'accès API"
+  },
+  "apiKey": {
+    "message": "Clé API"
+  },
+  "ssoKeyConnectorError": {
+    "message": "Erreur Key Connector : vérifiez que Key Connector est disponible et fonctionne correctement."
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Abonnement Premium requis"
+  },
+  "organizationIsDisabled": {
+    "message": "L'organisation est désactivée."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Les éléments des organisations suspendues ne sont pas accessibles. Contactez le propriétaire de votre organisation pour obtenir de l'aide."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "loggingInTo": {
+    "message": "Connexion à $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "settingsEdited": {
+    "message": "Les paramètres ont été modifiés"
+  },
+  "environmentEditedClick": {
+    "message": "Cliquer ici"
+  },
+  "environmentEditedReset": {
+    "message": "pour réinitialiser aux paramètres par défaut"
+  },
+  "serverVersion": {
+    "message": "Version du serveur"
+  },
+  "selfHosted": {
+    "message": "Auto-hébergé"
+  },
+  "thirdParty": {
+    "message": "Tierce partie"
+  },
+  "thirdPartyServerMessage": {
+    "message": "Connecté à l'implémentation du serveur tiers, $SERVERNAME$. Veuillez contrôler les bugs en utilisant le serveur officiel, ou rapportez-les au serveur tiers.",
+    "placeholders": {
+      "servername": {
+        "content": "$1",
+        "example": "ThirdPartyServerName"
+      }
+    }
+  },
+  "lastSeenOn": {
+    "message": "vu pour la dernière fois le : $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "Jun 15, 2015"
+      }
+    }
+  },
+  "loginWithMasterPassword": {
+    "message": "Se connecter avec le mot de passe principal"
+  },
+  "loggingInAs": {
+    "message": "Connexion en tant que"
+  },
+  "notYou": {
+    "message": "Ce n'est pas vous ?"
+  },
+  "newAroundHere": {
+    "message": "Nouveau par ici ?"
+  },
+  "rememberEmail": {
+    "message": "Se souvenir du courriel"
+  },
+  "loginWithDevice": {
+    "message": "Se connecter avec l'appareil"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "La connexion avec l'appareil doit être configurée dans les paramètres de l'application Bitwarden. Besoin d'une autre option ?"
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Phrase d'empreinte"
+  },
+  "fingerprintMatchInfo": {
+    "message": "Veuillez vous assurer que votre coffre est déverrouillé et que la phrase d'empreinte correspond à celle de l'autre appareil."
+  },
+  "resendNotification": {
+    "message": "Renvoyer la notification"
+  },
+  "viewAllLoginOptions": {
+    "message": "Afficher toutes les options de connexion"
+  },
+  "notificationSentDevice": {
+    "message": "Une notification a été envoyée à votre appareil."
+  },
+  "logInInitiated": {
+    "message": "Connexion initiée"
+  },
+  "exposedMasterPassword": {
+    "message": "Mot de passe principal exposé"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Mot de passe trouvé dans une brèche de données. Utilisez un mot de passe unique pour protéger votre compte. Êtes-vous sûr de vouloir utiliser un mot de passe exposé ?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Mot de passe principal faible et exposé"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Mot de passe faible identifié et trouvé dans une brèche de données. Utilisez un mot de passe robuste et unique pour protéger votre compte. Êtes-vous sûr de vouloir utiliser ce mot de passe ?"
+  },
+  "checkForBreaches": {
+    "message": "Vérifier les brèches de données connues pour ce mot de passe"
+  },
+  "important": {
+    "message": "Important :"
+  },
+  "masterPasswordHint": {
+    "message": "Votre mot de passe principal ne peut pas être récupéré si vous l'oubliez !"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ caractère minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "howToAutofill": {
+    "message": "Comment saisir automatiquement"
+  },
+  "autofillSelectInfo": {
+    "message": "Select an item from this page or use the shortcut: $COMMAND$. You can also try auto-fill on page load.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillSelectInfoNoCommand": {
+    "message": "Sélectionnez un élément depuis cette page ou définissez un raccourci dans les paramètres. Vous pouvez également essayer la saisie automatique au chargement de la page."
+  },
+  "gotIt": {
+    "message": "Compris"
+  },
+  "autofillSettings": {
+    "message": "Paramètres de saisie automatique"
+  },
+  "autofillShortcut": {
+    "message": "Raccourci clavier de saisie automatique"
+  },
+  "autofillShortcutNotSet": {
+    "message": "Le raccourci de saisie automatique n'est pas défini. Changez-le dans les paramètres du navigateur."
+  },
+  "autofillShortcutText": {
+    "message": "Le raccourci de saisie automatique est : $COMMAND$. Changez-le dans les paramètres du navigateur.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  },
+  "autofillShortcutTextSafari": {
+    "message": "Raccourci de saisie automatique par défaut : $COMMAND$.",
+    "placeholders": {
+      "command": {
+        "content": "$1",
+        "example": "CTRL+Shift+L"
+      }
+    }
+  }
   "TOTPCopiedInClipboard": {
     "message": "TOTP copié dans votre presse papier !"
   },

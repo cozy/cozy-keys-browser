@@ -2,19 +2,20 @@ import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { first } from "rxjs/operators";
 
-import { ModalService } from "jslib-angular/services/modal.service";
-import { ValidationService } from "jslib-angular/services/validation.service";
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { OrganizationService } from "jslib-common/abstractions/organization.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { ProviderService } from "jslib-common/abstractions/provider.service";
-import { SearchService } from "jslib-common/abstractions/search.service";
-import { PlanType } from "jslib-common/enums/planType";
-import { ProviderUserType } from "jslib-common/enums/providerUserType";
-import { Organization } from "jslib-common/models/domain/organization";
-import { ProviderOrganizationOrganizationDetailsResponse } from "jslib-common/models/response/provider/providerOrganizationResponse";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { ProviderService } from "@bitwarden/common/abstractions/provider.service";
+import { SearchService } from "@bitwarden/common/abstractions/search.service";
+import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
+import { PlanType } from "@bitwarden/common/enums/planType";
+import { ProviderUserType } from "@bitwarden/common/enums/providerUserType";
+import { Organization } from "@bitwarden/common/models/domain/organization";
+import { ProviderOrganizationOrganizationDetailsResponse } from "@bitwarden/common/models/response/provider/provider-organization.response";
 
 import { WebProviderService } from "../services/webProvider.service";
 
@@ -29,10 +30,11 @@ const DisallowedPlanTypes = [
 @Component({
   templateUrl: "clients.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class ClientsComponent implements OnInit {
   @ViewChild("add", { read: ViewContainerRef, static: true }) addModalRef: ViewContainerRef;
 
-  providerId: any;
+  providerId: string;
   searchText: string;
   addableOrganizations: Organization[];
   loading = true;
@@ -44,7 +46,7 @@ export class ClientsComponent implements OnInit {
 
   protected didScroll = false;
   protected pageSize = 100;
-  protected actionPromise: Promise<any>;
+  protected actionPromise: Promise<unknown>;
   private pagedClientsCount = 0;
 
   constructor(
@@ -58,15 +60,18 @@ export class ClientsComponent implements OnInit {
     private webProviderService: WebProviderService,
     private logService: LogService,
     private modalService: ModalService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private organizationApiService: OrganizationApiServiceAbstraction
   ) {}
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.params.subscribe(async (params) => {
       this.providerId = params.providerId;
 
       await this.load();
 
+      /* eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe, rxjs/no-nested-subscribe */
       this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
         this.searchText = qParams.search;
       });
@@ -82,7 +87,7 @@ export class ClientsComponent implements OnInit {
       (o) => o.isOwner && o.providerId == null
     );
     const allowedOrgsIds = await Promise.all(
-      candidateOrgs.map((o) => this.apiService.getOrganization(o.id))
+      candidateOrgs.map((o) => this.organizationApiService.get(o.id))
     ).then((orgs) =>
       orgs.filter((o) => !DisallowedPlanTypes.includes(o.planType)).map((o) => o.id)
     );
@@ -134,6 +139,7 @@ export class ClientsComponent implements OnInit {
       (comp) => {
         comp.providerId = this.providerId;
         comp.organizations = this.addableOrganizations;
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
         comp.onAddedOrganization.subscribe(async () => {
           try {
             await this.load();

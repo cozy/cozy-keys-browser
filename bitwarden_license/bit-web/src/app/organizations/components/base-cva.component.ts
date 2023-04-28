@@ -1,7 +1,5 @@
 import { Directive, Input, OnInit, Self } from "@angular/core";
-import { ControlValueAccessor, FormControl, NgControl, Validators } from "@angular/forms";
-
-import { dirtyRequired } from "jslib-angular/validators/dirty.validator";
+import { ControlValueAccessor, UntypedFormControl, NgControl, Validators } from "@angular/forms";
 
 /** For use in the SSO Config Form only - will be deprecated by the Component Library */
 @Directive()
@@ -15,17 +13,14 @@ export abstract class BaseCvaComponent implements ControlValueAccessor, OnInit {
   }
 
   get isRequired() {
-    return (
-      this.controlDir.control.hasValidator(Validators.required) ||
-      this.controlDir.control.hasValidator(dirtyRequired)
-    );
+    return this.controlDir.control.hasValidator(Validators.required);
   }
 
   @Input() label: string;
   @Input() controlId: string;
   @Input() helperText: string;
 
-  internalControl = new FormControl("");
+  internalControl = new UntypedFormControl("");
 
   protected onChange: any;
   protected onTouched: any;

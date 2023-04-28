@@ -10,9 +10,9 @@
         </app-callout>
       </div>
       <div class="box">
-        <div class="box-header">
+        <h2 class="box-header">
           {{ title }}
-        </div>
+        </h2>
         <div class="box-content">
           <div class="box-content-row" appBoxRow>
             <label for="name">{{ "name" | i18n }}</label>
@@ -35,7 +35,7 @@
                 name="Type_{{ o.value }}"
                 id="type_{{ o.value }}"
                 [value]="o.value"
-                (change)="typeChanged(o)"
+                (change)="typeChanged()"
                 [checked]="send.type === o.value"
                 [disabled]="disableSend"
               />
@@ -51,6 +51,7 @@
               id="file"
               class="form-control-file"
               name="file"
+              aria-describedby="fileHelp"
               required
               [disabled]="disableSend"
             />
@@ -64,16 +65,17 @@
             <textarea
               id="text"
               name="text"
+              aria-describedby="textHelp"
               [(ngModel)]="send.text.text"
               rows="6"
               [readOnly]="disableSend"
             ></textarea>
           </div>
         </div>
-        <div class="box-footer" *ngIf="!editMode && send.type === sendType.File">
+        <div id="fileHelp" class="box-footer" *ngIf="!editMode && send.type === sendType.File">
           {{ "sendFileDesc" | i18n }} {{ "maxFileSize" | i18n }}
         </div>
-        <div class="box-footer" *ngIf="send.type === sendType.Text">
+        <div id="textHelp" class="box-footer" *ngIf="send.type === sendType.Text">
           {{ "sendTextDesc" | i18n }}
         </div>
       </div>
@@ -92,7 +94,7 @@
         </div>
       </div>
       <div class="box">
-        <div class="box-header">
+        <h2 class="box-header">
           <button
             type="button"
             class="toggle"
@@ -100,14 +102,14 @@
             (click)="toggleOptions()"
             [attr.aria-expanded]="showOptions"
           >
-            {{ "options" | i18n }}
             <i
               class="bwi bwi-lg"
               aria-hidden="true"
-              [ngClass]="{ 'bwi-angle-down': !showOptions, 'bwi-chevron-up': showOptions }"
+              [ngClass]="{ 'bwi-angle-right': !showOptions, 'bwi-angle-down': showOptions }"
             ></i>
+            {{ "options" | i18n }}
           </button>
-        </div>
+        </h2>
       </div>
       <div [hidden]="!showOptions">
         <app-send-efflux-dates
@@ -126,15 +128,16 @@
                 id="maxAccessCount"
                 type="number"
                 name="maxAccessCount"
+                aria-describedby="maxAccessCountHelp"
                 [(ngModel)]="send.maxAccessCount"
                 [readOnly]="disableSend"
               />
             </div>
           </div>
-          <div class="box-footer" *ngIf="!editMode">
+          <div id="maxAccessCountHelp" class="box-footer" *ngIf="!editMode">
             {{ "maxAccessCountDesc" | i18n }}
           </div>
-          <div class="box-footer" *ngIf="editMode">
+          <div id="maxAccessCountHelp" class="box-footer" *ngIf="editMode">
             <p>{{ "maxAccessCountDesc" | i18n }}</p>
             {{ "currentAccessCount" | i18n }}: <strong>{{ send.accessCount }}</strong>
           </div>
@@ -149,6 +152,7 @@
                 <input
                   id="password"
                   name="password"
+                  aria-describedby="passwordHelp"
                   type="{{ showPassword ? 'text' : 'password' }}"
                   [(ngModel)]="password"
                   [readOnly]="disableSend"
@@ -174,26 +178,27 @@
               </div>
             </div>
           </div>
-          <div class="box-footer">
+          <div id="passwordHelp" class="box-footer">
             {{ "sendPasswordDesc" | i18n }}
           </div>
         </div>
         <div class="box">
-          <div class="box-header">
-            {{ "notes" | i18n }}
-          </div>
+          <h2 class="box-header">
+            <label for="notes">{{ "notes" | i18n }}</label>
+          </h2>
           <div class="box-content">
             <div class="box-content-row" appBoxRow>
               <textarea
                 id="notes"
                 name="notes"
+                aria-describedby="notesHelp"
                 [(ngModel)]="send.notes"
                 rows="6"
                 [readOnly]="disableSend"
               ></textarea>
             </div>
           </div>
-          <div class="box-footer">
+          <div id="notesHelp" class="box-footer">
             {{ "sendNotesDesc" | i18n }}
           </div>
         </div>
@@ -227,9 +232,9 @@
         </div>
       </div>
       <div class="box">
-        <div class="box-header">
+        <h2 class="box-header">
           {{ "share" | i18n }}
-        </div>
+        </h2>
         <div class="box-content">
           <div class="box-content-row" appBoxRow *ngIf="editMode">
             <label for="link">{{ "sendLinkLabel" | i18n }}</label>
@@ -280,10 +285,14 @@
         appA11yTitle="{{ 'delete' | i18n }}"
         *ngIf="editMode"
       >
-        <i class="bwi bwi-trash bwi-lg bwi-fw" [hidden]="deleteBtn.loading" aria-hidden="true"></i>
+        <i
+          class="bwi bwi-trash bwi-lg bwi-fw"
+          [hidden]="$any(deleteBtn).loading"
+          aria-hidden="true"
+        ></i>
         <i
           class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw"
-          [hidden]="!deleteBtn.loading"
+          [hidden]="!$any(deleteBtn).loading"
           aria-hidden="true"
         ></i>
       </button>

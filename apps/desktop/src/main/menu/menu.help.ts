@@ -1,7 +1,8 @@
 import { shell, MenuItemConstructorOptions } from "electron";
 
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { isMacAppStore, isWindowsStore } from "jslib-electron/utils";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+
+import { isMacAppStore, isWindowsStore } from "../../utils";
 
 import { AboutMenu } from "./menu.about";
 import { IMenubarMenu } from "./menubar";
@@ -126,6 +127,11 @@ export class HelpMenu implements IMenubarMenu {
         label: "GitHub",
         click: () => shell.openExternal("https://github.com/bitwarden"),
       },
+      {
+        id: "mastodon",
+        label: "Mastodon",
+        click: () => shell.openExternal("https://fosstodon.org/@bitwarden"),
+      },
     ];
   }
 
@@ -160,6 +166,7 @@ export class HelpMenu implements IMenubarMenu {
       {
         id: "android",
         label: "Android",
+        visible: !isMacAppStore(), // Apple Guideline 2.3.10 - Accurate Metadata
         click: () => {
           shell.openExternal(
             "https://play.google.com/store/apps/" + "details?id=com.x8bit.bitwarden"

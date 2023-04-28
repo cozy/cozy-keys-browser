@@ -1,14 +1,14 @@
 import { Component } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { UntypedFormBuilder } from "@angular/forms";
 
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { OrganizationService } from "jslib-common/abstractions/organization.service";
-import { PolicyType } from "jslib-common/enums/policyType";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { PolicyType } from "@bitwarden/common/enums/policyType";
 
 import { BasePolicy, BasePolicyComponent } from "./base-policy.component";
 
 export class MasterPasswordPolicy extends BasePolicy {
-  name = "masterPass";
+  name = "masterPassPolicyTitle";
   description = "masterPassPolicyDesc";
   type = PolicyType.MasterPassword;
   component = MasterPasswordPolicyComponent;
@@ -32,7 +32,7 @@ export class MasterPasswordPolicyComponent extends BasePolicyComponent {
   showKeyConnectorInfo = false;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     i18nService: I18nService,
     private organizationService: OrganizationService
   ) {

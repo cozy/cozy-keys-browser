@@ -1,25 +1,28 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { CryptoService } from "jslib-common/abstractions/crypto.service";
-import { CryptoFunctionService } from "jslib-common/abstractions/cryptoFunction.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { SEND_KDF_ITERATIONS } from "jslib-common/enums/kdfType";
-import { SendType } from "jslib-common/enums/sendType";
-import { Utils } from "jslib-common/misc/utils";
-import { SendAccess } from "jslib-common/models/domain/sendAccess";
-import { SymmetricCryptoKey } from "jslib-common/models/domain/symmetricCryptoKey";
-import { SendAccessRequest } from "jslib-common/models/request/sendAccessRequest";
-import { ErrorResponse } from "jslib-common/models/response/errorResponse";
-import { SendAccessResponse } from "jslib-common/models/response/sendAccessResponse";
-import { SendAccessView } from "jslib-common/models/view/sendAccessView";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
+import { FileDownloadService } from "@bitwarden/common/abstractions/fileDownload/fileDownload.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { SEND_KDF_ITERATIONS } from "@bitwarden/common/enums/kdfType";
+import { SendType } from "@bitwarden/common/enums/sendType";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { EncArrayBuffer } from "@bitwarden/common/models/domain/enc-array-buffer";
+import { SendAccess } from "@bitwarden/common/models/domain/send-access";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { SendAccessRequest } from "@bitwarden/common/models/request/send-access.request";
+import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
+import { SendAccessResponse } from "@bitwarden/common/models/response/send-access.response";
+import { SendAccessView } from "@bitwarden/common/models/view/send-access.view";
 
 @Component({
   selector: "app-send-access",
   templateUrl: "access.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class AccessComponent implements OnInit {
   send: SendAccessView;
   sendType = SendType;
@@ -44,7 +47,8 @@ export class AccessComponent implements OnInit {
     private apiService: ApiService,
     private platformUtilsService: PlatformUtilsService,
     private route: ActivatedRoute,
-    private cryptoService: CryptoService
+    private cryptoService: CryptoService,
+    private fileDownloadService: FileDownloadService
   ) {}
 
   get sendText() {
@@ -69,6 +73,7 @@ export class AccessComponent implements OnInit {
   }
 
   ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.params.subscribe(async (params) => {
       this.id = params.sendId;
       this.key = params.key;
@@ -107,9 +112,13 @@ export class AccessComponent implements OnInit {
     }
 
     try {
-      const buf = await response.arrayBuffer();
-      const decBuf = await this.cryptoService.decryptFromBytes(buf, this.decKey);
-      this.platformUtilsService.saveFile(window, decBuf, null, this.send.file.fileName);
+      const encBuf = await EncArrayBuffer.fromResponse(response);
+      const decBuf = await this.cryptoService.decryptFromBytes(encBuf, this.decKey);
+      this.fileDownloadService.download({
+        fileName: this.send.file.fileName,
+        blobData: decBuf,
+        downloadMethod: "save",
+      });
     } catch (e) {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
     }

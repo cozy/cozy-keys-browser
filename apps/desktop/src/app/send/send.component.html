@@ -1,3 +1,5 @@
+<!-- Please remove this disable statement when editing this file! -->
+<!-- eslint-disable @angular-eslint/template/button-has-type -->
 <div id="sends" class="vault">
   <div class="left-nav">
     <div class="vault-filters">
@@ -6,7 +8,11 @@
         <ul class="filter-options">
           <li class="filter-option" [ngClass]="{ active: selectedAll }">
             <span class="filter-buttons">
-              <button class="filter-button" (click)="selectAll()" [attr.aria-pressed]="selectedAll">
+              <button
+                class="filter-button"
+                (click)="selectAll()"
+                [attr.aria-pressed]="selectedAll === true"
+              >
                 <i class="bwi bwi-fw bwi-filter" aria-hidden="true"></i>&nbsp;{{
                   "allSends" | i18n
                 }}
@@ -130,7 +136,12 @@
         </ng-container>
       </div>
       <div class="footer">
-        <button (click)="addSend()" class="block primary" appA11yTitle="{{ 'addItem' | i18n }}">
+        <button
+          type="button"
+          (click)="addSend()"
+          class="block primary"
+          appA11yTitle="{{ 'addItem' | i18n }}"
+        >
           <i class="bwi bwi-plus bwi-lg" aria-hidden="true"></i>
         </button>
       </div>

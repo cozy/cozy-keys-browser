@@ -1,3 +1,5 @@
+<!-- Please remove this disable statement when editing this file! -->
+<!-- eslint-disable @angular-eslint/template/button-has-type -->
 <div class="modal fade" role="dialog" aria-modal="true" aria-labelledby="sendAddEditTitle">
   <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
     <form
@@ -9,7 +11,7 @@
       autocomplete="off"
     >
       <div class="modal-header">
-        <h2 class="modal-title" id="sendAddEditTitle">{{ title }}</h2>
+        <h1 class="modal-title" id="sendAddEditTitle">{{ title }}</h1>
         <button
           type="button"
           class="close"
@@ -55,7 +57,7 @@
                 name="Type_{{ o.value }}"
                 id="type_{{ o.value }}"
                 [value]="o.value"
-                (change)="typeChanged(o)"
+                (change)="typeChanged()"
                 [checked]="send.type === o.value"
               />
               <label class="form-check-label" for="type_{{ o.value }}">
@@ -120,14 +122,7 @@
         <h3 class="mt-5">{{ "share" | i18n }}</h3>
         <div class="form-group" *ngIf="link">
           <label for="link">{{ "sendLinkLabel" | i18n }}</label>
-          <input
-            type="text"
-            readonly
-            id="link"
-            name="Link"
-            [(ngModel)]="link"
-            class="form-control"
-          />
+          <input type="text" readonly id="link" name="Link" [ngModel]="link" class="form-control" />
         </div>
         <div class="form-group">
           <div class="form-check">
@@ -148,14 +143,16 @@
           class="section-header d-flex flex-row align-items-center mt-5"
           (click)="toggleOptions()"
         >
-          <h3 class="mb-0 mr-2">{{ "options" | i18n }}</h3>
-          <a class="mb-1" href="#" appStopClick role="button">
-            <i
-              class="bwi"
-              aria-hidden="true"
-              [ngClass]="{ 'bwi-angle-down': !showOptions, 'bwi-chevron-up': showOptions }"
-            ></i>
-          </a>
+          <h3 class="mb-0 mr-2">
+            <button appStopClick class="header-expandable">
+              <i
+                class="bwi"
+                aria-hidden="true"
+                [ngClass]="{ 'bwi-angle-right': !showOptions, 'bwi-angle-down': showOptions }"
+              ></i>
+              {{ "options" | i18n }}
+            </button>
+          </h3>
         </div>
         <div id="options" [hidden]="!showOptions">
           <app-send-efflux-dates
@@ -286,17 +283,17 @@
             class="btn btn-outline-danger"
             appA11yTitle="{{ 'delete' | i18n }}"
             *ngIf="editMode"
-            [disabled]="deleteBtn.loading"
+            [disabled]="$any(deleteBtn).loading"
             [appApiAction]="deletePromise"
           >
             <i
               class="bwi bwi-trash bwi-lg bwi-fw"
-              [hidden]="deleteBtn.loading"
+              [hidden]="$any(deleteBtn).loading"
               aria-hidden="true"
             ></i>
             <i
               class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw"
-              [hidden]="!deleteBtn.loading"
+              [hidden]="!$any(deleteBtn).loading"
               title="{{ 'loading' | i18n }}"
               aria-hidden="true"
             ></i>

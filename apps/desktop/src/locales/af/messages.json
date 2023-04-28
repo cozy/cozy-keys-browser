@@ -233,13 +233,16 @@
     "message": "Mnr."
   },
   "mrs": {
-    "message": "Mev."
+    "message": "Mev"
   },
   "ms": {
-    "message": "Mej."
+    "message": "Mej"
+  },
+  "mx": {
+    "message": "Mx"
   },
   "dr": {
-    "message": "Dr."
+    "message": "Dr"
   },
   "expirationMonth": {
     "message": "Vervalmaand"
@@ -370,10 +373,10 @@
     "message": "Is u seker u wil oor die huidige wagwoord skryf?"
   },
   "overwriteUsername": {
-    "message": "Overwrite Username"
+    "message": "Skryf oor gebruikersnaam"
   },
   "overwriteUsernameConfirmation": {
-    "message": "Are you sure you want to overwrite the current username?"
+    "message": "Is u seker u wil oor die huidige gebruikersnaam skryf?"
   },
   "noneFolder": {
     "message": "Geen Vouer",
@@ -400,6 +403,18 @@
   "length": {
     "message": "Lengte"
   },
+  "uppercase": {
+    "message": "Hoofletters (A-Z)"
+  },
+  "lowercase": {
+    "message": "Kleinletters (a-z)"
+  },
+  "numbers": {
+    "message": "Syfers (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Spesiale karakters (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Aantal Woorde"
   },
@@ -408,7 +423,7 @@
   },
   "capitalize": {
     "message": "Maak beginhoofletters",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Voeg syfer toe"
@@ -520,11 +535,21 @@
   "invalidEmail": {
     "message": "Ongeldige e-posadres."
   },
-  "masterPassRequired": {
-    "message": "Hoofwagwoord word benodig."
+  "masterPasswordRequired": {
+    "message": "Hoofwagwoord word vereis."
   },
-  "masterPassLength": {
-    "message": "Hoofwagwoord moet ten minste 8 karakters lank wees."
+  "confirmMasterPasswordRequired": {
+    "message": "Hoofwagwoord moet weer intevoer word."
+  },
+  "masterPasswordMinlength": {
+    "message": "Die Hoofwagwoord moet ten minste $VALUE$ karakters lank wees.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "Hoofwagwoordbevestiging stem nie ooreen nie."
@@ -737,16 +762,16 @@
     "message": "Laai tans…"
   },
   "lockVault": {
-    "message": "Lock Vault"
+    "message": "Vergrendel kluis"
   },
   "passwordGenerator": {
     "message": "Wagwoordgenereerder"
   },
   "contactUs": {
-    "message": "Contact Us"
+    "message": "Kontak ons"
   },
   "getHelp": {
-    "message": "Get Help"
+    "message": "Kry hulp"
   },
   "fileBugReport": {
     "message": "Rapporteer ’n fout"
@@ -882,11 +907,11 @@
     "message": "Wis gekopieerde waardes outomaties vanuit u knipbord.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
-  "disableFavicon": {
-    "message": "Deaktiveer Webwerfikone"
+  "enableFavicon": {
+    "message": "Toon webwerfikone"
   },
-  "disableFaviconDesc": {
-    "message": "Webwerfikone verskaf ’n herkenbare beeld langs elke aantekenitem in u kluis."
+  "faviconDesc": {
+    "message": "Toon ’n herkenbare beeld langs elke aantekening."
   },
   "enableMinToTray": {
     "message": "Minimaliseer na stelsellaai"
@@ -1198,7 +1223,7 @@
     "description": "Domain name. Ex. website.com"
   },
   "domainName": {
-    "message": "Domain Name",
+    "message": "Domeinnaam",
     "description": "Domain name. Ex. website.com"
   },
   "host": {
@@ -1251,6 +1276,10 @@
     "message": "Bygewerk",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Geskep",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Wagwoord bygewerk",
     "description": "ex. Date this password was updated"
@@ -1260,6 +1289,40 @@
   },
   "fileFormat": {
     "message": "Lêerformaat"
+  },
+  "hCaptchaUrl": {
+    "message": "hCaptcha-bronadres",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "loadAccessibilityCookie": {
+    "message": "Laai toeganklikheidskoekie"
+  },
+  "registerAccessibilityUser": {
+    "message": "Registreer as toeganklikheidsgebruiker by",
+    "description": "ex. Register as an accessibility user at hcaptcha.com"
+  },
+  "copyPasteLink": {
+    "message": "Kopieer en plak die skakel wat na die e-pos hier onder gestuur is"
+  },
+  "enterhCaptchaUrl": {
+    "message": "Voer die bronadres in om die toeganklikheidskoekie vir hCaptcha te laai",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "hCaptchaUrlRequired": {
+    "message": "hCaptcha-bronadres word benodig",
+    "description": "hCaptcha is the name of a website, should not be translated"
+  },
+  "invalidUrl": {
+    "message": "Ongeldige bronadres"
+  },
+  "done": {
+    "message": "Klaar"
+  },
+  "accessibilityCookieSaved": {
+    "message": "Toeganklikheidskoekie is bewaar!"
+  },
+  "noAccessibilityCookieSaved": {
+    "message": "Geen toeganklikheidskoekie is bewaar nie"
   },
   "warning": {
     "message": "WAARSKUWING",
@@ -1335,14 +1398,29 @@
   "touchIdConsentMessage": {
     "message": "ontgrendel u kluis"
   },
-  "noAutoPromptWindowsHello": {
-    "message": "Moenie by lansering vra vir Windows Hello nie."
+  "autoPromptWindowsHello": {
+    "message": "Vra vir Windows Hello by lansering"
   },
-  "noAutoPromptTouchId": {
-    "message": "Moenie by lansering vra vir Touch ID nie."
+  "autoPromptTouchId": {
+    "message": "Vra vir Touch ID by lansering"
   },
   "lockWithMasterPassOnRestart": {
     "message": "Vergrendel by herbegin met hoofwagwoord"
+  },
+  "deleteAccount": {
+    "message": "Skrap rekening"
+  },
+  "deleteAccountDesc": {
+    "message": "Gaan hieronder voort om u rekening en alle kluisdata te skrap."
+  },
+  "deleteAccountWarning": {
+    "message": "Skrap van u rekening is permanent. Dit kan nie ontdaan word nie."
+  },
+  "accountDeleted": {
+    "message": "Rekening geskrap"
+  },
+  "accountDeletedDesc": {
+    "message": "U rekening is gesluit en alle geassosieerde data is geskrap."
   },
   "preferences": {
     "message": "Voorkeure"
@@ -1497,7 +1575,7 @@
   "acceptPolicies": {
     "message": "Deur hierdie kassie af te merk stem u in tot die volgende:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "Gebruiksvoorwaardes en privaatheidsbeleid is nie erken nie."
   },
   "enableBrowserIntegration": {
@@ -1506,17 +1584,23 @@
   "enableBrowserIntegrationDesc": {
     "message": "Blaaierintegrasie word gebruik vir biometrie in blaaier."
   },
-  "browserIntegrationMasOnlyTitle": {
+  "enableDuckDuckGoBrowserIntegration": {
+    "message": "Staan DuckDuckGo-blaaierintegrasie toe"
+  },
+  "enableDuckDuckGoBrowserIntegrationDesc": {
+    "message": "Gebruik u Bitwarden-kluis wanneer u met DuckDuckGo blaai."
+  },
+  "browserIntegrationUnsupportedTitle": {
     "message": "Blaaierintegrasie word nie ondersteun nie"
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Ongelukkig word blaaierintegrasie tans slegs in die weergawe vir die Mac-toepwinkel ondersteun."
   },
-  "browserIntegrationWindowsStoreTitle": {
-    "message": "Blaaierintegrasie word nie ondersteun nie"
-  },
   "browserIntegrationWindowsStoreDesc": {
     "message": "Ongelukkig word blaaierintegrasie tans nie in die weergawe vir die Windows-winkel ondersteun nie."
+  },
+  "browserIntegrationLinuxDesc": {
+    "message": "Ongelukkig word blaaierintegrasie tans nie in die weergawe vir Linux ondersteun nie."
   },
   "enableBrowserIntegrationFingerprint": {
     "message": "Vereis bevestiging vir blaaierintegrasie"
@@ -1532,6 +1616,21 @@
   },
   "verifyBrowserDesc": {
     "message": "Maak seker dat die getoonde vingerafdruk identies is aan dié wat in die blaaieruitbreiding vertoon word."
+  },
+  "verifyNativeMessagingConnectionTitle": {
+    "message": "$APPID$ wil aan Bitwarden koppel",
+    "placeholders": {
+      "appid": {
+        "content": "$1",
+        "example": "My App"
+      }
+    }
+  },
+  "verifyNativeMessagingConnectionDesc": {
+    "message": "Wil u hierdie versoek goedkeur?"
+  },
+  "verifyNativeMessagingConnectionWarning": {
+    "message": "Indien u nie hierdie versoek geïnisieer het nie, moet dit dan nie goedkeur nie."
   },
   "biometricsNotEnabledTitle": {
     "message": "Biometrie is geaktiveer"
@@ -1587,7 +1686,8 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "maxAccessCount": {
-    "message": "Maksimum toegangsaantal"
+    "message": "Maksimum toegangsaantal",
+    "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
   "maxAccessCountDesc": {
     "message": "Indien ingestel het gebruikers ne meer toegang tot hierdie Send sodra die maksimum aantal toegang bereik is.",
@@ -1689,6 +1789,15 @@
   "disabled": {
     "message": "Gedeaktiveer"
   },
+  "removePassword": {
+    "message": "Verwyder wagwoord"
+  },
+  "removedPassword": {
+    "message": "Wagwoord geverwydered"
+  },
+  "removePasswordConfirmation": {
+    "message": "Is jy seker jy wil die wagwoord verwyder?"
+  },
   "maxAccessCountReached": {
     "message": "Maks toegangsaantal bereik"
   },
@@ -1766,7 +1875,7 @@
     "message": "Een of meer organisasiebeleide verhoed u om u persoonlike kluis uit te stuur."
   },
   "addAccount": {
-    "message": "Add Account"
+    "message": "Voeg rekening toe"
   },
   "removeMasterPassword": {
     "message": "Verwyder hoofwagwoord"
@@ -1792,26 +1901,26 @@
   "leftOrganization": {
     "message": "U het die organisasie verlaat."
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "Kan nie die sleutelkoppelstuk bereik nie, probeer later weer."
+  "ssoKeyConnectorError": {
+    "message": "Sleutel-koppelstukfout: maak seker dat Sleutel-koppelstuk beskikbaar is en werk."
   },
   "lockAllVaults": {
-    "message": "Lock All Vaults"
+    "message": "Vergrendel alle kluise"
   },
   "accountLimitReached": {
-    "message": "No more than 5 accounts may be logged in at the same time."
+    "message": "Nie meer as 5 rekeninge kan terselfdertyd ingeteken wees nie."
   },
   "accountPreferences": {
-    "message": "Preferences"
+    "message": "Voorkeure"
   },
   "appPreferences": {
-    "message": "App Settings (All Accounts)"
+    "message": "Toepinstellings (alle rekeninge)"
   },
   "accountSwitcherLimitReached": {
-    "message": "Account limit reached. Log out of an account to add another."
+    "message": "Rekeningperk is bereik. Teken by’n rekening af om ’n ander toe te voeg."
   },
   "settingsTitle": {
-    "message": "App settings for $EMAIL$",
+    "message": "Toepinstellings vir $EMAIL$",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1820,19 +1929,19 @@
     }
   },
   "switchAccount": {
-    "message": "Switch Account"
+    "message": "Verander rekening"
   },
   "options": {
-    "message": "Options"
+    "message": "Opsies"
   },
   "sessionTimeout": {
-    "message": "Your session has timed out. Please go back and try logging in again."
+    "message": "U sessie het uitgetel. Gaan terug en probeer weer inteken."
   },
   "exportingPersonalVaultTitle": {
-    "message": "Exporting Personal Vault"
+    "message": "Stuur tans persoonlike kluis uit"
   },
   "exportingPersonalVaultDescription": {
-    "message": "Only the personal vault items associated with $EMAIL$ will be exported. Organization vault items will not be included.",
+    "message": "Slegs die persoonlike kluisitems wat met $EMAIL$ verbind word, word uitgestuur. Organisasiekluisitems word nie ingesluit nie.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1840,46 +1949,257 @@
       }
     }
   },
+  "locked": {
+    "message": "Vergrendel"
+  },
+  "unlocked": {
+    "message": "Ontgrendel"
+  },
   "generator": {
-    "message": "Generator"
+    "message": "Genereerder"
   },
   "whatWouldYouLikeToGenerate": {
-    "message": "What would you like to generate?"
+    "message": "Wat wil u genereer?"
   },
   "passwordType": {
-    "message": "Password Type"
+    "message": "Wagwoordtipe"
   },
   "regenerateUsername": {
-    "message": "Regenerate Username"
+    "message": "Hergenereer gebruikersnaam"
   },
   "generateUsername": {
-    "message": "Generate Username"
+    "message": "Genereer gebruikersnaam"
   },
   "usernameType": {
-    "message": "Username Type"
+    "message": "Gebruikersnaamtipe"
   },
   "plusAddressedEmail": {
-    "message": "Plus Addressed Email"
+    "message": "E-posadres met plus",
+    "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
-    "message": "Use your email provider's sub-addressing capabilities."
+    "message": "Gebruik u e-posverskaffer se subadresvermoëns."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Allesomvattende e-pos"
   },
   "catchallEmailDesc": {
-    "message": "Use your domain's configured catch-all inbox."
+    "message": "Gebruik u domein se opgestelde allesomvattende inmandjie."
   },
   "random": {
-    "message": "Random"
+    "message": "Lukraak"
   },
   "randomWord": {
-    "message": "Random Word"
+    "message": "Lukrake woord"
   },
   "websiteName": {
-    "message": "Website Name"
+    "message": "Webwerfnaam"
   },
   "service": {
-    "message": "Service"
+    "message": "Diens"
+  },
+  "allVaults": {
+    "message": "Alle kluise"
+  },
+  "searchOrganization": {
+    "message": "Deursoek organisasie"
+  },
+  "searchMyVault": {
+    "message": "Deursoek my kluis"
+  },
+  "forwardedEmail": {
+    "message": "E-posalias vir aanstuur"
+  },
+  "forwardedEmailDesc": {
+    "message": "Genereer ’n e-posalias met ’n eksterne aanstuurdiens."
+  },
+  "hostname": {
+    "message": "Gasheernaam",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "API-toegangsteken"
+  },
+  "apiKey": {
+    "message": "API-sleutel"
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Premie-intekening word vereis"
+  },
+  "organizationIsDisabled": {
+    "message": "Organisasie is gedeaktiveer."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "Items in gedeaktiveerde organisasies is ontoeganklik. Kontak u organisasie-eienaar vir bystand."
+  },
+  "neverLockWarning": {
+    "message": "Is u seker u wil die “Nooit”-opsie gebruik? Deur u vergrendelopsies op “Nooit” te stel word u kluis se enkripsie op u toestel bewaar. Indien u hierdie opsie gebruik moet u verseker dat u toestel behoorlik beskerm is."
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "vault": {
+    "message": "Kluis"
+  },
+  "loginWithMasterPassword": {
+    "message": "Meld aan met meesterwagwoord"
+  },
+  "loggingInAs": {
+    "message": "Meld aan as"
+  },
+  "rememberEmail": {
+    "message": "Onthou e-pos"
+  },
+  "notYou": {
+    "message": "Nie jy nie?"
+  },
+  "newAroundHere": {
+    "message": "Nuut hier rond?"
+  },
+  "loggingInTo": {
+    "message": "Meld aan tot $DOMAIN$",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "example.com"
+      }
+    }
+  },
+  "logInWithAnotherDevice": {
+    "message": "Meld aan met 'n ander toestel"
+  },
+  "logInInitiated": {
+    "message": "Aan tekening geïnisieer"
+  },
+  "notificationSentDevice": {
+    "message": "'n Kennisgewing was na jou toestel gestuur."
+  },
+  "fingerprintMatchInfo": {
+    "message": "Maak asseblief seker dat jou kluis oopgesluit is en die Vingerafdrukfrase met die ander toestel vergelyk."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Vingerafdrukfrase"
+  },
+  "needAnotherOption": {
+    "message": "Aan teken met toestel moet opgestel word in die instellings van die Bitwarden toep. Nodig 'n ander opsie?"
+  },
+  "viewAllLoginOptions": {
+    "message": "Beskou alle aantekenings opsies"
+  },
+  "resendNotification": {
+    "message": "Herstuur kennisgewing"
+  },
+  "toggleCharacterCount": {
+    "message": "Tokkel karakter telling",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "areYouTryingtoLogin": {
+    "message": "Probeer jy om aan te teken?"
+  },
+  "logInAttemptBy": {
+    "message": "Aantekenings poging deur $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "deviceType": {
+    "message": "Toestel Tiepe"
+  },
+  "ipAddress": {
+    "message": "IP adres"
+  },
+  "time": {
+    "message": "Tyd"
+  },
+  "confirmLogIn": {
+    "message": "Bevestig aantekening"
+  },
+  "denyLogIn": {
+    "message": "Weier aantekening"
+  },
+  "approveLoginRequests": {
+    "message": "Bevestig aantekenings versoeke"
+  },
+  "logInConfirmedForEmailOnDevice": {
+    "message": "Aantekening gebevestig vir $EMAIL$ op $DEVICE$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      },
+      "device": {
+        "content": "$2",
+        "example": "iOS"
+      }
+    }
+  },
+  "youDeniedALogInAttemptFromAnotherDevice": {
+    "message": "Jy het 'n aantekenings poging van 'n ander toestel gekeer. As dit inderdaad jy was, probeer om weer met die toestel aan te teken."
+  },
+  "justNow": {
+    "message": "Nou net"
+  },
+  "requestedXMinutesAgo": {
+    "message": "Versoek $MINUTES$ minute gelede",
+    "placeholders": {
+      "minutes": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "loginRequestHasAlreadyExpired": {
+    "message": "Aantekenings versoek het reeds versper."
+  },
+  "thisRequestIsNoLongerValid": {
+    "message": "Hierdie versoek is nie meer geldig nie."
+  },
+  "approveLoginRequestDesc": {
+    "message": "Gebruik hierdie toestel om aantekenings versoeke, van ander toetstelle, goed te keer."
+  },
+  "confirmLoginAtemptForMail": {
+    "message": "Bevestig aantekenings poging vir $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@example.com"
+      }
+    }
+  },
+  "logInRequested": {
+    "message": "Aan teken versoek"
+  },
+  "exposedMasterPassword": {
+    "message": "Ontblote Hoofwagwoord"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "Wagwoord gevind in data lekkasie. Gebruik 'n unieke wagwoord om jou rekening te beskerm. Is jy seker dat jy 'n ontblote wagwoord wil gebruik?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Swak en Ontblote Hoofwagwoord"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Swak wagwoord geidentifiseer en gevind in 'n data lekkasie. Gebruik 'n sterk en unieke wagwoord om jou rekening te beskerm. Is jy seker dat jy hierdie wagwoord wil gebruik?"
+  },
+  "checkForBreaches": {
+    "message": "Kontroleer bekende data lekkasies vir hierdie wagwoord"
+  },
+  "important": {
+    "message": "Belangrik:"
+  },
+  "masterPasswordHint": {
+    "message": "Jou hoofwagwoord kan nie herkry word as jy dit vergeet nie!"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ karakters minimum",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
   }
 }

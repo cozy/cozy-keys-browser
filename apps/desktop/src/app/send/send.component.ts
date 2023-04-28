@@ -1,17 +1,17 @@
 import { Component, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 
-import { SendComponent as BaseSendComponent } from "jslib-angular/components/send/send.component";
-import { BroadcasterService } from "jslib-common/abstractions/broadcaster.service";
-import { EnvironmentService } from "jslib-common/abstractions/environment.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { PolicyService } from "jslib-common/abstractions/policy.service";
-import { SearchService } from "jslib-common/abstractions/search.service";
-import { SendService } from "jslib-common/abstractions/send.service";
-import { SendView } from "jslib-common/models/view/sendView";
-import { invokeMenu, RendererMenuItem } from "jslib-electron/utils";
+import { SendComponent as BaseSendComponent } from "@bitwarden/angular/components/send/send.component";
+import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
+import { SearchService } from "@bitwarden/common/abstractions/search.service";
+import { SendService } from "@bitwarden/common/abstractions/send.service";
+import { SendView } from "@bitwarden/common/models/view/send.view";
 
+import { invokeMenu, RendererMenuItem } from "../../utils";
 import { SearchBarService } from "../layout/search/search-bar.service";
 
 import { AddEditComponent } from "./add-edit.component";
@@ -56,7 +56,8 @@ export class SendComponent extends BaseSendComponent implements OnInit, OnDestro
       policyService,
       logService
     );
-    this.searchBarService.searchText.subscribe((searchText) => {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+    this.searchBarService.searchText$.subscribe((searchText) => {
       this.searchText = searchText;
       this.searchTextChanged();
     });
@@ -131,6 +132,18 @@ export class SendComponent extends BaseSendComponent implements OnInit, OnDestro
       label: this.i18nService.t("copyLink"),
       click: () => this.copy(send),
     });
+    if (send.password && !send.disabled) {
+      menu.push({
+        label: this.i18nService.t("removePassword"),
+        click: async () => {
+          await this.removePassword(send);
+          if (this.sendId === send.id) {
+            this.sendId = null;
+            this.selectSend(send.id);
+          }
+        },
+      });
+    }
     menu.push({
       label: this.i18nService.t("delete"),
       click: async () => {

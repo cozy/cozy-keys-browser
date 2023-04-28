@@ -1,8 +1,8 @@
-import { AuthService } from "jslib-common/abstractions/auth.service";
-import { PasswordGenerationService } from "jslib-common/abstractions/passwordGeneration.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
-import { AuthenticationStatus } from "jslib-common/enums/authenticationStatus";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
+import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
 import { BrowserApi } from "../browser/browserApi";
 
@@ -15,7 +15,7 @@ export default class CommandsBackground {
 
   constructor(
     private main: MainBackground,
-    private passwordGenerationService: PasswordGenerationService,
+    private passwordGenerationService: PasswordGenerationServiceAbstraction,
     private platformUtilsService: PlatformUtilsService,
     private vaultTimeoutService: VaultTimeoutService,
     private authService: AuthService
@@ -34,14 +34,10 @@ export default class CommandsBackground {
             msg.data.commandToRetry.sender
           );
         }
-
-        if (this.isVivaldi && msg.command === "keyboardShortcutTriggered" && msg.shortcut) {
-          await this.processCommand(msg.shortcut, sender);
-        }
       }
     );
 
-    if (!this.isVivaldi && chrome && chrome.commands) {
+    if (chrome && chrome.commands) {
       chrome.commands.onCommand.addListener(async (command: string) => {
         await this.processCommand(command);
       });
@@ -60,7 +56,7 @@ export default class CommandsBackground {
         await this.openPopup();
         break;
       case "lock_vault":
-        await this.vaultTimeoutService.lock(true);
+        await this.vaultTimeoutService.lock();
         break;
       default:
         break;
@@ -68,7 +64,7 @@ export default class CommandsBackground {
   }
 
   private async generatePasswordToClipboard() {
-    const options = (await this.passwordGenerationService.getOptions())[0];
+    const options = (await this.passwordGenerationService.getOptions())?.[0] ?? {};
     const password = await this.passwordGenerationService.generatePassword(options);
     this.platformUtilsService.copyToClipboard(password, { window: window });
     this.passwordGenerationService.addHistory(password);

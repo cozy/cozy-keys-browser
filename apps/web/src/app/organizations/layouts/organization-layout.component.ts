@@ -1,92 +1,75 @@
-import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { map, mergeMap, Observable, Subject, takeUntil } from "rxjs";
 
-import { BroadcasterService } from "jslib-common/abstractions/broadcaster.service";
-import { OrganizationService } from "jslib-common/abstractions/organization.service";
-import { Organization } from "jslib-common/models/domain/organization";
-
-import { NavigationPermissionsService } from "../services/navigation-permissions.service";
-
-const BroadcasterSubscriptionId = "OrganizationLayoutComponent";
+import {
+  canAccessBillingTab,
+  canAccessGroupsTab,
+  canAccessMembersTab,
+  canAccessReportingTab,
+  canAccessSettingsTab,
+  canAccessVaultTab,
+  getOrganizationById,
+  OrganizationService,
+} from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { Organization } from "@bitwarden/common/models/domain/organization";
 
 @Component({
   selector: "app-organization-layout",
   templateUrl: "organization-layout.component.html",
 })
 export class OrganizationLayoutComponent implements OnInit, OnDestroy {
-  organization: Organization;
-  businessTokenPromise: Promise<any>;
-  private organizationId: string;
+  organization$: Observable<Organization>;
 
-  constructor(
-    private route: ActivatedRoute,
-    private organizationService: OrganizationService,
-    private broadcasterService: BroadcasterService,
-    private ngZone: NgZone
-  ) {}
+  private _destroy = new Subject<void>();
+
+  constructor(private route: ActivatedRoute, private organizationService: OrganizationService) {}
 
   ngOnInit() {
     document.body.classList.remove("layout_frontend");
-    this.route.params.subscribe(async (params: any) => {
-      this.organizationId = params.organizationId;
-      await this.load();
-    });
-    this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
-      this.ngZone.run(async () => {
-        switch (message.command) {
-          case "updatedOrgLicense":
-            await this.load();
-            break;
-        }
-      });
-    });
+
+    this.organization$ = this.route.params
+      .pipe(takeUntil(this._destroy))
+      .pipe<string>(map((p) => p.organizationId))
+      .pipe(
+        mergeMap((id) => {
+          return this.organizationService.organizations$
+            .pipe(takeUntil(this._destroy))
+            .pipe(getOrganizationById(id));
+        })
+      );
   }
 
   ngOnDestroy() {
-    this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
+    this._destroy.next();
+    this._destroy.complete();
   }
 
-  async load() {
-    this.organization = await this.organizationService.get(this.organizationId);
+  canShowVaultTab(organization: Organization): boolean {
+    return canAccessVaultTab(organization);
   }
 
-  get showManageTab(): boolean {
-    return NavigationPermissionsService.canAccessManage(this.organization);
+  canShowSettingsTab(organization: Organization): boolean {
+    return canAccessSettingsTab(organization);
   }
 
-  get showToolsTab(): boolean {
-    return NavigationPermissionsService.canAccessTools(this.organization);
+  canShowMembersTab(organization: Organization): boolean {
+    return canAccessMembersTab(organization);
   }
 
-  get showSettingsTab(): boolean {
-    return NavigationPermissionsService.canAccessSettings(this.organization);
+  canShowGroupsTab(organization: Organization): boolean {
+    return canAccessGroupsTab(organization);
   }
 
-  get toolsRoute(): string {
-    return this.organization.canAccessImportExport
-      ? "tools/import"
-      : "tools/exposed-passwords-report";
+  canShowReportsTab(organization: Organization): boolean {
+    return canAccessReportingTab(organization);
   }
 
-  get manageRoute(): string {
-    let route: string;
-    switch (true) {
-      case this.organization.canManageUsers:
-        route = "manage/people";
-        break;
-      case this.organization.canViewAssignedCollections || this.organization.canViewAllCollections:
-        route = "manage/collections";
-        break;
-      case this.organization.canManageGroups:
-        route = "manage/groups";
-        break;
-      case this.organization.canManagePolicies:
-        route = "manage/policies";
-        break;
-      case this.organization.canAccessEventLogs:
-        route = "manage/events";
-        break;
-    }
-    return route;
+  canShowBillingTab(organization: Organization): boolean {
+    return canAccessBillingTab(organization);
+  }
+
+  getReportTabLabel(organization: Organization): string {
+    return organization.useEvents ? "reporting" : "reports";
   }
 }

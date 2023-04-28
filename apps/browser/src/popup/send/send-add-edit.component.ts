@@ -3,16 +3,16 @@ import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
-import { AddEditComponent as BaseAddEditComponent } from "jslib-angular/components/send/add-edit.component";
-import { EnvironmentService } from "jslib-common/abstractions/environment.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { PolicyService } from "jslib-common/abstractions/policy.service";
-import { SendService } from "jslib-common/abstractions/send.service";
+import { AddEditComponent as BaseAddEditComponent } from "@bitwarden/angular/components/send/add-edit.component";
+import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
+import { SendService } from "@bitwarden/common/abstractions/send.service";
 
-import { StateService } from "../../services/abstractions/state.service";
+import { BrowserStateService } from "../../services/abstractions/browser-state.service";
 import { PopupUtilsService } from "../services/popup-utils.service";
 /** Start Cozy imports */
 /* eslint-disable */
@@ -24,6 +24,7 @@ import { HistoryService } from "../services/history.service";
   selector: "app-send-add-edit",
   templateUrl: "send-add-edit.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class SendAddEditComponent extends BaseAddEditComponent {
   // Options header
   showOptions = false;
@@ -37,7 +38,7 @@ export class SendAddEditComponent extends BaseAddEditComponent {
   constructor(
     i18nService: I18nService,
     platformUtilsService: PlatformUtilsService,
-    stateService: StateService,
+    stateService: BrowserStateService,
     messagingService: MessagingService,
     policyService: PolicyService,
     environmentService: EnvironmentService,
@@ -104,6 +105,7 @@ export class SendAddEditComponent extends BaseAddEditComponent {
     this.isUnsupportedMac =
       this.platformUtilsService.isChrome() && window?.navigator?.appVersion.includes("Mac OS X 11");
 
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
       if (params.sendId) {
         this.sendId = params.sendId;
@@ -112,7 +114,7 @@ export class SendAddEditComponent extends BaseAddEditComponent {
         const type = parseInt(params.type, null);
         this.type = type;
       }
-      await this.load();
+      await super.ngOnInit();
     });
 
     window.setTimeout(() => {

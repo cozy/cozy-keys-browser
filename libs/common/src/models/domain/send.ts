@@ -1,13 +1,12 @@
-import { CryptoService } from "../../abstractions/crypto.service";
 import { SendType } from "../../enums/sendType";
 import { Utils } from "../../misc/utils";
-import { SendData } from "../data/sendData";
-import { SendView } from "../view/sendView";
+import { SendData } from "../data/send.data";
+import { SendView } from "../view/send.view";
 
-import Domain from "./domainBase";
-import { EncString } from "./encString";
-import { SendFile } from "./sendFile";
-import { SendText } from "./sendText";
+import Domain from "./domain-base";
+import { EncString } from "./enc-string";
+import { SendFile } from "./send-file";
+import { SendText } from "./send-text";
 
 export class Send extends Domain {
   id: string;
@@ -71,13 +70,7 @@ export class Send extends Domain {
   async decrypt(): Promise<SendView> {
     const model = new SendView(this);
 
-    let cryptoService: CryptoService;
-    const containerService = (Utils.global as any).bitwardenContainerService;
-    if (containerService) {
-      cryptoService = containerService.getCryptoService();
-    } else {
-      throw new Error("global bitwardenContainerService not initialized.");
-    }
+    const cryptoService = Utils.getContainerService().getCryptoService();
 
     try {
       model.key = await cryptoService.decryptToBytes(this.key, null);

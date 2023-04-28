@@ -1,22 +1,31 @@
-import { Component, EventEmitter, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { OrganizationTaxInfoUpdateRequest } from "jslib-common/models/request/organizationTaxInfoUpdateRequest";
-import { TaxInfoUpdateRequest } from "jslib-common/models/request/taxInfoUpdateRequest";
-import { TaxRateResponse } from "jslib-common/models/response/taxRateResponse";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
+import { OrganizationTaxInfoUpdateRequest } from "@bitwarden/common/models/request/organization-tax-info-update.request";
+import { TaxInfoUpdateRequest } from "@bitwarden/common/models/request/tax-info-update.request";
+import { TaxInfoResponse } from "@bitwarden/common/models/response/tax-info.response";
+import { TaxRateResponse } from "@bitwarden/common/models/response/tax-rate.response";
+
+type TaxInfoView = Omit<TaxInfoResponse, "taxIdType"> & {
+  includeTaxId: boolean;
+  [key: string]: unknown;
+};
 
 @Component({
   selector: "app-tax-info",
   templateUrl: "tax-info.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class TaxInfoComponent {
+  @Input() trialFlow = false;
   @Output() onCountryChanged = new EventEmitter();
 
   loading = true;
   organizationId: string;
-  taxInfo: any = {
+  taxInfo: TaxInfoView = {
     taxId: null,
     line1: null,
     line2: null,
@@ -29,7 +38,7 @@ export class TaxInfoComponent {
 
   taxRates: TaxRateResponse[];
 
-  private pristine: any = {
+  private pristine: TaxInfoView = {
     taxId: null,
     line1: null,
     line2: null,
@@ -43,15 +52,17 @@ export class TaxInfoComponent {
   constructor(
     private apiService: ApiService,
     private route: ActivatedRoute,
-    private logService: LogService
+    private logService: LogService,
+    private organizationApiService: OrganizationApiServiceAbstraction
   ) {}
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.parent.params.subscribe(async (params) => {
       this.organizationId = params.organizationId;
       if (this.organizationId) {
         try {
-          const taxInfo = await this.apiService.getOrganizationTaxInfo(this.organizationId);
+          const taxInfo = await this.organizationApiService.getTaxInfo(this.organizationId);
           if (taxInfo) {
             this.taxInfo.taxId = taxInfo.taxId;
             this.taxInfo.state = taxInfo.state;
@@ -139,7 +150,7 @@ export class TaxInfoComponent {
     }
     const request = this.getTaxInfoRequest();
     return this.organizationId
-      ? this.apiService.putOrganizationTaxInfo(
+      ? this.organizationApiService.updateTaxInfo(
           this.organizationId,
           request as OrganizationTaxInfoUpdateRequest
         )

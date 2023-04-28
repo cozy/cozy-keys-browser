@@ -130,7 +130,7 @@ export const routerTransition = trigger("routerTransition", [
 
   transition("login => home", outSlideDown),
   transition("login => hint", inSlideUp),
-  transition("login => tabs", inSlideLeft),
+  transition("login => tabs, login => 2fa, login => login-with-device", inSlideLeft), // TODO REFACTO v d'origine Cozy : transition("login => tabs", inSlideLeft),
 
   transition("hint => login, register => home, environment => home", outSlideDown),
 
@@ -138,6 +138,9 @@ export const routerTransition = trigger("routerTransition", [
   transition("2fa => 2fa-options", inSlideUp),
   transition("2fa-options => 2fa", outSlideDown),
   transition("2fa => tabs", inSlideLeft),
+
+  transition("login-with-device => tabs, login-with-device => 2fa", inSlideLeft),
+  transition("login-with-device => login", outSlideRight),
 
   transition(tabsToCiphers, inSlideLeft),
   transition(ciphersToTabs, outSlideRight),
@@ -206,6 +209,9 @@ export const routerTransition = trigger("routerTransition", [
 
   transition("tabs => lock", inSlideDown),
 
+  transition("tabs => help-and-feedback", inSlideLeft),
+  transition("help-and-feedback => tabs", outSlideRight),
+
   transition("tabs => send-type", inSlideLeft),
   transition("send-type => tabs", outSlideRight),
 
@@ -214,4 +220,7 @@ export const routerTransition = trigger("routerTransition", [
 
   transition("tabs => edit-send, send-type => edit-send", inSlideUp),
   transition("edit-send => tabs, edit-send => send-type", outSlideDown),
+
+  transition("tabs => autofill", inSlideLeft),
+  transition("autofill => tabs", outSlideRight),
 ]);

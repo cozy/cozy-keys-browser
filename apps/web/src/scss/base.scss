@@ -78,11 +78,11 @@ img.logo {
   height: 43px;
   margin: 0 auto;
   width: 284px;
+}
 
-  &.logo-themed {
-    @include themify($themes) {
-      content: url("../images/logo-" + themed("logoSuffix") + "@2x.png");
-    }
+img.logo-themed {
+  @include themify($themes) {
+    content: url("../images/logo-" + themed("logoSuffix") + "@2x.png");
   }
 }
 
@@ -302,6 +302,16 @@ code {
   }
 }
 
-button i.bwi {
+button:not([bitbutton]):not([biticonbutton]) i.bwi,
+a i.bwi {
   margin-right: 0.25rem;
+}
+
+.no-items {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }

@@ -1,9 +1,6 @@
-$icomoon-font-path: "../../../../libs/angular/src/scss/bwicons/fonts/";
-$card-icons-base: "../../../../libs/angular/src/images/cards/";
-
 @import "../../../../libs/angular/src/scss/webfonts.css";
 @import "../../../../libs/angular/src/scss/bwicons/styles/style.scss";
-@import "~@angular/cdk/overlay-prebuilt.css";
+@import "@angular/cdk/overlay-prebuilt.css";
 @import "variables.scss";
 @import "base.scss";
 @import "grid.scss";

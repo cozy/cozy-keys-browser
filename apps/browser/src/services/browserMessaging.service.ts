@@ -1,4 +1,6 @@
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+
+import { BrowserApi } from "../browser/browserApi";
 
 import RuntimeBackground from "../background/runtime.background";
 
@@ -23,11 +25,10 @@ export default class BrowserMessagingService implements MessagingService {
   }
 
   send(subscriber: string, arg: any = {}) {
-    const message = Object.assign({}, { command: subscriber }, arg);
-    if (message.command === "syncCompleted") {
+    if (subscriber === "syncCompleted") {
       this.countSync();
     } else {
-      chrome.runtime.sendMessage(message);
+      chrome.runtime.sendMessage(subscriber, arg);
     }
   }
 

@@ -5,7 +5,6 @@
   padding: 7px 15px;
   border: 1px solid #000000;
   font-size: $font-size-base;
-  white-space: nowrap;
   text-align: center;
   cursor: pointer;
   text-transform: uppercase;
@@ -27,6 +26,11 @@
     @include themify($themes) {
       color: themed("buttonDangerColor");
     }
+  }
+
+  &.callout-half {
+    font-weight: bold;
+    max-width: 50%;
   }
 
   &:hover:not([disabled]) {
@@ -76,7 +80,8 @@
 
   &.block {
     display: block;
-    width: 100%;
+    width: calc(100% - 10px);
+    margin: 0 auto;
   }
 
   &.link,
@@ -102,12 +107,24 @@
 
 button.box-content-row {
   display: block;
-  width: 100%;
+  width: calc(100% - 10px);
   text-align: left;
+  border-color: none;
+
+  @include themify($themes) {
+    background-color: themed("boxBackgroundColor");
+  }
 }
 
 button {
   border: none;
   background: transparent;
   color: inherit;
+}
+
+.login-buttons {
+  .btn.block {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }

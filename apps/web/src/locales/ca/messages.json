@@ -133,6 +133,9 @@
   "ms": {
     "message": "Srta."
   },
+  "mx": {
+    "message": "Mx"
+  },
   "dr": {
     "message": "Dr."
   },
@@ -188,11 +191,11 @@
   },
   "baseDomain": {
     "message": "Domini base",
-    "description": "Domain name. Ex. website.com"
+    "description": "Domain name. Example: website.com"
   },
   "domainName": {
     "message": "Nom del domini",
-    "description": "Domain name. Ex. website.com"
+    "description": "Domain name. Example: website.com"
   },
   "host": {
     "message": "Amfitrió",
@@ -277,12 +280,36 @@
   "searchFavorites": {
     "message": "Cerca en preferits"
   },
-  "searchType": {
-    "message": "Cerca en tipus",
-    "description": "Search item type"
+  "searchLogin": {
+    "message": "Cerca inicis de sessió",
+    "description": "Search Login type"
+  },
+  "searchCard": {
+    "message": "Cerca targetes",
+    "description": "Search Card type"
+  },
+  "searchIdentity": {
+    "message": "Cerca identitats",
+    "description": "Search Identity type"
+  },
+  "searchSecureNote": {
+    "message": "Cerca notes segures",
+    "description": "Search Secure Note type"
   },
   "searchVault": {
     "message": "Cerca en la caixa forta"
+  },
+  "searchMyVault": {
+    "message": "Cerca en la caixa forta"
+  },
+  "searchOrganization": {
+    "message": "Cerca organització"
+  },
+  "searchMembers": {
+    "message": "Cerca membres"
+  },
+  "searchGroups": {
+    "message": "Cerca grups"
   },
   "allItems": {
     "message": "Tots els elements"
@@ -365,6 +392,9 @@
   "select": {
     "message": "Selecciona"
   },
+  "newItem": {
+    "message": "Element nou"
+  },
   "addItem": {
     "message": "Afegeix element"
   },
@@ -373,6 +403,13 @@
   },
   "viewItem": {
     "message": "Visualitza l'element"
+  },
+  "new": {
+    "message": "Nou",
+    "description": "for adding new items"
+  },
+  "item": {
+    "message": "Element"
   },
   "ex": {
     "message": "ex.",
@@ -421,11 +458,26 @@
     "message": "Copia URI",
     "description": "Copy URI to clipboard"
   },
+  "me": {
+    "message": "Jo"
+  },
   "myVault": {
-    "message": "La meua caixa forta"
+    "message": "Caixa forta"
+  },
+  "allVaults": {
+    "message": "Totes les caixes fortes"
   },
   "vault": {
     "message": "Caixa forta"
+  },
+  "vaults": {
+    "message": "Caixes fortes"
+  },
+  "vaultItems": {
+    "message": "Elements de la caixa forta"
+  },
+  "filter": {
+    "message": "Filtre"
   },
   "moveSelectedToOrg": {
     "message": "Desplaça la selecció a l'organització"
@@ -522,7 +574,7 @@
     "message": "Esteu segur que voleu sobreescriure la contrasenya actual?"
   },
   "editedFolder": {
-    "message": "Carpeta editada"
+    "message": "Carpeta guardada"
   },
   "addedFolder": {
     "message": "Carpeta afegida"
@@ -532,6 +584,12 @@
   },
   "deletedFolder": {
     "message": "Carpeta suprimida"
+  },
+  "editInfo": {
+    "message": "Edita la informació"
+  },
+  "access": {
+    "message": "Accés"
   },
   "loggedOut": {
     "message": "Sessió tancada"
@@ -557,11 +615,29 @@
   "loginOrCreateNewAccount": {
     "message": "Inicieu sessió o creeu un compte nou per accedir a la caixa forta."
   },
+  "loginWithDevice": {
+    "message": "Inici de sessió amb dispositiu"
+  },
+  "loginWithDeviceEnabledInfo": {
+    "message": "L'inici de sessió amb el dispositiu ha d'estar activat a la configuració de l'aplicació mòbil Bitwarden. Necessiteu una altra opció?"
+  },
+  "loginWithMasterPassword": {
+    "message": "Inici de sessió amb contrasenya mestra"
+  },
   "createAccount": {
     "message": "Crea un compte"
   },
+  "newAroundHere": {
+    "message": "Nou per ací?"
+  },
+  "startTrial": {
+    "message": "Comença la prova"
+  },
   "logIn": {
     "message": "Inicia sessió"
+  },
+  "logInInitiated": {
+    "message": "S'ha iniciat la sessió"
   },
   "submit": {
     "message": "Envia"
@@ -580,6 +656,9 @@
   },
   "masterPassDesc": {
     "message": "La contrasenya mestra és la clau que utilitzeu per accedir a la vostra caixa forta. És molt important que no la oblideu. No hi ha manera de recuperar-la en cas que la oblideu."
+  },
+  "masterPassImportant": {
+    "message": "Les contrasenyes mestres no es poden recuperar si les oblideu!"
   },
   "masterPassHintDesc": {
     "message": "Una pista de la contrasenya mestra pot ajudar-vos a recordar-la si la oblideu."
@@ -611,17 +690,30 @@
   "invalidEmail": {
     "message": "L’adreça electrònica no és vàlida."
   },
-  "masterPassRequired": {
-    "message": "La contrasenya és obligatòria."
+  "masterPasswordRequired": {
+    "message": "Es requereix la contrasenya mestra."
   },
-  "masterPassLength": {
-    "message": "La contrasenya ha de contenir almenys 8 caràcters."
+  "confirmMasterPasswordRequired": {
+    "message": "Cal tornar a escriure la contrasenya mestra."
+  },
+  "masterPasswordMinlength": {
+    "message": "La contrasenya mestra ha de contenir almenys $VALUE$ caràcters.",
+    "description": "The Master Password must be at least a specific number of characters long.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
   },
   "masterPassDoesntMatch": {
     "message": "La confirmació de la contrasenya mestra no coincideix."
   },
   "newAccountCreated": {
     "message": "El vostre compte s'ha creat correctament. Ara ja podeu entrar."
+  },
+  "trialAccountCreated": {
+    "message": "Compte creat amb èxit."
   },
   "masterPassSent": {
     "message": "Hem enviat un correu electrònic amb la vostra contrasenya mestra."
@@ -654,11 +746,17 @@
   "invalidMasterPassword": {
     "message": "Contrasenya mestra no vàlida"
   },
+  "invalidFilePassword": {
+    "message": "La contrasenya del fitxer no és vàlida. Utilitzeu la contrasenya que vau introduir quan vau crear el fitxer d'exportació."
+  },
   "lockNow": {
     "message": "Bloqueja ara"
   },
   "noItemsInList": {
     "message": "No hi ha cap element a llistar."
+  },
+  "noPermissionToViewAllCollectionItems": {
+    "message": "No teniu permís per veure tots els elements en aquesta col·lecció."
   },
   "noCollectionsInList": {
     "message": "No hi ha cap col·lecció a llistar."
@@ -669,6 +767,9 @@
   "noUsersInList": {
     "message": "No hi ha cap usuari a llistar."
   },
+  "noMembersInList": {
+    "message": "No hi ha cap membre a llistar."
+  },
   "noEventsInList": {
     "message": "No hi ha cap esdeveniment a llistar."
   },
@@ -677,6 +778,9 @@
   },
   "noOrganizationsList": {
     "message": "No pertanyeu a cap organització. Les organitzacions permeten compartir elements amb altres usuaris de forma segura."
+  },
+  "notificationSentDevice": {
+    "message": "S'ha enviat una notificació al vostre dispositiu."
   },
   "versionNumber": {
     "message": "Versió $VERSION_NUMBER$",
@@ -727,13 +831,13 @@
     "message": "Inici de sessió no disponible"
   },
   "noTwoStepProviders": {
-    "message": "Aquest compte té habilitat l'inici de sessió en dues passes, però aquest navegador web no admet cap dels dos proveïdors configurats."
+    "message": "Aquest compte té habilitat l'inici de sessió en dos passos, però aquest navegador web no admet cap dels dos proveïdors configurats."
   },
   "noTwoStepProviders2": {
     "message": "Utilitzeu un navegador web compatible (com ara Chrome) o afegiu proveïdors addicionals que siguen compatibles amb tots els navegadors web (com una aplicació d'autenticació)."
   },
   "twoStepOptions": {
-    "message": "Opcions d'inici de sessió en dues passes"
+    "message": "Opcions d'inici de sessió en dos passos"
   },
   "recoveryCodeDesc": {
     "message": "Heu perdut l'accés a tots els vostres proveïdors de dos factors? Utilitzeu el vostre codi de recuperació per desactivar tots els proveïdors de dos factors del vostre compte."
@@ -802,13 +906,25 @@
     "message": "Editeu les col·leccions amb les què es comparteix aquest element. Només els usuaris de l'organització que tinguen accés a aquestes col·leccions podran veure'l."
   },
   "deleteSelectedItemsDesc": {
-    "message": "Heu seleccionat $COUNT$ elements per suprimir. Esteu segur que voleu suprimir tots aquests elements?",
+    "message": "S'enviaran $COUNT$ elements a la paperera.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "150"
       }
     }
+  },
+  "deleteSelectedCollectionsDesc": {
+    "message": "Se suprimiran $COUNT$ coleccions permanentment.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "150"
+      }
+    }
+  },
+  "deleteSelectedConfirmation": {
+    "message": "Esteu segur que voleu continuar?"
   },
   "moveSelectedItemsDesc": {
     "message": "Trieu una carpeta a la que vulgueu desplaçar els $COUNT$ elements seleccionats.",
@@ -866,6 +982,48 @@
   "fileFormat": {
     "message": "Format de fitxer"
   },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Aquesta exportació de fitxers estarà protegida amb contrasenya i requerirà la contrasenya del fitxer per desxifrar-la."
+  },
+  "exportPasswordDescription": {
+    "message": "Aquesta contrasenya s'utilitzarà per exportar i importar aquest fitxer"
+  },
+  "confirmMasterPassword": {
+    "message": "Confirma la contrasenya mestra"
+  },
+  "confirmFormat": {
+    "message": "Confirma el format"
+  },
+  "filePassword": {
+    "message": "Contrasenya del fitxer"
+  },
+  "confirmFilePassword": {
+    "message": "Confirma la contrasenya del fitxer"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Utilitzeu la clau de xifratge del vostre compte, derivada del nom d'usuari i la contrasenya mestra, per xifrar l'exportació i restringir la importació només al compte de Bitwarden actual."
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Establiu una contrasenya per xifrar l'exportació i importeu-la a qualsevol compte de Bitwarden mitjançant aquesta contrasenya."
+  },
+  "exportTypeHeading": {
+    "message": "Tipus d'exportació"
+  },
+  "accountRestricted": {
+    "message": "Hi ha una restricció de compte"
+  },
+  "passwordProtected": {
+    "message": "Protegit amb contrasenya"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "\"Contrasenya del fitxer\" i \"Confirma contrasenya del fitxer\" no coincideixen."
+  },
+  "confirmVaultImport": {
+    "message": "Confirma la importació de la Caixa forta"
+  },
+  "confirmVaultImportDesc": {
+    "message": "Aquest fitxer està protegit amb contrasenya. Introduïu-la per importar dades."
+  },
   "exportSuccess": {
     "message": "S'han exportat les dades de la vostra caixa forta."
   },
@@ -880,7 +1038,7 @@
   },
   "minSpecial": {
     "message": "Mínim de caràcters especials",
-    "description": "Minimum Special Characters"
+    "description": "Minimum special characters"
   },
   "ambiguous": {
     "message": "Eviteu caràcters ambigus"
@@ -891,6 +1049,20 @@
   "length": {
     "message": "Longitud"
   },
+  "uppercase": {
+    "message": "Majúscula (A-Z)",
+    "description": "Include uppercase letters in the password generator."
+  },
+  "lowercase": {
+    "message": "Minúscula (a-z)",
+    "description": "Include lowercase letters in the password generator."
+  },
+  "numbers": {
+    "message": "Números (0-9)"
+  },
+  "specialCharacters": {
+    "message": "Caràcters especials (!@#$%^&*)"
+  },
   "numWords": {
     "message": "Nombre de paraules"
   },
@@ -899,7 +1071,7 @@
   },
   "capitalize": {
     "message": "Majúscules inicials",
-    "description": "Make the first letter of a work uppercase."
+    "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
     "message": "Inclou número"
@@ -912,10 +1084,10 @@
   },
   "clear": {
     "message": "Esborra",
-    "description": "To clear something out. example: To clear browser history."
+    "description": "To clear something out. Example: To clear browser history."
   },
   "accountUpdated": {
-    "message": "Compte actualitzat"
+    "message": "Compte guardat"
   },
   "changeEmail": {
     "message": "Canvia el correu electrònic"
@@ -942,7 +1114,7 @@
     "message": "Si es procedeix, es tancarà la vostra sessió actual i l'haureu de tornar a iniciar. Les sessions d'altres dispositius poden mantenir-se actives fins a una hora."
   },
   "emailChanged": {
-    "message": "El correu electrònic s'ha canviat"
+    "message": "El correu electrònic s'ha guardat"
   },
   "logBackIn": {
     "message": "Torneu a iniciar sessió."
@@ -991,6 +1163,19 @@
         "example": "50,000"
       }
     }
+  },
+  "kdfMemory": {
+    "message": "Memòria KDF (MB)",
+    "description": "Memory refers to computer memory (RAM). MB is short for megabytes."
+  },
+  "argon2Warning": {
+    "message": "La configuració de les iteracions, la memòria i el paral·lelisme de KDF massa alts podria provocar un rendiment baix quan inicieu sessió (i desbloquegeu) Bitwarden en dispositius més lents o antics. Us recomanem que els canvieu individualment en increments més menuts i després proveu tots els vostres dispositius."
+  },
+  "kdfParallelism": {
+    "message": "Paral·lelisme KDF"
+  },
+  "argon2Desc": {
+    "message": "Les iteracions de KDF, la memòria i el paral·lelisme més alts poden ajudar a protegir la vostra contrasenya mestra de ser forçada per força bruta per un atacant."
   },
   "changeKdf": {
     "message": "Canvia KDF"
@@ -1047,7 +1232,7 @@
     "message": "La supressió del compte és permanent. No es pot desfer."
   },
   "accountDeleted": {
-    "message": "S'ha eliminat el compte"
+    "message": "S'ha suprimit el compte"
   },
   "accountDeletedDesc": {
     "message": "El vostre compte s'ha tancat i s'han eliminat totes les dades associades."
@@ -1068,7 +1253,10 @@
     "message": "Hi ha hagut un problema amb les dades que heu intentat importar. Resoleu els errors que es mostren a continuació al fitxer font i torneu-ho a provar."
   },
   "importSuccess": {
-    "message": "Les dades s'han importat amb èxit a la vostra caixa forta."
+    "message": "Les dades s'han importat amb èxit"
+  },
+  "dataExportSuccess": {
+    "message": "Les dades s'han exportat correctament"
   },
   "importWarning": {
     "message": "Esteu important dades a $ORGANIZATION$. Les vostres dades es poden compartir amb membres d'aquesta organització. Voleu continuar?",
@@ -1094,6 +1282,12 @@
   "selectImportFile": {
     "message": "Seleccioneu el fitxer d'importació"
   },
+  "chooseFile": {
+    "message": "Trieu fitxer"
+  },
+  "noFileChosen": {
+    "message": "No s'ha triat cap fitxer"
+  },
   "orCopyPasteFileContents": {
     "message": "o copieu/enganxeu el contingut dels fitxers d'importació"
   },
@@ -1110,11 +1304,14 @@
   "options": {
     "message": "Opcions"
   },
-  "optionsDesc": {
-    "message": "Personalitzeu la vostra caixa forta web."
+  "preferences": {
+    "message": "Preferències"
   },
-  "optionsUpdated": {
-    "message": "Opcions actualitzades"
+  "preferencesDesc": {
+    "message": "Personalitzeu l'experiència de la caixa forta web."
+  },
+  "preferencesUpdated": {
+    "message": "Preferències guardades"
   },
   "language": {
     "message": "Idioma"
@@ -1122,18 +1319,11 @@
   "languageDesc": {
     "message": "Canvia l'idioma utilitzat per la caixa forta web."
   },
-  "disableIcons": {
-    "message": "Inhabilita les icones del lloc web"
+  "enableFavicon": {
+    "message": "Mostra les icones del lloc web"
   },
-  "disableIconsDesc": {
-    "message": "Les icones del lloc web proporcionen una imatge que es pot reconèixer al costat de cada element d'inici de sessió a la vostra caixa forta."
-  },
-  "enableGravatars": {
-    "message": "Habilita Gravatars",
-    "description": "'Gravatar' is the name of a service. See www.gravatar.com"
-  },
-  "enableGravatarsDesc": {
-    "message": "Utilitzeu imatges d'avatar carregades de gravatar.com."
+  "faviconDesc": {
+    "message": "Mostra una imatge reconeixible al costat de cada inici de sessió."
   },
   "enableFullWidth": {
     "message": "Habilita la disposició de l'amplada completa",
@@ -1182,16 +1372,29 @@
     }
   },
   "domainsUpdated": {
-    "message": "Dominis actualitzats"
+    "message": "Dominis guardats"
   },
   "twoStepLogin": {
     "message": "Inici de sessió en dues passes"
   },
+  "twoStepLoginEnforcement": {
+    "message": "Aplicació d'inici de sessió en dos passos"
+  },
   "twoStepLoginDesc": {
     "message": "Protegiu el vostre compte exigint un pas addicional en iniciar sessió."
   },
-  "twoStepLoginOrganizationDesc": {
-    "message": "Demana un inici de sessió en dues passes per als usuaris de la vostra organització mitjançant la configuració de proveïdors a nivell de l'organització."
+  "twoStepLoginOrganizationDescStart": {
+    "message": "Apliqueu les opcions d'inici de sessió en dos passos de Bitwarden per als membres mitjançant la ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
+  },
+  "twoStepLoginPolicy": {
+    "message": "Política d'inici de sessió en dos passos"
+  },
+  "twoStepLoginOrganizationDuoDesc": {
+    "message": "Per aplicar l'inici de sessió en dos passos mitjançant Duo, utilitzeu les opcions següents."
+  },
+  "twoStepLoginOrganizationSsoDesc": {
+    "message": "Si heu configurat l'SSO o teniu previst fer-ho, és possible que l'inici de sessió en dos passos ja s'aplique a través del vostre proveïdor d'identitat."
   },
   "twoStepLoginRecoveryWarning": {
     "message": "Si habiliteu l'inici de sessió en dues passes, pot bloquejar-vos de manera definitiva el compte de Bitwarden. Un codi de recuperació us permet accedir al vostre compte en cas que no pugueu utilitzar el proveïdor d'inici de sessió en dues passes (p. Ex. Perdre el dispositiu). El suport de Bitwarden no podrà ajudar-vos si perdeu l'accés al vostre compte. Us recomanem que escriviu o imprimiu el codi de recuperació i el mantingueu en un lloc segur."
@@ -1209,9 +1412,12 @@
   "enabled": {
     "message": "Habilitat"
   },
+  "restoreAccess": {
+    "message": "Restaura l'accés"
+  },
   "premium": {
     "message": "Premium",
-    "description": "Premium Membership"
+    "description": "Premium membership"
   },
   "premiumMembership": {
     "message": "Subscripció Premium"
@@ -1234,8 +1440,11 @@
   "disable": {
     "message": "Inhabilita"
   },
+  "revokeAccess": {
+    "message": "Revoca l'accés"
+  },
   "twoStepLoginProviderEnabled": {
-    "message": "Aquest proveïdor d'inici de sessió en dues passes està habilitat al vostre compte."
+    "message": "Aquest proveïdor d'inici de sessió en dos passos està habilitat al vostre compte."
   },
   "twoStepLoginAuthDesc": {
     "message": "Introduïu la vostra contrasenya mestra per modificar la configuració d'inici de sessió en dues passes."
@@ -1274,10 +1483,10 @@
     "message": "En cas que hàgeu d'afegir-lo a un altre dispositiu, a continuació teniu el codi QR (o clau) requerit per l'aplicació autenticadora."
   },
   "twoStepDisableDesc": {
-    "message": "Esteu segur que voleu inhabilitar aquest proveïdor d'inici de sessió en dues passes?"
+    "message": "Esteu segur que voleu inhabilitar aquest proveïdor d'inici de sessió en dos passos?"
   },
   "twoStepDisabled": {
-    "message": "El proveïdor d'inici de sessió en dues passes està inhabilitat."
+    "message": "El proveïdor d'inici de sessió en dos passos està inhabilitat."
   },
   "twoFactorYubikeyAdd": {
     "message": "Afegiu una nova YubiKey al vostre compte"
@@ -1295,7 +1504,7 @@
     "message": "Guardeu el formulari."
   },
   "twoFactorYubikeyWarning": {
-    "message": "A causa de les limitacions de la plataforma, les YubiKeys no es poden utilitzar en totes les aplicacions de Bitwarden. Heu d'habilitar un altre proveïdor d'inici de sessió en dues passes per accedir al compte quan no es puguen utilitzar les YubiKeys. Plataformes compatibles:"
+    "message": "A causa de les limitacions de la plataforma, les YubiKeys no es poden utilitzar en totes les aplicacions de Bitwarden. Heu d'habilitar un altre proveïdor d'inici de sessió en dos passos per accedir al compte quan no es puguen utilitzar les YubiKeys. Plataformes compatibles:"
   },
   "twoFactorYubikeySupportUsb": {
     "message": "Caixa forta web, aplicació d'escriptori, CLI i totes les extensions de navegador en un dispositiu amb un port USB que puga acceptar la vostra YubiKey."
@@ -1379,7 +1588,7 @@
     "message": "Afegiu una clau de seguretat de WebAuthn al vostre compte"
   },
   "readKey": {
-    "message": "Llegeix la clau"
+    "message": "Llig la clau"
   },
   "keyCompromised": {
     "message": "La clau està compromesa."
@@ -1397,7 +1606,7 @@
     "message": "Guardeu el formulari."
   },
   "twoFactorU2fWarning": {
-    "message": "A causa de les limitacions de la plataforma, FIDO U2F no es pot utilitzar en totes les aplicacions de Bitwarden. Heu d'habilitar un altre proveïdor d'inici de sessió en dues passes perquè pugueu accedir al vostre compte quan FIDO U2F no es puga utilitzar. Plataformes compatibles:"
+    "message": "A causa de les limitacions de la plataforma, FIDO U2F no es pot utilitzar en totes les aplicacions de Bitwarden. Heu d'habilitar un altre proveïdor d'inici de sessió en dos passos perquè pugueu accedir al vostre compte quan FIDO U2F no es puga utilitzar. Plataformes compatibles:"
   },
   "twoFactorU2fSupportWeb": {
     "message": "Caixa forta web i extensions de navegador en un escriptori/portàtil amb un navegador compatible amb U2F (Chrome, Opera, Vivaldi, o Firefox amb FIDO U2F activat)."
@@ -1406,13 +1615,13 @@
     "message": "S'està esperant que toqueu el botó de la vostra clau de seguretat"
   },
   "twoFactorU2fClickSave": {
-    "message": "Feu clic al botó \"Guarda\" que apareix a continuació per habilitar aquesta clau de seguretat per iniciar sessió en dues passes."
+    "message": "Feu clic al botó \"Guarda\" que apareix a continuació per habilitar aquesta clau de seguretat per iniciar sessió en dos passos."
   },
   "twoFactorU2fProblemReadingTryAgain": {
     "message": "Hi ha hagut un problema en llegir la clau de seguretat. Torneu-ho a provar."
   },
   "twoFactorWebAuthnWarning": {
-    "message": "A causa de les limitacions de la plataforma, WebAuthn no es pot utilitzar en totes les aplicacions Bitwarden. Heu d’habilitar un altre proveïdor d’inici de sessió en dues passas perquè pugueu accedir al vostre compte quan no es puga utilitzar WebAuthn. Plataformes compatibles:"
+    "message": "A causa de les limitacions de la plataforma, WebAuthn no es pot utilitzar en totes les aplicacions Bitwarden. Heu d’habilitar un altre proveïdor d’inici de sessió en dos passos perquè pugueu accedir al vostre compte quan no es puga utilitzar WebAuthn. Plataformes compatibles:"
   },
   "twoFactorWebAuthnSupportWeb": {
     "message": "Caixa forta web i extensions de navegador en un escriptori/portàtil amb un navegador compatible amb WebAuthn (Chrome, Opera, Vivaldi, o Firefox amb FIDO U2F activat)."
@@ -1421,7 +1630,7 @@
     "message": "El codi de recuperació d'inici de sessió en dues passes de Bitwarden"
   },
   "twoFactorRecoveryNoCode": {
-    "message": "Encara no heu habilitat cap proveïdor d'inici de sessió en dues passes. Després d'activar-lo, podeu consultar ací el codi de recuperació."
+    "message": "Encara no heu habilitat cap proveïdor d'inici de sessió en dos passos. Després d'activar-lo, podeu consultar ací el codi de recuperació."
   },
   "printCode": {
     "message": "Imprimeix el codi",
@@ -1431,13 +1640,18 @@
     "message": "Informes"
   },
   "reportsDesc": {
-    "message": "Identifiqueu i tanqueu els forats de seguretat dels comptes en línia fent clic en els informes següents."
+    "message": "Identifiqueu i tanqueu els forats de seguretat dels comptes en línia fent clic en els informes següents.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
+  },
+  "orgsReportsDesc": {
+    "message": "Identifiqueu i tanqueu els forats de seguretat dels comptes en línia fent clic en els informes següents.",
+    "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
-    "message": "Informe de llocs web no segurs"
+    "message": "Llocs web no segurs"
   },
   "unsecuredWebsitesReportDesc": {
-    "message": "L'ús de llocs web no segurs amb l'esquema http:// pot ser perillós. Si el lloc web ho permet, sempre haureu d'accedir-hi mitjançant l'esquema https:// perquè la vostra connexió estiga xifrada."
+    "message": "Els URL que comencen per http:// no utilitzen el millor xifratge disponible. Canvieu els URI d'inici de sessió d'aquests comptes a https:// per a una navegació més segura."
   },
   "unsecuredWebsitesFound": {
     "message": "S'han trobat llocs web no segurs"
@@ -1455,16 +1669,16 @@
     "message": "Cap element de la vostra caixa forta té URI no segures."
   },
   "inactive2faReport": {
-    "message": "Informe 2FA inactiu"
+    "message": "Inici de sessió inactiu en dos passos"
   },
   "inactive2faReportDesc": {
-    "message": "L'autenticació de dos factors (2FA) és una configuració de seguretat important que ajuda a assegurar els vostres comptes. Si el lloc web ho ofereix, sempre haureu d'activar l'autenticació de dos factors."
+    "message": "L'inici de sessió en dos passos afegeix una capa de protecció als comptes. Activeu l'inici de sessió en dos passos mitjançant Bitwarden Authenticator per a aquests comptes o utilitzeu un mètode alternatiu."
   },
   "inactive2faFound": {
     "message": "S'han trobat registres sense 2FA"
   },
   "inactive2faFoundDesc": {
-    "message": "Hem trobat $COUNT$ llocs web a la vostra caixa forta que no es poden configurar amb l'autenticació de dos factors (d'acord amb twofactorauth.org). Per protegir encara més aquests comptes, haureu d'habilitar l'autenticació de dos factors.",
+    "message": "Hem trobat $COUNT$ llocs web a la vostra caixa forta que no es poden configurar amb l'autenticació de dos factors (d'acord amb 2fa.directory). Per protegir encara més aquests comptes, haureu d'habilitar l'autenticació de dos factors.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1479,7 +1693,7 @@
     "message": "Instruccions"
   },
   "exposedPasswordsReport": {
-    "message": "Informe de contrasenyes exposades"
+    "message": "Contrasenyes exposades"
   },
   "exposedPasswordsReportDesc": {
     "message": "Les contrasenyes exposades són claus que s'han descobert en filtracions de dades conegudes que es van fer públiques o que es van vendre a la web fosca per part d'hackers."
@@ -1512,10 +1726,10 @@
     }
   },
   "weakPasswordsReport": {
-    "message": "Informe de contrasenyes poc segures"
+    "message": "Contrasenyes poc segures"
   },
   "weakPasswordsReportDesc": {
-    "message": "Les contrasenyes poc segures poden ser descobertes fàcilment per pirates informàtics amb eines automatitzades que s'utilitzen per trencar contrasenyes. El generador de contrasenyes Bitwarden us pot ajudar a crear contrasenyes fortes."
+    "message": "Els atacants poden endevinar fàcilment les contrasenyes febles. Canvieu aquestes contrasenyes per fortes mitjançant el generador de contrasenyes."
   },
   "weakPasswordsFound": {
     "message": "S'han trobat contrasenyes poc segures"
@@ -1533,10 +1747,10 @@
     "message": "Cap element de la vostra caixa forta té contrasenyes poc segures."
   },
   "reusedPasswordsReport": {
-    "message": "Informe de contrasenyes reutilitzades"
+    "message": "Contrasenyes reutilitzades"
   },
   "reusedPasswordsReportDesc": {
-    "message": "Si un servei que utilitzeu està compromès, la reutilització de la mateixa contrasenya en altres llocs pot permetre als hackers accedir fàcilment a més comptes en línia vostres. Heu d'utilitzar una contrasenya exclusiva per a cada compte o servei."
+    "message": "La reutilització de contrasenyes facilita que els atacants puguin entrar en diversos comptes. Canvieu aquestes contrasenyes perquè cadascuna siga única."
   },
   "reusedPasswordsFound": {
     "message": "S'han trobat contrasenyes reutilitzades"
@@ -1624,6 +1838,12 @@
   "billing": {
     "message": "Facturació"
   },
+  "billingPlanLabel": {
+    "message": "Pla de facturació"
+  },
+  "paymentType": {
+    "message": "Tipus de pagament"
+  },
   "accountCredit": {
     "message": "Compte de crèdit",
     "description": "Financial term. In the case of Bitwarden, a positive balance means that you owe money, while a negative balance means that you have a credit (Bitwarden owes you money)."
@@ -1651,7 +1871,7 @@
   },
   "goPremium": {
     "message": "Fes-te Premium",
-    "description": "Another way of saying \"Get a premium membership\""
+    "description": "Another way of saying \"Get a Premium membership\""
   },
   "premiumUpdated": {
     "message": "Heu actualitzat a la versió premium."
@@ -1688,6 +1908,22 @@
         "example": "$10"
       }
     }
+  },
+  "premiumPriceWithFamilyPlan": {
+    "message": "Hazte Premium por sólo $PRICE$ /año, u obtén cuentas Premium para usuarios $FAMILYPLANUSERCOUNT$ y uso compartido familiar ilimitado con un ",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      },
+      "familyplanusercount": {
+        "content": "$2",
+        "example": "6"
+      }
+    }
+  },
+  "bitwardenFamiliesPlan": {
+    "message": "Plan Familias Bitwarden."
   },
   "addons": {
     "message": "Complements"
@@ -1740,6 +1976,9 @@
   "year": {
     "message": "any"
   },
+  "yr": {
+    "message": "any"
+  },
   "month": {
     "message": "mes"
   },
@@ -1767,6 +2006,9 @@
   },
   "billingInformation": {
     "message": "Informació de facturació"
+  },
+  "billingTrialSubLabel": {
+    "message": "El vostre mètode de pagament no es cobrarà durant la prova gratuïta de 7 dies."
   },
   "creditCard": {
     "message": "Targeta de crèdit"
@@ -1819,11 +2061,11 @@
   "updateLicense": {
     "message": "Actualitza la llicència"
   },
-  "updatedLicense": {
-    "message": "Llicència actualitzada"
-  },
   "manageSubscription": {
     "message": "Administra la subscripció"
+  },
+  "launchCloudSubscription": {
+    "message": "Inicia la subscripció al núvol"
   },
   "storage": {
     "message": "Emmagatzematge"
@@ -2124,11 +2366,35 @@
       }
     }
   },
+  "trialThankYou": {
+    "message": "Gràcies per registrar-te a Bitwarden per $PLAN$!",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "trialPaidInfoMessage": {
+    "message": "La vostra prova gratuïta de $PLAN$ de 7 dies es convertirà en una subscripció de pagament al cap de 7 dies.",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "trialConfirmationEmail": {
+    "message": "Hem enviat un correu electrònic de confirmació al correu electrònic de facturació del vostre equip a "
+  },
   "monthly": {
     "message": "Mensual"
   },
   "annually": {
     "message": "Annual"
+  },
+  "annual": {
+    "message": "Anual"
   },
   "basePrice": {
     "message": "Preu base"
@@ -2193,8 +2459,23 @@
   "deleteGroupConfirmation": {
     "message": "Esteu segur que voleu suprimir aquest grup?"
   },
+  "deleteMultipleGroupsConfirmation": {
+    "message": "Esteu segur que voleu suprimir els següents $QUANTITY$ grups?",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removeUserConfirmation": {
     "message": "Esteu segur que voleu suprimir aquest usuari?"
+  },
+  "removeOrgUserConfirmation": {
+    "message": "Quan s'elimina un membre, ja no té accés a les dades de l'organització i aquesta acció és irreversible. Per tornar a afegir el membre a l'organització, cal convidar-lo i incorporar-lo de nou."
+  },
+  "revokeUserConfirmation": {
+    "message": "Quan un membre és revocat, ja no té accés a les dades de l'organització. Per restaurar ràpidament l'accés dels membres, aneu a la pestanya Revocat."
   },
   "removeUserConfirmationKeyConnector": {
     "message": "Advertència! Aquest usuari requereix un connector clau per gestionar el seu xifrat. La supressió d'aquest usuari des de la vostra organització desactivarà permanentment el seu compte. Aquesta acció no es pot desfer. Voleu continuar?"
@@ -2204,6 +2485,9 @@
   },
   "externalIdDesc": {
     "message": "L'identificador extern es pot utilitzar com a referència o enllaçar aquest recurs a un sistema extern, com ara un directori d'usuari."
+  },
+  "nestCollectionUnder": {
+    "message": "Anida col·lecció sota"
   },
   "accessControl": {
     "message": "Control d'accés"
@@ -2226,14 +2510,23 @@
   "editCollection": {
     "message": "Edita col·lecció"
   },
+  "collectionInfo": {
+    "message": "Informació de col·lecció"
+  },
   "deleteCollectionConfirmation": {
     "message": "Esteu segur que voleu suprimir aquesta col·lecció?"
   },
-  "editUser": {
-    "message": "Edita usuari"
+  "editMember": {
+    "message": "Edita el membre"
   },
-  "inviteUser": {
-    "message": "Convida usuari"
+  "fieldOnTabRequiresAttention": {
+    "message": "Un camp de la pestanya '$TAB$' requereix la vostra atenció.",
+    "placeholders": {
+      "tab": {
+        "content": "$1",
+        "example": "Collection info"
+      }
+    }
   },
   "inviteUserDesc": {
     "message": "Convida un nou usuari a la vostra organització introduint l'adreça electrònica del compte de Bitwarden a continuació. Si encara no tenen un compte de Bitwarden, se us demanarà que creeu un compte nou."
@@ -2275,7 +2568,7 @@
     "message": "Propietari"
   },
   "ownerDesc": {
-    "message": "L'usuari d'accés més elevat que pot gestionar tots els aspectes de la vostra organització."
+    "message": "Gestioneu tots els aspectes de la vostra organització, incloses la facturació i les subscripcions"
   },
   "clientOwnerDesc": {
     "message": "Aquest usuari ha de ser independent del proveïdor. Si el proveïdor està desvinculat de l'organització, aquest usuari mantindrà la propietat de l'organització."
@@ -2284,19 +2577,19 @@
     "message": "Administrador"
   },
   "adminDesc": {
-    "message": "Els administradors poden accedir i gestionar tots els elements, col·leccions i usuaris de la vostra organització."
+    "message": "Gestioneu l'accés a l'organització, totes les col·leccions, els membres, els informes i la configuració de seguretat"
   },
   "user": {
     "message": "Usuari"
   },
   "userDesc": {
-    "message": "Un usuari habitual amb accés a les col·leccions assignades a la vostra organització."
+    "message": "Accediu i afegiu elements a les col·leccions assignades"
   },
   "manager": {
     "message": "Gestor"
   },
   "managerDesc": {
-    "message": "Els gestors poden accedir i gestionar les col·leccions assignades a la vostra organització."
+    "message": "Creeu, suprimiu i gestioneu l'accés a les col·leccions assignades"
   },
   "all": {
     "message": "Tot"
@@ -2338,13 +2631,13 @@
     "message": "S'ha canviat la contrasenya del compte."
   },
   "enabledUpdated2fa": {
-    "message": "Inici de sessió en dues passes habilitat/actualitzat."
+    "message": "Inici de sessió en dos passos guardat"
   },
   "disabled2fa": {
-    "message": "S'ha inhabilitat l'inici de sessió en dues passes."
+    "message": "S'ha inhabilitat l'inici de sessió en dos passos"
   },
   "recovered2fa": {
-    "message": "S'ha recuperat el compte des de l'inici de sessió en dues passes."
+    "message": "S'ha recuperat el compte des de l'inici de sessió en dos passos."
   },
   "failedLogin": {
     "message": "S'ha produït un error d'inici de sessió amb una contrasenya incorrecta."
@@ -2353,7 +2646,7 @@
     "message": "S'ha produït un error amb un inici de sessió en dues passes incorrecte."
   },
   "exportedVault": {
-    "message": "Caixa forta exportada."
+    "message": "S'ha exportat la caixa forta"
   },
   "exportedOrganizationVault": {
     "message": "Caixa forta de l’organització exportada."
@@ -2397,6 +2690,9 @@
       }
     }
   },
+  "viewAllLoginOptions": {
+    "message": "Veure totes les opcions d'inici de sessió"
+  },
   "viewedItemId": {
     "message": "$ID$ de l'element vist.",
     "placeholders": {
@@ -2421,6 +2717,15 @@
       "id": {
         "content": "$1",
         "example": "Google"
+      }
+    }
+  },
+  "viewedCardNumberItemId": {
+    "message": "Número de targeta vist per a l'article $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
       }
     }
   },
@@ -2487,6 +2792,9 @@
       }
     }
   },
+  "deletedCollections": {
+    "message": "Col·leccions suprimides"
+  },
   "deletedCollectionId": {
     "message": "S'ha suprimit la col·lecció $ID$.",
     "placeholders": {
@@ -2532,8 +2840,53 @@
       }
     }
   },
+  "deletedManyGroups": {
+    "message": "S'han suprimit $QUANTITY$ grups.",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "removedUserId": {
     "message": "S'ha suprimit l'usuari $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "removeUserIdAccess": {
+    "message": "Suprimeix l'accés $ID$",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "revokedUserId": {
+    "message": "S'ha revocat l'accés a l'organització per $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "restoredUserId": {
+    "message": "S'ha revstaurat l'accés a l'organització per $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "revokeUserId": {
+    "message": "S'ha revocat l'accés per $ID$",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -2671,7 +3024,7 @@
     "message": "Accés de grup"
   },
   "groupAccessUserDesc": {
-    "message": "Editeu els grups als quals pertany aquest usuari."
+    "message": "Doneu accés als membres a les col·leccions afegint-los a 1 o més grups."
   },
   "invitedUsers": {
     "message": "Usuaris convidats."
@@ -2707,7 +3060,7 @@
     }
   },
   "confirmUsers": {
-    "message": "Confirma usuaris"
+    "message": "Confirma membres"
   },
   "usersNeedConfirmed": {
     "message": "Teniu usuaris que han acceptat la seua invitació, però encara cal confirmar-la. Els usuaris no tindran accés a l'organització fins que estiguen confirmats."
@@ -2768,7 +3121,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must enable 2FA on your user account before you can join this organization."
+        "example": "You must set up 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -2782,7 +3135,7 @@
     "message": "Recupera l'inici de sessió en dues passes del compte"
   },
   "twoStepRecoverDisabled": {
-    "message": "S'ha inhabilitat l'inici de sessió en dues passes al vostre compte."
+    "message": "S'ha inhabilitat l'inici de sessió en dos passos al vostre compte."
   },
   "learnMore": {
     "message": "Més informació"
@@ -2794,10 +3147,13 @@
     "message": "Si el vostre compte existeix, rebreu un correu electrònic amb més instruccions."
   },
   "deleteRecoverConfirmDesc": {
-    "message": "Heu sol·licitat suprimir el compte de Bitwarden. Feu clic al botó seguüent per confirmar-ho."
+    "message": "Heu sol·licitat suprimir el compte de Bitwarden. Feu clic al botó següent per confirmar-ho."
   },
   "myOrganization": {
     "message": "La meua organització"
+  },
+  "organizationInfo": {
+    "message": "Informació de l'organització"
   },
   "deleteOrganization": {
     "message": "Suprimeix l'organització"
@@ -2830,7 +3186,7 @@
     "message": "S'ha suprimit l'organització i totes les dades associades."
   },
   "organizationUpdated": {
-    "message": "S'ha actualitzat l'organització"
+    "message": "S'ha guardat l'organització"
   },
   "taxInformation": {
     "message": "Informació fiscal"
@@ -2840,15 +3196,15 @@
   },
   "billingPlan": {
     "message": "Pla",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlan": {
-    "message": "Canvi de pla",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "message": "Pla d'actualització",
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "changeBillingPlanUpgrade": {
     "message": "Actualitzeu el compte a un altre pla proporcionant la informació següent. Assegureu-vos que heu afegit un mètode de pagament actiu al compte.",
-    "description": "A billing plan/package. For example: families, teams, enterprise, etc."
+    "description": "A billing plan/package. For example: Families, Teams, Enterprise, etc."
   },
   "invoiceNumber": {
     "message": "Factura #$NUMBER$",
@@ -2867,7 +3223,7 @@
     "message": "Baixa factura"
   },
   "verifyBankAccount": {
-    "message": "Comproveu compte"
+    "message": "Comproveu compte bancari"
   },
   "verifyBankAccountDesc": {
     "message": "Hem realitzat dos dipòsits en el vostre compte bancari (pot tardar entre 1-2 dies laborables). Introduïu aquests imports per verificar el compte bancari."
@@ -2927,11 +3283,11 @@
     "message": "Cost potencial màxim per plaça"
   },
   "addSeats": {
-    "message": "Afegeix reserves",
+    "message": "Afegeix places",
     "description": "Seat = User Seat"
   },
   "removeSeats": {
-    "message": "Suprimeix llocs",
+    "message": "Suprimeix places",
     "description": "Seat = User Seat"
   },
   "subscriptionDesc": {
@@ -2965,7 +3321,7 @@
     "message": "Els ajustos a la vostra subscripció donaran lloc a canvis prorratejats als vostres totals de facturació. Si els nous usuaris convidats superen les vostres places de subscripció, rebreu immediatament un càrrec prorratejat pels usuaris addicionals."
   },
   "subscriptionUserSeatsLimitedAutoscale": {
-    "message": "Els ajustaments a la vostra subscripció es traduiran en canvis prorratejats en els vostres totals de facturació. Si els usuaris recentment convidats excedeixen les vostres places de subscripció, rebreu immediatament un càrrec previst dels usuaris addicionals fins que s'aconseguisca arribar al vostre límit de places ($MAX$).",
+    "message": "Els ajustos a la vostra subscripció donaran lloc a canvis prorratejats en els vostres totals de facturació. Si els usuaris recentment convidats excedeixen les vostres places de subscripció, rebreu immediatament un càrrec previst dels usuaris addicionals fins que s'aconseguisca arribar al vostre límit de places ($MAX$).",
     "placeholders": {
       "max": {
         "content": "$1",
@@ -3010,10 +3366,10 @@
     }
   },
   "seatsToAdd": {
-    "message": "Reserves a afegir"
+    "message": "Places a afegir"
   },
   "seatsToRemove": {
-    "message": "Reserves a suprimir"
+    "message": "Places a suprimir"
   },
   "seatsAddNote": {
     "message": "Si afegiu reserves d'usuari, es generaran ajustos al total de facturació i carregarem el mètode de pagament immediatament al fitxer. El primer càrrec serà prorratejat per a la resta del cicle de facturació actual."
@@ -3037,7 +3393,7 @@
     "message": "Actualitza clau"
   },
   "updateEncryptionKey": {
-    "message": "Actualitzeu la clau de xifratge"
+    "message": "Actualitza la clau de xifratge"
   },
   "updateEncryptionKeyShortDesc": {
     "message": "Esteu fent servir un esquema de xifrage antiquat."
@@ -3081,7 +3437,7 @@
   "acceptPolicies": {
     "message": "Si activeu aquesta casella, indiqueu que esteu d’acord amb el següent:"
   },
-  "acceptPoliciesError": {
+  "acceptPoliciesRequired": {
     "message": "No s’han reconegut les condicions del servei i la declaració de privadesa."
   },
   "termsOfService": {
@@ -3124,12 +3480,19 @@
     "message": "Actualitzat",
     "description": "ex. Date this item was updated"
   },
+  "dateCreated": {
+    "message": "Creat",
+    "description": "ex. Date this item was created"
+  },
   "datePasswordUpdated": {
     "message": "Contrasenya actualitzada",
     "description": "ex. Date this password was updated"
   },
   "organizationIsDisabled": {
     "message": "L'organització està inhabilitada."
+  },
+  "disabledOrganizationFilterError": {
+    "message": "No es pot accedir als elements de les organitzacions inhabilitades. Poseu-vos en contacte amb el propietari de la vostra organització per obtenir ajuda."
   },
   "licenseIsExpired": {
     "message": "Llicència caducada."
@@ -3198,6 +3561,12 @@
     "message": "Per assegurar la integritat de les vostres claus de xifratge, comproveu la frase de l'empremta digital de l'usuari abans de continuar.",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
+  "fingerprintMatchInfo": {
+    "message": "Assegureu-vos que la vostra caixa forta estiga desbloquejada i que la frase d'empremta digital coincidisca amb l'altre dispositiu."
+  },
+  "fingerprintPhraseHeader": {
+    "message": "Frase d'empremta digital"
+  },
   "dontAskFingerprintAgain": {
     "message": "No sol·liciteu tornar a comprovar la frase de les empremtes dactilars (No recomanat)",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
@@ -3255,17 +3624,23 @@
   "clone": {
     "message": "Clona"
   },
+  "masterPassPolicyTitle": {
+    "message": "Requisits de contrasenya mestra"
+  },
   "masterPassPolicyDesc": {
     "message": "Estableix els requisits mínims per al nivell de seguretat de la contrasenya principal."
+  },
+  "twoStepLoginPolicyTitle": {
+    "message": "Cal iniciar sessió en dos passos"
   },
   "twoStepLoginPolicyDesc": {
     "message": "Requereix que els usuaris configuren l’inici de sessió en dues passes als seus comptes personals."
   },
   "twoStepLoginPolicyWarning": {
-    "message": "Els membres de l’organització que no tinguen activat l’inici de sessió en dues passes per al seu compte personal s'eliminaran de l’organització i rebran un correu electrònic que els notificarà sobre el canvi."
+    "message": "Els membres de l’organització que no tinguen activat l’inici de sessió en dos passos per al seu compte personal s'eliminaran de l’organització i rebran un correu electrònic que els notificarà sobre el canvi."
   },
   "twoStepLoginPolicyUserWarning": {
-    "message": "Eres membre d’una organització que necessita l’inici de sessió en dues passes per estar habilitat al vostre compte d’usuari. Si desactiveu tots els proveïdors d’inici de sessió en dues passes, sereu eliminats automàticament d’aquestes organitzacions."
+    "message": "Eres membre d’una organització que necessita l’inici de sessió en dos passos per estar habilitat al vostre compte d’usuari. Si desactiveu tots els proveïdors d’inici de sessió en dos passos, sereu eliminats automàticament d’aquestes organitzacions."
   },
   "passwordGeneratorPolicyDesc": {
     "message": "Estableix els requisits mínims per a la configuració del generador de contrasenyes."
@@ -3325,10 +3700,10 @@
     "message": "Preferència d'usuari"
   },
   "vaultTimeoutAction": {
-    "message": "Acció del temps d'espera de la caixa forta"
+    "message": "Acció quan acabe el temps d'espera de la caixa forta"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "Una caixa forta bloquejada requereix que torneu a introduir la contrasenya principal per accedir-ne de nou."
+    "message": "Una caixa forta bloquejada requereix que torne a introduir la contrasenya principal per accedir-ne de nou."
   },
   "vaultTimeoutActionLogOutDesc": {
     "message": "Una caixa forta desconnectada requereix que torneu a autentificar-vos per accedir-hi de nou."
@@ -3476,6 +3851,12 @@
   "ssoIdentifierRequired": {
     "message": "Cal identificador d’organització."
   },
+  "ssoIdentifier": {
+    "message": "Identificador SSO"
+  },
+  "ssoIdentifierHint": {
+    "message": "Proporcioneu aquest identificador als vostres membres per iniciar sessió amb SSO."
+  },
   "unlinkSso": {
     "message": "Desenllaça SSO"
   },
@@ -3522,7 +3903,7 @@
     "message": "Text"
   },
   "createSend": {
-    "message": "Crea un nou Send",
+    "message": "Nou Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editSend": {
@@ -3534,7 +3915,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
-    "message": "Send editat",
+    "message": "Send guardat",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "deletedSend": {
@@ -3587,6 +3968,9 @@
   },
   "disabled": {
     "message": "Inhabilitat"
+  },
+  "revoked": {
+    "message": "Revocat"
   },
   "sendLink": {
     "message": "Enllaç Send",
@@ -3736,7 +4120,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must enable 2FA on your user account before you can join this organization."
+        "example": "You must set up 2FA on your user account before you can join this organization."
       }
     }
   },
@@ -3799,7 +4183,7 @@
     }
   },
   "personalOwnership": {
-    "message": "Propietat personal"
+    "message": "Suprimeix la caixa forta individual"
   },
   "personalOwnershipPolicyDesc": {
     "message": "Sol·liciteu als usuaris que guarden elements de caixa forta a una organització suprimint l’opció de propietat personal."
@@ -3811,17 +4195,17 @@
     "message": "A causa d'una política empresarial, no podeu guardar elements a la vostra caixa forta personal. Canvieu l'opció Propietat en organització i trieu entre les col·leccions disponibles."
   },
   "disableSend": {
-    "message": "Desactiva Send"
+    "message": "Suprimeix Send"
   },
   "disableSendPolicyDesc": {
-    "message": "No permeteu als usuaris crear o editar un Send Bitwarden. Es permet suprimir un Send existent.",
+    "message": "No permeteu als usuaris crear o editar Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "disableSendExemption": {
     "message": "Els usuaris de l’organització que poden gestionar les polítiques d'aquesta, estan exempts de la seua aplicació."
   },
   "sendDisabled": {
-    "message": "Send desactivat",
+    "message": "Send suprimit",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendDisabledWarning": {
@@ -3840,7 +4224,7 @@
     "message": "Els usuaris de l’organització que poden gestionar les polítiques d'aquesta, estan exempts de la seua aplicació."
   },
   "disableHideEmail": {
-    "message": "No permeteu que els usuaris amaguen la seua adreça de correu electrònic dels destinataris en crear o editar un Send.",
+    "message": "Mostra sempre l'adreça de correu electrònic del membre amb els destinataris quan creeu o editeu un Send.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendOptionsPolicyInEffect": {
@@ -3869,10 +4253,34 @@
     "message": "Personalitzat"
   },
   "customDesc": {
-    "message": "Permet un control més granular dels permisos d'usuari per a configuracions avançades."
+    "message": "Concediu permisos personalitzats als membres"
+  },
+  "customDescNonEnterpriseStart": {
+    "message": "Els rols personalitzats són una ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseLink": {
+    "message": "característica empresarial",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customDescNonEnterpriseEnd": {
+    "message": ". Contacta amb el nostre equip d'assistència per actualitzar la teua subscripció",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Custom roles is an enterprise feature. Contact our support team to upgrade your subscription'"
+  },
+  "customNonEnterpriseError": {
+    "message": "Per habilitar els permisos personalitzats, l'organització ha de tenir un pla Enterprise 2020."
   },
   "permissions": {
     "message": "Permisos"
+  },
+  "permission": {
+    "message": "Permisos"
+  },
+  "managerPermissions": {
+    "message": "Permisos de l'administrador"
+  },
+  "adminPermissions": {
+    "message": "Permisos de l'administrador"
   },
   "accessEventLogs": {
     "message": "Registres d'esdeveniments dels accessos"
@@ -3949,10 +4357,10 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendTextDesc": {
-    "message": "El text que voleu enviar."
+    "message": "El text que voleu pel Send."
   },
   "sendFileDesc": {
-    "message": "El fitxer que voleu enviar."
+    "message": "El fitxer que voleu pel Send."
   },
   "copySendLinkOnSave": {
     "message": "Copie l'enllaç per compartir aquest Send al meu porta-retalls després de guardar-lo."
@@ -4163,7 +4571,7 @@
     "message": "La resposta de les claus d’organització és nul·la"
   },
   "resetPasswordDetailsError": {
-    "message": "La resposta Restableix detalls de contrasenya és nul·la"
+    "message": "La resposta dels detalls de restabliment de la contrasenya és nul·la"
   },
   "trashCleanupWarning": {
     "message": "Els elements que porten més de 30 dies a la paperera se suprimiran automàticament."
@@ -4183,11 +4591,20 @@
   "reinviteSelected": {
     "message": "Tornar a enviar invitacions"
   },
+  "resendNotification": {
+    "message": "Torna a enviar la notificació"
+  },
   "noSelectedUsersApplicable": {
     "message": "Aquesta acció no és aplicable a cap dels usuaris seleccionats."
   },
   "removeUsersWarning": {
     "message": "Esteu segur que voleu eliminar els usuaris següents? El procés pot tardar uns segons a completar-se i no es pot interrompre ni cancel·lar."
+  },
+  "removeOrgUsersConfirmation": {
+    "message": "Quan se suprimeixen els membres, ja no tenen accés a les dades de l'organització i aquesta acció és irreversible. Per tornar a afegir el membre a l'organització, cal convidar-lo i incorporar-lo de nou. El procés pot tardar uns quants segons a completar-se i no es pot interrompre ni cancel·lar."
+  },
+  "revokeUsersWarning": {
+    "message": "Quan els membres són revocats, ja no tenen accés a les dades de l'organització. Per restaurar ràpidament l'accés dels membres, aneu a la pestanya Revocat. El procés pot tardar uns quants segons a completar-se i no es pot interrompre ni cancel·lar."
   },
   "theme": {
     "message": "Tema"
@@ -4214,10 +4631,16 @@
     "message": "Confirmat correctament."
   },
   "bulkReinviteMessage": {
-    "message": "Reconvidat correctament."
+    "message": "Tornat a convidar correctament."
   },
   "bulkRemovedMessage": {
     "message": "Suprimit correctament"
+  },
+  "bulkRevokedMessage": {
+    "message": "S'ha revocat l'accés a l'organització correctament"
+  },
+  "bulkRestoredMessage": {
+    "message": "S'ha restaurat l'accés a l'organització correctament"
   },
   "bulkFilteredMessage": {
     "message": "Exclòs, no aplicable per a aquesta acció."
@@ -4227,6 +4650,12 @@
   },
   "removeUsers": {
     "message": "Suprimeix usuaris"
+  },
+  "revokeUsers": {
+    "message": "Revoca usuaris"
+  },
+  "restoreUsers": {
+    "message": "Restaura usuaris"
   },
   "error": {
     "message": "Error"
@@ -4238,7 +4667,7 @@
     "message": "Configuració del proveïdor"
   },
   "setupProviderLoginDesc": {
-    "message": "T'han convidat a configurar un proveïdor nou. Per continuar, heu d'iniciar sessió o crear un nou compte de Bitwarden."
+    "message": "Us han convidat a configurar un proveïdor nou. Per continuar, heu d'iniciar sessió o crear un nou compte de Bitwarden."
   },
   "setupProviderDesc": {
     "message": "Introduïu els detalls a continuació per completar la configuració del proveïdor. Poseu-vos en contacte amb el servei d'atenció al client si teniu cap pregunta."
@@ -4251,6 +4680,10 @@
   },
   "clients": {
     "message": "Clients"
+  },
+  "client": {
+    "message": "Client",
+    "description": "This is used as a table header to describe which client application created an event log."
   },
   "providerAdmin": {
     "message": "Administrador del proveïdor"
@@ -4265,7 +4698,7 @@
     "message": "Els usuaris del servei poden accedir i gestionar totes les organitzacions client."
   },
   "providerInviteUserDesc": {
-    "message": "Convida un nou usuari a la vostra organització introduint l'adreça electrònica del compte de Bitwarden a continuació. Si encara no tenen un compte de Bitwarden, se us demanarà que creeu un compte nou."
+    "message": "Convideu un nou usuari a la vostra organització introduint l'adreça electrònica del compte de Bitwarden a continuació. Si encara no tenen un compte de Bitwarden, se us demanarà que creeu un compte nou."
   },
   "joinProvider": {
     "message": "Uniu-vos al proveïdor"
@@ -4274,7 +4707,7 @@
     "message": "Heu estat convidat a unir-vos al proveïdor llistat més amunt. Per acceptar la invitació, heu d'iniciar sessió o crear un compte nou a Bitwarden."
   },
   "providerInviteAcceptFailed": {
-    "message": "No es pot acceptar la invitació. Demaneu a l'administrador d'una organització que envie una invitació nova."
+    "message": "No es pot acceptar la invitació. Demaneu a un administrador del proveïdor que envie una nova invitació."
   },
   "providerInviteAcceptedDesc": {
     "message": "Podeu accedir a aquesta organització una vegada que un administrador confirme la vostra pertinença. Rebreu un correu electrònic quan això passe."
@@ -4326,10 +4759,10 @@
     "message": "S'ha inhabilitat el proveïdor."
   },
   "providerUpdated": {
-    "message": "S'ha actualitzat el proveïdor"
+    "message": "S'ha guardat el proveïdor"
   },
   "yourProviderIs": {
-    "message": "El vostre proveïdor és $PROVIDER$. Tenen privilegis administratius i de facturació en la vostra organització.",
+    "message": "El vostre proveïdor és $PROVIDER$. Té privilegis administratius i de facturació en la vostra organització.",
     "placeholders": {
       "provider": {
         "content": "$1",
@@ -4353,7 +4786,7 @@
     "message": "Afig"
   },
   "updatedMasterPassword": {
-    "message": "Contrasenya mestra actualitzada"
+    "message": "Contrasenya mestra guardada"
   },
   "updateMasterPassword": {
     "message": "Actualitza contrasenya mestra"
@@ -4401,6 +4834,12 @@
   "vaultTimeoutToLarge": {
     "message": "El temps d'espera de la caixa forta supera les restriccions establertes per la vostra organització."
   },
+  "vaultCustomTimeoutMinimum": {
+    "message": "El temps d'espera personalitzat mínim és d'1 minut."
+  },
+  "vaultTimeoutRangeError": {
+    "message": "El temps d'espera de la caixa forta no es troba dins de l'interval permès."
+  },
   "disablePersonalVaultExport": {
     "message": "Inhabilita l'exportació de la caixa forta personal"
   },
@@ -4408,7 +4847,7 @@
     "message": "Prohibeix als usuaris exportar les dades de la seua caixa forta privada."
   },
   "vaultExportDisabled": {
-    "message": "L'exportació de la caixa forta està inhabilitada"
+    "message": "L'exportació de la caixa forta s'ha suprimit"
   },
   "personalVaultExportPolicyInEffect": {
     "message": "Una o més polítiques d'organització us impedeixen exportar la vostra caixa forta."
@@ -4441,7 +4880,7 @@
     "message": "ID de Client"
   },
   "clientSecret": {
-    "message": "Client Secret"
+    "message": "Secret de client"
   },
   "metadataAddress": {
     "message": "Adreça de metadades"
@@ -4580,7 +5019,7 @@
     "placeholders": {
       "description": {
         "content": "$1",
-        "example": "You must have at least one existing Families Organization."
+        "example": "You must have at least one existing Families organization."
       }
     }
   },
@@ -4632,9 +5071,6 @@
   "sponsorshipCreated": {
     "message": "S'ha creat un patrocini"
   },
-  "revoke": {
-    "message": "Revoca"
-  },
   "emailSent": {
     "message": "Correu electrònic enviat"
   },
@@ -4644,8 +5080,8 @@
   "removeSponsorshipSuccess": {
     "message": "S'ha suprimit el patrocini"
   },
-  "ssoKeyConnectorUnavailable": {
-    "message": "No es pot arribar al connector de claus, torneu-ho a provar més tard."
+  "ssoKeyConnectorError": {
+    "message": "Error del connector de claus: assegureu-vos que el connector de claus està disponible i funcionant correctament."
   },
   "keyConnectorUrl": {
     "message": "URL del connector de claus"
@@ -4684,7 +5120,7 @@
     "message": "Abandona l'organització"
   },
   "removeMasterPassword": {
-    "message": "Suprimiu la contrasenya mestra"
+    "message": "Suprimeix la contrasenya mestra"
   },
   "removedMasterPassword": {
     "message": "S'ha suprimit la contrasenya mestra."
@@ -4697,18 +5133,18 @@
   },
   "ssoPolicyHelpStart": {
     "message": "Habilita la",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpLink": {
     "message": "Política d'autenticació SSO",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "per obligar que tots els membres inicien la sessió amb SSO.",
-    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enable the SSO Authentication policy to require all members to log in with SSO.'"
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpKeyConnector": {
-    "message": "Les polítiques d'autenticació SSO i d'organització única són necessàries per configurar el desxifrat del connector de claus."
+    "message": "Es requereix l'autenticació SSO i les polítiques d'organització única per configurar el desxifrat del connector de claus."
   },
   "memberDecryptionOption": {
     "message": "Opcions de desxifrat de membres"
@@ -4738,7 +5174,7 @@
     "message": "Connector de claus inhabilitat"
   },
   "keyConnectorWarning": {
-    "message": "Una vegada els membres comencen a utilitzarel connector de claus, la vostra organització no pot tornar al desxifrat de la contrasenya mestra. Continueu només si us sentiu còmode implementant i gestionant un servidor de claus."
+    "message": "Una vegada els membres comencen a utilitzar el connector de claus, la vostra organització no pot tornar al desxifrat de la contrasenya mestra. Continueu només si us sentiu còmode implementant i gestionant un servidor de claus."
   },
   "migratedKeyConnector": {
     "message": "S'ha migrat al connector claus"
@@ -4773,6 +5209,72 @@
   "freeWithSponsorship": {
     "message": "GRATUÏT amb patrocini"
   },
+  "viewBillingSyncToken": {
+    "message": "Mostra el token de sincronització de facturació"
+  },
+  "generateBillingSyncToken": {
+    "message": "Genera el token de sincronització de facturació"
+  },
+  "copyPasteBillingSync": {
+    "message": "Copieu i enganxeu aquest token a la configuració de sincronització de facturació de la vostra organització autoallotjada."
+  },
+  "billingSyncCanAccess": {
+    "message": "El vostre tokende sincronització de facturació pot accedir i editar la configuració de subscripció d'aquesta organització."
+  },
+  "manageBillingSync": {
+    "message": "Gestiona la sincronització de facturació"
+  },
+  "setUpBillingSync": {
+    "message": "Configura la sincronització de facturació"
+  },
+  "generateToken": {
+    "message": "Genera un token"
+  },
+  "rotateToken": {
+    "message": "Gira el token"
+  },
+  "rotateBillingSyncTokenWarning": {
+    "message": "Si continueu, haureu de tornar a configurar la sincronització de facturació al vostre servidor allotjat."
+  },
+  "rotateBillingSyncTokenTitle": {
+    "message": "Girar el token de sincronització de facturació invalidarà el token anterior."
+  },
+  "selfHostingTitle": {
+    "message": "Autoallotjat"
+  },
+  "selfHostingEnterpriseOrganizationSectionCopy": {
+    "message": "Per configurar la organització al vostre servidor, haureu de carregar el fitxer de llicència. Per donar suport als plans Free Families i a les capacitats de facturació avançades per a la vostra organització autoallotjada, haureu de configurar la sincronització de facturació."
+  },
+  "billingSyncApiKeyRotated": {
+    "message": "Token girat."
+  },
+  "billingSyncDesc": {
+    "message": "La sincronització de facturació ofereix plans familiars gratuïts i capacitats de facturació avançades enllaçant el vostre Bitwarden autoallotjat amb el vostre servidor al núvol de Bitwarden."
+  },
+  "billingSyncKeyDesc": {
+    "message": "Per omplir aquest formulari, cal un token de sincronització de facturació de la configuració de subscripció de la vostra organització al núvol."
+  },
+  "billingSyncKey": {
+    "message": "Token de sincronització de facturació"
+  },
+  "active": {
+    "message": "Actiu"
+  },
+  "inactive": {
+    "message": "Inactiu"
+  },
+  "sentAwaitingSync": {
+    "message": "Enviat (esperant sincronització)"
+  },
+  "sent": {
+    "message": "Enviat"
+  },
+  "requestRemoved": {
+    "message": "Eliminat (esperant sincronització)"
+  },
+  "requested": {
+    "message": "Sol·licitat"
+  },
   "formErrorSummaryPlural": {
     "message": "$COUNT$ camps de dalt necessiten la vostra atenció.",
     "placeholders": {
@@ -4796,6 +5298,15 @@
   },
   "required": {
     "message": "requerit"
+  },
+  "characterMaximum": {
+    "message": "$MAX$ caràcters màxim",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
   },
   "idpSingleSignOnServiceUrlRequired": {
     "message": "Requerit si l'identificador d'entitat no és un URL."
@@ -4836,8 +5347,33 @@
       }
     }
   },
+  "accessDenied": {
+    "message": "Accés denegat. No teniu permís per veure aquesta pàgina."
+  },
+  "masterPassword": {
+    "message": "Contrasenya mestra"
+  },
+  "security": {
+    "message": "Seguretat"
+  },
+  "keys": {
+    "message": "Claus"
+  },
+  "billingHistory": {
+    "message": "Historial de facturació"
+  },
   "backToReports": {
     "message": "Torna als informes"
+  },
+  "organizationPicker": {
+    "message": "Selector d'organització"
+  },
+  "currentOrganization": {
+    "message": "Organització actual",
+    "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
+  },
+  "accountSettings": {
+    "message": "Configuració del compte"
   },
   "generator": {
     "message": "Generador"
@@ -4862,21 +5398,1267 @@
     "description": "Username generator option that appends a random sub-address to the username. For example: address+subaddress@email.com"
   },
   "plusAddressedEmailDesc": {
-    "message": "Use your email provider's sub-addressing capabilities."
+    "message": "Utilitzeu les capacitats de subadreçament del vostre proveïdor de correu electrònic."
   },
   "catchallEmail": {
-    "message": "Catch-all Email"
+    "message": "Captura tot correu electrònic"
   },
   "catchallEmailDesc": {
-    "message": "Use your domain's configured catch-all inbox."
+    "message": "Utilitzeu la safata d'entrada global configurada del vostre domini."
   },
   "random": {
-    "message": "Aleatori"
+    "message": "Aleatori",
+    "description": "Generates domain-based username using random letters"
   },
   "randomWord": {
     "message": "Paraula aleatòria"
   },
   "service": {
     "message": "Servei"
+  },
+  "unknownCipher": {
+    "message": "Element desconegut, és possible que hàgeu d'iniciar sessió amb un altre compte per accedir a aquest element."
+  },
+  "cannotSponsorSelf": {
+    "message": "No podeu bescanviar pel compte actiu. Introduïu un correu electrònic diferent."
+  },
+  "revokeWhenExpired": {
+    "message": "Caduca el $DATE$",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "12/31/2020"
+      }
+    }
+  },
+  "awaitingSyncSingular": {
+    "message": "El testimoni es va girar fa $DAYS$ dia. Actualitzeu el token de sincronització de facturació a la configuració de l'organització autoallotjada.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "1"
+      }
+    }
+  },
+  "awaitingSyncPlural": {
+    "message": "El testimoni es va girar fa $DAYS$ dies. Actualitzeu el token de sincronització de facturació a la configuració de l'organització autoallotjada.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "1"
+      }
+    }
+  },
+  "lastSync": {
+    "message": "Última sincronització",
+    "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
+  },
+  "sponsorshipsSynced": {
+    "message": "Patrocinis autoallotjats sincronitzats."
+  },
+  "billingManagedByProvider": {
+    "message": "Gestionat per $PROVIDER$",
+    "placeholders": {
+      "provider": {
+        "content": "$1",
+        "example": "Managed Services Company"
+      }
+    }
+  },
+  "billingContactProviderForAssistance": {
+    "message": "Poseu-vos en contacte amb ells per obtindre ajuda",
+    "description": "This text is displayed if an organization's billing is managed by a Provider. It tells the user to contact the Provider for assistance."
+  },
+  "forwardedEmail": {
+    "message": "Àlies de correu electrònic reenviat"
+  },
+  "forwardedEmailDesc": {
+    "message": "Genera un àlies de correu electrònic amb un servei de reenviament extern."
+  },
+  "hostname": {
+    "message": "Nom de l'amfitrió",
+    "description": "Part of a URL."
+  },
+  "apiAccessToken": {
+    "message": "Token d'accés a l'API"
+  },
+  "deviceVerification": {
+    "message": "Verificació del dispositiu"
+  },
+  "enableDeviceVerification": {
+    "message": "Activa la verificació del dispositiu"
+  },
+  "deviceVerificationDesc": {
+    "message": "Quan està activat, els codis de verificació s'envien a la vostra adreça de correu electrònic quan inicieu sessió des d'un dispositiu no reconegut"
+  },
+  "updatedDeviceVerification": {
+    "message": "Actualitza la verificació del dispositiu"
+  },
+  "areYouSureYouWantToEnableDeviceVerificationTheVerificationCodeEmailsWillArriveAtX": {
+    "message": "Esteu segur que voleu activar la verificació del dispositiu? Els correus electrònics del codi de verificació arribaran a: $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "My Email"
+      }
+    }
+  },
+  "premiumSubcriptionRequired": {
+    "message": "Cal una subscripció premium"
+  },
+  "scim": {
+    "message": "Aprovisionament SCIM",
+    "description": "The text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "scimDescription": {
+    "message": "Proporcioneu automàticament usuaris i grups amb el vostre proveïdor d'identitat preferit mitjançant el subministrament SCIM",
+    "description": "the text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "scimEnabledCheckboxDesc": {
+    "message": "Habilita SCIM",
+    "description": "the text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "scimEnabledCheckboxDescHelpText": {
+    "message": "Configureu el vostre proveïdor d'identitat preferit configurant l'URL i la clau de l'API SCIM",
+    "description": "the text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "scimApiKeyHelperText": {
+    "message": "Aquesta clau d'API té accés per gestionar els usuaris de la vostra organització. S'ha de mantenir en secret."
+  },
+  "copyScimKey": {
+    "message": "Copieu la clau de l'API SCIM al porta-retalls",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "rotateScimKey": {
+    "message": "Gira la clau de l'API SCIM",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "rotateScimKeyWarning": {
+    "message": "Esteu segur que voleu girar la clau de l'API SCIM? La clau actual ja no funcionarà per a cap integració existent.",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "rotateKey": {
+    "message": "Gira la clau"
+  },
+  "scimApiKey": {
+    "message": "Gira la clau de l'API SCIM",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "copyScimUrl": {
+    "message": "Copia l'URL del punt final d'SCIM al porta-retalls",
+    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
+  },
+  "scimUrl": {
+    "message": "URL d'SCIM",
+    "description": "the text, 'SCIM' and 'URL', are acronymns and should not be translated."
+  },
+  "scimApiKeyRotated": {
+    "message": "La clau de l'API SCIM s'ha girat correctament",
+    "description": "the text, 'SCIM' and 'API', are acronymns and should not be translated."
+  },
+  "scimSettingsSaved": {
+    "message": "La configuració de SCIM s'ha guardat correctament",
+    "description": "the text, 'SCIM', is an acronymn and should not be translated."
+  },
+  "inputRequired": {
+    "message": "Es requereix una entrada."
+  },
+  "inputEmail": {
+    "message": "L'entrada no és una adreça de correu electrònic."
+  },
+  "inputMinLength": {
+    "message": "L'entrada ha de tenir com a mínim $COUNT$ caràcters.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxLength": {
+    "message": "L'entrada no ha de superar $COUNT$ caràcters de longitud.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "inputForbiddenCharacters": {
+    "message": "Els següents caràcters no estan permesos:\n$CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
+      }
+    }
+  },
+  "multipleInputEmails": {
+    "message": "Un o més correus electrònics no són vàlids"
+  },
+  "tooManyEmails": {
+    "message": "Només podeu enviar fins a $COUNT$ correus electrònics alhora",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ camps de dalt necessiten la vostra atenció.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "turnOn": {
+    "message": "Activa"
+  },
+  "on": {
+    "message": "Activat"
+  },
+  "members": {
+    "message": "Membres"
+  },
+  "reporting": {
+    "message": "Informes"
+  },
+  "cardBrandMir": {
+    "message": "Mir"
+  },
+  "numberOfUsers": {
+    "message": "Nombre d'usuaris"
+  },
+  "loggingInAs": {
+    "message": "Has iniciat sessió com"
+  },
+  "notYou": {
+    "message": "No sou vosaltres?"
+  },
+  "pickAnAvatarColor": {
+    "message": "Tria un color d'avatar"
+  },
+  "customizeAvatar": {
+    "message": "Personalitza avatar"
+  },
+  "avatarUpdated": {
+    "message": "S'ha actualitzat l'avatar"
+  },
+  "brightBlue": {
+    "message": "Blau brillant"
+  },
+  "green": {
+    "message": "Verd"
+  },
+  "orange": {
+    "message": "Taronja"
+  },
+  "lavender": {
+    "message": "Lavanda"
+  },
+  "yellow": {
+    "message": "Groc"
+  },
+  "indigo": {
+    "message": "Anyil"
+  },
+  "teal": {
+    "message": "Verd blavós"
+  },
+  "salmon": {
+    "message": "Salmó"
+  },
+  "pink": {
+    "message": "Rosa"
+  },
+  "customColor": {
+    "message": "Color personalitzat"
+  },
+  "selectPlaceholder": {
+    "message": "-- Selecciona --"
+  },
+  "multiSelectPlaceholder": {
+    "message": "-- Escriviu per filtrar --"
+  },
+  "multiSelectLoading": {
+    "message": "Obtenint opcions..."
+  },
+  "multiSelectNotFound": {
+    "message": "No s'ha trobat cap element"
+  },
+  "multiSelectClearAll": {
+    "message": "Esborra-ho tot"
+  },
+  "toggleCharacterCount": {
+    "message": "Commuta el recompte de caràcters",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "passwordCharacterCount": {
+    "message": "Recompte de caràcters de la contrasenya",
+    "description": "'Character count' describes a feature that displays a number next to each character of the password."
+  },
+  "hide": {
+    "message": "Amaga"
+  },
+  "projects": {
+    "message": "Projectes",
+    "description": "Description for the Projects field."
+  },
+  "lastEdited": {
+    "message": "Última edició",
+    "description": "The label for the date and time when a item was last edited."
+  },
+  "editSecret": {
+    "message": "Edita secret",
+    "description": "Action to modify an existing secret."
+  },
+  "addSecret": {
+    "message": "Afig secret",
+    "description": "Action to create a new secret."
+  },
+  "copySecretName": {
+    "message": "Copia el nom del secret",
+    "description": "Action to copy the name of a secret to the system's clipboard."
+  },
+  "copySecretValue": {
+    "message": "Copia el valor del secret",
+    "description": "Action to copy the value of a secret to the system's clipboard."
+  },
+  "deleteSecret": {
+    "message": "Suprimeix el secret",
+    "description": "Action to delete a single secret from the system."
+  },
+  "deleteSecrets": {
+    "message": "Suprimeix els secrets",
+    "description": "The action to delete multiple secrets from the system."
+  },
+  "hardDeleteSecret": {
+    "message": "Suprimeix definitivament el secret"
+  },
+  "hardDeleteSecrets": {
+    "message": "Suprimeix definitivament els secrets"
+  },
+  "secretProjectAssociationDescription": {
+    "message": "Selecciona los proyectos a los que se asociará el secreto. Sólo los usuarios de la organización con acceso a estos proyectos podrán verlo.",
+    "description": "A prompt explaining how secrets can be associated with projects."
+  },
+  "selectProjects": {
+    "message": "Selecciona projectes",
+    "description": "A label for a type-to-filter input field to choose projects."
+  },
+  "searchProjects": {
+    "message": "Cerca projectes",
+    "description": "Label for the search bar used to search projects."
+  },
+  "project": {
+    "message": "Projecte",
+    "description": "Similar to collections, projects can be used to group secrets."
+  },
+  "editProject": {
+    "message": "Edita el projecte",
+    "description": "The action to modify an existing project."
+  },
+  "viewProject": {
+    "message": "Veure el projecte",
+    "description": "The action to view details of a project."
+  },
+  "deleteProject": {
+    "message": "Suprimeix el projecte",
+    "description": "The action to delete a project from the system."
+  },
+  "deleteProjects": {
+    "message": "Suprimeix els projectes",
+    "description": "The action to delete multiple projects from the system."
+  },
+  "secret": {
+    "message": "Secret",
+    "description": "Label for a secret (key/value pair)"
+  },
+  "serviceAccount": {
+    "message": "Compte del servei",
+    "description": "A machine user which can be used to automate processes and access secrets in the system."
+  },
+  "serviceAccounts": {
+    "message": "Comptes del servei",
+    "description": "The title for the section that deals with service accounts."
+  },
+  "secrets": {
+    "message": "Secrets",
+    "description": "The title for the section of the application that deals with secrets."
+  },
+  "nameValuePair": {
+    "message": "Nom/Parell de valors",
+    "description": "Title for a name/ value pair. Secrets typically consist of a name and value pair."
+  },
+  "secretEdited": {
+    "message": "S'ha editat el secret",
+    "description": "Notification for the successful editing of a secret."
+  },
+  "secretCreated": {
+    "message": "S'ha creat el secret",
+    "description": "Notification for the successful creation of a secret."
+  },
+  "newSecret": {
+    "message": "Secret nou",
+    "description": "Title for creating a new secret."
+  },
+  "newServiceAccount": {
+    "message": "Compte nou del servei",
+    "description": "Title for creating a new service account."
+  },
+  "secretsNoItemsTitle": {
+    "message": "No hi ha cap secret per mostrar",
+    "description": "Empty state to indicate that there are no secrets to display."
+  },
+  "secretsNoItemsMessage": {
+    "message": "Per començar, afig un secret nou o importa secrets.",
+    "description": "Message to encourage the user to start adding secrets."
+  },
+  "secretsTrashNoItemsMessage": {
+    "message": "No hi ha secrets a la paperera."
+  },
+  "serviceAccountsNoItemsMessage": {
+    "message": "Crea un compte de servei nou per començar a automatitzar l'accés secret.",
+    "description": "Message to encourage the user to start creating service accounts."
+  },
+  "serviceAccountsNoItemsTitle": {
+    "message": "Encara no hi ha res a mostrar",
+    "description": "Title to indicate that there are no service accounts to display."
+  },
+  "searchSecrets": {
+    "message": "Cerca secrets",
+    "description": "Placeholder text for searching secrets."
+  },
+  "deleteServiceAccounts": {
+    "message": "Suprimeix els comptes de servei",
+    "description": "Title for the action to delete one or multiple service accounts."
+  },
+  "deleteServiceAccount": {
+    "message": "Suprimeix el compte de servei",
+    "description": "Title for the action to delete a single service account."
+  },
+  "viewServiceAccount": {
+    "message": "Veure el compte de servei",
+    "description": "Action to view the details of a service account."
+  },
+  "deleteServiceAccountDialogMessage": {
+    "message": "La supressió del compte de servei $SERVICE_ACCOUNT$ és permanent i irreversible.",
+    "placeholders": {
+      "service_account": {
+        "content": "$1",
+        "example": "Service account name"
+      }
+    }
+  },
+  "deleteServiceAccountsDialogMessage": {
+    "message": "La supressió de comptes de servei és permanent i irreversible."
+  },
+  "deleteServiceAccountsConfirmMessage": {
+    "message": "Suprimeix $COUNT$ comptes de servei",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteServiceAccountToast": {
+    "message": "El compte de servei s'ha suprimit"
+  },
+  "deleteServiceAccountsToast": {
+    "message": "S'han suprimit els comptes de servei"
+  },
+  "searchServiceAccounts": {
+    "message": "Cerca els comptes de servei",
+    "description": "Placeholder text for searching service accounts."
+  },
+  "editServiceAccount": {
+    "message": "Edita el compte de servei",
+    "description": "Title for editing a service account."
+  },
+  "addProject": {
+    "message": "Afig un projecte",
+    "description": "Title for creating a new project."
+  },
+  "projectEdited": {
+    "message": "Projecte editat",
+    "description": "Notification for the successful editing of a project."
+  },
+  "projectSaved": {
+    "message": "Projecte guardat",
+    "description": "Notification for the successful saving of a project."
+  },
+  "projectCreated": {
+    "message": "Projecte creat",
+    "description": "Notification for the successful creation of a project."
+  },
+  "projectName": {
+    "message": "Nom del Projecte",
+    "description": "Label for entering the name of a project."
+  },
+  "newProject": {
+    "message": "Projecte nou",
+    "description": "Title for creating a new project."
+  },
+  "softDeleteSecretWarning": {
+    "message": "La supressió de secrets pot afectar les integracions existents.",
+    "description": "Warns that deleting secrets can have consequences on integrations"
+  },
+  "softDeletesSuccessToast": {
+    "message": "Secrets enviats a la paperera",
+    "description": "Notifies that the selected secrets have been moved to the trash"
+  },
+  "hardDeleteSecretConfirmation": {
+    "message": "Esteu segur que voleu suprimir definitivament aquest secret?"
+  },
+  "hardDeleteSecretsConfirmation": {
+    "message": "Esteu segur que voleu suprimir definitivament aquests secrets?"
+  },
+  "hardDeletesSuccessToast": {
+    "message": "Secrets suprimits definitivament"
+  },
+  "smAccess": {
+    "message": "Accés",
+    "description": "Title indicating what permissions a service account has"
+  },
+  "projectCommaSecret": {
+    "message": "Projecte, secret",
+    "description": ""
+  },
+  "serviceAccountName": {
+    "message": "Nom del compte de servei",
+    "description": "Label for the name of a service account"
+  },
+  "serviceAccountCreated": {
+    "message": "Compte de servei creat",
+    "description": "Notifies that a new service account has been created"
+  },
+  "serviceAccountUpdated": {
+    "message": "Compte de servei actualitzat",
+    "description": "Notifies that a service account has been updated"
+  },
+  "newSaSelectAccess": {
+    "message": "Escriu o selecciona projectes o secrets",
+    "description": "Instructions for selecting projects or secrets for a new service account"
+  },
+  "newSaTypeToFilter": {
+    "message": "Escriu per a filtrar",
+    "description": "Instructions for filtering a list of projects or secrets"
+  },
+  "deleteProjectsToast": {
+    "message": "Projectes suprimits",
+    "description": "Notifies that the selected projects have been deleted"
+  },
+  "deleteProjectToast": {
+    "message": "El projecte i tots els secrets associats s'han suprimit",
+    "description": "Notifies that a project has been deleted"
+  },
+  "deleteProjectDialogMessage": {
+    "message": "La supressió de $PROJECT$ és permanent i irreversible.",
+    "description": "Informs users that projects are hard deleted and not sent to trash",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectInputLabel": {
+    "message": "Escriu \"$CONFIRM$\" per continuar",
+    "description": "Users are prompted to type 'confirm' to delete a project",
+    "placeholders": {
+      "confirm": {
+        "content": "$1",
+        "example": "Delete 3 projects"
+      }
+    }
+  },
+  "deleteProjectConfirmMessage": {
+    "message": "Suprimeix $PROJECT$",
+    "description": "Confirmation prompt to delete a specific project, where '$PROJECT$' is a placeholder for the name of the project.",
+    "placeholders": {
+      "project": {
+        "content": "$1",
+        "example": "project name"
+      }
+    }
+  },
+  "deleteProjectsConfirmMessage": {
+    "message": "Suprimeix $COUNT$ projectes",
+    "description": "Confirmation prompt to delete multiple projects, where '$COUNT$' is a placeholder for the number of projects to be deleted.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteProjectsDialogMessage": {
+    "message": "La supressió de projectes és permanent i irreversible.",
+    "description": "This message is displayed in a dialog box as a warning before proceeding with project deletion."
+  },
+  "projectsNoItemsTitle": {
+    "message": "No hi ha cap projecte per mostrar",
+    "description": "Empty state to be displayed when there are no projects to display in the list."
+  },
+  "projectsNoItemsMessage": {
+    "message": "Afig un projecte nou per començar a organitzar secrets.",
+    "description": "Message to be displayed when there are no projects to display in the list."
+  },
+  "smConfirmationRequired": {
+    "message": "Cal confirmació",
+    "description": "Indicates that user confirmation is required for an action to proceed."
+  },
+  "bulkDeleteProjectsErrorMessage": {
+    "message": "Els següents projectes no es poden eliminar:",
+    "description": "Message to be displayed when there is an error during bulk project deletion."
+  },
+  "softDeleteSuccessToast": {
+    "message": "S'ha enviat el secret a la paperera",
+    "description": "Notification to be displayed when a secret is successfully sent to the trash."
+  },
+  "hardDeleteSuccessToast": {
+    "message": "Secret suprimit definitivament"
+  },
+  "accessTokens": {
+    "message": "Tokens d'accès",
+    "description": "Title for the section displaying access tokens."
+  },
+  "createAccessToken": {
+    "message": "Crea un token d'accés",
+    "description": "Button label for creating a new access token."
+  },
+  "expires": {
+    "message": "Caduca",
+    "description": "Label for the expiration date of an access token."
+  },
+  "canRead": {
+    "message": "Es pot llegir",
+    "description": "Label for the access level of an access token (Read only)."
+  },
+  "accessTokensNoItemsTitle": {
+    "message": "No hi ha tokens d'accés per mostrar",
+    "description": "Title to be displayed when there are no access tokens to display in the list."
+  },
+  "accessTokensNoItemsDesc": {
+    "message": "Per començar, crea un token d'accés",
+    "description": "Message to be displayed when there are no access tokens to display in the list."
+  },
+  "downloadAccessToken": {
+    "message": "Baixa o copia abans de tancar.",
+    "description": "Message to be displayed before closing an access token, reminding the user to download or copy it."
+  },
+  "expiresOnAccessToken": {
+    "message": "Caduca el:",
+    "description": "Label for the expiration date of an access token."
+  },
+  "accessTokenCallOutTitle": {
+    "message": "Els tokens d'accés no s'emmagatzemen i no es poden recuperar",
+    "description": "Notification to inform the user that access tokens are only displayed once and cannot be retrieved again."
+  },
+  "copyToken": {
+    "message": "Copia el token",
+    "description": "Copies the generated access token to the user's clipboard."
+  },
+  "accessToken": {
+    "message": "Token d'accés",
+    "description": "A unique string that gives a client application (eg. CLI) access to a secret or set of secrets."
+  },
+  "accessTokenExpirationRequired": {
+    "message": "La data de caducitat és obligatòria",
+    "description": "Error message indicating that an expiration date for the access token must be set."
+  },
+  "accessTokenCreatedAndCopied": {
+    "message": "Token d'accés creat i copiat al porta-retalls",
+    "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
+  },
+  "accessTokenPermissionsBetaNotification": {
+    "message": "La gestió de permisos no està disponible per a la versió beta.",
+    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
+  },
+  "revokeAccessToken": {
+    "message": "Revoca el token d'accés",
+    "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
+  },
+  "revokeAccessTokens": {
+    "message": "Revoca tokens d'accés"
+  },
+  "revokeAccessTokenDesc": {
+    "message": "La revocació de tokens d'accés és permanent i irreversible."
+  },
+  "accessTokenRevoked": {
+    "message": "S'han revocat tokens d'accés",
+    "description": "Toast message after deleting one or multiple access tokens."
+  },
+  "submenu": {
+    "message": "Submenú"
+  },
+  "from": {
+    "message": "De"
+  },
+  "to": {
+    "message": "A"
+  },
+  "member": {
+    "message": "Membre"
+  },
+  "update": {
+    "message": "Actualitza"
+  },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ més",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "groupInfo": {
+    "message": "Informació del grup"
+  },
+  "editGroupMembersDesc": {
+    "message": "Concediu als membres accés a les col·leccions assignades al grup."
+  },
+  "editGroupCollectionsDesc": {
+    "message": "Doneu accés a les col·leccions afegint-les a aquest grup."
+  },
+  "accessAllCollectionsDesc": {
+    "message": "Doneu accés a totes les col·leccions actuals i futures."
+  },
+  "accessAllCollectionsHelp": {
+    "message": "Si està marcat, substituirà tots els altres permisos de la col·lecció."
+  },
+  "selectMembers": {
+    "message": "Seleccioneu membres"
+  },
+  "selectCollections": {
+    "message": "Seleccioneu col·leccions"
+  },
+  "role": {
+    "message": "Rol"
+  },
+  "removeMember": {
+    "message": "Suprimeix membre"
+  },
+  "collection": {
+    "message": "Col·lecció"
+  },
+  "noCollection": {
+    "message": "Cap col·lecció"
+  },
+  "canView": {
+    "message": "Pot veure"
+  },
+  "canViewExceptPass": {
+    "message": "Pot veure, excepte les contrasenyes"
+  },
+  "canEdit": {
+    "message": "Pot editar"
+  },
+  "canEditExceptPass": {
+    "message": "Pot editar, excepte les contrasenyes"
+  },
+  "noCollectionsAdded": {
+    "message": "No s'han afegit col·leccions"
+  },
+  "noMembersAdded": {
+    "message": "No s'han afegit membres"
+  },
+  "noGroupsAdded": {
+    "message": "No s'han afegit grups"
+  },
+  "group": {
+    "message": "Grup"
+  },
+  "groupAccessAll": {
+    "message": "Aquest grup pot accedir i modificar tots els elements."
+  },
+  "memberAccessAll": {
+    "message": "Aquest usuari pot accedir i modificar tots els elements."
+  },
+  "domainVerification": {
+    "message": "Verificació de dominis"
+  },
+  "newDomain": {
+    "message": "Domini nou"
+  },
+  "noDomains": {
+    "message": "Sense dominis"
+  },
+  "noDomainsSubText": {
+    "message": "La connexió d'un domini permet als membres ometre el camp d'identificador de SSO durant l'inici de sessió amb aquest."
+  },
+  "verifyDomain": {
+    "message": "Verifica domini"
+  },
+  "reverifyDomain": {
+    "message": "Torna a verificar el domini"
+  },
+  "copyDnsTxtRecord": {
+    "message": "Copia registre DNS TXT"
+  },
+  "dnsTxtRecord": {
+    "message": "Registre DNS TXT"
+  },
+  "dnsTxtRecordInputHint": {
+    "message": "Copieu i enganxeu el registre TXT al vostre proveïdor de DNS."
+  },
+  "domainNameInputHint": {
+    "message": "Exemple: el meudomini.com. Els subdominis requereixen que es verifiquen entrades separades."
+  },
+  "automaticDomainVerification": {
+    "message": "Verificació automàtica de dominis"
+  },
+  "automaticDomainVerificationProcess": {
+    "message": "Bitwarden intentarà verificar el domini 3 vegades durant les primeres 72 hores. Si el domini no es pot verificar, comproveu el registre DNS del vostre amfitrió i verifiqueu-lo manualment. El domini s'eliminarà de la vostra organització en 7 dies si no es verifica"
+  },
+  "invalidDomainNameMessage": {
+    "message": "L'entrada no és un format vàlid. Format: el meudomini.com. Els subdominis requereixen que es verifiquen entrades separades."
+  },
+  "removeDomain": {
+    "message": "Suprimeix domini"
+  },
+  "removeDomainWarning": {
+    "message": "L'eliminació d'un domini no es pot desfer. Esteu segur que voleu continuar?"
+  },
+  "domainRemoved": {
+    "message": "Domini suprimit"
+  },
+  "domainSaved": {
+    "message": "Domini guardat"
+  },
+  "domainVerified": {
+    "message": "Domini verificat"
+  },
+  "duplicateDomainError": {
+    "message": "No pots reclamar el mateix domini dues vegades."
+  },
+  "domainNotAvailable": {
+    "message": "Algú més està utilitzant $DOMAIN$. Utilitzeu un domini diferent per continuar.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerified": {
+    "message": "$DOMAIN$ no verificat. Comproveu el vostre registre DNS.",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainStatusVerified": {
+    "message": "Verificat"
+  },
+  "domainStatusUnverified": {
+    "message": "Sense verificar"
+  },
+  "domainNameTh": {
+    "message": "Nom"
+  },
+  "domainStatusTh": {
+    "message": "Estat"
+  },
+  "lastChecked": {
+    "message": "Última comprovació"
+  },
+  "editDomain": {
+    "message": "Editar el domini"
+  },
+  "domainFormInvalid": {
+    "message": "Hi ha errors de forma que necessiten la vostra atenció"
+  },
+  "addedDomain": {
+    "message": "S'ha afegit el domini $DOMAIN$",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "removedDomain": {
+    "message": "S'ha suprimit el domini $DOMAIN$",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainVerifiedEvent": {
+    "message": "$DOMAIN$ verificat",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "domainNotVerifiedEvent": {
+    "message": "$DOMAIN$ sense verificar",
+    "placeholders": {
+      "DOMAIN": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
+  },
+  "membersColumnHeader": {
+    "message": "Membre/grup"
+  },
+  "groupAndMemberColumnHeader": {
+    "message": "Membre"
+  },
+  "selectGroupsAndMembers": {
+    "message": "Seleccioneu grups i membres"
+  },
+  "selectGroups": {
+    "message": "Selecciona grups"
+  },
+  "userPermissionOverrideHelper": {
+    "message": "Els permisos establerts per a un membre substituiran els permisos establerts pel grup d'aquest membre"
+  },
+  "noMembersOrGroupsAdded": {
+    "message": "No s'han afegit membres ni grups"
+  },
+  "deleted": {
+    "message": "Suprimit"
+  },
+  "memberStatusFilter": {
+    "message": "Filtre d'estat del membre"
+  },
+  "inviteMember": {
+    "message": "Convida membre"
+  },
+  "needsConfirmation": {
+    "message": "Necessita confirmació"
+  },
+  "memberRole": {
+    "message": "Rol de membre"
+  },
+  "moreFromBitwarden": {
+    "message": "Més de Bitwarden"
+  },
+  "switchProducts": {
+    "message": "Canvi de productes"
+  },
+  "freeOrgInvLimitReachedManageBilling": {
+    "message": "Les organitzacions gratuïtes poden tindre fins a $SEATCOUNT$ membres. Actualitza a un pla de pagament per convidar més membres.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgInvLimitReachedNoManageBilling": {
+    "message": "Les organitzacions gratuïtes poden tindre fins a $SEATCOUNT$ membres. Poseu-vos en contacte amb el propietari de la vostra organització per actualitzar-ho.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedManageBilling": {
+    "message": "Les organitzacions gratuïtes poden tindre fins a $COLLECTIONCOUNT$ col·leccions. Actualitza a un pla de pagament per afegir més col·leccions.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "freeOrgMaxCollectionReachedNoManageBilling": {
+    "message": "Les organitzacions gratuïtes poden tindre fins a $COLLECTIONCOUNT$ col·leccions. Poseu-vos en contacte amb el propietari de la vostra organització per actualitzar-ho.",
+    "placeholders": {
+      "COLLECTIONCOUNT": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "server": {
+    "message": "Servidor"
+  },
+  "exportData": {
+    "message": "Exportar dades"
+  },
+  "exportingOrganizationSecretDataTitle": {
+    "message": "Exportació de dades secretes de l’organització"
+  },
+  "exportingOrganizationSecretDataDescription": {
+    "message": "Només s'exportaran les dades del gestor de Secrets associades a $ORGANIZATION$. No s'inclouran elements d'altres productes o d'altres organitzacions.",
+    "placeholders": {
+      "ORGANIZATION": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "fileUpload": {
+    "message": "Càrrega de fitxers"
+  },
+  "acceptedFormats": {
+    "message": "Formats acceptats:"
+  },
+  "copyPasteImportContents": {
+    "message": "Copia i enganxa contingut d'importació:"
+  },
+  "or": {
+    "message": "o"
+  },
+  "licenseAndBillingManagement": {
+    "message": "Gestió de llicències i facturació"
+  },
+  "automaticSync": {
+    "message": "Sincronització automàtica"
+  },
+  "manualUpload": {
+    "message": "Pujada manual"
+  },
+  "manualUploadDesc": {
+    "message": "Si no voleu activar la sincronització de facturació, pugeu manualment la vostra llicència ací."
+  },
+  "syncLicense": {
+    "message": "Sincronització de la llicència"
+  },
+  "licenseSyncSuccess": {
+    "message": "Llicència sincronitzada correctament"
+  },
+  "licenseUploadSuccess": {
+    "message": "Llicència pujada correctament"
+  },
+  "lastLicenseSync": {
+    "message": "Última sincronització de llicència"
+  },
+  "billingSyncHelp": {
+    "message": "Ajuda de sincronització de facturació"
+  },
+  "uploadLicense": {
+    "message": "Puja la llicència"
+  },
+  "projectPeopleDescription": {
+    "message": "Dona accés a aquest projecte a grups o persones."
+  },
+  "projectPeopleSelectHint": {
+    "message": "Escriu o selecciona persones o grups"
+  },
+  "projectServiceAccountsDescription": {
+    "message": "Dona accés a aquest projecte als comptes de servei."
+  },
+  "projectServiceAccountsSelectHint": {
+    "message": "Escriu o selecciona comptes de servei"
+  },
+  "projectEmptyPeopleAccessPolicies": {
+    "message": "Afegeix persones o grups per començar a col·laborar"
+  },
+  "projectEmptyServiceAccountAccessPolicies": {
+    "message": "Afig comptes de servei per concedir accés"
+  },
+  "serviceAccountPeopleDescription": {
+    "message": "Concediu accés a aquest compte de servei a grups o persones."
+  },
+  "serviceAccountProjectsDescription": {
+    "message": "Assigna projectes a aquest compte de servei. "
+  },
+  "serviceAccountEmptyProjectAccesspolicies": {
+    "message": "Afig projectes per concedir accés"
+  },
+  "canReadWrite": {
+    "message": "Es pot llegir, escriure"
+  },
+  "groupSlashUser": {
+    "message": "Grup/Usuari"
+  },
+  "lowKdfIterations": {
+    "message": "Iteracions de KDF baixes"
+  },
+  "lowKdfIterationsDesc": {
+    "message": "Augmenteu la configuració de xifratge KDF per millorar la seguretat del compte."
+  },
+  "changeKdfSettings": {
+    "message": "Canvia la configuració de KDF"
+  },
+  "changeKdfLoggedOutWarning": {
+    "message": "Si continueu, es tancarà la sessió de la vostra sessió actual i us demanarà que torneu a iniciar sessió. Les sessions actives en altres dispositius poden continuar romanent actives fins a una hora. Us recomanem que exporteu la vostra caixa forta abans de canviar la configuració d'encriptació per evitar la pèrdua de dades."
+  },
+  "secretsManagerBeta": {
+    "message": "Administrador de secrets Beta"
+  },
+  "secretsManagerBetaDesc": {
+    "message": "Activa l'accés dels usuaris a l'administrador de secrets sense cap càrrec durant el programa beta."
+  },
+  "userAccessSecretsManager": {
+    "message": "Aquest usuari pot accedir a la beta de l'administrador de secrets"
+  },
+  "important": {
+    "message": "Important:"
+  },
+  "viewAll": {
+    "message": "Mostra-ho tot"
+  },
+  "showingPortionOfTotal": {
+    "message": "S'estan mostrant $PORTION$ de $TOTAL$",
+    "placeholders": {
+      "portion": {
+        "content": "$1",
+        "example": "2"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Resoleu els errors següents i torneu-ho a provar."
+  },
+  "description": {
+    "message": "Descripció"
+  },
+  "errorReadingImportFile": {
+    "message": "S'ha produït un error en intentar llegir el fitxer d'importació"
+  },
+  "accessedSecret": {
+    "message": "S'ha accedit al secret $SECRET_ID$.",
+    "placeholders": {
+      "secret_id": {
+        "content": "$1",
+        "example": "4d34e8a8"
+      }
+    }
+  },
+  "sdk": {
+    "message": "SDK",
+    "description": "Software Development Kit"
+  },
+  "createSecret": {
+    "message": "Crea un secret"
+  },
+  "createProject": {
+    "message": "Crea un projecte"
+  },
+  "createServiceAccount": {
+    "message": "Crea un compte de servei"
+  },
+  "downloadThe": {
+    "message": "Baixa el",
+    "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
+  },
+  "smCLI": {
+    "message": "Administrador de secrets CLI"
+  },
+  "importSecrets": {
+    "message": "Importa secrets"
+  },
+  "getStarted": {
+    "message": "Comencem"
+  },
+  "complete": {
+    "message": "$COMPLETED$/$TOTAL$ Completat",
+    "placeholders": {
+      "COMPLETED": {
+        "content": "$1",
+        "example": "1"
+      },
+      "TOTAL": {
+        "content": "$2",
+        "example": "4"
+      }
+    }
+  },
+  "restoreSecret": {
+    "message": "Restaura secret"
+  },
+  "restoreSecrets": {
+    "message": "Restaura secrets"
+  },
+  "restoreSecretPrompt": {
+    "message": "Esteu segur que voleu restaurar aquest secret?"
+  },
+  "restoreSecretsPrompt": {
+    "message": "Esteu segur que voleu restaurar aquests secrets?"
+  },
+  "secretRestoredSuccessToast": {
+    "message": "Secret restaurat"
+  },
+  "secretsRestoredSuccessToast": {
+    "message": "Secrets restaurats"
+  },
+  "selectionIsRequired": {
+    "message": "La selecció és necessària."
+  },
+  "secretsManagerSubscriptionDesc": {
+    "message": "Activeu l’accés a l’organització al Gestor de secrets sense cap càrrec durant el programa beta. Els usuaris poden rebre accés a la beta en membres."
+  },
+  "secretsManagerEnable": {
+    "message": "Habilita l'administrador de secrets Beta"
+  },
+  "saPeopleWarningTitle": {
+    "message": "Els tokens d'accés encara estan disponibles"
+  },
+  "saPeopleWarningMessage": {
+    "message": "La supressió de persones d'un compte de servei no suprimeix els testimonis d'accés que han creat. Per a les millors pràctiques de seguretat, es recomana revocar els testimonis d'accés creats per persones suprimides d'un compte de servei."
+  },
+  "smAccessRemovalWarningProjectTitle": {
+    "message": "Suprimeix l'accés a aquest projecte"
+  },
+  "smAccessRemovalWarningProjectMessage": {
+    "message": "Aquesta acció suprimirà l'accés al projecte."
+  },
+  "smAccessRemovalWarningSaTitle": {
+    "message": "Suprimeix l'accés a aquest compte de servei"
+  },
+  "smAccessRemovalWarningSaMessage": {
+    "message": "Aquesta acció suprimirà l'accés al compte de servei."
+  },
+  "removeAccess": {
+    "message": "Suprimeix l'accés"
+  },
+  "checkForBreaches": {
+    "message": "Comproveu les filtracions de dades conegudes per a aquesta contrasenya"
+  },
+  "exposedMasterPassword": {
+    "message": "Contrasenya mestra exposada"
+  },
+  "exposedMasterPasswordDesc": {
+    "message": "S'ha trobat la contrasenya en una filtració de dades. Utilitzeu una contrasenya única per protegir el vostre compte. Esteu segur que voleu utilitzar una contrasenya exposada?"
+  },
+  "weakAndExposedMasterPassword": {
+    "message": "Contrasenya mestra exposada i poc segura"
+  },
+  "weakAndBreachedMasterPasswordDesc": {
+    "message": "Contrasenya feble identificada i trobada en una filtració de dades. Utilitzeu una contrasenya única i segura per protegir el vostre compte. Esteu segur que voleu utilitzar aquesta contrasenya?"
+  },
+  "characterMinimum": {
+    "message": "$LENGTH$ caràcters mínim",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "masterPasswordMinimumlength": {
+    "message": "La contrasenya mestra ha de tenir almenys $LENGTH$ caràcters.",
+    "placeholders": {
+      "length": {
+        "content": "$1",
+        "example": "14"
+      }
+    }
+  },
+  "dismiss": {
+    "message": "Descarta"
   }
 }

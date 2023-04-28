@@ -2,18 +2,19 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
-import { ValidationService } from "jslib-angular/services/validation.service";
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { CryptoService } from "jslib-common/abstractions/crypto.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { SyncService } from "jslib-common/abstractions/sync.service";
-import { ProviderSetupRequest } from "jslib-common/models/request/provider/providerSetupRequest";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
+import { ProviderSetupRequest } from "@bitwarden/common/models/request/provider/provider-setup.request";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 @Component({
   selector: "provider-setup",
   templateUrl: "setup.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class SetupComponent implements OnInit {
   loading = true;
   authed = false;
@@ -38,6 +39,7 @@ export class SetupComponent implements OnInit {
 
   ngOnInit() {
     document.body.classList.remove("layout_frontend");
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       const error = qParams.providerId == null || qParams.email == null || qParams.token == null;
 

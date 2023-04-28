@@ -1,33 +1,42 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { firstValueFrom, lastValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
 
-import { ModalService } from "jslib-angular/services/modal.service";
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { CollectionService } from "jslib-common/abstractions/collection.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { OrganizationService } from "jslib-common/abstractions/organization.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { SearchService } from "jslib-common/abstractions/search.service";
-import { CollectionData } from "jslib-common/models/data/collectionData";
-import { Collection } from "jslib-common/models/domain/collection";
-import { Organization } from "jslib-common/models/domain/organization";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { SearchService } from "@bitwarden/common/abstractions/search.service";
+import { ProductType } from "@bitwarden/common/enums/productType";
+import { CollectionData } from "@bitwarden/common/models/data/collection.data";
+import { Collection } from "@bitwarden/common/models/domain/collection";
+import { Organization } from "@bitwarden/common/models/domain/organization";
 import {
   CollectionDetailsResponse,
   CollectionResponse,
-} from "jslib-common/models/response/collectionResponse";
-import { ListResponse } from "jslib-common/models/response/listResponse";
-import { CollectionView } from "jslib-common/models/view/collectionView";
+} from "@bitwarden/common/models/response/collection.response";
+import { ListResponse } from "@bitwarden/common/models/response/list.response";
+import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+import {
+  DialogService,
+  SimpleDialogCloseType,
+  SimpleDialogOptions,
+  SimpleDialogType,
+} from "@bitwarden/components";
 
-import { EntityUsersComponent } from "../../modules/organizations/manage/entity-users.component";
+import { CollectionDialogResult, openCollectionDialog } from "../shared";
 
-import { CollectionAddEditComponent } from "./collection-add-edit.component";
+import { EntityUsersComponent } from "./entity-users.component";
 
 @Component({
   selector: "app-org-manage-collections",
   templateUrl: "collections.component.html",
 })
+// eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class CollectionsComponent implements OnInit {
   @ViewChild("addEdit", { read: ViewContainerRef, static: true }) addEditModalRef: ViewContainerRef;
   @ViewChild("usersTemplate", { read: ViewContainerRef, static: true })
@@ -56,13 +65,17 @@ export class CollectionsComponent implements OnInit {
     private platformUtilsService: PlatformUtilsService,
     private searchService: SearchService,
     private logService: LogService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private dialogService: DialogService,
+    private router: Router
   ) {}
 
   async ngOnInit() {
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.parent.parent.params.subscribe(async (params) => {
       this.organizationId = params.organizationId;
       await this.load();
+      // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe, rxjs/no-nested-subscribe
       this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
         this.searchText = qParams.search;
       });
@@ -114,34 +127,69 @@ export class CollectionsComponent implements OnInit {
     this.didScroll = this.pagedCollections.length > this.pageSize;
   }
 
-  async edit(collection: CollectionView) {
-    const canCreate = collection == null && this.canCreate;
-    const canEdit = collection != null && this.canEdit(collection);
-    const canDelete = collection != null && this.canDelete(collection);
+  async edit(collection?: CollectionView) {
+    const canCreate = collection == undefined && this.canCreate;
+    const canEdit = collection != undefined && this.canEdit(collection);
+    const canDelete = collection != undefined && this.canDelete(collection);
 
     if (!(canCreate || canEdit || canDelete)) {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("missingPermissions"));
       return;
     }
 
-    const [modal] = await this.modalService.openViewRef(
-      CollectionAddEditComponent,
-      this.addEditModalRef,
-      (comp) => {
-        comp.organizationId = this.organizationId;
-        comp.collectionId = collection != null ? collection.id : null;
-        comp.canSave = canCreate || canEdit;
-        comp.canDelete = canDelete;
-        comp.onSavedCollection.subscribe(() => {
-          modal.close();
-          this.load();
-        });
-        comp.onDeletedCollection.subscribe(() => {
-          modal.close();
-          this.removeCollection(collection);
-        });
+    if (
+      !collection &&
+      this.organization.planProductType === ProductType.Free &&
+      this.collections.length === this.organization.maxCollections
+    ) {
+      // Show org upgrade modal
+      // It might be worth creating a simple
+      // org upgrade dialog service to launch the dialog here and in the people.comp
+      // once the enterprise pod is done w/ their organization module refactor.
+      const orgUpgradeSimpleDialogOpts: SimpleDialogOptions = {
+        title: this.i18nService.t("upgradeOrganization"),
+        content: this.i18nService.t(
+          this.organization.canManageBilling
+            ? "freeOrgMaxCollectionReachedManageBilling"
+            : "freeOrgMaxCollectionReachedNoManageBilling",
+          this.organization.maxCollections
+        ),
+        type: SimpleDialogType.PRIMARY,
+      };
+
+      if (this.organization.canManageBilling) {
+        orgUpgradeSimpleDialogOpts.acceptButtonText = this.i18nService.t("upgrade");
+      } else {
+        orgUpgradeSimpleDialogOpts.acceptButtonText = this.i18nService.t("ok");
+        orgUpgradeSimpleDialogOpts.cancelButtonText = null; // hide secondary btn
       }
-    );
+
+      const simpleDialog = this.dialogService.openSimpleDialog(orgUpgradeSimpleDialogOpts);
+
+      firstValueFrom(simpleDialog.closed).then((result: SimpleDialogCloseType | undefined) => {
+        if (!result) {
+          return;
+        }
+
+        if (result == SimpleDialogCloseType.ACCEPT && this.organization.canManageBilling) {
+          this.router.navigate(
+            ["/organizations", this.organization.id, "billing", "subscription"],
+            { queryParams: { upgrade: true } }
+          );
+        }
+      });
+
+      return;
+    }
+
+    const dialog = openCollectionDialog(this.dialogService, {
+      data: { collectionId: collection?.id, organizationId: this.organizationId },
+    });
+
+    const result = await lastValueFrom(dialog.closed);
+    if (result === CollectionDialogResult.Saved || result === CollectionDialogResult.Deleted) {
+      this.load();
+    }
   }
 
   add() {
@@ -184,6 +232,7 @@ export class CollectionsComponent implements OnInit {
         comp.entityId = collection.id;
         comp.entityName = collection.name;
 
+        // eslint-disable-next-line rxjs-angular/prefer-takeuntil
         comp.onEditedUsers.subscribe(() => {
           this.load();
           modal.close();
