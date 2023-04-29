@@ -114,7 +114,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     }
 
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
+    this.route.queryParams.pipe(first()).subscribe(async (qParams: any) => {
       if (qParams.sso === "true") {
         super.onSuccessfulLogin = () => {
           BrowserApi.reloadOpenWindows();
@@ -142,4 +142,15 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
   async isLinux() {
     return (await BrowserApi.getPlatformInfo()).os === "linux";
   }
+  /* Cozy custo */
+  async submit() {
+    await super.submit();
+    const isAuthed = await this.stateService.getIsAuthenticated();
+    if (!isAuthed) {
+      // TODO BJA : prompt a message in case 2FA failed, explaining a new code is sent.
+    } else {
+      this.messagingService.send("loggedIn");
+    }
+  }
+  /* end custo */
 }

@@ -5,11 +5,13 @@
       <span class="title">{{ "verifyIdentity" | i18n }}</span>
     </h1>
     <div class="right">
+      <!-- Cozy custo
       <button type="submit" *ngIf="!hideInput">{{ "unlock" | i18n }}</button>
+      -->
     </div>
   </header>
   <main tabindex="-1">
-    <div class="box">
+    <div class="box unlock-box">
       <div class="box-content">
         <div class="box-content-row box-content-row-flex" appBoxRow *ngIf="!hideInput">
           <div class="row-main" *ngIf="pinLock">
@@ -42,6 +44,7 @@
               type="button"
               class="row-btn"
               appStopClick
+              appBlurClick
               appA11yTitle="{{ 'toggleVisibility' | i18n }}"
               (click)="togglePassword()"
               [attr.aria-pressed]="showPassword"
@@ -55,9 +58,18 @@
           </div>
         </div>
       </div>
+      <!-- Cozy custo -->
+      <div class="content">
+        <button class="btn primary block" type="submit" appBlurClick>{{ "unlock" | i18n }}</button>
+      </div>
+      <!-- end custo -->
       <div id="masterPasswordHelp" class="box-footer">
         <p>{{ "yourVaultIsLocked" | i18n }}</p>
         {{ "loggedInAsOn" | i18n: email:webVaultHostname }}
+      <!-- Cozy custo -->
+        <a href="#" appStopClick (click)="logOut()">{{ "logOut" | i18n }}.</a>
+        <p class=""></p>
+      <!-- end custo -->
       </div>
     </div>
     <div class="box" *ngIf="biometricLock">
@@ -73,9 +85,11 @@
         </button>
       </div>
     </div>
+      <!-- Cozy custo
     <p class="text-center">
       <button type="button" appStopClick (click)="logOut()">{{ "logOut" | i18n }}</button>
     </p>
+    -->
     <app-private-mode-warning></app-private-mode-warning>
     <app-callout *ngIf="biometricError" type="error">{{ biometricError }}</app-callout>
     <p class="text-center text-muted" *ngIf="pendingBiometric">

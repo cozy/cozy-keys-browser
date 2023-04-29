@@ -125,7 +125,7 @@ function getBgService<T>(service: keyof MainBackground) {
   };
 }
 
-/* COZY START */
+/* Cozy custo */
 const cozyMessagingService = isPrivateMode
   ? new BrowserMessagingPrivateModePopupService()
   : new BrowserMessagingService();
@@ -138,12 +138,12 @@ const cozyClientService = new CozyClientService(
 export const cozySanitizeUrlService = new CozySanitizeUrlService();
 export const konnectorsService = new KonnectorsService(
   getBgService<CipherService>("cipherService")(),
-  getBgService<StorageService>("storageService")(),
+  getBgService<StateService>("storageService")(),
   getBgService<SettingsService>("settingsService")(),
   cozyClientService,
   getBgService<StateServiceAbstraction>("stateService")()
 );
-/* COZY END */
+/* end custo */
 
 @NgModule({
   imports: [JslibServicesModule],

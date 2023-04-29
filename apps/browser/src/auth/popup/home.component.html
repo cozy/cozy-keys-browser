@@ -2,6 +2,7 @@
   <div class="content login-page">
     <div class="logo-image"></div>
     <p class="lead text-center">{{ "loginOrCreateNewAccount" | i18n }}</p>
+    <!-- Cozy custo
     <form #form [formGroup]="formGroup" (ngSubmit)="submit()">
       <div class="box">
         <div class="box-content">
@@ -33,8 +34,14 @@
       {{ "newAroundHere" | i18n }}
       <a routerLink="/register" (click)="setFormValues()">{{ "createAccount" | i18n }}</a>
     </p>
+    -->
+    <a class="btn primary block" routerLink="/login"
+      ><b>{{ "login" | i18n }}</b></a
+    >
+    <button type="button" class="signup-link" (click)="openCozyWebsite()">
+      {{ "notRegistered" | i18n }}
+    </button>
+    <!-- end custo -->
+
   </div>
 </div>
-<button type="button" routerLink="/environment" class="settings-icon" (click)="setFormValues()">
-  <i class="bwi bwi-cog-f bwi-lg" aria-hidden="true"></i><span>&nbsp;{{ "settings" | i18n }}</span>
-</button>

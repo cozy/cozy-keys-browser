@@ -21,6 +21,12 @@ import { BrowserApi } from "../../browser/browserApi";
 import { BrowserStateService } from "../../services/abstractions/browser-state.service";
 import { AutofillService } from "../services/abstractions/autofill.service";
 
+// Cozy Imports
+/* eslint-disable */
+import { KonnectorsService } from "src/popup/services/konnectors.service";
+/* eslint-enable */
+// End Cozy imports
+
 export default class NotificationBackground {
   private notificationQueue: (AddLoginQueueMessage | AddChangePasswordQueueMessage)[] = [];
 
@@ -30,7 +36,8 @@ export default class NotificationBackground {
     private authService: AuthService,
     private policyService: PolicyService,
     private folderService: FolderService,
-    private stateService: BrowserStateService
+    private stateService: BrowserStateService,
+    private konnectorsService: KonnectorsService
   ) {}
 
   async init() {
@@ -390,6 +397,7 @@ export default class NotificationBackground {
 
     const cipher = await this.cipherService.encrypt(cipherView);
     await this.cipherService.updateWithServer(cipher);
+    this.konnectorsService.createSuggestions(); // Cozy custo
     // We've only updated the password, no need to broadcast editedCipher message
     return;
   }

@@ -13,6 +13,10 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
+/* Cozy imports */
+import { HistoryService } from "../services/history.service";
+/* END */
+
 @Component({
   selector: "app-vault-attachments",
   templateUrl: "attachments.component.html",
@@ -31,7 +35,8 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
     private route: ActivatedRoute,
     stateService: StateService,
     logService: LogService,
-    fileDownloadService: FileDownloadService
+    fileDownloadService: FileDownloadService,
+    private historyService: HistoryService
   ) {
     super(
       cipherService,
@@ -57,7 +62,12 @@ export class AttachmentsComponent extends BaseAttachmentsComponent {
   }
 
   back() {
+    /* Cozy custo : attachements are not displayed in Cozy Pass Addon, but we modify nevertheless
+    // this back in case one day we decide to use this component
     this.location.back();
+    */
+    this.historyService.gotoPreviousUrl();
+    // end custo
   }
 
   close() {

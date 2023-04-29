@@ -1,6 +1,51 @@
 import AddLoginRuntimeMessage from "../../background/models/addLoginRuntimeMessage";
 import ChangePasswordRuntimeMessage from "../../background/models/changePasswordRuntimeMessage";
 
+// Cozy Imports
+import {
+  cancelButtonNames,
+  changePasswordButtonContainsNames,
+  changePasswordButtonNames,
+  logInButtonNames,
+} from "./consts";
+// END Cozy Imports
+
+
+/* Cozy custo  */
+// See original file:
+// https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/content/notificationBar.ts
+
+// Returns a cozy app url based on the cozyUrl and the app name
+function getAppURLCozy(cozyUrl: string, appName: string, hash: string) {
+  if (!appName) {
+    return new URL(cozyUrl).toString();
+  }
+  const url = new URL(cozyUrl);
+  const hostParts = url.host.split(".");
+  url.host = [`${hostParts[0]}-${appName}`, ...hostParts.slice(1)].join(".");
+  if (hash) {
+    url.hash = hash;
+  }
+  return url.toString();
+}
+
+// The aim is to not activate the inPageMenu in somme Cozy applications so that there is no menu in
+// their forms (contacts, pass...)
+let cozyPasswordsHostname: string;
+let cozyContactsHostname: string;
+function shouldTrigerMenu() {
+  return !(
+    (cozyPasswordsHostname === window.location.hostname && window.location.hash !== "#/login") ||
+    cozyContactsHostname === window.location.hostname
+  );
+}
+chrome.storage.local.get("environmentUrls", (urls: any) => {
+  cozyPasswordsHostname = new URL(getAppURLCozy(urls.environmentUrls.base, "passwords", ""))
+    .hostname;
+  cozyContactsHostname = new URL(getAppURLCozy(urls.environmentUrls.base, "contacts", "")).hostname;
+});
+/* END Cozy custo  */
+
 document.addEventListener("DOMContentLoaded", (event) => {
   if (window.location.hostname.endsWith("vault.bitwarden.com")) {
     return;
@@ -24,10 +69,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     "em",
     "hr",
   ]);
+  const submitButtonSelector =
+    'input[type="submit"], input[type="image"], ' + 'button[type="submit"]';
   let domObservationCollectTimeout: number = null;
   let collectIfNeededTimeout: number = null;
-  let observeDomTimeout: number = null;
+  // let observeDomTimeout: number = null;
   const inIframe = isInIframe();
+  /* commented by Cozy
   const cancelButtonNames = new Set(["cancel", "close", "back"]);
   const logInButtonNames = new Set([
     "log in",
@@ -45,8 +93,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
     "change",
   ]);
   const changePasswordButtonContainsNames = new Set(["pass", "change", "contras", "senha"]);
+  END commented by Cozy */
   let disabledAddLoginNotification = false;
   let disabledChangedPasswordNotification = false;
+  const formEls = new Set();
 
   const activeUserIdKey = "activeUserId";
   let activeUserId: string;
@@ -82,6 +132,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
   });
 
   function processMessages(msg: any, sendResponse: (response?: any) => void) {
+    /*
+        @override by Cozy :
+        This log is very useful for reverse engineer the code, keep it for tests
+        console.log('notificationBar.js HEARD MESSAGE : ', {'msg.command': msg.command,'msg': msg});
+    */
     if (msg.command === "openNotificationBar") {
       if (inIframe) {
         return;
@@ -108,6 +163,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
       watchForms(msg.data.forms);
       sendResponse();
       return true;
+    } else if (msg.command === "notificationBarCollect") {
+      collect();
+      sendResponse();
+      return true;
     }
   }
 
@@ -119,11 +178,21 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   }
 
+  /**
+   * observeDom watches changes in the DOM and starts a new details page collect
+   * if a new form is found.
+   */
   function observeDom() {
     const bodies = document.querySelectorAll("body");
     if (bodies && bodies.length > 0) {
       observer = new MutationObserver((mutations) => {
+        /* we remove the pageHref !== window.location.href condition since in some cases it prevents to react
+        // to the page changes (for instance second step of this page :
+        // https://secure.fnac.com/identity/server/gateway/signin-signup )
         if (mutations == null || mutations.length === 0 || pageHref !== window.location.href) {
+        */
+        if (mutations == null || mutations.length === 0 || !shouldTrigerMenu()) {
+        /* end custo */
           return;
         }
 
@@ -157,11 +226,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
               continue;
             }
 
-            const forms = addedNode.querySelectorAll("form:not([data-bitwarden-watching])");
+            const forms = addedNode.querySelectorAll("form:not([data-bitwarden-watching]),input"); // Cozy custo
             if (forms != null && forms.length > 0) {
               doCollect = true;
               break;
             }
+            // Cozy custo : take into account when modification occurs into a form.
+            const parentform = addedNode.closest("form:not([data-bitwarden-watching])");
+            if (parentform != null && parentform.length > 0) {
+              doCollect = true;
+              break;
+            }
+            /* end custo */
           }
 
           if (doCollect) {
@@ -174,7 +250,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
             window.clearTimeout(domObservationCollectTimeout);
           }
 
+          /* Cozy custo : the timeout is tightened compared to BW because when mutations are trigered,
+          // the browser has already differed the event : there is no need to wait more.
           domObservationCollectTimeout = window.setTimeout(collect, 1000);
+          */
+          domObservationCollectTimeout = window.setTimeout(collect, 100);
+          /* end custo */
         }
       });
 
@@ -183,6 +264,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   }
 
   function collectIfNeededWithTimeout() {
+    collectIfNeeded();  // Cozy custo
     if (collectIfNeededTimeout != null) {
       window.clearTimeout(collectIfNeededTimeout);
     }
@@ -197,21 +279,39 @@ document.addEventListener("DOMContentLoaded", (event) => {
         observer = null;
       }
 
+      /* Cozy custo
       collect();
 
       if (observeDomTimeout != null) {
         window.clearTimeout(observeDomTimeout);
       }
       observeDomTimeout = window.setTimeout(observeDom, 1000);
+      */
+      if (shouldTrigerMenu()) {
+        collect();
+      }
+      // The DOM might change during the collect: watch the DOM body for changes.
+      // Note: a setTimeout was present here, apparently related to the autofill:
+      // https://github.com/bitwarden/browser/commit/d19fcd6e4ccf062b595c2823267ffd32fd8e5a3d
+
+      observeDom();
+      /* end custo */
     }
 
     if (collectIfNeededTimeout != null) {
       window.clearTimeout(collectIfNeededTimeout);
     }
+
+    /* Cozy custo :
+    // this loop waiting for (pageHref !== window.location.href) to become true seems useless :
+    // we only need to react to dom modifications, already taken into account by observeDom()
+    // so we comment the loop waiting for "production tests"
     collectIfNeededTimeout = window.setTimeout(collectIfNeeded, 1000);
+    */
   }
 
   function collect() {
+    // notificationBar about to request to bgCollectPageDetails, result will also be used for the inPageMenu
     sendPlatformMessage({
       command: "bgCollectPageDetails",
       sender: "notificationBar",
@@ -227,12 +327,31 @@ document.addEventListener("DOMContentLoaded", (event) => {
       const formId: string = f.form != null ? f.form.htmlID : null;
       let formEl: HTMLFormElement = null;
       if (formId != null && formId !== "") {
+        // Get form by id
         formEl = document.getElementById(formId) as HTMLFormElement;
+      } else if (f.form.htmlClass) {
+        // Get form by class
+        const formsByClass = document.getElementsByClassName(
+          f.form.htmlClass
+        ) as HTMLCollectionOf<HTMLFormElement>;
+        if (formsByClass.length > 0) {
+          formEl = formsByClass[0];
+        }
       }
 
       if (formEl == null) {
         const index = parseInt(f.form.opid.split("__")[2], null);
         formEl = document.getElementsByTagName("form")[index];
+      }
+      if (!formEl) {
+        return;
+      }
+      if (formEls.has(formEl)) {
+        // The form has already been processed: nothing to do here
+        return;
+      } else {
+        // This is a new form
+        formEls.add(formEl);
       }
 
       if (formEl != null && formEl.dataset.bitwardenWatching !== "1") {
@@ -258,6 +377,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (submitButton != null) {
       submitButton.removeEventListener("click", formSubmitted, false);
       submitButton.addEventListener("click", formSubmitted, false);
+    /* Cozy custo */
+    } else {
+      // No submit button found in the form: it might be elsewhere in the document
+      const potentialSubmitButtons = getButtonsInDocument();
+      for (const button of potentialSubmitButtons) {
+        button.removeEventListener("click", formSubmitted, false);
+        button.addEventListener("click", formSubmitted, false);
+      }
+    /* end custo */
     }
   }
 
@@ -316,6 +444,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (el == null && fieldData.htmlName != null && fieldData.htmlName !== "") {
       el = form.querySelector('input[name="' + fieldData.htmlName + '"]');
     }
+    /* Cozy custo */
+    if (el == null && fieldData.opid != null) {
+      // @ts-expect-error opid is not an html property
+      el = inputs.find((e) => e.opid === fieldData.opid);
+    }
+    /* end custo */
     if (el == null && fieldData.elementNumber != null) {
       el = inputs[fieldData.elementNumber];
     }
@@ -361,6 +495,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
           login.password != null &&
           login.password !== ""
         ) {
+          /* Cozy custo */
+          if (!form) {
+            // This happens when the submit button was found outside of the form
+            form = formData[i].formEl;
+          }
+          /* end custo */
           processedForm(form);
           sendPlatformMessage({
             command: "bgAddLogin",
@@ -402,6 +542,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
 
         if ((newPass != null && curPass != null) || (newPassOnly && newPass != null)) {
+          /* Cozy custo */
+          if (!form) {
+            // This happens when the submit button was found outside of the form
+            form = formData[i].formEl;
+          }
+          /* end custo */
           processedForm(form);
 
           const changePasswordRuntimeMessage: ChangePasswordRuntimeMessage = {
@@ -419,6 +565,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   }
 
+  /* Cozy custo */
+  function getButtonsInDocument() {
+    const submitButtons = document.querySelectorAll(
+      submitButtonSelector + ', div[role="button"]'
+    ) as NodeList;
+    return submitButtons;
+  }
+  /* end custo */
+
   function getSubmitButton(wrappingEl: HTMLElement, buttonNames: Set<string>) {
     if (wrappingEl == null) {
       return null;
@@ -426,9 +581,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     const wrappingElIsForm = wrappingEl.tagName.toLowerCase() === "form";
 
-    let submitButton = wrappingEl.querySelector(
-      'input[type="submit"], input[type="image"], ' + 'button[type="submit"]'
-    ) as HTMLElement;
+    let submitButton = wrappingEl.querySelector(submitButtonSelector) as HTMLElement;
     if (submitButton == null && wrappingElIsForm) {
       submitButton = wrappingEl.querySelector("button:not([type])");
       if (submitButton != null) {
@@ -449,6 +602,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
         if (submitButton != null || button == null || button.tagName == null) {
           return;
         }
+        /* Cozy custo */
+        const inputButton = button as HTMLInputElement;
+        if (inputButton.type === "submit") {
+          submitButton = button;
+        }
+        /* end custo */
         const buttonText = getButtonText(button);
         if (buttonText != null) {
           if (
@@ -498,6 +657,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   }
 
   function closeExistingAndOpenBar(type: string, typeData: any) {
+    /* Cozy custo
     const barQueryParams = {
       type,
       isVaultLocked: typeData.isVaultLocked,
@@ -506,6 +666,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
     };
     const barQueryString = new URLSearchParams(barQueryParams).toString();
     const barPage = "notification/bar.html?" + barQueryString;
+    */
+    let barPage = "notification/bar.html";
+    switch (type) {
+      case "add":
+        barPage = barPage + "?add=1&isVaultLocked=" + typeData.isVaultLocked;
+        break;
+      case "change":
+        barPage = barPage + "?change=1&isVaultLocked=" + typeData.isVaultLocked;
+        break;
+      case "TOTPCopied":
+        barPage = barPage + "?totp=1";
+        break;
+      default:
+        break;
+    }
+    /* end custo */
 
     const frame = document.getElementById("bit-notification-bar-iframe") as HTMLIFrameElement;
     if (frame != null && frame.src.indexOf(barPage) >= 0) {
@@ -526,25 +702,33 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const barPageUrl: string = chrome.extension.getURL(barPage);
 
     const iframe = document.createElement("iframe");
+    /* commented by Cozy
     iframe.style.cssText = "height: 42px; width: 100%; border: 0; min-height: initial;";
+    */
     iframe.id = "bit-notification-bar-iframe";
     iframe.src = barPageUrl;
 
     const frameDiv = document.createElement("div");
     frameDiv.setAttribute("aria-live", "polite");
     frameDiv.id = "bit-notification-bar";
+    /* Cozy custo
     frameDiv.style.cssText =
       "height: 42px; width: 100%; top: 0; left: 0; padding: 0; position: fixed; " +
       "z-index: 2147483647; visibility: visible;";
+    */
+    frameDiv.style.cssText = "visibility: hidden;";
+    /* end custo */
     frameDiv.appendChild(iframe);
     document.body.appendChild(frameDiv);
 
     (iframe.contentWindow.location as any) = barPageUrl;
 
+    /** commented by Cozy
     const spacer = document.createElement("div");
     spacer.id = "bit-notification-bar-spacer";
     spacer.style.cssText = "height: 42px;";
     document.body.insertBefore(spacer, document.body.firstChild);
+    END commented by Cozy*/
   }
 
   function closeBar(explicitClose: boolean) {
@@ -553,10 +737,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
       barEl.parentElement.removeChild(barEl);
     }
 
+    /** commented by Cozy
     const spacerEl = document.getElementById("bit-notification-bar-spacer");
     if (spacerEl) {
       spacerEl.parentElement.removeChild(spacerEl);
     }
+    END commented by Cozy */
 
     if (!explicitClose) {
       return;
@@ -579,7 +765,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
   }
 
   function adjustBar(data: any) {
+    /* Cozy custo
     if (data != null && data.height !== 42) {
+    */
+    if (data != null) {
+    /* end custo */
       const newHeight = data.height + "px";
       doHeightAdjustment("bit-notification-bar-iframe", newHeight);
       doHeightAdjustment("bit-notification-bar", newHeight);
@@ -591,6 +781,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const el = document.getElementById(elId);
     if (el != null) {
       el.style.height = heightStyle;
+      el.style.removeProperty("visibility"); // Cozy custo
     }
   }
 

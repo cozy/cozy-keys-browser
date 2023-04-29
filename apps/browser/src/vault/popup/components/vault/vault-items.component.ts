@@ -25,6 +25,17 @@ import { PopupUtilsService } from "../../../../popup/services/popup-utils.servic
 import { BrowserStateService } from "../../../../services/abstractions/browser-state.service";
 import { VaultFilterService } from "../../../services/vault-filter.service";
 
+/** Start Cozy imports */
+/* eslint-disable */
+import { AutofillService } from "../../../../autofill/services/abstractions/autofill.service";
+import { CozyClientService } from "../../../../popup/services/cozyClient.service";
+import { KonnectorsService } from "../../../../popup/services/konnectors.service";
+import { HistoryService } from "../../../../popup/services/history.service";
+import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
+import { HostListener } from "@angular/core";
+/* eslint-enable */
+/** End Cozy imports */
+
 const ComponentId = "VaultItemsComponent";
 
 @Component({
@@ -50,6 +61,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   private preventSelected = false;
   private applySavedState = true;
   private scrollingContainer = "cdk-virtual-scroll-viewport";
+  private pageDetails: any[] = []; // Cozy custo
 
   constructor(
     searchService: SearchService,
@@ -67,13 +79,27 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     private collectionService: CollectionService,
     private platformUtilsService: PlatformUtilsService,
     private cipherService: CipherService,
-    private vaultFilterService: VaultFilterService
+    private vaultFilterService: VaultFilterService,
+    private cozyClientService: CozyClientService,
+    private konnectorsService: KonnectorsService,
+    private autofillService: AutofillService,
+    private historyService: HistoryService
   ) {
     super(searchService);
     this.applySavedState =
       (window as any).previousPopupUrl != null &&
       !(window as any).previousPopupUrl.startsWith("/ciphers");
   }
+
+  // Cozy custo
+  @HostListener("window:keydown", ["$event"])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === "Escape") {
+      this.back();
+      event.preventDefault();
+    }
+  }
+  // end custo
 
   async ngOnInit() {
     this.searchTypeSearch = !this.platformUtilsService.isSafari();
@@ -87,6 +113,12 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
           this.searchText = this.state.searchText;
         }
       }
+      // Cozy custo
+      if (params.searchText) {
+        this.searchText = params.searchText;
+        this.search(50);
+      }
+      // end custo
 
       if (params.deleted) {
         this.showVaultFilter = true;
@@ -161,7 +193,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
           0
         );
       }
-      await this.stateService.setBrowserVaultItemsComponentState(null);
+      await this.stateService.setBrowserCipherComponentState(null);
     });
 
     this.broadcasterService.subscribe(ComponentId, (message: any) => {
@@ -174,6 +206,17 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
               }, 500);
             }
             break;
+          // Cozy custo
+          case "collectPageDetailsResponse":
+            if (message.sender === ComponentId) {
+              this.pageDetails.push({
+                frameId: message.webExtSender.frameId,
+                tab: message.tab,
+                details: message.details,
+              });
+            }
+            break;
+            // end custo
           default:
             break;
         }
@@ -181,12 +224,31 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
         this.changeDetectorRef.detectChanges();
       });
     });
+
+    // Cozy custo : request page detail from current tab
+    const tab = await BrowserApi.getTabFromCurrentWindow();
+    this.pageDetails = [];
+    BrowserApi.tabSendMessage(tab, {
+      command: "collectPageDetails",
+      tab: tab,
+      sender: ComponentId,
+    });
+    // end custo
   }
 
   ngOnDestroy() {
     this.saveState();
+    this.unloadMnger(); // Cozy custo
     this.broadcasterService.unsubscribe(ComponentId);
   }
+
+  // Cozy custo : beforeunload event would be better but is not triggered in webextension...
+  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
+  @HostListener("window:unload", ["$event"])
+  async unloadMnger(event?: any) {
+    this.historyService.updateQueryParamInCurrentUrl("searchText", this.searchText ? this.searchText : "");
+  }
+  // end custo
 
   selectCipher(cipher: CipherView) {
     this.selectedTimeout = window.setTimeout(() => {
@@ -240,8 +302,12 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   }
 
   back() {
+    /* Cozy custo
     (window as any).routeDirection = "b";
     this.location.back();
+    */
+    this.historyService.gotoPreviousUrl();
+    // end custo
   }
 
   showGroupings() {
@@ -293,4 +359,69 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     };
     await this.stateService.setBrowserVaultItemsComponentState(this.state);
   }
+
+  // Cozy custo
+  async fillOrLaunchCipher(cipher: CipherView) {
+    // Get default matching setting for urls
+    let defaultMatch = await this.stateService.getDefaultUriMatch();
+    if (defaultMatch == null) {
+      defaultMatch = UriMatchType.Domain;
+    }
+    // Get the current url
+    const tab = await BrowserApi.getTabFromCurrentWindow();
+    const isCipherMatcinghUrl = await this.konnectorsService.hasURLMatchingCiphers(
+      tab.url,
+      [cipher],
+      defaultMatch
+    );
+    if (isCipherMatcinghUrl) {
+      this.fillCipher(cipher);
+    } else {
+      this.launchCipher(cipher);
+    }
+  }
+
+  async fillCipher(cipher: CipherView) {
+    let totpCode = null;
+
+    if (this.pageDetails == null || this.pageDetails.length === 0) {
+      this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
+      return;
+    }
+
+    try {
+      totpCode = await this.autofillService.doAutoFill({
+        cipher: cipher,
+        pageDetails: this.pageDetails,
+        doc: window.document,
+        fillNewPassword: true,
+      });
+      if (totpCode != null) {
+        this.platformUtilsService.copyToClipboard(totpCode, { window: window });
+      }
+      if (this.popupUtils.inPopup(window)) {
+        BrowserApi.closePopup(window);
+      }
+    } catch (e) {
+      this.ngZone.run(() => {
+        this.platformUtilsService.showToast("error", null, this.i18nService.t("autofillError"));
+        this.changeDetectorRef.detectChanges();
+      });
+    }
+  }
+
+  openWebApp() {
+    window.open(this.cozyClientService.getAppURL("passwords", ""));
+  }
+
+  emptySearch() {
+    this.searchText = "";
+    document.getElementById("search").focus();
+    this.search(50);
+  }
+
+  viewCipher(cipher: CipherView) {
+    this.router.navigate(["/view-cipher"], { queryParams: { cipherId: cipher.id } });
+  }
+  // end custo
 }

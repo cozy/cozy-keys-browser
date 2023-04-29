@@ -20,6 +20,10 @@ export class ActionButtonsComponent {
   @Output() launchEvent = new EventEmitter<CipherView>();
   @Input() cipher: CipherView;
   @Input() showView = false;
+  /* Cozy custo */
+  @Input() showGlobe = false;
+  @Output() onAutofill = new EventEmitter<CipherView>();
+  /* end custo */
 
   cipherType = CipherType;
   userHasPremiumAccess = false;
@@ -86,4 +90,9 @@ export class ActionButtonsComponent {
   view() {
     this.onView.emit(this.cipher);
   }
+  /* Cozy custo */
+  autofill() {
+    this.onAutofill.emit(this.cipher);
+  }
+  /* end custo */
 }

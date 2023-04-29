@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Create cozy-keys archive 
+cd apps/browser
+# Create cozy-keys archive
 git archive HEAD -o dist/cozy-keys.zip .
 # Create jslib archive
 zip -r dist/jslib.zip jslib

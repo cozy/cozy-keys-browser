@@ -132,4 +132,61 @@ export class BrowserStateService
       this.reconcileOptions(options, await this.defaultInMemoryOptions())
     );
   }
+
+  /* Cozy custo */
+  async getEnableInPageMenu(options?: StorageOptions): Promise<boolean> {
+    return (
+      (
+        await this.getGlobals(
+          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+        )
+      )?.enableInPageMenu ?? true // defaults to true
+    );
+  }
+
+  async setEnableInPageMenu(value: boolean, options?: StorageOptions): Promise<void> {
+    const globals = await this.getGlobals(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    globals.enableInPageMenu = value;
+    await this.saveGlobals(
+      globals,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
+  async getDisableKonnectorsSuggestions(options?: StorageOptions): Promise<boolean> {
+    return (
+      (
+        await this.getGlobals(
+          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+        )
+      )?.disableKonnectorsSuggestions ?? false // defaults to false
+    );
+  }
+
+  async setDisableKonnectorsSuggestions(value: boolean, options?: StorageOptions): Promise<void> {
+    const globals = await this.getGlobals(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    globals.disableKonnectorsSuggestions = value;
+    await this.saveGlobals(
+      globals,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
+  async setHistoryState(value: string): Promise<void> {
+    const account = await this.getAccount(await this.defaultInMemoryOptions());
+    if (!account) {
+      return;
+    }
+    account.history = value;
+    await this.saveAccount(account, await this.defaultInMemoryOptions());
+  }
+
+  async getHistoryState(): Promise<string> {
+    return (await this.getAccount(await this.defaultInMemoryOptions()))?.history;
+  }
+  /* end custo */
 }

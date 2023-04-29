@@ -1,21 +1,26 @@
 <form #form (ngSubmit)="submit()" [appApiAction]="formPromise" [formGroup]="formGroup">
   <header>
     <h1 class="login-center">
-      <span class="title">{{ "logIn" | i18n }}</span>
+      <span class="title">{{ "verifyIdentity" | i18n }}</span>
     </h1>
   </header>
   <main tabindex="-1">
-    <div class="box">
+    <div class="box unlock-box">
       <div class="box-content">
         <div class="box-content-row box-content-row-flex" appBoxRow>
-          <div class="row-main">
-            <input id="email" type="text" formControlName="email" [hidden]="true" />
+          <div class="row-main" *ngIf="pinLock">
+            <label for="pin">{{ "pin" | i18n }}</label>
             <input
-              id="rememberEmail"
-              type="checkbox"
-              formControlName="rememberEmail"
-              [hidden]="true"
+              id="pin"
+              type="{{ showPassword ? 'text' : 'password' }}"
+              name="PIN"
+              class="monospaced"
+              [(ngModel)]="pin"
+              required
+              appInputVerbatim
             />
+          </div>
+          <div class="row-main" *ngIf="!pinLock">
             <label for="masterPassword">{{ "masterPass" | i18n }}</label>
             <input
               id="masterPassword"
@@ -31,6 +36,7 @@
               type="button"
               class="row-btn"
               appStopClick
+              appBlurClick
               appA11yTitle="{{ 'toggleVisibility' | i18n }}"
               (click)="togglePassword()"
               [attr.aria-pressed]="showPassword"
@@ -43,14 +49,27 @@
             </button>
           </div>
         </div>
+        <!-- Cozy custo
         <div class="box-content-row" [hidden]="!showCaptcha()">
           <iframe id="hcaptcha_iframe" height="80"></iframe>
         </div>
+        -->
       </div>
+      <div class="content">
+        <button class="btn primary block" type="submit" appBlurClick>{{ "unlock" | i18n }}</button>
+      </div>
+      <!-- end custo -->
       <div class="box-footer">
+        <!-- Cozy custo
         <button type="button" class="btn link" routerLink="/hint" (click)="setFormValues()">
           <b>{{ "getMasterPasswordHint" | i18n }}</b>
         </button>
+        -->
+        <p>{{ "yourVaultIsLocked" | i18n }}</p>
+        {{ "loggedInAsOn" | i18n: email:webVaultHostname }}
+        <a href="#" appStopClick (click)="logOut()">{{ "logOut" | i18n }}.</a>
+        <p class=""></p>
+      <!-- end custo -->
       </div>
     </div>
     <app-private-mode-warning></app-private-mode-warning>

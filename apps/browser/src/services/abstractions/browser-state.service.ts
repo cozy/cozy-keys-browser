@@ -29,4 +29,14 @@ export abstract class BrowserStateService extends BaseStateServiceAbstraction<Ac
     value: BrowserComponentState,
     options?: StorageOptions
   ) => Promise<void>;
+  // Cozy customization
+  //*
+  getEnableInPageMenu: (options?: StorageOptions) => Promise<boolean>;
+
+  setEnableInPageMenu: (value: boolean, options?: StorageOptions) => Promise<void>;
+
+  getDisableKonnectorsSuggestions: (options?: StorageOptions) => Promise<boolean>;
+
+  setDisableKonnectorsSuggestions: (value: boolean, options?: StorageOptions) => Promise<void>;
+  //*/
 }

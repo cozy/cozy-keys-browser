@@ -1,7 +1,9 @@
 <header>
   <div class="left">
+    <!--
     <app-pop-out [show]="!comingFromAddEdit"></app-pop-out>
-    <button type="button" (click)="close()" *ngIf="comingFromAddEdit">
+    -->
+    <button type="button" appBlurClick (click)="close()" *ngIf="comingFromAddEdit">
       {{ "cancel" | i18n }}
     </button>
   </div>
@@ -9,7 +11,7 @@
     <span class="title">{{ "generator" | i18n }}</span>
   </h1>
   <div class="right">
-    <button type="button" (click)="select()" *ngIf="comingFromAddEdit">
+    <button type="button" appBlurClick (click)="select()" *ngIf="comingFromAddEdit">
       {{ "select" | i18n }}
     </button>
   </div>
@@ -18,8 +20,12 @@
   <app-callout type="info" *ngIf="enforcedPasswordPolicyOptions?.inEffect() && type === 'password'">
     {{ "passwordGeneratorPolicyInEffect" | i18n }}
   </app-callout>
-  <div class="generated-block" *ngIf="type === 'password'">
-    <div class="generated-wrapper" [innerHTML]="password | colorPassword" appSelectCopy></div>
+  <div class="generated-block box-content-row box-content-row-flex" *ngIf="type === 'password'">
+    <div
+      class="generated-wrapper row-main"
+      [innerHTML]="password | colorPassword"
+      appSelectCopy
+    ></div>
     <div class="action-buttons">
       <button
         type="button"
@@ -28,20 +34,25 @@
         appA11yTitle="{{ 'copyPassword' | i18n }}"
         (click)="copy()"
       >
-        <i class="bwi bwi-lg bwi-clone" aria-hidden="true"></i>
+        <i class="icon-cozy icon-copy" aria-hidden="true"></i>
       </button>
       <button
         type="button"
         appStopClick
+        appBlurClick
         appA11yTitle="{{ 'regeneratePassword' | i18n }}"
         (click)="regenerate()"
       >
-        <i class="bwi bwi-lg bwi-generate" aria-hidden="true"></i>
+        <i class="icon-cozy icon-refresh" aria-hidden="true"></i>
       </button>
     </div>
   </div>
-  <div class="generated-block" *ngIf="type === 'username'">
-    <div class="generated-wrapper" [innerHTML]="username | colorPassword" appSelectCopy></div>
+  <div class="generated-block box-content-row box-content-row-flex" *ngIf="type === 'username'">
+    <div
+      class="generated-wrapper row-main"
+      [innerHTML]="username | colorPassword"
+      appSelectCopy
+    ></div>
     <div class="action-buttons" #form [appApiAction]="usernameGeneratingPromise">
       <button
         type="button"
@@ -50,23 +61,25 @@
         appA11yTitle="{{ 'copyUsername' | i18n }}"
         (click)="copy()"
       >
-        <i class="bwi bwi-lg bwi-clone" aria-hidden="true"></i>
+        <i class="icon-cozy icon-copy" aria-hidden="true"></i>
       </button>
       <button
         type="button"
         appStopClick
+        appBlurClick
         appA11yTitle="{{ 'regenerateUsername' | i18n }}"
         (click)="$any(form).loading ? false : regenerate()"
         [attr.aria-disabled]="$any(form).loading ? 'true' : null"
       >
         <i
-          class="bwi bwi-lg bwi-generate"
+          class="icon-cozy icon-refresh"
           [ngClass]="$any(form).loading ? 'bwi-spin' : ''"
           aria-hidden="true"
         ></i>
       </button>
     </div>
   </div>
+  <!-- Cozy commented
   <div class="box">
     <div class="box-content">
       <div class="box-content-row" role="radiogroup" aria-labelledby="typeHeading">
@@ -91,7 +104,43 @@
       </div>
     </div>
   </div>
+   -->
   <ng-container *ngIf="type === 'password'">
+    <!-- Cozy custo -->
+    <div class="box list">
+      <div class="box-content">
+        <div class="box-content-row">
+          <a class="box-content-row box-content-row-flex" routerLink="/generator-history">
+            <div class="row-main">{{ "passwordHistory" | i18n }}</div>
+            <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
+          </a>
+        </div>
+        <div class="box-content-row">
+          <a
+            class="box-content-row box-content-row-flex"
+            href="#"
+            appStopClick
+            appBlurClick
+            (click)="toggleOptions()"
+            >
+            <i
+              class="row-icon icon-cozy icon-arrow-right"
+              aria-hidden="true"
+              *ngIf="showOptions === false"
+              ></i>
+            <i
+              class="row-icon icon-cozy icon-arrow-down"
+              aria-hidden="true"
+              *ngIf="showOptions === true"
+              ></i>
+              {{ "advancedOptions" | i18n }}
+          </a>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="showOptions === true">
+    <!-- end custo -->
+
     <div class="box">
       <h2 class="box-header">
         {{ "options" | i18n }}
@@ -269,6 +318,7 @@
         </div>
       </div>
     </ng-container>
+    <!-- Cozy custo
     <div class="box list">
       <div class="box-content single-line">
         <a class="box-content-row box-content-row-flex" routerLink="/generator-history">
@@ -277,6 +327,9 @@
         </a>
       </div>
     </div>
+    -->
+    </div>
+    <!-- end custo -->
   </ng-container>
   <ng-container *ngIf="type === 'username'">
     <div class="box">

@@ -18,6 +18,8 @@ export class AutoFillConstants {
     "e-mail adresse",
     "benutzerid",
     "benutzer id",
+    // French
+    "identifiant",
   ];
 
   static readonly PasswordFieldIgnoreList: string[] = [
@@ -62,6 +64,7 @@ export class CreditCardAutoFillConstants {
     "card-name",
     "cardholder-name",
     "cardholder",
+    "card-owner",
     "name",
     "nom",
   ];
@@ -71,6 +74,7 @@ export class CreditCardAutoFillConstants {
     "card-name",
     "cardholder-name",
     "cardholder",
+    "card-owner",
     "tbName",
   ];
 
@@ -122,6 +126,7 @@ export class CreditCardAutoFillConstants {
     "expiration-date",
     "payment-card-expiration",
     "payment-cc-date",
+    "mm-aa",
   ];
 
   static readonly CardExpiryFieldNameValues: string[] = [
@@ -173,6 +178,7 @@ export class CreditCardAutoFillConstants {
     "exp-date-mo",
     "cb-date-mois",
     "date-m",
+    "month",
   ];
 
   static readonly ExpiryYearFieldNames: string[] = [
@@ -219,6 +225,7 @@ export class CreditCardAutoFillConstants {
     "validity-year",
     "exp-date-year",
     "date-y",
+    "year",
   ];
 
   static readonly CVVFieldNames: string[] = [
@@ -257,7 +264,7 @@ export class CreditCardAutoFillConstants {
   // 0: English, 1: Danish, 2: German/Dutch, 3: French/Spanish/Italian, 4: Russian, 5: Portuguese
   static readonly MonthAbbr = ["mm", "mm", "mm", "mm", "мм", "mm"];
   static readonly YearAbbrShort = ["yy", "åå", "jj", "aa", "гг", "rr"];
-  static readonly YearAbbrLong = ["yyyy", "åååå", "jjjj", "aa", "гггг", "rrrr"];
+  static readonly YearAbbrLong = ["yyyy", "åååå", "jjjj", "aaaa", "гггг", "rrrr"];
 }
 
 export class IdentityAutoFillConstants {
@@ -287,6 +294,8 @@ export class IdentityAutoFillConstants {
     "first-n",
     // German
     "vorname",
+    // French
+    "prenom",
   ];
 
   static readonly MiddlenameFieldNames: string[] = [
@@ -310,6 +319,9 @@ export class IdentityAutoFillConstants {
     // German
     "nachname",
     "familienname",
+    // French
+    "nom-de-famille",
+    "nom",
   ];
 
   static readonly EmailFieldNames: string[] = ["e-mail", "email-address"];
@@ -323,6 +335,7 @@ export class IdentityAutoFillConstants {
     "billing-addr",
     "mail-addr",
     "bill-addr",
+    "adresse-personnelle",
   ];
 
   static readonly AddressFieldNameValues: string[] = [
@@ -359,6 +372,7 @@ export class IdentityAutoFillConstants {
     "zip2",
     "zip-code",
     "postal-code",
+    "code-postal",
     "post-code",
     "address-zip",
     "address-postal",
@@ -373,6 +387,7 @@ export class IdentityAutoFillConstants {
     "address-level-2",
     "address-city",
     "address-town",
+    "ville",
   ];
 
   static readonly StateFieldNames: string[] = [
@@ -391,6 +406,7 @@ export class IdentityAutoFillConstants {
     "address-country",
     "address-country-name",
     "address-country-code",
+    "pays",
   ];
 
   static readonly PhoneFieldNames: string[] = [
@@ -400,15 +416,24 @@ export class IdentityAutoFillConstants {
     "tel",
     "telephone",
     "phone-number",
+    "téléphone",
   ];
 
-  static readonly UserNameFieldNames: string[] = ["user-name", "user-id", "screen-name"];
+  static readonly UserNameFieldNames: string[] = [
+    "user-name",
+    "user-id",
+    "screen-name",
+    "utilisateur",
+    "pseudo",
+    "login",
+  ];
 
   static readonly CompanyFieldNames: string[] = [
     "company",
     "company-name",
     "organization",
     "organization-name",
+    "entreprise",
   ];
 
   static readonly IsoCountries: { [id: string]: string } = {

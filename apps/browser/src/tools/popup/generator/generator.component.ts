@@ -12,6 +12,12 @@ import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/ge
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { AddEditCipherInfo } from "@bitwarden/common/vault/types/add-edit-cipher-info";
 
+/* Cozy imports */
+/* eslint-disable */
+import { HistoryService } from "../../../popup/services/history.service";
+/* eslint-enable */
+/* END */
+
 @Component({
   selector: "app-generator",
   templateUrl: "generator.component.html",
@@ -28,7 +34,8 @@ export class GeneratorComponent extends BaseGeneratorComponent {
     stateService: StateService,
     route: ActivatedRoute,
     logService: LogService,
-    private location: Location
+    private location: Location,
+    private historyService: HistoryService,
   ) {
     super(
       passwordGenerationService,
@@ -67,6 +74,10 @@ export class GeneratorComponent extends BaseGeneratorComponent {
   }
 
   close() {
+    /* Cozy custo
     this.location.back();
+    */
+    this.historyService.gotoPreviousUrl();
+    /* end custo */
   }
 }

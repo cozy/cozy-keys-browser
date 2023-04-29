@@ -3,9 +3,9 @@ import CozyClient from "cozy-client";
 // @ts-ignore
 import flag from "cozy-flags";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { EnvironmentService } from "jslib-common/abstractions/environment.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 
 /**
  * CozyClient service, used to communicate with a Cozy stack on specific Cozy's routes.

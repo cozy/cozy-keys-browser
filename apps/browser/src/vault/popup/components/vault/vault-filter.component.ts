@@ -23,6 +23,14 @@ import { PopupUtilsService } from "../../../../popup/services/popup-utils.servic
 import { BrowserStateService } from "../../../../services/abstractions/browser-state.service";
 import { VaultFilterService } from "../../../services/vault-filter.service";
 
+/** Start Cozy imports */
+/* eslint-disable */
+import { HistoryService } from "../../../../popup/services/history.service";
+import { HostListener } from "@angular/core";
+import { CozyClientService } from "../../../../popup/services/cozyClient.service";
+/* eslint-enable */
+/** End Cozy imports */
+
 const ComponentId = "VaultComponent";
 
 @Component({
@@ -53,7 +61,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   folderCounts = new Map<string, number>();
   collectionCounts = new Map<string, number>();
   typeCounts = new Map<CipherType, number>();
-  searchText: string;
+  searchText = "";  // Cozy custo
   state: BrowserGroupingsComponentState;
   showLeftHeader = true;
   searchPending = false;
@@ -86,7 +94,9 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     private searchService: SearchService,
     private location: Location,
     private browserStateService: BrowserStateService,
-    private vaultFilterService: VaultFilterService
+    private vaultFilterService: VaultFilterService,
+    private cozyClientService: CozyClientService,
+    private historyService: HistoryService
   ) {
     this.noFolderListSize = 100;
   }
@@ -116,7 +126,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
     const restoredScopeState = await this.restoreState();
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.queryParams.pipe(first()).subscribe(async (params) => {
+    this.route.queryParams.pipe(first()).subscribe(async (params: any) => {
       this.state = await this.browserStateService.getBrowserGroupingComponentState();
       if (this.state?.searchText) {
         this.searchText = this.state.searchText;
@@ -149,8 +159,18 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       window.clearTimeout(this.selectedTimeout);
     }
     this.saveState();
+    this.unloadMnger(); // Cozy custo
     this.broadcasterService.unsubscribe(ComponentId);
   }
+
+  // Cozy custo : beforeunload event would be better but is not triggered in webextension...
+  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
+  @HostListener("window:unload", ["$event"])
+  async unloadMnger(event?: any) {
+    // save search state when popup is closed.
+    this.historyService.updateQueryParamInCurrentUrl("searchText", this.searchText);
+  }
+  // end custo
 
   async load() {
     this.vaultFilter = this.vaultFilterService.getVaultFilter();
@@ -205,9 +225,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
         filterDeleted,
         this.allCiphers
       );
+      /* commented by Cozy
       this.ciphers = this.ciphers.filter(
         (c) => !this.vaultFilterService.filterCipherForSelectedVault(c)
       );
+      */
       return;
     }
     this.searchPending = true;
@@ -222,9 +244,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
           this.allCiphers
         );
       }
+      /* commented by Cozy
       this.ciphers = this.ciphers.filter(
         (c) => !this.vaultFilterService.filterCipherForSelectedVault(c)
       );
+      */
       this.searchPending = false;
     }, timeout);
   }
@@ -426,5 +450,20 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     }
 
     return true;
+  }
+
+  selectCurrent() {
+    this.router.navigate(["/tabs/current"]);
+    // this.router.navigate(['current'])
+  }
+
+  cancelSearch() {
+    this.searchText = "";
+    document.getElementById("search").focus();
+    this.search(50);
+  }
+
+  openWebApp() {
+    window.open(this.cozyClientService.getAppURL("passwords", ""));
   }
 }

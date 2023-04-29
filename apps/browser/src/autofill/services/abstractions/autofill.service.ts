@@ -45,4 +45,13 @@ export abstract class AutofillService {
     loginItem: CipherView,
     defaultUriMatch: UriMatchType
   ) => boolean;
+  // Cozy customization
+  //*
+  generateFieldsForInPageMenuScripts: (
+    pageDetails: any,
+    connected: boolean,
+    frameId: number
+  ) => any;
+  postFilterFieldsForInPageMenu: (scriptsObj: any, forms: any, fields: any) => void;
+  //*/
 }

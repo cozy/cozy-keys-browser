@@ -1,9 +1,12 @@
 <header>
   <div class="left">
+    <!-- commented by Cozy
     <app-pop-out></app-pop-out>
+    -->
   </div>
   <h1 class="sr-only">{{ "myVault" | i18n }}</h1>
   <div class="search">
+    <i class="icon-cozy icon-search"></i>
     <input
       type="{{ searchTypeSearch ? 'search' : 'text' }}"
       placeholder="{{ 'searchVault' | i18n }}"
@@ -14,19 +17,24 @@
       appAutofocus
       (keydown)="closeOnEsc($event)"
     />
-    <i class="bwi bwi-search"></i>
+    <i class="icon-cozy icon-cross {{ (searchText === '') ? 'invisible' : '' }}" aria-hidden="true" (click)="cancelSearch()"></i>
   </div>
   <div class="right">
-    <button type="button" (click)="addCipher()" appA11yTitle="{{ 'addItem' | i18n }}">
-      <i class="bwi bwi-plus bwi-lg bwi-fw" aria-hidden="true"></i>
+    <button type="button" (click)="openWebApp()" appA11yTitle="{{ 'popOutNewWindow' | i18n }}">
+      <i class="icon-cozy icon-out-w" aria-hidden="true"></i>
+    </button>
+    <button appBlurClick (click)="addCipher()" appA11yTitle="{{ 'addItem' | i18n }}">
+      <i class="icon-cozy icon-plus" aria-hidden="true"></i>
     </button>
   </div>
 </header>
 <main tabindex="-1" cdk-scrollable>
+  <!-- commented by Cozy
   <app-vault-select
     (onVaultSelectionChanged)="vaultFilterChanged()"
     class="select-index-top"
   ></app-vault-select>
+  -->
   <div class="no-items" *ngIf="(!ciphers || !ciphers.length) && !showSearching()">
     <i class="bwi bwi-spinner bwi-spin bwi-3x" *ngIf="!loaded"></i>
     <ng-container *ngIf="loaded">
@@ -57,17 +65,20 @@
     <div class="box list">
       <h2 class="box-header">
         {{ "types" | i18n }}
+        <!-- commented by Cozy
         <span class="flex-right">4</span>
+        -->
       </h2>
       <div class="box-content single-line">
         <button
           type="button"
           class="box-content-row"
           appStopClick
+          appBlurClick
           (click)="selectType(cipherType.Login)"
         >
           <div class="row-main">
-            <div class="icon"><i class="bwi bwi-fw bwi-lg bwi-globe"></i></div>
+            <div class="icon"><i class="icon-cozy icon-login"></i></div>
             <span class="text">{{ "typeLogin" | i18n }}</span>
           </div>
           <span class="row-sub-label">{{ typeCounts.get(cipherType.Login) || 0 }}</span>
@@ -77,10 +88,11 @@
           type="button"
           class="box-content-row"
           appStopClick
+          appBlurClick
           (click)="selectType(cipherType.Card)"
         >
           <div class="row-main">
-            <div class="icon"><i class="bwi bwi-fw bwi-lg bwi-credit-card"></i></div>
+            <div class="icon"><i class="icon-cozy icon-bank"></i></div>
             <span class="text">{{ "typeCard" | i18n }}</span>
           </div>
           <span class="row-sub-label">{{ typeCounts.get(cipherType.Card) || 0 }}</span>
@@ -90,10 +102,11 @@
           type="button"
           class="box-content-row"
           appStopClick
+          appBlurClick
           (click)="selectType(cipherType.Identity)"
         >
           <div class="row-main">
-            <div class="icon"><i class="bwi bwi-fw bwi-lg bwi-id-card"></i></div>
+            <div class="icon"><i class="icon-cozy icon-identity"></i></div>
             <span class="text">{{ "typeIdentity" | i18n }}</span>
           </div>
           <span class="row-sub-label">{{ typeCounts.get(cipherType.Identity) || 0 }}</span>
@@ -103,17 +116,36 @@
           type="button"
           class="box-content-row"
           appStopClick
+          appBlurClick
           (click)="selectType(cipherType.SecureNote)"
+          *ngIf="typeCounts.get(cipherType.SecureNote)"
         >
           <div class="row-main">
-            <div class="icon"><i class="bwi bwi-fw bwi-lg bwi-sticky-note"></i></div>
+            <div class="icon"><i class="icon-cozy icon-note"></i></div>
             <span class="text">{{ "typeSecureNote" | i18n }}</span>
           </div>
           <span class="row-sub-label">{{ typeCounts.get(cipherType.SecureNote) || 0 }}</span>
           <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
         </button>
+        <!-- Cozy custo : add a "for this web site" button -->
+        <button
+          type="button"
+          class="box-content-row"
+          appStopClick
+          appBlurClick
+          (click)="selectCurrent()"
+          *ngIf="!isInPopOut"
+        >
+          <div class="row-main">
+            <div class="icon"><i class="icon-cozy icon-search"></i></div>
+            <span class="text">{{ "forThisWebSite" | i18n }}</span>
+          </div>
+          <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
+        </button>
+        <!-- end custo -->
       </div>
     </div>
+    <!-- commented by Cozy (Folders are collections in Cozy)
     <div class="box list" *ngIf="nestedFolders?.length">
       <h2 class="box-header">
         {{ "folders" | i18n }}
@@ -138,10 +170,14 @@
         </button>
       </div>
     </div>
-    <div class="box list" *ngIf="showCollections && nestedCollections && nestedCollections.length">
+    -->
+    <!-- in Cozy, folders are collections -->
+    <div class="box list" *ngIf="nestedCollections && nestedCollections.length">
       <h2 class="box-header">
-        {{ "collections" | i18n }}
+        {{ "folders" | i18n }}
+        <!--
         <span class="flex-right">{{ nestedCollections.length }}</span>
+        -->
       </h2>
       <div class="box-content single-line">
         <button
@@ -149,10 +185,23 @@
           *ngFor="let nestedCollection of nestedCollections"
           class="box-content-row"
           appStopClick
+          appBlurClick
           (click)="selectCollection(nestedCollection.node)"
         >
           <div class="row-main">
+            <!-- Cozy custo
             <div class="icon"><i class="bwi bwi-fw bwi-lg bwi-collection"></i></div>
+            -->
+            <div class="icon">
+              <i
+                class="icon-cozy icon-folder"
+                [ngClass]="{
+                  'bwi-folder': nestedCollection.node.id,
+                  'bwi-folder-closed-f': !nestedCollection.node.id
+                }"
+              ></i>
+            </div>
+            <!-- end custo -->
             <span class="text">{{ nestedCollection.node.name }}</span>
           </div>
           <span class="row-sub-label">{{
@@ -160,6 +209,20 @@
           }}</span>
           <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
         </button>
+        <!-- Cozy custo : add a trash line -->
+        <div class="box list" *ngIf="deletedCount">
+          <div class="box-content single-line">
+            <a href="#" class="box-content-row" appStopClick appBlurClick (click)="selectTrash()">
+              <div class="row-main">
+                <div class="icon"><i class="icon-cozy icon-trash"></i></div>
+                <span class="text">{{ "trash" | i18n }}</span>
+              </div>
+              <span class="row-sub-label">{{ deletedCount }}</span>
+              <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
+            </a>
+          </div>
+        </div>
+        <!-- end custo -->
       </div>
     </div>
     <div class="box list" *ngIf="showNoFolderCiphers">
@@ -178,6 +241,7 @@
         </app-cipher-row>
       </div>
     </div>
+    <!-- commented by Cozy
     <div class="box list" *ngIf="deletedCount">
       <h2 class="box-header">
         {{ "trash" | i18n }}
@@ -194,6 +258,7 @@
         </button>
       </div>
     </div>
+    -->
   </ng-container>
   <ng-container *ngIf="showSearching()">
     <div class="no-items" *ngIf="!ciphers || !ciphers.length">

@@ -7,7 +7,11 @@ import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authenticatio
 @Injectable()
 export class UnauthGuard implements CanActivate {
   protected homepage = "vault";
+  /* Cozy custo : move properties to protected
   constructor(private authService: AuthService, private router: Router) {}
+  */
+  constructor(protected authService: AuthService, protected router: Router) {}
+  /* end custo */
 
   async canActivate() {
     const authStatus = await this.authService.getAuthStatus();

@@ -1,3 +1,4 @@
+import menuCtrler from './menuCtrler';
 !(function () {
   /*
   1Password Extension
@@ -58,8 +59,8 @@
 
           /**
            * For a given element `el`, returns the value of the attribute `attrName`.
-           * @param {HTMLElement} el 
-           * @param {string} attrName 
+           * @param {HTMLElement} el
+           * @param {string} attrName
            * @returns {string} The value of the attribute
            */
           function getElementAttrValue(el, attrName) {
@@ -96,7 +97,7 @@
 
           /**
            * Returns the value of the given element.
-           * @param {HTMLElement} el 
+           * @param {HTMLElement} el
            * @returns {any} Value of the element
            */
           function getElementValue(el) {
@@ -124,7 +125,7 @@
 
           /**
            * If `el` is a `<select>` element, return an array of all of the options' `text` properties.
-           * @param {HTMLElement} el 
+           * @param {HTMLElement} el
            * @returns {string[]} An array of options for the given `<select>` element
            */
           function getSelectElementOptions(el) {
@@ -147,7 +148,7 @@
 
           /**
            * If `el` is in a data table, get the label in the row directly above it
-           * @param {HTMLElement} el 
+           * @param {HTMLElement} el
            * @returns {string} A string containing the label, or null if not found
            */
           function getLabelTop(el) {
@@ -187,7 +188,7 @@
 
           /**
            * Get the contents of the elements that are labels for `el`
-           * @param {HTMLElement} el 
+           * @param {HTMLElement} el
            * @returns {string} A string containing all of the `innerText` or `textContent` values for all elements that are labels for `el`
            */
           function getLabelTag(el) {
@@ -239,10 +240,10 @@
 
           /**
            * Add property `prop` with value `val` to the object `obj`
-           * @param {object} obj 
-           * @param {string} prop 
-           * @param {any} val 
-           * @param {*} d 
+           * @param {object} obj
+           * @param {string} prop
+           * @param {any} val
+           * @param {*} d
            */
           function addProp(obj, prop, val, d) {
               if (0 !== d && d === val || null === val || void 0 === val) {
@@ -254,7 +255,7 @@
 
           /**
            * Converts the string `s` to lowercase
-           * @param {string} s 
+           * @param {string} s
            * @returns Lowercase string
            */
           function toLowerString(s) {
@@ -263,8 +264,8 @@
 
           /**
            * Query the document `doc` for elements matching the selector `selector`
-           * @param {Document} doc 
-           * @param {string} query 
+           * @param {Document} doc
+           * @param {string} query
            * @returns {HTMLElement[]} An array of elements matching the selector
            */
           function queryDoc(doc, query) {
@@ -274,6 +275,20 @@
               } catch (e) { }
               return els;
           }
+
+            /* Cozy custo - Find the form parent of the HTML element */
+            function findFormParent(forms, el) {
+                return forms.find(function(form) {
+                    const formById = form.htmlID ? el.closest('#' + form.htmlID) : null;
+                    let formByClass;
+                    if (form.htmlClass) {
+                        const classSelector = form.htmlClass.trim().replace(/ /g,'.');
+                        formByClass = el.closest('.' + classSelector);
+                    }
+                    return formById || formByClass;
+                })
+            }
+            /* end custo */
 
           // end helpers
 
@@ -373,6 +388,13 @@
 
               if (el.form) {
                   field.form = getElementAttrValue(el.form, 'opid');
+              /* Cozy custo */
+              } else {
+                  const parentForm = findFormParent(theForms, el);
+                  if (parentForm) {
+                      field.form = getElementAttrValue(parentForm, 'opid');
+                  }
+              /* Cozy custo */
               }
 
               // START MODIFICATION
@@ -427,6 +449,7 @@
               title: theDoc.title,
               url: theView.location.href,
               documentUrl: theDoc.location.href,
+              tabUrl: theView.location.href, // Cozy custo
               forms: function (forms) {
                   var formObj = {};
                   forms.forEach(function (f) {
@@ -452,8 +475,8 @@
       /**
        * Do the event on the element.
        * @param {HTMLElement} kedol The element to do the event on
-       * @param {string} fonor The event name 
-       * @returns 
+       * @param {string} fonor The event name
+       * @returns
        */
       function doEventOnElement(kedol, fonor) {
           var quebo;
@@ -465,7 +488,7 @@
 
       /**
        * Clean up the string `s` to remove non-printable characters and whitespace.
-       * @param {string} s 
+       * @param {string} s
        * @returns {string} Clean text
        */
       function cleanText(s) {
@@ -477,7 +500,7 @@
       /**
        * If `el` is a text node, add the node's text to `arr`.
        * If `el` is an element node, add the element's `textContent or `innerText` to `arr`.
-       * @param {string[]} arr An array of `textContent` or `innerText` values 
+       * @param {string[]} arr An array of `textContent` or `innerText` values
        * @param {HTMLElement} el The element to push to the array
        */
       function checkNodeType(arr, el) {
@@ -511,9 +534,9 @@
 
       /**
        * Recursively gather all of the text values from the elements preceding `el` in the DOM
-       * @param {HTMLElement} el 
+       * @param {HTMLElement} el
        * @param {string[]} arr An array of `textContent` or `innerText` values
-       * @param {number} steps The number of steps to take up the DOM tree 
+       * @param {number} steps The number of steps to take up the DOM tree
        */
       function shiftForLeftLabel(el, arr, steps) {
           var sib;
@@ -544,7 +567,7 @@
       /**
        * Determine if the element is visible.
        * Visible is define as not having `display: none` or `visibility: hidden`.
-       * @param {HTMLElement} el 
+       * @param {HTMLElement} el
        * @returns {boolean} Returns `true` if the element is visible and `false` otherwise
        */
       function isElementVisible(el) {
@@ -576,7 +599,7 @@
       /**
        * Determine if the element is "viewable" on the screen.
        * "Viewable" is defined as being visible in the DOM and being within the confines of the viewport.
-       * @param {HTMLElement} el 
+       * @param {HTMLElement} el
        * @returns {boolean} Returns `true` if the element is viewable and `false` otherwise
        */
       function isElementViewable(el) {
@@ -615,7 +638,7 @@
           // If the right side of the bounding rectangle is outside the viewport, the x coordinate of the center point is the window width (minus offset) divided by 2.
           // If the right side of the bounding rectangle is inside the viewport, the x coordinate of the center point is the width of the bounding rectangle divided by 2.
           // If the bottom of the bounding rectangle is outside the viewport, the y coordinate of the center point is the window height (minus offset) divided by 2.
-          // If the bottom side of the bounding rectangle is inside the viewport, the y coordinate of the center point is the height of the bounding rectangle divided by 
+          // If the bottom side of the bounding rectangle is inside the viewport, the y coordinate of the center point is the height of the bounding rectangle divided by
           // We then use elementFromPoint to find the element at that point.
           for (var pointEl = el.ownerDocument.elementFromPoint(leftOffset + (rect.right > window.innerWidth ? (window.innerWidth - leftOffset) / 2 : rect.width / 2), topOffset + (rect.bottom > window.innerHeight ? (window.innerHeight - topOffset) / 2 : rect.height / 2)); pointEl && pointEl !== el && pointEl !== document;) {
              // If the element we found is a label, and the element we're checking has labels
@@ -637,7 +660,7 @@
 
       /**
        * Retrieve the element from the document with the specified `opid` property
-       * @param {number} opId 
+       * @param {number} opId
        * @returns {HTMLElement} The element with the specified `opiId`, or `null` if no such element exists
        */
       function getElementForOPID(opId) {
@@ -714,7 +737,7 @@
 
       /**
        * Focus the element `el` and optionally restore its original value
-       * @param {HTMLElement} el 
+       * @param {HTMLElement} el
        * @param {boolean} setVal Set the value of the element to its original value
        */
       function focusElement(el, setVal) {
@@ -729,8 +752,11 @@
               el.focus();
           }
       }
-
+      /* Cozy custo : the result is serialized to be deserialized : serialization is useless
       return JSON.stringify(getPageDetails(document, 'oneshotUUID'));
+      */
+      return JSON.stringify(getPageDetails(document, 'oneshotUUID'));
+      /* end custo */
   }
 
   function fill(document, fillScript, undefined) {
@@ -856,6 +882,7 @@
           touch_all_fields: touchAllFields,
           simple_set_value_by_query: doSimpleSetByQuery,
           focus_by_opid: doFocusByOpId,
+          add_menu_btn_by_opid:addMenuBtnByOpId, // Cozy custo
           delay: null
       };
 
@@ -881,10 +908,17 @@
           return el ? (fillTheElement(el, op), [el]) : null;
       }
 
+        /* Cozy custo : add the menu button in the element by opid operation */
+        function addMenuBtnByOpId(opId, val, fieldType) {
+            var el = getElementByOpId(opId);
+            return el ? (menuCtrler.addMenuButton(el, fieldType, false, fieldType, opId), [el]) : null;
+        }
+        /* end custo */
+
       /**
        * Find all elements matching `query` and fill them using the value `op` from the fill script
-       * @param {string} query 
-       * @param {string} op 
+       * @param {string} query
+       * @param {string} op
        * @returns {HTMLElement}
        */
       function doFillByQuery(query, op) {
@@ -897,8 +931,8 @@
 
       /**
        * Assign `valueToSet` to all elements in the DOM that match `query`.
-       * @param {string} query 
-       * @param {string} valueToSet 
+       * @param {string} query
+       * @param {string} valueToSet
        * @returns {Array} Array of elements that were set.
        */
       function doSimpleSetByQuery(query, valueToSet) {
@@ -912,8 +946,8 @@
 
       /**
        * Do a a click and focus on the element with the given `opId`.
-       * @param {number} opId 
-       * @returns 
+       * @param {number} opId
+       * @returns
        */
       function doFocusByOpId(opId) {
           var el = getElementByOpId(opId)
@@ -927,8 +961,8 @@
 
       /**
        * Do a click on the element with the given `opId`.
-       * @param {number} opId 
-       * @returns 
+       * @param {number} opId
+       * @returns
        */
       function doClickByOpId(opId) {
           var el = getElementByOpId(opId);
@@ -936,9 +970,9 @@
       }
 
       /**
-       * Do a `click` and `focus` on all elements that match the query. 
-       * @param {string} query 
-       * @returns 
+       * Do a `click` and `focus` on all elements that match the query.
+       * @param {string} query
+       * @returns
        */
       function doClickByQuery(query) {
           query = selectAllFromDoc(query);
@@ -961,8 +995,8 @@
 
       /**
        * Fll an element `el` using the value `op` from the fill script
-       * @param {HTMLElement} el 
-       * @param {string} op 
+       * @param {HTMLElement} el
+       * @param {string} op
        */
       function fillTheElement(el, op) {
           var shouldCheck;
@@ -994,7 +1028,7 @@
 
       /**
        * Do all the fill operations needed on the element `el`.
-       * @param {HTMLElement} el 
+       * @param {HTMLElement} el
        * @param {*} afterValSetFunc The function to perform after the operations are complete.
        */
       function doAllFillOperations(el, afterValSetFunc) {
@@ -1014,12 +1048,14 @@
           // END MODIFICATION
       }
 
+      // helper to find the input corresponding to an OpId from the console
+      // ex : document.elementForOPID('__2')
       document.elementForOPID = getElementByOpId;
 
       /**
        * Normalize the event based on API support
-       * @param {HTMLElement} el 
-       * @param {string} eventName 
+       * @param {HTMLElement} el
+       * @param {string} eventName
        * @returns {Event} A normalized event
        */
       function normalizeEvent(el, eventName) {
@@ -1046,7 +1082,7 @@
       /**
        * Simulate the entry of a value into an element.
        * Clicks the element, focuses it, and then fires a keydown, keypress, and keyup event.
-       * @param {HTMLElement} el 
+       * @param {HTMLElement} el
        */
       function setValueForElement(el) {
           var valueToSet = el.value;
@@ -1061,7 +1097,7 @@
       /**
        * Simulate the entry of a value into an element by using events.
        * Dispatches a keydown, keypress, and keyup event, then fires the `input` and `change` events before removing focus.
-       * @param {HTMLElement} el 
+       * @param {HTMLElement} el
        */
       function setValueForElementByEvent(el) {
           var valueToSet = el.value,
@@ -1081,7 +1117,7 @@
 
       /**
        * Click on an element `el`
-       * @param {HTMLElement} el 
+       * @param {HTMLElement} el
        * @returns {boolean} Returns true if the element was clicked and false if it was not able to be clicked
        */
       function clickElement(el) {
@@ -1116,7 +1152,7 @@
 
       /**
        * Determine if we can apply styling to `el` to indicate that it was filled.
-       * @param {HTMLElement} el 
+       * @param {HTMLElement} el
        * @returns {boolean} Returns true if we can see the element to apply styling.
        */
       function canSeeElementToStyle(el) {
@@ -1149,7 +1185,7 @@
 
       /**
        * Find the element for the given `opid`.
-       * @param {number} theOpId 
+       * @param {number} theOpId
        * @returns {HTMLElement} The element for the given `opid`, or `null` if not found.
        */
       function getElementByOpId(theOpId) {
@@ -1181,8 +1217,8 @@
 
       /**
        * Helper for doc.querySelectorAll
-       * @param {string} theSelector 
-       * @returns 
+       * @param {string} theSelector
+       * @returns
        */
       function selectAllFromDoc(theSelector) {
           var d = document, elements = [];
@@ -1194,7 +1230,7 @@
 
       /**
        * Focus an element and optionally re-set its value after focusing
-       * @param {HTMLElement} el 
+       * @param {HTMLElement} el
        * @param {boolean} setValue Re-set the value after focusing
        */
       function doFocusElement(el, setValue) {
@@ -1207,11 +1243,52 @@
           }
       }
 
+/* Cozy custo
       doFill(fillScript);
 
       return JSON.stringify({
           success: true
       });
+*/
+      function runLoginMenuFillScript(fillScript) {
+          fillScript.script.forEach((action) => {
+              if (action[0] !== 'add_menu_btn_by_opid') return
+              const el = getElementByOpId(action[1])
+              menuCtrler.addMenuButton(el, true, true, action[3], action[1] )
+          });
+      }
+
+      if (fillScripts.isForLoginMenu) {
+          menuCtrler.setMenuType('loginMenu', fillScripts.isPinLocked, fillScripts.isLocked )
+      } else {
+          menuCtrler.setMenuType('autofillMenu', fillScripts.isPinLocked, fillScripts.isLocked )
+      }
+
+      for (let fillScript of fillScripts) {
+          switch (fillScript.type) {
+              case 'existingLoginFieldsForInPageMenuScript':
+                  doFill(fillScript);
+                  break;
+              case 'loginFieldsForInPageMenuScript':
+                  if (fillScripts[0].type !== 'existingLoginFieldsForInPageMenuScript') {
+                      // if the first fillScript is for an existing login cipher, then do not activate menu
+                      // for a generic login
+                      runLoginMenuFillScript(fillScript);
+                  }
+                  break;
+              case 'cardFieldsForInPageMenuScript':
+              case 'identityFieldsForInPageMenuScript':
+                  runLoginMenuFillScript(fillScript);
+                  break;
+              default:
+                  doFill(fillScript);
+                  break;
+
+          }
+      }
+
+      return '{"success": true}';
+/* end custo */
   }
 
   /*
@@ -1219,9 +1296,25 @@
   */
 
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+      /* Cozy custo : this log is very useful for reverse engineering the code, keep it for tests
+        console.log('autofil.js HEARD : ', {
+            'command': msg.command,
+            'subcommand': msg.subcommand,
+            'sender': sender.url ? new URL(sender.url).pathname : sender,
+            "msg": msg,
+            "heard in": document.location.pathname
+        });
+      */
+      if (msg.command === 'notificationBarPageDetails') return
+      /* end custo */
+
       if (msg.command === 'collectPageDetails') {
+          /* Cozy custo
           var pageDetails = collect(document);
           var pageDetailsObj = JSON.parse(pageDetails);
+          */
+          var pageDetailsObj = collect(document);
+          /* end custo */
           chrome.runtime.sendMessage({
               command: 'collectPageDetailsResponse',
               tab: msg.tab,
@@ -1232,14 +1325,89 @@
           return true;
       }
       else if (msg.command === 'fillForm') {
+          /* Cozy custo
           fill(document, msg.fillScript);
+          */
+          msg.fillScripts.isForLoginMenu = false
+          let actionsNumber = 0;
+          for (var fillScript of msg.fillScripts) {
+              actionsNumber += fillScript.script.length
+          }
+          if (actionsNumber === 0) {
+              menuCtrler.deactivate()
+          } else {
+              menuCtrler.setHostFrameId(msg.frameId)
+              fill(document, msg.fillScripts);
+          }
+          /* end custo */
           sendResponse();
           return true;
+      } else if (msg.command === 'autofillAnswerRequest') {
+          if (msg.subcommand === 'closeMenu') {
+              menuCtrler.hide(msg.force);
+          }else if (msg.subcommand === 'setMenuHeight') {
+              menuCtrler.setHeight(msg.height)
+          }else if (msg.subcommand === 'fillFormWithCipher') {
+              menuCtrler.hide(true)
+              menuCtrler.freeze() // freeze menu to avoid clipping during autofill
+              var pageDetailsObj = collect(document);
+              chrome.runtime.sendMessage({
+                  command     : 'collectPageDetailsResponse',
+                  details     : pageDetailsObj,
+                  sender      : 'autofillForMenu.js',
+                  cipherId    : msg.cipherId,
+              })
+          } else if (msg.subcommand === 'inPageMenuDeactivate') {
+              menuCtrler.deactivate()
+          } else if (msg.subcommand === 'loginIPMenuActivate') {
+              const pageDetails = collect(document)
+              chrome.runtime.sendMessage({
+                  command: 'bgGetLoginMenuFillScript',
+                  pageDetails: pageDetails,
+                  isPinLocked: msg.isPinLocked,
+              })
+          } else if (msg.subcommand === 'loginIPMenuSetFields') {
+              msg.fieldsForInPageMenuScripts.isPinLocked    = msg.isPinLocked
+              msg.fieldsForInPageMenuScripts.isLocked       = msg.isLocked
+              msg.fieldsForInPageMenuScripts.isForLoginMenu = true
+              // check there are fields where to activate the menu,
+              let nFields = 0
+              msg.fieldsForInPageMenuScripts.forEach(scriptObj => nFields += scriptObj.script.length )
+              if (nFields === 0) {
+                  // no fields =>  deactivate the menu
+                  menuCtrler.deactivate()
+              } else {
+                  // send the script for filling
+                  menuCtrler.setHostFrameId(msg.frameId)
+                  fill(document, msg.fieldsForInPageMenuScripts)
+              }
+          } else if (msg.subcommand === 'autofilIPMenuActivate') {
+              var pageDetails = collect(document);
+              chrome.runtime.sendMessage({
+                  command: 'bgGetAutofillMenuScript',
+                  details: pageDetails,
+                  sender: 'notificationBar',
+              });
+          } else if (msg.subcommand === '2faRequested') {
+              menuCtrler.set2FaMode(true)
+          }
+      } else if (msg.command === 'updateMenuCiphers') {
+          // store the ciphers sent to the menu to reuse them later on
+          menuCtrler.setCiphers(msg.data.ciphers)
+      } else if (msg.command === 'fieldFillingWithData') {
+          document.elementsByOPID[msg.opId].value = msg.data
+          menuCtrler.hide(true);
       } else if (msg.command === 'collectPageDetailsImmediately') {
+        /* Cozy custo
         var pageDetails = collect(document);
         var pageDetailsObj = JSON.parse(pageDetails);
+        */
+        var pageDetailsObj = collect(document);
+        /* end custo */
         sendResponse(pageDetailsObj);
         return true;
       }
+      sendResponse();
+      return true;
   });
 })();

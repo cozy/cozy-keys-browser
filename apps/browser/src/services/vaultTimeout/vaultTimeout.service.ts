@@ -27,4 +27,11 @@ export default class VaultTimeoutService extends BaseVaultTimeoutService {
       }
     }
   }
+
+  /* Cozy custo overided just in order to reset history */
+  async lock(userId?: string): Promise<void> {
+    await this.stateService.setHistoryState(null);
+    super.lock(userId);
+  }
+  /* end custo */
 }

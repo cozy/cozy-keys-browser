@@ -14,6 +14,21 @@
       class="row-main"
     >
       <app-vault-icon [cipher]="cipher"></app-vault-icon>
+      <!-- Cozy custo-->
+      <ng-container *ngIf="cipher.type === cipherType.Login">
+        <app-vault-icon [cipher]="cipher"></app-vault-icon>
+      </ng-container>
+      <ng-container *ngIf="cipher.type === cipherType.Card">
+        <div class="icon" aria-hidden="true">
+          <i class="icon-cozy icon-bank"></i>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="cipher.type === cipherType.Identity">
+        <div class="icon" aria-hidden="true">
+          <i class="icon-cozy icon-identity"></i>
+        </div>
+      </ng-container>
+      <!-- end custo-->
       <div class="row-main-content">
         <span class="text">
           <span class="truncate-box">
@@ -36,14 +51,15 @@
             </ng-container>
           </span>
         </span>
-        <span class="detail">{{ cipher.subTitle }}</span>
+        <span class="detail">{{ getSubtitle(cipher) }}</span>
       </div>
     </button>
     <app-action-buttons
       [cipher]="cipher"
-      [showView]="showView"
       (onView)="viewCipher(cipher)"
       (launchEvent)="launchCipher(cipher)"
+      [showGlobe]="showGlobe"
+      (onAutofill)="autofill(cipher)"
       class="action-buttons"
     >
     </app-action-buttons>

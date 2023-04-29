@@ -98,4 +98,8 @@ export default class AutofillField {
    */
   tagName: string;
   [key: string]: any;
+  /**
+   * Cozy custo
+   */
+  fieldType: any;
 }

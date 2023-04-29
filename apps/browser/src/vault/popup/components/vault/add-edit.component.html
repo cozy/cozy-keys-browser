@@ -1,13 +1,24 @@
 <form #form (ngSubmit)="submit()" [appApiAction]="formPromise">
   <header>
     <div class="left">
+      <!-- Cozy customization
       <button type="button" (click)="cancel()">{{ "cancel" | i18n }}</button>
+      -->
+      <button type="button" appBlurClick (click)="cancel()" title="{{ 'cancel_shortcut' | i18n }}">
+        <i class="icon-cozy icon-cross" aria-hidden="true"></i>
+      </button>
+      <!-- end Cozy -->
     </div>
     <h1 class="center">
       <span class="title">{{ title }}</span>
     </h1>
     <div class="right">
-      <button type="submit" [disabled]="form.loading">
+      <button
+        type="submit"
+        [disabled]="form.loading"
+        appBlurClick
+        title="{{ 'save_shorcut' | i18n }}"
+      >
         <span [hidden]="form.loading">{{ "save" | i18n }}</span>
         <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!form.loading" aria-hidden="true"></i>
       </button>
@@ -58,6 +69,7 @@
                 type="button"
                 class="row-btn"
                 appStopClick
+                appBlurClick
                 appA11yTitle="{{ 'generateUsername' | i18n }}"
                 (click)="generateUsername()"
                 *ngIf="!(!cipher.edit && editMode)"
@@ -85,6 +97,7 @@
                 type="button"
                 #checkPasswordBtn
                 class="row-btn btn"
+                appBlurClick
                 appA11yTitle="{{ 'checkPassword' | i18n }}"
                 (click)="checkPassword()"
                 [appApiAction]="checkPasswordPromise"
@@ -106,6 +119,7 @@
                 type="button"
                 class="row-btn"
                 appStopClick
+                appBlurClick
                 appA11yTitle="{{ 'toggleVisibility' | i18n }}"
                 (click)="togglePassword()"
                 *ngIf="cipher.viewPassword"
@@ -121,6 +135,7 @@
                 type="button"
                 class="row-btn"
                 appStopClick
+                appBlurClick
                 appA11yTitle="{{ 'generatePassword' | i18n }}"
                 (click)="generatePassword()"
                 *ngIf="cipher.viewPassword && !(!cipher.edit && editMode)"
@@ -173,6 +188,7 @@
                 type="button"
                 class="row-btn"
                 appStopClick
+                appBlurClick
                 appA11yTitle="{{ 'toggleVisibility' | i18n }}"
                 (click)="toggleCardNumber()"
                 [attr.aria-pressed]="showCardNumber"
@@ -250,6 +266,7 @@
                 type="button"
                 class="row-btn"
                 appStopClick
+                appBlurClick
                 appA11yTitle="{{ 'toggleVisibility' | i18n }}"
                 (click)="toggleCardCode()"
                 [attr.aria-pressed]="showCardCode"
@@ -462,7 +479,7 @@
         </div>
       </div>
     </div>
-    <div class="box" *ngIf="cipher.type === cipherType.Login">
+    <div class="box box-uri" *ngIf="cipher.type === cipherType.Login">
       <div class="box-content">
         <ng-container *ngIf="cipher.login.hasUris">
           <div
@@ -548,6 +565,7 @@
         <button
           type="button"
           appStopClick
+          appBlurClick
           (click)="addUri()"
           class="box-content-row box-content-row-newmulti single-line"
           *ngIf="!(!cipher.edit && editMode)"
@@ -574,6 +592,7 @@
     </div>
     <div class="box">
       <div class="box-content">
+        <!-- Commented by Cozy
         <div class="box-content-row" appBoxRow>
           <label for="folder">{{ "folder" | i18n }}</label>
           <select id="folder" name="FolderId" [(ngModel)]="cipher.folderId">
@@ -634,6 +653,7 @@
           <div class="row-main">{{ "collections" | i18n }}</div>
           <i class="bwi bwi-angle-right row-sub-icon" aria-hidden="true"></i>
         </button>
+        END -->
       </div>
     </div>
     <div class="box">
@@ -709,6 +729,7 @@
           type="button"
           class="box-content-row"
           appStopClick
+          appBlurClick
           (click)="delete()"
           [appApiAction]="deletePromise"
           #deleteBtn

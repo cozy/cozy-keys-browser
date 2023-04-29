@@ -9,6 +9,7 @@
     <div class="right">
       <button
         type="submit"
+        appBlurClick
         [disabled]="form.loading"
         *ngIf="
           selectedProviderType != null &&
@@ -52,6 +53,7 @@
               appInputVerbatim
             />
           </div>
+          <!-- Cozy custo
           <div class="box-content-row box-content-row-checkbox" appBoxRow>
             <label for="remember">{{ "rememberMe" | i18n }}</label>
             <input id="remember" type="checkbox" name="Remember" [(ngModel)]="remember" />
@@ -119,6 +121,7 @@
             <label for="remember">{{ "rememberMe" | i18n }}</label>
             <input id="remember" type="checkbox" name="Remember" [(ngModel)]="remember" />
           </div>
+          -->
         </div>
       </div>
     </ng-container>
@@ -130,6 +133,7 @@
       <p class="text-center">{{ "noTwoStepProviders2" | i18n }}</p>
     </div>
     <div class="content no-vpad" *ngIf="selectedProviderType != null">
+      <!-- Cozy custo
       <p class="text-center">
         <button type="button" appStopClick (click)="anotherMethod()">
           {{ "useAnotherTwoStepMethod" | i18n }}
@@ -140,6 +144,7 @@
           {{ "sendVerificationCodeEmailAgain" | i18n }}
         </button>
       </p>
+      -->
     </div>
   </main>
 </form>

@@ -23,16 +23,35 @@ import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view
 import { BrowserApi } from "../../../../browser/browserApi";
 import { PopupUtilsService } from "../../../../popup/services/popup-utils.service";
 
+/* Cozy imports */
+/* eslint-disable */
+import { KonnectorsService } from "../../../../popup/services/konnectors.service";
+import { HistoryService } from "../../../../popup/services/history.service";
+import { HostListener, EventEmitter } from "@angular/core";
+import { deleteCipher } from "./cozy-utils";
+/* eslint-enable */
+/* END */
+
 @Component({
   selector: "app-vault-add-edit",
   templateUrl: "add-edit.component.html",
 })
+
+/**
+ * See the original component:
+ * https://github.com/bitwarden/browser/blob/
+ * 7bfb8d91e3fcec00424d28410ef33401d582c3cc/src/popup/vault/add-edit.component.ts
+ */
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class AddEditComponent extends BaseAddEditComponent {
   currentUris: string[];
-  showAttachments = true;
   openAttachmentsInPopup: boolean;
   showAutoFillOnPageLoadOptions: boolean;
+  // Cozy customization
+  //*
+  private initialPwd: string;
+  typeOptions: any[];
+  //*/
 
   constructor(
     cipherService: CipherService,
@@ -51,7 +70,9 @@ export class AddEditComponent extends BaseAddEditComponent {
     private popupUtilsService: PopupUtilsService,
     organizationService: OrganizationService,
     passwordRepromptService: PasswordRepromptService,
-    logService: LogService
+    logService: LogService,
+    private konnectorsService: KonnectorsService,
+    private historyService: HistoryService
   ) {
     super(
       cipherService,
@@ -68,13 +89,28 @@ export class AddEditComponent extends BaseAddEditComponent {
       passwordRepromptService,
       organizationService
     );
+    this.typeOptions = [
+      { name: i18nService.t("typeLogin"), value: CipherType.Login },
+      { name: i18nService.t("typeCard"), value: CipherType.Card },
+      { name: i18nService.t("typeIdentity"), value: CipherType.Identity },
+    ];
+  }
+
+  @HostListener("window:keydown", ["$event"])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === "Escape") {
+      this.cancel();
+      event.preventDefault();
+    } else if (event.key === "Enter" && event.getModifierState("Control")) {
+      this.submit();
+    }
   }
 
   async ngOnInit() {
     await super.ngOnInit();
 
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.queryParams.pipe(first()).subscribe(async (params) => {
+    this.route.queryParams.pipe(first()).subscribe(async (params: any) => {
       if (params.cipherId) {
         this.cipherId = params.cipherId;
       }
@@ -101,6 +137,31 @@ export class AddEditComponent extends BaseAddEditComponent {
         this.organizationId = params.selectedVault;
       }
       await this.load();
+
+      // Cozy customization
+      //*
+      this.initialPwd = this.cipher.login.password;
+      if (params.tempCipher) {
+        // the cipher was already in edition and popup has been closed or navigation in pwd generator
+        // we have to select the correct pwd
+        // first retrive data form url
+        const histCipher = JSON.parse(params.tempCipher);
+        this.initialPwd = histCipher.initialPwd;
+        delete histCipher.initialPwd;
+        if (histCipher.login.password !== this.cipher.login.password) {
+          // url pwd and state pwd are different : one of them has been modified compared to initial pwd
+          if (this.initialPwd !== this.cipher.login.password) {
+            // initial pwd and state differs, we keep the state pwd
+            histCipher.login.password = this.cipher.login.password;
+          } else {
+            // initial pwd and state are identical, we keep the url pwd
+          }
+        } else {
+          // url pwd and state pwd are identical, keep url pwd
+        }
+        deepCopy(this.cipher, histCipher);
+      }
+      //*/
 
       if (!this.editMode || this.cloneMode) {
         if (
@@ -137,6 +198,14 @@ export class AddEditComponent extends BaseAddEditComponent {
     }
   }
 
+  // note Cozy : beforeunload event would be better but is not triggered in webextension...
+  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
+  @HostListener("window:unload", ["$event"])
+  async unloadMnger(event: any) {
+    // save cipher state in url for when popup will be closed.
+    this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, ...this.cipher });
+  }
+
   async load() {
     await super.load();
     this.showAutoFillOnPageLoadOptions =
@@ -157,9 +226,20 @@ export class AddEditComponent extends BaseAddEditComponent {
     }
 
     if (this.cloneMode) {
+      // Cozy customization : why should we go back to vault after cloning a cipher ?
+      // we prefer go back un history twice (from where the initial cipher has bee opened)
+      /*
       this.router.navigate(["/tabs/vault"]);
+      */
+      this.historyService.gotoPreviousUrl(2);
     } else {
+      /* Cozy customization
       this.location.back();
+      */
+      //*
+      this.konnectorsService.createSuggestions();
+      this.historyService.gotoPreviousUrl();
+      //*/
     }
     return true;
   }
@@ -192,14 +272,19 @@ export class AddEditComponent extends BaseAddEditComponent {
       this.messagingService.send("closeTab");
       return;
     }
-
+    /* Cozy customization
     this.location.back();
+    */
+    this.historyService.gotoPreviousUrl();
+    //*/
   }
 
   async generateUsername(): Promise<boolean> {
     const confirmed = await super.generateUsername();
     if (confirmed) {
       await this.saveCipherState();
+      // save cipher state in url for when popup will be closed.
+      this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, ...this.cipher });
       this.router.navigate(["generator"], { queryParams: { type: "username" } });
     }
     return confirmed;
@@ -209,15 +294,30 @@ export class AddEditComponent extends BaseAddEditComponent {
     const confirmed = await super.generatePassword();
     if (confirmed) {
       await this.saveCipherState();
+      // save cipher state in url for when popup will be closed.
+      this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, ...this.cipher });
       this.router.navigate(["generator"], { queryParams: { type: "password" } });
     }
     return confirmed;
   }
 
+  /**
+   * @override by Cozy
+   * Calls the overrided deleteCipher
+   */
   async delete(): Promise<boolean> {
-    const confirmed = await super.delete();
+    const confirmed = await deleteCipher(
+      this.cipherService,
+      this.i18nService,
+      this.platformUtilsService,
+      this.cipher,
+      this.stateService
+    );
     if (confirmed) {
+      /* Cozy customization
       this.router.navigate(["/tabs/vault"]);
+      */
+      this.historyService.gotoPreviousUrl();
     }
     return confirmed;
   }
@@ -257,5 +357,22 @@ export class AddEditComponent extends BaseAddEditComponent {
         document.getElementById("name").focus();
       }
     }, 200);
+  }
+}
+
+
+// Cozy Helper
+// copy source object attributes into target object
+function deepCopy(target: any, source: any) {
+  for (const key in source) {
+    if (typeof source[key] === "object") {
+      if (Array.isArray(source[key])) {
+        target[key] = source[key].slice();
+      } else {
+        deepCopy(target[key], source[key]);
+      }
+    } else {
+      target[key] = source[key];
+    }
   }
 }

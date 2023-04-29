@@ -30,6 +30,16 @@ import { PopupUtilsService } from "../../../../popup/services/popup-utils.servic
 
 const BroadcasterSubscriptionId = "ChildViewComponent";
 
+/* start Cozy imports */
+/* eslint-disable */
+import { deleteCipher } from "./cozy-utils";
+import { CozyClientService } from "../../../../popup/services/cozyClient.service";
+import { CAN_SHARE_ORGANIZATION } from "../../../../cozy/flags";
+import { HistoryService } from "../../../../popup/services/history.service";
+import { HostListener } from "@angular/core";
+/* eslint-enable */
+/* end Cozy imports */
+
 @Component({
   selector: "app-vault-view",
   templateUrl: "view.component.html",
@@ -41,6 +51,7 @@ export class ViewComponent extends BaseViewComponent {
   loadPageDetailsTimeout: number;
   inPopout = false;
   cipherType = CipherType;
+  CAN_SHARE_ORGANIZATION = CAN_SHARE_ORGANIZATION;
 
   constructor(
     cipherService: CipherService,
@@ -65,7 +76,9 @@ export class ViewComponent extends BaseViewComponent {
     apiService: ApiService,
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
-    fileDownloadService: FileDownloadService
+    fileDownloadService: FileDownloadService,
+    private cozyClientService: CozyClientService,
+    private historyService: HistoryService
   ) {
     super(
       cipherService,
@@ -89,10 +102,20 @@ export class ViewComponent extends BaseViewComponent {
     );
   }
 
+  /* Cozy customization */
+  @HostListener("window:keydown", ["$event"])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === "Escape") {
+      this.close();
+      event.preventDefault();
+    }
+  }
+  /* end custo */
+
   ngOnInit() {
     this.inPopout = this.popupUtilsService.inPopout(window);
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.queryParams.pipe(first()).subscribe(async (params) => {
+    this.route.queryParams.pipe(first()).subscribe(async (params: any) => {
       if (params.cipherId) {
         this.cipherId = params.cipherId;
       } else {
@@ -134,6 +157,14 @@ export class ViewComponent extends BaseViewComponent {
     super.ngOnDestroy();
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
+
+  /* Cozy customization : beforeunload event would be better but is not triggered in webextension...
+  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension */
+  @HostListener("window:unload", ["$event"])
+  async unloadMnger(event?: any) {
+    this.historyService.updateTimeStamp();
+  }
+  /* end custo */
 
   async load() {
     await super.load();
@@ -242,8 +273,19 @@ export class ViewComponent extends BaseViewComponent {
     return false;
   }
 
+  /**
+   * Cozy custo
+   * Calls the overrided deleteCipher
+   */
   async delete() {
-    if (await super.delete()) {
+    const deleted = await deleteCipher(
+      this.cipherService,
+      this.i18nService,
+      this.platformUtilsService,
+      this.cipher,
+      this.stateService
+    );
+    if (deleted) {
       this.messagingService.send("deletedCipher");
       this.close();
       return true;
@@ -252,7 +294,11 @@ export class ViewComponent extends BaseViewComponent {
   }
 
   close() {
+    /* Cozy custo
     this.location.back();
+    */
+    this.historyService.gotoPreviousUrl();
+    /* end custo */
   }
 
   private async loadPageDetails() {
@@ -288,6 +334,13 @@ export class ViewComponent extends BaseViewComponent {
       });
       if (this.totpCode != null) {
         this.platformUtilsService.copyToClipboard(this.totpCode, { window: window });
+        /* Cozy custo */
+        this.platformUtilsService.showToast(
+          "success",
+          this.i18nService.t("TOTP"),
+          this.i18nService.t("TOTPCopiedInClipboard")
+        );
+        /* end custo */
       }
     } catch {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("autofillError"));
@@ -296,5 +349,59 @@ export class ViewComponent extends BaseViewComponent {
     }
 
     return true;
+  }
+
+  /* ---------------------------------------------------------------
+    @added by Cozy
+    returns the postal adress as a string
+    the adress will be formated according to the local standard
+    ------------------------------------------------------------------- */
+  getLocalizedAdress(): string {
+    const id = this.cipher.identity;
+    let fullAdress: string;
+    switch (navigator.language.substr(0, 2)) {
+      case "fr":
+        /* for the french official format, see : AFNOR XPZ10-011 (no free acces)
+                a free summary
+                for an individual :
+                    1- CIVILITE-TITRE ou QUALITE-PRENOM-NOM
+                       permet d’identifier le destinataire, la ligne 2 le point de remise.
+                    2- N° APP ou BAL-ETAGE-COULOIR-ESC
+                       correspond à tout ce qui est situé à l’intérieur d’un bâtiment,
+                    3- ENTREE-BATIMENT-IMMEUBLE-RESIDENCE
+                       tout ce qui est à l’extérieur.
+                    4- NUMERO-LIBELLE DE LA VOIE
+                    5- LIEU DIT ou SERVICE PARTICULIER DE DISTRIBUTION
+                    6- CODE POSTAL et LOCALITE DE DESTINATION ou CODE CEDEX et LIBELLE CEDEX
+                for a company :
+                    1. RAISON SOCIALE ou DENOMINATION
+                    2. IDENTITE DU DESTINATAIRE et/ou SERVICE
+                    3. ENTREE-BATIMENT-IMMEUBLE-RES-ZI
+                    4. NUMERO-LIBELLE DE LA VOIE
+                    5. MENTION SPECIALE et COMMUNE GEOGRAPHIQUE - si différente de celle indiquée ligne 6
+                    6. (CODE POSTAL et LOCALITE DE DESTINATION) ou (CODE CEDEX et LIBELLE CEDEX)
+                */
+        fullAdress =
+          (id.address1 ? id.address1 : "") +
+          (id.address2 ? "\n" + id.address2 : "") +
+          (id.address3 ? "\n" + id.address3 : "") +
+          (id.postalCode || id.city ? "\n" + id.postalCode + " " + id.city : "") +
+          (id.country ? "\n" + id.country : "");
+        break;
+      default:
+        fullAdress =
+          (id.address1 ? id.address1 : "") +
+          (id.address2 ? "\n" + id.address2 : "") +
+          (id.address3 ? "\n" + id.address3 : "") +
+          (id.fullAddressPart2 ? "\n" + id.fullAddressPart2 : "") +
+          (id.country ? "\n" + id.country : "");
+        break;
+    }
+    return fullAdress;
+  }
+
+  openWebApp() {
+    const hash = "#/vault?action=view&cipherId=" + this.cipherId;
+    window.open(this.cozyClientService.getAppURL("passwords", hash));
   }
 }

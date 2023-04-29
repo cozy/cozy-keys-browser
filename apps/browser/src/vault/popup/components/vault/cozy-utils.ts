@@ -1,13 +1,13 @@
 import { EventEmitter } from "@angular/core";
 
-import { CipherService } from "jslib-common/abstractions/cipher.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { CipherView } from "jslib-common/models/view/cipherView";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 /**
- * @override by Cozy
+ * Cozy custo
  * This method is extracted from the jslib:
  * https://github.com/bitwarden/jslib/blob/
  * f30d6f8027055507abfdefd1eeb5d9aab25cc601/src/angular/components/view.component.ts#L117

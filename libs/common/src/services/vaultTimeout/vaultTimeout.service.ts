@@ -26,7 +26,7 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     private messagingService: MessagingService,
     private searchService: SearchService,
     private keyConnectorService: KeyConnectorService,
-    private stateService: StateService,
+    protected stateService: StateService, // Cozy custo (move to protected)
     private authService: AuthService,
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private lockedCallback: (userId?: string) => Promise<void> = null,

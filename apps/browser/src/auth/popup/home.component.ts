@@ -8,6 +8,16 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 
+
+/* start Cozy imports */
+/* eslint-disable */
+import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password/password-generation.service.abstraction";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { BrowserApi } from "../../browser/browserApi";
+/* eslint-enable */
+/* end Cozy imports */
+
 @Component({
   selector: "app-home",
   templateUrl: "home.component.html",
@@ -28,7 +38,9 @@ export class HomeComponent implements OnInit {
     private i18nService: I18nService,
     private environmentService: EnvironmentService,
     private route: ActivatedRoute,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private cryptoFunctionService: CryptoFunctionService,
+    private passwordGenerationService: PasswordGenerationServiceAbstraction,
   ) {}
   async ngOnInit(): Promise<void> {
     let savedEmail = this.loginService.getEmail();
@@ -74,4 +86,51 @@ export class HomeComponent implements OnInit {
     this.loginService.setEmail(this.formGroup.value.email);
     this.loginService.setRememberEmail(this.formGroup.value.rememberEmail);
   }
+
+  /* Cozy custo */
+  async launchSsoBrowser() {
+    // Generate necessary sso params
+    const passwordOptions: any = {
+      type: "password",
+      length: 64,
+      uppercase: true,
+      lowercase: true,
+      numbers: true,
+      special: false,
+    };
+
+    const state =
+      (await this.passwordGenerationService.generatePassword(passwordOptions)) +
+      ":clientId=browser";
+    const codeVerifier = await this.passwordGenerationService.generatePassword(passwordOptions);
+    const codeVerifierHash = await this.cryptoFunctionService.hash(codeVerifier, "sha256");
+    const codeChallenge = Utils.fromBufferToUrlB64(codeVerifierHash);
+
+    await this.stateService.setSsoCodeVerifier(codeVerifier);
+    await this.stateService.setSsoState(state);
+
+    let url = this.environmentService.getWebVaultUrl();
+    if (url == null) {
+      url = "https://vault.bitwarden.com";
+    }
+
+    const redirectUri = url + "/sso-connector.html";
+
+    // Launch browser
+    this.platformUtilsService.launchUri(
+      url +
+        "/#/sso?clientId=browser" +
+        "&redirectUri=" +
+        encodeURIComponent(redirectUri) +
+        "&state=" +
+        state +
+        "&codeChallenge=" +
+        codeChallenge
+    );
+  }
+
+  openCozyWebsite() {
+    BrowserApi.createNewTab("https://manager.cozycloud.cc/cozy/create");
+  }
+    /* end custo */
 }

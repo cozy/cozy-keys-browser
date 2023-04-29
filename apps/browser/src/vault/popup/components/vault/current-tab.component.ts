@@ -21,6 +21,14 @@ import { AutofillService } from "../../../../autofill/services/abstractions/auto
 import { BrowserApi } from "../../../../browser/browserApi";
 import { PopupUtilsService } from "../../../../popup/services/popup-utils.service";
 import { VaultFilterService } from "../../../services/vault-filter.service";
+/** Start Cozy imports */
+/* eslint-disable */
+import { CozyClientService } from "../../../../popup/services/cozyClient.service";
+import { HistoryService } from "../../../../popup/services/history.service";
+import { Location } from "@angular/common";
+import { HostListener } from "@angular/core";
+/* eslint-enable */
+/** End Cozy imports */
 
 const BroadcasterSubscriptionId = "CurrentTabComponent";
 
@@ -67,7 +75,10 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private passwordRepromptService: PasswordRepromptService,
     private organizationService: OrganizationService,
-    private vaultFilterService: VaultFilterService
+    private vaultFilterService: VaultFilterService,
+    private cozyClientService: CozyClientService,
+    private location: Location,
+    private historyService: HistoryService
   ) {}
 
   async ngOnInit() {
@@ -127,6 +138,11 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
         this.i18nService.t("autofillPageLoadPolicyActivated")
       );
     }
+
+    // Cozy custo
+    window.setTimeout(() => {
+      document.getElementById("search").focus();
+    }, 100);
   }
 
   ngOnDestroy() {
@@ -137,10 +153,19 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  // Cozy custo : beforeunload event would be better but is not triggered in webextension...
+  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
+  @HostListener("window:unload", ["$event"])
+  async unloadMnger(event?: any) {
+    this.historyService.updateTimeStamp();
+  }
+  // end custo
+
   async refresh() {
     await this.load();
   }
 
+  /* Cozy custo
   addCipher() {
     this.router.navigate(["/add-cipher"], {
       queryParams: {
@@ -150,6 +175,26 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
       },
     });
   }
+  */
+  //*
+  addLoginCipher() {
+    this.router.navigate(["/add-cipher"], {
+      queryParams: {
+        name: this.hostname,
+        uri: this.url,
+        selectedVault: this.vaultFilterService.getVaultFilter().selectedOrganizationId,
+      },
+    });
+  }
+
+  addCardCipher() {
+    this.router.navigate(["/add-cipher"], { queryParams: { type: 3 } });
+  }
+
+  addIdentityCipher() {
+    this.router.navigate(["/add-cipher"], { queryParams: { type: 4 } });
+  }
+  //*/
 
   viewCipher(cipher: CipherView) {
     this.router.navigate(["/view-cipher"], { queryParams: { cipherId: cipher.id } });
@@ -183,6 +228,14 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
       });
       if (this.totpCode != null) {
         this.platformUtilsService.copyToClipboard(this.totpCode, { window: window });
+        // Cozy custo
+        this.platformUtilsService.showToast(
+          "success",
+          this.i18nService.t("TOTP"),
+          this.i18nService.t("TOTPCopiedInClipboard")
+        );
+        return;
+        // end custo
       }
       if (this.popupUtilsService.inPopup(window)) {
         if (!closePopupDelay) {
@@ -205,17 +258,35 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   }
 
   searchVault() {
+    // Cozy custo
+    if (this.searchTimeout != null) {
+      clearTimeout(this.searchTimeout);
+    }
+    // end custo
     if (!this.searchService.isSearchable(this.searchText)) {
       return;
     }
 
+    /* Cozy custo
     this.router.navigate(["/tabs/vault"], { queryParams: { searchText: this.searchText } });
+    */
+    this.searchTimeout = window.setTimeout(async () => {
+      this.router.navigate(["/tabs/vault"], { queryParams: { searchText: this.searchText } });
+    }, 200);
+    // end custo
   }
 
+  @HostListener("window:keydown", ["$event"]) // Cozy custo
   closeOnEsc(e: KeyboardEvent) {
+    /**
     // If input not empty, use browser default behavior of clearing input instead
     if (e.key === "Escape" && (this.searchText == null || this.searchText === "")) {
       BrowserApi.closePopup(window);
+    }
+    */
+    if (e.key === "Escape") {
+      this.back();
+      e.preventDefault();
     }
   }
 
@@ -310,4 +381,14 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
       this.autofillCalloutText = this.i18nService.t("autofillSelectInfoWithoutCommand");
     }
   }
+
+  // Cozy custo
+  back() {
+    this.historyService.gotoPreviousUrl();
+  }
+
+  openWebApp() {
+    window.open(this.cozyClientService.getAppURL("passwords", ""));
+  }
+  // end custo
 }
