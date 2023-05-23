@@ -107,7 +107,11 @@ export class ExportService implements ExportServiceAbstraction {
       this.padNumber(now.getMinutes(), 2) +
       this.padNumber(now.getSeconds(), 2);
 
+    /** Cozy custo
     return "bitwarden" + (prefix ? "_" + prefix : "") + "_export_" + dateString + "." + extension;
+    */
+    return "Cozy-Pass" + (prefix ? "_" + prefix : "") + "_export_" + dateString + "." + extension;
+    /** end custo */
   }
 
   private async getDecryptedExport(format: "json" | "csv"): Promise<string> {
