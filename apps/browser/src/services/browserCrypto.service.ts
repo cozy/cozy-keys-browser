@@ -1,17 +1,23 @@
 import { KeySuffixOptions } from "@bitwarden/common/enums/keySuffixOptions";
 import { CryptoService } from "@bitwarden/common/services/crypto.service";
-
-import { ProfileOrganizationResponse } from "@bitwarden/common/models/response/profileOrganizationResponse";
-import { ProfileProviderOrganizationResponse } from "@bitwarden/common/models/response/profileProviderOrganizationResponse";
+/* start Cozy imports */
+/* eslint-disable */
+import { ProfileOrganizationResponse } from "@bitwarden/common/models/response/profile-organization.response";
+import { ProfileProviderOrganizationResponse } from "@bitwarden/common/models/response/profile-provider-organization.response";
+import { EncryptedOrganizationKeyData } from "@bitwarden/common/models/data/encrypted-organization-key.data";
+/* eslint-enable */
+/* end Cozy imports */
 
 export class BrowserCryptoService extends CryptoService {
+
+  /** Cozy custo */
   async upsertOrganizationKey(organizationId: string, key: string) {
     if (key === "") {
       return;
     }
     const encOrgKeys = await this.stateService.getEncryptedOrganizationKeys();
 
-    encOrgKeys[organizationId] = key;
+    encOrgKeys[organizationId] = key as unknown as EncryptedOrganizationKeyData;
 
     await this.clearOrgKeys();
     await this.stateService.setEncryptedOrganizationKeys(encOrgKeys);
@@ -25,6 +31,7 @@ export class BrowserCryptoService extends CryptoService {
 
     return super.setOrgKeys(validOrgs, providerOrgs);
   }
+  /** end custo */
 
   protected async retrieveKeyFromStorage(keySuffix: KeySuffixOptions) {
     if (keySuffix === "biometric") {

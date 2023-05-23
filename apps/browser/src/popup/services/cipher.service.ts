@@ -1,19 +1,18 @@
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { CryptoService } from "jslib-common/abstractions/crypto.service";
-import { FileUploadService } from "jslib-common/abstractions/fileUpload.service";
-import { I18nService } from "jslib-common/abstractions/i18n.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { SearchService } from "jslib-common/abstractions/search.service";
-import { SettingsService } from "jslib-common/abstractions/settings.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { StorageService } from "jslib-common/abstractions/storage.service";
-import { sequentialize } from "jslib-common/misc/sequentialize";
-import { CipherView } from "jslib-common/models/view/cipherView";
-import { CipherService as CipherServiceBase } from "jslib-common/services/cipher.service";
-
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
+import { FileUploadService } from "@bitwarden/common/abstractions/fileUpload.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { SearchService } from "@bitwarden/common/abstractions/search.service";
+import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { sequentialize } from "@bitwarden/common/misc/sequentialize";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 /**
  * Cozy : we overcharge this class in order to modify `getAllDecrypted()`
- */
+*/
+import { CipherService as CipherServiceBase } from "@bitwarden/common/vault/services/cipher.service";
 
 export class CipherService extends CipherServiceBase {
   constructor(
@@ -24,7 +23,8 @@ export class CipherService extends CipherServiceBase {
     i18nService: I18nService,
     private localSearchService: () => SearchService,
     logService: LogService,
-    private localStateService: StateService
+    private localStateService: StateService,
+    private localEncryptService: EncryptService,
   ) {
     super(
       localCryptoService,
@@ -34,7 +34,8 @@ export class CipherService extends CipherServiceBase {
       i18nService,
       localSearchService,
       logService,
-      localStateService
+      localStateService,
+      localEncryptService
     );
   }
 

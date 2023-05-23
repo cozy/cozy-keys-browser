@@ -755,11 +755,11 @@ import menuCtrler from './menuCtrler';
       /* Cozy custo : the result is serialized to be deserialized : serialization is useless
       return JSON.stringify(getPageDetails(document, 'oneshotUUID'));
       */
-      return JSON.stringify(getPageDetails(document, 'oneshotUUID'));
+      return getPageDetails(document, 'oneshotUUID');
       /* end custo */
   }
 
-  function fill(document, fillScript, undefined) {
+  function fill(document, fillScripts, undefined) {
       var isFirefox = navigator.userAgent.indexOf('Firefox') !== -1 || navigator.userAgent.indexOf('Gecko/') !== -1;
 
       var markTheFilling = true,
@@ -1304,7 +1304,7 @@ import menuCtrler from './menuCtrler';
             "msg": msg,
             "heard in": document.location.pathname
         });
-      */
+        */
       if (msg.command === 'notificationBarPageDetails') return
       /* end custo */
 

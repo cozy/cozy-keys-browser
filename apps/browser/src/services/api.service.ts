@@ -1,15 +1,14 @@
-// import { TokenRequest } from "jslib-common/models/request/identityToken/tokenRequest";
-import { AppIdService } from "jslib-common/abstractions/appId.service";
-import { EnvironmentService } from "jslib-common/abstractions/environment.service";
-import { PlatformUtilsService } from "jslib-common/abstractions/platformUtils.service";
-import { TokenService } from "jslib-common/abstractions/token.service";
-import { DeviceType } from "jslib-common/enums/deviceType";
-import { ApiTokenRequest } from "jslib-common/models/request/identityToken/apiTokenRequest";
-import { PasswordTokenRequest } from "jslib-common/models/request/identityToken/passwordTokenRequest";
-import { SsoTokenRequest } from "jslib-common/models/request/identityToken/ssoTokenRequest";
-import { ErrorResponse } from "jslib-common/models/response/errorResponse";
-import { IdentityTwoFactorResponse } from "jslib-common/models/response/identityTwoFactorResponse";
-import { ApiService as BaseApiService } from "jslib-common/services/api.service";
+import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
+import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
+import { PasswordTokenRequest } from "@bitwarden/common/auth/models/request/identity-token/password-token.request";
+import { SsoTokenRequest } from "@bitwarden/common/auth/models/request/identity-token/sso-token.request";
+import { UserApiTokenRequest } from "@bitwarden/common/auth/models/request/identity-token/user-api-token.request";
+import { IdentityTwoFactorResponse } from "@bitwarden/common/auth/models/response/identity-two-factor.response";
+import { DeviceType } from "@bitwarden/common/enums/deviceType";
+import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
+import { ApiService as BaseApiService } from "@bitwarden/common/services/api.service";
 
 import { IdentityTokenResponse } from "../models/response/identityTokenResponse";
 
@@ -30,6 +29,7 @@ function getDeviceName(deviceType: DeviceType): string {
 }
 
 /**
+ * This file is specific to Cozy.
  * We extend the jslib's ApiService and override the `postIdentityToken` method
  * to pass the client name to the stack, so in cozy-settings we can show
  * "Cozy Password (browser name)" in the connected devices list.
@@ -89,7 +89,7 @@ export class ApiService extends BaseApiService {
   // Auth APIs
 
   async postIdentityToken(
-    request: ApiTokenRequest | PasswordTokenRequest | SsoTokenRequest
+    request: UserApiTokenRequest | PasswordTokenRequest | SsoTokenRequest
   ): Promise<IdentityTokenResponse | IdentityTwoFactorResponse> {
     const headers = new Headers({
       "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
@@ -99,27 +99,9 @@ export class ApiService extends BaseApiService {
     if (this._customUserAgent != null) {
       headers.set("User-Agent", this._customUserAgent);
     }
-    // request.alterIdentityTokenHeaders(headers);
 
-    /* TODO REFACTO : was our version, commented in order to adapt it to the new BW way of doing 
-    const bodyData = {
-      ...request.toIdentityToken(this._platformUtilsService.identityClientId),
-      clientName: `Cozy Passwords (${getDeviceName(this._device)})`,
-    };
-    const body = this._qsStringify(bodyData);
-    const response = await this.fetch(
-      new Request(this._environmentService.getIdentityUrl() + "/connect/token", {
-        body: body,
-        credentials: this._getCredentials(),
-        cache: "no-cache",
-        headers: headers,
-        method: "POST",
-      })
-    );
-    */
-    /* TODO REFACTO : new way of doing things by BW, but should be adapted */
     const identityToken =
-      request instanceof ApiTokenRequest
+      request instanceof UserApiTokenRequest
         ? request.toIdentityToken()
         : request.toIdentityToken(this._platformUtilsService.getClientType());
     const bodyData = {
@@ -135,7 +117,6 @@ export class ApiService extends BaseApiService {
         method: "POST",
       })
     );
-    /* END new BW way of doing things */
 
     let responseJson: any = null;
     if (this._isJsonResponse(response)) {

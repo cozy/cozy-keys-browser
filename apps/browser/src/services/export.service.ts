@@ -1,18 +1,19 @@
 import * as papa from "papaparse";
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { CipherService } from "jslib-common/abstractions/cipher.service";
-import { CryptoService } from "jslib-common/abstractions/crypto.service";
-import { CryptoFunctionService } from "jslib-common/abstractions/cryptoFunction.service";
-import { FolderService } from "jslib-common/abstractions/folder.service";
-import { CipherType } from "jslib-common/enums/cipherType";
-import { CipherWithIdExport as CipherExport } from "jslib-common/models/export/cipherWithIdsExport";
-import { FolderWithIdExport as FolderExport } from "jslib-common/models/export/folderWithIdExport";
-import { CipherView } from "jslib-common/models/view/cipherView";
-import { FolderView } from "jslib-common/models/view/folderView";
-import { ExportService as BaseExportService } from "jslib-common/services/export.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
+import { CipherWithIdExport as CipherExport } from "@bitwarden/common/models/export/cipher-with-ids.export";
+import { FolderWithIdExport as FolderExport } from "@bitwarden/common/models/export/folder-with-id.export";
+import { ExportService as BaseExportService } from "@bitwarden/common/services/export.service";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 
 /**
+ * This file is specific to Cozy.
  * By default the ciphers that have an organizationId and not included in the
  * exported data. In our case, ciphers created in harvest or by the stack (via
  * migration script for example) are shared with the cozy organization. But
@@ -41,7 +42,7 @@ export class ExportService extends BaseExportService {
     const promises = [];
 
     promises.push(
-      this.folderService.getAllDecrypted().then((folders) => {
+      this.folderService.getAllDecryptedFromState().then((folders) => {
         decFolders = folders;
       })
     );

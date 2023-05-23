@@ -10,7 +10,6 @@ import {
 } from "./consts";
 // END Cozy Imports
 
-
 /* Cozy custo  */
 // See original file:
 // https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/content/notificationBar.ts
@@ -39,10 +38,10 @@ function shouldTrigerMenu() {
     cozyContactsHostname === window.location.hostname
   );
 }
-chrome.storage.local.get("environmentUrls", (urls: any) => {
-  cozyPasswordsHostname = new URL(getAppURLCozy(urls.environmentUrls.base, "passwords", ""))
+chrome.storage.local.get("global", (resp: any) => {
+  cozyPasswordsHostname = new URL(getAppURLCozy(resp.global.environmentUrls.base, "passwords", ""))
     .hostname;
-  cozyContactsHostname = new URL(getAppURLCozy(urls.environmentUrls.base, "contacts", "")).hostname;
+  cozyContactsHostname = new URL(getAppURLCozy(resp.global.environmentUrls.base, "contacts", "")).hostname;
 });
 /* END Cozy custo  */
 
@@ -106,7 +105,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
     activeUserId = obj[activeUserIdKey];
   });
-
+  /* Cozy custo */
+  if (activeUserId) {
+  /* end custo */
+  /** TODO BJA : there might be a bug bellow : activeUserId will always be empty since the chrome.storage.local.get is asynchronous... */
   chrome.storage.local.get(activeUserId, (obj: any) => {
     if (obj?.[activeUserId] == null) {
       return;
@@ -126,6 +128,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
       collectIfNeededWithTimeout();
     }
   });
+  /* Cozy custo */
+  } else {
+    collectIfNeededWithTimeout();
+  }
+  /* end custo */
 
   chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     processMessages(msg, sendResponse);
@@ -136,7 +143,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         @override by Cozy :
         This log is very useful for reverse engineer the code, keep it for tests
         console.log('notificationBar.js HEARD MESSAGE : ', {'msg.command': msg.command,'msg': msg});
-    */
+        */
     if (msg.command === "openNotificationBar") {
       if (inIframe) {
         return;

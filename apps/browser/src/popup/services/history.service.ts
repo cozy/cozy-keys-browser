@@ -1,22 +1,20 @@
 import { Injectable } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
 
-import { CipherView } from "jslib-common/models/view/cipherView";
-
 import { BrowserApi } from "../../browser/browserApi";
-import { StateService } from "../../services/state.service";
+import { BrowserStateService as StateService } from "../../services/browser-state.service";
 
-/* 
+/*
 
 This class is added by Cozy
 
-It is in charge to manage a navigation history and to persist some contextual data 
+It is in charge to manage a navigation history and to persist some contextual data
 so that when the popup is closed the user can find back its navigation when re-opening
 the popup.
 This navigation state is used only two minutes after closing the popup. Beyond 2 mn the
 popup will be opened on the default homePage.
 
-The persistence is operated by BW stateService, in memory, thus is cleared 
+The persistence is operated by BW stateService, in memory, thus is cleared
 on logout and on lock.
 
 */
@@ -26,6 +24,7 @@ export class HistoryService {
   private hist: any[] = [undefined];
   private homepage = "tabs/current";
   private defaultHist: string[] = ["/tabs/current", "/tabs/vault"];
+  private defaultLoggedOutHistory: string[] = ["/home"];
   private rootPaths: string[] = ["/tabs/vault", "/tabs/generator", "/tabs/settings"];
   private currentUrlInProgress = false;
   private previousUrlInProgress = false;
@@ -39,6 +38,7 @@ export class HistoryService {
     // listen to router to feed the history
     router.events.subscribe(async (event) => {
       if (event instanceof NavigationEnd) {
+        // console.log("navigationEnd event on url", event.url);
         if (this.currentUrlInProgress) {
           this.currentUrlInProgress = false;
         } else if (this.previousUrlInProgress) {
@@ -47,7 +47,7 @@ export class HistoryService {
           this.previousUrlInProgress = false;
           await this.saveHistoryState();
         } else {
-          if (this.rootPaths.includes(event.url)) {
+          if (this.rootPaths.includes(event.url.split("?")[0])) {
             // back to a root of a tab : delete history
             this.hist = [event.url];
           } else if (event.url === "/lock") {
@@ -61,9 +61,14 @@ export class HistoryService {
         }
       }
     });
+    /** for debug */
+    // // @ts-ignore
+    // window["hist"] = this;
+    /** end custo */
   }
 
   async init() {
+    // console.log("historyService.init()");
     const histStr: string = await this.stateService.getHistoryState();
     if (histStr === "/" || !histStr) {
       this.hist = this.defaultHist.slice();
@@ -79,6 +84,10 @@ export class HistoryService {
       return;
     }
     this.hist = retrievedData.hist;
+  }
+
+  setLoggedOutHistory() {
+    this.hist = this.defaultLoggedOutHistory.slice();
   }
 
   gotoPreviousUrl(steps = 1) {
@@ -102,9 +111,7 @@ export class HistoryService {
   }
 
   private gotoToUrl(urlStr: any) {
-    let tempCipher: CipherView = undefined;
     if (typeof urlStr !== "string") {
-      tempCipher = urlStr.tempCipher;
       urlStr = urlStr.url;
     }
     if (!urlStr) {
@@ -167,7 +174,7 @@ export class HistoryService {
 
 // Cozy Helper
 
-/* 
+/*
 Remove all null properties to shorten the stored url in history (recursive)
 */
 function cleanCipher(cipher: any) {

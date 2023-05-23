@@ -1,6 +1,6 @@
 require("./menu.scss");
-import { CipherType } from "jslib-common/enums/cipherType.ts";
-import { CipherView } from "jslib-common/models/view/cipherView.ts";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view.ts";
 
 // Globals
 var arrow,

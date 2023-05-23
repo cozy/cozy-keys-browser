@@ -1,9 +1,9 @@
 <header>
   <div class="left">
     <button type="button" appBlurClick (click)="back()" title="{{ 'back_shortcut' | i18n }}">
-      <span class="header-icon" title="{{ "back" | i18n }}"
-        ><i class="icon-cozy icon-back"></i
-      ></span>
+      <span class="header-icon" title="{{ 'back' | i18n }}">
+        <i class="icon-cozy icon-back"></i>
+      </span>
     </button>
   </div>
   <h1 class="sr-only">{{ "myVault" | i18n }}</h1>
@@ -157,8 +157,6 @@
             title="{{ 'viewItem' | i18n }}"
             (onSelected)="selectCipher($event)"
             (launchEvent)="launchCipher($event)"
-            (onDoubleSelected)="fillOrLaunchCipher($event)"
-            [showGlobe]="true"
             (onView)="viewCipher($event)"
           ></app-cipher-row>
         </div>

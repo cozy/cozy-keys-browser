@@ -1,8 +1,11 @@
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 
 import { BrowserApi } from "../browser/browserApi";
-
+/** Start Cozy imports */
+/* eslint-disable */
 import RuntimeBackground from "../background/runtime.background";
+/* eslint-enable */
+/** End Cozy imports */
 
 function debounce(fnToDebounce: () => any, delay: number, context: any) {
   let timeout: any;
@@ -25,11 +28,7 @@ export default class BrowserMessagingService implements MessagingService {
   }
 
   send(subscriber: string, arg: any = {}) {
-    if (subscriber === "syncCompleted") {
-      this.countSync();
-    } else {
-      chrome.runtime.sendMessage(subscriber, arg);
-    }
+    return BrowserApi.sendMessage(subscriber, arg);
   }
 
   /*
@@ -60,7 +59,7 @@ export default class BrowserMessagingService implements MessagingService {
     // console.log(`debouncedCountSync() after a delay grouped`, this.syncCounter, 'syncCompleted messages');
     if (this.syncCounter > 2) {
       // console.log(`therefore a fullSync() is trigered on the addon`);
-      this.runtimeBackground.processMessage({ command: "fullSync" }, "syncService", null);
+      this.runtimeBackground.processMessage({ command: "fullSync" }, "syncService" as chrome.runtime.MessageSender, null);
     }
     this.syncCounter = 0;
   }

@@ -108,7 +108,6 @@
               type="button"
               #checkPasswordBtn
               class="row-btn btn"
-              appBlurClick
               appA11yTitle="{{ 'checkPassword' | i18n }}"
               (click)="checkPassword()"
               [appApiAction]="checkPasswordPromise"
@@ -432,21 +431,30 @@
             "
             >{{ "address" | i18n }}</span
           >
+          <!-- Cozy custo
           <div *ngIf="cipher.identity.address1">{{ cipher.identity.address1 }}</div>
           <div *ngIf="cipher.identity.address2">{{ cipher.identity.address2 }}</div>
           <div *ngIf="cipher.identity.address3">{{ cipher.identity.address3 }}</div>
           <div *ngIf="cipher.identity.fullAddressPart2">{{ cipher.identity.fullAddressPart2 }}</div>
           <div *ngIf="cipher.identity.country">{{ cipher.identity.country }}</div>
+          -->
+            <div *ngIf="cipher.identity.address1" class="show-whitespace">
+              {{ getLocalizedAdress() }}
+            </div>
+            <!-- end custo -->
         </div>
       </div>
     </div>
   </div>
-  <div class="box box-uri" *ngIf="cipher.login && cipher.login.hasUris">
+  <div class="box" *ngIf="cipher.login && cipher.login.hasUris">
     <div class="box-content">
       <div
         class="box-content-row box-content-row-flex"
         *ngFor="let u of cipher.login.uris; let i = index"
       >
+        <!-- Cozy custo -->
+        <app-vault-icon [cipher]="cipher" class="view-icon"></app-vault-icon>
+        <!-- end custo -->
         <div class="row-main">
           <label
             for="hostOrUri{{ i }}"
@@ -500,6 +508,7 @@
       </div>
     </div>
   </div>
+  <!-- Cozy custo : in Cozy folders are a couple [organization, collection]
   <div class="box" *ngIf="cipher.folderId">
     <div class="box-content">
       <div class="box-content-row">
@@ -514,6 +523,7 @@
       </div>
     </div>
   </div>
+  -->
   <div class="box" *ngIf="cipher.notes">
     <h2 class="box-header">
       <label
@@ -585,6 +595,11 @@
         *ngIf="cipher.type !== cipherType.SecureNote && !cipher.isDeleted && !inPopout"
       >
         <div class="row-main text-primary">
+          <!-- Cozy custo
+          <div class="icon text-primary" aria-hidden="true">
+            <i class="bwi bwi-pencil-square bwi-lg bwi-fw"></i>
+          </div>
+          -->
           <div class="icon icon-cozy-inline" aria-hidden="true">
             <svg
               width="16"
@@ -600,6 +615,7 @@
               />
             </svg>
           </div>
+          <!-- end -->
           <span>{{ "autoFill" | i18n }}</span>
         </div>
       </button>
@@ -633,23 +649,42 @@
           <span>{{ "cloneItem" | i18n }}</span>
         </div>
       </button>
+      <!-- Cozy custo -->
+      <!--
+      <button
+        type="button"
+        class="box-content-row"
+        appStopClick
+        (click)="share()"
+        *ngIf="!cipher.organizationId"
+      >
+      -->
       <ng-container *ifFlag="CAN_SHARE_ORGANIZATION">
-        <button
-          type="button"
-          class="box-content-row"
-          appStopClick
-          appBlurClick
-          (click)="share()"
-          *ngIf="!cipher.organizationId"
-        >
-          <div class="row-main text-primary">
-            <div class="icon text-primary" aria-hidden="true">
-              <i class="bwi bwi-arrow-circle-right bwi-lg bwi-fw"></i>
-            </div>
-            <span>{{ "moveToOrganization" | i18n }}</span>
+      <button
+       type="button"
+       class="box-content-row"
+       appStopClick
+       (click)="share()"
+       *ngIf="!cipher.isDeleted"
+       >
+        <!-- end custo -->
+        <div class="row-main text-primary">
+          <div class="icon text-primary" aria-hidden="true">
+            <!-- Cozy Custo
+            <i class="bwi bwi-arrow-circle-right bwi-lg bwi-fw"></i>
+             -->
+            <i
+              class="icon-cozy icon-folder"
+              aria-hidden="true"
+            ></i>
+            <!-- end custo -->
           </div>
-        </button>
+          <span>{{ "changeFolder" | i18n }}</span>
+        </div>
+      </button>
+      <!-- Cozy custo -->
       </ng-container>
+      <!-- end custo -->
       <button
         type="button"
         class="box-content-row"

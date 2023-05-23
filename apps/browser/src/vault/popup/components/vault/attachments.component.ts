@@ -14,7 +14,7 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
 /* Cozy imports */
-import { HistoryService } from "../services/history.service";
+import { HistoryService } from "../../../../popup/services/history.service";
 /* END */
 
 @Component({

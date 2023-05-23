@@ -13,8 +13,9 @@
       title="{{ title }} - {{ cipher.name }}"
       class="row-main"
     >
+      <!-- Cozy custo
       <app-vault-icon [cipher]="cipher"></app-vault-icon>
-      <!-- Cozy custo-->
+      -->
       <ng-container *ngIf="cipher.type === cipherType.Login">
         <app-vault-icon [cipher]="cipher"></app-vault-icon>
       </ng-container>
@@ -33,6 +34,7 @@
         <span class="text">
           <span class="truncate-box">
             <span class="truncate">{{ cipher.name }}</span>
+            <!-- Cozy custo
             <ng-container *ngIf="cipher.organizationId">
               <i
                 class="bwi bwi-collection text-muted"
@@ -49,6 +51,22 @@
               ></i>
               <span class="sr-only">{{ "attachments" | i18n }}</span>
             </ng-container>
+            -->
+            <ng-container *ngIf="cipher.organizationId && !isKonnector">
+              <i
+                class="icon-cozy icon-share"
+                title="{{ 'shared' | i18n }}"
+                aria-hidden="true"
+                ></i>
+            </ng-container>
+            <ng-container *ngIf="cipher.organizationId && isKonnector">
+                <i
+                  class="icon-cozy icon-cozy-sync"
+                  title="{{'sharedWithKonnector' | i18n}}"
+                  aria-hidden="true">
+                </i>
+            </ng-container>
+            <!-- end custo -->
           </span>
         </span>
         <span class="detail">{{ getSubtitle(cipher) }}</span>
@@ -58,7 +76,6 @@
       [cipher]="cipher"
       (onView)="viewCipher(cipher)"
       (launchEvent)="launchCipher(cipher)"
-      [showGlobe]="showGlobe"
       (onAutofill)="autofill(cipher)"
       class="action-buttons"
     >

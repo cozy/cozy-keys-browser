@@ -79,6 +79,7 @@ export interface GenerateFillScriptOptions {
   cipher: CipherView;
   tabUrl: string;
   defaultUriMatch: UriMatchType;
+  sender?: string; // Cozy custo
 }
 
 export default class AutofillService implements AutofillServiceInterface {
@@ -199,7 +200,7 @@ export default class AutofillService implements AutofillServiceInterface {
       if (options.fieldsForInPageMenuScripts) {
         // means we are preparing a script to activate menu into page fields
         if (fillScript) {
-          fillScript.script = fillScript.script.filter((action) => {
+          fillScript.script = fillScript.script.filter((action: any) => {
             if (action[0] !== "fill_by_opid") {
               return false;
             }
@@ -288,9 +289,7 @@ export default class AutofillService implements AutofillServiceInterface {
     let hasFieldsForInPageMenu = false;
     if (pageDetails[0].sender === "notifBarForInPageMenu") {
       cipher = await this.cipherService.getLastUsedForUrl(tab.url, false);
-      let r = 0;
-      pageDetails[0].fieldsForInPageMenuScripts.forEach((s: any) => (r += s.script.length));
-      hasFieldsForInPageMenu = r > 0;
+      hasFieldsForInPageMenu = ( pageDetails[0].fieldsForInPageMenuScripts.findIndex( (s: any) => {s.script.length > 0}) ) > -1;
       tab = pageDetails[0].tab;
       if (!cipher && !hasFieldsForInPageMenu) {
         // there is no cipher for this URL : deactivate in page menu
@@ -311,24 +310,32 @@ export default class AutofillService implements AutofillServiceInterface {
       if (!tab || !tab.url) {
         return;
       }
-      if (fromCommand) {
-        cipher = await this.cipherService.getNextCipherForUrl(tab.url);
+    /* END @override by Cozy */
+    if (fromCommand) {
+      cipher = await this.cipherService.getNextCipherForUrl(tab.url);
+    } else {
+      const lastLaunchedCipher = await this.cipherService.getLastLaunchedForUrl(tab.url, true);
+      if (
+        lastLaunchedCipher &&
+        Date.now().valueOf() - lastLaunchedCipher.localData?.lastLaunched?.valueOf() < 30000
+      ) {
+        cipher = lastLaunchedCipher;
       } else {
-        const lastLaunchedCipher = await this.cipherService.getLastLaunchedForUrl(tab.url, true);
-        if (
-          lastLaunchedCipher &&
-          Date.now().valueOf() - lastLaunchedCipher.localData?.lastLaunched?.valueOf() < 30000
-        ) {
-          cipher = lastLaunchedCipher;
-        } else {
-          cipher = await this.cipherService.getLastUsedForUrl(tab.url, true);
-        }
+        cipher = await this.cipherService.getLastUsedForUrl(tab.url, true);
       }
     }
-    if (cipher == null && !hasFieldsForInPageMenu) {
+    /** Cozy custo
+    }
+    if (cipher == null || cipher.reprompt !== CipherRepromptType.None) {
       return null;
     }
-    /* END @override by Cozy */
+    */
+    }
+    if ((cipher == null || cipher.reprompt !== CipherRepromptType.None) && !hasFieldsForInPageMenu) {
+      return null;
+    }
+    /** end custo */
+
     const totpCode = await this.doAutoFill({
       tab: tab,
       cipher: cipher,
@@ -467,6 +474,9 @@ export default class AutofillService implements AutofillServiceInterface {
       onlyEmptyFields: false,
       onlyVisibleFields: false,
       cipher: cipherModel,
+      fillNewPassword: true,
+      tabUrl: "",
+      defaultUriMatch: UriMatchType.Never,
     };
 
     // B1] pre filter the fields into which a login menu should be inserted
@@ -630,7 +640,7 @@ export default class AutofillService implements AutofillServiceInterface {
       if (!element.hasOwnProperty(attr) || !element[attr]) {
         continue;
       }
-      if (this.isFieldMatch(element[attr], markers)) {
+      if (AutofillService.isFieldMatch(element[attr], markers)) {
         return true;
       }
     }
@@ -917,8 +927,8 @@ export default class AutofillService implements AutofillServiceInterface {
       return null;
     }
 
-    const passwords: AutofillField[] = [];
-    const usernames: AutofillField[] = [];
+    let passwords: AutofillField[] = [];
+    let usernames: AutofillField[] = [];
     let pf: AutofillField = null;
     let username: AutofillField = null;
     const login = options.cipher.login;
@@ -1852,7 +1862,7 @@ export default class AutofillService implements AutofillServiceInterface {
 
         /* Cozy specific testings   */
         if (
-          this.isFieldMatch(
+          AutofillService.isFieldMatch(
             f[attr],
             IdentityAutoFillConstants.FullNameFieldNames,
             IdentityAutoFillConstants.FullNameFieldNameValues
@@ -1862,7 +1872,7 @@ export default class AutofillService implements AutofillServiceInterface {
           fillFields.name = f;
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.FirstnameFieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.FirstnameFieldNames) &&
           (!fillFields.firstName || f.viewableOri)
         ) {
           switch (this.isFirstNameFirst(f[attr])) {
@@ -1878,31 +1888,31 @@ export default class AutofillService implements AutofillServiceInterface {
           }
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.MiddlenameFieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.MiddlenameFieldNames) &&
           (!fillFields.middleName || f.viewableOri)
         ) {
           fillFields.middleName = f;
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.LastnameFieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.LastnameFieldNames) &&
           (!fillFields.lastName || f.viewableOri)
         ) {
           fillFields.lastName = f;
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.TitleFieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.TitleFieldNames) &&
           (!fillFields.title || f.viewableOri)
         ) {
           fillFields.title = f;
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.EmailFieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.EmailFieldNames) &&
           (!fillFields.email || f.viewableOri)
         ) {
           fillFields.email = f;
           break;
         } else if (
-          this.isFieldMatch(
+          AutofillService.isFieldMatch(
             f[attr],
             IdentityAutoFillConstants.AddressFieldNames,
             IdentityAutoFillConstants.AddressFieldNameValues
@@ -1912,61 +1922,61 @@ export default class AutofillService implements AutofillServiceInterface {
           fillFields.address = f;
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.Address1FieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.Address1FieldNames) &&
           (!fillFields.address1 || f.viewableOri)
         ) {
           fillFields.address1 = f;
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.Address2FieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.Address2FieldNames) &&
           (!fillFields.address2 || f.viewableOri)
         ) {
           fillFields.address2 = f;
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.Address3FieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.Address3FieldNames) &&
           (!fillFields.address3 || f.viewableOri)
         ) {
           fillFields.address3 = f;
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.PostalCodeFieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.PostalCodeFieldNames) &&
           (!fillFields.postalCode || f.viewableOri)
         ) {
           fillFields.postalCode = f;
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.CityFieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.CityFieldNames) &&
           (!fillFields.city || f.viewableOri)
         ) {
           fillFields.city = f;
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.StateFieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.StateFieldNames) &&
           (!fillFields.state || f.viewableOri)
         ) {
           fillFields.state = f;
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.CountryFieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.CountryFieldNames) &&
           (!fillFields.country || f.viewableOri)
         ) {
           fillFields.country = f;
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.PhoneFieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.PhoneFieldNames) &&
           (!fillFields.phone || f.viewableOri)
         ) {
           fillFields.phone = f;
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.UserNameFieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.UserNameFieldNames) &&
           (!fillFields.username || f.viewableOri)
         ) {
           fillFields.username = f;
           break;
         } else if (
-          this.isFieldMatch(f[attr], IdentityAutoFillConstants.CompanyFieldNames) &&
+          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.CompanyFieldNames) &&
           (!fillFields.company || f.viewableOri)
         ) {
           fillFields.company = f;

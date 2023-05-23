@@ -373,19 +373,4 @@ export abstract class StateService<T extends Account = Account> {
     options?: StorageOptions
   ) => Promise<void>;
 
-  // Cozy customization
-  //*
-  getEnableInPageMenu: (options?: StorageOptions) => Promise<boolean>;
-
-  setEnableInPageMenu: (value: boolean, options?: StorageOptions) => Promise<void>;
-
-  getDisableKonnectorsSuggestions: (options?: StorageOptions) => Promise<boolean>;
-
-  setDisableKonnectorsSuggestions: (value: boolean, options?: StorageOptions) => Promise<void>;
-
-  setHistoryState: (value: string) => Promise<void>;
-
-  getHistoryState: () => Promise<string>;
-  //*/
-
 }

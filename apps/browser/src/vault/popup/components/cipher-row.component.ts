@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-
 /** Start Cozy imports */
 /* eslint-disable */
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { zeroPadLeftUntilTwoChars } from "../../../tools/strings";
+import { KonnectorsService } from "../../../popup/services/konnectors.service";
+import { OnInit } from "@angular/core";
 /* eslint-enable */
 /** End Cozy imports */
 
@@ -13,7 +14,7 @@ import { zeroPadLeftUntilTwoChars } from "../../../tools/strings";
   selector: "app-cipher-row",
   templateUrl: "cipher-row.component.html",
 })
-export class CipherRowComponent {
+export class CipherRowComponent implements OnInit {
   @Output() onSelected = new EventEmitter<CipherView>();
   @Output() launchEvent = new EventEmitter<CipherView>();
   @Output() onView = new EventEmitter<CipherView>();
@@ -21,6 +22,8 @@ export class CipherRowComponent {
   @Input() last: boolean;
   @Input() showView = false;
   @Input() title: string;
+  isKonnector: boolean;
+  constructor(protected konnectorService: KonnectorsService){ }
   /* Cozy custo */
   @Output() onAutofill = new EventEmitter<CipherView>();
   cipherType = CipherType;
@@ -67,4 +70,18 @@ export class CipherRowComponent {
     return c.subTitle;
   }
   /* end custo */
+
+
+  // Cozy customization, differentiate shared Ciphers from ciphers in "Cozy Connectors" organization
+  // /*
+  async ngOnInit() {
+    /** TODO BJA konnectors icon : not tested, waiting for its full implementation
+     * Need to modify the cozy client rights so that the call can be run
+     */
+    /*
+    this.isKonnector = await this.konnectorService.isKonnectorsOrganization(this.cipher.organizationId);
+    */
+    this.isKonnector = false;
+  }
+  // */
 }

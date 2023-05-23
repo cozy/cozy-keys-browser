@@ -241,43 +241,6 @@
       <div class="box-content">
         <div class="box-content-row" appBoxRow>
           <label for="theme">{{ "theme" | i18n }}</label>
-  <div class="box box-section-divider">
-    <h2>
-      <button
-        type="button"
-        class="box-header-expandable"
-        (click)="showAutofill = !showAutofill"
-        [attr.aria-expanded]="showAutofill"
-      >
-        Autofill
-        <i *ngIf="!showAutofill" class="bwi bwi-angle-down bwi-sm icon" aria-hidden="true"></i>
-        <i *ngIf="showAutofill" class="bwi bwi-chevron-up bwi-sm icon" aria-hidden="true"></i>
-      </button>
-    </h2>
-  </div>
-  <ng-container *ngIf="showAutofill">
-    <div class="box">
-      <div class="box-content">
-        <div class="box-content-row box-content-row-checkbox" appBoxRow>
-          <label for="autofill">{{ "enableAutoFillOnPageLoad" | i18n }}</label>
-          <input
-            id="autofill"
-            type="checkbox"
-            (change)="updateAutoFillOnPageLoad()"
-            [(ngModel)]="enableAutoFillOnPageLoad"
-          />
-        </div>
-      </div>
-      <div class="box-footer">
-        {{ "enableAutoFillOnPageLoadDesc" | i18n }}
-        <b>{{ "warning" | i18n }}</b
-        >: {{ "experimentalFeature" | i18n }}
-      </div>
-    </div>
-    <div class="box">
-      <div class="box-content">
-        <div class="box-content-row" appBoxRow>
-          <label for="defaultAutofill">{{ "defaultAutoFillOnPageLoad" | i18n }}</label>
           <select
             id="theme"
             name="Theme"

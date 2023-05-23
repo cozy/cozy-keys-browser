@@ -105,8 +105,8 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       const confirmed = await this.platformUtilsService.showDialog(
         this.i18nService.t("popup2faCloseMessage"),
         null,
-        this.i18nService.t("yes"),
-        this.i18nService.t("no")
+        this.i18nService.t("continue")
+        // this.i18nService.t("no") // Commented by Cozy custo
       );
       if (confirmed) {
         this.popupUtilsService.popOut(window);
@@ -147,7 +147,14 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
     await super.submit();
     const isAuthed = await this.stateService.getIsAuthenticated();
     if (!isAuthed) {
-      // TODO BJA : prompt a message in case 2FA failed, explaining a new code is sent.
+      /* Cozy custo : showToast if provided 2FA token is wrong */
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("inPageMenuLogin2FACheckError")
+      );
+      /* end custo */
+
     } else {
       this.messagingService.send("loggedIn");
     }

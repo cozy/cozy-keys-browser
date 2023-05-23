@@ -1,4 +1,4 @@
-import { IdentityTokenResponse as BaseIdentityTokenResponse } from "jslib-common/models/response/identityTokenResponse";
+import { IdentityTokenResponse as BaseIdentityTokenResponse } from "@bitwarden/common/auth/models/response/identity-token.response";
 
 /**
  * We need to extend the jslib's IdentityTokenResponse to add the clientId and

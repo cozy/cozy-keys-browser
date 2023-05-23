@@ -78,7 +78,7 @@ export class ViewComponent extends BaseViewComponent {
     logService: LogService,
     fileDownloadService: FileDownloadService,
     private cozyClientService: CozyClientService,
-    private historyService: HistoryService
+    private historyService: HistoryService,
   ) {
     super(
       cipherService,
@@ -206,12 +206,21 @@ export class ViewComponent extends BaseViewComponent {
       return false;
     }
 
+    /** Cozy custo : go to share screen even if organizationId is mentionned since in Cozy
+     * a user can move a cipher to any organization (= folder) */
+    /*
     if (this.cipher.organizationId == null) {
       this.router.navigate(["/share-cipher"], {
         replaceUrl: true,
         queryParams: { cipherId: this.cipher.id },
       });
     }
+    */
+    this.router.navigate(["/share-cipher"], {
+      replaceUrl: true,
+      queryParams: { cipherId: this.cipher.id },
+    });
+    /** end custo */
     return true;
   }
 

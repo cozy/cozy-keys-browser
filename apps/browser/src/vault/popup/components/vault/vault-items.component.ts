@@ -24,7 +24,6 @@ import { BrowserComponentState } from "../../../../models/browserComponentState"
 import { PopupUtilsService } from "../../../../popup/services/popup-utils.service";
 import { BrowserStateService } from "../../../../services/abstractions/browser-state.service";
 import { VaultFilterService } from "../../../services/vault-filter.service";
-
 /** Start Cozy imports */
 /* eslint-disable */
 import { AutofillService } from "../../../../autofill/services/abstractions/autofill.service";
@@ -94,9 +93,13 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   // Cozy custo
   @HostListener("window:keydown", ["$event"])
   handleKeyDown(event: KeyboardEvent) {
-    if (event.key === "Escape") {
-      this.back();
+    if (event.key === 'Escape') {
       event.preventDefault();
+      if (this.searchText == null || this.searchText === "") {
+        this.back();
+      } else {
+        this.emptySearch();
+      }
     }
   }
   // end custo
@@ -193,7 +196,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
           0
         );
       }
-      await this.stateService.setBrowserCipherComponentState(null);
+      await this.stateService.setBrowserVaultItemsComponentState(null);
     });
 
     this.broadcasterService.subscribe(ComponentId, (message: any) => {
@@ -394,6 +397,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
         cipher: cipher,
         pageDetails: this.pageDetails,
         doc: window.document,
+        tab: null,
         fillNewPassword: true,
       });
       if (totpCode != null) {
@@ -416,6 +420,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
 
   emptySearch() {
     this.searchText = "";
+    console.log("vault-items.component : focus() !")
     document.getElementById("search").focus();
     this.search(50);
   }

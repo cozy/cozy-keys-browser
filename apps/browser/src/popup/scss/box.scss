@@ -1,5 +1,18 @@
 @import "variables.scss";
 
+.box-content > app-cipher-row:not(:last-child) .box-content-row-flex {
+  &::before {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: calc(100% - 40px);
+    @include themify($themes) {
+      border-bottom: 1px solid themed("borderColor");
+    }
+    content:"";
+  }
+}
+
 .box {
   position: relative;
   width: 100%;
@@ -98,7 +111,7 @@
     .box-content-row.single-line {
       padding-top: 10px;
       padding-bottom: 10px;
-      margin: 5px;
+      // margin: 5px; // Cozy custo
     }
 
     &.row-top-padding {
@@ -107,8 +120,7 @@
   }
 
   .box-footer {
-    // margin: 0 5px 5px 5px;
-    padding: 5px 10px;
+    margin: 0 5px 25px 5px;
     font-size: $font-size-small;
     button.btn {
       font-size: $font-size-small;
@@ -136,6 +148,16 @@
     }
   }
 
+  /* Cozy custo*/
+  .row-footer {
+    padding: 5px 0px;
+    font-size: $font-size-small;
+    @include themify($themes) {
+      color: themed("mutedColor");
+    }
+  }
+  /* end custo*/
+
   &.list {
     margin: 10px 0 20px 0;
     .box-content {
@@ -144,11 +166,21 @@
         display: inline-block;
         width: 100%;
       }
-
+      app-cipher-row:not(:last-child)::before {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: calc(100% - 40px);
+        border-bottom: 1px solid red;
+      }
       .box-content-row {
         padding: 5px 10px;
         text-decoration: none;
+        /* Cozy custo
         border-radius: $border-radius;
+        */
+        border-radius: 0;
+        /* end custo*/
         // background-color: $background-color;
 
         @include themify($themes) {
@@ -209,6 +241,14 @@
             min-width: 0;
           }
         }
+
+        /* Cozy custo */
+        .row-vertical {
+          min-width: 0;
+          align-items: center;
+          flex-grow: 1;
+        }
+        /* end custo Cozy */
       }
 
       &.single-line {
@@ -217,9 +257,22 @@
           align-items: center;
           padding-top: 10px;
           padding-bottom: 10px;
+          /* Cozy custo
           margin: 5px;
           border-radius: $border-radius;
+          */
+          border-radius: 0;
         }
+        &.underline .box-content-row:not(:last-child)::after {
+          position: absolute;
+          right: 0;
+          bottom: 0;
+          width: calc(100% - 40px);
+          @include themify($themes) {
+            border-bottom: 1px solid themed("borderColor");
+          }
+        }
+        /* end custo */
       }
     }
   }
@@ -242,7 +295,12 @@
 }
 
 .login-box {
-  margin-top: 58px;
+  margin-top: 130px;
+  .label {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-left: 10px;
+  }
 }
 
 .unlock-box {
@@ -267,8 +325,10 @@
   padding: 5px 10px;
   position: relative;
   z-index: 1;
+  /* Cozy custo
   border-radius: $border-radius;
   margin: 3px 5px;
+  end custo */
 
   @include themify($themes) {
     background-color: themed("boxBackgroundColor");
@@ -454,7 +514,7 @@
   &.box-content-row-slider {
     padding-top: 10px;
     padding-bottom: 10px;
-    margin: 5px;
+    margin: 0;
 
     label,
     .row-label {
@@ -844,7 +904,7 @@ form {
   }
 }
 
-// Cozy custo
+/* Cozy custo */
 .explanation {
   padding-top: 60px;
   padding-bottom: 10px;
@@ -853,4 +913,10 @@ form {
 .options-row {
   padding: 15px 15px 0px 10px;
 }
-// end custo
+
+select:focus-visible {
+  @include themify($themes) {
+    outline: 1px solid themed("boxBackgroundHoverColor");
+  }
+}
+/* end custo */

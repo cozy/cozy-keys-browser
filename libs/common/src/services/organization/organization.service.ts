@@ -4,7 +4,11 @@ import { InternalOrganizationService as InternalOrganizationServiceAbstraction }
 import { StateService } from "../../abstractions/state.service";
 import { OrganizationData } from "../../models/data/organization.data";
 import { Organization } from "../../models/domain/organization";
-
+/** Cozy custo */
+/* eslint-disable */
+import { ProfileOrganizationResponse } from "../../models/response/profile-organization.response";
+/* eslint-enable */
+/* END */
 export class OrganizationService implements InternalOrganizationServiceAbstraction {
   protected _organizations = new BehaviorSubject<Organization[]>([]);
 
@@ -107,4 +111,10 @@ export class OrganizationService implements InternalOrganizationServiceAbstracti
     const organizations = Object.values(organizationsMap || {}).map((o) => new Organization(o));
     this._organizations.next(organizations);
   }
+
+  /* Cozy custo */
+  async upsertOrganization(organization: ProfileOrganizationResponse) {
+    await this.upsert(new OrganizationData(organization));
+  }
+  /* end custo */
 }

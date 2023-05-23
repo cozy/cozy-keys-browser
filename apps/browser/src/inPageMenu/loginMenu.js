@@ -1,8 +1,6 @@
 require("./loginMenu.scss");
 
-import { AuthService } from "jslib-common/abstractions/auth.service";
-import { EnvironmentService } from "jslib-common/abstractions/environment.service";
-import { Utils } from "jslib-common/misc/utils";
+import { Utils } from "@bitwarden/common/misc/utils";
 
 import { CozySanitizeUrlService } from "../popup/services/cozySanitizeUrl.service";
 
@@ -68,7 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
   _testHash();
 
   // 5- prepare i18n and apply
-  var i18n = {};
   if (typeof safari !== "undefined") {
     const responseCommand = "notificationBarFrameDataResponse"; // to be adapted to loginMenu
     // eslint-disable-next-line no-undef
@@ -82,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
       (msgEvent) => {
         const msg = JSON.parse(msgEvent.message.msg);
         if (msg.command === responseCommand && msg.data) {
-          i18n = msg.data.i18n;
           // eslint-disable-next-line no-undef
           load();
         }
@@ -123,8 +119,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 8- listen to the commands sent by the addon
   chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-    // console.log('loginMenu heared msg', msg);
-    if (msg.command !== "menuAnswerRequest") return;
+    /* For debug
+    console.log('loginMenu heared msg', msg);
+    */
+    if (msg.command !== "menuAnswerRequest") {return};
     switch (msg.subcommand) {
       case "loginNOK":
         // console.log("loginNOK heard in loginInPageMenu");
@@ -139,6 +137,11 @@ document.addEventListener("DOMContentLoaded", () => {
         urlInput.value = msg.rememberedCozyUrl;
         // input event not triggered in Chrome by the previous instruction... so we triger event manually...
         urlInput.dispatchEvent(new Event("input", { bubbles: true }));
+        break;
+      case "menuFocus":
+        setTimeout(() => {
+          setFocusOnEmptyField();
+        }, 50);
         break;
     }
   });
@@ -174,7 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   panel.addEventListener("keydown", (event) => {
-    if (!event.isTrusted) return;
+    if (!event.isTrusted) {return};
     const keyName = event.key;
     if (keyName === "Enter") {
       if (isIn2FA) {
@@ -193,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Width is constraint by the parent page, but height is decided by the
 // iframe content
 function adjustMenuHeight() {
-  if (lastSentHeight === panel.offsetHeight) return;
+  if (lastSentHeight === panel.offsetHeight) {return};
   lastSentHeight = panel.offsetHeight;
   chrome.runtime.sendMessage({
     command: "bgAnswerMenuRequest",
@@ -404,6 +407,9 @@ function _turnIntoMaterialInput(inputEl, labelText) {
   let isFocusedOrFilled = false;
   const initialPlaceholder = inputEl.placeholder;
   // init input state
+  if (document.activeElement !== inputEl) {
+    inputEl.placeholder = "";
+  }
   if (inputEl.value) {
     container.classList.add("focused-or-filled");
     inputEl.placeholder = initialPlaceholder;

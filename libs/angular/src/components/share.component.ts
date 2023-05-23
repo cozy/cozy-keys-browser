@@ -27,6 +27,7 @@ export class ShareComponent implements OnInit, OnDestroy {
   cipher: CipherView;
   collections: Checkable<CollectionView>[] = [];
   organizations$: Observable<Organization[]>;
+  selectedCollectionId: string = undefined;
 
   protected writeableCollections: Checkable<CollectionView>[] = [];
 
@@ -75,6 +76,13 @@ export class ShareComponent implements OnInit, OnDestroy {
     this.cipher = await cipherDomain.decrypt();
 
     this.filterCollections();
+    /* Cozy custo : initialize de select item on the current collection of the cipher */
+    if (this.cipher.organizationId) {
+      this.selectedCollectionId = this.collections.find(col => col.organizationId === this.cipher.organizationId)?.id;
+    } else {
+      this.selectedCollectionId = "";
+    }
+    /* end custo */
   }
 
   filterCollections() {
@@ -82,13 +90,20 @@ export class ShareComponent implements OnInit, OnDestroy {
     if (this.organizationId == null || this.writeableCollections.length === 0) {
       this.collections = [];
     } else {
+      /** Cozy custo : no need to filter collections since in Cozy
+       * a user can move a cipher to any organization (= folder)
       this.collections = this.writeableCollections.filter(
         (c) => c.organizationId === this.organizationId
       );
+      */
+      this.collections = this.writeableCollections.slice();
+      /** end custo */
+
     }
   }
 
   async submit(): Promise<boolean> {
+    /** Cozy custo
     const selectedCollectionIds = this.collections.filter(isChecked).map((c) => c.id);
     if (selectedCollectionIds.length === 0) {
       this.platformUtilsService.showToast(
@@ -98,22 +113,39 @@ export class ShareComponent implements OnInit, OnDestroy {
       );
       return;
     }
+    */
+    const selectedCollection = this.collections.filter(c => !!(c as any).checked);
+    if (selectedCollection.length !== 1) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("selectOneFolder")
+      );
+      return;
+    }
+
+    const organizationId = selectedCollection[0].organizationId;
+    const selectedCollectionIds = selectedCollection.map(c => c.id);
+    /** end custo */
 
     const cipherDomain = await this.cipherService.get(this.cipherId);
     const cipherView = await cipherDomain.decrypt();
+    /** Cozy custo
     const orgs = await firstValueFrom(this.organizations$);
     const orgName =
       orgs.find((o) => o.id === this.organizationId)?.name ?? this.i18nService.t("organization");
+    */
 
     try {
       this.formPromise = this.cipherService
-        .shareWithServer(cipherView, this.organizationId, selectedCollectionIds)
+        .shareWithServer(cipherView, organizationId, selectedCollectionIds)
         .then(async () => {
           this.onSharedCipher.emit();
           this.platformUtilsService.showToast(
             "success",
             null,
-            this.i18nService.t("movedItemToOrg", cipherView.name, orgName)
+            // this.i18nService.t("movedItemToOrg", cipherView.name, orgName) // Cozy custo
+            this.i18nService.t("movedItemToFolder")
           );
         });
       await this.formPromise;
@@ -134,4 +166,12 @@ export class ShareComponent implements OnInit, OnDestroy {
     }
     return false;
   }
+
+  /** Cozy custo */
+  onSelectedCollectionChange() {
+    this.collections.forEach(collection => {
+        (collection as any).checked = this.selectedCollectionId === collection.id;
+    });
+  }
+  /** end custo */
 }

@@ -9,6 +9,8 @@ export interface PageDetail {
   frameId: number;
   tab: chrome.tabs.Tab;
   details: AutofillPageDetails;
+  fieldsForInPageMenuScripts?: any;
+  sender?: any;
 }
 
 export interface AutoFillOptions {
@@ -22,6 +24,7 @@ export interface AutoFillOptions {
   fillNewPassword?: boolean;
   skipLastUsed?: boolean;
   allowUntrustedIframe?: boolean;
+  fieldsForInPageMenuScripts?: any[]; // Cozy custo
 }
 
 export interface FormData {

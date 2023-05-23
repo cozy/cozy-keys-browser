@@ -15,21 +15,23 @@ import LockedVaultPendingNotificationsItem from "./models/lockedVaultPendingNoti
 
 // Cozy Imports
 /* eslint-disable */
-import { AuthService } from "jslib-common/services/auth.service";
-import { AuthenticationStatus } from "jslib-common/enums/authenticationStatus";
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { CipherWithIdExport as CipherExport } from "jslib-common/models/export/cipherWithIdsExport";
-import { CipherService } from "jslib-common/abstractions/cipher.service";
-import { CipherType } from "jslib-common/enums/cipherType";
+import { AuthService } from "@bitwarden/common/auth/services/auth.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CipherWithIdExport as CipherExport } from "@bitwarden/common/models/export/cipher-with-ids.export";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CozyClientService } from "src/popup/services/cozyClient.service";
-import { CryptoService } from "jslib-common/abstractions/crypto.service";
-import { EncString } from "jslib-common/models/domain/encString";
-import { HashPurpose } from "jslib-common/enums/hashPurpose";
-import { PasswordRequest } from "jslib-common/models/request/passwordRequest";
-import { PasswordLogInCredentials } from "jslib-common/models/domain/logInCredentials";
-import { SyncService } from "jslib-common/abstractions/sync.service";
-import { StateService } from "src/services/state.service";
-import { VaultTimeoutService } from "jslib-common/abstractions/vaultTimeout.service";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { EncString } from "@bitwarden/common/models/domain/enc-string";
+import { HashPurpose } from "@bitwarden/common/enums/hashPurpose";
+import { PasswordRequest } from "@bitwarden/common/auth/models/request/password.request";
+import { PasswordLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { BrowserStateService as StateService } from "src/services/browser-state.service";
+import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 /* eslint-enable */
 // End Cozy imports
 
@@ -55,8 +57,8 @@ export default class RuntimeBackground {
     private cryptoService: CryptoService,
     private apiService: ApiService,
     private cipherService: CipherService,
-    private vaultTimeoutService: VaultTimeoutService,
-    private cozyClientService: CozyClientService
+    private cozyClientService: CozyClientService,
+    private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
   ) {
     // onInstalled listener must be wired up before anything else, so we do it in the ctor
     chrome.runtime.onInstalled.addListener((details: any) => {
@@ -86,37 +88,15 @@ export default class RuntimeBackground {
 
   async processMessage(msg: any, sender: chrome.runtime.MessageSender, sendResponse: any) {
     /*
-        @override by Cozy : this log is very useful for reverse engineering the code, keep it for tests
-        console.log('runtime.background PROCESS MESSAGE ', {
-            'command': msg.subcommand ? msg.subcommand : msg.command,
-            'sender': msg.sender + ' of ' +
-            (sender.url ? (new URL(sender.url)).host + ' frameId:' + sender.frameId : sender),
-            'full.msg': msg,
-            'full.sender': sender,
-        });
-    */
-    let logins,
-      allCiphers,
-      ciphers,
-      cozyUrl,
-      rememberedCozyUrl,
-      fieldsForInPageMenuScripts,
-      isAuthenticated,
-      fieldsForAutofillMenuScripts,
-      isLocked,
-      pinSet,
-      isPinLocked,
-      that: any,
-      script,
-      enableInPageMenu,
-      enableInPageMenu2,
-      forms,
-      tab,
-      c,
-      cipher,
-      totpCode2,
-      authStatus;
-
+      Cozy custo : this log is very useful for reverse engineering the code, keep it for tests
+      console.log('runtime.background PROCESS MESSAGE ', {
+          'command': msg.subcommand ? msg.subcommand : msg.command,
+          'sender': msg.sender + ' of ' +
+          (sender.url ? (new URL(sender.url)).host + ' frameId:' + sender.frameId : sender),
+          'full.msg': msg,
+          'full.sender': sender,
+      });
+      */
     switch (msg.command) {
       case "loggedIn":
       case "unlocked": {
@@ -213,11 +193,11 @@ export default class RuntimeBackground {
         break;
       case "bgAnswerMenuRequest":
         switch (msg.subcommand) {
-          case "getCiphersForTab":
-            logins = await this.cipherService.getAllDecryptedForUrl(sender.tab.url, null);
+          case "getCiphersForTab":{
+            const logins = await this.cipherService.getAllDecryptedForUrl(sender.tab.url, null);
             logins.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
-            allCiphers = await this.cipherService.getAllDecrypted();
-            ciphers = { logins: logins, cards: [], identities: [] };
+            const allCiphers = await this.cipherService.getAllDecrypted();
+            const ciphers = { logins: logins, cards: [] as Array<CipherExport>, identities: [] as Array<CipherView> };
             for (const cipher of allCiphers) {
               if (cipher.isDeleted) {
                 continue;
@@ -233,12 +213,13 @@ export default class RuntimeBackground {
                   break;
               }
             }
-            cozyUrl = new URL(this.environmentService.getWebVaultUrl()).origin;
+            const cozyUrl = new URL(this.environmentService.getWebVaultUrl()).origin;
             await BrowserApi.tabSendMessageData(sender.tab, "updateMenuCiphers", {
               ciphers: ciphers,
               cozyUrl: cozyUrl,
             });
             break;
+          }
           case "closeMenu":
             await BrowserApi.tabSendMessage(sender.tab, {
               command: "autofillAnswerRequest",
@@ -279,8 +260,10 @@ export default class RuntimeBackground {
           case "2faCheck":
             await this.twoFaCheck(msg.token, sender.tab);
             break;
-          case "getRememberedCozyUrl":
-            rememberedCozyUrl = (await this.stateService.getRememberedEmail()).slice(3);
+          case "getRememberedCozyUrl":{
+            let rememberedCozyUrl = await this.stateService.getRememberedEmail();
+
+            rememberedCozyUrl = await this.stateService.getRememberedEmail();
             if (!rememberedCozyUrl) {
               rememberedCozyUrl = "";
             }
@@ -290,6 +273,7 @@ export default class RuntimeBackground {
               rememberedCozyUrl: rememberedCozyUrl,
             }); // don't add the frameId, since the emiter (menu) is not the target...
             break;
+          }
           case "fieldFillingWithData":
             await BrowserApi.tabSendMessage(
               sender.tab,
@@ -320,13 +304,13 @@ export default class RuntimeBackground {
       case "bgReseedStorage":
         await this.main.reseedStorage();
         break;
-      case "bgGetLoginMenuFillScript":
+      case "bgGetLoginMenuFillScript": {
         // addon has been disconnected or the page was loaded while addon was not connected
-        enableInPageMenu = await this.stateService.getEnableInPageMenu();
+        const enableInPageMenu = await this.stateService.getEnableInPageMenu();
         if (!enableInPageMenu) {
           break;
         }
-        fieldsForInPageMenuScripts = await this.autofillService.generateFieldsForInPageMenuScripts(
+        const fieldsForInPageMenuScripts = await this.autofillService.generateFieldsForInPageMenuScripts(
           msg.pageDetails,
           false,
           sender.frameId
@@ -336,11 +320,11 @@ export default class RuntimeBackground {
           msg.pageDetails.forms,
           msg.pageDetails.fields
         );
-        isAuthenticated = await this.stateService.getIsAuthenticated(); // = connected or installed
-        authStatus = await this.authService.getAuthStatus();
-        isLocked = isAuthenticated && authStatus === AuthenticationStatus.Locked;
-        pinSet = await this.vaultTimeoutService.isPinLockSet();
-        isPinLocked = (pinSet[0] && this.stateService.getProtectedPin != null) || pinSet[1];
+        const isAuthenticated = await this.stateService.getIsAuthenticated(); // = connected or installed
+        const authStatus = await this.authService.getAuthStatus();
+        const isLocked = isAuthenticated && authStatus === AuthenticationStatus.Locked;
+        const pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
+        const isPinLocked = (pinSet[0] && this.stateService.getProtectedPin != null) || pinSet[1];
         await BrowserApi.tabSendMessage(
           sender.tab,
           {
@@ -354,6 +338,7 @@ export default class RuntimeBackground {
           { frameId: sender.frameId }
         );
         break;
+      }
       case "bgGetAutofillMenuScript": {
         // If goes here : means that addon has just been connected (page was already loaded)
         const activateMenu = async () => {
@@ -381,7 +366,7 @@ export default class RuntimeBackground {
       }
       case "collectPageDetailsResponse":
         switch (msg.sender) {
-          case "notificationBar":
+          case "notificationBar": {
             /* auttofill.js sends the page details requested by the notification bar.
                 Result will be used by both the notificationBar and for the inPageMenu.
                 inPageMenu requires a fillscrip to know wich fields are relevant for the menu and which
@@ -389,16 +374,16 @@ export default class RuntimeBackground {
                 existing logins)
               */
             // 1- request a fill script for the in-page-menu (if activated)
-            enableInPageMenu2 = await this.stateService.getEnableInPageMenu();
+            let enableInPageMenu = await this.stateService.getEnableInPageMenu();
             // default to true
-            if (enableInPageMenu2 === null) {
-              enableInPageMenu2 = true;
+            if (enableInPageMenu === null) {
+              enableInPageMenu = true;
             }
-            if (enableInPageMenu2) {
+            if (enableInPageMenu) {
               // If goes here : means that the page has just been loaded while addon was already connected
               // get scripts for logins, cards and identities
 
-              fieldsForAutofillMenuScripts =
+              const fieldsForAutofillMenuScripts =
                 await this.autofillService.generateFieldsForInPageMenuScripts(
                   msg.details,
                   true,
@@ -426,13 +411,14 @@ export default class RuntimeBackground {
               }
             }
             // 2- send page details to the notification bar
-            forms = this.autofillService.getFormsWithPasswordFields(msg.details);
+            const forms = this.autofillService.getFormsWithPasswordFields(msg.details);
             await BrowserApi.tabSendMessageData(msg.tab, "notificationBarPageDetails", {
               details: msg.details,
               forms: forms,
             });
 
             break;
+          }
           case "autofiller":
           case "autofill_cmd": {
             const totpCode = await this.autofillService.doAutoFillActiveTab(
@@ -453,12 +439,13 @@ export default class RuntimeBackground {
           }
 
           // autofill request for a specific cipher from menu.js
-          case "autofillForMenu.js":
-            tab = await BrowserApi.getTabFromCurrentWindow();
-            c = await this.cipherService.get(msg.cipherId);
-            cipher = await c.decrypt();
-            totpCode2 = await this.autofillService.doAutoFill({
+          case "autofillForMenu.js": {
+            const tab = await BrowserApi.getTabFromCurrentWindow();
+            const c = await this.cipherService.get(msg.cipherId);
+            const cipher = await c.decrypt();
+            const totpCode2 = await this.autofillService.doAutoFill({
               cipher: cipher,
+              tab: null,
               pageDetails: [
                 {
                   frameId: sender.frameId,
@@ -475,7 +462,7 @@ export default class RuntimeBackground {
               });
             }
             break;
-
+          }
           case "contextMenu":
             clearTimeout(this.autofillTimeout);
             this.pageDetailsToAutoFill.push({
@@ -592,7 +579,7 @@ export default class RuntimeBackground {
         base: loginUrl + "/bitwarden",
       });
       // logIn
-      const cred = new PasswordLogInCredentials(email, pwd);
+      const cred = new PasswordLogInCredentials(email, pwd, null, null);
       const response = await this.authService.logIn(cred);
 
       if (response.requiresTwoFactor) {
@@ -601,14 +588,14 @@ export default class RuntimeBackground {
           subcommand: "2faRequested",
         });
       } else {
-        await this.stateService.setRememberedEmail(email);
+        await this.stateService.setRememberedEmail(loginUrl);
         await BrowserApi.tabSendMessage(tab, {
           command: "menuAnswerRequest",
           subcommand: "loginOK",
         });
         // when login is processed on background side, then your messages are not receivend by the background,
         // so you need to triger yourself "loggedIn" actions
-        this.processMessage({ command: "loggedIn" }, "runtime.background.ts.login()", null);
+        this.processMessage({ command: "loggedIn" }, "runtime.background.ts.login()" as chrome.runtime.MessageSender, null);
       }
     } catch (e) {
       await BrowserApi.tabSendMessage(tab, {
@@ -624,8 +611,9 @@ export default class RuntimeBackground {
     */
   private async unlock(email: string, pwd: string, tab: any, loginUrl: string) {
     const kdf = await this.stateService.getKdfType();
-    const kdfIterations = await this.stateService.getKdfIterations();
-    const key = await this.cryptoService.makeKey(pwd, email, kdf, kdfIterations);
+    // const kdfIterations = await this.stateService.getKdfIterations();
+    const kdfConfig = await this.stateService.getKdfConfig();
+    const key = await this.cryptoService.makeKey(pwd, email, kdf, kdfConfig);
     const storedKeyHash = await this.cryptoService.getKeyHash();
 
     let passwordValid = false;
@@ -662,7 +650,7 @@ export default class RuntimeBackground {
       });
       // when unlock is processed on background side, then your messages are not receivend by the background,
       // so you need to triger yourself "loggedIn" actions
-      this.processMessage({ command: "unlocked" }, "runtime.background.ts.unlock()", null);
+      this.processMessage({ command: "unlocked" }, "runtime.background.ts.unlock()" as chrome.runtime.MessageSender, null);
     } else {
       await BrowserApi.tabSendMessage(tab, {
         command: "menuAnswerRequest",
@@ -680,8 +668,9 @@ export default class RuntimeBackground {
     */
   private async unPinlock(email: string, pin: string, tab: any, loginUrl: string) {
     const kdf = await this.stateService.getKdfType();
-    const kdfIterations = await this.stateService.getKdfIterations();
-    const pinSet = await this.vaultTimeoutService.isPinLockSet();
+    // const kdfIterations = await this.stateService.getKdfIterations();
+    const kdfConfig = await this.stateService.getKdfConfig();
+    const pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
     let failed = true;
     try {
       if (pinSet[0]) {
@@ -689,7 +678,7 @@ export default class RuntimeBackground {
           pin,
           email,
           kdf,
-          kdfIterations,
+          kdfConfig,
           await this.stateService.getDecryptedPinProtected()
         );
         const encKey = await this.cryptoService.getEncKey(key);
@@ -700,13 +689,13 @@ export default class RuntimeBackground {
 
         if (!failed) {
           await this.cryptoService.setKey(key);
-          this.processMessage({ command: "unlocked" }, "runtime.background.ts.unPinlock()", null);
+          this.processMessage({ command: "unlocked" }, "runtime.background.ts.unPinlock()" as chrome.runtime.MessageSender, null);
         }
       } else {
-        const key = await this.cryptoService.makeKeyFromPin(pin, email, kdf, kdfIterations);
+        const key = await this.cryptoService.makeKeyFromPin(pin, email, kdf, kdfConfig);
         failed = false;
         await this.cryptoService.setKey(key);
-        this.processMessage({ command: "unlocked" }, "runtime.background.ts.unlock()", null);
+        this.processMessage({ command: "unlocked" }, "runtime.background.ts.unlock()" as chrome.runtime.MessageSender, null);
       }
     } catch {
       failed = true;
@@ -716,7 +705,7 @@ export default class RuntimeBackground {
       this.invalidPinAttempts++;
       if (this.invalidPinAttempts >= 5) {
         // this.messagingService.send('logout');
-        this.processMessage({ command: "logout" }, "runtime.background.ts.unlock()", null);
+        this.processMessage({ command: "logout" }, "runtime.background.ts.unlock()" as chrome.runtime.MessageSender, null);
         return;
       }
       await BrowserApi.tabSendMessage(tab, {
@@ -734,7 +723,6 @@ export default class RuntimeBackground {
   /*
     @override by Cozy
     this function is based on the submit() function in jslib/src/angular/components/two-factor.component.ts
-    TODO REFACTO
     */
   private async twoFaCheck(token: string, tab: any) {
     try {
@@ -749,7 +737,7 @@ export default class RuntimeBackground {
         null
       );
       // validation succeeded
-      this.processMessage({ command: "loggedIn" }, "runtime.background.ts.twoFaCheck()", null);
+      this.processMessage({ command: "loggedIn" }, "runtime.background.ts.twoFaCheck()" as chrome.runtime.MessageSender, null);
     } catch (e) {
       await BrowserApi.tabSendMessage(tab, {
         command: "menuAnswerRequest",

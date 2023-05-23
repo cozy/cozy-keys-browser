@@ -1,12 +1,10 @@
-import { StateService } from "jslib-common/abstractions/state.service";
-import { StorageService } from "jslib-common/abstractions/storage.service";
-import { CipherType } from "jslib-common/enums/cipherType";
-import { CipherView } from "jslib-common/models/view/cipherView";
-import { LoginUriView } from "jslib-common/models/view/loginUriView";
-import { LoginView } from "jslib-common/models/view/loginView";
-import { SettingsService } from "jslib-common/services/settings.service";
-
-import BrowserStorageService from "../../services/browserStorage.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { AbstractStorageService as StorageService } from "@bitwarden/common/abstractions/storage.service";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
+import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
+import { SettingsService } from "@bitwarden/common/services/settings.service";
 
 import { KonnectorsService } from "./konnectors.service";
 

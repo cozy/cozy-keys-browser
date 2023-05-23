@@ -1,36 +1,35 @@
 /* -----------------------------------------------------------------------------------
 
-    @override by Cozy
+    Cozy custo : this file is specific to Cozy
 
-    COZY DUPLICATE -
-    This file extends the JSlib class : jslib/services/sync.service
+    This file extends the JSlib class : @bitwarden/common/vault/services/sync/sync.service
     For more context, see commit f1956682454d00328dea38d37257ab32dc80129f
     The original extended file version is here :
        https://github.com/bitwarden/jslib/blob/669f6ddf93bbfe8acd18a4834fff5e1c7f9c91ba/src/services/sync.service.ts
 
    ----------------------------------------------------------------------------------- */
 
-import { ApiService } from "jslib-common/abstractions/api.service";
-import { CipherService } from "jslib-common/abstractions/cipher.service";
-import { CollectionService } from "jslib-common/abstractions/collection.service";
-import { FolderService } from "jslib-common/abstractions/folder.service";
-import { KeyConnectorService } from "jslib-common/abstractions/keyConnector.service";
-import { LogService } from "jslib-common/abstractions/log.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
-import { PolicyService } from "jslib-common/abstractions/policy.service";
-import { SendService } from "jslib-common/abstractions/send.service";
-import { SettingsService } from "jslib-common/abstractions/settings.service";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
+import { LogService } from "@bitwarden/common/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { InternalOrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { InternalPolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
+import { SendService } from "@bitwarden/common/abstractions/send.service";
+import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
+import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 /* start Cozy imports */
 /* eslint-disable */
-import { TokenService as TokenServiceAbstraction } from "jslib-common/abstractions/token.service";
-import { SyncCipherNotification } from "jslib-common/models/response/notificationResponse";
-import { ProfileOrganizationResponse } from "jslib-common/models/response/profileOrganizationResponse";
-import { SyncService as BaseSyncService } from "jslib-common/services/sync.service";
+import { SyncCipherNotification } from "@bitwarden/common/models/response/notification.response";
+import { ProfileProviderOrganizationResponse as ProfileProviderOrganizationResponse } from "@bitwarden/common/models/response/profile-provider-organization.response";
+import { SyncService as BaseSyncService } from "@bitwarden/common/vault/services/sync/sync.service";
 import { CozyClientService } from "./cozyClient.service";
 import { BrowserCryptoService as CryptoService } from "../../services/browserCrypto.service";
-import { StateService } from "jslib-common/abstractions/state.service";
-import { OrganizationService } from "./organization.service";
-import { ProviderService } from "jslib-common/abstractions/provider.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { ProviderService } from "@bitwarden/common/abstractions/provider.service";
+import { FolderApiServiceAbstraction } from "@bitwarden/common/vault/abstractions/folder/folder-api.service.abstraction";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -52,21 +51,21 @@ export class SyncService extends BaseSyncService {
   constructor(
     private localApiService: ApiService,
     settingsService: SettingsService,
-    folderService: FolderService,
+    folderService: InternalFolderService,
     cipherService: CipherService,
     private localCryptoService: CryptoService,
     private localCollectionService: CollectionService,
     private localMessagingService: MessagingService,
-    policyService: PolicyService,
+    policyService: InternalPolicyService,
     sendService: SendService,
     logService: LogService,
     keyConnectorService: KeyConnectorService,
     private localStateService: StateService,
-    private localOrganizationService: OrganizationService,
     providerService: ProviderService,
+    private localFolderApiService: FolderApiServiceAbstraction,
+    private _organizationService: InternalOrganizationService,
     logoutCallback: (expired: boolean) => Promise<void>,
     private cozyClientService: CozyClientService,
-    private tokenService: TokenServiceAbstraction
   ) {
     super(
       localApiService,
@@ -81,8 +80,9 @@ export class SyncService extends BaseSyncService {
       logService,
       keyConnectorService,
       localStateService,
-      localOrganizationService,
       providerService,
+      localFolderApiService,
+      _organizationService,
       logoutCallback
     );
   }
@@ -93,35 +93,6 @@ export class SyncService extends BaseSyncService {
     // Update remote sync date only for non-zero date, which is used for logout
     if (date.getTime() !== 0) {
       await this.cozyClientService.updateSynchronizedAt();
-    }
-  }
-
-  /**
-   * Cozy stack may change how userId is computed in the future
-   * So this userId can be desynchronized between client and server
-   * This impacts realtime notifications that would be broken if wrong userId is used
-   * This method allows to synchronize user identity from the server
-   */
-  async refreshIdentityToken() {
-    const isAuthenticated = await this.localStateService.getIsAuthenticated();
-    if (!isAuthenticated) {
-      return;
-    }
-
-    const client = await this.cozyClientService.getClientInstance();
-
-    const currentToken = await this.tokenService.getToken();
-
-    await this.localApiService.refreshIdentityToken();
-    const refreshedToken = await this.tokenService.getToken();
-    client.getStackClient().setToken(refreshedToken);
-    client.options.token = refreshedToken;
-
-    if (currentToken !== refreshedToken) {
-      const kdf = await this.localStateService.getKdfType();
-      const kdfIterations = await this.localStateService.getKdfIterations();
-      await this.localStateService.setKdfType(kdf);
-      await this.localStateService.setKdfIterations(kdfIterations);
     }
   }
 
@@ -147,13 +118,13 @@ export class SyncService extends BaseSyncService {
           isfullSyncRunning = false;
           return resp;
         });
-      return this.refreshIdentityToken().then(() => fullSyncPromise);
+      return fullSyncPromise;
     }
   }
 
   async syncUpsertCipher(notification: SyncCipherNotification, isEdit: boolean): Promise<boolean> {
     const isAuthenticated = await this.localStateService.getIsAuthenticated();
-    if (!isAuthenticated) return false;
+    if (!isAuthenticated) {return false};
 
     this.localSyncStarted();
 
@@ -194,21 +165,21 @@ export class SyncService extends BaseSyncService {
       return;
     }
 
-    const storedOrganization = await this.localOrganizationService.get(organizationId);
+    const storedOrganization = await this._organizationService.get(organizationId);
     const storedOrganizationkey = await this.localCryptoService.getOrgKey(organizationId);
 
     if (storedOrganization !== null && storedOrganizationkey != null) {
       return;
     }
 
-    const remoteOrganization = await this.localApiService.getOrganization(organizationId);
+    const remoteOrganization = await this._organizationService.get(organizationId);
     const remoteOrganizationResponse = (remoteOrganization as any).response;
-    const remoteProfileOrganizationResponse = new ProfileOrganizationResponse(
+    const remoteProfileProviderOrganizationResponse = new ProfileProviderOrganizationResponse(
       remoteOrganizationResponse
     );
 
     if (remoteOrganization !== null) {
-      await this.localOrganizationService.upsertOrganization(remoteProfileOrganizationResponse);
+      await this._organizationService.upsertOrganization(remoteProfileProviderOrganizationResponse);
 
       await this.syncUpsertOrganizationKey(organizationId);
 

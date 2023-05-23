@@ -1,4 +1,5 @@
 import { registerLocaleData } from "@angular/common";
+/* Cozy custo
 import localeAr from "@angular/common/locales/ar";
 import localeAz from "@angular/common/locales/az";
 import localeBe from "@angular/common/locales/be";
@@ -106,3 +107,9 @@ registerLocaleData(localeUk, "uk");
 registerLocaleData(localeVi, "vi");
 registerLocaleData(localeZhCn, "zh-CN");
 registerLocaleData(localeZhTw, "zh-TW");
+// end custo */
+
+import localeEnGb from "@angular/common/locales/en-GB";
+import localeFr from "@angular/common/locales/fr";
+registerLocaleData(localeEnGb, "en-GB");
+registerLocaleData(localeFr, "fr");

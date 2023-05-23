@@ -13,11 +13,8 @@
   "loginOrCreateNewAccount": {
     "message": "Log in to your Cozy to access your secure vault."
   },
-  "notRegistered": {
-    "message": "Not registered yet?"
-  },
   "createAccount": {
-    "message": "Create account"
+    "message": "Create your Cozy !"
   },
   "login": {
     "message": "Log in"
@@ -257,7 +254,7 @@
   },
   "contactSupport": {
     "message": "Contact Bitwarden support"
-  },      
+  },
   "sync": {
     "message": "Sync"
   },
@@ -702,6 +699,8 @@
   "notificationAddSavePassword": {
     "message": "Save password"
   },
+  "disableChangedPasswordNotification": {
+    "message": "Disable Changed Password Notification"
   },
   "changedPasswordNotificationDesc": {
     "message": "Ask to update a login's password when a change is detected on a website."
@@ -774,6 +773,15 @@
   "shared": {
     "message": "Shared"
   },
+  "sharedWithKonnector": {
+    "message": "Shared with Cozy Connector"
+  },
+  "movedItemToFolder": {
+    "message": "Element moved"
+  },
+  "shareNone": {
+    "message": "None"
+  },
   "learnOrg": {
     "message": "Learn about organizations"
   },
@@ -782,6 +790,9 @@
   },
   "moveToOrganization": {
     "message": "Move to organization"
+  },
+  "changeFolder": {
+    "message": "Change of folder"
   },
   "share": {
     "message": "Share"
@@ -801,6 +812,9 @@
   },
   "moveToOrgDesc": {
     "message": "Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved."
+  },
+  "moveToFolderDesk": {
+    "message": "Choose a folder to move this item to. If it is a shared folder, then the ownership of the item will be shared with all members of the share. You will no longer be the direct owner of this item."
   },
   "learnMore": {
     "message": "Learn more"
@@ -1432,6 +1446,9 @@
   "noCollectionsInList": {
     "message": "There are no collections to list."
   },
+  "noFolderInList": {
+    "message": "There are no folders to list."
+  },
   "ownership": {
     "message": "Ownership"
   },
@@ -1486,6 +1503,9 @@
   },
   "selectOneCollection": {
     "message": "You must select at least one collection."
+  },
+  "selectOneFolder": {
+    "message": "You must select one folder."
   },
   "advancedOptions": {
     "message": "Advanced options"
@@ -2149,7 +2169,7 @@
     "message": "New around here?"
   },
   "rememberEmail": {
-    "message": "Remember email"
+    "message": "Remember my Cozy"
   },
   "loginWithDevice": {
     "message": "Log in with device"
@@ -2212,7 +2232,7 @@
     "message": "How to auto-fill"
   },
   "autofillSelectInfoWithCommand": {
-    "message": "Select an item from this page or use the shortcut: $COMMAND$",
+    "message": "You can use your shortcut \"$COMMAND$\" or click on this icon : ",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2221,7 +2241,7 @@
     }
   },
   "autofillSelectInfoWithoutCommand": {
-    "message": "Select an item from this page or set a shortcut in settings."
+    "message": "Just press this icon : "
   },
   "gotIt": {
     "message": "Got it"
@@ -2252,7 +2272,7 @@
         "example": "CTRL+Shift+L"
       }
     }
-  }
+  },
   "TOTPCopiedInClipboard": {
     "message": "TOTP copied in your clipboard !"
   },

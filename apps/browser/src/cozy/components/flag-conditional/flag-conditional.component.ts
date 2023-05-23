@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
 import * as uuid from "uuid";
 
-import { BroadcasterService } from "jslib-common/abstractions/broadcaster.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
+import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 
 const BroadcasterSubscriptionId = "FlagConditionalComponent";
 

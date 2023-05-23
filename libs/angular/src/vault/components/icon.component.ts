@@ -51,7 +51,7 @@ export class IconComponent implements OnChanges {
   protected load() {
     switch (this.cipher.type) {
       case CipherType.Login:
-        this.icon = "bwi-globe";
+        this.icon = "icon-globe";
         this.setLoginIcon();
         break;
       case CipherType.SecureNote:
@@ -94,7 +94,7 @@ export class IconComponent implements OnChanges {
       if (this.imageEnabled && isWebsite) {
         try {
           this.image = this.iconsUrl + "/" + Utils.getHostname(hostnameUri) + "/icon.png";
-          this.fallbackImage = "images/bwi-globe.png";
+          this.fallbackImage = "images/icons-16-globe.svg";
         } catch (e) {
           // Ignore error since the fallback icon will be shown if image is null.
         }

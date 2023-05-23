@@ -1,4 +1,4 @@
-import { MessagingService as abstractMessagingService } from "jslib-common/abstractions/messaging.service";
+import { MessagingService as abstractMessagingService } from "@bitwarden/common/abstractions/messaging.service";
 
 import RuntimeBackground from "../../background/runtime.background";
 

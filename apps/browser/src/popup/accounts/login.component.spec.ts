@@ -1,6 +1,6 @@
 import { CozySanitizeUrlService } from "../services/cozySanitizeUrl.service";
 
-import { LoginComponent } from "./login.component";
+import { LoginComponent } from "../../auth/popup/login.component";
 
 describe("url input", () => {
   const loginComponent = new LoginComponent(
@@ -14,9 +14,14 @@ describe("url input", () => {
     null,
     null,
     null,
-    new CozySanitizeUrlService(),
     null,
-    null
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    new CozySanitizeUrlService()
   );
   it("should return undefined if the input is empty", () => {
     const inputUrl = "";

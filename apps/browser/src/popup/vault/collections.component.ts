@@ -1,4 +1,3 @@
-import { Location } from "@angular/common";
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { first } from "rxjs/operators";
@@ -26,7 +25,6 @@ export class CollectionsComponent extends BaseCollectionsComponent {
     i18nService: I18nService,
     cipherService: CipherService,
     private route: ActivatedRoute,
-    private location: Location,
     logService: LogService,
     private historyService: HistoryService
   ) {

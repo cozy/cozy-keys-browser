@@ -22,12 +22,13 @@ import { BrowserGroupingsComponentState } from "../../../../models/browserGroupi
 import { PopupUtilsService } from "../../../../popup/services/popup-utils.service";
 import { BrowserStateService } from "../../../../services/abstractions/browser-state.service";
 import { VaultFilterService } from "../../../services/vault-filter.service";
-
 /** Start Cozy imports */
 /* eslint-disable */
 import { HistoryService } from "../../../../popup/services/history.service";
 import { HostListener } from "@angular/core";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { Observable } from "rxjs";
 /* eslint-enable */
 /** End Cozy imports */
 
@@ -70,6 +71,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   vaultFilter: VaultFilter;
   selectedOrganization: string = null;
   showCollections = true;
+  cipherNumberForCurrentTab: string;
 
   private loadedTimeout: number;
   private selectedTimeout: number;
@@ -102,7 +104,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    /** Cozy custo : do not use input type=search to use our own cancel cross
     this.searchTypeSearch = !this.platformUtilsService.isSafari();
+    */
+    this.searchTypeSearch = false;
+    /* end custo */
     this.showLeftHeader = !(
       this.popupUtils.inSidebar(window) && this.platformUtilsService.isFirefox()
     );
@@ -194,6 +200,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     }
     await this.search(null);
     this.getCounts();
+    this.getCipherNumberForCurrentTab();
   }
 
   async loadCollections() {
@@ -295,9 +302,25 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   async addCipher() {
+    /** Cozy custo
     this.router.navigate(["/add-cipher"], {
       queryParams: { selectedVault: this.vaultFilter.selectedOrganizationId },
     });
+    */
+    const tab = await BrowserApi.getTabFromCurrentWindow();
+    let url = "", hostname = "";
+    if (tab != null) {
+      url = tab.url;
+      hostname = Utils.getHostname(url);
+    }
+    this.router.navigate(["/add-cipher"], {
+      queryParams: {
+        selectedVault: this.vaultFilter.selectedOrganizationId,
+        uri: url,
+        name: hostname,
+      },
+    });
+    /* end custo */
   }
 
   async vaultFilterChanged() {
@@ -385,11 +408,27 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     );
   }
 
+  /** Cozy custo : we prefer to escape whereever esc key is stroke */
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      if (this.searchText == null || this.searchText === "") {
+        BrowserApi.closePopup(window);
+      } else {
+        this.emptySearch();
+      }
+    }
+  }
+  /** end custo */
+
   closeOnEsc(e: KeyboardEvent) {
+    /** Cozy custo : we prefer to escape whereever esc key is stroke
     // If input not empty, use browser default behavior of clearing input instead
     if (e.key === "Escape" && (this.searchText == null || this.searchText === "")) {
       BrowserApi.closePopup(window);
     }
+    end custo */
   }
 
   private async loadCollectionsAndFolders() {
@@ -457,7 +496,8 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     // this.router.navigate(['current'])
   }
 
-  cancelSearch() {
+  /** Cozy custo */
+  emptySearch() {
     this.searchText = "";
     document.getElementById("search").focus();
     this.search(50);
@@ -466,4 +506,15 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   openWebApp() {
     window.open(this.cozyClientService.getAppURL("passwords", ""));
   }
+
+  back() {
+    this.historyService.gotoPreviousUrl();
+  }
+
+  async getCipherNumberForCurrentTab() {
+    const tab = await BrowserApi.getTabFromCurrentWindow();
+    const ciphers = await this.cipherService.getAllDecryptedForUrl(tab?.url);
+    this.cipherNumberForCurrentTab = ciphers.length == 0 ? "" : ciphers.length.toString();
+  }
+  /** end custo */
 }

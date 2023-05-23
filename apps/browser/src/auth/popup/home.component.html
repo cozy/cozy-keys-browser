@@ -2,6 +2,43 @@
   <div class="content login-page">
     <div class="logo-image"></div>
     <p class="lead text-center">{{ "loginOrCreateNewAccount" | i18n }}</p>
+    <form #form [formGroup]="formGroup" (ngSubmit)="submit()">
+      <div class="box">
+        <div class="box-content">
+          <div class="box-content-row" appBoxRow>
+            <!-- Cozy custo
+            <label for="email">{{ "emailAddress" | i18n }}</label>
+             -->
+            <label for="email">{{ "cozyUrl" | i18n }}</label>
+            <!-- end custo -->
+            <input id="email" type="email" formControlName="email" appInputVerbatim="false" placeholder="ex. https://claude.mycozy.cloud" />
+          </div>
+          <!-- Cozy custo
+          <div class="box-footer no-margin" *ngIf="selfHostedDomain">
+            {{ "loggingInTo" | i18n: selfHostedDomain }}
+          </div>
+          -->
+          <div class="remember-email-check">
+            <input
+              id="rememberEmail"
+              type="checkbox"
+              name="rememberEmail"
+              formControlName="rememberEmail"
+            />
+            <label for="rememberEmail">{{ "rememberEmail" | i18n }}</label>
+          </div>
+        </div>
+      </div>
+      <div class="box">
+        <button type="submit" class="btn primary block">
+          <b>{{ "continue" | i18n }}</b>
+        </button>
+      </div>
+    </form>
+    <p class="createAccountLink">
+      {{ "newAroundHere" | i18n }}
+      <a routerLink="/register" (click)="openCozyWebsite()">{{ "createAccount" | i18n }}</a>
+    </p>
     <!-- Cozy custo
     <form #form [formGroup]="formGroup" (ngSubmit)="submit()">
       <div class="box">
@@ -35,12 +72,17 @@
       <a routerLink="/register" (click)="setFormValues()">{{ "createAccount" | i18n }}</a>
     </p>
     -->
+
+    <!--
     <a class="btn primary block" routerLink="/login"
       ><b>{{ "login" | i18n }}</b></a
     >
-    <button type="button" class="signup-link" (click)="openCozyWebsite()">
+    <a  class="signup-link" (click)="openCozyWebsite()">
       {{ "notRegistered" | i18n }}
-    </button>
+    </a>
+    -->
+
+
     <!-- end custo -->
 
   </div>

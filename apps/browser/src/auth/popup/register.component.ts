@@ -1,3 +1,4 @@
+/* Cozy custo : unused file
 import { Component } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -55,3 +56,4 @@ export class RegisterComponent extends BaseRegisterComponent {
     );
   }
 }
+ */

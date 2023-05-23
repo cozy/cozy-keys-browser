@@ -1,6 +1,6 @@
 import { BehaviorSubject } from "rxjs";
 
-import { GlobalState } from "@bitwarden/common/models/domain/global-state";
+// import { GlobalState } from "@bitwarden/common/models/domain/global-state";
 import { StorageOptions } from "@bitwarden/common/models/domain/storage-options";
 import { StateService as BaseStateService } from "@bitwarden/common/services/state.service";
 
@@ -11,6 +11,12 @@ import { BrowserGroupingsComponentState } from "../models/browserGroupingsCompon
 import { BrowserSendComponentState } from "../models/browserSendComponentState";
 
 import { BrowserStateService as StateServiceAbstraction } from "./abstractions/browser-state.service";
+
+// Cozy Imports
+/* eslint-disable */
+import { GlobalState } from "../models/globalState";
+/* eslint-enable */
+// End Cozy imports
 
 @browserSession
 export class BrowserStateService

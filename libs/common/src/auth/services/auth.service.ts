@@ -93,7 +93,7 @@ export class AuthService implements AuthServiceAbstraction {
     protected stateService: StateService,
     protected twoFactorService: TwoFactorService,
     protected i18nService: I18nService,
-    protected encryptService: EncryptService
+    protected encryptService: EncryptService,
   ) {}
 
   async logIn(

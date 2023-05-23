@@ -86,7 +86,7 @@ const requiredPlugins = [
   }),
 ];
 
-const plugins = [
+let plugins = [
   new HtmlWebpackPlugin({
     template: "./src/popup/index.html",
     filename: "popup/index.html",
@@ -138,12 +138,29 @@ const plugins = [
   new webpack.ProvidePlugin({
     process: "process/browser.js",
   }),
-  new webpack.SourceMapDevToolPlugin({
-    exclude: [/content\/.*/, /notification\/.*/],
-    filename: "[file].map",
-  }),
-  ...requiredPlugins,
+  // Cozy custo
+  // new webpack.SourceMapDevToolPlugin({
+  //   exclude: [/content\/.*/, /notification\/.*/],
+  //   filename: "[file].map",
+  // }),
+  // ...requiredPlugins,
 ];
+if (ENV === "development") { // add source maps only if not development
+  plugins = [
+    ...plugins,
+    new webpack.SourceMapDevToolPlugin({
+      exclude: [/content\/.*/, /notification\/.*/],
+      filename: "[file].map",
+    }),
+    ...requiredPlugins,
+  ]
+} else {
+  plugins = [
+    ...plugins,
+    ...requiredPlugins,
+  ]
+}
+/** end custo */
 
 /**
  * @type {import("webpack").Configuration}
@@ -161,7 +178,7 @@ const mainConfig = {
     "content/notificationBar": "./src/autofill/content/notification-bar.ts",
     "content/contextMenuHandler": "./src/autofill/content/context-menu-handler.ts",
     "content/message_handler": "./src/autofill/content/message_handler.ts",
-    "notification/bar": "./src/autofill/notification/bar.ts",
+    "notification/bar": "./src/autofill/notification/bar.js",
     "encrypt-worker": "../../libs/common/src/services/cryptography/encrypt.worker.ts",
     "content/appInfo": "./src/content/appInfo.ts",
     "inPageMenu/menu": "./src/inPageMenu/menu.js",

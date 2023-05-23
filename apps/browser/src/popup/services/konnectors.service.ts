@@ -1,17 +1,18 @@
 import Registry from "cozy-client/dist/registry";
+import { firstValueFrom } from "rxjs";
 
-import { CipherService } from "jslib-common/abstractions/cipher.service";
-import { SettingsService } from "jslib-common/abstractions/settings.service";
+import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
+import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { AccountSettingsSettings } from "@bitwarden/common/models/domain/account";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 /*
-import { StateService } from "jslib-common/abstractions/state.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
 */
-import { StorageService } from "jslib-common/abstractions/storage.service";
-import { CipherType } from "jslib-common/enums/cipherType";
-import { UriMatchType } from "jslib-common/enums/uriMatchType";
-import { Utils } from "jslib-common/misc/utils";
-import { CipherView } from "jslib-common/models/view/cipherView";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import { StateService } from "../../services/abstractions/state.service";
+import { BrowserStateService as StateService } from "../../services/abstractions/browser-state.service";
 
 import { CozyClientService } from "./cozyClient.service";
 
@@ -19,10 +20,18 @@ const DomainMatchBlacklist = new Map<string, Set<string>>([
   ["google.com", new Set(["script.google.com"])],
 ]);
 
+// store "Cozy Connectors" organization and collection from user settings
+interface KonnectorsOrg {
+  organizationId: string;
+  collectionId: string;
+}
+
 export class KonnectorsService {
+
+  private konnectorsOrg: KonnectorsOrg = null;
+
   constructor(
     private cipherService: CipherService,
-    private storageService: StorageService,
     private settingsService: SettingsService,
     private cozyClientService: CozyClientService,
     private stateService: StateService
@@ -125,20 +134,22 @@ export class KonnectorsService {
     const eqDomainsPromise =
       domain == null
         ? Promise.resolve([])
-        : this.settingsService.getEquivalentDomains().then((eqDomains: any[][]) => {
-            let matches: any[] = [];
-            eqDomains.forEach((eqDomain) => {
-              if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
-                matches = matches.concat(eqDomain);
+        : firstValueFrom(this.settingsService.settings$).then(
+            (settings: AccountSettingsSettings) => {
+              let matches: any[] = [];
+              settings?.equivalentDomains?.forEach((eqDomain: any) => {
+                if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
+                  matches = matches.concat(eqDomain);
+                }
+              });
+
+              if (!matches.length) {
+                matches.push(domain);
               }
-            });
 
-            if (!matches.length) {
-              matches.push(domain);
+              return matches;
             }
-
-            return matches;
-          });
+          );
     const matchingDomains = await eqDomainsPromise;
 
     return ciphers.some((cipher) => {
@@ -234,4 +245,44 @@ export class KonnectorsService {
     const matchingKonnectors = results.filter((res) => res);
     return matchingKonnectors;
   }
+
+  /** TODO BJA konnectors icon : not tested, waiting for its full implementation
+   * Need to modify the cozy client rights so that the call can be run
+   */
+  /*
+    async isKonnectorsOrganization(organizationId: string): Promise<boolean> {
+    const konnectorsOrg = await this.getKonnectorsOrganization();
+    if (organizationId === konnectorsOrg.organizationId) {
+        return true;
+    }
+    return false;
+  }
+
+  // get "Cozy Connectors" organization and collection from user settings
+  async getKonnectorsOrganization(): Promise<KonnectorsOrg> {
+    if (this.konnectorsOrg) {
+        return this.konnectorsOrg;
+    }
+    if (this.settingsPromise) {
+      return this.settingsPromise;
+    }
+    this.settingsPromise = this.cozyClientService.getClientInstance()
+    .then((client) => {
+        client.getStackClient().fetchJSON(
+            'GET',
+            '/data/io.cozy.settings/io.cozy.settings.bitwarden'
+        );
+      })
+    .then((settings: any) => {
+      this.konnectorsOrg = {
+          organizationId: settings.organization_id,
+          collectionId: settings.collection_id,
+      };
+      return this.konnectorsOrg;
+    })
+    return this.settingsPromise
+  }
+  private settingsPromise: any;
+*/
+
 }

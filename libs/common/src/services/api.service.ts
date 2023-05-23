@@ -590,7 +590,11 @@ export class ApiService implements ApiServiceAbstraction {
   }
 
   async getFullCipherDetails(id: string): Promise<CipherResponse> {
+    /** Cozy custo : this route is not yet existing on Cozy server, we deactivate it for tests
     const r = await this.send("GET", "/ciphers/" + id + "/details", null, true, true);
+    */
+    const r = await this.send("GET", "/ciphers/" + id + "", null, true, true);
+    /* end custo */
     return new CipherResponse(r);
   }
 

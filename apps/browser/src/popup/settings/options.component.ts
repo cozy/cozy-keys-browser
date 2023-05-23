@@ -10,7 +10,7 @@ import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
 
 /* Cozy imports */
 import { BrowserApi } from "../../browser/browserApi";
-import { StateService } from "../../services/abstractions/state.service";
+import { BrowserStateService as StateService } from "../../services/abstractions/browser-state.service";
 /* END */
 
 @Component({

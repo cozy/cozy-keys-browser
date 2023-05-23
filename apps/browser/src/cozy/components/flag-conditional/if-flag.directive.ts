@@ -1,8 +1,9 @@
 import { Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from "@angular/core";
 import * as uuid from "uuid";
 
-import { BroadcasterService } from "jslib-common/abstractions/broadcaster.service";
-import { MessagingService } from "jslib-common/abstractions/messaging.service";
+import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+
 
 const BroadcasterSubscriptionId = "IfFlagDirective";
 

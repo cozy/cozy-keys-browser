@@ -1,8 +1,12 @@
 import { VaultTimeoutService as BaseVaultTimeoutService } from "@bitwarden/common/services/vaultTimeout/vaultTimeout.service";
 
 import { SafariApp } from "../../browser/safariApp";
+import { BrowserStateService } from "../browser-state.service";
 
 export default class VaultTimeoutService extends BaseVaultTimeoutService {
+
+  protected stateService : BrowserStateService;
+
   startCheck() {
     this.checkVaultTimeout();
     if (this.platformUtilsService.isSafari()) {

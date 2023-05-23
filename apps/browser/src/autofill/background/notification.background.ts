@@ -56,6 +56,13 @@ export default class NotificationBackground {
   }
 
   async processMessage(msg: any, sender: chrome.runtime.MessageSender) {
+    /*
+      Cozy custo : this log is very useful for reverse engineering the code, keep it for tests
+      console.log('notification.background PROCESS MESSAGE ', {
+        'msg': msg,
+        'sender': sender
+      });
+    */
     switch (msg.command) {
       case "unlockCompleted":
         if (msg.data.target !== "notification.background") {

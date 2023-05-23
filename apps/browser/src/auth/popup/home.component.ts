@@ -7,8 +7,6 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
-
-
 /* start Cozy imports */
 /* eslint-disable */
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
@@ -26,7 +24,11 @@ export class HomeComponent implements OnInit {
   loginInitiated = false;
 
   formGroup = this.formBuilder.group({
+    /** Cozy custo
     email: ["", [Validators.required, Validators.email]],
+     */
+    email: [""],
+    /** end custo */
     rememberEmail: [false],
   });
 

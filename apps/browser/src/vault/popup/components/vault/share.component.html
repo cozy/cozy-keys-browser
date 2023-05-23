@@ -2,10 +2,16 @@
   <ng-container *ngIf="organizations$ | async as organizations">
     <header>
       <div class="left">
+        <!-- Cozy custo
         <button type="button" (click)="cancel()">{{ "cancel" | i18n }}</button>
+        -->
+        <button type="button" appBlurClick (click)="cancel()" title="{{ 'close_shortcut' | i18n }}">
+          <i class="icon-cozy icon-cross" aria-hidden="true"></i>
+        </button>
+        <!-- end custo -->
       </div>
       <h1 class="center">
-        <span class="title">{{ "moveToOrganization" | i18n }}</span>
+        <span class="title">{{ "changeFolder" | i18n }}</span>
       </h1>
       <div class="right">
         <button
@@ -26,27 +32,42 @@
       <div class="box">
         <div class="box-content" *ngIf="!organizations || !organizations.length">
           <div class="box-content-row padded no-hover">
-            {{ "noOrganizationsList" | i18n }}
+            {{ "noFolderInList" | i18n }}
           </div>
         </div>
         <div class="box-content" *ngIf="organizations && organizations.length">
           <div class="box-content-row" appBoxRow>
+            <!-- Cozy custo
             <label for="organization">{{ "organization" | i18n }}</label>
             <select
               id="organization"
               name="OrganizationId"
               aria-describedby="organizationHelp"
-              [(ngModel)]="organizationId"
-              (change)="filterCollections()"
+              [(ngModel)]="selectedCollectionId"
+              (change)="onSelectedCollectionChange()"
             >
-              <option *ngFor="let o of organizations" [ngValue]="o.id">{{ o.name }}</option>
+              <option *ngFor="let collection of collections" [ngValue]="collection.id">{{ collection.name }}</option>
             </select>
+            -->
+            <label for="organization">{{ "folder" | i18n }}</label>
+            <select
+              id="folder"
+              name="FolderId"
+              aria-describedby="organizationHelp"
+              [(ngModel)]="selectedCollectionId"
+              (change)="onSelectedCollectionChange()"
+            >
+              <option value="">{{'shareNone' | i18n}}</option>
+              <option *ngFor="let collection of collections" [ngValue]="collection.id">{{ collection.name }}</option>
+            </select>
+            <!-- end custo -->
           </div>
         </div>
         <div id="organizationHelp" class="box-footer">
-          {{ "moveToOrgDesc" | i18n }}
+          {{ "moveToFolderDesk" | i18n }}
         </div>
       </div>
+      <!-- Cozy custo
       <div class="box" *ngIf="organizations && organizations.length">
         <h2 class="box-header">
           {{ "collections" | i18n }}
@@ -72,6 +93,7 @@
           </div>
         </div>
       </div>
+      -->
     </main>
   </ng-container>
 </form>

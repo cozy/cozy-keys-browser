@@ -94,7 +94,6 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
   protected twoFactorRoute = "2fa";
   protected successRoute = "/tabs/vault";
   protected forcePasswordResetRoute = "update-temp-password";
-  protected alwaysRememberCozyUrl = false;
   /* end custo */
   constructor(
     apiService: ApiService,
@@ -198,29 +197,17 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
   end comment */
 
   /* Cozy custo */
-  async ngOnInit() {
-    if (this.cozyUrl == null || this.cozyUrl === "") {
-      this.email = await this.stateService.getRememberedEmail();
-      this.cozyUrl = this.email.slice(3);
-      if (this.cozyUrl == null) {
-        this.cozyUrl = "";
-      }
-    }
-    if (!this.alwaysRememberCozyUrl) {
-      this.rememberCozyUrl = (await this.stateService.getRememberedEmail()) != null;
-    }
-    if (Utils.isBrowser) {
-      document
-        .getElementById(this.cozyUrl == null || this.cozyUrl === "" ? "cozyUrl" : "masterPassword")
-        .focus();
-    }
-  }
-
   async submit() {
-    try {
-      const loginUrl = this.sanitizeUrlInput(this.cozyUrl);
+    const data = this.formGroup.value;
 
-      if (this.masterPassword == null || this.masterPassword === "") {
+    // await this.setupCaptcha();
+
+    this.formGroup.markAllAsTouched();
+
+    try {
+      const cozyUrl = this.sanitizeUrlInput(data.email);
+
+      if (data.masterPassword == null || data.masterPassword === "") {
         this.platformUtilsService.showToast(
           "error",
           this.i18nService.t("errorOccurred"),
@@ -231,20 +218,23 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
 
       // This adds the scheme if missing
       await this.environmentService.setUrls({
-        base: loginUrl + "/bitwarden",
+        base: cozyUrl + "/bitwarden",
       });
       // The email is based on the URL and necessary for login
-      const hostname = Utils.getHostname(loginUrl);
-      this.email = "me@" + hostname;
+      const hostname = Utils.getHostname(cozyUrl);
+      // this.email = "me@" + hostname;
 
-      const credentials = new PasswordLogInCredentials(this.email, this.masterPassword, null, null);
+      const credentials = new PasswordLogInCredentials(
+        "me@" + hostname,
+        data.masterPassword,
+        null,
+        null
+      );
       this.formPromise = this.authService.logIn(credentials);
       const response = await this.formPromise;
-      if (this.rememberCozyUrl || this.alwaysRememberCozyUrl) {
-        await this.stateService.setRememberedEmail(this.email);
-      } else {
-        await this.stateService.setRememberedEmail(null);
-      }
+      this.setFormValues();
+
+      await this.loginService.saveEmailSettings();
       if (this.handleCaptchaRequired(response)) {
         return;
       } else if (response.requiresTwoFactor) {
@@ -282,7 +272,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
   }
 
   async forgotPassword() {
-    if (!this.cozyUrl) {
+    const cozyUrl = this.sanitizeUrlInput(this.formGroup.value.email);
+    if (!cozyUrl) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
@@ -291,9 +282,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
       return;
     }
 
-    const loginUrl = this.sanitizeUrlInput(this.cozyUrl);
-
-    await this.initializeEnvForCozy(loginUrl);
+    await this.initializeEnvForCozy(cozyUrl);
 
     let cozyConfiguration: CozyConfiguration = {};
     try {
@@ -310,8 +299,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     const shouldRedirectToOidc = shouldRedirectToOIDCPasswordPage(cozyConfiguration);
 
     const url = shouldRedirectToOidc
-      ? getCozyPassWebURL(loginUrl, cozyConfiguration)
-      : getPassphraseResetURL(loginUrl);
+      ? getCozyPassWebURL(cozyUrl, cozyConfiguration)
+      : getPassphraseResetURL(cozyUrl);
 
     const browser = window.browser || window.chrome;
     await browser.tabs.create({
@@ -327,7 +316,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
   }
 
   private getCozyConfiguration = async (): Promise<CozyConfiguration> => {
-    const preloginResponse = await this.apiService.postPrelogin(new PreloginRequest(this.cozyUrl));
+    const cozyUrl = this.sanitizeUrlInput(this.formGroup.value.email);
+    const preloginResponse = await this.apiService.postPrelogin(new PreloginRequest(cozyUrl));
 
     const { HasCiphers, OIDC, FlatSubdomains } = (preloginResponse as any).response;
 

@@ -138,11 +138,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
         this.i18nService.t("autofillPageLoadPolicyActivated")
       );
     }
-
-    // Cozy custo
-    window.setTimeout(() => {
-      document.getElementById("search").focus();
-    }, 100);
   }
 
   ngOnDestroy() {

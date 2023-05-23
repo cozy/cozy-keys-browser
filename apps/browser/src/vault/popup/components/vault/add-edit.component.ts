@@ -22,13 +22,13 @@ import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view
 
 import { BrowserApi } from "../../../../browser/browserApi";
 import { PopupUtilsService } from "../../../../popup/services/popup-utils.service";
-
 /* Cozy imports */
 /* eslint-disable */
 import { KonnectorsService } from "../../../../popup/services/konnectors.service";
 import { HistoryService } from "../../../../popup/services/history.service";
 import { HostListener, EventEmitter } from "@angular/core";
 import { deleteCipher } from "./cozy-utils";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 /* eslint-enable */
 /* END */
 
@@ -145,10 +145,10 @@ export class AddEditComponent extends BaseAddEditComponent {
         // the cipher was already in edition and popup has been closed or navigation in pwd generator
         // we have to select the correct pwd
         // first retrive data form url
-        const histCipher = JSON.parse(params.tempCipher);
-        this.initialPwd = histCipher.initialPwd;
-        delete histCipher.initialPwd;
-        if (histCipher.login.password !== this.cipher.login.password) {
+        const data = JSON.parse(params.tempCipher);
+        this.initialPwd = data.initialPwd;
+        const histCipher = CipherView.fromJSON(data.cipher);
+        if (data.cipher.login?.password !== this.cipher.login?.password) {
           // url pwd and state pwd are different : one of them has been modified compared to initial pwd
           if (this.initialPwd !== this.cipher.login.password) {
             // initial pwd and state differs, we keep the state pwd
@@ -159,9 +159,10 @@ export class AddEditComponent extends BaseAddEditComponent {
         } else {
           // url pwd and state pwd are identical, keep url pwd
         }
-        deepCopy(this.cipher, histCipher);
+
+        Object.assign(this.cipher, histCipher)
       }
-      //*/
+      // end custo */
 
       if (!this.editMode || this.cloneMode) {
         if (
@@ -198,13 +199,15 @@ export class AddEditComponent extends BaseAddEditComponent {
     }
   }
 
-  // note Cozy : beforeunload event would be better but is not triggered in webextension...
-  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
+  /* Cozy custo
+   note Cozy : beforeunload event would be better but is not triggered in webextension...
+   see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
+  */
   @HostListener("window:unload", ["$event"])
   async unloadMnger(event: any) {
-    // save cipher state in url for when popup will be closed.
-    this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, ...this.cipher });
+    this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, cipher: this.cipher });
   }
+  /* end custo */
 
   async load() {
     await super.load();
@@ -226,20 +229,20 @@ export class AddEditComponent extends BaseAddEditComponent {
     }
 
     if (this.cloneMode) {
-      // Cozy customization : why should we go back to vault after cloning a cipher ?
-      // we prefer go back un history twice (from where the initial cipher has bee opened)
+      /* Cozy customization : why should we go back to vault after cloning a cipher ?
+         we prefer go back in history twice (from where the initial cipher has been opened)
       /*
       this.router.navigate(["/tabs/vault"]);
       */
       this.historyService.gotoPreviousUrl(2);
+      /* end custo */
     } else {
       /* Cozy customization
       this.location.back();
       */
-      //*
       this.konnectorsService.createSuggestions();
       this.historyService.gotoPreviousUrl();
-      //*/
+      /* end custo */
     }
     return true;
   }
@@ -357,22 +360,5 @@ export class AddEditComponent extends BaseAddEditComponent {
         document.getElementById("name").focus();
       }
     }, 200);
-  }
-}
-
-
-// Cozy Helper
-// copy source object attributes into target object
-function deepCopy(target: any, source: any) {
-  for (const key in source) {
-    if (typeof source[key] === "object") {
-      if (Array.isArray(source[key])) {
-        target[key] = source[key].slice();
-      } else {
-        deepCopy(target[key], source[key]);
-      }
-    } else {
-      target[key] = source[key];
-    }
   }
 }

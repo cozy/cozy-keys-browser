@@ -10,6 +10,13 @@ import { OrganizationService } from "@bitwarden/common/abstractions/organization
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
+/* start Cozy imports */
+/* eslint-disable */
+import { HistoryService } from "../../../../popup/services/history.service";
+import { HostListener } from "@angular/core";
+/* eslint-enable */
+/* end Cozy imports */
+
 @Component({
   selector: "app-vault-share",
   templateUrl: "share.component.html",
@@ -24,7 +31,8 @@ export class ShareComponent extends BaseShareComponent {
     cipherService: CipherService,
     private route: ActivatedRoute,
     private router: Router,
-    organizationService: OrganizationService
+    organizationService: OrganizationService,
+    private historyService: HistoryService,
   ) {
     super(
       collectionService,
@@ -32,14 +40,18 @@ export class ShareComponent extends BaseShareComponent {
       i18nService,
       cipherService,
       logService,
-      organizationService
+      organizationService,
     );
   }
 
   async ngOnInit() {
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.onSharedCipher.subscribe(() => {
+      /* Cozy custo
       this.router.navigate(["view-cipher", { cipherId: this.cipherId }]);
+      */
+      this.historyService.gotoPreviousUrl();
+      /** end custo */
     });
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
@@ -57,9 +69,24 @@ export class ShareComponent extends BaseShareComponent {
   }
 
   cancel() {
+    /* Cozy custo
     this.router.navigate(["/view-cipher"], {
       replaceUrl: true,
       queryParams: { cipherId: this.cipher.id },
     });
+    */
+    this.historyService.gotoPreviousUrl();
+    /* end custo */
   }
+
+  /* Cozy customization */
+  @HostListener("window:keydown", ["$event"])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === "Escape") {
+      this.cancel();
+      event.preventDefault();
+    }
+  }
+  /* end custo */
+
 }

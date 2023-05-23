@@ -130,7 +130,7 @@ export const routerTransition = trigger("routerTransition", [
 
   transition("login => home", outSlideDown),
   transition("login => hint", inSlideUp),
-  transition("login => tabs, login => 2fa, login => login-with-device", inSlideLeft), // TODO REFACTO v d'origine Cozy : transition("login => tabs", inSlideLeft),
+  transition("login => tabs, login => 2fa, login => login-with-device", inSlideLeft),
 
   transition("hint => login, register => home, environment => home", outSlideDown),
 

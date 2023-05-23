@@ -3,7 +3,7 @@ import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstracti
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/abstractions/appId.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
 import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/common/abstractions/collection.service";
-import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
+// import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/abstractions/crypto.service";
 import { CryptoFunctionService as CryptoFunctionServiceAbstraction } from "@bitwarden/common/abstractions/cryptoFunction.service";
 import { EncryptService } from "@bitwarden/common/abstractions/encrypt.service";
 import { EventCollectionService as EventCollectionServiceAbstraction } from "@bitwarden/common/abstractions/event/event-collection.service";
@@ -32,7 +32,7 @@ import { UserVerificationApiServiceAbstraction } from "@bitwarden/common/abstrac
 import { UserVerificationService as UserVerificationServiceAbstraction } from "@bitwarden/common/abstractions/userVerification/userVerification.service.abstraction";
 import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
 import { VaultTimeoutSettingsService as VaultTimeoutSettingsServiceAbstraction } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
-import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
+// import { AuthService as AuthServiceAbstraction } from "@bitwarden/common/auth/abstractions/auth.service";
 import { KeyConnectorService as KeyConnectorServiceAbstraction } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { TokenService as TokenServiceAbstraction } from "@bitwarden/common/auth/abstractions/token.service";
 import { TwoFactorService as TwoFactorServiceAbstraction } from "@bitwarden/common/auth/abstractions/two-factor.service";
@@ -76,7 +76,7 @@ import {
   UsernameGenerationService,
   UsernameGenerationServiceAbstraction,
 } from "@bitwarden/common/tools/generator/username";
-import { CipherService as CipherServiceAbstraction } from "@bitwarden/common/vault/abstractions/cipher.service";
+// import { CipherService as CipherServiceAbstraction } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/vault/abstractions/folder/folder-api.service.abstraction";
 import { InternalFolderService as InternalFolderServiceAbstraction } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { SyncNotifierService as SyncNotifierServiceAbstraction } from "@bitwarden/common/vault/abstractions/sync/sync-notifier.service.abstraction";
@@ -100,10 +100,10 @@ import { SafariApp } from "../browser/safariApp";
 import { flagEnabled } from "../flags";
 import { UpdateBadge } from "../listeners/update-badge";
 import { Account } from "../models/account";
-import { BrowserStateService as StateServiceAbstraction } from "../services/abstractions/browser-state.service";
+// import { BrowserStateService as StateServiceAbstraction } from "../services/abstractions/browser-state.service";
 import { BrowserEnvironmentService } from "../services/browser-environment.service";
 import { BrowserI18nService } from "../services/browser-i18n.service";
-// import { BrowserOrganizatiimport {  } from "../services/browser-organization.service";
+import { BrowserOrganizationService } from "../services/browser-organization.service";
 import { BrowserPolicyService } from "../services/browser-policy.service";
 import { BrowserSettingsService } from "../services/browser-settings.service";
 import { BrowserStateService } from "../services/browser-state.service";
@@ -132,8 +132,8 @@ import { CozyClientService } from "../popup/services/cozyClient.service";
 import { ExportService } from "../services/export.service";
 import { KonnectorsService } from "../popup/services/konnectors.service";
 import { MessagingService as MessagingServiceAbstraction } from "../services/abstractions/messaging.service";
-import { BrowserOrganizationService } from "../popup/services/organization.service";
 import { SyncService } from "../popup/services/sync.service";
+import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -145,7 +145,7 @@ export default class MainBackground {
   i18nService: I18nServiceAbstraction;
   platformUtilsService: PlatformUtilsServiceAbstraction;
   logService: LogServiceAbstraction;
-  cryptoService: CryptoService;
+  cryptoService: BrowserCryptoService;
   cryptoFunctionService: CryptoFunctionServiceAbstraction;
   tokenService: TokenServiceAbstraction;
   appIdService: AppIdServiceAbstraction;
@@ -168,7 +168,7 @@ export default class MainBackground {
   searchService: SearchServiceAbstraction;
   notificationsService: NotificationsServiceAbstraction;
   // stateService: StateServiceAbstraction;
-  stateService: StateService;
+  stateService: BrowserStateService;
   stateMigrationService: StateMigrationService;
   systemService: SystemServiceAbstraction;
   eventCollectionService: EventCollectionServiceAbstraction;
@@ -176,8 +176,6 @@ export default class MainBackground {
   policyService: InternalPolicyServiceAbstraction;
   sendService: SendServiceAbstraction;
   fileUploadService: FileUploadServiceAbstraction;
-  // organizationService: OrganizationServiceAbstraction;
-  organizationService: OrganizationService; // target Cozy version
   organizationService: InternalOrganizationServiceAbstraction;
   providerService: ProviderServiceAbstraction;
   keyConnectorService: KeyConnectorServiceAbstraction;
@@ -476,7 +474,6 @@ export default class MainBackground {
       this.organizationService,
       logoutCallback,
       this.cozyClientService,
-      this.tokenService
     );
     this.eventUploadService = new EventUploadService(
       this.apiService,
@@ -550,7 +547,6 @@ export default class MainBackground {
 
     this.konnectorsService = new KonnectorsService(
       this.cipherService,
-      this.storageService,
       this.settingsService,
       this.cozyClientService,
       this.stateService
@@ -617,7 +613,6 @@ export default class MainBackground {
           if (tab == null) {
             return;
           }
-
           BrowserApi.tabSendMessage(tab, {
             command: "collectPageDetails",
             tab: tab,
@@ -667,8 +662,8 @@ export default class MainBackground {
       this.cryptoService,
       this.apiService,
       this.cipherService,
-      this.vaultTimeoutService,
-      this.cozyClientService
+      this.cozyClientService,
+      this.vaultTimeoutSettingsService,
     );
     this.messagingService.setRuntimeBackground(this.runtimeBackground);
     /* end custo */
@@ -810,10 +805,6 @@ export default class MainBackground {
     //Needs to be checked before state is cleaned
     const needStorageReseed = await this.needsStorageReseed();
 
-    // Clear auth and token afterwards, as previous services might need it (by Cozy)
-    // note TODO BJA : the cmd `await this.stateService.clean({ userId: userId });` has been added by bw, our `tokenService.clean()` might be useless now.
-    // a test shows that tokenService.clearToken() is called once => we should keep it ? what is its rôle ?
-    await this.tokenService.clearToken();
     await this.stateService.clean({ userId: userId });
 
     if (userId == null || userId === (await this.stateService.getUserId())) {
@@ -845,15 +836,7 @@ export default class MainBackground {
       return;
     }
     const authStatus = await this.authService.getAuthStatus();
-    if (authStatus === AuthenticationStatus.Locked) {
-      // For information, to make the difference betweend locked and loggedout :
-      // const isAuthenticated = await this.userService.isAuthenticated(); // = connected or installed
-      // const isLocked        = await this.vaultTimeoutService.isLocked()
-      //    if  isAuthenticated == false  &  isLocked == true   => loggedout
-      //    if  isAuthenticated == true   &  isLocked == true   => locked
-      //    if  isAuthenticated == true   &  isLocked == false  => logged in
-      // const pinSet = await this.vaultTimeoutService.isPinLockSet();
-      // const isPinLocked = (pinSet[0] && this.vaultTimeoutService.pinProtectedKey != null) || pinSet[1];
+    if (authStatus !== AuthenticationStatus.Unlocked) {
       BrowserApi.tabSendMessage(
         tab,
         {
@@ -870,7 +853,6 @@ export default class MainBackground {
     if (frameId != null) {
       options.frameId = frameId;
     }
-
     BrowserApi.tabSendMessage(
       tab,
       {
@@ -947,4 +929,14 @@ export default class MainBackground {
 
     this.syncTimeout = setTimeout(async () => await this.fullSync(), 5 * 60 * 1000); // check every 5 minutes
   }
+
+  /* Cozy custo */
+  private buildUserAgent(): string {
+    const browserUA = navigator.userAgent;
+    const appName = "io.cozy.pass.browser";
+    const appVersion = BrowserApi.getApplicationVersion() || "unknown";
+    return `${browserUA} ${appName}-${appVersion}`;
+  }
+  /* end custo */
+
 }

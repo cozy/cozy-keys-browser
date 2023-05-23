@@ -4,7 +4,7 @@
     <app-pop-out></app-pop-out>
     -->
   </div>
-  <h1 class="sr-only">{{ "myVault" | i18n }}</h1>
+  <h1 class="sr-only">{{ "myVault" | i18n }} dd</h1>
   <div class="search">
     <i class="icon-cozy icon-search"></i>
     <input
@@ -17,13 +17,13 @@
       appAutofocus
       (keydown)="closeOnEsc($event)"
     />
-    <i class="icon-cozy icon-cross {{ (searchText === '') ? 'invisible' : '' }}" aria-hidden="true" (click)="cancelSearch()"></i>
+    <i class="icon-cozy icon-cross {{ (searchText === '') ? 'invisible' : '' }}" aria-hidden="true" (click)="emptySearch()"></i>
   </div>
   <div class="right">
     <button type="button" (click)="openWebApp()" appA11yTitle="{{ 'popOutNewWindow' | i18n }}">
       <i class="icon-cozy icon-out-w" aria-hidden="true"></i>
     </button>
-    <button appBlurClick (click)="addCipher()" appA11yTitle="{{ 'addItem' | i18n }}">
+    <button type="button" appBlurClick (click)="addCipher()" appA11yTitle="{{ 'addItem' | i18n }}">
       <i class="icon-cozy icon-plus" aria-hidden="true"></i>
     </button>
   </div>
@@ -69,7 +69,7 @@
         <span class="flex-right">4</span>
         -->
       </h2>
-      <div class="box-content single-line">
+      <div class="box-content single-line underline">
         <button
           type="button"
           class="box-content-row"
@@ -81,7 +81,7 @@
             <div class="icon"><i class="icon-cozy icon-login"></i></div>
             <span class="text">{{ "typeLogin" | i18n }}</span>
           </div>
-          <span class="row-sub-label">{{ typeCounts.get(cipherType.Login) || 0 }}</span>
+          <span class="row-sub-label">{{ this.typeCounts.get(cipherType.Login) || 0 }}</span>
           <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
         </button>
         <button
@@ -95,7 +95,7 @@
             <div class="icon"><i class="icon-cozy icon-bank"></i></div>
             <span class="text">{{ "typeCard" | i18n }}</span>
           </div>
-          <span class="row-sub-label">{{ typeCounts.get(cipherType.Card) || 0 }}</span>
+          <span class="row-sub-label">{{ this.typeCounts.get(cipherType.Card) || 0 }}</span>
           <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
         </button>
         <button
@@ -109,7 +109,7 @@
             <div class="icon"><i class="icon-cozy icon-identity"></i></div>
             <span class="text">{{ "typeIdentity" | i18n }}</span>
           </div>
-          <span class="row-sub-label">{{ typeCounts.get(cipherType.Identity) || 0 }}</span>
+          <span class="row-sub-label">{{ this.typeCounts.get(cipherType.Identity) || 0 }}</span>
           <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
         </button>
         <button
@@ -118,29 +118,29 @@
           appStopClick
           appBlurClick
           (click)="selectType(cipherType.SecureNote)"
-          *ngIf="typeCounts.get(cipherType.SecureNote)"
+          *ngIf="this.typeCounts.get(cipherType.SecureNote)"
         >
           <div class="row-main">
             <div class="icon"><i class="icon-cozy icon-note"></i></div>
             <span class="text">{{ "typeSecureNote" | i18n }}</span>
           </div>
-          <span class="row-sub-label">{{ typeCounts.get(cipherType.SecureNote) || 0 }}</span>
+          <span class="row-sub-label">{{ this.typeCounts.get(cipherType.SecureNote) || 0 }}</span>
           <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
         </button>
-        <!-- Cozy custo : add a "for this web site" button -->
+        <!-- Cozy custo : add a "for this web site" row -->
         <button
-          type="button"
-          class="box-content-row"
-          appStopClick
-          appBlurClick
-          (click)="selectCurrent()"
-          *ngIf="!isInPopOut"
+        type="button"
+        class="box-content-row"
+        appStopClick
+        appBlurClick
+        (click)="selectCurrent()"
         >
-          <div class="row-main">
-            <div class="icon"><i class="icon-cozy icon-search"></i></div>
-            <span class="text">{{ "forThisWebSite" | i18n }}</span>
-          </div>
-          <span><i class="fa fa-chevron-right fa-lg row-sub-icon"></i></span>
+        <div class="row-main">
+          <div class="icon"><i class="icon-cozy icon-search"></i></div>
+          <span class="text">{{ "forThisWebSite" | i18n }}</span>
+        </div>
+        <span class="row-sub-label">{{ cipherNumberForCurrentTab }}</span>
+        <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
         </button>
         <!-- end custo -->
       </div>
@@ -179,7 +179,7 @@
         <span class="flex-right">{{ nestedCollections.length }}</span>
         -->
       </h2>
-      <div class="box-content single-line">
+      <div class="box-content single-line underline">
         <button
           type="button"
           *ngFor="let nestedCollection of nestedCollections"
@@ -210,18 +210,14 @@
           <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
         </button>
         <!-- Cozy custo : add a trash line -->
-        <div class="box list" *ngIf="deletedCount">
-          <div class="box-content single-line">
-            <a href="#" class="box-content-row" appStopClick appBlurClick (click)="selectTrash()">
-              <div class="row-main">
-                <div class="icon"><i class="icon-cozy icon-trash"></i></div>
-                <span class="text">{{ "trash" | i18n }}</span>
-              </div>
-              <span class="row-sub-label">{{ deletedCount }}</span>
-              <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
-            </a>
+        <button type="button" class="box-content-row" *ngIf="deletedCount" (click)="selectTrash()">
+          <div class="row-main">
+            <div class="icon"><i class="icon-cozy icon-trash"></i></div>
+            <span class="text">{{ "trash" | i18n }}</span>
           </div>
-        </div>
+          <span class="row-sub-label">{{ deletedCount }}</span>
+          <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
+        </button>
         <!-- end custo -->
       </div>
     </div>
