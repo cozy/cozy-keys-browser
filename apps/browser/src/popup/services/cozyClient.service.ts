@@ -65,6 +65,8 @@ export class CozyClientService {
   }
 
   async createClient() {
+    console.log("createClient()");
+
     if (this.instance) {
       this.unregisterFlags();
     }
@@ -73,6 +75,13 @@ export class CozyClientService {
     this.instance = new CozyClient({ uri: uri, token: token });
     this.instance.registerPlugin(flag.plugin, undefined);
     this.registerFlags();
+    // @ts-ignore
+    document.cozyclient = this.instance;
+    this.instance.queryAll(this.instance.find("io.cozy.settings"), {})
+    this.instance.getStackClient().fetchJSON("GET", "/settings/context")
+    this.instance.getStackClient().fetchJSON("GET", "/settings/instance")
+
+
     return this.instance;
   }
 
@@ -93,6 +102,7 @@ export class CozyClientService {
 
     try {
       const client = await this.getClientInstance();
+      client.fetchQueryAndGetFromState()
       await client.getStackClient().fetch("DELETE", "/auth/register/" + clientId, undefined, {
         headers: {
           Authorization: "Bearer " + registrationAccessToken,
