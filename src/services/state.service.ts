@@ -118,6 +118,27 @@ export class StateService
     );
   }
 
+  async getEnableGPT(options?: StorageOptions): Promise<boolean> {
+    return (
+      (
+        await this.getGlobals(
+          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+        )
+      )?.enableGPT ?? false // defaults to false
+    );
+  }
+
+  async setEnableGPT(value: boolean, options?: StorageOptions): Promise<void> {
+    const globals = await this.getGlobals(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    globals.enableGPT = value;
+    await this.saveGlobals(
+      globals,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
   async getDisableKonnectorsSuggestions(options?: StorageOptions): Promise<boolean> {
     return (
       (

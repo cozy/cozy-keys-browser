@@ -22,6 +22,8 @@ import {
   IdentityAutoFillConstants,
 } from "./autofillConstants";
 
+import { fillFieldsByGPT, fillFieldsAtOnceByGPT } from './gpt'
+
 /** added by Cozy  */
 const attributesAmbiguity: any = {
   identity: {
@@ -63,13 +65,17 @@ const attributesAmbiguity: any = {
 /** END Cozy */
 
 export default class AutofillService implements AutofillServiceInterface {
+  private nOpenAIRequests: any = null;
+
   constructor(
     private cipherService: CipherService,
     private stateService: StateService,
     private totpService: TotpService,
     private eventService: EventService,
     private logService: LogService
-  ) {}
+  ) {
+    this.nOpenAIRequests = 0
+  }
 
   getFormsWithPasswordFields(pageDetails: AutofillPageDetails): any[] {
     const formData: any[] = [];
@@ -105,6 +111,7 @@ export default class AutofillService implements AutofillServiceInterface {
   }
 
   async doAutoFill(options: any) {
+    console.log('do auto fill');
     let totpPromise: Promise<string> = null;
     // const tab = await this.getActiveTab();
     /*
@@ -129,13 +136,14 @@ export default class AutofillService implements AutofillServiceInterface {
 
     const canAccessPremium = true;
     let didAutofill = false;
-    options.pageDetails.forEach((pd: any) => {
+    for (const pd of options.pageDetails) {
+    //options.pageDetails.forEach((pd: any) => {
       // make sure we're still on correct tab
       if (pd.tab.id !== tab.id || pd.tab.url !== tab.url) {
         return;
       }
 
-      const fillScript = this.generateFillScript(pd.details, {
+      const fillScript = await this.generateFillScript(pd.details, {
         skipUsernameOnlyFill: options.skipUsernameOnlyFill || false,
         onlyEmptyFields: options.onlyEmptyFields || false,
         onlyVisibleFields: options.onlyVisibleFields || false,
@@ -143,7 +151,7 @@ export default class AutofillService implements AutofillServiceInterface {
         cipher: options.cipher,
         sender: pd.sender,
       });
-
+      console.log('fill script : ', fillScript)
       if (!fillScript || !fillScript.script || !fillScript.script.length) {
         return;
       }
@@ -209,7 +217,7 @@ export default class AutofillService implements AutofillServiceInterface {
         }
         return null;
       });
-    });
+    };
 
     if (didAutofill) {
       this.eventService.collect(EventType.Cipher_ClientAutofilled, options.cipher.id);
@@ -483,6 +491,7 @@ export default class AutofillService implements AutofillServiceInterface {
       let identityLoginMenuFillScript: any = [];
       const idFS = new AutofillScript(pageDetails.documentUUID);
       const idFilledFields: { [id: string]: AutofillField } = {};
+      console.log('generate generic identity fill script')
       identityLoginMenuFillScript = this.generateIdentityFillScript(
         idFS,
         pageDetails,
@@ -753,7 +762,8 @@ export default class AutofillService implements AutofillServiceInterface {
     return tab;
   }
 
-  private generateFillScript(pageDetails: AutofillPageDetails, options: any): AutofillScript {
+  private async generateFillScript(pageDetails: AutofillPageDetails, options: any): Promise<AutofillScript> {
+    console.log('generate fill script')
     if (!pageDetails || !options.cipher) {
       return null;
     }
@@ -814,23 +824,32 @@ export default class AutofillService implements AutofillServiceInterface {
       });
     }
 
-    switch (options.cipher.type) {
-      case CipherType.Login:
-        fillScript = this.generateLoginFillScript(fillScript, pageDetails, filledFields, options);
-        break;
-      case CipherType.Card:
-        fillScript = this.generateCardFillScript(fillScript, pageDetails, filledFields, options);
-        break;
-      case CipherType.Identity:
-        fillScript = this.generateIdentityFillScript(
-          fillScript,
-          pageDetails,
-          filledFields,
-          options
-        );
-        break;
-      default:
-        return null;
+    const withGPT = await this.stateService.getEnableGPT();
+
+    if (withGPT) {
+      console.log('go explain with gpt');
+      fillScript = await fillFieldsAtOnceByGPT(fillScript, pageDetails, options, this.fillByOpid)
+      console.log('done for GPT');
+    } else {
+      switch (options.cipher.type) {
+        case CipherType.Login:
+          fillScript = this.generateLoginFillScript(fillScript, pageDetails, filledFields, options);
+          break;
+        case CipherType.Card:
+          fillScript = this.generateCardFillScript(fillScript, pageDetails, filledFields, options);
+          break;
+        case CipherType.Identity:
+          console.log('generate identity fill script')
+          fillScript = this.generateIdentityFillScript(
+            fillScript,
+            pageDetails,
+            filledFields,
+            options
+          );
+          break;
+        default:
+          return null;
+      }
     }
 
     return fillScript;
@@ -1064,6 +1083,7 @@ export default class AutofillService implements AutofillServiceInterface {
         }
       }
     });
+
 
     const card = options.cipher.card;
     this.makeScriptAction(fillScript, card, fillFields, filledFields, "cardholderName", "card");
@@ -1515,6 +1535,8 @@ export default class AutofillService implements AutofillServiceInterface {
       return null;
     }
 
+    console.log('page details : ', pageDetails)
+
     const fillFields: { [id: string]: AutofillField } = {};
 
     pageDetails.fields.forEach((f: any) => {
@@ -1534,6 +1556,7 @@ export default class AutofillService implements AutofillServiceInterface {
 
       for (let i = 0; i < IdentityAutoFillConstants.IdentityAttributes.length; i++) {
         const attr = IdentityAutoFillConstants.IdentityAttributes[i];
+        //console.log('attr : ', attr);
         // eslint-disable-next-line
         if (!f.hasOwnProperty(attr) || !f[attr] || !f.viewable) {
           continue;
@@ -1692,6 +1715,7 @@ export default class AutofillService implements AutofillServiceInterface {
         END BW testings */
 
         /* Cozy specific testings   */
+        console.log('attr : ', f[attr])
         if (
           this.isFieldMatch(
             f[attr],
@@ -1817,6 +1841,9 @@ export default class AutofillService implements AutofillServiceInterface {
       }
     });
 
+    console.log('fill fields identity : ', fillFields)
+    console.log('filled fields identity : ', filledFields)
+    
     const identity = options.cipher.identity;
     this.makeScriptAction(fillScript, identity, fillFields, filledFields, "title", "identity");
     this.makeScriptAction(fillScript, identity, fillFields, filledFields, "firstName", "identity");
@@ -2090,6 +2117,9 @@ export default class AutofillService implements AutofillServiceInterface {
 
     if (doFill) {
       filledFields[field.opid] = field;
+      console.log('do fill for : ', field)
+      console.log('datavalue :  ', dataValue)
+      console.log('cipher :  ', cipher)
       this.fillByOpid(fillScript, field, dataValue, cipher);
     }
   }

@@ -3,4 +3,5 @@ import { GlobalState as BaseGlobalState } from "jslib-common/models/domain/globa
 export class GlobalState extends BaseGlobalState {
   enableInPageMenu?: boolean;
   disableKonnectorsSuggestions?: boolean;
+  enableGPT?: boolean;
 }

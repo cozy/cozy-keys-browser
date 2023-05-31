@@ -980,6 +980,12 @@
   "environmentSaved": {
     "message": "The environment URLs have been saved."
   },
+  "enableGPT": {
+    "message": "Unleash the AI!"
+  },
+  "enableGPTDesc": {
+    "message": "Enable auto-fill by GPT"
+  },
   "disableKonnectorsSuggestions": {
     "message": "Disable automatic connector suggestion"
   },

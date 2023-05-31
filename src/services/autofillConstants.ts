@@ -33,7 +33,7 @@ export class AutoFillConstants {
     "radio",
     "checkbox",
     "hidden",
-    "file",
+    //"file", // TEST UPLOAD
     "button",
     "image",
     "reset",

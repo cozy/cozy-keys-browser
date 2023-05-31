@@ -29,6 +29,16 @@
     <div class="box">
       <div class="box-content">
         <div class="box-content-row box-content-row-checkbox" appBoxRow>
+          <label for="enableGPT">{{ "enableGPT" | i18n }}</label>
+          <input id="enableGPT" type="checkbox" (change)="updateEnableGPT()"
+            [(ngModel)]="enableGPT" />
+        </div>
+      </div>
+      <div class="box-footer">{{ "enableGPTDesc" | i18n }}</div>
+    </div>
+    <div class="box">
+      <div class="box-content">
+        <div class="box-content-row box-content-row-checkbox" appBoxRow>
           <label for="disableSuggestions">{{ "disableKonnectorsSuggestions" | i18n }}</label>
           <input
             id="disableSuggestions"

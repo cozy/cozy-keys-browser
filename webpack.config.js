@@ -55,6 +55,8 @@ const moduleRules = [
   },
 ];
 
+
+
 const plugins = [
   new HtmlWebpackPlugin({
     template: "./src/popup/index.html",
@@ -117,7 +119,7 @@ const plugins = [
   new webpack.SourceMapDevToolPlugin({
     exclude: [/content\/.*/, /notification\/.*/],
     filename: "[file].map",
-  }),
+  })
 ];
 
 const config = {

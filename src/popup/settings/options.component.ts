@@ -18,6 +18,7 @@ import { StateService } from "../../services/abstractions/state.service";
 })
 export class OptionsComponent implements OnInit {
   disableFavicon = false;
+  enableGPT = true;
   disableKonnectorsSuggestions = false;
   enableInPageMenu = true;
   disableBadgeCounter = false;
@@ -78,6 +79,8 @@ export class OptionsComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.enableGPT = await this.stateService.getEnableGPT()
+
     this.disableKonnectorsSuggestions = await this.stateService.getDisableKonnectorsSuggestions();
 
     this.enableAutoFillOnPageLoad = await this.stateService.getEnableAutoFillOnPageLoad();
@@ -128,6 +131,10 @@ export class OptionsComponent implements OnInit {
 
   async updateAutoTotpCopy() {
     await this.stateService.setDisableAutoTotpCopy(this.disableAutoTotpCopy);
+  }
+
+  async updateEnableGPT() {
+    await this.stateService.setEnableGPT(this.enableGPT);
   }
 
   async updateKonnectorsSuggestions() {

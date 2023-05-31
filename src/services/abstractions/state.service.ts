@@ -30,6 +30,9 @@ export abstract class StateService extends BaseStateServiceAbstraction<Account> 
     options?: StorageOptions
   ) => Promise<void>;
 
+  getEnableGPT: (options?: StorageOptions) => Promise<boolean>;
+  setEnableGPT: (value: boolean, options?: StorageOptions) => Promise<void>;
+
   getEnableInPageMenu: (options?: StorageOptions) => Promise<boolean>;
 
   setEnableInPageMenu: (value: boolean, options?: StorageOptions) => Promise<void>;

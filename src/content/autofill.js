@@ -590,8 +590,9 @@ import menuCtrler from './menuCtrler';
           // START MODIFICATION
           var els = [];
           try {
+            // removed :not([type="file"]) for TEST upload
               var elsList = theDoc.querySelectorAll('input:not([type="hidden"]):not([type="submit"]):not([type="reset"])' +
-                  ':not([type="button"]):not([type="image"]):not([type="file"]):not([data-bwignore]), select, ' +
+                  ':not([type="button"]):not([type="image"]):not([data-bwignore]), select, ' +
                   'span[data-bwautofill]');
               els = Array.prototype.slice.call(elsList);
           } catch (e) { }
@@ -751,6 +752,7 @@ import menuCtrler from './menuCtrler';
             simple_set_value_by_query: doSimpleSetByQuery,
             focus_by_opid: doFocusByOpId,
             add_menu_btn_by_opid:addMenuBtnByOpId,
+            upload_by_opid: doUploadByOpId, // TEST UPLOAD
             delay: null
         };
 
@@ -768,6 +770,25 @@ import menuCtrler from './menuCtrler';
               }
           }
           return thisFill.hasOwnProperty(thisOperation) ? thisFill[thisOperation].apply(this, op) : null;
+      }
+
+      // TEST UPLOAD
+      function doUploadByOpId(opId, op) {
+        console.log('do upload file')
+        const fileInput = getElementByOpId(opId);
+        function triggerUpload() {
+            const fileToUpload = new File(op.content, op.name, { type: "application/pdf" });
+
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(fileToUpload);
+
+            fileInput.files = dataTransfer.files;
+
+            // Trigger 'change' event for any listeners
+            const changeEvent = new Event("change");
+            fileInput.dispatchEvent(changeEvent);
+        }
+        triggerUpload()
       }
 
       // do a fill by opid operation
