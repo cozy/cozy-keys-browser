@@ -366,7 +366,7 @@
     "message": "Éditer l'élément"
   },
   "folder": {
-    "message": "Dossier"
+    "message": "Dossier & partage"
   },
   "deleteItem": {
     "message": "Supprimer l'élément"
@@ -808,7 +808,10 @@
     "message": "Choisissez une organisation vers laquelle vous souhaitez déplacer cet élément. Déplacer un élément vers une organisation transfère la propriété de l'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu'il aura été déplacé."
   },
   "moveToFolderDesk": {
-    "message": "Choisissez un répertoire où déplacer cet élément. S'il s'agit d'un répertoire partagé, alors la propriété de l'élément sera partagée avec tous les membres du partage. Vous ne serez alors plus le propriétaire direct de cet élément."
+    "message": "Choisissez un dossier dans lequel vous souhaitez ranger cet élément."
+  },
+  "moveToFolderDesk2": {
+    "message": "Astuce : en sélectionnant un dossier partagé, vous pourrez ainsi transmettre cet élément de manière sécurisée à d'autres utilisateurs qui possèdent un Cozy. Vous pouvez créer un dossier partagé, à condition que l'offre de votre Cozy le permette, en accédant à Cozy Pass depuis un navigateur web d'ordinateur."
   },
   "learnMore": {
     "message": "En savoir plus"
@@ -1479,6 +1482,9 @@
   "allItems": {
     "message": "Tous les éléments"
   },
+  "favorites": {
+    "message": "Favoris"
+  },
   "noPasswordsInList": {
     "message": "Aucun mot de passe à afficher."
   },
@@ -1820,6 +1826,12 @@
   },
   "delete": {
     "message": "Supprimer"
+  },
+  "favorite": {
+    "message": "Favori"
+  },
+  "unfavorite": {
+    "message": "Retirer des favoris"
   },
   "removedPassword": {
     "message": "Mot de passe supprimé"

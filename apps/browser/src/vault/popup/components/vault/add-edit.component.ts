@@ -331,6 +331,7 @@ export class AddEditComponent extends BaseAddEditComponent {
   }
 
   allowOwnershipOptions(): boolean {
+    return false; // Cozy custo : inactivate while submit doen't properly manage organizations & collections for Cozy
     return (
       (!this.editMode || this.cloneMode) &&
       this.ownershipOptions &&

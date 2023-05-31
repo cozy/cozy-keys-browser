@@ -366,7 +366,7 @@
     "message": "Edit item"
   },
   "folder": {
-    "message": "Folder"
+    "message": "Folder & sharing"
   },
   "deleteItem": {
     "message": "Delete item"
@@ -814,7 +814,10 @@
     "message": "Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved."
   },
   "moveToFolderDesk": {
-    "message": "Choose a folder to move this item to. If it is a shared folder, then the ownership of the item will be shared with all members of the share. You will no longer be the direct owner of this item."
+    "message": "Choose a folder in which to store this item."
+  },
+  "moveToFolderDesk2": {
+    "message": "Tip: by selecting a shared folder, you will be able to transmit this item securely to other users who own a Cozy. You can create a shared folder, provided your Cozy's offer allows it, by accessing Cozy Pass from a computer web browser."
   },
   "learnMore": {
     "message": "Learn more"
@@ -1416,6 +1419,9 @@
   "allItems": {
     "message": "All items"
   },
+  "favorites": {
+    "message": "Favorites"
+  },
   "noPasswordsInList": {
     "message": "There are no passwords to list."
   },
@@ -1757,6 +1763,12 @@
   },
   "delete": {
     "message": "Delete"
+  },
+  "favorite": {
+    "message": "Favorite"
+  },
+  "unfavorite": {
+    "message": "Unfavorite"
   },
   "removedPassword": {
     "message": "Password removed"

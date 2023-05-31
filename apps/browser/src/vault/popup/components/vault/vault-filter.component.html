@@ -4,7 +4,7 @@
     <app-pop-out></app-pop-out>
     -->
   </div>
-  <h1 class="sr-only">{{ "myVault" | i18n }} dd</h1>
+  <h1 class="sr-only">{{ "myVault" | i18n }}</h1>
   <div class="search">
     <i class="icon-cozy icon-search"></i>
     <input
@@ -49,7 +49,9 @@
     <div class="box list" *ngIf="favoriteCiphers">
       <h2 class="box-header">
         {{ "favorites" | i18n }}
+        <!-- Cozy custo : commented
         <span class="flex-right">{{ favoriteCiphers.length }}</span>
+        -->
       </h2>
       <div class="box-content">
         <app-cipher-row
@@ -70,6 +72,22 @@
         -->
       </h2>
       <div class="box-content single-line underline">
+        <!-- Cozy custo : add a "for this web site" row -->
+        <button
+        type="button"
+        class="box-content-row"
+        appStopClick
+        appBlurClick
+        (click)="selectCurrent()"
+        >
+        <div class="row-main">
+          <div class="icon"><i class="icon-cozy icon-search"></i></div>
+          <span class="text">{{ "forThisWebSite" | i18n }}</span>
+        </div>
+        <span class="row-sub-label">{{ cipherNumberForCurrentTab }}</span>
+        <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
+        </button>
+        <!-- end custo -->
         <button
           type="button"
           class="box-content-row"
@@ -127,22 +145,6 @@
           <span class="row-sub-label">{{ this.typeCounts.get(cipherType.SecureNote) || 0 }}</span>
           <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
         </button>
-        <!-- Cozy custo : add a "for this web site" row -->
-        <button
-        type="button"
-        class="box-content-row"
-        appStopClick
-        appBlurClick
-        (click)="selectCurrent()"
-        >
-        <div class="row-main">
-          <div class="icon"><i class="icon-cozy icon-search"></i></div>
-          <span class="text">{{ "forThisWebSite" | i18n }}</span>
-        </div>
-        <span class="row-sub-label">{{ cipherNumberForCurrentTab }}</span>
-        <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
-        </button>
-        <!-- end custo -->
       </div>
     </div>
     <!-- commented by Cozy (Folders are collections in Cozy)

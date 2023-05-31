@@ -76,7 +76,7 @@ export class ShareComponent implements OnInit, OnDestroy {
     this.cipher = await cipherDomain.decrypt();
 
     this.filterCollections();
-    /* Cozy custo : initialize de select item on the current collection of the cipher */
+    /* Cozy custo : initialize selected item on the current collection of the cipher */
     if (this.cipher.organizationId) {
       this.selectedCollectionId = this.collections.find(col => col.organizationId === this.cipher.organizationId)?.id;
     } else {

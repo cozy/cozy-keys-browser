@@ -188,7 +188,9 @@ export class AddEditComponent implements OnInit, OnDestroy {
       this.allowPersonal = false;
     } else {
       const myEmail = await this.stateService.getEmail();
+      /** Cozy custo : commented : oragnizations are folders in Cozy
       this.ownershipOptions.push({ name: myEmail, value: null });
+      */
     }
 
     const orgs = await this.organizationService.getAll();

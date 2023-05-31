@@ -599,10 +599,12 @@
             <option *ngFor="let f of folders$ | async" [ngValue]="f.id">{{ f.name }}</option>
           </select>
         </div>
+        -->
         <div class="box-content-row box-content-row-checkbox" appBoxRow>
           <label for="favorite">{{ "favorite" | i18n }}</label>
           <input id="favorite" type="checkbox" name="Favorite" [(ngModel)]="cipher.favorite" />
         </div>
+        <!-- Commented by Cozy
         <div class="box-content-row box-content-row-checkbox" appBoxRow *ngIf="canUseReprompt">
           <label for="passwordPrompt">
             {{ "passwordPrompt" | i18n }}
@@ -681,11 +683,17 @@
     </app-vault-add-edit-custom-fields>
     <div class="box" *ngIf="allowOwnershipOptions()">
       <h2 class="box-header">
+        <!-- Cozy custo
         {{ "ownership" | i18n }}
+        -->
+        {{ "Folder" | i18n }}
+        <!-- end custo -->
       </h2>
       <div class="box-content">
         <div class="box-content-row" appBoxRow>
+          <!-- commenté par Cozy
           <label for="organizationId">{{ "whoOwnsThisItem" | i18n }}</label>
+          -->
           <select
             id="organizationId"
             class="form-control"
@@ -707,6 +715,7 @@
           {{ "noCollectionsInList" | i18n }}
         </div>
       </div>
+      <!-- Cozy custo : commented
       <div class="box-content" *ngIf="collections && collections.length">
         <div
           class="box-content-row box-content-row-checkbox"
@@ -722,6 +731,7 @@
           />
         </div>
       </div>
+      -->
     </div>
     <div class="box list" *ngIf="editMode && !cloneMode && !(!cipher.edit && editMode)">
       <div class="box-content single-line">
