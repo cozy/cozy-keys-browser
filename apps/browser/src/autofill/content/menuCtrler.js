@@ -133,7 +133,7 @@ function _initInPageMenuForEl(targetEl) {
   if (parentForm && !formsEl.includes(parentForm)) {
     formsEl.push(parentForm);
     parentForm.addEventListener("click", (evt) => {
-      if (evt.target.nodeName !== "INPUT") {
+      if (!isOverAnInput(evt.clientX, evt.clientY)) {
         menuCtrler.freeze();
         setTimeout(menuCtrler.unFreeze, 300);
       }
@@ -238,7 +238,7 @@ function _onBlur(event) {
 }
 
 function _onFocus(event) {
-  // console.log('focus event in an input id:', event.target.id;
+  // console.log('focus event in an input id:', event.target.id);
   if (!event.isTrusted) {return};
   if (state.currentMenuType === "loginMenu") {return};
   show(this);
@@ -246,7 +246,7 @@ function _onFocus(event) {
 
 function _onClick(event) {
   if (!event.isTrusted) {return};
-  // console.log('click event in an input id:', event.target.id);
+  // console.log('click 2 event in an input id:', event.target.id, event.target.clientWidth - state.rightOffset - event.offsetX < 25);
   if (event.target.clientWidth - state.rightOffset - event.offsetX < 25) {
     toggleShow(this);
   } else {
@@ -317,7 +317,7 @@ function toggleShow(targetEl) {
 /* --------------------------------------------------------------------- */
 //
 function show(targetEl) {
-  // console.log('menuCtrler.show() ');
+  // console.log('menuCtrler.show() isFrozen:', state.isFrozen);
   if (state.isFrozen) {return};
   if (!state.isHidden && state.lastFocusedEl === targetEl) {return};
   state.lastFocusedEl = targetEl;
@@ -685,12 +685,33 @@ function _setApplyFadeInUrl(doApply, fieldTypes) {
 function _isCharacterKeyPress(evt) {
   return evt.key.length === 1;
 }
+
 /* --------------------------------------------------------------------- */
 // set state.targetFrameId which is the id of the frame containing the menu
 function setHostFrameId(frameId) {
   state.iFrameHash.hostFrameId = frameId;
 }
 menuCtrler.setHostFrameId = setHostFrameId;
+
+/* --------------------------------------------------------------------- */
+// check if coordonates are over one of the input in targetsEl
+// this is more relevant than just testing the element type since some
+// websites have placeholders elements partialy over inputs (so the click
+// over the element, but the event is fired in the placeholder element...)
+function isOverAnInput(x, y) {
+  for (const el of targetsEl) {
+    const rect = el.getBoundingClientRect();
+    if (
+      (rect.x<x && x < rect.x+rect.width)
+      &&
+      (rect.y<y && y < rect.y+rect.height)
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
 
 /* --------------------------------------------------------------------- */
 // EXPORT
