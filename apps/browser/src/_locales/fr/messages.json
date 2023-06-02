@@ -2353,5 +2353,11 @@
   },
   "TOTP": {
     "message": "Mot de passe à usage unique"
+  },
+  "sharingNotAcceptedYet": {
+    "message": "Dossier inacessible - partage à finaliser."
+  },
+  "sharingNotAcceptedYetDesc": {
+    "message": "Pour finaliser le partage, transmettez le code de sécurité à la personne qui vous a invité. Vous trouverez ce code en allant dans ce même répertoire depuis dans <a €€€>la version web de Cozy Pass</a>."
   }
 }

@@ -28,7 +28,7 @@ import { HistoryService } from "../../../../popup/services/history.service";
 import { HostListener } from "@angular/core";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { Utils } from "@bitwarden/common/misc/utils";
-import { Observable } from "rxjs";
+import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 /* eslint-enable */
 /** End Cozy imports */
 
@@ -81,6 +81,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   private hasSearched = false;
   private hasLoadedAllCiphers = false;
   private allCiphers: CipherView[] = null;
+  private notValidatedCollectionId: string[] = [];
 
   constructor(
     private i18nService: I18nService,
@@ -98,7 +99,8 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     private browserStateService: BrowserStateService,
     private vaultFilterService: VaultFilterService,
     private cozyClientService: CozyClientService,
-    private historyService: HistoryService
+    private historyService: HistoryService,
+    private organizationService: OrganizationService,
   ) {
     this.noFolderListSize = 100;
   }
@@ -208,7 +210,21 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       this.selectedOrganization
     );
     this.collections = allCollections.fullList;
+    /** Cozy custo : modify collections for which the share has not been validated
+     * by its owner (and thus can not be decrypted).
     this.nestedCollections = allCollections.nestedList;
+    */
+    this.nestedCollections = [];
+    const orgs = await this.organizationService.getAll()
+    for (const col of allCollections.nestedList) {
+      if (col.node.name === "[error: cannot decrypt]") {
+        const correspondingOrg = orgs.find(org => org.id === col.node.organizationId);
+        col.node.name = correspondingOrg.name;
+        this.notValidatedCollectionId.push(col.node.id)
+      }
+      this.nestedCollections.push(col);
+    }
+    /** end custo */
   }
 
   async loadFolders() {
@@ -269,6 +285,16 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   async selectCollection(collection: CollectionView) {
+    /** Cozy custo : if the collection is not yet validated, then display a warning */
+    if (this.notValidatedCollectionId.includes(collection.id)) {
+      const desc = this.i18nService.t("sharingNotAcceptedYetDesc").replace("€€€", `href='${this.cozyClientService.getAppURL("passwords", "")}' target='_blank'`);
+      await this.platformUtilsService.showDialog(
+        desc,
+        this.i18nService.t("sharingNotAcceptedYet"),
+        "ok",null,null,true)
+      return
+    }
+    /** end custo */
     this.router.navigate(["/ciphers"], { queryParams: { collectionId: collection.id } });
   }
 

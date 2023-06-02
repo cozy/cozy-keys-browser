@@ -90,13 +90,17 @@ export class ShareComponent implements OnInit, OnDestroy {
     if (this.organizationId == null || this.writeableCollections.length === 0) {
       this.collections = [];
     } else {
-      /** Cozy custo : no need to filter collections since in Cozy
+      /** Cozy custo :
+       * i) no need to filter collections since in Cozy
        * a user can move a cipher to any organization (= folder)
+       * ii) but we have to filter collections not decrypted (what happens when the sharing is not validated)
       this.collections = this.writeableCollections.filter(
         (c) => c.organizationId === this.organizationId
       );
       */
-      this.collections = this.writeableCollections.slice();
+      this.collections = this.writeableCollections.filter(
+        (c) => c.name !== "[error: cannot decrypt]"
+      );
       /** end custo */
 
     }
