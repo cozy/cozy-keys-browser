@@ -123,7 +123,7 @@
   <div class="box list">
     <h2 class="box-header">{{ "account" | i18n }}</h2>
     <div class="box-content single-line">
-      <button type="button" class="box-content-row" routerLink="/premium">
+      <button type="button" class="box-content-row" (click)="premium()">
         <div class="row-main">
           <div class="icon text-primary">
             <svg
@@ -143,7 +143,7 @@
             </svg>
           </div>
           <span class="text text-primary"
-            ><b>{{ "premiumMembership" | i18n }}</b></span
+            ><b>{{ "premiumMembership" | i18n }} tototo</b></span
           >
         </div>
         <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i></span>
