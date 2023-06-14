@@ -22,9 +22,10 @@ The Cozy browser extension is written using the Web Extension API and Angular. I
 
 ## Build for developement
 
-```
+```sh
 npm install --legacy-peer-deps
 npm run start
+# In watch mode, you can run a command - for instance to play a sound - by personalizing the `webpack.announcer.plugin.js`
 ```
 
 You can now load the extension into your browser through the browser's extension tools page:
@@ -42,7 +43,7 @@ You can now load the extension into your browser through the browser's extension
 Production builds can be created for each browser with the following commands:
 Out of the box, the desktop application can only communicate with the production browser extension. When you enable browser integration in the desktop application, the application generates manifests which contain the production IDs of the browser extensions. To enable communication between the desktop application and development versions of browser extensions, add the development IDs to the `allowed_extensions` section of the corresponding manifests.
 
-```
+```sh
 npm install
 npm run dist:<firefox|chrome|opera|safari>`
 ```
@@ -51,7 +52,7 @@ Manifests are located in the `browser` subdirectory of the Bitwarden configurati
 
 You can also build all of them in once by running:
 
-```
+```sh
 npm install
 npm run dist
 ```
@@ -60,7 +61,7 @@ npm run dist
 
 In case you need to create an archive of the source code, which can be required for an add-on submission on some platforms:
 
-```
+```sh
 npm run dist:sources
 ```
 
