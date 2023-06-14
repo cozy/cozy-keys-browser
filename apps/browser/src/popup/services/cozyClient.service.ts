@@ -1,4 +1,4 @@
-import CozyClient from "cozy-client";
+import CozyClient, { Q } from "cozy-client";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import flag from "cozy-flags";
@@ -6,6 +6,16 @@ import flag from "cozy-flags";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+interface QueryResult<T> {
+  data: { attributes: T }
+}
+
+type ExpectedContext = QueryResult<{
+  manager_url?: string
+  enable_premium_links?: boolean
+}>
+
+type ExpectedInstance = QueryResult<{ id?: string }>
 
 /**
  * CozyClient service, used to communicate with a Cozy stack on specific Cozy's routes.
@@ -77,9 +87,28 @@ export class CozyClientService {
     this.registerFlags();
     // @ts-ignore
     document.cozyclient = this.instance;
-    this.instance.queryAll(this.instance.find("io.cozy.settings"), {})
-    this.instance.getStackClient().fetchJSON("GET", "/settings/context")
-    this.instance.getStackClient().fetchJSON("GET", "/settings/instance")
+    // manager_url &  enable_premium_links
+    const { manager_url, enable_premium_links } =
+      (await this.instance.query(Q('io.cozy.settings').getById('context')) as ExpectedContext).data.attributes;
+    // const { uuid } =
+    //   (await this.instance.query(Q('io.cozy.settings').getById('instance')) as ExpectedInstance).data.id;
+    const uuidobj = await this.instance.query(Q('io.cozy.settings').getById('instance'));
+    const uuiobj2 = (await this.instance.fetchQueryAndGetFromState(
+      {
+        definition: Q("io.cozy.settings").getById('io.cozy.settings.instance'),
+        options: {
+          as: `${"io.cozy.settings"}/io.cozy.settings.instance`,
+          fetchPolicy: CozyClient.fetchPolicies.olderThan(5 * 60 * 1000),
+          singleDocData: true
+        }
+      }
+    )) as ExpectedInstance
+    console.log(manager_url, enable_premium_links, uuidobj);
+
+    // const offersLink = enable_premium_links && manager_url && uuid
+    //         ? `${manager_url}/cozy/instances/${uuid}/premium`
+    //         : null
+    // console.log(offersLink);
 
 
     return this.instance;
@@ -102,7 +131,6 @@ export class CozyClientService {
 
     try {
       const client = await this.getClientInstance();
-      client.fetchQueryAndGetFromState()
       await client.getStackClient().fetch("DELETE", "/auth/register/" + clientId, undefined, {
         headers: {
           Authorization: "Bearer " + registrationAccessToken,
