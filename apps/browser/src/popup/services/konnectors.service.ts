@@ -243,11 +243,7 @@ export class KonnectorsService {
     return matchingKonnectors;
   }
 
-  /** TODO BJA konnectors icon : not tested, waiting for its full implementation
-   * Need to modify the cozy client rights so that the call can be run
-   */
-  /*
-    async isKonnectorsOrganization(organizationId: string): Promise<boolean> {
+  async isKonnectorsOrganization(organizationId: string): Promise<boolean> {
     const konnectorsOrg = await this.getKonnectorsOrganization();
     if (organizationId === konnectorsOrg.organizationId) {
         return true;
@@ -265,7 +261,7 @@ export class KonnectorsService {
     }
     this.settingsPromise = this.cozyClientService.getClientInstance()
     .then((client) => {
-        client.getStackClient().fetchJSON(
+        return client.getStackClient().fetchJSON(
             'GET',
             '/data/io.cozy.settings/io.cozy.settings.bitwarden'
         );
@@ -279,6 +275,7 @@ export class KonnectorsService {
     })
     return this.settingsPromise
   }
+
   private settingsPromise: any;
-*/
+
 }

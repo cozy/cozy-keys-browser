@@ -72,18 +72,12 @@ export class CipherRowComponent implements OnInit {
 
     return c.subTitle;
   }
-  /* end custo */
 
   // Cozy customization, differentiate shared Ciphers from ciphers in "Cozy Connectors" organization
-  // /*
   async ngOnInit() {
-    /** TODO BJA konnectors icon : not tested, waiting for its full implementation
-     * Need to modify the cozy client rights so that the call can be run
-     */
-    /*
-    this.isKonnector = await this.konnectorService.isKonnectorsOrganization(this.cipher.organizationId);
-    */
-    this.isKonnector = false;
+   this.isKonnector = await this.konnectorService.isKonnectorsOrganization(this.cipher.organizationId);
   }
-  // */
+
+  /* end custo */
+
 }
