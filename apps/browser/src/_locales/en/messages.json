@@ -194,11 +194,11 @@
     "message": "Change master password"
   },
   "fingerprintPhrase": {
-    "message": "Security Code",
+    "message": "Security code for sharings",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
-    "message": "Your account's security code",
+    "message": "Security code for sharings",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "twoStepLogin": {
@@ -2193,7 +2193,7 @@
     "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
   },
   "fingerprintPhraseHeader": {
-    "message": "Fingerprint phrase"
+    "message": "Security code for sharings"
   },
   "fingerprintMatchInfo": {
     "message": "Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device."
@@ -2297,7 +2297,10 @@
   "sharingNotAcceptedYet": {
     "message": "File inaccessible - sharing to be finalized."
   },
-  "sharingNotAcceptedYetDesc": {
-    "message": "To finalize the sharing, send the security code to the person who invited you. You'll find this code by going to this same directory from <a €€€>the web version of Cozy Pass</a>."
+  "sharingNotAcceptedYetDesc1": {
+    "message": "To finalize sharing and access to shared passwords, please send your security code to the person who invited you, using the method of your choice (call, SMS, instant messaging, etc.):"
+  },
+  "sharingNotAcceptedYetDesc2": {
+    "message": "This security code will enable him to validate your identity and let you access shared items."
   }
 }

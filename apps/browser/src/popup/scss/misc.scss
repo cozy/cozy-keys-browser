@@ -671,3 +671,14 @@ html.force_redraw {
 .rounded-circle {
   border-radius: 50% !important;
 }
+
+.security-code-desc {
+  text-align: left;
+}
+
+.security-code {
+  @include themify($themes) {
+    color:themed("primaryAccentColor");
+  }
+  font-size: 17px;
+}

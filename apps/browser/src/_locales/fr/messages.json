@@ -194,11 +194,11 @@
     "message": "Changer le mot de passe"
   },
   "fingerprintPhrase": {
-    "message": "Phrase de sécurité",
+    "message": "Code de sécurité pour les partages",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
-    "message": "La phrase de sécurité de votre compte",
+    "message": "Code de sécurité pour les partages",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "twoStepLogin": {
@@ -2360,7 +2360,10 @@
   "sharingNotAcceptedYet": {
     "message": "Dossier inacessible - partage à finaliser."
   },
-  "sharingNotAcceptedYetDesc": {
-    "message": "Pour finaliser le partage, transmettez le code de sécurité à la personne qui vous a invité. Vous trouverez ce code en allant dans ce même répertoire depuis dans <a €€€>la version web de Cozy Pass</a>."
+  "sharingNotAcceptedYetDesc1": {
+    "message": "Pour finaliser le partage et accéder aux mots de passe partagés, veuillez transmettre par le moyen de votre choix (Appel, SMS, messagerie instantanée, ...) votre code de sécurité à la personnne vous ayant invité :"
+  },
+  "sharingNotAcceptedYetDesc2": {
+    "message": "Ce code de sécurité lui permettra de valider votre identité et ainsi d'accéder aux éléments partagés."
   }
 }
