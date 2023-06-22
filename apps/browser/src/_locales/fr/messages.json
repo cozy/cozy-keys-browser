@@ -786,7 +786,7 @@
     "message": "Déplacer vers l'organisation"
   },
   "changeFolder": {
-    "message": "Changer de répertoire"
+    "message": "Répertoire et partage"
   },
   "share": {
     "message": "Partager"
@@ -811,7 +811,10 @@
     "message": "Choisissez un dossier dans lequel vous souhaitez ranger cet élément."
   },
   "moveToFolderDesk2": {
-    "message": "Astuce : en sélectionnant un dossier partagé, vous pourrez ainsi transmettre cet élément de manière sécurisée à d'autres utilisateurs qui possèdent un Cozy. Vous pouvez créer un dossier partagé, à condition que l'offre de votre Cozy le permette, en accédant à Cozy Pass depuis un navigateur web d'ordinateur."
+    "message": "Partage : en sélectionnant un dossier partagé, vous pourrez ainsi transmettre cet élément de manière sécurisée à d'autres utilisateurs. Vous pouvez créer un dossier partagé en accédant à Cozy Pass depuis un navigateur web d'ordinateur."
+  },
+  "sharingPremiumLinkDesc": {
+    "message": "Voir les offres permettant le partage, et plus !"
   },
   "learnMore": {
     "message": "En savoir plus"

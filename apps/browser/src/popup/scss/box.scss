@@ -149,6 +149,12 @@
   }
 
   /* Cozy custo*/
+  .box-footer-comment{
+    margin: 20px 5px 0px 5px;
+    &#organizationHelp3 {
+      font-size: 16px;
+    }
+  }
   .row-footer {
     padding: 5px 0px;
     font-size: $font-size-small;
@@ -174,7 +180,7 @@
         border-bottom: 1px solid red;
       }
       .box-content-row {
-        padding: 5px 10px;
+        padding: 0px 10px;
         text-decoration: none;
         /* Cozy custo
         border-radius: $border-radius;
@@ -247,6 +253,9 @@
           min-width: 0;
           align-items: center;
           flex-grow: 1;
+        }
+        button {
+          padding: 10px;
         }
         /* end custo Cozy */
       }

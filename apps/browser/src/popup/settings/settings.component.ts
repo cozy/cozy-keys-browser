@@ -438,8 +438,11 @@ export class SettingsComponent implements OnInit {
     return !this.platformUtilsService.isSafari();
   }
 
-  premium() {
-    BrowserApi.createNewTab("https://cozy.io/fr/pricing/");
+  async openPremiumPage() {
+    const link = await this.cozyClientService.getPremiumLink()
+    if (link) {
+      BrowserApi.createNewTab(link);
+    }
   }
 
   getCozyURL() {

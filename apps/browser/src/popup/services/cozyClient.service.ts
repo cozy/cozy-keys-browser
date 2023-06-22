@@ -15,7 +15,7 @@ type ExpectedContext = QueryResult<{
   enable_premium_links?: boolean
 }>
 
-type ExpectedInstance = QueryResult<{ id?: string }>
+type ExpectedInstance = QueryResult<{ uuid?: string }>
 
 /**
  * CozyClient service, used to communicate with a Cozy stack on specific Cozy's routes.
@@ -85,15 +85,20 @@ export class CozyClientService {
     this.instance = new CozyClient({ uri: uri, token: token });
     this.instance.registerPlugin(flag.plugin, undefined);
     this.registerFlags();
-    // @ts-ignore
-    document.cozyclient = this.instance;
-    // manager_url &  enable_premium_links
+    return this.instance;
+  }
+
+  /**
+   * returns a url (string) pointing to the premium plan for this Cozy
+   * or null if some data are missing
+   */
+  async getPremiumLink() {
+    const client = await this.getClientInstance();
+    // retrieve manager_url &  enable_premium_links
     const { manager_url, enable_premium_links } =
-      (await this.instance.query(Q('io.cozy.settings').getById('context')) as ExpectedContext).data.attributes;
-    // const { uuid } =
-    //   (await this.instance.query(Q('io.cozy.settings').getById('instance')) as ExpectedInstance).data.id;
-    const uuidobj = await this.instance.query(Q('io.cozy.settings').getById('instance'));
-    const uuiobj2 = (await this.instance.fetchQueryAndGetFromState(
+      (await client.query(Q('io.cozy.settings').getById('context')) as ExpectedContext).data.attributes;
+    // retrieve uuid
+    const instance = (await client.fetchQueryAndGetFromState(
       {
         definition: Q("io.cozy.settings").getById('io.cozy.settings.instance'),
         options: {
@@ -103,15 +108,12 @@ export class CozyClientService {
         }
       }
     )) as ExpectedInstance
-    console.log(manager_url, enable_premium_links, uuidobj);
-
-    // const offersLink = enable_premium_links && manager_url && uuid
-    //         ? `${manager_url}/cozy/instances/${uuid}/premium`
-    //         : null
-    // console.log(offersLink);
-
-
-    return this.instance;
+    const uuid = instance.data.attributes?.uuid;
+    // build offer url on the cloudery
+    const offersLink = enable_premium_links && manager_url && uuid
+            ? `${manager_url}/cozy/instances/${uuid}/premium`
+            : null
+    return offersLink;
   }
 
   async updateSynchronizedAt() {

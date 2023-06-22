@@ -792,7 +792,7 @@
     "message": "Move to organization"
   },
   "changeFolder": {
-    "message": "Change of folder"
+    "message": "Folder and sharing"
   },
   "share": {
     "message": "Share"
@@ -817,7 +817,10 @@
     "message": "Choose a folder in which to store this item."
   },
   "moveToFolderDesk2": {
-    "message": "Tip: by selecting a shared folder, you will be able to transmit this item securely to other users who own a Cozy. You can create a shared folder, provided your Cozy's offer allows it, by accessing Cozy Pass from a computer web browser."
+    "message": "Tip: by selecting a shared folder, you will be able to transmit this item securely to other users. You can create a shared folder by accessing Cozy Pass from a computer web browser."
+  },
+  "sharingPremiumLinkDesc": {
+    "message": "See plans with sharing, and more !"
   },
   "learnMore": {
     "message": "Learn more"
