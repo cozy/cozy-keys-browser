@@ -473,6 +473,24 @@ li.active .icon-cozy-inline > svg {
   }
 }
 
+.icon-download {
+  mask-image: url("../images/icon-cloud-download.svg");
+  -webkit-mask-image: url("../images/icon-cloud-download.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.text-danger .icon-cozy {
+  @include themify($themes) {
+    background-color: themed("dangerColor") !important;
+  }
+}
+
 .icon-double {
   width: 75px;
   height: 75px;
@@ -681,4 +699,8 @@ html.force_redraw {
     color:themed("primaryAccentColor");
   }
   font-size: 17px;
+}
+
+.empty-top {
+  height: 75px;
 }

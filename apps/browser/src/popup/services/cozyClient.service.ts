@@ -75,8 +75,6 @@ export class CozyClientService {
   }
 
   async createClient() {
-    console.log("createClient()");
-
     if (this.instance) {
       this.unregisterFlags();
     }

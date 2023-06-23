@@ -217,6 +217,10 @@ header {
     }
   }
 
+  .right.solid {
+    min-width: 75px;
+  }
+
   .center {
     display: flex;
     align-items: center;

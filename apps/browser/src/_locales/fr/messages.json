@@ -616,7 +616,7 @@
     }
   },
   "newUri": {
-    "message": "Nouvel URI"
+    "message": "Nouveau domaine à exclure"
   },
   "addedItem": {
     "message": "Élément ajouté"
@@ -649,7 +649,7 @@
     "message": "Rechercher dans le dossier"
   },
   "searchCollection": {
-    "message": "Rechercher dans la collection"
+    "message": "Rechercher dans le dossier"
   },
   "searchType": {
     "message": "Rechercher dans le type"
@@ -670,8 +670,8 @@
   "showCardsCurrentTabDesc": {
     "message": "Lister les éléments de la carte sur la page de l'onglet pour faciliter la saisie automatique."
   },
-  "dontShowIdentitiesCurrentTab": {
-    "message": "Ne pas afficher les profils sur la page Onglet courant"
+  "showIdentitiesCurrentTab": {
+    "message": "Afficher les profils sur la page Onglet courant"
   },
   "showIdentitiesCurrentTabDesc": {
     "message": "Lister les profils sur la page de l'onglet en cours pour faciliter la saisie automatique."
@@ -786,7 +786,7 @@
     "message": "Déplacer vers l'organisation"
   },
   "changeFolder": {
-    "message": "Répertoire et partage"
+    "message": "Dossier et partage"
   },
   "share": {
     "message": "Partager"
@@ -1774,7 +1774,7 @@
     "message": "Domaines exclus"
   },
   "excludedDomainsDesc": {
-    "message": "Bitwarden ne proposera pas d'enregistrer les informations de connexion pour ces domaines. Vous devez actualiser la page pour que les modifications prennent effet."
+    "message": "Cozy Pass ne proposera pas d'enregistrer les informations de connexion pour ces domaines. Vous devez actualiser la page pour que les modifications prennent effet."
   },
   "excludedDomainsInvalidDomain": {
     "message": "$DOMAIN$ n'est pas un domaine valide",

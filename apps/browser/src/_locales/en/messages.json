@@ -616,7 +616,7 @@
     }
   },
   "newUri": {
-    "message": "New URI"
+    "message": "New domain to exclude"
   },
   "addedItem": {
     "message": "Item added"
@@ -649,7 +649,7 @@
     "message": "Search folder"
   },
   "searchCollection": {
-    "message": "Search collection"
+    "message": "Search in folder"
   },
   "searchType": {
     "message": "Search type"
@@ -1711,7 +1711,7 @@
     "message": "Excluded domains"
   },
   "excludedDomainsDesc": {
-    "message": "Bitwarden will not ask to save login details for these domains. You must refresh the page for changes to take effect."
+    "message": "Cozy Pass will not ask to save login details for these domains. You must refresh the page for changes to take effect."
   },
   "excludedDomainsInvalidDomain": {
     "message": "$DOMAIN$ is not a valid domain",
