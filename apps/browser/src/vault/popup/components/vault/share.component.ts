@@ -18,6 +18,7 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
 /* eslint-disable */
 import { HistoryService } from "../../../../popup/services/history.service";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
+import { BrowserApi } from "../../../../browser/browserApi";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -96,7 +97,9 @@ export class ShareComponent extends BaseShareComponent {
   async openPremiumPage() {
     const link = await this.cozyClientService.getPremiumLink()
     if (link) {
-      window.open(link);
+      BrowserApi.createNewTab(link);
+    } else {
+      BrowserApi.createNewTab('https://cozy.io/fr/pricing/');
     }
   }
   /* end custo */

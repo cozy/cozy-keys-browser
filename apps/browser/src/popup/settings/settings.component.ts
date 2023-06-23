@@ -439,9 +439,11 @@ export class SettingsComponent implements OnInit {
   }
 
   async openPremiumPage() {
-    const link = await this.cozyClientService.getPremiumLink()
+    const link = await this.cozyClientService.getPremiumLink();
     if (link) {
       BrowserApi.createNewTab(link);
+    } else {
+      BrowserApi.createNewTab('https://cozy.io/fr/pricing/');
     }
   }
 
