@@ -324,6 +324,12 @@ export class SettingsComponent implements OnInit {
     );
     if (confirmed) {
       this.messagingService.send("logout");
+      setTimeout(() => {
+        // for security reasons the addon will be relaoded at logout.
+        // In order to avoid blinking experience we immediately close the popup.
+        // https://github.com/bitwarden/clients/issues/3166
+        window.close();
+      }, 300);
     }
   }
 
