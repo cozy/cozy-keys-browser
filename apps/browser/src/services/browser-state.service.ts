@@ -9,6 +9,7 @@ import { Account } from "../models/account";
 import { BrowserComponentState } from "../models/browserComponentState";
 import { BrowserGroupingsComponentState } from "../models/browserGroupingsComponentState";
 import { BrowserSendComponentState } from "../models/browserSendComponentState";
+import { KonnectorsOrg } from "../models/konnectorsOrganization";
 
 import { BrowserStateService as StateServiceAbstraction } from "./abstractions/browser-state.service";
 
@@ -193,6 +194,19 @@ export class BrowserStateService
 
   async getHistoryState(): Promise<string> {
     return (await this.getAccount(await this.defaultInMemoryOptions()))?.history;
+  }
+
+  async getKonnectorsOrganization(): Promise<KonnectorsOrg> {
+    return (await this.getAccount(await this.defaultInMemoryOptions()))?.konnectorsOrganization;
+  }
+
+  async setKonnectorsOrganization(value: KonnectorsOrg): Promise<void> {
+    const account = await this.getAccount(await this.defaultInMemoryOptions());
+    if (!account) {
+      return;
+    }
+    account.konnectorsOrganization = value;
+    await this.saveAccount(account, await this.defaultInMemoryOptions());
   }
   /* end custo */
 }

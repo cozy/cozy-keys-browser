@@ -31,6 +31,7 @@ import { PasswordLogInCredentials } from "@bitwarden/common/auth/models/domain/l
 import { PreloginRequest } from "@bitwarden/common/models/request/prelogin.request";
 import { generateWebLink, Q } from "cozy-client";
 import { CozySanitizeUrlService } from "../../popup/services/cozySanitizeUrl.service";
+import { KonnectorsService } from "../../popup/services/konnectors.service";
 import { sanitizeUrlInput } from "./login.component.functions";
 /* eslint-enable */
 /* end Cozy imports */
@@ -117,7 +118,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     formValidationErrorService: FormValidationErrorsService,
     route: ActivatedRoute,
     loginService: LoginService,
-    protected cozySanitizeUrlService: CozySanitizeUrlService
+    protected cozySanitizeUrlService: CozySanitizeUrlService,
+    protected konnectorService: KonnectorsService,
   ) {
     super(
       apiService,
@@ -237,6 +239,10 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
       this.formPromise = this.authService.logIn(credentials);
       const response = await this.formPromise;
       this.setFormValues();
+      setTimeout(() => {
+        // only for prefetching data, wait for search and components initialization finished to run (1500ms)
+        this.konnectorService.getKonnectorsOrganization();
+      }, 1500);
 
       await this.loginService.saveEmailSettings();
       if (this.handleCaptchaRequired(response)) {
