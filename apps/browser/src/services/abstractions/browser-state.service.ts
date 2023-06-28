@@ -48,5 +48,9 @@ export abstract class BrowserStateService extends BaseStateServiceAbstraction<Ac
   setKonnectorsOrganization: (value: KonnectorsOrg) => Promise<void>;
 
   getKonnectorsOrganization: () => Promise<KonnectorsOrg>;
+
+  setBannerClosedByUser: (value: boolean) => Promise<void>;
+
+  getBannerClosedByUser: () => Promise<boolean>;
   //*/
 }

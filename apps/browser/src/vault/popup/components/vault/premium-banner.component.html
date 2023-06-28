@@ -1,0 +1,7 @@
+<div *ngIf="shouldDisplayPremiumNote()">
+  <button type="button" class="close-premium" appBlurClick (click)="close()" title="{{ 'close_shortcut' | i18n }}">
+    <i class="icon-cozy icon-cross-mask icon-cross-premium" aria-hidden="true"></i>
+  </button>
+    <p>{{ "premiumDesc1" | i18n }}</p>
+  <p><a (click)="openPremiumPage()" href="#">{{ "premiumDesc2" | i18n }}</a></p>
+</div>

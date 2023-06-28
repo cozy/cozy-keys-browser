@@ -333,6 +333,15 @@ li.active .icon-cozy-inline > svg {
   background-image: url("../images/icons-16-icon-cross.svg");
 }
 
+.icon-cross-mask {
+  mask-image: url("../images/icons-16-icon-cross.svg");
+  -webkit-mask-image: url("../images/icons-16-icon-cross.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+}
+
 .icon-plus {
   background-image: url("../images/icons-16-icon-plus.svg");
 }

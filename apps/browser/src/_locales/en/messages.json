@@ -822,6 +822,12 @@
   "sharingPremiumLinkDesc": {
     "message": "See plans with sharing, and more !"
   },
+  "premiumDesc1": {
+    "message": "Share your passwords with a premium version !"
+  },
+  "premiumDesc2": {
+    "message": "All Premium features"
+  },
   "learnMore": {
     "message": "Learn more"
   },

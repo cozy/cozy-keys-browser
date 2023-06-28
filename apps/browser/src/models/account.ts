@@ -30,6 +30,7 @@ export class Account extends BaseAccount {
   sendType?: BrowserComponentState;
   history?: string;
   konnectorsOrganization?: KonnectorsOrg;
+  bannerClosedByUser?: boolean;
 
   constructor(init: Partial<Account>) {
     super(init);

@@ -6,6 +6,7 @@ import flag from "cozy-flags";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 interface QueryResult<T> {
   data: { attributes: T }
 }
@@ -25,11 +26,13 @@ type ExpectedInstance = QueryResult<{ uuid?: string }>
 export class CozyClientService {
   protected instance: CozyClient;
   protected flagChangedPointer: any = undefined;
+  private estimatedVaultCreationDate: Date = null;
 
   constructor(
     protected environmentService: EnvironmentService,
     protected apiService: ApiService,
-    protected messagingService: MessagingService
+    protected messagingService: MessagingService,
+    protected cipherService: CipherService,
   ) {
     this.flagChangedPointer = this.flagChanged.bind(this);
   }
@@ -159,5 +162,25 @@ export class CozyClientService {
     const client = await this.getClientInstance();
 
     await client.logout();
+  }
+
+  async getVaultCreationDate(): Promise<Date> {
+    if (this.estimatedVaultCreationDate) {
+      // it is useless to update its age if one is known
+      return this.estimatedVaultCreationDate;
+    }
+    const ciphers = await this.cipherService.getAllDecrypted();
+    if (ciphers.length === 0) {
+      return new Date();
+    }
+    const minDate = ciphers.reduce((minDate, cipher) => {
+      const date = cipher.creationDate ? cipher.creationDate : cipher.revisionDate;
+      if (date) {
+        return date < minDate ? date : minDate;
+      }
+      return minDate
+    }, new Date())
+    this.estimatedVaultCreationDate = minDate;
+    return minDate;
   }
 }

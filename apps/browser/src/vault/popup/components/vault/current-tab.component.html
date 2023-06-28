@@ -57,11 +57,15 @@
     <!-- end custo -->
   </div>
 </header>
+<!-- Cozy custo
 <main tabindex="-1">
+-->
+<main tabindex="-1" class="with-banner">
+<!-- end custo -->
   <div class="no-items" *ngIf="!loaded">
     <i class="bwi bwi-spinner bwi-spin bwi-3x" aria-hidden="true"></i>
   </div>
-  <ng-container *ngIf="loaded">
+  <div *ngIf="loaded">
     <!-- Cozy custo
     <app-vault-select (onVaultSelectionChanged)="load()"></app-vault-select>
     <app-callout *ngIf="showHowToAutofill" type="info" title="{{ 'howToAutofill' | i18n }}">
@@ -186,5 +190,8 @@
         <!-- end custo -->
       </div>
     </div>
-  </ng-container>
+  </div>
+
+  <app-vault-premium-banner></app-vault-premium-banner>
+
 </main>

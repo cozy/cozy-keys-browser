@@ -341,7 +341,8 @@ export default class MainBackground {
     this.cozyClientService = new CozyClientService(
       this.environmentService,
       this.apiService,
-      this.messagingService
+      this.messagingService,
+      this.cipherService,
     );
 
     this.settingsService = new BrowserSettingsService(this.stateService);

@@ -205,3 +205,45 @@ app-vault-share {
     padding: 45px 20px 0 20px;
   }
 }
+
+/* Cozy custo */
+main.with-banner {
+  display:flex;
+  flex-direction:column;
+  > :first-child {
+    flex: 1;
+  }
+
+  app-vault-premium-banner {
+    > div {
+      padding: 4px 0 11px 0;
+      @include themify($themes) {
+        background-color: themed("backgroundColor");
+      }
+    }
+
+    .close-premium {
+      margin-right: 15px;
+      display: block;
+      margin-left: auto;
+      .icon-cross-premium {
+        width: 10px;
+        height: 10px;
+        @include themify($themes) {
+          background-color: themed("mutedColor");
+        }
+      }
+    }
+
+    p {
+      text-align: center;
+      @include themify($themes) {
+        color: themed("mutedColor");
+      }
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+
+  }
+}
+/* end custo */

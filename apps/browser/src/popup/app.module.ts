@@ -80,6 +80,7 @@ import { TabsComponent } from "./tabs.component";
 /* eslint-disable */
 import { FlagConditionalComponent } from "../cozy/components/flag-conditional/flag-conditional.component";
 import { IfFlagDirective } from "../cozy/components/flag-conditional/if-flag.directive";
+import { PremiumBannerComponent } from "../vault/popup/components/vault/premium-banner.component";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -162,6 +163,7 @@ import { IfFlagDirective } from "../cozy/components/flag-conditional/if-flag.dir
     AutofillComponent,
     FlagConditionalComponent,
     IfFlagDirective,
+    PremiumBannerComponent,
   ],
   providers: [CurrencyPipe, DatePipe],
   bootstrap: [AppComponent],
