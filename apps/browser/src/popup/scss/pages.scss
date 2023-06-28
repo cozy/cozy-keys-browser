@@ -208,13 +208,14 @@ app-vault-share {
 
 /* Cozy custo */
 main.with-banner {
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
   > :first-child {
     flex: 1;
   }
 
   app-vault-premium-banner {
+    flex: 0;
     > div {
       padding: 4px 0 11px 0;
       @include themify($themes) {
