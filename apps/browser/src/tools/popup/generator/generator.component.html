@@ -108,34 +108,26 @@
   <ng-container *ngIf="type === 'password'">
     <!-- Cozy custo -->
     <div class="box list">
-      <div class="box-content">
-        <div class="box-content-row">
-          <a class="box-content-row box-content-row-flex" routerLink="/generator-history">
-            <div class="row-main">{{ "passwordHistory" | i18n }}</div>
-            <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
-          </a>
-        </div>
-        <div class="box-content-row">
-          <a
-            class="box-content-row box-content-row-flex"
-            href="#"
-            appStopClick
-            appBlurClick
-            (click)="toggleOptions()"
+      <div class="box-content single-line">
+        <a class="box-content-row box-content-row-flex" routerLink="/generator-history">
+          <div class="row-main">{{ "passwordHistory" | i18n }}</div>
+          <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
+        </a>
+        <button class="box-content-row" type="button"
+          (click)="toggleOptions($event)"
           >
-            <i
-              class="row-icon icon-cozy icon-arrow-right"
-              aria-hidden="true"
-              *ngIf="showOptions === false"
+          <i
+            class="row-icon icon-cozy icon-arrow-right"
+            aria-hidden="true"
+            *ngIf="showOptions === false"
             ></i>
-            <i
-              class="row-icon icon-cozy icon-arrow-down"
-              aria-hidden="true"
-              *ngIf="showOptions === true"
+          <i
+            class="row-icon icon-cozy icon-arrow-down"
+            aria-hidden="true"
+            *ngIf="showOptions === true"
             ></i>
             {{ "advancedOptions" | i18n }}
-          </a>
-        </div>
+        </button>
       </div>
     </div>
     <div *ngIf="showOptions === true">

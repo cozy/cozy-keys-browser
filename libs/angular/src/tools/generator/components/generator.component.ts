@@ -202,7 +202,8 @@ export class GeneratorComponent implements OnInit {
     this.onSelected.emit(this.type === "password" ? this.password : this.username);
   }
 
-  toggleOptions() {
+  toggleOptions(event: Event) {
+    (event.target as HTMLElement).blur();
     this.showOptions = !this.showOptions;
   }
 

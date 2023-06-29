@@ -12,9 +12,9 @@ app-generator .generated-block {
   font-size: $font-size-large;
   font-family: $font-family-sans-serif;
   margin: 8px;
+  /* Cozy custo
   padding: 8px 10px 8px 0;
   display: flex;
-  /* Cozy custo
   border-radius: $border-radius;
   border: 1px solid;
 
@@ -23,6 +23,8 @@ app-generator .generated-block {
     border-color: themed("borderColorAlt");
   }
   */
+  padding: 8px 10px 8px 15px;
+  display: flex;
   box-sizing: border-box;
   border-radius: 0.188rem;
   border: 0.063rem solid $gray;
