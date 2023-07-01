@@ -36,3 +36,9 @@ iframe {
     margin-right: 0.5em;
     box-sizing: border-box;
 }
+.keyboard {
+    border: solid 1px grey;
+}
+.keyboard button {
+    margin-bottom: 20px;
+}

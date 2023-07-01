@@ -137,6 +137,7 @@ export default class AutofillService implements AutofillServiceInterface {
    * @returns The TOTP code of the successfully autofilled login, if any
    */
   async doAutoFill(options: AutoFillOptions): Promise<string> {
+    console.log("doAutoFill()");
     /*
     @override by Cozy : when the user logins into the addon, all tabs requests a pageDetail in order to
     activate the in-page-menu : then the tab to take into account is not the active tab, but the tab sent with
@@ -196,18 +197,23 @@ export default class AutofillService implements AutofillServiceInterface {
       // Add a small delay between operations
       fillScript.properties.delay_between_operations = 20;
 
-      /* Cozy insertion */
+      /* Cozy custo */
       if (options.fieldsForInPageMenuScripts) {
         // means we are preparing a script to activate menu into page fields
         if (fillScript) {
           fillScript.script = fillScript.script.filter((action: any) => {
-            if (action[0] !== "fill_by_opid") {
-              return false;
+            if (action[0] === "fill_by_opid") {
+              action[0] = "add_menu_btn_by_opid";
+              action[3].hasExistingCipher = true;
+              action[3].connected = true;
+              return true;
+            } else if (action[0] === "bankKeyboardOp") {
+              action[0] = "add_bankKeyboard_menu_by_opid";
+              action[3].hasExistingCipher = true;
+              action[3].connected = true;
+              return true;
             }
-            action[0] = "add_menu_btn_by_opid";
-            action[3].hasExistingCipher = true;
-            action[3].connected = true;
-            return true;
+            return false;
           });
           fillScripts = [fillScript, ...options.fieldsForInPageMenuScripts];
         } else {
@@ -215,14 +221,20 @@ export default class AutofillService implements AutofillServiceInterface {
         }
         this.postFilterFieldsForInPageMenu(fillScripts, pd.details.forms, pd.details.fields);
       } else {
+        fillScript.script.forEach( s => {
+          if (s[0] === "bankKeyboardOp") {
+            s[0] = "fill_bankKeyboard_menu_by_opid"
+          }
+        });
         fillScripts = fillScript ? [fillScript] : [];
       }
-      /* END Cozy insertion */
+      /* END Cozy custo */
 
       didAutofill = true;
       if (!options.skipLastUsed && options.cipher && !options.fieldsForInPageMenuScripts) {
         this.cipherService.updateLastUsedDate(options.cipher.id);
       }
+      console.log("fillScripts envoyés à la page :", fillScripts);
 
       BrowserApi.tabSendMessage(
         tab,
@@ -280,6 +292,8 @@ export default class AutofillService implements AutofillServiceInterface {
     fromCommand: boolean
   ): Promise<string> {
     let cipher: CipherView;
+    console.log("doAutoFillOnTab()");
+
     /* *
     @override by Cozy : when the user logins into the addon, all tabs request a pageDetail in order to
     activate the in-page-menu :
@@ -289,10 +303,7 @@ export default class AutofillService implements AutofillServiceInterface {
     let hasFieldsForInPageMenu = false;
     if (pageDetails[0].sender === "notifBarForInPageMenu") {
       cipher = await this.cipherService.getLastUsedForUrl(tab.url, false);
-      hasFieldsForInPageMenu =
-        pageDetails[0].fieldsForInPageMenuScripts.findIndex((s: any) => {
-          s.script.length > 0;
-        }) > -1;
+      hasFieldsForInPageMenu = ( pageDetails[0].fieldsForInPageMenuScripts.findIndex( (s: any) => {return (s.script.length > 0)}) ) > -1;
       tab = pageDetails[0].tab;
       if (!cipher && !hasFieldsForInPageMenu) {
         // there is no cipher for this URL : deactivate in page menu
@@ -370,6 +381,7 @@ export default class AutofillService implements AutofillServiceInterface {
    * @returns The TOTP code of the successfully autofilled login, if any
    */
   async doAutoFillActiveTab(pageDetails: PageDetail[], fromCommand: boolean): Promise<string> {
+    console.log("doAutoFillActiveTab()");
     const tab = await this.getActiveTab();
     if (!tab || !tab.url) {
       return;
@@ -525,14 +537,19 @@ export default class AutofillService implements AutofillServiceInterface {
       );
       loginLoginMenuFillScript.type = "loginFieldsForInPageMenuScript";
       loginLoginMenuFillScript.script = loginLoginMenuFillScript.script.filter((action: any) => {
-        // only 'fill_by_opid' are relevant for the fields wher to add a menu
-        if (action[0] !== "fill_by_opid") {
-          return false;
+        // only 'fill_by_opid' and 'bankKeyboardOp' are relevant for the fields where to add a menu
+        if (action[0] === "fill_by_opid") {
+          action[0] = "add_menu_btn_by_opid";
+          action[3].hasExistingCipher = true;
+          action[3].connected = true;
+          return true;
+        } else if (action[0] === "bankKeyboardOp") {
+          action[0] = "add_bankKeyboard_menu_by_opid";
+          action[3].hasExistingCipher = true;
+          action[3].connected = true;
+          return true;
         }
-        action[0] = "add_menu_btn_by_opid";
-        action[3].hasLoginCipher = true;
-        action[3].connected = connected;
-        return true;
+        return false;
       });
       scriptForFieldsMenu.push(loginLoginMenuFillScript);
     }
@@ -589,6 +606,43 @@ export default class AutofillService implements AutofillServiceInterface {
       scriptForFieldsMenu.push(identityLoginMenuFillScript);
     }
 
+    // // F] generate a fillscript for the banks keyboards menu
+    // console.log("F] generate a fillscript for the banks keyboards menu");
+    // pageDetails.fields.forEach((f: any) => {
+    //   if (f.type !== "bankKeyboardField") {
+    //     return;
+    //   }
+    //   const bkFS = new AutofillScript(pageDetails.documentUUID);
+    //   bkFS.type = "bankFieldsForInPageMenuScript";
+    //   bkFS.script.push(["add_bankKeyboar_menu_btn_by_opid", f.opid]);
+    //   scriptForFieldsMenu.push(bkFS);
+    // });
+    // const hasBankKeyboard = true;
+    // if (hasBankKeyboard) {
+    //   let bankKeyboardMenuFillScript: any = [];
+    //   const idFilledFields: { [id: string]: AutofillField } = {};
+    //   bankKeyboardMenuFillScript = this.generateIdentityFillScript(
+    //     bkFS,
+    //     pageDetails,
+    //     idFilledFields,
+    //     options
+    //   );
+    //   bankKeyboardMenuFillScript.type = "bankKeyboardFieldsForInPageMenuScript";
+    //   bankKeyboardMenuFillScript.script = bankKeyboardMenuFillScript.script.filter(
+    //     (action: any) => {
+    //       // only 'fill_by_opid' are relevant for the fields wher to add a menu
+    //       if (action[0] !== "fill_by_opid") {
+    //         return false;
+    //       }
+    //       action[0] = "add_menu_btn_by_opid";
+    //       action[3].hasIdentityCipher = true;
+    //       action[3].connected = connected;
+    //       return true;
+    //     }
+    //   );
+    //   scriptForFieldsMenu.push(bankKeyboardMenuFillScript);
+    // }
+
     return scriptForFieldsMenu;
   }
 
@@ -630,7 +684,14 @@ export default class AutofillService implements AutofillServiceInterface {
           )
         : false;
       field.isInForm = !!field.form;
-      field.formObj = pageDetails.forms[field.form];
+      field.formObj = pageDetails.forms[field.form]; // todo BJA : à supprimer ?
+      //
+      if (field.type === "bankKeyboardField") {
+
+        field.isInForm = true;
+        field.isInloginForm = true;
+        // console.log("field.isInForm", field.isInForm);
+      }
       // force to true the viewable property so that the BW process doesn't take this parameter into
       // account for the menu scripts. Original value must be restored afterwhat.
       field.viewableOri = field.viewable;
@@ -845,6 +906,8 @@ export default class AutofillService implements AutofillServiceInterface {
       return null;
     }
 
+    console.log("generateFillScript()");
+
     let fillScript = new AutofillScript(pageDetails.documentUUID);
     const filledFields: { [id: string]: AutofillField } = {};
     const fields = options.cipher.fields;
@@ -1034,6 +1097,15 @@ export default class AutofillService implements AutofillServiceInterface {
         }
       });
     }
+
+    /* @override by Cozy : force "bankKeyboardField" */
+    pageDetails.fields.forEach((f) => {
+      if (f.type === "bankKeyboardField" && !passwords.includes(f)) {
+        passwords.push(f);
+      }
+    });
+
+    /* END @override by Cozy                  */
 
     /* @override by Cozy : remove otp fields */
     usernames = usernames.filter((field) => {
@@ -2288,8 +2360,11 @@ export default class AutofillService implements AutofillServiceInterface {
       if (AutofillService.forCustomFieldsOnly(f)) {
         return;
       }
-
+      /* Cozy custo
       const isPassword = f.type === "password";
+      */
+      const isPassword = (f.type === "password") || (f.type === "bankKeyboardField");
+      /* end custo */
       const valueIsLikePassword = (value: string) => {
         if (value == null) {
           return false;
@@ -2548,7 +2623,7 @@ export default class AutofillService implements AutofillServiceInterface {
     // Prioritize password field over others.
     if (lastPasswordField) {
       fillScript.script.push(["focus_by_opid", lastPasswordField.opid]);
-    } else if (lastField) {
+    } else if (lastField && lastField.type !== "bankKeyboardField") {
       fillScript.script.push(["focus_by_opid", lastField.opid]);
     }
 
@@ -2564,11 +2639,16 @@ export default class AutofillService implements AutofillServiceInterface {
     if (field.maxLength && value && value.length > field.maxLength) {
       value = value.substr(0, value.length);
     }
-    if (field.tagName !== "span") {
-      fillScript.script.push(["click_on_opid", field.opid]);
-      fillScript.script.push(["focus_by_opid", field.opid]);
+    if (field.type === 'bankKeyboardField') {
+      console.log("F] generate a script for the banks keyboards menu");
+      fillScript.script.push(["bankKeyboardOp", field.opid, value, { field: field, cipher: cipher }]);
+    } else {
+      if (field.tagName !== "span") {
+        fillScript.script.push(["click_on_opid", field.opid]);
+        fillScript.script.push(["focus_by_opid", field.opid]);
+      }
+      fillScript.script.push(["fill_by_opid", field.opid, value, { field: field, cipher: cipher }]);
     }
-    fillScript.script.push(["fill_by_opid", field.opid, value, { field: field, cipher: cipher }]);
   }
 
   static forCustomFieldsOnly(field: AutofillField): boolean {

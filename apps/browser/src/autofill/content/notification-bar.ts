@@ -2,6 +2,7 @@ import AddLoginRuntimeMessage from "../../background/models/addLoginRuntimeMessa
 import ChangePasswordRuntimeMessage from "../../background/models/changePasswordRuntimeMessage";
 
 // Cozy Imports
+import {BankServiceFactory} from './bank.service';
 import {
   cancelButtonNames,
   changePasswordButtonContainsNames,
@@ -28,7 +29,7 @@ function getAppURLCozy(cozyUrl: string, appName: string, hash: string) {
   return url.toString();
 }
 
-// The aim is to not activate the inPageMenu in somme Cozy applications so that there is no menu in
+// The aim is to not activate the inPageMenu in some Cozy applications so that there is no menu in
 // their forms (contacts, pass...)
 let cozyPasswordsHostname: string;
 let cozyContactsHostname: string;
@@ -47,6 +48,8 @@ chrome.storage.local.get("global", (resp: any) => {
 /* END Cozy custo  */
 
 document.addEventListener("DOMContentLoaded", (event) => {
+  console.log("DOMContentLoaded", document.location.href);
+
   if (window.location.hostname.endsWith("vault.bitwarden.com")) {
     return;
   }
@@ -144,7 +147,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
         @override by Cozy :
         This log is very useful for reverse engineer the code, keep it for tests
         console.log('notificationBar.js HEARD MESSAGE : ', {'msg.command': msg.command,'msg': msg});
-        */
+    */
+      //  console.log('notificationBar.js HEARD MESSAGE : ', {'msg.command': msg.command,'msg': msg});
     if (msg.command === "openNotificationBar") {
       if (inIframe) {
         return;
@@ -199,6 +203,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
         // https://secure.fnac.com/identity/server/gateway/signin-signup )
         if (mutations == null || mutations.length === 0 || pageHref !== window.location.href) {
         */
+       console.log("dom mutations in", document.location.href);
+
         if (mutations == null || mutations.length === 0 || !shouldTrigerMenu()) {
           /* end custo */
           return;
@@ -302,7 +308,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
       // Note: a setTimeout was present here, apparently related to the autofill:
       // https://github.com/bitwarden/browser/commit/d19fcd6e4ccf062b595c2823267ffd32fd8e5a3d
 
-      observeDom();
+      console.log("about to get bank name");
+      const bankService = BankServiceFactory.createService();
+      console.log(bankService.getCurrentBankName())
+      if (!bankService?.observeDomForBank(collect)) {
+        console.log("observeDom trigered for GENERIC web page", document.location.href);
+        observeDom();
+      }
+
       /* end custo */
     }
 

@@ -1,4 +1,6 @@
 import menuCtrler from './menuCtrler';
+import {BankServiceFactory} from './bank.service';
+const bankService = BankServiceFactory.createService()
 !(function () {
   /*
   1Password Extension
@@ -48,6 +50,7 @@ import menuCtrler from './menuCtrler';
   */
 
   function collect(document, undefined) {
+      console.log('collect !');
       // START MODIFICATION
       var isFirefox = navigator.userAgent.indexOf('Firefox') !== -1 || navigator.userAgent.indexOf('Gecko/') !== -1;
       // END MODIFICATION
@@ -299,6 +302,7 @@ import menuCtrler from './menuCtrler';
           var theForms = Array.prototype.slice.call(queryDoc(theDoc, 'form')).map(function (formEl, elIndex) {
               var op = {},
                   formOpId = '__form__' + elIndex;
+              console.log("formEl.opid =", elIndex)
 
               formEl.opid = formOpId;
               op.opid = formOpId;
@@ -308,6 +312,7 @@ import menuCtrler from './menuCtrler';
               formOpId = new URL(formOpId, window.location.href);
               addProp(op, 'htmlAction', formOpId ? formOpId.href : null);
               addProp(op, 'htmlMethod', getElementAttrValue(formEl, 'method'));
+              addProp(op, 'htmlClass', getElementAttrValue(formEl, 'class'));
 
               return op;
           });
@@ -323,6 +328,7 @@ import menuCtrler from './menuCtrler';
               }
 
               theDoc.elementsByOPID[opId] = el;
+              // console.log("el.opid =", opId)
               el.opid = opId;
               field.opid = opId;
               field.elementNumber = elIndex;
@@ -397,6 +403,10 @@ import menuCtrler from './menuCtrler';
               /* Cozy custo */
               }
 
+          if (el.isBankKeyboardEl) {
+            field.type = "bankKeyboardField"
+          }
+
               // START MODIFICATION
               //addProp(field, 'fakeTested', checkIfFakeTested(field, el), false);
               // END MODIFICATION
@@ -442,6 +452,25 @@ import menuCtrler from './menuCtrler';
               el.blur();
               el.value !== elValue && (el.value = elValue);
           });
+
+          // // check if we are in a special page (banks for  instance) in order to
+          // // inject special fields
+          // console.log("est on bien dans le cas boursorama ? ", theDoc.location.host);
+          // // if (theDoc.location.host === 'clients.boursorama.com') {
+          // if (theDoc.location.href === "http://localhost:3333/T04.0-Login-bank-keyboard.html") {
+          //   console.log("on est bien dans le cas boursorama");
+          //   // const keysEl = theDoc.querySelector(".pad-keys"); // LCL rule
+          //   // const keysEl = theDoc.querySelector(".password-input"); // boursorama rule
+          //   const keysEl = theDoc.querySelector(".keyboard"); // rule page de test
+          //   keysEl.opid = "__bkKeyboard_"
+          //   theDoc.elementsByOPID[keysEl.opid] = keysEl;
+          //   const field = {
+          //     type : "bankKeyboardField",
+          //     opid : keysEl.opid,
+
+          //   }
+          //   theFields.push(field);
+          // }
 
           // build out the page details object. this is the final result
           var pageDetails = {
@@ -704,6 +733,26 @@ import menuCtrler from './menuCtrler';
               els = Array.prototype.slice.call(elsList);
           } catch (e) { }
 
+          // check if we are in a special page (banks for  instance) in order to
+          // inject special fields
+          console.log("est on bien dans le cas banque ?? ", theDoc.location.host);
+          // if (theDoc.location.host === 'clients.boursorama.com') {
+          const keyboardEl = bankService?.getBankKeyboarMenudEl(theDoc)
+          if (keyboardEl) {
+            keyboardEl.isBankKeyboardEl = true;
+            els.push(keyboardEl);
+          }
+          console.log(els);
+          // if (theDoc.location.href === "http://localhost:3333/T04.0-Login-bank-keyboard.html") {
+          //   console.log("on est bien dans le cas boursorama");
+          //   // const keysEl = theDoc.querySelector(".pad-keys"); // LCL rule
+          //   // const keysEl = theDoc.querySelector(".password-input"); // boursorama rule
+          //   // const keysEl = theDoc.querySelector(".keyboard"); // rule page de test
+          //   const keyboardEl = theDoc.querySelector(".keyboard");
+          //   keyboardEl.isBankKeyboardEl = true;
+          //   els.push(keyboardEl);
+          // }
+
           if (!limit || els.length <= limit) {
               return els;
           }
@@ -883,6 +932,8 @@ import menuCtrler from './menuCtrler';
           simple_set_value_by_query: doSimpleSetByQuery,
           focus_by_opid: doFocusByOpId,
           add_menu_btn_by_opid:addMenuBtnByOpId, // Cozy custo
+          add_bankKeyboard_menu_by_opid: addBankKeyboardMenuByOpId,
+          fill_bankKeyboard_menu_by_opid: fillBankKeyboardMenuByOpId,
           delay: null
       };
 
@@ -900,6 +951,21 @@ import menuCtrler from './menuCtrler';
               }
           }
           return thisFill.hasOwnProperty(thisOperation) ? thisFill[thisOperation].apply(this, op) : null;
+      }
+
+      // type on the bank keyboard
+      function addBankKeyboardMenuByOpId(opId, op) {
+        console.log("addBankKeyboardMenuByOpId(opId, op)", opId, op)
+
+      }
+
+      // type on the bank keyboard
+      function fillBankKeyboardMenuByOpId(opId, op) {
+        console.log("fillBankKeyboardMenuByOpId(opId, op)", opId, op)
+        const el = getBankElementByOpId(opId)
+        // const getKeyboardKeysElements = getKeyboardKeysElements(el)
+        bankService.typeOnKeyboard(op)
+
       }
 
       // do a fill by opid operation
@@ -1050,7 +1116,7 @@ import menuCtrler from './menuCtrler';
 
       // helper to find the input corresponding to an OpId from the console
       // ex : document.elementForOPID('__2')
-      document.elementForOPID = getElementByOpId;
+      document.getElementByOpId = getElementByOpId;
 
       /**
        * Normalize the event based on API support
@@ -1213,6 +1279,15 @@ import menuCtrler from './menuCtrler';
           } finally {
               return theElement;
           }
+        }
+
+      /**
+       * Find the element for the given `opid` for a bank keyboard.
+       * @param {number} theOpId
+       * @returns {HTMLElement} The element for the given `opid`, or `undefined` if not found.
+       */
+      function getBankElementByOpId(theOpId) {
+          return document.elementsByOPID[theOpId];
       }
 
       /**
@@ -1250,12 +1325,19 @@ import menuCtrler from './menuCtrler';
           success: true
       });
 */
+
       function runLoginMenuFillScript(fillScript) {
-          fillScript.script.forEach((action) => {
-              if (action[0] !== 'add_menu_btn_by_opid') return
-              const el = getElementByOpId(action[1])
-              menuCtrler.addMenuButton(el, true, true, action[3], action[1] )
-          });
+        console.log("runLoginMenuFillScript(fillScript)", fillScript);
+        fillScript.script.forEach((action) => {
+          if (action[0] === 'add_menu_btn_by_opid') {
+            const el = getElementByOpId(action[1])
+            menuCtrler.addMenuButton(el, true, true, action[3], action[1] )
+          } else if (action[0] === 'add_bankKeyboard_menu_by_opid' ) {
+            const el = getBankElementByOpId(action[1])
+            menuCtrler.addMenuButton(el, true, true, action[3], action[1] )
+          }
+          return
+        });
       }
 
       if (fillScripts.isForLoginMenu) {
@@ -1266,20 +1348,23 @@ import menuCtrler from './menuCtrler';
 
       for (let fillScript of fillScripts) {
           switch (fillScript.type) {
-              case 'existingLoginFieldsForInPageMenuScript':
-                  doFill(fillScript);
-                  break;
+              // case 'existingLoginFieldsForInPageMenuScript': // TODO BJA : à supprimer ?
+              //     doFill(fillScript);
+              //     break;
               case 'loginFieldsForInPageMenuScript':
-                  if (fillScripts[0].type !== 'existingLoginFieldsForInPageMenuScript') {
+                  // if (fillScripts[0].type !== 'existingLoginFieldsForInPageMenuScript') {
                       // if the first fillScript is for an existing login cipher, then do not activate menu
                       // for a generic login
                       runLoginMenuFillScript(fillScript);
-                  }
+                  // }
                   break;
               case 'cardFieldsForInPageMenuScript':
               case 'identityFieldsForInPageMenuScript':
                   runLoginMenuFillScript(fillScript);
                   break;
+
+              //     runLoginMenuFillScript(fillScript);
+              //     break;
               default:
                   doFill(fillScript);
                   break;
@@ -1305,6 +1390,13 @@ import menuCtrler from './menuCtrler';
             "heard in": document.location.pathname
         });
         */
+      //  console.log('autofil.js HEARD : ', {
+      //      'command': msg.command,
+      //      'subcommand': msg.subcommand,
+      //      'sender': sender.url ? new URL(sender.url).pathname : sender,
+      //      "msg": msg,
+      //      "heard in": document.location.pathname
+      //  });
       if (msg.command === 'notificationBarPageDetails') return
       /* end custo */
 
