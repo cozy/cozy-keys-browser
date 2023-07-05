@@ -51,8 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
   titleEl = document.getElementById("title-content");
 
   // 2- prepare i18n and apply
-  var i18n = {};
-  var lang = window.navigator.language;
   if (typeof safari !== "undefined") {
     // not implemented for safari for now
     // const responseCommand = 'notificationBarFrameDataResponse';
@@ -69,7 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // }, false);
   } else {
     // retrieve i18n values and set elements textcontent
-    lang = chrome.i18n.getUILanguage();
     i18nGetMessage = chrome.i18n.getMessage;
     titleEl.textContent = i18nGetMessage("inPageMenuSelectAnAccount");
   }
@@ -86,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "heard in": document.location.pathname
         });
         */
-    if (msg.command !== "updateMenuCiphers" && msg.command !== "menuAnswerRequest") return;
+    if (msg.command !== "updateMenuCiphers" && msg.command !== "menuAnswerRequest") { return };
 
     if (msg.command === "updateMenuCiphers") {
       const ciphersData = msg.data.ciphers;
@@ -121,11 +118,11 @@ document.addEventListener("DOMContentLoaded", () => {
           requestFormFillingWithCipher(document.querySelector(".selected").dataset.cipherId);
           break;
         case "trigerFillFieldWithData": {
-          if (hostFrameId !== msg.frameTargetId || !isDisplayed) return;
+          if (hostFrameId !== msg.frameTargetId || !isDisplayed) { return };
           const dataTxt = document
             .querySelector(".selected")
             .querySelector(".row-detail").textContent;
-          if (!dataTxt) return;
+          if (!dataTxt) { return };
           requestFieldFillingWithData(dataTxt);
           break;
         }
@@ -211,19 +208,19 @@ function updateRows(rowsListType) {
   // 1- generate rows
   switch (rowsListType) {
     case "login":
-      if (!ciphers || !ciphers.logins) return;
+      if (!ciphers || !ciphers.logins) { return };
       rowsCiphers = ciphers.logins;
       rowsList = document.querySelector("#login-rows-list");
       rowTemplate = loginRowTemplate;
       break;
     case "card":
-      if (!ciphers || !ciphers.cards) return;
+      if (!ciphers || !ciphers.cards) { return };
       rowsCiphers = ciphers.cards;
       rowsList = document.querySelector("#card-rows-list");
       rowTemplate = cardRowTemplate;
       break;
     case "ids":
-      if (!ciphers || !ciphers.identities) return;
+      if (!ciphers || !ciphers.identities) { return };
       rowsCiphers = ciphers.identities;
       rowsList = document.querySelector("#ids-rows-list");
       rowTemplate = idsRowTemplate;
@@ -275,7 +272,7 @@ function updateRows(rowsListType) {
 /* --------------------------------------------------------------------- */
 //
 function formatCipherData(cipherData, key, format) {
-  if (!format) return cipherData[key];
+  if (!format) { return cipherData[key] };
 
   if (format.type === "expDate") {
     const fullMonth = ("0" + cipherData.expMonth).slice(-2);
@@ -301,10 +298,10 @@ function formatCipherData(cipherData, key, format) {
 /* --------------------------------------------------------------------- */
 // Select the first visible row
 function selectFirstVisibleRow() {
-  if (!ciphers) return; // no received ciphers yet, rows are not ready
+  if (!ciphers) { return }; // no received ciphers yet, rows are not ready
   const hash = JSON.parse(decodeURIComponent(window.location.hash).slice(1));
   const currentSelection = document.querySelector(".selected");
-  if (currentSelection) currentSelection.classList.remove("selected");
+  if (currentSelection) { currentSelection.classList.remove("selected") };
   if (hash["login"]) {
     document.querySelector("#login-rows-list").firstElementChild.classList.add("selected");
     return;
@@ -324,7 +321,7 @@ function selectFirstVisibleRow() {
 // Width is constraint by the parent page, but height is decided by the
 // iframe content
 function adjustMenuHeight() {
-  if (lastSentHeight === panel.offsetHeight) return;
+  if (lastSentHeight === panel.offsetHeight) { return };
   lastSentHeight = panel.offsetHeight;
   chrome.runtime.sendMessage({
     command: "bgAnswerMenuRequest",
@@ -422,7 +419,7 @@ function _testHash() {
   for (let options of typesOptions) {
     const rowsEl = document.querySelector(options.selector);
     const key = options.fieldCipherType;
-    if (oldFieldData && oldFieldData[key] === hash[key]) continue;
+    if (oldFieldData && oldFieldData[key] === hash[key]) { continue };
     if (hash[key]) {
       titleEl.textContent = options.title;
       options.updateFn();

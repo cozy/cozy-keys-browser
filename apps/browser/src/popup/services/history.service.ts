@@ -36,7 +36,7 @@ export class HistoryService {
     this.stateService = page.bitwardenMain["stateService"];
 
     // listen to router to feed the history
-    router.events.subscribe(async (event) => {
+    router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         // console.log("navigationEnd event on url", event.url);
         if (this.currentUrlInProgress) {
@@ -45,7 +45,7 @@ export class HistoryService {
           this.hist.shift();
           this.hist[0] = event.url;
           this.previousUrlInProgress = false;
-          await this.saveHistoryState();
+          this.saveHistoryState();
         } else {
           if (this.rootPaths.includes(event.url.split("?")[0])) {
             // back to a root of a tab : delete history
@@ -57,7 +57,7 @@ export class HistoryService {
           } else {
             this.hist.unshift(event.url);
           }
-          await this.saveHistoryState();
+          this.saveHistoryState();
         }
       }
     });

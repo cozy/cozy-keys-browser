@@ -53,7 +53,6 @@ import localeUk from "@angular/common/locales/uk";
 import localeVi from "@angular/common/locales/vi";
 import localeZhCn from "@angular/common/locales/zh-Hans";
 import localeZhTw from "@angular/common/locales/zh-Hant";
-
 registerLocaleData(localeAr, "ar");
 registerLocaleData(localeAz, "az");
 registerLocaleData(localeBe, "be");
@@ -108,7 +107,6 @@ registerLocaleData(localeVi, "vi");
 registerLocaleData(localeZhCn, "zh-CN");
 registerLocaleData(localeZhTw, "zh-TW");
 // end custo */
-
 import localeEnGb from "@angular/common/locales/en-GB";
 import localeFr from "@angular/common/locales/fr";
 registerLocaleData(localeEnGb, "en-GB");

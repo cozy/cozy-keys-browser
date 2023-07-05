@@ -81,10 +81,8 @@ export class CozyClientService {
       const client = await this.getClientInstance();
       await client.getStackClient().fetchJSON("POST", "/settings/synchronized");
     } catch (err) {
-      /* tslint:disable-next-line */
-      console.error("Error while updating cozy client's synchronized_at");
-      /* tslint:disable-next-line */
-      console.error(err);
+      // console.error("Error while updating cozy client's synchronized_at");
+      // console.error(err);
     }
   }
 
@@ -101,10 +99,8 @@ export class CozyClientService {
         },
       });
     } catch (err) {
-      /* tslint:disable-next-line */
-      console.error("Error while deleting oauth client");
-      /* tslint:disable-next-line */
-      console.error(err);
+      // console.error("Error while deleting oauth client");
+      // console.error(err);
     }
   }
 

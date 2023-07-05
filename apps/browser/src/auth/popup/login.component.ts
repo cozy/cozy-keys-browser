@@ -1,4 +1,8 @@
+/* Cozy custo
 import { Component, NgZone } from "@angular/core";
+*/
+import { Component, NgZone, Input, OnInit } from "@angular/core";
+/* end custo */
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 
@@ -22,12 +26,12 @@ import { flagEnabled } from "../../flags";
 
 /* start Cozy imports */
 /* eslint-disable */
-import { Input, OnInit } from "@angular/core";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
 import { PasswordLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
 import { PreloginRequest } from "@bitwarden/common/models/request/prelogin.request";
 import { generateWebLink, Q } from "cozy-client";
 import { CozySanitizeUrlService } from "../../popup/services/cozySanitizeUrl.service";
+import { sanitizeUrlInput } from "./login.component.functions";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -205,7 +209,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     this.formGroup.markAllAsTouched();
 
     try {
-      const cozyUrl = this.sanitizeUrlInput(data.email);
+      const cozyUrl = sanitizeUrlInput(data.email, this.cozySanitizeUrlService);
 
       if (data.masterPassword == null || data.masterPassword === "") {
         this.platformUtilsService.showToast(
@@ -272,7 +276,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
   }
 
   async forgotPassword() {
-    const cozyUrl = this.sanitizeUrlInput(this.formGroup.value.email);
+    const cozyUrl = sanitizeUrlInput(this.formGroup.value.email, this.cozySanitizeUrlService);
     if (!cozyUrl) {
       this.platformUtilsService.showToast(
         "error",
@@ -316,7 +320,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
   }
 
   private getCozyConfiguration = async (): Promise<CozyConfiguration> => {
-    const cozyUrl = this.sanitizeUrlInput(this.formGroup.value.email);
+    const cozyUrl = sanitizeUrlInput(this.formGroup.value.email, this.cozySanitizeUrlService);
     const preloginResponse = await this.apiService.postPrelogin(new PreloginRequest(cozyUrl));
 
     const { HasCiphers, OIDC, FlatSubdomains } = (preloginResponse as any).response;
@@ -334,25 +338,5 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     });
     this.stateService.setRememberedEmail(cozyUrl);
   };
-
-  sanitizeUrlInput(inputUrl: string): string {
-    // Prevent empty url
-    if (!inputUrl) {
-      throw new Error("cozyUrlRequired");
-    }
-    // Prevent email input
-    if (inputUrl.includes("@")) {
-      throw new Error("noEmailAsCozyUrl");
-    }
-
-    if (this.cozySanitizeUrlService.hasMispelledCozy(inputUrl)) {
-      throw new Error("hasMispelledCozy");
-    }
-
-    return this.cozySanitizeUrlService.normalizeURL(
-      inputUrl,
-      this.cozySanitizeUrlService.cozyDomain
-    );
-  }
   /* end custo */
 }

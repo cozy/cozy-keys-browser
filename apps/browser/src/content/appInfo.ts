@@ -1,5 +1,3 @@
-import { BrowserApi } from "../browser/browserApi";
-
 // This content script acts as a bridge between the app and the main.background
 // that is capable of telling if the extension is connected or not.
 // See https://krasimirtsonev.com/blog/article/Send-message-from-web-page-to-chrome-extensions-background-script

@@ -1,8 +1,5 @@
-import { relative } from "path";
-
 import {
   animate,
-  animateChild,
   group,
   query,
   style,

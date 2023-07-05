@@ -1,5 +1,9 @@
 import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
+/** Cozy custo
 import { firstValueFrom, map, Observable, Subject, takeUntil } from "rxjs";
+*/
+import { map, Observable, Subject, takeUntil } from "rxjs";
+/** end custo */
 
 import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
@@ -13,7 +17,11 @@ import { OrganizationUserStatusType } from "@bitwarden/common/enums/organization
 import { Utils } from "@bitwarden/common/misc/utils";
 import { Organization } from "@bitwarden/common/models/domain/organization";
 import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+/** Cozy custo
 import { Checkable, isChecked } from "@bitwarden/common/types/checkable";
+*/
+import { Checkable } from "@bitwarden/common/types/checkable";
+/** end custo */
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 

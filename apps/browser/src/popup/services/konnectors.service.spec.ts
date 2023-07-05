@@ -1,10 +1,15 @@
+// import { mock, MockProxy } from "jest-mock-extended";
+import { of } from "rxjs";
+
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { AbstractStorageService as StorageService } from "@bitwarden/common/abstractions/storage.service";
+// import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
-import { SettingsService } from "@bitwarden/common/services/settings.service";
+
+// import { BrowserStateService } from "../../services/abstractions/browser-state.service";
 
 import { KonnectorsService } from "./konnectors.service";
 
@@ -63,21 +68,20 @@ export class TestStateService implements StateService {
 }
 
 describe("Konnectors Service", () => {
-  const settingsService = new SettingsService(null);
-  const storageService = new TestStorageService();
+  const settingsService: any = {
+    settings$: of([]),
+    getEquivalentDomains: () => {
+      return Promise.resolve([]);
+    },
+  }
   const konnectorsService = new KonnectorsService(
     null,
-    storageService,
     settingsService,
     null,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     /* @ts-ignore */
     new TestStateService()
   );
-
-  beforeEach(() => {
-    spyOn(settingsService, "getEquivalentDomains").and.returnValue(Promise.resolve([]));
-  });
 
   it("should suggest konnectors by full url match", async () => {
     const konnectors = buildKonnectors([{ slug: "ameli", uri: "http://ameli.fr/login" }]);

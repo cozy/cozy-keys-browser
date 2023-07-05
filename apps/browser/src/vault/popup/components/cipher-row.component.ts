@@ -1,4 +1,8 @@
+/* Cozy custo
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+*/
+import { Component, EventEmitter, Input, Output, OnInit } from "@angular/core";
+/* end custo */
 
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 /** Start Cozy imports */
@@ -6,7 +10,6 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { zeroPadLeftUntilTwoChars } from "../../../tools/strings";
 import { KonnectorsService } from "../../../popup/services/konnectors.service";
-import { OnInit } from "@angular/core";
 /* eslint-enable */
 /** End Cozy imports */
 

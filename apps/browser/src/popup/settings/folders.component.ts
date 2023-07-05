@@ -1,15 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, HostListener } from "@angular/core";
 import { Router } from "@angular/router";
 import { map, Observable } from "rxjs";
 
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
-
-/** Start Cozy imports */
-/* eslint-disable */
-import { HostListener } from "@angular/core";
-/* eslint-enable */
-/** End Cozy imports */
 
 @Component({
   selector: "app-folders",

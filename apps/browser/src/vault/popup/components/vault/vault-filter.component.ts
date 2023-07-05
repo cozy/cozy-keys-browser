@@ -1,5 +1,9 @@
 import { Location } from "@angular/common";
+/* Cozy custo
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+*/
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, HostListener } from "@angular/core";
+/* end custo */
 import { ActivatedRoute, Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
@@ -25,7 +29,6 @@ import { VaultFilterService } from "../../../services/vault-filter.service";
 /** Start Cozy imports */
 /* eslint-disable */
 import { HistoryService } from "../../../../popup/services/history.service";
-import { HostListener } from "@angular/core";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";

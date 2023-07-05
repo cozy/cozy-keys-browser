@@ -1,5 +1,9 @@
 import { Location } from "@angular/common";
+/* Cozy custo
 import { ChangeDetectorRef, Component, NgZone } from "@angular/core";
+*/
+import { ChangeDetectorRef, Component, NgZone, HostListener } from "@angular/core";
+/* end custo */
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -36,7 +40,6 @@ import { deleteCipher } from "./cozy-utils";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { CAN_SHARE_ORGANIZATION } from "../../../../cozy/flags";
 import { HistoryService } from "../../../../popup/services/history.service";
-import { HostListener } from "@angular/core";
 /* eslint-enable */
 /* end Cozy imports */
 

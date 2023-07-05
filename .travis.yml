@@ -8,8 +8,8 @@ cache:
   directories:
     - node_modules
 script:
-  - cd apps/browser/
   - npm ci
+  - cd apps/browser/
   - npm run build
   - npm run test
   - cd ../..

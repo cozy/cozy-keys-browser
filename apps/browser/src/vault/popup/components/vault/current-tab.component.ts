@@ -1,4 +1,8 @@
+/* Cozy custo
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+*/
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, HostListener } from "@angular/core";
+/* end custo */
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { debounceTime, takeUntil } from "rxjs/operators";
@@ -26,7 +30,6 @@ import { VaultFilterService } from "../../../services/vault-filter.service";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { HistoryService } from "../../../../popup/services/history.service";
 import { Location } from "@angular/common";
-import { HostListener } from "@angular/core";
 /* eslint-enable */
 /** End Cozy imports */
 

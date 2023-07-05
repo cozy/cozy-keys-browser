@@ -1,4 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
+/* Cozy custo
+import { takeUntil } from "rxjs";
+*/
+import { takeUntil, Subject } from "rxjs";
+/* end custo */
 
 import { PopupUtilsService } from "./services/popup-utils.service"; // eslint-disable-line
 /* COZY IMPORTS */
@@ -14,18 +19,20 @@ import { routerTransition } from "./app-routing.animations";
   templateUrl: "tabs.component.html",
   animations: [routerTransition],
 })
-export class TabsComponent implements OnInit {
+export class TabsComponent implements OnInit, OnDestroy {
   showCurrentTab = true;
   cozyUrl: string;
   event$;
   isVaultTabActive = true;
+
+  protected destroy$ = new Subject<void>();
 
   constructor(
     private popupUtilsService: PopupUtilsService,
     private cozyClientService: CozyClientService,
     private router: Router
   ) {
-    this.event$ = this.router.events.subscribe((event: NavigationEvent) => {
+    this.event$ = this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event: NavigationEvent) => {
       if (event instanceof NavigationEnd) {
         if (event.url === "/tabs/current") {
           this.isVaultTabActive = true;
@@ -39,6 +46,11 @@ export class TabsComponent implements OnInit {
   ngOnInit() {
     this.showCurrentTab = !this.popupUtilsService.inPopout(window);
     this.cozyUrl = this.cozyClientService.getAppURL("", "");
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   getState(outlet: RouterOutlet) {

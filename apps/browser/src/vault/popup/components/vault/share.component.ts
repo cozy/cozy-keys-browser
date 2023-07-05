@@ -1,4 +1,8 @@
+/* Cozy custo
 import { Component } from "@angular/core";
+*/
+import { Component, HostListener } from "@angular/core";
+/* end custo */
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -13,7 +17,6 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
 /* start Cozy imports */
 /* eslint-disable */
 import { HistoryService } from "../../../../popup/services/history.service";
-import { HostListener } from "@angular/core";
 /* eslint-enable */
 /* end Cozy imports */
 

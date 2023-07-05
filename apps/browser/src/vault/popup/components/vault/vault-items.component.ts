@@ -1,5 +1,9 @@
 import { Location } from "@angular/common";
+/* Cozy custo
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+*/
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, HostListener } from "@angular/core";
+/* end custo */
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -31,7 +35,6 @@ import { CozyClientService } from "../../../../popup/services/cozyClient.service
 import { KonnectorsService } from "../../../../popup/services/konnectors.service";
 import { HistoryService } from "../../../../popup/services/history.service";
 import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
-import { HostListener } from "@angular/core";
 /* eslint-enable */
 /** End Cozy imports */
 
@@ -420,7 +423,6 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
 
   emptySearch() {
     this.searchText = "";
-    console.log("vault-items.component : focus() !")
     document.getElementById("search").focus();
     this.search(50);
   }

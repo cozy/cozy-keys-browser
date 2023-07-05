@@ -1,5 +1,9 @@
 import { Location } from "@angular/common";
+/* Cozy custo
 import { Component } from "@angular/core";
+*/
+import { Component, HostListener } from "@angular/core";
+/* end custo */
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -26,7 +30,6 @@ import { PopupUtilsService } from "../../../../popup/services/popup-utils.servic
 /* eslint-disable */
 import { KonnectorsService } from "../../../../popup/services/konnectors.service";
 import { HistoryService } from "../../../../popup/services/history.service";
-import { HostListener, EventEmitter } from "@angular/core";
 import { deleteCipher } from "./cozy-utils";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 /* eslint-enable */

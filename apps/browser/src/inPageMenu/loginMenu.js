@@ -460,11 +460,3 @@ function _hidePwdVisibility() {
   visiPwdBtn.firstElementChild.classList.replace("icon-hide", "icon-eye");
   isPwdHidden = true;
 }
-
-/* --------------------------------------------------------------------- */
-// unHide the visibility of the password
-function _unHidePwdVisibility() {
-  pwdInput.type = "text";
-  visiPwdBtn.firstElementChild.classList.replace("icon-eye", "icon-hide");
-  isPwdHidden = false;
-}

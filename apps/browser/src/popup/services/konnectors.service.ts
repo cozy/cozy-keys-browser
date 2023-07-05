@@ -62,10 +62,8 @@ export class KonnectorsService {
         this.sendKonnectorsSuggestion(cozyClient, konnectorsToSuggest);
       }
     } catch (e) {
-      /* tslint:disable-next-line */
-      console.error(e);
-      /* tslint:disable-next-line */
-      console.error("Error while trying to make konnectors suggestions");
+      // console.error(e);
+      // console.error("Error while trying to make konnectors suggestions");
     }
   }
 

@@ -1,5 +1,9 @@
 import { Location } from "@angular/common";
+/*
 import { Component } from "@angular/core";
+*/
+import { Component, HostListener } from "@angular/core";
+/* end custo */
 import { ActivatedRoute } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -8,10 +12,11 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
-// Cozy imports
+/** Start Cozy imports */
+/* eslint-disable */
 import { HistoryService } from "../../../../popup/services/history.service";
-import { HostListener } from "@angular/core";
-// end
+/* eslint-enable */
+/** End Cozy imports */
 
 @Component({
   selector: "app-password-history",
