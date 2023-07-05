@@ -58,7 +58,7 @@ export default class RuntimeBackground {
     private apiService: ApiService,
     private cipherService: CipherService,
     private cozyClientService: CozyClientService,
-    private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
+    private vaultTimeoutSettingsService: VaultTimeoutSettingsService
   ) {
     // onInstalled listener must be wired up before anything else, so we do it in the ctor
     chrome.runtime.onInstalled.addListener((details: any) => {
@@ -193,11 +193,15 @@ export default class RuntimeBackground {
         break;
       case "bgAnswerMenuRequest":
         switch (msg.subcommand) {
-          case "getCiphersForTab":{
+          case "getCiphersForTab": {
             const logins = await this.cipherService.getAllDecryptedForUrl(sender.tab.url, null);
             logins.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
             const allCiphers = await this.cipherService.getAllDecrypted();
-            const ciphers = { logins: logins, cards: [] as Array<CipherExport>, identities: [] as Array<CipherView> };
+            const ciphers = {
+              logins: logins,
+              cards: [] as Array<CipherExport>,
+              identities: [] as Array<CipherView>,
+            };
             for (const cipher of allCiphers) {
               if (cipher.isDeleted) {
                 continue;
@@ -260,7 +264,7 @@ export default class RuntimeBackground {
           case "2faCheck":
             await this.twoFaCheck(msg.token, sender.tab);
             break;
-          case "getRememberedCozyUrl":{
+          case "getRememberedCozyUrl": {
             let rememberedCozyUrl = await this.stateService.getRememberedEmail();
 
             rememberedCozyUrl = await this.stateService.getRememberedEmail();
@@ -310,11 +314,12 @@ export default class RuntimeBackground {
         if (!enableInPageMenu) {
           break;
         }
-        const fieldsForInPageMenuScripts = await this.autofillService.generateFieldsForInPageMenuScripts(
-          msg.pageDetails,
-          false,
-          sender.frameId
-        );
+        const fieldsForInPageMenuScripts =
+          await this.autofillService.generateFieldsForInPageMenuScripts(
+            msg.pageDetails,
+            false,
+            sender.frameId
+          );
         this.autofillService.postFilterFieldsForInPageMenu(
           fieldsForInPageMenuScripts,
           msg.pageDetails.forms,
@@ -359,9 +364,9 @@ export default class RuntimeBackground {
             ],
             true
           );
-        }
+        };
         this.syncService.fullSync(false).then(activateMenu.bind(this));
-        await activateMenu()
+        await activateMenu();
         break;
       }
       case "collectPageDetailsResponse":
@@ -595,7 +600,11 @@ export default class RuntimeBackground {
         });
         // when login is processed on background side, then your messages are not receivend by the background,
         // so you need to triger yourself "loggedIn" actions
-        this.processMessage({ command: "loggedIn" }, "runtime.background.ts.login()" as chrome.runtime.MessageSender, null);
+        this.processMessage(
+          { command: "loggedIn" },
+          "runtime.background.ts.login()" as chrome.runtime.MessageSender,
+          null
+        );
       }
     } catch (e) {
       await BrowserApi.tabSendMessage(tab, {
@@ -650,7 +659,11 @@ export default class RuntimeBackground {
       });
       // when unlock is processed on background side, then your messages are not receivend by the background,
       // so you need to triger yourself "loggedIn" actions
-      this.processMessage({ command: "unlocked" }, "runtime.background.ts.unlock()" as chrome.runtime.MessageSender, null);
+      this.processMessage(
+        { command: "unlocked" },
+        "runtime.background.ts.unlock()" as chrome.runtime.MessageSender,
+        null
+      );
     } else {
       await BrowserApi.tabSendMessage(tab, {
         command: "menuAnswerRequest",
@@ -689,13 +702,21 @@ export default class RuntimeBackground {
 
         if (!failed) {
           await this.cryptoService.setKey(key);
-          this.processMessage({ command: "unlocked" }, "runtime.background.ts.unPinlock()" as chrome.runtime.MessageSender, null);
+          this.processMessage(
+            { command: "unlocked" },
+            "runtime.background.ts.unPinlock()" as chrome.runtime.MessageSender,
+            null
+          );
         }
       } else {
         const key = await this.cryptoService.makeKeyFromPin(pin, email, kdf, kdfConfig);
         failed = false;
         await this.cryptoService.setKey(key);
-        this.processMessage({ command: "unlocked" }, "runtime.background.ts.unlock()" as chrome.runtime.MessageSender, null);
+        this.processMessage(
+          { command: "unlocked" },
+          "runtime.background.ts.unlock()" as chrome.runtime.MessageSender,
+          null
+        );
       }
     } catch {
       failed = true;
@@ -705,7 +726,11 @@ export default class RuntimeBackground {
       this.invalidPinAttempts++;
       if (this.invalidPinAttempts >= 5) {
         // this.messagingService.send('logout');
-        this.processMessage({ command: "logout" }, "runtime.background.ts.unlock()" as chrome.runtime.MessageSender, null);
+        this.processMessage(
+          { command: "logout" },
+          "runtime.background.ts.unlock()" as chrome.runtime.MessageSender,
+          null
+        );
         return;
       }
       await BrowserApi.tabSendMessage(tab, {
@@ -737,7 +762,11 @@ export default class RuntimeBackground {
         null
       );
       // validation succeeded
-      this.processMessage({ command: "loggedIn" }, "runtime.background.ts.twoFaCheck()" as chrome.runtime.MessageSender, null);
+      this.processMessage(
+        { command: "loggedIn" },
+        "runtime.background.ts.twoFaCheck()" as chrome.runtime.MessageSender,
+        null
+      );
     } catch (e) {
       await BrowserApi.tabSendMessage(tab, {
         command: "menuAnswerRequest",

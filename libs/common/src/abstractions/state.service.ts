@@ -372,5 +372,4 @@ export abstract class StateService<T extends Account = Account> {
     value: Record<string, Record<string, boolean>>,
     options?: StorageOptions
   ) => Promise<void>;
-
 }

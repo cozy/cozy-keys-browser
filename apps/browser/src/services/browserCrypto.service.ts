@@ -9,7 +9,6 @@ import { EncryptedOrganizationKeyData } from "@bitwarden/common/models/data/encr
 /* end Cozy imports */
 
 export class BrowserCryptoService extends CryptoService {
-
   /** Cozy custo */
   async upsertOrganizationKey(organizationId: string, key: string) {
     if (key === "") {

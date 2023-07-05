@@ -438,10 +438,10 @@
           <div *ngIf="cipher.identity.fullAddressPart2">{{ cipher.identity.fullAddressPart2 }}</div>
           <div *ngIf="cipher.identity.country">{{ cipher.identity.country }}</div>
           -->
-            <div *ngIf="cipher.identity.address1" class="show-whitespace">
-              {{ getLocalizedAdress() }}
-            </div>
-            <!-- end custo -->
+          <div *ngIf="cipher.identity.address1" class="show-whitespace">
+            {{ getLocalizedAdress() }}
+          </div>
+          <!-- end custo -->
         </div>
       </div>
     </div>
@@ -660,29 +660,26 @@
       >
       -->
       <ng-container *ifFlag="CAN_SHARE_ORGANIZATION">
-      <button
-       type="button"
-       class="box-content-row"
-       appStopClick
-       (click)="share()"
-       *ngIf="!cipher.isDeleted"
-       >
-        <!-- end custo -->
-        <div class="row-main text-primary">
-          <div class="icon text-primary" aria-hidden="true">
-            <!-- Cozy Custo
+        <button
+          type="button"
+          class="box-content-row"
+          appStopClick
+          (click)="share()"
+          *ngIf="!cipher.isDeleted"
+        >
+          <!-- end custo -->
+          <div class="row-main text-primary">
+            <div class="icon text-primary" aria-hidden="true">
+              <!-- Cozy Custo
             <i class="bwi bwi-arrow-circle-right bwi-lg bwi-fw"></i>
              -->
-            <i
-              class="icon-cozy icon-folder"
-              aria-hidden="true"
-            ></i>
-            <!-- end custo -->
+              <i class="icon-cozy icon-folder" aria-hidden="true"></i>
+              <!-- end custo -->
+            </div>
+            <span>{{ "changeFolder" | i18n }}</span>
           </div>
-          <span>{{ "changeFolder" | i18n }}</span>
-        </div>
-      </button>
-      <!-- Cozy custo -->
+        </button>
+        <!-- Cozy custo -->
       </ng-container>
       <!-- end custo -->
       <button

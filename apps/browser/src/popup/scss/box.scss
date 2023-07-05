@@ -9,7 +9,7 @@
     @include themify($themes) {
       border-bottom: 1px solid themed("borderColor");
     }
-    content:"";
+    content: "";
   }
 }
 

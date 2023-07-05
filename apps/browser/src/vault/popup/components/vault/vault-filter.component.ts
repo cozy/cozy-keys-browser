@@ -2,7 +2,14 @@ import { Location } from "@angular/common";
 /* Cozy custo
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 */
-import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, HostListener } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  HostListener,
+} from "@angular/core";
 /* end custo */
 import { ActivatedRoute, Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
@@ -65,7 +72,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   folderCounts = new Map<string, number>();
   collectionCounts = new Map<string, number>();
   typeCounts = new Map<CipherType, number>();
-  searchText = "";  // Cozy custo
+  searchText = ""; // Cozy custo
   state: BrowserGroupingsComponentState;
   showLeftHeader = true;
   searchPending = false;
@@ -103,7 +110,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     private vaultFilterService: VaultFilterService,
     private cozyClientService: CozyClientService,
     private historyService: HistoryService,
-    private organizationService: OrganizationService,
+    private organizationService: OrganizationService
   ) {
     this.noFolderListSize = 100;
   }
@@ -218,12 +225,12 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     this.nestedCollections = allCollections.nestedList;
     */
     this.nestedCollections = [];
-    const orgs = await this.organizationService.getAll()
+    const orgs = await this.organizationService.getAll();
     for (const col of allCollections.nestedList) {
       if (col.node.name === "[error: cannot decrypt]") {
-        const correspondingOrg = orgs.find(org => org.id === col.node.organizationId);
+        const correspondingOrg = orgs.find((org) => org.id === col.node.organizationId);
         col.node.name = correspondingOrg.name;
-        this.notValidatedCollectionId.push(col.node.id)
+        this.notValidatedCollectionId.push(col.node.id);
       }
       this.nestedCollections.push(col);
     }
@@ -290,12 +297,21 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   async selectCollection(collection: CollectionView) {
     /** Cozy custo : if the collection is not yet validated, then display a warning */
     if (this.notValidatedCollectionId.includes(collection.id)) {
-      const desc = this.i18nService.t("sharingNotAcceptedYetDesc").replace("€€€", `href='${this.cozyClientService.getAppURL("passwords", "")}' target='_blank'`);
+      const desc = this.i18nService
+        .t("sharingNotAcceptedYetDesc")
+        .replace(
+          "€€€",
+          `href='${this.cozyClientService.getAppURL("passwords", "")}' target='_blank'`
+        );
       await this.platformUtilsService.showDialog(
         desc,
         this.i18nService.t("sharingNotAcceptedYet"),
-        "ok",null,null,true)
-      return
+        "ok",
+        null,
+        null,
+        true
+      );
+      return;
     }
     /** end custo */
     this.router.navigate(["/ciphers"], { queryParams: { collectionId: collection.id } });
@@ -337,7 +353,8 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     });
     */
     const tab = await BrowserApi.getTabFromCurrentWindow();
-    let url = "", hostname = "";
+    let url = "",
+      hostname = "";
     if (tab != null) {
       url = tab.url;
       hostname = Utils.getHostname(url);
@@ -438,9 +455,9 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   }
 
   /** Cozy custo : we prefer to escape whereever esc key is stroke */
-  @HostListener('window:keydown', ['$event'])
+  @HostListener("window:keydown", ["$event"])
   handleKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Escape') {
+    if (event.key === "Escape") {
       event.preventDefault();
       if (this.searchText == null || this.searchText === "") {
         BrowserApi.closePopup(window);

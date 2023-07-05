@@ -4,8 +4,7 @@ import { SafariApp } from "../../browser/safariApp";
 import { BrowserStateService } from "../browser-state.service";
 
 export default class VaultTimeoutService extends BaseVaultTimeoutService {
-
-  protected stateService : BrowserStateService;
+  protected stateService: BrowserStateService;
 
   startCheck() {
     this.checkVaultTimeout();

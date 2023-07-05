@@ -11,7 +11,7 @@ import { sequentialize } from "@bitwarden/common/misc/sequentialize";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 /**
  * Cozy : we overcharge this class in order to modify `getAllDecrypted()`
-*/
+ */
 import { CipherService as CipherServiceBase } from "@bitwarden/common/vault/services/cipher.service";
 
 export class CipherService extends CipherServiceBase {
@@ -24,7 +24,7 @@ export class CipherService extends CipherServiceBase {
     private localSearchService: () => SearchService,
     logService: LogService,
     private localStateService: StateService,
-    private localEncryptService: EncryptService,
+    private localEncryptService: EncryptService
   ) {
     super(
       localCryptoService,

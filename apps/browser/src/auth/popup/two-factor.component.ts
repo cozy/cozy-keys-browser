@@ -154,7 +154,6 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
         this.i18nService.t("inPageMenuLogin2FACheckError")
       );
       /* end custo */
-
     } else {
       this.messagingService.send("loggedIn");
     }

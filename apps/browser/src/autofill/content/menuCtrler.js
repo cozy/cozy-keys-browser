@@ -95,7 +95,7 @@ function addMenuButton(el, op, markTheFilling, fieldType, opId) {
         if (!targetsEl.includes(el)) {
           // no need to add again the "button" into the field
           _initInPageMenuForEl(el);
-        };
+        }
         break;
     }
   }
@@ -110,16 +110,16 @@ function _initInPageMenuForEl(targetEl) {
   targetsEl.push(targetEl);
 
   // style the input element
-  const cs = window.getComputedStyle(targetEl)
+  const cs = window.getComputedStyle(targetEl);
   state.rightOffset = parseFloat(cs.paddingRight);
   targetEl.style.backgroundImage = menuBtnSvg;
   targetEl.style.backgroundRepeat = "no-repeat";
   targetEl.style.backgroundAttachment = "scroll";
   targetEl.style.backgroundSize = targetEl.clientWidth > 90 ? "24px 24px" : "12px 12px";
   targetEl.style.backgroundPosition =
-    targetEl.clientWidth > 90 ?
-    `calc(100% - ${state.rightOffset + 3}px) 50%` :
-    `calc(100% - ${state.rightOffset + 2}px) 1px` ;
+    targetEl.clientWidth > 90
+      ? `calc(100% - ${state.rightOffset + 3}px) 50%`
+      : `calc(100% - ${state.rightOffset + 2}px) 1px`;
   targetEl.style.cursor = "pointer";
 
   // prevent browser autocomplet with history for this field
@@ -172,7 +172,9 @@ function _initInPageMenuForEl(targetEl) {
       phase: "beforeWrite",
       requires: ["computeStyles"],
       fn: (pop) => {
-        if (state.isHidden) {return};
+        if (state.isHidden) {
+          return;
+        }
         var w = pop.state.rects.reference.width;
         var d = w - minMenuWidth;
         if (d > 0) {
@@ -185,7 +187,9 @@ function _initInPageMenuForEl(targetEl) {
             pop.state.rects.reference.x +
             pop.state.rects.reference.width;
         }
-        if (state.iFrameHash.arrowD !== d) {_updateArrowPos(d);}
+        if (state.iFrameHash.arrowD !== d) {
+          _updateArrowPos(d);
+        }
         pop.state.styles.popper.width = `${w + 20}px`;
         pop.state.styles.popper.left = `-10px`;
       },
@@ -195,7 +199,9 @@ function _initInPageMenuForEl(targetEl) {
       enabled: true,
       phase: "afterWrite",
       fn: ({ popState }) => {
-        if (state.isHidden) {return};
+        if (state.isHidden) {
+          return;
+        }
         menuEl.setAttribute("data-show", "");
       },
     };
@@ -231,7 +237,9 @@ function _initInPageMenuForEl(targetEl) {
 }
 
 function _onBlur(event) {
-  if (!event.isTrusted) {return};
+  if (!event.isTrusted) {
+    return;
+  }
   // console.log('Blur event in an input', event.target.id)
   menuCtrler.hide();
   return true;
@@ -239,13 +247,19 @@ function _onBlur(event) {
 
 function _onFocus(event) {
   // console.log('focus event in an input id:', event.target.id);
-  if (!event.isTrusted) {return};
-  if (state.currentMenuType === "loginMenu") {return};
+  if (!event.isTrusted) {
+    return;
+  }
+  if (state.currentMenuType === "loginMenu") {
+    return;
+  }
   show(this);
 }
 
 function _onClick(event) {
-  if (!event.isTrusted) {return};
+  if (!event.isTrusted) {
+    return;
+  }
   // console.log('click 2 event in an input id:', event.target.id, event.target.clientWidth - state.rightOffset - event.offsetX < 25);
   if (event.target.clientWidth - state.rightOffset - event.offsetX < 25) {
     toggleShow(this);
@@ -256,7 +270,9 @@ function _onClick(event) {
 
 function _onKeyDown(event) {
   // console.log('keydown event', event.key, state.isHidden);
-  if (!event.isTrusted) {return};
+  if (!event.isTrusted) {
+    return;
+  }
   const keyName = event.key;
   if (keyName === "Escape") {
     menuCtrler.hide(true);
@@ -282,13 +298,17 @@ function _onKeyDown(event) {
     }
     return;
   } else if (keyName === "Enter" && event.ctrlKey) {
-    if (state.isHidden) {return};
+    if (state.isHidden) {
+      return;
+    }
     event.stopPropagation();
     event.preventDefault();
     submitDetail();
     return;
   } else if (keyName === "Enter") {
-    if (state.isHidden) {return};
+    if (state.isHidden) {
+      return;
+    }
     event.stopPropagation();
     event.preventDefault();
     menuCtrler.submit();
@@ -318,8 +338,12 @@ function toggleShow(targetEl) {
 //
 function show(targetEl) {
   // console.log('menuCtrler.show() isFrozen:', state.isFrozen);
-  if (state.isFrozen) {return};
-  if (!state.isHidden && state.lastFocusedEl === targetEl) {return};
+  if (state.isFrozen) {
+    return;
+  }
+  if (!state.isHidden && state.lastFocusedEl === targetEl) {
+    return;
+  }
   state.lastFocusedEl = targetEl;
   popperInstance.state.elements.reference = targetEl;
   popperInstance.update();
@@ -346,7 +370,9 @@ function show(targetEl) {
 function hide(force) {
   // n++  // usefull for debug...
   // console.log(`Hide call id=0${n}, force=${!!force}, isFrozen=${state.isFrozen}`); // usefull for debug...
-  if (state.isFrozen || !state.isMenuInited) {return};
+  if (state.isFrozen || !state.isMenuInited) {
+    return;
+  }
   if (force && typeof force == "boolean") {
     _setApplyFadeInUrl(false);
     // hide menu element after a delay so that the inner pannel has been scaled to 0 and therefore enables
@@ -412,7 +438,9 @@ menuCtrler.hide = hide;
 /* --------------------------------------------------------------------- */
 // Hide menu and remove the "buttons" in form inputs
 function deactivate() {
-  if (!menuEl) {return}; // can happen
+  if (!menuEl) {
+    return;
+  } // can happen
   hide(true);
   removeInPageButtons();
   state.isActivated = false;
@@ -479,9 +507,15 @@ menuCtrler.moveSelection = moveSelection;
 function getPossibleTypesForField(fieldEl) {
   const cipherTypes = [];
   // cipher.type : 1:login 2:notes  3:Card 4: identities
-  if (fieldEl.fieldTypes.login) {cipherTypes.push(CipherType.Login)};
-  if (fieldEl.fieldTypes.card) {cipherTypes.push(CipherType.Card)};
-  if (fieldEl.fieldTypes.identity) {cipherTypes.push(CipherType.Identity)};
+  if (fieldEl.fieldTypes.login) {
+    cipherTypes.push(CipherType.Login);
+  }
+  if (fieldEl.fieldTypes.card) {
+    cipherTypes.push(CipherType.Card);
+  }
+  if (fieldEl.fieldTypes.identity) {
+    cipherTypes.push(CipherType.Identity);
+  }
 
   return cipherTypes;
 }
@@ -512,8 +546,12 @@ menuCtrler.submitDetail = submit;
 /* --------------------------------------------------------------------- */
 // Set the height of menuEl (iframe) taking into account the inner margin
 function setHeight(h) {
-  if (!state.isMenuInited) {return}; // happens if in an iframe without relevant inputs for the menu
-  if (state.lastHeight === h) {return};
+  if (!state.isMenuInited) {
+    return;
+  } // happens if in an iframe without relevant inputs for the menu
+  if (state.lastHeight === h) {
+    return;
+  }
   menuEl.style.height = h + 28 + "px";
   state.lastHeight = h;
 }
@@ -533,7 +571,9 @@ function setCiphers(newCiphers) {
   ciphersById = {};
   for (var cipherListId in newCiphers) {
     // eslint-disable-next-line no-prototype-builtins
-    if (!newCiphers.hasOwnProperty(cipherListId)) {continue};
+    if (!newCiphers.hasOwnProperty(cipherListId)) {
+      continue;
+    }
     for (var cipher of newCiphers[cipherListId]) {
       ciphers.append(cipher);
       ciphersById[cipher.id] = cipher;
@@ -548,9 +588,15 @@ menuCtrler.setCiphers = setCiphers;
 // Run this function so that menuCtrler.state.selectedCipher corresponds
 // to the initial selection within the menu
 function selectFirstCipherToSuggestFor(fieldEl) {
-  if (state.isHidden) {return};
-  if (!ciphers || ciphers._length == 0) {return};
-  if (!fieldEl) {return};
+  if (state.isHidden) {
+    return;
+  }
+  if (!ciphers || ciphers._length == 0) {
+    return;
+  }
+  if (!fieldEl) {
+    return;
+  }
   let newCipherNode = ciphers.head();
   const cipherTypesToSuggest = getPossibleTypesForField(fieldEl);
   do {
@@ -598,16 +644,24 @@ menuCtrler.setMenuType = setMenuType;
 //     * force reload by modifying a random variable via _forceIframeRefresh()
 // parameters in the 'hash' section will only be listened inside the iframe
 function _setIframeURLforMenuType(menuType, isPinLocked, isLocked) {
-  if (!menuEl) {return};
+  if (!menuEl) {
+    return;
+  }
   const hash = "#" + encodeURIComponent(JSON.stringify(state.iFrameHash));
   const rand = "?" + Math.floor(Math.random() * 1000000 + 1);
   if (menuType === "autofillMenu") {
     menuEl.src = chrome.runtime.getURL("inPageMenu/menu.html" + rand) + hash;
   } else if (menuType === "loginMenu") {
     let searchParams = "";
-    if (isPinLocked) {searchParams = "isPinLocked=true"};
-    if (isLocked) {searchParams += "isLocked=true"};
-    if (searchParams) {searchParams = "?" + searchParams};
+    if (isPinLocked) {
+      searchParams = "isPinLocked=true";
+    }
+    if (isLocked) {
+      searchParams += "isLocked=true";
+    }
+    if (searchParams) {
+      searchParams = "?" + searchParams;
+    }
     menuEl.src = chrome.runtime.getURL("inPageMenu/loginMenu.html" + searchParams + rand) + hash;
   }
 }
@@ -616,7 +670,9 @@ function _setIframeURLforMenuType(menuType, isPinLocked, isLocked) {
 // Modifies the random part of the iframe url in order to force
 // the iframe to reload
 function _forceIframeRefresh() {
-  if (!menuEl || !menuEl.src) {return};
+  if (!menuEl || !menuEl.src) {
+    return;
+  }
   const url = new URL(menuEl.src);
   const rand = "?" + Math.floor(Math.random() * 1000000 + 1);
   menuEl.src = url.origin + url.pathname + url.search + rand + url.hash;
@@ -625,7 +681,9 @@ function _forceIframeRefresh() {
 /* --------------------------------------------------------------------- */
 //
 function _updateArrowPos(d) {
-  if (!menuEl || !menuEl.src) {return};
+  if (!menuEl || !menuEl.src) {
+    return;
+  }
   state.iFrameHash.arrowD = d;
   _updateHash();
 }
@@ -641,7 +699,9 @@ menuCtrler.set2FaMode = set2FaMode;
 /* --------------------------------------------------------------------- */
 //
 function _updateHash() {
-  if (state.isHidden) {return};
+  if (state.isHidden) {
+    return;
+  }
   const url = new URL(menuEl.src);
   menuEl.src =
     url.origin +
@@ -655,7 +715,9 @@ function _updateHash() {
 // send informations to the iframe through the url's hash (no reload)
 // the hash is a Json string
 function _setApplyFadeInUrl(doApply, fieldTypes) {
-  if (!menuEl || !menuEl.src) {return};
+  if (!menuEl || !menuEl.src) {
+    return;
+  }
   const url = new URL(menuEl.src);
   if (doApply) {
     fieldTypes = {
@@ -701,17 +763,12 @@ menuCtrler.setHostFrameId = setHostFrameId;
 function isOverAnInput(x, y) {
   for (const el of targetsEl) {
     const rect = el.getBoundingClientRect();
-    if (
-      (rect.x<x && x < rect.x+rect.width)
-      &&
-      (rect.y<y && y < rect.y+rect.height)
-    ) {
+    if (rect.x < x && x < rect.x + rect.width && rect.y < y && y < rect.y + rect.height) {
       return true;
     }
   }
   return false;
 }
-
 
 /* --------------------------------------------------------------------- */
 // EXPORT

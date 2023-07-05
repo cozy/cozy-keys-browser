@@ -57,8 +57,10 @@
               [(ngModel)]="selectedCollectionId"
               (change)="onSelectedCollectionChange()"
             >
-              <option value="">{{'shareNone' | i18n}}</option>
-              <option *ngFor="let collection of collections" [ngValue]="collection.id">{{ collection.name }}</option>
+              <option value="">{{ "shareNone" | i18n }}</option>
+              <option *ngFor="let collection of collections" [ngValue]="collection.id">
+                {{ collection.name }}
+              </option>
             </select>
             <!-- end custo -->
           </div>

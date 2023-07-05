@@ -17,7 +17,11 @@
       appAutofocus
       (keydown)="closeOnEsc($event)"
     />
-    <i class="icon-cozy icon-cross {{ (searchText === '') ? 'invisible' : '' }}" aria-hidden="true" (click)="emptySearch()"></i>
+    <i
+      class="icon-cozy icon-cross {{ searchText === '' ? 'invisible' : '' }}"
+      aria-hidden="true"
+      (click)="emptySearch()"
+    ></i>
   </div>
   <div class="right">
     <button type="button" (click)="openWebApp()" appA11yTitle="{{ 'popOutNewWindow' | i18n }}">
@@ -74,18 +78,18 @@
       <div class="box-content single-line underline">
         <!-- Cozy custo : add a "for this web site" row -->
         <button
-        type="button"
-        class="box-content-row"
-        appStopClick
-        appBlurClick
-        (click)="selectCurrent()"
+          type="button"
+          class="box-content-row"
+          appStopClick
+          appBlurClick
+          (click)="selectCurrent()"
         >
-        <div class="row-main">
-          <div class="icon"><i class="icon-cozy icon-search"></i></div>
-          <span class="text">{{ "forThisWebSite" | i18n }}</span>
-        </div>
-        <span class="row-sub-label">{{ cipherNumberForCurrentTab }}</span>
-        <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
+          <div class="row-main">
+            <div class="icon"><i class="icon-cozy icon-search"></i></div>
+            <span class="text">{{ "forThisWebSite" | i18n }}</span>
+          </div>
+          <span class="row-sub-label">{{ cipherNumberForCurrentTab }}</span>
+          <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
         </button>
         <!-- end custo -->
         <button

@@ -289,7 +289,10 @@ export default class AutofillService implements AutofillServiceInterface {
     let hasFieldsForInPageMenu = false;
     if (pageDetails[0].sender === "notifBarForInPageMenu") {
       cipher = await this.cipherService.getLastUsedForUrl(tab.url, false);
-      hasFieldsForInPageMenu = ( pageDetails[0].fieldsForInPageMenuScripts.findIndex( (s: any) => {s.script.length > 0}) ) > -1;
+      hasFieldsForInPageMenu =
+        pageDetails[0].fieldsForInPageMenuScripts.findIndex((s: any) => {
+          s.script.length > 0;
+        }) > -1;
       tab = pageDetails[0].tab;
       if (!cipher && !hasFieldsForInPageMenu) {
         // there is no cipher for this URL : deactivate in page menu
@@ -310,28 +313,31 @@ export default class AutofillService implements AutofillServiceInterface {
       if (!tab || !tab.url) {
         return;
       }
-    /* END @override by Cozy */
-    if (fromCommand) {
-      cipher = await this.cipherService.getNextCipherForUrl(tab.url);
-    } else {
-      const lastLaunchedCipher = await this.cipherService.getLastLaunchedForUrl(tab.url, true);
-      if (
-        lastLaunchedCipher &&
-        Date.now().valueOf() - lastLaunchedCipher.localData?.lastLaunched?.valueOf() < 30000
-      ) {
-        cipher = lastLaunchedCipher;
+      /* END @override by Cozy */
+      if (fromCommand) {
+        cipher = await this.cipherService.getNextCipherForUrl(tab.url);
       } else {
-        cipher = await this.cipherService.getLastUsedForUrl(tab.url, true);
+        const lastLaunchedCipher = await this.cipherService.getLastLaunchedForUrl(tab.url, true);
+        if (
+          lastLaunchedCipher &&
+          Date.now().valueOf() - lastLaunchedCipher.localData?.lastLaunched?.valueOf() < 30000
+        ) {
+          cipher = lastLaunchedCipher;
+        } else {
+          cipher = await this.cipherService.getLastUsedForUrl(tab.url, true);
+        }
       }
-    }
-    /** Cozy custo
+      /** Cozy custo
     }
     if (cipher == null || cipher.reprompt !== CipherRepromptType.None) {
       return null;
     }
     */
     }
-    if ((cipher == null || cipher.reprompt !== CipherRepromptType.None) && !hasFieldsForInPageMenu) {
+    if (
+      (cipher == null || cipher.reprompt !== CipherRepromptType.None) &&
+      !hasFieldsForInPageMenu
+    ) {
       return null;
     }
     /** end custo */

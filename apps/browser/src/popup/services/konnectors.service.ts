@@ -27,7 +27,6 @@ interface KonnectorsOrg {
 }
 
 export class KonnectorsService {
-
   private konnectorsOrg: KonnectorsOrg = null;
 
   constructor(
@@ -282,5 +281,4 @@ export class KonnectorsService {
   }
   private settingsPromise: any;
 */
-
 }

@@ -65,7 +65,7 @@ export class SyncService extends BaseSyncService {
     private localFolderApiService: FolderApiServiceAbstraction,
     private _organizationService: InternalOrganizationService,
     logoutCallback: (expired: boolean) => Promise<void>,
-    private cozyClientService: CozyClientService,
+    private cozyClientService: CozyClientService
   ) {
     super(
       localApiService,
@@ -124,7 +124,9 @@ export class SyncService extends BaseSyncService {
 
   async syncUpsertCipher(notification: SyncCipherNotification, isEdit: boolean): Promise<boolean> {
     const isAuthenticated = await this.localStateService.getIsAuthenticated();
-    if (!isAuthenticated) {return false};
+    if (!isAuthenticated) {
+      return false;
+    }
 
     this.localSyncStarted();
 

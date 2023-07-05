@@ -19,7 +19,11 @@
       appAutofocus
       appInputVerbatim
     />
-    <i class="icon-cozy icon-cross {{ (searchText === '') ? 'invisible' : '' }}" aria-hidden="true" (click)="emptySearch()"></i>
+    <i
+      class="icon-cozy icon-cross {{ searchText === '' ? 'invisible' : '' }}"
+      aria-hidden="true"
+      (click)="emptySearch()"
+    ></i>
   </div>
   <div class="right">
     <button type="button" (click)="openWebApp()" appA11yTitle="{{ 'popOutNewWindow' | i18n }}">
@@ -96,7 +100,7 @@
         (onVaultSelectionChanged)="changeVaultSelection()"
       ></app-vault-select>
       -->
-      <div class="no-items no-items-centered-up" >
+      <div class="no-items no-items-centered-up">
         <i class="bwi bwi-spinner bwi-spin bwi-3x" *ngIf="!loaded" aria-hidden="true"></i>
         <ng-container *ngIf="loaded">
           <!-- commented by Cozy
@@ -137,7 +141,7 @@
       maxBufferPx="600"
       *ngIf="ciphers.length"
       #virtualScrollViewport
-      >
+    >
       <!-- commented by cozy
       <app-vault-select
         *ngIf="showVaultFilter && !showGroupings()"

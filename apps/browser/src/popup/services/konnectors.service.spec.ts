@@ -73,7 +73,7 @@ describe("Konnectors Service", () => {
     getEquivalentDomains: () => {
       return Promise.resolve([]);
     },
-  }
+  };
   const konnectorsService = new KonnectorsService(
     null,
     settingsService,

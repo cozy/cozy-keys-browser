@@ -4,7 +4,6 @@ import * as uuid from "uuid";
 import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 
-
 const BroadcasterSubscriptionId = "IfFlagDirective";
 
 /**

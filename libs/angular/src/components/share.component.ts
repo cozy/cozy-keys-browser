@@ -86,7 +86,9 @@ export class ShareComponent implements OnInit, OnDestroy {
     this.filterCollections();
     /* Cozy custo : initialize selected item on the current collection of the cipher */
     if (this.cipher.organizationId) {
-      this.selectedCollectionId = this.collections.find(col => col.organizationId === this.cipher.organizationId)?.id;
+      this.selectedCollectionId = this.collections.find(
+        (col) => col.organizationId === this.cipher.organizationId
+      )?.id;
     } else {
       this.selectedCollectionId = "";
     }
@@ -110,7 +112,6 @@ export class ShareComponent implements OnInit, OnDestroy {
         (c) => c.name !== "[error: cannot decrypt]"
       );
       /** end custo */
-
     }
   }
 
@@ -126,7 +127,7 @@ export class ShareComponent implements OnInit, OnDestroy {
       return;
     }
     */
-    const selectedCollection = this.collections.filter(c => !!(c as any).checked);
+    const selectedCollection = this.collections.filter((c) => !!(c as any).checked);
     if (selectedCollection.length !== 1) {
       this.platformUtilsService.showToast(
         "error",
@@ -137,7 +138,7 @@ export class ShareComponent implements OnInit, OnDestroy {
     }
 
     const organizationId = selectedCollection[0].organizationId;
-    const selectedCollectionIds = selectedCollection.map(c => c.id);
+    const selectedCollectionIds = selectedCollection.map((c) => c.id);
     /** end custo */
 
     const cipherDomain = await this.cipherService.get(this.cipherId);
@@ -181,8 +182,8 @@ export class ShareComponent implements OnInit, OnDestroy {
 
   /** Cozy custo */
   onSelectedCollectionChange() {
-    this.collections.forEach(collection => {
-        (collection as any).checked = this.selectedCollectionId === collection.id;
+    this.collections.forEach((collection) => {
+      (collection as any).checked = this.selectedCollectionId === collection.id;
     });
   }
   /** end custo */

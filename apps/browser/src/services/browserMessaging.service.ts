@@ -59,7 +59,11 @@ export default class BrowserMessagingService implements MessagingService {
     // console.log(`debouncedCountSync() after a delay grouped`, this.syncCounter, 'syncCompleted messages');
     if (this.syncCounter > 2) {
       // console.log(`therefore a fullSync() is trigered on the addon`);
-      this.runtimeBackground.processMessage({ command: "fullSync" }, "syncService" as chrome.runtime.MessageSender, null);
+      this.runtimeBackground.processMessage(
+        { command: "fullSync" },
+        "syncService" as chrome.runtime.MessageSender,
+        null
+      );
     }
     this.syncCounter = 0;
   }

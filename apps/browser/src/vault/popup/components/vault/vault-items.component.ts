@@ -2,7 +2,14 @@ import { Location } from "@angular/common";
 /* Cozy custo
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 */
-import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, HostListener } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  HostListener,
+} from "@angular/core";
 /* end custo */
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
@@ -96,7 +103,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   // Cozy custo
   @HostListener("window:keydown", ["$event"])
   handleKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Escape') {
+    if (event.key === "Escape") {
       event.preventDefault();
       if (this.searchText == null || this.searchText === "") {
         this.back();
@@ -222,7 +229,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
               });
             }
             break;
-            // end custo
+          // end custo
           default:
             break;
         }
@@ -252,7 +259,10 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
   @HostListener("window:unload", ["$event"])
   async unloadMnger(event?: any) {
-    this.historyService.updateQueryParamInCurrentUrl("searchText", this.searchText ? this.searchText : "");
+    this.historyService.updateQueryParamInCurrentUrl(
+      "searchText",
+      this.searchText ? this.searchText : ""
+    );
   }
   // end custo
 

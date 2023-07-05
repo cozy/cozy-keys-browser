@@ -46,7 +46,12 @@
     <button type="button" (click)="openWebApp()" appA11yTitle="{{ 'popOutNewWindow' | i18n }}">
       <i class="icon-cozy icon-out-w" aria-hidden="true"></i>
     </button>
-    <button type="button" appBlurClick (click)="addLoginCipher()" appA11yTitle="{{ 'addItem' | i18n }}">
+    <button
+      type="button"
+      appBlurClick
+      (click)="addLoginCipher()"
+      appA11yTitle="{{ 'addItem' | i18n }}"
+    >
       <i class="icon-cozy icon-plus" aria-hidden="true"></i>
     </button>
     <!-- end custo -->
@@ -64,9 +69,16 @@
     -->
     <app-callout *ngIf="showHowToAutofill" type="info" title="{{ 'howToAutofill' | i18n }}">
       <div class="icon-cozy-inline">
-        <p>{{ autofillCalloutText }}
+        <p>
+          {{ autofillCalloutText }}
           <span>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <path
                 fill-rule="evenodd"
                 clip-rule="evenodd"
@@ -90,7 +102,6 @@
         {{ "autofillSettings" | i18n }}
       </button>
       -->
-
     </app-callout>
     <div class="box list">
       <h2 class="box-header">

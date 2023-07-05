@@ -32,15 +32,17 @@ export class TabsComponent implements OnInit, OnDestroy {
     private cozyClientService: CozyClientService,
     private router: Router
   ) {
-    this.event$ = this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event: NavigationEvent) => {
-      if (event instanceof NavigationEnd) {
-        if (event.url === "/tabs/current") {
-          this.isVaultTabActive = true;
-        } else {
-          this.isVaultTabActive = false;
+    this.event$ = this.router.events
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event: NavigationEvent) => {
+        if (event instanceof NavigationEnd) {
+          if (event.url === "/tabs/current") {
+            this.isVaultTabActive = true;
+          } else {
+            this.isVaultTabActive = false;
+          }
         }
-      }
-    });
+      });
   }
 
   ngOnInit() {

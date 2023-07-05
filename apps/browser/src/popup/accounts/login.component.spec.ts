@@ -2,7 +2,7 @@ import { sanitizeUrlInput } from "../../auth/popup/login.component.functions";
 import { CozySanitizeUrlService } from "../services/cozySanitizeUrl.service";
 
 describe("url input", () => {
-  const cozySanitizeUrlService = new CozySanitizeUrlService()
+  const cozySanitizeUrlService = new CozySanitizeUrlService();
 
   it("should return undefined if the input is empty", () => {
     const inputUrl = "";

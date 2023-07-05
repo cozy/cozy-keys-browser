@@ -6,7 +6,6 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 
-
 /* Cozy imports */
 import { HistoryService } from "../../../popup/services/history.service";
 /* END */

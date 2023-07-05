@@ -145,7 +145,8 @@ let plugins = [
   // }),
   // ...requiredPlugins,
 ];
-if (ENV === "development") { // add source maps only if not development
+if (ENV === "development") {
+  // add source maps only if not development
   plugins = [
     ...plugins,
     new webpack.SourceMapDevToolPlugin({
@@ -153,12 +154,9 @@ if (ENV === "development") { // add source maps only if not development
       filename: "[file].map",
     }),
     ...requiredPlugins,
-  ]
+  ];
 } else {
-  plugins = [
-    ...plugins,
-    ...requiredPlugins,
-  ]
+  plugins = [...plugins, ...requiredPlugins];
 }
 /** end custo */
 

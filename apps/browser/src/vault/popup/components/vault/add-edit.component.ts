@@ -163,7 +163,7 @@ export class AddEditComponent extends BaseAddEditComponent {
           // url pwd and state pwd are identical, keep url pwd
         }
 
-        Object.assign(this.cipher, histCipher)
+        Object.assign(this.cipher, histCipher);
       }
       // end custo */
 
@@ -208,7 +208,10 @@ export class AddEditComponent extends BaseAddEditComponent {
   */
   @HostListener("window:unload", ["$event"])
   async unloadMnger(event: any) {
-    this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, cipher: this.cipher });
+    this.historyService.saveTempCipherInHistory({
+      initialPwd: this.initialPwd,
+      cipher: this.cipher,
+    });
   }
   /* end custo */
 

@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit {
     private route: ActivatedRoute,
     private loginService: LoginService,
     private cryptoFunctionService: CryptoFunctionService,
-    private passwordGenerationService: PasswordGenerationServiceAbstraction,
+    private passwordGenerationService: PasswordGenerationServiceAbstraction
   ) {}
   async ngOnInit(): Promise<void> {
     let savedEmail = this.loginService.getEmail();
@@ -138,5 +138,5 @@ export class HomeComponent implements OnInit {
   openCozyWebsite() {
     BrowserApi.createNewTab("https://manager.cozycloud.cc/cozy/create");
   }
-    /* end custo */
+  /* end custo */
 }

@@ -35,7 +35,7 @@ export class GeneratorComponent extends BaseGeneratorComponent {
     route: ActivatedRoute,
     logService: LogService,
     private location: Location,
-    private historyService: HistoryService,
+    private historyService: HistoryService
   ) {
     super(
       passwordGenerationService,

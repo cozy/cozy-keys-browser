@@ -53,18 +53,15 @@
             </ng-container>
             -->
             <ng-container *ngIf="cipher.organizationId && !isKonnector">
-              <i
-                class="icon-cozy icon-share"
-                title="{{ 'shared' | i18n }}"
-                aria-hidden="true"
-                ></i>
+              <i class="icon-cozy icon-share" title="{{ 'shared' | i18n }}" aria-hidden="true"></i>
             </ng-container>
             <ng-container *ngIf="cipher.organizationId && isKonnector">
-                <i
-                  class="icon-cozy icon-cozy-sync"
-                  title="{{'sharedWithKonnector' | i18n}}"
-                  aria-hidden="true">
-                </i>
+              <i
+                class="icon-cozy icon-cozy-sync"
+                title="{{ 'sharedWithKonnector' | i18n }}"
+                aria-hidden="true"
+              >
+              </i>
             </ng-container>
             <!-- end custo -->
           </span>

@@ -44,5 +44,4 @@ export abstract class BrowserStateService extends BaseStateServiceAbstraction<Ac
 
   getHistoryState: () => Promise<string>;
   //*/
-
 }

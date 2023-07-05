@@ -117,7 +117,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     formValidationErrorService: FormValidationErrorsService,
     route: ActivatedRoute,
     loginService: LoginService,
-    protected cozySanitizeUrlService: CozySanitizeUrlService,
+    protected cozySanitizeUrlService: CozySanitizeUrlService
   ) {
     super(
       apiService,

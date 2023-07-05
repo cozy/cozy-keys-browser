@@ -26,7 +26,7 @@ export class CipherRowComponent implements OnInit {
   @Input() showView = false;
   @Input() title: string;
   isKonnector: boolean;
-  constructor(protected konnectorService: KonnectorsService){ }
+  constructor(protected konnectorService: KonnectorsService) {}
   /* Cozy custo */
   @Output() onAutofill = new EventEmitter<CipherView>();
   cipherType = CipherType;
@@ -73,7 +73,6 @@ export class CipherRowComponent implements OnInit {
     return c.subTitle;
   }
   /* end custo */
-
 
   // Cozy customization, differentiate shared Ciphers from ciphers in "Cozy Connectors" organization
   // /*

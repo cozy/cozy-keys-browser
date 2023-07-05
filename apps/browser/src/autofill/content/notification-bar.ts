@@ -41,7 +41,8 @@ function shouldTrigerMenu() {
 chrome.storage.local.get("global", (resp: any) => {
   cozyPasswordsHostname = new URL(getAppURLCozy(resp.global.environmentUrls.base, "passwords", ""))
     .hostname;
-  cozyContactsHostname = new URL(getAppURLCozy(resp.global.environmentUrls.base, "contacts", "")).hostname;
+  cozyContactsHostname = new URL(getAppURLCozy(resp.global.environmentUrls.base, "contacts", ""))
+    .hostname;
 });
 /* END Cozy custo  */
 
@@ -107,28 +108,28 @@ document.addEventListener("DOMContentLoaded", (event) => {
   });
   /* Cozy custo */
   if (activeUserId) {
-  /* end custo */
-  /** TODO BJA : there might be a bug bellow : activeUserId will always be empty since the chrome.storage.local.get is asynchronous... */
-  chrome.storage.local.get(activeUserId, (obj: any) => {
-    if (obj?.[activeUserId] == null) {
-      return;
-    }
+    /* end custo */
+    /** TODO BJA : there might be a bug bellow : activeUserId will always be empty since the chrome.storage.local.get is asynchronous... */
+    chrome.storage.local.get(activeUserId, (obj: any) => {
+      if (obj?.[activeUserId] == null) {
+        return;
+      }
 
-    const domains = obj[activeUserId].settings.neverDomains;
-    // eslint-disable-next-line
-    if (domains != null && domains.hasOwnProperty(window.location.hostname)) {
-      return;
-    }
+      const domains = obj[activeUserId].settings.neverDomains;
+      // eslint-disable-next-line
+      if (domains != null && domains.hasOwnProperty(window.location.hostname)) {
+        return;
+      }
 
-    disabledAddLoginNotification = obj[activeUserId].settings.disableAddLoginNotification;
-    disabledChangedPasswordNotification =
-      obj[activeUserId].settings.disableChangedPasswordNotification;
+      disabledAddLoginNotification = obj[activeUserId].settings.disableAddLoginNotification;
+      disabledChangedPasswordNotification =
+        obj[activeUserId].settings.disableChangedPasswordNotification;
 
-    if (!disabledAddLoginNotification || !disabledChangedPasswordNotification) {
-      collectIfNeededWithTimeout();
-    }
-  });
-  /* Cozy custo */
+      if (!disabledAddLoginNotification || !disabledChangedPasswordNotification) {
+        collectIfNeededWithTimeout();
+      }
+    });
+    /* Cozy custo */
   } else {
     collectIfNeededWithTimeout();
   }
@@ -199,7 +200,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         if (mutations == null || mutations.length === 0 || pageHref !== window.location.href) {
         */
         if (mutations == null || mutations.length === 0 || !shouldTrigerMenu()) {
-        /* end custo */
+          /* end custo */
           return;
         }
 
@@ -271,7 +272,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   }
 
   function collectIfNeededWithTimeout() {
-    collectIfNeeded();  // Cozy custo
+    collectIfNeeded(); // Cozy custo
     if (collectIfNeededTimeout != null) {
       window.clearTimeout(collectIfNeededTimeout);
     }
@@ -384,7 +385,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (submitButton != null) {
       submitButton.removeEventListener("click", formSubmitted, false);
       submitButton.addEventListener("click", formSubmitted, false);
-    /* Cozy custo */
+      /* Cozy custo */
     } else {
       // No submit button found in the form: it might be elsewhere in the document
       const potentialSubmitButtons = getButtonsInDocument();
@@ -392,7 +393,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         button.removeEventListener("click", formSubmitted, false);
         button.addEventListener("click", formSubmitted, false);
       }
-    /* end custo */
+      /* end custo */
     }
   }
 
@@ -776,7 +777,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     if (data != null && data.height !== 42) {
     */
     if (data != null) {
-    /* end custo */
+      /* end custo */
       const newHeight = data.height + "px";
       doHeightAdjustment("bit-notification-bar-iframe", newHeight);
       doHeightAdjustment("bit-notification-bar", newHeight);

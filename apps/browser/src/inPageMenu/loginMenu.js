@@ -122,7 +122,9 @@ document.addEventListener("DOMContentLoaded", () => {
     /* For debug
     console.log('loginMenu heared msg', msg);
     */
-    if (msg.command !== "menuAnswerRequest") {return};
+    if (msg.command !== "menuAnswerRequest") {
+      return;
+    }
     switch (msg.subcommand) {
       case "loginNOK":
         // console.log("loginNOK heard in loginInPageMenu");
@@ -177,7 +179,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   panel.addEventListener("keydown", (event) => {
-    if (!event.isTrusted) {return};
+    if (!event.isTrusted) {
+      return;
+    }
     const keyName = event.key;
     if (keyName === "Enter") {
       if (isIn2FA) {
@@ -196,7 +200,9 @@ document.addEventListener("DOMContentLoaded", () => {
 // Width is constraint by the parent page, but height is decided by the
 // iframe content
 function adjustMenuHeight() {
-  if (lastSentHeight === panel.offsetHeight) {return};
+  if (lastSentHeight === panel.offsetHeight) {
+    return;
+  }
   lastSentHeight = panel.offsetHeight;
   chrome.runtime.sendMessage({
     command: "bgAnswerMenuRequest",

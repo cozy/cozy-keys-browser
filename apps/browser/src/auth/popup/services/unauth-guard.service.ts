@@ -15,11 +15,7 @@ export class UnauthGuardService extends BaseUnauthGuardService {
   protected homepage = "tabs/current";
 
   // Cozy custo
-  constructor(
-    authService: AuthService,
-    router: Router,
-    private historyService: HistoryService
-  ) {
+  constructor(authService: AuthService, router: Router, private historyService: HistoryService) {
     super(authService, router);
   }
 
@@ -39,4 +35,3 @@ export class UnauthGuardService extends BaseUnauthGuardService {
   }
   // end custo
 }
-

@@ -35,7 +35,7 @@ export class ShareComponent extends BaseShareComponent {
     private route: ActivatedRoute,
     private router: Router,
     organizationService: OrganizationService,
-    private historyService: HistoryService,
+    private historyService: HistoryService
   ) {
     super(
       collectionService,
@@ -43,7 +43,7 @@ export class ShareComponent extends BaseShareComponent {
       i18nService,
       cipherService,
       logService,
-      organizationService,
+      organizationService
     );
   }
 
@@ -91,5 +91,4 @@ export class ShareComponent extends BaseShareComponent {
     }
   }
   /* end custo */
-
 }

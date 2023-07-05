@@ -2,7 +2,7 @@ export default class AutofillScript {
   /* Cozy custo
   script: string[][] = [];
   */
-  script: (string|string|string|any)[][] = [];
+  script: (string | string | string | any)[][] = [];
   /* end custo */
   documentUUID: any = {};
   properties: any = {};

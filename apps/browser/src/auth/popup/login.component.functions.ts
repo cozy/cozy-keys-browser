@@ -1,6 +1,9 @@
 import { CozySanitizeUrlService } from "../../popup/services/cozySanitizeUrl.service";
 
-export const sanitizeUrlInput = (inputUrl: string, cozySanitizeUrlService: CozySanitizeUrlService): string => {
+export const sanitizeUrlInput = (
+  inputUrl: string,
+  cozySanitizeUrlService: CozySanitizeUrlService
+): string => {
   // Prevent empty url
   if (!inputUrl) {
     throw new Error("cozyUrlRequired");
@@ -14,8 +17,5 @@ export const sanitizeUrlInput = (inputUrl: string, cozySanitizeUrlService: CozyS
     throw new Error("hasMispelledCozy");
   }
 
-  return cozySanitizeUrlService.normalizeURL(
-    inputUrl,
-    cozySanitizeUrlService.cozyDomain
-  );
-}
+  return cozySanitizeUrlService.normalizeURL(inputUrl, cozySanitizeUrlService.cozyDomain);
+};

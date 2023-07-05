@@ -473,7 +473,7 @@ export default class MainBackground {
       this.folderApiService,
       this.organizationService,
       logoutCallback,
-      this.cozyClientService,
+      this.cozyClientService
     );
     this.eventUploadService = new EventUploadService(
       this.apiService,
@@ -663,7 +663,7 @@ export default class MainBackground {
       this.apiService,
       this.cipherService,
       this.cozyClientService,
-      this.vaultTimeoutSettingsService,
+      this.vaultTimeoutSettingsService
     );
     this.messagingService.setRuntimeBackground(this.runtimeBackground);
     /* end custo */
@@ -938,5 +938,4 @@ export default class MainBackground {
     return `${browserUA} ${appName}-${appVersion}`;
   }
   /* end custo */
-
 }

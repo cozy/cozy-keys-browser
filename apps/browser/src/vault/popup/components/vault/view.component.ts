@@ -81,7 +81,7 @@ export class ViewComponent extends BaseViewComponent {
     logService: LogService,
     fileDownloadService: FileDownloadService,
     private cozyClientService: CozyClientService,
-    private historyService: HistoryService,
+    private historyService: HistoryService
   ) {
     super(
       cipherService,
