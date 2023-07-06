@@ -30,6 +30,8 @@ type ExpectedContext = QueryResult<{
 
 type ExpectedInstance = QueryResult<{ uuid?: string }>
 
+let subDomainType: "nested" | "flat";
+
 /**
  * CozyClient service, used to communicate with a Cozy stack on specific Cozy's routes.
  *
@@ -161,18 +163,15 @@ export class CozyClientService {
     if (!appName) {
       return new URL(this.getCozyURL()).toString();
     }
-    const client = await this.getClientInstance();
-    const capabilities = await client.query(Q("io.cozy.settings").getById("capabilities"));
+    const subDomain = await this.getSubDomainType();
     const cozyURL = this.getCozyURL();
-    const subdomain = capabilities?.data.attributes.flat_subdomains ? "flat" : "nested";
-
     const link = generateWebLink({
       cozyUrl: cozyURL,
       searchParams: [],
       pathname: "",
       hash: hash,
       slug: appName,
-      subDomainType: subdomain,
+      subDomainType: subDomain,
     });
 
     return link;
@@ -184,11 +183,9 @@ export class CozyClientService {
   */
   async correspondsToConnectedCozyURL(appUrl: string): Promise<boolean> {
     const appURL = new URL(appUrl);
-    const client = await this.getClientInstance();
-    const capabilities = await client.query(Q("io.cozy.settings").getById("capabilities"));
-    const subdomain = capabilities?.data.attributes.flat_subdomains ? "flat" : "nested";
+    const subDomain = await this.getSubDomainType();
     const currentCozyURL = new URL(this.getCozyURL());
-    if (subdomain === "nested") {
+    if (subDomain === "nested") {
       //remove first subdomain if there is one more than on the Cozy (would be an app nested domain)
       const currentCozyURLHosts = currentCozyURL.host.split(".")
       let appUrlHosts = appURL.host.split(".")
@@ -211,6 +208,19 @@ export class CozyClientService {
     }
   }
 
+  /**
+   * @returns "nested" or "flat"
+   */
+  async getSubDomainType(): Promise<"flat" | "nested"> {
+    if (subDomainType) {
+      return subDomainType;
+    }
+    const client = await this.getClientInstance();
+    const capabilities = await client.query(Q("io.cozy.settings").getById("capabilities"));
+    subDomainType = capabilities?.data.attributes.flat_subdomains ? "flat" : "nested";
+    return subDomainType;
+  }
+
   async saveCozyCredentials(uri: string, pwd: string) {
     // find a possible already existing cipher
     const ciphersUnfiltered = await this.cipherService.getAllDecryptedForUrl(uri, undefined, UriMatchType.Domain);
@@ -221,9 +231,9 @@ export class CozyClientService {
       }
       // test that the cipher url realy matches the user's Cozy url
       for (const u of c.login.uris) {
-        // const cipherCozyUrl = await this.getPossibleCozyURLFromAppUrl(u.uri)
         if (await this.correspondsToConnectedCozyURL(u.uri)) {
           ciphers.push(c);
+          break;
         }
       }
     }

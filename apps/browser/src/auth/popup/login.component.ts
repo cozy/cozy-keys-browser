@@ -142,7 +142,18 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
       loginService
     );
     super.onSuccessfulLogin = async () => {
+      /* Cozy custo
       await syncService.fullSync(true);
+      */
+      const syncPromise = syncService.fullSync(true).then(() => {
+        this.cozyClientService.saveCozyCredentials(
+          sanitizeUrlInput(this.formGroup.value.email, this.cozySanitizeUrlService),
+          this.formGroup.value.masterPassword
+        );
+      });
+      this.konnectorsService.getKonnectorsOrganization();
+      return syncPromise;
+      /* end custo */
     };
     super.successRoute = "/tabs/vault";
     this.showPasswordless = flagEnabled("showPasswordless");
@@ -267,17 +278,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
         } else {
           this.router.navigate([this.successRoute]);
         }
-        // TODO BJA : onsync event ?
-        setTimeout(() => {
-          this.cozyClientService.saveCozyCredentials(cozyUrl, data.masterPassword);
-        }, 200);
-        setTimeout(() => {
-          // only for prefetching data, wait for search and components initialization finished to run (1500ms)
-          this.konnectorsService.getKonnectorsOrganization();
-        }, 1500);
       }
     } catch (e) {
-      console.log("should NOT save credentials of the Cozy instance");
       this.logService.error(e);
     }
   }

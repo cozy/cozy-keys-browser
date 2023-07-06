@@ -377,22 +377,16 @@ export class SettingsComponent implements OnInit {
   END */
 
   async import() {
-    const client = await this.cozyClientService.getClientInstance();
-
-    const capabilities = await client.query(Q("io.cozy.settings").getById("capabilities"));
-
-    const cozyURL = client.getStackClient().uri;
-    const subdomain = capabilities?.data.attributes.flat_subdomains ? "flat" : "nested";
-
+    const subDomain = await this.cozyClientService.getSubDomainType();
+    const cozyURL = this.cozyClientService.getCozyURL();
     const link = generateWebLink({
       cozyUrl: cozyURL,
       searchParams: [],
       pathname: "",
       hash: "/vault?action=import",
       slug: "passwords",
-      subDomainType: subdomain,
+      subDomainType: subDomain,
     });
-
     BrowserApi.createNewTab(link);
   }
 
