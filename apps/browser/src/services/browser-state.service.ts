@@ -209,14 +209,14 @@ export class BrowserStateService
     await this.saveAccount(account, await this.defaultInMemoryOptions());
   }
 
-  async setBannerClosedByUser(value: boolean){
+  async setBannerClosedByUser(value: boolean) {
     const account = await this.getAccount(await this.defaultInMemoryOptions());
     if (!account) {
       return;
     }
     account.bannerClosedByUser = value;
     await this.saveAccount(account, await this.defaultInMemoryOptions());
-  };
+  }
 
   async getBannerClosedByUser() {
     return (await this.getAccount(await this.defaultInMemoryOptions()))?.bannerClosedByUser;

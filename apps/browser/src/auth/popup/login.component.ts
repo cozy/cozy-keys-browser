@@ -121,7 +121,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     loginService: LoginService,
     protected cozySanitizeUrlService: CozySanitizeUrlService,
     private cozyClientService: CozyClientService,
-    private konnectorsService: KonnectorsService,
+    private konnectorsService: KonnectorsService
   ) {
     super(
       apiService,

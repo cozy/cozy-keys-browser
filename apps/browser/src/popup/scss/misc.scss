@@ -711,7 +711,7 @@ html.force_redraw {
 
 .security-code {
   @include themify($themes) {
-    color:themed("primaryAccentColor");
+    color: themed("primaryAccentColor");
   }
   font-size: 17px;
 }

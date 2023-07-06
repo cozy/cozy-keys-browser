@@ -8,7 +8,7 @@ const { AngularWebpackPlugin } = require("@ngtools/webpack");
 const TerserPlugin = require("terser-webpack-plugin");
 const { TsconfigPathsPlugin } = require("tsconfig-paths-webpack-plugin");
 const configurator = require("./config/config");
-const WebpackAnnouncerPlugin = require('./webpack.announcer.plugin.js');
+const WebpackAnnouncerPlugin = require("./webpack.announcer.plugin.js");
 
 if (process.env.NODE_ENV == null) {
   process.env.NODE_ENV = "development";

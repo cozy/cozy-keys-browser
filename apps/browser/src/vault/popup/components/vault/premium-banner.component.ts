@@ -16,9 +16,7 @@ const BroadcasterSubscriptionId = "PremiumBanner";
   selector: "app-vault-premium-banner",
   templateUrl: "premium-banner.component.html",
 })
-
 export class PremiumBannerComponent {
-
   static showBanner = false;
   static closedByUser = false;
 
@@ -27,7 +25,7 @@ export class PremiumBannerComponent {
     private cozyClientService: CozyClientService,
     private broadcasterService: BroadcasterService,
     private ngZone: NgZone,
-    private stateService: StateService,
+    private stateService: StateService
   ) {
     this.refresh();
   }
@@ -36,7 +34,7 @@ export class PremiumBannerComponent {
     this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
       this.ngZone.run(async () => {
         switch (message.command) {
-          case "syncCompleted":{
+          case "syncCompleted": {
             this.refresh();
             break;
           }
@@ -46,7 +44,7 @@ export class PremiumBannerComponent {
       });
     });
     PremiumBannerComponent.closedByUser = await this.stateService.getBannerClosedByUser();
-    this.refresh()
+    this.refresh();
   }
 
   ngOnDestroy() {
@@ -59,28 +57,25 @@ export class PremiumBannerComponent {
 
   async refresh() {
     const vaultCreationDate = await this.cozyClientService.getVaultCreationDate();
-    const limitDate = new Date(Date.now() - 21 * ( 3600 * 1000 * 24));
+    const limitDate = new Date(Date.now() - 21 * (3600 * 1000 * 24));
     PremiumBannerComponent.showBanner =
-      !flag('passwords.can-share-organizations')
-      &&
-      vaultCreationDate < limitDate
-      &&
+      !flag("passwords.can-share-organizations") &&
+      vaultCreationDate < limitDate &&
       !PremiumBannerComponent.closedByUser;
   }
 
   close() {
     PremiumBannerComponent.closedByUser = true;
     PremiumBannerComponent.showBanner = false;
-    this.stateService.setBannerClosedByUser(true)
+    this.stateService.setBannerClosedByUser(true);
   }
 
   async openPremiumPage() {
-    const link = await this.cozyClientService.getPremiumLink()
+    const link = await this.cozyClientService.getPremiumLink();
     if (link) {
       BrowserApi.createNewTab(link);
     } else {
-      BrowserApi.createNewTab('https://cozy.io/fr/pricing/');
+      BrowserApi.createNewTab("https://cozy.io/fr/pricing/");
     }
   }
-
 }

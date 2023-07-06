@@ -114,7 +114,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     private historyService: HistoryService,
     private organizationService: OrganizationService,
     private cryptoService: CryptoService,
-    private stateService: StateService,
+    private stateService: StateService
   ) {
     this.noFolderListSize = 100;
   }

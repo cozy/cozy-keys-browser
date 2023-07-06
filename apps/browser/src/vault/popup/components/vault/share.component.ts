@@ -38,7 +38,7 @@ export class ShareComponent extends BaseShareComponent {
     private router: Router,
     organizationService: OrganizationService,
     private historyService: HistoryService,
-    private cozyClientService: CozyClientService,
+    private cozyClientService: CozyClientService
   ) {
     super(
       collectionService,
@@ -95,11 +95,11 @@ export class ShareComponent extends BaseShareComponent {
   }
 
   async openPremiumPage() {
-    const link = await this.cozyClientService.getPremiumLink()
+    const link = await this.cozyClientService.getPremiumLink();
     if (link) {
       BrowserApi.createNewTab(link);
     } else {
-      BrowserApi.createNewTab('https://cozy.io/fr/pricing/');
+      BrowserApi.createNewTab("https://cozy.io/fr/pricing/");
     }
   }
   /* end custo */

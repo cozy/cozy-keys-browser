@@ -343,7 +343,7 @@ export default class MainBackground {
       this.environmentService,
       this.apiService,
       this.messagingService,
-      this.cipherService,
+      this.cipherService
     );
 
     this.settingsService = new BrowserSettingsService(this.stateService);
@@ -737,11 +737,11 @@ export default class MainBackground {
         // See https://developer.chrome.com/apps/runtime#event-onMessage
         return true;
       } else if (msg.command === "getUserCredentials") {
-        this.getUserCredentials(sender.origin).then(pwd => {
+        this.getUserCredentials(sender.origin).then((pwd) => {
           if (pwd) {
-            sendResponse(pwd)
+            sendResponse(pwd);
           }
-        })
+        });
         return true;
       } else if (msg.command === "queryFlag") {
         this.cozyClientService.notifyFlagStatus(msg.flagName);
@@ -768,11 +768,15 @@ export default class MainBackground {
    */
   async getUserCredentials(urlToCheck: string) {
     const cozyPassUrl = await this.cozyClientService.getAppURL("passwords", "");
-    const cozyPassUrlOrigin = (new URL(cozyPassUrl)).origin;
-    const urlToCheckOrigin = (new URL(urlToCheck)).origin;
+    const cozyPassUrlOrigin = new URL(cozyPassUrl).origin;
+    const urlToCheckOrigin = new URL(urlToCheck).origin;
     if (cozyPassUrlOrigin === urlToCheckOrigin) {
       const cozyUrl = this.cozyClientService.getCozyURL();
-      const ciphers = await this.cipherService.getAllDecryptedForUrl(cozyUrl, undefined, UriMatchType.Host);
+      const ciphers = await this.cipherService.getAllDecryptedForUrl(
+        cozyUrl,
+        undefined,
+        UriMatchType.Host
+      );
       if (ciphers.length === 0) {
         return undefined;
       }
@@ -782,9 +786,8 @@ export default class MainBackground {
       return undefined;
     }
     return undefined;
-  };
+  }
   // end custo
-
 
   async refreshBadge() {
     await new UpdateBadge(self).run({ existingServices: this as any });

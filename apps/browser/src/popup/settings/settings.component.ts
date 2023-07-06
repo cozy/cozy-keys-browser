@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl } from "@angular/forms";
 import { Router } from "@angular/router";
-import { generateWebLink, Q } from "cozy-client";
+import { generateWebLink } from "cozy-client";
 import Swal from "sweetalert2";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -341,7 +341,9 @@ export class SettingsComponent implements OnInit {
       this.i18nService.t("cancel")
     );
     if (confirmed) {
-      BrowserApi.createNewTab(await this.cozyClientService.getAppURL("settings", "/profile/password"));
+      BrowserApi.createNewTab(
+        await this.cozyClientService.getAppURL("settings", "/profile/password")
+      );
     }
   }
 
@@ -443,7 +445,7 @@ export class SettingsComponent implements OnInit {
     if (link) {
       BrowserApi.createNewTab(link);
     } else {
-      BrowserApi.createNewTab('https://cozy.io/fr/pricing/');
+      BrowserApi.createNewTab("https://cozy.io/fr/pricing/");
     }
   }
 

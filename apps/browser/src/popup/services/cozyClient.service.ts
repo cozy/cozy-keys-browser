@@ -1,4 +1,3 @@
-
 import CozyClient, { Q, generateWebLink } from "cozy-client";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -20,18 +19,18 @@ import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 import { SecureNoteView } from "@bitwarden/common/vault/models/view/secure-note.view";
 
 interface QueryResult<T> {
-  data: { attributes: T }
+  data: { attributes: T };
 }
 
 type ExpectedContext = QueryResult<{
-  manager_url?: string
-  enable_premium_links?: boolean
-}>
+  manager_url?: string;
+  enable_premium_links?: boolean;
+}>;
 
 type ExpectedInstance = QueryResult<{
-  uuid?: string
-  email?: string
-}>
+  uuid?: string;
+  email?: string;
+}>;
 
 let subDomainType: "nested" | "flat";
 
@@ -49,7 +48,7 @@ export class CozyClientService {
     protected environmentService: EnvironmentService,
     protected apiService: ApiService,
     protected messagingService: MessagingService,
-    protected cipherService: CipherService,
+    protected cipherService: CipherService
   ) {
     this.flagChangedPointer = this.flagChanged.bind(this);
   }
@@ -113,24 +112,24 @@ export class CozyClientService {
   async getPremiumLink() {
     const client = await this.getClientInstance();
     // retrieve manager_url &  enable_premium_links
-    const { manager_url, enable_premium_links } =
-      (await client.query(Q('io.cozy.settings').getById('context')) as ExpectedContext).data.attributes;
+    const { manager_url, enable_premium_links } = (
+      (await client.query(Q("io.cozy.settings").getById("context"))) as ExpectedContext
+    ).data.attributes;
     // retrieve uuid
-    const instance = (await client.fetchQueryAndGetFromState(
-      {
-        definition: Q("io.cozy.settings").getById('io.cozy.settings.instance'),
-        options: {
-          as: `${"io.cozy.settings"}/io.cozy.settings.instance`,
-          fetchPolicy: CozyClient.fetchPolicies.olderThan(5 * 60 * 1000),
-          singleDocData: true
-        }
-      }
-    )) as ExpectedInstance
+    const instance = (await client.fetchQueryAndGetFromState({
+      definition: Q("io.cozy.settings").getById("io.cozy.settings.instance"),
+      options: {
+        as: `${"io.cozy.settings"}/io.cozy.settings.instance`,
+        fetchPolicy: CozyClient.fetchPolicies.olderThan(5 * 60 * 1000),
+        singleDocData: true,
+      },
+    })) as ExpectedInstance;
     const uuid = instance.data.attributes?.uuid;
     // build offer url on the cloudery
-    const offersLink = enable_premium_links && manager_url && uuid
-            ? `${manager_url}/cozy/instances/${uuid}/premium`
-            : null
+    const offersLink =
+      enable_premium_links && manager_url && uuid
+        ? `${manager_url}/cozy/instances/${uuid}/premium`
+        : null;
     return offersLink;
   }
 
@@ -140,16 +139,14 @@ export class CozyClientService {
   async getUserEmail(): Promise<string> {
     const client = await this.getClientInstance();
     // retrieve instance data
-    const instance = (await client.fetchQueryAndGetFromState(
-      {
-        definition: Q("io.cozy.settings").getById('io.cozy.settings.instance'),
-        options: {
-          as: `${"io.cozy.settings"}/io.cozy.settings.instance`,
-          fetchPolicy: CozyClient.fetchPolicies.olderThan(5 * 60 * 1000),
-          singleDocData: true
-        }
-      }
-    )) as ExpectedInstance
+    const instance = (await client.fetchQueryAndGetFromState({
+      definition: Q("io.cozy.settings").getById("io.cozy.settings.instance"),
+      options: {
+        as: `${"io.cozy.settings"}/io.cozy.settings.instance`,
+        fetchPolicy: CozyClient.fetchPolicies.olderThan(5 * 60 * 1000),
+        singleDocData: true,
+      },
+    })) as ExpectedInstance;
     return instance.data.attributes?.email;
   }
 
@@ -202,15 +199,15 @@ export class CozyClientService {
   /**
    * Returns true if appUrl points the currently connected cozy.
    * even if the appUrl points to a specific app (nested of flat urls)
-  */
+   */
   async correspondsToConnectedCozyURL(appUrl: string): Promise<boolean> {
     const appURL = new URL(appUrl);
     const subDomain = await this.getSubDomainType();
     const currentCozyURL = new URL(this.getCozyURL());
     if (subDomain === "nested") {
       //remove first subdomain if there is one more than on the Cozy (would be an app nested domain)
-      const currentCozyURLHosts = currentCozyURL.host.split(".")
-      let appUrlHosts = appURL.host.split(".")
+      const currentCozyURLHosts = currentCozyURL.host.split(".");
+      let appUrlHosts = appURL.host.split(".");
       if (appUrlHosts.length === currentCozyURLHosts.length + 1) {
         appUrlHosts = appUrlHosts.slice(1);
       }
@@ -221,8 +218,8 @@ export class CozyClientService {
     } else {
       // remove potential `-appslug` in the first subdomain and then compare
       const appUrlHosts = appURL.host.split(".");
-      appUrlHosts[0] = appUrlHosts[0].replace(/-[A-Za-z0-9]+/g, "")
-      appURL.host = appUrlHosts.join('.');
+      appUrlHosts[0] = appUrlHosts[0].replace(/-[A-Za-z0-9]+/g, "");
+      appURL.host = appUrlHosts.join(".");
       if (appURL.host === currentCozyURL.host) {
         return true;
       }
@@ -245,8 +242,12 @@ export class CozyClientService {
 
   async saveCozyCredentials(uri: string, pwd: string) {
     // find a possible already existing cipher
-    const ciphersUnfiltered = await this.cipherService.getAllDecryptedForUrl(uri, undefined, UriMatchType.Domain);
-    const ciphers = []
+    const ciphersUnfiltered = await this.cipherService.getAllDecryptedForUrl(
+      uri,
+      undefined,
+      UriMatchType.Domain
+    );
+    const ciphers = [];
     for (const c of ciphersUnfiltered) {
       if (c.isDeleted) {
         break;
@@ -309,8 +310,8 @@ export class CozyClientService {
       if (date) {
         return date < minDate ? date : minDate;
       }
-      return minDate
-    }, new Date())
+      return minDate;
+    }, new Date());
     this.estimatedVaultCreationDate = minDate;
     return minDate;
   }

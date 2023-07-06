@@ -18,8 +18,9 @@ document.addEventListener("cozy.passwordextension.getcredentials", () => {
   // This will not work in Safari. It's OK for now as we don't have a Safari
   // extension, but we should find a way to send messages in Safari.
   chrome.runtime.sendMessage({ command: "getUserCredentials" }, (response: string) => {
-    const responseEvent = new CustomEvent<string>("cozy.passwordextension.credentials.response", {detail: response});
+    const responseEvent = new CustomEvent<string>("cozy.passwordextension.credentials.response", {
+      detail: response,
+    });
     document.dispatchEvent(responseEvent);
   });
 });
-

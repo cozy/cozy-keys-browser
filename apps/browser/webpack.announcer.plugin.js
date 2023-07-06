@@ -1,4 +1,4 @@
-const exec = require('child_process').exec;
+const exec = require("child_process").exec;
 
 /**
  * A webpack plugin to run personnalized commands after build succeeded.
@@ -10,15 +10,13 @@ const exec = require('child_process').exec;
 const doneCmd = `mpg123 ~/.dev-sounds/plop.mp3`;
 
 class AnnouncerPlugin {
+  constructor(options) {}
 
-    constructor(options) {
-    }
-
-    apply(compiler) {
-      compiler.hooks.done.tap("done", () => {
-        exec(doneCmd);
-      });
-    }
+  apply(compiler) {
+    compiler.hooks.done.tap("done", () => {
+      exec(doneCmd);
+    });
+  }
 }
 
 module.exports = AnnouncerPlugin;

@@ -47,7 +47,7 @@ export class GeneratorComponent implements OnInit {
     protected logService: LogService,
     protected route: ActivatedRoute,
     private win: Window,
-    protected cozyClientService: CozyClientService,
+    protected cozyClientService: CozyClientService
   ) {
     this.typeOptions = [
       { name: i18nService.t("password"), value: "password" },

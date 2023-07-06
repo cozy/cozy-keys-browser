@@ -31,7 +31,7 @@ export class GeneratorComponent extends BaseGeneratorComponent {
   private addEditCipherInfo: AddEditCipherInfo;
   private cipherState: CipherView;
 
-  @ViewChild('emailInput') emailInputElement: ElementRef;
+  @ViewChild("emailInput") emailInputElement: ElementRef;
 
   constructor(
     passwordGenerationService: PasswordGenerationServiceAbstraction,
@@ -43,7 +43,7 @@ export class GeneratorComponent extends BaseGeneratorComponent {
     logService: LogService,
     private location: Location,
     private historyService: HistoryService,
-    protected cozyClientService: CozyClientService,
+    protected cozyClientService: CozyClientService
   ) {
     super(
       passwordGenerationService,
@@ -54,7 +54,7 @@ export class GeneratorComponent extends BaseGeneratorComponent {
       logService,
       route,
       window,
-      cozyClientService,
+      cozyClientService
     );
   }
 
