@@ -47,7 +47,7 @@ export class TabsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.showCurrentTab = !this.popupUtilsService.inPopout(window);
-    this.cozyUrl = this.cozyClientService.getAppURL("", "");
+    this.cozyUrl = this.cozyClientService.getCozyURL();
   }
 
   ngOnDestroy() {

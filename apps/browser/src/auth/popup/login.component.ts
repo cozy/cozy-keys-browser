@@ -31,6 +31,7 @@ import { PasswordLogInCredentials } from "@bitwarden/common/auth/models/domain/l
 import { PreloginRequest } from "@bitwarden/common/models/request/prelogin.request";
 import { generateWebLink, Q } from "cozy-client";
 import { CozySanitizeUrlService } from "../../popup/services/cozySanitizeUrl.service";
+import { CozyClientService } from "../../popup/services/cozyClient.service";
 import { KonnectorsService } from "../../popup/services/konnectors.service";
 import { sanitizeUrlInput } from "./login.component.functions";
 /* eslint-enable */
@@ -119,7 +120,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     route: ActivatedRoute,
     loginService: LoginService,
     protected cozySanitizeUrlService: CozySanitizeUrlService,
-    protected konnectorService: KonnectorsService,
+    private cozyClientService: CozyClientService,
+    private konnectorsService: KonnectorsService,
   ) {
     super(
       apiService,
@@ -239,11 +241,6 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
       this.formPromise = this.authService.logIn(credentials);
       const response = await this.formPromise;
       this.setFormValues();
-      setTimeout(() => {
-        // only for prefetching data, wait for search and components initialization finished to run (1500ms)
-        this.konnectorService.getKonnectorsOrganization();
-      }, 1500);
-
       await this.loginService.saveEmailSettings();
       if (this.handleCaptchaRequired(response)) {
         return;
@@ -270,8 +267,17 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
         } else {
           this.router.navigate([this.successRoute]);
         }
+        // TODO BJA : onsync event ?
+        setTimeout(() => {
+          this.cozyClientService.saveCozyCredentials(cozyUrl, data.masterPassword);
+        }, 200);
+        setTimeout(() => {
+          // only for prefetching data, wait for search and components initialization finished to run (1500ms)
+          this.konnectorsService.getKonnectorsOrganization();
+        }, 1500);
       }
     } catch (e) {
+      console.log("should NOT save credentials of the Cozy instance");
       this.logService.error(e);
     }
   }

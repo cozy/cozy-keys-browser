@@ -134,6 +134,7 @@ import { KonnectorsService } from "../popup/services/konnectors.service";
 import { MessagingService as MessagingServiceAbstraction } from "../services/abstractions/messaging.service";
 import { SyncService } from "../popup/services/sync.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -727,13 +728,6 @@ export default class MainBackground {
       return status;
     };
 
-    // Cozy explanations :
-    // For information, to make the difference betweend locked and loggedout :
-    // const isAuthenticated = await this.stateService.getIsAuthenticated(); // = connected or installed
-    // const isLocked        = await this.vaultTimeoutService.isLocked()
-    //    if  isAuthenticated == false  &  isLocked == true   => loggedout
-    //    if  isAuthenticated == true   &  isLocked == true   => locked
-    //    if  isAuthenticated == true   &  isLocked == false  => logged in
     BrowserApi.messageListener("main.background", (msg: any, sender: any, sendResponse: any) => {
       if (msg.command === "checkextensionstatus") {
         checkCurrentStatus(msg).then(sendResponse);
@@ -741,6 +735,13 @@ export default class MainBackground {
         // The callback should return true if it's sending the
         // response asynchronously.
         // See https://developer.chrome.com/apps/runtime#event-onMessage
+        return true;
+      } else if (msg.command === "getUserCredentials") {
+        this.getUserCredentials(sender.origin).then(pwd => {
+          if (pwd) {
+            sendResponse(pwd)
+          }
+        })
         return true;
       } else if (msg.command === "queryFlag") {
         this.cozyClientService.notifyFlagStatus(msg.flagName);
@@ -759,6 +760,31 @@ export default class MainBackground {
       }, 500);
     });
   }
+
+  /**
+   * Cozy custo
+   * Returns the Cozy password only if urlToCheck
+   * points to the currently connected Cozy instance
+   */
+  async getUserCredentials(urlToCheck: string) {
+    const cozyPassUrl = await this.cozyClientService.getAppURL("passwords", "");
+    const cozyPassUrlOrigin = (new URL(cozyPassUrl)).origin;
+    const urlToCheckOrigin = (new URL(urlToCheck)).origin;
+    if (cozyPassUrlOrigin === urlToCheckOrigin) {
+      const cozyUrl = this.cozyClientService.getCozyURL();
+      const ciphers = await this.cipherService.getAllDecryptedForUrl(cozyUrl, undefined, UriMatchType.Host);
+      if (ciphers.length === 0) {
+        return undefined;
+      }
+      if (ciphers[0].login?.password) {
+        return ciphers[0].login.password;
+      }
+      return undefined;
+    }
+    return undefined;
+  };
+  // end custo
+
 
   async refreshBadge() {
     await new UpdateBadge(self).run({ existingServices: this as any });

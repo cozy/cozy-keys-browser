@@ -341,7 +341,7 @@ export class SettingsComponent implements OnInit {
       this.i18nService.t("cancel")
     );
     if (confirmed) {
-      BrowserApi.createNewTab(this.cozyClientService.getAppURL("settings", "/profile/password"));
+      BrowserApi.createNewTab(await this.cozyClientService.getAppURL("settings", "/profile/password"));
     }
   }
 
@@ -454,6 +454,6 @@ export class SettingsComponent implements OnInit {
   }
 
   getCozyURL() {
-    return this.cozyClientService.getAppURL("", "");
+    return this.cozyClientService.getCozyURL();
   }
 }

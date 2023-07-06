@@ -1,4 +1,5 @@
-import CozyClient, { Q } from "cozy-client";
+
+import CozyClient, { Q, generateWebLink } from "cozy-client";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import flag from "cozy-flags";
@@ -6,7 +7,18 @@ import flag from "cozy-flags";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { SecureNoteType } from "@bitwarden/common/enums/secureNoteType";
+import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { CardView } from "@bitwarden/common/vault/models/view/card.view";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view";
+import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
+import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
+import { SecureNoteView } from "@bitwarden/common/vault/models/view/secure-note.view";
+
 interface QueryResult<T> {
   data: { attributes: T }
 }
@@ -145,17 +157,104 @@ export class CozyClientService {
     }
   }
 
-  getAppURL(appName: string, hash: string) {
+  async getAppURL(appName: string, hash: string) {
     if (!appName) {
       return new URL(this.getCozyURL()).toString();
     }
-    const url = new URL(this.getCozyURL());
-    const hostParts = url.host.split(".");
-    url.host = [`${hostParts[0]}-${appName}`, ...hostParts.slice(1)].join(".");
-    if (hash) {
-      url.hash = hash;
+    const client = await this.getClientInstance();
+    const capabilities = await client.query(Q("io.cozy.settings").getById("capabilities"));
+    const cozyURL = this.getCozyURL();
+    const subdomain = capabilities?.data.attributes.flat_subdomains ? "flat" : "nested";
+
+    const link = generateWebLink({
+      cozyUrl: cozyURL,
+      searchParams: [],
+      pathname: "",
+      hash: hash,
+      slug: appName,
+      subDomainType: subdomain,
+    });
+
+    return link;
+  }
+
+  /**
+   * Returns true if appUrl points the currently connected cozy.
+   * even if the appUrl points to a specific app (nested of flat urls)
+  */
+  async correspondsToConnectedCozyURL(appUrl: string): Promise<boolean> {
+    const appURL = new URL(appUrl);
+    const client = await this.getClientInstance();
+    const capabilities = await client.query(Q("io.cozy.settings").getById("capabilities"));
+    const subdomain = capabilities?.data.attributes.flat_subdomains ? "flat" : "nested";
+    const currentCozyURL = new URL(this.getCozyURL());
+    if (subdomain === "nested") {
+      //remove first subdomain if there is one more than on the Cozy (would be an app nested domain)
+      const currentCozyURLHosts = currentCozyURL.host.split(".")
+      let appUrlHosts = appURL.host.split(".")
+      if (appUrlHosts.length === currentCozyURLHosts.length + 1) {
+        appUrlHosts = appUrlHosts.slice(1);
+      }
+      if (appUrlHosts.join(".") === currentCozyURL.host) {
+        return true;
+      }
+      return false;
+    } else {
+      // remove potential `-appslug` in the first subdomain and then compare
+      const appUrlHosts = appURL.host.split(".");
+      appUrlHosts[0] = appUrlHosts[0].replace(/-[A-Za-z0-9]+/g, "")
+      appURL.host = appUrlHosts.join('.');
+      if (appURL.host === currentCozyURL.host) {
+        return true;
+      }
+      return false;
     }
-    return url.toString();
+  }
+
+  async saveCozyCredentials(uri: string, pwd: string) {
+    // find a possible already existing cipher
+    const ciphersUnfiltered = await this.cipherService.getAllDecryptedForUrl(uri, undefined, UriMatchType.Domain);
+    const ciphers = []
+    for (const c of ciphersUnfiltered) {
+      if (c.isDeleted) {
+        break;
+      }
+      // test that the cipher url realy matches the user's Cozy url
+      for (const u of c.login.uris) {
+        // const cipherCozyUrl = await this.getPossibleCozyURLFromAppUrl(u.uri)
+        if (await this.correspondsToConnectedCozyURL(u.uri)) {
+          ciphers.push(c);
+        }
+      }
+    }
+    if (ciphers.length) {
+      // update first existing cipher
+      const cipher = ciphers[0];
+      if (cipher.login.password !== pwd) {
+        cipher.login.password = pwd;
+        const encCipher = await this.cipherService.encrypt(cipher);
+        this.cipherService.updateWithServer(encCipher);
+        return;
+      }
+    } else {
+      // create a new cipher for this Cozy
+      const cipher = new CipherView();
+      cipher.organizationId = null;
+      cipher.name = "My Cozy";
+      cipher.folderId = null;
+      cipher.type = CipherType.Login;
+      cipher.login = new LoginView();
+      cipher.login.uris = [new LoginUriView()];
+      cipher.login.uris[0].uri = uri;
+      cipher.login.password = pwd;
+      cipher.card = new CardView();
+      cipher.identity = new IdentityView();
+      cipher.secureNote = new SecureNoteView();
+      cipher.secureNote.type = SecureNoteType.Generic;
+      cipher.reprompt = CipherRepromptType.None;
+      const encCipher = await this.cipherService.encrypt(cipher);
+      await this.cipherService.createWithServer(encCipher);
+    }
   }
 
   async logout() {

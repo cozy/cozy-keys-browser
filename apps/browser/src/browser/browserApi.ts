@@ -177,7 +177,7 @@ export class BrowserApi {
   ) {
     chrome.runtime.onMessage.addListener(
       (msg: any, sender: chrome.runtime.MessageSender, response: any) => {
-        callback(msg, sender, response);
+        return callback(msg, sender, response);
       }
     );
   }
