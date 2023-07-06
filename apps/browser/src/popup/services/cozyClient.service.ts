@@ -28,7 +28,10 @@ type ExpectedContext = QueryResult<{
   enable_premium_links?: boolean
 }>
 
-type ExpectedInstance = QueryResult<{ uuid?: string }>
+type ExpectedInstance = QueryResult<{
+  uuid?: string
+  email?: string
+}>
 
 let subDomainType: "nested" | "flat";
 
@@ -129,6 +132,25 @@ export class CozyClientService {
             ? `${manager_url}/cozy/instances/${uuid}/premium`
             : null
     return offersLink;
+  }
+
+  /**
+   * returns user's email (string)
+   */
+  async getUserEmail(): Promise<string> {
+    const client = await this.getClientInstance();
+    // retrieve instance data
+    const instance = (await client.fetchQueryAndGetFromState(
+      {
+        definition: Q("io.cozy.settings").getById('io.cozy.settings.instance'),
+        options: {
+          as: `${"io.cozy.settings"}/io.cozy.settings.instance`,
+          fetchPolicy: CozyClient.fetchPolicies.olderThan(5 * 60 * 1000),
+          singleDocData: true
+        }
+      }
+    )) as ExpectedInstance
+    return instance.data.attributes?.email;
   }
 
   async updateSynchronizedAt() {

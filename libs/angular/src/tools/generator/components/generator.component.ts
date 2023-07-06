@@ -11,6 +11,11 @@ import { PasswordGeneratorPolicyOptions } from "@bitwarden/common/models/domain/
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
 
+/* Cozy imports */
+/* eslint-disable */
+import { CozyClientService } from "../../../../../../apps/browser/src/popup/services/cozyClient.service";
+/* eslint-enable */
+/* END */
 @Directive()
 export class GeneratorComponent implements OnInit {
   @Input() comingFromAddEdit = false;
@@ -41,7 +46,8 @@ export class GeneratorComponent implements OnInit {
     protected i18nService: I18nService,
     protected logService: LogService,
     protected route: ActivatedRoute,
-    private win: Window
+    private win: Window,
+    protected cozyClientService: CozyClientService,
   ) {
     this.typeOptions = [
       { name: i18nService.t("password"), value: "password" },
@@ -92,7 +98,11 @@ export class GeneratorComponent implements OnInit {
         this.usernameOptions.subaddressEmail == null ||
         this.usernameOptions.subaddressEmail === ""
       ) {
-        this.usernameOptions.subaddressEmail = await this.stateService.getEmail();
+        /** Cozy custo
+         this.usernameOptions.subaddressEmail = await this.stateService.getEmail();
+        */
+        this.usernameOptions.subaddressEmail = await this.cozyClientService.getUserEmail();
+        /** End custo */
       }
       if (this.usernameWebsite == null) {
         this.usernameOptions.subaddressType = this.usernameOptions.catchallType = "random";

@@ -71,6 +71,31 @@ app-generator .box-content-row:before {
   width: 100%;
 }
 
+// Cozy custo
+app-generator {
+  .inputWithIcon {
+    display: flex;
+    align-items: center;
+    .icon-cozy {
+      height: 12px;
+      margin-right: 10px;
+      cursor: pointer;
+      @include themify($themes) {
+        background-color: themed("mutedColor");
+      }
+    }
+  }
+}
+
+app-generator .box-content-row input[type=text]:not([name=""]) {
+  &:focus{
+    @include themify($themes) {
+      background-color: themed("borderColor") !important;
+    }
+  }
+}
+// end custo
+
 app-home {
   position: fixed;
   height: 100%;
@@ -194,7 +219,11 @@ app-vault-add-edit,
 app-generator,
 app-vault-attachments {
   .box {
+    /* Cozy custo
     margin: 15px 0 25px 0;
+    */
+    margin-top: 15px;
+    /* end custo */
 
     & + .box {
       margin-top: 25px;
