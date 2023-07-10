@@ -113,10 +113,18 @@ export class CozyClientService {
    * or null if some data are missing
    */
   async getPremiumLink() {
+    console.log("getPremiumLink()");
     const client = await this.getClientInstance();
     // retrieve manager_url &  enable_premium_links
     const { manager_url, enable_premium_links } = (
-      (await client.query(Q("io.cozy.settings").getById("context"))) as ExpectedContext
+      (await client.fetchQueryAndGetFromState({
+        definition: Q("io.cozy.settings").getById("context"),
+        options: {
+          as: `${"io.cozy.settings"}/io.cozy.settings.context`,
+          fetchPolicy: CozyClient.fetchPolicies.olderThan(5 * 60 * 1000),
+          singleDocData: true,
+        }
+      })) as ExpectedContext
     ).data.attributes;
     // retrieve uuid
     const instance = (await client.fetchQueryAndGetFromState({
