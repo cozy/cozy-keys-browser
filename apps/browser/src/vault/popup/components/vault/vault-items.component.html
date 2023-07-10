@@ -34,11 +34,7 @@
     </button>
   </div>
 </header>
-<!-- Cozy custo
 <main tabindex="-1" [ngClass]="{ 'stacked-boxes': showGroupings() }">
--->
-<main tabindex="-1" [ngClass]="{ 'stacked-boxes': showGroupings() }" class="with-banner">
-  <!-- end custo -->
   <ng-container *ngIf="showGroupings()">
     <!-- commented by cozy
     <app-vault-select
@@ -172,7 +168,4 @@
       </div>
     </cdk-virtual-scroll-viewport>
   </ng-container>
-  <!-- Cozy custo -->
-  <app-vault-premium-banner></app-vault-premium-banner>
-  <!-- end custo -->
 </main>
