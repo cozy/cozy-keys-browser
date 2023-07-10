@@ -44,7 +44,7 @@ export class TabsComponent implements OnInit, OnDestroy {
     private router: Router,
     private stateService: StateService,
     private broadcasterService: BroadcasterService,
-    private ngZone: NgZone,
+    private ngZone: NgZone
   ) {
     this.event$ = this.router.events
       .pipe(takeUntil(this.destroy$))

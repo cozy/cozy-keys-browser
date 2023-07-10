@@ -1,8 +1,11 @@
 <!-- Cozy custo
 <div class="tab-page" [@routerTransition]="getState(o)">
 -->
-<div [ngClass]="{'tab-page': true, 'with-banner': shouldDisplayPremiumNote()}" [@routerTransition]="getState(o)">
-<!-- end custo -->
+<div
+  [ngClass]="{ 'tab-page': true, 'with-banner': shouldDisplayPremiumNote() }"
+  [@routerTransition]="getState(o)"
+>
+  <!-- end custo -->
   <router-outlet #o="outlet"></router-outlet>
   <!-- Cozy custo - Premium banner -->
   <div *ngIf="shouldDisplayPremiumNote()" id="premium-banner">

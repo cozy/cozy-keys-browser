@@ -21,7 +21,6 @@ export class IdentityTokenResponse extends BaseResponse {
   clientId: string;
   registrationAccessToken: string;
 
-
   constructor(response: any) {
     super(response);
     this.accessToken = response.access_token;

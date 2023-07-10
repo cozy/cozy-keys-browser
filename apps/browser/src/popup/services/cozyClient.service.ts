@@ -113,7 +113,6 @@ export class CozyClientService {
    * or null if some data are missing
    */
   async getPremiumLink() {
-    console.log("getPremiumLink()");
     const client = await this.getClientInstance();
     // retrieve manager_url &  enable_premium_links
     const { manager_url, enable_premium_links } = (
@@ -123,7 +122,7 @@ export class CozyClientService {
           as: `${"io.cozy.settings"}/io.cozy.settings.context`,
           fetchPolicy: CozyClient.fetchPolicies.olderThan(5 * 60 * 1000),
           singleDocData: true,
-        }
+        },
       })) as ExpectedContext
     ).data.attributes;
     // retrieve uuid
@@ -172,7 +171,7 @@ export class CozyClientService {
   }
 
   async deleteOAuthClient() {
-    const {clientId, registrationAccessToken} = await this.stateService.getOauthTokens();
+    const { clientId, registrationAccessToken } = await this.stateService.getOauthTokens();
     if (!clientId || !registrationAccessToken) {
       return;
     }

@@ -222,13 +222,13 @@ export class BrowserStateService
     return (await this.getAccount(await this.defaultInMemoryOptions()))?.bannerClosedByUser;
   }
 
-  async getOauthTokens():Promise<{clientId:string, registrationAccessToken: string}> {
+  async getOauthTokens(): Promise<{ clientId: string; registrationAccessToken: string }> {
     const account = await this.getAccount(await this.defaultOnDiskLocalOptions());
     if (!account) {
       return;
     }
-    const {clientId, registrationAccessToken} = account.tokens;
-    return {clientId, registrationAccessToken};
+    const { clientId, registrationAccessToken } = account.tokens;
+    return { clientId, registrationAccessToken };
   }
   /* end custo */
 }
