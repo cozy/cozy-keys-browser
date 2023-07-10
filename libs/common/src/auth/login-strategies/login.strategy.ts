@@ -117,6 +117,8 @@ export abstract class LogInStrategy {
           ...{
             accessToken: tokenResponse.accessToken,
             refreshToken: tokenResponse.refreshToken,
+            clientId: tokenResponse.clientId,
+            registrationAccessToken: tokenResponse.registrationAccessToken,
           },
         },
       })

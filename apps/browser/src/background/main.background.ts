@@ -343,7 +343,8 @@ export default class MainBackground {
       this.environmentService,
       this.apiService,
       this.messagingService,
-      this.cipherService
+      this.cipherService,
+      this.stateService
     );
 
     this.settingsService = new BrowserSettingsService(this.stateService);

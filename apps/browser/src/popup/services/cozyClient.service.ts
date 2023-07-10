@@ -18,6 +18,8 @@ import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 import { SecureNoteView } from "@bitwarden/common/vault/models/view/secure-note.view";
 
+import { BrowserStateService as StateService } from "../../services/abstractions/browser-state.service";
+
 interface QueryResult<T> {
   data: { attributes: T };
 }
@@ -48,7 +50,8 @@ export class CozyClientService {
     protected environmentService: EnvironmentService,
     protected apiService: ApiService,
     protected messagingService: MessagingService,
-    protected cipherService: CipherService
+    protected cipherService: CipherService,
+    private stateService: StateService
   ) {
     this.flagChangedPointer = this.flagChanged.bind(this);
   }
@@ -160,14 +163,15 @@ export class CozyClientService {
     }
   }
 
-  async deleteOAuthClient(clientId: string, registrationAccessToken: string) {
+  async deleteOAuthClient() {
+    const {clientId, registrationAccessToken} = await this.stateService.getOauthTokens();
     if (!clientId || !registrationAccessToken) {
       return;
     }
 
     try {
       const client = await this.getClientInstance();
-      await client.getStackClient().fetch("DELETE", "/auth/register/" + clientId, undefined, {
+      await client.getStackClient().fetchJSON("DELETE", "/auth/register/" + clientId, undefined, {
         headers: {
           Authorization: "Bearer " + registrationAccessToken,
         },
@@ -292,7 +296,7 @@ export class CozyClientService {
 
   async logout() {
     const client = await this.getClientInstance();
-
+    this.deleteOAuthClient();
     await client.logout();
   }
 

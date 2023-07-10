@@ -134,7 +134,8 @@ const cozyClientService = new CozyClientService(
   getBgService<EnvironmentService>("environmentService")(),
   getBgService<ApiService>("apiService")(),
   cozyMessagingService,
-  getBgService<CipherService>("cipherService")()
+  getBgService<CipherService>("cipherService")(),
+  getBgService<StateServiceAbstraction>("stateService")()
 );
 export const cozySanitizeUrlService = new CozySanitizeUrlService();
 export const konnectorsService = new KonnectorsService(

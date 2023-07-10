@@ -52,5 +52,7 @@ export abstract class BrowserStateService extends BaseStateServiceAbstraction<Ac
   setBannerClosedByUser: (value: boolean) => Promise<void>;
 
   getBannerClosedByUser: () => Promise<boolean>;
+
+  getOauthTokens: () => Promise<{clientId:string, registrationAccessToken: string}>;
   //*/
 }
