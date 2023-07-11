@@ -448,6 +448,18 @@ li.active .icon-cozy-inline > svg {
   }
 }
 
+.icon-folder-for-sharing {
+  mask-image: url("../images/icon-sharing-folder.svg");
+  -webkit-mask-image: url("../images/icon-sharing-folder.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
 .icon-trash {
   mask-image: url("../images/icons-16-trash.svg");
   -webkit-mask-image: url("../images/icons-16-trash.svg");
