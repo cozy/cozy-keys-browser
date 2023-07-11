@@ -102,5 +102,14 @@ export class ShareComponent extends BaseShareComponent {
       BrowserApi.createNewTab("https://cozy.io/fr/pricing/");
     }
   }
+
+  moveToFolderDesc2() {
+    return this.i18nService.t("moveToFolderDesc2");
+  }
+
+  async openWebApp(e: any) {
+    e.preventDefault();
+    window.open(await this.cozyClientService.getAppURL("passwords", ""));
+  }
   /* end custo */
 }

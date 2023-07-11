@@ -66,11 +66,14 @@
           </div>
         </div>
         <div id="organizationHelp" class="box-footer-comment">
-          {{ "moveToFolderDesk" | i18n }}
+          {{ "moveToFolderDesc1" | i18n }}
         </div>
-        <div id="organizationHelp2" class="box-footer-comment">
-          {{ "moveToFolderDesk2" | i18n }}
-        </div>
+        <div
+          id="organizationHelp2"
+          class="box-footer-comment"
+          [innerHtml]="moveToFolderDesc2()"
+          (click)="openWebApp($event)"
+        ></div>
         <div id="organizationHelp3" class="box-footer-comment">
           <a (click)="openPremiumPage()" href="#">
             {{ "sharingPremiumLinkDesc" | i18n }}

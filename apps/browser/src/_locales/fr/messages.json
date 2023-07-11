@@ -807,11 +807,11 @@
   "moveToOrgDesc": {
     "message": "Choisissez une organisation vers laquelle vous souhaitez déplacer cet élément. Déplacer un élément vers une organisation transfère la propriété de l'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu'il aura été déplacé."
   },
-  "moveToFolderDesk": {
+  "moveToFolderDesc1": {
     "message": "Choisissez un dossier dans lequel vous souhaitez ranger cet élément."
   },
-  "moveToFolderDesk2": {
-    "message": "Partage : en sélectionnant un dossier partagé, vous pourrez ainsi transmettre cet élément de manière sécurisée à d'autres utilisateurs. Vous pouvez créer un dossier partagé en accédant à Cozy Pass depuis un navigateur web d'ordinateur."
+  "moveToFolderDesc2": {
+    "message": "<b>Partage</b> :</br>En sélectionnant un dossier partagé, vous pourrez ainsi transmettre cet élément de manière sécurisée à d'autres utilisateurs.</br>Vous pouvez créer un dossier partagé en accédant à <a href=''>Cozy Pass</a> depuis un navigateur web."
   },
   "sharingPremiumLinkDesc": {
     "message": "Voir les offres permettant le partage, et plus !"

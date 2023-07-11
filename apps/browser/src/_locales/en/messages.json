@@ -813,11 +813,11 @@
   "moveToOrgDesc": {
     "message": "Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved."
   },
-  "moveToFolderDesk": {
+  "moveToFolderDesc1": {
     "message": "Choose a folder in which to store this item."
   },
-  "moveToFolderDesk2": {
-    "message": "Tip: by selecting a shared folder, you will be able to transmit this item securely to other users. You can create a shared folder by accessing Cozy Pass from a computer web browser."
+  "moveToFolderDesc2": {
+    "message": "<b>Sharing</b>:</br>By selecting a shared folder, you will be able to transmit this item securely to other users.</br>You can create a shared folder by accessing <a href=''>Cozy Pass</a> from a computer web browser."
   },
   "sharingPremiumLinkDesc": {
     "message": "See plans with sharing, and more !"
