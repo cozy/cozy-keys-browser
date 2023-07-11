@@ -96,7 +96,12 @@ export class GeneratorComponent implements OnInit {
       }
       if (
         this.usernameOptions.subaddressEmail == null ||
+        /* Cozy Custo - manage "undefined" case
         this.usernameOptions.subaddressEmail === ""
+        */
+        this.usernameOptions.subaddressEmail === "" ||
+        this.usernameOptions.subaddressEmail === undefined
+        /* end custo */
       ) {
         /** Cozy custo
          this.usernameOptions.subaddressEmail = await this.stateService.getEmail();
