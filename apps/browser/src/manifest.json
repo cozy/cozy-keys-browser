@@ -103,7 +103,8 @@
     "images/icon38.png",
     "images/icon38_locked.png",
     "inPageMenu/menu.html",
-    "inPageMenu/loginMenu.html"
+    "inPageMenu/loginMenu.html",
+    "tensor/index.html"
   ],
   "applications": {
     "gecko": {

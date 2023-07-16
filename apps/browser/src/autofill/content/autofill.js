@@ -1,6 +1,6 @@
 import menuCtrler from './menuCtrler';
 import {BankServiceFactory} from './bank.service';
-const bankService = BankServiceFactory.createService()
+const bankService = BankServiceFactory.createService(true)
 !(function () {
   /*
   1Password Extension

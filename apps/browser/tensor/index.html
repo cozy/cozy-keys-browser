@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .testRow{
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      > img {
+        border: black 1px solid;
+        margin-right: 15px;
+      }
+    }
+  </style>
+
+  <title>TensorFlow.js Tutorial</title>
+
+  <!-- Import TensorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
+
+  <!-- Import tfjs-vis -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.0.2/dist/tfjs-vis.umd.min.js"></script>
+
+  <!-- Import the main script file -->
+  <script src="script.js" type="module"></script>
+
+</head>
+
+<body>
+  <div id="train-exemples">
+    <p>Exemple of data used for training</p>
+  </div>
+  <div id="test-container">
+    <p>Test the model</p>
+  </div>
+</body>
+</html>

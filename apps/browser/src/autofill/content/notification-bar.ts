@@ -309,7 +309,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
       // https://github.com/bitwarden/browser/commit/d19fcd6e4ccf062b595c2823267ffd32fd8e5a3d
 
       console.log("about to get bank name");
-      const bankService = BankServiceFactory.createService();
+      const bankService = BankServiceFactory.createService(false);
       console.log(bankService.getCurrentBankName())
       if (!bankService?.observeDomForBank(collect)) {
         console.log("observeDom trigered for GENERIC web page", document.location.href);

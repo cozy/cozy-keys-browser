@@ -122,6 +122,8 @@ let plugins = [
       { from: "./src/autofill/content/autofill.css", to: "content" },
       { from: "./src/content/notification.css", to: "content" },
       { from: "./src/inPageMenu/images", to: "inPageMenu/images" },
+      { from: "./src/tensor/models_for_dist", to: "tensor/models_for_dist" },
+      { from: "./src/tensor/", to: "tensor" },
     ],
   }),
   new MiniCssExtractPlugin({
@@ -184,6 +186,7 @@ const mainConfig = {
     "content/appInfo": "./src/content/appInfo.ts",
     "inPageMenu/menu": "./src/inPageMenu/menu.js",
     "inPageMenu/loginMenu": "./src/inPageMenu/loginMenu.js",
+    "tensor/model-wrapper": "./src/tensor/model-wrapper.ts",
   },
   optimization: {
     minimize: ENV !== "development",
