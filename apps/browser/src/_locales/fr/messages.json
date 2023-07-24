@@ -246,14 +246,17 @@
   "helpLink": {
     "message": "https://support.cozy.io/category/378-gestionnaire-de-mots-de-passe"
   },
+  "helpCenterCozy": {
+    "message": "Aide pour tout Cozy"
+  },
   "helpCenter": {
-    "message": "Bitwarden Help center"
+    "message": "Aide Cozy Pass"
   },
   "communityForums": {
-    "message": "Explore Bitwarden community forums"
+    "message": "Forums communautaire Cozy"
   },
   "contactSupport": {
-    "message": "Contact Bitwarden support"
+    "message": "Contactez nous"
   },
   "sync": {
     "message": "Synchroniser"

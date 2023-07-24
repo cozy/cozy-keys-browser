@@ -243,17 +243,20 @@
   "helpFeedback": {
     "message": "Help"
   },
-  "helpCenter": {
-    "message": "Cozy Help"
-  },
   "helpLink": {
     "message": "https://help.cozy.io/category/395-password-manager"
   },
+  "helpCenterCozy": {
+    "message": "Help for Cozy"
+  },
+  "helpCenter": {
+    "message": "Help for Cozy Pass"
+  },
   "communityForums": {
-    "message": "Explore Bitwarden community forums"
+    "message": "Cozy community forums"
   },
   "contactSupport": {
-    "message": "Contact Bitwarden support"
+    "message": "Contact Cozy support"
   },
   "sync": {
     "message": "Sync"

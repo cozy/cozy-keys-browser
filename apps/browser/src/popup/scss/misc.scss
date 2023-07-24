@@ -319,11 +319,11 @@ li.active .icon-cozy-inline > svg {
   fill: $brand-primary;
 }
 
-.icon.text-primary .icon-cozy {
-  @include themify($themes) {
-    background-color: themed("primaryColor");
-  }
-}
+// .icon.text-primary .icon-cozy {
+//   @include themify($themes) {
+//     background-color: themed("primaryColor");
+//   }
+// }
 
 .icon-pen {
   mask-image: url("../images/icons-16-icon-pen.svg");
@@ -410,6 +410,12 @@ li.active .icon-cozy-inline > svg {
 
 .icon-key {
   background-image: url("../images/icons-16-icon-key.svg");
+}
+
+.icon-cozy-round {
+  background-image: url("../images/icon-cozy-round.svg");
+  width: 25px;
+  height: 25px;
 }
 
 .icon-search {
@@ -507,6 +513,62 @@ li.active .icon-cozy-inline > svg {
   -webkit-mask-repeat: no-repeat;
   mask-size: contain;
   -webkit-mask-size: contain;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-cozy-smile {
+  mask-image: url("../images/icon-cozy-smile.svg");
+  -webkit-mask-image: url("../images/icon-cozy-smile.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  width: 25px;
+  height: 25px;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-chat {
+  mask-image: url("../images/icon-chat.svg");
+  -webkit-mask-image: url("../images/icon-chat.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  width: 25px;
+  height: 25px;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-email {
+  mask-image: url("../images/icon-email.svg");
+  -webkit-mask-image: url("../images/icon-email.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  width: 25px;
+  height: 25px;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-pass {
+  mask-image: url("../images/icon-pass.svg");
+  -webkit-mask-image: url("../images/icon-pass.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  width: 25px;
+  height: 25px;
   @include themify($themes) {
     background-color: themed("headerInputPlaceholderColor");
   }
