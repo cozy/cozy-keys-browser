@@ -136,11 +136,13 @@ export class CozyClientService {
     })) as ExpectedInstance;
     const uuid = instance.data.attributes?.uuid;
     // build offer url on the cloudery
-    const offersLink =
-      enable_premium_links && manager_url && uuid
-        ? `${manager_url}/cozy/instances/${uuid}/premium`
-        : null;
-    return offersLink;
+    if (enable_premium_links && manager_url && uuid) {
+      const managerUrl = new URL(manager_url)
+      managerUrl.pathname = `/cozy/instances/${uuid}/premium`
+      return managerUrl.toString();
+    } else {
+      return null;
+    }
   }
 
   /**
