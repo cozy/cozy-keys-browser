@@ -70,7 +70,7 @@
     <app-callout *ngIf="showHowToAutofill" type="info" title="{{ 'howToAutofill' | i18n }}">
       <div class="icon-cozy-inline">
         <p>
-          {{ autofillCalloutText }}
+          {{ autofillCalloutText[0] }}
           <span>
             <svg
               width="16"
@@ -86,6 +86,7 @@
               />
             </svg>
           </span>
+          {{ autofillCalloutText[1] }}
         </p>
       </div>
       <!-- end custo -->

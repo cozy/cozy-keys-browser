@@ -61,7 +61,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   isLoading = false;
   showOrganizations = false;
   showHowToAutofill = false;
-  autofillCalloutText: string;
+  autofillCalloutText: string[] = ["", ""];
   protected search$ = new Subject<void>();
   private destroy$ = new Subject<void>();
 
@@ -380,11 +380,21 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   }
 
   private setAutofillCalloutText(command: string) {
+    /* Cozy custo
     if (command) {
       this.autofillCalloutText = this.i18nService.t("autofillSelectInfoWithCommand", command);
     } else {
       this.autofillCalloutText = this.i18nService.t("autofillSelectInfoWithoutCommand");
     }
+    */
+    let trans;
+    if (command) {
+      trans = this.i18nService.t("autofillSelectInfoWithCommand", command);
+    } else {
+      trans = this.i18nService.t("autofillSelectInfoWithoutCommand");
+    }
+    this.autofillCalloutText = trans.split(" ✨ ");
+    /* end custo  */
   }
 
   // Cozy custo

@@ -2253,10 +2253,10 @@
     "message": "Your organization policies have turned on auto-fill on page load."
   },
   "howToAutofill": {
-    "message": "How to auto-fill"
+    "message": "Did you know ?"
   },
   "autofillSelectInfoWithCommand": {
-    "message": "You can use your shortcut \"$COMMAND$\" or click on this icon : ",
+    "message": "Click on ✨ below to fill in the current web page with one click ($COMMAND$)",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2265,7 +2265,7 @@
     }
   },
   "autofillSelectInfoWithoutCommand": {
-    "message": "Just press this icon : "
+    "message": "Click on ✨ below to fill in the current web page with one click"
   },
   "gotIt": {
     "message": "Got it"

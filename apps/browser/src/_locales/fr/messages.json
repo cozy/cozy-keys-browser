@@ -2316,10 +2316,10 @@
     }
   },
   "howToAutofill": {
-    "message": "Comment saisir automatiquement"
+    "message": "Le saviez-vous ?"
   },
   "autofillSelectInfoWithCommand": {
-    "message": "Vous pouvez utiliser votre raccourcis \"$COMMAND$\" ou cliquer sur l'icone : ",
+    "message": "Cliquez sur ✨ ci-dessous pour remplir d'un clic la page web courante ($COMMAND$)",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2328,7 +2328,7 @@
     }
   },
   "autofillSelectInfoWithoutCommand": {
-    "message": "Simplement cliquez sur l'icone : "
+    "message": "Cliquez sur ✨ ci-dessous pour remplir d'un clic la page web courante"
   },
   "gotIt": {
     "message": "Compris"
