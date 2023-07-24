@@ -265,26 +265,21 @@ export class KonnectorsService {
     }
     this.kOrgPromise = this.stateService
       .getKonnectorsOrganization()
-      .then((kOrganisationFromState) => {
+      .then(async (kOrganisationFromState) => {
         if (kOrganisationFromState) {
           this.konnectorsOrg = kOrganisationFromState;
           return this.konnectorsOrg;
         }
-        return this.cozyClientService
-          .getClientInstance()
-          .then((client) => {
-            return client
-              .getStackClient()
-              .fetchJSON("GET", "/data/io.cozy.settings/io.cozy.settings.bitwarden");
-          })
-          .then(async (settings: any) => {
-            this.konnectorsOrg = {
-              organizationId: settings.organization_id,
-              collectionId: settings.collection_id,
-            };
-            this.stateService.setKonnectorsOrganization(this.konnectorsOrg);
-            return this.konnectorsOrg;
-          });
+        const client = await this.cozyClientService.getClientInstance();
+        const settings = await client
+          .getStackClient()
+          .fetchJSON("GET", "/data/io.cozy.settings/io.cozy.settings.bitwarden");
+        this.konnectorsOrg = {
+          organizationId: settings.organization_id,
+          collectionId: settings.collection_id,
+        };
+        this.stateService.setKonnectorsOrganization(this.konnectorsOrg);
+        return this.konnectorsOrg;
       });
     return this.kOrgPromise;
   }
