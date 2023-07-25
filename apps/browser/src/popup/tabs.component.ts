@@ -34,8 +34,9 @@ export class TabsComponent implements OnInit, OnDestroy {
   protected destroy$ = new Subject<void>();
 
   /* cozy custo */
-  static showBanner = false;
-  static closedByUser = false;
+  static showBanner: boolean = undefined;
+  static closedByUser: boolean = undefined;
+  static isVaultTooOld: boolean = undefined;
   /* end custo */
 
   constructor(
@@ -74,8 +75,10 @@ export class TabsComponent implements OnInit, OnDestroy {
         }
       });
     });
-    TabsComponent.closedByUser = await this.stateService.getBannerClosedByUser();
-    this.refreshBanner();
+    if (TabsComponent.showBanner === undefined) {
+      TabsComponent.closedByUser = await this.stateService.getBannerClosedByUser();
+      this.refreshBanner();
+    }
   }
 
   ngOnDestroy() {
@@ -103,11 +106,14 @@ export class TabsComponent implements OnInit, OnDestroy {
   /* Cozy custo - premium banner code */
 
   async refreshBanner() {
-    const vaultCreationDate = await this.cozyClientService.getVaultCreationDate();
-    const limitDate = new Date(Date.now() - 21 * (3600 * 1000 * 24));
+    if (TabsComponent.isVaultTooOld === undefined) {
+      const vaultCreationDate = await this.cozyClientService.getVaultCreationDate();
+      const limitDate = new Date(Date.now() - 21 * (3600 * 1000 * 24));
+      TabsComponent.isVaultTooOld = vaultCreationDate < limitDate;
+    }
     TabsComponent.showBanner =
       !flag("passwords.can-share-organizations") &&
-      vaultCreationDate < limitDate &&
+      TabsComponent.isVaultTooOld &&
       !TabsComponent.closedByUser;
   }
 
