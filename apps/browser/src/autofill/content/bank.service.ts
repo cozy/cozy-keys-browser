@@ -48,9 +48,14 @@ class BankService_test extends BaseBankService implements BankServiceInterface {
 
 
 /***********************************************************/
- // BankService for CAISSEDEPARGNE - WIP - needs OCR
+ // BankService for all banks of BPCE group :
+ //   * CAISSEDEPARGNE
+ //   * banquepopulaire
+ //   * créditfoncier
+ //   * créditcooperatif
+ //   * banquepalatine
 /****/
-class BankService_caissedepargne extends BaseBankService implements BankServiceInterface {
+class BankService_BPCE_group extends BaseBankService implements BankServiceInterface {
 
   private buttonElements: NodeList;
   private correspondanceTable = new Array<number>(10);
@@ -259,7 +264,11 @@ export class BankServiceFactory {
       case "boursorama":
         return new BankService_boursorama();
       case "caissedepargne":
-        return new BankService_caissedepargne(initOcr);
+      case "banquepopulaire":
+      case "créditfoncier":
+      case "créditcooperatif":
+      case "banquepalatine":
+        return new BankService_BPCE_group(initOcr);
       case "lcl":
         return new BankService_lcl();
     }
@@ -289,8 +298,12 @@ export const getCurrentBankName = (): string => {
   if (document.location.href === "bnp") {
     CURRENT_BANK_NAME = 'bnp'
   }
+  // banquepalatine
+  if (document.location.href === "https://www.icgauth.epalatine.fr/se-connecter/mot-de-passe") {
+    CURRENT_BANK_NAME = 'banquepalatine'
+  }
   // banquepopulaire
-  if (document.location.href === "banquepopulaire") {
+  if (document.location.href === "https://www.banquepopulaire.fr/se-connecter/mot-de-passe") {
     CURRENT_BANK_NAME = 'banquepopulaire'
   }
   // banquepostale
@@ -298,9 +311,6 @@ export const getCurrentBankName = (): string => {
     CURRENT_BANK_NAME = 'banquepostale'
   }
   // boursorama
-  if (document.location.href === "boursorama") {
-    CURRENT_BANK_NAME = 'boursorama'
-  }
   if (document.location.href === "https://clients.boursorama.com/connexion/saisie-mot-de-passe" ) {
     CURRENT_BANK_NAME = "boursorama";
   }
@@ -312,9 +322,17 @@ export const getCurrentBankName = (): string => {
   if (document.location.href === "https://www.caisse-epargne.fr/se-connecter/mot-de-passe") {
     CURRENT_BANK_NAME = 'caissedepargne'
   }
+  // créditcooperatif
+  if (document.location.href === "https://www.credit-cooperatif.coop/se-connecter/identifier") {
+    CURRENT_BANK_NAME = 'créditcooperatif'
+  }
   // créditdunord
   if (document.location.href === "créditdunord") {
     CURRENT_BANK_NAME = 'créditdunord'
+  }
+  // créditfoncier
+  if (document.location.href === "https://www.icgauth.creditfoncier.fr/se-connecter/mot-de-passe") {
+    CURRENT_BANK_NAME = 'créditfoncier'
   }
   // creditmutuel
   if (document.location.href === "creditmutuel") {
