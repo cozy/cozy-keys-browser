@@ -15,7 +15,7 @@ const CTX = CANVAS.getContext('2d');
 let TRAIN_EXEMPLES_CONTAINER;
 
 /**
- * A class that
+ * A class that prepare data (`load()`) and prepare batches of data (for training or test)
  */
 export class LearnData {
   constructor() {
@@ -39,7 +39,6 @@ export class LearnData {
         const img = new Image();
         const imgRequest = new Promise((resolve, reject) => {
           img.onload = () => {
-            console.log("onload");
             TRAIN_EXEMPLES_CONTAINER.appendChild(img)
             // prepare datasetBytesView to manipulate datasetBytesBuffer.
             // need 4 bytes for each pixel

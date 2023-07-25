@@ -11,6 +11,9 @@ class BaseBankService {
   getCurrentBankName(){
     return CURRENT_BANK_NAME;
   }
+  observeDomForBank(collectFunction: any): boolean{
+    return false;
+  }
 }
 
 let CURRENT_BANK_NAME: string;
@@ -24,18 +27,12 @@ class BankService_test extends BaseBankService implements BankServiceInterface {
 
   observeDomForBank(collectFunction: any): boolean{
     setTimeout(() => {
-      console.log("observeDomForBank ! ! ! ! ");
       collectFunction();
     }, 5000);
     return true;
   }
 
-  getCurrentBankName(): string{
-    return CURRENT_BANK_NAME;
-  }
-
   async typeOnKeyboard(codeToType: string, isARecall = false): Promise<void>{
-    console.log("typeOnKeyboard()", CURRENT_BANK_NAME , codeToType)
     if (codeToType === "" ) { return }
     const key = codeToType.charAt(0);
     await playKeySound(key);
@@ -79,10 +76,6 @@ class BankService_caissedepargne extends BaseBankService implements BankServiceI
     })
   }
 
-  observeDomForBank(collectFunction: any): boolean{
-    return false;
-  }
-
   getBankKeyboarMenudEl(): HTMLElement{
     // console.log("getBankKeyboarMenudEl", document.querySelector("as-row-circles-password"));
     return document.querySelector("as-row-circles-password");
@@ -119,7 +112,6 @@ class BankService_caissedepargne extends BaseBankService implements BankServiceI
   }
 
   async typeOnKeyboard(codeToType: string, isARecall = false): Promise<void>{
-    console.log("typeOnKeyboard", CURRENT_BANK_NAME, codeToType);
     if (codeToType === "" ) { return }
     if (!isARecall) {
       this.buttonElements = document.querySelectorAll("as-keyboard-button > button");
@@ -152,13 +144,10 @@ class BankService_caissedepargne extends BaseBankService implements BankServiceI
 class BankService_lcl extends BaseBankService implements BankServiceInterface {
 
   observeDomForBank(collectFunction: any): boolean{
-    console.log("observeDom trigered for LCL !!! web page", document.location.href);
     const observer = new MutationObserver((mutations) => {
-      console.log("LCL dom mutations in", mutations)
       for (let i = 0; i < mutations.length; i++) {
         const target = mutations[i].target;
         if ((target as HTMLElement).className === "pad-code") {
-          console.log("DOM MUTATIONS VALIDATED => collect()");
           collectFunction();
           observer.disconnect();
           break;
@@ -173,12 +162,7 @@ class BankService_lcl extends BaseBankService implements BankServiceInterface {
     return document.querySelector(".pad-code");
   }
 
-  getCurrentBankName(): string{
-    return CURRENT_BANK_NAME;
-  }
-
   async typeOnKeyboard(codeToType: string, isARecall = false): Promise<void>{
-    console.log("typeOnKeyboard", CURRENT_BANK_NAME, codeToType);
     if (codeToType === "" ) { return }
     if (!isARecall) {
       if (document.querySelector(".pad-dot.is-filled")) {
@@ -214,16 +198,8 @@ class BankService_boursorama extends BaseBankService implements BankServiceInter
   private correspondanceTable = new Array<number>(10);
   private keyImageHashes:{ [index: string]: number } = {"0":-1961266208,"1":1806502122,"2":383789923,"3":-1617329400,"4":-323759857,"5":-2028372521,"6":1483506720,"7":927833434,"8":269012712,"9":1964989521}
 
-  observeDomForBank(collectFunction: any): boolean{
-    return false;
-  }
-
   getBankKeyboarMenudEl(): HTMLElement{
     return document.querySelector("[data-id='form_fakePassword']");
-  }
-
-  getCurrentBankName(): string{
-    return CURRENT_BANK_NAME;
   }
 
   buildCorrespondanceTable() {
@@ -242,7 +218,6 @@ class BankService_boursorama extends BaseBankService implements BankServiceInter
   }
 
   async typeOnKeyboard(codeToType: string, isARecall = false): Promise<void>{
-    console.log("typeOnKeyboard", CURRENT_BANK_NAME, codeToType);
     if (codeToType === "" ) { return }
     if (!isARecall) {
       this.buttonElements = document.querySelectorAll(".password-input button");
@@ -292,6 +267,11 @@ export class BankServiceFactory {
 }
 
 
+
+/***********************************************************/
+ // return the bank name of the current web page
+ // (undefined if not a bank)
+/****/
 export const getCurrentBankName = (): string => {
 
   // console.log("getCurrentBankName", document.location.href);
@@ -374,6 +354,8 @@ export const getCurrentBankName = (): string => {
   // console.log("bank.service.currentBankName =", currentBankName);
   return CURRENT_BANK_NAME;
 }
+
+
 
 /***********************************************************/
  // Simple hash function only used for comparing images

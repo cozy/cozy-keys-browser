@@ -19,7 +19,6 @@ const DO_TRAIN       = false;
  * main
  */
 async function run() {
-  console.log("run()");
   TEST_CONTAINER = document.querySelector("#test-container")
 
   DATA = new LearnData();
@@ -105,8 +104,7 @@ async function saveModelJson(model) {
         'Content-Type': 'application/json'
     },
     body: jsonStr
-  })
-  .then(response => console.log(response.status))
+  });
   return jsonStr;
 }
 
@@ -234,7 +232,6 @@ async function train(model, data) {
   };
   const fitCallbacks = () => {
     tfvis.show.fitCallbacks(container, metrics)();
-    console.log("fitCallbacks end !");
   }
 
   const BATCH_SIZE = 4;
@@ -256,7 +253,6 @@ async function train(model, data) {
       d.labels
     ];
   });
-  console.log("start fit");
   return model.fit(trainXs, trainYs, {
     batchSize: BATCH_SIZE,
     validationData: [testXs, testYs],
@@ -271,7 +267,6 @@ async function train(model, data) {
  * run tests
  */
 function doPrediction(model, data, testDataSize = 500) {
-  console.log('doPrediction()');
   const testData = data.nextTestBatch(testDataSize);
   const testxs = testData.xs.reshape([testDataSize, IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNELS]);
   const labels = testData.labels.argMax(-1);

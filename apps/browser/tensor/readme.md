@@ -1,7 +1,7 @@
 
 Steps to produce a new model with somme training data :
 * run `node server.js`
-* add data in bank-key-images.js
+* add data in bank-key-images.js (see how it is used in `data.js`)
 * in `script.js` : modify the value "DO_TRAIN" in order to
   * train the model against data
   * or just to reuse last computed model
@@ -13,4 +13,4 @@ Documentation
 * le [tuto officiel qui a servie de modèle](https://codelabs.developers.google.com/codelabs/tfjs-training-classfication?hl=fr#0)
 
 Things to know :
-* index-ori.html : the tensor flow tutorial
+* index-ori.html : the original tensor flow tutorial

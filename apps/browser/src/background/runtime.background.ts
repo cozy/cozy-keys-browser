@@ -88,22 +88,15 @@ export default class RuntimeBackground {
 
   async processMessage(msg: any, sender: chrome.runtime.MessageSender, sendResponse: any) {
     /*
-      Cozy custo : this log is very useful for reverse engineering the code, keep it for tests
-      console.log('runtime.background PROCESS MESSAGE ', {
-          'command': msg.subcommand ? msg.subcommand : msg.command,
-          'sender': msg.sender + ' of ' +
-          (sender.url ? (new URL(sender.url)).host + ' frameId:' + sender.frameId : sender),
-          'full.msg': msg,
-          'full.sender': sender,
-      });
-      */
-     console.log('runtime.background PROCESS MESSAGE ', {
-         'command': msg.subcommand ? msg.subcommand : msg.command,
-         'sender': msg.sender + ' of ' +
-         (sender.url ? (new URL(sender.url)).host + ' frameId:' + sender.frameId : sender),
-         'full.msg': msg,
-         'full.sender': sender,
-     });
+    Cozy custo : this log is very useful for reverse engineering the code, keep it for tests
+    console.log('runtime.background PROCESS MESSAGE ', {
+        'command': msg.subcommand ? msg.subcommand : msg.command,
+        'sender': msg.sender + ' of ' +
+        (sender.url ? (new URL(sender.url)).host + ' frameId:' + sender.frameId : sender),
+        'full.msg': msg,
+        'full.sender': sender,
+    });
+    */
     switch (msg.command) {
       case "loggedIn":
       case "unlocked": {
@@ -321,7 +314,6 @@ export default class RuntimeBackground {
         if (!enableInPageMenu) {
           break;
         }
-        console.log("t1");
         const fieldsForInPageMenuScripts = await this.autofillService.generateFieldsForInPageMenuScripts(
           msg.pageDetails,
           false,
@@ -354,7 +346,6 @@ export default class RuntimeBackground {
       case "bgGetAutofillMenuScript": {
         // If goes here : means that addon has just been connected (page was already loaded)
         const activateMenu = async () => {
-          console.log("t2");
           const script = await this.autofillService.generateFieldsForInPageMenuScripts(
             msg.details,
             true,
@@ -380,8 +371,6 @@ export default class RuntimeBackground {
       case "collectPageDetailsResponse":
         switch (msg.sender) {
           case "notificationBar": {
-            console.log("t3.0");
-
             /* auttofill.js sends the page details requested by the notification bar.
                 Result will be used by both the notificationBar and for the inPageMenu.
                 inPageMenu requires a fillscrip to know wich fields are relevant for the menu and which
@@ -397,8 +386,6 @@ export default class RuntimeBackground {
             if (enableInPageMenu) {
               // If goes here : means that the page has just been loaded while addon was already connected
               // get scripts for logins, cards and identities
-              console.log("t3");
-
               const fieldsForAutofillMenuScripts =
                 await this.autofillService.generateFieldsForInPageMenuScripts(
                   msg.details,
@@ -408,8 +395,6 @@ export default class RuntimeBackground {
               // get script for existing logins.
               // the 4 scripts (existing logins, logins, cards and identities) will be sent
               // to autofill.js by autofill.service
-              console.log("fieldsForAutofillMenuScripts :");
-              console.log(fieldsForAutofillMenuScripts);
               try {
                 await this.autofillService.doAutoFillActiveTab(
                   [

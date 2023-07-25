@@ -48,8 +48,6 @@ chrome.storage.local.get("global", (resp: any) => {
 /* END Cozy custo  */
 
 document.addEventListener("DOMContentLoaded", (event) => {
-  console.log("DOMContentLoaded", document.location.href);
-
   if (window.location.hostname.endsWith("vault.bitwarden.com")) {
     return;
   }
@@ -144,11 +142,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   function processMessages(msg: any, sendResponse: (response?: any) => void) {
     /*
-        @override by Cozy :
-        This log is very useful for reverse engineer the code, keep it for tests
-        console.log('notificationBar.js HEARD MESSAGE : ', {'msg.command': msg.command,'msg': msg});
+      @override by Cozy :
+      This log is useful for tests
+      console.log('notificationBar.js HEARD MESSAGE : ', {'msg.command': msg.command,'msg': msg});
     */
-      //  console.log('notificationBar.js HEARD MESSAGE : ', {'msg.command': msg.command,'msg': msg});
     if (msg.command === "openNotificationBar") {
       if (inIframe) {
         return;
@@ -203,7 +200,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
         // https://secure.fnac.com/identity/server/gateway/signin-signup )
         if (mutations == null || mutations.length === 0 || pageHref !== window.location.href) {
         */
-       console.log("dom mutations in", document.location.href);
 
         if (mutations == null || mutations.length === 0 || !shouldTrigerMenu()) {
           /* end custo */
@@ -301,19 +297,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
       }
       observeDomTimeout = window.setTimeout(observeDom, 1000);
       */
-      if (shouldTrigerMenu()) {
-        collect();
+     if (shouldTrigerMenu()) {
+       collect();
       }
       // The DOM might change during the collect: watch the DOM body for changes.
       // Note: a setTimeout was present here, apparently related to the autofill:
       // https://github.com/bitwarden/browser/commit/d19fcd6e4ccf062b595c2823267ffd32fd8e5a3d
-
-      console.log("about to get bank name");
+      // In case of a webpage of a bank, run a specific `observeDom`
       const bankService = BankServiceFactory.createService(false);
-      console.log(bankService.getCurrentBankName())
-      if (!bankService?.observeDomForBank(collect)) {
-        console.log("observeDom trigered for GENERIC web page", document.location.href);
-        observeDom();
+      if (!bankService?.observeDomForBank(collect)) { // try observeDom for a bank web page"
+        observeDom(); // if not, then trigger observeDom for GENERIC web page
       }
 
       /* end custo */

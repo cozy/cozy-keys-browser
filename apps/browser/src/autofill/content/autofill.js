@@ -50,7 +50,6 @@ const bankService = BankServiceFactory.createService(true)
   */
 
   function collect(document, undefined) {
-      console.log('collect !');
       // START MODIFICATION
       var isFirefox = navigator.userAgent.indexOf('Firefox') !== -1 || navigator.userAgent.indexOf('Gecko/') !== -1;
       // END MODIFICATION
@@ -302,7 +301,6 @@ const bankService = BankServiceFactory.createService(true)
           var theForms = Array.prototype.slice.call(queryDoc(theDoc, 'form')).map(function (formEl, elIndex) {
               var op = {},
                   formOpId = '__form__' + elIndex;
-              console.log("formEl.opid =", elIndex)
 
               formEl.opid = formOpId;
               op.opid = formOpId;
@@ -328,7 +326,6 @@ const bankService = BankServiceFactory.createService(true)
               }
 
               theDoc.elementsByOPID[opId] = el;
-              // console.log("el.opid =", opId)
               el.opid = opId;
               field.opid = opId;
               field.elementNumber = elIndex;
@@ -452,25 +449,6 @@ const bankService = BankServiceFactory.createService(true)
               el.blur();
               el.value !== elValue && (el.value = elValue);
           });
-
-          // // check if we are in a special page (banks for  instance) in order to
-          // // inject special fields
-          // console.log("est on bien dans le cas boursorama ? ", theDoc.location.host);
-          // // if (theDoc.location.host === 'clients.boursorama.com') {
-          // if (theDoc.location.href === "http://localhost:3333/T04.0-Login-bank-keyboard.html") {
-          //   console.log("on est bien dans le cas boursorama");
-          //   // const keysEl = theDoc.querySelector(".pad-keys"); // LCL rule
-          //   // const keysEl = theDoc.querySelector(".password-input"); // boursorama rule
-          //   const keysEl = theDoc.querySelector(".keyboard"); // rule page de test
-          //   keysEl.opid = "__bkKeyboard_"
-          //   theDoc.elementsByOPID[keysEl.opid] = keysEl;
-          //   const field = {
-          //     type : "bankKeyboardField",
-          //     opid : keysEl.opid,
-
-          //   }
-          //   theFields.push(field);
-          // }
 
           // build out the page details object. this is the final result
           var pageDetails = {
@@ -734,24 +712,12 @@ const bankService = BankServiceFactory.createService(true)
           } catch (e) { }
 
           // check if we are in a special page (banks for  instance) in order to
-          // inject special fields
-          console.log("est on bien dans le cas banque ?? ", theDoc.location.host);
-          // if (theDoc.location.host === 'clients.boursorama.com') {
+          // inject special fields for this bank
           const keyboardEl = bankService?.getBankKeyboarMenudEl(theDoc)
           if (keyboardEl) {
             keyboardEl.isBankKeyboardEl = true;
             els.push(keyboardEl);
           }
-          console.log(els);
-          // if (theDoc.location.href === "http://localhost:3333/T04.0-Login-bank-keyboard.html") {
-          //   console.log("on est bien dans le cas boursorama");
-          //   // const keysEl = theDoc.querySelector(".pad-keys"); // LCL rule
-          //   // const keysEl = theDoc.querySelector(".password-input"); // boursorama rule
-          //   // const keysEl = theDoc.querySelector(".keyboard"); // rule page de test
-          //   const keyboardEl = theDoc.querySelector(".keyboard");
-          //   keyboardEl.isBankKeyboardEl = true;
-          //   els.push(keyboardEl);
-          // }
 
           if (!limit || els.length <= limit) {
               return els;
@@ -932,7 +898,6 @@ const bankService = BankServiceFactory.createService(true)
           simple_set_value_by_query: doSimpleSetByQuery,
           focus_by_opid: doFocusByOpId,
           add_menu_btn_by_opid:addMenuBtnByOpId, // Cozy custo
-          add_bankKeyboard_menu_by_opid: addBankKeyboardMenuByOpId,
           fill_bankKeyboard_menu_by_opid: fillBankKeyboardMenuByOpId,
           delay: null
       };
@@ -954,16 +919,8 @@ const bankService = BankServiceFactory.createService(true)
       }
 
       // type on the bank keyboard
-      function addBankKeyboardMenuByOpId(opId, op) {
-        console.log("addBankKeyboardMenuByOpId(opId, op)", opId, op)
-
-      }
-
-      // type on the bank keyboard
       function fillBankKeyboardMenuByOpId(opId, op) {
-        console.log("fillBankKeyboardMenuByOpId(opId, op)", opId, op)
         const el = getBankElementByOpId(opId)
-        // const getKeyboardKeysElements = getKeyboardKeysElements(el)
         bankService.typeOnKeyboard(op)
 
       }
@@ -1327,7 +1284,6 @@ const bankService = BankServiceFactory.createService(true)
 */
 
       function runLoginMenuFillScript(fillScript) {
-        console.log("runLoginMenuFillScript(fillScript)", fillScript);
         fillScript.script.forEach((action) => {
           if (action[0] === 'add_menu_btn_by_opid') {
             const el = getElementByOpId(action[1])
@@ -1348,23 +1304,13 @@ const bankService = BankServiceFactory.createService(true)
 
       for (let fillScript of fillScripts) {
           switch (fillScript.type) {
-              // case 'existingLoginFieldsForInPageMenuScript': // TODO BJA : à supprimer ?
-              //     doFill(fillScript);
-              //     break;
               case 'loginFieldsForInPageMenuScript':
-                  // if (fillScripts[0].type !== 'existingLoginFieldsForInPageMenuScript') {
-                      // if the first fillScript is for an existing login cipher, then do not activate menu
-                      // for a generic login
-                      runLoginMenuFillScript(fillScript);
-                  // }
+                  runLoginMenuFillScript(fillScript);
                   break;
               case 'cardFieldsForInPageMenuScript':
               case 'identityFieldsForInPageMenuScript':
                   runLoginMenuFillScript(fillScript);
                   break;
-
-              //     runLoginMenuFillScript(fillScript);
-              //     break;
               default:
                   doFill(fillScript);
                   break;
@@ -1390,13 +1336,6 @@ const bankService = BankServiceFactory.createService(true)
             "heard in": document.location.pathname
         });
         */
-      //  console.log('autofil.js HEARD : ', {
-      //      'command': msg.command,
-      //      'subcommand': msg.subcommand,
-      //      'sender': sender.url ? new URL(sender.url).pathname : sender,
-      //      "msg": msg,
-      //      "heard in": document.location.pathname
-      //  });
       if (msg.command === 'notificationBarPageDetails') return
       /* end custo */
 
