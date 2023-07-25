@@ -48,6 +48,57 @@ class BankService_test extends BaseBankService implements BankServiceInterface {
 
 
 /***********************************************************/
+ // BankService for creditagricole
+/****/
+class BankService_creditagricole extends BaseBankService implements BankServiceInterface {
+
+  private correspondanceTable = new Array<number>(10);
+
+  private keysElements: NodeList;
+
+  getBankKeyboarMenudEl(): HTMLElement{
+    return document.querySelector("#clavier_num");
+  }
+
+  buildCorrespondanceTable() {
+    // iterate on current keyboard to find the correspondance table
+    this.keysElements = document.querySelectorAll(".Login-keypad .Login-key div");
+    this.keysElements.forEach( (div: HTMLElement, keyIndex: number) => {
+      this.correspondanceTable[parseInt(div.textContent)] = keyIndex;
+    });
+  }
+
+  async typeOnKeyboard(codeToType: string, isARecall = false): Promise<void>{
+    if (codeToType === "" ) { return }
+    if (!isARecall) {
+      this.buildCorrespondanceTable();
+      // check if there are some keys already typed
+      const currentlyTypedInput = document.querySelector("input#Login-password") as HTMLInputElement;
+      if ( currentlyTypedInput.value !== "") {
+        (document.querySelector(".add-clear-span span") as HTMLButtonElement).click();
+        await playKeySound("A", 50);
+        setTimeout( () => { // just wait for the page to delete preiously typed password
+          this.typeOnKeyboard(codeToType, true);
+        }, 200);
+      } else {
+        this.typeOnKeyboard(codeToType, true);
+      }
+    } else {
+      // find key element and click on it
+      const key = codeToType.charAt(0)
+      const keyEl = (this.keysElements[this.correspondanceTable[parseInt(key)]] as HTMLButtonElement);
+      keyEl.style.cssText = "background: #3b51d5; color: #f0f3ff;"
+      keyEl.click();
+      await playKeySound(key);
+      this.typeOnKeyboard(codeToType.slice(1), true);
+      keyEl.style.cssText = "";
+    }
+  }
+}
+
+
+
+/***********************************************************/
  // BankService for all banks of BPCE group :
  //   * CAISSEDEPARGNE
  //   * banquepopulaire
@@ -260,7 +311,6 @@ export class BankServiceFactory {
     switch (currentBankName) {
       case "test":
         return new BankService_test();
-        default:
       case "boursorama":
         return new BankService_boursorama();
       case "caissedepargne":
@@ -271,6 +321,8 @@ export class BankServiceFactory {
         return new BankService_BPCE_group(initOcr);
       case "lcl":
         return new BankService_lcl();
+      case "cagricole":
+        return new BankService_creditagricole();
     }
   }
 }
@@ -315,7 +367,9 @@ export const getCurrentBankName = (): string => {
     CURRENT_BANK_NAME = "boursorama";
   }
   // cagricole
-  if (document.location.href === "cagricole") {
+  const firstIndex = document.location.href.indexOf("https://www.credit-agricole.fr/");
+  const secondIndex = document.location.href.indexOf("/particulier/acceder-a-mes-comptes.html");
+  if (firstIndex === 0 && secondIndex > 0) {
     CURRENT_BANK_NAME = 'cagricole'
   }
   // caissedepargne
