@@ -48,6 +48,59 @@ class BankService_test extends BaseBankService implements BankServiceInterface {
 
 
 /***********************************************************/
+ // BankService for banquepostale
+/****/
+class BankService_banquepostale extends BaseBankService implements BankServiceInterface {
+
+  private correspondanceTable = new Array<number>(10);
+
+  private keysElements: NodeList;
+
+  getBankKeyboarMenudEl(): HTMLElement{
+    return document.querySelector(".tb-container-cvdPsw");
+  }
+
+  buildCorrespondanceTable() {
+    // iterate on current keyboard to find the correspondance table
+    this.keysElements = document.querySelectorAll("[data-tb-cvd-id=password] button");
+    this.keysElements.forEach( (button: HTMLButtonElement, keyIndex: number) => {
+      this.correspondanceTable[parseInt(button.textContent)] = keyIndex;
+    });
+  }
+
+  async typeOnKeyboard(codeToType: string, isARecall = false): Promise<void>{
+    if (codeToType === "" ) { return }
+    if (!isARecall) {
+      const isKeyboardInHiddenElmt = !!document.querySelector(".ecran .tb-volet-hidden [data-tb-form-id='motdepasse']")
+      if (isKeyboardInHiddenElmt) { return }
+      this.buildCorrespondanceTable();
+      // check if there are some keys already typed
+      const selectedPuce = document.querySelector(".tb-container-cvdPsw .--select") as HTMLInputElement;
+      if (selectedPuce) {
+        (document.querySelector("#reset-password button") as HTMLButtonElement).click();
+        await playKeySound("A", 50);
+        setTimeout( () => { // just wait for the page to delete preiously typed password
+          this.typeOnKeyboard(codeToType, true);
+        }, 200);
+      } else {
+        this.typeOnKeyboard(codeToType, true);
+      }
+    } else {
+      // find key element and click on it
+      const key = codeToType.charAt(0)
+      const keyEl = (this.keysElements[this.correspondanceTable[parseInt(key)]] as HTMLButtonElement);
+      keyEl.style.cssText = "background: #3b51d5; color: #f0f3ff;"
+      keyEl.click();
+      await playKeySound(key);
+      this.typeOnKeyboard(codeToType.slice(1), true);
+      keyEl.style.cssText = "";
+    }
+  }
+}
+
+
+
+/***********************************************************/
  // BankService for creditagricole
 /****/
 class BankService_creditagricole extends BaseBankService implements BankServiceInterface {
@@ -110,7 +163,6 @@ class BankService_BPCE_group extends BaseBankService implements BankServiceInter
 
   private buttonElements: NodeList;
   private correspondanceTable = new Array<number>(10);
-  private keyImageHashes:{ [index: string]: number } = {};
   private iframePromise: Promise<void>;
 
   constructor(initOcr?: boolean) {
@@ -311,6 +363,8 @@ export class BankServiceFactory {
     switch (currentBankName) {
       case "test":
         return new BankService_test();
+      case "banquepostale":
+        return new BankService_banquepostale();
       case "boursorama":
         return new BankService_boursorama();
       case "caissedepargne":
@@ -359,7 +413,7 @@ export const getCurrentBankName = (): string => {
     CURRENT_BANK_NAME = 'banquepopulaire'
   }
   // banquepostale
-  if (document.location.href === "banquepostale") {
+  if (document.location.hostname === "voscomptesenligne.labanquepostale.fr") {
     CURRENT_BANK_NAME = 'banquepostale'
   }
   // boursorama

@@ -1,5 +1,6 @@
 import menuCtrler from './menuCtrler';
 import {BankServiceFactory} from './bank.service';
+console.log("cozy : autofill init ! ! ! for href", document.location.href);
 const bankService = BankServiceFactory.createService(true)
 !(function () {
   /*
@@ -713,7 +714,7 @@ const bankService = BankServiceFactory.createService(true)
 
           // check if we are in a special page (banks for  instance) in order to
           // inject special fields for this bank
-          const keyboardEl = bankService?.getBankKeyboarMenudEl(theDoc)
+          const keyboardEl = bankService?.getBankKeyboarMenudEl(theDoc);
           if (keyboardEl) {
             keyboardEl.isBankKeyboardEl = true;
             els.push(keyboardEl);
