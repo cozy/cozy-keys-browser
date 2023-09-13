@@ -1,16 +1,12 @@
 #!/bin/bash
 
-cd apps/browser
+# move to script directory and then to project root
+cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null
+cd ..
+
 # Create cozy-keys archive
-git archive HEAD -o dist/cozy-keys.zip .
-# Create jslib archive
-zip -r dist/jslib.zip jslib
-cd dist
-# Merge both archives into one
-unzip -d tmp -o -u cozy-keys.zip
-unzip -d tmp -o -u jslib.zip
-cd tmp; zip -D -r ../sources.zip .; cd ..
-# Cleanup
-rm jslib.zip
-rm cozy-keys.zip
-rm -r tmp
+git archive HEAD -o apps/browser/dist/cozy-keys.zip .
+cd apps/browser/dist/
+zip --delete cozy-keys.zip apps/web*
+zip --delete cozy-keys.zip apps/desktop*
+zip --delete cozy-keys.zip apps/cli*
