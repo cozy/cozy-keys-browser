@@ -23,7 +23,9 @@ The Cozy browser extension is written using the Web Extension API and Angular. I
 ## Build for developement
 
 ```sh
+cd ../..        # run install from project root
 npm install --legacy-peer-deps
+cd apps/browser # run from this directory
 npm run start
 # In watch mode, you can run a command - for instance to play a sound - by personalizing the `webpack.announcer.plugin.js`
 ```
@@ -69,7 +71,7 @@ npm run dist
 In case you need to create an archive of the source code, which can be required for an add-on submission on some platforms:
 
 ```sh
-npm run dist:sources
+npm run dist:sources # sources will be in `dist/cozy-keys-sources.zip`
 ```
 
 ## Desktop communication
