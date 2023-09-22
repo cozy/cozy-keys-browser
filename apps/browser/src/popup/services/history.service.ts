@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
 
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+
 import { BrowserApi } from "../../browser/browserApi";
 import { BrowserStateService as StateService } from "../../services/browser-state.service";
 
@@ -84,6 +86,15 @@ export class HistoryService {
       return;
     }
     this.hist = retrievedData.hist;
+    // if in last url in history is a "/generator", then simulate an AddEditCipherInfo (it has been
+    // deleted when closing the popup)
+    if (this.hist[0].startsWith("/generator")) {
+      await this.stateService.setAddEditCipherInfo({
+        cipher: new CipherView(),
+        collectionIds:[]
+      });
+    }
+
   }
 
   setLoggedOutHistory() {

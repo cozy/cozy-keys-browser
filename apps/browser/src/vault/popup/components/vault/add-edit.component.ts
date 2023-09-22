@@ -293,7 +293,10 @@ export class AddEditComponent extends BaseAddEditComponent {
     if (confirmed) {
       await this.saveCipherState();
       // save cipher state in url for when popup will be closed.
-      this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, ...this.cipher });
+      this.historyService.saveTempCipherInHistory({
+        initialPwd: this.initialPwd,
+        cipher: this.cipher,
+      });
       this.router.navigate(["generator"], { queryParams: { type: "username" } });
     }
     return confirmed;
@@ -304,7 +307,10 @@ export class AddEditComponent extends BaseAddEditComponent {
     if (confirmed) {
       await this.saveCipherState();
       // save cipher state in url for when popup will be closed.
-      this.historyService.saveTempCipherInHistory({ initialPwd: this.initialPwd, ...this.cipher });
+      this.historyService.saveTempCipherInHistory({
+        initialPwd: this.initialPwd,
+        cipher: this.cipher,
+      });
       this.router.navigate(["generator"], { queryParams: { type: "password" } });
     }
     return confirmed;
