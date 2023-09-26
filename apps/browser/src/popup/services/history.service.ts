@@ -91,10 +91,9 @@ export class HistoryService {
     if (this.hist[0].startsWith("/generator")) {
       await this.stateService.setAddEditCipherInfo({
         cipher: new CipherView(),
-        collectionIds:[]
+        collectionIds: [],
       });
     }
-
   }
 
   setLoggedOutHistory() {

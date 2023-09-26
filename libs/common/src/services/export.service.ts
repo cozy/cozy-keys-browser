@@ -182,7 +182,6 @@ export class ExportService implements ExportServiceAbstraction {
       });
 
       decCiphers.forEach((c) => {
-
         /* commented by cozy
         // The default BW is to exclude ciphers that have an organizationId. But in Cozy, ciphers created
         // in harvest or by the stack (via migration script for example) are shared with the cozy organization.
