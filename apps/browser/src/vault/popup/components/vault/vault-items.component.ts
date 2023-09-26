@@ -427,8 +427,8 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     }
   }
 
-  async openWebApp() {
-    window.open(await this.cozyClientService.getAppURL("passwords", ""));
+  openWebApp() {
+    window.open(this.cozyClientService.getAppURL("passwords", ""));
   }
 
   emptySearch() {

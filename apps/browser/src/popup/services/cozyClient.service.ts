@@ -105,6 +105,7 @@ export class CozyClientService {
     this.instance = new CozyClient({ uri: uri, token: token });
     this.instance.registerPlugin(flag.plugin, undefined);
     this.registerFlags();
+    await this.getSubDomainType();
     return this.instance;
   }
 
@@ -191,11 +192,10 @@ export class CozyClientService {
     }
   }
 
-  async getAppURL(appName: string, hash: string) {
+  getAppURL(appName: string, hash: string) {
     if (!appName) {
       return new URL(this.getCozyURL()).toString();
     }
-    const subDomain = await this.getSubDomainType();
     const cozyURL = this.getCozyURL();
     const link = generateWebLink({
       cozyUrl: cozyURL,
@@ -203,7 +203,7 @@ export class CozyClientService {
       pathname: "",
       hash: hash,
       slug: appName,
-      subDomainType: subDomain,
+      subDomainType: subDomainType,
     });
 
     return link;
@@ -213,11 +213,10 @@ export class CozyClientService {
    * Returns true if appUrl points the currently connected cozy.
    * even if the appUrl points to a specific app (nested of flat urls)
    */
-  async correspondsToConnectedCozyURL(appUrl: string): Promise<boolean> {
+  correspondsToConnectedCozyURL(appUrl: string): boolean {
     const appURL = new URL(appUrl);
-    const subDomain = await this.getSubDomainType();
     const currentCozyURL = new URL(this.getCozyURL());
-    if (subDomain === "nested") {
+    if (subDomainType === "nested") {
       //remove first subdomain if there is one more than on the Cozy (would be an app nested domain)
       const currentCozyURLHosts = currentCozyURL.host.split(".");
       let appUrlHosts = appURL.host.split(".");
@@ -267,7 +266,7 @@ export class CozyClientService {
       }
       // test that the cipher url realy matches the user's Cozy url
       for (const u of c.login.uris) {
-        if (await this.correspondsToConnectedCozyURL(u.uri)) {
+        if (this.correspondsToConnectedCozyURL(u.uri)) {
           ciphers.push(c);
           break;
         }

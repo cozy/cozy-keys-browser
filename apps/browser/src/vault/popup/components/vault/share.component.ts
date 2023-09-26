@@ -107,9 +107,9 @@ export class ShareComponent extends BaseShareComponent {
     return this.i18nService.t("moveToFolderDesc2");
   }
 
-  async openWebApp(e: any) {
+  openWebApp(e: any) {
     e.preventDefault();
-    window.open(await this.cozyClientService.getAppURL("passwords", ""));
+    window.open(this.cozyClientService.getAppURL("passwords", ""));
   }
   /* end custo */
 }

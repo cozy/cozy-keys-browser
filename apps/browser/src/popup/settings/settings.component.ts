@@ -342,7 +342,7 @@ export class SettingsComponent implements OnInit {
     );
     if (confirmed) {
       BrowserApi.createNewTab(
-        await this.cozyClientService.getAppURL("settings", "/profile/password")
+        this.cozyClientService.getAppURL("settings", "/profile/password")
       );
     }
   }

@@ -412,8 +412,8 @@ export class ViewComponent extends BaseViewComponent {
     return fullAdress;
   }
 
-  async openWebApp() {
+  openWebApp() {
     const hash = "/vault?action=view&cipherId=" + this.cipherId;
-    window.open(await this.cozyClientService.getAppURL("passwords", hash));
+    window.open(this.cozyClientService.getAppURL("passwords", hash));
   }
 }

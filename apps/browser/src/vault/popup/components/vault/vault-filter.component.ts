@@ -557,8 +557,8 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     this.search(50);
   }
 
-  async openWebApp() {
-    window.open(await this.cozyClientService.getAppURL("passwords", ""));
+  openWebApp() {
+    window.open(this.cozyClientService.getAppURL("passwords", ""));
   }
 
   back() {

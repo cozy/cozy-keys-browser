@@ -402,8 +402,8 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     this.historyService.gotoPreviousUrl();
   }
 
-  async openWebApp() {
-    window.open(await this.cozyClientService.getAppURL("passwords", ""));
+  openWebApp() {
+    window.open(this.cozyClientService.getAppURL("passwords", ""));
   }
   // end custo
 }
