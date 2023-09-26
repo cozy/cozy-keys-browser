@@ -147,9 +147,14 @@ export class ExportService implements ExportServiceAbstraction {
         if (c.type !== CipherType.Login && c.type !== CipherType.SecureNote) {
           return;
         }
+        /* commented by cozy
+        // The default BW is to exclude ciphers that have an organizationId. But in Cozy, ciphers created
+        // in harvest or by the stack (via migration script for example) are shared with the cozy organization.
+        // These ciphers are still the user's ownership. So we want to include all ciphers in exported data.
         if (c.organizationId != null) {
           return;
         }
+        */
 
         const cipher: any = {};
         cipher.folder =
@@ -177,9 +182,15 @@ export class ExportService implements ExportServiceAbstraction {
       });
 
       decCiphers.forEach((c) => {
+
+        /* commented by cozy
+        // The default BW is to exclude ciphers that have an organizationId. But in Cozy, ciphers created
+        // in harvest or by the stack (via migration script for example) are shared with the cozy organization.
+        // These ciphers are still the user's ownership. So we want to include all ciphers in exported data.
         if (c.organizationId != null) {
           return;
         }
+        */
         const cipher = new CipherExport();
         cipher.build(c);
         cipher.collectionIds = null;

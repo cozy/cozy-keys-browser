@@ -55,7 +55,7 @@ import { EncryptServiceImplementation } from "@bitwarden/common/services/cryptog
 import { MultithreadEncryptServiceImplementation } from "@bitwarden/common/services/cryptography/multithread-encrypt.service.implementation";
 import { EventCollectionService } from "@bitwarden/common/services/event/event-collection.service";
 import { EventUploadService } from "@bitwarden/common/services/event/event-upload.service";
-// import { ExportService } from "@bitwarden/common/services/export.service";
+import { ExportService } from "@bitwarden/common/services/export.service";
 import { FileUploadService } from "@bitwarden/common/services/fileUpload.service";
 import { MemoryStorageService } from "@bitwarden/common/services/memoryStorage.service";
 import { NotificationsService } from "@bitwarden/common/services/notifications.service";
@@ -129,7 +129,6 @@ import WebRequestBackground from "./webRequest.background";
 import { ApiService } from "../services/api.service";
 import { CipherService } from "../popup/services/cipher.service";
 import { CozyClientService } from "../popup/services/cozyClient.service";
-import { ExportService } from "../services/export.service";
 import { KonnectorsService } from "../popup/services/konnectors.service";
 import { MessagingService as MessagingServiceAbstraction } from "../services/abstractions/messaging.service";
 import { SyncService } from "../popup/services/sync.service";
