@@ -58,19 +58,31 @@
           </div>
         </div>
       </div>
-      <!-- Cozy custo -->
-      <div class="content">
-        <button class="btn primary block" type="submit" appBlurClick>{{ "unlock" | i18n }}</button>
-      </div>
-      <!-- end custo -->
+      <!-- Cozy custo
       <div id="masterPasswordHelp" class="box-footer">
         <p>{{ "yourVaultIsLocked" | i18n }}</p>
         {{ "loggedInAsOn" | i18n: email:webVaultHostname }}
-        <!-- Cozy custo -->
-        <a href="#" appStopClick (click)="logOut()">{{ "logOut" | i18n }}.</a>
-        <p class=""></p>
-        <!-- end custo -->
       </div>
+      -->
+      <div class="content">
+        <button class="btn primary block" type="submit" appBlurClick>{{ "unlock" | i18n }}</button>
+      </div>
+      <div id="masterPasswordHelp" class="box-footer" class="text-center" *ngIf="!pinLock">
+        <p>{{ "loggedInAsOn" | i18n: webVaultHostname }}</p>
+        <p class="">
+          <a href="#" appStopClick (click)="logOut()">{{ "logOut" | i18n }}.</a>
+        </p>
+      </div>
+      <div id="masterPasswordHelp" class="box-footer" class="text-center" *ngIf="pinLock">
+        <p>
+          {{ "yourVaultIsPinLocked" | i18n }}
+          <a href="#" appStopClick (click)="logOut()"
+            >{{ "pinLogOut" | i18n: webVaultHostname }}.</a
+          >
+          {{ "yourVaultIsPinLocked2" | i18n }}
+        </p>
+      </div>
+      <!-- end custo -->
     </div>
     <div class="box" *ngIf="biometricLock">
       <div class="box-footer no-pad">

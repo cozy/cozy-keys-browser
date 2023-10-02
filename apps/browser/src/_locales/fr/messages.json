@@ -207,6 +207,14 @@
   "logOut": {
     "message": "Se déconnecter"
   },
+  "pinLogOut": {
+    "message": "déconnectez vous du Cozy $ACCOUNT$",
+    "placeholders": {
+      "account": {
+        "content": "$1"
+      }
+    }
+  },
   "about": {
     "message": "À propos"
   },
@@ -413,18 +421,20 @@
   "yourVaultIsLocked": {
     "message": "Votre coffre est verrouillé. Vérifiez votre identité pour continuer."
   },
+  "yourVaultIsPinLocked": {
+    "message": "En cas d'oublie de votre code PIN, "
+  },
+  "yourVaultIsPinLocked2": {
+    "message": " puis ré-authentifiez vous."
+  },
   "unlock": {
     "message": "Déverrouiller"
   },
   "loggedInAsOn": {
-    "message": "Connecté en tant que $EMAIL$ sur $HOSTNAME$.",
+    "message": "Connecté au Cozy $HOSTNAME$",
     "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "name@example.com"
-      },
       "hostname": {
-        "content": "$2",
+        "content": "$1",
         "example": "mycozy.cloud"
       }
     }
@@ -619,7 +629,7 @@
     }
   },
   "newUri": {
-    "message": "Nouveau domaine à exclure"
+    "message": "Nouvelle adresse internet"
   },
   "addedItem": {
     "message": "Élément ajouté"
@@ -1544,7 +1554,7 @@
     "message": "Déverrouiller avec un code PIN"
   },
   "setYourPinCode": {
-    "message": "Définissez votre code PIN pour déverrouiller Cozy. Les paramètres relatifs à votre code PIN seront réinitialisés si vous vous déconnectez complètement de l'application."
+    "message": "Définissez votre code PIN de déverrouillage. Ce code PIN sera désactivé si vous vous déconnectez."
   },
   "pinRequired": {
     "message": "Le code PIN est requis."
