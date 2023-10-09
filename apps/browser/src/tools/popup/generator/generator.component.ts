@@ -1,5 +1,9 @@
 import { Location } from "@angular/common";
+/* Cozy custo
 import { Component } from "@angular/core";
+*/
+import { Component, ElementRef, ViewChild } from "@angular/core";
+/* end custo */
 import { ActivatedRoute } from "@angular/router";
 
 import { GeneratorComponent as BaseGeneratorComponent } from "@bitwarden/angular/tools/generator/components/generator.component";
@@ -15,6 +19,7 @@ import { AddEditCipherInfo } from "@bitwarden/common/vault/types/add-edit-cipher
 /* Cozy imports */
 /* eslint-disable */
 import { HistoryService } from "../../../popup/services/history.service";
+import { CozyClientService } from "../../../popup/services/cozyClient.service";
 /* eslint-enable */
 /* END */
 
@@ -26,6 +31,8 @@ export class GeneratorComponent extends BaseGeneratorComponent {
   private addEditCipherInfo: AddEditCipherInfo;
   private cipherState: CipherView;
 
+  @ViewChild("emailInput") emailInputElement: ElementRef;
+
   constructor(
     passwordGenerationService: PasswordGenerationServiceAbstraction,
     usernameGenerationService: UsernameGenerationServiceAbstraction,
@@ -35,7 +42,8 @@ export class GeneratorComponent extends BaseGeneratorComponent {
     route: ActivatedRoute,
     logService: LogService,
     private location: Location,
-    private historyService: HistoryService
+    private historyService: HistoryService,
+    protected cozyClientService: CozyClientService
   ) {
     super(
       passwordGenerationService,
@@ -45,7 +53,8 @@ export class GeneratorComponent extends BaseGeneratorComponent {
       i18nService,
       logService,
       route,
-      window
+      window,
+      cozyClientService
     );
   }
 
@@ -79,5 +88,20 @@ export class GeneratorComponent extends BaseGeneratorComponent {
     */
     this.historyService.gotoPreviousUrl();
     /* end custo */
+  }
+
+  emailHasFocus = false;
+
+  focusEmail() {
+    if (this.emailHasFocus) {
+      this.emailHasFocus = false;
+    } else {
+      this.emailInputElement.nativeElement.focus();
+    }
+  }
+  unFocusEmail() {
+    setTimeout(() => {
+      this.emailHasFocus = false;
+    }, 300);
   }
 }

@@ -9,18 +9,25 @@
     <h1 class="center">
       <span class="title">{{ "exportVault" | i18n }}</span>
     </h1>
+    <!-- Cozy custo
     <div class="right">
       <button type="submit" [disabled]="!exportForm.enabled">
         {{ "submit" | i18n }}
       </button>
+    -->
+    <div class="right solid">
+      <!-- end custo -->
     </div>
   </header>
   <main tabindex="-1">
+    <!-- Cozy Custo
     <app-callout type="warning" title="{{ 'vaultExportDisabled' | i18n }}" *ngIf="disabledByPolicy">
       {{ "personalVaultExportPolicyInEffect" | i18n }}
     </app-callout>
     <app-export-scope-callout *ngIf="!disabledByPolicy"></app-export-scope-callout>
-
+    -->
+    <div class="empty-top"></div>
+    <!-- end custo -->
     <div class="box">
       <div class="box-content">
         <div class="box-content-row" appBoxRow>
@@ -36,5 +43,20 @@
         <p>{{ "confirmIdentity" | i18n }}</p>
       </div>
     </div>
+    <!-- Cozy custo -->
+    <div class="box list">
+      <div class="box-content single-line">
+        <button type="submit" appstopclick="" appblurclick="" class="box-content-row">
+          <div class="row-main text-danger">
+            <div aria-hidden="true" class="icon text-danger">
+              <i class="icon-cozy icon-download"></i>
+              <i class="bwi bwi-spinner bwi-spin bwi-lg bwi-fw" hidden=""></i>
+            </div>
+            <span>{{ "exportVault" | i18n }}</span>
+          </div>
+        </button>
+      </div>
+    </div>
+    <!-- end custo -->
   </main>
 </form>

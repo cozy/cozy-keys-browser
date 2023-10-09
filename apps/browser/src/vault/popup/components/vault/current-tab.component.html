@@ -61,7 +61,7 @@
   <div class="no-items" *ngIf="!loaded">
     <i class="bwi bwi-spinner bwi-spin bwi-3x" aria-hidden="true"></i>
   </div>
-  <ng-container *ngIf="loaded">
+  <div *ngIf="loaded">
     <!-- Cozy custo
     <app-vault-select (onVaultSelectionChanged)="load()"></app-vault-select>
     <app-callout *ngIf="showHowToAutofill" type="info" title="{{ 'howToAutofill' | i18n }}">
@@ -70,7 +70,7 @@
     <app-callout *ngIf="showHowToAutofill" type="info" title="{{ 'howToAutofill' | i18n }}">
       <div class="icon-cozy-inline">
         <p>
-          {{ autofillCalloutText }}
+          {{ autofillCalloutText[0] }}
           <span>
             <svg
               width="16"
@@ -86,6 +86,7 @@
               />
             </svg>
           </span>
+          {{ autofillCalloutText[1] }}
         </p>
       </div>
       <!-- end custo -->
@@ -115,7 +116,7 @@
           *ngFor="let loginCipher of loginCiphers"
           [cipher]="loginCipher"
           title="{{ 'viewItem' | i18n }}"
-          [showView]="true"
+          [showView]="false"
           (onSelected)="viewCipher($event)"
           (onView)="viewCipher($event)"
           (onAutofill)="fillCipher(loginCipher)"
@@ -141,7 +142,7 @@
           *ngFor="let cardCipher of cardCiphers"
           [cipher]="cardCipher"
           title="{{ 'viewItem' | i18n }}"
-          [showView]="true"
+          [showView]="false"
           (onSelected)="viewCipher($event)"
           (onView)="viewCipher($event)"
           (onAutofill)="fillCipher(cardCipher)"
@@ -168,7 +169,7 @@
           *ngFor="let identityCipher of identityCiphers"
           [cipher]="identityCipher"
           title="{{ 'viewItem' | i18n }}"
-          [showView]="true"
+          [showView]="false"
           (onSelected)="viewCipher($event)"
           (onView)="viewCipher($event)"
           (onAutofill)="fillCipher(identityCipher)"
@@ -186,5 +187,5 @@
         <!-- end custo -->
       </div>
     </div>
-  </ng-container>
+  </div>
 </main>

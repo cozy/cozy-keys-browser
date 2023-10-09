@@ -5,6 +5,7 @@ import { Account } from "../../models/account";
 import { BrowserComponentState } from "../../models/browserComponentState";
 import { BrowserGroupingsComponentState } from "../../models/browserGroupingsComponentState";
 import { BrowserSendComponentState } from "../../models/browserSendComponentState";
+import { KonnectorsOrg } from "../../models/konnectorsOrganization";
 
 export abstract class BrowserStateService extends BaseStateServiceAbstraction<Account> {
   getBrowserGroupingComponentState: (
@@ -43,5 +44,15 @@ export abstract class BrowserStateService extends BaseStateServiceAbstraction<Ac
   setHistoryState: (value: string) => Promise<void>;
 
   getHistoryState: () => Promise<string>;
+
+  setKonnectorsOrganization: (value: KonnectorsOrg) => Promise<void>;
+
+  getKonnectorsOrganization: () => Promise<KonnectorsOrg>;
+
+  setBannerClosedByUser: (value: boolean) => Promise<void>;
+
+  getBannerClosedByUser: () => Promise<boolean>;
+
+  getOauthTokens: () => Promise<{ clientId: string; registrationAccessToken: string }>;
   //*/
 }

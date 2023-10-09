@@ -12,9 +12,9 @@ app-generator .generated-block {
   font-size: $font-size-large;
   font-family: $font-family-sans-serif;
   margin: 8px;
+  /* Cozy custo
   padding: 8px 10px 8px 0;
   display: flex;
-  /* Cozy custo
   border-radius: $border-radius;
   border: 1px solid;
 
@@ -23,6 +23,8 @@ app-generator .generated-block {
     border-color: themed("borderColorAlt");
   }
   */
+  padding: 8px 10px 8px 15px;
+  display: flex;
   box-sizing: border-box;
   border-radius: 0.188rem;
   border: 0.063rem solid $gray;
@@ -68,6 +70,31 @@ app-generator .generated-block {
 app-generator .box-content-row:before {
   width: 100%;
 }
+
+// Cozy custo
+app-generator {
+  .inputWithIcon {
+    display: flex;
+    align-items: center;
+    .icon-cozy {
+      height: 12px;
+      margin-right: 10px;
+      cursor: pointer;
+      @include themify($themes) {
+        background-color: themed("mutedColor");
+      }
+    }
+  }
+}
+
+app-generator .box-content-row input[type="text"]:not([name=""]) {
+  &:focus {
+    @include themify($themes) {
+      background-color: themed("borderColor") !important;
+    }
+  }
+}
+// end custo
 
 app-home {
   position: fixed;
@@ -192,7 +219,11 @@ app-vault-add-edit,
 app-generator,
 app-vault-attachments {
   .box {
+    /* Cozy custo
     margin: 15px 0 25px 0;
+    */
+    margin-top: 15px;
+    /* end custo */
 
     & + .box {
       margin-top: 25px;
@@ -205,3 +236,50 @@ app-vault-share {
     padding: 45px 20px 0 20px;
   }
 }
+
+/* Cozy custo */
+
+app-help-and-feedback .box-content {
+  padding-top: 25px;
+}
+
+#premium-banner {
+  width: 100%;
+  position: absolute;
+  bottom: 55px;
+  z-index: 1;
+  flex: 0;
+  > div {
+    padding: 4px 0 11px 0;
+    @include themify($themes) {
+      background-color: themed("backgroundColor");
+    }
+  }
+
+  .close-premium {
+    margin-right: 15px;
+    display: block;
+    margin-left: auto;
+    .icon-cross-premium {
+      width: 10px;
+      height: 10px;
+      @include themify($themes) {
+        background-color: themed("mutedColor");
+      }
+    }
+  }
+
+  p {
+    text-align: center;
+    @include themify($themes) {
+      color: themed("mutedColor");
+    }
+    font-size: 13px;
+    margin-bottom: 0;
+  }
+}
+
+.with-banner main {
+  bottom: 110px;
+}
+/* end custo */

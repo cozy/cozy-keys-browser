@@ -22,9 +22,12 @@ The Cozy browser extension is written using the Web Extension API and Angular. I
 
 ## Build for developement
 
-```
+```sh
+cd ../..        # run install from project root
 npm install --legacy-peer-deps
+cd apps/browser # run from this directory
 npm run start
+# In watch mode, you can run a command - for instance to play a sound - by personalizing the `webpack.announcer.plugin.js`
 ```
 
 You can now load the extension into your browser through the browser's extension tools page:
@@ -39,19 +42,26 @@ You can now load the extension into your browser through the browser's extension
 
 ## Production build
 
-Production builds can be created for each browser with the following commands:
-Out of the box, the desktop application can only communicate with the production browser extension. When you enable browser integration in the desktop application, the application generates manifests which contain the production IDs of the browser extensions. To enable communication between the desktop application and development versions of browser extensions, add the development IDs to the `allowed_extensions` section of the corresponding manifests.
+Before building the addon, you can run tests and prettier :
 
+```sh
+npm run lint      # audit lint
+npm run prettier  # repair lint
+npm run test      # run tests
 ```
+
+Production builds can be created for each browser with the following commands:
+
+```sh
 npm install
-npm run dist:<firefox|chrome|opera|safari>`
+npm run dist:<firefox|chrome|opera|safari>
 ```
 
 Manifests are located in the `browser` subdirectory of the Bitwarden configuration directory. For instance, on Windows the manifests are located at `C:\Users\<user>\AppData\Roaming\Bitwarden\browsers` and on macOS these are in `Application Support` for various browsers ([for example](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#manifest_location)). Note that disabling the desktop integration will delete the manifests, and the files will need to be updated again.
 
 You can also build all of them in once by running:
 
-```
+```sh
 npm install
 npm run dist
 ```
@@ -60,8 +70,8 @@ npm run dist
 
 In case you need to create an archive of the source code, which can be required for an add-on submission on some platforms:
 
-```
-npm run dist:sources
+```sh
+npm run dist:sources # sources will be in `dist/cozy-keys-sources.zip`
 ```
 
 ## Desktop communication

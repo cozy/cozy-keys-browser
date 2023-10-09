@@ -9,6 +9,7 @@ import { Account } from "../models/account";
 import { BrowserComponentState } from "../models/browserComponentState";
 import { BrowserGroupingsComponentState } from "../models/browserGroupingsComponentState";
 import { BrowserSendComponentState } from "../models/browserSendComponentState";
+import { KonnectorsOrg } from "../models/konnectorsOrganization";
 
 import { BrowserStateService as StateServiceAbstraction } from "./abstractions/browser-state.service";
 
@@ -193,6 +194,41 @@ export class BrowserStateService
 
   async getHistoryState(): Promise<string> {
     return (await this.getAccount(await this.defaultInMemoryOptions()))?.history;
+  }
+
+  async getKonnectorsOrganization(): Promise<KonnectorsOrg> {
+    return (await this.getAccount(await this.defaultInMemoryOptions()))?.konnectorsOrganization;
+  }
+
+  async setKonnectorsOrganization(value: KonnectorsOrg): Promise<void> {
+    const account = await this.getAccount(await this.defaultInMemoryOptions());
+    if (!account) {
+      return;
+    }
+    account.konnectorsOrganization = value;
+    await this.saveAccount(account, await this.defaultInMemoryOptions());
+  }
+
+  async setBannerClosedByUser(value: boolean) {
+    const account = await this.getAccount(await this.defaultInMemoryOptions());
+    if (!account) {
+      return;
+    }
+    account.bannerClosedByUser = value;
+    await this.saveAccount(account, await this.defaultInMemoryOptions());
+  }
+
+  async getBannerClosedByUser() {
+    return (await this.getAccount(await this.defaultInMemoryOptions()))?.bannerClosedByUser;
+  }
+
+  async getOauthTokens(): Promise<{ clientId: string; registrationAccessToken: string }> {
+    const account = await this.getAccount(await this.defaultOnDiskLocalOptions());
+    if (!account) {
+      return;
+    }
+    const { clientId, registrationAccessToken } = account.tokens;
+    return { clientId, registrationAccessToken };
   }
   /* end custo */
 }

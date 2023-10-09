@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { UntypedFormControl } from "@angular/forms";
 import { Router } from "@angular/router";
-import { generateWebLink, Q } from "cozy-client";
+import { generateWebLink } from "cozy-client";
 import Swal from "sweetalert2";
 
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -324,6 +324,12 @@ export class SettingsComponent implements OnInit {
     );
     if (confirmed) {
       this.messagingService.send("logout");
+      setTimeout(() => {
+        // for security reasons the addon will be relaoded at logout.
+        // In order to avoid blinking experience we immediately close the popup.
+        // https://github.com/bitwarden/clients/issues/3166
+        window.close();
+      }, 300);
     }
   }
 
@@ -335,7 +341,9 @@ export class SettingsComponent implements OnInit {
       this.i18nService.t("cancel")
     );
     if (confirmed) {
-      BrowserApi.createNewTab(this.cozyClientService.getAppURL("settings", "/profile/password"));
+      BrowserApi.createNewTab(
+        await this.cozyClientService.getAppURL("settings", "/profile/password")
+      );
     }
   }
 
@@ -371,22 +379,16 @@ export class SettingsComponent implements OnInit {
   END */
 
   async import() {
-    const client = await this.cozyClientService.getClientInstance();
-
-    const capabilities = await client.query(Q("io.cozy.settings").getById("capabilities"));
-
-    const cozyURL = client.getStackClient().uri;
-    const subdomain = capabilities?.data.attributes.flat_subdomains ? "flat" : "nested";
-
+    const subDomain = await this.cozyClientService.getSubDomainType();
+    const cozyURL = this.cozyClientService.getCozyURL();
     const link = generateWebLink({
       cozyUrl: cozyURL,
       searchParams: [],
       pathname: "",
       hash: "/vault?action=import",
       slug: "passwords",
-      subDomainType: subdomain,
+      subDomainType: subDomain,
     });
-
     BrowserApi.createNewTab(link);
   }
 
@@ -438,11 +440,16 @@ export class SettingsComponent implements OnInit {
     return !this.platformUtilsService.isSafari();
   }
 
-  premium() {
-    BrowserApi.createNewTab("https://cozy.io/fr/pricing/");
+  async openPremiumPage() {
+    const link = await this.cozyClientService.getPremiumLink();
+    if (link) {
+      BrowserApi.createNewTab(link);
+    } else {
+      BrowserApi.createNewTab("https://cozy.io/fr/pricing/");
+    }
   }
 
   getCozyURL() {
-    return this.cozyClientService.getAppURL("", "");
+    return this.cozyClientService.getCozyURL();
   }
 }

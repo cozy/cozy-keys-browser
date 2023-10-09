@@ -1,5 +1,29 @@
+<!-- Cozy custo
 <div class="tab-page" [@routerTransition]="getState(o)">
+-->
+<div
+  [ngClass]="{ 'tab-page': true, 'with-banner': shouldDisplayPremiumNote() }"
+  [@routerTransition]="getState(o)"
+>
+  <!-- end custo -->
   <router-outlet #o="outlet"></router-outlet>
+  <!-- Cozy custo - Premium banner -->
+  <div *ngIf="shouldDisplayPremiumNote()" id="premium-banner">
+    <button
+      type="button"
+      class="close-premium"
+      appBlurClick
+      (click)="close()"
+      title="{{ 'close_shortcut' | i18n }}"
+    >
+      <i class="icon-cozy icon-cross-mask icon-cross-premium" aria-hidden="true"></i>
+    </button>
+    <p>{{ "premiumDesc1" | i18n }}</p>
+    <p>
+      <a (click)="openPremiumPage()" href="#">{{ "premiumDesc2" | i18n }}</a>
+    </p>
+  </div>
+  <!-- end custo -->
   <nav class="tabs">
     <ul>
       <li routerLinkActive="active" #rlaMyVault="routerLinkActive">

@@ -194,11 +194,11 @@
     "message": "Changer le mot de passe"
   },
   "fingerprintPhrase": {
-    "message": "Phrase de sécurité",
+    "message": "Code de sécurité pour les partages",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
-    "message": "La phrase de sécurité de votre compte",
+    "message": "Code de sécurité pour les partages",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "twoStepLogin": {
@@ -246,14 +246,17 @@
   "helpLink": {
     "message": "https://support.cozy.io/category/378-gestionnaire-de-mots-de-passe"
   },
+  "helpCenterCozy": {
+    "message": "Aide pour tout Cozy"
+  },
   "helpCenter": {
-    "message": "Bitwarden Help center"
+    "message": "Aide Cozy Pass"
   },
   "communityForums": {
-    "message": "Explore Bitwarden community forums"
+    "message": "Forums communautaire Cozy"
   },
   "contactSupport": {
-    "message": "Contact Bitwarden support"
+    "message": "Contactez nous"
   },
   "sync": {
     "message": "Synchroniser"
@@ -616,7 +619,7 @@
     }
   },
   "newUri": {
-    "message": "Nouvel URI"
+    "message": "Nouveau domaine à exclure"
   },
   "addedItem": {
     "message": "Élément ajouté"
@@ -649,7 +652,7 @@
     "message": "Rechercher dans le dossier"
   },
   "searchCollection": {
-    "message": "Rechercher dans la collection"
+    "message": "Rechercher dans le dossier"
   },
   "searchType": {
     "message": "Rechercher dans le type"
@@ -670,8 +673,8 @@
   "showCardsCurrentTabDesc": {
     "message": "Lister les éléments de la carte sur la page de l'onglet pour faciliter la saisie automatique."
   },
-  "dontShowIdentitiesCurrentTab": {
-    "message": "Ne pas afficher les profils sur la page Onglet courant"
+  "showIdentitiesCurrentTab": {
+    "message": "Afficher les profils sur la page Onglet courant"
   },
   "showIdentitiesCurrentTabDesc": {
     "message": "Lister les profils sur la page de l'onglet en cours pour faciliter la saisie automatique."
@@ -786,7 +789,7 @@
     "message": "Déplacer vers l'organisation"
   },
   "changeFolder": {
-    "message": "Changer de répertoire"
+    "message": "Dossier et partage"
   },
   "share": {
     "message": "Partager"
@@ -807,11 +810,20 @@
   "moveToOrgDesc": {
     "message": "Choisissez une organisation vers laquelle vous souhaitez déplacer cet élément. Déplacer un élément vers une organisation transfère la propriété de l'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu'il aura été déplacé."
   },
-  "moveToFolderDesk": {
+  "moveToFolderDesc1": {
     "message": "Choisissez un dossier dans lequel vous souhaitez ranger cet élément."
   },
-  "moveToFolderDesk2": {
-    "message": "Astuce : en sélectionnant un dossier partagé, vous pourrez ainsi transmettre cet élément de manière sécurisée à d'autres utilisateurs qui possèdent un Cozy. Vous pouvez créer un dossier partagé, à condition que l'offre de votre Cozy le permette, en accédant à Cozy Pass depuis un navigateur web d'ordinateur."
+  "moveToFolderDesc2": {
+    "message": "<b>Partage</b> :</br>En sélectionnant un dossier partagé, vous pourrez ainsi transmettre cet élément de manière sécurisée à d'autres utilisateurs.</br>Vous pouvez créer un dossier partagé en accédant à <a href=''>Cozy Pass</a> depuis un navigateur web."
+  },
+  "sharingPremiumLinkDesc": {
+    "message": "Voir les offres permettant le partage, et plus !"
+  },
+  "premiumDesc1": {
+    "message": "Partager des mots de passe grâce à la version Premium !"
+  },
+  "premiumDesc2": {
+    "message": "Toutes les fonctionnalités Premium"
   },
   "learnMore": {
     "message": "En savoir plus"
@@ -1133,24 +1145,6 @@
   },
   "autoFillOnPageLoadNo": {
     "message": "Ne pas saisir automatiquement au chargement de la page"
-  },
-  "defaultAutoFillOnPageLoad": {
-    "message": "Default autofill setting for login items"
-  },
-  "defaultAutoFillOnPageLoadDesc": {
-    "message": "After enabling Auto-fill on Page Load, you can enable or disable the feature for individual login items. This is the default setting for login items that are not separately configured."
-  },
-  "itemAutoFillOnPageLoad": {
-    "message": "Auto-fill on Page Load (if enabled in Options)"
-  },
-  "autoFillOnPageLoadUseDefault": {
-    "message": "Use default setting"
-  },
-  "autoFillOnPageLoadYes": {
-    "message": "Auto-fill on page load"
-  },
-  "autoFillOnPageLoadNo": {
-    "message": "Do not auto-fill on page load"
   },
   "commandOpenPopup": {
     "message": "Ouvrir la popup du coffre"
@@ -1771,7 +1765,7 @@
     "message": "Domaines exclus"
   },
   "excludedDomainsDesc": {
-    "message": "Bitwarden ne proposera pas d'enregistrer les informations de connexion pour ces domaines. Vous devez actualiser la page pour que les modifications prennent effet."
+    "message": "Cozy Pass ne proposera pas d'enregistrer les informations de connexion pour ces domaines. Vous devez actualiser la page pour que les modifications prennent effet."
   },
   "excludedDomainsInvalidDomain": {
     "message": "$DOMAIN$ n'est pas un domaine valide",
@@ -2304,10 +2298,10 @@
     }
   },
   "howToAutofill": {
-    "message": "Comment saisir automatiquement"
+    "message": "Le saviez-vous ?"
   },
   "autofillSelectInfoWithCommand": {
-    "message": "Vous pouvez utiliser votre raccourcis \"$COMMAND$\" ou cliquer sur l'icone : ",
+    "message": "Cliquez sur ✨ ci-dessous pour remplir d'un clic la page web courante ($COMMAND$)",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2316,7 +2310,7 @@
     }
   },
   "autofillSelectInfoWithoutCommand": {
-    "message": "Simplement cliquez sur l'icone : "
+    "message": "Cliquez sur ✨ ci-dessous pour remplir d'un clic la page web courante"
   },
   "gotIt": {
     "message": "Compris"
@@ -2357,7 +2351,10 @@
   "sharingNotAcceptedYet": {
     "message": "Dossier inacessible - partage à finaliser."
   },
-  "sharingNotAcceptedYetDesc": {
-    "message": "Pour finaliser le partage, transmettez le code de sécurité à la personne qui vous a invité. Vous trouverez ce code en allant dans ce même répertoire depuis dans <a €€€>la version web de Cozy Pass</a>."
+  "sharingNotAcceptedYetDesc1": {
+    "message": "Pour finaliser le partage et accéder aux mots de passe partagés, veuillez transmettre par le moyen de votre choix (Appel, SMS, messagerie instantanée, ...) votre code de sécurité à la personnne vous ayant invité :"
+  },
+  "sharingNotAcceptedYetDesc2": {
+    "message": "Ce code de sécurité lui permettra de valider votre identité et ainsi d'accéder aux éléments partagés."
   }
 }

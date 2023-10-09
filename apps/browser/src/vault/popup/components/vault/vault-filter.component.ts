@@ -35,10 +35,12 @@ import { BrowserStateService } from "../../../../services/abstractions/browser-s
 import { VaultFilterService } from "../../../services/vault-filter.service";
 /** Start Cozy imports */
 /* eslint-disable */
-import { HistoryService } from "../../../../popup/services/history.service";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
-import { Utils } from "@bitwarden/common/misc/utils";
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
+import { HistoryService } from "../../../../popup/services/history.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { Utils } from "@bitwarden/common/misc/utils";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
 /* eslint-enable */
 /** End Cozy imports */
 
@@ -110,7 +112,9 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     private vaultFilterService: VaultFilterService,
     private cozyClientService: CozyClientService,
     private historyService: HistoryService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private cryptoService: CryptoService,
+    private stateService: StateService
   ) {
     this.noFolderListSize = 100;
   }
@@ -297,12 +301,16 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   async selectCollection(collection: CollectionView) {
     /** Cozy custo : if the collection is not yet validated, then display a warning */
     if (this.notValidatedCollectionId.includes(collection.id)) {
-      const desc = this.i18nService
-        .t("sharingNotAcceptedYetDesc")
-        .replace(
-          "€€€",
-          `href='${this.cozyClientService.getAppURL("passwords", "")}' target='_blank'`
-        );
+      const fingerprint = await this.cryptoService.getFingerprint(
+        await this.stateService.getUserId()
+      );
+      const desc = `<p class="security-code-desc">
+        ${this.i18nService.t("sharingNotAcceptedYetDesc1")}
+        </p><p class="security-code">
+        ${fingerprint.join("-")}
+        </p><p class="security-code-desc">
+        ${this.i18nService.t("sharingNotAcceptedYetDesc2")}
+        </p>`;
       await this.platformUtilsService.showDialog(
         desc,
         this.i18nService.t("sharingNotAcceptedYet"),
@@ -549,8 +557,8 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     this.search(50);
   }
 
-  openWebApp() {
-    window.open(this.cozyClientService.getAppURL("passwords", ""));
+  async openWebApp() {
+    window.open(await this.cozyClientService.getAppURL("passwords", ""));
   }
 
   back() {

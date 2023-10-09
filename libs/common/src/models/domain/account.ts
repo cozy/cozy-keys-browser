@@ -265,6 +265,8 @@ export class AccountTokens {
   accessToken?: string;
   refreshToken?: string;
   securityStamp?: string;
+  clientId?: string;
+  registrationAccessToken?: string;
 
   static fromJSON(obj: Jsonify<AccountTokens>): AccountTokens {
     if (obj == null) {

@@ -659,29 +659,25 @@
         *ngIf="!cipher.organizationId"
       >
       -->
-      <ng-container *ifFlag="CAN_SHARE_ORGANIZATION">
-        <button
-          type="button"
-          class="box-content-row"
-          appStopClick
-          (click)="share()"
-          *ngIf="!cipher.isDeleted"
-        >
-          <!-- end custo -->
-          <div class="row-main text-primary">
-            <div class="icon text-primary" aria-hidden="true">
-              <!-- Cozy Custo
+      <button
+        type="button"
+        class="box-content-row"
+        appStopClick
+        (click)="share()"
+        *ngIf="!cipher.isDeleted"
+      >
+        <!-- end custo -->
+        <div class="row-main text-primary">
+          <div class="icon text-primary" aria-hidden="true">
+            <!-- Cozy Custo
             <i class="bwi bwi-arrow-circle-right bwi-lg bwi-fw"></i>
-             -->
-              <i class="icon-cozy icon-folder" aria-hidden="true"></i>
-              <!-- end custo -->
-            </div>
-            <span>{{ "changeFolder" | i18n }}</span>
+            -->
+            <i class="icon-cozy icon-folder-for-sharing" aria-hidden="true"></i>
+            <!-- end custo -->
           </div>
-        </button>
-        <!-- Cozy custo -->
-      </ng-container>
-      <!-- end custo -->
+          <span>{{ "changeFolder" | i18n }}</span>
+        </div>
+      </button>
       <button
         type="button"
         class="box-content-row"

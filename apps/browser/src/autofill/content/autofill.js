@@ -1407,7 +1407,7 @@ import menuCtrler from './menuCtrler';
         sendResponse(pageDetailsObj);
         return true;
       }
-      sendResponse();
-      return true;
+      // sendResponse();
+      // return true;
   });
 })();

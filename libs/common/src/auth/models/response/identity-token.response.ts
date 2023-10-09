@@ -18,6 +18,8 @@ export class IdentityTokenResponse extends BaseResponse {
   forcePasswordReset: boolean;
   apiUseKeyConnector: boolean;
   keyConnectorUrl: string;
+  clientId: string;
+  registrationAccessToken: string;
 
   constructor(response: any) {
     super(response);
@@ -37,5 +39,7 @@ export class IdentityTokenResponse extends BaseResponse {
     this.forcePasswordReset = this.getResponseProperty("ForcePasswordReset");
     this.apiUseKeyConnector = this.getResponseProperty("ApiUseKeyConnector");
     this.keyConnectorUrl = this.getResponseProperty("KeyConnectorUrl");
+    this.clientId = this.getResponseProperty("clientId");
+    this.registrationAccessToken = this.getResponseProperty("registrationAccessToken");
   }
 }

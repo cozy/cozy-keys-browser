@@ -133,7 +133,9 @@ const cozyMessagingService = isPrivateMode
 const cozyClientService = new CozyClientService(
   getBgService<EnvironmentService>("environmentService")(),
   getBgService<ApiService>("apiService")(),
-  cozyMessagingService
+  cozyMessagingService,
+  getBgService<CipherService>("cipherService")(),
+  getBgService<StateServiceAbstraction>("stateService")()
 );
 export const cozySanitizeUrlService = new CozySanitizeUrlService();
 export const konnectorsService = new KonnectorsService(

@@ -319,18 +319,33 @@ li.active .icon-cozy-inline > svg {
   fill: $brand-primary;
 }
 
-.icon.text-primary .icon-cozy {
-  @include themify($themes) {
-    background-color: themed("primaryColor");
-  }
-}
+// .icon.text-primary .icon-cozy {
+//   @include themify($themes) {
+//     background-color: themed("primaryColor");
+//   }
+// }
 
 .icon-pen {
-  background-image: url("../images/icons-16-icon-pen.svg");
+  mask-image: url("../images/icons-16-icon-pen.svg");
+  -webkit-mask-image: url("../images/icons-16-icon-pen.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: white;
 }
 
 .icon-cross {
   background-image: url("../images/icons-16-icon-cross.svg");
+}
+
+.icon-cross-mask {
+  mask-image: url("../images/icons-16-icon-cross.svg");
+  -webkit-mask-image: url("../images/icons-16-icon-cross.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
 }
 
 .icon-plus {
@@ -397,6 +412,12 @@ li.active .icon-cozy-inline > svg {
   background-image: url("../images/icons-16-icon-key.svg");
 }
 
+.icon-cozy-round {
+  background-image: url("../images/icon-cozy-round.svg");
+  width: 25px;
+  height: 25px;
+}
+
 .icon-search {
   mask-image: url("../images/icons-16-magnifier.svg");
   -webkit-mask-image: url("../images/icons-16-magnifier.svg");
@@ -424,6 +445,18 @@ li.active .icon-cozy-inline > svg {
 .icon-folder {
   mask-image: url("../images/icons-16-folder.svg");
   -webkit-mask-image: url("../images/icons-16-folder.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-folder-for-sharing {
+  mask-image: url("../images/icon-sharing-folder.svg");
+  -webkit-mask-image: url("../images/icon-sharing-folder.svg");
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: contain;
@@ -470,6 +503,80 @@ li.active .icon-cozy-inline > svg {
   -webkit-mask-image: url("../images/icons-16-share.svg");
   @include themify($themes) {
     background-color: themed("mutedColor");
+  }
+}
+
+.icon-download {
+  mask-image: url("../images/icon-cloud-download.svg");
+  -webkit-mask-image: url("../images/icon-cloud-download.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-cozy-smile {
+  mask-image: url("../images/icon-cozy-smile.svg");
+  -webkit-mask-image: url("../images/icon-cozy-smile.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  width: 25px;
+  height: 25px;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-chat {
+  mask-image: url("../images/icon-chat.svg");
+  -webkit-mask-image: url("../images/icon-chat.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  width: 25px;
+  height: 25px;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-email {
+  mask-image: url("../images/icon-email.svg");
+  -webkit-mask-image: url("../images/icon-email.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  width: 25px;
+  height: 25px;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-pass {
+  mask-image: url("../images/icon-pass.svg");
+  -webkit-mask-image: url("../images/icon-pass.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  width: 25px;
+  height: 25px;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.text-danger .icon-cozy {
+  @include themify($themes) {
+    background-color: themed("dangerColor") !important;
   }
 }
 
@@ -670,4 +777,19 @@ html.force_redraw {
 
 .rounded-circle {
   border-radius: 50% !important;
+}
+
+.security-code-desc {
+  text-align: left;
+}
+
+.security-code {
+  @include themify($themes) {
+    color: themed("primaryAccentColor");
+  }
+  font-size: 17px;
+}
+
+.empty-top {
+  height: 75px;
 }

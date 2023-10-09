@@ -194,11 +194,11 @@
     "message": "Change master password"
   },
   "fingerprintPhrase": {
-    "message": "Security Code",
+    "message": "Security code for sharings",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
-    "message": "Your account's security code",
+    "message": "Security code for sharings",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "twoStepLogin": {
@@ -243,17 +243,20 @@
   "helpFeedback": {
     "message": "Help"
   },
-  "helpCenter": {
-    "message": "Cozy Help"
-  },
   "helpLink": {
     "message": "https://help.cozy.io/category/395-password-manager"
   },
+  "helpCenterCozy": {
+    "message": "Help for Cozy"
+  },
+  "helpCenter": {
+    "message": "Help for Cozy Pass"
+  },
   "communityForums": {
-    "message": "Explore Bitwarden community forums"
+    "message": "Cozy community forums"
   },
   "contactSupport": {
-    "message": "Contact Bitwarden support"
+    "message": "Contact Cozy support"
   },
   "sync": {
     "message": "Sync"
@@ -616,7 +619,7 @@
     }
   },
   "newUri": {
-    "message": "New URI"
+    "message": "New domain to exclude"
   },
   "addedItem": {
     "message": "Item added"
@@ -649,7 +652,7 @@
     "message": "Search folder"
   },
   "searchCollection": {
-    "message": "Search collection"
+    "message": "Search in folder"
   },
   "searchType": {
     "message": "Search type"
@@ -792,7 +795,7 @@
     "message": "Move to organization"
   },
   "changeFolder": {
-    "message": "Change of folder"
+    "message": "Folder and sharing"
   },
   "share": {
     "message": "Share"
@@ -813,11 +816,20 @@
   "moveToOrgDesc": {
     "message": "Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved."
   },
-  "moveToFolderDesk": {
+  "moveToFolderDesc1": {
     "message": "Choose a folder in which to store this item."
   },
-  "moveToFolderDesk2": {
-    "message": "Tip: by selecting a shared folder, you will be able to transmit this item securely to other users who own a Cozy. You can create a shared folder, provided your Cozy's offer allows it, by accessing Cozy Pass from a computer web browser."
+  "moveToFolderDesc2": {
+    "message": "<b>Sharing</b>:</br>By selecting a shared folder, you will be able to transmit this item securely to other users.</br>You can create a shared folder by accessing <a href=''>Cozy Pass</a> from a computer web browser."
+  },
+  "sharingPremiumLinkDesc": {
+    "message": "See plans with sharing, and more !"
+  },
+  "premiumDesc1": {
+    "message": "Share passwords with our Premium version !"
+  },
+  "premiumDesc2": {
+    "message": "All Premium features"
   },
   "learnMore": {
     "message": "Learn more"
@@ -1708,7 +1720,7 @@
     "message": "Excluded domains"
   },
   "excludedDomainsDesc": {
-    "message": "Bitwarden will not ask to save login details for these domains. You must refresh the page for changes to take effect."
+    "message": "Cozy Pass will not ask to save login details for these domains. You must refresh the page for changes to take effect."
   },
   "excludedDomainsInvalidDomain": {
     "message": "$DOMAIN$ is not a valid domain",
@@ -2190,7 +2202,7 @@
     "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
   },
   "fingerprintPhraseHeader": {
-    "message": "Fingerprint phrase"
+    "message": "Security code for sharings"
   },
   "fingerprintMatchInfo": {
     "message": "Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device."
@@ -2241,10 +2253,10 @@
     "message": "Your organization policies have turned on auto-fill on page load."
   },
   "howToAutofill": {
-    "message": "How to auto-fill"
+    "message": "Did you know ?"
   },
   "autofillSelectInfoWithCommand": {
-    "message": "You can use your shortcut \"$COMMAND$\" or click on this icon : ",
+    "message": "Click on ✨ below to fill in the current web page with one click ($COMMAND$)",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2253,7 +2265,7 @@
     }
   },
   "autofillSelectInfoWithoutCommand": {
-    "message": "Just press this icon : "
+    "message": "Click on ✨ below to fill in the current web page with one click"
   },
   "gotIt": {
     "message": "Got it"
@@ -2294,7 +2306,10 @@
   "sharingNotAcceptedYet": {
     "message": "File inaccessible - sharing to be finalized."
   },
-  "sharingNotAcceptedYetDesc": {
-    "message": "To finalize the sharing, send the security code to the person who invited you. You'll find this code by going to this same directory from <a €€€>the web version of Cozy Pass</a>."
+  "sharingNotAcceptedYetDesc1": {
+    "message": "To finalize sharing and access to shared passwords, please send your security code to the person who invited you, using the method of your choice (call, SMS, instant messaging, etc.):"
+  },
+  "sharingNotAcceptedYetDesc2": {
+    "message": "This security code will enable him to validate your identity and let you access shared items."
   }
 }

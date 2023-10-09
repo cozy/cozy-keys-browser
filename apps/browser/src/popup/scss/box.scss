@@ -149,6 +149,12 @@
   }
 
   /* Cozy custo*/
+  .box-footer-comment {
+    margin: 20px 5px 0px 5px;
+    &#organizationHelp3 {
+      font-size: 16px;
+    }
+  }
   .row-footer {
     padding: 5px 0px;
     font-size: $font-size-small;
@@ -159,7 +165,9 @@
   /* end custo*/
 
   &.list {
+    /* Cozy custo
     margin: 10px 0 20px 0;
+    */
     .box-content {
       background-color: white;
       .virtual-scroll-item {
@@ -174,7 +182,7 @@
         border-bottom: 1px solid red;
       }
       .box-content-row {
-        padding: 5px 10px;
+        padding: 0px 10px;
         text-decoration: none;
         /* Cozy custo
         border-radius: $border-radius;
@@ -247,6 +255,10 @@
           min-width: 0;
           align-items: center;
           flex-grow: 1;
+        }
+
+        button {
+          padding: 10px 10px 10px 0;
         }
         /* end custo Cozy */
       }

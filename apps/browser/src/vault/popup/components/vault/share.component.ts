@@ -17,6 +17,8 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
 /* start Cozy imports */
 /* eslint-disable */
 import { HistoryService } from "../../../../popup/services/history.service";
+import { CozyClientService } from "../../../../popup/services/cozyClient.service";
+import { BrowserApi } from "../../../../browser/browserApi";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -35,7 +37,8 @@ export class ShareComponent extends BaseShareComponent {
     private route: ActivatedRoute,
     private router: Router,
     organizationService: OrganizationService,
-    private historyService: HistoryService
+    private historyService: HistoryService,
+    private cozyClientService: CozyClientService
   ) {
     super(
       collectionService,
@@ -89,6 +92,24 @@ export class ShareComponent extends BaseShareComponent {
       this.cancel();
       event.preventDefault();
     }
+  }
+
+  async openPremiumPage() {
+    const link = await this.cozyClientService.getPremiumLink();
+    if (link) {
+      BrowserApi.createNewTab(link);
+    } else {
+      BrowserApi.createNewTab("https://cozy.io/fr/pricing/");
+    }
+  }
+
+  moveToFolderDesc2() {
+    return this.i18nService.t("moveToFolderDesc2");
+  }
+
+  async openWebApp(e: any) {
+    e.preventDefault();
+    window.open(await this.cozyClientService.getAppURL("passwords", ""));
   }
   /* end custo */
 }
