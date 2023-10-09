@@ -1,40 +1,32 @@
 {
   "compilerOptions": {
+    "pretty": true,
     "moduleResolution": "node",
     "noImplicitAny": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "module": "es6",
-    "target": "ES2016",
-    "allowJs": true,
+    "target": "ES6",
+    "module": "ES2020",
+    "lib": ["es5", "es6", "es7", "dom"],
     "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declaration": false,
+    "outDir": "dist",
     "baseUrl": ".",
+    "resolveJsonModule": true,
     "paths": {
-      "jslib-common/*": ["jslib/common/src/*"],
-      "jslib-angular/*": ["jslib/angular/src/*"]
+      "@bitwarden/common/*": ["./libs/common/src/*"],
+      "@bitwarden/angular/*": ["./libs/angular/src/*"],
+      "@bitwarden/node/*": ["./libs/node/src/*"],
+      "@bitwarden/components": ["./libs/components/src"],
+      "@bitwarden/web-vault/*": ["./apps/web/src/*"]
     },
-    "allowSyntheticDefaultImports": true
+    "plugins": [
+      {
+        "transform": "typescript-transform-paths"
+      }
+    ]
   },
-  "angularCompilerOptions": {
-    "preserveWhitespaces": true
-  },
-  "include": ["src"],
-  "exclude": [
-    "node_modules",
-    "jslib/node_modules",
-    "dist",
-    "jslib/dist",
-    "jslib/spec",
-    "jslib/src/cli",
-    "jslib/src/electron",
-    "jslib/src/angular/components/modal.component.ts",
-    "jslib/src/angular/components/icon.component.ts",
-    "jslib/src/angular/dummy.module.ts",
-    "build",
-    "build.safariextension",
-    "coverage",
-    "store",
-    "jslib/src/services/nodeApi.service.ts",
-    "jslib/src/services/lowdbStorage.service.ts"
-  ]
+  "include": ["apps/web/src/**/*", "libs/*/src/**/*", "bitwarden_license/bit-web/src/**/*"],
+  "exclude": ["apps/web/src/**/*.spec.ts", "libs/*/src/**/*.spec.ts"]
 }

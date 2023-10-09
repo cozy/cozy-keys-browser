@@ -1,0 +1,82 @@
+﻿@import "./variables.scss";
+
+body {
+  background-color: $brand-primary;
+  margin: 0;
+  margin-top: 6px;
+  padding: 8px 18px 8px 8px;
+  font-size: 16px;
+  line-height: 16px;
+  font-family: $font-family-sans-serif;
+  display: flex;
+  color: white;
+}
+
+#logo-link {
+  margin-right: 18px;
+}
+
+#content {
+  flex-grow: 1;
+}
+
+#template-totp-copied-clone {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
+.desc-text {
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+svg.dont-save {
+  fill: white;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+button {
+  border: 1px solid white;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 10px 10px 10px 10px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.submit-buttons {
+  display: flex;
+}
+
+.add-or-change {
+  background-color: #ffffff;
+  color: $brand-primary;
+  margin-left: 5px;
+}
+
+.dont-save {
+  background-color: $brand-primary;
+  color: #ffffff;
+  margin-left: auto;
+}
+
+body[class*="lang-en"] .add-buttons {
+  width: 175px;
+}
+
+@media (min-width: 768px) {
+  body[class*="lang-en"] .add-buttons {
+    width: 320px;
+  }
+}
+
+@media (print) {
+  body {
+    display: none;
+  }
+}

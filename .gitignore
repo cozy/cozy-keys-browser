@@ -1,19 +1,44 @@
-.vs
-.vscode
-.idea
+# General
 .DS_Store
+Thumbs.db
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Node
 node_modules
 npm-debug.log
-vwd.webinfo
-dist/
-dist-safari/
+
+# Build directories
+dist
+build
+.angular/cache
+
+# Testing
+coverage
+junit.xml
+
+# Misc
 *.crx
 *.pem
 *.zip
-build/
-build.safariextension/
-coverage/
-xcuserdata/
-*.hmap
-!src/safari/safari/app/popup/index.html
-src/safari/safari/app/
+*.provisionprofile
+
+# Storybook
+documentation.json
+.eslintcache
+storybook-static

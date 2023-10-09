@@ -1,0 +1,104 @@
+<form #form (ngSubmit)="submit()" [appApiAction]="formPromise">
+  <ng-container *ngIf="organizations$ | async as organizations">
+    <header>
+      <div class="left">
+        <!-- Cozy custo
+        <button type="button" (click)="cancel()">{{ "cancel" | i18n }}</button>
+        -->
+        <button type="button" appBlurClick (click)="cancel()" title="{{ 'close_shortcut' | i18n }}">
+          <i class="icon-cozy icon-cross" aria-hidden="true"></i>
+        </button>
+        <!-- end custo -->
+      </div>
+      <h1 class="center">
+        <span class="title">{{ "changeFolder" | i18n }}</span>
+      </h1>
+      <div class="right">
+        <button
+          type="submit"
+          [disabled]="form.loading || !canSave"
+          *ngIf="organizations && organizations.length"
+        >
+          <span [hidden]="form.loading">{{ "move" | i18n }}</span>
+          <i
+            class="bwi bwi-spinner bwi-lg bwi-spin"
+            [hidden]="!form.loading"
+            aria-hidden="true"
+          ></i>
+        </button>
+      </div>
+    </header>
+    <main tabindex="-1">
+      <div class="box">
+        <div class="box-content" *ngIf="!organizations || !organizations.length">
+          <div class="box-content-row padded no-hover">
+            {{ "noFolderInList" | i18n }}
+          </div>
+        </div>
+        <div class="box-content" *ngIf="organizations && organizations.length">
+          <div class="box-content-row" appBoxRow>
+            <!-- Cozy custo
+            <label for="organization">{{ "organization" | i18n }}</label>
+            <select
+              id="organization"
+              name="OrganizationId"
+              aria-describedby="organizationHelp"
+              [(ngModel)]="selectedCollectionId"
+              (change)="onSelectedCollectionChange()"
+            >
+              <option *ngFor="let collection of collections" [ngValue]="collection.id">{{ collection.name }}</option>
+            </select>
+            -->
+            <label for="organization">{{ "folder" | i18n }}</label>
+            <select
+              id="folder"
+              name="FolderId"
+              aria-describedby="organizationHelp"
+              [(ngModel)]="selectedCollectionId"
+              (change)="onSelectedCollectionChange()"
+            >
+              <option value="">{{ "shareNone" | i18n }}</option>
+              <option *ngFor="let collection of collections" [ngValue]="collection.id">
+                {{ collection.name }}
+              </option>
+            </select>
+            <!-- end custo -->
+          </div>
+        </div>
+        <div id="organizationHelp" class="box-footer">
+          {{ "moveToFolderDesk" | i18n }}
+        </div>
+        <div id="organizationHelp2" class="box-footer">
+          {{ "moveToFolderDesk2" | i18n }}
+        </div>
+      </div>
+      <!-- Cozy custo
+      <div class="box" *ngIf="organizations && organizations.length">
+        <h2 class="box-header">
+          {{ "collections" | i18n }}
+        </h2>
+        <div class="box-content" *ngIf="!collections || !collections.length">
+          <div class="box-content-row padded no-hover">
+            {{ "noCollectionsInList" | i18n }}
+          </div>
+        </div>
+        <div class="box-content" *ngIf="collections && collections.length">
+          <div
+            class="box-content-row box-content-row-checkbox"
+            *ngFor="let c of collections; let i = index"
+            appBoxRow
+          >
+            <label for="collection_{{ i }}">{{ c.name }}</label>
+            <input
+              id="collection_{{ i }}"
+              type="checkbox"
+              [(ngModel)]="c.checked"
+              name="Collection[{{ i }}].Checked"
+            />
+          </div>
+        </div>
+      </div>
+      -->
+    </main>
+  </ng-container>
+</form>

@@ -1,0 +1,91 @@
+<form
+  #form
+  (ngSubmit)="submit()"
+  [appApiAction]="formPromise"
+  class="tw-container tw-mx-auto"
+  [formGroup]="formGroup"
+>
+  <!-- Cozy custo
+This component has heavily diverged from BW
+No reconciliation is possible
+-->
+  <header>
+    <div class="left">
+      <a routerLink="/home">{{ "cancel" | i18n }}</a>
+    </div>
+    <h1 class="center">
+      <span class="title">{{ "appName" | i18n }}</span>
+    </h1>
+    <div class="right" style="visibility: hidden">
+      <a routerLink="/home">{{ "cancel" | i18n }}</a>
+    </div>
+  </header>
+  <main tabindex="-1">
+    <div class="box login-box">
+      <div class="box-content login-content">
+        <div class="box-content-row" appBoxRow [hidden]="true">
+          <label for="cozyUrl">{{ "cozyUrl" | i18n }}</label>
+          <input
+            id="cozyUrl"
+            type="text"
+            name="CozyUrl"
+            formControlName="email"
+            required
+            inputmode="url"
+            placeholder="ex. https://claude.mycozy.cloud"
+            appInputVerbatim="false"
+          />
+        </div>
+        <div class="box-content-row box-content-row-flex" appBoxRow>
+          <div class="row-main">
+            <input
+              id="rememberEmail"
+              type="checkbox"
+              formControlName="rememberEmail"
+              [hidden]="true"
+            />
+            <label for="masterPassword">{{ "masterPass" | i18n }}</label>
+            <input
+              id="masterPassword"
+              type="{{ showPassword ? 'text' : 'password' }}"
+              class="monospaced"
+              formControlName="masterPassword"
+              appInputVerbatim
+              appAutofocus
+            />
+          </div>
+          <div class="action-buttons">
+            <button
+              type="button"
+              class="row-btn"
+              appStopClick
+              appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+              (click)="togglePassword()"
+              [attr.aria-pressed]="showPassword"
+            >
+              <i
+                class="bwi bwi-lg"
+                [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
+                aria-hidden="true"
+              ></i>
+            </button>
+          </div>
+        </div>
+        <div class="label">
+          <a style="cursor: pointer" (click)="forgotPassword()">{{ "forgotPassword" | i18n }}</a>
+        </div>
+      </div>
+      <div class="content">
+        <button class="btn primary block" type="submit" appBlurClick [disabled]="form.loading">
+          <span [hidden]="form.loading">{{ "login" | i18n }}</span>
+          <i
+            class="bwi bwi-spinner bwi-lg bwi-spin"
+            [hidden]="!form.loading"
+            aria-hidden="true"
+          ></i>
+        </button>
+      </div>
+    </div>
+    <app-private-mode-warning></app-private-mode-warning>
+  </main>
+</form>

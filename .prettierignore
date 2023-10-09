@@ -1,16 +1,34 @@
 # Build directories
-build
-dist
-coverage
-docs
-
-jslib
+**/build
+**/dist
+**/coverage
+.angular
+documentation.json
+storybook-static
+**/docs
 
 # External libraries / auto synced locales
-src/_locales
-src/scripts/duo.js
-src/content/autofill.js
-src/safari
+apps/browser/src/_locales
+apps/browser/src/auth/scripts/duo.js
+apps/browser/src/autofill/content/autofill.js
+apps/browser/src/safari
+
+apps/desktop/src/locales
+apps/desktop/dist-safari
+apps/desktop/desktop_native
+apps/desktop/src/auth/scripts/duo.js
+
+apps/cli/src/locales
+apps/cli/.github
+
+apps/web/.github
+apps/web/src/404/bootstrap.min.css
+apps/web/src/locales
+
+libs/.github
 
 # Github Workflows
-.github/workflows 
+.github/workflows
+
+# Forked library files
+libs/common/src/types/deep-jsonify.ts

@@ -1,0 +1,135 @@
+@import "variables.scss";
+
+.btn {
+  border-radius: $border-radius;
+  padding: 7px 15px;
+  border: 1px solid #000000;
+  font-size: $font-size-base;
+  text-align: center;
+  cursor: pointer;
+  text-transform: uppercase;
+
+  @include themify($themes) {
+    background-color: themed("buttonBackgroundColor");
+    border-color: themed("buttonBorderColor");
+    color: themed("buttonColor");
+  }
+
+  &.primary {
+    @include themify($themes) {
+      background-color: $button-background-color-primary;
+      color: themed("buttonPrimaryColor");
+    }
+  }
+
+  &.danger {
+    @include themify($themes) {
+      color: themed("buttonDangerColor");
+    }
+  }
+
+  &.callout-half {
+    font-weight: bold;
+    max-width: 50%;
+  }
+
+  &:hover:not([disabled]) {
+    cursor: pointer;
+
+    @include themify($themes) {
+      background-color: darken(themed("buttonBackgroundColor"), 1.5%);
+      border-color: darken(themed("buttonBorderColor"), 17%);
+      color: darken(themed("buttonColor"), 10%);
+    }
+
+    &.primary {
+      @include themify($themes) {
+        background-color: $button-background-color-primary-active;
+        color: themed("buttonPrimaryColor");
+      }
+    }
+
+    &.danger {
+      @include themify($themes) {
+        color: darken(themed("buttonDangerColor"), 6%);
+      }
+    }
+  }
+
+  &:focus:not([disabled]) {
+    cursor: pointer;
+    outline: 0;
+
+    @include themify($themes) {
+      background-color: darken(themed("buttonBackgroundColor"), 6%);
+      border-color: darken(themed("buttonBorderColor"), 25%);
+    }
+
+    &.primary {
+      @include themify($themes) {
+        background-color: $button-background-color-primary-active;
+        color: themed("buttonPrimaryColor");
+      }
+    }
+  }
+
+  &[disabled] {
+    opacity: 0.65;
+    cursor: default !important;
+  }
+
+  &.block {
+    display: block;
+    width: calc(100% - 10px);
+    margin: 0 auto;
+  }
+
+  &.link,
+  &.neutral {
+    border: none !important;
+    background: none !important;
+    color: $brand-primary !important;
+    font-size: 12px;
+    font-weight: bold;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.action-buttons {
+  .btn {
+    &:focus {
+      outline: auto;
+    }
+  }
+}
+
+button.box-content-row {
+  display: block;
+  /* Cozy custo
+  width: calc(100% - 10px);
+  */
+  width: 100%;
+  // end custo
+
+  text-align: left;
+  border-color: none;
+
+  @include themify($themes) {
+    background-color: themed("boxBackgroundColor");
+  }
+}
+
+button {
+  border: none;
+  background: transparent;
+  color: inherit;
+}
+
+.login-buttons {
+  .btn.block {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

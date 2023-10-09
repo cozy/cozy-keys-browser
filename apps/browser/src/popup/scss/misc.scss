@@ -1,0 +1,673 @@
+@import "variables.scss";
+
+small,
+.small {
+  font-size: $font-size-small;
+}
+
+.bg-primary {
+  @include themify($themes) {
+    background-color: themed("primaryColor") !important;
+  }
+}
+
+.bg-success {
+  @include themify($themes) {
+    background-color: themed("successColor") !important;
+  }
+}
+
+.bg-danger {
+  @include themify($themes) {
+    background-color: themed("dangerColor") !important;
+  }
+}
+
+.bg-info {
+  @include themify($themes) {
+    background-color: themed("infoColor") !important;
+  }
+}
+
+.bg-warning {
+  @include themify($themes) {
+    background-color: themed("warningColor") !important;
+  }
+}
+
+.text-primary {
+  @include themify($themes) {
+    color: themed("primaryColor") !important;
+  }
+}
+
+.text-success {
+  @include themify($themes) {
+    color: themed("successColor") !important;
+  }
+}
+
+.text-muted {
+  @include themify($themes) {
+    color: themed("mutedColor") !important;
+  }
+}
+
+.text-default {
+  @include themify($themes) {
+    color: themed("textColor") !important;
+  }
+}
+
+.text-danger {
+  @include themify($themes) {
+    color: themed("dangerColor") !important;
+  }
+}
+
+.text-info {
+  @include themify($themes) {
+    color: themed("infoColor") !important;
+  }
+}
+
+.text-warning {
+  @include themify($themes) {
+    color: themed("warningColor") !important;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.font-weight-semibold {
+  font-weight: 600;
+}
+
+p.lead {
+  font-size: $font-size-large;
+  margin-bottom: 20px;
+  font-weight: normal;
+}
+
+.flex-right {
+  margin-left: auto;
+}
+
+.flex-bottom {
+  margin-top: auto;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.no-vmargin {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.no-vpad {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.display-block {
+  display: block !important;
+}
+
+.monospaced {
+  font-family: $font-family-monospace;
+}
+
+.show-whitespace {
+  white-space: pre-wrap;
+}
+
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.img-rounded {
+  border-radius: $border-radius;
+}
+
+.select-index-top {
+  position: relative;
+  z-index: 100;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  border: 0 !important;
+}
+
+:not(:focus) > .exists-only-on-parent-focus {
+  display: none;
+}
+
+.password-wrapper {
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  min-width: 0;
+}
+
+.password-number {
+  @include themify($themes) {
+    color: themed("passwordNumberColor");
+  }
+}
+
+.password-special {
+  @include themify($themes) {
+    color: themed("passwordSpecialColor");
+  }
+}
+
+.password-character {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30px;
+  height: 36px;
+  font-weight: 600;
+
+  &:nth-child(odd) {
+    @include themify($themes) {
+      background-color: themed("backgroundColor");
+    }
+  }
+}
+
+.password-count {
+  white-space: nowrap;
+  font-size: 8px;
+
+  @include themify($themes) {
+    color: themed("passwordCountText") !important;
+  }
+}
+
+#duo-frame {
+  background: url("../images/loading.svg") 0 0 no-repeat;
+  width: 100%;
+  height: 470px;
+  margin-bottom: -10px;
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+}
+
+#web-authn-frame {
+  background: url("../images/loading.svg") 0 0 no-repeat;
+  width: 100%;
+  height: 310px;
+  margin-bottom: -10px;
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+}
+
+#hcaptcha_iframe {
+  width: 100%;
+  border: none;
+  transition: height 0.25s linear;
+}
+
+body.linux-webauthn {
+  width: 485px !important;
+  #web-authn-frame {
+    iframe {
+      width: 375px;
+      margin: 0 55px;
+    }
+  }
+}
+
+#loading {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  color: $text-muted;
+  min-height: 46px;
+
+  @include themify($themes) {
+    color: themed("mutedColor");
+  }
+}
+
+app-vault-icon,
+.app-vault-icon {
+  display: flex;
+}
+
+.logo-image {
+  margin: 0 auto;
+  width: 142px;
+  height: 21px;
+  background-size: 142px 21px;
+  background-repeat: no-repeat;
+  @include themify($themes) {
+    background-image: url("../images/logo-" + themed("logoSuffix") + "@2x.png");
+  }
+  @media (min-width: 219px) {
+    width: 189px;
+    height: 28px;
+    background-size: 189px 28px;
+  }
+  @media (min-width: 314px) {
+    width: 284px;
+    height: 43px;
+    background-size: 284px 43px;
+  }
+}
+
+.icon-cozy {
+  display: inline-block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 16px;
+  background-position: center;
+}
+
+.view-icon .icon-cozy {
+  width: 24px;
+  height: 24px;
+}
+
+.icon-cozy-inline {
+  color: $gray-light;
+  display: flex;
+  justify-content: center;
+  &:hover,
+  &:active,
+  &.active {
+    color: $brand-primary;
+    svg {
+      fill: $brand-primary;
+    }
+  }
+  svg {
+    fill: $gray-light;
+  }
+}
+
+li.active .icon-cozy-inline > svg {
+  fill: $brand-primary;
+}
+
+.text-primary .icon-cozy-inline > svg {
+  fill: $brand-primary;
+}
+
+.icon.text-primary .icon-cozy {
+  @include themify($themes) {
+    background-color: themed("primaryColor");
+  }
+}
+
+.icon-pen {
+  background-image: url("../images/icons-16-icon-pen.svg");
+}
+
+.icon-cross {
+  background-image: url("../images/icons-16-icon-cross.svg");
+}
+
+.icon-plus {
+  background-image: url("../images/icons-16-icon-plus.svg");
+}
+
+.icon-back {
+  background-image: url("../images/icons-16-icon-back.svg");
+}
+
+.icon-out-w {
+  background-image: url("../images/icons-16-icon-out-white.svg");
+}
+
+.icon-out {
+  background-image: url("../images/icons-16-icon-out.svg");
+}
+
+.icon-copy {
+  background-image: url("../images/icons-16-copy.svg");
+}
+
+.icon-refresh {
+  background-image: url("../images/icons-16-icon-sync.svg");
+}
+
+.icon-arrow-right {
+  background-image: url("../images/icons-16-icon-arrow-right.svg");
+  background-size: 12px 16px;
+}
+
+.icon-arrow-down {
+  background-image: url("../images/icons-16-icon-arrow-down.svg");
+  background-size: 12px 16px;
+}
+
+.icon-login {
+  background-image: url("../images/icons-login.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 24px;
+}
+
+.icon-identity {
+  background-image: url("../images/icons-identity.svg");
+  width: 24px;
+  height: 24px;
+}
+
+.icon-bank {
+  background-image: url("../images/icons-card.svg");
+  width: 24px;
+  height: 24px;
+}
+
+.icon-globe {
+  background-image: url("../images/icons-globe.svg");
+  width: 20px;
+  height: 20px;
+}
+
+.icon-key {
+  background-image: url("../images/icons-16-icon-key.svg");
+}
+
+.icon-search {
+  mask-image: url("../images/icons-16-magnifier.svg");
+  -webkit-mask-image: url("../images/icons-16-magnifier.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-note {
+  mask-image: url("../images/icons-16-note.svg");
+  -webkit-mask-image: url("../images/icons-16-note.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-folder {
+  mask-image: url("../images/icons-16-folder.svg");
+  -webkit-mask-image: url("../images/icons-16-folder.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-trash {
+  mask-image: url("../images/icons-16-trash.svg");
+  -webkit-mask-image: url("../images/icons-16-trash.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  @include themify($themes) {
+    background-color: themed("headerInputPlaceholderColor");
+  }
+}
+
+.icon-profile {
+  background-image: url("../images/icons-16-icon-profile.svg");
+}
+
+.icon-hashtag {
+  background-image: url("../images/icons-16-icon-hashtag.svg");
+}
+
+.icon-card {
+  background-image: url("../images/icons-files-cb.svg");
+}
+
+.icon-cozy-sync {
+  background-image: url("../images/icons-16-cozy-sync.svg");
+}
+
+.icon-history {
+  background-image: url("../images/icons-16-icon-history.svg");
+}
+
+.icon-share {
+  mask-image: url("../images/icons-16-share.svg");
+  -webkit-mask-image: url("../images/icons-16-share.svg");
+  @include themify($themes) {
+    background-color: themed("mutedColor");
+  }
+}
+
+.icon-double {
+  width: 75px;
+  height: 75px;
+}
+
+.invisible {
+  visibility: hidden;
+}
+[hidden] {
+  display: none !important;
+}
+
+.draggable {
+  cursor: move;
+}
+
+.toast-bottom {
+  bottom: 55px;
+  right: 10px;
+  left: 10px;
+  width: 100%;
+}
+
+#toast-container .toast.toast-info {
+  /* This width is from the #toast-container.toast-bottom-full-width > div
+    in  https://github.com/Stabzs/Angular2-Toaster/blob/master/src/toaster.css */
+  width: 96%;
+}
+
+.callout {
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #000000;
+  border-left-width: 5px;
+  border-radius: 3px;
+  @include themify($themes) {
+    border-color: themed("calloutBorderColor");
+    background-color: themed("calloutBackgroundColor");
+  }
+
+  .callout-heading {
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+
+  h3.callout-heading {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  &.callout-primary {
+    @include themify($themes) {
+      border-left-color: themed("primaryColor");
+    }
+
+    .callout-heading {
+      @include themify($themes) {
+        color: themed("primaryColor");
+      }
+    }
+  }
+
+  &.callout-info {
+    @include themify($themes) {
+      border-left-color: themed("infoColor");
+    }
+
+    .callout-heading {
+      @include themify($themes) {
+        color: themed("infoColor");
+      }
+    }
+  }
+
+  &.callout-danger {
+    @include themify($themes) {
+      border-left-color: themed("dangerColor");
+    }
+
+    .callout-heading {
+      @include themify($themes) {
+        color: themed("dangerColor");
+      }
+    }
+  }
+
+  &.callout-success {
+    @include themify($themes) {
+      border-left-color: themed("successColor");
+    }
+
+    .callout-heading {
+      @include themify($themes) {
+        color: themed("successColor");
+      }
+    }
+  }
+
+  &.callout-warning {
+    @include themify($themes) {
+      border-left-color: themed("warningColor");
+    }
+
+    .callout-heading {
+      @include themify($themes) {
+        color: themed("warningColor");
+      }
+    }
+  }
+
+  &.clickable {
+    &:hover,
+    &:focus,
+    &.active {
+      @include themify($themes) {
+        background-color: themed("boxBackgroundHoverColor");
+      }
+    }
+  }
+
+  .enforced-policy-options ul {
+    padding-left: 30px;
+    margin: 0;
+  }
+}
+
+input[type="password"]::-ms-reveal {
+  display: none;
+}
+
+.flex {
+  display: flex;
+
+  &.flex-grow {
+    > * {
+      flex: 1;
+    }
+  }
+}
+
+// Text selection styles
+// Set explicit selection styles (assumes primary accent color has sufficient
+// contrast against the background, so its inversion is also still readable)
+// and suppress user selection for most elements (to make it more app-like)
+
+::selection {
+  @include themify($themes) {
+    color: themed("backgroundColor");
+    background-color: themed("primaryAccentColor");
+  }
+}
+
+h1,
+h2,
+h3,
+label,
+a,
+button,
+p,
+img,
+.box-header,
+.box-footer,
+.callout,
+.row-label,
+.modal-title,
+.overlay-container,
+.swal2-container {
+  user-select: none;
+}
+
+app-about .modal-body > *,
+app-vault-view .box-footer {
+  user-select: auto;
+}
+
+/* tweak for inconsistent line heights in cipher view */
+.box-footer button,
+.box-footer a {
+  line-height: 1;
+}
+
+// Workaround for slow performance on external monitors on Chrome + MacOS
+// See: https://bugs.chromium.org/p/chromium/issues/detail?id=971701#c64
+@keyframes redraw {
+  0% {
+    opacity: 0.99;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+html.force_redraw {
+  animation: redraw 1s linear infinite;
+}
+
+.rounded-circle {
+  border-radius: 50% !important;
+}

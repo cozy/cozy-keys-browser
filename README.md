@@ -1,92 +1,44 @@
-# What's Cozy?
+<p align="center">
+  <img src="https://raw.githubusercontent.com/bitwarden/brand/master/screenshots/apps-combo-logo.png" alt="Bitwarden" />
+</p>
+<p align="center">
+  <a href="https://github.com/bitwarden/clients/actions/workflows/build-browser.yml?query=branch:master" target="_blank">
+    <img src="https://github.com/bitwarden/clients/actions/workflows/build-browser.yml/badge.svg?branch=master" alt="Github Workflow browser build on master" />
+  </a>
+  <a href="https://github.com/bitwarden/clients/actions/workflows/build-cli.yml?query=branch:master" target="_blank">
+    <img src="https://github.com/bitwarden/clients/actions/workflows/build-cli.yml/badge.svg?branch=master" alt="Github Workflow CLI build on master" />
+  </a>
+  <a href="https://github.com/bitwarden/clients/actions/workflows/build-desktop.yml?query=branch:master" target="_blank">
+    <img src="https://github.com/bitwarden/clients/actions/workflows/build-desktop.yml/badge.svg?branch=master" alt="Github Workflow desktop build on master" />
+  </a>
+    <a href="https://github.com/bitwarden/clients/actions/workflows/build-web.yml?query=branch:master" target="_blank">
+    <img src="https://github.com/bitwarden/clients/actions/workflows/build-web.yml/badge.svg?branch=master" alt="Github Workflow web build on master" />
+  </a>
+  <a href="https://gitter.im/bitwarden/Lobby" target="_blank">
+    <img src="https://badges.gitter.im/bitwarden/Lobby.svg" alt="gitter chat" />
+  </a>
+</p>
 
-![Cozy Logo](https://cdn.rawgit.com/cozy/cozy-guidelines/master/templates/cozy_logo_small.svg)
+---
 
-[Cozy] is a platform that brings all your web services in the same private space. With it, your webapps and your devices can share data easily, providing you with a new experience. You can install Cozy on your own hardware where no one's tracking you.
+# Bitwarden Client Applications
 
-# Cozy Browser Extension
+This repository houses all Bitwarden client applications except the [Mobile application](https://github.com/bitwarden/mobile).
 
-Securely store your passwords and make it easy to add and update your Cozy connectors!
+Please refer to the [Clients section](https://contributing.bitwarden.com/getting-started/clients/) of the [Contributing Documentation](https://contributing.bitwarden.com/) for build instructions, recommended tooling, code style tips, and lots of other great information to get you started.
 
-The Cozy browser extension is written using the Web Extension API and Angular. It is based on [Bitwarden](https://github.com/bitwarden/browser).
+## Related projects:
 
-# Build/Run
+- [bitwarden/server](https://github.com/bitwarden/server): The core infrastructure backend (API, database, Docker, etc).
+- [bitwarden/mobile](https://github.com/bitwarden/mobile): The mobile app vault (iOS and Android).
+- [bitwarden/directory-connector](https://github.com/bitwarden/directory-connector): A tool for syncing a directory (AD, LDAP, Azure, G Suite, Okta) to an organization.
 
-## Requirements
+# We're Hiring!
 
-- [Node.js](https://nodejs.org) v16.15.0 (bug in npm 8.11.0 and greater)
-- NPM 8.5.5
-- [Gulp](https://gulpjs.com/) (`npm install --global gulp-cli`)
-- Chrome (preferred), Opera, Firefox browser or Safari
+Interested in contributing in a big way? Consider joining our team! We're hiring for many positions. Please take a look at our [Careers page](https://bitwarden.com/careers/) to see what opportunities are [currently open](https://bitwarden.com/careers/#open-positions) as well as what it's like to work at Bitwarden.
 
-## Build for developement
+# Contribute
 
-```
-npm install --legacy-peer-deps
-npm run start
-```
+Code contributions are welcome! Please commit any pull requests against the `master` branch. Learn more about how to contribute by reading the [Contributing Guidelines](https://contributing.bitwarden.com/contributing/). Check out the [Contributing Documentation](https://contributing.bitwarden.com/) for how to get started with your first contribution.
 
-You can now load the extension into your browser through the browser's extension tools page:
-
-- Chrome/Opera:
-  1. Type `chrome://extensions` in your address bar to bring up the extensions page.
-  2. Enable developer mode (toggle switch)
-  3. Click the "Load unpacked extension" button, navigate to the `build` folder of your local extension instance, and click "Ok".
-- Firefox
-  1. Type `about:debugging` in your address bar to bring up the add-ons page.
-  2. Click the `Load Temporary Add-on` button, navigate to the `build/manifest.json` file, and "Open".
-
-## Production build
-
-Production builds can be created for each browser with the following commands:
-Out of the box, the desktop application can only communicate with the production browser extension. When you enable browser integration in the desktop application, the application generates manifests which contain the production IDs of the browser extensions. To enable communication between the desktop application and development versions of browser extensions, add the development IDs to the `allowed_extensions` section of the corresponding manifests.
-
-```
-npm install
-npm run dist:<firefox|chrome|opera|safari>`
-```
-
-Manifests are located in the `browser` subdirectory of the Bitwarden configuration directory. For instance, on Windows the manifests are located at `C:\Users\<user>\AppData\Roaming\Bitwarden\browsers` and on macOS these are in `Application Support` for various browsers ([for example](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#manifest_location)). Note that disabling the desktop integration will delete the manifests, and the files will need to be updated again.
-
-You can also build all of them in once by running:
-
-```
-npm install
-npm run dist
-```
-
-## Source archive
-
-In case you need to create an archive of the source code, which can be required for an add-on submission on some platforms:
-
-```
-npm run dist:sources
-```
-
-## Desktop communication
-
-Native Messaging (communication between the desktop application and browser extension) works by having the browser start a lightweight proxy baked into our desktop application.
-
-Out of the box, the desktop application can only communicate with the production browser extension. When you enable browser integration in the desktop application, the application generates manifests which contain the production IDs of the browser extensions. To enable communication between the desktop application and development versions of browser extensions, add the development IDs to the `allowed_extensions` section of the corresponding manifests.
-
-Manifests are located in the `browser` subdirectory of the Bitwarden configuration directory. For instance, on Windows the manifests are located at `C:\Users\<user>\AppData\Roaming\Bitwarden\browsers` and on macOS these are in `Application Support` for various browsers ([for example](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_manifests#manifest_location)). Note that disabling the desktop integration will delete the manifests, and the files will need to be updated again.
-
-## Prettier
-
-We recently migrated to using Prettier as code formatter. All previous branches will need to updated to avoid large merge conflicts using the following steps:
-
-1. Check out your local Branch
-2. Run `git merge cebee8aa81b87cc26157e5bd0f879db254db9319`
-3. Resolve any merge conflicts, commit.
-4. Run `npm run prettier`
-5. Commit
-6. Run `git merge -Xours 8fe821b9a3f9728bcb02d607ca75add468d380c1`
-7. Push
-
-### Git blame
-
-We also recommend that you configure git to ignore the prettier revision using:
-
-```bash
-git config blame.ignoreRevsFile .git-blame-ignore-revs
-```
+Security audits and feedback are welcome. Please open an issue or email us privately if the report is sensitive in nature. You can read our security policy in the [`SECURITY.md`](SECURITY.md) file.

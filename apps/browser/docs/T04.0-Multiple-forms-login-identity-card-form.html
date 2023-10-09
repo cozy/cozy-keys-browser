@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" media="screen" type="text/css" href="TXX.css"/>
+    </head>
+
+    <body>
+
+        <a href="./">Back to menu</a>
+        <hr>
+        <h2>Multiple form in a single page</h2>
+        <p>✅ normal behaviour for login and autofill menu</p>
+
+        <h2 class="header-section">Login form </h2>
+
+        <form action="" method="get" class="form-example" >
+
+          <div class="form-row">
+            <label for="email">Enter your email: </label>
+            <input type="text" name="email" id="email" value="" autocomplete="off" style="width:100%; box-sizing: border-box;" >
+          </div>
+
+          <div class="form-row">
+            <label for="password">Enter your password: </label>
+            <input type="text" name="password" id="password" value="" autocomplete=“off” style="width:100%; box-sizing: border-box;" autofocus >
+          </div>
+
+          <div class="form-row">
+            <br>
+            <input type="submit" value="login" onClick="document.querySelector('form').submit(); console.log('toto')">
+          </div>
+
+        </form>
+
+        <hr>
+        <h2 class="header-section">Identity form</h2>
+
+        <form class="form-example form autosave-enabled form-exemple" id="dossier-edit-form" enctype="multipart/form-data" action="https://www.demarches-simplifiees.fr/dossiers/2418643/brouillon" accept-charset="UTF-8" method="post">
+
+            <input placeholder="Nom de famille" required="required" type="text" value="" name="dossier[champs_attributes][3][value]" id="dossier_champs_attributes_3_value" autocomplete="off" >
+
+            <label for="dossier_champs_attributes_4_value">Nom d'usage</label>
+            <input placeholder="Nom d'usage" type="text" value="" name="dossier[champs_attributes][4][value]" id="dossier_champs_attributes_4_value">
+
+            <label for="dossier_champs_attributes_5_value">Prénoms
+                <span class="mandatory">*</span>
+            </label>
+            <input placeholder="Prénoms" required="required" type="text" value="" name="dossier[champs_attributes][5][value]" id="dossier_champs_attributes_5_value">
+
+            <input type="hidden" value="91090858" name="dossier[champs_attributes][5][id]" id="dossier_champs_attributes_5_id">
+
+            <label for="dossier_champs_attributes_6_value">Adresse personnelle
+                <span class="mandatory">*</span>
+            </label>
+            <input placeholder="Adresse personnelle" required="required" type="text" value="" name="dossier[champs_attributes][6][value]" id="dossier_champs_attributes_6_value">
+
+            <label for="dossier_champs_attributes_7_value">Code postal
+                <span class="mandatory">*</span>
+            </label>
+            <input placeholder="Code postal" required="required" type="text" value="" name="dossier[champs_attributes][7][value]" id="dossier_champs_attributes_7_value">
+
+        </form>
+
+        <hr>
+        <h2 class="header-section">Credit card form</h2>
+
+        <form class="form-example">
+            <div class="form-group owner">
+                <label for="owner">Card Owner</label>
+                <input type="text" class="form-control" id="card-owner">
+            </div>
+            <div class="form-group CVV">
+                <label for="cvv">CVV</label>
+                <input type="text" class="form-control" id="cvv" autocomplete="off" >
+            </div>
+            <div class="form-group" id="card-number-field">
+                <label for="cardNumber">Card Number</label>
+                <input type="text" class="form-control" id="cardNumber" autocomplete="off" >
+            </div>
+            <div class="form-group" id="expiration-date">
+                <label>Expiration Date</label>
+                <select>
+                    <option value="01">January</option>
+                    <option value="02">February </option>
+                    <option value="03">March</option>
+                    <option value="04">April</option>
+                    <option value="05">May</option>
+                    <option value="06">June</option>
+                    <option value="07">July</option>
+                    <option value="08">August</option>
+                    <option value="09">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+                <select>
+                    <option value="16"> 2016</option>
+                    <option value="17"> 2017</option>
+                    <option value="18"> 2018</option>
+                    <option value="19"> 2019</option>
+                    <option value="20"> 2020</option>
+                    <option value="21"> 2021</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="pay-now">
+                <button type="submit" class="btn btn-default" id="confirm-purchase">Confirm</button>
+            </div>
+
+        </form>
+
+    </body>
+</html>

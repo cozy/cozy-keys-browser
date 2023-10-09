@@ -1,0 +1,38 @@
+@charset "utf-8";
+
+body {
+    font-family: monospace;
+}
+hr {
+    height: 4px;
+    background-color: black;
+}
+form {
+    max-width: 400px;
+}
+.form-row {
+    margin-bottom: 10px;
+    width:100%;
+}
+label {
+    display: block;
+    margin-top: 13px;
+}
+
+label.small {
+    margin-top: 0;
+}
+input:not([type=radio][type=submit]) {
+    width:100%;
+}
+button {
+    margin-top: 20px;
+}
+iframe {
+    width:100%;
+    border: solid black 3px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-right: 0.5em;
+    box-sizing: border-box;
+}
