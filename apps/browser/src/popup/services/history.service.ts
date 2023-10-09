@@ -40,7 +40,7 @@ export class HistoryService {
     // listen to router to feed the history
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        // console.log("navigationEnd event on url", event.url);
+        console.log("navigationEnd event on url", event.url);
         if (this.currentUrlInProgress) {
           this.currentUrlInProgress = false;
         } else if (this.previousUrlInProgress) {
@@ -70,8 +70,9 @@ export class HistoryService {
   }
 
   async init() {
-    // console.log("historyService.init()");
+    console.log("historyService.init()");
     const histStr: string = await this.stateService.getHistoryState();
+    console.log("history.service.init()", histStr);
     if (histStr === "/" || !histStr) {
       this.hist = this.defaultHist.slice();
       return;
@@ -116,6 +117,7 @@ export class HistoryService {
   }
 
   gotoCurrentUrl() {
+    console.log("history.service.gotoCurrentUrl(), this.hist=", this.hist);
     this.currentUrlInProgress = true;
     this.gotoToUrl(this.hist[0]);
   }

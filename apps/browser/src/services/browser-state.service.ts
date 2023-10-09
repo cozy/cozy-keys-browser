@@ -184,6 +184,7 @@ export class BrowserStateService
   }
 
   async setHistoryState(value: string): Promise<void> {
+    console.log("setHistoryState() value=", value);
     const account = await this.getAccount(await this.defaultInMemoryOptions());
     if (!account) {
       return;
@@ -193,6 +194,7 @@ export class BrowserStateService
   }
 
   async getHistoryState(): Promise<string> {
+    await console.log("getHistoryState() value=", (await this.getAccount(await this.defaultInMemoryOptions()))?.history);
     return (await this.getAccount(await this.defaultInMemoryOptions()))?.history;
   }
 
