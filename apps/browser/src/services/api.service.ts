@@ -106,7 +106,7 @@ export class ApiService extends BaseApiService {
         : request.toIdentityToken(this._platformUtilsService.getClientType());
     const bodyData = {
       ...identityToken,
-      clientName: `Cozy Passwords (${getDeviceName(this._device)})`,
+      clientName: `Cozy Pass (${getDeviceName(this._device)})`,
     };
     const response = await this.fetch(
       new Request(this._environmentService.getIdentityUrl() + "/connect/token", {
