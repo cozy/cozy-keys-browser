@@ -207,6 +207,14 @@
   "logOut": {
     "message": "Log out"
   },
+  "pinLogOut": {
+    "message": "log out from the Cozy $ACCOUNT$",
+    "placeholders": {
+      "account": {
+        "content": "$1"
+      }
+    }
+  },
   "about": {
     "message": "About"
   },
@@ -413,18 +421,20 @@
   "yourVaultIsLocked": {
     "message": "Your vault is locked, confirm your password to continue."
   },
+  "yourVaultIsPinLocked": {
+    "message": "If you forget your pin code "
+  },
+  "yourVaultIsPinLocked2": {
+    "message": "  and re-authenticate."
+  },
   "unlock": {
     "message": "Unlock"
   },
   "loggedInAsOn": {
-    "message": "Logged in as $EMAIL$ on $HOSTNAME$.",
+    "message": "Logged in on $HOSTNAME$.",
     "placeholders": {
-      "email": {
-        "content": "$1",
-        "example": "name@example.com"
-      },
       "hostname": {
-        "content": "$2",
+        "content": "$1",
         "example": "mycozy.cloud"
       }
     }
@@ -619,7 +629,7 @@
     }
   },
   "newUri": {
-    "message": "New domain to exclude"
+    "message": "New domain"
   },
   "addedItem": {
     "message": "Item added"
@@ -1499,7 +1509,7 @@
     "message": "Unlock with PIN"
   },
   "setYourPinCode": {
-    "message": "Set your PIN code for unlocking Cozy. Your PIN settings will be reset if you ever fully log out of the application."
+    "message": "Set your unlock PIN. It will be deactivated if you log out."
   },
   "pinRequired": {
     "message": "PIN code is required."
