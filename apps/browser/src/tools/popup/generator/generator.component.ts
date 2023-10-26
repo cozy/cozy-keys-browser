@@ -2,7 +2,7 @@ import { Location } from "@angular/common";
 /* Cozy custo
 import { Component } from "@angular/core";
 */
-import { Component, ElementRef, ViewChild } from "@angular/core";
+import { Component, ElementRef, ViewChild, OnDestroy } from "@angular/core";
 /* end custo */
 import { ActivatedRoute } from "@angular/router";
 
@@ -20,6 +20,8 @@ import { AddEditCipherInfo } from "@bitwarden/common/vault/types/add-edit-cipher
 /* eslint-disable */
 import { HistoryService } from "../../../popup/services/history.service";
 import { CozyClientService } from "../../../popup/services/cozyClient.service";
+import { first } from "rxjs/operators";
+import { Subject } from "rxjs";
 /* eslint-enable */
 /* END */
 
@@ -27,9 +29,10 @@ import { CozyClientService } from "../../../popup/services/cozyClient.service";
   selector: "app-generator",
   templateUrl: "generator.component.html",
 })
-export class GeneratorComponent extends BaseGeneratorComponent {
+export class GeneratorComponent extends BaseGeneratorComponent implements OnDestroy {
   private addEditCipherInfo: AddEditCipherInfo;
   private cipherState: CipherView;
+  protected destroy$ = new Subject<void>();
 
   @ViewChild("emailInput") emailInputElement: ElementRef;
 
@@ -67,7 +70,27 @@ export class GeneratorComponent extends BaseGeneratorComponent {
     if (this.cipherState?.login?.hasUris) {
       this.usernameWebsite = this.cipherState.login.uris[0].hostname;
     }
+    // Cozy customization
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
+    this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
+      if (qParams.tempCipher) {
+        // a cipher is in edition, retrive cipher data form url
+        this.comingFromAddEdit = true;
+        const jsonCipher = JSON.parse(qParams.tempCipher);
+        this.cipherState = CipherView.fromJSON(jsonCipher);
+        if (this.cipherState?.login?.hasUris) {
+          this.usernameWebsite = this.cipherState.login.uris[0].hostname;
+        }
+      }
+    });
+    // end custo */
+
     await super.ngOnInit();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   select() {
@@ -77,8 +100,12 @@ export class GeneratorComponent extends BaseGeneratorComponent {
     } else if (this.type === "username") {
       this.cipherState.login.username = this.username;
     }
+    /* Cozy custo
     this.addEditCipherInfo.cipher = this.cipherState;
     this.stateService.setAddEditCipherInfo(this.addEditCipherInfo);
+    */
+    this.historyService.updatePreviousAddEditCipher(this.cipherState);
+    /* end custo */
     this.close();
   }
 

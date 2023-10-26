@@ -52,7 +52,6 @@ export class AddEditComponent extends BaseAddEditComponent {
   showAutoFillOnPageLoadOptions: boolean;
   // Cozy customization
   //*
-  private initialPwd: string;
   typeOptions: any[];
   //*/
 
@@ -143,26 +142,12 @@ export class AddEditComponent extends BaseAddEditComponent {
 
       // Cozy customization
       //*
-      this.initialPwd = this.cipher.login.password;
       if (params.tempCipher) {
         // the cipher was already in edition and popup has been closed or navigation in pwd generator
         // we have to select the correct pwd
         // first retrive data form url
-        const data = JSON.parse(params.tempCipher);
-        this.initialPwd = data.initialPwd;
-        const histCipher = CipherView.fromJSON(data.cipher);
-        if (data.cipher.login?.password !== this.cipher.login?.password) {
-          // url pwd and state pwd are different : one of them has been modified compared to initial pwd
-          if (this.initialPwd !== this.cipher.login.password) {
-            // initial pwd and state differs, we keep the state pwd
-            histCipher.login.password = this.cipher.login.password;
-          } else {
-            // initial pwd and state are identical, we keep the url pwd
-          }
-        } else {
-          // url pwd and state pwd are identical, keep url pwd
-        }
-
+        const cipherJson = JSON.parse(params.tempCipher);
+        const histCipher = CipherView.fromJSON(cipherJson);
         Object.assign(this.cipher, histCipher);
       }
       // end custo */
@@ -208,10 +193,7 @@ export class AddEditComponent extends BaseAddEditComponent {
   */
   @HostListener("window:unload", ["$event"])
   async unloadMnger(event: any) {
-    this.historyService.saveTempCipherInHistory({
-      initialPwd: this.initialPwd,
-      cipher: this.cipher,
-    });
+    this.historyService.saveTempCipherInHistory(this.cipher);
   }
   /* end custo */
 
@@ -293,11 +275,13 @@ export class AddEditComponent extends BaseAddEditComponent {
     if (confirmed) {
       await this.saveCipherState();
       // save cipher state in url for when popup will be closed.
-      this.historyService.saveTempCipherInHistory({
-        initialPwd: this.initialPwd,
-        cipher: this.cipher,
+      this.historyService.saveTempCipherInHistory(this.cipher);
+      this.router.navigate(["generator"], {
+        queryParams: {
+          type: "username",
+          tempCipher: JSON.stringify(this.cipher),
+        },
       });
-      this.router.navigate(["generator"], { queryParams: { type: "username" } });
     }
     return confirmed;
   }
@@ -307,11 +291,10 @@ export class AddEditComponent extends BaseAddEditComponent {
     if (confirmed) {
       await this.saveCipherState();
       // save cipher state in url for when popup will be closed.
-      this.historyService.saveTempCipherInHistory({
-        initialPwd: this.initialPwd,
-        cipher: this.cipher,
+      this.historyService.saveTempCipherInHistory(this.cipher);
+      this.router.navigate(["generator"], {
+        queryParams: { type: "password", tempCipher: JSON.stringify(this.cipher) },
       });
-      this.router.navigate(["generator"], { queryParams: { type: "password" } });
     }
     return confirmed;
   }
