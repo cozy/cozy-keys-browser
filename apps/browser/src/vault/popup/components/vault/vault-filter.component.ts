@@ -190,7 +190,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   @HostListener("window:unload", ["$event"])
   async unloadMnger(event?: any) {
     // save search state when popup is closed.
-    this.historyService.updateQueryParamInCurrentUrl("searchText", this.searchText);
+    this.historyService.updateQueryParamInHistory("searchText", this.searchText);
   }
   // end custo
 
