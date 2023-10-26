@@ -23,7 +23,7 @@ on logout and on lock.
 
 @Injectable()
 export class HistoryService {
-  private hist: any[] = [undefined];
+  private hist: string[] = [undefined];
   private homepage = "tabs/current";
   private defaultHist: string[] = ["/tabs/current", "/tabs/vault"];
   private defaultLoggedOutHistory: string[] = ["/home"];
@@ -151,13 +151,13 @@ export class HistoryService {
     );
   }
 
-  saveTempCipherInHistory(cipher: any) {
-    const cleanedCipher: any = cleanCipher(cipher);
-    this.updateQueryParamInCurrentUrl("tempCipher", JSON.stringify(cleanedCipher));
+  saveTempCipherInHistory(cipher: CipherView, step = 0) {
+    const jsonCleanedCipher: string = jsonCleanedObject(cipher);
+    this.updateQueryParamInHistory("tempCipher", jsonCleanedCipher, step);
   }
 
-  updateQueryParamInCurrentUrl(key: string, value: string) {
-    const words = this.hist[0].split("?"); // words[0]=>url | words[1] => queryParams string
+  updateQueryParamInHistory(key: string, value: string, step = 0) {
+    const words = this.hist[step].split("?"); // words[0]=>url | words[1] => queryParams string
     const params = new URLSearchParams(words[1]);
     const queryParamsObj: any = {};
     for (const [key, value] of params) {
@@ -169,16 +169,20 @@ export class HistoryService {
       queryParamsObj[key] = value;
     }
     const queryParamSt: string = new URLSearchParams(queryParamsObj).toString();
-    this.updateCurrentUrl(words[0] + (queryParamSt !== "" ? "?" + queryParamSt : ""));
+    this.updateUrlAtStep(words[0] + (queryParamSt !== "" ? "?" + queryParamSt : ""), step);
   }
 
-  async updateCurrentUrl(url: string) {
-    this.hist[0] = url;
+  private async updateUrlAtStep(url: string, step: number) {
+    this.hist[step] = url;
     await this.saveHistoryState();
   }
 
   async updateTimeStamp() {
     await this.saveHistoryState();
+  }
+
+  async updatePreviousAddEditCipher(cipher: CipherView) {
+    await this.saveTempCipherInHistory(cipher, 1);
   }
 }
 
@@ -187,14 +191,14 @@ export class HistoryService {
 /*
 Remove all null properties to shorten the stored url in history (recursive)
 */
-function cleanCipher(cipher: any) {
-  for (const key in cipher) {
-    if (cipher[key] === null) {
-      delete cipher[key];
-    } else if (typeof cipher[key] === "object") {
-      cleanCipher(cipher[key]);
+function jsonCleanedObject(obj: any): any {
+  for (const key in obj) {
+    if (obj[key] === null) {
+      delete obj[key];
+    } else if (typeof obj[key] === "object") {
+      jsonCleanedObject(obj[key]);
     }
   }
-  return cipher;
+  return JSON.stringify(obj);
 }
 // END Cozy helper

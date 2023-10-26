@@ -259,7 +259,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
   @HostListener("window:unload", ["$event"])
   async unloadMnger(event?: any) {
-    this.historyService.updateQueryParamInCurrentUrl(
+    this.historyService.updateQueryParamInHistory(
       "searchText",
       this.searchText ? this.searchText : ""
     );
