@@ -8,12 +8,59 @@ interface BankServiceInterface {
 }
 
 class BaseBankService {
+
+  protected correspondanceTable = new Array<number>(10);
+
   getCurrentBankName(){
     return CURRENT_BANK_NAME;
   }
   observeDomForBank(collectFunction: any): boolean{
     return false;
   }
+}
+
+class BaseOcrBankService extends BaseBankService {
+
+  private iframePromise: Promise<void>;
+
+  constructor(initOcr: boolean, modelName: string) {
+    super();
+    if (!initOcr) {
+      return
+    }
+    // create iframe where Tensorflow model will be run to OCR the keys
+    window.addEventListener("DOMContentLoaded", () => {
+      const iframe = document.createElement("iframe");
+      iframe.src = chrome.runtime.getURL("tensor/index.html?model=" + modelName);
+      iframe.style.cssText = `display: none`;
+      document.body.append(iframe);
+      this.iframePromise = new Promise((resolve)=>{
+        iframe.addEventListener("load", () => {
+          resolve();
+        })
+      })
+    })
+  }
+
+  protected async ocr(dataUrls: string[]) {
+    const promise = new Promise((resolve) => {
+      this.iframePromise.then(() => {
+        // send key images to OCR in iframe
+        chrome.runtime.sendMessage({
+          command: "toTensorIframe-keysToOCR",
+          dataUrls,
+        },
+        (r)=>{
+          r.forEach( ( val: number, imageIndex: number ) => {
+            this.correspondanceTable[val] = imageIndex;
+          });
+          resolve(this.correspondanceTable)
+        }
+      )})
+    })
+    return promise;
+  }
+
 }
 
 let CURRENT_BANK_NAME: string;
@@ -52,8 +99,6 @@ class BankService_test extends BaseBankService implements BankServiceInterface {
 /****/
 class BankService_banquepostale extends BaseBankService implements BankServiceInterface {
 
-  private correspondanceTable = new Array<number>(10);
-
   private keysElements: NodeList;
 
   getBankKeyboarMenudEl(): HTMLElement{
@@ -79,7 +124,7 @@ class BankService_banquepostale extends BaseBankService implements BankServiceIn
       if (selectedPuce) {
         (document.querySelector("#reset-password button") as HTMLButtonElement).click();
         await playKeySound("A", 50);
-        setTimeout( () => { // just wait for the page to delete preiously typed password
+        setTimeout( () => { // just wait for the page to delete previously typed password
           this.typeOnKeyboard(codeToType, true);
         }, 200);
       } else {
@@ -101,11 +146,96 @@ class BankService_banquepostale extends BaseBankService implements BankServiceIn
 
 
 /***********************************************************/
+ // BankService for BNP
+/****/
+class BankService_bnp extends BaseOcrBankService implements BankServiceInterface {
+
+  private keysElements: NodeList;
+
+  constructor(initOcr: boolean) {
+    super(initOcr, "bnp")
+  }
+
+  getBankKeyboarMenudEl(): HTMLElement{
+    const element = document.querySelector("#initPass") as HTMLElement;
+    return element;
+  }
+
+  async buildCorrespondanceTable() {
+    // get the keyboard image
+    const keyboardEl = document.querySelector("#secret-nbr-keyboard") as HTMLDivElement;
+    const style = window.getComputedStyle(keyboardEl);
+    const imgUrl = style.backgroundImage.slice(4, -1).replace(/"/g, "")
+    const img = new Image()
+    img.src = imgUrl;
+    const promise = new Promise((resolve)=>{
+      img.onload = resolve
+    })
+    await promise;
+    // the keyboard is a single image, we have to split it into an image
+    // Image geometry parameters
+    const
+      X0 = 3,
+      Y0 = 2,
+      IMG_W = 77 - 28 - 27, // 22 px
+      IMG_H = 75 - 21 - 22, // 32 px
+      STEP_X = 86-X0,
+      STEP_Y = 82-Y0;
+
+    // canvas
+    const canvasForKeys = document.createElement("canvas");
+    canvasForKeys.width = 22;
+    canvasForKeys.height = 32;
+    const ctxForKeys = canvasForKeys.getContext('2d');
+    // get dataUrls for each key
+    const dataUrls: string[] = [];
+    for (let j = 0; j < 2; j++) {
+      for (let i = 0; i < 5; i++) {
+        const x = X0 + i * STEP_X;
+        const y = Y0 + j * STEP_Y;
+        ctxForKeys.drawImage(img, x + 28, y + 21, IMG_W, IMG_H, 0, 0, 22, 32) // all key images must be 22*32 to be ocr-ized
+        dataUrls.push(canvasForKeys.toDataURL())
+      }
+    }
+    // run ocr
+    await this.ocr(dataUrls);
+    // usefull to get data urls of keys in order to train the model
+    // console.log("\ndataUrls");
+    // console.log(dataUrls);
+  }
+
+  async typeOnKeyboard(codeToType: string, isARecall = false): Promise<void>{
+    if (codeToType === "" ) { return }
+    if (!isARecall) {
+      this.keysElements = document.querySelectorAll("#secret-nbr-keyboard a");
+      if (this.correspondanceTable[0] == undefined) {
+        await this.buildCorrespondanceTable();
+      }
+      const hasActiveBullets = (document.querySelector("#secret-nbr") as HTMLInputElement).value !== '';
+      if (hasActiveBullets) {
+        (document.querySelector("#initPass") as HTMLButtonElement).click();
+        await playKeySound("A", 50);
+      }
+      setTimeout( () => { // just wait for the page to delete previously typed password
+        this.typeOnKeyboard(codeToType, true);
+      }, 200);
+    } else {
+      // find key element and click on it
+      const key = codeToType.charAt(0)
+      const keyEl: HTMLButtonElement = (this.keysElements[this.correspondanceTable[parseInt(key)]] as HTMLButtonElement);
+      keyEl.click();
+      await playKeySound(key);
+      this.typeOnKeyboard(codeToType.slice(1), true);
+    }
+  }
+}
+
+
+
+/***********************************************************/
  // BankService for creditagricole
 /****/
 class BankService_creditagricole extends BaseBankService implements BankServiceInterface {
-
-  private correspondanceTable = new Array<number>(10);
 
   private keysElements: NodeList;
 
@@ -130,7 +260,7 @@ class BankService_creditagricole extends BaseBankService implements BankServiceI
       if ( currentlyTypedInput.value !== "") {
         (document.querySelector(".add-clear-span span") as HTMLButtonElement).click();
         await playKeySound("A", 50);
-        setTimeout( () => { // just wait for the page to delete preiously typed password
+        setTimeout( () => { // just wait for the page to delete previously typed password
           this.typeOnKeyboard(codeToType, true);
         }, 200);
       } else {
@@ -159,29 +289,12 @@ class BankService_creditagricole extends BaseBankService implements BankServiceI
  //   * créditcooperatif
  //   * banquepalatine
 /****/
-class BankService_BPCE_group extends BaseBankService implements BankServiceInterface {
+class BankService_BPCE_group extends BaseOcrBankService implements BankServiceInterface {
 
   private buttonElements: NodeList;
-  private correspondanceTable = new Array<number>(10);
-  private iframePromise: Promise<void>;
 
-  constructor(initOcr?: boolean) {
-    super();
-    if (!initOcr) {
-      return
-    }
-    // create iframe where Tensorflow model will be run to OCR the keys
-    window.addEventListener("load", () => {
-      const iframe = document.createElement("iframe");
-      iframe.src = chrome.runtime.getURL("tensor/index.html");
-      iframe.style.cssText = `display: none`;
-      document.body.append(iframe);
-      this.iframePromise = new Promise((resolve)=>{
-        iframe.addEventListener("load", () => {
-          resolve();
-        })
-      })
-    })
+  constructor(initOcr: boolean) {
+    super(initOcr, "caisse_epargne")
   }
 
   getBankKeyboarMenudEl(): HTMLElement{
@@ -201,22 +314,7 @@ class BankService_BPCE_group extends BaseBankService implements BankServiceInter
       dataUrls.push(url)
     });
     // send dataUrls to TensorFlow iframe
-    const promise = new Promise((resolve) => {
-      this.iframePromise.then(() => {
-        // send key images to OCR
-        chrome.runtime.sendMessage({
-          command: "toTensorIframe-keysToOCR",
-          dataUrls,
-        },
-        (r)=>{
-          r.forEach( ( val: number, imageIndex: number ) => {
-            this.correspondanceTable[val] = imageIndex;
-          });
-          resolve(this.correspondanceTable)
-        }
-      )})
-    })
-    return promise;
+    return this.ocr(dataUrls);
   }
 
   async typeOnKeyboard(codeToType: string, isARecall = false): Promise<void>{
@@ -230,7 +328,7 @@ class BankService_BPCE_group extends BaseBankService implements BankServiceInter
         await playKeySound("A", 50);
         hasActiveBullets = document.querySelector("as-row-circles-password .check") !== null;
       }
-      setTimeout( () => { // just wait for the page to delete preiously typed password
+      setTimeout( () => { // just wait for the page to delete previously typed password
         this.typeOnKeyboard(codeToType, true);
       }, 200);
     } else {
@@ -276,7 +374,7 @@ class BankService_lcl extends BaseBankService implements BankServiceInterface {
       if (document.querySelector(".pad-dot.is-filled")) {
         (document.querySelector(".pad-reset") as HTMLButtonElement).click();
         await playKeySound("A", 50);
-        setTimeout( () => { // just wait for the page to delete preiously typed password
+        setTimeout( () => { // just wait for the page to delete previously typed password
           this.typeOnKeyboard(codeToType, true);
         }, 200);
       } else {
@@ -303,7 +401,6 @@ class BankService_lcl extends BaseBankService implements BankServiceInterface {
 class BankService_boursorama extends BaseBankService implements BankServiceInterface {
 
   private buttonElements: NodeList;
-  private correspondanceTable = new Array<number>(10);
   private keyImageHashes:{ [index: string]: number } = {"0":-1961266208,"1":1806502122,"2":383789923,"3":-1617329400,"4":-323759857,"5":-2028372521,"6":1483506720,"7":927833434,"8":269012712,"9":1964989521}
 
   getBankKeyboarMenudEl(): HTMLElement{
@@ -336,7 +433,7 @@ class BankService_boursorama extends BaseBankService implements BankServiceInter
         await playKeySound("A", 50);
         hasActiveBullets = document.querySelector(".c-circle-password__item.is-active") !== null;
       }
-      setTimeout( () => { // just wait for the page to delete preiously typed password
+      setTimeout( () => { // just wait for the page to delete previously typed password
         this.typeOnKeyboard(codeToType, true);
       }, 200);
     } else {
@@ -365,6 +462,8 @@ export class BankServiceFactory {
         return new BankService_test();
       case "banquepostale":
         return new BankService_banquepostale();
+      case "bnp":
+        return new BankService_bnp(initOcr);
       case "boursorama":
         return new BankService_boursorama();
       case "caissedepargne":
@@ -401,7 +500,7 @@ export const getCurrentBankName = (): string => {
     CURRENT_BANK_NAME = 'axabanque'
   }
   // bnp
-  if (document.location.href === "bnp") {
+  if (document.location.hostname === "connexion-mabanque.bnpparibas") {
     CURRENT_BANK_NAME = 'bnp'
   }
   // banquepalatine

@@ -1,14 +1,16 @@
-import jsonModel from "./models_for_dist/model.json"
 import * as tf from '@tensorflow/tfjs';
 
+var jsonModel: any;
+
 const CANVAS = document.createElement('canvas');
-const CTX = CANVAS.getContext('2d');
+const CTX = CANVAS.getContext('2d', {willReadFrequently:true});
 
 const TARGET_IMAGE_WIDTH = 48;
 const TARGET_IMAGE_HEIGHT = 48;
 const IMAGE_SIZE = TARGET_IMAGE_WIDTH*TARGET_IMAGE_HEIGHT;
 
 let MODEL: any;
+
 
 /***************************************************************** */
 /* Listen to messages sent by the content script "bank.service.ts" */
@@ -28,12 +30,18 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     "heard in": document.location.pathname
   });
   */
-  const predPromises: Promise<number>[] = [];
-  msg.dataUrls.forEach( (dataUrl: string) => {
-    predPromises.push( predict(dataUrl) );
-  });
-  const promiseAll = Promise.all(predPromises);
-  promiseAll.then( sendResponse );
+  (async () => { // the correct way to run async, see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage#sending_an_asynchronous_response_using_sendresponse
+    await getModel();
+    const predPromises: Promise<number>[] = [];
+    msg.dataUrls.forEach( (dataUrl: string) => {
+      predPromises.push( predict(dataUrl) );
+    });
+    const promiseAll = Promise.allSettled(predPromises);
+    promiseAll.then( (result: any) => {
+      const response = result.map( (e: any ) => e.value); // TODO BJA : any pas jolis...
+      sendResponse(response);
+    });
+  })()
   return true;
 })
 
@@ -43,15 +51,39 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 /*************************************/
 async function getModel() {
   if (MODEL) {
-    return MODEL;
+    return;
+  }
+  if (!jsonModel) {
+    await loadJsonModel();
   }
   MODEL = await tf.loadLayersModel(tf.io.fromMemory({
     modelTopology : jsonModel.modelTopology,
     weightSpecs : jsonModel.weightSpecs,
     weightData : base64ToArrayBuffer(jsonModel.weightData)
   }));
+}
 
-  return MODEL;
+
+/**************************************/
+/* return the json MODEL for the bank */
+/**************************************/
+async function loadJsonModel() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const modelName = urlParams.get('model');
+  switch (modelName) {
+
+    case 'bnp':
+      jsonModel = await import("./models_for_dist/model-bnp.json");
+      break;
+
+      case 'caisse_epargne':
+      jsonModel = await import("./models_for_dist/model-caisse-epargne.json");
+      break;
+
+    default:
+      break;
+  }
+  return jsonModel;
 }
 
 
@@ -61,7 +93,7 @@ async function getModel() {
 async function predict(dataUrl: string): Promise<number> {
   const img =  new Image();
   img.src = dataUrl;
-  const MODEL = await getModel();
+  console.log("predict");
   return new Promise(resolve => {
     img.onload = ()=>{
       const tensorImage = createTensorFromImage(img);

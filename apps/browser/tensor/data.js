@@ -1,4 +1,18 @@
-import realRawData from "./CAISSEDEPARGNE/bank-key-images.js"
+// import realRawData1 from "./CAISSEDEPARGNE/bank-key-images.js"
+// import realRawData2 from "./BNP/bank-key-images.js"
+// const realRawData = realRawData1.concat(realRawData2);
+
+// import realRawData1 from "./CAISSEDEPARGNE/bank-key-images.js"
+// import realRawData2 from "./BNP/bank-key-images.js"
+// var realRawData = [];
+// for (let i = 0; i < 1500; i++) {
+//   realRawData = realRawData.concat(realRawData1);
+//   realRawData = realRawData.concat(realRawData2);
+// }
+
+
+// import realRawData from "./CAISSEDEPARGNE/bank-key-images.js"
+import realRawData from "./BNP/bank-key-images.js"
 
 const TARGET_IMAGE_WIDTH = 48;
 const TARGET_IMAGE_HEIGHT = 48;
@@ -14,10 +28,11 @@ const CTX = CANVAS.getContext('2d');
 
 let TRAIN_EXEMPLES_CONTAINER;
 
-/**
+/******************************************************************************************
  * A class that prepare data (`load()`) and prepare batches of data (for training or test)
- */
+ ******************************************************************************************/
 export class LearnData {
+
   constructor() {
     this.shuffledTrainIndex = 0;
     this.shuffledTestIndex = 0;
@@ -39,7 +54,7 @@ export class LearnData {
         const img = new Image();
         const imgRequest = new Promise((resolve, reject) => {
           img.onload = () => {
-            TRAIN_EXEMPLES_CONTAINER.appendChild(img)
+            TRAIN_EXEMPLES_CONTAINER.appendChild(img)  // optionnal
             // prepare datasetBytesView to manipulate datasetBytesBuffer.
             // need 4 bytes for each pixel
             const datasetBytesView = new Float32Array(
@@ -60,7 +75,7 @@ export class LearnData {
             const reworkedImageCanvas = document.createElement('canvas');
             reworkedImageCanvas.width = TARGET_IMAGE_WIDTH;
             reworkedImageCanvas.height = TARGET_IMAGE_HEIGHT;
-            TRAIN_EXEMPLES_CONTAINER.appendChild(reworkedImageCanvas);
+            TRAIN_EXEMPLES_CONTAINER.appendChild(reworkedImageCanvas); // optionnal
             const ctx2 = reworkedImageCanvas.getContext('2d');
             ctx2.drawImage(CANVAS, 0, 0);
             // get image data into datasetBytesBuffer

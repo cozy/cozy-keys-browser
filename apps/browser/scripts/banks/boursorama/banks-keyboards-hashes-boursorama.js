@@ -31,12 +31,6 @@ console.log("\nboursoramaKeyImageHashes =");
 console.log(JSON.stringify(boursoramaKeyImageHashes))
 
 
-/* ******************* */
-
-
-
-
-
 /* ************************************************************************ */
 /* A simple hash function only used for comparing images of keyboard keys   */
 /* NOT for crypto                                                           */
