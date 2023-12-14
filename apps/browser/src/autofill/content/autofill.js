@@ -714,7 +714,7 @@ const bankService = BankServiceFactory.createService(true)
 
           // check if we are in a special page (banks for  instance) in order to
           // inject special fields for this bank
-          const keyboardEl = bankService?.getBankKeyboarMenudEl(theDoc);
+          const keyboardEl = bankService?.getBankKeyboardMenudEl(theDoc);
           if (keyboardEl) {
             keyboardEl.isBankKeyboardEl = true;
             els.push(keyboardEl);

@@ -1,6 +1,8 @@
 
 /*************************************************************************
 
+In charge of producing data to train the model for BNP
+
 To extract image urls from keyboard of BNP : run the following script in
 the console of the login web page of BNP (this is the same script as in bank.service.ts / BNP) :
 
@@ -8,6 +10,8 @@ Note : images are always identical so their Hash should be enough, BUT : when th
 the keyboard image, then the canvas is the only way to get the raw data (dataurl). And this method
 returns differents results on different browsers. This difference is enven used to finger print
 browsers... That's why we have to ocr images for BNP...
+*****************************************************************************
+
 
     // get the keyboard image
     const keyboardEl = document.querySelector("#secret-nbr-keyboard");

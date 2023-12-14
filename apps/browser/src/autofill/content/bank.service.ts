@@ -4,7 +4,7 @@ interface BankServiceInterface {
   observeDomForBank(collectFunction: any): boolean;
   getCurrentBankName(): string;
   typeOnKeyboard(codeToType: string, isARecall? : any): void;
-  getBankKeyboarMenudEl(): HTMLElement;
+  getBankKeyboardMenudEl(): HTMLElement;
 }
 
 class BaseBankService {
@@ -86,7 +86,7 @@ class BankService_test extends BaseBankService implements BankServiceInterface {
     this.typeOnKeyboard(codeToType.slice(1), true);
   }
 
-  getBankKeyboarMenudEl(): HTMLElement{
+  getBankKeyboardMenudEl(): HTMLElement{
     // console.log("getBankKeyboarMenudEl()", currentBankName)
     return document.querySelector(".keyboard");
   }
@@ -101,7 +101,7 @@ class BankService_banquepostale extends BaseBankService implements BankServiceIn
 
   private keysElements: NodeList;
 
-  getBankKeyboarMenudEl(): HTMLElement{
+  getBankKeyboardMenudEl(): HTMLElement{
     return document.querySelector(".tb-container-cvdPsw");
   }
 
@@ -144,6 +144,119 @@ class BankService_banquepostale extends BaseBankService implements BankServiceIn
 }
 
 
+/***********************************************************/
+ // BankService for Société Générale
+/****/
+class BankService_societegenerale extends BaseOcrBankService implements BankServiceInterface {
+
+  private keysElements: NodeList | HTMLElement[];
+
+  constructor(initOcr: boolean) {
+    super(initOcr, "societegenerale")
+  }
+
+  getBankKeyboardMenudEl(): HTMLElement{
+    const element = document.querySelector('#codeSecret')?.parentElement as HTMLElement;
+    return element;
+  }
+
+  async buildCorrespondanceTable() {
+    // get the keyboard image
+    const keyboardEl: HTMLImageElement = document.querySelector("#img_clavier");
+    const img = new Image()
+    img.src = keyboardEl.src;
+    const promise = new Promise((resolve)=>{
+      img.onload = resolve
+    })
+    await promise;
+
+    //* Image geometry
+    const
+      X0 = 4,
+      Y0 = 4,
+      Dx = 15,
+      Dy = 10,
+      STEP_X = 64-X0,
+      STEP_Y = 64-Y0,
+      IMG_W = 55-2*Dx-X0+1,
+      IMG_H = 55-2*Dy-Y0+1;
+
+    //* canvas
+    const canvasForKeys = document.createElement("canvas");
+    canvasForKeys.width = 22;
+    canvasForKeys.height = 32;
+    const ctxForKeys = canvasForKeys.getContext('2d');
+
+    //* ************************************************************************
+    //* the keyboard is a single image, we have to split it into an image
+    //* for each key and run ocr
+    //* ************************************************************************
+    const dataUrls = [];
+    for (let j = 0; j < 4; j++) {
+      for (let i = 0; i < 4; i++) {
+        const x = X0 + i * STEP_X + Dx;
+        const y = Y0 + j * STEP_Y + Dy;
+        ctxForKeys.drawImage(img, x, y, IMG_W, IMG_H, 0, 0, 22, 32) // all key images must be 22*32 to be ocr-ized
+        dataUrls.push(canvasForKeys.toDataURL())
+      }
+    }
+    // remove dataUrls corresponding to empty keys
+    const emptyDataUrl = dataUrls.reduce((shortestDataUrl: string, currentValue: string) => {
+      return currentValue.length < shortestDataUrl.length ? currentValue : shortestDataUrl
+    }, dataUrls[0]);
+    const nonEmptydataUrls = dataUrls.filter(url => url !== emptyDataUrl );
+    // run OCR
+    await this.ocr(nonEmptydataUrls);
+    // usefull to get data urls of keys in order to train the model
+    // console.log("\ndataUrls");
+    // console.log(dataUrls);
+
+    // find the correct position in the matrix
+    let key_position = 0;
+    let key_value;
+    const correspondanceTableWithEmptykeys = new Array(10);
+    for (let k = 0; k < dataUrls.length; k++) {
+      const url = dataUrls[k];
+      if (url !== emptyDataUrl) {
+        key_value = this.correspondanceTable.findIndex(pos => pos === key_position)
+        correspondanceTableWithEmptykeys[key_value] = k;
+        key_position += 1;
+      }
+    }
+    this.correspondanceTable = correspondanceTableWithEmptykeys;
+  }
+
+  async typeOnKeyboard(codeToType: string, isARecall = false): Promise<void>{
+    if (codeToType === "" ) { return }
+    if (!isARecall) {
+      this.keysElements = Array.from(document.querySelectorAll("#img_container > div"));
+      // Convert buttons NodeList to an array
+      this.keysElements.splice(16);
+      this.keysElements.reverse();
+      if (this.correspondanceTable[0] == undefined) {
+        await this.buildCorrespondanceTable();
+      }
+      const regex = /auth-pwd-[123456789]/;
+      const inputEl = document.querySelector("#codeSecret");
+      const hasActiveBullets = inputEl.className.search(regex) > -1;
+      if (hasActiveBullets) {
+        (document.querySelector("#codeSecret-delete") as HTMLButtonElement).click();
+        await playKeySound("A", 50);
+      }
+      setTimeout( () => { // just wait for the page to delete previously typed password
+        this.typeOnKeyboard(codeToType, true);
+      }, 200);
+    } else {
+      // find key element and click on it
+      const key = codeToType.charAt(0)
+      const keyEl: HTMLButtonElement = (this.keysElements[this.correspondanceTable[parseInt(key)]] as HTMLButtonElement);
+      keyEl.click();
+      await playKeySound(key);
+      this.typeOnKeyboard(codeToType.slice(1), true);
+    }
+  }
+}
+
 
 /***********************************************************/
  // BankService for BNP
@@ -156,7 +269,7 @@ class BankService_bnp extends BaseOcrBankService implements BankServiceInterface
     super(initOcr, "bnp")
   }
 
-  getBankKeyboarMenudEl(): HTMLElement{
+  getBankKeyboardMenudEl(): HTMLElement{
     const element = document.querySelector("#initPass") as HTMLElement;
     return element;
   }
@@ -239,7 +352,7 @@ class BankService_creditagricole extends BaseBankService implements BankServiceI
 
   private keysElements: NodeList;
 
-  getBankKeyboarMenudEl(): HTMLElement{
+  getBankKeyboardMenudEl(): HTMLElement{
     return document.querySelector("#clavier_num");
   }
 
@@ -297,7 +410,7 @@ class BankService_BPCE_group extends BaseOcrBankService implements BankServiceIn
     super(initOcr, "caisse_epargne")
   }
 
-  getBankKeyboarMenudEl(): HTMLElement{
+  getBankKeyboardMenudEl(): HTMLElement{
     // console.log("getBankKeyboarMenudEl", document.querySelector("as-row-circles-password"));
     return document.querySelector("as-row-circles-password");
   }
@@ -364,7 +477,7 @@ class BankService_lcl extends BaseBankService implements BankServiceInterface {
     return true;
   }
 
-  getBankKeyboarMenudEl(): HTMLElement{
+  getBankKeyboardMenudEl(): HTMLElement{
     return document.querySelector(".pad-code");
   }
 
@@ -403,7 +516,7 @@ class BankService_boursorama extends BaseBankService implements BankServiceInter
   private buttonElements: NodeList;
   private keyImageHashes:{ [index: string]: number } = {"0":-1961266208,"1":1806502122,"2":383789923,"3":-1617329400,"4":-323759857,"5":-2028372521,"6":1483506720,"7":927833434,"8":269012712,"9":1964989521}
 
-  getBankKeyboarMenudEl(): HTMLElement{
+  getBankKeyboardMenudEl(): HTMLElement{
     return document.querySelector("[data-id='form_fakePassword']");
   }
 
@@ -476,6 +589,8 @@ export class BankServiceFactory {
         return new BankService_lcl();
       case "cagricole":
         return new BankService_creditagricole();
+      case "societegenerale":
+        return new BankService_societegenerale(initOcr);
     }
   }
 }
@@ -573,7 +688,7 @@ export const getCurrentBankName = (): string => {
     CURRENT_BANK_NAME = 'orangebank'
   }
   // societegenerale
-  if (document.location.href === "societegenerale") {
+  if (document.location.hostname === "particuliers.sg.fr") {
     CURRENT_BANK_NAME = 'societegenerale'
   }
   // console.log("bank.service.currentBankName =", currentBankName);

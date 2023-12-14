@@ -1,7 +1,19 @@
-// import realRawData1 from "./CAISSEDEPARGNE/bank-key-images.js"
-// import realRawData2 from "./BNP/bank-key-images.js"
-// const realRawData = realRawData1.concat(realRawData2);
+/******************************************************************************************
+ * Select the data to train the model on by un-commenting the targeted data
+ ******************************************************************************************/
 
+/* CAISSE D'EPARGNE */
+// import realRawData from "./CAISSEDEPARGNE/bank-key-images.js"
+
+/* BNP */
+// import realRawData from "./BNP/bank-key-images.js"
+
+/* BNP AND CAISSE D'EPARGNE */
+/*
+training on the two sets of data creates a disfucntionnal model.
+That's why we create a model for each bank. Maybe this could be
+improved to train a single model.
+*/
 // import realRawData1 from "./CAISSEDEPARGNE/bank-key-images.js"
 // import realRawData2 from "./BNP/bank-key-images.js"
 // var realRawData = [];
@@ -10,10 +22,16 @@
 //   realRawData = realRawData.concat(realRawData2);
 // }
 
+/* SOCIÉTÉ GÉNÉRALE */
+import realRawData1 from "./SOCIETE_GALE/bank-key-images.js"
+var realRawData = [];
+for (let i = 0; i < 1; i++) {
+  realRawData = realRawData.concat(realRawData1);
+}
 
-// import realRawData from "./CAISSEDEPARGNE/bank-key-images.js"
-import realRawData from "./BNP/bank-key-images.js"
-
+/******************************************************************************************
+ * CONSTANTS
+ ******************************************************************************************/
 const TARGET_IMAGE_WIDTH = 48;
 const TARGET_IMAGE_HEIGHT = 48;
 const IMAGE_SIZE = TARGET_IMAGE_WIDTH*TARGET_IMAGE_HEIGHT;

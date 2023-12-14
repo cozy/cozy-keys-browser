@@ -9,6 +9,7 @@ export class AutoFillConstants {
     "e-mail address",
     "userid",
     "user id",
+    "user_id",
     "customer id",
     "login id",
     // German

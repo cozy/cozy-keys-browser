@@ -80,6 +80,10 @@ async function loadJsonModel() {
       jsonModel = await import("./models_for_dist/model-caisse-epargne.json");
       break;
 
+      case 'societegenerale':
+      jsonModel = await import("./models_for_dist/model-societe-gale.json");
+      break;
+
     default:
       break;
   }
