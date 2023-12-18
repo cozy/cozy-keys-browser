@@ -323,7 +323,7 @@ export default class RuntimeBackground {
         if (!enableInPageMenu) {
           break;
         }
-        const fieldsForInPageMenuScripts = await this.autofillService.generateFieldsForInPageMenuScripts(
+        const fieldsForInPageMenuScripts = await this.autofillService.generateInPageMenuScripts(
           msg.pageDetails,
           false,
           sender.frameId
@@ -355,7 +355,7 @@ export default class RuntimeBackground {
       case "bgGetAutofillMenuScript": {
         // If goes here : means that addon has just been connected (page was already loaded)
         const activateMenu = async () => {
-          const script = await this.autofillService.generateFieldsForInPageMenuScripts(
+          const script = await this.autofillService.generateInPageMenuScripts(
             msg.details,
             true,
             sender.frameId
@@ -396,7 +396,7 @@ export default class RuntimeBackground {
               // If goes here : means that the page has just been loaded while addon was already connected
               // get scripts for logins, cards and identities
               const fieldsForAutofillMenuScripts =
-                await this.autofillService.generateFieldsForInPageMenuScripts(
+                await this.autofillService.generateInPageMenuScripts(
                   msg.details,
                   true,
                   sender.frameId

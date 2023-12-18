@@ -391,7 +391,7 @@ export default class AutofillService implements AutofillServiceInterface {
   // should be displayed.
   // The selection creteria here a the one common to both login and autofill menu.
   // Add prefilters and postFilters depending on the type of menu.
-  async generateFieldsForInPageMenuScripts(pageDetails: any, connected: boolean) {
+  async generateInPageMenuScripts(pageDetails: any, connected: boolean) {
     if (!pageDetails) {
       return null;
     }

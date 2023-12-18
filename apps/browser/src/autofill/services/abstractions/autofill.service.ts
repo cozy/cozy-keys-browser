@@ -50,7 +50,7 @@ export abstract class AutofillService {
   ) => boolean;
   // Cozy customization
   //*
-  generateFieldsForInPageMenuScripts: (
+  generateInPageMenuScripts: (
     pageDetails: any,
     connected: boolean,
     frameId: number
