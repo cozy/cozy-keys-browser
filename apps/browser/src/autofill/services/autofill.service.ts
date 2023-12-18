@@ -2176,7 +2176,7 @@ export default class AutofillService implements AutofillServiceInterface {
         A long string is not coherent with the description of a form to fill. It is likely a search form where
         the element before the input ("label-left") is a select for the user to choose the category where to run
         the search. */
-    if (value.length > 100) {
+    if (value.length > 60) {
       return false;
     }
     /* end override by Cozy */
