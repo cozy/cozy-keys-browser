@@ -153,7 +153,7 @@ export default class AutofillService implements AutofillServiceInterface {
       tab = await this.getActiveTab();
     }
     /* END @override by Cozy */
-    if (!tab || !options.cipher || !options.pageDetails || !options.pageDetails.length) {
+    if (!tab || (!options.cipher && !options.fieldsForInPageMenuScripts) || !options.pageDetails || !options.pageDetails.length) {
       throw new Error("Nothing to auto-fill.");
     }
 
@@ -180,11 +180,12 @@ export default class AutofillService implements AutofillServiceInterface {
         sender: pd.sender,
       });
 
-      if (!fillScript || !fillScript.script || !fillScript.script.length) {
-        return;
+      if (!options.fieldsForInPageMenuScripts &&
+          (!fillScript || !fillScript.script || !fillScript.script.length)) {
+          return;
       }
 
-      if (
+      if ( fillScript &&
         fillScript.untrustedIframe &&
         options.allowUntrustedIframe != undefined &&
         !options.allowUntrustedIframe
@@ -194,7 +195,9 @@ export default class AutofillService implements AutofillServiceInterface {
       }
 
       // Add a small delay between operations
-      fillScript.properties.delay_between_operations = 20;
+      if (fillScript) {
+        fillScript.properties.delay_between_operations = 20;
+      }
 
       /* Cozy custo */
       if (options.fieldsForInPageMenuScripts) {
