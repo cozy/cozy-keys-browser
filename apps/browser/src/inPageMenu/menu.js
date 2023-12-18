@@ -178,6 +178,7 @@ function requestFormFillingWithCipher(cipherId) {
   chrome.runtime.sendMessage({
     command: "bgAnswerMenuRequest",
     subcommand: "fillFormWithCipher",
+    targetFrameId: hostFrameId,
     cipherId: cipherId,
     sender: "menu.js",
   });

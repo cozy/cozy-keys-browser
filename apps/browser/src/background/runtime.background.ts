@@ -243,7 +243,16 @@ export default class RuntimeBackground {
               command: "autofillAnswerRequest",
               subcommand: "fillFormWithCipher",
               cipherId: msg.cipherId,
-            });
+              },
+              // The following line could be used to limit the request to only the frame pointed by the menu as being the target.
+              // But this could limit autofill when there are fields to fill in others frames.
+              // And this limitation is not possible when autofill is launched from the popup since this it has no idea of
+              // wich frame to target.
+              // So we send the message to all frames of a specific tab, assuming all frames have the
+              // same level of trust than the tab url.
+              // We keep this comment in order to track the history of this problem which is raised regularly.
+              // {frameId: msg.targetFrameId},
+            );
             break;
           case "menuMoveSelection":
             await BrowserApi.tabSendMessage(sender.tab, {

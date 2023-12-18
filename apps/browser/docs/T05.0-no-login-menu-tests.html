@@ -10,7 +10,10 @@
 
         <a href="./">Back to menu</a>
         <hr>
-        <h2>No-menu identity form</h2>
+        <h2>No-menu identity forms - all tests</h2>
+        <p>❗❗ Note : autofil will be triggered in all frames. That is a choice. The reson is that limitating the autofill to only the source frame is possible only when trigered from the menu. This is not possible when autofill is launched from the popup since this it has no idea of wich frame to target.
+          </br>So we send the message to all frames of a specific tab, assuming all frames have the same level of trust than the tab url.
+        </p>
 
         <iframe id="header" style="width:100%; height:300px;" src="T01.0-Login-form.html"></iframe>
         <iframe id="header" style="width:100%; height:300px;" src="T01.1-Login-in-search-form.html"></iframe>
