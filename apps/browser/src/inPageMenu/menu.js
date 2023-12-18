@@ -322,15 +322,15 @@ function selectFirstVisibleRow() {
     currentSelection.classList.remove("selected");
   }
   if (hash["login"]) {
-    document.querySelector("#login-rows-list").firstElementChild.classList.add("selected");
+    document.querySelector("#login-rows-list")?.firstElementChild?.classList.add("selected");
     return;
   }
   if (hash["card"]) {
-    document.querySelector("#card-rows-list").firstElementChild.classList.add("selected");
+    document.querySelector("#card-rows-list")?.firstElementChild.classList.add("selected");
     return;
   }
   if (hash["identity"]) {
-    document.querySelector("#ids-rows-list").firstElementChild.classList.add("selected");
+    document.querySelector("#ids-rows-list")?.firstElementChild.classList.add("selected");
     return;
   }
 }
@@ -392,7 +392,7 @@ function _mapData2Obj(dataObj, obj) {
 // Select the row corresponding to a Cipher ID
 function setSelectionOnCipher(targetCipherId) {
   // 1- remove current selection
-  document.querySelector(".selected").classList.remove("selected");
+  document.querySelector(".selected")?.classList.remove("selected");
   // 2- set new selection
   document.querySelector(`[data-cipher-id="${targetCipherId}"]`).classList.add("selected");
 }
