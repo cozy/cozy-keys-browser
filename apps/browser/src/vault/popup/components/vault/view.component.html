@@ -50,6 +50,16 @@
         >
         <input id="name" type="text" [value]="cipher.name" readonly aria-readonly="true" />
       </div>
+      <div *ngIf="cipher.type === 5"
+        style="
+          display: flex;
+          flex: 1;
+          flex-direction: column;
+          align-items: center;
+        "
+      >
+        <img [src]="illustrationUrl" style="width: 50%;"/>
+      </div>
       <!-- Login -->
       <div *ngIf="cipher.login">
         <div class="box-content-row box-content-row-flex" *ngIf="cipher.login.username">

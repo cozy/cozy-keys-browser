@@ -1,3 +1,4 @@
+import { LoginUriApi } from "@bitwarden/common/models/api/login-uri.api";
 import { ApiService } from "../../../abstractions/api.service";
 import { CollectionService } from "../../../abstractions/collection.service";
 import { CryptoService } from "../../../abstractions/crypto.service";
@@ -34,6 +35,16 @@ import { CipherData } from "../../../vault/models/data/cipher.data";
 import { FolderData } from "../../../vault/models/data/folder.data";
 import { CipherResponse } from "../../../vault/models/response/cipher.response";
 import { FolderResponse } from "../../../vault/models/response/folder.response";
+import { LoginData } from "../../models/data/login.data";
+import { Cipher } from "../../models/domain/cipher";
+import { Login } from "../../models/domain/login";
+import { CipherView } from "../../models/view/cipher.view";
+import { LoginApi } from "@bitwarden/common/models/api/login.api";
+import { LoginView } from "../../models/view/login.view";
+import { FieldApi } from "@bitwarden/common/models/api/field.api";
+import { FieldView } from "../../models/view/field.view";
+import { CipherType } from "../../enums/cipher-type";
+import { FieldType } from "@bitwarden/common/enums/fieldType";
 
 export class SyncService implements SyncServiceAbstraction {
   syncInProgress = false;
@@ -101,9 +112,55 @@ export class SyncService implements SyncServiceAbstraction {
       await this.apiService.refreshIdentityToken();
       const response = await this.apiService.getSync();
 
+      console.log('🌈🌈🌈🌈 response', response)
+
       await this.syncProfile(response.profile);
       await this.syncFolders(response.folders);
       await this.syncCollections(response.collections);
+
+      /** DEBUT INSERTION CIPHER */
+      const makeField = (name: string, value: string) => {
+        const field = new FieldView()
+        field.type = FieldType.Text
+        field.name = name
+        field.value = value
+        return field
+      }
+
+      const testCipher = new CipherView()
+      testCipher.name = "Carte d'identité"
+      testCipher.id = "SOME_CIPHER_ID"
+      testCipher.type = CipherType.Paper
+      testCipher.organizationId = "022e8b9e4fbf87a09964498c952053da" // Cozy Konnectors
+      testCipher.collectionIds = ["a1f0cf763d2c0b6f0a18a3d0effb0b87"]
+      testCipher.fields = []
+      
+      testCipher.fields.push(makeField("Date d'expiration", "11/02/2030")) 
+      testCipher.fields.push(makeField("Numéro de carte d'identité", "KH9KSI45S2")) 
+      testCipher.fields.push(makeField("Alerte d'expiration", "30 jours")) 
+      testCipher.fields.push(makeField("Titulaire", "Joël COSTA")) 
+      testCipher.fields.push(makeField("Face du document", "Face avant")) 
+      testCipher.fields.push(makeField("Qualification", "Carte d'identité")) 
+      testCipher.fields.push(makeField("Illustration", "https://cozy.io/fr/images/homepage-x2-min.png"))
+
+      const testCipherEncrypted = await this.cipherService.encrypt(testCipher);
+      const cipherViewEncrypted = new CipherView(testCipherEncrypted)
+      const cipherResponse = new CipherResponse(cipherViewEncrypted)
+      cipherResponse.id = testCipherEncrypted.id
+      cipherResponse.name = testCipherEncrypted.name.encryptedString
+      cipherResponse.organizationId = testCipherEncrypted.organizationId
+      cipherResponse.login = new LoginApi()
+      cipherResponse.fields = []
+      for(const field of testCipherEncrypted.fields) {
+        cipherResponse.fields.push(new FieldApi({
+          Type: field.type,
+          Name: field.name.encryptedString,
+          Value: field.value.encryptedString
+        }))
+      }
+      response.ciphers.push(cipherResponse)
+      /** FIN INSERTION CIPHER */
+
       await this.syncCiphers(response.ciphers);
       await this.syncSends(response.sends);
       await this.syncSettings(response.domains);

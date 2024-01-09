@@ -62,6 +62,7 @@ export class ViewComponent implements OnDestroy, OnInit {
   fieldType = FieldType;
   checkPasswordPromise: Promise<number>;
   folder: FolderView;
+  illustrationUrl: string;
 
   private totpInterval: any;
   private previousCipherId: string;
@@ -135,6 +136,10 @@ export class ViewComponent implements OnDestroy, OnInit {
       this.totpInterval = setInterval(async () => {
         await this.totpTick(interval);
       }, 1000);
+    }
+
+    if (this.cipher.type === CipherType.Paper) {
+      this.illustrationUrl = this.cipher.fields.find(f => f.name === 'Illustration').value
     }
 
     if (this.previousCipherId !== this.cipherId) {

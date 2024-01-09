@@ -1160,6 +1160,8 @@ export class CipherService implements CipherServiceAbstraction {
 
   private async encryptCipherData(cipher: Cipher, model: CipherView, key: SymmetricCryptoKey) {
     switch (cipher.type) {
+      case CipherType.Paper:
+        return;
       case CipherType.Login:
         cipher.login = new Login();
         cipher.login.passwordRevisionDate = model.login.passwordRevisionDate;
