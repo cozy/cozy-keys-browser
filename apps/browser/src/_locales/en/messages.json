@@ -1338,6 +1338,9 @@
   "typeIdentities": {
     "message": "Profiles"
   },
+  "typePapers": {
+    "message": "Documents and Notes"
+  },
   "forThisWebSite": {
     "message": "For this web page"
   },

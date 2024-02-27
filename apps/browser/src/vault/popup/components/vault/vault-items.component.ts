@@ -155,6 +155,11 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
           case CipherType.SecureNote:
             this.groupingTitle = this.i18nService.t("secureNotes");
             break;
+          // Cozy customization
+          case CipherType.Paper:
+            this.groupingTitle = this.i18nService.t("typePapers");
+            break;
+          // Cozy customization end
           default:
             break;
         }

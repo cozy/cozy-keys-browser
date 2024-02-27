@@ -1240,6 +1240,10 @@ export class CipherService implements CipherServiceAbstraction {
           key
         );
         return;
+      // Cozy customization
+      case CipherType.Paper:
+        return;
+      // Cozy customization end
       default:
         throw new Error("Unknown cipher type.");
     }

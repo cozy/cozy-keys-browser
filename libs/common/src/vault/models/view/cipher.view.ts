@@ -76,6 +76,11 @@ export class CipherView implements View, InitializerMetadata {
         return this.card;
       case CipherType.Identity:
         return this.identity;
+      // Cozy customization
+      case CipherType.Paper:
+        // This is a temporary value to be able to display a Paper row (otherwise it crashes because it tries to get a subtitle from an undefined value)
+        return {} as LoginView;
+      // Cozy customization end
       default:
         break;
     }
