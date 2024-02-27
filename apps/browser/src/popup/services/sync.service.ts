@@ -65,7 +65,7 @@ export class SyncService extends BaseSyncService {
     private localFolderApiService: FolderApiServiceAbstraction,
     private _organizationService: InternalOrganizationService,
     logoutCallback: (expired: boolean) => Promise<void>,
-    private cozyClientService: CozyClientService
+    cozyClientService: CozyClientService
   ) {
     super(
       localApiService,
@@ -83,7 +83,8 @@ export class SyncService extends BaseSyncService {
       providerService,
       localFolderApiService,
       _organizationService,
-      logoutCallback
+      logoutCallback,
+      cozyClientService
     );
   }
 

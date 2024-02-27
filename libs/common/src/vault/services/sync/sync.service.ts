@@ -1,3 +1,5 @@
+import { CozyClientService } from "../../../../../../apps/browser/src/popup/services/cozyClient.service";
+import { fetchPapersAndConvertAsCiphers } from "../../../../../../libs/cozy/paperCipher";
 import { ApiService } from "../../../abstractions/api.service";
 import { CollectionService } from "../../../abstractions/collection.service";
 import { CryptoService } from "../../../abstractions/crypto.service";
@@ -54,7 +56,8 @@ export class SyncService implements SyncServiceAbstraction {
     private providerService: ProviderService,
     private folderApiService: FolderApiServiceAbstraction,
     private organizationService: InternalOrganizationService,
-    private logoutCallback: (expired: boolean) => Promise<void>
+    private logoutCallback: (expired: boolean) => Promise<void>,
+    protected cozyClientService: CozyClientService
   ) {}
 
   async getLastSync(): Promise<Date> {
@@ -104,6 +107,15 @@ export class SyncService implements SyncServiceAbstraction {
       await this.syncProfile(response.profile);
       await this.syncFolders(response.folders);
       await this.syncCollections(response.collections);
+
+      // Cozy customization
+      const papersCiphers = await fetchPapersAndConvertAsCiphers(
+        this.cipherService,
+        this.cozyClientService
+      );
+      response.ciphers.push(...papersCiphers);
+      // Cozy customization end
+
       await this.syncCiphers(response.ciphers);
       await this.syncSends(response.sends);
       await this.syncSettings(response.domains);
