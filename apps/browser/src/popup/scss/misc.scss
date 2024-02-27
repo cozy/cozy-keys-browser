@@ -574,6 +574,12 @@ li.active .icon-cozy-inline > svg {
   }
 }
 
+.icon-mespapiers {
+  background-image: url("../images/icon-mespapiers.svg");
+  width: 24px;
+  height: 24px;
+}
+
 .text-danger .icon-cozy {
   @include themify($themes) {
     background-color: themed("dangerColor") !important;
