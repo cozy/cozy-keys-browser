@@ -12,7 +12,9 @@ const fetchPapers = async (client: CozyClient) => {
 
   const data = await client.queryAll(filesQueryByLabels.definition(), filesQueryByLabels.options);
 
-  return data;
+  const hydratedData = client.hydrateDocuments('io.cozy.files', data)
+
+  return hydratedData;
 }
 
 export const buildFilesQueryWithQualificationLabel = () => {
@@ -54,6 +56,7 @@ export const buildFilesQueryWithQualificationLabel = () => {
         })
         .select(select)
         .limitBy(1000)
+        .include(['contacts'])
         .indexFields(['type', 'trashed']),
     options: {
       as: `io.cozy.files/metadata_qualification_label`
