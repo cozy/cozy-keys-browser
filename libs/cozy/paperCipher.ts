@@ -3,9 +3,11 @@
 import { Q } from 'cozy-client'
 import CozyClient from 'cozy-client/types/CozyClient';
 
+import { PaperApi } from '@bitwarden/common/models/api/paper.api';
 import { CipherType } from '@bitwarden/common/vault/enums/cipher-type';
 import { CipherResponse } from '@bitwarden/common/vault/models/response/cipher.response';
 import { CipherView } from '@bitwarden/common/vault/models/view/cipher.view';
+import { PaperView } from '@bitwarden/common/vault/models/view/paper.view';
 
 const fetchPapers = async (client: CozyClient) => {
   const filesQueryByLabels = buildFilesQueryWithQualificationLabel();
@@ -65,7 +67,9 @@ export const buildFilesQueryWithQualificationLabel = () => {
 }
 
 
-const convertPapersAsCiphers = async (cipherService: any, papers: any): Promise<CipherResponse[]> => {
+const convertPapersAsCiphers = async (cipherService: any, client: CozyClient, papers: any): Promise<CipherResponse[]> => {
+  const baseUrl = client.getStackClient().uri
+
   const papersCiphers = []
 
   for (const paper of papers) {
@@ -73,13 +77,19 @@ const convertPapersAsCiphers = async (cipherService: any, papers: any): Promise<
     cipherView.id = paper.id
     cipherView.name = paper.name
     cipherView.type = CipherType.Paper
+    cipherView.paper = new PaperView()
+    cipherView.paper.ownerName = paper.contacts.data[0]?.displayName
+    cipherView.paper.illustrationThumbnailUrl = new URL(baseUrl, paper.links.tiny).toString()
 
     const cipherEncrypted = await cipherService.encrypt(cipherView)
     const cipherViewEncrypted = new CipherView(cipherEncrypted)
     const cipherViewResponse = new CipherResponse(cipherViewEncrypted)
     cipherViewResponse.id = cipherEncrypted.id
     cipherViewResponse.name = cipherEncrypted.name.encryptedString
-    cipherViewResponse.fields = []
+
+    cipherViewResponse.paper = new PaperApi()
+    cipherViewResponse.paper.ownerName = cipherView.paper.ownerName
+    cipherViewResponse.paper.illustrationThumbnailUrl = cipherView.paper.illustrationThumbnailUrl
 
     papersCiphers.push(cipherViewResponse)
   }
@@ -93,7 +103,7 @@ export const fetchPapersAndConvertAsCiphers = async (cipherService: any, cozyCli
   try {
     const papers = await fetchPapers(client);
 
-    const papersCiphers = await convertPapersAsCiphers(cipherService, papers)
+    const papersCiphers = await convertPapersAsCiphers(cipherService, client, papers)
 
     console.log(`${papersCiphers.length} papers ciphers will be added`)
 
