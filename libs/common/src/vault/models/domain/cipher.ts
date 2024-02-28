@@ -16,6 +16,7 @@ import { Card } from "./card";
 import { Field } from "./field";
 import { Identity } from "./identity";
 import { Login } from "./login";
+import { Paper } from "./paper";
 import { Password } from "./password";
 import { SecureNote } from "./secure-note";
 
@@ -38,6 +39,7 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
   identity: Identity;
   card: Card;
   secureNote: SecureNote;
+  paper: Paper;
   attachments: Attachment[];
   fields: Field[];
   passwordHistory: Password[];
@@ -94,6 +96,11 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
       case CipherType.Identity:
         this.identity = new Identity(obj.identity);
         break;
+      // Cozy customization
+      case CipherType.Paper:
+        this.paper = new Paper(obj.paper);
+        break;
+      // Cozy customization end
       default:
         break;
     }
@@ -143,6 +150,11 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
       case CipherType.Identity:
         model.identity = await this.identity.decrypt(this.organizationId, encKey);
         break;
+      // Cozy customization
+      case CipherType.Paper:
+        model.paper = await this.paper.decrypt(this.organizationId, encKey);
+        break;
+      // Cozy customization end
       default:
         break;
     }

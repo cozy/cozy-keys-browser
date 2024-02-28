@@ -7,6 +7,7 @@ import { CardData } from "./card.data";
 import { FieldData } from "./field.data";
 import { IdentityData } from "./identity.data";
 import { LoginData } from "./login.data";
+import { PaperData } from "./paper.data";
 import { PasswordHistoryData } from "./password-history.data";
 import { SecureNoteData } from "./secure-note.data";
 
@@ -26,6 +27,7 @@ export class CipherData {
   secureNote?: SecureNoteData;
   card?: CardData;
   identity?: IdentityData;
+  paper?: PaperData;
   fields?: FieldData[];
   attachments?: AttachmentData[];
   passwordHistory?: PasswordHistoryData[];
@@ -68,6 +70,11 @@ export class CipherData {
       case CipherType.Identity:
         this.identity = new IdentityData(response.identity);
         break;
+      // Cozy customization
+      case CipherType.Paper:
+        this.paper = new PaperData(response.paper);
+        break;
+      // Cozy customization end
       default:
         break;
     }
