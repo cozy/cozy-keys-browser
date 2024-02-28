@@ -2,6 +2,7 @@ import { CardApi } from "../../../models/api/card.api";
 import { FieldApi } from "../../../models/api/field.api";
 import { IdentityApi } from "../../../models/api/identity.api";
 import { LoginApi } from "../../../models/api/login.api";
+import { PaperApi } from "../../../models/api/paper.api";
 import { SecureNoteApi } from "../../../models/api/secure-note.api";
 import { BaseResponse } from "../../../models/response/base.response";
 import { CipherRepromptType } from "../../enums/cipher-reprompt-type";
@@ -21,6 +22,7 @@ export class CipherResponse extends BaseResponse {
   card: CardApi;
   identity: IdentityApi;
   secureNote: SecureNoteApi;
+  paper: PaperApi;
   favorite: boolean;
   edit: boolean;
   viewPassword: boolean;
