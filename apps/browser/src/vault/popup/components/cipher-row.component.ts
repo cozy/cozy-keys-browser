@@ -8,6 +8,7 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 /** Start Cozy imports */
 /* eslint-disable */
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { zeroPadLeftUntilTwoChars } from "../../../tools/strings";
 import { KonnectorsService } from "../../../popup/services/konnectors.service";
 /* eslint-enable */
@@ -26,7 +27,7 @@ export class CipherRowComponent implements OnInit {
   @Input() showView = false;
   @Input() title: string;
   isKonnector: boolean;
-  constructor(protected konnectorService: KonnectorsService) {}
+  constructor(protected konnectorService: KonnectorsService, private syncService: SyncService) {}
   /* Cozy custo */
   @Output() onAutofill = new EventEmitter<CipherView>();
   cipherType = CipherType;
@@ -72,6 +73,15 @@ export class CipherRowComponent implements OnInit {
 
     return c.subTitle;
   }
+
+  // Cozy customization
+  async onThumbnailError() {
+    // A thumbnail URL is valid for 10 minutes. If a thumbnail URL is expired,
+    // it is very likely that all thumbnail URLs are expired. So we start a
+    // full sync that will get new thumbnail URLs.
+    await this.syncService.fullSync(true);
+  }
+  // Cozy customization end
 
   // Cozy customization, differentiate shared Ciphers from ciphers in "Cozy Connectors" organization
   async ngOnInit() {
