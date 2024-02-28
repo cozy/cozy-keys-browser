@@ -15,7 +15,7 @@ export const convertPaperToCipherResponse = async (
   cipherView.type = CipherType.Paper;
   cipherView.paper = new PaperView();
   cipherView.paper.ownerName = paper.contacts.data[0]?.displayName;
-  cipherView.paper.illustrationThumbnailUrl = new URL(baseUrl, paper.links.tiny).toString();
+  cipherView.paper.illustrationThumbnailUrl = new URL(paper.links.tiny, baseUrl).toString();
 
   const cipherEncrypted = await cipherService.encrypt(cipherView);
   const cipherViewEncrypted = new CipherView(cipherEncrypted);
