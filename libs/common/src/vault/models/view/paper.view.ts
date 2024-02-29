@@ -1,13 +1,16 @@
 // Cozy customization
 import { Jsonify } from "type-fest";
 
+import { PaperType } from "../../../enums/paperType";
 import { Paper } from "../domain/paper";
 
 import { ItemView } from "./item.view";
 
 export class PaperView extends ItemView {
+  type: PaperType = null;
   ownerName: string = null;
   illustrationThumbnailUrl: string = null;
+  noteContent: string = null;
 
   constructor(p?: Paper) {
     super();
@@ -15,12 +18,14 @@ export class PaperView extends ItemView {
       return;
     }
 
+    this.type = p.type;
     this.ownerName = p.ownerName;
     this.illustrationThumbnailUrl = p.illustrationThumbnailUrl;
+    this.noteContent = p.noteContent;
   }
 
   get subTitle(): string {
-    return this.ownerName;
+    return this.type === PaperType.Paper ? this.ownerName : this.noteContent;
   }
 
   static fromJSON(obj: Partial<Jsonify<PaperView>>): PaperView {

@@ -5,6 +5,7 @@ import CozyClient from "cozy-client/types/CozyClient";
 
 import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.response";
 
+import { convertNoteToCipherResponse, isNote, fetchNoteThumbnailUrl } from "./note.helper";
 import { convertPaperToCipherResponse } from "./paper.helper";
 
 const fetchPapers = async (client: CozyClient) => {
@@ -73,10 +74,19 @@ const convertPapersAsCiphers = async (
 
   const papersCiphers = [];
 
-  for (const paper of papers) {
-    const cipherViewResponse = await convertPaperToCipherResponse(cipherService, paper, baseUrl);
+  const noteThumbnailUrl = await fetchNoteThumbnailUrl(client);
 
-    papersCiphers.push(cipherViewResponse);
+  for (const paper of papers) {
+    let cipherResponse: CipherResponse;
+    if (isNote(paper)) {
+      cipherResponse = await convertNoteToCipherResponse(cipherService, paper, {
+        client,
+        noteThumbnailUrl,
+      });
+    } else {
+      cipherResponse = await convertPaperToCipherResponse(cipherService, paper, { baseUrl });
+    }
+    papersCiphers.push(cipherResponse);
   }
 
   return papersCiphers;
