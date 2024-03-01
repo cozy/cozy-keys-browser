@@ -432,8 +432,12 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     }
   }
 
-  openWebApp() {
-    window.open(this.cozyClientService.getAppURL("passwords", ""));
+  async openWebApp() {
+    if (this.type === CipherType.Paper) {
+      window.open(this.cozyClientService.getAppURL("mespapiers", ""));
+    } else {
+      window.open(this.cozyClientService.getAppURL("passwords", ""));
+    }
   }
 
   emptySearch() {
