@@ -9,8 +9,21 @@ interface PaperConversionOptions {
   baseUrl: string;
 }
 
+const buildOwnerName = (i18nService: any, paper: any) => {
+  if (paper.contacts.data[0]?.displayName) {
+    return paper.contacts.data[0]?.displayName;
+  } else if (paper.cozyMetadata.createdByApp && paper.cozyMetadata.sourceAccountIdentifier) {
+    return `${i18nService.t("account")} ${paper.cozyMetadata.createdByApp.toUpperCase()} : ${
+      paper.cozyMetadata.sourceAccountIdentifier
+    }`;
+  } else {
+    return "";
+  }
+};
+
 export const convertPaperToCipherResponse = async (
   cipherService: any,
+  i18nService: any,
   paper: any,
   options: PaperConversionOptions
 ): Promise<CipherResponse> => {
@@ -22,7 +35,7 @@ export const convertPaperToCipherResponse = async (
   cipherView.type = CipherType.Paper;
   cipherView.paper = new PaperView();
   cipherView.paper.type = PaperType.Paper;
-  cipherView.paper.ownerName = paper.contacts.data[0]?.displayName;
+  cipherView.paper.ownerName = buildOwnerName(i18nService, paper);
   cipherView.paper.illustrationThumbnailUrl = new URL(paper.links.tiny, baseUrl).toString();
 
   const cipherEncrypted = await cipherService.encrypt(cipherView);
