@@ -30,6 +30,7 @@ import { ProviderService } from "@bitwarden/common/abstractions/provider.service
 import { FolderApiServiceAbstraction } from "@bitwarden/common/vault/abstractions/folder/folder-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -65,7 +66,8 @@ export class SyncService extends BaseSyncService {
     private localFolderApiService: FolderApiServiceAbstraction,
     private _organizationService: InternalOrganizationService,
     logoutCallback: (expired: boolean) => Promise<void>,
-    cozyClientService: CozyClientService
+    cozyClientService: CozyClientService,
+    i18nService: I18nService
   ) {
     super(
       localApiService,
@@ -84,7 +86,8 @@ export class SyncService extends BaseSyncService {
       localFolderApiService,
       _organizationService,
       logoutCallback,
-      cozyClientService
+      cozyClientService,
+      i18nService
     );
   }
 

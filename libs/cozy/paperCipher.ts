@@ -35,6 +35,7 @@ export const buildFilesQueryWithQualificationLabel = () => {
     "metadata.title",
     "metadata.version",
     "cozyMetadata.createdByApp",
+    "cozyMetadata.sourceAccountIdentifier",
     "created_at",
     "dir_id",
     "updated_at",
@@ -67,6 +68,7 @@ export const buildFilesQueryWithQualificationLabel = () => {
 
 const convertPapersAsCiphers = async (
   cipherService: any,
+  i18nService: any,
   client: CozyClient,
   papers: any
 ): Promise<CipherResponse[]> => {
@@ -84,7 +86,9 @@ const convertPapersAsCiphers = async (
         noteThumbnailUrl,
       });
     } else {
-      cipherResponse = await convertPaperToCipherResponse(cipherService, paper, { baseUrl });
+      cipherResponse = await convertPaperToCipherResponse(cipherService, i18nService, paper, {
+        baseUrl,
+      });
     }
     papersCiphers.push(cipherResponse);
   }
@@ -94,14 +98,15 @@ const convertPapersAsCiphers = async (
 
 export const fetchPapersAndConvertAsCiphers = async (
   cipherService: any,
-  cozyClientService: any
+  cozyClientService: any,
+  i18nService: any
 ): Promise<CipherResponse[]> => {
   const client = await cozyClientService.getClientInstance();
 
   try {
     const papers = await fetchPapers(client);
 
-    const papersCiphers = await convertPapersAsCiphers(cipherService, client, papers);
+    const papersCiphers = await convertPapersAsCiphers(cipherService, i18nService, client, papers);
 
     console.log(`${papersCiphers.length} papers ciphers will be added`);
 
