@@ -307,10 +307,16 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     }
   }
 
-  addCipher() {
+  async addCipher() {
     if (this.deleted) {
       return false;
     }
+    // Cozy customization
+    if (this.type === CipherType.Paper) {
+      window.open(this.cozyClientService.getAppURL("mespapiers", "paper/create"));
+      return false;
+    }
+    // Cozy customization
     super.addCipher();
     this.router.navigate(["/add-cipher"], {
       queryParams: {
