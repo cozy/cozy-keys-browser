@@ -9,6 +9,8 @@ interface PaperConversionOptions {
   baseUrl: string;
 }
 
+const DEFAULT_THUMBNAIL_URL = "/popup/images/icon-file-type-text.svg";
+
 const buildOwnerName = (i18nService: any, paper: any) => {
   if (paper.contacts.data[0]?.displayName) {
     return paper.contacts.data[0]?.displayName;
@@ -19,6 +21,10 @@ const buildOwnerName = (i18nService: any, paper: any) => {
   } else {
     return "";
   }
+};
+
+const buildIllustrationThumbnailUrl = (paper: any, baseUrl: string) => {
+  return paper.links.tiny ? new URL(paper.links.tiny, baseUrl).toString() : DEFAULT_THUMBNAIL_URL;
 };
 
 export const convertPaperToCipherResponse = async (
@@ -36,7 +42,7 @@ export const convertPaperToCipherResponse = async (
   cipherView.paper = new PaperView();
   cipherView.paper.type = PaperType.Paper;
   cipherView.paper.ownerName = buildOwnerName(i18nService, paper);
-  cipherView.paper.illustrationThumbnailUrl = new URL(paper.links.tiny, baseUrl).toString();
+  cipherView.paper.illustrationThumbnailUrl = buildIllustrationThumbnailUrl(paper, baseUrl);
 
   const cipherEncrypted = await cipherService.encrypt(cipherView);
   const cipherViewEncrypted = new CipherView(cipherEncrypted);
