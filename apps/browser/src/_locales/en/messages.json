@@ -358,6 +358,9 @@
   "usefulInformation": {
     "message": "Useful information"
   },
+  "actions": {
+    "message": "Actions"
+  },
   "username": {
     "message": "Username"
   },
