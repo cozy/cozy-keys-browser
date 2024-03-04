@@ -219,15 +219,18 @@ app-vault-add-edit,
 app-generator,
 app-vault-attachments {
   .box {
-    /* Cozy custo
+    /* Cozy customization
     margin: 15px 0 25px 0;
     */
     margin-top: 15px;
-    /* end custo */
 
+    /*
     & + .box {
       margin-top: 25px;
     }
+    */
+
+    /* Cozy customization end */
   }
 }
 
