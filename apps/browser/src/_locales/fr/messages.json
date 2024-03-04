@@ -358,6 +358,9 @@
   "itemInformation": {
     "message": "Informations sur l'élément"
   },
+  "usefulInformation": {
+    "message": "Informations utiles"
+  },
   "username": {
     "message": "Identifiant"
   },

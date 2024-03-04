@@ -355,6 +355,9 @@
   "itemInformation": {
     "message": "Item information"
   },
+  "usefulInformation": {
+    "message": "Useful information"
+  },
   "username": {
     "message": "Username"
   },
