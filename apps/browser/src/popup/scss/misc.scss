@@ -336,6 +336,10 @@ li.active .icon-cozy-inline > svg {
   max-height: 26px !important;
 }
 
+.icon-paper-wrapper::before {
+  content: url("../images/icon-file-type-text.png");
+}
+
 .icon-pen {
   mask-image: url("../images/icons-16-icon-pen.svg");
   -webkit-mask-image: url("../images/icons-16-icon-pen.svg");
