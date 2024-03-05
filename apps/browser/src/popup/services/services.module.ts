@@ -126,17 +126,7 @@ function getBgService<T>(service: keyof MainBackground) {
 }
 
 /* Cozy custo */
-const cozyMessagingService = isPrivateMode
-  ? new BrowserMessagingPrivateModePopupService()
-  : new BrowserMessagingService();
-
-const cozyClientService = new CozyClientService(
-  getBgService<EnvironmentService>("environmentService")(),
-  getBgService<ApiService>("apiService")(),
-  cozyMessagingService,
-  getBgService<CipherService>("cipherService")(),
-  getBgService<StateServiceAbstraction>("stateService")()
-);
+const cozyClientService = getBgService<CozyClientService>("cozyClientService")();
 export const cozySanitizeUrlService = new CozySanitizeUrlService();
 export const konnectorsService = new KonnectorsService(
   getBgService<CipherService>("cipherService")(),
