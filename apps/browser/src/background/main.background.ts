@@ -338,14 +338,6 @@ export default class MainBackground {
       (expired: boolean) => this.logout(expired),
       this.buildUserAgent()
     );
-    this.cozyClientService = new CozyClientService(
-      this.environmentService,
-      this.apiService,
-      this.messagingService,
-      this.cipherService,
-      this.stateService
-    );
-
     this.settingsService = new BrowserSettingsService(this.stateService);
     this.fileUploadService = new FileUploadService(this.logService, this.apiService);
     this.cipherService = new CipherService(
@@ -359,6 +351,15 @@ export default class MainBackground {
       this.stateService,
       this.encryptService
     );
+    // Cozy customization
+    this.cozyClientService = new CozyClientService(
+      this.environmentService,
+      this.apiService,
+      this.messagingService,
+      this.cipherService,
+      this.stateService
+    );
+    // Cozy customization end
     this.folderService = new BrowserFolderService(
       this.cryptoService,
       this.i18nService,
