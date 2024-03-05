@@ -25,7 +25,8 @@ export class PaperView extends ItemView {
   }
 
   get subTitle(): string {
-    return this.type === PaperType.Paper ? this.ownerName : this.noteContent;
+    const subTitle = this.type === PaperType.Paper ? this.ownerName : this.noteContent;
+    return subTitle || "";
   }
 
   static fromJSON(obj: Partial<Jsonify<PaperView>>): PaperView {
