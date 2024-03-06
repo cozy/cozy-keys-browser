@@ -40,6 +40,7 @@ import { deleteCipher } from "./cozy-utils";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { CAN_SHARE_ORGANIZATION } from "../../../../cozy/flags";
 import { HistoryService } from "../../../../popup/services/history.service";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -81,7 +82,8 @@ export class ViewComponent extends BaseViewComponent {
     logService: LogService,
     fileDownloadService: FileDownloadService,
     private cozyClientService: CozyClientService,
-    private historyService: HistoryService
+    private historyService: HistoryService,
+    private syncService: SyncService
   ) {
     super(
       cipherService,
@@ -416,4 +418,13 @@ export class ViewComponent extends BaseViewComponent {
     const hash = "/vault?action=view&cipherId=" + this.cipherId;
     window.open(this.cozyClientService.getAppURL("passwords", hash));
   }
+
+  // Cozy customization
+  async onIllustrationError() {
+    // An illustration URL is valid for 10 minutes. If an illustration URL is expired,
+    // it is very likely that all illustration URLs are expired. So we start a
+    // full sync that will get new illustration URLs.
+    await this.syncService.fullSync(true);
+  }
+  // Cozy customization end
 }
