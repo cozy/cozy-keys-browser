@@ -1,6 +1,6 @@
-import CozyClient, { Q, generateWebLink } from "cozy-client";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+// @ts-nocheck
+import CozyClient, { HasMany, Q, QueryDefinition, generateWebLink } from "cozy-client";
 import flag from "cozy-flags";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -101,7 +101,21 @@ export class CozyClientService {
     }
     const uri = this.getCozyURL();
     const token = await this.apiService.getActiveBearerToken();
-    this.instance = new CozyClient({ uri: uri, token: token });
+    this.instance = new CozyClient({
+      uri: uri,
+      token: token,
+      schema: {
+        files: {
+          doctype: "io.cozy.files",
+          relationships: {
+            contacts: {
+              type: HasManyContacts,
+              doctype: "io.cozy.contacts",
+            },
+          },
+        },
+      },
+    });
     this.instance.registerPlugin(flag.plugin, undefined);
     this.registerFlags();
     await this.getSubDomainType();
@@ -325,5 +339,27 @@ export class CozyClientService {
     }, new Date());
     this.estimatedVaultCreationDate = minDate;
     return minDate;
+  }
+}
+
+class HasManyContacts extends HasMany {
+  get data() {
+    const refs = this.target.relationships.referenced_by.data;
+    const albums = refs ? refs.map((ref) => this.get(ref.type, ref.id)).filter(Boolean) : [];
+    return albums;
+  }
+
+  static query(doc, client, assoc) {
+    if (
+      !doc.relationships ||
+      !doc.relationships.referenced_by ||
+      !doc.relationships.referenced_by.data
+    ) {
+      return null;
+    }
+    const included = doc.relationships.referenced_by.data;
+    const ids = included.filter((inc) => inc.type === assoc.doctype).map((inc) => inc.id);
+
+    return new QueryDefinition({ doctype: assoc.doctype, ids });
   }
 }

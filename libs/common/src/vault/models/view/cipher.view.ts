@@ -14,6 +14,7 @@ import { CardView } from "./card.view";
 import { FieldView } from "./field.view";
 import { IdentityView } from "./identity.view";
 import { LoginView } from "./login.view";
+import { PaperView } from "./paper.view";
 import { PasswordHistoryView } from "./password-history.view";
 import { SecureNoteView } from "./secure-note.view";
 
@@ -35,6 +36,7 @@ export class CipherView implements View, InitializerMetadata {
   identity = new IdentityView();
   card = new CardView();
   secureNote = new SecureNoteView();
+  paper = new PaperView();
   attachments: AttachmentView[] = null;
   fields: FieldView[] = null;
   passwordHistory: PasswordHistoryView[] = null;
@@ -76,6 +78,10 @@ export class CipherView implements View, InitializerMetadata {
         return this.card;
       case CipherType.Identity:
         return this.identity;
+      // Cozy customization
+      case CipherType.Paper:
+        return this.paper;
+      // Cozy customization end
       default:
         break;
     }

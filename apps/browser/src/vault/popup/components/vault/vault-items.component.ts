@@ -155,6 +155,11 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
           case CipherType.SecureNote:
             this.groupingTitle = this.i18nService.t("secureNotes");
             break;
+          // Cozy customization
+          case CipherType.Paper:
+            this.groupingTitle = this.i18nService.t("typePapers");
+            break;
+          // Cozy customization end
           default:
             break;
         }
@@ -302,10 +307,16 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     }
   }
 
-  addCipher() {
+  async addCipher() {
     if (this.deleted) {
       return false;
     }
+    // Cozy customization
+    if (this.type === CipherType.Paper) {
+      window.open(this.cozyClientService.getAppURL("mespapiers", "paper/create"));
+      return false;
+    }
+    // Cozy customization
     super.addCipher();
     this.router.navigate(["/add-cipher"], {
       queryParams: {
@@ -427,8 +438,12 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     }
   }
 
-  openWebApp() {
-    window.open(this.cozyClientService.getAppURL("passwords", ""));
+  async openWebApp() {
+    if (this.type === CipherType.Paper) {
+      window.open(this.cozyClientService.getAppURL("mespapiers", ""));
+    } else {
+      window.open(this.cozyClientService.getAppURL("passwords", ""));
+    }
   }
 
   emptySearch() {

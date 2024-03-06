@@ -163,7 +163,7 @@
     "chalk": "^4.1.0",
     "commander": "^7.2.0",
     "core-js": "^3.11.0",
-    "cozy-client": "40.0.1",
+    "cozy-client": "45.13.0",
     "cozy-ui": "51.3.1",
     "@cozy/minilog": "1.0.0",
     "cozy-device-helper": ">1.12.0",

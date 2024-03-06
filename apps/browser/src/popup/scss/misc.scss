@@ -325,6 +325,21 @@ li.active .icon-cozy-inline > svg {
 //   }
 // }
 
+.icon-paper-wrapper {
+  border: 3px solid #fff;
+  box-shadow: 0px 2px 4px 0px rgba(29, 33, 42, 0.16), 0px 4px 16px 0px rgba(29, 33, 42, 0.16),
+    0px 0px 0px 0.5px rgba(29, 33, 42, 0.16), 0px 0px 0px 0.5px rgba(29, 33, 42, 0.16);
+  // Reduce default border-radius
+  border-radius: 3px !important;
+  // Increase max-width and max-height to take into account border
+  max-width: 26px !important;
+  max-height: 26px !important;
+}
+
+.icon-paper-wrapper::before {
+  content: url("../images/icon-file-type-text.png");
+}
+
 .icon-pen {
   mask-image: url("../images/icons-16-icon-pen.svg");
   -webkit-mask-image: url("../images/icons-16-icon-pen.svg");
@@ -572,6 +587,12 @@ li.active .icon-cozy-inline > svg {
   @include themify($themes) {
     background-color: themed("headerInputPlaceholderColor");
   }
+}
+
+.icon-mespapiers {
+  background-image: url("../images/icon-mespapiers.svg");
+  width: 24px;
+  height: 24px;
 }
 
 .text-danger .icon-cozy {
