@@ -45,6 +45,7 @@ export const convertNoteToCipherResponse = async (
     .getStackClient()
     .fetchJSON("GET", "/notes/" + paper.id + "/text");
   cipherView.paper.illustrationThumbnailUrl = noteIllustrationUrl;
+  cipherView.paper.illustrationUrl = noteIllustrationUrl;
   cipherView.fields = buildFieldsFromPaper(i18nService, paper);
   cipherView.fields.push(buildField(i18nService.t("content"), cipherView.paper.noteContent));
 
@@ -58,6 +59,7 @@ export const convertNoteToCipherResponse = async (
   cipherViewResponse.paper.type = cipherView.paper.type;
   cipherViewResponse.paper.noteContent = cipherView.paper.noteContent;
   cipherViewResponse.paper.illustrationThumbnailUrl = cipherView.paper.illustrationThumbnailUrl;
+  cipherViewResponse.paper.illustrationUrl = cipherView.paper.illustrationUrl;
   cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields);
 
   return cipherViewResponse;

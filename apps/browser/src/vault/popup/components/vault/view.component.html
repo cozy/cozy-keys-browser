@@ -35,6 +35,15 @@
   </div>
 </header>
 <main tabindex="-1" *ngIf="cipher">
+  <!-- Cozy customization -->
+  <div *ngIf="cipher.type === cipherType.Paper" class="paper-illustration">
+    <img
+      [src]="cipher.paper.illustrationUrl"
+      (click)="openWebApp()"
+      (error)="onIllustrationError()"
+    />
+  </div>
+  <!-- Cozy customization end -->
   <div class="box">
     <h2 class="box-header">
       {{ "usefulInformation" | i18n }}

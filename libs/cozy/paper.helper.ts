@@ -29,6 +29,12 @@ const buildIllustrationThumbnailUrl = (paper: any, baseUrl: string) => {
   return paper.links.tiny ? new URL(paper.links.tiny, baseUrl).toString() : DEFAULT_THUMBNAIL_URL;
 };
 
+const buildIllustrationUrl = (paper: any, baseUrl: string) => {
+  return paper.links.medium
+    ? new URL(paper.links.medium, baseUrl).toString()
+    : DEFAULT_THUMBNAIL_URL;
+};
+
 export const convertPaperToCipherResponse = async (
   cipherService: any,
   i18nService: any,
@@ -45,6 +51,7 @@ export const convertPaperToCipherResponse = async (
   cipherView.paper.type = PaperType.Paper;
   cipherView.paper.ownerName = buildOwnerName(i18nService, paper);
   cipherView.paper.illustrationThumbnailUrl = buildIllustrationThumbnailUrl(paper, baseUrl);
+  cipherView.paper.illustrationUrl = buildIllustrationUrl(paper, baseUrl);
   cipherView.fields = buildFieldsFromPaper(i18nService, paper);
 
   const cipherEncrypted = await cipherService.encrypt(cipherView);
@@ -57,6 +64,7 @@ export const convertPaperToCipherResponse = async (
   cipherViewResponse.paper.type = cipherView.paper.type;
   cipherViewResponse.paper.ownerName = cipherView.paper.ownerName;
   cipherViewResponse.paper.illustrationThumbnailUrl = cipherView.paper.illustrationThumbnailUrl;
+  cipherViewResponse.paper.illustrationUrl = cipherView.paper.illustrationUrl;
   cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields);
 
   return cipherViewResponse;
