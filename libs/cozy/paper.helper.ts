@@ -5,6 +5,8 @@ import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.r
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { PaperView } from "@bitwarden/common/vault/models/view/paper.view";
 
+import { buildFieldsFromPaper, copyEncryptedFields } from "./fields.helper";
+
 interface PaperConversionOptions {
   baseUrl: string;
 }
@@ -43,6 +45,7 @@ export const convertPaperToCipherResponse = async (
   cipherView.paper.type = PaperType.Paper;
   cipherView.paper.ownerName = buildOwnerName(i18nService, paper);
   cipherView.paper.illustrationThumbnailUrl = buildIllustrationThumbnailUrl(paper, baseUrl);
+  cipherView.fields = buildFieldsFromPaper(i18nService, paper);
 
   const cipherEncrypted = await cipherService.encrypt(cipherView);
   const cipherViewEncrypted = new CipherView(cipherEncrypted);
@@ -54,6 +57,7 @@ export const convertPaperToCipherResponse = async (
   cipherViewResponse.paper.type = cipherView.paper.type;
   cipherViewResponse.paper.ownerName = cipherView.paper.ownerName;
   cipherViewResponse.paper.illustrationThumbnailUrl = cipherView.paper.illustrationThumbnailUrl;
+  cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields);
 
   return cipherViewResponse;
 };
