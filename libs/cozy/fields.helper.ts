@@ -2,6 +2,7 @@ import { models } from "cozy-client";
 
 import { FieldType } from "@bitwarden/common/enums/fieldType";
 import { FieldApi } from "@bitwarden/common/models/api/field.api";
+import { Field } from "@bitwarden/common/vault/models/domain/field";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 
 const {
@@ -17,7 +18,7 @@ const {
   formatContactValue,
 } = models.paper;
 
-const buildField = (name: string, value: string): FieldView => {
+export const buildField = (name: string, value: string): FieldView => {
   const field = new FieldView();
   field.type = FieldType.Text;
   field.name = name;

@@ -364,6 +364,9 @@
   "actions": {
     "message": "Actions"
   },
+  "content": {
+    "message": "Contenu"
+  },
   "username": {
     "message": "Identifiant"
   },

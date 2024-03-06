@@ -361,6 +361,9 @@
   "actions": {
     "message": "Actions"
   },
+  "content": {
+    "message": "Content"
+  },
   "username": {
     "message": "Username"
   },
