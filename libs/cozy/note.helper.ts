@@ -8,6 +8,8 @@ import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.r
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { PaperView } from "@bitwarden/common/vault/models/view/paper.view";
 
+import { buildFieldsFromPaper, copyEncryptedFields } from "./fields.helper";
+
 interface NoteConversionOptions {
   client: CozyClient;
   noteThumbnailUrl: string;
@@ -27,6 +29,7 @@ export const fetchNoteThumbnailUrl = async (client: CozyClient) => {
 
 export const convertNoteToCipherResponse = async (
   cipherService: any,
+  i18nService: any,
   paper: any,
   options: NoteConversionOptions
 ): Promise<CipherResponse> => {
@@ -42,6 +45,7 @@ export const convertNoteToCipherResponse = async (
     .getStackClient()
     .fetchJSON("GET", "/notes/" + paper.id + "/text");
   cipherView.paper.illustrationThumbnailUrl = noteThumbnailUrl;
+  cipherView.fields = buildFieldsFromPaper(i18nService, paper);
 
   const cipherEncrypted = await cipherService.encrypt(cipherView);
   const cipherViewEncrypted = new CipherView(cipherEncrypted);
@@ -53,6 +57,7 @@ export const convertNoteToCipherResponse = async (
   cipherViewResponse.paper.type = cipherView.paper.type;
   cipherViewResponse.paper.noteContent = cipherView.paper.noteContent;
   cipherViewResponse.paper.illustrationThumbnailUrl = cipherView.paper.illustrationThumbnailUrl;
+  cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields);
 
   return cipherViewResponse;
 };

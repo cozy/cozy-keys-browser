@@ -33,6 +33,11 @@ export const buildFilesQueryWithQualificationLabel = () => {
     "metadata.contractType",
     "metadata.refTaxIncome",
     "metadata.title",
+    "metadata.AObtentionDate",
+    "metadata.BObtentionDate",
+    "metadata.CObtentionDate",
+    "metadata.DObtentionDate",
+    "metadata.page",
     "metadata.version",
     "cozyMetadata.createdByApp",
     "cozyMetadata.sourceAccountIdentifier",
@@ -81,7 +86,7 @@ const convertPapersAsCiphers = async (
   for (const paper of papers) {
     let cipherResponse: CipherResponse;
     if (isNote(paper)) {
-      cipherResponse = await convertNoteToCipherResponse(cipherService, paper, {
+      cipherResponse = await convertNoteToCipherResponse(cipherService, i18nService, paper, {
         client,
         noteThumbnailUrl,
       });
