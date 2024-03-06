@@ -12,12 +12,12 @@ import { buildFieldsFromPaper, copyEncryptedFields, buildField } from "./fields.
 
 interface NoteConversionOptions {
   client: CozyClient;
-  noteThumbnailUrl: string;
+  noteIllustrationUrl: string;
 }
 
 export const isNote = (document: any) => document.mime === "text/vnd.cozy.note+markdown";
 
-export const fetchNoteThumbnailUrl = async (client: CozyClient) => {
+export const fetchNoteIllustrationUrl = async (client: CozyClient) => {
   const { data: app } = await client.query(Q("io.cozy.apps").getById("notes"));
 
   const baseUrl = client.getStackClient().uri;
@@ -33,7 +33,7 @@ export const convertNoteToCipherResponse = async (
   paper: any,
   options: NoteConversionOptions
 ): Promise<CipherResponse> => {
-  const { client, noteThumbnailUrl } = options;
+  const { client, noteIllustrationUrl } = options;
 
   const cipherView = new CipherView();
   cipherView.id = paper.id;
@@ -44,7 +44,7 @@ export const convertNoteToCipherResponse = async (
   cipherView.paper.noteContent = await client
     .getStackClient()
     .fetchJSON("GET", "/notes/" + paper.id + "/text");
-  cipherView.paper.illustrationThumbnailUrl = noteThumbnailUrl;
+  cipherView.paper.illustrationThumbnailUrl = noteIllustrationUrl;
   cipherView.fields = buildFieldsFromPaper(i18nService, paper);
   cipherView.fields.push(buildField(i18nService.t("content"), cipherView.paper.noteContent));
 
