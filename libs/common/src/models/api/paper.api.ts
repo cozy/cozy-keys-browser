@@ -7,6 +7,7 @@ export class PaperApi extends BaseResponse {
   ownerName: string;
   illustrationThumbnailUrl: string;
   illustrationUrl: string;
+  qualificationLabel: string;
   noteContent: string;
 
   constructor(data: any = null) {
@@ -18,6 +19,7 @@ export class PaperApi extends BaseResponse {
     this.ownerName = this.getResponseProperty("OwnerName");
     this.illustrationThumbnailUrl = this.getResponseProperty("IllustrationThumbnailUrl");
     this.illustrationUrl = this.getResponseProperty("IllustrationUrl");
+    this.qualificationLabel = this.getResponseProperty("QualificationLabel");
     this.noteContent = this.getResponseProperty("NoteContent");
   }
 }

@@ -41,6 +41,7 @@ import { CozyClientService } from "../../../../popup/services/cozyClient.service
 import { CAN_SHARE_ORGANIZATION } from "../../../../cozy/flags";
 import { HistoryService } from "../../../../popup/services/history.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { PaperType } from "@bitwarden/common/enums/paperType";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -415,8 +416,13 @@ export class ViewComponent extends BaseViewComponent {
   }
 
   openWebApp() {
-    const hash = "/vault?action=view&cipherId=" + this.cipherId;
-    window.open(this.cozyClientService.getAppURL("passwords", hash));
+    if (this.cipher.type === CipherType.Paper && this.cipher.paper.type === PaperType.Paper) {
+      const hash = `/paper/files/${this.cipher.paper.qualificationLabel}/${this.cipher.id}`;
+      window.open(this.cozyClientService.getAppURL("mespapiers", hash));
+    } else {
+      const hash = "/vault?action=view&cipherId=" + this.cipherId;
+      window.open(this.cozyClientService.getAppURL("passwords", hash));
+    }
   }
 
   // Cozy customization

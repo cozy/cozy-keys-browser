@@ -52,6 +52,7 @@ export const convertPaperToCipherResponse = async (
   cipherView.paper.ownerName = buildOwnerName(i18nService, paper);
   cipherView.paper.illustrationThumbnailUrl = buildIllustrationThumbnailUrl(paper, baseUrl);
   cipherView.paper.illustrationUrl = buildIllustrationUrl(paper, baseUrl);
+  cipherView.paper.qualificationLabel = paper.metadata.qualification.label;
   cipherView.fields = buildFieldsFromPaper(i18nService, paper);
 
   const cipherEncrypted = await cipherService.encrypt(cipherView);
@@ -65,6 +66,7 @@ export const convertPaperToCipherResponse = async (
   cipherViewResponse.paper.ownerName = cipherView.paper.ownerName;
   cipherViewResponse.paper.illustrationThumbnailUrl = cipherView.paper.illustrationThumbnailUrl;
   cipherViewResponse.paper.illustrationUrl = cipherView.paper.illustrationUrl;
+  cipherViewResponse.paper.qualificationLabel = cipherView.paper.qualificationLabel;
   cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields);
 
   return cipherViewResponse;

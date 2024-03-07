@@ -7,6 +7,7 @@ export class PaperData {
   ownerName: string;
   illustrationThumbnailUrl: string;
   illustrationUrl: string;
+  qualificationLabel: string;
   noteContent: string;
 
   constructor(data?: PaperApi) {
@@ -18,6 +19,7 @@ export class PaperData {
     this.ownerName = data.ownerName;
     this.illustrationThumbnailUrl = data.illustrationThumbnailUrl;
     this.illustrationUrl = data.illustrationUrl;
+    this.qualificationLabel = data.qualificationLabel;
     this.noteContent = data.noteContent;
   }
 }
