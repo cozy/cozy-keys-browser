@@ -646,6 +646,8 @@
           <span>{{ "autoFillAndSave" | i18n }}</span>
         </div>
       </button>
+      <!-- Cozy customization; do not display "clone" action if cipher is a paper" -->
+      <!--
       <button
         type="button"
         class="box-content-row"
@@ -654,6 +656,16 @@
         (click)="clone()"
         *ngIf="!cipher.organizationId && !cipher.isDeleted"
       >
+      -->
+      <button
+        type="button"
+        class="box-content-row"
+        appStopClick
+        appBlurClick
+        (click)="clone()"
+        *ngIf="!cipher.organizationId && !cipher.isDeleted && cipher.type !== cipherType.Paper"
+      >
+        <!-- Cozy customization end -->
         <div class="row-main text-primary">
           <div class="icon text-primary" aria-hidden="true">
             <i class="bwi bwi-files bwi-lg bwi-fw"></i>
@@ -676,7 +688,7 @@
         class="box-content-row"
         appStopClick
         (click)="share()"
-        *ngIf="!cipher.isDeleted"
+        *ngIf="!cipher.isDeleted && cipher.type !== cipherType.Paper"
       >
         <!-- end custo -->
         <div class="row-main text-primary">
