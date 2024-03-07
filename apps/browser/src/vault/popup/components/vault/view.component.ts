@@ -419,6 +419,15 @@ export class ViewComponent extends BaseViewComponent {
     if (this.cipher.type === CipherType.Paper && this.cipher.paper.type === PaperType.Paper) {
       const hash = `/paper/files/${this.cipher.paper.qualificationLabel}/${this.cipher.id}`;
       window.open(this.cozyClientService.getAppURL("mespapiers", hash));
+    } else if (this.cipher.type === CipherType.Paper && this.cipher.paper.type === PaperType.Note) {
+      const returnUrl = this.cozyClientService.getAppURL(
+        "mespapiers",
+        `/paper/files/${this.cipher.paper.qualificationLabel}`
+      );
+      const destinationUrl = this.cozyClientService.getAppURL("notes", `n/${this.cipher.id}`);
+      const url = new URL(destinationUrl);
+      url.searchParams.set("returnUrl", returnUrl);
+      window.open(url.toString());
     } else {
       const hash = "/vault?action=view&cipherId=" + this.cipherId;
       window.open(this.cozyClientService.getAppURL("passwords", hash));
