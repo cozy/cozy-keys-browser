@@ -350,6 +350,16 @@ li.active .icon-cozy-inline > svg {
   background-color: white;
 }
 
+.icon-popout {
+  mask-image: url("../images/icons-16-popout.svg");
+  -webkit-mask-image: url("../images/icons-16-popout.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: $list-icon-color;
+}
+
 .icon-cross {
   background-image: url("../images/icons-16-icon-cross.svg");
 }
