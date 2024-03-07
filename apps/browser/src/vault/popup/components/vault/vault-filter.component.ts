@@ -367,7 +367,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       url = tab.url;
       hostname = Utils.getHostname(url);
     }
-    this.router.navigate(["/add-cipher"], {
+    this.router.navigate(["/add-generic"], {
       queryParams: {
         selectedVault: this.vaultFilter.selectedOrganizationId,
         uri: url,
