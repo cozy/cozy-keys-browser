@@ -33,12 +33,18 @@
         {{ "itemInformation" | i18n }}
       </h2>
       <div class="box-content">
+        <!--
+        Cozy customisation: remove "type" combobox as we now choose the type from
+        the AddGeneric component
+        -->
+        <!--
         <div class="box-content-row" *ngIf="!editMode" appBoxRow>
           <label for="type">{{ "type" | i18n }}</label>
           <select id="type" name="Type" [(ngModel)]="cipher.type">
             <option *ngFor="let o of typeOptions" [ngValue]="o.value">{{ o.name }}</option>
           </select>
         </div>
+        -->
         <div class="box-content-row" appBoxRow>
           <label for="name">{{ "name" | i18n }}</label>
           <input
