@@ -60,6 +60,7 @@
           appStopClick
           appBlurClick
           (click)="selectType(cipherType.Paper)"
+          *ngIf="!collectionId"
         >
           <div class="row-main">
             <div class="icon"><i class="icon-cozy icon-mespapiers"></i></div>
