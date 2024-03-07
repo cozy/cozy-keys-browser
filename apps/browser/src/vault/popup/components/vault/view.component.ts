@@ -181,6 +181,14 @@ export class ViewComponent extends BaseViewComponent {
     if (this.cipher.isDeleted) {
       return false;
     }
+
+    // Cozy customization
+    if (this.cipher.type === CipherType.Paper) {
+      this.openWebApp();
+      return;
+    }
+    // Cozy customization end
+
     if (!(await super.edit())) {
       return false;
     }
