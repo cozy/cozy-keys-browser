@@ -1,8 +1,19 @@
 <ng-container>
+  <!-- Cozy customization; hide "Custom fields" header and remove extra margin for Paper ciphers  -->
+  <!--
   <h2 class="box-header">
+  -->
+  <h2 class="box-header" *ngIf="cipher.type !== cipherType.Paper">
     {{ "customFields" | i18n }}
   </h2>
+  <!--
   <div class="box-content">
+  -->
+  <div
+    class="box-content"
+    [ngStyle]="{ 'margin-top.px': cipher.type !== cipherType.Paper ? 0 : -15 }"
+  >
+    <!-- Cozy customization end -->
     <div class="box-content-row box-content-row-flex" *ngFor="let field of cipher.fields">
       <div class="row-main">
         <span
