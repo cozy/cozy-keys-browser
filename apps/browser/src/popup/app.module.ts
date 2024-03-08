@@ -80,6 +80,7 @@ import { TabsComponent } from "./tabs.component";
 /* eslint-disable */
 import { FlagConditionalComponent } from "../cozy/components/flag-conditional/flag-conditional.component";
 import { IfFlagDirective } from "../cozy/components/flag-conditional/if-flag.directive";
+import { AddGenericComponent } from "../cozy/components/add-generic/add-generic.component";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -108,6 +109,7 @@ import { IfFlagDirective } from "../cozy/components/flag-conditional/if-flag.dir
     ActionButtonsComponent,
     AddEditComponent,
     AddEditCustomFieldsComponent,
+    AddGenericComponent,
     AppComponent,
     AttachmentsComponent,
     CipherRowComponent,
