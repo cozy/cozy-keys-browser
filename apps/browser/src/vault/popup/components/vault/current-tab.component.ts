@@ -170,9 +170,9 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     await this.load();
   }
 
-  /* Cozy custo
+  //* Cozy custo
   addCipher() {
-    this.router.navigate(["/add-cipher"], {
+    this.router.navigate(["/add-generic"], {
       queryParams: {
         name: this.hostname,
         uri: this.url,
@@ -180,7 +180,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
       },
     });
   }
-  */
+  //*/
   //*
   addLoginCipher() {
     this.router.navigate(["/add-cipher"], {
