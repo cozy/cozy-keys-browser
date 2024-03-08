@@ -316,9 +316,11 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
       window.open(this.cozyClientService.getAppURL("mespapiers", "paper/create"));
       return false;
     }
+
+    const route = this.type ? "/add-cipher" : "/add-generic";
     // Cozy customization
     super.addCipher();
-    this.router.navigate(["/add-cipher"], {
+    this.router.navigate([route], {
       queryParams: {
         folderId: this.folderId,
         type: this.type,
