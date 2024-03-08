@@ -18,6 +18,7 @@ import { SsoComponent } from "../auth/popup/sso.component";
 import { TwoFactorOptionsComponent } from "../auth/popup/two-factor-options.component";
 import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
+import { AddGenericComponent } from "../cozy/components/add-generic/add-generic.component";
 import { GeneratorComponent } from "../tools/popup/generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/popup/generator/password-generator-history.component";
 import { AddEditComponent } from "../vault/popup/components/vault/add-edit.component";
@@ -155,6 +156,13 @@ const routes: Routes = [
     component: AddEditComponent,
     canActivate: [AuthGuard, DebounceNavigationService],
     data: { state: "add-cipher" },
+    runGuardsAndResolvers: "always",
+  },
+  {
+    path: "add-generic",
+    component: AddGenericComponent,
+    canActivate: [AuthGuard, DebounceNavigationService],
+    data: { state: "add-generic" },
     runGuardsAndResolvers: "always",
   },
   {
