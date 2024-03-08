@@ -110,9 +110,16 @@
           </button>
           -->
           <!-- Cozy insertion -->
-          <ng-container *ngIf="type === 1">
+          <ng-container *ngIf="!type">
             <div class="icon"><i class="icon-cozy icon-login icon-double"></i></div>
             <p>{{ "noItemsInList" | i18n }}</p>
+            <button type="button" (click)="addCipher()" class="btn block primary link">
+              {{ "addItem" | i18n }}
+            </button>
+          </ng-container>
+          <ng-container *ngIf="type === 1">
+            <div class="icon"><i class="icon-cozy icon-login icon-double"></i></div>
+            <p>{{ "addLoginExplanation" | i18n }}</p>
             <button type="button" (click)="addCipher()" class="btn block primary link">
               {{ "addLogin" | i18n }}
             </button>

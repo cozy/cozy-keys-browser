@@ -130,11 +130,8 @@
   "autoFillInfo": {
     "message": "You don't have any recorded login to fill the current web page."
   },
-  "addLoginExplanation_L1": {
-    "message": "No longer search, loose nor type"
-  },
-  "addLoginExplanation_L2": {
-    "message": "your passwords..."
+  "addLoginExplanation": {
+    "message": "No longer search, loose nor type\nyour passwords..."
   },
   "addIdentityExplanation": {
     "message": "Automatically fill in the forms with your address, email, phone, date of birth..."
