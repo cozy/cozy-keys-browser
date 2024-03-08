@@ -376,6 +376,15 @@
   "editItem": {
     "message": "Éditer l'élément"
   },
+  "editLogin": {
+    "message": "Éditer l'identifiant"
+  },
+  "editCard": {
+    "message": "Éditer la carte de paiement"
+  },
+  "editIdentity": {
+    "message": "Éditer le profil"
+  },
   "folder": {
     "message": "Dossier & partage"
   },

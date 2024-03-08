@@ -373,6 +373,15 @@
   "note": {
     "message": "Note"
   },
+  "editLogin": {
+    "message": "Edit login"
+  },
+  "editCard": {
+    "message": "Edit credit card"
+  },
+  "editIdentity": {
+    "message": "Edit profile"
+  },
   "editItem": {
     "message": "Edit item"
   },

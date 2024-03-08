@@ -202,6 +202,25 @@ export class AddEditComponent extends BaseAddEditComponent {
     this.showAutoFillOnPageLoadOptions =
       this.cipher.type === CipherType.Login &&
       (await this.stateService.getEnableAutoFillOnPageLoad());
+
+    // Cozy customization, override the page title to include the Item's type
+    // part of this code is copied from the parent's `load()` method
+    //*
+    const currentTypeKey = CipherType[this.type];
+
+    this.editMode = this.cipherId != null;
+    if (this.editMode) {
+      this.editMode = true;
+      if (this.cloneMode) {
+        this.cloneMode = true;
+        this.title = this.i18nService.t(`add${currentTypeKey}`);
+      } else {
+        this.title = this.i18nService.t(`edit${currentTypeKey}`);
+      }
+    } else {
+      this.title = this.i18nService.t(`add${currentTypeKey}`);
+    }
+    //*/
   }
 
   async submit(): Promise<boolean> {
