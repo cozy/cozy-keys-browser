@@ -1,0 +1,73 @@
+<div>
+  <header>
+    <div class="left">
+      <button type="button" appBlurClick (click)="back()" title="{{ 'back_shortcut' | i18n }}">
+        <span class="header-icon" title="{{ 'back' | i18n }}"
+          ><i class="icon-cozy icon-back"></i
+        ></span>
+      </button>
+    </div>
+    <h1 class="center">
+      <span class="title">{{ "addItem" | i18n }}</span>
+    </h1>
+    <div class="right"></div>
+  </header>
+  <main tabindex="-1">
+    <div class="box list">
+      <div class="box-content single-line underline">
+        <button
+          type="button"
+          class="box-content-row"
+          appStopClick
+          appBlurClick
+          (click)="selectType(cipherType.Login)"
+        >
+          <div class="row-main">
+            <div class="icon"><i class="icon-cozy icon-login"></i></div>
+            <span class="text">{{ "typeLogin" | i18n }}</span>
+          </div>
+          <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
+        </button>
+        <button
+          type="button"
+          class="box-content-row"
+          appStopClick
+          appBlurClick
+          (click)="selectType(cipherType.Card)"
+        >
+          <div class="row-main">
+            <div class="icon"><i class="icon-cozy icon-bank"></i></div>
+            <span class="text">{{ "typeCard" | i18n }}</span>
+          </div>
+          <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
+        </button>
+        <button
+          type="button"
+          class="box-content-row"
+          appStopClick
+          appBlurClick
+          (click)="selectType(cipherType.Identity)"
+        >
+          <div class="row-main">
+            <div class="icon"><i class="icon-cozy icon-identity"></i></div>
+            <span class="text">{{ "typeIdentity" | i18n }}</span>
+          </div>
+          <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
+        </button>
+        <button
+          type="button"
+          class="box-content-row"
+          appStopClick
+          appBlurClick
+          (click)="selectType(cipherType.Paper)"
+        >
+          <div class="row-main">
+            <div class="icon"><i class="icon-cozy icon-mespapiers"></i></div>
+            <span class="text">{{ "typePapers" | i18n }}</span>
+          </div>
+          <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
+        </button>
+      </div>
+    </div>
+  </main>
+</div>
