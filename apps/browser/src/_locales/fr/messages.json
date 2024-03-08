@@ -130,8 +130,8 @@
   "autoFillInfo": {
     "message": "Aucun identifiant enregistré pour remplir la page actuelle."
   },
-  "addLoginExplanation_L1": {
-    "message": "Ne plus chercher, ne plus perdre, ne plus taper"
+  "addLoginExplanation": {
+    "message": "Ne plus chercher, ne plus perdre, ne plus taper\nvos mots de passe..."
   },
   "addLoginExplanation_L2": {
     "message": "vos mots de passe..."
