@@ -1810,6 +1810,9 @@
   "unfavorite": {
     "message": "Unfavorite"
   },
+  "print": {
+    "message": "Print"
+  },
   "removedPassword": {
     "message": "Password removed"
   },

@@ -702,6 +702,20 @@
           <span>{{ "changeFolder" | i18n }}</span>
         </div>
       </button>
+      <!-- Cozy customization -->
+      <button
+        type="button"
+        class="box-content-row"
+        appStopClick
+        appBlurClick
+        (click)="print()"
+        *ngIf="cipher.type === cipherType.Paper"
+      >
+        <div class="row-main text-primary">
+          <span>{{ "print" | i18n }}</span>
+        </div>
+      </button>
+      <!-- Cozy customization end -->
       <button
         type="button"
         class="box-content-row"

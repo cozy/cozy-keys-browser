@@ -1858,6 +1858,9 @@
   "unfavorite": {
     "message": "Retirer des favoris"
   },
+  "print": {
+    "message": "Imprimer"
+  },
   "removedPassword": {
     "message": "Mot de passe supprimé"
   },
