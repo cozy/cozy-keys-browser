@@ -1861,6 +1861,9 @@
   "print": {
     "message": "Imprimer"
   },
+  "download": {
+    "message": "Télécharger"
+  },
   "removedPassword": {
     "message": "Mot de passe supprimé"
   },

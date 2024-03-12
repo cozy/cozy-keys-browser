@@ -716,6 +716,20 @@
         </div>
       </button>
       <!-- Cozy customization end -->
+      <!-- Cozy customization -->
+      <button
+        type="button"
+        class="box-content-row"
+        appStopClick
+        appBlurClick
+        (click)="download()"
+        *ngIf="cipher.type === cipherType.Paper"
+      >
+        <div class="row-main text-primary">
+          <span>{{ "download" | i18n }}</span>
+        </div>
+      </button>
+      <!-- Cozy customization end -->
       <button
         type="button"
         class="box-content-row"

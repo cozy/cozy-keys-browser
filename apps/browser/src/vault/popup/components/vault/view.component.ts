@@ -455,6 +455,18 @@ export class ViewComponent extends BaseViewComponent {
   // Cozy customization end
 
   // Cozy customization
+  async download() {
+    const client = await this.cozyClientService.getClientInstance();
+
+    const downloadUrl = await client
+      .collection("io.cozy.files")
+      .getDownloadLinkById(this.cipher.id, this.cipher.name);
+
+    client.collection("io.cozy.files").forceFileDownload(`${downloadUrl}?Dl=1`, this.cipher.name);
+  }
+  // Cozy customization end
+
+  // Cozy customization
   async onIllustrationError() {
     // An illustration URL is valid for 10 minutes. If an illustration URL is expired,
     // it is very likely that all illustration URLs are expired. So we start a
