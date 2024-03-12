@@ -1813,6 +1813,9 @@
   "print": {
     "message": "Print"
   },
+  "download": {
+    "message": "Download"
+  },
   "removedPassword": {
     "message": "Password removed"
   },
