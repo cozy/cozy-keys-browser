@@ -775,6 +775,10 @@
     "message": "Light",
     "description": "Light color"
   },
+  "lightContrasted": {
+    "message": "Light with pronounced contrast",
+    "description": "Light color"
+  },
   "solarizedDark": {
     "message": "Solarized dark",
     "description": "'Solarized' is a noun and the name of a color scheme. It should not be translated."
