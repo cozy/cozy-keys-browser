@@ -14,6 +14,7 @@ $font-size-xxlarge: 28px;
 $font-size-small: 12px;
 // Close to cozy-ui text primary
 $text-color: rgba($grey900, 0.9);
+$text-color-contrasted: rgba($grey900, 0.9);
 $border-color: #f0f0f0;
 $border-color-dark: #ddd;
 $list-item-hover: #fbfbfb;
@@ -30,6 +31,7 @@ $gray-light: #95999d;
 $gray-silver: #d6d8da;
 // Close to cozy-ui text secondary
 $text-muted: rgba($grey900, 0.48);
+$text-muted-contrasted: rgba($grey900, 0.72);
 
 $brand-primary: #297ef2;
 $brand-primary-active: darken($brand-primary, 5%);
@@ -38,6 +40,14 @@ $brand-success: #09ae1c;
 $brand-info: #009fa2;
 $brand-warning: #cb8100;
 $brand-primary-accent: darken($brand-primary, 8%);
+
+$brand-primary-contrasted: #0e6ff6;
+$brand-primary-active-contrasted: darken($brand-primary-contrasted, 5%);
+$brand-danger-contrasted: #e81111;
+$brand-success-contrasted: #068915;
+$brand-info-contrasted: #008281;
+$brand-warning-contrasted: #a36800;
+$brand-primary-accent-contrasted: darken($brand-primary-contrasted, 8%);
 
 $background-color: #f5f6f7;
 $background-color-alt: #ffffff;
@@ -122,6 +132,69 @@ $themes: (
     successColor: $brand-success,
     infoColor: $brand-info,
     warningColor: $brand-warning,
+    logoSuffix: "dark",
+    passwordNumberColor: #007fde,
+    passwordSpecialColor: #c40800,
+    passwordCountText: #212529,
+    calloutBorderColor: $border-color-dark,
+    calloutBackgroundColor: $box-background-color,
+    toastTextColor: #ffffff,
+    svgSuffix: "-light.svg",
+    transparentColor: rgba(0, 0, 0, 0),
+    dateInputColorScheme: light,
+    // https://stackoverflow.com/a/53336754
+    webkitCalendarPickerFilter: invert(46%) sepia(69%) saturate(6397%) hue-rotate(211deg)
+      brightness(85%) contrast(103%),
+    // light has no hover so use same color
+    webkitCalendarPickerHoverFilter: invert(46%) sepia(69%) saturate(6397%) hue-rotate(211deg)
+      brightness(85%) contrast(103%),
+    codeColor: #e83e8c,
+  ),
+  lightContrasted: (
+    textColor: $text-color-contrasted,
+    hoverColorTransparent: rgba($text-color-contrasted, 0.15),
+    borderColor: $border-color-dark,
+    backgroundColor: $background-color,
+    borderColorAlt: $border-color-alt,
+    backgroundColorAlt: #ffffff,
+    scrollbarColor: rgba(100, 100, 100, 0.2),
+    scrollbarHoverColor: rgba(100, 100, 100, 0.4),
+    boxBackgroundColor: $box-background-color,
+    boxBackgroundHoverColor: $box-background-hover-color,
+    boxBorderColor: $box-border-color,
+    tabBackgroundColor: #ffffff,
+    tabBackgroundHoverColor: $list-item-hover,
+    headerColor: #ffffff,
+    headerBackgroundColor: $brand-primary-contrasted,
+    headerBackgroundHoverColor: rgba(255, 255, 255, 0.1),
+    headerBorderColor: $brand-primary-contrasted,
+    headerInputBackgroundColor: lighten($brand-primary-contrasted, 8%),
+    headerInputBackgroundFocusColor: lighten($brand-primary-contrasted, 8%),
+    headerInputColor: #ffffff,
+    headerInputPlaceholderColor: lighten($brand-primary-contrasted, 35%),
+    listItemBackgroundHoverColor: $list-item-hover,
+    disabledIconColor: $list-icon-color,
+    disabledBoxOpacity: $disabled-box-opacity,
+    headingColor: $charcoal-grey,
+    labelColor: $gray-light,
+    mutedColor: $text-muted-contrasted,
+    totpStrokeColor: $brand-primary-contrasted,
+    boxRowButtonColor: $brand-primary-contrasted,
+    boxRowButtonHoverColor: darken($brand-primary-contrasted, 10%),
+    inputBorderColor: darken($border-color-dark, 7%),
+    inputBackgroundColor: #ffffff,
+    inputPlaceholderColor: lighten($gray-light, 20%),
+    buttonBackgroundColor: $button-background-color,
+    buttonBorderColor: $button-border-color,
+    buttonColor: $button-color,
+    buttonPrimaryColor: $button-color-primary,
+    buttonDangerColor: $button-color-danger,
+    primaryColor: $brand-primary-contrasted,
+    primaryAccentColor: $brand-primary-accent-contrasted,
+    dangerColor: $brand-danger-contrasted,
+    successColor: $brand-success-contrasted,
+    infoColor: $brand-info-contrasted,
+    warningColor: $brand-warning-contrasted,
     logoSuffix: "dark",
     passwordNumberColor: #007fde,
     passwordSpecialColor: #c40800,

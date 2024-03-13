@@ -45,6 +45,7 @@ export class ThemingService implements AbstractThemingService {
     this.theme$.subscribe((theme: Theme) => {
       this.document.documentElement.classList.remove(
         "theme_" + ThemeType.Light,
+        "theme_" + ThemeType.LightContrasted,
         "theme_" + ThemeType.Dark,
         "theme_" + ThemeType.Nord,
         "theme_" + ThemeType.SolarizedDark
