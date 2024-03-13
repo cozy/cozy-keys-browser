@@ -77,7 +77,7 @@
     "message": "Vault"
   },
   "myVault": {
-    "message": "Passwords & co"
+    "message": "Data"
   },
   "allVaults": {
     "message": "All vaults"
@@ -240,7 +240,7 @@
     "message": "Delete folder"
   },
   "folders": {
-    "message": "Folders"
+    "message": "Folders & Login sharing"
   },
   "noFolders": {
     "message": "There are no folders to list."
