@@ -761,14 +761,6 @@
       }
     }
 
-    .icon-trash {
-      width: 20px;
-      height: 20px;
-      @include themify($themes) {
-        background-color: themed("mutedColor");
-      }
-    }
-
     &.icon-small {
       min-width: 25px;
     }
