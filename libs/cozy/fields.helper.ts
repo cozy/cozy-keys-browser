@@ -64,6 +64,7 @@ export const buildFieldsFromPaper = (i18nService: any, paper: any): FieldView[] 
       formattedName = getTranslatedNameForContact({ lang });
       formattedValue = formatContactValue(paper.contacts.data);
     } else {
+      // do nothing if metadata qualification type is unknown (new type, wrong type, unknown type, ...)
       return;
     }
 
