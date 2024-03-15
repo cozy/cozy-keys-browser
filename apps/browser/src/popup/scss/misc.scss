@@ -325,6 +325,18 @@ This class is responsible of changing tabs colors :
   content: "\f071"; // do not show the previous icon but keep height
 }
 
+.bwi-generate-f {
+  background-color: $gray-light;
+  mask-image: url("../../../../../node_modules/cozy-ui/assets/icons/ui/sync.svg");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.bwi-generate-f::before {
+  content: "\f071"; // do not show the previous icon but keep height
+}
+
 .icon-cozy-inline {
   color: $gray-light;
   display: flex;
