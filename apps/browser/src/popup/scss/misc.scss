@@ -294,6 +294,37 @@ app-vault-icon,
   height: 24px;
 }
 
+/*
+This class is responsible of changing tabs colors :
+ - color is for text
+ - background-color is for font icons transformed in SVG icons
+*/
+.tab-icon-cozy {
+  color: $gray-light;
+
+  &:hover,
+  &:active,
+  &.active {
+    color: $brand-primary;
+
+    .bwi {
+      background-color: $brand-primary;
+    }
+  }
+}
+
+.bwi-lock-f {
+  background-color: $gray-light;
+  mask-image: url("../../../../../node_modules/cozy-ui/assets/icons/ui/stack.svg");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.bwi-lock-f::before {
+  content: "\f071"; // do not show the previous icon but keep height
+}
+
 .icon-cozy-inline {
   color: $gray-light;
   display: flex;
