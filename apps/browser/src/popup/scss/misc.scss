@@ -351,7 +351,9 @@ li.active .icon-cozy-inline > svg {
 }
 
 .paper-illustration img {
-  height: 128px;
+  height: 100px;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 .icon-pen {
