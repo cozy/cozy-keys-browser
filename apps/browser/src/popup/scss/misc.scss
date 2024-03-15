@@ -349,6 +349,18 @@ This class is responsible of changing tabs colors :
   content: "\f071"; // do not show the previous icon but keep height
 }
 
+.tab-icon-cozy-cloud {
+  background-color: $gray-light;
+  mask-image: url("../../../../../node_modules/cozy-ui/assets/icons/ui/cloud.svg");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.tab-icon-cozy-cloud::before {
+  content: "\f071"; // keep height
+}
+
 .icon-cozy-inline {
   color: $gray-light;
   display: flex;
