@@ -761,14 +761,6 @@
       }
     }
 
-    .icon-folder {
-      width: 20px;
-      height: 20px;
-      @include themify($themes) {
-        background-color: themed("mutedColor");
-      }
-    }
-
     .icon-trash {
       width: 20px;
       height: 20px;
