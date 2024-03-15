@@ -712,6 +712,9 @@
         *ngIf="cipher.type === cipherType.Paper"
       >
         <div class="row-main text-primary">
+          <div class="icon text-primary" aria-hidden="true">
+            <i class="icon-cozy icon-print-paper" aria-hidden="true"></i>
+          </div>
           <span>{{ "print" | i18n }}</span>
         </div>
       </button>
@@ -726,6 +729,9 @@
         *ngIf="cipher.type === cipherType.Paper"
       >
         <div class="row-main text-primary">
+          <div class="icon text-primary" aria-hidden="true">
+            <i class="icon-cozy icon-download-paper" aria-hidden="true"></i>
+          </div>
           <span>{{ "download" | i18n }}</span>
         </div>
       </button>
