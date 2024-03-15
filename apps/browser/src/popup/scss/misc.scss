@@ -443,6 +443,16 @@ li.active .icon-cozy-inline > svg {
   background-color: $list-icon-color;
 }
 
+.icon-pop-inside {
+  mask-image: url("../../../../../node_modules/cozy-ui/assets/icons/ui/pop-inside.svg");
+  -webkit-mask-image: url("../../../../../node_modules/cozy-ui/assets/icons/ui/pop-inside.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: white;
+}
+
 .icon-cross {
   background-image: url("../images/icons-16-icon-cross.svg");
 }
@@ -462,10 +472,6 @@ li.active .icon-cozy-inline > svg {
 
 .icon-back {
   background-image: url("../images/icons-16-icon-back.svg");
-}
-
-.icon-out-w {
-  background-image: url("../images/icons-16-icon-out-white.svg");
 }
 
 .icon-out {
