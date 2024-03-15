@@ -40,6 +40,8 @@ import { deleteCipher } from "./cozy-utils";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { CAN_SHARE_ORGANIZATION } from "../../../../cozy/flags";
 import { HistoryService } from "../../../../popup/services/history.service";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { PaperType } from "@bitwarden/common/enums/paperType";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -81,7 +83,8 @@ export class ViewComponent extends BaseViewComponent {
     logService: LogService,
     fileDownloadService: FileDownloadService,
     private cozyClientService: CozyClientService,
-    private historyService: HistoryService
+    private historyService: HistoryService,
+    private syncService: SyncService
   ) {
     super(
       cipherService,
@@ -178,6 +181,14 @@ export class ViewComponent extends BaseViewComponent {
     if (this.cipher.isDeleted) {
       return false;
     }
+
+    // Cozy customization
+    if (this.cipher.type === CipherType.Paper) {
+      this.openWebApp();
+      return;
+    }
+    // Cozy customization end
+
     if (!(await super.edit())) {
       return false;
     }
@@ -413,7 +424,54 @@ export class ViewComponent extends BaseViewComponent {
   }
 
   openWebApp() {
-    const hash = "/vault?action=view&cipherId=" + this.cipherId;
-    window.open(this.cozyClientService.getAppURL("passwords", hash));
+    if (this.cipher.type === CipherType.Paper && this.cipher.paper.type === PaperType.Paper) {
+      const hash = `/paper/files/${this.cipher.paper.qualificationLabel}/${this.cipher.id}`;
+      window.open(this.cozyClientService.getAppURL("mespapiers", hash));
+    } else if (this.cipher.type === CipherType.Paper && this.cipher.paper.type === PaperType.Note) {
+      const returnUrl = this.cozyClientService.getAppURL(
+        "mespapiers",
+        `/paper/files/${this.cipher.paper.qualificationLabel}`
+      );
+      const destinationUrl = this.cozyClientService.getAppURL("notes", `n/${this.cipher.id}`);
+      const url = new URL(destinationUrl);
+      url.searchParams.set("returnUrl", returnUrl);
+      window.open(url.toString());
+    } else {
+      const hash = "/vault?action=view&cipherId=" + this.cipherId;
+      window.open(this.cozyClientService.getAppURL("passwords", hash));
+    }
   }
+
+  // Cozy customization
+  async print() {
+    const client = await this.cozyClientService.getClientInstance();
+
+    const printUrl = await client
+      .collection("io.cozy.files")
+      .getDownloadLinkById(this.cipher.id, this.cipher.name);
+
+    window.open(printUrl);
+  }
+  // Cozy customization end
+
+  // Cozy customization
+  async download() {
+    const client = await this.cozyClientService.getClientInstance();
+
+    const downloadUrl = await client
+      .collection("io.cozy.files")
+      .getDownloadLinkById(this.cipher.id, this.cipher.name);
+
+    client.collection("io.cozy.files").forceFileDownload(`${downloadUrl}?Dl=1`, this.cipher.name);
+  }
+  // Cozy customization end
+
+  // Cozy customization
+  async onIllustrationError() {
+    // An illustration URL is valid for 10 minutes. If an illustration URL is expired,
+    // it is very likely that all illustration URLs are expired. So we start a
+    // full sync that will get new illustration URLs.
+    await this.syncService.fullSync(true);
+  }
+  // Cozy customization end
 }

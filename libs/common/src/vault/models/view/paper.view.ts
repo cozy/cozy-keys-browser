@@ -10,6 +10,8 @@ export class PaperView extends ItemView {
   type: PaperType = null;
   ownerName: string = null;
   illustrationThumbnailUrl: string = null;
+  illustrationUrl: string = null;
+  qualificationLabel: string = null;
   noteContent: string = null;
 
   constructor(p?: Paper) {
@@ -21,6 +23,8 @@ export class PaperView extends ItemView {
     this.type = p.type;
     this.ownerName = p.ownerName;
     this.illustrationThumbnailUrl = p.illustrationThumbnailUrl;
+    this.illustrationUrl = p.illustrationUrl;
+    this.qualificationLabel = p.qualificationLabel;
     this.noteContent = p.noteContent;
   }
 

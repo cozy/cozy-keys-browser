@@ -8,14 +8,16 @@ import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.r
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { PaperView } from "@bitwarden/common/vault/models/view/paper.view";
 
+import { buildFieldsFromPaper, copyEncryptedFields, buildField } from "./fields.helper";
+
 interface NoteConversionOptions {
   client: CozyClient;
-  noteThumbnailUrl: string;
+  noteIllustrationUrl: string;
 }
 
 export const isNote = (document: any) => document.mime === "text/vnd.cozy.note+markdown";
 
-export const fetchNoteThumbnailUrl = async (client: CozyClient) => {
+export const fetchNoteIllustrationUrl = async (client: CozyClient) => {
   const { data: app } = await client.query(Q("io.cozy.apps").getById("notes"));
 
   const baseUrl = client.getStackClient().uri;
@@ -27,10 +29,11 @@ export const fetchNoteThumbnailUrl = async (client: CozyClient) => {
 
 export const convertNoteToCipherResponse = async (
   cipherService: any,
+  i18nService: any,
   paper: any,
   options: NoteConversionOptions
 ): Promise<CipherResponse> => {
-  const { client, noteThumbnailUrl } = options;
+  const { client, noteIllustrationUrl } = options;
 
   const cipherView = new CipherView();
   cipherView.id = paper.id;
@@ -41,7 +44,11 @@ export const convertNoteToCipherResponse = async (
   cipherView.paper.noteContent = await client
     .getStackClient()
     .fetchJSON("GET", "/notes/" + paper.id + "/text");
-  cipherView.paper.illustrationThumbnailUrl = noteThumbnailUrl;
+  cipherView.paper.illustrationThumbnailUrl = noteIllustrationUrl;
+  cipherView.paper.illustrationUrl = noteIllustrationUrl;
+  cipherView.paper.qualificationLabel = paper.metadata.qualification.label;
+  cipherView.fields = buildFieldsFromPaper(i18nService, paper);
+  cipherView.fields.push(buildField(i18nService.t("content"), cipherView.paper.noteContent));
 
   const cipherEncrypted = await cipherService.encrypt(cipherView);
   const cipherViewEncrypted = new CipherView(cipherEncrypted);
@@ -53,6 +60,9 @@ export const convertNoteToCipherResponse = async (
   cipherViewResponse.paper.type = cipherView.paper.type;
   cipherViewResponse.paper.noteContent = cipherView.paper.noteContent;
   cipherViewResponse.paper.illustrationThumbnailUrl = cipherView.paper.illustrationThumbnailUrl;
+  cipherViewResponse.paper.illustrationUrl = cipherView.paper.illustrationUrl;
+  cipherViewResponse.paper.qualificationLabel = cipherView.paper.qualificationLabel;
+  cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields);
 
   return cipherViewResponse;
 };

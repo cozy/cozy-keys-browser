@@ -358,6 +358,15 @@
   "itemInformation": {
     "message": "Informations sur l'élément"
   },
+  "usefulInformation": {
+    "message": "Informations utiles"
+  },
+  "actions": {
+    "message": "Actions"
+  },
+  "content": {
+    "message": "Contenu"
+  },
   "username": {
     "message": "Identifiant"
   },
@@ -1848,6 +1857,12 @@
   },
   "unfavorite": {
     "message": "Retirer des favoris"
+  },
+  "print": {
+    "message": "Imprimer"
+  },
+  "download": {
+    "message": "Télécharger"
   },
   "removedPassword": {
     "message": "Mot de passe supprimé"

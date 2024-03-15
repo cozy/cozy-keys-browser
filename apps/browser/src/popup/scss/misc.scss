@@ -340,6 +340,22 @@ li.active .icon-cozy-inline > svg {
   content: url("../images/icon-file-type-text.png");
 }
 
+.paper-illustration {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  margin-top: 0px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.paper-illustration img {
+  height: 100px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
 .icon-pen {
   mask-image: url("../images/icons-16-icon-pen.svg");
   -webkit-mask-image: url("../images/icons-16-icon-pen.svg");

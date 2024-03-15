@@ -9,6 +9,8 @@ export class Paper extends Domain {
   type: PaperType = null;
   ownerName: string;
   illustrationThumbnailUrl: string;
+  illustrationUrl: string;
+  qualificationLabel: string;
   noteContent: string;
 
   constructor(obj?: PaperData) {
@@ -20,6 +22,8 @@ export class Paper extends Domain {
     this.type = obj.type;
     this.ownerName = obj.ownerName;
     this.illustrationThumbnailUrl = obj.illustrationThumbnailUrl;
+    this.illustrationUrl = obj.illustrationUrl;
+    this.qualificationLabel = obj.qualificationLabel;
     this.noteContent = obj.noteContent;
   }
 

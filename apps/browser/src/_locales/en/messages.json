@@ -355,6 +355,15 @@
   "itemInformation": {
     "message": "Item information"
   },
+  "usefulInformation": {
+    "message": "Useful information"
+  },
+  "actions": {
+    "message": "Actions"
+  },
+  "content": {
+    "message": "Content"
+  },
   "username": {
     "message": "Username"
   },
@@ -1800,6 +1809,12 @@
   },
   "unfavorite": {
     "message": "Unfavorite"
+  },
+  "print": {
+    "message": "Print"
+  },
+  "download": {
+    "message": "Download"
   },
   "removedPassword": {
     "message": "Password removed"
