@@ -580,6 +580,26 @@ li.active .icon-cozy-inline > svg {
   }
 }
 
+.icon-print-paper {
+  mask-image: url("../../../../../node_modules/cozy-ui//assets/icons/ui/printer.svg");
+  -webkit-mask-image: url("../../../../../node_modules/cozy-ui//assets/icons/ui/printer.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: $brand-primary;
+}
+
+.icon-download-paper {
+  mask-image: url("../../../../../node_modules/cozy-ui//assets/icons/ui/download.svg");
+  -webkit-mask-image: url("../../../../../node_modules/cozy-ui//assets/icons/ui/download.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: $brand-primary;
+}
+
 .icon-profile {
   background-image: url("../images/icons-16-icon-profile.svg");
 }
