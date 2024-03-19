@@ -41,9 +41,9 @@ export const convertNoteToCipherResponse = async (
   cipherView.type = CipherType.Paper;
   cipherView.paper = new PaperView();
   cipherView.paper.type = PaperType.Note;
-  cipherView.paper.noteContent = await client
-    .getStackClient()
-    .fetchJSON("GET", "/notes/" + paper.id + "/text");
+  cipherView.paper.noteContent =
+    (await client.getStackClient().fetchJSON("GET", "/notes/" + paper.id + "/text")) || "/";
+
   cipherView.paper.illustrationThumbnailUrl = noteIllustrationUrl;
   cipherView.paper.illustrationUrl = noteIllustrationUrl;
   cipherView.paper.qualificationLabel = paper.metadata.qualification.label;
