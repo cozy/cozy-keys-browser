@@ -658,8 +658,14 @@
   "deleteSharedItemConfirmation": {
     "message": "This identifier is currently used to import the account data into your Cozy. By deleting it, this automatic import will be interrupted. Are you sure ?"
   },
+  "deletePaperItemConfirmation": {
+    "message": "Are you sure you want to delete this element?"
+  },
   "deletedItem": {
     "message": "Item sent to trash"
+  },
+  "deletedPaperItem": {
+    "message": "Item sent to Cozy Drive trash"
   },
   "overwritePassword": {
     "message": "Overwrite password"

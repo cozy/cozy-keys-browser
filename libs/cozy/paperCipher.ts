@@ -3,7 +3,11 @@
 import { Q } from "cozy-client";
 import CozyClient from "cozy-client/types/CozyClient";
 
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.response";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import { convertNoteToCipherResponse, isNote, fetchNoteIllustrationUrl } from "./note.helper";
 import { convertPaperToCipherResponse } from "./paper.helper";
@@ -122,4 +126,37 @@ export const fetchPapersAndConvertAsCiphers = async (
     throw e;
   }
 };
+
+export const deletePaperCipher = async (
+  cipherService: CipherService,
+  i18nService: I18nService,
+  platformUtilsService: PlatformUtilsService,
+  cipher: CipherView,
+  cozyClientService: any
+): Promise<boolean> => {
+  const confirmed = await platformUtilsService.showDialog(
+    i18nService.t("deletePaperItemConfirmation"),
+    i18nService.t("deleteItem"),
+    i18nService.t("yes"),
+    i18nService.t("no"),
+    "warning"
+  );
+
+  if (!confirmed) {
+    return false;
+  }
+
+  const client = await cozyClientService.getClientInstance();
+  await client.destroy({
+    _id: cipher.id,
+    _type: "io.cozy.files",
+  });
+  await cipherService.delete(cipher.id);
+
+  const message = i18nService.t("deletedPaperItem");
+  platformUtilsService.showToast("success", null, message);
+
+  return true;
+};
+
 // Cozy customization end
