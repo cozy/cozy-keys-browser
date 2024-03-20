@@ -54,6 +54,7 @@ export const convertPaperToCipherResponse = async (
   cipherView.paper.illustrationUrl = buildIllustrationUrl(paper, baseUrl);
   cipherView.paper.qualificationLabel = paper.metadata.qualification.label;
   cipherView.fields = buildFieldsFromPaper(i18nService, paper);
+  cipherView.favorite = !!paper.cozyMetadata.favorite;
 
   const cipherEncrypted = await cipherService.encrypt(cipherView);
   const cipherViewEncrypted = new CipherView(cipherEncrypted);
@@ -68,6 +69,7 @@ export const convertPaperToCipherResponse = async (
   cipherViewResponse.paper.illustrationUrl = cipherView.paper.illustrationUrl;
   cipherViewResponse.paper.qualificationLabel = cipherView.paper.qualificationLabel;
   cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields);
+  cipherViewResponse.favorite = cipherEncrypted.favorite;
 
   return cipherViewResponse;
 };
