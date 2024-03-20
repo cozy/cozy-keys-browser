@@ -37,7 +37,7 @@ const BroadcasterSubscriptionId = "ChildViewComponent";
 /* start Cozy imports */
 /* eslint-disable */
 import { deleteCipher } from "./cozy-utils";
-import { deletePaperCipher } from "../../../../../../../libs/cozy/paperCipher";
+import { favoritePaperCipher, deletePaperCipher } from "../../../../../../../libs/cozy/paperCipher";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { CAN_SHARE_ORGANIZATION } from "../../../../cozy/flags";
 import { HistoryService } from "../../../../popup/services/history.service";
@@ -214,6 +214,23 @@ export class ViewComponent extends BaseViewComponent {
       },
     });
     return true;
+  }
+
+  async favorite() {
+    try {
+      await favoritePaperCipher(
+        this.cipherService,
+        this.i18nService,
+        this.cipher,
+        this.cozyClientService
+      );
+
+      const cipher = await this.cipherService.get(this.cipherId);
+
+      this.cipher = await cipher.decrypt();
+    } catch {
+      this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
+    }
   }
 
   async share() {

@@ -6,6 +6,7 @@ import CozyClient from "cozy-client/types/CozyClient";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.response";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
@@ -20,6 +21,17 @@ const fetchPapers = async (client: CozyClient) => {
   const hydratedData = client.hydrateDocuments("io.cozy.files", data);
 
   return hydratedData;
+};
+
+const fetchPaper = async (client: CozyClient, _id: string) => {
+  const fileQueryWithContact = buildFileQueryWithContacts(_id);
+
+  const { data } = await client.query(
+    fileQueryWithContact.definition(),
+    fileQueryWithContact.options
+  );
+
+  return data[0];
 };
 
 export const buildFilesQueryWithQualificationLabel = () => {
@@ -45,6 +57,7 @@ export const buildFilesQueryWithQualificationLabel = () => {
     "metadata.version",
     "cozyMetadata.createdByApp",
     "cozyMetadata.sourceAccountIdentifier",
+    "cozyMetadata.favorite",
     "created_at",
     "dir_id",
     "updated_at",
@@ -71,6 +84,21 @@ export const buildFilesQueryWithQualificationLabel = () => {
         .indexFields(["type", "trashed"]),
     options: {
       as: `io.cozy.files/metadata_qualification_label`,
+    },
+  };
+};
+
+export const buildFileQueryWithContacts = (_id: string) => {
+  return {
+    definition: () =>
+      Q("io.cozy.files")
+        .where({
+          _id: _id,
+        })
+        .limitBy(1)
+        .include(["contacts"]),
+    options: {
+      as: `io.cozy.files/byIdWithContacts`,
     },
   };
 };
@@ -125,6 +153,42 @@ export const fetchPapersAndConvertAsCiphers = async (
 
     throw e;
   }
+};
+
+export const favoritePaperCipher = async (
+  cipherService: CipherService,
+  i18nService: I18nService,
+  cipher: CipherView,
+  cozyClientService: any
+): Promise<boolean> => {
+  const client = await cozyClientService.getClientInstance();
+
+  const paper = await fetchPaper(client, cipher.id);
+
+  const { data: updatedPaper } = await client.save({
+    ...paper,
+    cozyMetadata: {
+      ...paper.cozyMetadata,
+      favorite: !cipher.favorite,
+    },
+  });
+
+  const [updatePaperWithContacts] = client.hydrateDocuments("io.cozy.files", [updatedPaper]);
+
+  const cipherResponse = await convertPaperToCipherResponse(
+    cipherService,
+    i18nService,
+    updatePaperWithContacts,
+    {
+      baseUrl: client.getStackClient().uri,
+    }
+  );
+
+  const cipherData = new CipherData(cipherResponse);
+
+  await cipherService.upsert([cipherData]);
+
+  return true;
 };
 
 export const deletePaperCipher = async (
