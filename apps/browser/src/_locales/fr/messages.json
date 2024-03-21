@@ -1842,6 +1842,9 @@
   "expired": {
     "message": "Expiré"
   },
+  "expiredIn": {
+    "message": "Expire dans"
+  },
   "pendingDeletion": {
     "message": "En attente de suppression"
   },

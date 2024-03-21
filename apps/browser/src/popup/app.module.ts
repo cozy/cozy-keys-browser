@@ -48,6 +48,7 @@ import { VaultFilterComponent } from "../vault/popup/components/vault/vault-filt
 import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items.component";
 import { VaultSelectComponent } from "../vault/popup/components/vault/vault-select.component";
 import { ViewCustomFieldsComponent } from "../vault/popup/components/vault/view-custom-fields.component";
+import { ViewExpirationDateComponent } from "../vault/popup/components/vault/view-expiration-date.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -157,6 +158,7 @@ import { AddGenericComponent } from "../cozy/components/add-generic/add-generic.
     VaultTimeoutInputComponent,
     ViewComponent,
     ViewCustomFieldsComponent,
+    ViewExpirationDateComponent,
     RemovePasswordComponent,
     VaultSelectComponent,
     AboutComponent,
