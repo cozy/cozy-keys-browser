@@ -315,7 +315,7 @@ This class is responsible of changing tabs colors :
 
 .bwi-lock-f {
   background-color: $gray-light;
-  mask-image: url("../../../../../node_modules/cozy-ui/assets/icons/ui/stack.svg");
+  mask-image: url("cozy-ui/assets/icons/ui/stack.svg");
   mask-position: center;
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -327,7 +327,7 @@ This class is responsible of changing tabs colors :
 
 .bwi-generate-f {
   background-color: $gray-light;
-  mask-image: url("../../../../../node_modules/cozy-ui/assets/icons/ui/sync.svg");
+  mask-image: url("cozy-ui/assets/icons/ui/sync.svg");
   mask-position: center;
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -339,7 +339,7 @@ This class is responsible of changing tabs colors :
 
 .bwi-cog-f {
   background-color: $gray-light;
-  mask-image: url("../../../../../node_modules/cozy-ui/assets/icons/ui/gear.svg");
+  mask-image: url("cozy-ui/assets/icons/ui/gear.svg");
   mask-position: center;
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -351,7 +351,7 @@ This class is responsible of changing tabs colors :
 
 .tab-icon-cozy-cloud {
   background-color: $gray-light;
-  mask-image: url("../../../../../node_modules/cozy-ui/assets/icons/ui/cloud.svg");
+  mask-image: url("cozy-ui/assets/icons/ui/cloud.svg");
   mask-position: center;
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -444,8 +444,8 @@ li.active .icon-cozy-inline > svg {
 }
 
 .icon-pop-inside {
-  mask-image: url("../../../../../node_modules/cozy-ui/assets/icons/ui/pop-inside.svg");
-  -webkit-mask-image: url("../../../../../node_modules/cozy-ui/assets/icons/ui/pop-inside.svg");
+  mask-image: url("cozy-ui/assets/icons/ui/pop-inside.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/pop-inside.svg");
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: contain;
@@ -511,19 +511,19 @@ li.active .icon-cozy-inline > svg {
 }
 
 .icon-card {
-  background-image: url("../../../../../node_modules/cozy-ui/assets/icons/illus/credit-card-large.svg");
+  background-image: url("cozy-ui/assets/icons/illus/credit-card-large.svg");
   width: 24px;
   height: 24px;
 }
 
 .icon-folder {
-  background-image: url("../../../../../node_modules/cozy-ui/assets/icons/illus/file-type-folder.svg");
+  background-image: url("cozy-ui/assets/icons/illus/file-type-folder.svg");
   width: 24px;
   height: 24px;
 }
 
 .icon-trash {
-  background-image: url("../../../../../node_modules/cozy-ui/assets/icons/illus/trash-duotone.svg");
+  background-image: url("cozy-ui/assets/icons/illus/trash-duotone.svg");
   width: 24px;
   height: 24px;
 }
@@ -581,8 +581,8 @@ li.active .icon-cozy-inline > svg {
 }
 
 .icon-print-paper {
-  mask-image: url("../../../../../node_modules/cozy-ui//assets/icons/ui/printer.svg");
-  -webkit-mask-image: url("../../../../../node_modules/cozy-ui//assets/icons/ui/printer.svg");
+  mask-image: url("cozy-ui/assets/icons/ui/printer.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/printer.svg");
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: contain;
@@ -591,8 +591,8 @@ li.active .icon-cozy-inline > svg {
 }
 
 .icon-download-paper {
-  mask-image: url("../../../../../node_modules/cozy-ui//assets/icons/ui/download.svg");
-  -webkit-mask-image: url("../../../../../node_modules/cozy-ui//assets/icons/ui/download.svg");
+  mask-image: url("cozy-ui/assets/icons/ui/download.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/download.svg");
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: contain;
