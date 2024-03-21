@@ -2,6 +2,7 @@ import { Directive, Input } from "@angular/core";
 
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { EventType } from "@bitwarden/common/enums/eventType";
+import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
 import { FieldType } from "@bitwarden/common/enums/fieldType";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
@@ -13,6 +14,9 @@ export class ViewCustomFieldsComponent {
   @Input() copy: (value: string, typeI18nKey: string, aType: string) => void;
 
   fieldType = FieldType;
+  // Cozy customization
+  fieldSubType = FieldSubType;
+  // Cozy customization end
 
   constructor(private eventCollectionService: EventCollectionService) {}
 

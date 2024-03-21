@@ -1,0 +1,7 @@
+·
+<span *ngIf="field.expirationData.isExpired" class="text-danger">
+  {{ "expired" | i18n }}
+</span>
+<span *ngIf="field.expirationData.isExpiringSoon" class="text-warning">
+  {{ "expiredIn" | i18n }} {{ getExpirationDistance() }}
+</span>

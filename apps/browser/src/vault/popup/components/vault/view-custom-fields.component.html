@@ -26,6 +26,10 @@
         <span *ngIf="field.type === fieldType.Linked" class="row-label">{{ field.name }}</span>
         <div *ngIf="field.type === fieldType.Text">
           {{ field.value || "&nbsp;" }}
+          <app-vault-view-expiration-date
+            *ngIf="field.subtype === fieldSubType.ExpirationDate"
+            [field]="field"
+          ></app-vault-view-expiration-date>
         </div>
         <div *ngIf="field.type === fieldType.Hidden">
           <span *ngIf="!field.showValue" class="monospaced">{{ field.maskedValue }}</span>

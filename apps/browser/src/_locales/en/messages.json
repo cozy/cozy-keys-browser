@@ -1794,6 +1794,9 @@
   "expired": {
     "message": "Expired"
   },
+  "expiredIn": {
+    "message": "Expire in"
+  },
   "pendingDeletion": {
     "message": "Pending deletion"
   },
