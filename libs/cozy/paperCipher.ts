@@ -29,7 +29,6 @@ const convertPapersAsCiphers = async (
     let cipherResponse: CipherResponse;
     if (isNote(paper)) {
       cipherResponse = await convertNoteToCipherResponse(cipherService, i18nService, paper, {
-        client,
         noteIllustrationUrl,
       });
     } else {
