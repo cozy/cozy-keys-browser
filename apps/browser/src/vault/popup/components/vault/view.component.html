@@ -751,12 +751,28 @@
           <span>{{ "restoreItem" | i18n }}</span>
         </div>
       </button>
+      <!-- Cozy customization;
+        <button
+          type="button"
+          class="box-content-row"
+          appStopClick
+          (click)="delete()"
+          *ngIf="cipher.edit"
+        >
+          <div class="row-main text-danger">
+            <div class="icon text-danger" aria-hidden="true">
+              <i class="bwi bwi-trash bwi-lg bwi-fw"></i>
+            </div>
+            <span>{{ (cipher.isDeleted ? "permanentlyDeleteItem" : "deleteItem") | i18n }}</span>
+          </div>
+        </button>
+      -->
       <button
         type="button"
         class="box-content-row"
         appStopClick
         (click)="delete()"
-        *ngIf="cipher.edit"
+        *ngIf="cipher.edit || cipher.type === cipherType.Paper"
       >
         <div class="row-main text-danger">
           <div class="icon text-danger" aria-hidden="true">
@@ -765,6 +781,7 @@
           <span>{{ (cipher.isDeleted ? "permanentlyDeleteItem" : "deleteItem") | i18n }}</span>
         </div>
       </button>
+      <!-- Cozy customization end -->
     </div>
   </div>
   <div class="box">

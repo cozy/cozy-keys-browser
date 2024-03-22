@@ -37,6 +37,7 @@ const BroadcasterSubscriptionId = "ChildViewComponent";
 /* start Cozy imports */
 /* eslint-disable */
 import { deleteCipher } from "./cozy-utils";
+import { deletePaperCipher } from "../../../../../../../libs/cozy/paperCipher";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { CAN_SHARE_ORGANIZATION } from "../../../../cozy/flags";
 import { HistoryService } from "../../../../popup/services/history.service";
@@ -301,19 +302,36 @@ export class ViewComponent extends BaseViewComponent {
    * Calls the overrided deleteCipher
    */
   async delete() {
-    const deleted = await deleteCipher(
-      this.cipherService,
-      this.i18nService,
-      this.platformUtilsService,
-      this.cipher,
-      this.stateService
-    );
-    if (deleted) {
-      this.messagingService.send("deletedCipher");
-      this.close();
-      return true;
+    if (this.cipher.type === CipherType.Paper) {
+      const deleted = await deletePaperCipher(
+        this.cipherService,
+        this.i18nService,
+        this.platformUtilsService,
+        this.cipher,
+        this.cozyClientService
+      );
+
+      if (deleted) {
+        this.messagingService.send("deletedCipher");
+        this.close();
+        return true;
+      }
+      return false;
+    } else {
+      const deleted = await deleteCipher(
+        this.cipherService,
+        this.i18nService,
+        this.platformUtilsService,
+        this.cipher,
+        this.stateService
+      );
+      if (deleted) {
+        this.messagingService.send("deletedCipher");
+        this.close();
+        return true;
+      }
+      return false;
     }
-    return false;
   }
 
   close() {
