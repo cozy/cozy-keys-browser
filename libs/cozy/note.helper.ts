@@ -1,5 +1,7 @@
 import { Q } from "cozy-client";
 import CozyClient from "cozy-client/types/CozyClient";
+import { Node, Schema } from "prosemirror-model";
+import { EditorState } from "prosemirror-state";
 
 import { PaperType } from "@bitwarden/common/enums/paperType";
 import { PaperApi } from "@bitwarden/common/models/api/paper.api";
@@ -11,7 +13,6 @@ import { PaperView } from "@bitwarden/common/vault/models/view/paper.view";
 import { buildFieldsFromPaper, copyEncryptedFields, buildField } from "./fields.helper";
 
 interface NoteConversionOptions {
-  client: CozyClient;
   noteIllustrationUrl: string;
 }
 
@@ -27,13 +28,38 @@ export const fetchNoteIllustrationUrl = async (client: CozyClient) => {
   return fullUrl;
 };
 
+export const noteToText = (note: any): string => {
+  const schema = new Schema({
+    marks: Object.fromEntries(note.attributes.metadata.schema.marks),
+    nodes: Object.fromEntries(note.attributes.metadata.schema.nodes),
+  });
+
+  const node = Node.fromJSON(schema, note.attributes.metadata.content);
+
+  const state = EditorState.create({
+    schema,
+    doc: node,
+  });
+
+  const textContent: string[] = [];
+
+  state.doc.content.descendants((node) => {
+    if (node.isTextblock) {
+      textContent.push(node.textContent);
+    }
+  });
+
+  const textOnly = textContent?.join("\n") || "/";
+
+  return textOnly;
+};
 export const convertNoteToCipherResponse = async (
   cipherService: any,
   i18nService: any,
   paper: any,
   options: NoteConversionOptions
 ): Promise<CipherResponse> => {
-  const { client, noteIllustrationUrl } = options;
+  const { noteIllustrationUrl } = options;
 
   const cipherView = new CipherView();
   cipherView.id = paper.id;
@@ -41,8 +67,7 @@ export const convertNoteToCipherResponse = async (
   cipherView.type = CipherType.Paper;
   cipherView.paper = new PaperView();
   cipherView.paper.type = PaperType.Note;
-  cipherView.paper.noteContent =
-    (await client.getStackClient().fetchJSON("GET", "/notes/" + paper.id + "/text")) || "/";
+  cipherView.paper.noteContent = noteToText(paper);
 
   cipherView.paper.illustrationThumbnailUrl = noteIllustrationUrl;
   cipherView.paper.illustrationUrl = noteIllustrationUrl;
