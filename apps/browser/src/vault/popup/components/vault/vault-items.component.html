@@ -27,7 +27,7 @@
   </div>
   <div class="right">
     <button type="button" (click)="openWebApp()" appA11yTitle="{{ 'popOutNewWindow' | i18n }}">
-      <i class="icon-cozy icon-out-w" aria-hidden="true"></i>
+      <i class="icon-cozy icon-pop-inside" aria-hidden="true"></i>
     </button>
     <button type="button" appBlurClick (click)="addCipher()" appA11yTitle="{{ 'addItem' | i18n }}">
       <i class="icon-cozy icon-plus" aria-hidden="true"></i>
@@ -125,7 +125,7 @@
             </button>
           </ng-container>
           <ng-container *ngIf="type === 3">
-            <div class="icon"><i class="icon-cozy icon-bank icon-double"></i></div>
+            <div class="icon"><i class="icon-cozy icon-card icon-double"></i></div>
             <p>{{ "addCardExplanation" | i18n }}</p>
             <button type="button" (click)="addCipher()" class="btn block primary link">
               {{ "addCard" | i18n }}

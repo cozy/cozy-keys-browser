@@ -294,6 +294,73 @@ app-vault-icon,
   height: 24px;
 }
 
+/*
+This class is responsible of changing tabs colors :
+ - color is for text
+ - background-color is for font icons transformed in SVG icons
+*/
+.tab-icon-cozy {
+  color: $gray-light;
+
+  &:hover,
+  &:active,
+  &.active {
+    color: $brand-primary;
+
+    .bwi {
+      background-color: $brand-primary;
+    }
+  }
+}
+
+.bwi-lock-f {
+  background-color: $gray-light;
+  mask-image: url("cozy-ui/assets/icons/ui/stack.svg");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.bwi-lock-f::before {
+  content: "\f071"; // do not show the previous icon but keep height
+}
+
+.bwi-generate-f {
+  background-color: $gray-light;
+  mask-image: url("cozy-ui/assets/icons/ui/sync.svg");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.bwi-generate-f::before {
+  content: "\f071"; // do not show the previous icon but keep height
+}
+
+.bwi-cog-f {
+  background-color: $gray-light;
+  mask-image: url("cozy-ui/assets/icons/ui/gear.svg");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.bwi-cog-f::before {
+  content: "\f071"; // do not show the previous icon but keep height
+}
+
+.tab-icon-cozy-cloud {
+  background-color: $gray-light;
+  mask-image: url("cozy-ui/assets/icons/ui/cloud.svg");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.tab-icon-cozy-cloud::before {
+  content: "\f071"; // keep height
+}
+
 .icon-cozy-inline {
   color: $gray-light;
   display: flex;
@@ -376,6 +443,16 @@ li.active .icon-cozy-inline > svg {
   background-color: $list-icon-color;
 }
 
+.icon-pop-inside {
+  mask-image: url("cozy-ui/assets/icons/ui/pop-inside.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/pop-inside.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: white;
+}
+
 .icon-cross {
   background-image: url("../images/icons-16-icon-cross.svg");
 }
@@ -395,10 +472,6 @@ li.active .icon-cozy-inline > svg {
 
 .icon-back {
   background-image: url("../images/icons-16-icon-back.svg");
-}
-
-.icon-out-w {
-  background-image: url("../images/icons-16-icon-out-white.svg");
 }
 
 .icon-out {
@@ -437,8 +510,20 @@ li.active .icon-cozy-inline > svg {
   height: 24px;
 }
 
-.icon-bank {
-  background-image: url("../images/icons-card.svg");
+.icon-card {
+  background-image: url("cozy-ui/assets/icons/illus/credit-card-large.svg");
+  width: 24px;
+  height: 24px;
+}
+
+.icon-folder {
+  background-image: url("cozy-ui/assets/icons/illus/file-type-folder.svg");
+  width: 24px;
+  height: 24px;
+}
+
+.icon-trash {
+  background-image: url("cozy-ui/assets/icons/illus/trash-duotone.svg");
   width: 24px;
   height: 24px;
 }
@@ -483,18 +568,6 @@ li.active .icon-cozy-inline > svg {
   }
 }
 
-.icon-folder {
-  mask-image: url("../images/icons-16-folder.svg");
-  -webkit-mask-image: url("../images/icons-16-folder.svg");
-  mask-repeat: no-repeat;
-  -webkit-mask-repeat: no-repeat;
-  mask-size: contain;
-  -webkit-mask-size: contain;
-  @include themify($themes) {
-    background-color: themed("headerInputPlaceholderColor");
-  }
-}
-
 .icon-folder-for-sharing {
   mask-image: url("../images/icon-sharing-folder.svg");
   -webkit-mask-image: url("../images/icon-sharing-folder.svg");
@@ -507,16 +580,24 @@ li.active .icon-cozy-inline > svg {
   }
 }
 
-.icon-trash {
-  mask-image: url("../images/icons-16-trash.svg");
-  -webkit-mask-image: url("../images/icons-16-trash.svg");
+.icon-print-paper {
+  mask-image: url("cozy-ui/assets/icons/ui/printer.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/printer.svg");
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: contain;
   -webkit-mask-size: contain;
-  @include themify($themes) {
-    background-color: themed("headerInputPlaceholderColor");
-  }
+  background-color: $brand-primary;
+}
+
+.icon-download-paper {
+  mask-image: url("cozy-ui/assets/icons/ui/download.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/download.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: $brand-primary;
 }
 
 .icon-profile {

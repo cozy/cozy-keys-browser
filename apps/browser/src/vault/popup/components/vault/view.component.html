@@ -20,7 +20,7 @@
     </button>
     -->
     <button (click)="openWebApp()" appA11yTitle="{{ 'popOutNewWindow' | i18n }}">
-      <i class="icon-cozy icon-out-w" aria-hidden="true"></i>
+      <i class="icon-cozy icon-pop-inside" aria-hidden="true"></i>
     </button>
     <button
       type="button"
@@ -712,6 +712,9 @@
         *ngIf="cipher.type === cipherType.Paper"
       >
         <div class="row-main text-primary">
+          <div class="icon text-primary" aria-hidden="true">
+            <i class="icon-cozy icon-print-paper" aria-hidden="true"></i>
+          </div>
           <span>{{ "print" | i18n }}</span>
         </div>
       </button>
@@ -726,6 +729,9 @@
         *ngIf="cipher.type === cipherType.Paper"
       >
         <div class="row-main text-primary">
+          <div class="icon text-primary" aria-hidden="true">
+            <i class="icon-cozy icon-download-paper" aria-hidden="true"></i>
+          </div>
           <span>{{ "download" | i18n }}</span>
         </div>
       </button>

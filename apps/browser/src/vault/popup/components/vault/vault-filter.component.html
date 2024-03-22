@@ -25,7 +25,7 @@
   </div>
   <div class="right">
     <button type="button" (click)="openWebApp()" appA11yTitle="{{ 'popOutNewWindow' | i18n }}">
-      <i class="icon-cozy icon-out-w" aria-hidden="true"></i>
+      <i class="icon-cozy icon-pop-inside" aria-hidden="true"></i>
     </button>
     <button type="button" appBlurClick (click)="addCipher()" appA11yTitle="{{ 'addItem' | i18n }}">
       <i class="icon-cozy icon-plus" aria-hidden="true"></i>
@@ -115,7 +115,7 @@
           (click)="selectType(cipherType.Card)"
         >
           <div class="row-main">
-            <div class="icon"><i class="icon-cozy icon-bank"></i></div>
+            <div class="icon"><i class="icon-cozy icon-card"></i></div>
             <span class="text">{{ "typeCard" | i18n }}</span>
           </div>
           <span class="row-sub-label">{{ this.typeCounts.get(cipherType.Card) || 0 }}</span>
@@ -216,13 +216,7 @@
             <div class="icon"><i class="bwi bwi-fw bwi-lg bwi-collection"></i></div>
             -->
             <div class="icon">
-              <i
-                class="icon-cozy icon-folder"
-                [ngClass]="{
-                  'bwi-folder': nestedCollection.node.id,
-                  'bwi-folder-closed-f': !nestedCollection.node.id
-                }"
-              ></i>
+              <i class="icon-cozy icon-folder"></i>
             </div>
             <!-- end custo -->
             <span class="text">{{ nestedCollection.node.name }}</span>

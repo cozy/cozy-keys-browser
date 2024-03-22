@@ -481,6 +481,11 @@ header {
             color: themed("primaryColor"); //used to keep tab colored when active
           }
         }
+        // Cozy customization; active color for font icons transformed in SVG icons (see .tab-icon-cozy)
+        .bwi {
+          background-color: $brand-primary;
+        }
+        // Cozy customization end
       }
     }
   }
