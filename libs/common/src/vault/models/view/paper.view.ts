@@ -29,7 +29,8 @@ export class PaperView extends ItemView {
   }
 
   get subTitle(): string {
-    const subTitle = this.type === PaperType.Paper ? this.ownerName : this.noteContent;
+    const subTitle =
+      this.type === PaperType.Paper ? this.ownerName : this.noteContent.split("\n")[0];
     return subTitle || "";
   }
 
