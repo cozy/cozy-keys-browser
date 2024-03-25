@@ -134,6 +134,7 @@ import { MessagingService as MessagingServiceAbstraction } from "../services/abs
 import { SyncService } from "../popup/services/sync.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
+import { ThemeType } from "@bitwarden/common/enums/themeType";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -819,6 +820,14 @@ export default class MainBackground {
 
   async logout(expired: boolean, userId?: string) {
     await this.eventUploadService.uploadEvents(userId);
+
+    // Cozy customization, reset theme to LighContrasted if user did not manually changed it
+    //*
+    const isUserSetTheme = await this.stateService.getIsUserSetTheme();
+    if (!isUserSetTheme) {
+      await this.stateService.setTheme(ThemeType.LightContrasted);
+    }
+    //*/
 
     await Promise.all([
       this.syncService.setLastSync(new Date(0), userId),
