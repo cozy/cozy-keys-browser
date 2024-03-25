@@ -13,7 +13,12 @@ export class GlobalState {
   ssoOrganizationIdentifier?: string;
   ssoState?: string;
   rememberedEmail?: string;
+  // Cozy customization, set `LightContrasted` theme by default on first opening
+  /*
   theme?: ThemeType = ThemeType.System;
+  /*/
+  theme?: ThemeType = ThemeType.LightContrasted;
+  //*/
   window?: WindowState = new WindowState();
   twoFactorToken?: string;
   disableFavicon?: boolean;
