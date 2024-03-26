@@ -835,6 +835,9 @@
       justify-content: center;
       white-space: nowrap;
       background-color: $brand-primary;
+      @include themify($themes) {
+        background-color: themed("primaryColor");
+      }
     }
   }
 

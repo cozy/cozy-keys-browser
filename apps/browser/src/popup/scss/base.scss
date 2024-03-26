@@ -321,6 +321,9 @@ header {
       padding: 0 6px;
       background-color: white;
       color: $brand-primary;
+      @include themify($themes) {
+        color: themed("primaryColor");
+      }
       border-radius: 4px;
       white-space: nowrap;
       overflow: hidden;
@@ -346,6 +349,9 @@ header {
       #search-tag-text::after {
         content: "";
         border-bottom: 1px solid $brand-primary;
+        @include themify($themes) {
+          border-bottom-color: themed("primaryColor");
+        }
         position: absolute;
         left: 0;
         top: 56%;
@@ -354,6 +360,10 @@ header {
       #search-tag-text + span {
         color: $brand-primary;
         border-color: $brand-primary;
+        @include themify($themes) {
+          color: themed("primaryColor");
+          border-color: themed("primaryColor");
+        }
       }
     }
 
@@ -458,11 +468,15 @@ header {
         text-overflow: ellipsis;
         color: $text-muted;
         width: 100%;
+        @include themify($themes) {
+          color: themed("mutedColor");
+        }
 
         &:hover,
         &:focus {
           @include themify($themes) {
             background-color: themed("tabBackgroundHoverColor");
+            color: themed("primaryColor");
           }
         }
 
@@ -475,6 +489,9 @@ header {
 
       &.active * {
         color: $brand-primary;
+        @include themify($themes) {
+          color: themed("primaryColor"); //used to keep tab colored when active
+        }
         a,
         button {
           @include themify($themes) {
@@ -484,6 +501,9 @@ header {
         // Cozy customization; active color for font icons transformed in SVG icons (see .tab-icon-cozy)
         .bwi {
           background-color: $brand-primary;
+          @include themify($themes) {
+            background-color: themed("primaryColor"); //used to keep tab colored when active
+          }
         }
         // Cozy customization end
       }

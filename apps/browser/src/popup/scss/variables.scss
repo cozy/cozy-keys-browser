@@ -65,6 +65,8 @@ $button-border-color: darken($border-color-dark, 12%);
 $button-background-color: white;
 $button-background-color-primary: $brand-primary;
 $button-background-color-primary-active: $brand-primary-active;
+$button-background-color-primary-contrasted: $brand-primary-contrasted;
+$button-background-color-primary-active-contrasted: $brand-primary-active-contrasted;
 $button-color: lighten($text-color, 40%);
 $button-color-primary: #ffffff;
 $button-color-danger: darken($brand-danger, 10%);
@@ -122,6 +124,8 @@ $themes: (
     inputBackgroundColor: #ffffff,
     inputPlaceholderColor: lighten($gray-light, 20%),
     buttonBackgroundColor: $button-background-color,
+    buttonBackgroundColorPrimary: $button-background-color-primary,
+    buttonBackgroundColorPrimaryActive: $button-background-color-primary-active,
     buttonBorderColor: $button-border-color,
     buttonColor: $button-color,
     buttonPrimaryColor: $button-color-primary,
@@ -185,6 +189,8 @@ $themes: (
     inputBackgroundColor: #ffffff,
     inputPlaceholderColor: lighten($gray-light, 20%),
     buttonBackgroundColor: $button-background-color,
+    buttonBackgroundColorPrimary: $button-background-color-primary-contrasted,
+    buttonBackgroundColorPrimaryActive: $button-background-color-primary-active-contrasted,
     buttonBorderColor: $button-border-color,
     buttonColor: $button-color,
     buttonPrimaryColor: $button-color-primary,

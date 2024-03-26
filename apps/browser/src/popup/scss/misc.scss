@@ -306,9 +306,15 @@ This class is responsible of changing tabs colors :
   &:active,
   &.active {
     color: $brand-primary;
+    @include themify($themes) {
+      color: themed("primaryColor");
+    }
 
     .bwi {
       background-color: $brand-primary;
+      @include themify($themes) {
+        background-color: themed("primaryColor");
+      }
     }
   }
 }
@@ -380,10 +386,16 @@ This class is responsible of changing tabs colors :
 
 li.active .icon-cozy-inline > svg {
   fill: $brand-primary;
+  @include themify($themes) {
+    fill: themed("primaryColor");
+  }
 }
 
 .text-primary .icon-cozy-inline > svg {
   fill: $brand-primary;
+  @include themify($themes) {
+    fill: themed("primaryColor");
+  }
 }
 
 // .icon.text-primary .icon-cozy {
@@ -588,6 +600,9 @@ li.active .icon-cozy-inline > svg {
   mask-size: contain;
   -webkit-mask-size: contain;
   background-color: $brand-primary;
+  @include themify($themes) {
+    background-color: themed("primaryColor");
+  }
 }
 
 .icon-download-paper {
@@ -598,6 +613,9 @@ li.active .icon-cozy-inline > svg {
   mask-size: contain;
   -webkit-mask-size: contain;
   background-color: $brand-primary;
+  @include themify($themes) {
+    background-color: themed("primaryColor");
+  }
 }
 
 .icon-profile {
