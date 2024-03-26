@@ -64,10 +64,12 @@ export const convertPaperToCipherResponse = async (
 
   cipherViewResponse.paper = new PaperApi();
   cipherViewResponse.paper.type = cipherView.paper.type;
-  cipherViewResponse.paper.ownerName = cipherView.paper.ownerName;
-  cipherViewResponse.paper.illustrationThumbnailUrl = cipherView.paper.illustrationThumbnailUrl;
-  cipherViewResponse.paper.illustrationUrl = cipherView.paper.illustrationUrl;
-  cipherViewResponse.paper.qualificationLabel = cipherView.paper.qualificationLabel;
+  cipherViewResponse.paper.ownerName = cipherEncrypted.paper.ownerName?.encryptedString ?? "";
+  cipherViewResponse.paper.illustrationThumbnailUrl =
+    cipherEncrypted.paper.illustrationThumbnailUrl.encryptedString;
+  cipherViewResponse.paper.illustrationUrl = cipherEncrypted.paper.illustrationUrl.encryptedString;
+  cipherViewResponse.paper.qualificationLabel =
+    cipherEncrypted.paper.qualificationLabel.encryptedString;
   cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields);
   cipherViewResponse.favorite = cipherEncrypted.favorite;
 

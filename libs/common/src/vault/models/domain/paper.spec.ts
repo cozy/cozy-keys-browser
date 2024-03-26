@@ -1,8 +1,7 @@
-// Cozy customization
+import { mockEnc } from "../../../../spec/utils";
 import { PaperType } from "../../../enums/paperType";
-import { PaperData } from "../data/paper.data";
-
-import { Paper } from "./paper";
+import { PaperData } from "../../../vault/models/data/paper.data";
+import { Paper } from "../../models/domain/paper";
 
 describe("Paper", () => {
   let data: PaperData;
@@ -10,9 +9,11 @@ describe("Paper", () => {
   beforeEach(() => {
     data = {
       type: PaperType.Paper,
-      ownerName: "Alice",
-      illustrationThumbnailUrl: "https://example.com/image",
-      noteContent: undefined,
+      ownerName: "encOwnerName",
+      illustrationThumbnailUrl: "encIllustrationThumbnailUrl",
+      illustrationUrl: "encIllustrationUrl",
+      qualificationLabel: "encQualificationLabel",
+      noteContent: "encNoteContent",
     };
   });
 
@@ -22,38 +23,48 @@ describe("Paper", () => {
 
     expect(paper).toEqual({
       type: undefined,
-      ownerName: undefined,
-      illustrationThumbnailUrl: undefined,
-      noteContent: undefined,
+      ownerName: null,
+      illustrationThumbnailUrl: null,
+      illustrationUrl: null,
+      qualificationLabel: null,
+      noteContent: null,
     });
   });
 
-  it("Convert Paper", () => {
+  it("Convert", () => {
     const paper = new Paper(data);
 
     expect(paper).toEqual({
       type: 1,
-      ownerName: "Alice",
-      illustrationThumbnailUrl: "https://example.com/image",
-      noteContent: undefined,
+      ownerName: { encryptedString: "encOwnerName", encryptionType: 0 },
+      illustrationThumbnailUrl: {
+        encryptedString: "encIllustrationThumbnailUrl",
+        encryptionType: 0,
+      },
+      illustrationUrl: { encryptedString: "encIllustrationUrl", encryptionType: 0 },
+      qualificationLabel: { encryptedString: "encQualificationLabel", encryptionType: 0 },
+      noteContent: { encryptedString: "encNoteContent", encryptionType: 0 },
     });
   });
 
   it("Decrypt", async () => {
     const paper = new Paper();
     paper.type = PaperType.Paper;
-    paper.ownerName = "Alice";
-    paper.illustrationThumbnailUrl = "https://example.com/image";
-    paper.noteContent = undefined;
+    paper.ownerName = mockEnc("ownerName");
+    paper.illustrationThumbnailUrl = mockEnc("illustrationThumbnailUrl");
+    paper.illustrationUrl = mockEnc("illustrationUrl");
+    paper.qualificationLabel = mockEnc("qualificationLabel");
+    paper.noteContent = mockEnc("noteContent");
 
     const view = await paper.decrypt(null);
 
     expect(view).toEqual({
       type: 1,
-      ownerName: "Alice",
-      illustrationThumbnailUrl: "https://example.com/image",
-      noteContent: undefined,
+      ownerName: "ownerName",
+      illustrationThumbnailUrl: "illustrationThumbnailUrl",
+      illustrationUrl: "illustrationUrl",
+      qualificationLabel: "qualificationLabel",
+      noteContent: "noteContent",
     });
   });
 });
-// Cozy customization end

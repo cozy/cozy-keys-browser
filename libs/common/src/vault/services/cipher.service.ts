@@ -30,6 +30,7 @@ import { Field } from "../models/domain/field";
 import { Identity } from "../models/domain/identity";
 import { Login } from "../models/domain/login";
 import { LoginUri } from "../models/domain/login-uri";
+import { Paper } from "../models/domain/paper";
 import { Password } from "../models/domain/password";
 import { SecureNote } from "../models/domain/secure-note";
 import { SortedCiphersCache } from "../models/domain/sorted-ciphers-cache";
@@ -1246,6 +1247,20 @@ export class CipherService implements CipherServiceAbstraction {
         return;
       // Cozy customization
       case CipherType.Paper:
+        cipher.paper = new Paper();
+        cipher.paper.type = model.paper.type;
+        await this.encryptObjProperty(
+          model.paper,
+          cipher.paper,
+          {
+            ownerName: null,
+            illustrationThumbnailUrl: null,
+            illustrationUrl: null,
+            qualificationLabel: null,
+            noteContent: null,
+          },
+          key
+        );
         return;
       // Cozy customization end
       default:

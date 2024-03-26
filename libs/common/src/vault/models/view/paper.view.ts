@@ -21,16 +21,11 @@ export class PaperView extends ItemView {
     }
 
     this.type = p.type;
-    this.ownerName = p.ownerName;
-    this.illustrationThumbnailUrl = p.illustrationThumbnailUrl;
-    this.illustrationUrl = p.illustrationUrl;
-    this.qualificationLabel = p.qualificationLabel;
-    this.noteContent = p.noteContent;
   }
 
   get subTitle(): string {
     const subTitle =
-      this.type === PaperType.Paper ? this.ownerName : this.noteContent.split("\n")[0];
+      this.type === PaperType.Paper ? this.ownerName : this.noteContent?.split("\n")[0];
     return subTitle || "";
   }
 
