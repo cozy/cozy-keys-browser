@@ -1,79 +1,17 @@
 /* eslint-disable no-console */
 // Cozy customization
-import { Q } from "cozy-client";
 import CozyClient from "cozy-client/types/CozyClient";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.response";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import { convertNoteToCipherResponse, isNote, fetchNoteIllustrationUrl } from "./note.helper";
 import { convertPaperToCipherResponse } from "./paper.helper";
-
-const fetchPapers = async (client: CozyClient) => {
-  const filesQueryByLabels = buildFilesQueryWithQualificationLabel();
-
-  const data = await client.queryAll(filesQueryByLabels.definition(), filesQueryByLabels.options);
-
-  const hydratedData = client.hydrateDocuments("io.cozy.files", data);
-
-  return hydratedData;
-};
-
-export const buildFilesQueryWithQualificationLabel = () => {
-  const select = [
-    "name",
-    "mime",
-    "referenced_by",
-    "metadata.country",
-    "metadata.datetime",
-    "metadata.expirationDate",
-    "metadata.noticePeriod",
-    "metadata.qualification.label",
-    "metadata.referencedDate",
-    "metadata.number",
-    "metadata.contractType",
-    "metadata.refTaxIncome",
-    "metadata.title",
-    "metadata.AObtentionDate",
-    "metadata.BObtentionDate",
-    "metadata.CObtentionDate",
-    "metadata.DObtentionDate",
-    "metadata.page",
-    "metadata.version",
-    "cozyMetadata.createdByApp",
-    "cozyMetadata.sourceAccountIdentifier",
-    "created_at",
-    "dir_id",
-    "updated_at",
-    "type",
-    "trashed",
-  ];
-
-  return {
-    definition: () =>
-      Q("io.cozy.files")
-        .where({
-          type: "file",
-          trashed: false,
-        })
-        .partialIndex({
-          "metadata.qualification.label": {
-            $exists: true,
-          },
-          "cozyMetadata.createdByApp": { $exists: true },
-        })
-        .select(select)
-        .limitBy(1000)
-        .include(["contacts"])
-        .indexFields(["type", "trashed"]),
-    options: {
-      as: `io.cozy.files/metadata_qualification_label`,
-    },
-  };
-};
+import { fetchPapers, fetchPaper } from "./queries";
 
 const convertPapersAsCiphers = async (
   cipherService: any,
@@ -125,6 +63,42 @@ export const fetchPapersAndConvertAsCiphers = async (
 
     return [];
   }
+};
+
+export const favoritePaperCipher = async (
+  cipherService: CipherService,
+  i18nService: I18nService,
+  cipher: CipherView,
+  cozyClientService: any
+): Promise<boolean> => {
+  const client = await cozyClientService.getClientInstance();
+
+  const paper = await fetchPaper(client, cipher.id);
+
+  const { data: updatedPaper } = await client.save({
+    ...paper,
+    cozyMetadata: {
+      ...paper.cozyMetadata,
+      favorite: !cipher.favorite,
+    },
+  });
+
+  const [updatePaperWithContacts] = client.hydrateDocuments("io.cozy.files", [updatedPaper]);
+
+  const cipherResponse = await convertPaperToCipherResponse(
+    cipherService,
+    i18nService,
+    updatePaperWithContacts,
+    {
+      baseUrl: client.getStackClient().uri,
+    }
+  );
+
+  const cipherData = new CipherData(cipherResponse);
+
+  await cipherService.upsert([cipherData]);
+
+  return true;
 };
 
 export const deletePaperCipher = async (

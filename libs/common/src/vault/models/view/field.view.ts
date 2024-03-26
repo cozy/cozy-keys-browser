@@ -1,14 +1,20 @@
 import { Jsonify } from "type-fest";
 
+import { FieldSubType } from "../../../enums/fieldSubType";
 import { FieldType } from "../../../enums/fieldType";
 import { LinkedIdType } from "../../../enums/linkedIdType";
 import { View } from "../../../models/view/view";
+import { ExpirationDateData } from "../data/expiration-date.data";
 import { Field } from "../domain/field";
 
 export class FieldView implements View {
   name: string = null;
   value: string = null;
   type: FieldType = null;
+  // Cozy customization
+  subtype: FieldSubType = null;
+  expirationData: ExpirationDateData = null;
+  // Cozy customization end
   newField = false; // Marks if the field is new and hasn't been saved
   showValue = false;
   showCount = false;
@@ -20,6 +26,10 @@ export class FieldView implements View {
     }
 
     this.type = f.type;
+    // Cozy customization
+    this.subtype = f.subtype;
+    this.expirationData = f.expirationData;
+    // Cozy customization end
     this.linkedId = f.linkedId;
   }
 
