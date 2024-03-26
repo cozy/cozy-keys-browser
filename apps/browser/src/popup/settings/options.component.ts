@@ -180,6 +180,7 @@ export class OptionsComponent implements OnInit {
 
   async saveTheme() {
     await this.themingService.updateConfiguredTheme(this.theme);
+    await this.stateService.setIsUserSetTheme(true);
   }
 
   async saveDefaultUriMatch() {

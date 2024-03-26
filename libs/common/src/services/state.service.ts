@@ -2206,6 +2206,26 @@ export class StateService<
     );
   }
 
+  // Cozy customization, track if user manually set a preferred theme
+  //*
+  async getIsUserSetTheme(options?: StorageOptions): Promise<boolean> {
+    return (
+      await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.isUserSetTheme;
+  }
+
+  async setIsUserSetTheme(value: boolean, options?: StorageOptions): Promise<void> {
+    const globals = await this.getGlobals(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    globals.isUserSetTheme = value;
+    await this.saveGlobals(
+      globals,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+  //*/
+
   async getTwoFactorToken(options?: StorageOptions): Promise<string> {
     return (
       await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
