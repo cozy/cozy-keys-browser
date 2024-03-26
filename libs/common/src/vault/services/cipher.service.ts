@@ -1262,6 +1262,8 @@ export class CipherService implements CipherServiceAbstraction {
           key
         );
         return;
+      case CipherType.Contact:
+        return;
       // Cozy customization end
       default:
         throw new Error("Unknown cipher type.");
