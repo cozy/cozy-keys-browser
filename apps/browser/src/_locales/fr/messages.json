@@ -1417,6 +1417,9 @@
   "typeIdentities": {
     "message": "Profils"
   },
+  "typeContacts": {
+    "message": "Contacts"
+  },
   "typePapers": {
     "message": "Documents et Notes"
   },
