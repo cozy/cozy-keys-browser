@@ -19,6 +19,12 @@ export class GlobalState {
   /*/
   theme?: ThemeType = ThemeType.LightContrasted;
   //*/
+
+  // Cozy customization, track if user manually set a preferred theme
+  //*
+  isUserSetTheme = false;
+  //*/
+
   window?: WindowState = new WindowState();
   twoFactorToken?: string;
   disableFavicon?: boolean;
