@@ -1,4 +1,5 @@
 import { CozyClientService } from "../../../../../../apps/browser/src/popup/services/cozyClient.service";
+import { fetchContactsAndConvertAsCiphers } from "../../../../../../libs/cozy/contactCipher";
 import { fetchPapersAndConvertAsCiphers } from "../../../../../../libs/cozy/paperCipher";
 import { ApiService } from "../../../abstractions/api.service";
 import { CollectionService } from "../../../abstractions/collection.service";
@@ -117,6 +118,11 @@ export class SyncService implements SyncServiceAbstraction {
         this.i18nService
       );
       response.ciphers.push(...papersCiphers);
+      const contactsCiphers = await fetchContactsAndConvertAsCiphers(
+        this.cipherService,
+        this.cozyClientService
+      );
+      response.ciphers.push(...contactsCiphers);
       // Cozy customization end
 
       await this.syncCiphers(response.ciphers);
