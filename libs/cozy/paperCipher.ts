@@ -123,7 +123,7 @@ export const fetchPapersAndConvertAsCiphers = async (
   } catch (e) {
     console.log("Error while fetching papers and converting them as ciphers", e);
 
-    throw e;
+    return [];
   }
 };
 
