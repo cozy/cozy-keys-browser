@@ -7,6 +7,7 @@ import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { LoginComponent as BaseLoginComponent } from "@bitwarden/angular/auth/components/login.component";
+import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
 import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
@@ -34,6 +35,7 @@ import { CozySanitizeUrlService } from "../../popup/services/cozySanitizeUrl.ser
 import { CozyClientService } from "../../popup/services/cozyClient.service";
 import { KonnectorsService } from "../../popup/services/konnectors.service";
 import { sanitizeUrlInput } from "./login.component.functions";
+import { ThemeType } from "@bitwarden/common/enums/themeType";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -121,7 +123,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     loginService: LoginService,
     protected cozySanitizeUrlService: CozySanitizeUrlService,
     private cozyClientService: CozyClientService,
-    private konnectorsService: KonnectorsService
+    private konnectorsService: KonnectorsService,
+    private themingService: AbstractThemingService
   ) {
     super(
       apiService,
@@ -270,6 +273,10 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
       } else {
         const disableFavicon = await this.stateService.getDisableFavicon();
         await this.stateService.setDisableFavicon(!!disableFavicon);
+        // Cozy customization, set correct theme based on cozy's context
+        //*
+        await this.configureTheme();
+        //*/
         if (this.onSuccessfulLogin != null) {
           this.onSuccessfulLogin();
         }
@@ -283,6 +290,24 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
       this.logService.error(e);
     }
   }
+
+  // Cozy customization, set correct theme based on cozy's context
+  //*
+  async configureTheme() {
+    const useContrastedThemeByDefault = await this.cozyClientService.getFlagValue(
+      "passwords.theme.default-contrasted"
+    );
+
+    const isUserSetTheme = await this.stateService.getIsUserSetTheme();
+
+    if (useContrastedThemeByDefault) {
+      await this.themingService.updateConfiguredTheme(ThemeType.LightContrasted);
+      await this.stateService.setIsUserSetTheme(false);
+    } else if (!isUserSetTheme) {
+      await this.themingService.updateConfiguredTheme(ThemeType.System);
+    }
+  }
+  //*/
 
   togglePassword() {
     this.showPassword = !this.showPassword;

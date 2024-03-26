@@ -81,6 +81,11 @@ export class CozyClientService {
     this.messagingService.send("flagChange", { flagName, flagValue });
   }
 
+  async getFlagValue(flagName: string) {
+    await this.getClientInstance();
+    return flag(flagName);
+  }
+
   async getClientInstance() {
     if (this.instance) {
       const token = await this.apiService.getActiveBearerToken();
