@@ -118,6 +118,7 @@ export class CozyClientService {
     });
     this.instance.registerPlugin(flag.plugin, undefined);
     this.registerFlags();
+    await this.instance.plugins.flags.initializing;
     await this.getSubDomainType();
     return this.instance;
   }
