@@ -105,8 +105,8 @@ export const copyEncryptedFields = (fields: Field[]): FieldApi[] => {
         Type: field.type,
         Subtype: field.subtype,
         ExpirationData: field.expirationData,
-        Name: field.name.encryptedString,
-        Value: field.value.encryptedString,
+        Name: field.name?.encryptedString || "",
+        Value: field.value?.encryptedString || "",
       })
     );
   }
