@@ -17,7 +17,7 @@
 
   &.primary {
     @include themify($themes) {
-      background-color: $button-background-color-primary;
+      background-color: themed("buttonBackgroundColorPrimary");
       color: themed("buttonPrimaryColor");
     }
   }
@@ -44,7 +44,7 @@
 
     &.primary {
       @include themify($themes) {
-        background-color: $button-background-color-primary-active;
+        background-color: themed("buttonBackgroundColorPrimaryActive");
         color: themed("buttonPrimaryColor");
       }
     }
@@ -67,7 +67,7 @@
 
     &.primary {
       @include themify($themes) {
-        background-color: $button-background-color-primary-active;
+        background-color: themed("buttonBackgroundColorPrimaryActive");
         color: themed("buttonPrimaryColor");
       }
     }
@@ -89,6 +89,9 @@
     border: none !important;
     background: none !important;
     color: $brand-primary !important;
+    @include themify($themes) {
+      color: themed("primaryColor") !important;
+    }
     font-size: 12px;
     font-weight: bold;
     &:hover {
