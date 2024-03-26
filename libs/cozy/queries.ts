@@ -78,3 +78,39 @@ export const fetchPaper = async (client: CozyClient, _id: string) => {
 
   return data[0];
 };
+
+// Contacts
+
+export const buildContactsQuery = () => ({
+  definition: Q("io.cozy.contacts")
+    .where({
+      _id: {
+        $gt: null,
+      },
+    })
+    .partialIndex({
+      $or: [
+        {
+          trashed: {
+            $exists: false,
+          },
+        },
+        {
+          trashed: false,
+        },
+      ],
+    })
+    .indexFields(["_id"])
+    .limitBy(1000),
+  options: {
+    as: "io.cozy.contacts",
+  },
+});
+
+export const fetchContacts = async (client: CozyClient) => {
+  const contactsQuery = buildContactsQuery();
+
+  const data = await client.queryAll(contactsQuery.definition, contactsQuery.options);
+
+  return data;
+};
