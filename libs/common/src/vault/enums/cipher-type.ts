@@ -5,5 +5,6 @@ export enum CipherType {
   Identity = 4,
   // Cozy customization
   Paper = 1000,
+  Contact = 1001,
   // Cozy customization end
 }
