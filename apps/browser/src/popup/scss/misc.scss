@@ -302,6 +302,10 @@ This class is responsible of changing tabs colors :
 .tab-icon-cozy {
   color: $gray-light;
 
+  .bwi {
+    color: $gray-light;
+  }
+
   &:hover,
   &:active,
   &.active {
@@ -314,6 +318,7 @@ This class is responsible of changing tabs colors :
       background-color: $brand-primary;
       @include themify($themes) {
         background-color: themed("primaryColor");
+        color: themed("primaryColor");
       }
     }
   }
