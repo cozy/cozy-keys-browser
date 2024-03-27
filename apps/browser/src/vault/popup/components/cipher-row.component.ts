@@ -11,6 +11,7 @@ import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { zeroPadLeftUntilTwoChars } from "../../../tools/strings";
 import { KonnectorsService } from "../../../popup/services/konnectors.service";
+import { DomSanitizer } from "@angular/platform-browser";
 /* eslint-enable */
 /** End Cozy imports */
 
@@ -27,7 +28,11 @@ export class CipherRowComponent implements OnInit {
   @Input() showView = false;
   @Input() title: string;
   isKonnector: boolean;
-  constructor(protected konnectorService: KonnectorsService, private syncService: SyncService) {}
+  constructor(
+    protected konnectorService: KonnectorsService,
+    private syncService: SyncService,
+    private sanitizer: DomSanitizer
+  ) {}
   /* Cozy custo */
   @Output() onAutofill = new EventEmitter<CipherView>();
   cipherType = CipherType;
@@ -94,4 +99,10 @@ export class CipherRowComponent implements OnInit {
     }
   }
   /* end custo */
+
+  // Cozy customization
+  sanitize(url: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(url);
+  }
+  // Cozy customization end
 }

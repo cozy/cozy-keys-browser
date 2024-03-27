@@ -1,4 +1,3 @@
-import { Q } from "cozy-client";
 import CozyClient from "cozy-client/types/CozyClient";
 import { Node, Schema } from "prosemirror-model";
 import { EditorState } from "prosemirror-state";
@@ -19,13 +18,21 @@ interface NoteConversionOptions {
 export const isNote = (document: any) => document.mime === "text/vnd.cozy.note+markdown";
 
 export const fetchNoteIllustrationUrl = async (client: CozyClient) => {
-  const { data: app } = await client.query(Q("io.cozy.apps").getById("notes"));
+  const icon = await client.getStackClient().getIconURL({
+    type: "app",
+    slug: "notes",
+  });
 
-  const baseUrl = client.getStackClient().uri;
+  const imageUrl = await client
+    .getStackClient()
+    .fetch("GET", icon)
+    .then((response: any) => response.blob())
+    .then((blob: any) => {
+      const imageUrl = URL.createObjectURL(blob);
+      return imageUrl;
+    });
 
-  const fullUrl = new URL(app.links.icon, baseUrl).toString();
-
-  return fullUrl;
+  return imageUrl;
 };
 
 export const noteToText = (note: any): string => {

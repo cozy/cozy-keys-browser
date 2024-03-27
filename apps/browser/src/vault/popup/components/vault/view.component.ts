@@ -43,6 +43,8 @@ import { CAN_SHARE_ORGANIZATION } from "../../../../cozy/flags";
 import { HistoryService } from "../../../../popup/services/history.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { PaperType } from "@bitwarden/common/enums/paperType";
+import { DomSanitizer } from "@angular/platform-browser";
+
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -85,7 +87,8 @@ export class ViewComponent extends BaseViewComponent {
     fileDownloadService: FileDownloadService,
     private cozyClientService: CozyClientService,
     private historyService: HistoryService,
-    private syncService: SyncService
+    private syncService: SyncService,
+    private sanitizer: DomSanitizer
   ) {
     super(
       cipherService,
@@ -507,6 +510,12 @@ export class ViewComponent extends BaseViewComponent {
     // it is very likely that all illustration URLs are expired. So we start a
     // full sync that will get new illustration URLs.
     await this.syncService.fullSync(true);
+  }
+  // Cozy customization end
+
+  // Cozy customization
+  sanitize(url: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(url);
   }
   // Cozy customization end
 }
