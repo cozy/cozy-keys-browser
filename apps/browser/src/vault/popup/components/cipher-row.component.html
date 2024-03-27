@@ -35,7 +35,7 @@
         <div class="icon" aria-hidden="true">
           <img
             class="icon-paper-wrapper"
-            [src]="cipher.paper.illustrationThumbnailUrl"
+            [src]="sanitize(cipher.paper.illustrationThumbnailUrl)"
             (error)="onThumbnailError()"
           />
         </div>
