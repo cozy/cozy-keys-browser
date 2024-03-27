@@ -127,7 +127,9 @@ export class CozyClientService {
       this.instance = new CozyClient({
         uri: uri,
         // token: token,
-        oauth: oauthToken,
+        oauth: {
+          token: oauthToken
+        },
         oauthOptions,
         schema: {
           files: {
