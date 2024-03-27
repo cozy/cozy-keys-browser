@@ -85,8 +85,15 @@ export class CozyClientService {
     if (this.instance) {
       const token = await this.apiService.getActiveBearerToken();
       // If the instance's token differ from the active bearer, a refresh is needed.
-      if (token !== this.instance.options.token) {
-        this.instance.getStackClient().setToken(token);
+      if (token !== this.instance.getStackClient().token.accessToken) {
+        const oauthToken = {
+          tokenType: 'bearer',
+          accessToken: token,
+          refreshToken: await this.stateService.getRefreshToken(),
+          scope: '*'
+        }
+
+        this.instance.getStackClient().setToken(oauthToken);
         this.instance.options.token = token;
       }
       return this.instance;
@@ -101,25 +108,47 @@ export class CozyClientService {
     }
     const uri = this.getCozyURL();
     const token = await this.apiService.getActiveBearerToken();
-    this.instance = new CozyClient({
-      uri: uri,
-      token: token,
-      schema: {
-        files: {
-          doctype: "io.cozy.files",
-          relationships: {
-            contacts: {
-              type: HasManyContacts,
-              doctype: "io.cozy.contacts",
+
+    const oauthToken = {
+      tokenType: 'bearer',
+      accessToken: token,
+      refreshToken: await this.stateService.getRefreshToken(),
+      scope: '*'
+    }
+
+    const oauthOptions = {
+      clientID: 'test', // await this.stateService.getApiKeyClientId(),
+      clientName: 'TEST',
+    }
+
+    console.log('oauthToken', oauthToken)
+    console.log('oauthOptions', oauthOptions)
+    try {
+      this.instance = new CozyClient({
+        uri: uri,
+        // token: token,
+        oauth: oauthToken,
+        oauthOptions,
+        schema: {
+          files: {
+            doctype: "io.cozy.files",
+            relationships: {
+              contacts: {
+                type: HasManyContacts,
+                doctype: "io.cozy.contacts",
+              },
             },
           },
         },
-      },
-    });
-    this.instance.registerPlugin(flag.plugin, undefined);
-    this.registerFlags();
-    await this.getSubDomainType();
-    return this.instance;
+      });
+      this.instance.registerPlugin(flag.plugin, undefined);
+      this.registerFlags();
+      await this.getSubDomainType();
+      return this.instance;
+    } catch (err) {
+      console.error("Error while creating cozy client");
+      console.error(err);
+    }
   }
 
   /**

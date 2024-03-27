@@ -23,6 +23,10 @@ export const fetchNoteIllustrationUrl = async (client: CozyClient) => {
     slug: "notes",
   });
 
+
+  console.log('client.getStackClient()', client.getStackClient())
+  console.log('icon', icon)
+
   const imageUrl = await client
     .getStackClient()
     .fetch("GET", icon)
