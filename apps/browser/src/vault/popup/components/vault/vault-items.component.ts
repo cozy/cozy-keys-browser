@@ -164,6 +164,12 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
             break;
         }
         await this.load(this.buildFilter());
+
+        // Cozy customizations
+        if (params.type == CipherType.Paper) {
+          await this.sortByCreationDate();
+        }
+        // Cozy customization end
       } else if (params.folderId) {
         this.showVaultFilter = true;
         this.folderId = params.folderId === "none" ? null : params.folderId;
@@ -388,6 +394,14 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     };
     await this.stateService.setBrowserVaultItemsComponentState(this.state);
   }
+
+  // Cozy customization
+  private async sortByCreationDate() {
+    this.ciphers = this.ciphers.sort((a, b) => {
+      return new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime();
+    })
+  }
+  // Cozy customization end
 
   // Cozy custo
   async fillOrLaunchCipher(cipher: CipherView) {
