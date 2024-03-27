@@ -70,6 +70,8 @@ export const convertPaperToCipherResponse = async (
   cipherViewResponse.paper.qualificationLabel = cipherView.paper.qualificationLabel;
   cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields);
   cipherViewResponse.favorite = cipherEncrypted.favorite;
+  cipherViewResponse.creationDate = paper.cozyMetadata.createdAt;
+  cipherViewResponse.revisionDate = paper.cozyMetadata.updatedAt;
 
   return cipherViewResponse;
 };

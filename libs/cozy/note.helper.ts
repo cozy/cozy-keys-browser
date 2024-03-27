@@ -88,6 +88,8 @@ export const convertNoteToCipherResponse = async (
   cipherViewResponse.paper.illustrationUrl = cipherView.paper.illustrationUrl;
   cipherViewResponse.paper.qualificationLabel = cipherView.paper.qualificationLabel;
   cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields);
+  cipherViewResponse.creationDate = paper.cozyMetadata.createdAt;
+  cipherViewResponse.revisionDate = paper.cozyMetadata.updatedAt;
 
   return cipherViewResponse;
 };
