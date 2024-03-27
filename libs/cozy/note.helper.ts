@@ -23,20 +23,7 @@ export const fetchNoteIllustrationUrl = async (client: CozyClient) => {
     slug: "notes",
   });
 
-
-  console.log('client.getStackClient()', client.getStackClient())
-  console.log('icon', icon)
-
-  const imageUrl = await client
-    .getStackClient()
-    .fetch("GET", icon)
-    .then((response: any) => response.blob())
-    .then((blob: any) => {
-      const imageUrl = URL.createObjectURL(blob);
-      return imageUrl;
-    });
-
-  return imageUrl;
+  return icon
 };
 
 export const noteToText = (note: any): string => {
