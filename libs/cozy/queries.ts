@@ -8,6 +8,8 @@ const buildFilesQueryWithQualificationLabel = () => {
     "referenced_by",
     "metadata",
     "metadata.qualification.label",
+    "cozyMetadata.createdAt",
+    "cozyMetadata.updatedAt",
     "cozyMetadata.createdByApp",
     "cozyMetadata.sourceAccountIdentifier",
     "cozyMetadata.favorite",
