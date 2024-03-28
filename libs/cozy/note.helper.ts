@@ -47,7 +47,7 @@ export const noteToText = (note: any): string => {
     }
   });
 
-  const textOnly = textContent?.join("\n") || "/";
+  const textOnly = textContent?.join("\n");
 
   return textOnly;
 };
@@ -81,10 +81,12 @@ export const convertNoteToCipherResponse = async (
 
   cipherViewResponse.paper = new PaperApi();
   cipherViewResponse.paper.type = cipherView.paper.type;
-  cipherViewResponse.paper.noteContent = cipherView.paper.noteContent;
-  cipherViewResponse.paper.illustrationThumbnailUrl = cipherView.paper.illustrationThumbnailUrl;
-  cipherViewResponse.paper.illustrationUrl = cipherView.paper.illustrationUrl;
-  cipherViewResponse.paper.qualificationLabel = cipherView.paper.qualificationLabel;
+  cipherViewResponse.paper.noteContent = cipherEncrypted.paper.noteContent?.encryptedString ?? "";
+  cipherViewResponse.paper.illustrationThumbnailUrl =
+    cipherEncrypted.paper.illustrationThumbnailUrl.encryptedString;
+  cipherViewResponse.paper.illustrationUrl = cipherEncrypted.paper.illustrationUrl.encryptedString;
+  cipherViewResponse.paper.qualificationLabel =
+    cipherEncrypted.paper.qualificationLabel.encryptedString;
   cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields);
   cipherViewResponse.creationDate = paper.cozyMetadata.createdAt;
   cipherViewResponse.revisionDate = paper.cozyMetadata.updatedAt;
