@@ -4,6 +4,7 @@ import { CipherResponse } from "../response/cipher.response";
 
 import { AttachmentData } from "./attachment.data";
 import { CardData } from "./card.data";
+import { ContactData } from "./contact.data";
 import { FieldData } from "./field.data";
 import { IdentityData } from "./identity.data";
 import { LoginData } from "./login.data";
@@ -28,6 +29,7 @@ export class CipherData {
   card?: CardData;
   identity?: IdentityData;
   paper?: PaperData;
+  contact?: ContactData;
   fields?: FieldData[];
   attachments?: AttachmentData[];
   passwordHistory?: PasswordHistoryData[];
@@ -73,6 +75,9 @@ export class CipherData {
       // Cozy customization
       case CipherType.Paper:
         this.paper = new PaperData(response.paper);
+        break;
+      case CipherType.Contact:
+        this.contact = new ContactData(response.contact);
         break;
       // Cozy customization end
       default:

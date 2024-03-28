@@ -13,6 +13,7 @@ import { CipherView } from "../view/cipher.view";
 
 import { Attachment } from "./attachment";
 import { Card } from "./card";
+import { Contact } from "./contact";
 import { Field } from "./field";
 import { Identity } from "./identity";
 import { Login } from "./login";
@@ -40,6 +41,7 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
   card: Card;
   secureNote: SecureNote;
   paper: Paper;
+  contact: Contact;
   attachments: Attachment[];
   fields: Field[];
   passwordHistory: Password[];
@@ -100,6 +102,9 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
       case CipherType.Paper:
         this.paper = new Paper(obj.paper);
         break;
+      case CipherType.Contact:
+        this.contact = new Contact(obj.contact);
+        break;
       // Cozy customization end
       default:
         break;
@@ -153,6 +158,9 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
       // Cozy customization
       case CipherType.Paper:
         model.paper = await this.paper.decrypt(this.organizationId, encKey);
+        break;
+      case CipherType.Contact:
+        model.contact = await this.contact.decrypt(this.organizationId, encKey);
         break;
       // Cozy customization end
       default:

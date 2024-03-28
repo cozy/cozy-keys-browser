@@ -6,6 +6,9 @@ import { Contact } from "../domain/contact";
 import { ItemView } from "./item.view";
 
 export class ContactView extends ItemView {
+  displayName: string = null;
+  primaryEmail: string = null;
+
   constructor(p?: Contact) {
     super();
     if (!p) {
@@ -14,7 +17,7 @@ export class ContactView extends ItemView {
   }
 
   get subTitle(): string {
-    return "";
+    return this.primaryEmail !== this.displayName ? this.primaryEmail : null;
   }
 
   static fromJSON(obj: Partial<Jsonify<ContactView>>): ContactView {
