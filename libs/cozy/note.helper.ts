@@ -1,4 +1,3 @@
-import { Q } from "cozy-client";
 import CozyClient from "cozy-client/types/CozyClient";
 import { Node, Schema } from "prosemirror-model";
 import { EditorState } from "prosemirror-state";
@@ -19,13 +18,12 @@ interface NoteConversionOptions {
 export const isNote = (document: any) => document.mime === "text/vnd.cozy.note+markdown";
 
 export const fetchNoteIllustrationUrl = async (client: CozyClient) => {
-  const { data: app } = await client.query(Q("io.cozy.apps").getById("notes"));
+  const icon = await client.getStackClient().getIconURL({
+    type: "app",
+    slug: "notes",
+  });
 
-  const baseUrl = client.getStackClient().uri;
-
-  const fullUrl = new URL(app.links.icon, baseUrl).toString();
-
-  return fullUrl;
+  return icon;
 };
 
 export const noteToText = (note: any): string => {
@@ -88,6 +86,8 @@ export const convertNoteToCipherResponse = async (
   cipherViewResponse.paper.illustrationUrl = cipherView.paper.illustrationUrl;
   cipherViewResponse.paper.qualificationLabel = cipherView.paper.qualificationLabel;
   cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields);
+  cipherViewResponse.creationDate = paper.cozyMetadata.createdAt;
+  cipherViewResponse.revisionDate = paper.cozyMetadata.updatedAt;
 
   return cipherViewResponse;
 };

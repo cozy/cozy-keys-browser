@@ -90,8 +90,15 @@ export class CozyClientService {
     if (this.instance) {
       const token = await this.apiService.getActiveBearerToken();
       // If the instance's token differ from the active bearer, a refresh is needed.
-      if (token !== this.instance.options.token) {
-        this.instance.getStackClient().setToken(token);
+      if (token !== this.instance.getStackClient().token.accessToken) {
+        const oauthToken = {
+          tokenType: "bearer",
+          accessToken: token,
+          refreshToken: await this.stateService.getRefreshToken(),
+          scope: "*",
+        };
+
+        this.instance.getStackClient().setToken(oauthToken);
         this.instance.options.token = token;
       }
       return this.instance;
@@ -106,9 +113,25 @@ export class CozyClientService {
     }
     const uri = this.getCozyURL();
     const token = await this.apiService.getActiveBearerToken();
+
+    const oauthToken = {
+      tokenType: "bearer",
+      accessToken: token,
+      refreshToken: await this.stateService.getRefreshToken(),
+      scope: "*",
+    };
+
+    const oauthOptions = {
+      clientID: "id",
+      clientName: "Cozy Pass (Cozy Client)",
+    };
+
     this.instance = new CozyClient({
       uri: uri,
-      token: token,
+      oauth: {
+        token: oauthToken,
+      },
+      oauthOptions,
       schema: {
         files: {
           doctype: "io.cozy.files",
@@ -121,6 +144,12 @@ export class CozyClientService {
         },
       },
     });
+
+    await this.instance.login({
+      uri,
+      token: oauthToken,
+    });
+
     this.instance.registerPlugin(flag.plugin, undefined);
     this.registerFlags();
     await this.instance.plugins.flags.initializing;
