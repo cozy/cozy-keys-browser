@@ -1,11 +1,15 @@
+/* eslint-disable no-console */
 import { Component, Input, OnInit } from "@angular/core";
 /* eslint-disable import/no-duplicates */
 import addDays from "date-fns/addDays";
 import formatDistanceToNowStrict from "date-fns/formatDistanceToNowStrict";
+import isAfter from "date-fns/isAfter";
 import fr from "date-fns/locale/fr";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 
 const DELAY_IN_DAYS = 15;
 
@@ -19,6 +23,7 @@ export class ProfilesMigrationComponent implements OnInit {
   deadline: string;
   ready = false;
   constructor(
+    protected cipherService: CipherService,
     protected i18nService: I18nService,
     protected stateService: StateService
   ) {}
@@ -38,7 +43,32 @@ export class ProfilesMigrationComponent implements OnInit {
       unit: "day",
     });
 
-    this.ready = true;
+    const didClean = await this.handleDeadline(cleanDeadline);
+
+    if (!didClean) {
+      this.ready = true;
+    }
+  }
+
+  protected async handleDeadline(deadline: Date) {
+    if (!isAfter(new Date(), deadline)) {
+      return false;
+    }
+
+    try {
+      const allCiphers = await this.cipherService.getAllDecrypted();
+
+      for (const cipher of allCiphers) {
+        if (cipher.type === CipherType.Identity && !cipher.isDeleted) {
+          await this.cipherService.softDeleteWithServer(cipher.id);
+        }
+      }
+    } catch (err) {
+      console.log("Error while trying to delete Profiles", err);
+      return false;
+    }
+
+    return true;
   }
 
   moreInfo() {}
