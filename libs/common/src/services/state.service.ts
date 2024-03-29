@@ -1,3 +1,5 @@
+import formatISO from "date-fns/formatISO";
+import parseISO from "date-fns/parseISO";
 import { BehaviorSubject, concatMap } from "rxjs";
 import { Jsonify } from "type-fest";
 
@@ -2904,6 +2906,32 @@ export class StateService<
       this.accountDiskCache.next(this.accountDiskCache.value);
     }
   }
+
+  // Cozy customization, clean profiles after X days
+  //*
+  async getProfilesCleanDeadline(options?: StorageOptions): Promise<Date | null> {
+    const valueString = (
+      await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.profilesCleanDeadline;
+
+    if (valueString) {
+      return parseISO(valueString);
+    } else {
+      return null;
+    }
+  }
+
+  async setProfilesCleanDeadline(value: Date, options?: StorageOptions): Promise<void> {
+    const globals = await this.getGlobals(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    globals.profilesCleanDeadline = formatISO(value);
+    await this.saveGlobals(
+      globals,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+  //*/
 }
 
 function withPrototypeForArrayMembers<T>(

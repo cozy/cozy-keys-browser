@@ -49,4 +49,8 @@ export class GlobalState {
   enableBrowserIntegration?: boolean;
   enableBrowserIntegrationFingerprint?: boolean;
   enableDuckDuckGoBrowserIntegration?: boolean;
+  // Cozy customization, clean profiles after X days
+  //*
+  profilesCleanDeadline: string;
+  //*/
 }
