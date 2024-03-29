@@ -377,4 +377,9 @@ export abstract class StateService<T extends Account = Account> {
     value: Record<string, Record<string, boolean>>,
     options?: StorageOptions
   ) => Promise<void>;
+  // Cozy customization, clean profiles after X days
+  //*
+  getProfilesCleanDeadline: (options?: StorageOptions) => Promise<Date | null>;
+  setProfilesCleanDeadline: (value: Date, options?: StorageOptions) => Promise<void>;
+  //*/
 }
