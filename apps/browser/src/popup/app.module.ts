@@ -41,6 +41,7 @@ import { PasswordRepromptComponent } from "../vault/popup/components/password-re
 import { AddEditCustomFieldsComponent } from "../vault/popup/components/vault/add-edit-custom-fields.component";
 import { AddEditComponent } from "../vault/popup/components/vault/add-edit.component";
 import { AttachmentsComponent } from "../vault/popup/components/vault/attachments.component";
+import { ContactAvatarComponent } from "../vault/popup/components/vault/contact-avatar.component";
 import { CurrentTabComponent } from "../vault/popup/components/vault/current-tab.component";
 import { PasswordHistoryComponent } from "../vault/popup/components/vault/password-history.component";
 import { ShareComponent } from "../vault/popup/components/vault/share.component";
@@ -159,6 +160,7 @@ import { AddGenericComponent } from "../cozy/components/add-generic/add-generic.
     ViewComponent,
     ViewCustomFieldsComponent,
     ViewExpirationDateComponent,
+    ContactAvatarComponent,
     RemovePasswordComponent,
     VaultSelectComponent,
     AboutComponent,
