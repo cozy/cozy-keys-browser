@@ -139,6 +139,9 @@
   "addCardExplanation": {
     "message": "Don't type in your credit card numbers, don't lose your PIN code."
   },
+  "addPaperExplanation": {
+    "message": "Quickly consult and retrieve your documents or notes and associated important information..."
+  },
   "emptyDirectoryExplanation": {
     "message": "Empty folder"
   },
@@ -153,6 +156,9 @@
   },
   "addIdentity": {
     "message": "Add a profile"
+  },
+  "addPaper": {
+    "message": "Add a paper"
   },
   "addItem": {
     "message": "Add item"
