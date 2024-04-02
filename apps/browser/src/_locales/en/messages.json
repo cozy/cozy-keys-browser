@@ -142,6 +142,9 @@
   "addPaperExplanation": {
     "message": "Quickly consult and retrieve your documents or notes and associated important information..."
   },
+  "addContactExplanation": {
+    "message": "Automatically fill in the forms with your address, email, phone, date of birth..."
+  },
   "emptyDirectoryExplanation": {
     "message": "Empty folder"
   },
@@ -159,6 +162,9 @@
   },
   "addPaper": {
     "message": "Add a paper"
+  },
+  "addContact": {
+    "message": "Add a contact"
   },
   "addItem": {
     "message": "Add item"
