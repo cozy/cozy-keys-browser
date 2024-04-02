@@ -1270,6 +1270,7 @@ export class CipherService implements CipherServiceAbstraction {
           cipher.contact,
           {
             displayName: null,
+            initials: null,
             primaryEmail: null,
           },
           key
