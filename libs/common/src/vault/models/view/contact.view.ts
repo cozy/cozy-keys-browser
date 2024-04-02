@@ -7,6 +7,7 @@ import { ItemView } from "./item.view";
 
 export class ContactView extends ItemView {
   displayName: string = null;
+  initials: string = null;
   primaryEmail: string = null;
 
   constructor(p?: Contact) {

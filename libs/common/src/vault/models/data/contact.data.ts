@@ -3,6 +3,7 @@ import { ContactApi } from "../../../models/api/contact.api";
 
 export class ContactData {
   displayName: string;
+  initials: string;
   primaryEmail: string;
 
   constructor(data?: ContactApi) {
@@ -11,6 +12,7 @@ export class ContactData {
     }
 
     this.displayName = data.displayName;
+    this.initials = data.initials;
     this.primaryEmail = data.primaryEmail;
   }
 }
