@@ -673,11 +673,17 @@
   "deletePaperItemConfirmation": {
     "message": "Are you sure you want to delete this element?"
   },
+  "deleteContactItemConfirmation": {
+    "message": "Are you sure you want to delete this contact?"
+  },
   "deletedItem": {
     "message": "Item sent to trash"
   },
   "deletedPaperItem": {
     "message": "Item sent to Cozy Drive trash"
+  },
+  "deletedContactItem": {
+    "message": "Contact deleted"
   },
   "overwritePassword": {
     "message": "Overwrite password"

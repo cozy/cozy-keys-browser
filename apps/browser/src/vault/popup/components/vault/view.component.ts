@@ -38,6 +38,7 @@ const BroadcasterSubscriptionId = "ChildViewComponent";
 /* eslint-disable */
 import { deleteCipher } from "./cozy-utils";
 import { favoritePaperCipher, deletePaperCipher } from "../../../../../../../libs/cozy/paperCipher";
+import { deleteContactCipher } from "../../../../../../../libs/cozy/contactCipher";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { CAN_SHARE_ORGANIZATION } from "../../../../cozy/flags";
 import { HistoryService } from "../../../../popup/services/history.service";
@@ -325,36 +326,34 @@ export class ViewComponent extends BaseViewComponent {
    * Calls the overrided deleteCipher
    */
   async delete() {
-    if (this.cipher.type === CipherType.Paper) {
-      const deleted = await deletePaperCipher(
-        this.cipherService,
-        this.i18nService,
-        this.platformUtilsService,
-        this.cipher,
-        this.cozyClientService
-      );
+    const getDeleteMethod = () => {
+      if (this.cipher.type === CipherType.Paper) {
+        return deletePaperCipher;
+      }
 
-      if (deleted) {
-        this.messagingService.send("deletedCipher");
-        this.close();
-        return true;
+      if (this.cipher.type === CipherType.Contact) {
+        return deleteContactCipher;
       }
-      return false;
-    } else {
-      const deleted = await deleteCipher(
-        this.cipherService,
-        this.i18nService,
-        this.platformUtilsService,
-        this.cipher,
-        this.stateService
-      );
-      if (deleted) {
-        this.messagingService.send("deletedCipher");
-        this.close();
-        return true;
-      }
-      return false;
+
+      return deleteCipher;
+    };
+
+    const deleteMethod = getDeleteMethod();
+
+    const deleted = await deleteMethod(
+      this.cipherService,
+      this.i18nService,
+      this.platformUtilsService,
+      this.cipher,
+      this.cozyClientService
+    );
+
+    if (deleted) {
+      this.messagingService.send("deletedCipher");
+      this.close();
+      return true;
     }
+    return false;
   }
 
   close() {
