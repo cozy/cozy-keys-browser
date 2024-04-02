@@ -190,6 +190,9 @@ export class ViewComponent extends BaseViewComponent {
     if (this.cipher.type === CipherType.Paper) {
       this.openWebApp();
       return;
+    } else if (this.cipher.type === CipherType.Contact) {
+      const hash = `${this.cipher.id}/edit`;
+      window.open(this.cozyClientService.getAppURL("contacts", hash));
     }
     // Cozy customization end
 
@@ -474,6 +477,9 @@ export class ViewComponent extends BaseViewComponent {
       const url = new URL(destinationUrl);
       url.searchParams.set("returnUrl", returnUrl);
       window.open(url.toString());
+    } else if (this.cipher.type === CipherType.Contact) {
+      const hash = this.cipher.id;
+      window.open(this.cozyClientService.getAppURL("contacts", hash));
     } else {
       const hash = "/vault?action=view&cipherId=" + this.cipherId;
       window.open(this.cozyClientService.getAppURL("passwords", hash));
