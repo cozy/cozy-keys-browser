@@ -324,6 +324,9 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     if (this.type === CipherType.Paper) {
       window.open(this.cozyClientService.getAppURL("mespapiers", "paper/create"));
       return false;
+    } else if (this.type === CipherType.Contact) {
+      window.open(this.cozyClientService.getAppURL("contacts", "new"));
+      return false;
     }
 
     const route = this.type ? "/add-cipher" : "/add-generic";
@@ -460,6 +463,8 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   async openWebApp() {
     if (this.type === CipherType.Paper) {
       window.open(this.cozyClientService.getAppURL("mespapiers", ""));
+    } else if (this.type === CipherType.Contact) {
+      window.open(this.cozyClientService.getAppURL("contacts", ""));
     } else {
       window.open(this.cozyClientService.getAppURL("passwords", ""));
     }
