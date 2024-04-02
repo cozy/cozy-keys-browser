@@ -663,7 +663,12 @@
         appStopClick
         appBlurClick
         (click)="clone()"
-        *ngIf="!cipher.organizationId && !cipher.isDeleted && cipher.type !== cipherType.Paper"
+        *ngIf="
+          !cipher.organizationId &&
+          !cipher.isDeleted &&
+          cipher.type !== cipherType.Paper &&
+          cipher.type !== cipherType.Contact
+        "
       >
         <!-- Cozy customization end -->
         <div class="row-main text-primary">
@@ -688,7 +693,11 @@
         class="box-content-row"
         appStopClick
         (click)="share()"
-        *ngIf="!cipher.isDeleted && cipher.type !== cipherType.Paper"
+        *ngIf="
+          !cipher.isDeleted &&
+          cipher.type !== cipherType.Paper &&
+          cipher.type !== cipherType.Contact
+        "
       >
         <!-- end custo -->
         <div class="row-main text-primary">
