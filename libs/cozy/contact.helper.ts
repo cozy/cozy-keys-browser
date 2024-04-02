@@ -31,6 +31,8 @@ export const convertContactToCipherResponse = async (
   cipherViewResponse.contact.primaryEmail =
     cipherEncrypted.contact.primaryEmail?.encryptedString ?? "";
   cipherViewResponse.favorite = cipherEncrypted.favorite;
+  cipherViewResponse.creationDate = contact.cozyMetadata?.createdAt;
+  cipherViewResponse.revisionDate = contact.cozyMetadata?.updatedAt;
 
   return cipherViewResponse;
 };
