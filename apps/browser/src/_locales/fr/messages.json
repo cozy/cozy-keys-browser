@@ -142,6 +142,9 @@
   "addCardExplanation": {
     "message": "Ne tapez plus vos numéros de carte de crédit, ne perdez plus votre code PIN."
   },
+  "addPaperExplanation": {
+    "message": "Consultez et récupérez rapidement vos documents ou notes et informations importantes associées…"
+  },
   "emptyDirectoryExplanation": {
     "message": "Répertoire vide"
   },
@@ -156,6 +159,9 @@
   },
   "addIdentity": {
     "message": "Ajouter un profil"
+  },
+  "addPaper": {
+    "message": "Ajouter un papier"
   },
   "addItem": {
     "message": "Ajouter un élément"
