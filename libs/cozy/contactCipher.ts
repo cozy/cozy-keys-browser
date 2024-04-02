@@ -3,6 +3,7 @@
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.response";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
@@ -43,6 +44,32 @@ export const fetchContactsAndConvertAsCiphers = async (
 
     return [];
   }
+};
+
+export const favoriteContactCipher = async (
+  cipherService: CipherService,
+  cipher: CipherView,
+  cozyClientService: any
+): Promise<boolean> => {
+  const client = await cozyClientService.getClientInstance();
+
+  const contact = await fetchContact(client, cipher.id);
+
+  const { data: updatedContact } = await client.save({
+    ...contact,
+    cozyMetadata: {
+      ...contact.cozyMetadata,
+      favorite: !cipher.favorite,
+    },
+  });
+
+  const cipherResponse = await convertContactToCipherResponse(cipherService, updatedContact);
+
+  const cipherData = new CipherData(cipherResponse);
+
+  await cipherService.upsert([cipherData]);
+
+  return true;
 };
 
 export const deleteContactCipher = async (

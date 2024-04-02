@@ -38,7 +38,10 @@ const BroadcasterSubscriptionId = "ChildViewComponent";
 /* eslint-disable */
 import { deleteCipher } from "./cozy-utils";
 import { favoritePaperCipher, deletePaperCipher } from "../../../../../../../libs/cozy/paperCipher";
-import { deleteContactCipher } from "../../../../../../../libs/cozy/contactCipher";
+import {
+  favoriteContactCipher,
+  deleteContactCipher,
+} from "../../../../../../../libs/cozy/contactCipher";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { CAN_SHARE_ORGANIZATION } from "../../../../cozy/flags";
 import { HistoryService } from "../../../../popup/services/history.service";
@@ -225,12 +228,16 @@ export class ViewComponent extends BaseViewComponent {
 
   async favorite() {
     try {
-      await favoritePaperCipher(
-        this.cipherService,
-        this.i18nService,
-        this.cipher,
-        this.cozyClientService
-      );
+      if (this.cipher.type === CipherType.Paper) {
+        await favoritePaperCipher(
+          this.cipherService,
+          this.i18nService,
+          this.cipher,
+          this.cozyClientService
+        );
+      } else if (this.cipher.type === CipherType.Contact) {
+        await favoriteContactCipher(this.cipherService, this.cipher, this.cozyClientService);
+      }
 
       const cipher = await this.cipherService.get(this.cipherId);
 
