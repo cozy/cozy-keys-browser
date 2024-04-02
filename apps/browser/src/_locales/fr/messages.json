@@ -676,11 +676,17 @@
   "deletePaperItemConfirmation": {
     "message": "Êtes-vous sûr de vouloir supprimer cet élément ?"
   },
+  "deleteContactItemConfirmation": {
+    "message": "Êtes-vous sûr de vouloir supprimer ce contact ?"
+  },
   "deletedItem": {
     "message": "Élément envoyé à la corbeille"
   },
   "deletedPaperItem": {
     "message": "Élément envoyé à la corbeille de Cozy Drive"
+  },
+  "deletedContactItem": {
+    "message": "Contact supprimé"
   },
   "overwritePassword": {
     "message": "Écraser le mot de passe"
