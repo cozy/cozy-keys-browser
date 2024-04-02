@@ -65,6 +65,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   deleted = true;
   noneFolder = false;
   showVaultFilter = false;
+  cipherType = CipherType; // Cozy custo
 
   private selectedTimeout: number;
   private preventSelected = false;
