@@ -435,8 +435,7 @@ li.active .icon-cozy-inline > svg {
 }
 
 .paper-illustration img {
-  height: 100px;
-  max-width: 100%;
+  max-height: 96px; // size of the tiny thumbnail
   object-fit: contain;
 }
 
