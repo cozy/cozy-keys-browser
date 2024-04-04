@@ -38,7 +38,7 @@
   <!-- Cozy customization -->
   <div *ngIf="cipher.type === cipherType.Paper" class="paper-illustration">
     <img
-      [src]="sanitize(cipher.paper.illustrationUrl)"
+      [src]="sanitize(cipher.paper.illustrationThumbnailUrl)"
       (click)="openWebApp()"
       (error)="onIllustrationError()"
     />
