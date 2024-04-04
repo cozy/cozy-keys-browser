@@ -57,7 +57,18 @@
           (dragstart)="setTextDataOnDrag($event, cipher.name)"
           >{{ "name" | i18n }}</label
         >
+        <!-- Cozy customization, ellipsis for long names
         <input id="name" type="text" [value]="cipher.name" readonly aria-readonly="true" />
+        -->
+        <input
+          id="name"
+          type="text"
+          class="truncate"
+          [value]="cipher.name"
+          readonly
+          aria-readonly="true"
+        />
+        <!-- Cozy customization end -->
       </div>
       <!-- Login -->
       <div *ngIf="cipher.login">
