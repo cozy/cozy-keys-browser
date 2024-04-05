@@ -1,4 +1,5 @@
 import { CardApi } from "../../../models/api/card.api";
+import { ContactApi } from "../../../models/api/contact.api";
 import { FieldApi } from "../../../models/api/field.api";
 import { IdentityApi } from "../../../models/api/identity.api";
 import { LoginApi } from "../../../models/api/login.api";
@@ -23,6 +24,7 @@ export class CipherResponse extends BaseResponse {
   identity: IdentityApi;
   secureNote: SecureNoteApi;
   paper: PaperApi;
+  contact: ContactApi;
   favorite: boolean;
   edit: boolean;
   viewPassword: boolean;

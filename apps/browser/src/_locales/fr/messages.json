@@ -145,6 +145,9 @@
   "addPaperExplanation": {
     "message": "Consultez et récupérez rapidement vos documents ou notes et informations importantes associées…"
   },
+  "addContactExplanation": {
+    "message": "Remplissez automatiquement les formulaires avec vos adresses, email, téléphone, date de naissance..."
+  },
   "emptyDirectoryExplanation": {
     "message": "Répertoire vide"
   },
@@ -161,7 +164,10 @@
     "message": "Ajouter un profil"
   },
   "addPaper": {
-    "message": "Ajouter un papier"
+    "message": "Ajouter un document"
+  },
+  "addContact": {
+    "message": "Ajouter un contact"
   },
   "addItem": {
     "message": "Ajouter un élément"
@@ -1416,6 +1422,9 @@
   },
   "typeIdentities": {
     "message": "Profils"
+  },
+  "typeContacts": {
+    "message": "Contacts"
   },
   "typePapers": {
     "message": "Documents et Notes"

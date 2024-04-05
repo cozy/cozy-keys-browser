@@ -26,6 +26,7 @@ import { CipherData } from "../models/data/cipher.data";
 import { Attachment } from "../models/domain/attachment";
 import { Card } from "../models/domain/card";
 import { Cipher } from "../models/domain/cipher";
+import { Contact } from "../models/domain/contact";
 import { Field } from "../models/domain/field";
 import { Identity } from "../models/domain/identity";
 import { Login } from "../models/domain/login";
@@ -1261,6 +1262,19 @@ export class CipherService implements CipherServiceAbstraction {
           },
           key
         );
+        return;
+      case CipherType.Contact:
+        cipher.contact = new Contact();
+        await this.encryptObjProperty(
+          model.contact,
+          cipher.contact,
+          {
+            displayName: null,
+            primaryEmail: null,
+          },
+          key
+        );
+        return;
         return;
       // Cozy customization end
       default:

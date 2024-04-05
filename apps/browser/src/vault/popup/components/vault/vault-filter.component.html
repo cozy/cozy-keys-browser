@@ -135,6 +135,22 @@
           <span class="row-sub-label">{{ this.typeCounts.get(cipherType.Identity) || 0 }}</span>
           <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
         </button>
+        <!-- Cozy customization ; display Contact type row -->
+        <button
+          type="button"
+          class="box-content-row"
+          appStopClick
+          appBlurClick
+          (click)="selectType(cipherType.Contact)"
+        >
+          <div class="row-main">
+            <div class="icon"><i class="icon-cozy icon-identity"></i></div>
+            <span class="text">{{ "typeContacts" | i18n }}</span>
+          </div>
+          <span class="row-sub-label">{{ this.typeCounts.get(cipherType.Contact) || 0 }}</span>
+          <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
+        </button>
+        <!-- Cozy customization end -->
         <!-- Cozy customization ; display Paper type row -->
         <button
           type="button"
