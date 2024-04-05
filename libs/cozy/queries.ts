@@ -114,3 +114,9 @@ export const fetchContacts = async (client: CozyClient) => {
 
   return data;
 };
+
+export const fetchContact = async (client: CozyClient, _id: string) => {
+  const { data } = await client.query(Q("io.cozy.contacts").getById(_id));
+
+  return data;
+};

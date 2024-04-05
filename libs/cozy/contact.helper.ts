@@ -19,6 +19,7 @@ export const convertContactToCipherResponse = async (
   cipherView.contact = new ContactView();
   cipherView.contact.displayName = contact.displayName;
   cipherView.contact.primaryEmail = getPrimaryEmail(contact);
+  cipherView.favorite = !!contact.cozyMetadata?.favorite;
 
   const cipherEncrypted = await cipherService.encrypt(cipherView);
   const cipherViewEncrypted = new CipherView(cipherEncrypted);
@@ -29,6 +30,9 @@ export const convertContactToCipherResponse = async (
   cipherViewResponse.contact.displayName = cipherEncrypted.contact.displayName.encryptedString;
   cipherViewResponse.contact.primaryEmail =
     cipherEncrypted.contact.primaryEmail?.encryptedString ?? "";
+  cipherViewResponse.favorite = cipherEncrypted.favorite;
+  cipherViewResponse.creationDate = contact.cozyMetadata?.createdAt;
+  cipherViewResponse.revisionDate = contact.cozyMetadata?.updatedAt;
 
   return cipherViewResponse;
 };

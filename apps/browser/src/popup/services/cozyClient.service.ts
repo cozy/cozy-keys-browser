@@ -18,6 +18,7 @@ import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 import { SecureNoteView } from "@bitwarden/common/vault/models/view/secure-note.view";
 
+import manifest from "../../manifest.json";
 import { BrowserStateService as StateService } from "../../services/abstractions/browser-state.service";
 
 interface QueryResult<T> {
@@ -142,6 +143,10 @@ export class CozyClientService {
             },
           },
         },
+      },
+      appMetadata: {
+        slug: "passwords",
+        version: manifest.version,
       },
     });
 

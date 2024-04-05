@@ -663,7 +663,12 @@
         appStopClick
         appBlurClick
         (click)="clone()"
-        *ngIf="!cipher.organizationId && !cipher.isDeleted && cipher.type !== cipherType.Paper"
+        *ngIf="
+          !cipher.organizationId &&
+          !cipher.isDeleted &&
+          cipher.type !== cipherType.Paper &&
+          cipher.type !== cipherType.Contact
+        "
       >
         <!-- Cozy customization end -->
         <div class="row-main text-primary">
@@ -688,7 +693,11 @@
         class="box-content-row"
         appStopClick
         (click)="share()"
-        *ngIf="!cipher.isDeleted && cipher.type !== cipherType.Paper"
+        *ngIf="
+          !cipher.isDeleted &&
+          cipher.type !== cipherType.Paper &&
+          cipher.type !== cipherType.Contact
+        "
       >
         <!-- end custo -->
         <div class="row-main text-primary">
@@ -709,7 +718,7 @@
         appStopClick
         appBlurClick
         (click)="favorite()"
-        *ngIf="cipher.type === cipherType.Paper"
+        *ngIf="cipher.type === cipherType.Paper || cipher.type === cipherType.Contact"
       >
         <div *ngIf="cipher.favorite" class="row-main text-primary">
           <div class="icon text-primary" aria-hidden="true">
@@ -795,7 +804,9 @@
         class="box-content-row"
         appStopClick
         (click)="delete()"
-        *ngIf="cipher.edit || cipher.type === cipherType.Paper"
+        *ngIf="
+          cipher.edit || cipher.type === cipherType.Paper || cipher.type === cipherType.Contact
+        "
       >
         <div class="row-main text-danger">
           <div class="icon text-danger" aria-hidden="true">
