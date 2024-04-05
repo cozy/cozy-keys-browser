@@ -9,7 +9,9 @@ export class ContactAvatarComponent {
   @Input() initials: string;
   @Input() size: number;
 
-  getBackgroundColor(): string {
-    return nameToColor(this.initials);
+  backgroundColor: string;
+
+  async ngOnInit() {
+    this.backgroundColor = nameToColor(this.initials);
   }
 }
