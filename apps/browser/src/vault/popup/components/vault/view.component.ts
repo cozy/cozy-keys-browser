@@ -187,12 +187,9 @@ export class ViewComponent extends BaseViewComponent {
     }
 
     // Cozy customization
-    if (this.cipher.type === CipherType.Paper) {
-      this.openWebApp();
+    if (this.cipher.type === CipherType.Paper || this.cipher.type === CipherType.Contact) {
+      this.editInWebApp();
       return;
-    } else if (this.cipher.type === CipherType.Contact) {
-      const hash = `${this.cipher.id}/edit`;
-      window.open(this.cozyClientService.getAppURL("contacts", hash));
     }
     // Cozy customization end
 
@@ -483,6 +480,16 @@ export class ViewComponent extends BaseViewComponent {
     } else {
       const hash = "/vault?action=view&cipherId=" + this.cipherId;
       window.open(this.cozyClientService.getAppURL("passwords", hash));
+    }
+  }
+
+  editInWebApp() {
+    if (this.cipher.type === CipherType.Paper) {
+      this.openWebApp();
+      return;
+    } else if (this.cipher.type === CipherType.Contact) {
+      const hash = `${this.cipher.id}/edit`;
+      window.open(this.cozyClientService.getAppURL("contacts", hash));
     }
   }
 
