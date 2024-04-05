@@ -41,7 +41,6 @@ import { PasswordRepromptComponent } from "../vault/popup/components/password-re
 import { AddEditCustomFieldsComponent } from "../vault/popup/components/vault/add-edit-custom-fields.component";
 import { AddEditComponent } from "../vault/popup/components/vault/add-edit.component";
 import { AttachmentsComponent } from "../vault/popup/components/vault/attachments.component";
-import { ContactAvatarComponent } from "../vault/popup/components/vault/contact-avatar.component";
 import { CurrentTabComponent } from "../vault/popup/components/vault/current-tab.component";
 import { PasswordHistoryComponent } from "../vault/popup/components/vault/password-history.component";
 import { ShareComponent } from "../vault/popup/components/vault/share.component";
@@ -49,7 +48,6 @@ import { VaultFilterComponent } from "../vault/popup/components/vault/vault-filt
 import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items.component";
 import { VaultSelectComponent } from "../vault/popup/components/vault/vault-select.component";
 import { ViewCustomFieldsComponent } from "../vault/popup/components/vault/view-custom-fields.component";
-import { ViewExpirationDateComponent } from "../vault/popup/components/vault/view-expiration-date.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -83,6 +81,8 @@ import { TabsComponent } from "./tabs.component";
 import { FlagConditionalComponent } from "../cozy/components/flag-conditional/flag-conditional.component";
 import { IfFlagDirective } from "../cozy/components/flag-conditional/if-flag.directive";
 import { AddGenericComponent } from "../cozy/components/add-generic/add-generic.component";
+import { ViewExpirationDateComponent } from "../vault/popup/components/vault/view-expiration-date.component";
+import { ContactAvatarComponent } from "../vault/popup/components/vault/contact-avatar.component";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -111,7 +111,6 @@ import { AddGenericComponent } from "../cozy/components/add-generic/add-generic.
     ActionButtonsComponent,
     AddEditComponent,
     AddEditCustomFieldsComponent,
-    AddGenericComponent,
     AppComponent,
     AttachmentsComponent,
     CipherRowComponent,
@@ -159,15 +158,18 @@ import { AddGenericComponent } from "../cozy/components/add-generic/add-generic.
     VaultTimeoutInputComponent,
     ViewComponent,
     ViewCustomFieldsComponent,
-    ViewExpirationDateComponent,
-    ContactAvatarComponent,
     RemovePasswordComponent,
     VaultSelectComponent,
     AboutComponent,
     HelpAndFeedbackComponent,
     AutofillComponent,
+    /* start Cozy components */
     FlagConditionalComponent,
     IfFlagDirective,
+    AddGenericComponent,
+    ViewExpirationDateComponent,
+    ContactAvatarComponent,
+    /* end Cozy components */
   ],
   providers: [CurrencyPipe, DatePipe],
   bootstrap: [AppComponent],
