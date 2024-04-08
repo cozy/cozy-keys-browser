@@ -38,7 +38,7 @@
   <!-- Cozy customization -->
   <div *ngIf="cipher.type === cipherType.Paper" class="paper-illustration">
     <img
-      [src]="sanitize(cipher.paper.illustrationUrl)"
+      [src]="sanitize(cipher.paper.illustrationThumbnailUrl)"
       (click)="openWebApp()"
       (error)="onIllustrationError()"
     />
@@ -57,7 +57,18 @@
           (dragstart)="setTextDataOnDrag($event, cipher.name)"
           >{{ "name" | i18n }}</label
         >
+        <!-- Cozy customization, ellipsis for long names
         <input id="name" type="text" [value]="cipher.name" readonly aria-readonly="true" />
+        -->
+        <input
+          id="name"
+          type="text"
+          class="truncate"
+          [value]="cipher.name"
+          readonly
+          aria-readonly="true"
+        />
+        <!-- Cozy customization end -->
       </div>
       <!-- Login -->
       <div *ngIf="cipher.login">
