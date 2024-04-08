@@ -63,7 +63,10 @@ export class ViewComponent extends BaseViewComponent {
   loadPageDetailsTimeout: number;
   inPopout = false;
   cipherType = CipherType;
+  // Cozy customization
+  paperType = PaperType;
   CAN_SHARE_ORGANIZATION = CAN_SHARE_ORGANIZATION;
+  // Cozy customization end
 
   constructor(
     cipherService: CipherService,
