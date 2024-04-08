@@ -7,6 +7,7 @@ import { ContactView } from "../view/contact.view";
 
 export class Contact extends Domain {
   displayName: EncString;
+  initials: EncString;
   primaryEmail: EncString;
 
   constructor(obj?: ContactData) {
@@ -20,6 +21,7 @@ export class Contact extends Domain {
       obj,
       {
         displayName: null,
+        initials: null,
         primaryEmail: null,
       },
       []
@@ -31,6 +33,7 @@ export class Contact extends Domain {
       new ContactView(this),
       {
         displayName: null,
+        initials: null,
         primaryEmail: null,
       },
       orgId,

@@ -40,6 +40,12 @@
           />
         </div>
       </ng-container>
+      <ng-container *ngIf="cipher.type === cipherType.Contact">
+        <div class="icon" aria-hidden="true">
+          <app-vault-contact-avatar [initials]="cipher.contact.initials" [size]="24">
+          </app-vault-contact-avatar>
+        </div>
+      </ng-container>
       <!-- end custo-->
       <div class="row-main-content">
         <span class="text">
