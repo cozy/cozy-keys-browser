@@ -756,7 +756,7 @@
         appStopClick
         appBlurClick
         (click)="print()"
-        *ngIf="cipher.type === cipherType.Paper"
+        *ngIf="cipher.type === cipherType.Paper && cipher.paper.type === paperType.Paper"
       >
         <div class="row-main text-primary">
           <div class="icon text-primary" aria-hidden="true">
