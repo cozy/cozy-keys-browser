@@ -8,6 +8,8 @@ import { ContactView } from "@bitwarden/common/vault/models/view/contact.view";
 
 const { getInitials } = models.contact;
 
+import { buildFieldsFromContact, copyEncryptedFields } from "./fields.helper";
+
 const getPrimaryEmail = (contact: any): string | undefined => {
   return contact.email.find((email: any) => email.primary)?.address;
 };
@@ -18,6 +20,7 @@ const getPrimaryPhone = (contact: any): string | undefined => {
 
 export const convertContactToCipherResponse = async (
   cipherService: any,
+  i18nService: any,
   contact: any
 ): Promise<CipherResponse> => {
   const cipherView = new CipherView();
@@ -30,6 +33,7 @@ export const convertContactToCipherResponse = async (
   cipherView.contact.primaryEmail = getPrimaryEmail(contact);
   cipherView.contact.primaryPhone = getPrimaryPhone(contact);
   cipherView.favorite = !!contact.cozyMetadata?.favorite;
+  cipherView.fields = buildFieldsFromContact(i18nService, contact);
 
   const cipherEncrypted = await cipherService.encrypt(cipherView);
   const cipherViewEncrypted = new CipherView(cipherEncrypted);
@@ -46,6 +50,7 @@ export const convertContactToCipherResponse = async (
   cipherViewResponse.favorite = cipherEncrypted.favorite;
   cipherViewResponse.creationDate = contact.cozyMetadata?.createdAt;
   cipherViewResponse.revisionDate = contact.cozyMetadata?.updatedAt;
+  cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields ?? []);
 
   return cipherViewResponse;
 };
