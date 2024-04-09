@@ -13,12 +13,17 @@ import { fetchContacts, fetchContact } from "./queries";
 
 const convertContactsAsCiphers = async (
   cipherService: any,
+  i18nService: any,
   contacts: any
 ): Promise<CipherResponse[]> => {
   const contactsCiphers = [];
 
   for (const contact of contacts) {
-    const cipherResponse = await convertContactToCipherResponse(cipherService, contact);
+    const cipherResponse = await convertContactToCipherResponse(
+      cipherService,
+      i18nService,
+      contact
+    );
 
     contactsCiphers.push(cipherResponse);
   }
@@ -28,14 +33,15 @@ const convertContactsAsCiphers = async (
 
 export const fetchContactsAndConvertAsCiphers = async (
   cipherService: any,
-  cozyClientService: any
+  cozyClientService: any,
+  i18nService: any
 ): Promise<CipherResponse[]> => {
   const client = await cozyClientService.getClientInstance();
 
   try {
     const contacts = await fetchContacts(client);
 
-    const contactsCiphers = await convertContactsAsCiphers(cipherService, contacts);
+    const contactsCiphers = await convertContactsAsCiphers(cipherService, i18nService, contacts);
 
     console.log(`${contactsCiphers.length} contacts ciphers will be added`);
 
@@ -49,6 +55,7 @@ export const fetchContactsAndConvertAsCiphers = async (
 
 export const favoriteContactCipher = async (
   cipherService: CipherService,
+  i18nService: I18nService,
   cipher: CipherView,
   cozyClientService: any
 ): Promise<boolean> => {
@@ -64,7 +71,11 @@ export const favoriteContactCipher = async (
     },
   });
 
-  const cipherResponse = await convertContactToCipherResponse(cipherService, updatedContact);
+  const cipherResponse = await convertContactToCipherResponse(
+    cipherService,
+    i18nService,
+    updatedContact
+  );
 
   const cipherData = new CipherData(cipherResponse);
 

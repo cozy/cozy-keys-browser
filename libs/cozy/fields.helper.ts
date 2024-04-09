@@ -118,4 +118,15 @@ export const buildFieldsFromPaper = (i18nService: any, paper: any): FieldView[] 
   return fields;
 };
 
+// Contact fields
+
+export const buildFieldsFromContact = (i18nService: any, contact: any): FieldView[] => {
+  const fields: FieldView[] = [];
+
+  const lang = i18nService.translationLocale;
+
+  // TODO
+
+  return fields;
+};
 
