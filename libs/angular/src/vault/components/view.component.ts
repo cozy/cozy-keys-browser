@@ -109,7 +109,20 @@ export class ViewComponent implements OnDestroy, OnInit {
   }
 
   async load() {
-    this.cleanUp();
+    // Cozy customization; favorite cipher directly from view page
+
+    // The cipher view is not built to update a cipher. Ciphers
+    // are updated on the edit page which redirect on the view page.
+    // So when setting a Login or Card cipher as favorite, the cipher view
+    // can blink. It is related to the "syncCompleted" event triggered by
+    // the "NotificationType.SyncCipherUpdate" event received by websocket
+    // when a cipher is updated.
+
+    // It blinks because the cipher is set to null and then set to the
+    // new cipher. We consider as safe to not set to null a cipher because
+    // it is then set to the new cipher.
+    this.cleanUpButKeepCipher();
+    // Cozy customization end
 
     const cipher = await this.cipherService.get(this.cipherId);
     this.cipher = await cipher.decrypt();
@@ -442,6 +455,19 @@ export class ViewComponent implements OnDestroy, OnInit {
       clearInterval(this.totpInterval);
     }
   }
+
+  // Cozy customization; favorite cipher directly from view page
+  private cleanUpButKeepCipher() {
+    this.totpCode = null;
+    this.showPassword = false;
+    this.showCardNumber = false;
+    this.showCardCode = false;
+    this.passwordReprompted = false;
+    if (this.totpInterval) {
+      clearInterval(this.totpInterval);
+    }
+  }
+  // Cozy customization end
 
   private async totpUpdateCode() {
     if (

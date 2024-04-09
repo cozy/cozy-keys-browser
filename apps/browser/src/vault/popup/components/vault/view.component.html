@@ -727,14 +727,7 @@
         </div>
       </button>
       <!-- Cozy customization; new favorite button -->
-      <button
-        type="button"
-        class="box-content-row"
-        appStopClick
-        appBlurClick
-        (click)="favorite()"
-        *ngIf="cipher.type === cipherType.Paper || cipher.type === cipherType.Contact"
-      >
+      <button type="button" class="box-content-row" appStopClick appBlurClick (click)="favorite()">
         <div *ngIf="cipher.favorite" class="row-main text-primary">
           <div class="icon text-primary" aria-hidden="true">
             <i class="bwi bwi-star-f bwi-lg bwi-fw"></i>
