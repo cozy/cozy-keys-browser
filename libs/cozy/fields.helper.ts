@@ -4,6 +4,7 @@ import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
 import { FieldType } from "@bitwarden/common/enums/fieldType";
 import { FieldApi } from "@bitwarden/common/models/api/field.api";
 import { ExpirationDateData } from "@bitwarden/common/vault/models/data/expiration-date.data";
+import { LabelData } from "@bitwarden/common/vault/models/data/label.data";
 import { Field } from "@bitwarden/common/vault/models/domain/field";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 
@@ -31,6 +32,7 @@ const {
 interface FieldOptions {
   subtype?: FieldSubType;
   expirationData?: ExpirationDateData;
+  label?: LabelData;
 }
 
 // Helpers
@@ -40,6 +42,7 @@ export const buildField = (name: string, value: string, options: FieldOptions = 
   field.type = FieldType.Text;
   field.subtype = options.subtype ?? FieldSubType.Default;
   field.expirationData = options.expirationData;
+  field.label = options.label;
   field.name = name;
   field.value = value;
   return field;
@@ -54,6 +57,7 @@ export const copyEncryptedFields = (fields: Field[]): FieldApi[] => {
         Type: field.type,
         Subtype: field.subtype,
         ExpirationData: field.expirationData,
+        Label: field.label,
         Name: field.name?.encryptedString || "",
         Value: field.value?.encryptedString || "",
       })
@@ -126,11 +130,20 @@ export const buildFieldsFromPaper = (i18nService: any, paper: any): FieldView[] 
 
 // Contact fields
 
-const buildContactField = ({ fieldModel, fieldName, fieldValue, lang }: any) => {
+const buildContactField = ({ fieldModel, fieldName, fieldValue, lang, type, label }: any) => {
   const formattedName = getTranslatedNameForContactField(fieldName, { lang });
   const formattedValue = getFormattedValueForContactField(fieldValue, { field: fieldModel, lang });
 
-  const field = buildField(formattedName, formattedValue);
+  const fieldOptions: FieldOptions = {};
+
+  if (type) {
+    fieldOptions.label = {
+      type,
+      label,
+    };
+  }
+
+  const field = buildField(formattedName, formattedValue, fieldOptions);
   return field;
 };
 
@@ -154,6 +167,8 @@ const buildFieldsFromContactByBrowsingModels = ({ models, data, lang, builtField
           fieldName,
           fieldValue: fieldValueItem[fieldModel.value],
           lang,
+          type: fieldValueItem.type,
+          label: fieldValueItem.label,
         });
         builtFields.push(field);
 
@@ -181,6 +196,8 @@ const buildFieldsFromContactByBrowsingModels = ({ models, data, lang, builtField
         fieldName,
         fieldValue,
         lang,
+        type: fieldValue.type,
+        label: fieldValue.label,
       });
       builtFields.push(field);
     }
