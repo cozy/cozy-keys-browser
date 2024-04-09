@@ -7,6 +7,12 @@ import { ExpirationDateData } from "@bitwarden/common/vault/models/data/expirati
 import { Field } from "@bitwarden/common/vault/models/domain/field";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 
+import {
+  fields as fieldsModels,
+  getTranslatedNameForContactField,
+  getFormattedValueForContactField,
+} from "./contact.lib";
+
 const {
   formatMetadataQualification,
   getMetadataQualificationType,
@@ -120,13 +126,78 @@ export const buildFieldsFromPaper = (i18nService: any, paper: any): FieldView[] 
 
 // Contact fields
 
+const buildContactField = ({ fieldModel, fieldName, fieldValue, lang }: any) => {
+  const formattedName = getTranslatedNameForContactField(fieldName, { lang });
+  const formattedValue = getFormattedValueForContactField(fieldValue, { field: fieldModel, lang });
+
+  const field = buildField(formattedName, formattedValue);
+  return field;
+};
+
+// We browse recursively the fieldsModels (what we want to display in the contact object) to
+// - translate field name
+// - format field value
+// - create a Bitwarden Field for each field
+const buildFieldsFromContactByBrowsingModels = ({ models, data, lang, builtFields }: any) => {
+  models.forEach((fieldModel: any) => {
+    const fieldName = fieldModel.name;
+    const fieldValue = data[fieldModel.name];
+
+    if (!fieldValue) {
+      return;
+    }
+
+    if (fieldModel.isArray) {
+      fieldValue.forEach((fieldValueItem: any) => {
+        const field = buildContactField({
+          fieldModel,
+          fieldName,
+          fieldValue: fieldValueItem[fieldModel.value],
+          lang,
+        });
+        builtFields.push(field);
+
+        if (fieldModel.subFields) {
+          buildFieldsFromContactByBrowsingModels({
+            models: fieldModel.subFields,
+            data: fieldValueItem,
+            lang,
+            builtFields,
+          });
+        }
+      });
+    } else if (fieldModel.isObject) {
+      if (fieldModel.subFields) {
+        buildFieldsFromContactByBrowsingModels({
+          models: fieldModel.subFields,
+          data: fieldValue,
+          lang,
+          builtFields,
+        });
+      }
+    } else {
+      const field = buildContactField({
+        fieldModel,
+        fieldName,
+        fieldValue,
+        lang,
+      });
+      builtFields.push(field);
+    }
+  });
+};
+
 export const buildFieldsFromContact = (i18nService: any, contact: any): FieldView[] => {
-  const fields: FieldView[] = [];
+  const builtFields: FieldView[] = [];
 
   const lang = i18nService.translationLocale;
 
-  // TODO
+  buildFieldsFromContactByBrowsingModels({
+    models: fieldsModels,
+    data: contact,
+    lang,
+    builtFields,
+  });
 
-  return fields;
+  return builtFields;
 };
-
