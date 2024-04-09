@@ -1,0 +1,90 @@
+.alert {
+  &.warning {
+    @include themify($themes) {
+      background-color: change-color(themed("warningColor"), $alpha: 0.12);
+    }
+    .alert-icon {
+      @include themify($themes) {
+        background-color: themed("warningColor");
+        color: themed("warningColor");
+      }
+    }
+    .alert-action {
+      .btn.link {
+        @include themify($themes) {
+          color: themed("warningColor") !important;
+        }
+      }
+    }
+  }
+  display: flex;
+  flex-wrap: wrap;
+
+  padding: 8px 16px;
+
+  border-radius: 8px;
+
+  .alert-icon {
+    display: flex;
+
+    height: 16px;
+    width: 16px;
+
+    margin-right: 12px;
+    margin-top: 9px;
+    padding: 7px 0;
+
+    font-size: 22px;
+
+    @include themify($themes) {
+      background-color: themed("warningColor");
+      color: themed("warningColor");
+    }
+  }
+
+  .alert-message {
+    display: flex;
+    flex-wrap: wrap;
+    flex: auto;
+    align-items: center;
+
+    max-width: calc(100% - 28px);
+
+    padding: 8px 0;
+
+    .alert-title {
+      width: 100%;
+
+      margin-bottom: 0.35em;
+      margin-top: -2px;
+
+      font-weight: bold;
+    }
+  }
+
+  .alert-action {
+    display: block;
+
+    width: 100%;
+
+    margin-left: auto;
+    margin-right: -6px;
+    padding-left: 0;
+
+    text-align: right;
+    text-transform: uppercase;
+
+    .btn.link {
+      @include themify($themes) {
+        color: themed("warningColor") !important;
+      }
+    }
+  }
+}
+
+.profileMigration {
+  @include themify($themes) {
+    background-color: themed("backgroundColorAlt");
+  }
+  padding: 16px;
+}
