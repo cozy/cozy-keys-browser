@@ -3,7 +3,10 @@
   <!--
   <h2 class="box-header">
   -->
-  <h2 class="box-header" *ngIf="cipher.type !== cipherType.Paper">
+  <h2
+    class="box-header"
+    *ngIf="cipher.type !== cipherType.Paper && cipher.type !== cipherType.Contact"
+  >
     {{ "customFields" | i18n }}
   </h2>
   <!--
@@ -11,7 +14,10 @@
   -->
   <div
     class="box-content"
-    [ngStyle]="{ 'margin-top.px': cipher.type !== cipherType.Paper ? 0 : -15 }"
+    [ngStyle]="{
+      'margin-top.px':
+        cipher.type !== cipherType.Paper && cipher.type !== cipherType.Contact ? 0 : -15
+    }"
   >
     <!-- Cozy customization end -->
     <!--
