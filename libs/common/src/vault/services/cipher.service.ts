@@ -249,6 +249,7 @@ export class CipherService implements CipherServiceAbstraction {
     // Cozy customization
     field.subtype = fieldModel.subtype;
     field.expirationData = fieldModel.expirationData;
+    field.label = fieldModel.label;
     // Cozy customization end
     field.linkedId = fieldModel.linkedId;
     // normalize boolean type field values

@@ -2,6 +2,7 @@ import { FieldSubType } from "../../enums/fieldSubType";
 import { FieldType } from "../../enums/fieldType";
 import { LinkedIdType } from "../../enums/linkedIdType";
 import { ExpirationDateData } from "../../vault/models/data/expiration-date.data";
+import { LabelData } from "../../vault/models/data/label.data";
 import { BaseResponse } from "../response/base.response";
 
 export class FieldApi extends BaseResponse {
@@ -11,6 +12,7 @@ export class FieldApi extends BaseResponse {
   // Cozy customization
   subtype: FieldSubType;
   expirationData: ExpirationDateData;
+  label: LabelData;
   // Cozy customization end
   linkedId: LinkedIdType;
 
@@ -23,6 +25,7 @@ export class FieldApi extends BaseResponse {
     // Cozy customization
     this.subtype = this.getResponseProperty("Subtype");
     this.expirationData = this.getResponseProperty("ExpirationData");
+    this.label = this.getResponseProperty("Label");
     // Cozy customization end
     this.name = this.getResponseProperty("Name");
     this.value = this.getResponseProperty("Value");

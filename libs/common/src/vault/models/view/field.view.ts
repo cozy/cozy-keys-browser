@@ -5,6 +5,7 @@ import { FieldType } from "../../../enums/fieldType";
 import { LinkedIdType } from "../../../enums/linkedIdType";
 import { View } from "../../../models/view/view";
 import { ExpirationDateData } from "../data/expiration-date.data";
+import { LabelData } from "../data/label.data";
 import { Field } from "../domain/field";
 
 export class FieldView implements View {
@@ -14,6 +15,7 @@ export class FieldView implements View {
   // Cozy customization
   subtype: FieldSubType = null;
   expirationData: ExpirationDateData = null;
+  label: LabelData = null;
   // Cozy customization end
   newField = false; // Marks if the field is new and hasn't been saved
   showValue = false;
@@ -29,6 +31,7 @@ export class FieldView implements View {
     // Cozy customization
     this.subtype = f.subtype;
     this.expirationData = f.expirationData;
+    this.label = f.label;
     // Cozy customization end
     this.linkedId = f.linkedId;
   }
