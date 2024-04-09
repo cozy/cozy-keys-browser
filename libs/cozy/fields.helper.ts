@@ -27,6 +27,8 @@ interface FieldOptions {
   expirationData?: ExpirationDateData;
 }
 
+// Helpers
+
 export const buildField = (name: string, value: string, options: FieldOptions = {}): FieldView => {
   const field = new FieldView();
   field.type = FieldType.Text;
@@ -36,6 +38,26 @@ export const buildField = (name: string, value: string, options: FieldOptions = 
   field.value = value;
   return field;
 };
+
+export const copyEncryptedFields = (fields: Field[]): FieldApi[] => {
+  const encryptedFields = [];
+
+  for (const field of fields) {
+    encryptedFields.push(
+      new FieldApi({
+        Type: field.type,
+        Subtype: field.subtype,
+        ExpirationData: field.expirationData,
+        Name: field.name?.encryptedString || "",
+        Value: field.value?.encryptedString || "",
+      })
+    );
+  }
+
+  return encryptedFields;
+};
+
+// Paper fields
 
 export const buildFieldsFromPaper = (i18nService: any, paper: any): FieldView[] => {
   const fields: FieldView[] = [];
@@ -96,20 +118,4 @@ export const buildFieldsFromPaper = (i18nService: any, paper: any): FieldView[] 
   return fields;
 };
 
-export const copyEncryptedFields = (fields: Field[]): FieldApi[] => {
-  const encryptedFields = [];
 
-  for (const field of fields) {
-    encryptedFields.push(
-      new FieldApi({
-        Type: field.type,
-        Subtype: field.subtype,
-        ExpirationData: field.expirationData,
-        Name: field.name?.encryptedString || "",
-        Value: field.value?.encryptedString || "",
-      })
-    );
-  }
-
-  return encryptedFields;
-};
