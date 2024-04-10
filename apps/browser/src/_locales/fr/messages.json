@@ -1898,6 +1898,9 @@
   "download": {
     "message": "Télécharger"
   },
+  "sendEmail": {
+    "message": "Envoyer un email"
+  },
   "removedPassword": {
     "message": "Mot de passe supprimé"
   },

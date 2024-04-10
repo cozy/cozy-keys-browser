@@ -635,6 +635,19 @@ li.active .icon-cozy-inline > svg {
   }
 }
 
+.icon-send-email {
+  mask-image: url("cozy-ui/assets/icons/ui/email.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/email.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: $brand-primary;
+  @include themify($themes) {
+    background-color: themed("primaryColor");
+  }
+}
+
 .icon-profile {
   background-image: url("../images/icons-16-icon-profile.svg");
 }
