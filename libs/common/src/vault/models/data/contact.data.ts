@@ -5,6 +5,7 @@ export class ContactData {
   displayName: string;
   initials: string;
   primaryEmail: string;
+  primaryPhone: string;
 
   constructor(data?: ContactApi) {
     if (data == null) {
@@ -14,6 +15,7 @@ export class ContactData {
     this.displayName = data.displayName;
     this.initials = data.initials;
     this.primaryEmail = data.primaryEmail;
+    this.primaryPhone = data.primaryPhone;
   }
 }
 // Cozy customization end

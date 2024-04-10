@@ -9,6 +9,7 @@ export class ContactView extends ItemView {
   displayName: string = null;
   initials: string = null;
   primaryEmail: string = null;
+  primaryPhone: string = null;
 
   constructor(p?: Contact) {
     super();
