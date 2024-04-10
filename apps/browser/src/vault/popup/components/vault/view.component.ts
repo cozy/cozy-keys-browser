@@ -63,7 +63,10 @@ export class ViewComponent extends BaseViewComponent {
   loadPageDetailsTimeout: number;
   inPopout = false;
   cipherType = CipherType;
+  // Cozy customization
+  paperType = PaperType;
   CAN_SHARE_ORGANIZATION = CAN_SHARE_ORGANIZATION;
+  // Cozy customization end
 
   constructor(
     cipherService: CipherService,
@@ -234,6 +237,10 @@ export class ViewComponent extends BaseViewComponent {
         );
       } else if (this.cipher.type === CipherType.Contact) {
         await favoriteContactCipher(this.cipherService, this.cipher, this.cozyClientService);
+      } else {
+        this.cipher.favorite = !this.cipher.favorite;
+        const cipher = await this.cipherService.encrypt(this.cipher);
+        await this.cipherService.updateWithServer(cipher);
       }
 
       const cipher = await this.cipherService.get(this.cipherId);
