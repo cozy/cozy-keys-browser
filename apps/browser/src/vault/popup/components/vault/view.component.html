@@ -36,12 +36,16 @@
 </header>
 <main tabindex="-1" *ngIf="cipher">
   <!-- Cozy customization -->
-  <div *ngIf="cipher.type === cipherType.Paper" class="paper-illustration">
+  <div *ngIf="cipher.type === cipherType.Paper" class="cipher-illustration">
     <img
       [src]="sanitize(cipher.paper.illustrationThumbnailUrl)"
       (click)="openWebApp()"
       (error)="onIllustrationError()"
     />
+  </div>
+  <div *ngIf="cipher.type === cipherType.Contact" class="cipher-illustration">
+    <app-vault-contact-avatar [initials]="cipher.contact.initials" [size]="96">
+    </app-vault-contact-avatar>
   </div>
   <!-- Cozy customization end -->
   <div class="box">
