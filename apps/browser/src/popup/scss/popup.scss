@@ -11,4 +11,8 @@
 @import "plugins.scss";
 @import "environment.scss";
 @import "pages.scss";
+// Cozy Customization, Profile migration
+//*
+@import "cozy-profiles-migration.scss";
+//*/
 @import "@angular/cdk/overlay-prebuilt.css";
