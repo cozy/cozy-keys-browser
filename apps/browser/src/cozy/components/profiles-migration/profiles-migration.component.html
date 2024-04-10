@@ -1,0 +1,14 @@
+<div class="profileMigration" *ngIf="ready && profilesCount > 0">
+  <div class="alert">
+    <div class="alert-icon cozy-icon-info"></div>
+    <div class="alert-message">
+      <div class="alert-title">{{ "profileMigrationTitle" | i18n }}</div>
+      <div>{{ "profileMigrationContent" | i18n: deadline:remaining:profilesCount }}</div>
+    </div>
+    <div class="alert-action">
+      <button type="button" class="btn link" (click)="moreInfo()">
+        {{ "profileMigrationAction" | i18n }}
+      </button>
+    </div>
+  </div>
+</div>
