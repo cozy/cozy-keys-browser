@@ -794,6 +794,23 @@
       </button>
       <!-- Cozy customization end -->
       <!-- Cozy customization -->
+      <button
+        type="button"
+        class="box-content-row"
+        appStopClick
+        appBlurClick
+        (click)="call()"
+        *ngIf="cipher.type === cipherType.Contact && cipher.contact.primaryPhone"
+      >
+        <div class="row-main text-primary">
+          <div class="icon text-primary" aria-hidden="true">
+            <i class="icon-cozy icon-telephone" aria-hidden="true"></i>
+          </div>
+          <span>{{ "call" | i18n }}</span>
+        </div>
+      </button>
+      <!-- Cozy customization end -->
+      <!-- Cozy customization -->
       <!-- Prevent to restore deleted Profiles as they will be replaced by Cozy Contacts -->
       <button
         type="button"

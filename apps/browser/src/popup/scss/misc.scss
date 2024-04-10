@@ -648,6 +648,19 @@ li.active .icon-cozy-inline > svg {
   }
 }
 
+.icon-telephone {
+  mask-image: url("cozy-ui/assets/icons/ui/telephone.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/telephone.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: $brand-primary;
+  @include themify($themes) {
+    background-color: themed("primaryColor");
+  }
+}
+
 .icon-profile {
   background-image: url("../images/icons-16-icon-profile.svg");
 }

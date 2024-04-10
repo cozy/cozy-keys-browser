@@ -1901,6 +1901,9 @@
   "sendEmail": {
     "message": "Envoyer un email"
   },
+  "call": {
+    "message": "Appeler"
+  },
   "removedPassword": {
     "message": "Mot de passe supprimé"
   },
