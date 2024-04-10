@@ -10,6 +10,8 @@ export class FieldApi extends BaseResponse {
   value: string;
   type: FieldType;
   // Cozy customization
+  id: string;
+  parentId: string;
   subtype: FieldSubType;
   expirationData: ExpirationDateData;
   label: LabelData;
@@ -23,6 +25,8 @@ export class FieldApi extends BaseResponse {
     }
     this.type = this.getResponseProperty("Type");
     // Cozy customization
+    this.id = this.getResponseProperty("Id");
+    this.parentId = this.getResponseProperty("ParentId");
     this.subtype = this.getResponseProperty("Subtype");
     this.expirationData = this.getResponseProperty("ExpirationData");
     this.label = this.getResponseProperty("Label");
