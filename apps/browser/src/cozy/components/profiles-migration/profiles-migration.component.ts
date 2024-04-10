@@ -71,5 +71,9 @@ export class ProfilesMigrationComponent implements OnInit {
     return true;
   }
 
-  moreInfo() {}
+  moreInfo() {
+    const infoUrl =
+      "https://support.cozy.io/394-comment-puis-je-parametrer-mon-gestionnaire-de-mot-de-passe/";
+    window.open(infoUrl);
+  }
 }
