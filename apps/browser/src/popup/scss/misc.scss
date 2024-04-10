@@ -324,6 +324,19 @@ This class is responsible of changing tabs colors :
   }
 }
 
+.cozy-icon-info {
+  background-color: $gray-light;
+  color: $gray-light;
+  mask-image: url("cozy-ui/assets/icons/ui/info.svg");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.cozy-icon-info::before {
+  content: "\f071"; // keep height
+}
+
 .bwi-lock-f {
   background-color: $gray-light;
   mask-image: url("cozy-ui/assets/icons/ui/stack.svg");

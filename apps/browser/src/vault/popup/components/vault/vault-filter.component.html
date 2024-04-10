@@ -33,6 +33,12 @@
   </div>
 </header>
 <main tabindex="-1" cdk-scrollable>
+  <!-- Cozy customization, Profile migration -->
+  <app-profiles-migration
+    *ngIf="ciphers && ciphers.length"
+    [profilesCount]="this.typeCounts.get(cipherType.Identity) || 0"
+  ></app-profiles-migration>
+  <!-- Cozy customization end -->
   <!-- commented by Cozy
   <app-vault-select
     (onVaultSelectionChanged)="vaultFilterChanged()"

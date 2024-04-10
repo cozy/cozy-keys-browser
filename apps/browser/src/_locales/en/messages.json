@@ -2379,5 +2379,28 @@
   },
   "sharingNotAcceptedYetDesc2": {
     "message": "This security code will enable him to validate your identity and let you access shared items."
+  },
+  "profileMigrationTitle": {
+    "message": "Important information"
+  },
+  "profileMigrationContent": {
+    "message": "Your Cozy extension will evolve. Your profiles will be deleted after $DATE$. So you have $REMAINING$ to transform your $PROFILES_COUNT$ profiles into contacts and then continue to use the autofill feature.",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "January 1st, 1970"
+      },
+      "remaining": {
+        "content": "$2",
+        "example": "15"
+      },
+      "profiles_count": {
+        "content": "$3",
+        "example": "12"
+      }
+    }
+  },
+  "profileMigrationAction": {
+    "message": "More details"
   }
 }

@@ -2427,5 +2427,28 @@
   },
   "sharingNotAcceptedYetDesc2": {
     "message": "Ce code de sécurité lui permettra de valider votre identité et ainsi d'accéder aux éléments partagés."
+  },
+  "profileMigrationTitle": {
+    "message": "Information importante"
+  },
+  "profileMigrationContent": {
+    "message": "Votre extension Cozy évolue. Les profils seront supprimé le $DATE$. Il vous reste donc $REMAINING$ pour transformer vos $PROFILES_COUNT$ profils en contact et continuer à utiliser la fonction de remplissage automatique.",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "1er janvier 1970"
+      },
+      "remaining": {
+        "content": "$2",
+        "example": "15"
+      },
+      "profiles_count": {
+        "content": "$3",
+        "example": "12"
+      }
+    }
+  },
+  "profileMigrationAction": {
+    "message": "En savoir plus"
   }
 }
