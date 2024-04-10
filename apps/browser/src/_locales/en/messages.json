@@ -1178,6 +1178,9 @@
   "copyValue": {
     "message": "Copy value"
   },
+  "expandValue": {
+    "message": "Expand value"
+  },
   "value": {
     "message": "Value"
   },
