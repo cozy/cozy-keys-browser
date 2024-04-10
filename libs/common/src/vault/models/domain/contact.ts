@@ -9,6 +9,7 @@ export class Contact extends Domain {
   displayName: EncString;
   initials: EncString;
   primaryEmail: EncString;
+  primaryPhone: EncString;
 
   constructor(obj?: ContactData) {
     super();
@@ -23,6 +24,7 @@ export class Contact extends Domain {
         displayName: null,
         initials: null,
         primaryEmail: null,
+        primaryPhone: null,
       },
       []
     );
@@ -35,6 +37,7 @@ export class Contact extends Domain {
         displayName: null,
         initials: null,
         primaryEmail: null,
+        primaryPhone: null,
       },
       orgId,
       encKey
