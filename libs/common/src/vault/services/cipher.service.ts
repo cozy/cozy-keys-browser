@@ -247,6 +247,8 @@ export class CipherService implements CipherServiceAbstraction {
     const field = new Field();
     field.type = fieldModel.type;
     // Cozy customization
+    field.id = fieldModel.id;
+    field.parentId = fieldModel.parentId;
     field.subtype = fieldModel.subtype;
     field.expirationData = fieldModel.expirationData;
     field.label = fieldModel.label;

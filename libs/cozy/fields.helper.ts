@@ -30,6 +30,8 @@ const {
 } = models.paper;
 
 interface FieldOptions {
+  id?: string;
+  parentId?: string;
   subtype?: FieldSubType;
   expirationData?: ExpirationDateData;
   label?: LabelData;
@@ -40,6 +42,8 @@ interface FieldOptions {
 export const buildField = (name: string, value: string, options: FieldOptions = {}): FieldView => {
   const field = new FieldView();
   field.type = FieldType.Text;
+  field.id = options.id;
+  field.parentId = options.parentId;
   field.subtype = options.subtype ?? FieldSubType.Default;
   field.expirationData = options.expirationData;
   field.label = options.label;
@@ -54,6 +58,8 @@ export const copyEncryptedFields = (fields: Field[]): FieldApi[] => {
   for (const field of fields) {
     encryptedFields.push(
       new FieldApi({
+        Id: field.id,
+        ParentId: field.parentId,
         Type: field.type,
         Subtype: field.subtype,
         ExpirationData: field.expirationData,
@@ -130,7 +136,16 @@ export const buildFieldsFromPaper = (i18nService: any, paper: any): FieldView[] 
 
 // Contact fields
 
-const buildContactField = ({ fieldModel, fieldName, fieldValue, lang, type, label }: any) => {
+const buildContactField = ({
+  fieldModel,
+  fieldName,
+  fieldValue,
+  lang,
+  type,
+  label,
+  id,
+  parentId,
+}: any) => {
   const formattedName = getTranslatedNameForContactField(fieldName, { lang });
   const formattedValue = getFormattedValueForContactField(fieldValue, { field: fieldModel, lang });
 
@@ -142,6 +157,13 @@ const buildContactField = ({ fieldModel, fieldName, fieldValue, lang, type, labe
       label,
     };
   }
+  if (id) {
+    fieldOptions.id = id;
+  }
+
+  if (parentId) {
+    fieldOptions.parentId = parentId;
+  }
 
   const field = buildField(formattedName, formattedValue, fieldOptions);
   return field;
@@ -151,7 +173,13 @@ const buildContactField = ({ fieldModel, fieldName, fieldValue, lang, type, labe
 // - translate field name
 // - format field value
 // - create a Bitwarden Field for each field
-const buildFieldsFromContactByBrowsingModels = ({ models, data, lang, builtFields }: any) => {
+const buildFieldsFromContactByBrowsingModels = ({
+  models,
+  data,
+  lang,
+  builtFields,
+  parentId,
+}: any) => {
   models.forEach((fieldModel: any) => {
     const fieldName = fieldModel.name;
     const fieldValue = data[fieldModel.name];
@@ -169,6 +197,8 @@ const buildFieldsFromContactByBrowsingModels = ({ models, data, lang, builtField
           lang,
           type: fieldValueItem.type,
           label: fieldValueItem.label,
+          id: fieldModel.name === "address" && Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
+          parentId,
         });
         builtFields.push(field);
 
@@ -178,6 +208,7 @@ const buildFieldsFromContactByBrowsingModels = ({ models, data, lang, builtField
             data: fieldValueItem,
             lang,
             builtFields,
+            parentId: fieldModel.name === "address" && field.id,
           });
         }
       });
@@ -198,6 +229,7 @@ const buildFieldsFromContactByBrowsingModels = ({ models, data, lang, builtField
         lang,
         type: fieldValue.type,
         label: fieldValue.label,
+        parentId,
       });
       builtFields.push(field);
     }

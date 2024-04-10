@@ -17,6 +17,8 @@ export class Field extends Domain {
   type: FieldType;
   linkedId: LinkedIdType;
   // Cozy customization
+  id: string;
+  parentId: string; // If a field has a parentId, we will display it on the view page only if the parentId is selected
   subtype: FieldSubType;
   expirationData: ExpirationDateData;
   label: LabelData;
@@ -30,6 +32,8 @@ export class Field extends Domain {
 
     this.type = obj.type;
     // Cozy customization
+    this.id = obj.id;
+    this.parentId = obj.parentId;
     this.subtype = obj.subtype;
     this.expirationData = obj.expirationData;
     this.label = obj.label;

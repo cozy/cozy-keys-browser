@@ -9,6 +9,8 @@ import { LabelData } from "./label.data";
 export class FieldData {
   type: FieldType;
   // Cozy customization
+  id: string;
+  parentId: string;
   subtype: FieldSubType;
   expirationData: ExpirationDateData;
   label: LabelData;
@@ -23,6 +25,8 @@ export class FieldData {
     }
     this.type = response.type;
     // Cozy customization
+    this.id = response.id;
+    this.parentId = response.parentId;
     this.subtype = response.subtype;
     this.expirationData = response.expirationData;
     this.label = response.label;
