@@ -28,6 +28,7 @@ import { BrowserApi } from "../../../../browser/browserApi";
 import { PopupUtilsService } from "../../../../popup/services/popup-utils.service";
 /* Cozy imports */
 /* eslint-disable */
+import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { KonnectorsService } from "../../../../popup/services/konnectors.service";
 import { HistoryService } from "../../../../popup/services/history.service";
 import { deleteCipher } from "./cozy-utils";
@@ -74,7 +75,8 @@ export class AddEditComponent extends BaseAddEditComponent {
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
     private konnectorsService: KonnectorsService,
-    private historyService: HistoryService
+    private historyService: HistoryService,
+    private cozyClientService: CozyClientService
   ) {
     super(
       cipherService,
@@ -328,7 +330,8 @@ export class AddEditComponent extends BaseAddEditComponent {
       this.i18nService,
       this.platformUtilsService,
       this.cipher,
-      this.stateService
+      this.stateService,
+      this.cozyClientService
     );
     if (confirmed) {
       /* Cozy customization
