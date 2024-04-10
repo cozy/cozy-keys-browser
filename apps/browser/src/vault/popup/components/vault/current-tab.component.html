@@ -152,7 +152,10 @@
         <!-- end custo -->
       </div>
     </div>
-    <div class="box list">
+    <!-- Cozy customization -->
+    <!-- Disable Profiles if empty as they will be replaced by Cozy Contacts -->
+    <div class="box list" *ngIf="identityCiphers.length > 0">
+      <!---->
       <h2 class="box-header">
         {{ "identities" | i18n }}
         <!-- Cozy custo : commented
