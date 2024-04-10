@@ -356,6 +356,7 @@ export class ViewComponent extends BaseViewComponent {
       this.i18nService,
       this.platformUtilsService,
       this.cipher,
+      this.stateService,
       this.cozyClientService
     );
 

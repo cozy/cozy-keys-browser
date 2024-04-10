@@ -2,6 +2,7 @@
 // Cozy customization
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.response";
@@ -77,6 +78,7 @@ export const deleteContactCipher = async (
   i18nService: I18nService,
   platformUtilsService: PlatformUtilsService,
   cipher: CipherView,
+  stateService: StateService,
   cozyClientService: any
 ): Promise<boolean> => {
   const confirmed = await platformUtilsService.showDialog(

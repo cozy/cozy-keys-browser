@@ -6,6 +6,8 @@ import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
+import { CozyClientService } from "../../../../popup/services/cozyClient.service";
+
 /**
  * Cozy custo
  * This method is extracted from the jslib:
@@ -19,7 +21,8 @@ export const deleteCipher = async (
   i18nService: I18nService,
   platformUtilsService: PlatformUtilsService,
   cipher: CipherView,
-  stateService: StateService
+  stateService: StateService,
+  cozyClientService: CozyClientService
 ): Promise<boolean> => {
   const organizations = await stateService.getOrganizations();
   const [cozyOrganization] = Object.values(organizations).filter((org) => org.name === "Cozy");
