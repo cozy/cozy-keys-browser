@@ -13,9 +13,20 @@ import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 export class ViewCustomFieldsComponent extends BaseViewCustomFieldsComponent {
   /* Cozy customization */
   cipherType = CipherType;
+  selectedId: string | undefined = undefined;
   /* Cozy customization end */
 
   constructor(eventCollectionService: EventCollectionService) {
     super(eventCollectionService);
   }
+
+  /* Cozy customization */
+  selectId(id: string | undefined) {
+    if (id !== this.selectedId) {
+      this.selectedId = id;
+    } else {
+      this.selectedId = undefined;
+    }
+  }
+  /* Cozy customization end */
 }

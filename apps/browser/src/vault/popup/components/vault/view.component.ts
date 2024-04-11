@@ -236,7 +236,12 @@ export class ViewComponent extends BaseViewComponent {
           this.cozyClientService
         );
       } else if (this.cipher.type === CipherType.Contact) {
-        await favoriteContactCipher(this.cipherService, this.cipher, this.cozyClientService);
+        await favoriteContactCipher(
+          this.cipherService,
+          this.i18nService,
+          this.cipher,
+          this.cozyClientService
+        );
       } else {
         this.cipher.favorite = !this.cipher.favorite;
         const cipher = await this.cipherService.encrypt(this.cipher);

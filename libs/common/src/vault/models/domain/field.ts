@@ -8,6 +8,7 @@ import { EncString } from "../../../models/domain/enc-string";
 import { SymmetricCryptoKey } from "../../../models/domain/symmetric-crypto-key";
 import { ExpirationDateData } from "../data/expiration-date.data";
 import { FieldData } from "../data/field.data";
+import { LabelData } from "../data/label.data";
 import { FieldView } from "../view/field.view";
 
 export class Field extends Domain {
@@ -16,8 +17,11 @@ export class Field extends Domain {
   type: FieldType;
   linkedId: LinkedIdType;
   // Cozy customization
+  id: string;
+  parentId: string; // If a field has a parentId, we will display it on the view page only if the parentId is selected
   subtype: FieldSubType;
   expirationData: ExpirationDateData;
+  label: LabelData;
   // Cozy customization end
 
   constructor(obj?: FieldData) {
@@ -28,8 +32,11 @@ export class Field extends Domain {
 
     this.type = obj.type;
     // Cozy customization
+    this.id = obj.id;
+    this.parentId = obj.parentId;
     this.subtype = obj.subtype;
     this.expirationData = obj.expirationData;
+    this.label = obj.label;
     // Cozy customization end
     this.linkedId = obj.linkedId;
     this.buildDomainModel(

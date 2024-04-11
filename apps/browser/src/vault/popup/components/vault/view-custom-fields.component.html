@@ -3,7 +3,10 @@
   <!--
   <h2 class="box-header">
   -->
-  <h2 class="box-header" *ngIf="cipher.type !== cipherType.Paper">
+  <h2
+    class="box-header"
+    *ngIf="cipher.type !== cipherType.Paper && cipher.type !== cipherType.Contact"
+  >
     {{ "customFields" | i18n }}
   </h2>
   <!--
@@ -11,103 +14,153 @@
   -->
   <div
     class="box-content"
-    [ngStyle]="{ 'margin-top.px': cipher.type !== cipherType.Paper ? 0 : -15 }"
+    [ngStyle]="{
+      'margin-top.px':
+        cipher.type !== cipherType.Paper && cipher.type !== cipherType.Contact ? 0 : -15
+    }"
   >
     <!-- Cozy customization end -->
-    <div class="box-content-row box-content-row-flex" *ngFor="let field of cipher.fields">
-      <div class="row-main">
-        <span
-          *ngIf="field.type != fieldType.Linked"
-          class="row-label draggable"
-          draggable="true"
-          (dragstart)="setTextDataOnDrag($event, field.value)"
-          >{{ field.name }}</span
-        >
-        <span *ngIf="field.type === fieldType.Linked" class="row-label">{{ field.name }}</span>
-        <div *ngIf="field.type === fieldType.Text">
-          {{ field.value || "&nbsp;" }}
-          <app-vault-view-expiration-date
-            *ngIf="field.subtype === fieldSubType.ExpirationDate"
-            [field]="field"
-          ></app-vault-view-expiration-date>
-        </div>
-        <div *ngIf="field.type === fieldType.Hidden">
-          <span *ngIf="!field.showValue" class="monospaced">{{ field.maskedValue }}</span>
+    <!--
+      Cozy customization
+      We extracted the cipher.fields for loop in an ng-container and slightly modified below divs condition and style
+    -->
+    <ng-container *ngFor="let field of cipher.fields">
+      <div
+        *ngIf="!field.parentId || field.parentId === this.selectedId"
+        class="box-content-row box-content-row-flex"
+      >
+        <div class="row-main" [ngStyle]="{ 'margin-left.px': field.parentId ? 10 : 0 }">
+          <!-- Cozy customization; add field label type in field name (like "Perso" or "Pro") -->
+          <!--
           <span
-            *ngIf="field.showValue && !field.showCount"
-            class="monospaced show-whitespace"
-            [innerHTML]="field.value | colorPassword"
-          ></span>
+            *ngIf="field.type != fieldType.Linked"
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, field.value)"
+            >{{ field.name }}</span
+          >
+          -->
           <span
-            *ngIf="field.showValue && field.showCount"
-            [innerHTML]="field.value | colorPasswordCount"
-          ></span>
-        </div>
-        <div *ngIf="field.type === fieldType.Boolean">
-          <i class="bwi bwi-check-square" *ngIf="field.value === 'true'" aria-hidden="true"></i>
-          <i class="bwi bwi-square" *ngIf="field.value !== 'true'" aria-hidden="true"></i>
-          <span class="sr-only">{{ field.value }}</span>
-        </div>
-        <div *ngIf="field.type === fieldType.Linked" class="box-content-row-flex">
-          <div class="icon icon-small">
-            <i
-              class="bwi bwi-link"
-              aria-hidden="true"
-              appA11yTitle="{{ 'linkedValue' | i18n }}"
-            ></i>
-            <span class="sr-only">{{ "linkedValue" | i18n }}</span>
+            *ngIf="field.type != fieldType.Linked"
+            class="row-label draggable"
+            draggable="true"
+            (dragstart)="setTextDataOnDrag($event, field.value)"
+          >
+            {{ field.name }}
+            <span *ngIf="field.label" aria-hidden="true"> · </span>
+            <span *ngIf="field.label">
+              {{ field.label.type }}
+            </span>
+          </span>
+          <!-- Cozy customization end -->
+          <span *ngIf="field.type === fieldType.Linked" class="row-label">{{ field.name }}</span>
+          <div *ngIf="field.type === fieldType.Text">
+            {{ field.value || "&nbsp;" }}
+            <app-vault-view-expiration-date
+              *ngIf="field.subtype === fieldSubType.ExpirationDate"
+              [field]="field"
+            ></app-vault-view-expiration-date>
           </div>
-          <span>{{ cipher.linkedFieldI18nKey(field.linkedId) | i18n }}</span>
+          <div *ngIf="field.type === fieldType.Hidden">
+            <span *ngIf="!field.showValue" class="monospaced">{{ field.maskedValue }}</span>
+            <span
+              *ngIf="field.showValue && !field.showCount"
+              class="monospaced show-whitespace"
+              [innerHTML]="field.value | colorPassword"
+            ></span>
+            <span
+              *ngIf="field.showValue && field.showCount"
+              [innerHTML]="field.value | colorPasswordCount"
+            ></span>
+          </div>
+          <div *ngIf="field.type === fieldType.Boolean">
+            <i class="bwi bwi-check-square" *ngIf="field.value === 'true'" aria-hidden="true"></i>
+            <i class="bwi bwi-square" *ngIf="field.value !== 'true'" aria-hidden="true"></i>
+            <span class="sr-only">{{ field.value }}</span>
+          </div>
+          <div *ngIf="field.type === fieldType.Linked" class="box-content-row-flex">
+            <div class="icon icon-small">
+              <i
+                class="bwi bwi-link"
+                aria-hidden="true"
+                appA11yTitle="{{ 'linkedValue' | i18n }}"
+              ></i>
+              <span class="sr-only">{{ "linkedValue" | i18n }}</span>
+            </div>
+            <span>{{ cipher.linkedFieldI18nKey(field.linkedId) | i18n }}</span>
+          </div>
+        </div>
+        <div class="action-buttons action-buttons-fixed">
+          <!-- Cozy customization; button to expand a field with subfields (i.e. the address)  -->
+          <button
+            type="button"
+            class="row-btn"
+            appStopClick
+            attr.aria-label="{{ 'expandValue' | i18n }} {{ field.name }}"
+            appA11yTitle="{{ 'expandValue' | i18n }}"
+            *ngIf="field.id"
+            (click)="selectId(field.id)"
+          >
+            <i
+              *ngIf="this.selectedId === field.id"
+              class="bwi bwi-lg bwi-angle-up"
+              aria-hidden="true"
+            ></i>
+            <i
+              *ngIf="this.selectedId !== field.id"
+              class="bwi bwi-lg bwi-angle-down"
+              aria-hidden="true"
+            ></i>
+          </button>
+          <!-- Cozy customization end -->
+          <button
+            type="button"
+            class="row-btn"
+            appStopClick
+            attr.aria-label="{{ 'toggleCharacterCount' | i18n }} {{ field.name }}"
+            appA11yTitle="{{ 'toggleCharacterCount' | i18n }}"
+            *ngIf="field.type === fieldType.Hidden && cipher.viewPassword && field.showValue"
+            (click)="toggleFieldCount(field)"
+            [attr.aria-pressed]="field.showCount"
+          >
+            <i class="bwi bwi-lg bwi-numbered-list" aria-hidden="true"></i>
+          </button>
+          <button
+            type="button"
+            class="row-btn"
+            appStopClick
+            attr.aria-label="{{ 'toggleVisibility' | i18n }} {{ field.name }}"
+            appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+            *ngIf="field.type === fieldType.Hidden && cipher.viewPassword"
+            (click)="toggleFieldValue(field)"
+            [attr.aria-pressed]="field.showValue"
+          >
+            <i
+              class="bwi bwi-lg"
+              aria-hidden="true"
+              [ngClass]="{ 'bwi-eye': !field.showValue, 'bwi-eye-slash': field.showValue }"
+            ></i>
+          </button>
+          <button
+            type="button"
+            class="row-btn"
+            appStopClick
+            attr.aria-label="{{ 'copyValue' | i18n }} {{ field.name }}"
+            appA11yTitle="{{ 'copyValue' | i18n }}"
+            *ngIf="
+              field.value &&
+              field.type !== fieldType.Boolean &&
+              field.type !== fieldType.Linked &&
+              !(field.type === fieldType.Hidden && !cipher.viewPassword)
+            "
+            (click)="
+              copy(field.value, 'value', field.type === fieldType.Hidden ? 'H_Field' : 'Field')
+            "
+          >
+            <i class="bwi bwi-lg bwi-clone" aria-hidden="true"></i>
+          </button>
         </div>
       </div>
-      <div class="action-buttons action-buttons-fixed">
-        <button
-          type="button"
-          class="row-btn"
-          appStopClick
-          attr.aria-label="{{ 'toggleCharacterCount' | i18n }} {{ field.name }}"
-          appA11yTitle="{{ 'toggleCharacterCount' | i18n }}"
-          *ngIf="field.type === fieldType.Hidden && cipher.viewPassword && field.showValue"
-          (click)="toggleFieldCount(field)"
-          [attr.aria-pressed]="field.showCount"
-        >
-          <i class="bwi bwi-lg bwi-numbered-list" aria-hidden="true"></i>
-        </button>
-        <button
-          type="button"
-          class="row-btn"
-          appStopClick
-          attr.aria-label="{{ 'toggleVisibility' | i18n }} {{ field.name }}"
-          appA11yTitle="{{ 'toggleVisibility' | i18n }}"
-          *ngIf="field.type === fieldType.Hidden && cipher.viewPassword"
-          (click)="toggleFieldValue(field)"
-          [attr.aria-pressed]="field.showValue"
-        >
-          <i
-            class="bwi bwi-lg"
-            aria-hidden="true"
-            [ngClass]="{ 'bwi-eye': !field.showValue, 'bwi-eye-slash': field.showValue }"
-          ></i>
-        </button>
-        <button
-          type="button"
-          class="row-btn"
-          appStopClick
-          attr.aria-label="{{ 'copyValue' | i18n }} {{ field.name }}"
-          appA11yTitle="{{ 'copyValue' | i18n }}"
-          *ngIf="
-            field.value &&
-            field.type !== fieldType.Boolean &&
-            field.type !== fieldType.Linked &&
-            !(field.type === fieldType.Hidden && !cipher.viewPassword)
-          "
-          (click)="
-            copy(field.value, 'value', field.type === fieldType.Hidden ? 'H_Field' : 'Field')
-          "
-        >
-          <i class="bwi bwi-lg bwi-clone" aria-hidden="true"></i>
-        </button>
-      </div>
-    </div>
+    </ng-container>
   </div>
 </ng-container>

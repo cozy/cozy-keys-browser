@@ -4,8 +4,15 @@ import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
 import { FieldType } from "@bitwarden/common/enums/fieldType";
 import { FieldApi } from "@bitwarden/common/models/api/field.api";
 import { ExpirationDateData } from "@bitwarden/common/vault/models/data/expiration-date.data";
+import { LabelData } from "@bitwarden/common/vault/models/data/label.data";
 import { Field } from "@bitwarden/common/vault/models/domain/field";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
+
+import {
+  fields as fieldsModels,
+  getTranslatedNameForContactField,
+  getFormattedValueForContactField,
+} from "./contact.lib";
 
 const {
   formatMetadataQualification,
@@ -23,19 +30,50 @@ const {
 } = models.paper;
 
 interface FieldOptions {
+  id?: string;
+  parentId?: string;
   subtype?: FieldSubType;
   expirationData?: ExpirationDateData;
+  label?: LabelData;
 }
+
+// Helpers
 
 export const buildField = (name: string, value: string, options: FieldOptions = {}): FieldView => {
   const field = new FieldView();
   field.type = FieldType.Text;
+  field.id = options.id;
+  field.parentId = options.parentId;
   field.subtype = options.subtype ?? FieldSubType.Default;
   field.expirationData = options.expirationData;
+  field.label = options.label;
   field.name = name;
   field.value = value;
   return field;
 };
+
+export const copyEncryptedFields = (fields: Field[]): FieldApi[] => {
+  const encryptedFields = [];
+
+  for (const field of fields) {
+    encryptedFields.push(
+      new FieldApi({
+        Id: field.id,
+        ParentId: field.parentId,
+        Type: field.type,
+        Subtype: field.subtype,
+        ExpirationData: field.expirationData,
+        Label: field.label,
+        Name: field.name?.encryptedString || "",
+        Value: field.value?.encryptedString || "",
+      })
+    );
+  }
+
+  return encryptedFields;
+};
+
+// Paper fields
 
 export const buildFieldsFromPaper = (i18nService: any, paper: any): FieldView[] => {
   const fields: FieldView[] = [];
@@ -96,20 +134,119 @@ export const buildFieldsFromPaper = (i18nService: any, paper: any): FieldView[] 
   return fields;
 };
 
-export const copyEncryptedFields = (fields: Field[]): FieldApi[] => {
-  const encryptedFields = [];
+// Contact fields
 
-  for (const field of fields) {
-    encryptedFields.push(
-      new FieldApi({
-        Type: field.type,
-        Subtype: field.subtype,
-        ExpirationData: field.expirationData,
-        Name: field.name?.encryptedString || "",
-        Value: field.value?.encryptedString || "",
-      })
-    );
+const buildContactField = ({
+  fieldModel,
+  fieldName,
+  fieldValue,
+  lang,
+  type,
+  label,
+  id,
+  parentId,
+}: any) => {
+  const formattedName = getTranslatedNameForContactField(fieldName, { lang });
+  const formattedValue = getFormattedValueForContactField(fieldValue, { field: fieldModel, lang });
+
+  const fieldOptions: FieldOptions = {};
+
+  if (type) {
+    fieldOptions.label = {
+      type,
+      label,
+    };
+  }
+  if (id) {
+    fieldOptions.id = id;
   }
 
-  return encryptedFields;
+  if (parentId) {
+    fieldOptions.parentId = parentId;
+  }
+
+  const field = buildField(formattedName, formattedValue, fieldOptions);
+  return field;
+};
+
+// We browse recursively the fieldsModels (what we want to display in the contact object) to
+// - translate field name
+// - format field value
+// - create a Bitwarden Field for each field
+const buildFieldsFromContactByBrowsingModels = ({
+  models,
+  data,
+  lang,
+  builtFields,
+  parentId,
+}: any) => {
+  models.forEach((fieldModel: any) => {
+    const fieldName = fieldModel.name;
+    const fieldValue = data[fieldModel.name];
+
+    if (!fieldValue) {
+      return;
+    }
+
+    if (fieldModel.isArray) {
+      fieldValue.forEach((fieldValueItem: any) => {
+        const field = buildContactField({
+          fieldModel,
+          fieldName,
+          fieldValue: fieldValueItem[fieldModel.value],
+          lang,
+          type: fieldValueItem.type,
+          label: fieldValueItem.label,
+          id: fieldModel.name === "address" && Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
+          parentId,
+        });
+        builtFields.push(field);
+
+        if (fieldModel.subFields) {
+          buildFieldsFromContactByBrowsingModels({
+            models: fieldModel.subFields,
+            data: fieldValueItem,
+            lang,
+            builtFields,
+            parentId: fieldModel.name === "address" && field.id,
+          });
+        }
+      });
+    } else if (fieldModel.isObject) {
+      if (fieldModel.subFields) {
+        buildFieldsFromContactByBrowsingModels({
+          models: fieldModel.subFields,
+          data: fieldValue,
+          lang,
+          builtFields,
+        });
+      }
+    } else {
+      const field = buildContactField({
+        fieldModel,
+        fieldName,
+        fieldValue,
+        lang,
+        type: fieldValue.type,
+        label: fieldValue.label,
+        parentId,
+      });
+      builtFields.push(field);
+    }
+  });
+};
+
+export const buildFieldsFromContact = (i18nService: any, contact: any): FieldView[] => {
+  const builtFields: FieldView[] = [];
+
+  const lang = i18nService.translationLocale;
+
+  buildFieldsFromContactByBrowsingModels({
+    models: fieldsModels,
+    data: contact,
+    lang,
+    builtFields,
+  });
+
+  return builtFields;
 };

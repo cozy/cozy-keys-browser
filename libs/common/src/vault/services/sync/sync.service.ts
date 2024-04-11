@@ -120,7 +120,8 @@ export class SyncService implements SyncServiceAbstraction {
       response.ciphers.push(...papersCiphers);
       const contactsCiphers = await fetchContactsAndConvertAsCiphers(
         this.cipherService,
-        this.cozyClientService
+        this.cozyClientService,
+        this.i18nService
       );
       response.ciphers.push(...contactsCiphers);
       // Cozy customization end

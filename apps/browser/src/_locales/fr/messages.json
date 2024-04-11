@@ -1226,6 +1226,9 @@
   "copyValue": {
     "message": "Copier la valeur"
   },
+  "expandValue": {
+    "message": "Étendre la valeur"
+  },
   "value": {
     "message": "Valeur"
   },
