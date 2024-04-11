@@ -1272,6 +1272,7 @@ export class CipherService implements CipherServiceAbstraction {
             displayName: null,
             initials: null,
             primaryEmail: null,
+            primaryPhone: null,
           },
           key
         );

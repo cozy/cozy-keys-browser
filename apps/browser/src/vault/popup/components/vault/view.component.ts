@@ -532,6 +532,18 @@ export class ViewComponent extends BaseViewComponent {
   // Cozy customization end
 
   // Cozy customization
+  sendEmail() {
+    window.open(`mailto:${this.cipher.contact.primaryEmail}`);
+  }
+  // Cozy customization end
+
+  // Cozy customization
+  call() {
+    window.open(`tel:${this.cipher.contact.primaryPhone}`);
+  }
+  // Cozy customization end
+
+  // Cozy customization
   async onIllustrationError() {
     // An illustration URL is valid for 10 minutes. If an illustration URL is expired,
     // it is very likely that all illustration URLs are expired. So we start a

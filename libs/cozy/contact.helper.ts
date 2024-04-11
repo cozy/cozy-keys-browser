@@ -12,6 +12,10 @@ const getPrimaryEmail = (contact: any): string | undefined => {
   return contact.email.find((email: any) => email.primary)?.address;
 };
 
+const getPrimaryPhone = (contact: any): string | undefined => {
+  return contact.phone?.find((phone: any) => phone.primary)?.number;
+};
+
 export const convertContactToCipherResponse = async (
   cipherService: any,
   contact: any
@@ -24,6 +28,7 @@ export const convertContactToCipherResponse = async (
   cipherView.contact.displayName = contact.displayName;
   cipherView.contact.initials = getInitials(contact);
   cipherView.contact.primaryEmail = getPrimaryEmail(contact);
+  cipherView.contact.primaryPhone = getPrimaryPhone(contact);
   cipherView.favorite = !!contact.cozyMetadata?.favorite;
 
   const cipherEncrypted = await cipherService.encrypt(cipherView);
@@ -36,6 +41,8 @@ export const convertContactToCipherResponse = async (
   cipherViewResponse.contact.initials = cipherEncrypted.contact.initials?.encryptedString ?? "";
   cipherViewResponse.contact.primaryEmail =
     cipherEncrypted.contact.primaryEmail?.encryptedString ?? "";
+  cipherViewResponse.contact.primaryPhone =
+    cipherEncrypted.contact.primaryPhone?.encryptedString ?? "";
   cipherViewResponse.favorite = cipherEncrypted.favorite;
   cipherViewResponse.creationDate = contact.cozyMetadata?.createdAt;
   cipherViewResponse.revisionDate = contact.cozyMetadata?.updatedAt;

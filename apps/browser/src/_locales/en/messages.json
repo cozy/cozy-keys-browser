@@ -1850,6 +1850,12 @@
   "download": {
     "message": "Download"
   },
+  "sendEmail": {
+    "message": "Send email"
+  },
+  "call": {
+    "message": "Call"
+  },
   "removedPassword": {
     "message": "Password removed"
   },
