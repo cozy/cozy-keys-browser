@@ -1,6 +1,7 @@
 import { models } from "cozy-client";
 
 import { ContactApi } from "@bitwarden/common/models/api/contact.api";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.response";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -21,7 +22,8 @@ const getPrimaryPhone = (contact: any): string | undefined => {
 export const convertContactToCipherResponse = async (
   cipherService: any,
   i18nService: any,
-  contact: any
+  contact: any,
+  key: SymmetricCryptoKey
 ): Promise<CipherResponse> => {
   const cipherView = new CipherView();
   cipherView.id = contact.id;
@@ -35,7 +37,7 @@ export const convertContactToCipherResponse = async (
   cipherView.favorite = !!contact.cozyMetadata?.favorite;
   cipherView.fields = buildFieldsFromContact(i18nService, contact);
 
-  const cipherEncrypted = await cipherService.encrypt(cipherView);
+  const cipherEncrypted = await cipherService.encrypt(cipherView, key);
   const cipherViewEncrypted = new CipherView(cipherEncrypted);
   const cipherViewResponse = new CipherResponse(cipherViewEncrypted);
   cipherViewResponse.id = cipherEncrypted.id;

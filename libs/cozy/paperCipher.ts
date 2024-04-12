@@ -2,6 +2,7 @@
 // Cozy customization
 import CozyClient from "cozy-client/types/CozyClient";
 
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
@@ -16,6 +17,7 @@ import { fetchPapers, fetchPaper } from "./queries";
 
 const convertPapersAsCiphers = async (
   cipherService: any,
+  cryptoService: CryptoService,
   i18nService: any,
   client: CozyClient,
   papers: any
@@ -26,14 +28,16 @@ const convertPapersAsCiphers = async (
 
   const noteIllustrationUrl = await fetchNoteIllustrationUrl(client);
 
+  const key = await cryptoService.getKeyForUserEncryption();
+
   for (const paper of papers) {
     let cipherResponse: CipherResponse;
     if (isNote(paper)) {
-      cipherResponse = await convertNoteToCipherResponse(cipherService, i18nService, paper, {
+      cipherResponse = await convertNoteToCipherResponse(cipherService, i18nService, paper, key, {
         noteIllustrationUrl,
       });
     } else {
-      cipherResponse = await convertPaperToCipherResponse(cipherService, i18nService, paper, {
+      cipherResponse = await convertPaperToCipherResponse(cipherService, i18nService, paper, key, {
         baseUrl,
       });
     }
@@ -45,6 +49,7 @@ const convertPapersAsCiphers = async (
 
 export const fetchPapersAndConvertAsCiphers = async (
   cipherService: any,
+  cryptoService: CryptoService,
   cozyClientService: any,
   i18nService: any
 ): Promise<CipherResponse[]> => {
@@ -53,7 +58,13 @@ export const fetchPapersAndConvertAsCiphers = async (
   try {
     const papers = await fetchPapers(client);
 
-    const papersCiphers = await convertPapersAsCiphers(cipherService, i18nService, client, papers);
+    const papersCiphers = await convertPapersAsCiphers(
+      cipherService,
+      cryptoService,
+      i18nService,
+      client,
+      papers
+    );
 
     console.log(`${papersCiphers.length} papers ciphers will be added`);
 
@@ -67,6 +78,7 @@ export const fetchPapersAndConvertAsCiphers = async (
 
 export const favoritePaperCipher = async (
   cipherService: CipherService,
+  cryptoService: CryptoService,
   i18nService: I18nService,
   cipher: CipherView,
   cozyClientService: any
@@ -87,6 +99,7 @@ export const favoritePaperCipher = async (
 
   const cipherResponse = await convertPaperToCipherResponse(
     cipherService,
+    cryptoService,
     i18nService,
     updatePaperWithContacts,
     {
