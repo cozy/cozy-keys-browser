@@ -94,7 +94,10 @@ export class CipherService implements CipherServiceAbstraction {
     originalCipher: Cipher = null
   ): Promise<Cipher> {
     // Adjust password history
+    /* Cozy customization; we do not use password history for Papers & Contacts. Avoid to decrypt Papers & Contacts for nothing.
     if (model.id != null) {
+    */
+    if (model.id != null && model.type !== CipherType.Paper && model.type !== CipherType.Contact) {
       if (originalCipher == null) {
         originalCipher = await this.get(model.id);
       }
