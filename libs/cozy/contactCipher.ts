@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 // Cozy customization
+import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
@@ -13,16 +14,20 @@ import { fetchContacts, fetchContact } from "./queries";
 
 const convertContactsAsCiphers = async (
   cipherService: any,
+  cryptoService: CryptoService,
   i18nService: any,
   contacts: any
 ): Promise<CipherResponse[]> => {
   const contactsCiphers = [];
 
+  const key = await cryptoService.getKeyForUserEncryption();
+
   for (const contact of contacts) {
     const cipherResponse = await convertContactToCipherResponse(
       cipherService,
       i18nService,
-      contact
+      contact,
+      key
     );
 
     contactsCiphers.push(cipherResponse);
@@ -33,6 +38,7 @@ const convertContactsAsCiphers = async (
 
 export const fetchContactsAndConvertAsCiphers = async (
   cipherService: any,
+  cryptoService: CryptoService,
   cozyClientService: any,
   i18nService: any
 ): Promise<CipherResponse[]> => {
@@ -41,7 +47,12 @@ export const fetchContactsAndConvertAsCiphers = async (
   try {
     const contacts = await fetchContacts(client);
 
-    const contactsCiphers = await convertContactsAsCiphers(cipherService, i18nService, contacts);
+    const contactsCiphers = await convertContactsAsCiphers(
+      cipherService,
+      cryptoService,
+      i18nService,
+      contacts
+    );
 
     console.log(`${contactsCiphers.length} contacts ciphers will be added`);
 
@@ -55,6 +66,7 @@ export const fetchContactsAndConvertAsCiphers = async (
 
 export const favoriteContactCipher = async (
   cipherService: CipherService,
+  cryptoService: CryptoService,
   i18nService: I18nService,
   cipher: CipherView,
   cozyClientService: any
@@ -73,6 +85,7 @@ export const favoriteContactCipher = async (
 
   const cipherResponse = await convertContactToCipherResponse(
     cipherService,
+    cryptoService,
     i18nService,
     updatedContact
   );

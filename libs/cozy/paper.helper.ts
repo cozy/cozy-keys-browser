@@ -1,5 +1,6 @@
 import { PaperType } from "@bitwarden/common/enums/paperType";
 import { PaperApi } from "@bitwarden/common/models/api/paper.api";
+import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.response";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -39,6 +40,7 @@ export const convertPaperToCipherResponse = async (
   cipherService: any,
   i18nService: any,
   paper: any,
+  key: SymmetricCryptoKey,
   options: PaperConversionOptions
 ): Promise<CipherResponse> => {
   const { baseUrl } = options;
@@ -56,7 +58,7 @@ export const convertPaperToCipherResponse = async (
   cipherView.fields = buildFieldsFromPaper(i18nService, paper);
   cipherView.favorite = !!paper.cozyMetadata.favorite;
 
-  const cipherEncrypted = await cipherService.encrypt(cipherView);
+  const cipherEncrypted = await cipherService.encrypt(cipherView, key);
   const cipherViewEncrypted = new CipherView(cipherEncrypted);
   const cipherViewResponse = new CipherResponse(cipherViewEncrypted);
   cipherViewResponse.id = cipherEncrypted.id;
