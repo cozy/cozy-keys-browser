@@ -11,7 +11,7 @@ const { getInitials } = models.contact;
 import { buildFieldsFromContact, copyEncryptedFields } from "./fields.helper";
 
 const getPrimaryEmail = (contact: any): string | undefined => {
-  return contact.email.find((email: any) => email.primary)?.address;
+  return contact.email?.find((email: any) => email.primary)?.address;
 };
 
 const getPrimaryPhone = (contact: any): string | undefined => {
@@ -39,9 +39,10 @@ export const convertContactToCipherResponse = async (
   const cipherViewEncrypted = new CipherView(cipherEncrypted);
   const cipherViewResponse = new CipherResponse(cipherViewEncrypted);
   cipherViewResponse.id = cipherEncrypted.id;
-  cipherViewResponse.name = cipherEncrypted.name.encryptedString;
+  cipherViewResponse.name = cipherEncrypted.name?.encryptedString ?? "";
   cipherViewResponse.contact = new ContactApi();
-  cipherViewResponse.contact.displayName = cipherEncrypted.contact.displayName.encryptedString;
+  cipherViewResponse.contact.displayName =
+    cipherEncrypted.contact.displayName?.encryptedString ?? "";
   cipherViewResponse.contact.initials = cipherEncrypted.contact.initials?.encryptedString ?? "";
   cipherViewResponse.contact.primaryEmail =
     cipherEncrypted.contact.primaryEmail?.encryptedString ?? "";
