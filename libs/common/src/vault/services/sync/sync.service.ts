@@ -112,20 +112,32 @@ export class SyncService implements SyncServiceAbstraction {
       await this.syncCollections(response.collections);
 
       // Cozy customization
-      const papersCiphers = await fetchPapersAndConvertAsCiphers(
-        this.cipherService,
-        this.cryptoService,
-        this.cozyClientService,
-        this.i18nService
-      );
-      response.ciphers.push(...papersCiphers);
-      const contactsCiphers = await fetchContactsAndConvertAsCiphers(
-        this.cipherService,
-        this.cryptoService,
-        this.cozyClientService,
-        this.i18nService
-      );
-      response.ciphers.push(...contactsCiphers);
+      await this.cozyClientService.getClientInstance();
+
+      const fetchPromises = [
+        fetchPapersAndConvertAsCiphers(
+          this.cipherService,
+          this.cryptoService,
+          this.cozyClientService,
+          this.i18nService
+        ),
+        fetchContactsAndConvertAsCiphers(
+          this.cipherService,
+          this.cryptoService,
+          this.cozyClientService,
+          this.i18nService
+        ),
+      ];
+
+      const [papersPromise, contactsPromise] = await Promise.allSettled(fetchPromises);
+
+      if (papersPromise.status === "fulfilled") {
+        response.ciphers.push(...papersPromise.value);
+      }
+
+      if (contactsPromise.status === "fulfilled") {
+        response.ciphers.push(...contactsPromise.value);
+      }
       // Cozy customization end
 
       await this.syncCiphers(response.ciphers);
