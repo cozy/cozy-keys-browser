@@ -84,7 +84,7 @@ export const fetchPaper = async (client: CozyClient, _id: string) => {
 export const buildContactsQuery = () => ({
   definition: Q("io.cozy.contacts")
     .where({
-      _id: {
+      "indexes.byFamilyNameGivenNameEmailCozyUrl": {
         $gt: null,
       },
     })
@@ -99,11 +99,15 @@ export const buildContactsQuery = () => ({
           trashed: false,
         },
       ],
+      "indexes.byFamilyNameGivenNameEmailCozyUrl": {
+        $exists: true,
+      },
     })
-    .indexFields(["_id"])
+    .indexFields(["indexes.byFamilyNameGivenNameEmailCozyUrl"])
+    .sortBy([{ "indexes.byFamilyNameGivenNameEmailCozyUrl": "asc" }])
     .limitBy(1000),
   options: {
-    as: "io.cozy.contacts",
+    as: "io.cozy.contacts/indexedByFamilyNameGivenNameEmailCozyUrl",
   },
 });
 
