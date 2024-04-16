@@ -1283,7 +1283,6 @@ export class CipherService implements CipherServiceAbstraction {
           key
         );
         return;
-        return;
       // Cozy customization end
       default:
         throw new Error("Unknown cipher type.");
