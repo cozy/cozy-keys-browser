@@ -453,6 +453,12 @@ export class CipherService implements CipherServiceAbstraction {
         return true;
       }
 
+      // Cozy customization
+      if (cipher.type === CipherType.Contact) {
+        return cipher.favorite || cipher.contact.me;
+      }
+      // Cozy customization end
+
       if (url != null && cipher.type === CipherType.Login && cipher.login.uris != null) {
         for (let i = 0; i < cipher.login.uris.length; i++) {
           const u = cipher.login.uris[i];

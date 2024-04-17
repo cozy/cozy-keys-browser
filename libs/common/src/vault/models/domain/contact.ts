@@ -18,7 +18,6 @@ export class Contact extends Domain {
       return;
     }
 
-
     this.me = obj.me;
     this.buildDomainModel(
       this,
