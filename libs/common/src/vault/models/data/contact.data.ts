@@ -6,6 +6,7 @@ export class ContactData {
   initials: string;
   primaryEmail: string;
   primaryPhone: string;
+  me: boolean;
 
   constructor(data?: ContactApi) {
     if (data == null) {
@@ -16,6 +17,7 @@ export class ContactData {
     this.initials = data.initials;
     this.primaryEmail = data.primaryEmail;
     this.primaryPhone = data.primaryPhone;
+    this.me = data.me;
   }
 }
 // Cozy customization end

@@ -54,6 +54,7 @@ export const convertContactToCipherResponse = async (
   cipherViewResponse.creationDate = contact.cozyMetadata?.createdAt;
   cipherViewResponse.revisionDate = contact.cozyMetadata?.updatedAt;
   cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields ?? []);
+  cipherViewResponse.contact.me = contact.me;
 
   return cipherViewResponse;
 };
