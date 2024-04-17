@@ -763,6 +763,12 @@ li.active .icon-cozy-inline > svg {
   height: 24px;
 }
 
+.icon-contacts {
+  background-image: url("../images/icon-contacts.svg");
+  width: 24px;
+  height: 24px;
+}
+
 .text-danger .icon-cozy {
   @include themify($themes) {
     background-color: themed("dangerColor") !important;
