@@ -45,5 +45,23 @@ export class Contact extends Domain {
       encKey
     );
   }
+
+  toContactData(): ContactData {
+    const c = new ContactData();
+    c.me = this.me;
+    this.buildDataModel(
+      this,
+      c,
+      {
+        displayName: null,
+        initials: null,
+        primaryEmail: null,
+        primaryPhone: null,
+      },
+      []
+    );
+
+    return c;
+  }
 }
 // Cozy customization end
