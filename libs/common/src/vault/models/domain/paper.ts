@@ -49,5 +49,24 @@ export class Paper extends Domain {
       encKey
     );
   }
+
+  toPaperData(): PaperData {
+    const p = new PaperData();
+    p.type = this.type;
+    this.buildDataModel(
+      this,
+      p,
+      {
+        ownerName: null,
+        illustrationThumbnailUrl: null,
+        illustrationUrl: null,
+        qualificationLabel: null,
+        noteContent: null,
+      },
+      []
+    );
+
+    return p;
+  }
 }
 // Cozy customization end

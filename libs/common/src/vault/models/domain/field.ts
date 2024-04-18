@@ -64,6 +64,11 @@ export class Field extends Domain {
 
   toFieldData(): FieldData {
     const f = new FieldData();
+    f.id = this.id;
+    f.parentId = this.parentId;
+    f.subtype = this.subtype;
+    f.expirationData = this.expirationData;
+    f.label = this.label;
     this.buildDataModel(
       this,
       f,
