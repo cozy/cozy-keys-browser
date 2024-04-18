@@ -151,7 +151,7 @@ const buildContactField = ({
 
   const fieldOptions: FieldOptions = {};
 
-  if (type) {
+  if (type || label) {
     fieldOptions.label = {
       type,
       label,

@@ -47,10 +47,7 @@
             (dragstart)="setTextDataOnDrag($event, field.value)"
           >
             {{ field.name }}
-            <span *ngIf="field.label" aria-hidden="true"> · </span>
-            <span *ngIf="field.label">
-              {{ field.label.type }}
-            </span>
+            <app-vault-view-label *ngIf="field.label" [label]="field.label"></app-vault-view-label>
           </span>
           <!-- Cozy customization end -->
           <span *ngIf="field.type === fieldType.Linked" class="row-label">{{ field.name }}</span>

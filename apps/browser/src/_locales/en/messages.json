@@ -2423,5 +2423,20 @@
   },
   "encryptedInfoDismiss": {
     "message": "I understand"
+  },
+  "home": {
+    "message": "Home"
+  },
+  "work": {
+    "message": "Work"
+  },
+  "cell": {
+    "message": "Cell"
+  },
+  "voice": {
+    "message": "Voice"
+  },
+  "fax": {
+    "message": "Fax"
   }
 }
