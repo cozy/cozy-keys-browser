@@ -23,7 +23,7 @@ export const convertContactToCipherResponse = async (
   cipherService: any,
   i18nService: any,
   contact: any,
-  key: SymmetricCryptoKey
+  key?: SymmetricCryptoKey
 ): Promise<CipherResponse> => {
   const cipherView = new CipherView();
   cipherView.id = contact.id ?? contact._id;

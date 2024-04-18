@@ -33,13 +33,25 @@ export const convertPapersAsCiphers = async (
   for (const paper of papers) {
     let cipherResponse: CipherResponse;
     if (isNote(paper)) {
-      cipherResponse = await convertNoteToCipherResponse(cipherService, i18nService, paper, key, {
-        noteIllustrationUrl,
-      });
+      cipherResponse = await convertNoteToCipherResponse(
+        cipherService,
+        i18nService,
+        paper,
+        {
+          noteIllustrationUrl,
+        },
+        key
+      );
     } else {
-      cipherResponse = await convertPaperToCipherResponse(cipherService, i18nService, paper, key, {
-        baseUrl,
-      });
+      cipherResponse = await convertPaperToCipherResponse(
+        cipherService,
+        i18nService,
+        paper,
+        {
+          baseUrl,
+        },
+        key
+      );
     }
     papersCiphers.push(cipherResponse);
   }
@@ -78,7 +90,6 @@ export const fetchPapersAndConvertAsCiphers = async (
 
 export const favoritePaperCipher = async (
   cipherService: CipherService,
-  cryptoService: CryptoService,
   i18nService: I18nService,
   cipher: CipherView,
   cozyClientService: any
@@ -99,7 +110,6 @@ export const favoritePaperCipher = async (
 
   const cipherResponse = await convertPaperToCipherResponse(
     cipherService,
-    cryptoService,
     i18nService,
     updatePaperWithContacts,
     {
