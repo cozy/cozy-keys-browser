@@ -82,6 +82,7 @@ import { FlagConditionalComponent } from "../cozy/components/flag-conditional/fl
 import { IfFlagDirective } from "../cozy/components/flag-conditional/if-flag.directive";
 import { AddGenericComponent } from "../cozy/components/add-generic/add-generic.component";
 import { ViewExpirationDateComponent } from "../vault/popup/components/vault/view-expiration-date.component";
+import { ViewLabelComponent } from "../vault/popup/components/vault/view-label.component";
 import { ContactAvatarComponent } from "../vault/popup/components/vault/contact-avatar.component";
 import { ProfilesMigrationComponent } from "../cozy/components/profiles-migration/profiles-migration.component";
 import { EncryptedInfoComponent } from "../cozy/components/encrypted-info/encrypted-info.component";
@@ -170,6 +171,7 @@ import { EncryptedInfoComponent } from "../cozy/components/encrypted-info/encryp
     IfFlagDirective,
     AddGenericComponent,
     ViewExpirationDateComponent,
+    ViewLabelComponent,
     ContactAvatarComponent,
     ProfilesMigrationComponent,
     EncryptedInfoComponent,

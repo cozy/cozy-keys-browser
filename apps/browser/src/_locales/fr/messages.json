@@ -2471,5 +2471,20 @@
   },
   "encryptedInfoDismiss": {
     "message": "J'ai compris"
+  },
+  "home": {
+    "message": "Perso"
+  },
+  "work": {
+    "message": "Pro"
+  },
+  "cell": {
+    "message": "Mobile"
+  },
+  "voice": {
+    "message": "Fixe"
+  },
+  "fax": {
+    "message": "Fax"
   }
 }
