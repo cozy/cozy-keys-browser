@@ -56,8 +56,8 @@ export const convertNoteToCipherResponse = async (
   cipherService: any,
   i18nService: any,
   paper: any,
-  key: SymmetricCryptoKey,
-  options: NoteConversionOptions
+  options: NoteConversionOptions,
+  key?: SymmetricCryptoKey
 ): Promise<CipherResponse> => {
   const { noteIllustrationUrl } = options;
 

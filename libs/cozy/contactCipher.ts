@@ -66,7 +66,6 @@ export const fetchContactsAndConvertAsCiphers = async (
 
 export const favoriteContactCipher = async (
   cipherService: CipherService,
-  cryptoService: CryptoService,
   i18nService: I18nService,
   cipher: CipherView,
   cozyClientService: any
@@ -85,7 +84,6 @@ export const favoriteContactCipher = async (
 
   const cipherResponse = await convertContactToCipherResponse(
     cipherService,
-    cryptoService,
     i18nService,
     updatedContact
   );
