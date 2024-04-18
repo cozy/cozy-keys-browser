@@ -45,6 +45,9 @@ export class RealTimeNotifications {
     // We don't want to listen Creation as it is always followed by an Update notification with more data
     await realtime.subscribe("updated", doctypePaper, this.dispatchUpdatePaper.bind(this));
     await realtime.subscribe("deleted", doctypePaper, this.dispatchDeleteCipher.bind(this));
+
+    const doctypeThumbnail = "io.cozy.files.thumbnails";
+    await realtime.subscribe("created", doctypeThumbnail, this.dispatchCreateThumbnail.bind(this));
   }
 
   async unregister() {
@@ -60,6 +63,9 @@ export class RealTimeNotifications {
     const doctypePaper = "io.cozy.files";
     await realtime.unsubscribe("updated", doctypePaper, this.dispatchUpdatePaper);
     await realtime.unsubscribe("deleted", doctypePaper, this.dispatchDeleteCipher);
+
+    const doctypeThumbnail = "io.cozy.files.thumbnails";
+    await realtime.unsubscribe("created", doctypeThumbnail, this.dispatchCreateThumbnail);
   }
 
   async dispatchCreateOrUpdateContact(data: any) {
@@ -129,5 +135,15 @@ export class RealTimeNotifications {
     await this.cipherService.upsert(new CipherData(cipherResponse));
     this.messagingService.send("syncedUpsertedCipher", { cipherId: paperId });
     this.messagingService.send("syncCompleted", { successfully: true });
+  }
+
+  async dispatchCreateThumbnail(data: any) {
+    const cipher = await this.cipherService.get(data._id);
+
+    if (cipher === null) {
+      return;
+    }
+
+    this.upsertPaperFromId(data._id);
   }
 }
