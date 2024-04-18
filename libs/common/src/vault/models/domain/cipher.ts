@@ -248,6 +248,12 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
       case CipherType.Identity:
         c.identity = this.identity.toIdentityData();
         break;
+      case CipherType.Paper:
+        c.paper = this.paper.toPaperData();
+        break;
+      case CipherType.Contact:
+        c.contact = this.contact.toContactData();
+        break;
       default:
         break;
     }
