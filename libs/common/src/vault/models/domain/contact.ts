@@ -10,6 +10,7 @@ export class Contact extends Domain {
   initials: EncString;
   primaryEmail: EncString;
   primaryPhone: EncString;
+  me: boolean;
 
   constructor(obj?: ContactData) {
     super();
@@ -17,6 +18,7 @@ export class Contact extends Domain {
       return;
     }
 
+    this.me = obj.me;
     this.buildDomainModel(
       this,
       obj,

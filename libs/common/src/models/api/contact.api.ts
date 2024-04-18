@@ -6,6 +6,7 @@ export class ContactApi extends BaseResponse {
   initials: string;
   primaryEmail: string;
   primaryPhone: string;
+  me: boolean;
 
   constructor(data: any = null) {
     super(data);
@@ -17,6 +18,7 @@ export class ContactApi extends BaseResponse {
     this.initials = this.getResponseProperty("Initials");
     this.primaryEmail = this.getResponseProperty("PrimaryEmail");
     this.primaryPhone = this.getResponseProperty("PrimaryPhone");
+    this.me = this.getResponseProperty("Me");
   }
 }
 // Cozy customization end

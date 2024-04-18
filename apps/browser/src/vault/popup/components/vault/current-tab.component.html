@@ -185,5 +185,35 @@
         <!-- end custo -->
       </div>
     </div>
+    <!-- Cozy customization -->
+    <!-- Add me and favorite Cozy Contacts -->
+    <div class="box list">
+      <!---->
+      <h2 class="box-header">
+        {{ "typeContacts" | i18n }}
+      </h2>
+      <div class="box-content">
+        <app-cipher-row
+          *ngFor="let contactCipher of contactCiphers"
+          [cipher]="contactCipher"
+          title="{{ 'viewItem' | i18n }}"
+          [showView]="false"
+          (onSelected)="viewCipher($event)"
+          (onView)="viewCipher($event)"
+          (onAutofill)="fillCipher(contactCipher)"
+        ></app-cipher-row>
+        <!-- Cozy custo -->
+        <div
+          class="box-content-row padded no-hover"
+          *ngIf="contactCiphers && !contactCiphers.length"
+        >
+          <p class="text-center">{{ "addContactExplanation" | i18n }}</p>
+          <button type="button" class="btn link block" (click)="addContactCipher()">
+            {{ "addContact" | i18n }}
+          </button>
+        </div>
+        <!-- end custo -->
+      </div>
+    </div>
   </div>
 </main>

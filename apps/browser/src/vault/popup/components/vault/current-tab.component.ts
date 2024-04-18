@@ -52,6 +52,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   cardCiphers: CipherView[];
   identityCiphers: CipherView[];
   loginCiphers: CipherView[];
+  contactCiphers: CipherView[];
   url: string;
   hostname: string;
   searchText: string;
@@ -199,6 +200,13 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   addIdentityCipher() {
     this.router.navigate(["/add-cipher"], { queryParams: { type: 4 } });
   }
+
+  // Cozy customization
+  addContactCipher() {
+    const appUrl = this.cozyClientService.getAppURL("contacts", "new");
+    window.open(appUrl);
+  }
+  // Cozy customization end
   //*/
 
   viewCipher(cipher: CipherView) {
@@ -333,6 +341,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     this.loginCiphers = [];
     this.cardCiphers = [];
     this.identityCiphers = [];
+    this.contactCiphers = [];
 
     ciphers.forEach((c) => {
       if (!this.vaultFilterService.filterCipherForSelectedVault(c)) {
@@ -346,6 +355,11 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
           case CipherType.Identity:
             this.identityCiphers.push(c);
             break;
+          // Cozy customization
+          case CipherType.Contact:
+            this.contactCiphers.push(c);
+            break;
+          // Cozy customization end
           default:
             break;
         }

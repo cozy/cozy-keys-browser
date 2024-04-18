@@ -10,12 +10,15 @@ export class ContactView extends ItemView {
   initials: string = null;
   primaryEmail: string = null;
   primaryPhone: string = null;
+  me = false;
 
   constructor(p?: Contact) {
     super();
     if (!p) {
       return;
     }
+
+    this.me = p.me;
   }
 
   get subTitle(): string {
