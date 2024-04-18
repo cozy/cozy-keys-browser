@@ -113,7 +113,6 @@ export class RealTimeNotifications {
         this.cipherService,
         this.i18nService,
         hydratedData,
-        null,
         {
           noteIllustrationUrl,
         }
@@ -125,7 +124,6 @@ export class RealTimeNotifications {
         this.cipherService,
         this.i18nService,
         hydratedData,
-        null,
         {
           baseUrl,
         }
