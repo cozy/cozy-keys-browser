@@ -231,6 +231,7 @@ export class ViewComponent extends BaseViewComponent {
       if (this.cipher.type === CipherType.Paper) {
         await favoritePaperCipher(
           this.cipherService,
+          this.cryptoService,
           this.i18nService,
           this.cipher,
           this.cozyClientService
@@ -238,6 +239,7 @@ export class ViewComponent extends BaseViewComponent {
       } else if (this.cipher.type === CipherType.Contact) {
         await favoriteContactCipher(
           this.cipherService,
+          this.cryptoService,
           this.i18nService,
           this.cipher,
           this.cozyClientService
