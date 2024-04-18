@@ -32,28 +32,33 @@ export const convertPapersAsCiphers = async (
 
   for (const paper of papers) {
     let cipherResponse: CipherResponse;
-    if (isNote(paper)) {
-      cipherResponse = await convertNoteToCipherResponse(
-        cipherService,
-        i18nService,
-        paper,
-        {
-          noteIllustrationUrl,
-        },
-        key
-      );
-    } else {
-      cipherResponse = await convertPaperToCipherResponse(
-        cipherService,
-        i18nService,
-        paper,
-        {
-          baseUrl,
-        },
-        key
-      );
+    try {
+      if (isNote(paper)) {
+        cipherResponse = await convertNoteToCipherResponse(
+          cipherService,
+          i18nService,
+          paper,
+          {
+            noteIllustrationUrl,
+          },
+          key
+        );
+      } else {
+        cipherResponse = await convertPaperToCipherResponse(
+          cipherService,
+          i18nService,
+          paper,
+          {
+            baseUrl,
+          },
+          key
+        );
+      }
+
+      papersCiphers.push(cipherResponse);
+    } catch (e) {
+      console.log(`Error during conversion of paper ${paper.id}`, paper, e);
     }
-    papersCiphers.push(cipherResponse);
   }
 
   return papersCiphers;

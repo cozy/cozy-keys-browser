@@ -23,14 +23,18 @@ const convertContactsAsCiphers = async (
   const key = await cryptoService.getKeyForUserEncryption();
 
   for (const contact of contacts) {
-    const cipherResponse = await convertContactToCipherResponse(
-      cipherService,
-      i18nService,
-      contact,
-      key
-    );
+    try {
+      const cipherResponse = await convertContactToCipherResponse(
+        cipherService,
+        i18nService,
+        contact,
+        key
+      );
 
-    contactsCiphers.push(cipherResponse);
+      contactsCiphers.push(cipherResponse);
+    } catch (e) {
+      console.log(`Error during conversion of contact ${contact.id}`, contact, e);
+    }
   }
 
   return contactsCiphers;
