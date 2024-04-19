@@ -918,4 +918,8 @@ select:focus-visible {
     outline: 1px solid themed("boxBackgroundHoverColor");
   }
 }
+
+.box.list .box-content .box-content-row .no-white-space {
+  white-space: normal !important;
+}
 /* end custo */
