@@ -541,6 +541,14 @@ li.active .icon-cozy-inline > svg {
   }
 }
 
+.icon-unencrypted {
+  mask-image: url("../images/icon-unencrypted.svg");
+  -webkit-mask-image: url("../images/icon-unencrypted.svg");
+  @include themify($themes) {
+    background-color: themed("mutedColor");
+  }
+}
+
 .icon-cozy-details {
   width: 10px;
   height: 10px;
