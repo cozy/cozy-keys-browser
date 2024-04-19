@@ -30,7 +30,7 @@ const buildIllustrationThumbnailUrl = (paper: any, baseUrl: string) => {
   return paper.links.tiny ? new URL(paper.links.tiny, baseUrl).toString() : DEFAULT_THUMBNAIL_URL;
 };
 
-const buildIllustrationUrl = (paper: any, baseUrl: string) => {
+export const buildIllustrationUrl = (paper: any, baseUrl: string) => {
   return paper.links.medium
     ? new URL(paper.links.medium, baseUrl).toString()
     : DEFAULT_THUMBNAIL_URL;
