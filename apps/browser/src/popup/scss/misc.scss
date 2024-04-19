@@ -533,6 +533,14 @@ li.active .icon-cozy-inline > svg {
   height: 24px;
 }
 
+.icon-encrypted {
+  mask-image: url("../images/icon-encrypted.svg");
+  -webkit-mask-image: url("../images/icon-encrypted.svg");
+  @include themify($themes) {
+    background-color: themed("mutedColor");
+  }
+}
+
 .icon-identity {
   background-image: url("../images/icons-identity.svg");
   width: 24px;

@@ -1,0 +1,17 @@
+<div class="encryptedInfo" *ngIf="!tooltipDismissed">
+  <div class="alert info">
+    <div class="alert-icon icon-encrypted"></div>
+    <div class="alert-message">
+      <div class="alert-title">{{ "encryptedInfoTitle" | i18n }}</div>
+      <div>{{ "encryptedInfoContent" | i18n }}</div>
+    </div>
+    <div class="alert-action">
+      <button type="button" class="btn link" (click)="moreInfo()">
+        {{ "encryptedInfoMoreDetails" | i18n }}
+      </button>
+      <button type="button" class="btn link" (click)="dismiss()">
+        {{ "encryptedInfoDismiss" | i18n }}
+      </button>
+    </div>
+  </div>
+</div>

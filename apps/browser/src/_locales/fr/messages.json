@@ -2459,5 +2459,17 @@
   },
   "profileMigrationAction": {
     "message": "En savoir plus"
+  },
+  "encryptedInfoTitle": {
+    "message": "Chiffré de bout en bout"
+  },
+  "encryptedInfoContent": {
+    "message": "Attention, ne perdez pas votre mot de passe Cozy. Vos identifiants et mots de passe sont chiffrés de bout en bout. Personne d’autre que vous ne peut y accéder, pas même Cozy Cloud."
+  },
+  "encryptedInfoMoreDetails": {
+    "message": "En savoir plus"
+  },
+  "encryptedInfoDismiss": {
+    "message": "J'ai compris"
   }
 }

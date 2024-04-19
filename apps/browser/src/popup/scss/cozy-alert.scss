@@ -17,6 +17,24 @@
       }
     }
   }
+  &.info {
+    @include themify($themes) {
+      background-color: change-color(themed("primaryColor"), $alpha: 0.12);
+    }
+    .alert-icon {
+      @include themify($themes) {
+        background-color: themed("primaryColor");
+        color: themed("primaryColor");
+      }
+    }
+    .alert-action {
+      .btn.link {
+        @include themify($themes) {
+          color: themed("primaryColor") !important;
+        }
+      }
+    }
+  }
   display: flex;
   flex-wrap: wrap;
 
@@ -82,7 +100,8 @@
   }
 }
 
-.profileMigration {
+.profileMigration,
+.encryptedInfo {
   @include themify($themes) {
     background-color: themed("backgroundColorAlt");
   }
