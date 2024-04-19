@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { CozyClientService } from "../../../../../../apps/browser/src/popup/services/cozyClient.service";
 import { fetchContactsAndConvertAsCiphers } from "../../../../../../libs/cozy/contactCipher";
 import { fetchPapersAndConvertAsCiphers } from "../../../../../../libs/cozy/paperCipher";
@@ -110,7 +111,6 @@ export class SyncService implements SyncServiceAbstraction {
       await this.syncProfile(response.profile);
       await this.syncFolders(response.folders);
       await this.syncCollections(response.collections);
-      await this.syncCiphers(response.ciphers);
 
       // Cozy customization
       await this.cozyClientService.getClientInstance();
@@ -132,11 +132,24 @@ export class SyncService implements SyncServiceAbstraction {
 
       const [papersPromise, contactsPromise] = await Promise.allSettled(fetchPromises);
 
+      /*
+        Because syncCiphers replace previous ciphers, we need to do syncCiphers :
+        - after we converted papers and contacts because papers and contacts conversion
+          can try to reuse previous ciphers
+        - before we upsert papers and contacts because we want to have
+          bitwarden ciphers and papers and contacts ciphers
+      */
+      await this.syncCiphers(response.ciphers);
+
       if (papersPromise.status === "fulfilled") {
+        console.log(`${papersPromise.value.length} contacts ciphers will be added`);
+
         await this.cipherService.upsert(papersPromise.value);
       }
 
       if (contactsPromise.status === "fulfilled") {
+        console.log(`${contactsPromise.value.length} papers ciphers will be added`);
+
         await this.cipherService.upsert(contactsPromise.value);
       }
       // Cozy customization end
