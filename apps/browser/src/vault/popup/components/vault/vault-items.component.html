@@ -180,6 +180,10 @@
           {{ groupingTitle }}
           <span class="flex-right">{{ isSearching() ? ciphers.length : "" }}</span>
         </h2>
+
+        <app-encrypted-info
+          *ngIf="type === cipherType.Login || type === cipherType.Card"
+        ></app-encrypted-info>
         <div class="box-content">
           <app-cipher-row
             *cdkVirtualFor="let c of ciphers; let last = last"
