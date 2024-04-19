@@ -3,14 +3,13 @@ import { Node, Schema } from "prosemirror-model";
 import { EditorState } from "prosemirror-state";
 
 import { PaperType } from "@bitwarden/common/enums/paperType";
-import { PaperApi } from "@bitwarden/common/models/api/paper.api";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
-import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.response";
+import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { PaperView } from "@bitwarden/common/vault/models/view/paper.view";
 
-import { buildFieldsFromPaper, copyEncryptedFields, buildField } from "./fields.helper";
+import { buildFieldsFromPaper, buildField } from "./fields.helper";
 
 interface NoteConversionOptions {
   noteIllustrationUrl: string;
@@ -52,13 +51,13 @@ export const noteToText = (note: any): string => {
 
   return textOnly;
 };
-export const convertNoteToCipherResponse = async (
+export const convertNoteToCipherData = async (
   cipherService: any,
   i18nService: any,
   paper: any,
   options: NoteConversionOptions,
   key?: SymmetricCryptoKey
-): Promise<CipherResponse> => {
+): Promise<CipherData> => {
   const { noteIllustrationUrl } = options;
 
   const cipherView = new CipherView();
@@ -74,24 +73,12 @@ export const convertNoteToCipherResponse = async (
   cipherView.paper.qualificationLabel = paper.metadata.qualification.label;
   cipherView.fields = buildFieldsFromPaper(i18nService, paper);
   cipherView.fields.push(buildField(i18nService.t("content"), cipherView.paper.noteContent));
+  cipherView.creationDate = new Date(paper.cozyMetadata.createdAt);
+  cipherView.revisionDate = new Date(paper.cozyMetadata.updatedAt);
 
   const cipherEncrypted = await cipherService.encrypt(cipherView, key);
-  const cipherViewEncrypted = new CipherView(cipherEncrypted);
-  const cipherViewResponse = new CipherResponse(cipherViewEncrypted);
-  cipherViewResponse.id = cipherEncrypted.id;
-  cipherViewResponse.name = cipherEncrypted.name.encryptedString;
 
-  cipherViewResponse.paper = new PaperApi();
-  cipherViewResponse.paper.type = cipherView.paper.type;
-  cipherViewResponse.paper.noteContent = cipherEncrypted.paper.noteContent?.encryptedString ?? "";
-  cipherViewResponse.paper.illustrationThumbnailUrl =
-    cipherEncrypted.paper.illustrationThumbnailUrl.encryptedString;
-  cipherViewResponse.paper.illustrationUrl = cipherEncrypted.paper.illustrationUrl.encryptedString;
-  cipherViewResponse.paper.qualificationLabel =
-    cipherEncrypted.paper.qualificationLabel.encryptedString;
-  cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields);
-  cipherViewResponse.creationDate = paper.cozyMetadata.createdAt;
-  cipherViewResponse.revisionDate = paper.cozyMetadata.updatedAt;
+  const cipherData = cipherEncrypted.toCipherData();
 
-  return cipherViewResponse;
+  return cipherData;
 };

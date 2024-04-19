@@ -1,12 +1,11 @@
 import { PaperType } from "@bitwarden/common/enums/paperType";
-import { PaperApi } from "@bitwarden/common/models/api/paper.api";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
-import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.response";
+import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { PaperView } from "@bitwarden/common/vault/models/view/paper.view";
 
-import { buildFieldsFromPaper, copyEncryptedFields } from "./fields.helper";
+import { buildFieldsFromPaper } from "./fields.helper";
 
 interface PaperConversionOptions {
   baseUrl: string;
@@ -36,13 +35,13 @@ export const buildIllustrationUrl = (paper: any, baseUrl: string) => {
     : DEFAULT_THUMBNAIL_URL;
 };
 
-export const convertPaperToCipherResponse = async (
+export const convertPaperToCipherData = async (
   cipherService: any,
   i18nService: any,
   paper: any,
   options: PaperConversionOptions,
   key?: SymmetricCryptoKey
-): Promise<CipherResponse> => {
+): Promise<CipherData> => {
   const { baseUrl } = options;
 
   const cipherView = new CipherView();
@@ -57,25 +56,12 @@ export const convertPaperToCipherResponse = async (
   cipherView.paper.qualificationLabel = paper.metadata.qualification.label;
   cipherView.fields = buildFieldsFromPaper(i18nService, paper);
   cipherView.favorite = !!paper.cozyMetadata.favorite;
+  cipherView.creationDate = new Date(paper.cozyMetadata.createdAt);
+  cipherView.revisionDate = new Date(paper.cozyMetadata.updatedAt);
 
   const cipherEncrypted = await cipherService.encrypt(cipherView, key);
-  const cipherViewEncrypted = new CipherView(cipherEncrypted);
-  const cipherViewResponse = new CipherResponse(cipherViewEncrypted);
-  cipherViewResponse.id = cipherEncrypted.id;
-  cipherViewResponse.name = cipherEncrypted.name.encryptedString;
 
-  cipherViewResponse.paper = new PaperApi();
-  cipherViewResponse.paper.type = cipherView.paper.type;
-  cipherViewResponse.paper.ownerName = cipherEncrypted.paper.ownerName?.encryptedString ?? "";
-  cipherViewResponse.paper.illustrationThumbnailUrl =
-    cipherEncrypted.paper.illustrationThumbnailUrl.encryptedString;
-  cipherViewResponse.paper.illustrationUrl = cipherEncrypted.paper.illustrationUrl.encryptedString;
-  cipherViewResponse.paper.qualificationLabel =
-    cipherEncrypted.paper.qualificationLabel.encryptedString;
-  cipherViewResponse.fields = copyEncryptedFields(cipherEncrypted.fields);
-  cipherViewResponse.favorite = cipherEncrypted.favorite;
-  cipherViewResponse.creationDate = paper.cozyMetadata.createdAt;
-  cipherViewResponse.revisionDate = paper.cozyMetadata.updatedAt;
+  const cipherData = cipherEncrypted.toCipherData();
 
-  return cipherViewResponse;
+  return cipherData;
 };

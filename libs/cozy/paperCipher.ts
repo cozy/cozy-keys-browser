@@ -8,11 +8,10 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
-import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.response";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import { convertNoteToCipherResponse, isNote, fetchNoteIllustrationUrl } from "./note.helper";
-import { convertPaperToCipherResponse } from "./paper.helper";
+import { convertNoteToCipherData, isNote, fetchNoteIllustrationUrl } from "./note.helper";
+import { convertPaperToCipherData } from "./paper.helper";
 import { fetchPapers, fetchPaper } from "./queries";
 
 export const convertPapersAsCiphers = async (
@@ -21,7 +20,7 @@ export const convertPapersAsCiphers = async (
   i18nService: any,
   client: CozyClient,
   papers: any
-): Promise<CipherResponse[]> => {
+): Promise<CipherData[]> => {
   const baseUrl = client.getStackClient().uri;
 
   const papersCiphers = [];
@@ -31,10 +30,10 @@ export const convertPapersAsCiphers = async (
   const key = await cryptoService.getKeyForUserEncryption();
 
   for (const paper of papers) {
-    let cipherResponse: CipherResponse;
+    let cipherData: CipherData;
     try {
       if (isNote(paper)) {
-        cipherResponse = await convertNoteToCipherResponse(
+        cipherData = await convertNoteToCipherData(
           cipherService,
           i18nService,
           paper,
@@ -44,7 +43,7 @@ export const convertPapersAsCiphers = async (
           key
         );
       } else {
-        cipherResponse = await convertPaperToCipherResponse(
+        cipherData = await convertPaperToCipherData(
           cipherService,
           i18nService,
           paper,
@@ -55,7 +54,7 @@ export const convertPapersAsCiphers = async (
         );
       }
 
-      papersCiphers.push(cipherResponse);
+      papersCiphers.push(cipherData);
     } catch (e) {
       console.log(`Error during conversion of paper ${paper.id}`, paper, e);
     }
@@ -69,7 +68,7 @@ export const fetchPapersAndConvertAsCiphers = async (
   cryptoService: CryptoService,
   cozyClientService: any,
   i18nService: any
-): Promise<CipherResponse[]> => {
+): Promise<CipherData[]> => {
   const client = await cozyClientService.getClientInstance();
 
   try {
@@ -113,7 +112,7 @@ export const favoritePaperCipher = async (
 
   const [updatePaperWithContacts] = client.hydrateDocuments("io.cozy.files", [updatedPaper]);
 
-  const cipherResponse = await convertPaperToCipherResponse(
+  const cipherData = await convertPaperToCipherData(
     cipherService,
     i18nService,
     updatePaperWithContacts,
@@ -122,9 +121,7 @@ export const favoritePaperCipher = async (
     }
   );
 
-  const cipherData = new CipherData(cipherResponse);
-
-  await cipherService.upsert([cipherData]);
+  await cipherService.upsert(cipherData);
 
   return true;
 };

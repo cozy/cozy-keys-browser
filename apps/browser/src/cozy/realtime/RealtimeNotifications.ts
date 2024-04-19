@@ -3,16 +3,14 @@ import CozyClient from "cozy-client";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
-import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.response";
 
-import { convertContactToCipherResponse } from "../../../../../libs/cozy/contact.helper";
+import { convertContactToCipherData } from "../../../../../libs/cozy/contact.helper";
 import {
-  convertNoteToCipherResponse,
+  convertNoteToCipherData,
   fetchNoteIllustrationUrl,
   isNote,
 } from "../../../../../libs/cozy/note.helper";
-import { convertPaperToCipherResponse } from "../../../../../libs/cozy/paper.helper";
+import { convertPaperToCipherData } from "../../../../../libs/cozy/paper.helper";
 import { fetchPaper } from "../../../../../libs/cozy/queries";
 
 export class RealTimeNotifications {
@@ -69,13 +67,13 @@ export class RealTimeNotifications {
   }
 
   async dispatchCreateOrUpdateContact(data: any) {
-    const cipherResponse = await convertContactToCipherResponse(
+    const cipherData = await convertContactToCipherData(
       this.cipherService,
       this.i18nService,
       data,
       null
     );
-    await this.cipherService.upsert(new CipherData(cipherResponse));
+    await this.cipherService.upsert(cipherData);
     this.messagingService.send("syncedUpsertedCipher", { cipherId: data._id });
     this.messagingService.send("syncCompleted", { successfully: true });
   }
@@ -105,11 +103,11 @@ export class RealTimeNotifications {
     const itemFromDb = await fetchPaper(this.client, paperId);
     const hydratedData = this.client.hydrateDocuments("io.cozy.files", [itemFromDb])[0];
 
-    let cipherResponse: CipherResponse;
+    let cipherData;
     if (isNote(itemFromDb)) {
       const noteIllustrationUrl = await fetchNoteIllustrationUrl(this.client);
 
-      cipherResponse = await convertNoteToCipherResponse(
+      cipherData = await convertNoteToCipherData(
         this.cipherService,
         this.i18nService,
         hydratedData,
@@ -120,7 +118,7 @@ export class RealTimeNotifications {
     } else {
       const baseUrl = this.client.getStackClient().uri;
 
-      cipherResponse = await convertPaperToCipherResponse(
+      cipherData = await convertPaperToCipherData(
         this.cipherService,
         this.i18nService,
         hydratedData,
@@ -130,7 +128,7 @@ export class RealTimeNotifications {
       );
     }
 
-    await this.cipherService.upsert(new CipherData(cipherResponse));
+    await this.cipherService.upsert(cipherData);
     this.messagingService.send("syncedUpsertedCipher", { cipherId: paperId });
     this.messagingService.send("syncCompleted", { successfully: true });
   }
