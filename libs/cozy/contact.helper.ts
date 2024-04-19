@@ -26,7 +26,7 @@ export const convertContactToCipherResponse = async (
   key: SymmetricCryptoKey
 ): Promise<CipherResponse> => {
   const cipherView = new CipherView();
-  cipherView.id = contact.id;
+  cipherView.id = contact.id ?? contact._id;
   cipherView.name = contact.displayName;
   cipherView.type = CipherType.Contact;
   cipherView.contact = new ContactView();
