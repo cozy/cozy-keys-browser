@@ -15,7 +15,7 @@ import { convertNoteToCipherResponse, isNote, fetchNoteIllustrationUrl } from ".
 import { convertPaperToCipherResponse } from "./paper.helper";
 import { fetchPapers, fetchPaper } from "./queries";
 
-const convertPapersAsCiphers = async (
+export const convertPapersAsCiphers = async (
   cipherService: any,
   cryptoService: CryptoService,
   i18nService: any,

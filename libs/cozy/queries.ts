@@ -43,17 +43,12 @@ const buildFilesQueryWithQualificationLabel = () => {
   };
 };
 
-const buildFileQueryWithContacts = (_id: string) => {
+const buildFileQueryById = (_id: string) => {
   return {
-    definition: () =>
-      Q("io.cozy.files")
-        .where({
-          _id: _id,
-        })
-        .limitBy(1)
-        .include(["contacts"]),
+    definition: () => Q("io.cozy.files").getById(_id),
     options: {
-      as: `io.cozy.files/byIdWithContacts`,
+      as: `io.cozy.files/byId`,
+      singleDocData: true,
     },
   };
 };
@@ -69,14 +64,14 @@ export const fetchPapers = async (client: CozyClient) => {
 };
 
 export const fetchPaper = async (client: CozyClient, _id: string) => {
-  const fileQueryWithContact = buildFileQueryWithContacts(_id);
+  const fileQueryWithContact = buildFileQueryById(_id);
 
   const { data } = await client.query(
     fileQueryWithContact.definition(),
     fileQueryWithContact.options
   );
 
-  return data[0];
+  return data;
 };
 
 // Contacts
