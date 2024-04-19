@@ -5,6 +5,7 @@ import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
@@ -27,6 +28,10 @@ const convertContactsAsCiphers = async (
 
       contactsCiphers.push(cipherData);
     } catch (e) {
+      if (e.message === "No encryption key provided.") {
+        throw e;
+      }
+
       console.log(`Error during conversion of contact ${contact.id}`, contact, e);
     }
   }
@@ -52,13 +57,16 @@ export const fetchContactsAndConvertAsCiphers = async (
       contacts
     );
 
-    console.log(`${contactsCiphers.length} contacts ciphers will be added`);
-
     return contactsCiphers;
   } catch (e) {
-    console.log("Error while fetching contacts and converting them as ciphers", e);
+    console.log(
+      "Error while fetching contacts and converting them as ciphers. Fallbacking to stored contacts.",
+      e
+    );
 
-    return [];
+    return (await cipherService.getAll())
+      .filter((cipher: any) => cipher.type === CipherType.Contact)
+      .map((cipher: any) => cipher.toCipherData());
   }
 };
 
