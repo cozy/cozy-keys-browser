@@ -84,6 +84,7 @@ import { AddGenericComponent } from "../cozy/components/add-generic/add-generic.
 import { ViewExpirationDateComponent } from "../vault/popup/components/vault/view-expiration-date.component";
 import { ContactAvatarComponent } from "../vault/popup/components/vault/contact-avatar.component";
 import { ProfilesMigrationComponent } from "../cozy/components/profiles-migration/profiles-migration.component";
+import { EncryptedInfoComponent } from "../cozy/components/encrypted-info/encrypted-info.component";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -171,6 +172,7 @@ import { ProfilesMigrationComponent } from "../cozy/components/profiles-migratio
     ViewExpirationDateComponent,
     ContactAvatarComponent,
     ProfilesMigrationComponent,
+    EncryptedInfoComponent,
     /* end Cozy components */
   ],
   providers: [CurrencyPipe, DatePipe],

@@ -2411,5 +2411,17 @@
   },
   "profileMigrationAction": {
     "message": "More details"
+  },
+  "encryptedInfoTitle": {
+    "message": "End-to-end encryption"
+  },
+  "encryptedInfoContent": {
+    "message": "Don't lose your Cozy password. Your logins and passwords are encrypted from end-to-end. No one but you can access them, not even Cozy Cloud."
+  },
+  "encryptedInfoMoreDetails": {
+    "message": "More details"
+  },
+  "encryptedInfoDismiss": {
+    "message": "I understand"
   }
 }
