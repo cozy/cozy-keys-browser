@@ -358,7 +358,8 @@ export default class MainBackground {
       this.apiService,
       this.messagingService,
       this.cipherService,
-      this.stateService
+      this.stateService,
+      this.i18nService
     );
     // Cozy customization end
     this.folderService = new BrowserFolderService(

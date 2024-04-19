@@ -2,9 +2,11 @@
 // @ts-nocheck
 import CozyClient, { HasMany, Q, QueryDefinition, generateWebLink } from "cozy-client";
 import flag from "cozy-flags";
+import { RealtimePlugin } from "cozy-realtime";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { SecureNoteType } from "@bitwarden/common/enums/secureNoteType";
 import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
@@ -18,6 +20,7 @@ import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 import { SecureNoteView } from "@bitwarden/common/vault/models/view/secure-note.view";
 
+import { RealTimeNotifications } from "../../cozy/realtime/RealtimeNotifications";
 import manifest from "../../manifest.json";
 import { BrowserStateService as StateService } from "../../services/abstractions/browser-state.service";
 
@@ -45,13 +48,15 @@ export class CozyClientService {
   protected flagChangedPointer: any = undefined;
   private estimatedVaultCreationDate: Date = null;
   private subDomainType: "nested" | "flat";
+  private realTimeNotifications: RealTimeNotifications;
 
   constructor(
     protected environmentService: EnvironmentService,
     protected apiService: ApiService,
     protected messagingService: MessagingService,
     protected cipherService: CipherService,
-    private stateService: StateService
+    private stateService: StateService,
+    private i18nService: I18nService
   ) {
     this.flagChangedPointer = this.flagChanged.bind(this);
   }
@@ -111,6 +116,7 @@ export class CozyClientService {
   async createClient() {
     if (this.instance) {
       this.unregisterFlags();
+      this.realTimeNotifications.unregister();
     }
     const uri = this.getCozyURL();
     const token = await this.apiService.getActiveBearerToken();
@@ -154,6 +160,15 @@ export class CozyClientService {
       uri,
       token: oauthToken,
     });
+
+    this.instance.registerPlugin(RealtimePlugin, undefined);
+    this.realTimeNotifications = new RealTimeNotifications(
+      this.messagingService,
+      this.cipherService,
+      this.i18nService,
+      this.instance
+    );
+    this.realTimeNotifications.init();
 
     this.instance.registerPlugin(flag.plugin, undefined);
     this.registerFlags();
