@@ -51,7 +51,8 @@
         <span class="text">
           <span class="truncate-box">
             <span class="truncate">{{ cipher.name }}</span>
-            <!-- Cozy custo
+            <!-- Cozy custo, Show shared info on details lines instead of on title's side -->
+            <!--
             <ng-container *ngIf="cipher.organizationId">
               <i
                 class="bwi bwi-collection text-muted"
@@ -60,6 +61,9 @@
               ></i>
               <span class="sr-only">{{ "shared" | i18n }}</span>
             </ng-container>
+            -->
+            <!-- Cozy custo, Disable attachments -->
+            <!--
             <ng-container *ngIf="cipher.hasAttachments">
               <i
                 class="bwi bwi-paperclip text-muted"
@@ -69,21 +73,31 @@
               <span class="sr-only">{{ "attachments" | i18n }}</span>
             </ng-container>
             -->
-            <ng-container *ngIf="cipher.organizationId && !isKonnector">
-              <i class="icon-cozy icon-share" title="{{ 'shared' | i18n }}" aria-hidden="true"></i>
-            </ng-container>
-            <ng-container *ngIf="cipher.organizationId && isKonnector">
-              <i
-                class="icon-cozy icon-cozy-sync"
-                title="{{ 'sharedWithKonnector' | i18n }}"
-                aria-hidden="true"
-              >
-              </i>
-            </ng-container>
-            <!-- end custo -->
           </span>
         </span>
+        <!-- Cozy customization, Show shared and unencrypted info on details lines -->
+        <!--
         <span class="detail">{{ getSubtitle(cipher) }}</span>
+        -->
+        <!---->
+        <span class="detail no-white-space" *ngIf="getSubtitle(cipher)">
+          <i
+            *ngIf="cipher.organizationId && !isKonnector"
+            class="icon-cozy icon-cozy-details icon-share"
+            title="{{ 'shared' | i18n }}"
+            aria-hidden="true"
+          ></i>
+          {{ getSubtitle(cipher) }}
+        </span>
+        <span class="detail no-white-space" *ngIf="cipher.organizationId && isKonnector">
+          <i
+            class="icon-cozy icon-cozy-details icon-unencrypted"
+            title="{{ 'sharedWithKonnector' | i18n }}"
+            aria-hidden="true"
+          ></i>
+          {{ "sharedWithKonnector" | i18n }}
+        </span>
+        <!---->
       </div>
     </button>
     <app-action-buttons
