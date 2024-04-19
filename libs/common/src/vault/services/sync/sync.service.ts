@@ -110,6 +110,7 @@ export class SyncService implements SyncServiceAbstraction {
       await this.syncProfile(response.profile);
       await this.syncFolders(response.folders);
       await this.syncCollections(response.collections);
+      await this.syncCiphers(response.ciphers);
 
       // Cozy customization
       await this.cozyClientService.getClientInstance();
@@ -132,15 +133,14 @@ export class SyncService implements SyncServiceAbstraction {
       const [papersPromise, contactsPromise] = await Promise.allSettled(fetchPromises);
 
       if (papersPromise.status === "fulfilled") {
-        response.ciphers.push(...papersPromise.value);
+        await this.cipherService.upsert(papersPromise.value);
       }
 
       if (contactsPromise.status === "fulfilled") {
-        response.ciphers.push(...contactsPromise.value);
+        await this.cipherService.upsert(contactsPromise.value);
       }
       // Cozy customization end
 
-      await this.syncCiphers(response.ciphers);
       await this.syncSends(response.sends);
       await this.syncSettings(response.domains);
       await this.syncPolicies(response.policies);

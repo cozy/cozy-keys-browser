@@ -6,10 +6,9 @@ import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUti
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
-import { CipherResponse } from "@bitwarden/common/vault/models/response/cipher.response";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import { convertContactToCipherResponse } from "./contact.helper";
+import { convertContactToCipherData } from "./contact.helper";
 import { fetchContacts, fetchContact } from "./queries";
 
 const convertContactsAsCiphers = async (
@@ -17,21 +16,16 @@ const convertContactsAsCiphers = async (
   cryptoService: CryptoService,
   i18nService: any,
   contacts: any
-): Promise<CipherResponse[]> => {
+): Promise<CipherData[]> => {
   const contactsCiphers = [];
 
   const key = await cryptoService.getKeyForUserEncryption();
 
   for (const contact of contacts) {
     try {
-      const cipherResponse = await convertContactToCipherResponse(
-        cipherService,
-        i18nService,
-        contact,
-        key
-      );
+      const cipherData = await convertContactToCipherData(cipherService, i18nService, contact, key);
 
-      contactsCiphers.push(cipherResponse);
+      contactsCiphers.push(cipherData);
     } catch (e) {
       console.log(`Error during conversion of contact ${contact.id}`, contact, e);
     }
@@ -45,7 +39,7 @@ export const fetchContactsAndConvertAsCiphers = async (
   cryptoService: CryptoService,
   cozyClientService: any,
   i18nService: any
-): Promise<CipherResponse[]> => {
+): Promise<CipherData[]> => {
   const client = await cozyClientService.getClientInstance();
 
   try {
@@ -86,15 +80,9 @@ export const favoriteContactCipher = async (
     },
   });
 
-  const cipherResponse = await convertContactToCipherResponse(
-    cipherService,
-    i18nService,
-    updatedContact
-  );
+  const cipherData = await convertContactToCipherData(cipherService, i18nService, updatedContact);
 
-  const cipherData = new CipherData(cipherResponse);
-
-  await cipherService.upsert([cipherData]);
+  await cipherService.upsert(cipherData);
 
   return true;
 };

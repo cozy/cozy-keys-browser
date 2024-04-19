@@ -2,10 +2,8 @@ import { models } from "cozy-client";
 
 import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
 import { FieldType } from "@bitwarden/common/enums/fieldType";
-import { FieldApi } from "@bitwarden/common/models/api/field.api";
 import { ExpirationDateData } from "@bitwarden/common/vault/models/data/expiration-date.data";
 import { LabelData } from "@bitwarden/common/vault/models/data/label.data";
-import { Field } from "@bitwarden/common/vault/models/domain/field";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 
 import {
@@ -50,27 +48,6 @@ export const buildField = (name: string, value: string, options: FieldOptions = 
   field.name = name;
   field.value = value;
   return field;
-};
-
-export const copyEncryptedFields = (fields: Field[]): FieldApi[] => {
-  const encryptedFields = [];
-
-  for (const field of fields) {
-    encryptedFields.push(
-      new FieldApi({
-        Id: field.id,
-        ParentId: field.parentId,
-        Type: field.type,
-        Subtype: field.subtype,
-        ExpirationData: field.expirationData,
-        Label: field.label,
-        Name: field.name?.encryptedString || "",
-        Value: field.value?.encryptedString || "",
-      })
-    );
-  }
-
-  return encryptedFields;
 };
 
 // Paper fields
