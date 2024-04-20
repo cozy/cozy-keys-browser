@@ -9,13 +9,15 @@ import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
+import { CozyClientService } from "../../apps/browser/src/popup/services/cozyClient.service";
+
 import { convertContactToCipherData } from "./contact.helper";
 import { fetchContacts, fetchContact } from "./queries";
 
 const convertContactsAsCiphers = async (
-  cipherService: any,
+  cipherService: CipherService,
   cryptoService: CryptoService,
-  i18nService: any,
+  i18nService: I18nService,
   contacts: any
 ): Promise<CipherData[]> => {
   const contactsCiphers = [];
@@ -40,10 +42,10 @@ const convertContactsAsCiphers = async (
 };
 
 export const fetchContactsAndConvertAsCiphers = async (
-  cipherService: any,
+  cipherService: CipherService,
   cryptoService: CryptoService,
-  cozyClientService: any,
-  i18nService: any
+  cozyClientService: CozyClientService,
+  i18nService: I18nService
 ): Promise<CipherData[]> => {
   const client = await cozyClientService.getClientInstance();
 
@@ -65,8 +67,8 @@ export const fetchContactsAndConvertAsCiphers = async (
     );
 
     return (await cipherService.getAll())
-      .filter((cipher: any) => cipher.type === CipherType.Contact)
-      .map((cipher: any) => cipher.toCipherData());
+      .filter((cipher) => cipher.type === CipherType.Contact)
+      .map((cipher) => cipher.toCipherData());
   }
 };
 
@@ -74,7 +76,7 @@ export const favoriteContactCipher = async (
   cipherService: CipherService,
   i18nService: I18nService,
   cipher: CipherView,
-  cozyClientService: any
+  cozyClientService: CozyClientService
 ): Promise<boolean> => {
   const client = await cozyClientService.getClientInstance();
 
@@ -101,7 +103,7 @@ export const deleteContactCipher = async (
   platformUtilsService: PlatformUtilsService,
   cipher: CipherView,
   stateService: StateService,
-  cozyClientService: any
+  cozyClientService: CozyClientService
 ): Promise<boolean> => {
   const confirmed = await platformUtilsService.showDialog(
     i18nService.t("deleteContactItemConfirmation"),

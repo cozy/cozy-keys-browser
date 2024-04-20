@@ -2,8 +2,10 @@ import CozyClient from "cozy-client/types/CozyClient";
 import { Node, Schema } from "prosemirror-model";
 import { EditorState } from "prosemirror-state";
 
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PaperType } from "@bitwarden/common/enums/paperType";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -52,8 +54,8 @@ export const noteToText = (note: any): string => {
   return textOnly;
 };
 export const convertNoteToCipherData = async (
-  cipherService: any,
-  i18nService: any,
+  cipherService: CipherService,
+  i18nService: I18nService,
   paper: any,
   options: NoteConversionOptions,
   key?: SymmetricCryptoKey
