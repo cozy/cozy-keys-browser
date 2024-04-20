@@ -1,5 +1,6 @@
 import { models } from "cozy-client";
 
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
 import { FieldType } from "@bitwarden/common/enums/fieldType";
 import { ExpirationDateData } from "@bitwarden/common/vault/models/data/expiration-date.data";
@@ -52,7 +53,7 @@ export const buildField = (name: string, value: string, options: FieldOptions = 
 
 // Paper fields
 
-export const buildFieldsFromPaper = (i18nService: any, paper: any): FieldView[] => {
+export const buildFieldsFromPaper = (i18nService: I18nService, paper: any): FieldView[] => {
   const fields: FieldView[] = [];
 
   const qualificationLabels = formatMetadataQualification(paper.metadata);
@@ -213,7 +214,7 @@ const buildFieldsFromContactByBrowsingModels = ({
   });
 };
 
-export const buildFieldsFromContact = (i18nService: any, contact: any): FieldView[] => {
+export const buildFieldsFromContact = (i18nService: I18nService, contact: any): FieldView[] => {
   const builtFields: FieldView[] = [];
 
   const lang = i18nService.translationLocale;

@@ -11,14 +11,16 @@ import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
+import { CozyClientService } from "../../apps/browser/src/popup/services/cozyClient.service";
+
 import { convertNoteToCipherData, isNote, fetchNoteIllustrationUrl } from "./note.helper";
 import { convertPaperToCipherData } from "./paper.helper";
 import { fetchPapers, fetchPaper } from "./queries";
 
 export const convertPapersAsCiphers = async (
-  cipherService: any,
+  cipherService: CipherService,
   cryptoService: CryptoService,
-  i18nService: any,
+  i18nService: I18nService,
   client: CozyClient,
   papers: any
 ): Promise<CipherData[]> => {
@@ -31,7 +33,7 @@ export const convertPapersAsCiphers = async (
   const key = await cryptoService.getKeyForUserEncryption();
 
   for (const paper of papers) {
-    let cipherData: CipherData;
+    let cipherData;
     try {
       if (isNote(paper)) {
         cipherData = await convertNoteToCipherData(
@@ -69,10 +71,10 @@ export const convertPapersAsCiphers = async (
 };
 
 export const fetchPapersAndConvertAsCiphers = async (
-  cipherService: any,
+  cipherService: CipherService,
   cryptoService: CryptoService,
-  cozyClientService: any,
-  i18nService: any
+  cozyClientService: CozyClientService,
+  i18nService: I18nService
 ): Promise<CipherData[]> => {
   const client = await cozyClientService.getClientInstance();
 
@@ -95,8 +97,8 @@ export const fetchPapersAndConvertAsCiphers = async (
     );
 
     return (await cipherService.getAll())
-      .filter((cipher: any) => cipher.type === CipherType.Paper)
-      .map((cipher: any) => cipher.toCipherData());
+      .filter((cipher) => cipher.type === CipherType.Paper)
+      .map((cipher) => cipher.toCipherData());
   }
 };
 
@@ -104,7 +106,7 @@ export const favoritePaperCipher = async (
   cipherService: CipherService,
   i18nService: I18nService,
   cipher: CipherView,
-  cozyClientService: any
+  cozyClientService: CozyClientService
 ): Promise<boolean> => {
   const client = await cozyClientService.getClientInstance();
 
@@ -140,7 +142,7 @@ export const deletePaperCipher = async (
   platformUtilsService: PlatformUtilsService,
   cipher: CipherView,
   stateService: StateService,
-  cozyClientService: any
+  cozyClientService: CozyClientService
 ): Promise<boolean> => {
   const confirmed = await platformUtilsService.showDialog(
     i18nService.t("deletePaperItemConfirmation"),

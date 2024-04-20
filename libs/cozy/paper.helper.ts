@@ -1,5 +1,7 @@
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PaperType } from "@bitwarden/common/enums/paperType";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -13,7 +15,7 @@ interface PaperConversionOptions {
 
 const DEFAULT_THUMBNAIL_URL = "/popup/images/icon-file-type-text.svg";
 
-const buildOwnerName = (i18nService: any, paper: any) => {
+const buildOwnerName = (i18nService: I18nService, paper: any) => {
   if (paper.contacts.data[0]?.displayName) {
     return paper.contacts.data[0]?.displayName;
   } else if (paper.cozyMetadata.createdByApp && paper.cozyMetadata.sourceAccountIdentifier) {
@@ -36,8 +38,8 @@ export const buildIllustrationUrl = (paper: any, baseUrl: string) => {
 };
 
 export const convertPaperToCipherData = async (
-  cipherService: any,
-  i18nService: any,
+  cipherService: CipherService,
+  i18nService: I18nService,
   paper: any,
   options: PaperConversionOptions,
   key?: SymmetricCryptoKey
