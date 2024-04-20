@@ -1,5 +1,6 @@
 import { Q } from "cozy-client";
 import CozyClient from "cozy-client/types/CozyClient";
+import { IOCozyContact } from "cozy-client/types/types";
 
 const buildFilesQueryWithQualificationLabel = () => {
   const select = [
@@ -106,16 +107,19 @@ export const buildContactsQuery = () => ({
   },
 });
 
-export const fetchContacts = async (client: CozyClient) => {
+export const fetchContacts = async (client: CozyClient): Promise<IOCozyContact[]> => {
   const contactsQuery = buildContactsQuery();
 
-  const data = await client.queryAll(contactsQuery.definition, contactsQuery.options);
+  const data: IOCozyContact[] = await client.queryAll(
+    contactsQuery.definition,
+    contactsQuery.options
+  );
 
   return data;
 };
 
-export const fetchContact = async (client: CozyClient, _id: string) => {
-  const { data } = await client.query(Q("io.cozy.contacts").getById(_id));
+export const fetchContact = async (client: CozyClient, _id: string): Promise<IOCozyContact> => {
+  const { data }: { data: IOCozyContact } = await client.query(Q("io.cozy.contacts").getById(_id));
 
   return data;
 };
