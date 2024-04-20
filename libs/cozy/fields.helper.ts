@@ -1,4 +1,5 @@
 import { models } from "cozy-client";
+import { IOCozyContact } from "cozy-client/types/types";
 
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
@@ -214,7 +215,10 @@ const buildFieldsFromContactByBrowsingModels = ({
   });
 };
 
-export const buildFieldsFromContact = (i18nService: I18nService, contact: any): FieldView[] => {
+export const buildFieldsFromContact = (
+  i18nService: I18nService,
+  contact: IOCozyContact
+): FieldView[] => {
   const builtFields: FieldView[] = [];
 
   const lang = i18nService.translationLocale;
