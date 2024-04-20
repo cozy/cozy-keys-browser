@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
 // Cozy customization
+import { IOCozyContact } from "cozy-client/types/types";
+
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
@@ -18,7 +20,7 @@ const convertContactsAsCiphers = async (
   cipherService: CipherService,
   cryptoService: CryptoService,
   i18nService: I18nService,
-  contacts: any
+  contacts: IOCozyContact[]
 ): Promise<CipherData[]> => {
   const contactsCiphers = [];
 
