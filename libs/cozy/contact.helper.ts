@@ -1,6 +1,8 @@
 import { models } from "cozy-client";
 
+import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -19,8 +21,8 @@ const getPrimaryPhone = (contact: any): string | undefined => {
 };
 
 export const convertContactToCipherData = async (
-  cipherService: any,
-  i18nService: any,
+  cipherService: CipherService,
+  i18nService: I18nService,
   contact: any,
   key?: SymmetricCryptoKey
 ): Promise<CipherData> => {
