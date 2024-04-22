@@ -1277,6 +1277,7 @@ export class CipherService implements CipherServiceAbstraction {
         return;
       case CipherType.Contact:
         cipher.contact = new Contact();
+        cipher.contact.me = model.contact.me;
         await this.encryptObjProperty(
           model.contact,
           cipher.contact,
