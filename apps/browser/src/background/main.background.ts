@@ -830,6 +830,11 @@ export default class MainBackground {
     }
     //*/
 
+    // Cozy customization, logout OAuth client
+    //*
+    await this.cozyClientService.logout();
+    //*/
+
     await Promise.all([
       this.syncService.setLastSync(new Date(0), userId),
       this.cryptoService.clearKeys(userId),
