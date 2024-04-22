@@ -916,6 +916,17 @@ export default class AutofillService implements AutofillServiceInterface {
           options
         );
         break;
+      case CipherType.Paper:
+      case CipherType.Contact:
+        /*
+          For papers and contacts, we currently store data to fill only in custom fields. So we want to return the
+          fillScript which has already been generated and completed with custom fields.
+          Later, we may improve the fillScript generated for papers and contacts. So we will need :
+          - to add custom behavior for some custom fields (like custom behavior for a custom field called "address")
+          - to move some data from custom fields to PaperView or ContactView and add a generateXXXFillScript() method
+          - ...
+        */
+        break;
       default:
         return null;
     }
