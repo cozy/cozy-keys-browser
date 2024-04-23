@@ -20,6 +20,7 @@ export class Field extends Domain {
   id: string;
   parentId: string; // If a field has a parentId, we will display it on the view page only if the parentId is selected
   subtype: FieldSubType;
+  cozyType: string; // Type of the data on Cozy side, like 'givenName', 'country', 'company'
   expirationData: ExpirationDateData;
   label: LabelData;
   // Cozy customization end
@@ -35,6 +36,7 @@ export class Field extends Domain {
     this.id = obj.id;
     this.parentId = obj.parentId;
     this.subtype = obj.subtype;
+    this.cozyType = obj.cozyType;
     this.expirationData = obj.expirationData;
     this.label = obj.label;
     // Cozy customization end
@@ -67,6 +69,7 @@ export class Field extends Domain {
     f.id = this.id;
     f.parentId = this.parentId;
     f.subtype = this.subtype;
+    f.cozyType = this.cozyType;
     f.expirationData = this.expirationData;
     f.label = this.label;
     this.buildDataModel(
