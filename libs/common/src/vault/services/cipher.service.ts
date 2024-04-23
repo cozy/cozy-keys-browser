@@ -253,6 +253,7 @@ export class CipherService implements CipherServiceAbstraction {
     field.id = fieldModel.id;
     field.parentId = fieldModel.parentId;
     field.subtype = fieldModel.subtype;
+    field.cozyType = fieldModel.cozyType;
     field.expirationData = fieldModel.expirationData;
     field.label = fieldModel.label;
     // Cozy customization end

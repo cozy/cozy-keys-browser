@@ -12,6 +12,7 @@ export class FieldData {
   id: string;
   parentId: string;
   subtype: FieldSubType;
+  cozyType: string;
   expirationData: ExpirationDateData;
   label: LabelData;
   // Cozy customization end
@@ -28,6 +29,7 @@ export class FieldData {
     this.id = response.id;
     this.parentId = response.parentId;
     this.subtype = response.subtype;
+    this.cozyType = response.cozyType;
     this.expirationData = response.expirationData;
     this.label = response.label;
     // Cozy customization end
