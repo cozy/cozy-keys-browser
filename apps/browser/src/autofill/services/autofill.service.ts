@@ -13,6 +13,7 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
 
+import { generateIdentityViewFromCipherView } from "../../../../../libs/cozy/contact.helper";
 import { BrowserApi } from "../../browser/browserApi";
 import { BrowserStateService } from "../../services/abstractions/browser-state.service";
 import AutofillField from "../models/autofill-field";
@@ -917,15 +918,22 @@ export default class AutofillService implements AutofillServiceInterface {
         );
         break;
       case CipherType.Paper:
+        /*
+          For papers, we only use the custom fields matching.
+        */
+        break;
       case CipherType.Contact:
         /*
-          For papers and contacts, we currently store data to fill only in custom fields. So we want to return the
-          fillScript which has already been generated and completed with custom fields.
-          Later, we may improve the fillScript generated for papers and contacts. So we will need :
-          - to add custom behavior for some custom fields (like custom behavior for a custom field called "address")
-          - to move some data from custom fields to PaperView or ContactView and add a generateXXXFillScript() method
-          - ...
+          For contacts, we create an IdentityView with the contact content to leverage the generateIdentityFillScript.
         */
+        options.cipher.identity = generateIdentityViewFromCipherView(options.cipher);
+
+        fillScript = this.generateIdentityFillScript(
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
         break;
       default:
         return null;

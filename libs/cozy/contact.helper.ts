@@ -8,6 +8,7 @@ import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { ContactView } from "@bitwarden/common/vault/models/view/contact.view";
+import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view";
 
 const { getInitials } = models.contact;
 
@@ -50,4 +51,37 @@ export const convertContactToCipherData = async (
   const cipherData = cipherEncrypted.toCipherData();
 
   return cipherData;
+};
+
+export const generateIdentityViewFromCipherView = (cipher: CipherView): IdentityView => {
+  const identity = new IdentityView();
+
+  identity.firstName = cipher.fields.find((f) => f.cozyType === "givenName")?.value;
+  identity.lastName = cipher.fields.find((f) => f.cozyType === "familyName")?.value;
+  identity.company = cipher.fields.find((f) => f.cozyType === "company")?.value;
+  identity.phone = cipher.contact.primaryPhone;
+  identity.email = cipher.contact.primaryEmail;
+
+  const chosenAddress = cipher.fields.find((f) => f.cozyType === "address");
+
+  if (chosenAddress) {
+    identity.address1 =
+      cipher.fields.find((f) => f.parentId === chosenAddress.id && f.cozyType === "number")?.value +
+      " " +
+      cipher.fields.find((f) => f.parentId === chosenAddress.id && f.cozyType === "street")?.value;
+    identity.city = cipher.fields.find(
+      (f) => f.parentId === chosenAddress.id && f.cozyType === "city"
+    )?.value;
+    identity.state = cipher.fields.find(
+      (f) => f.parentId === chosenAddress.id && f.cozyType === "region"
+    )?.value;
+    identity.postalCode = cipher.fields.find(
+      (f) => f.parentId === chosenAddress.id && f.cozyType === "code"
+    )?.value;
+    identity.country = cipher.fields.find(
+      (f) => f.parentId === chosenAddress.id && f.cozyType === "country"
+    )?.value;
+  }
+
+  return identity;
 };
