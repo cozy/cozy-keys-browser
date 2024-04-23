@@ -16,6 +16,7 @@ export class FieldView implements View {
   id: string = null;
   parentId: string = null;
   subtype: FieldSubType = null;
+  cozyType: string = null;
   expirationData: ExpirationDateData = null;
   label: LabelData = null;
   // Cozy customization end
@@ -34,6 +35,7 @@ export class FieldView implements View {
     this.id = f.id;
     this.parentId = f.parentId;
     this.subtype = f.subtype;
+    this.cozyType = f.cozyType;
     this.expirationData = f.expirationData;
     this.label = f.label;
     // Cozy customization end

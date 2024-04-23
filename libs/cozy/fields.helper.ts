@@ -33,6 +33,7 @@ interface FieldOptions {
   id?: string;
   parentId?: string;
   subtype?: FieldSubType;
+  cozyType?: string;
   expirationData?: ExpirationDateData;
   label?: LabelData;
 }
@@ -45,6 +46,7 @@ export const buildField = (name: string, value: string, options: FieldOptions = 
   field.id = options.id;
   field.parentId = options.parentId;
   field.subtype = options.subtype ?? FieldSubType.Default;
+  field.cozyType = options.cozyType;
   field.expirationData = options.expirationData;
   field.label = options.label;
   field.name = name;
@@ -143,6 +145,8 @@ const buildContactField = ({
   if (parentId) {
     fieldOptions.parentId = parentId;
   }
+
+  fieldOptions.cozyType = fieldName;
 
   const field = buildField(formattedName, formattedValue, fieldOptions);
   return field;
