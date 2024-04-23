@@ -324,7 +324,7 @@ export class IdentityAutoFillConstants {
     "nom",
   ];
 
-  static readonly EmailFieldNames: string[] = ["e-mail", "email-address"];
+  static readonly EmailFieldNames: string[] = ["e-mail", "email-address", "courriel"];
 
   static readonly AddressFieldNames: string[] = [
     "address",
