@@ -46,6 +46,8 @@ export const convertPaperToCipherData = async (
 ): Promise<CipherData> => {
   const { baseUrl } = options;
 
+  const cozyMetadata = paper.cozyMetadata;
+
   const cipherView = new CipherView();
   cipherView.id = paper.id;
   cipherView.name = paper.name;
@@ -58,8 +60,12 @@ export const convertPaperToCipherData = async (
   cipherView.paper.qualificationLabel = paper.metadata.qualification.label;
   cipherView.fields = buildFieldsFromPaper(i18nService, paper);
   cipherView.favorite = !!paper.cozyMetadata.favorite;
-  cipherView.creationDate = new Date(paper.cozyMetadata.createdAt);
-  cipherView.revisionDate = new Date(paper.cozyMetadata.updatedAt);
+  if (cozyMetadata?.createdAt) {
+    cipherView.creationDate = new Date(cozyMetadata.createdAt);
+  }
+  if (cozyMetadata?.updatedAt) {
+    cipherView.revisionDate = new Date(cozyMetadata.updatedAt);
+  }
 
   const cipherEncrypted = await cipherService.encrypt(cipherView, key);
 

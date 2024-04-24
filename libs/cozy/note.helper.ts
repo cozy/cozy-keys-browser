@@ -62,6 +62,8 @@ export const convertNoteToCipherData = async (
 ): Promise<CipherData> => {
   const { noteIllustrationUrl } = options;
 
+  const cozyMetadata = paper.cozyMetadata;
+
   const cipherView = new CipherView();
   cipherView.id = paper.id;
   cipherView.name = paper.name.replace(".cozy-note", "");
@@ -76,8 +78,13 @@ export const convertNoteToCipherData = async (
   cipherView.fields = buildFieldsFromPaper(i18nService, paper);
   cipherView.fields.push(buildField(i18nService.t("content"), cipherView.paper.noteContent));
   cipherView.favorite = !!paper.cozyMetadata.favorite;
-  cipherView.creationDate = new Date(paper.cozyMetadata.createdAt);
-  cipherView.revisionDate = new Date(paper.cozyMetadata.updatedAt);
+
+  if (cozyMetadata?.createdAt) {
+    cipherView.creationDate = new Date(cozyMetadata.createdAt);
+  }
+  if (cozyMetadata?.updatedAt) {
+    cipherView.revisionDate = new Date(cozyMetadata.updatedAt);
+  }
 
   const cipherEncrypted = await cipherService.encrypt(cipherView, key);
 
