@@ -6,6 +6,7 @@ import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { PaperType } from "@bitwarden/common/enums/paperType";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
@@ -122,14 +123,27 @@ export const favoritePaperCipher = async (
 
   const [updatePaperWithContacts] = client.hydrateDocuments("io.cozy.files", [updatedPaper]);
 
-  const cipherData = await convertPaperToCipherData(
-    cipherService,
-    i18nService,
-    updatePaperWithContacts,
-    {
-      baseUrl: client.getStackClient().uri,
-    }
-  );
+  let cipherData;
+
+  if (cipher.paper.type === PaperType.Paper) {
+    cipherData = await convertPaperToCipherData(
+      cipherService,
+      i18nService,
+      updatePaperWithContacts,
+      {
+        baseUrl: client.getStackClient().uri,
+      }
+    );
+  } else if (cipher.paper.type === PaperType.Note) {
+    cipherData = await convertNoteToCipherData(
+      cipherService,
+      i18nService,
+      updatePaperWithContacts,
+      {
+        noteIllustrationUrl: await fetchNoteIllustrationUrl(client),
+      }
+    );
+  }
 
   await cipherService.upsert(cipherData);
 
