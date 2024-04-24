@@ -1867,12 +1867,6 @@
     "message": "Nombre maximum d'accès atteint",
     "description": "This text will be displayed after a Send has been accessed the maximum amount of times."
   },
-  "expired": {
-    "message": "Expiré"
-  },
-  "expiredIn": {
-    "message": "Expire dans"
-  },
   "pendingDeletion": {
     "message": "En attente de suppression"
   },
