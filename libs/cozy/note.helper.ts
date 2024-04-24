@@ -75,6 +75,7 @@ export const convertNoteToCipherData = async (
   cipherView.paper.qualificationLabel = paper.metadata.qualification.label;
   cipherView.fields = buildFieldsFromPaper(i18nService, paper);
   cipherView.fields.push(buildField(i18nService.t("content"), cipherView.paper.noteContent));
+  cipherView.favorite = !!paper.cozyMetadata.favorite;
   cipherView.creationDate = new Date(paper.cozyMetadata.createdAt);
   cipherView.revisionDate = new Date(paper.cozyMetadata.updatedAt);
 
