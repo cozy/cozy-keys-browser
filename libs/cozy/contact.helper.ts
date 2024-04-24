@@ -8,6 +8,7 @@ import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { ContactView } from "@bitwarden/common/vault/models/view/contact.view";
+import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view";
 
 const { getInitials } = models.contact;
@@ -53,6 +54,26 @@ export const convertContactToCipherData = async (
   return cipherData;
 };
 
+const chooseAddress = (cipher: CipherView): FieldView => {
+  const homeAddress = cipher.fields.find(
+    (f) => f.cozyType === "address" && f.label.label === "home"
+  );
+
+  if (homeAddress) {
+    return homeAddress;
+  }
+
+  const workAddress = cipher.fields.find(
+    (f) => f.cozyType === "address" && f.label.label === "work"
+  );
+
+  if (workAddress) {
+    return workAddress;
+  }
+
+  return cipher.fields.find((f) => f.cozyType === "address");
+};
+
 export const generateIdentityViewFromCipherView = (cipher: CipherView): IdentityView => {
   const identity = new IdentityView();
 
@@ -62,7 +83,7 @@ export const generateIdentityViewFromCipherView = (cipher: CipherView): Identity
   identity.phone = cipher.contact.primaryPhone;
   identity.email = cipher.contact.primaryEmail;
 
-  const chosenAddress = cipher.fields.find((f) => f.cozyType === "address");
+  const chosenAddress = chooseAddress(cipher);
 
   if (chosenAddress) {
     identity.address1 =
