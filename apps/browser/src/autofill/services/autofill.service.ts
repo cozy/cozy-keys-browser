@@ -926,7 +926,12 @@ export default class AutofillService implements AutofillServiceInterface {
         /*
           For contacts, we create an IdentityView with the contact content to leverage the generateIdentityFillScript.
         */
-        options.cipher.identity = generateIdentityViewFromCipherView(options.cipher);
+        try {
+          options.cipher.identity = generateIdentityViewFromCipherView(options.cipher);
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.log("Failed to convert CipherView to IdentityView", e);
+        }
 
         fillScript = this.generateIdentityFillScript(
           fillScript,
