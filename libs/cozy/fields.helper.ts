@@ -61,7 +61,10 @@ export const buildFieldsFromPaper = (i18nService: I18nService, paper: any): Fiel
 
   const qualificationLabels = formatMetadataQualification(paper.metadata);
   const qualificationLabel = paper.metadata.qualification.label;
-  const lang = i18nService.translationLocale;
+
+  // @ts-expect-error I did not succeed in getting i18nService.translationLocale so I fallback to a private property
+  const lang = i18nService.systemLanguage;
+
   const f = (a: string) => {
     return new Date(a).toLocaleString(lang, { year: "numeric", month: "numeric", day: "numeric" });
   };
@@ -225,7 +228,8 @@ export const buildFieldsFromContact = (
 ): FieldView[] => {
   const builtFields: FieldView[] = [];
 
-  const lang = i18nService.translationLocale;
+  // @ts-expect-error I did not succeed in getting i18nService.translationLocale so I fallback to a private property
+  const lang = i18nService.systemLanguage;
 
   buildFieldsFromContactByBrowsingModels({
     models: fieldsModels,
