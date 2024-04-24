@@ -56,7 +56,7 @@ export const convertContactToCipherData = async (
 
 const chooseAddress = (cipher: CipherView): FieldView => {
   const homeAddress = cipher.fields.find(
-    (f) => f.cozyType === "address" && f.label.label === "home"
+    (f) => f.cozyType === "address" && f.label?.label === "home"
   );
 
   if (homeAddress) {
@@ -64,7 +64,7 @@ const chooseAddress = (cipher: CipherView): FieldView => {
   }
 
   const workAddress = cipher.fields.find(
-    (f) => f.cozyType === "address" && f.label.label === "work"
+    (f) => f.cozyType === "address" && f.label?.label === "work"
   );
 
   if (workAddress) {
