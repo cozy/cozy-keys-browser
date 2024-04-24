@@ -97,6 +97,7 @@ export const generateIdentityViewFromCipherView = (cipher: CipherView): Identity
   const identity = new IdentityView();
 
   identity.firstName = cipher.fields.find((f) => f.cozyType === "givenName")?.value;
+  identity.middleName = cipher.fields.find((f) => f.cozyType === "additionalName")?.value;
   identity.lastName = cipher.fields.find((f) => f.cozyType === "familyName")?.value;
   identity.company = cipher.fields.find((f) => f.cozyType === "company")?.value;
   identity.phone = cipher.contact.primaryPhone;
