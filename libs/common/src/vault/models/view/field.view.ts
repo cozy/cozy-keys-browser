@@ -13,12 +13,12 @@ export class FieldView implements View {
   value: string = null;
   type: FieldType = null;
   // Cozy customization
-  id: string = null;
-  parentId: string = null;
+  id?: string = null;
+  parentId?: string = null;
   subtype: FieldSubType = null;
   cozyType: string = null;
-  expirationData: ExpirationDateData = null;
-  label: LabelData = null;
+  expirationData?: ExpirationDateData = null;
+  label?: LabelData = null;
   // Cozy customization end
   newField = false; // Marks if the field is new and hasn't been saved
   showValue = false;
