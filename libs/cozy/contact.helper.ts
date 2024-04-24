@@ -44,8 +44,12 @@ export const convertContactToCipherData = async (
   cipherView.favorite = !!cozyMetadata?.favorite;
   cipherView.fields = buildFieldsFromContact(i18nService, contact);
   cipherView.contact.me = contact.me;
-  cipherView.creationDate = new Date(cozyMetadata?.createdAt);
-  cipherView.revisionDate = new Date(cozyMetadata?.updatedAt);
+  if (cozyMetadata?.createdAt) {
+    cipherView.creationDate = new Date(cozyMetadata.createdAt);
+  }
+  if (cozyMetadata?.updatedAt) {
+    cipherView.revisionDate = new Date(cozyMetadata.updatedAt);
+  }
 
   const cipherEncrypted = await cipherService.encrypt(cipherView, key);
 
