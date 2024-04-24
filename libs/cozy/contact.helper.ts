@@ -74,6 +74,25 @@ const chooseAddress = (cipher: CipherView): FieldView => {
   return cipher.fields.find((f) => f.cozyType === "address");
 };
 
+const formatAddress = (cipher: CipherView, chosenAddress: FieldView): string => {
+  const addressNumber = cipher.fields.find(
+    (f) => f.parentId === chosenAddress.id && f.cozyType === "number"
+  )?.value;
+  const addressStreet = cipher.fields.find(
+    (f) => f.parentId === chosenAddress.id && f.cozyType === "street"
+  )?.value;
+
+  if (addressNumber && addressStreet) {
+    return `${addressNumber} ${addressStreet}`;
+  } else if (addressNumber) {
+    return addressNumber;
+  } else if (addressStreet) {
+    return addressStreet;
+  }
+
+  return "";
+};
+
 export const generateIdentityViewFromCipherView = (cipher: CipherView): IdentityView => {
   const identity = new IdentityView();
 
@@ -86,10 +105,7 @@ export const generateIdentityViewFromCipherView = (cipher: CipherView): Identity
   const chosenAddress = chooseAddress(cipher);
 
   if (chosenAddress) {
-    identity.address1 =
-      cipher.fields.find((f) => f.parentId === chosenAddress.id && f.cozyType === "number")?.value +
-      " " +
-      cipher.fields.find((f) => f.parentId === chosenAddress.id && f.cozyType === "street")?.value;
+    identity.address1 = formatAddress(cipher, chosenAddress);
     identity.city = cipher.fields.find(
       (f) => f.parentId === chosenAddress.id && f.cozyType === "city"
     )?.value;
