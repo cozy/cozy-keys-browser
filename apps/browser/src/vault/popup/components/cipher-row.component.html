@@ -80,7 +80,10 @@
         <span class="detail">{{ getSubtitle(cipher) }}</span>
         -->
         <!---->
-        <span class="detail no-white-space" *ngIf="getSubtitle(cipher)">
+        <span
+          class="detail no-white-space"
+          *ngIf="getSubtitle(cipher) || (cipher.organizationId && !isKonnector)"
+        >
           <i
             *ngIf="cipher.organizationId && !isKonnector"
             class="icon-cozy icon-cozy-details icon-share"
