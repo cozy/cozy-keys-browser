@@ -1,7 +1,7 @@
 /* Cozy custo
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 */
-import { Component, EventEmitter, Input, Output, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, Output, OnChanges } from "@angular/core";
 /* end custo */
 
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -19,7 +19,7 @@ import { DomSanitizer } from "@angular/platform-browser";
   selector: "app-cipher-row",
   templateUrl: "cipher-row.component.html",
 })
-export class CipherRowComponent implements OnInit {
+export class CipherRowComponent implements OnChanges {
   @Output() onSelected = new EventEmitter<CipherView>();
   @Output() launchEvent = new EventEmitter<CipherView>();
   @Output() onView = new EventEmitter<CipherView>();
@@ -89,7 +89,7 @@ export class CipherRowComponent implements OnInit {
   // Cozy customization end
 
   // Cozy customization, differentiate shared Ciphers from ciphers in "Cozy Connectors" organization
-  async ngOnInit() {
+  async ngOnChanges() {
     if (this.cipher.organizationId) {
       this.isKonnector = await this.konnectorService.isKonnectorsOrganization(
         this.cipher.organizationId
