@@ -197,7 +197,10 @@ export class BrowserStateService
   }
 
   async getKonnectorsOrganization(): Promise<KonnectorsOrg> {
-    return (await this.getAccount(await this.defaultInMemoryOptions()))?.konnectorsOrganization;
+    const organizationString = (await this.getAccount(await this.defaultInMemoryOptions()))
+      ?.konnectorsOrganization;
+
+    return organizationString ? JSON.parse(organizationString) : null;
   }
 
   async setKonnectorsOrganization(value: KonnectorsOrg): Promise<void> {
@@ -205,7 +208,7 @@ export class BrowserStateService
     if (!account) {
       return;
     }
-    account.konnectorsOrganization = value;
+    account.konnectorsOrganization = JSON.stringify(value);
     await this.saveAccount(account, await this.defaultInMemoryOptions());
   }
 
