@@ -904,8 +904,26 @@ export class CipherService implements CipherServiceAbstraction {
       });
     }
 
-    await this.clearCache();
+    // Cozy customization
+    // We do not want to clear the cache because reconstructing the cache involves decrypting all ciphers
+    // which is very costly with our papers and contacts. Instead we manually update decrypted ciphers below.
+    //*
     await this.stateService.setEncryptedCiphers(ciphers);
+
+    const decryptedCiphers = await this.stateService.getDecryptedCiphers();
+    if (decryptedCiphers == null) {
+      return;
+    }
+
+    const ids = typeof id === "string" ? [id] : id;
+    const removed = decryptedCiphers.filter((c) => !ids.includes(c.id));
+
+    await this.stateService.setDecryptedCiphers(removed);
+    /*/
+    await this.clearCache();
+
+    await this.stateService.setEncryptedCiphers(ciphers);
+    //*/
   }
 
   async deleteWithServer(id: string): Promise<any> {
