@@ -84,6 +84,10 @@ export class CipherRowComponent implements OnInit {
     // A thumbnail URL is valid for 10 minutes. If a thumbnail URL is expired,
     // it is very likely that all thumbnail URLs are expired. So we start a
     // full sync that will get new thumbnail URLs.
+    // We also change directly the thumbnail URL with the default one and
+    // when the sync will be done, a new cipher row will be created with
+    // a new thumbnail URL.
+    this.cipher.paper.illustrationThumbnailUrl = "/popup/images/icon-file-type-text.png";
     await this.syncService.fullSync(true);
   }
   // Cozy customization end
