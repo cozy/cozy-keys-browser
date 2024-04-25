@@ -8,7 +8,6 @@ import {
 import { BrowserComponentState } from "./browserComponentState";
 import { BrowserGroupingsComponentState } from "./browserGroupingsComponentState";
 import { BrowserSendComponentState } from "./browserSendComponentState";
-import { KonnectorsOrg } from "./konnectorsOrganization";
 
 export class AccountSettings extends BaseAccountSettings {
   vaultTimeout = -1; // On Restart
@@ -29,7 +28,7 @@ export class Account extends BaseAccount {
   ciphers?: BrowserComponentState;
   sendType?: BrowserComponentState;
   history?: string;
-  konnectorsOrganization?: KonnectorsOrg;
+  konnectorsOrganization?: string;
   bannerClosedByUser?: boolean;
 
   constructor(init: Partial<Account>) {
