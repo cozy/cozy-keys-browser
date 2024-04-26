@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { Component, Input, OnInit } from "@angular/core";
 /* eslint-disable import/no-duplicates */
-import addDays from "date-fns/addDays";
+import addDays from "date-fns/addMinutes";
 import formatDistanceToNowStrict from "date-fns/formatDistanceToNowStrict";
 import isAfter from "date-fns/isAfter";
 import fr from "date-fns/locale/fr";
