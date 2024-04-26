@@ -132,26 +132,19 @@ export class SyncService implements SyncServiceAbstraction {
 
       const [papersPromise, contactsPromise] = await Promise.allSettled(fetchPromises);
 
-      /*
-        Because syncCiphers replace previous ciphers, we need to do syncCiphers :
-        - after we converted papers and contacts because papers and contacts conversion
-          can try to reuse previous ciphers
-        - before we upsert papers and contacts because we want to have
-          bitwarden ciphers and papers and contacts ciphers
-      */
-      await this.syncCiphers(response.ciphers);
+      let cozyCiphers: CipherData[] = [];
 
       if (papersPromise.status === "fulfilled") {
         console.log(`${papersPromise.value.length} contacts ciphers will be added`);
-
-        await this.cipherService.upsert(papersPromise.value);
+        cozyCiphers = cozyCiphers.concat(papersPromise.value);
       }
 
       if (contactsPromise.status === "fulfilled") {
         console.log(`${contactsPromise.value.length} papers ciphers will be added`);
-
-        await this.cipherService.upsert(contactsPromise.value);
+        cozyCiphers = cozyCiphers.concat(contactsPromise.value);
       }
+
+      await this.syncCiphers(response.ciphers, cozyCiphers);
       // Cozy customization end
 
       await this.syncSends(response.sends);
@@ -405,6 +398,19 @@ export class SyncService implements SyncServiceAbstraction {
     return await this.collectionService.replace(collections);
   }
 
+  // Cozy customization, sync in the same time bitwarden ciphers (response) and cozy ciphers (data)
+  //*
+  private async syncCiphers(response: CipherResponse[], data: CipherData[]) {
+    const ciphers: { [id: string]: CipherData } = {};
+    response.forEach((c) => {
+      ciphers[c.id] = new CipherData(c);
+    });
+    data.forEach((c) => {
+      ciphers[c.id] = c;
+    });
+    return await this.cipherService.replace(ciphers);
+  }
+  /*/
   private async syncCiphers(response: CipherResponse[]) {
     const ciphers: { [id: string]: CipherData } = {};
     response.forEach((c) => {
@@ -412,6 +418,7 @@ export class SyncService implements SyncServiceAbstraction {
     });
     return await this.cipherService.replace(ciphers);
   }
+  //*/
 
   private async syncSends(response: SendResponse[]) {
     const sends: { [id: string]: SendData } = {};
