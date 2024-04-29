@@ -270,12 +270,31 @@
           <div class="row-main">
             <!-- Cozy custo
             <div class="icon"><i class="bwi bwi-fw bwi-lg bwi-collection"></i></div>
+            <span class="text">{{ nestedCollection.node.name }}</span>
             -->
             <div class="icon">
               <i class="icon-cozy icon-folder"></i>
             </div>
+            <div class="row-main-content">
+              <span class="text">{{ nestedCollection.node.name }}</span>
+              <span *ngIf="!nestedCollection.node.isKonnector" class="detail no-white-space">
+                <i
+                  class="icon-cozy icon-cozy-details icon-encrypted"
+                  title="{{ 'endToEndEncrypted' | i18n }}"
+                  aria-hidden="true"
+                ></i>
+                {{ "encryptedInfoTitle" | i18n }}
+              </span>
+              <span *ngIf="nestedCollection.node.isKonnector" class="detail no-white-space">
+                <i
+                  class="icon-cozy icon-cozy-details icon-unencrypted"
+                  title="{{ 'sharedWithKonnector' | i18n }}"
+                  aria-hidden="true"
+                ></i>
+                {{ "sharedWithKonnector" | i18n }}
+              </span>
+            </div>
             <!-- end custo -->
-            <span class="text">{{ nestedCollection.node.name }}</span>
           </div>
           <span class="row-sub-label">{{
             collectionCounts.get(nestedCollection.node.id) || 0
