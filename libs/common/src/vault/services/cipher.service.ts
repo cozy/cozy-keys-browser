@@ -451,14 +451,14 @@ export class CipherService implements CipherServiceAbstraction {
         return false;
       }
       if (includeOtherTypes != null && includeOtherTypes.indexOf(cipher.type) > -1) {
+        // Cozy customization
+        if (cipher.type === CipherType.Contact) {
+          return cipher.favorite || cipher.contact.me;
+        }
+        // Cozy customization end
+
         return true;
       }
-
-      // Cozy customization
-      if (cipher.type === CipherType.Contact) {
-        return cipher.favorite || cipher.contact.me;
-      }
-      // Cozy customization end
 
       if (url != null && cipher.type === CipherType.Login && cipher.login.uris != null) {
         for (let i = 0; i < cipher.login.uris.length; i++) {

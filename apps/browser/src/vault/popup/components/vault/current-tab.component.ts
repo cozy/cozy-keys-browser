@@ -331,6 +331,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     }
     if (!dontShowIdentities) {
       otherTypes.push(CipherType.Identity);
+      otherTypes.push(CipherType.Contact);
     }
 
     const ciphers = await this.cipherService.getAllDecryptedForUrl(
