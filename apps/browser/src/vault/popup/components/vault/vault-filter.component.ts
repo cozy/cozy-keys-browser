@@ -36,12 +36,17 @@ import { VaultFilterService } from "../../../services/vault-filter.service";
 /** Start Cozy imports */
 /* eslint-disable */
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
+import { KonnectorsService } from "../../../../popup/services/konnectors.service";
 import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
 import { HistoryService } from "../../../../popup/services/history.service";
 import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
 import { Utils } from "@bitwarden/common/misc/utils";
 import { StateService } from "@bitwarden/common/abstractions/state.service";
 /* eslint-enable */
+
+interface CollectionViewWithKonnector extends CollectionView {
+  isKonnector?: boolean;
+}
 /** End Cozy imports */
 
 const ComponentId = "VaultComponent";
@@ -65,7 +70,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   folders: FolderView[];
   nestedFolders: TreeNode<FolderView>[];
   collections: CollectionView[];
-  nestedCollections: TreeNode<CollectionView>[];
+  nestedCollections: TreeNode<CollectionViewWithKonnector>[];
   loaded = false;
   cipherType = CipherType;
   ciphers: CipherView[];
@@ -111,6 +116,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     private browserStateService: BrowserStateService,
     private vaultFilterService: VaultFilterService,
     private cozyClientService: CozyClientService,
+    private konnectorService: KonnectorsService,
     private historyService: HistoryService,
     private organizationService: OrganizationService,
     private cryptoService: CryptoService,
@@ -225,7 +231,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     );
     this.collections = allCollections.fullList;
     /** Cozy custo : modify collections for which the share has not been validated
-     * by its owner (and thus can not be decrypted).
+     * by its owner (and thus can not be decrypted). We also add an isKonnector attribute.
     this.nestedCollections = allCollections.nestedList;
     */
     this.nestedCollections = [];
@@ -236,7 +242,14 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
         col.node.name = correspondingOrg.name;
         this.notValidatedCollectionId.push(col.node.id);
       }
-      this.nestedCollections.push(col);
+      const isKonnector = await this.konnectorService.isKonnectorsOrganization(
+        col.node.organizationId
+      );
+
+      const colWithKonnector: TreeNode<CollectionViewWithKonnector> = col;
+      colWithKonnector.node.isKonnector = isKonnector;
+
+      this.nestedCollections.push(colWithKonnector);
     }
     /** end custo */
   }
