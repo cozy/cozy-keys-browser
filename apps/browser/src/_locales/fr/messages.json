@@ -2434,8 +2434,21 @@
   "profileMigrationTitle": {
     "message": "Information importante"
   },
-  "profileMigrationContent": {
-    "message": "Votre extension Cozy évolue. Les profils seront supprimé le $DATE$. Il vous reste donc $REMAINING$ pour transformer vos $PROFILES_COUNT$ profils en contact et continuer à utiliser la fonction de remplissage automatique.",
+  "profileMigrationContentSingle": {
+    "message": "Votre extension Cozy évolue ! Tous les Contacts et Papiers de votre Cozy y sont dorénavant accessibles. La notion de \"Profil\" est fusionnée avec les \"Contacts\" pour plus de simplicité. Votre Profil est affiché encore pendant $REMAINING$ pour vous permettre de déplacer les informations utiles vers vos Contacts. Il sera supprimé le $DATE$.",
+    "placeholders": {
+      "date": {
+        "content": "$1",
+        "example": "1er janvier 1970"
+      },
+      "remaining": {
+        "content": "$2",
+        "example": "15"
+      }
+    }
+  },
+  "profileMigrationContentMultiple": {
+    "message": "Votre extension Cozy évolue ! Tous les Contacts et Papiers de votre Cozy y sont dorénavant accessibles. La notion de \"Profil\" est fusionnée avec les \"Contacts\" pour plus de simplicité. Vos $PROFILES_COUNT$ Profils sont affichés encore pendant $REMAINING$ pour vous permettre de déplacer les informations utiles vers vos Contacts. Ils seront supprimés le $DATE$.",
     "placeholders": {
       "date": {
         "content": "$1",
