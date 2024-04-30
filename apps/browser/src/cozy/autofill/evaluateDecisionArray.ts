@@ -33,6 +33,26 @@
       password: 1,
       passwordRevisionDate: 1,
       totp: 1,
+    },
+    contact: {
+      title: 1,
+      firstName: 1,
+      middleName: 1,
+      lastName: 1,
+      address1: 1,
+      address2: 1,
+      address3: 1,
+      city: 1,
+      state: 1,
+      postalCode: 1,
+      country: 1,
+      company: 1,
+      email: 0,
+      phone: 0,
+      ssn: 0,
+      username: 1,
+      passportNumber: 1,
+      licenseNumber: 1,
     }
   };
 
@@ -46,10 +66,12 @@
       hasLoginCipher: scriptContext.hasLoginCipher,
       hasCardCipher: scriptContext.hasCardCipher,
       hasIdentityCipher: scriptContext.hasIdentityCipher,
+      hasContactCipher: scriptContext.hasContactCipher,
       ambiguity: ambiguity,
       loginFellows: scriptContext.loginFellows,
       cardFellows: scriptContext.cardFellows,
       identityFellows: scriptContext.identityFellows,
+      contactFellows: scriptContext.contactFellows,
       field_isInForm: scriptContext.field.isInForm,
       field_isInSearchForm: scriptContext.field.isInSearchForm,
       field_isInloginForm: scriptContext.field.isInloginForm,
@@ -99,6 +121,14 @@
     ) {
       return true;
     }
+    if (
+      da.connected === true &&
+      da.hasContactCipher === true &&
+      da.contactFellows > 1 &&
+      da.field_visible === true
+    ) {
+      return true;
+    }
     if (da.connected === false && da.loginFellows === 2) {
       return true;
     }
@@ -112,6 +142,12 @@
       return true;
     }
     if (da.ambiguity === 1 && da.identityFellows > 1 && da.field_isInForm === true) {
+      return true;
+    }
+    if (da.ambiguity === 0 && da.contactFellows > 0 && da.field_isInForm === true) {
+      return true;
+    }
+    if (da.ambiguity === 1 && da.contactFellows > 1 && da.field_isInForm === true) {
       return true;
     }
     if (da.connected === true && da.hasExistingCipher === undefined && da.hasLoginCipher === true) {
@@ -132,6 +168,8 @@
     hasCardCipher: boolean
     /** The field corresponds to at least 1 field of a generic Identity cipher */
     hasIdentityCipher: boolean
+    /** The field corresponds to at least 1 field of a generic Contact cipher */
+    hasContactCipher: boolean
     /** Ambiguity level, for now we handle 0 or 1 */
     ambiguity: number
     /** Number of fields in the page corresponding to a generic Login cipher */
@@ -140,6 +178,8 @@
     cardFellows: number
     /** Number of fields in the page corresponding to a generic Identity cipher */
     identityFellows: number
+    /** Number of fields in the page corresponding to a generic Contact cipher */
+    contactFellows: number
     /** If the field is inside a `<form>` element */
     field_isInForm: boolean
     /** If the field is inside a `<form>` element that contains search related terms (i.e. `search`, `recherche`) */
