@@ -244,6 +244,10 @@ export class AccountSettings {
   avatarColor?: string;
   activateAutoFillOnPageLoadFromPolicy?: boolean;
   smOnboardingTasks?: Record<string, Record<string, boolean>>;
+  // Cozy customization, clean profiles after X days
+  //*
+  profilesCleanDeadline?: string;
+  //*/
 
   static fromJSON(obj: Jsonify<AccountSettings>): AccountSettings {
     if (obj == null) {
