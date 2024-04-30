@@ -170,7 +170,10 @@
     hasIdentityCipher: boolean
     /** The field corresponds to at least 1 field of a generic Contact cipher */
     hasContactCipher: boolean
-    /** Ambiguity level, for now we handle 0 or 1 */
+    /** Sometimes 1 field is not enough to guess which types of cipher are eligibles
+     * For exemple, the field `email` is not enough to guess that we are in an Identity form or a Login form
+     * But if we have more related field like `firstName`, `phone` or `ssn`, then we can guess that it is an Identity form
+     * 1 if we accept that an anbiguous field triggers the corresponding type, 0 otherwise */
     ambiguity: number
     /** Number of fields in the page corresponding to a generic Login cipher */
     loginFellows: number
