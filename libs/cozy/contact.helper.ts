@@ -92,6 +92,10 @@ const formatAddress = (cipher: CipherView, chosenAddress: FieldView): string => 
     return addressNumber;
   } else if (addressStreet) {
     return addressStreet;
+  } else if (chosenAddress.value) {
+    // Special case for adresses from cco2 that have no "number" or "street" field
+    // and everything is in the "address" field
+    return chosenAddress.value;
   }
 
   return "";
