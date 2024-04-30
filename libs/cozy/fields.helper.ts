@@ -222,6 +222,20 @@ const buildFieldsFromContactByBrowsingModels = ({
   });
 };
 
+// Remove ids of addresses if they have no subfields. It is easier to do a post process
+// to remove ids than checking in the recursive buildFieldsFromContactByBrowsingModels
+// that addresses have subfields.
+const cleanEmptyAddresses = (builtFields: FieldView[]): void => {
+  builtFields.forEach((builtField) => {
+    if (
+      builtField.cozyType === "address" &&
+      !builtFields.find((f) => f.parentId === builtField.id)
+    ) {
+      builtField.id = undefined;
+    }
+  });
+};
+
 export const buildFieldsFromContact = (
   i18nService: I18nService,
   contact: IOCozyContact
@@ -237,6 +251,8 @@ export const buildFieldsFromContact = (
     lang,
     builtFields,
   });
+
+  cleanEmptyAddresses(builtFields);
 
   return builtFields;
 };
