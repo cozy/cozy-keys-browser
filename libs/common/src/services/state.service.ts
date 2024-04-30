@@ -2911,8 +2911,8 @@ export class StateService<
   //*
   async getProfilesCleanDeadline(options?: StorageOptions): Promise<Date | null> {
     const valueString = (
-      await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
-    )?.profilesCleanDeadline;
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.settings?.profilesCleanDeadline;
 
     if (valueString) {
       return parseISO(valueString);
@@ -2922,12 +2922,12 @@ export class StateService<
   }
 
   async setProfilesCleanDeadline(value: Date, options?: StorageOptions): Promise<void> {
-    const globals = await this.getGlobals(
+    const account = await this.getAccount(
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
     );
-    globals.profilesCleanDeadline = formatISO(value);
-    await this.saveGlobals(
-      globals,
+    account.settings.profilesCleanDeadline = formatISO(value);
+    await this.saveAccount(
+      account,
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
     );
   }
