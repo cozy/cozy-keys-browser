@@ -1,4 +1,4 @@
-<div class="profileMigration" *ngIf="ready && profilesCount > 0">
+<div class="profileMigration" *ngIf="ready && !profilesMigrationHidden && profilesCount > 0">
   <div class="alert warning">
     <div class="alert-icon cozy-icon-info"></div>
     <div class="alert-message">
@@ -13,6 +13,9 @@
     <div class="alert-action">
       <button type="button" class="btn link" (click)="moreInfo()">
         {{ "profileMigrationAction" | i18n }}
+      </button>
+      <button type="button" class="btn link" (click)="understood()">
+        {{ "understood" | i18n }}
       </button>
     </div>
   </div>
