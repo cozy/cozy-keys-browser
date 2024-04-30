@@ -2931,6 +2931,27 @@ export class StateService<
       this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
     );
   }
+
+  async getProfilesMigrationHidden(options?: StorageOptions): Promise<boolean | null> {
+    return (
+      (
+        await this.getAccount(
+          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+        )
+      )?.profile?.profilesMigrationHidden ?? false
+    );
+  }
+
+  async setProfilesMigrationHidden(value: boolean, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    account.profile.profilesMigrationHidden = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
   //*/
 }
 

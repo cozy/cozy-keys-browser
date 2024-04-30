@@ -381,5 +381,7 @@ export abstract class StateService<T extends Account = Account> {
   //*
   getProfilesCleanDeadline: (options?: StorageOptions) => Promise<Date | null>;
   setProfilesCleanDeadline: (value: Date, options?: StorageOptions) => Promise<void>;
+  getProfilesMigrationHidden: (options?: StorageOptions) => Promise<boolean>;
+  setProfilesMigrationHidden: (value: boolean, options?: StorageOptions) => Promise<void>;
   //*/
 }

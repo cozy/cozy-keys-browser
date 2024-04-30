@@ -192,6 +192,10 @@ export class AccountProfile {
   kdfMemory?: number;
   kdfParallelism?: number;
   kdfType?: KdfType;
+  // Cozy customization, clean profiles after X days
+  //*
+  profilesMigrationHidden?: boolean;
+  //*/
 
   static fromJSON(obj: Jsonify<AccountProfile>): AccountProfile {
     if (obj == null) {

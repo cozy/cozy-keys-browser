@@ -22,6 +22,7 @@ export class ProfilesMigrationComponent implements OnInit {
   remaining: string;
   deadline: string;
   ready = false;
+  profilesMigrationHidden = false;
   constructor(
     protected cipherService: CipherService,
     protected i18nService: I18nService,
@@ -42,6 +43,8 @@ export class ProfilesMigrationComponent implements OnInit {
       locale: this.i18nService.systemLanguage === "fr" ? fr : undefined,
       unit: "day",
     });
+
+    this.profilesMigrationHidden = await this.stateService.getProfilesMigrationHidden();
 
     const didClean = await this.handleDeadline(cleanDeadline);
 
@@ -69,6 +72,11 @@ export class ProfilesMigrationComponent implements OnInit {
     }
 
     return true;
+  }
+
+  protected async understood() {
+    await this.stateService.setProfilesMigrationHidden(true);
+    this.profilesMigrationHidden = true;
   }
 
   moreInfo() {
