@@ -19,10 +19,12 @@ describe("Autofill Service", () => {
       hasLoginCipher: true,
       hasCardCipher: true,
       hasIdentityCipher: true,
+      hasContactCipher: false,
       ambiguity: 1,
       loginFellows: 3,
       cardFellows: 3,
       identityFellows: 3,
+      contactFellows: 3,
       field_isInForm: true, // SET
       field_isInSearchForm: false, // SET
       field_isInloginForm: true,
@@ -41,10 +43,12 @@ describe("Autofill Service", () => {
       hasLoginCipher: true,
       hasCardCipher: true,
       hasIdentityCipher: true,
+      hasContactCipher: false,
       ambiguity: 0,
       loginFellows: 0,
       cardFellows: 0,
       identityFellows: 0,
+      contactFellows: 0,
       field_isInForm: false,
       field_isInSearchForm: true, // SET
       field_isInloginForm: false,
@@ -63,11 +67,12 @@ describe("Autofill Service", () => {
       hasLoginCipher: false,
       hasCardCipher: false,
       hasIdentityCipher: false,
+      hasContactCipher: false,
       ambiguity: 0,
       loginFellows: 2, // SET
       cardFellows: 0,
       identityFellows: 0,
-      field_isInForm: false,
+      contactFellows: 0,
       field_isInForm: false, // SET
       field_isInSearchForm: false,
       field_isInloginForm: false,
@@ -86,10 +91,12 @@ describe("Autofill Service", () => {
       hasLoginCipher: false,
       hasCardCipher: false,
       hasIdentityCipher: false,
+      hasContactCipher: false,
       ambiguity: 1, // SET
       loginFellows: 0,
       cardFellows: 2, // SET
       identityFellows: 0,
+      contactFellows: 0,
       field_isInForm: true, // SET
       field_isInSearchForm: false,
       field_isInloginForm: false,
@@ -113,10 +120,12 @@ describe("Autofill Service", () => {
       hasLoginCipher: false,
       hasCardCipher: false,
       hasIdentityCipher: false,
+      hasContactCipher: false,
       ambiguity: 0, // SET
       loginFellows: 0,
       cardFellows: 4, // SET
       identityFellows: 0,
+      contactFellows: 0,
       field_isInForm: true, // SET
       field_isInSearchForm: false,
       field_isInloginForm: false,
@@ -140,10 +149,37 @@ describe("Autofill Service", () => {
       hasLoginCipher: false,
       hasCardCipher: false,
       hasIdentityCipher: true, // SET
+      hasContactCipher: false,
       ambiguity: 0,
       loginFellows: 0,
       cardFellows: 0,
       identityFellows: 2, // SET
+      contactFellows: 0,
+      field_isInForm: true, // SET
+      field_isInSearchForm: false,
+      field_isInloginForm: false,
+      field_isInSignupForm: false,
+      hasMultipleScript: false,
+      field_visible: true, // SET
+      field_viewable: false,
+    }
+
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
+  })
+
+  it("Extension is logged in, there are at least 2 Contacts fields, we are in a form => We should display menu (i.e. EDF account creation)", () => {
+    const decisionArray: DecisionArray = {
+      connected: true, // SET
+      hasExistingCipher: false,
+      hasLoginCipher: false,
+      hasCardCipher: false,
+      hasIdentityCipher: false,
+      hasContactCipher: true, // SET
+      ambiguity: 0,
+      loginFellows: 0,
+      cardFellows: 0,
+      identityFellows: 0,
+      contactFellows: 2, // SET
       field_isInForm: true, // SET
       field_isInSearchForm: false,
       field_isInloginForm: false,
@@ -163,10 +199,12 @@ describe("Autofill Service", () => {
       hasLoginCipher: true, // SET
       hasCardCipher: false,
       hasIdentityCipher: false,
+      hasContactCipher: false,
       ambiguity: 0,
       loginFellows: 2, // SET
       cardFellows: 0,
       identityFellows: 0,
+      contactFellows: 0,
       field_isInForm: true, // VARY
       field_isInSearchForm: false,
       field_isInloginForm: true, // SET
@@ -190,10 +228,12 @@ describe("Autofill Service", () => {
       hasLoginCipher: true, // SET
       hasCardCipher: false,
       hasIdentityCipher: false,
+      hasContactCipher: false,
       ambiguity: 0,
       loginFellows: 2, // SET
       cardFellows: 0,
       identityFellows: 0,
+      contactFellows: 0,
       field_isInForm: true,
       field_isInSearchForm: false,
       field_isInloginForm: false,
@@ -213,10 +253,41 @@ describe("Autofill Service", () => {
       hasLoginCipher: false,
       hasCardCipher: false,
       hasIdentityCipher: true,
+      hasContactCipher: false,
       ambiguity: 0, // SET
       loginFellows: 0,
       cardFellows: 0,
       identityFellows: 1, // SET
+      contactFellows: 0,
+      field_isInForm: true, // SET
+      field_isInSearchForm: false,
+      field_isInloginForm: false,
+      field_isInSignupForm: false,
+      hasMultipleScript: false,
+      field_visible: true,
+      field_viewable: false,
+    }
+
+    decisionArray.connected = true
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
+    
+    decisionArray.connected = false
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
+  })
+
+  it("Extension is logged in (or not), no ambiguity, there are at least 2 Contacts fields => We should display menu (i.e. Netflix)", () => {
+    const decisionArray: DecisionArray = {
+      connected: false, // VARY
+      hasExistingCipher: false,
+      hasLoginCipher: false,
+      hasCardCipher: false,
+      hasIdentityCipher: false,
+      hasContactCipher: true,
+      ambiguity: 0, // SET
+      loginFellows: 0,
+      cardFellows: 0,
+      identityFellows: 0,
+      contactFellows: 1, // SET
       field_isInForm: true, // SET
       field_isInSearchForm: false,
       field_isInloginForm: false,
@@ -240,10 +311,41 @@ describe("Autofill Service", () => {
       hasLoginCipher: false,
       hasCardCipher: false,
       hasIdentityCipher: true,
+      hasContactCipher: false,
       ambiguity: 1, // SET
       loginFellows: 0,
       cardFellows: 0,
       identityFellows: 2, // SET
+      contactFellows: 0,
+      field_isInForm: true, // SET
+      field_isInSearchForm: false,
+      field_isInloginForm: false,
+      field_isInSignupForm: false,
+      hasMultipleScript: false,
+      field_visible: true,
+      field_viewable: false,
+    }
+
+    decisionArray.connected = true
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
+    
+    decisionArray.connected = false
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
+  })
+
+  it("Extension is logged in (or not), with ambiguity, there are at least 3 Identiy fields => We should display menu (i.e. CCM)", () => {
+    const decisionArray: DecisionArray = {
+      connected: false, // VARY
+      hasExistingCipher: false,
+      hasLoginCipher: false,
+      hasCardCipher: false,
+      hasIdentityCipher: false,
+      hasContactCipher: true,
+      ambiguity: 1, // SET
+      loginFellows: 0,
+      cardFellows: 0,
+      identityFellows: 0,
+      contactFellows: 2, // SET
       field_isInForm: true, // SET
       field_isInSearchForm: false,
       field_isInloginForm: false,
@@ -267,10 +369,12 @@ describe("Autofill Service", () => {
       hasLoginCipher: true, // SET
       hasCardCipher: false,
       hasIdentityCipher: true,
+      hasContactCipher: false,
       ambiguity: 0,
       loginFellows: 0,
       cardFellows: 0,
       identityFellows: 0,
+      contactFellows: 0,
       field_isInForm: false,
       field_isInSearchForm: false,
       field_isInloginForm: false,
