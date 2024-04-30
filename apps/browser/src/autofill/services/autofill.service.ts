@@ -15,6 +15,7 @@ import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view
 
 import { generateIdentityViewFromCipherView } from "../../../../../libs/cozy/contact.helper";
 import { BrowserApi } from "../../browser/browserApi";
+import { evaluateDecisionArray, makeDecisionArray } from "../../cozy/autofill/evaluateDecisionArray";
 import { BrowserStateService } from "../../services/abstractions/browser-state.service";
 import AutofillField from "../models/autofill-field";
 import AutofillPageDetails from "../models/autofill-page-details";
@@ -31,46 +32,6 @@ import {
   CreditCardAutoFillConstants,
   IdentityAutoFillConstants,
 } from "./autofill-constants";
-
-/** added by Cozy  */
-const attributesAmbiguity: any = {
-  identity: {
-    title: 1,
-    firstName: 1,
-    middleName: 1,
-    lastName: 1,
-    address1: 1,
-    address2: 1,
-    address3: 1,
-    city: 1,
-    state: 1,
-    postalCode: 1,
-    country: 1,
-    company: 1,
-    email: 0,
-    phone: 0,
-    ssn: 0,
-    username: 1,
-    passportNumber: 1,
-    licenseNumber: 1,
-  },
-  card: {
-    cardholderName: 1,
-    brand: 1,
-    number: 1,
-    expMonth: 0,
-    expYear: 0,
-    code: 1,
-  },
-  login: {
-    uris: 1,
-    username: 1,
-    password: 1,
-    passwordRevisionDate: 1,
-    totp: 1,
-  },
-};
-/** END Cozy */
 
 export interface GenerateFillScriptOptions {
   skipUsernameOnlyFill: boolean;
@@ -738,35 +699,15 @@ export default class AutofillService implements AutofillServiceInterface {
         default:
           break;
       }
-      // check if the field is associated to an ambiguous attribute of a cipher
-      const ambiguity =
-        attributesAmbiguity[scriptContext.cipher.type][scriptContext.cipher.fieldType];
-      scriptContext.ambiguity = ambiguity ? ambiguity : 0; // custom fields are not ambiguous
-      // prepare decision array used to decide if the script should be run for this field
-      const decisionArray = {
-        connected: scriptContext.connected,
-        hasExistingCipher: scriptContext.hasExistingCipher,
-        hasLoginCipher: scriptContext.hasLoginCipher,
-        hasCardCipher: scriptContext.hasCardCipher,
-        hasIdentityCipher: scriptContext.hasIdentityCipher,
-        ambiguity: scriptContext.ambiguity,
-        loginFellows: scriptContext.loginFellows,
-        cardFellows: scriptContext.cardFellows,
-        identityFellows: scriptContext.identityFellows,
-        field_isInForm: scriptContext.field.isInForm,
-        field_isInSearchForm: scriptContext.field.isInSearchForm,
-        field_isInloginForm: scriptContext.field.isInloginForm,
-        field_isInSignupForm: scriptContext.field.isInSignupForm,
-        hasMultipleScript: scriptContext.hasMultipleScript,
-        field_visible: scriptContext.field.visible,
-        field_viewable: scriptContext.field.viewableOri, // use the original value
-      };
+
+      const decisionArray = makeDecisionArray(scriptContext)
+      scriptContext.ambiguity = decisionArray.ambiguity;
       scriptContext.decisionArray = decisionArray;
     }
     // filter according to decisionArray
     scriptObjs.forEach((scriptObj: any) => {
       scriptObj.script = scriptObj.script.filter((action: any) => {
-        if (!this.evaluateDecisionArray(action)) {
+        if (!evaluateDecisionArray(action)) {
           /* @override by Cozy : this log is required for debug and analysis
           const fieldStr = `${action[1]}, ${action[3].cipher.type}:${action[3].cipher.fieldType}`
           console.log("!! ELIMINATE menu for field", {
@@ -810,66 +751,6 @@ export default class AutofillService implements AutofillServiceInterface {
   }
 
   // Helpers
-
-  /* -------------------------------------------------------------------------------- */
-  // Evaluate if a decision array is valid to activate a menu for the field in the page.
-  private evaluateDecisionArray(action: any) {
-    const da = action[3].decisionArray;
-    // selection conditions
-    if (
-      da.hasExistingCipher === true &&
-      da.field_isInForm === true &&
-      da.field_isInSearchForm === false
-    ) {
-      return true;
-    }
-    if (da.field_isInSearchForm === true) {
-      return false;
-    }
-    if (
-      da.connected === true &&
-      da.hasExistingCipher === true &&
-      da.loginFellows > 1 &&
-      da.field_visible === true
-    ) {
-      return true;
-    }
-    if (da.ambiguity === 1 && da.cardFellows > 1 && da.field_isInForm === true) {
-      return true;
-    }
-    if (da.ambiguity === 0 && da.cardFellows > 3 && da.field_isInForm === true) {
-      return true;
-    }
-    if (
-      da.connected === true &&
-      da.hasIdentityCipher === true &&
-      da.identityFellows > 1 &&
-      da.field_visible === true
-    ) {
-      return true;
-    }
-    if (da.connected === false && da.loginFellows === 2) {
-      return true;
-    }
-    if (da.connected === false && da.hasLoginCipher === true && da.field_isInloginForm === true) {
-      return true;
-    }
-    if (da.connected === false && da.hasLoginCipher === true && da.field_isInSignupForm === true) {
-      return true;
-    }
-    if (da.ambiguity === 0 && da.identityFellows > 0 && da.field_isInForm === true) {
-      return true;
-    }
-    if (da.ambiguity === 1 && da.identityFellows > 1 && da.field_isInForm === true) {
-      return true;
-    }
-    if (da.connected === true && da.hasExistingCipher === undefined && da.hasLoginCipher === true) {
-      return false;
-    }
-    // end selection conditions
-    return false;
-  }
-
   private async getActiveTab(): Promise<chrome.tabs.Tab> {
     const tab = await BrowserApi.getTabFromCurrentWindow();
     if (!tab) {
