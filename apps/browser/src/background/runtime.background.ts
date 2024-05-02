@@ -200,6 +200,7 @@ export default class RuntimeBackground {
               logins: logins,
               cards: [] as Array<CipherExport>,
               identities: [] as Array<CipherView>,
+              contacts: [] as Array<CipherView>,
             };
             for (const cipher of allCiphers) {
               if (cipher.isDeleted) {
@@ -213,6 +214,13 @@ export default class RuntimeBackground {
                   break;
                 case CipherType.Identity:
                   ciphers.identities.push(cipher);
+                  break;
+                case CipherType.Contact:
+                  if (cipher.contact.me) {
+                    ciphers.contacts.unshift(cipher);
+                  } else if (cipher.favorite) {
+                    ciphers.contacts.push(cipher);
+                  }
                   break;
               }
             }

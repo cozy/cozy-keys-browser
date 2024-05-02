@@ -516,6 +516,9 @@ function getPossibleTypesForField(fieldEl) {
   if (fieldEl.fieldTypes.identity) {
     cipherTypes.push(CipherType.Identity);
   }
+  if (fieldEl.fieldTypes.contact) {
+    cipherTypes.push(CipherType.Contact);
+  }
 
   return cipherTypes;
 }
@@ -721,7 +724,7 @@ function _setApplyFadeInUrl(doApply, fieldTypes) {
   const url = new URL(menuEl.src);
   if (doApply) {
     fieldTypes = {
-      ...{ login: false, identity: false, card: false, fieldFormat: false },
+      ...{ login: false, identity: false, card: false, contact: false, fieldFormat: false },
       ...fieldTypes,
     };
     state.iFrameHash = { ...state.iFrameHash, ...fieldTypes, applyFadeIn: true };
