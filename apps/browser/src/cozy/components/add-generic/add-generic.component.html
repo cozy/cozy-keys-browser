@@ -47,6 +47,7 @@
           appStopClick
           appBlurClick
           (click)="selectType(cipherType.Contact)"
+          *ngIf="!collectionId"
         >
           <div class="row-main">
             <div class="icon"><i class="icon-cozy icon-contacts"></i></div>
