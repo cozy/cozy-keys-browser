@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (msg.command === "updateMenuCiphers") {
       const ciphersData = msg.data.ciphers;
-      ciphers = { cards: [], identities: [], logins: [] };
+      ciphers = { cards: [], identities: [], logins: [], contacts: [] };
 
       ciphersData.cards.forEach((cd) => {
         ciphers.cards.push(mapData2CipherView(cd, new CipherView()));
@@ -99,6 +99,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       ciphersData.logins.forEach((cd) => {
         ciphers.logins.push(mapData2CipherView(cd, new CipherView()));
+      });
+      ciphersData.contacts.forEach((cd) => {
+        ciphers.contacts.push(mapData2CipherView(cd, new CipherView()));
       });
 
       document.getElementById("logo-link").href = msg.data.cozyUrl;
@@ -155,17 +158,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 6- listen to click on the rows
-  document.querySelectorAll("#login-rows-list, #card-rows-list, #ids-rows-list").forEach((list) => {
-    list.addEventListener("click", (e) => {
-      const rowEl = e.target.closest(".row-main");
-      const detailEl = e.target.closest(".row-detail");
-      if (detailEl) {
-        requestFieldFillingWithData(detailEl.textContent);
-      } else {
-        requestFormFillingWithCipher(rowEl.dataset.cipherId);
-      }
+  document
+    .querySelectorAll("#login-rows-list, #card-rows-list, #ids-rows-list, #contact-rows-list")
+    .forEach((list) => {
+      list.addEventListener("click", (e) => {
+        const rowEl = e.target.closest(".row-main");
+        const detailEl = e.target.closest(".row-detail");
+        if (detailEl) {
+          requestFieldFillingWithData(detailEl.textContent);
+        } else {
+          requestFormFillingWithCipher(rowEl.dataset.cipherId);
+        }
+      });
     });
-  });
 
   // 7- detect when to apply the fadeIn effect
   window.addEventListener("hashchange", _testHash);
@@ -202,6 +207,7 @@ function updateAllRows() {
   updateRows("login");
   updateRows("card");
   updateRows("ids");
+  updateRows("contact");
   selectFirstVisibleRow();
 }
 
@@ -235,6 +241,14 @@ function updateRows(rowsListType) {
       }
       rowsCiphers = ciphers.identities;
       rowsList = document.querySelector("#ids-rows-list");
+      rowTemplate = idsRowTemplate;
+      break;
+    case "contact":
+      if (!ciphers || !ciphers.contacts) {
+        return;
+      }
+      rowsCiphers = ciphers.contacts;
+      rowsList = document.querySelector("#contact-rows-list");
       rowTemplate = idsRowTemplate;
       break;
   }
@@ -276,6 +290,13 @@ function updateRows(rowsListType) {
           default:
             detail.textContent = cipher.identity[currentFieldData.identity];
         }
+        break;
+      case "contact":
+        text.textContent = cipher.name;
+        detail.textContent =
+          cipher.contact.primaryEmail !== cipher.contact.displayName
+            ? cipher.contact.primaryEmail
+            : null;
         break;
     }
   });
@@ -367,6 +388,9 @@ function mapData2CipherView(cData, cView) {
     case CipherType.Identity:
       _mapData2Obj(cData.identity, cView.identity);
       break;
+    case CipherType.Contact:
+      _mapData2Obj(cData.contact, cView.contact);
+      break;
   }
   const propNotTocopy = ["card", "login", "identity", "secureNote"];
   for (var key in cData) {
@@ -433,6 +457,12 @@ function _testHash() {
       title: i18nGetMessage("inPageMenuSelectAnAccount"),
       updateFn: () => updateRows("login"),
       selector: "#login-rows-list",
+    },
+    {
+      fieldCipherType: "contact",
+      title: i18nGetMessage("inPageMenuSelectAContact"),
+      updateFn: () => updateRows("contact"),
+      selector: "#contacts-rows-list",
     },
   ];
 

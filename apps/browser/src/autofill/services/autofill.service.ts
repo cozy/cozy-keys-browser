@@ -492,6 +492,7 @@ export default class AutofillService implements AutofillServiceInterface {
 
     // B2] if connected, check if there are ciphers
     let hasIdentities = false;
+    let hasContacts = false;
     let hasLogins = false;
     let hasCards = false;
     if (connected) {
@@ -503,12 +504,14 @@ export default class AutofillService implements AutofillServiceInterface {
         hasCards = hasCards || cipher.type === CipherType.Card;
         hasLogins = hasLogins || cipher.type === CipherType.Login;
         hasIdentities = hasIdentities || cipher.type === CipherType.Identity;
-        if (hasCards && hasLogins && hasIdentities) {
+        hasContacts = hasContacts || cipher.type === CipherType.Contact;
+        if (hasCards && hasLogins && hasIdentities && hasContacts) {
           break;
         }
       }
     } else {
       hasIdentities = true;
+      hasContacts = true;
       hasLogins = true;
       hasCards = true;
     }
@@ -588,6 +591,44 @@ export default class AutofillService implements AutofillServiceInterface {
         }
       );
       scriptForFieldsMenu.push(identityLoginMenuFillScript);
+    }
+
+    // F] generate a standard contact fillscript for the generic cipher
+    if (hasContacts) {
+      let contactLoginMenuFillScript: any = [];
+      const idFS = new AutofillScript(pageDetails.documentUUID);
+      const idFilledFields: { [id: string]: AutofillField } = {};
+
+      // For contacts, we create an IdentityView with the contact content to leverage the generateIdentityFillScript.
+      try {
+        if (options.cipher.type === CipherType.Contact) {
+          options.cipher.identity = generateIdentityViewFromCipherView(options.cipher);
+        }
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log("Failed to convert CipherView to IdentityView", e);
+      }
+
+      contactLoginMenuFillScript = this.generateIdentityFillScript(
+        idFS,
+        pageDetails,
+        idFilledFields,
+        options
+      );
+      contactLoginMenuFillScript.type = "contactFieldsForInPageMenuScript";
+      contactLoginMenuFillScript.script = contactLoginMenuFillScript.script.filter(
+        (action: any) => {
+          // only 'fill_by_opid' are relevant for the fields wher to add a menu
+          if (action[0] !== "fill_by_opid") {
+            return false;
+          }
+          action[0] = "add_menu_btn_by_opid";
+          action[3].hasContactCipher = true;
+          action[3].connected = connected;
+          return true;
+        }
+      );
+      scriptForFieldsMenu.push(contactLoginMenuFillScript);
     }
 
     return scriptForFieldsMenu;
@@ -895,6 +936,10 @@ export default class AutofillService implements AutofillServiceInterface {
             case CipherType.Identity:
               field.fieldType = "customField";
               cipher = { type: "identity", fieldType: "customField" };
+              break;
+            case CipherType.Contact:
+              field.fieldType = "customField";
+              cipher = { type: "contact", fieldType: "customField" };
               break;
           }
           AutofillService.fillByOpid(fillScript, field, val, cipher);
@@ -1708,7 +1753,11 @@ export default class AutofillService implements AutofillServiceInterface {
     fillScript: AutofillScript,
     pageDetails: AutofillPageDetails,
     filledFields: { [id: string]: AutofillField },
-    options: GenerateFillScriptOptions
+    options: GenerateFillScriptOptions,
+    // Cozy customization, allow to call `generateIdentityFillScript` for contacts
+    //*
+    cipherType: "identity" | "contact" = "identity"
+    //*/
   ): AutofillScript {
     if (!options.cipher.identity) {
       return null;
@@ -2017,19 +2066,19 @@ export default class AutofillService implements AutofillServiceInterface {
     });
 
     const identity = options.cipher.identity;
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "title", "identity");
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "firstName", "identity");
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "middleName", "identity");
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "lastName", "identity");
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "address1", "identity");
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "address2", "identity");
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "address3", "identity");
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "city", "identity");
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "postalCode", "identity");
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "company", "identity");
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "email", "identity");
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "phone", "identity");
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "username", "identity");
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "title", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "firstName", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "middleName", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "lastName", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "address1", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "address2", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "address3", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "city", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "postalCode", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "company", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "email", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "phone", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "username", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
 
     let filledState = false;
     if (fillFields.state && identity.state && identity.state.length > 2) {
@@ -2039,7 +2088,7 @@ export default class AutofillService implements AutofillServiceInterface {
         IdentityAutoFillConstants.IsoProvinces[stateLower];
       if (isoState) {
         filledState = true;
-        const cipher = { type: "identity", fieldType: "state" };
+        const cipher = { type: cipherType, fieldType: "state" }; // Cozy customization: `"identity"` replaced by `cipherType`
         this.makeScriptActionWithValue(
           fillScript,
           isoState,
@@ -2051,14 +2100,14 @@ export default class AutofillService implements AutofillServiceInterface {
     }
 
     if (!filledState) {
-      this.makeScriptAction(fillScript, identity, fillFields, filledFields, "state", "identity");
+      this.makeScriptAction(fillScript, identity, fillFields, filledFields, "state", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
     }
 
     let filledCountry = false;
     if (fillFields.country && identity.country && identity.country.length > 2) {
       const countryLower = identity.country.toLowerCase();
       const isoCountry = IdentityAutoFillConstants.IsoCountries[countryLower];
-      const cipher = { type: "identity", fieldType: "country" };
+      const cipher = { type: cipherType, fieldType: "country" }; // Cozy customization: `"identity"` replaced by `cipherType`
       if (isoCountry) {
         filledCountry = true;
         this.makeScriptActionWithValue(
@@ -2072,7 +2121,7 @@ export default class AutofillService implements AutofillServiceInterface {
     }
 
     if (!filledCountry) {
-      this.makeScriptAction(fillScript, identity, fillFields, filledFields, "country", "identity");
+      this.makeScriptAction(fillScript, identity, fillFields, filledFields, "country", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
     }
 
     if (fillFields.name && (identity.firstName || identity.lastName)) {
@@ -2093,12 +2142,12 @@ export default class AutofillService implements AutofillServiceInterface {
         fullName += identity.lastName;
       }
 
-      const cipher = { type: "identity", fieldType: "fullName" };
+      const cipher = { type: cipherType, fieldType: "fullName" }; // Cozy customization: `"identity"` replaced by `cipherType`
       this.makeScriptActionWithValue(fillScript, fullName, fillFields.name, filledFields, cipher);
     }
 
     if (fillFields.lastNameFirstName) {
-      const cipher = { type: "identity", fieldType: "lastNameFirstName" };
+      const cipher = { type: cipherType, fieldType: "lastNameFirstName" }; // Cozy customization: `"identity"` replaced by `cipherType`
       const nameToDisplay = identity.lastName + " " + identity.firstName;
       this.makeScriptActionWithValue(
         fillScript,
@@ -2108,7 +2157,7 @@ export default class AutofillService implements AutofillServiceInterface {
         cipher
       );
     } else if (fillFields.firstNameLastName) {
-      const cipher = { type: "identity", fieldType: "firstNameLastName" };
+      const cipher = { type: cipherType, fieldType: "firstNameLastName" }; // Cozy customization: `"identity"` replaced by `cipherType`
       const nameToDisplay = identity.firstName + " " + identity.lastName;
       this.makeScriptActionWithValue(
         fillScript,
@@ -2137,7 +2186,7 @@ export default class AutofillService implements AutofillServiceInterface {
         address += identity.address3;
       }
 
-      const cipher = { type: "identity", fieldType: "fullAddress" };
+      const cipher = { type: cipherType, fieldType: "fullAddress" }; // Cozy customization: `"identity"` replaced by `cipherType`
       this.makeScriptActionWithValue(fillScript, address, fillFields.address, filledFields, cipher);
     }
 
