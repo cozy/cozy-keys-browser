@@ -2384,10 +2384,10 @@
     "message": "This security code will enable him to validate your identity and let you access shared items."
   },
   "profileMigrationTitle": {
-    "message": "Important information"
+    "message": "Cozy extension is evolving!"
   },
   "profileMigrationContentSingle": {
-    "message": "Your Cozy extension is evolving! All your Cozy's Contacts and Papers are now accessible. The notion of \"Profile\" has been merged with \"Contacts\" for greater simplicity. Your Profile is still displayed for $REMAINING$ to allow you to move useful information to your Contacts. It will be deleted on $DATE$.",
+    "message": "All your Cozy's Contacts and Papers are now accessible. The notion of \"Profile\" has been merged with \"Contacts\" for greater simplicity. Your Profile is still displayed for $REMAINING$ to allow you to move useful information to your Contacts. It will be deleted on $DATE$.",
     "placeholders": {
       "date": {
         "content": "$1",
