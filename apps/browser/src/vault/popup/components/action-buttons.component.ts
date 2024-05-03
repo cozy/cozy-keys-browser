@@ -68,7 +68,14 @@ export class ActionButtonsComponent {
     this.platformUtilsService.showToast(
       "info",
       null,
+      // Cozy customization, manage "Valeur copiée" feminine translation
+      //*
+      typeI18nKey === "value"
+        ? this.i18nService.t("valueCopiedFeminine", this.i18nService.t(typeI18nKey))
+        : this.i18nService.t("valueCopied", this.i18nService.t(typeI18nKey))
+      /*/
       this.i18nService.t("valueCopied", this.i18nService.t(typeI18nKey))
+      //*/
     );
 
     if (typeI18nKey === "password" || typeI18nKey === "verificationCodeTotp") {

@@ -585,6 +585,16 @@
       }
     }
   },
+  "valueCopiedFeminine": {
+    "message": "$VALUE$ copiée",
+    "description": "Value has been copied to the clipboard.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Password"
+      }
+    }
+  },
   "autofillError": {
     "message": "Impossible de saisir automatiquement l'élément sélectionné sur cette page. Copiez-collez plutôt l'information."
   },
