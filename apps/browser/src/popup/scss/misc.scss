@@ -448,6 +448,10 @@ li.active .icon-cozy-inline > svg {
   object-fit: contain;
 }
 
+.cipher-illustration > * {
+  cursor: pointer;
+}
+
 .icon-pen {
   mask-image: url("../images/icons-16-icon-pen.svg");
   -webkit-mask-image: url("../images/icons-16-icon-pen.svg");
