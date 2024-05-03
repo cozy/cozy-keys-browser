@@ -11,6 +11,7 @@ import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-repromp
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
+import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
 
 import { generateIdentityViewFromCipherView } from "../../../../../libs/cozy/contact.helper";
@@ -868,6 +869,8 @@ export default class AutofillService implements AutofillServiceInterface {
           filledFields,
           options
         );
+
+        options.cipher.identity = new IdentityView();
         break;
       default:
         return null;
