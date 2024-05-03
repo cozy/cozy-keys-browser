@@ -2432,10 +2432,10 @@
     "message": "Ce code de sécurité lui permettra de valider votre identité et ainsi d'accéder aux éléments partagés."
   },
   "profileMigrationTitle": {
-    "message": "Information importante"
+    "message": "L'extension Cozy évolue !"
   },
   "profileMigrationContentSingle": {
-    "message": "Votre extension Cozy évolue ! Tous les Contacts et Papiers de votre Cozy y sont dorénavant accessibles. La notion de \"Profil\" est fusionnée avec les \"Contacts\" pour plus de simplicité. Votre Profil est affiché encore pendant $REMAINING$ pour vous permettre de déplacer les informations utiles vers vos Contacts. Il sera supprimé le $DATE$.",
+    "message": "Tous les Contacts et Papiers de votre Cozy y sont dorénavant accessibles. La notion de \"Profil\" est fusionnée avec les \"Contacts\" pour plus de simplicité. Votre Profil est affiché encore pendant $REMAINING$ pour vous permettre de déplacer les informations utiles vers vos Contacts. Il sera supprimé le $DATE$.",
     "placeholders": {
       "date": {
         "content": "$1",
