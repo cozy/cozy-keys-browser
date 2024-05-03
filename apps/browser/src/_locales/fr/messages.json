@@ -1420,6 +1420,9 @@
   "typeSecureNote": {
     "message": "Note sécurisée"
   },
+  "typeSecureNotes": {
+    "message": "Notes sécurisées"
+  },
   "typeCard": {
     "message": "Carte de paiement"
   },
@@ -1432,8 +1435,14 @@
   "typeIdentities": {
     "message": "Profils"
   },
+  "typeContact": {
+    "message": "Contact"
+  },
   "typeContacts": {
     "message": "Contacts"
+  },
+  "typePaper": {
+    "message": "Document et Note"
   },
   "typePapers": {
     "message": "Documents et Notes"
