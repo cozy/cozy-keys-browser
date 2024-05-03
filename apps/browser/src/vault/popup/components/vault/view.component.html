@@ -44,7 +44,11 @@
     />
   </div>
   <div *ngIf="cipher.type === cipherType.Contact" class="cipher-illustration">
-    <app-vault-contact-avatar [initials]="cipher.contact.initials" [size]="96">
+    <app-vault-contact-avatar
+      (click)="openWebApp()"
+      [initials]="cipher.contact.initials"
+      [size]="96"
+    >
     </app-vault-contact-avatar>
   </div>
   <!-- Cozy customization end -->
