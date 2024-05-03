@@ -1,4 +1,4 @@
-import { DecisionArray, evaluateDecisionArray } from "./evaluateDecisionArray"
+import { DecisionArray, evaluateDecisionArray } from "./evaluateDecisionArray";
 
 const makeAction = (decisionArray: DecisionArray) => {
   return [
@@ -6,10 +6,10 @@ const makeAction = (decisionArray: DecisionArray) => {
     null,
     null,
     {
-      decisionArray
-    }
-  ]
-}
+      decisionArray,
+    },
+  ];
+};
 
 describe("Autofill Service", () => {
   it("Extension is logged in, has an existing cipher for website, we are in a form that's not a search => We should display the menu (e.g. assurance retraite)", () => {
@@ -31,10 +31,10 @@ describe("Autofill Service", () => {
       field_isInSignupForm: false,
       hasMultipleScript: false,
       field_visible: true,
-      field_viewable: true, 
-    }
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-  })
+      field_viewable: true,
+    };
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+  });
 
   it("We are in a search form => We should never display the menu", () => {
     const decisionArray: DecisionArray = {
@@ -55,10 +55,10 @@ describe("Autofill Service", () => {
       field_isInSignupForm: false,
       hasMultipleScript: true,
       field_visible: true,
-      field_viewable: true, 
-    }
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(false)
-  })
+      field_viewable: true,
+    };
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(false);
+  });
 
   it("Extension is logged in, has an existing cipher for website, we are NOT in a form but there are at least 2 Login fields => We should display menu (e.g. EDF)", () => {
     const decisionArray: DecisionArray = {
@@ -80,9 +80,9 @@ describe("Autofill Service", () => {
       hasMultipleScript: false,
       field_visible: true, // SET
       field_viewable: false,
-    }
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-  })
+    };
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+  });
 
   it("Extension is logged in (or not), no ambiguity, there are at least 2 Card fields, we are in a form => We should display menu", () => {
     const decisionArray: DecisionArray = {
@@ -104,14 +104,14 @@ describe("Autofill Service", () => {
       hasMultipleScript: false,
       field_visible: true,
       field_viewable: false,
-    }
+    };
 
-    decisionArray.connected = true
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-    
-    decisionArray.connected = false
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-  })
+    decisionArray.connected = true;
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+
+    decisionArray.connected = false;
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+  });
 
   it("Extension is logged in (or not), ambiguity, but there are at least 4 Card fields, we are in a form => We should display menu", () => {
     const decisionArray: DecisionArray = {
@@ -133,14 +133,14 @@ describe("Autofill Service", () => {
       hasMultipleScript: false,
       field_visible: true,
       field_viewable: false,
-    }
+    };
 
-    decisionArray.connected = true
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-    
-    decisionArray.connected = false
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-  })
+    decisionArray.connected = true;
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+
+    decisionArray.connected = false;
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+  });
 
   it("Extension is logged in, there are at least 2 Identity fields, we are in a form => We should display menu (i.e. EDF account creation)", () => {
     const decisionArray: DecisionArray = {
@@ -162,10 +162,10 @@ describe("Autofill Service", () => {
       hasMultipleScript: false,
       field_visible: true, // SET
       field_viewable: false,
-    }
+    };
 
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-  })
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+  });
 
   it("Extension is logged in, there are at least 2 Contacts fields, we are in a form => We should display menu (i.e. EDF account creation)", () => {
     const decisionArray: DecisionArray = {
@@ -187,10 +187,10 @@ describe("Autofill Service", () => {
       hasMultipleScript: false,
       field_visible: true, // SET
       field_viewable: false,
-    }
+    };
 
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-  })
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+  });
 
   it("Extension is logged out, enough Login fields, we are in a login form (or not) => We should display the menu (i.e. login Cozy or Fnac)", () => {
     const decisionArray: DecisionArray = {
@@ -212,14 +212,14 @@ describe("Autofill Service", () => {
       hasMultipleScript: false,
       field_visible: true,
       field_viewable: false,
-    }
+    };
 
-    decisionArray.field_isInForm = true
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-    
-    decisionArray.field_isInForm = false
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-  })
+    decisionArray.field_isInForm = true;
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+
+    decisionArray.field_isInForm = false;
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+  });
 
   it("Extension is logged out, there is a generic login, we are in a signup form => We should display the menu (i.e. signup form CCM)", () => {
     const decisionArray: DecisionArray = {
@@ -241,10 +241,10 @@ describe("Autofill Service", () => {
       hasMultipleScript: false,
       field_visible: true,
       field_viewable: false,
-    }
+    };
 
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-  })
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+  });
 
   it("Extension is logged in (or not), no ambiguity, there are at least 2 Identiy fields => We should display menu (i.e. Netflix)", () => {
     const decisionArray: DecisionArray = {
@@ -266,14 +266,14 @@ describe("Autofill Service", () => {
       hasMultipleScript: false,
       field_visible: true,
       field_viewable: false,
-    }
+    };
 
-    decisionArray.connected = true
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-    
-    decisionArray.connected = false
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-  })
+    decisionArray.connected = true;
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+
+    decisionArray.connected = false;
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+  });
 
   it("Extension is logged in (or not), no ambiguity, there are at least 2 Contacts fields => We should display menu (i.e. Netflix)", () => {
     const decisionArray: DecisionArray = {
@@ -295,14 +295,14 @@ describe("Autofill Service", () => {
       hasMultipleScript: false,
       field_visible: true,
       field_viewable: false,
-    }
+    };
 
-    decisionArray.connected = true
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-    
-    decisionArray.connected = false
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-  })
+    decisionArray.connected = true;
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+
+    decisionArray.connected = false;
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+  });
 
   it("Extension is logged in (or not), with ambiguity, there are at least 3 Identiy fields => We should display menu (i.e. CCM)", () => {
     const decisionArray: DecisionArray = {
@@ -324,14 +324,14 @@ describe("Autofill Service", () => {
       hasMultipleScript: false,
       field_visible: true,
       field_viewable: false,
-    }
+    };
 
-    decisionArray.connected = true
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-    
-    decisionArray.connected = false
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-  })
+    decisionArray.connected = true;
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+
+    decisionArray.connected = false;
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+  });
 
   it("Extension is logged in (or not), with ambiguity, there are at least 3 Identiy fields => We should display menu (i.e. CCM)", () => {
     const decisionArray: DecisionArray = {
@@ -353,14 +353,14 @@ describe("Autofill Service", () => {
       hasMultipleScript: false,
       field_visible: true,
       field_viewable: false,
-    }
+    };
 
-    decisionArray.connected = true
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-    
-    decisionArray.connected = false
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true)
-  })
+    decisionArray.connected = true;
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+
+    decisionArray.connected = false;
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(true);
+  });
 
   it("Logged in, no existing cipher, a login field => We should NOT display menu (i.e. trainline)", () => {
     const decisionArray: DecisionArray = {
@@ -382,9 +382,8 @@ describe("Autofill Service", () => {
       hasMultipleScript: false,
       field_visible: true,
       field_viewable: false,
-    }
+    };
 
-    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(false)
-  
-  })
-})
+    expect(evaluateDecisionArray(makeAction(decisionArray))).toBe(false);
+  });
+});
