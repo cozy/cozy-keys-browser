@@ -2467,7 +2467,7 @@
     }
   },
   "profileMigrationContentMultiple": {
-    "message": "Votre extension Cozy évolue ! Tous les Contacts et Papiers de votre Cozy y sont dorénavant accessibles. La notion de \"Profil\" est fusionnée avec les \"Contacts\" pour plus de simplicité. Vos $PROFILES_COUNT$ Profils sont affichés encore pendant $REMAINING$ pour vous permettre de déplacer les informations utiles vers vos Contacts. Ils seront supprimés le $DATE$.",
+    "message": "Tous les Contacts et Papiers de votre Cozy y sont dorénavant accessibles. La notion de \"Profil\" est fusionnée avec les \"Contacts\" pour plus de simplicité. Vos $PROFILES_COUNT$ Profils sont affichés encore pendant $REMAINING$ pour vous permettre de déplacer les informations utiles vers vos Contacts. Ils seront supprimés le $DATE$.",
     "placeholders": {
       "date": {
         "content": "$1",
