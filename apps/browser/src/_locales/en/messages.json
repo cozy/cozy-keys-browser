@@ -2419,7 +2419,7 @@
     }
   },
   "profileMigrationContentMultiple": {
-    "message": "Your Cozy extension is evolving! All your Cozy's Contacts and Papers are now accessible. The notion of \"Profile\" has been merged with \"Contacts\" for greater simplicity. Your $PROFILES_COUNT$ Profiles are still displayed for $REMAINING$ to allow you to move useful information to your Contacts. They will be deleted on $DATE$.",
+    "message": "All your Cozy's Contacts and Papers are now accessible. The notion of \"Profile\" has been merged with \"Contacts\" for greater simplicity. Your $PROFILES_COUNT$ Profiles are still displayed for $REMAINING$ to allow you to move useful information to your Contacts. They will be deleted on $DATE$.",
     "placeholders": {
       "date": {
         "content": "$1",
