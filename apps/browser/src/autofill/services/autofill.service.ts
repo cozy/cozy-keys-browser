@@ -15,7 +15,10 @@ import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view
 
 import { generateIdentityViewFromCipherView } from "../../../../../libs/cozy/contact.helper";
 import { BrowserApi } from "../../browser/browserApi";
-import { evaluateDecisionArray, makeDecisionArray } from "../../cozy/autofill/evaluateDecisionArray";
+import {
+  evaluateDecisionArray,
+  makeDecisionArray,
+} from "../../cozy/autofill/evaluateDecisionArray";
 import { BrowserStateService } from "../../services/abstractions/browser-state.service";
 import AutofillField from "../models/autofill-field";
 import AutofillPageDetails from "../models/autofill-page-details";
@@ -700,7 +703,7 @@ export default class AutofillService implements AutofillServiceInterface {
           break;
       }
 
-      const decisionArray = makeDecisionArray(scriptContext)
+      const decisionArray = makeDecisionArray(scriptContext);
       scriptContext.ambiguity = decisionArray.ambiguity;
       scriptContext.decisionArray = decisionArray;
     }
