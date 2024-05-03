@@ -1372,6 +1372,9 @@
   "typeSecureNote": {
     "message": "Secure note"
   },
+  "typeSecureNotes": {
+    "message": "Secure notes"
+  },
   "typeCard": {
     "message": "Card"
   },
@@ -1384,8 +1387,14 @@
   "typeIdentities": {
     "message": "Profiles"
   },
+  "typeContact": {
+    "message": "Contact"
+  },
   "typeContacts": {
     "message": "Contacts"
+  },
+  "typePaper": {
+    "message": "Document and Note"
   },
   "typePapers": {
     "message": "Documents and Notes"
