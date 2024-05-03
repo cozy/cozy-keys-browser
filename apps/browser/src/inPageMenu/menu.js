@@ -44,6 +44,16 @@ const idsRowTemplate = `
 </div>
 `;
 
+const contactsRowTemplate = `
+<div class="row-main">
+    <i class="row-icon icon-contact"></i>
+    <div class="row-main-content">
+        <div class="row-text">site description</div>
+        <div class="row-detail">account login</div>
+    </div>
+</div>
+`;
+
 document.addEventListener("DOMContentLoaded", () => {
   // 1- get elements references
   panel = document.querySelector(".panel");
@@ -249,7 +259,7 @@ function updateRows(rowsListType) {
       }
       rowsCiphers = ciphers.contacts;
       rowsList = document.querySelector("#contact-rows-list");
-      rowTemplate = idsRowTemplate;
+      rowTemplate = contactsRowTemplate;
       break;
   }
   // 2- remove all previous rows
