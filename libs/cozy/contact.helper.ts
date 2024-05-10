@@ -41,9 +41,15 @@ export const convertContactToCipherData = async (
   cipherView.contact.initials = getInitials(contact);
   cipherView.contact.primaryEmail = getPrimaryEmail(contact);
   cipherView.contact.primaryPhone = getPrimaryPhone(contact);
-  cipherView.favorite = !!cozyMetadata?.favorite;
   cipherView.fields = buildFieldsFromContact(i18nService, contact);
   cipherView.contact.me = contact.me;
+
+  if (cozyMetadata?.favorite === undefined && contact.me) {
+    cipherView.favorite = true;
+  } else {
+    cipherView.favorite = !!cozyMetadata?.favorite;
+  }
+
   if (cozyMetadata?.createdAt) {
     cipherView.creationDate = new Date(cozyMetadata.createdAt);
   }
