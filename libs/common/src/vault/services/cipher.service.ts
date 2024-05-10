@@ -163,6 +163,10 @@ export class CipherService implements CipherServiceAbstraction {
     cipher.reprompt = model.reprompt;
     cipher.edit = model.edit;
 
+    // Cozy customization; creationDate is not forwarded during encrypt contrary to revisionDate.
+    // I did not understand why. We need it so we forward it here.
+    cipher.creationDate = model.creationDate;
+
     if (key == null && cipher.organizationId != null) {
       key = await this.cryptoService.getOrgKey(cipher.organizationId);
       if (key == null) {
