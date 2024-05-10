@@ -733,10 +733,10 @@
     "message": "List card items on the Tab page for easy auto-fill."
   },
   "showIdentitiesCurrentTab": {
-    "message": "Show profiles on Tab page"
+    "message": "Show contacts on Tab page"
   },
   "showIdentitiesCurrentTabDesc": {
-    "message": "List profiles on the Tab page for easy auto-fill."
+    "message": "List contacts on the Tab page for easy auto-fill."
   },
   "clearClipboard": {
     "message": "Clear clipboard",

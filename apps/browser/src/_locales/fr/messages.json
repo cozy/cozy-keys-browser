@@ -736,10 +736,10 @@
     "message": "Lister les éléments de la carte sur la page de l'onglet pour faciliter la saisie automatique."
   },
   "showIdentitiesCurrentTab": {
-    "message": "Afficher les profils sur la page Onglet courant"
+    "message": "Afficher les contacts sur la page Onglet courant"
   },
   "showIdentitiesCurrentTabDesc": {
-    "message": "Lister les profils sur la page de l'onglet en cours pour faciliter la saisie automatique."
+    "message": "Lister les contacts sur la page de l'onglet en cours pour faciliter la saisie automatique."
   },
   "clearClipboard": {
     "message": "Effacer le presse-papiers",
