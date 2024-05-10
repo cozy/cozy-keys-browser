@@ -125,7 +125,9 @@
         </div>
       </div>
     </div>
-    <div class="box list">
+    <!-- Cozy customization -->
+    <!-- Disable Cards if type is hidden -->
+    <div class="box list" *ngIf="!dontShowCards">
       <h2 class="box-header">
         {{ "cards" | i18n }}
         <!-- Cozy custo : commented
@@ -154,7 +156,7 @@
     </div>
     <!-- Cozy customization -->
     <!-- Add me and favorite Cozy Contacts -->
-    <div class="box list">
+    <div class="box list" *ngIf="!dontShowIdentities">
       <!---->
       <h2 class="box-header">
         {{ "typeContacts" | i18n }}
@@ -183,8 +185,8 @@
       </div>
     </div>
     <!-- Cozy customization -->
-    <!-- Disable Profiles if empty as they will be replaced by Cozy Contacts -->
-    <div class="box list" *ngIf="identityCiphers.length > 0">
+    <!-- Disable Profiles if type is hidden or if empty as they will be replaced by Cozy Contacts -->
+    <div class="box list" *ngIf="!dontShowIdentities && identityCiphers.length > 0">
       <!---->
       <h2 class="box-header">
         {{ "identities" | i18n }}
