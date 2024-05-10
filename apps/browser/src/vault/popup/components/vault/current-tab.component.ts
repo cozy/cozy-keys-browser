@@ -65,6 +65,8 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   autofillCalloutText: string[] = ["", ""];
   protected search$ = new Subject<void>();
   private destroy$ = new Subject<void>();
+  dontShowCards = false;
+  dontShowIdentities = false;
 
   private totpCode: string;
   private totpTimeout: number;
@@ -333,6 +335,11 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
       otherTypes.push(CipherType.Identity);
       otherTypes.push(CipherType.Contact);
     }
+
+    // Cozy customization, forward dontShowCards and dontShowIdentities
+    // to view to hide completely these types if we do not want to show them
+    this.dontShowCards = dontShowCards;
+    this.dontShowIdentities = dontShowIdentities;
 
     const ciphers = await this.cipherService.getAllDecryptedForUrl(
       this.url,
