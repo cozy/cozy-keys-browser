@@ -472,7 +472,7 @@ function _testHash() {
       fieldCipherType: "contact",
       title: i18nGetMessage("inPageMenuSelectAContact"),
       updateFn: () => updateRows("contact"),
-      selector: "#contacts-rows-list",
+      selector: "#contact-rows-list",
     },
   ];
 
