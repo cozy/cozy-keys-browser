@@ -482,7 +482,9 @@ function _testHash() {
     if (oldFieldData && oldFieldData[key] === hash[key]) {
       continue;
     }
-    if (hash[key]) {
+    // At this point, a contact is considered as an identity so we need to remove the hidden class
+    // for existing type and also for contact if identity exists
+    if (hash[key] || (key === "contact" && hash["identity"])) {
       titleEl.textContent = options.title;
       options.updateFn();
       rowsEl.classList.remove("hidden");
