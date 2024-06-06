@@ -1,0 +1,109 @@
+import { Observable } from "rxjs";
+
+import { AdminAuthRequestStorable } from "@bitwarden/common/auth/models/domain/admin-auth-req-storable";
+import { AuthRequestResponse } from "@bitwarden/common/auth/models/response/auth-request.response";
+import { AuthRequestPushNotification } from "@bitwarden/common/models/response/notification.response";
+import { UserId } from "@bitwarden/common/types/guid";
+import { UserKey, MasterKey } from "@bitwarden/common/types/key";
+
+export abstract class AuthRequestServiceAbstraction {
+  /** Emits an auth request id when an auth request has been approved. */
+  authRequestPushNotification$: Observable<string>;
+
+  /**
+   * Returns true if the user has chosen to allow auth requests to show on this client.
+   * Intended to prevent spamming the user with auth requests.
+   * @param userId The user id.
+   * @throws If `userId` is not provided.
+   */
+  abstract getAcceptAuthRequests: (userId: UserId) => Promise<boolean>;
+  /**
+   * Sets whether to allow auth requests to show on this client for this user.
+   * @param accept Whether to allow auth requests to show on this client.
+   * @param userId The user id.
+   * @throws If `userId` is not provided.
+   */
+  abstract setAcceptAuthRequests: (accept: boolean, userId: UserId) => Promise<void>;
+  /**
+   * Returns an admin auth request for the given user if it exists.
+   * @param userId The user id.
+   * @throws If `userId` is not provided.
+   */
+  abstract getAdminAuthRequest: (userId: UserId) => Promise<AdminAuthRequestStorable | null>;
+  /**
+   * Sets an admin auth request for the given user.
+   * Note: use {@link clearAdminAuthRequest} to clear the request.
+   * @param authRequest The admin auth request.
+   * @param userId The user id.
+   * @throws If `authRequest` or `userId` is not provided.
+   */
+  abstract setAdminAuthRequest: (
+    authRequest: AdminAuthRequestStorable,
+    userId: UserId,
+  ) => Promise<void>;
+  /**
+   * Clears an admin auth request for the given user.
+   * @param userId The user id.
+   * @throws If `userId` is not provided.
+   */
+  abstract clearAdminAuthRequest: (userId: UserId) => Promise<void>;
+  /**
+   * Approve or deny an auth request.
+   * @param approve True to approve, false to deny.
+   * @param authRequest The auth request to approve or deny, must have an id and key.
+   * @returns The updated auth request, the `requestApproved` field will be true if
+   * approval was successful.
+   * @throws If the auth request is missing an id or key.
+   */
+  abstract approveOrDenyAuthRequest: (
+    approve: boolean,
+    authRequest: AuthRequestResponse,
+  ) => Promise<AuthRequestResponse>;
+  /**
+   * Sets the `UserKey` from an auth request. Auth request must have a `UserKey`.
+   * @param authReqResponse The auth request.
+   * @param authReqPrivateKey The private key corresponding to the public key sent in the auth request.
+   */
+  abstract setUserKeyAfterDecryptingSharedUserKey: (
+    authReqResponse: AuthRequestResponse,
+    authReqPrivateKey: ArrayBuffer,
+  ) => Promise<void>;
+  /**
+   * Sets the `MasterKey` and `MasterKeyHash` from an auth request. Auth request must have a `MasterKey` and `MasterKeyHash`.
+   * @param authReqResponse The auth request.
+   * @param authReqPrivateKey The private key corresponding to the public key sent in the auth request.
+   */
+  abstract setKeysAfterDecryptingSharedMasterKeyAndHash: (
+    authReqResponse: AuthRequestResponse,
+    authReqPrivateKey: ArrayBuffer,
+  ) => Promise<void>;
+  /**
+   * Decrypts a `UserKey` from a public key encrypted `UserKey`.
+   * @param pubKeyEncryptedUserKey The public key encrypted `UserKey`.
+   * @param privateKey The private key corresponding to the public key used to encrypt the `UserKey`.
+   * @returns The decrypted `UserKey`.
+   */
+  abstract decryptPubKeyEncryptedUserKey: (
+    pubKeyEncryptedUserKey: string,
+    privateKey: ArrayBuffer,
+  ) => Promise<UserKey>;
+  /**
+   * Decrypts a `MasterKey` and `MasterKeyHash` from a public key encrypted `MasterKey` and `MasterKeyHash`.
+   * @param pubKeyEncryptedMasterKey The public key encrypted `MasterKey`.
+   * @param pubKeyEncryptedMasterKeyHash The public key encrypted `MasterKeyHash`.
+   * @param privateKey The private key corresponding to the public key used to encrypt the `MasterKey` and `MasterKeyHash`.
+   * @returns The decrypted `MasterKey` and `MasterKeyHash`.
+   */
+  abstract decryptPubKeyEncryptedMasterKeyAndHash: (
+    pubKeyEncryptedMasterKey: string,
+    pubKeyEncryptedMasterKeyHash: string,
+    privateKey: ArrayBuffer,
+  ) => Promise<{ masterKey: MasterKey; masterKeyHash: string }>;
+
+  /**
+   * Handles incoming auth request push notifications.
+   * @param notification push notification.
+   * @remark We should only be receiving approved push notifications to prevent enumeration.
+   */
+  abstract sendAuthRequestPushNotification: (notification: AuthRequestPushNotification) => void;
+}

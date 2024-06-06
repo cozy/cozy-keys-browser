@@ -1,12 +1,12 @@
 import { Directive, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
+import { LoginEmailServiceAbstraction } from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
 import { PasswordHintRequest } from "@bitwarden/common/auth/models/request/password-hint.request";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
 @Directive()
 export class HintComponent implements OnInit {
@@ -22,11 +22,11 @@ export class HintComponent implements OnInit {
     protected apiService: ApiService,
     protected platformUtilsService: PlatformUtilsService,
     private logService: LogService,
-    private loginService: LoginService
+    private loginEmailService: LoginEmailServiceAbstraction,
   ) {}
 
   ngOnInit(): void {
-    this.email = this.loginService.getEmail() ?? "";
+    this.email = this.loginEmailService.getEmail() ?? "";
   }
 
   async submit() {
@@ -34,7 +34,7 @@ export class HintComponent implements OnInit {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("emailRequired")
+        this.i18nService.t("emailRequired"),
       );
       return;
     }
@@ -42,7 +42,7 @@ export class HintComponent implements OnInit {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("invalidEmail")
+        this.i18nService.t("invalidEmail"),
       );
       return;
     }
@@ -54,6 +54,8 @@ export class HintComponent implements OnInit {
       if (this.onSuccessfulSubmit != null) {
         this.onSuccessfulSubmit();
       } else if (this.router != null) {
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.router.navigate([this.successRoute]);
       }
     } catch (e) {

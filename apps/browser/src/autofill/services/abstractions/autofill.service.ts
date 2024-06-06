@@ -1,4 +1,5 @@
-import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
+import { UriMatchStrategySetting } from "@bitwarden/common/models/domain/domain-service";
+import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import AutofillField from "../../models/autofill-field";
@@ -16,7 +17,7 @@ export interface PageDetail {
 export interface AutoFillOptions {
   cipher: CipherView;
   pageDetails: PageDetail[];
-  doc?: typeof window.document;
+  doc?: typeof self.document;
   tab: chrome.tabs.Tab;
   skipUsernameOnlyFill?: boolean;
   onlyEmptyFields?: boolean;
@@ -24,7 +25,7 @@ export interface AutoFillOptions {
   fillNewPassword?: boolean;
   skipLastUsed?: boolean;
   allowUntrustedIframe?: boolean;
-  fieldsForInPageMenuScripts?: any[]; // Cozy custo
+  allowTotpAutofill?: boolean;
 }
 
 export interface FormData {
@@ -34,27 +35,36 @@ export interface FormData {
   passwords: AutofillField[];
 }
 
+export interface GenerateFillScriptOptions {
+  skipUsernameOnlyFill: boolean;
+  onlyEmptyFields: boolean;
+  onlyVisibleFields: boolean;
+  fillNewPassword: boolean;
+  allowTotpAutofill: boolean;
+  cipher: CipherView;
+  tabUrl: string;
+  defaultUriMatch: UriMatchStrategySetting;
+}
+
 export abstract class AutofillService {
+  loadAutofillScriptsOnInstall: () => Promise<void>;
+  reloadAutofillScripts: () => Promise<void>;
+  injectAutofillScripts: (
+    tab: chrome.tabs.Tab,
+    frameId?: number,
+    triggeringOnPageLoad?: boolean,
+  ) => Promise<void>;
   getFormsWithPasswordFields: (pageDetails: AutofillPageDetails) => FormData[];
-  doAutoFill: (options: AutoFillOptions) => Promise<string>;
+  doAutoFill: (options: AutoFillOptions) => Promise<string | null>;
   doAutoFillOnTab: (
     pageDetails: PageDetail[],
     tab: chrome.tabs.Tab,
-    fromCommand: boolean
-  ) => Promise<string>;
-  doAutoFillActiveTab: (pageDetails: PageDetail[], fromCommand: boolean) => Promise<string>;
-  iframeUrlMatches: (
-    pageUrl: string,
-    loginItem: CipherView,
-    defaultUriMatch: UriMatchType
-  ) => boolean;
-  // Cozy customization
-  //*
-  generateFieldsForInPageMenuScripts: (
-    pageDetails: any,
-    connected: boolean,
-    frameId: number
-  ) => any;
-  postFilterFieldsForInPageMenu: (scriptsObj: any, forms: any, fields: any) => void;
-  //*/
+    fromCommand: boolean,
+  ) => Promise<string | null>;
+  doAutoFillActiveTab: (
+    pageDetails: PageDetail[],
+    fromCommand: boolean,
+    cipherType?: CipherType,
+  ) => Promise<string | null>;
+  isPasswordRepromptRequired: (cipher: CipherView, tab: chrome.tabs.Tab) => Promise<boolean>;
 }

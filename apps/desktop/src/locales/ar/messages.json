@@ -236,7 +236,7 @@
     "message": "السيدة"
   },
   "ms": {
-    "message": "آنسة"
+    "message": "الآنسة"
   },
   "mx": {
     "message": "ماكس"
@@ -269,7 +269,7 @@
     "message": "الاسم الأوسط"
   },
   "lastName": {
-    "message": "اسم العائلة"
+    "message": "اللقب"
   },
   "fullName": {
     "message": "الاسم الكامل"
@@ -403,6 +403,9 @@
   "length": {
     "message": "الطول"
   },
+  "passwordMinLength": {
+    "message": "الحد الأدنى لطول كلمة المرور"
+  },
   "uppercase": {
     "message": "أحرف كبيرة (A-Z)"
   },
@@ -475,20 +478,20 @@
   "maxFileSize": {
     "message": "الحجم الأقصى للملف هو 500 ميجابايت."
   },
-  "updateKey": {
-    "message": "لا يمكنك استخدام هذه الميزة حتى تقوم بتحديث مفتاح التشفير الخاص بك."
+  "encryptionKeyMigrationRequired": {
+    "message": "مطلوب ترحيل مفتاح التشفير. الرجاء تسجيل الدخول بواسطة مخزن الويب لتحديث مفتاح التشفير الخاص بك."
   },
   "editedFolder": {
-    "message": "تم تعديل المجلد"
+    "message": "تم حفظ المجلد"
   },
   "addedFolder": {
-    "message": "مجلد مضاف"
+    "message": "تمت إضافة المجلد"
   },
   "deleteFolderConfirmation": {
     "message": "هل أنت متأكد من حذف هذا المجلد؟"
   },
   "deletedFolder": {
-    "message": "المجلد المحذوف"
+    "message": "تم حذف المجلد"
   },
   "loginOrCreateNewAccount": {
     "message": "قم بالتسجيل أو إنشاء حساب جديد للوصول إلى خزنتك الآمنة."
@@ -556,6 +559,12 @@
   },
   "newAccountCreated": {
     "message": "تم إنشاء حسابك الجديد! يمكنك الآن تسجيل الدخول."
+  },
+  "youSuccessfullyLoggedIn": {
+    "message": "سجلتَ الدخول بنجاح"
+  },
+  "youMayCloseThisWindow": {
+    "message": "يمكنك إغلاق هذه النافذة"
   },
   "masterPassSent": {
     "message": "لقد أرسلنا لك رسالة بريد إلكتروني تحتوي على تلميحات كلمة المرور الرئيسية."
@@ -770,6 +779,9 @@
   "contactUs": {
     "message": "اتصل بنا"
   },
+  "helpAndFeedback": {
+    "message": "المساعدة والملاحظات"
+  },
   "getHelp": {
     "message": "الحصول على المساعدة"
   },
@@ -788,8 +800,11 @@
   "changeMasterPass": {
     "message": "تغيير كلمة المرور الرئيسية"
   },
-  "changeMasterPasswordConfirmation": {
-    "message": "يمكنك تغيير كلمة المرور الرئيسية من خزنة الويب في bitwarden.com. هل تريد زيارة الموقع الآن؟"
+  "continueToWebApp": {
+    "message": "متابعة إلى تطبيق الويب؟"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "يمكنك تغيير كلمة المرور الرئيسية الخاصة بك على تطبيق ويب Bitwarden."
   },
   "fingerprintPhrase": {
     "message": "عبارة بصمة الإصبع",
@@ -1074,8 +1089,8 @@
   "premiumSignUpStorage": {
     "message": "1 جيغابايت وحدة تخزين مشفرة لمرفقات الملفات."
   },
-  "premiumSignUpTwoStep": {
-    "message": "خيارات تسجيل الدخول الإضافية من خطوتين مثل YubiKey و FIDO U2F و Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "خيارات تسجيل الدخول بخطوتين المملوكة مثل YubiKey و Duo."
   },
   "premiumSignUpReports": {
     "message": "نظافة كلمة المرور، صحة الحساب، وتقارير خرق البيانات للحفاظ على سلامة خزنتك."
@@ -1386,14 +1401,23 @@
   "invalidPin": {
     "message": "رمز PIN غير صالح."
   },
+  "tooManyInvalidPinEntryAttemptsLoggingOut": {
+    "message": "العديد من محاولات إدخال رقم التعريف الشخصي غير الصالحة. تسجيل الخروج."
+  },
   "unlockWithWindowsHello": {
     "message": "فتح مع Windows Hello"
+  },
+  "additionalWindowsHelloSettings": {
+    "message": "إعدادات Windows Hello إضافية"
   },
   "windowsHelloConsentMessage": {
     "message": "تحقق من Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "فتح بواسطة معرف اللمس"
+  },
+  "additionalTouchIdSettings": {
+    "message": "إعدادات معرف اللمس الإضافية"
   },
   "touchIdConsentMessage": {
     "message": "فتح خزنتك"
@@ -1403,6 +1427,12 @@
   },
   "autoPromptTouchId": {
     "message": "اطلب معرف اللمس عند التشغيل"
+  },
+  "requirePasswordOnStart": {
+    "message": "يتطلب كلمة مرور أو رقم التعريف الشخصي عند بدء التطبيق"
+  },
+  "recommendedForSecurity": {
+    "message": "موصى به للأمان."
   },
   "lockWithMasterPassOnRestart": {
     "message": "قفل مع كلمة المرور الرئيسية عند إعادة تشغيل"
@@ -1477,6 +1507,9 @@
   "vaultTimeoutActionLogOutDesc": {
     "message": "تسجيل الخروج من الخزنة يتطلب إعادة المصادقة للوصول إليها مرة أخرى."
   },
+  "unlockMethodNeededToChangeTimeoutActionDesc": {
+    "message": "أعدنّ طريقة إلغاء القُفْل لتغيير إجراء مهلة المخزن الخاص بك."
+  },
   "lock": {
     "message": "قفل",
     "description": "Verb form: to make secure or inaccesible by"
@@ -1497,12 +1530,6 @@
   "permanentlyDeletedItem": {
     "message": "تم حذف العنصر بشكل دائم"
   },
-  "restoreItem": {
-    "message": "استعادة العنصر"
-  },
-  "restoreItemConfirmation": {
-    "message": "هل أنت متأكد من أنك تريد استعادة هذا العنصر؟"
-  },
   "restoredItem": {
     "message": "العنصر المستعاد"
   },
@@ -1521,8 +1548,20 @@
   "setMasterPassword": {
     "message": "تعيين كلمة المرور الرئيسية"
   },
-  "ssoCompleteRegistration": {
-    "message": "من أجل إكمال تسجيل الدخول باستخدام SSO، يرجى تعيين كلمة مرور رئيسية للوصول وحماية خزنتك."
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "تم تحديث أذونات مؤسستك ، مما يتطلب عليك تعيين كلمة مرور رئيسية.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "تتطلب مؤسستك تعيين كلمة مرور رئيسية.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "verificationRequired": {
+    "message": "التحقق مطلوب",
+    "description": "Default title for the user verification dialog."
+  },
+  "currentMasterPass": {
+    "message": "كلمة المرور الرئيسية الحالية"
   },
   "newMasterPass": {
     "message": "كلمة المرور الرئيسية الجديدة"
@@ -1593,6 +1632,12 @@
   "browserIntegrationUnsupportedTitle": {
     "message": "تكامل المتصفح غير مدعوم"
   },
+  "browserIntegrationErrorTitle": {
+    "message": "خطأ في تمكين تكامل المتصفح"
+  },
+  "browserIntegrationErrorDesc": {
+    "message": "حدث خطأ أثناء تمكين دمج المتصفح."
+  },
   "browserIntegrationMasOnlyDesc": {
     "message": "للأسف، لا يتم دعم تكامل المتصفح إلا في إصدار متجر تطبيقات ماك في الوقت الحالي."
   },
@@ -1607,6 +1652,12 @@
   },
   "enableBrowserIntegrationFingerprintDesc": {
     "message": "أضف طبقة أمان إضافية عن طريق طلب تأكيد عبارة بصمة الإصبع عند إنشاء رابط بين سطح المكتب الخاص بك والمتصفح. هذا يتطلب إجراء المستخدم والتحقق في كل مرة يتم فيها إنشاء اتصال."
+  },
+  "enableHardwareAcceleration": {
+    "message": "استخدام تسارع العتاد"
+  },
+  "enableHardwareAccelerationDesc": {
+    "message": "بشكل افتراضي هذا الإعداد مفعل. أوقف التشغيل فقط إذا واجهت مشاكل في الرسوم البيانية. إعادة التشغيل مطلوبة."
   },
   "approve": {
     "message": "الموافقة"
@@ -1646,6 +1697,9 @@
   },
   "personalOwnershipPolicyInEffect": {
     "message": "تؤثر سياسة مؤسسة على خيارات الملكية الخاصة بك."
+  },
+  "personalOwnershipPolicyInEffectImports": {
+    "message": "لقد حالت سياسة المؤسسة دون استيراد العناصر إلى خزانتك الشخصية."
   },
   "allSends": {
     "message": "كل الإرسالات",
@@ -1840,6 +1894,45 @@
   "updateMasterPasswordWarning": {
     "message": "تم تغيير كلمة المرور الرئيسية الخاصة بك مؤخرًا من قبل مسؤول في مؤسستك. من أجل الوصول إلى الخزانة، يجب عليك تحديثها الآن. سيتم تسجيل خروجك من الجلسة الحالية، مما يتطلب منك تسجيل الدخول مرة أخرى. وقد تظل الجلسات النشطة على أجهزة أخرى نشطة لمدة تصل إلى ساعة واحدة."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "كلمة المرور الرئيسية الخاصة بك لا تفي بواحدة أو أكثر من سياسات مؤسستك. من أجل الوصول إلى الخزنة، يجب عليك تحديث كلمة المرور الرئيسية الآن. سيتم تسجيل خروجك من الجلسة الحالية، مما يتطلب منك تسجيل الدخول مرة أخرى. وقد تظل الجلسات النشطة على أجهزة أخرى نشطة لمدة تصل إلى ساعة واحدة."
+  },
+  "tryAgain": {
+    "message": "حاول مرة أخرى"
+  },
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "التحقق مطلوب لهذا الإجراء. قم بتعيين رمز PIN للمتابعة."
+  },
+  "setPin": {
+    "message": "تعيين رقم التعريف الشخصي"
+  },
+  "verifyWithBiometrics": {
+    "message": "التحقق بواسطة القياسات الحيوية"
+  },
+  "awaitingConfirmation": {
+    "message": "في انتظار تأكيد"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "لا يمكن إكمال القياسات الحيوية."
+  },
+  "needADifferentMethod": {
+    "message": "هل تحتاج إلى طريقة مختلفة؟"
+  },
+  "useMasterPassword": {
+    "message": "استخدام كلمة المرور الرئيسية"
+  },
+  "usePin": {
+    "message": "استخدام PIN"
+  },
+  "useBiometrics": {
+    "message": "استخدام المقاييس الحيوية"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "أدخِل رمز التحقق الذي أرسل إلى بريدك الإلكتروني."
+  },
+  "resendCode": {
+    "message": "إعادة إرسال الرمز"
+  },
   "hours": {
     "message": "ساعات"
   },
@@ -1856,6 +1949,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "سياسات مؤسستك تؤثر على مهلة خزنتك. الحد الأقصى المسموح به لمهلة الخزنة هو $HOURS$ ساعة(ساعات) و $MINUTES$ دقيقة(دقائق). يتم تعيين إجراء مهلة المخزن الخاص بك إلى $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "لقد حددت سياسات مؤسستك إجراء مهلة الخزنة الخاصة بك إلى $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1940,8 +2059,8 @@
   "exportingPersonalVaultTitle": {
     "message": "تصدير الخزنة الشخصية"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "سيتم تصدير فقط عناصر الخزنة الشخصية المرتبطة بـ $EMAIL$. لن يتم إدراج عناصر خزنة المؤسسة.",
+  "exportingIndividualVaultDescription": {
+    "message": "سيتم تصدير عناصر المخزن الفردية المرتبطة بـ $EMAIL$ فقط. لن يتم إدراج عناصر مخزن المؤسسة. سيتم تصدير معلومات المنتج فقط ولن تشمل المرفقات المرتبطة بها.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2035,9 +2154,6 @@
   "neverLockWarning": {
     "message": "هل أنت متأكد من أنك تريد استخدام خيار \"مطلقا\"؟ إعداد خيارات القفل إلى \"مطلقا\" يخزن مفتاح تشفير المستودع الخاص بك على جهازك. إذا كنت تستخدم هذا الخيار، يجب أن تتأكد من الحفاظ على حماية جهازك بشكل صحيح."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "الخزنة"
   },
@@ -2068,8 +2184,8 @@
   "logInWithAnotherDevice": {
     "message": "تسجيل الدخول باستخدام جهاز آخر"
   },
-  "logInInitiated": {
-    "message": "بدء تسجيل الدخول"
+  "loginInitiated": {
+    "message": "بَدْء تسجيل الدخول"
   },
   "notificationSentDevice": {
     "message": "تم إرسال إشعار إلى جهازك."
@@ -2201,5 +2317,408 @@
         "example": "14"
       }
     }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "يوصي Bitwarden بتحديث إعدادات القياسات الحيوية الخاصة بك لطلب كلمة المرور الرئيسية (أو PIN) عند فتح القفل الأول. هل ترغب في تحديث إعداداتك الآن؟"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "تحديث الإعدادات الموصى بها"
+  },
+  "deviceApprovalRequired": {
+    "message": "موافقة الجهاز مطلوبة. حدد خيار الموافقة أدناه:"
+  },
+  "rememberThisDevice": {
+    "message": "تذكر هذا الجهاز"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "إلغاء تحديد عند استخدام جهاز عام"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "الموافقة من جهازك الآخر"
+  },
+  "requestAdminApproval": {
+    "message": "طلب موافقة المشرف"
+  },
+  "approveWithMasterPassword": {
+    "message": "الموافقة بواسطة كلمة المرور الرئيسية"
+  },
+  "region": {
+    "message": "المنطقة"
+  },
+  "ssoIdentifierRequired": {
+    "message": "معرف الـSSO للمؤسسة مطلوب."
+  },
+  "eu": {
+    "message": "الاتحاد الأوروبي",
+    "description": "European Union"
+  },
+  "loggingInOn": {
+    "message": "جارٍ تسجيل الدخول"
+  },
+  "selfHostedServer": {
+    "message": "استضافة ذاتية"
+  },
+  "accessDenied": {
+    "message": "غير مسموح بالدخول. ليس لديك الصلاحية لعرض هذه الصفحة."
+  },
+  "accountSuccessfullyCreated": {
+    "message": "تم إنشاء الحساب بنجاح!"
+  },
+  "adminApprovalRequested": {
+    "message": "طلبت موافقة المسؤول"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "تم إرسال طلبك إلى المشرف الخاص بك."
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "سيتم إعلامك بمجرد الموافقة."
+  },
+  "troubleLoggingIn": {
+    "message": "مشكلة في تسجيل الدخول؟"
+  },
+  "loginApproved": {
+    "message": "تمت الموافقة على تسجيل الدخول"
+  },
+  "userEmailMissing": {
+    "message": "البريد الإلكتروني للمستخدم مفقود"
+  },
+  "deviceTrusted": {
+    "message": "الجهاز موثوق به"
+  },
+  "inputRequired": {
+    "message": "الإدخال مطلوب."
+  },
+  "required": {
+    "message": "مطلوب"
+  },
+  "search": {
+    "message": "بحث"
+  },
+  "inputMinLength": {
+    "message": "الإدخال يجب أن يكون على الأقل $COUNT$ حرفاً.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxLength": {
+    "message": "الإدخال يجب أن لا يتجاوز أحرف $COUNT$ في الطول.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "inputForbiddenCharacters": {
+    "message": "الأحرف التالية غير مسموح بها: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "يجب أن تكون قيمة الإدخال على الأقل $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "يجب ألا تتجاوز قيمة الإدخال $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
+  },
+  "multipleInputEmails": {
+    "message": "1 أو أكثر من رسائل البريد الإلكتروني غير صالحة"
+  },
+  "inputTrimValidator": {
+    "message": "الإدخال يجب أن لا يحتوي على مساحة بيضاء فقط.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
+  "inputEmail": {
+    "message": "الإدخال ليس عنوان بريد إلكتروني."
+  },
+  "fieldsNeedAttention": {
+    "message": "الحقل (الحقول) $COUNT$ أعلاه بحاجة إلى اهتمامك.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "selectPlaceholder": {
+    "message": "-- اختيار --"
+  },
+  "multiSelectPlaceholder": {
+    "message": "-- اكتب للنصفية --"
+  },
+  "multiSelectLoading": {
+    "message": "استرداد الخيارات..."
+  },
+  "multiSelectNotFound": {
+    "message": "لم يتم العثور على عناصر"
+  },
+  "multiSelectClearAll": {
+    "message": "امسح الكل"
+  },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ المزيد",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "submenu": {
+    "message": "قائمة فرعية"
+  },
+  "skipToContent": {
+    "message": "تخطي إلى المحتوى"
+  },
+  "typePasskey": {
+    "message": "مفتاح المرور"
+  },
+  "passkeyNotCopied": {
+    "message": "لن يتم نسخ مفتاح المرور"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "لن يتم نسخ مفتاح المرور إلى العنصر المستنسخ. هل تريد الاستمرار في استنساخ هذا العنصر؟"
+  },
+  "aliasDomain": {
+    "message": "الاسم البديل للنطاق"
+  },
+  "importData": {
+    "message": "استيراد البيانات",
+    "description": "Used for the desktop menu item and the header of the import dialog"
+  },
+  "importError": {
+    "message": "خطأ في الاستيراد"
+  },
+  "importErrorDesc": {
+    "message": "حدثت مشكلة في البيانات التي حاولت استيرادها. الرجاء حل الأخطاء المدرجة أدناه في الملف المصدر الخاص بك وحاول مرة أخرى."
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "قم بحل الأخطاء أدناه ثم حاول مرة أخرى."
+  },
+  "description": {
+    "message": "الوصف"
+  },
+  "importSuccess": {
+    "message": "تم استيراد البيانات بنجاح"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "تم استيراد مجموع العناصر $AMOUNT$.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "total": {
+    "message": "المجموع"
+  },
+  "importWarning": {
+    "message": "أنت تستورد البيانات إلى $ORGANIZATION$. قد يتم مشاركة بياناتك مع أعضاء هذه المؤسسة. هل تريد المتابعة؟",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "قم بتشغيل دوو واتبع الخطوات لإنهاء تسجيل الدخول."
+  },
+  "duoRequiredByOrgForAccount": {
+    "message": "تسجيل الدخول لـ Duo من خطوتين مطلوب لحسابك."
+  },
+  "launchDuo": {
+    "message": "تشغيل دوو في المتصفح"
+  },
+  "importFormatError": {
+    "message": "لم يتم تنسيق البيانات بشكل صحيح. الرجاء التحقق من ملف الاستيراد الخاص بك وحاول مرة أخرى."
+  },
+  "importNothingError": {
+    "message": "لم يتم استيراد أي شيء."
+  },
+  "importEncKeyError": {
+    "message": "خطأ في فك تشفير الملف المصدر. مفتاح التشفير الخاص بك لا يتطابق مع مفتاح التشفير المستخدم عند تصدير البيانات."
+  },
+  "invalidFilePassword": {
+    "message": "كلمة مرور الملف غير صالحة، الرجاء استخدام كلمة المرور التي أدخلتها عند إنشاء ملف التصدير."
+  },
+  "importDestination": {
+    "message": "وجهة الاستيراد"
+  },
+  "learnAboutImportOptions": {
+    "message": "تعرف على خيارات الاستيراد الخاصة بك"
+  },
+  "selectImportFolder": {
+    "message": "تحديد المجلد"
+  },
+  "selectImportCollection": {
+    "message": "اختر مجموعة"
+  },
+  "importTargetHint": {
+    "message": "حدد هذا الخيار إذا كنت تريد نقل محتويات الملف المستورد إلى $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "الملف يحتوي على عناصر غير معينة."
+  },
+  "selectFormat": {
+    "message": "حدد تنسيق ملف الاستيراد"
+  },
+  "selectImportFile": {
+    "message": "حدد ملف الاستيراد"
+  },
+  "chooseFile": {
+    "message": "اختيار ملف"
+  },
+  "noFileChosen": {
+    "message": "لم يتم اختيار ملف"
+  },
+  "orCopyPasteFileContents": {
+    "message": "او قم بنسخ ولصق محتويات مِلَفّ الاستيراد"
+  },
+  "instructionsFor": {
+    "message": "تعليمات $NAME$",
+    "description": "The title for the import tool instructions.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "LastPass (csv)"
+      }
+    }
+  },
+  "confirmVaultImport": {
+    "message": "تأكيد تصدير الخزنة"
+  },
+  "confirmVaultImportDesc": {
+    "message": "هذا الملف محمي بكلمة مرور. الرجاء إدخال كلمة مرور الملف لاستيراد البيانات."
+  },
+  "confirmFilePassword": {
+    "message": "تأكيد كلمة مرور الملف"
+  },
+  "multifactorAuthenticationCancelled": {
+    "message": "تم إلغاء المصادقة المتعددة"
+  },
+  "noLastPassDataFound": {
+    "message": "لم يتم العثور على بيانات LastPass"
+  },
+  "incorrectUsernameOrPassword": {
+    "message": "اسم المستخدم أو كلمة المرور غير صحيحة"
+  },
+  "incorrectPassword": {
+    "message": "كلمة سر خاطئة"
+  },
+  "incorrectCode": {
+    "message": "رمز غير صحيح"
+  },
+  "incorrectPin": {
+    "message": "رمز PIN غير صحيح"
+  },
+  "multifactorAuthenticationFailed": {
+    "message": "فشلت المصادقة المتعددة العوامل"
+  },
+  "includeSharedFolders": {
+    "message": "تضمين المجلدات المشتركة"
+  },
+  "lastPassEmail": {
+    "message": "بريد LastPass الإلكتروني"
+  },
+  "importingYourAccount": {
+    "message": "استيراد حسابك..."
+  },
+  "lastPassMFARequired": {
+    "message": "مطلوب المصادقة متعددة العوامل من LastPass"
+  },
+  "lastPassMFADesc": {
+    "message": "أدخل رمز المرور الخاص بك لمرة واحدة من تطبيق المصادقة الخاص بك"
+  },
+  "lastPassOOBDesc": {
+    "message": "الموافقة على طلب تسجيل الدخول في تطبيق المصادقة الخاص بك أو إدخال رمز مرور لمرة واحدة."
+  },
+  "passcode": {
+    "message": "رمز المرور"
+  },
+  "lastPassMasterPassword": {
+    "message": "كلمة المرور الرئيسية لـ LastPass"
+  },
+  "lastPassAuthRequired": {
+    "message": "مطلوب مصادقة LastPass"
+  },
+  "awaitingSSO": {
+    "message": "في انتظار مصادقة SSO"
+  },
+  "awaitingSSODesc": {
+    "message": "الرجاء الاستمرار في تسجيل الدخول باستخدام بيانات اعتماد الشركة الخاصة بك."
+  },
+  "seeDetailedInstructions": {
+    "message": "راجع التعليمات المفصلة في موقع المساعدة الخاص بنا في",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "importDirectlyFromLastPass": {
+    "message": "استيراد مباشرة من LastPass"
+  },
+  "importFromCSV": {
+    "message": "استيراد من CSV"
+  },
+  "lastPassTryAgainCheckEmail": {
+    "message": "حاول مرة أخرى أو ابحث عن بريد إلكتروني من LastPass للتحقق منك."
+  },
+  "collection": {
+    "message": "مجموعات"
+  },
+  "lastPassYubikeyDesc": {
+    "message": "أدخل YubiKey المرتبط بحسابك LastPass في منفذ USB الخاص بك، ثم المس الزر."
+  },
+  "commonImportFormats": {
+    "message": "تنسيقات مشتركة",
+    "description": "Label indicating the most common import formats"
+  },
+  "success": {
+    "message": "نجاح"
+  },
+  "troubleshooting": {
+    "message": "استكشاف الأخطاء وإصلاحها"
+  },
+  "disableHardwareAccelerationRestart": {
+    "message": "تعطيل تسارع العتاد وإعادة التشغيل"
+  },
+  "enableHardwareAccelerationRestart": {
+    "message": "تمكين تسارع العتاد وإعادة التشغيل"
+  },
+  "removePasskey": {
+    "message": "إزالة مفتاح المرور"
+  },
+  "passkeyRemoved": {
+    "message": "تمت إزالة كلمة المرور"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "خطأ في تعيين مجموعة الأهداف."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "خطأ في تعيين مجلد الهدف."
   }
 }

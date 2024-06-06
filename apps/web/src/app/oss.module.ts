@@ -1,12 +1,10 @@
 import { NgModule } from "@angular/core";
 
-import { LoginModule } from "../auth/login/login.module";
-
-import { TrialInitiationModule } from "./accounts/trial-initiation/trial-initiation.module";
-import { OrganizationCreateModule } from "./organizations/create/organization-create.module";
-import { OrganizationManageModule } from "./organizations/manage/organization-manage.module";
-import { OrganizationUserModule } from "./organizations/users/organization-user.module";
+import { AuthModule } from "./auth";
+import { LoginModule } from "./auth/login/login.module";
+import { TrialInitiationModule } from "./auth/trial-initiation/trial-initiation.module";
 import { LooseComponentsModule, SharedModule } from "./shared";
+import { AccessComponent } from "./tools/send/access.component";
 import { OrganizationBadgeModule } from "./vault/individual-vault/organization-badge/organization-badge.module";
 import { VaultFilterModule } from "./vault/individual-vault/vault-filter/vault-filter.module";
 
@@ -17,10 +15,9 @@ import { VaultFilterModule } from "./vault/individual-vault/vault-filter/vault-f
     TrialInitiationModule,
     VaultFilterModule,
     OrganizationBadgeModule,
-    OrganizationManageModule,
-    OrganizationUserModule,
-    OrganizationCreateModule,
     LoginModule,
+    AuthModule,
+    AccessComponent,
   ],
   exports: [
     SharedModule,
@@ -29,6 +26,7 @@ import { VaultFilterModule } from "./vault/individual-vault/vault-filter/vault-f
     VaultFilterModule,
     OrganizationBadgeModule,
     LoginModule,
+    AccessComponent,
   ],
   bootstrap: [],
 })

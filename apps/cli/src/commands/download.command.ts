@@ -1,8 +1,8 @@
 import * as fet from "node-fetch";
 
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { EncArrayBuffer } from "@bitwarden/common/models/domain/enc-array-buffer";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { EncArrayBuffer } from "@bitwarden/common/platform/models/domain/enc-array-buffer";
+import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 
 import { Response } from "../models/response";
 import { FileResponse } from "../models/response/file.response";
@@ -15,12 +15,12 @@ export abstract class DownloadCommand {
     url: string,
     key: SymmetricCryptoKey,
     fileName: string,
-    output?: string
+    output?: string,
   ) {
     const response = await fet.default(new fet.Request(url, { headers: { cache: "no-cache" } }));
     if (response.status !== 200) {
       return Response.error(
-        "A " + response.status + " error occurred while downloading the attachment."
+        "A " + response.status + " error occurred while downloading the attachment.",
       );
     }
 

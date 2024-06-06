@@ -5,15 +5,16 @@ import { takeUntil } from "rxjs";
 import { takeUntil, Subject } from "rxjs";
 /* end custo */
 
-import { PopupUtilsService } from "./services/popup-utils.service"; // eslint-disable-line
+import BrowserPopupUtils from "../platform/popup/browser-popup-utils";
+
 /* COZY IMPORTS */
 /* eslint-disable */
 import { CozyClientService } from "./services/cozyClient.service";
 import { Router, NavigationEnd, Event as NavigationEvent, RouterOutlet } from "@angular/router";
 import { routerTransition } from "./app-routing.animations";
 import { BrowserStateService as StateService } from "../services/abstractions/browser-state.service";
-import { BrowserApi } from "../browser/browserApi";
-import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
+import { BrowserApi } from "src/platform/browser/browser-api";
 const BroadcasterSubscriptionId = "PremiumBanner";
 // @ts-ignore
 import flag from "cozy-flags";
@@ -40,7 +41,6 @@ export class TabsComponent implements OnInit, OnDestroy {
   /* end custo */
 
   constructor(
-    private popupUtilsService: PopupUtilsService,
     private cozyClientService: CozyClientService,
     private router: Router,
     private stateService: StateService,
@@ -61,7 +61,7 @@ export class TabsComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.showCurrentTab = !this.popupUtilsService.inPopout(window);
+    this.showCurrentTab = !BrowserPopupUtils.inPopout(window);
     this.cozyUrl = this.cozyClientService.getCozyURL();
     this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
       this.ngZone.run(async () => {

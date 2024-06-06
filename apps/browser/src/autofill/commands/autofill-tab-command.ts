@@ -21,7 +21,7 @@ export class AutofillTabCommand {
         },
       ],
       tab,
-      true
+      true,
     );
   }
 
@@ -46,6 +46,7 @@ export class AutofillTabCommand {
       onlyEmptyFields: false,
       onlyVisibleFields: false,
       fillNewPassword: true,
+      allowTotpAutofill: true,
     });
   }
 
@@ -63,7 +64,7 @@ export class AutofillTabCommand {
           }
 
           resolve(response);
-        }
+        },
       );
     });
   }

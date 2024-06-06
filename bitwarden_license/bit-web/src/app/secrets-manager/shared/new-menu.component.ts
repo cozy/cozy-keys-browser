@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Subject, takeUntil } from "rxjs";
+import { Subject, takeUntil, concatMap, map } from "rxjs";
 
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
 import {
@@ -24,14 +25,28 @@ import {
 })
 export class NewMenuComponent implements OnInit, OnDestroy {
   private organizationId: string;
+  private organizationEnabled: boolean;
   private destroy$: Subject<void> = new Subject<void>();
-
-  constructor(private route: ActivatedRoute, private dialogService: DialogService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private dialogService: DialogService,
+    private organizationService: OrganizationService,
+  ) {}
 
   ngOnInit() {
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params: any) => {
-      this.organizationId = params.organizationId;
-    });
+    this.route.params
+      .pipe(
+        concatMap((params) =>
+          this.organizationService
+            .get$(params.organizationId)
+            .pipe(map((organization) => ({ params, organization }))),
+        ),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((mapResult) => {
+        this.organizationId = mapResult?.params?.organizationId;
+        this.organizationEnabled = mapResult?.organization?.enabled;
+      });
   }
 
   ngOnDestroy(): void {
@@ -44,6 +59,7 @@ export class NewMenuComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -53,6 +69,7 @@ export class NewMenuComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -62,6 +79,7 @@ export class NewMenuComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }

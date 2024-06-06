@@ -1,11 +1,11 @@
+import { PolicyResponse } from "../../../admin-console/models/response/policy.response";
 import { BaseResponse } from "../../../models/response/base.response";
-import { CollectionDetailsResponse } from "../../../models/response/collection.response";
 import { DomainsResponse } from "../../../models/response/domains.response";
-import { PolicyResponse } from "../../../models/response/policy.response";
 import { ProfileResponse } from "../../../models/response/profile.response";
-import { SendResponse } from "../../../models/response/send.response";
+import { SendResponse } from "../../../tools/send/models/response/send.response";
 
 import { CipherResponse } from "./cipher.response";
+import { CollectionDetailsResponse } from "./collection.response";
 import { FolderResponse } from "./folder.response";
 
 export class SyncResponse extends BaseResponse {

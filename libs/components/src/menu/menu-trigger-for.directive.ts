@@ -59,7 +59,7 @@ export class MenuTriggerForDirective implements OnDestroy {
   constructor(
     private elementRef: ElementRef<HTMLElement>,
     private viewContainerRef: ViewContainerRef,
-    private overlay: Overlay
+    private overlay: Overlay,
   ) {}
 
   @HostListener("click") toggleMenu() {
@@ -88,11 +88,12 @@ export class MenuTriggerForDirective implements OnDestroy {
       }
       this.destroyMenu();
     });
-    this.keyDownEventsSub =
-      this.menu.keyManager &&
-      this.overlayRef
+    if (this.menu.keyManager) {
+      this.menu.keyManager.setFirstItemActive();
+      this.keyDownEventsSub = this.overlayRef
         .keydownEvents()
         .subscribe((event: KeyboardEvent) => this.menu.keyManager.onKeydown(event));
+    }
   }
 
   private destroyMenu() {
@@ -110,7 +111,7 @@ export class MenuTriggerForDirective implements OnDestroy {
       filter((event: KeyboardEvent) => {
         const keys = this.menu.ariaRole === "menu" ? ["Escape", "Tab"] : ["Escape"];
         return keys.includes(event.key);
-      })
+      }),
     );
     const backdrop = this.overlayRef.backdropClick();
     const menuClosed = this.menu.closed;

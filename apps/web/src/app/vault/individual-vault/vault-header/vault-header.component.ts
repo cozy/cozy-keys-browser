@@ -1,85 +1,197 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
+import { firstValueFrom } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { TreeNode } from "@bitwarden/common/vault/models/domain/tree-node";
+import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 
-import { VaultFilter } from "../vault-filter/shared/models/vault-filter.model";
-import { CollectionFilter } from "../vault-filter/shared/models/vault-filter.type";
+import { CollectionDialogTabType } from "../../components/collection-dialog";
+import {
+  All,
+  RoutedVaultFilterModel,
+  Unassigned,
+} from "../vault-filter/shared/models/routed-vault-filter.model";
 
 @Component({
   selector: "app-vault-header",
   templateUrl: "./vault-header.component.html",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class VaultHeaderComponent {
-  /**
-   * Promise that is used to determine the loading state of the header via the ApiAction directive.
-   * When the promise exists and is not resolved, the loading spinner will be shown.
-   */
-  @Input() actionPromise: Promise<any>;
+export class VaultHeaderComponent implements OnInit {
+  protected Unassigned = Unassigned;
+  protected All = All;
+  protected CollectionDialogTabType = CollectionDialogTabType;
 
   /**
-   * The filter being actively applied to the vault view
+   * Boolean to determine the loading state of the header.
+   * Shows a loading spinner if set to true
    */
-  @Input() activeFilter: VaultFilter;
+  @Input() loading: boolean;
 
-  /**
-   * Emits when the active filter has been modified by the header
-   */
-  @Output() activeFilterChanged = new EventEmitter<VaultFilter>();
+  /** Current active filter */
+  @Input() filter: RoutedVaultFilterModel;
 
-  /**
-   * Emits an event when the new item button is clicked in the header
-   */
+  /** All organizations that can be shown */
+  @Input() organizations: Organization[] = [];
+
+  /** Currently selected collection */
+  @Input() collection?: TreeNode<CollectionView>;
+
+  /** Whether 'Collection' option is shown in the 'New' dropdown */
+  @Input() canCreateCollections: boolean;
+
+  /** Emits an event when the new item button is clicked in the header */
   @Output() onAddCipher = new EventEmitter<void>();
 
-  organizations$ = this.organizationService.organizations$;
+  /** Emits an event when the new collection button is clicked in the 'New' dropdown menu */
+  @Output() onAddCollection = new EventEmitter<null>();
 
-  constructor(private organizationService: OrganizationService, private i18nService: I18nService) {}
+  /** Emits an event when the new folder button is clicked in the 'New' dropdown menu */
+  @Output() onAddFolder = new EventEmitter<null>();
+
+  /** Emits an event when the edit collection button is clicked in the header */
+  @Output() onEditCollection = new EventEmitter<{ tab: CollectionDialogTabType }>();
+
+  /** Emits an event when the delete collection button is clicked in the header */
+  @Output() onDeleteCollection = new EventEmitter<void>();
+
+  private flexibleCollectionsV1Enabled = false;
+
+  constructor(
+    private i18nService: I18nService,
+    private configService: ConfigService,
+  ) {}
+
+  async ngOnInit() {
+    this.flexibleCollectionsV1Enabled = await firstValueFrom(
+      this.configService.getFeatureFlag$(FeatureFlag.FlexibleCollectionsV1),
+    );
+  }
 
   /**
    * The id of the organization that is currently being filtered on.
    * This can come from a collection filter or organization filter, if applied.
    */
-  get activeOrganizationId() {
-    if (this.activeFilter.selectedCollectionNode != null) {
-      return this.activeFilter.selectedCollectionNode.node.organizationId;
+  protected get activeOrganizationId() {
+    if (this.collection != undefined) {
+      return this.collection.node.organizationId;
     }
-    if (this.activeFilter.selectedOrganizationNode != null) {
-      return this.activeFilter.selectedOrganizationNode.node.id;
+
+    if (this.filter.organizationId !== undefined) {
+      return this.filter.organizationId;
     }
+
     return undefined;
   }
 
-  get title() {
-    if (this.activeFilter.isCollectionSelected) {
-      if (this.activeFilter.isUnassignedCollectionSelected) {
-        return this.i18nService.t("unassigned");
-      }
-      return this.activeFilter.selectedCollectionNode.node.name;
+  protected get activeOrganization() {
+    const organizationId = this.activeOrganizationId;
+    return this.organizations?.find((org) => org.id === organizationId);
+  }
+
+  protected get showBreadcrumbs() {
+    return this.filter.collectionId !== undefined && this.filter.collectionId !== All;
+  }
+
+  protected get title() {
+    if (this.filter.collectionId === Unassigned) {
+      return this.i18nService.t("unassigned");
     }
 
-    if (this.activeFilter.isMyVaultSelected) {
+    if (this.collection) {
+      return this.collection.node.name;
+    }
+
+    if (this.filter.organizationId === Unassigned) {
       return this.i18nService.t("myVault");
     }
 
-    if (this.activeFilter?.selectedOrganizationNode != null) {
-      return `${this.activeFilter.selectedOrganizationNode.node.name} ${this.i18nService
-        .t("vault")
-        .toLowerCase()}`;
+    const activeOrganization = this.activeOrganization;
+    if (activeOrganization) {
+      return `${activeOrganization.name} ${this.i18nService.t("vault").toLowerCase()}`;
     }
 
     return this.i18nService.t("allVaults");
   }
 
-  applyCollectionFilter(collection: TreeNode<CollectionFilter>) {
-    const filter = this.activeFilter;
-    filter.resetFilter();
-    filter.selectedCollectionNode = collection;
-    this.activeFilterChanged.emit(filter);
+  protected get icon() {
+    return this.filter.collectionId && this.filter.collectionId !== All ? "bwi-collection" : "";
   }
 
-  addCipher() {
+  /**
+   * A list of collection filters that form a chain from the organization root to currently selected collection.
+   * Begins from the organization root and excludes the currently selected collection.
+   */
+  protected get collections() {
+    if (this.collection == undefined) {
+      return [];
+    }
+
+    const collections = [this.collection];
+    while (collections[collections.length - 1].parent != undefined) {
+      collections.push(collections[collections.length - 1].parent);
+    }
+
+    return collections
+      .slice(1)
+      .reverse()
+      .map((treeNode) => treeNode.node);
+  }
+
+  get canEditCollection(): boolean {
+    // Only edit collections if not editing "Unassigned"
+    if (this.collection == null) {
+      return false;
+    }
+
+    // Otherwise, check if we can edit the specified collection
+    const organization = this.organizations.find(
+      (o) => o.id === this.collection?.node.organizationId,
+    );
+    return this.collection.node.canEdit(organization, this.flexibleCollectionsV1Enabled);
+  }
+
+  async editCollection(tab: CollectionDialogTabType): Promise<void> {
+    this.onEditCollection.emit({ tab });
+  }
+
+  get canDeleteCollection(): boolean {
+    // Only delete collections if not deleting "Unassigned"
+    if (this.collection === undefined) {
+      return false;
+    }
+
+    // Otherwise, check if we can delete the specified collection
+    const organization = this.organizations.find(
+      (o) => o.id === this.collection?.node.organizationId,
+    );
+
+    return this.collection.node.canDelete(organization);
+  }
+
+  deleteCollection() {
+    this.onDeleteCollection.emit();
+  }
+
+  protected addCipher() {
     this.onAddCipher.emit();
+  }
+
+  async addFolder(): Promise<void> {
+    this.onAddFolder.emit();
+  }
+
+  async addCollection(): Promise<void> {
+    this.onAddCollection.emit();
   }
 }

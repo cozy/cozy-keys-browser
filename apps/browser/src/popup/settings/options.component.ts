@@ -1,15 +1,25 @@
 import { Component, OnInit } from "@angular/core";
+import { firstValueFrom } from "rxjs";
 
-import { AbstractThemingService } from "@bitwarden/angular/services/theming/theming.service.abstraction";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-// import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { TotpService } from "@bitwarden/common/abstractions/totp.service";
-import { ThemeType } from "@bitwarden/common/enums/themeType";
-import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
+import { AutofillSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/autofill-settings.service";
+import { BadgeSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/badge-settings.service";
+import { DomainSettingsService } from "@bitwarden/common/autofill/services/domain-settings.service";
+import { UserNotificationSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/user-notification-settings.service";
+import { ClearClipboardDelaySetting } from "@bitwarden/common/autofill/types";
+import {
+  UriMatchStrategy,
+  UriMatchStrategySetting,
+} from "@bitwarden/common/models/domain/domain-service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { ThemeType } from "@bitwarden/common/platform/enums";
+import { ThemeStateService } from "@bitwarden/common/platform/theming/theme-state.service";
+import { VaultSettingsService } from "@bitwarden/common/vault/abstractions/vault-settings/vault-settings.service";
+
+import { enableAccountSwitching } from "../../platform/flags";
 
 /* Cozy imports */
-import { BrowserApi } from "../../browser/browserApi";
+import { BrowserApi } from "../../platform/browser/browser-api";
 import { BrowserStateService as StateService } from "../../services/abstractions/browser-state.service";
 /* END */
 
@@ -19,7 +29,7 @@ import { BrowserStateService as StateService } from "../../services/abstractions
 })
 export class OptionsComponent implements OnInit {
   enableFavicon = false;
-  enableBadgeCounter = false;
+  enableBadgeCounter = true;
   enableAutoFillOnPageLoad = false;
   autoFillOnPageLoadDefault = false;
   autoFillOnPageLoadOptions: any[];
@@ -27,14 +37,15 @@ export class OptionsComponent implements OnInit {
   enableContextMenuItem = false;
   enableAddLoginNotification = false;
   enableChangedPasswordNotification = false;
+  enablePasskeys = true;
   showCardsCurrentTab = false;
   showIdentitiesCurrentTab = false;
   showClearClipboard = true;
   theme: ThemeType;
   themeOptions: any[];
-  defaultUriMatch = UriMatchType.Domain;
+  defaultUriMatch: UriMatchStrategySetting = UriMatchStrategy.Domain;
   uriMatchOptions: any[];
-  clearClipboard: number;
+  clearClipboard: ClearClipboardDelaySetting;
   clearClipboardOptions: any[];
   showGeneral = true;
   showAutofill = true;
@@ -43,13 +54,17 @@ export class OptionsComponent implements OnInit {
   disableKonnectorsSuggestions = false;
   enableInPageMenu = true;
   // end custo
+  accountSwitcherEnabled = false;
 
   constructor(
     private messagingService: MessagingService,
-    private stateService: StateService,
-    private totpService: TotpService,
+    private userNotificationSettingsService: UserNotificationSettingsServiceAbstraction,
+    private autofillSettingsService: AutofillSettingsServiceAbstraction,
+    private domainSettingsService: DomainSettingsService,
+    private badgeSettingsService: BadgeSettingsServiceAbstraction,
     i18nService: I18nService,
-    private themingService: AbstractThemingService
+    private themeStateService: ThemeStateService,
+    private vaultSettingsService: VaultSettingsService,
   ) {
     this.themeOptions = [
       { name: i18nService.t("default"), value: ThemeType.System },
@@ -60,12 +75,12 @@ export class OptionsComponent implements OnInit {
       { name: i18nService.t("solarizedDark"), value: ThemeType.SolarizedDark },
     ];
     this.uriMatchOptions = [
-      { name: i18nService.t("baseDomain"), value: UriMatchType.Domain },
-      { name: i18nService.t("host"), value: UriMatchType.Host },
-      { name: i18nService.t("startsWith"), value: UriMatchType.StartsWith },
-      { name: i18nService.t("regEx"), value: UriMatchType.RegularExpression },
-      { name: i18nService.t("exact"), value: UriMatchType.Exact },
-      { name: i18nService.t("never"), value: UriMatchType.Never },
+      { name: i18nService.t("baseDomain"), value: UriMatchStrategy.Domain },
+      { name: i18nService.t("host"), value: UriMatchStrategy.Host },
+      { name: i18nService.t("startsWith"), value: UriMatchStrategy.StartsWith },
+      { name: i18nService.t("regEx"), value: UriMatchStrategy.RegularExpression },
+      { name: i18nService.t("exact"), value: UriMatchStrategy.Exact },
+      { name: i18nService.t("never"), value: UriMatchStrategy.Never },
     ];
     this.clearClipboardOptions = [
       { name: i18nService.t("never"), value: null },
@@ -80,66 +95,92 @@ export class OptionsComponent implements OnInit {
       { name: i18nService.t("autoFillOnPageLoadYes"), value: true },
       { name: i18nService.t("autoFillOnPageLoadNo"), value: false },
     ];
+
+    this.accountSwitcherEnabled = enableAccountSwitching();
   }
 
   async ngOnInit() {
+    // WHATISIT stateService n'existe plus
     this.disableKonnectorsSuggestions = await this.stateService.getDisableKonnectorsSuggestions();
 
-    this.enableAutoFillOnPageLoad = await this.stateService.getEnableAutoFillOnPageLoad();
-
+    // WHATISIT stateService n'existe plus
     this.enableInPageMenu = await this.stateService.getEnableInPageMenu();
 
-    this.autoFillOnPageLoadDefault =
-      (await this.stateService.getAutoFillOnPageLoadDefault()) ?? true;
+    this.enableAutoFillOnPageLoad = await firstValueFrom(
+      this.autofillSettingsService.autofillOnPageLoad$,
+    );
 
-    this.enableAddLoginNotification = !(await this.stateService.getDisableAddLoginNotification());
+    this.autoFillOnPageLoadDefault = await firstValueFrom(
+      this.autofillSettingsService.autofillOnPageLoadDefault$,
+    );
 
-    this.enableChangedPasswordNotification =
-      !(await this.stateService.getDisableChangedPasswordNotification());
+    this.enableAddLoginNotification = await firstValueFrom(
+      this.userNotificationSettingsService.enableAddedLoginPrompt$,
+    );
 
-    this.enableContextMenuItem = !(await this.stateService.getDisableContextMenuItem());
+    this.enableChangedPasswordNotification = await firstValueFrom(
+      this.userNotificationSettingsService.enableChangedPasswordPrompt$,
+    );
 
-    this.showCardsCurrentTab = !(await this.stateService.getDontShowCardsCurrentTab());
-    this.showIdentitiesCurrentTab = !(await this.stateService.getDontShowIdentitiesCurrentTab());
+    this.enableContextMenuItem = await firstValueFrom(
+      this.autofillSettingsService.enableContextMenu$,
+    );
 
-    this.enableAutoTotpCopy = !(await this.stateService.getDisableAutoTotpCopy());
+    this.showCardsCurrentTab = await firstValueFrom(this.vaultSettingsService.showCardsCurrentTab$);
+    this.showIdentitiesCurrentTab = await firstValueFrom(
+      this.vaultSettingsService.showIdentitiesCurrentTab$,
+    );
 
-    this.enableFavicon = !(await this.stateService.getDisableFavicon());
+    this.enableAutoTotpCopy = await firstValueFrom(this.autofillSettingsService.autoCopyTotp$);
 
-    this.enableBadgeCounter = !(await this.stateService.getDisableBadgeCounter());
+    this.enableFavicon = await firstValueFrom(this.domainSettingsService.showFavicons$);
 
-    this.theme = await this.stateService.getTheme();
+    this.enableBadgeCounter = await firstValueFrom(this.badgeSettingsService.enableBadgeCounter$);
 
-    const defaultUriMatch = await this.stateService.getDefaultUriMatch();
-    this.defaultUriMatch = defaultUriMatch == null ? UriMatchType.Domain : defaultUriMatch;
+    this.enablePasskeys = await firstValueFrom(this.vaultSettingsService.enablePasskeys$);
 
-    this.clearClipboard = await this.stateService.getClearClipboard();
+    this.theme = await firstValueFrom(this.themeStateService.selectedTheme$);
+
+    const defaultUriMatch = await firstValueFrom(
+      this.domainSettingsService.defaultUriMatchStrategy$,
+    );
+    this.defaultUriMatch = defaultUriMatch == null ? UriMatchStrategy.Domain : defaultUriMatch;
+
+    this.clearClipboard = await firstValueFrom(this.autofillSettingsService.clearClipboardDelay$);
   }
 
   async updateAddLoginNotification() {
-    await this.stateService.setDisableAddLoginNotification(!this.enableAddLoginNotification);
-  }
-
-  async updateChangedPasswordNotification() {
-    await this.stateService.setDisableChangedPasswordNotification(
-      !this.enableChangedPasswordNotification
+    await this.userNotificationSettingsService.setEnableAddedLoginPrompt(
+      this.enableAddLoginNotification,
     );
   }
 
+  async updateChangedPasswordNotification() {
+    await this.userNotificationSettingsService.setEnableChangedPasswordPrompt(
+      this.enableChangedPasswordNotification,
+    );
+  }
+
+  async updateEnablePasskeys() {
+    await this.vaultSettingsService.setEnablePasskeys(this.enablePasskeys);
+  }
+
   async updateContextMenuItem() {
-    await this.stateService.setDisableContextMenuItem(!this.enableContextMenuItem);
+    await this.autofillSettingsService.setEnableContextMenu(this.enableContextMenuItem);
     this.messagingService.send("bgUpdateContextMenu");
   }
 
   async updateAutoTotpCopy() {
-    await this.stateService.setDisableAutoTotpCopy(!this.enableAutoTotpCopy);
+    await this.autofillSettingsService.setAutoCopyTotp(this.enableAutoTotpCopy);
   }
 
   async updateKonnectorsSuggestions() {
+    // WHATISIT stateService n'existe plus
     await this.stateService.setDisableKonnectorsSuggestions(this.disableKonnectorsSuggestions);
   }
 
   async updateEnableInPageMenu() {
+    // WHATISIT stateService n'existe plus
     await this.stateService.setEnableInPageMenu(this.enableInPageMenu);
 
     // activate or deactivate the menu from all tabs
@@ -154,40 +195,37 @@ export class OptionsComponent implements OnInit {
   }
 
   async updateAutoFillOnPageLoad() {
-    await this.stateService.setEnableAutoFillOnPageLoad(this.enableAutoFillOnPageLoad);
+    await this.autofillSettingsService.setAutofillOnPageLoad(this.enableAutoFillOnPageLoad);
   }
 
   async updateAutoFillOnPageLoadDefault() {
-    await this.stateService.setAutoFillOnPageLoadDefault(this.autoFillOnPageLoadDefault);
+    await this.autofillSettingsService.setAutofillOnPageLoadDefault(this.autoFillOnPageLoadDefault);
   }
 
   async updateFavicon() {
-    await this.stateService.setDisableFavicon(!this.enableFavicon);
+    await this.domainSettingsService.setShowFavicons(this.enableFavicon);
   }
 
   async updateBadgeCounter() {
-    await this.stateService.setDisableBadgeCounter(!this.enableBadgeCounter);
+    await this.badgeSettingsService.setEnableBadgeCounter(this.enableBadgeCounter);
     this.messagingService.send("bgUpdateContextMenu");
   }
 
   async updateShowCardsCurrentTab() {
-    await this.stateService.setDontShowCardsCurrentTab(!this.showCardsCurrentTab);
+    await this.vaultSettingsService.setShowCardsCurrentTab(this.showCardsCurrentTab);
   }
 
   async updateShowIdentitiesCurrentTab() {
-    await this.stateService.setDontShowIdentitiesCurrentTab(!this.showIdentitiesCurrentTab);
+    await this.vaultSettingsService.setShowIdentitiesCurrentTab(this.showIdentitiesCurrentTab);
   }
 
   async saveTheme() {
-    await this.themingService.updateConfiguredTheme(this.theme);
+    await this.themeStateService.setSelectedTheme(this.theme);
+    // WHATISIT stateService n'existe plus
     await this.stateService.setIsUserSetTheme(true);
   }
 
-  async saveDefaultUriMatch() {
-    await this.stateService.setDefaultUriMatch(this.defaultUriMatch);
-  }
-
   async saveClearClipboard() {
-    await this.stateService.setClearClipboard(this.clearClipboard);
+    await this.autofillSettingsService.setClearClipboardDelay(this.clearClipboard);
   }
 }

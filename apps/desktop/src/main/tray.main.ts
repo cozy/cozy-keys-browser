@@ -1,9 +1,11 @@
 import * as path from "path";
 
 import { app, BrowserWindow, Menu, MenuItemConstructorOptions, nativeImage, Tray } from "electron";
+import { firstValueFrom } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+
+import { DesktopSettingsService } from "../platform/services/desktop-settings.service";
 
 import { WindowMain } from "./window.main";
 
@@ -18,7 +20,7 @@ export class TrayMain {
   constructor(
     private windowMain: WindowMain,
     private i18nService: I18nService,
-    private stateService: StateService
+    private desktopSettingsService: DesktopSettingsService,
   ) {
     if (process.platform === "win32") {
       this.icon = path.join(__dirname, "/images/icon.ico");
@@ -27,7 +29,7 @@ export class TrayMain {
       nImage.setTemplateImage(true);
       this.icon = nImage;
       this.pressedIcon = nativeImage.createFromPath(
-        path.join(__dirname, "/images/icon-highlight.png")
+        path.join(__dirname, "/images/icon-highlight.png"),
       );
     } else {
       this.icon = path.join(__dirname, "/images/icon.png");
@@ -54,30 +56,34 @@ export class TrayMain {
     }
 
     this.contextMenu = Menu.buildFromTemplate(menuItemOptions);
-    if (await this.stateService.getEnableTray()) {
+    if (await firstValueFrom(this.desktopSettingsService.trayEnabled$)) {
       this.showTray();
     }
   }
 
   setupWindowListeners(win: BrowserWindow) {
     win.on("minimize", async (e: Event) => {
-      if (await this.stateService.getEnableMinimizeToTray()) {
+      if (await firstValueFrom(this.desktopSettingsService.minimizeToTray$)) {
         e.preventDefault();
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.hideToTray();
       }
     });
 
     win.on("close", async (e: Event) => {
-      if (await this.stateService.getEnableCloseToTray()) {
+      if (await firstValueFrom(this.desktopSettingsService.closeToTray$)) {
         if (!this.windowMain.isQuitting) {
           e.preventDefault();
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.hideToTray();
         }
       }
     });
 
     win.on("show", async () => {
-      const enableTray = await this.stateService.getEnableTray();
+      const enableTray = await firstValueFrom(this.desktopSettingsService.trayEnabled$);
       if (!enableTray) {
         setTimeout(() => this.removeTray(false), 100);
       }
@@ -102,13 +108,15 @@ export class TrayMain {
     if (this.windowMain.win != null) {
       this.windowMain.win.hide();
     }
-    if (this.isDarwin() && !(await this.stateService.getAlwaysShowDock())) {
+    if (this.isDarwin() && !(await firstValueFrom(this.desktopSettingsService.alwaysShowDock$))) {
       this.hideDock();
     }
   }
 
   restoreFromTray() {
     if (this.windowMain.win == null || !this.windowMain.win.isVisible()) {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.toggleWindow();
     }
   }
@@ -142,6 +150,8 @@ export class TrayMain {
   }
 
   private showDock() {
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     app.dock.show();
   }
 
@@ -157,6 +167,8 @@ export class TrayMain {
     if (this.windowMain.win == null) {
       if (this.isDarwin()) {
         // On MacOS, closing the window via the red button destroys the BrowserWindow instance.
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.windowMain.createWindow().then(() => {
           this.windowMain.win.show();
           this.showDock();
@@ -166,7 +178,7 @@ export class TrayMain {
     }
     if (this.windowMain.win.isVisible()) {
       this.windowMain.win.hide();
-      if (this.isDarwin() && !(await this.stateService.getAlwaysShowDock())) {
+      if (this.isDarwin() && !(await firstValueFrom(this.desktopSettingsService.alwaysShowDock$))) {
         this.hideDock();
       }
     } else {

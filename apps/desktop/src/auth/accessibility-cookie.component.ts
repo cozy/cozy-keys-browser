@@ -2,15 +2,10 @@ import { Component, NgZone } from "@angular/core";
 import { UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
-import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
-import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { Utils } from "@bitwarden/common/misc/utils";
-
-import { getCookie } from "../utils";
-
-const BroadcasterSubscriptionId = "AccessibilityCookieComponent";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 @Component({
   selector: "app-accessibility-cookie",
@@ -29,45 +24,28 @@ export class AccessibilityCookieComponent {
     protected platformUtilsService: PlatformUtilsService,
     protected environmentService: EnvironmentService,
     protected i18nService: I18nService,
-    private broadcasterService: BroadcasterService,
-    protected ngZone: NgZone
+    protected ngZone: NgZone,
   ) {}
-
-  async ngOnInit() {
-    this.broadcasterService.subscribe(BroadcasterSubscriptionId, async (message: any) => {
-      this.ngZone.run(() => {
-        switch (message.command) {
-          case "windowIsFocused":
-            if (this.listenForCookie) {
-              this.listenForCookie = false;
-              this.checkForCookie();
-            }
-            break;
-          default:
-        }
-      });
-    });
-  }
 
   registerhCaptcha() {
     this.platformUtilsService.launchUri("https://www.hcaptcha.com/accessibility");
   }
 
-  async checkForCookie() {
-    this.hCaptchaWindow.close();
-    const [cookie] = await getCookie("https://www.hcaptcha.com/", "hc_accessibility");
+  async close() {
+    const [cookie] = await ipc.auth.getHcaptchaAccessibilityCookie();
     if (cookie) {
       this.onCookieSavedSuccess();
     } else {
       this.onCookieSavedFailure();
     }
+    await this.router.navigate(["/login"]);
   }
 
   onCookieSavedSuccess() {
     this.platformUtilsService.showToast(
       "success",
       null,
-      this.i18nService.t("accessibilityCookieSaved")
+      this.i18nService.t("accessibilityCookieSaved"),
     );
   }
 
@@ -75,7 +53,7 @@ export class AccessibilityCookieComponent {
     this.platformUtilsService.showToast(
       "error",
       null,
-      this.i18nService.t("noAccessibilityCookieSaved")
+      this.i18nService.t("noAccessibilityCookieSaved"),
     );
   }
 
@@ -84,15 +62,11 @@ export class AccessibilityCookieComponent {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("invalidUrl")
+        this.i18nService.t("invalidUrl"),
       );
       return;
     }
     this.listenForCookie = true;
-    this.hCaptchaWindow = window.open(this.accessibilityForm.value.link);
-  }
-
-  ngOnDestroy() {
-    this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
+    window.open(this.accessibilityForm.value.link, "_blank", "noopener noreferrer");
   }
 }

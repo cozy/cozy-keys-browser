@@ -1,45 +1,29 @@
 import { Component } from "@angular/core";
+import { firstValueFrom } from "rxjs";
 
 import { UpdateTempPasswordComponent as BaseUpdateTempPasswordComponent } from "@bitwarden/angular/auth/components/update-temp-password.component";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
-import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+
+import { postLogoutMessageListener$ } from "./utils/post-logout-message-listener";
 
 @Component({
   selector: "app-update-temp-password",
   templateUrl: "update-temp-password.component.html",
 })
 export class UpdateTempPasswordComponent extends BaseUpdateTempPasswordComponent {
-  constructor(
-    i18nService: I18nService,
-    platformUtilsService: PlatformUtilsService,
-    passwordGenerationService: PasswordGenerationServiceAbstraction,
-    policyService: PolicyService,
-    cryptoService: CryptoService,
-    stateService: StateService,
-    messagingService: MessagingService,
-    apiService: ApiService,
-    syncService: SyncService,
-    logService: LogService
-  ) {
-    super(
-      i18nService,
-      platformUtilsService,
-      passwordGenerationService,
-      policyService,
-      cryptoService,
-      messagingService,
-      apiService,
-      stateService,
-      syncService,
-      logService
-    );
+  onSuccessfulChangePassword: () => Promise<void> = this.doOnSuccessfulChangePassword.bind(this);
+
+  private async doOnSuccessfulChangePassword() {
+    // start listening for "switchAccountFinish" or "doneLoggingOut"
+    const messagePromise = firstValueFrom(postLogoutMessageListener$);
+    this.messagingService.send("logout");
+    // wait for messages
+    const command = await messagePromise;
+
+    // doneLoggingOut already has a message handler that will navigate us
+    if (command === "switchAccountFinish") {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.router.navigate(["/"]);
+    }
   }
 }

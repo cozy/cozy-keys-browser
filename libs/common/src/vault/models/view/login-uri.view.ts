@@ -1,28 +1,13 @@
 import { Jsonify } from "type-fest";
 
-import { UriMatchType } from "../../../enums/uriMatchType";
-import { Utils } from "../../../misc/utils";
+import { UriMatchStrategy, UriMatchStrategySetting } from "../../../models/domain/domain-service";
 import { View } from "../../../models/view/view";
+import { SafeUrls } from "../../../platform/misc/safe-urls";
+import { Utils } from "../../../platform/misc/utils";
 import { LoginUri } from "../domain/login-uri";
 
-const CanLaunchWhitelist = [
-  "https://",
-  "http://",
-  "ssh://",
-  "ftp://",
-  "sftp://",
-  "irc://",
-  "vnc://",
-  // https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/remote-desktop-uri
-  "rdp://", // Legacy RDP URI scheme
-  "ms-rd:", // Preferred RDP URI scheme
-  "chrome://",
-  "iosapp://",
-  "androidapp://",
-];
-
 export class LoginUriView implements View {
-  match: UriMatchType = null;
+  match: UriMatchStrategySetting = null;
 
   private _uri: string = null;
   private _domain: string = null;
@@ -59,7 +44,7 @@ export class LoginUriView implements View {
   }
 
   get hostname(): string {
-    if (this.match === UriMatchType.RegularExpression) {
+    if (this.match === UriMatchStrategy.RegularExpression) {
       return null;
     }
     if (this._hostname == null && this.uri != null) {
@@ -73,7 +58,7 @@ export class LoginUriView implements View {
   }
 
   get host(): string {
-    if (this.match === UriMatchType.RegularExpression) {
+    if (this.match === UriMatchStrategy.RegularExpression) {
       return null;
     }
     if (this._host == null && this.uri != null) {
@@ -107,16 +92,11 @@ export class LoginUriView implements View {
     if (this._canLaunch != null) {
       return this._canLaunch;
     }
-    if (this.uri != null && this.match !== UriMatchType.RegularExpression) {
-      const uri = this.launchUri;
-      for (let i = 0; i < CanLaunchWhitelist.length; i++) {
-        if (uri.indexOf(CanLaunchWhitelist[i]) === 0) {
-          this._canLaunch = true;
-          return this._canLaunch;
-        }
-      }
+    if (this.uri != null && this.match !== UriMatchStrategy.RegularExpression) {
+      this._canLaunch = SafeUrls.canLaunch(this.launchUri);
+    } else {
+      this._canLaunch = false;
     }
-    this._canLaunch = false;
     return this._canLaunch;
   }
 
@@ -128,5 +108,61 @@ export class LoginUriView implements View {
 
   static fromJSON(obj: Partial<Jsonify<LoginUriView>>): LoginUriView {
     return Object.assign(new LoginUriView(), obj);
+  }
+
+  matchesUri(
+    targetUri: string,
+    equivalentDomains: Set<string>,
+    defaultUriMatch: UriMatchStrategySetting = null,
+  ): boolean {
+    if (!this.uri || !targetUri) {
+      return false;
+    }
+
+    let matchType = this.match ?? defaultUriMatch;
+    matchType ??= UriMatchStrategy.Domain;
+
+    const targetDomain = Utils.getDomain(targetUri);
+    const matchDomains = equivalentDomains.add(targetDomain);
+
+    switch (matchType) {
+      case UriMatchStrategy.Domain:
+        return this.matchesDomain(targetUri, matchDomains);
+      case UriMatchStrategy.Host: {
+        const urlHost = Utils.getHost(targetUri);
+        return urlHost != null && urlHost === Utils.getHost(this.uri);
+      }
+      case UriMatchStrategy.Exact:
+        return targetUri === this.uri;
+      case UriMatchStrategy.StartsWith:
+        return targetUri.startsWith(this.uri);
+      case UriMatchStrategy.RegularExpression:
+        try {
+          const regex = new RegExp(this.uri, "i");
+          return regex.test(targetUri);
+        } catch (e) {
+          // Invalid regex
+          return false;
+        }
+      case UriMatchStrategy.Never:
+        return false;
+      default:
+        break;
+    }
+
+    return false;
+  }
+
+  private matchesDomain(targetUri: string, matchDomains: Set<string>) {
+    if (targetUri == null || this.domain == null || !matchDomains.has(this.domain)) {
+      return false;
+    }
+
+    if (Utils.DomainMatchBlacklist.has(this.domain)) {
+      const domainUrlHost = Utils.getHost(targetUri);
+      return !Utils.DomainMatchBlacklist.get(this.domain).has(domainUrlHost);
+    }
+
+    return true;
   }
 }

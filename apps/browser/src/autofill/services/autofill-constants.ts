@@ -11,6 +11,7 @@ export class AutoFillConstants {
     "user id",
     "customer id",
     "login id",
+    "login",
     // German
     "benutzername",
     "benutzer name",
@@ -22,22 +23,54 @@ export class AutoFillConstants {
     "identifiant",
   ];
 
-  static readonly PasswordFieldIgnoreList: string[] = [
-    "onetimepassword",
-    "captcha",
-    "findanything",
-    "forgot",
+  static readonly TotpFieldNames: string[] = [
+    "totp",
+    "2fa",
+    "mfa",
+    "totpcode",
+    "2facode",
+    "approvals_code",
+    "code",
+    "mfacode",
+    "otc",
+    "otc-code",
+    "otp-code",
+    "otpcode",
+    "pin",
+    "security_code",
+    "twofactor",
+    "twofa",
+    "twofactorcode",
+    "verificationCode",
   ];
 
-  static readonly ExcludedAutofillTypes: string[] = [
-    "radio",
-    "checkbox",
+  static readonly SearchFieldNames: string[] = ["search", "query", "find", "go"];
+
+  static readonly FieldIgnoreList: string[] = ["captcha", "findanything", "forgot"];
+
+  static readonly PasswordFieldExcludeList: string[] = [
+    ...AutoFillConstants.FieldIgnoreList,
+    "onetimepassword",
+  ];
+
+  static readonly ExcludedAutofillLoginTypes: string[] = [
     "hidden",
     "file",
     "button",
     "image",
     "reset",
     "search",
+  ];
+
+  static readonly ExcludedAutofillTypes: string[] = [
+    "radio",
+    "checkbox",
+    ...AutoFillConstants.ExcludedAutofillLoginTypes,
+  ];
+
+  static readonly ExcludedOverlayTypes: string[] = [
+    "textarea",
+    ...AutoFillConstants.ExcludedAutofillTypes,
   ];
 }
 
@@ -93,6 +126,7 @@ export class CreditCardAutoFillConstants {
     "carte-credit",
     "num-carte",
     "cb-num",
+    "card-pan",
   ];
 
   static readonly CardNumberFieldNameValues: string[] = [
@@ -284,7 +318,13 @@ export class IdentityAutoFillConstants {
 
   static readonly FullNameFieldNameValues: string[] = ["full-name", "your-name"];
 
-  static readonly TitleFieldNames: string[] = ["honorific-prefix", "prefix", "title"];
+  static readonly TitleFieldNames: string[] = [
+    "honorific-prefix",
+    "prefix",
+    "title",
+    // German
+    "anrede",
+  ];
 
   static readonly FirstnameFieldNames: string[] = [
     // English
@@ -336,6 +376,9 @@ export class IdentityAutoFillConstants {
     "mail-addr",
     "bill-addr",
     "adresse-personnelle",
+    // German
+    "strasse",
+    "adresse",
   ];
 
   static readonly AddressFieldNameValues: string[] = [
@@ -379,6 +422,9 @@ export class IdentityAutoFillConstants {
     "address-code",
     "address-postal-code",
     "address-zip-code",
+    // German
+    "plz",
+    "postleitzahl",
   ];
 
   static readonly CityFieldNames: string[] = [
@@ -388,6 +434,10 @@ export class IdentityAutoFillConstants {
     "address-city",
     "address-town",
     "ville",
+    // German
+    "ort",
+    "stadt",
+    "wohnort",
   ];
 
   static readonly StateFieldNames: string[] = [
@@ -397,6 +447,8 @@ export class IdentityAutoFillConstants {
     "address-level-1",
     "address-state",
     "address-province",
+    // German
+    "bundesland",
   ];
 
   static readonly CountryFieldNames: string[] = [
@@ -407,6 +459,8 @@ export class IdentityAutoFillConstants {
     "address-country-name",
     "address-country-code",
     "pays",
+    // German
+    "land",
   ];
 
   static readonly PhoneFieldNames: string[] = [
@@ -417,6 +471,11 @@ export class IdentityAutoFillConstants {
     "telephone",
     "phone-number",
     "téléphone",
+    // German
+    "telefon",
+    "telefonnummer",
+    "mobil",
+    "handy",
   ];
 
   static readonly UserNameFieldNames: string[] = [
@@ -434,6 +493,8 @@ export class IdentityAutoFillConstants {
     "organization",
     "organization-name",
     "entreprise",
+    // German
+    "firma",
   ];
 
   static readonly IsoCountries: { [id: string]: string } = {

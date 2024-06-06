@@ -1,7 +1,6 @@
-import { FieldSubType } from "../../../enums/fieldSubType";
-import { FieldType } from "../../../enums/fieldType";
-import { LinkedIdType } from "../../../enums/linkedIdType";
-import { FieldApi } from "../../../models/api/field.api";
+import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
+import { FieldType, LinkedIdType } from "../../enums";
+import { FieldApi } from "../api/field.api";
 
 import { ExpirationDateData } from "./expiration-date.data";
 import { LabelData } from "./label.data";

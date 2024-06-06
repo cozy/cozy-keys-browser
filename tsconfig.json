@@ -3,9 +3,9 @@
     "pretty": true,
     "moduleResolution": "node",
     "noImplicitAny": true,
-    "target": "ES6",
+    "target": "ES2016",
     "module": "ES2020",
-    "lib": ["es5", "es6", "es7", "dom"],
+    "lib": ["es5", "es6", "es7", "dom", "ES2021"],
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
@@ -15,18 +15,39 @@
     "baseUrl": ".",
     "resolveJsonModule": true,
     "paths": {
-      "@bitwarden/common/*": ["./libs/common/src/*"],
+      "@bitwarden/admin-console": ["./libs/admin-console/src"],
       "@bitwarden/angular/*": ["./libs/angular/src/*"],
-      "@bitwarden/node/*": ["./libs/node/src/*"],
+      "@bitwarden/auth/common": ["./libs/auth/src/common"],
+      "@bitwarden/auth/angular": ["./libs/auth/src/angular"],
+      "@bitwarden/billing": ["./libs/billing/src"],
+      "@bitwarden/common/*": ["./libs/common/src/*"],
       "@bitwarden/components": ["./libs/components/src"],
-      "@bitwarden/web-vault/*": ["./apps/web/src/*"]
+      "@bitwarden/vault-export-core": ["./libs/tools/export/vault-export/vault-export-core/src"],
+      "@bitwarden/vault-export-ui": ["./libs/tools/export/vault-export/vault-export-ui/src"],
+      "@bitwarden/importer/core": ["./libs/importer/src"],
+      "@bitwarden/importer/ui": ["./libs/importer/src/components"],
+      "@bitwarden/platform": ["./libs/platform/src"],
+      "@bitwarden/node/*": ["./libs/node/src/*"],
+      "@bitwarden/web-vault/*": ["./apps/web/src/*"],
+      "@bitwarden/vault": ["./libs/vault/src"]
     },
     "plugins": [
       {
         "transform": "typescript-transform-paths"
       }
-    ]
+    ],
+    "useDefineForClassFields": false
   },
-  "include": ["apps/web/src/**/*", "libs/*/src/**/*", "bitwarden_license/bit-web/src/**/*"],
-  "exclude": ["apps/web/src/**/*.spec.ts", "libs/*/src/**/*.spec.ts"]
+  "include": [
+    "apps/web/src/**/*",
+    "apps/browser/src/**/*",
+    "libs/*/src/**/*",
+    "bitwarden_license/bit-web/src/**/*"
+  ],
+  "exclude": [
+    "apps/web/src/**/*.spec.ts",
+    "apps/browser/src/**/*.spec.ts",
+    "libs/*/src/**/*.spec.ts",
+    "**/*.spec-util.ts"
+  ]
 }

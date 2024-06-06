@@ -3,7 +3,7 @@ use widestring::{U16CString, U16String};
 use windows::{
     core::{PCWSTR, PWSTR},
     Win32::{
-        Foundation::{GetLastError, ERROR_NOT_FOUND, FILETIME, WIN32_ERROR},
+        Foundation::{ERROR_NOT_FOUND, FILETIME},
         Security::Credentials::{
             CredDeleteW, CredFree, CredReadW, CredWriteW, CREDENTIALW, CRED_FLAGS,
             CRED_PERSIST_ENTERPRISE, CRED_TYPE_GENERIC,
@@ -22,7 +22,7 @@ pub fn get_password<'a>(service: &str, account: &str) -> Result<String> {
     let result = unsafe {
         CredReadW(
             PCWSTR(target_name.as_ptr()),
-            CRED_TYPE_GENERIC.0,
+            CRED_TYPE_GENERIC,
             CRED_FLAGS_NONE,
             credential_ptr,
         )
@@ -32,9 +32,7 @@ pub fn get_password<'a>(service: &str, account: &str) -> Result<String> {
         unsafe { CredFree(credential as *mut _) };
     });
 
-    if !result.as_bool() {
-        return Err(anyhow!(convert_error(unsafe { GetLastError() })));
-    }
+    result.map_err(|e| anyhow!(convert_error(e)))?;
 
     let password = unsafe {
         U16String::from_ptr(
@@ -57,7 +55,7 @@ pub fn get_password_keytar<'a>(service: &str, account: &str) -> Result<String> {
     let result = unsafe {
         CredReadW(
             PCWSTR(target_name.as_ptr()),
-            CRED_TYPE_GENERIC.0,
+            CRED_TYPE_GENERIC,
             CRED_FLAGS_NONE,
             credential_ptr,
         )
@@ -67,9 +65,7 @@ pub fn get_password_keytar<'a>(service: &str, account: &str) -> Result<String> {
         unsafe { CredFree(credential as *mut _) };
     });
 
-    if !result.as_bool() {
-        return Err(anyhow!(unsafe { GetLastError() }.0.to_string()));
-    }
+    result?;
 
     let password = unsafe {
         std::str::from_utf8_unchecked(std::slice::from_raw_parts(
@@ -95,7 +91,7 @@ pub fn set_password(service: &str, account: &str, password: &str) -> Result<()> 
     let credential = CREDENTIALW {
         Flags: CRED_FLAGS(CRED_FLAGS_NONE),
         Type: CRED_TYPE_GENERIC,
-        TargetName: PWSTR(unsafe { target_name.as_mut_ptr() }),
+        TargetName: PWSTR(target_name.as_mut_ptr()),
         Comment: PWSTR::null(),
         LastWritten: last_written,
         CredentialBlobSize: credential_len,
@@ -104,13 +100,10 @@ pub fn set_password(service: &str, account: &str, password: &str) -> Result<()> 
         AttributeCount: 0,
         Attributes: std::ptr::null_mut(),
         TargetAlias: PWSTR::null(),
-        UserName: PWSTR(unsafe { user_name.as_mut_ptr() }),
+        UserName: PWSTR(user_name.as_mut_ptr()),
     };
 
-    let result = unsafe { CredWriteW(&credential, 0) };
-    if !result.as_bool() {
-        return Err(anyhow!(unsafe { GetLastError() }.0.to_string()));
-    }
+    unsafe { CredWriteW(&credential, 0) }?;
 
     Ok(())
 }
@@ -121,10 +114,9 @@ pub fn delete_password(service: &str, account: &str) -> Result<()> {
     unsafe {
         CredDeleteW(
             PCWSTR(target_name.as_ptr()),
-            CRED_TYPE_GENERIC.0,
+            CRED_TYPE_GENERIC,
             CRED_FLAGS_NONE,
-        )
-        .ok()?
+        )?
     };
 
     Ok(())
@@ -135,11 +127,11 @@ fn target_name(service: &str, account: &str) -> String {
 }
 
 // Convert the internal WIN32 errors to descriptive messages
-fn convert_error(code: WIN32_ERROR) -> String {
-    match code {
-        ERROR_NOT_FOUND => String::from("Password not found."),
-        _ => code.0.to_string(),
+fn convert_error(e: windows::core::Error) -> String {
+    if e == ERROR_NOT_FOUND.into() {
+        return "Password not found.".to_string();
     }
+    e.to_string()
 }
 
 #[cfg(test)]
