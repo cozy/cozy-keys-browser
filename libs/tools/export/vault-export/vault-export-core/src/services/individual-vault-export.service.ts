@@ -113,9 +113,14 @@ export class IndividualVaultExportService
     });
 
     ciphers.forEach((c) => {
+      /* Commented by cozy
+      // The default BW is to exclude ciphers that have an organizationId. But in Cozy, ciphers created
+      // in harvest or by the stack (via migration script for example) are shared with the cozy organization.
+      // These ciphers are still the user's ownership. So we want to include all ciphers in exported data.
       if (c.organizationId != null) {
         return;
       }
+      */
       const cipher = new CipherWithIdExport();
       cipher.build(c);
       cipher.collectionIds = null;
@@ -139,9 +144,14 @@ export class IndividualVaultExportService
       if (c.type !== CipherType.Login && c.type !== CipherType.SecureNote) {
         return;
       }
+      /* Commented by cozy
+      // The default BW is to exclude ciphers that have an organizationId. But in Cozy, ciphers created
+      // in harvest or by the stack (via migration script for example) are shared with the cozy organization.
+      // These ciphers are still the user's ownership. So we want to include all ciphers in exported data.
       if (c.organizationId != null) {
         return;
       }
+      */
 
       const cipher = {} as BitwardenCsvIndividualExportType;
       cipher.folder =

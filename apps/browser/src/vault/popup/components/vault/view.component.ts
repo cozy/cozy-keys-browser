@@ -301,7 +301,7 @@ export class ViewComponent extends BaseViewComponent {
 
       const cipher = await this.cipherService.get(this.cipherId);
 
-      this.cipher = await cipher.decrypt();
+      this.cipher = await cipher.decrypt(await this.cipherService.getKeyForCipherKeyDecryption(cipher));
     } catch {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
     }

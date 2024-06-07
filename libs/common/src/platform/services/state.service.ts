@@ -1,3 +1,6 @@
+import formatISO from "date-fns/formatISO";
+import parseISO from "date-fns/parseISO";
+
 import { firstValueFrom, map } from "rxjs";
 import { Jsonify, JsonValue } from "type-fest";
 
@@ -66,6 +69,73 @@ export class StateService<
     protected tokenService: TokenService,
     private migrationRunner: MigrationRunner,
   ) {}
+
+  // Cozy customization, track if user manually set a preferred theme
+  //*
+  async getIsUserSetTheme(options?: StorageOptions): Promise<boolean> {
+    return (
+      await this.getGlobals(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.isUserSetTheme;
+  }
+
+  async setIsUserSetTheme(value: boolean, options?: StorageOptions): Promise<void> {
+    const globals = await this.getGlobals(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    globals.isUserSetTheme = value;
+    await this.saveGlobals(
+      globals,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+  //*/
+
+   // Cozy customization, clean profiles after X days
+  //*
+  async getProfilesCleanDeadline(options?: StorageOptions): Promise<Date | null> {
+    const valueString = (
+      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
+    )?.settings?.profilesCleanDeadline;
+
+    if (valueString) {
+      return parseISO(valueString);
+    } else {
+      return null;
+    }
+  }
+
+  async setProfilesCleanDeadline(value: Date, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    account.settings.profilesCleanDeadline = formatISO(value);
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+
+  async getProfilesMigrationHidden(options?: StorageOptions): Promise<boolean | null> {
+    return (
+      (
+        await this.getAccount(
+          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+        )
+      )?.profile?.profilesMigrationHidden ?? false
+    );
+  }
+
+  async setProfilesMigrationHidden(value: boolean, options?: StorageOptions): Promise<void> {
+    const account = await this.getAccount(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+    account.profile.profilesMigrationHidden = value;
+    await this.saveAccount(
+      account,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+    );
+  }
+  //*/
 
   async init(initOptions: InitOptions = {}): Promise<void> {
     // Deconstruct and apply defaults

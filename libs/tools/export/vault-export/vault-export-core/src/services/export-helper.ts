@@ -12,7 +12,11 @@ export class ExportHelper {
       this.padNumber(now.getMinutes(), 2) +
       this.padNumber(now.getSeconds(), 2);
 
+    /** Cozy customization
     return "bitwarden" + (prefix ? "_" + prefix : "") + "_export_" + dateString + "." + extension;
+    */
+    return "Cozy-Pass" + (prefix ? "_" + prefix : "") + "_export_" + dateString + "." + extension;
+    /** Cozy customization end */
   }
 
   private static padNumber(num: number, width: number, padCharacter = "0"): string {

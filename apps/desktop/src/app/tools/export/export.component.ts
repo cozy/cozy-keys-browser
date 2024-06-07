@@ -44,5 +44,15 @@ export class ExportComponent extends BaseExportComponent implements OnInit {
       dialogService,
       organizationService,
     );
+    this.formatOptions = [
+      { name: ".json", value: "json" },
+      { name: ".csv", value: "csv" },
+      // { name: ".json (Encrypted)", value: "encrypted_json" }, // commented by Cozy
+    ];
   }
+
+  formatOptions = [
+    { name: ".json", value: "json" },
+    { name: ".csv (logins & notes only)", value: "csv" },
+  ];
 }

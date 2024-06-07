@@ -179,7 +179,10 @@ const safeProviders: SafeProvider[] = [
     provide: CozyClientService,
     useValue: cozyClientService,
   }),
-  safeProvider(CozySanitizeUrlService),
+  safeProvider({
+    provide: CozySanitizeUrlService,
+    useValue: cozySanitizeUrlService
+  }),
   safeProvider({
     provide: KonnectorsService,
     useValue: konnectorsService,

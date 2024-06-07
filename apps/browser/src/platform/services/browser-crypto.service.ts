@@ -17,6 +17,14 @@ import { StateProvider } from "@bitwarden/common/platform/state";
 import { UserId } from "@bitwarden/common/types/guid";
 import { UserKey } from "@bitwarden/common/types/key";
 
+/* start Cozy imports */
+/* eslint-disable */
+import { ProfileOrganizationResponse } from "@bitwarden/common/models/response/profile-organization.response";
+import { ProfileProviderOrganizationResponse } from "@bitwarden/common/models/response/profile-provider-organization.response";
+import { EncryptedOrganizationKeyData } from "@bitwarden/common/models/data/encrypted-organization-key.data";
+/* eslint-enable */
+/* end Cozy imports */
+
 export class BrowserCryptoService extends CryptoService {
   constructor(
     masterPasswordService: InternalMasterPasswordServiceAbstraction,
@@ -44,6 +52,30 @@ export class BrowserCryptoService extends CryptoService {
       kdfConfigService,
     );
   }
+
+  /** Cozy custo */
+  async upsertOrganizationKey(organizationId: string, key: string) {
+    if (key === "") {
+      return;
+    }
+    const encOrgKeys = await this.stateService.getEncryptedOrganizationKeys();
+
+    encOrgKeys[organizationId] = key as unknown as EncryptedOrganizationKeyData;
+
+    await this.clearOrgKeys();
+    await this.stateService.setEncryptedOrganizationKeys(encOrgKeys);
+  }
+
+  setOrgKeys(
+    orgs: ProfileOrganizationResponse[],
+    providerOrgs: ProfileProviderOrganizationResponse[]
+  ): Promise<void> {
+    const validOrgs = orgs.filter((org) => org.key !== "");
+
+    return super.setOrgKeys(validOrgs, providerOrgs);
+  }
+  /** end custo */
+
   override async hasUserKeyStored(keySuffix: KeySuffixOptions, userId?: UserId): Promise<boolean> {
     if (keySuffix === KeySuffixOptions.Biometric) {
       const biometricUnlockPromise =

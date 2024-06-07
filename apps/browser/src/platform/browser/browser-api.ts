@@ -137,6 +137,12 @@ export class BrowserApi {
     });
   }
 
+  // Cozy customization
+  static async getAllTabs(): Promise<chrome.tabs.Tab[]> {
+    return await BrowserApi.tabsQuery({});
+  }
+  // Cozy customization end
+
   static async getActiveTabs(): Promise<chrome.tabs.Tab[]> {
     return await BrowserApi.tabsQuery({
       active: true,

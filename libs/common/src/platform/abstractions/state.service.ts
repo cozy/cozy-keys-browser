@@ -135,6 +135,11 @@ export abstract class StateService<T extends Account = Account> {
    * @deprecated For migration purposes only, use setEncryptedUserKeyPin instead
    */
   setEncryptedPinProtected: (value: string, options?: StorageOptions) => Promise<void>;
+  // Cozy customization, track if user manually set a preferred theme
+  //*
+  getIsUserSetTheme: (options?: StorageOptions) => Promise<boolean>;
+  setIsUserSetTheme: (value: boolean, options?: StorageOptions) => Promise<void>;
+  //*/
   getIsAuthenticated: (options?: StorageOptions) => Promise<boolean>;
   getLastSync: (options?: StorageOptions) => Promise<string>;
   setLastSync: (value: string, options?: StorageOptions) => Promise<void>;
@@ -167,4 +172,11 @@ export abstract class StateService<T extends Account = Account> {
   setVaultTimeout: (value: number, options?: StorageOptions) => Promise<void>;
   getVaultTimeoutAction: (options?: StorageOptions) => Promise<string>;
   setVaultTimeoutAction: (value: string, options?: StorageOptions) => Promise<void>;
+  // Cozy customization, clean profiles after X days
+  //*
+  getProfilesCleanDeadline: (options?: StorageOptions) => Promise<Date | null>;
+  setProfilesCleanDeadline: (value: Date, options?: StorageOptions) => Promise<void>;
+  getProfilesMigrationHidden: (options?: StorageOptions) => Promise<boolean>;
+  setProfilesMigrationHidden: (value: boolean, options?: StorageOptions) => Promise<void>;
+  //*/
 }

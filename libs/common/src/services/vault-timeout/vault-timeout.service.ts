@@ -29,7 +29,7 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     protected platformUtilsService: PlatformUtilsService,
     private messagingService: MessagingService,
     private searchService: SearchService,
-    private stateService: StateService,
+    private stateService: StateService, // Cozy customization (move to protected)
     private authService: AuthService,
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private stateEventRunnerService: StateEventRunnerService,

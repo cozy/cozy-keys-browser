@@ -21,6 +21,12 @@ import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 import { BrowserStateService } from "../../../platform/services/abstractions/browser-state.service";
 import { FilePopoutUtilsService } from "../services/file-popout-utils.service";
 
+/** Start Cozy imports */
+/* eslint-disable */
+import { HistoryService } from "../../../popup/services/history.service";
+/* eslint-enable */
+/** End Cozy imports */
+
 @Component({
   selector: "app-send-add-edit",
   templateUrl: "send-add-edit.component.html",
@@ -53,6 +59,7 @@ export class SendAddEditComponent extends BaseAddEditComponent {
     private filePopoutUtilsService: FilePopoutUtilsService,
     billingAccountProfileStateService: BillingAccountProfileStateService,
     accountService: AccountService,
+    private historyService: HistoryService,
   ) {
     super(
       i18nService,
@@ -123,6 +130,13 @@ export class SendAddEditComponent extends BaseAddEditComponent {
   }
 
   cancel() {
+    // Cozy customization
+    // - collections are not displayed in Cozy Pass Addon, but we modify nevertheless
+    // this back in case one day we decide to use this component
+    // - the routing pb mentionned above by BW is not relevant for the historyService
+    //*
+    this.historyService.gotoPreviousUrl();
+    /*/
     // If true, the window was pop'd out on the add-send page. location.back will not work
     if ((window as any).previousPopupUrl.startsWith("/add-send")) {
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
@@ -131,5 +145,7 @@ export class SendAddEditComponent extends BaseAddEditComponent {
     } else {
       this.location.back();
     }
+    //*/
+
   }
 }

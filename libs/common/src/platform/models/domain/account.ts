@@ -132,6 +132,10 @@ export class AccountProfile {
   kdfMemory?: number;
   kdfParallelism?: number;
   kdfType?: KdfType;
+  // Cozy customization, clean profiles after X days
+  //*
+  profilesMigrationHidden?: boolean;
+  //*/
 
   static fromJSON(obj: Jsonify<AccountProfile>): AccountProfile {
     if (obj == null) {
@@ -153,6 +157,10 @@ export class AccountSettings {
   protectedPin?: string;
   vaultTimeout?: number;
   vaultTimeoutAction?: string = "lock";
+  // Cozy customization, clean profiles after X days
+  //*
+  profilesCleanDeadline?: string;
+  //*/
 
   /** @deprecated July 2023, left for migration purposes*/
   pinProtected?: EncryptionPair<string, EncString> = new EncryptionPair<string, EncString>();

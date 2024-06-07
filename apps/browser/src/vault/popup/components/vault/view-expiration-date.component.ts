@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { models } from "cozy-client";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 
 const { makeExpiredMessage, makeExpiresInMessage } = models.paper;
