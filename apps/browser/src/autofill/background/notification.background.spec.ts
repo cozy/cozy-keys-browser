@@ -16,6 +16,8 @@ import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 import { CipherService } from "@bitwarden/common/vault/services/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/services/folder/folder.service";
 
+import { KonnectorsService } from "src/popup/services/konnectors.service";
+
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { DefaultBrowserStateService } from "../../platform/services/default-browser-state.service";
 import { NotificationQueueMessageType } from "../enums/notification-queue-message-type.enum";
@@ -50,6 +52,7 @@ describe("NotificationBackground", () => {
   const policyService = mock<PolicyService>();
   const folderService = mock<FolderService>();
   const stateService = mock<DefaultBrowserStateService>();
+  const konnectorsService = mock<KonnectorsService>();
   const userNotificationSettingsService = mock<UserNotificationSettingsService>();
   const domainSettingsService = mock<DomainSettingsService>();
   const environmentService = mock<EnvironmentService>();
@@ -65,6 +68,7 @@ describe("NotificationBackground", () => {
       policyService,
       folderService,
       stateService,
+      konnectorsService,
       userNotificationSettingsService,
       domainSettingsService,
       environmentService,

@@ -124,15 +124,14 @@ import { VaultFilterService } from "../../vault/services/vault-filter.service";
 import { DebounceNavigationService } from "./debounce-navigation.service";
 import { InitService } from "./init.service";
 import { PopupCloseWarningService } from "./popup-close-warning.service";
-
-/** COZY IMPORTS */
+/* start Cozy imports */
 /* eslint-disable */
 import { CozyClientService } from "./cozyClient.service";
 import { CozySanitizeUrlService } from "./cozySanitizeUrl.service";
 import { KonnectorsService } from "./konnectors.service";
 import { HistoryService } from "./history.service";
 /* eslint-enable */
-/* END */
+/* end Cozy imports */
 
 const OBSERVABLE_LARGE_OBJECT_MEMORY_STORAGE = new SafeInjectionToken<
   AbstractStorageService & ObservableStorageService
@@ -163,9 +162,10 @@ const cozyClientService = getBgService<CozyClientService>("cozyClientService")()
 export const cozySanitizeUrlService = new CozySanitizeUrlService();
 export const konnectorsService = new KonnectorsService(
   getBgService<CipherService>("cipherService")(),
-  getBgService<SettingsService>("settingsService")(),
+  getBgService<DomainSettingsService>("domainSettingsService")(),
   cozyClientService,
-  getBgService<StateServiceAbstraction>("stateService")()
+  getBgService<StateServiceAbstraction>("stateService")(),
+  getBgService<AutofillServiceAbstraction>("autofillService")(),
 );
 /* end custo */
 
@@ -175,19 +175,6 @@ export const konnectorsService = new KonnectorsService(
  * If you need help please ask for it, do NOT change the type of this array.
  */
 const safeProviders: SafeProvider[] = [
-  safeProvider({
-    provide: CozyClientService,
-    useValue: cozyClientService,
-  }),
-  safeProvider({
-    provide: CozySanitizeUrlService,
-    useValue: cozySanitizeUrlService
-  }),
-  safeProvider({
-    provide: KonnectorsService,
-    useValue: konnectorsService,
-  }),
-  safeProvider(HistoryService),
   safeProvider(InitService),
   safeProvider(DebounceNavigationService),
   safeProvider(DialogService),
@@ -633,13 +620,19 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: CLIENT_TYPE,
     useValue: ClientType.Browser,
-  })
+  }),
 ];
 
 @NgModule({
   imports: [JslibServicesModule],
   declarations: [],
   // Do not register your dependency here! Add it to the typesafeProviders array using the helper function
-  providers: safeProviders,
+  providers: [
+    ...safeProviders,
+    { provide: CozyClientService, useValue: cozyClientService },
+    { provide: CozySanitizeUrlService, useValue: cozySanitizeUrlService },
+    { provide: KonnectorsService, useValue: konnectorsService },
+    { provide: HistoryService },
+  ],
 })
 export class ServicesModule {}

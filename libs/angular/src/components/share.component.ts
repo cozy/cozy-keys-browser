@@ -80,13 +80,12 @@ export class ShareComponent implements OnInit, OnDestroy {
     /* Cozy custo : initialize selected item on the current collection of the cipher */
     if (this.cipher.organizationId) {
       this.selectedCollectionId = this.collections.find(
-        (col) => col.organizationId === this.cipher.organizationId
+        (col) => col.organizationId === this.cipher.organizationId,
       )?.id;
     } else {
       this.selectedCollectionId = "";
     }
     /* end custo */
-
   }
 
   filterCollections() {
@@ -103,7 +102,7 @@ export class ShareComponent implements OnInit, OnDestroy {
       );
       */
       this.collections = this.writeableCollections.filter(
-        (c) => c.name !== "[error: cannot decrypt]"
+        (c) => c.name !== "[error: cannot decrypt]",
       );
       /** end custo */
     }
@@ -126,7 +125,7 @@ export class ShareComponent implements OnInit, OnDestroy {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("selectOneFolder")
+        this.i18nService.t("selectOneFolder"),
       );
       return;
     }
@@ -154,7 +153,7 @@ export class ShareComponent implements OnInit, OnDestroy {
             "success",
             null,
             // this.i18nService.t("movedItemToOrg", cipherView.name, orgName), // Cozy custo
-            this.i18nService.t("movedItemToFolder")
+            this.i18nService.t("movedItemToFolder"),
           );
         });
       await this.formPromise;

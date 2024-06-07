@@ -184,6 +184,9 @@ export class Account {
   keys?: AccountKeys = new AccountKeys();
   profile?: AccountProfile = new AccountProfile();
   settings?: AccountSettings = new AccountSettings();
+  history?: string;
+  konnectorsOrganization?: string;
+  bannerClosedByUser?: boolean;
 
   constructor(init: Partial<Account>) {
     Object.assign(this, {

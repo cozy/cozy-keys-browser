@@ -11,23 +11,23 @@ import {
 
 import { fido2AuthGuard } from "../auth/guards/fido2-auth.guard";
 import { AccountSwitcherComponent } from "../auth/popup/account-switching/account-switcher.component";
-// import { EnvironmentComponent } from "../auth/popup/environment.component";
+import { EnvironmentComponent } from "../auth/popup/environment.component";
 import { HintComponent } from "../auth/popup/hint.component";
 import { HomeComponent } from "../auth/popup/home.component";
 import { LockComponent } from "../auth/popup/lock.component";
 import { LoginDecryptionOptionsComponent } from "../auth/popup/login-decryption-options/login-decryption-options.component";
 import { LoginViaAuthRequestComponent } from "../auth/popup/login-via-auth-request.component";
 import { LoginComponent } from "../auth/popup/login.component";
-// import { RegisterComponent } from "../auth/popup/register.component";
+import { RegisterComponent } from "../auth/popup/register.component";
 import { RemovePasswordComponent } from "../auth/popup/remove-password.component";
 import { SetPasswordComponent } from "../auth/popup/set-password.component";
 import { SsoComponent } from "../auth/popup/sso.component";
 import { TwoFactorOptionsComponent } from "../auth/popup/two-factor-options.component";
 import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
-import { AddGenericComponent } from "../cozy/components/add-generic/add-generic.component";
 import { AutofillComponent } from "../autofill/popup/settings/autofill.component";
-// import { PremiumComponent } from "../billing/popup/settings/premium.component";
+import { PremiumComponent } from "../billing/popup/settings/premium.component";
+import { AddGenericComponent } from "../cozy/components/add-generic/add-generic.component";
 import BrowserPopupUtils from "../platform/popup/browser-popup-utils";
 import { GeneratorComponent } from "../tools/popup/generator/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/popup/generator/password-generator-history.component";
@@ -149,28 +149,24 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { state: "remove-password" },
   },
-  /* commented by Cozy
   {
     path: "register",
     component: RegisterComponent,
     canActivate: [unauthGuardFn(unauthRouteOverrides)],
     data: { state: "register" },
   },
-  */
   {
     path: "hint",
     component: HintComponent,
     canActivate: [unauthGuardFn(unauthRouteOverrides)],
     data: { state: "hint" },
   },
-  /* commented by Cozy
   {
     path: "environment",
     component: EnvironmentComponent,
     canActivate: [unauthGuardFn(unauthRouteOverrides)],
     data: { state: "environment" },
   },
-  */
   {
     path: "ciphers",
     component: VaultItemsComponent,
@@ -288,14 +284,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { state: "excluded-domains" },
   },
-  /* commented by Cozy
   {
     path: "premium",
     component: PremiumComponent,
     canActivate: [AuthGuard],
     data: { state: "premium" },
   },
-  */
   {
     path: "options",
     component: OptionsComponent,

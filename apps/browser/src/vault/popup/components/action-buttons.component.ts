@@ -84,7 +84,7 @@ export class ActionButtonsComponent implements OnInit, OnDestroy {
       //*
       typeI18nKey === "value"
         ? this.i18nService.t("valueCopiedFeminine", this.i18nService.t(typeI18nKey))
-        : this.i18nService.t("valueCopied", this.i18nService.t(typeI18nKey))
+        : this.i18nService.t("valueCopied", this.i18nService.t(typeI18nKey)),
       /*/
       this.i18nService.t("valueCopied", this.i18nService.t(typeI18nKey)),
       //*/

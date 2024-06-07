@@ -40,7 +40,7 @@ import { AutofillService } from "../../../../autofill/services/abstractions/auto
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { KonnectorsService } from "../../../../popup/services/konnectors.service";
 import { HistoryService } from "../../../../popup/services/history.service";
-import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
+import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
 /* eslint-enable */
 /** End Cozy imports */
 
@@ -280,7 +280,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   async unloadMnger(event?: any) {
     this.historyService.updateQueryParamInHistory(
       "searchText",
-      this.searchText ? this.searchText : ""
+      this.searchText ? this.searchText : "",
     );
   }
   // end custo
@@ -346,8 +346,8 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     // Cozy customization
     super.addCipher();
     this.router.navigate([route], {
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       queryParams: {
         folderId: this.folderId,
         type: this.type,
@@ -427,16 +427,16 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   // Cozy custo
   async fillOrLaunchCipher(cipher: CipherView) {
     // Get default matching setting for urls
-    let defaultMatch = await this.stateService.getDefaultUriMatch();
+    let defaultMatch = await this.autofillService.getDefaultUriMatchStrategy(); // WHATISIT
     if (defaultMatch == null) {
-      defaultMatch = UriMatchType.Domain;
+      defaultMatch = UriMatchStrategy.Domain;
     }
     // Get the current url
     const tab = await BrowserApi.getTabFromCurrentWindow();
     const isCipherMatcinghUrl = await this.konnectorsService.hasURLMatchingCiphers(
       tab.url,
       [cipher],
-      defaultMatch
+      defaultMatch,
     );
     if (isCipherMatcinghUrl) {
       this.fillCipher(cipher);
@@ -464,7 +464,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
       if (totpCode != null) {
         this.platformUtilsService.copyToClipboard(totpCode, { window: window });
       }
-      if (this.popupUtils.inPopup(window)) {
+      if (BrowserPopupUtils.inPopup(window)) {
         BrowserApi.closePopup(window);
       }
     } catch (e) {

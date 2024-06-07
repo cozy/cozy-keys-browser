@@ -29,23 +29,8 @@ import MainBackground from "./main.background";
 
 // Cozy Imports
 /* eslint-disable */
-import { AuthService } from "@bitwarden/common/auth/services/auth.service";
-import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CipherWithIdExport as CipherExport } from "@bitwarden/common/models/export/cipher-with-ids.export";
-import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CozyClientService } from "src/popup/services/cozyClient.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { HashPurpose } from "@bitwarden/common/enums/hashPurpose";
-import { PasswordRequest } from "@bitwarden/common/auth/models/request/password.request";
-import { PasswordLogInCredentials } from "@bitwarden/common/auth/models/domain/log-in-credentials";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-import { BrowserStateService as StateService } from "src/services/browser-state.service";
-import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
-import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
-import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 /* eslint-enable */
 // End Cozy imports
 
@@ -69,6 +54,8 @@ export default class RuntimeBackground {
     private fido2Background: Fido2Background,
     private messageListener: MessageListener,
     private accountService: AccountService,
+    private syncService: SyncService,
+    private cozyClientService: CozyClientService,
   ) {
     // onInstalled listener must be wired up before anything else, so we do it in the ctor
     chrome.runtime.onInstalled.addListener((details: any) => {
@@ -133,59 +120,6 @@ export default class RuntimeBackground {
         break;
       case "collectPageDetailsResponse":
         switch (msg.sender) {
-          case "notificationBar": {
-            /* auttofill.js sends the page details requested by the notification bar.
-                Result will be used by both the notificationBar and for the inPageMenu.
-                inPageMenu requires a fillscrip to know wich fields are relevant for the menu and which
-                is the type of each field in order to adapt the menu content (cards, identities, login or
-                existing logins)
-              */
-            // 1- request a fill script for the in-page-menu (if activated)
-            let enableInPageMenu = await this.stateService.getEnableInPageMenu();
-            // default to true
-            if (enableInPageMenu === null) {
-              enableInPageMenu = true;
-            }
-            if (enableInPageMenu) {
-              // If goes here : means that the page has just been loaded while addon was already connected
-              // get scripts for logins, cards and identities
-
-              const fieldsForAutofillMenuScripts =
-                await this.autofillService.generateFieldsForInPageMenuScripts(
-                  msg.details,
-                  true,
-                  sender.frameId
-                );
-              // get script for existing logins.
-              // the 4 scripts (existing logins, logins, cards and identities) will be sent
-              // to autofill.js by autofill.service
-              try {
-                await this.autofillService.doAutoFillActiveTab(
-                  [
-                    {
-                      frameId: sender.frameId,
-                      tab: msg.tab,
-                      details: msg.details,
-                      fieldsForInPageMenuScripts: fieldsForAutofillMenuScripts,
-                      sender: "notifBarForInPageMenu", // to prepare a fillscript for the in-page-menu
-                    },
-                  ],
-                  true
-                );
-              } catch (error) {
-                // the `doAutoFillActiveTab` is run in a `try` because the original BW code
-                // casts an error when no autofill is detected;
-              }
-            }
-            // 2- send page details to the notification bar
-            const forms = this.autofillService.getFormsWithPasswordFields(msg.details);
-            await BrowserApi.tabSendMessageData(msg.tab, "notificationBarPageDetails", {
-              details: msg.details,
-              forms: forms,
-            });
-
-            break;
-          }
           case "autofiller":
           case "autofill_cmd": {
             const activeUserId = await firstValueFrom(
@@ -198,7 +132,6 @@ export default class RuntimeBackground {
                   frameId: sender.frameId,
                   tab: msg.tab,
                   details: msg.details,
-                  sender: msg.sender,
                 },
               ],
               msg.sender === "autofill_cmd",
@@ -257,6 +190,17 @@ export default class RuntimeBackground {
   }
 
   async processMessage(msg: any) {
+    /*
+      OUTDATED
+      Cozy custo : this log is very useful for reverse engineering the code, keep it for tests
+      console.log('runtime.background PROCESS MESSAGE ', {
+          'command': msg.subcommand ? msg.subcommand : msg.command,
+          'sender': msg.sender + ' of ' +
+          (sender.url ? (new URL(sender.url)).host + ' frameId:' + sender.frameId : sender),
+          'full.msg': msg,
+          'full.sender': sender,
+      });
+    */
     switch (msg.command) {
       case "loggedIn":
       case "unlocked": {
@@ -307,6 +251,11 @@ export default class RuntimeBackground {
           await this.configService.ensureConfigFetched();
         }
         break;
+      // Cozy customization
+      case "fullSync":
+        this.syncService.fullSync(true);
+        break;
+      // Cozy customization end
       case "openPopup":
         await this.main.openPopup();
         break;
@@ -405,6 +354,8 @@ export default class RuntimeBackground {
       void this.autofillService.loadAutofillScriptsOnInstall();
 
       if (this.onInstalledReason != null) {
+        // Cozy customization, disable Bitwarden redirection on installed
+        /*
         if (this.onInstalledReason === "install") {
           if (!devFlagEnabled("skipWelcomeOnInstall")) {
             void BrowserApi.createNewTab("https://bitwarden.com/browser-start/");
@@ -417,14 +368,15 @@ export default class RuntimeBackground {
           if (await this.environmentService.hasManagedEnvironment()) {
             await this.environmentService.setUrlsToManagedEnvironment();
           }
-        end custo */
         }
+        //*/
 
         // Execute the content-script on all tabs in case cozy-passwords is waiting for an answer
         const allTabs = await BrowserApi.getAllTabs();
         for (const tab of allTabs) {
           chrome.tabs.executeScript(tab.id, { file: "content/appInfo.js" });
         }
+
         this.onInstalledReason = null;
       }
     }, 100);

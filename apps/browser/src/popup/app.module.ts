@@ -20,14 +20,14 @@ import { ExportScopeCalloutComponent } from "@bitwarden/vault-export-ui";
 import { AccountSwitcherComponent } from "../auth/popup/account-switching/account-switcher.component";
 import { AccountComponent } from "../auth/popup/account-switching/account.component";
 import { CurrentAccountComponent } from "../auth/popup/account-switching/current-account.component";
-// import { EnvironmentComponent } from "../auth/popup/environment.component";
+import { EnvironmentComponent } from "../auth/popup/environment.component";
 import { HintComponent } from "../auth/popup/hint.component";
 import { HomeComponent } from "../auth/popup/home.component";
 import { LockComponent } from "../auth/popup/lock.component";
 import { LoginDecryptionOptionsComponent } from "../auth/popup/login-decryption-options/login-decryption-options.component";
 import { LoginViaAuthRequestComponent } from "../auth/popup/login-via-auth-request.component";
 import { LoginComponent } from "../auth/popup/login.component";
-// import { RegisterComponent } from "../auth/popup/register.component";
+import { RegisterComponent } from "../auth/popup/register.component";
 import { RemovePasswordComponent } from "../auth/popup/remove-password.component";
 import { SetPasswordComponent } from "../auth/popup/set-password.component";
 import { SsoComponent } from "../auth/popup/sso.component";
@@ -35,7 +35,7 @@ import { TwoFactorOptionsComponent } from "../auth/popup/two-factor-options.comp
 import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
 import { AutofillComponent } from "../autofill/popup/settings/autofill.component";
-// import { PremiumComponent } from "../billing/popup/settings/premium.component";
+import { PremiumComponent } from "../billing/popup/settings/premium.component";
 import { HeaderComponent } from "../platform/popup/header.component";
 import { PopupFooterComponent } from "../platform/popup/layout/popup-footer.component";
 import { PopupHeaderComponent } from "../platform/popup/layout/popup-header.component";
@@ -70,7 +70,7 @@ import { FolderAddEditComponent } from "../vault/popup/settings/folder-add-edit.
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-// import { PopOutComponent } from "./components/pop-out.component";
+import { PopOutComponent } from "./components/pop-out.component";
 import { UserVerificationComponent } from "./components/user-verification.component";
 import { ServicesModule } from "./services/services.module";
 import { ExcludedDomainsComponent } from "./settings/excluded-domains.component";
@@ -142,7 +142,7 @@ import "../platform/popup/locales";
     ColorPasswordPipe,
     ColorPasswordCountPipe,
     CurrentTabComponent,
-    //    EnvironmentComponent,
+    EnvironmentComponent,
     ExcludedDomainsComponent,
     ExportComponent,
     Fido2CipherRowComponent,
@@ -161,9 +161,9 @@ import "../platform/popup/locales";
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
     PasswordHistoryComponent,
-    // PopOutComponent,
-    // PremiumComponent,
-    // RegisterComponent,
+    PopOutComponent,
+    PremiumComponent,
+    RegisterComponent,
     SendAddEditComponent,
     SendGroupingsComponent,
     SendListComponent,

@@ -50,7 +50,7 @@ export class GeneratorComponent extends BaseGeneratorComponent implements OnDest
     logService: LogService,
     private location: Location,
     private historyService: HistoryService,
-    protected cozyClientService: CozyClientService
+    protected cozyClientService: CozyClientService,
   ) {
     super(
       passwordGenerationService,
@@ -61,7 +61,7 @@ export class GeneratorComponent extends BaseGeneratorComponent implements OnDest
       logService,
       route,
       window,
-      cozyClientService
+      cozyClientService,
     );
     this.cipherService = cipherService;
   }

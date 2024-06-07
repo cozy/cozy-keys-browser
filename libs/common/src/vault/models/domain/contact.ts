@@ -1,7 +1,7 @@
 // Cozy customization
-import Domain from "../../../models/domain/domain-base";
-import { EncString } from "../../../models/domain/enc-string";
-import { SymmetricCryptoKey } from "../../../models/domain/symmetric-crypto-key";
+import Domain from "../../../platform/models/domain/domain-base";
+import { EncString } from "../../../platform/models/domain/enc-string";
+import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
 import { ContactData } from "../data/contact.data";
 import { ContactView } from "../view/contact.view";
 
@@ -28,7 +28,7 @@ export class Contact extends Domain {
         primaryEmail: null,
         primaryPhone: null,
       },
-      []
+      [],
     );
   }
 
@@ -42,7 +42,7 @@ export class Contact extends Domain {
         primaryPhone: null,
       },
       orgId,
-      encKey
+      encKey,
     );
   }
 
@@ -58,7 +58,7 @@ export class Contact extends Domain {
         primaryEmail: null,
         primaryPhone: null,
       },
-      []
+      [],
     );
 
     return c;

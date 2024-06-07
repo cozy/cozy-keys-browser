@@ -27,6 +27,7 @@ import { BrowserStateService } from "../../platform/services/abstractions/browse
 import { openAddEditVaultItemPopout } from "../../vault/popup/utils/vault-popout-window";
 import { NotificationQueueMessageType } from "../enums/notification-queue-message-type.enum";
 import { AutofillService } from "../services/abstractions/autofill.service";
+
 import {
   AddChangePasswordQueueMessage,
   AddLoginQueueMessage,

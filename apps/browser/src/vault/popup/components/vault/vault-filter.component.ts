@@ -39,10 +39,11 @@ import { VaultFilterService } from "../../../services/vault-filter.service";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { KonnectorsService } from "../../../../popup/services/konnectors.service";
 import { HistoryService } from "../../../../popup/services/history.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { DialogService } from "../../../../../../../libs/components/src/dialog";
 /* eslint-enable */
 
 interface CollectionViewWithKonnector extends CollectionView {
@@ -130,6 +131,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     private stateService: StateService,
     private vaultFilterService: VaultFilterService,
     private vaultBrowserStateService: VaultBrowserStateService,
+    private dialogService: DialogService,
   ) {
     this.noFolderListSize = 100;
   }
@@ -275,7 +277,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
         this.notValidatedCollectionId.push(col.node.id);
       }
       const isKonnector = await this.konnectorService.isKonnectorsOrganization(
-        col.node.organizationId
+        col.node.organizationId,
       );
 
       const colWithKonnector: TreeNode<CollectionViewWithKonnector> = col;
@@ -351,7 +353,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     /** Cozy custo : if the collection is not yet validated, then display a warning */
     if (this.notValidatedCollectionId.includes(collection.id)) {
       const fingerprint = await this.cryptoService.getFingerprint(
-        await this.stateService.getUserId()
+        await this.stateService.getUserId(),
       );
       const desc = `<p class="security-code-desc">
         ${this.i18nService.t("sharingNotAcceptedYetDesc1")}
@@ -360,14 +362,11 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
         </p><p class="security-code-desc">
         ${this.i18nService.t("sharingNotAcceptedYetDesc2")}
         </p>`;
-      await this.platformUtilsService.showDialog(
-        desc,
-        this.i18nService.t("sharingNotAcceptedYet"),
-        "ok",
-        null,
-        null,
-        true
-      );
+      await this.dialogService.openSimpleDialog({
+        title: this.i18nService.t("sharingNotAcceptedYet"),
+        content: desc,
+        type: "warning",
+      });
       return;
     }
     /** end custo */

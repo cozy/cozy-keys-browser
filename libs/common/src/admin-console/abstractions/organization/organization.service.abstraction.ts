@@ -12,7 +12,6 @@ import { ProfileOrganizationResponse } from "../../models/response/profile-organ
 /* eslint-enable */
 /* END */
 
-
 export function canAccessVaultTab(org: Organization): boolean {
   return org.canViewAssignedCollections || org.canViewAllCollections;
 }

@@ -211,6 +211,7 @@ const mainConfig = {
     "content/lp-suppress-import-download": "./src/tools/content/lp-suppress-import-download.ts",
     "inPageMenu/menu": "./src/inPageMenu/menu.js",
     "inPageMenu/loginMenu": "./src/inPageMenu/loginMenu.js",
+    "content/appInfo": "./src/content/appInfo.ts",
   },
   optimization: {
     minimize: ENV !== "development",

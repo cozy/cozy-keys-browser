@@ -14,6 +14,7 @@ import { firstValueFrom } from "rxjs";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { EventType } from "@bitwarden/common/enums";
@@ -35,7 +36,7 @@ import { Launchable } from "@bitwarden/common/vault/interfaces/launchable";
 import { AttachmentView } from "@bitwarden/common/vault/models/view/attachment.view";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
 const BroadcasterSubscriptionId = "ViewComponent";
@@ -99,6 +100,8 @@ export class ViewComponent implements OnDestroy, OnInit {
     protected stateService: StateService,
     protected fileDownloadService: FileDownloadService,
     protected dialogService: DialogService,
+    protected toastService: ToastService,
+    protected organizationService: OrganizationService,
     protected datePipe: DatePipe,
     private billingAccountProfileStateService: BillingAccountProfileStateService,
   ) {}
@@ -381,7 +384,7 @@ export class ViewComponent implements OnDestroy, OnInit {
       //*
       typeI18nKey === "value"
         ? this.i18nService.t("valueCopiedFeminine", this.i18nService.t(typeI18nKey))
-        : this.i18nService.t("valueCopied", this.i18nService.t(typeI18nKey))
+        : this.i18nService.t("valueCopied", this.i18nService.t(typeI18nKey)),
       /*/
       this.i18nService.t("valueCopied", this.i18nService.t(typeI18nKey))
       //*/

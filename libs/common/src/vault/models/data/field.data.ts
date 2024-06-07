@@ -1,4 +1,5 @@
 import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
+
 import { FieldType, LinkedIdType } from "../../enums";
 import { FieldApi } from "../api/field.api";
 

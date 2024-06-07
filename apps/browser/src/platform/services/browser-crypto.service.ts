@@ -16,12 +16,11 @@ import { USER_KEY } from "@bitwarden/common/platform/services/key-state/user-key
 import { StateProvider } from "@bitwarden/common/platform/state";
 import { UserId } from "@bitwarden/common/types/guid";
 import { UserKey } from "@bitwarden/common/types/key";
-
 /* start Cozy imports */
 /* eslint-disable */
-import { ProfileOrganizationResponse } from "@bitwarden/common/models/response/profile-organization.response";
-import { ProfileProviderOrganizationResponse } from "@bitwarden/common/models/response/profile-provider-organization.response";
-import { EncryptedOrganizationKeyData } from "@bitwarden/common/models/data/encrypted-organization-key.data";
+import { EncryptedOrganizationKeyData } from "@bitwarden/common/admin-console/models/data/encrypted-organization-key.data";
+import { ProfileOrganizationResponse } from "@bitwarden/common/admin-console/models/response/profile-organization.response";
+import { ProfileProviderOrganizationResponse } from "@bitwarden/common/admin-console/models/response/profile-provider-organization.response";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -54,26 +53,29 @@ export class BrowserCryptoService extends CryptoService {
   }
 
   /** Cozy custo */
-  async upsertOrganizationKey(organizationId: string, key: string) {
-    if (key === "") {
-      return;
-    }
-    const encOrgKeys = await this.stateService.getEncryptedOrganizationKeys();
+  // WHATISIT
 
-    encOrgKeys[organizationId] = key as unknown as EncryptedOrganizationKeyData;
+  // async upsertOrganizationKey(organizationId: string, key: string) {
+  //   if (key === "") {
+  //     return;
+  //   }
+  //   const encOrgKeys = await this.stateService.getEncryptedOrganizationKeys();
 
-    await this.clearOrgKeys();
-    await this.stateService.setEncryptedOrganizationKeys(encOrgKeys);
-  }
+  //   encOrgKeys[organizationId] = key as unknown as EncryptedOrganizationKeyData;
 
-  setOrgKeys(
-    orgs: ProfileOrganizationResponse[],
-    providerOrgs: ProfileProviderOrganizationResponse[]
-  ): Promise<void> {
-    const validOrgs = orgs.filter((org) => org.key !== "");
+  //   await this.clearOrgKeys();
+  //   await this.stateService.setEncryptedOrganizationKeys(encOrgKeys);
+  // }
 
-    return super.setOrgKeys(validOrgs, providerOrgs);
-  }
+  // setOrgKeys(
+  //   orgs: ProfileOrganizationResponse[],
+  //   providerOrgs: ProfileProviderOrganizationResponse[],
+  //   userId: UserId,
+  // ): Promise<void> {
+  //   const validOrgs = orgs.filter((org) => org.key !== "");
+
+  //   return super.setOrgKeys(validOrgs, providerOrgs, userId);
+  // }
   /** end custo */
 
   override async hasUserKeyStored(keySuffix: KeySuffixOptions, userId?: UserId): Promise<boolean> {

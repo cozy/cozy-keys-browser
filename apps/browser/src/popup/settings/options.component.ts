@@ -18,10 +18,11 @@ import { VaultSettingsService } from "@bitwarden/common/vault/abstractions/vault
 
 import { enableAccountSwitching } from "../../platform/flags";
 
-/* Cozy imports */
-import { BrowserApi } from "../../platform/browser/browser-api";
-import { BrowserStateService as StateService } from "../../services/abstractions/browser-state.service";
-/* END */
+/* start Cozy imports */
+/* eslint-disable */
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+/* eslint-enable */
+/* end Cozy imports */
 
 @Component({
   selector: "app-options",
@@ -65,6 +66,7 @@ export class OptionsComponent implements OnInit {
     i18nService: I18nService,
     private themeStateService: ThemeStateService,
     private vaultSettingsService: VaultSettingsService,
+    private stateService: StateService,
   ) {
     this.themeOptions = [
       { name: i18nService.t("default"), value: ThemeType.System },
@@ -100,11 +102,7 @@ export class OptionsComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // WHATISIT stateService n'existe plus
     this.disableKonnectorsSuggestions = await this.stateService.getDisableKonnectorsSuggestions();
-
-    // WHATISIT stateService n'existe plus
-    this.enableInPageMenu = await this.stateService.getEnableInPageMenu();
 
     this.enableAutoFillOnPageLoad = await firstValueFrom(
       this.autofillSettingsService.autofillOnPageLoad$,
@@ -175,23 +173,7 @@ export class OptionsComponent implements OnInit {
   }
 
   async updateKonnectorsSuggestions() {
-    // WHATISIT stateService n'existe plus
     await this.stateService.setDisableKonnectorsSuggestions(this.disableKonnectorsSuggestions);
-  }
-
-  async updateEnableInPageMenu() {
-    // WHATISIT stateService n'existe plus
-    await this.stateService.setEnableInPageMenu(this.enableInPageMenu);
-
-    // activate or deactivate the menu from all tabs
-    let subcommand = "autofilIPMenuActivate";
-    if (!this.enableInPageMenu) {
-      subcommand = "inPageMenuDeactivate";
-    }
-    const allTabs = await BrowserApi.getAllTabs();
-    for (const tab of allTabs) {
-      BrowserApi.tabSendMessage(tab, { command: "autofillAnswerRequest", subcommand: subcommand });
-    }
   }
 
   async updateAutoFillOnPageLoad() {
@@ -221,9 +203,12 @@ export class OptionsComponent implements OnInit {
 
   async saveTheme() {
     await this.themeStateService.setSelectedTheme(this.theme);
-    // WHATISIT stateService n'existe plus
     await this.stateService.setIsUserSetTheme(true);
   }
+
+  // async saveDefaultUriMatch() {
+  //   await this.stateService.setDefaultUriMatch(this.defaultUriMatch);
+  // }
 
   async saveClearClipboard() {
     await this.autofillSettingsService.setClearClipboardDelay(this.clearClipboard);

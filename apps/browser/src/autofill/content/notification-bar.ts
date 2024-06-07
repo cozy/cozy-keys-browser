@@ -9,55 +9,6 @@ import { NotificationBarIframeInitData } from "../notification/abstractions/noti
 import { FormData } from "../services/abstractions/autofill.service";
 import { sendExtensionMessage, setupExtensionDisconnectAction } from "../utils";
 
-// Cozy Imports
-import {
-  cancelButtonNames,
-  changePasswordButtonContainsNames,
-  changePasswordButtonNames,
-  logInButtonNames,
-} from "./consts";
-// END Cozy Imports
-
-/* Cozy custo  */
-// See original file:
-// https://github.com/bitwarden/browser/blob/3e1e05ab4ffabbf180972650818a3ae3468dbdfb/src/content/notificationBar.ts
-
-// Returns a cozy app url based on the cozyUrl and the app name
-function getAppURLCozy(cozyUrl: string, appName: string, hash: string) {
-  if (!appName) {
-    return new URL(cozyUrl).toString();
-  }
-  const url = new URL(cozyUrl);
-  const hostParts = url.host.split(".");
-  url.host = [`${hostParts[0]}-${appName}`, ...hostParts.slice(1)].join(".");
-  if (hash) {
-    url.hash = hash;
-  }
-  return url.toString();
-}
-
-// The aim is to not activate the inPageMenu in somme Cozy applications so that there is no menu in
-// their forms (contacts, pass...)
-let cozyPasswordsHostname: string;
-let cozyContactsHostname: string;
-function shouldTrigerMenu() {
-  return !(
-    (cozyPasswordsHostname === window.location.hostname && window.location.hash !== "#/login") ||
-    cozyContactsHostname === window.location.hostname
-  );
-}
-chrome.storage.local.get("global", (resp: any) => {
-  cozyPasswordsHostname = new URL(getAppURLCozy(resp.global.environmentUrls.base, "passwords", ""))
-    .hostname;
-  cozyContactsHostname = new URL(getAppURLCozy(resp.global.environmentUrls.base, "contacts", ""))
-    .hostname;
-});
-/* END Cozy custo  */
-
-document.addEventListener("DOMContentLoaded", (event) => {
-  if (window.location.hostname.endsWith("vault.bitwarden.com")) {
-    return;
-  }
 interface HTMLElementWithFormOpId extends HTMLElement {
   formOpId: string;
 }
@@ -111,14 +62,11 @@ async function loadNotificationBar() {
     "em",
     "hr",
   ]);
-  const submitButtonSelector =
-    'input[type="submit"], input[type="image"], ' + 'button[type="submit"]';
   let domObservationCollectTimeoutId: number = null;
   let collectPageDetailsTimeoutId: number = null;
   let handlePageChangeTimeoutId: number = null;
 
   const inIframe = isInIframe();
-  /* commented by Cozy
   const cancelButtonNames = new Set(["cancel", "close", "back"]);
   const logInButtonNames = new Set([
     "log in",
@@ -193,11 +141,6 @@ async function loadNotificationBar() {
    * @returns {boolean} - Returns `true` if a response was sent, `false` otherwise.
    */
   function processMessages(msg: any, sendResponse: (response?: any) => void) {
-    /*
-        @override by Cozy :
-        This log is very useful for reverse engineer the code, keep it for tests
-        console.log('notificationBar.js HEARD MESSAGE : ', {'msg.command': msg.command,'msg': msg});
-        */
     if (msg.command === "openNotificationBar") {
       // `notification.background.ts : doNotificationQueueCheck(...)` sends
       // a message to the content script to open the notification bar
@@ -327,13 +270,6 @@ async function loadNotificationBar() {
               doCollectPageDetails = true;
               break;
             }
-            // Cozy custo : take into account when modification occurs into a form.
-            const parentform = addedNode.closest("form:not([data-bitwarden-watching])");
-            if (parentform != null && parentform.length > 0) {
-              doCollect = true;
-              break;
-            }
-            /* end custo */
           }
 
           if (doCollectPageDetails) {
@@ -467,16 +403,7 @@ async function loadNotificationBar() {
       const formId: string = f.form != null ? f.form.htmlID : null;
       let formEl: HTMLFormElement = null;
       if (formId != null && formId !== "") {
-        // Get form by id
         formEl = document.getElementById(formId) as HTMLFormElement;
-      } else if (f.form.htmlClass) {
-        // Get form by class
-        const formsByClass = document.getElementsByClassName(
-          f.form.htmlClass
-        ) as HTMLCollectionOf<HTMLFormElement>;
-        if (formsByClass.length > 0) {
-          formEl = formsByClass[0];
-        }
       }
 
       // If the form could not be retrieved by its HTML ID, retrieve it by its index pulled from the opid
@@ -486,16 +413,6 @@ async function loadNotificationBar() {
         // Each form has an opid and each element has an opid and its parent form opid
         const index = parseInt(f.form.opid.split("__")[2], null);
         formEl = document.getElementsByTagName("form")[index];
-      }
-      if (!formEl) {
-        return;
-      }
-      if (formEls.has(formEl)) {
-        // The form has already been processed: nothing to do here
-        return;
-      } else {
-        // This is a new form
-        formEls.add(formEl);
       }
 
       // If the form element exists and is not yet being watched, start watching it and set it as watched
@@ -627,12 +544,6 @@ async function loadNotificationBar() {
     if (el == null && fieldData.htmlName != null && fieldData.htmlName !== "") {
       el = form.querySelector('input[name="' + fieldData.htmlName + '"]');
     }
-    /* Cozy custo */
-    if (el == null && fieldData.opid != null) {
-      // @ts-expect-error opid is not an html property
-      el = inputs.find((e) => e.opid === fieldData.opid);
-    }
-    /* end custo */
     if (el == null && fieldData.elementNumber != null) {
       el = inputs[fieldData.elementNumber];
     }
@@ -963,7 +874,6 @@ async function loadNotificationBar() {
     const frameDiv = document.createElement("div");
     frameDiv.setAttribute("aria-live", "polite");
     frameDiv.id = "bit-notification-bar";
-    /* Cozy custo
     frameDiv.style.cssText =
       "height: 42px; width: 100%; top: 0; left: 0; padding: 0; position: fixed; " +
       "z-index: 2147483647; visibility: visible;";
@@ -999,7 +909,6 @@ async function loadNotificationBar() {
     spacer.id = "bit-notification-bar-spacer";
     spacer.style.cssText = "height: 42px;";
     document.body.insertBefore(spacer, document.body.firstChild);
-    END commented by Cozy*/
   }
 
   function closeBar(explicitClose: boolean) {
@@ -1009,12 +918,10 @@ async function loadNotificationBar() {
       notificationBarIframe = null;
     }
 
-    /** commented by Cozy
     const spacerEl = document.getElementById("bit-notification-bar-spacer");
     if (spacerEl) {
       spacerEl.parentElement.removeChild(spacerEl);
     }
-    END commented by Cozy */
 
     if (!explicitClose) {
       return;
@@ -1031,11 +938,7 @@ async function loadNotificationBar() {
   }
 
   function adjustBar(data: any) {
-    /* Cozy custo
     if (data != null && data.height !== 42) {
-    */
-    if (data != null) {
-      /* end custo */
       const newHeight = data.height + "px";
       doHeightAdjustment("bit-notification-bar-iframe", newHeight);
       doHeightAdjustment("bit-notification-bar", newHeight);
@@ -1047,7 +950,6 @@ async function loadNotificationBar() {
     const el = document.getElementById(elId);
     if (el != null) {
       el.style.height = heightStyle;
-      el.style.removeProperty("visibility"); // Cozy custo
     }
   }
   // End Notification Bar Functions (open, close, height adjustment, etc.)

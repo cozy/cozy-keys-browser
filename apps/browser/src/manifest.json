@@ -38,9 +38,7 @@
     },
     {
       "all_frames": true,
-      "js": [
-        "content/appInfo.js"
-      ],
+      "js": ["content/appInfo.js"],
       "matches": ["http://*/*", "https://*/*", "file:///*"],
       "run_at": "document_start"
     }

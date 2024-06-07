@@ -21,8 +21,6 @@ import { FieldType, CipherType } from "@bitwarden/common/vault/enums";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
-import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view";
-import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { ScriptInjectorService } from "../../platform/services/abstractions/script-injector.service";
@@ -374,54 +372,18 @@ export default class AutofillService implements AutofillServiceInterface {
     fromCommand: boolean,
   ): Promise<string | null> {
     let cipher: CipherView;
-    /* *
-    @override by Cozy : when the user logins into the addon, all tabs request a pageDetail in order to
-    activate the in-page-menu :
-      * then the tab to take into account is not the active tab, but the tab sent with the pageDetails
-      * and if there is no cipher for the tab, then request to close in page menu
-    */
-    let hasFieldsForInPageMenu = false;
-    if (pageDetails[0].sender === "notifBarForInPageMenu") {
-      cipher = await this.cipherService.getLastUsedForUrl(tab.url, false);
-      hasFieldsForInPageMenu =
-        pageDetails[0].fieldsForInPageMenuScripts.findIndex((s: any) => {
-          s.script.length > 0;
-        }) > -1;
-      tab = pageDetails[0].tab;
-      if (!cipher && !hasFieldsForInPageMenu) {
-        // there is no cipher for this URL : deactivate in page menu
-        BrowserApi.tabSendMessage(
-          tab,
-          {
-            command: "autofillAnswerRequest",
-            subcommand: "inPageMenuDeactivate",
-            frameId: pageDetails[0].frameId,
-          },
-          {
-            frameId: pageDetails[0].frameId,
-          }
-        );
-        return;
-      }
+    if (fromCommand) {
+      cipher = await this.cipherService.getNextCipherForUrl(tab.url);
     } else {
-      if (!tab || !tab.url) {
-        return;
-      }
-      /* END @override by Cozy */
-      if (fromCommand) {
-        cipher = await this.cipherService.getNextCipherForUrl(tab.url);
+      const lastLaunchedCipher = await this.cipherService.getLastLaunchedForUrl(tab.url, true);
+      if (
+        lastLaunchedCipher &&
+        Date.now().valueOf() - lastLaunchedCipher.localData?.lastLaunched?.valueOf() < 30000
+      ) {
+        cipher = lastLaunchedCipher;
       } else {
-        const lastLaunchedCipher = await this.cipherService.getLastLaunchedForUrl(tab.url, true);
-        if (
-          lastLaunchedCipher &&
-          Date.now().valueOf() - lastLaunchedCipher.localData?.lastLaunched?.valueOf() < 30000
-        ) {
-          cipher = lastLaunchedCipher;
-        } else {
-          cipher = await this.cipherService.getLastUsedForUrl(tab.url, true);
-        }
+        cipher = await this.cipherService.getLastUsedForUrl(tab.url, true);
       }
-      /** Cozy custo
     }
 
     if (cipher == null || (cipher.reprompt === CipherRepromptType.Password && !fromCommand)) {
@@ -435,15 +397,6 @@ export default class AutofillService implements AutofillServiceInterface {
 
       return null;
     }
-    */
-    }
-    if (
-      (cipher == null || cipher.reprompt !== CipherRepromptType.None) &&
-      !hasFieldsForInPageMenu
-    ) {
-      return null;
-    }
-    /** end custo */
 
     const totpCode = await this.doAutoFill({
       tab: tab,
@@ -604,24 +557,7 @@ export default class AutofillService implements AutofillServiceInterface {
           }
 
           filledFields[field.opid] = field;
-          let cipher: any;
-          switch (options.cipher.type) {
-            case CipherType.Login:
-              cipher = { type: "login", fieldType: "customField" };
-              break;
-            case CipherType.Card:
-              cipher = { type: "card", fieldType: "customField" };
-              break;
-            case CipherType.Identity:
-              field.fieldType = "customField";
-              cipher = { type: "identity", fieldType: "customField" };
-              break;
-            case CipherType.Contact:
-              field.fieldType = "customField";
-              cipher = { type: "contact", fieldType: "customField" };
-              break;
-          }
-          AutofillService.fillByOpid(fillScript, field, val, cipher);
+          AutofillService.fillByOpid(fillScript, field, val);
         }
       });
     }
@@ -645,31 +581,6 @@ export default class AutofillService implements AutofillServiceInterface {
           filledFields,
           options,
         );
-        break;
-      case CipherType.Paper:
-        /*
-          For papers, we only use the custom fields matching.
-        */
-        break;
-      case CipherType.Contact:
-        /*
-          For contacts, we create an IdentityView with the contact content to leverage the generateIdentityFillScript.
-        */
-        try {
-          options.cipher.identity = generateIdentityViewFromCipherView(options.cipher);
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.log("Failed to convert CipherView to IdentityView", e);
-        }
-
-        fillScript = this.generateIdentityFillScript(
-          fillScript,
-          pageDetails,
-          filledFields,
-          options
-        );
-
-        options.cipher.identity = new IdentityView();
         break;
       default:
         return null;
@@ -823,15 +734,6 @@ export default class AutofillService implements AutofillServiceInterface {
       });
     }
 
-    /* @override by Cozy : remove otp fields */
-    usernames = usernames.filter((field) => {
-      return !this.isOtpField(field);
-    });
-    passwords = passwords.filter((field) => {
-      return !this.isOtpField(field);
-    });
-    /* END @override by Cozy                  */
-
     usernames.forEach((u) => {
       // eslint-disable-next-line
       if (filledFields.hasOwnProperty(u.opid)) {
@@ -839,8 +741,7 @@ export default class AutofillService implements AutofillServiceInterface {
       }
 
       filledFields[u.opid] = u;
-      const cipher = { type: "login", fieldType: "username" };
-      AutofillService.fillByOpid(fillScript, u, login.username, cipher);
+      AutofillService.fillByOpid(fillScript, u, login.username);
     });
 
     passwords.forEach((p) => {
@@ -850,8 +751,7 @@ export default class AutofillService implements AutofillServiceInterface {
       }
 
       filledFields[p.opid] = p;
-      const cipher = { type: "login", fieldType: "password" };
-      AutofillService.fillByOpid(fillScript, p, login.password, cipher);
+      AutofillService.fillByOpid(fillScript, p, login.password);
     });
 
     if (options.allowTotpAutofill) {
@@ -966,10 +866,10 @@ export default class AutofillService implements AutofillServiceInterface {
     });
 
     const card = options.cipher.card;
-    this.makeScriptAction(fillScript, card, fillFields, filledFields, "cardholderName", "card");
-    this.makeScriptAction(fillScript, card, fillFields, filledFields, "number", "card");
-    this.makeScriptAction(fillScript, card, fillFields, filledFields, "code", "card");
-    this.makeScriptAction(fillScript, card, fillFields, filledFields, "brand", "card");
+    this.makeScriptAction(fillScript, card, fillFields, filledFields, "cardholderName");
+    this.makeScriptAction(fillScript, card, fillFields, filledFields, "number");
+    this.makeScriptAction(fillScript, card, fillFields, filledFields, "code");
+    this.makeScriptAction(fillScript, card, fillFields, filledFields, "brand");
 
     if (fillFields.expMonth && AutofillService.hasValue(card.expMonth)) {
       let expMonth: string = card.expMonth;
@@ -1006,8 +906,7 @@ export default class AutofillService implements AutofillServiceInterface {
       }
 
       filledFields[fillFields.expMonth.opid] = fillFields.expMonth;
-      const cipher = { type: "card", fieldType: "expMonth" };
-      AutofillService.fillByOpid(fillScript, fillFields.expMonth, expMonth, cipher);
+      AutofillService.fillByOpid(fillScript, fillFields.expMonth, expMonth);
     }
 
     if (fillFields.expYear && AutofillService.hasValue(card.expYear)) {
@@ -1053,8 +952,7 @@ export default class AutofillService implements AutofillServiceInterface {
       }
 
       filledFields[fillFields.expYear.opid] = fillFields.expYear;
-      const cipher = { type: "card", fieldType: "expYear" };
-      AutofillService.fillByOpid(fillScript, fillFields.expYear, expYear, cipher);
+      AutofillService.fillByOpid(fillScript, fillFields.expYear, expYear);
     }
 
     if (
@@ -1074,9 +972,7 @@ export default class AutofillService implements AutofillServiceInterface {
       }
 
       let exp: string = null;
-      let format: any; // Cozy
       for (let i = 0; i < CreditCardAutoFillConstants.MonthAbbr.length; i++) {
-        /* commented by Cozy : BW testings order is not optimum. Kept in comment to ease modif tracking
         if (
           this.fieldAttrsContain(
             fillFields.exp,
@@ -1184,189 +1080,6 @@ export default class AutofillService implements AutofillServiceInterface {
         ) {
           exp = fullMonth + partYear;
         }
-        END Cozy comment */
-
-        /* Cozy testing version */
-        if (
-          this.fieldAttrsContain(
-            fillFields.exp,
-            CreditCardAutoFillConstants.MonthAbbr[i] +
-              "/" +
-              CreditCardAutoFillConstants.YearAbbrLong[i]
-          )
-        ) {
-          exp = fullMonth + "/" + fullYear;
-          format = {
-            type: "expDate",
-            separator: "/",
-            isFullYear: true,
-            isMonthFirst: true,
-          };
-        } else if (
-          this.fieldAttrsContain(
-            fillFields.exp,
-            CreditCardAutoFillConstants.MonthAbbr[i] +
-              "/" +
-              CreditCardAutoFillConstants.YearAbbrShort[i]
-          ) &&
-          partYear != null
-        ) {
-          exp = fullMonth + "/" + partYear;
-          format = {
-            type: "expDate",
-            separator: "/",
-            isFullYear: false,
-            isMonthFirst: true,
-          };
-        } else if (
-          this.fieldAttrsContain(
-            fillFields.exp,
-            CreditCardAutoFillConstants.YearAbbrLong[i] +
-              "/" +
-              CreditCardAutoFillConstants.MonthAbbr[i]
-          )
-        ) {
-          exp = fullYear + "/" + fullMonth;
-          format = {
-            type: "expDate",
-            separator: "/",
-            isFullYear: true,
-            isMonthFirst: false,
-          };
-        } else if (
-          this.fieldAttrsContain(
-            fillFields.exp,
-            CreditCardAutoFillConstants.YearAbbrShort[i] +
-              "/" +
-              CreditCardAutoFillConstants.MonthAbbr[i]
-          ) &&
-          partYear != null
-        ) {
-          exp = partYear + "/" + fullMonth;
-          format = {
-            type: "expDate",
-            separator: "/",
-            isFullYear: false,
-            isMonthFirst: false,
-          };
-        } else if (
-          this.fieldAttrsContain(
-            fillFields.exp,
-            CreditCardAutoFillConstants.MonthAbbr[i] +
-              "-" +
-              CreditCardAutoFillConstants.YearAbbrLong[i]
-          )
-        ) {
-          exp = fullMonth + "-" + fullYear;
-          format = {
-            type: "expDate",
-            separator: "-",
-            isFullYear: true,
-            isMonthFirst: true,
-          };
-        } else if (
-          this.fieldAttrsContain(
-            fillFields.exp,
-            CreditCardAutoFillConstants.MonthAbbr[i] +
-              "-" +
-              CreditCardAutoFillConstants.YearAbbrShort[i]
-          ) &&
-          partYear != null
-        ) {
-          exp = fullMonth + "-" + partYear;
-          format = {
-            type: "expDate",
-            separator: "-",
-            isFullYear: false,
-            isMonthFirst: true,
-          };
-        } else if (
-          this.fieldAttrsContain(
-            fillFields.exp,
-            CreditCardAutoFillConstants.YearAbbrLong[i] +
-              "-" +
-              CreditCardAutoFillConstants.MonthAbbr[i]
-          )
-        ) {
-          exp = fullYear + "-" + fullMonth;
-          format = {
-            type: "expDate",
-            separator: "-",
-            isFullYear: true,
-            isMonthFirst: false,
-          };
-        } else if (
-          this.fieldAttrsContain(
-            fillFields.exp,
-            CreditCardAutoFillConstants.YearAbbrShort[i] +
-              "-" +
-              CreditCardAutoFillConstants.MonthAbbr[i]
-          ) &&
-          partYear != null
-        ) {
-          exp = partYear + "-" + fullMonth;
-          format = {
-            type: "expDate",
-            separator: "-",
-            isFullYear: false,
-            isMonthFirst: false,
-          };
-        } else if (
-          this.fieldAttrsContain(
-            fillFields.exp,
-            CreditCardAutoFillConstants.YearAbbrLong[i] + CreditCardAutoFillConstants.MonthAbbr[i]
-          )
-        ) {
-          exp = fullYear + fullMonth;
-          format = {
-            type: "expDate",
-            separator: "",
-            isFullYear: true,
-            isMonthFirst: false,
-          };
-        } else if (
-          this.fieldAttrsContain(
-            fillFields.exp,
-            CreditCardAutoFillConstants.YearAbbrShort[i] + CreditCardAutoFillConstants.MonthAbbr[i]
-          ) &&
-          partYear != null
-        ) {
-          exp = partYear + fullMonth;
-          format = {
-            type: "expDate",
-            separator: "",
-            isFullYear: false,
-            isMonthFirst: false,
-          };
-        } else if (
-          this.fieldAttrsContain(
-            fillFields.exp,
-            CreditCardAutoFillConstants.MonthAbbr[i] + CreditCardAutoFillConstants.YearAbbrLong[i]
-          )
-        ) {
-          exp = fullMonth + fullYear;
-          format = {
-            type: "expDate",
-            separator: "",
-            isFullYear: true,
-            isMonthFirst: true,
-          };
-        } else if (
-          this.fieldAttrsContain(
-            fillFields.exp,
-            CreditCardAutoFillConstants.MonthAbbr[i] + CreditCardAutoFillConstants.YearAbbrShort[i]
-          ) &&
-          partYear != null
-        ) {
-          exp = fullMonth + partYear;
-          format = {
-            type: "expDate",
-            separator: "",
-            isFullYear: false,
-            isMonthFirst: true,
-          };
-        }
-        /* END Cozy testing version */
 
         if (exp != null) {
           break;
@@ -1375,17 +1088,11 @@ export default class AutofillService implements AutofillServiceInterface {
 
       if (exp == null) {
         exp = fullYear + "-" + fullMonth;
-        format = { type: "expDate", separator: "/", isFullYear: true, isMonthFirst: true };
       }
 
-      this.makeScriptActionWithValue(fillScript, exp, fillFields.exp, filledFields, {
-        type: "card",
-        fieldType: "expiration",
-        fieldFormat: format,
-      });
+      this.makeScriptActionWithValue(fillScript, exp, fillFields.exp, filledFields);
     }
 
-    fillScript.type = "autofillScript";
     return fillScript;
   }
 
@@ -1474,12 +1181,6 @@ export default class AutofillService implements AutofillServiceInterface {
         return;
       }
 
-      // if viewableOri is undefined, means we are building a script for an autofil (and not a menu)
-      // in this case, only viewable fields will be taken into account, so we force all of them.
-      if (f.viewableOri === undefined) {
-        f.viewableOri = true;
-      }
-
       for (let i = 0; i < IdentityAutoFillConstants.IdentityAttributes.length; i++) {
         const attr = IdentityAutoFillConstants.IdentityAttributes[i];
         // eslint-disable-next-line
@@ -1489,43 +1190,6 @@ export default class AutofillService implements AutofillServiceInterface {
 
         // ref https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill
         // ref https://developers.google.com/web/fundamentals/design-and-ux/input/forms/
-
-        /* ---------------------------------------------------------------
-        Scheme of the selection of the mapping between page fields
-        and cipher attributes
-
-        A field for :
-
-          1- autofill                  2- menu
-              │                         │
-              │                   force viewable=1
-              │                         │
-              ▼                         ▼
-            viewable                  viewable
-              │ │                       │ │
-              │ └──0───►  out           │ └──0───►  out
-              │                         │           (never happens)
-              ▼                         ▼
-            match                     match
-              │ │                       │ │
-              │ └──0───► out            │ └──0───► out
-              │                         │
-              ▼                         ▼
-            already_one_field         already_one_field
-            for this property         for this property
-              │ │                       │ │
-              │ └──0───►  select        │ └──0───►  Select the field
-              │           the field     │
-              ▼                         ▼
-            viewableOri               viewableOri
-              │ │                      │ │
-              │ └──0───►  out          │ └──0───►  out
-              |          (never        │
-              ▼           happen)      ▼
-            select the field          select the field
-        ------------------------------------------------------------------*/
-        /* BW testing logic is modified, do not try to merge upstream
-        // Just observe their evolutions to check if some are relevant
         if (
           !fillFields.name &&
           AutofillService.isFieldMatch(
@@ -1637,148 +1301,23 @@ export default class AutofillService implements AutofillServiceInterface {
           fillFields.company = f;
           break;
         }
-        END BW testings */
-
-        /* Cozy specific testings   */
-        if (
-          AutofillService.isFieldMatch(
-            f[attr],
-            IdentityAutoFillConstants.FullNameFieldNames,
-            IdentityAutoFillConstants.FullNameFieldNameValues
-          ) &&
-          (!fillFields.name || f.viewableOri)
-        ) {
-          fillFields.name = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.FirstnameFieldNames) &&
-          (!fillFields.firstName || f.viewableOri)
-        ) {
-          switch (this.isFirstNameFirst(f[attr])) {
-            case true:
-              fillFields.firstNameLastName = f;
-              break;
-            case false:
-              fillFields.lastNameFirstName = f;
-              break;
-            default:
-              fillFields.firstName = f;
-              break;
-          }
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.MiddlenameFieldNames) &&
-          (!fillFields.middleName || f.viewableOri)
-        ) {
-          fillFields.middleName = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.LastnameFieldNames) &&
-          (!fillFields.lastName || f.viewableOri)
-        ) {
-          fillFields.lastName = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.TitleFieldNames) &&
-          (!fillFields.title || f.viewableOri)
-        ) {
-          fillFields.title = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.EmailFieldNames) &&
-          (!fillFields.email || f.viewableOri)
-        ) {
-          fillFields.email = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(
-            f[attr],
-            IdentityAutoFillConstants.AddressFieldNames,
-            IdentityAutoFillConstants.AddressFieldNameValues
-          ) &&
-          (!fillFields.address || f.viewableOri)
-        ) {
-          fillFields.address = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.Address1FieldNames) &&
-          (!fillFields.address1 || f.viewableOri)
-        ) {
-          fillFields.address1 = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.Address2FieldNames) &&
-          (!fillFields.address2 || f.viewableOri)
-        ) {
-          fillFields.address2 = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.Address3FieldNames) &&
-          (!fillFields.address3 || f.viewableOri)
-        ) {
-          fillFields.address3 = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.PostalCodeFieldNames) &&
-          (!fillFields.postalCode || f.viewableOri)
-        ) {
-          fillFields.postalCode = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.CityFieldNames) &&
-          (!fillFields.city || f.viewableOri)
-        ) {
-          fillFields.city = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.StateFieldNames) &&
-          (!fillFields.state || f.viewableOri)
-        ) {
-          fillFields.state = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.CountryFieldNames) &&
-          (!fillFields.country || f.viewableOri)
-        ) {
-          fillFields.country = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.PhoneFieldNames) &&
-          (!fillFields.phone || f.viewableOri)
-        ) {
-          fillFields.phone = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.UserNameFieldNames) &&
-          (!fillFields.username || f.viewableOri)
-        ) {
-          fillFields.username = f;
-          break;
-        } else if (
-          AutofillService.isFieldMatch(f[attr], IdentityAutoFillConstants.CompanyFieldNames) &&
-          (!fillFields.company || f.viewableOri)
-        ) {
-          fillFields.company = f;
-          break;
-        }
-        /* END Cozy testings */
       }
     });
 
     const identity = options.cipher.identity;
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "title", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "firstName", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "middleName", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "lastName", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "address1", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "address2", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "address3", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "city", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "postalCode", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "company", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "email", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "phone", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
-    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "username", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "title");
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "firstName");
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "middleName");
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "lastName");
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "address1");
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "address2");
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "address3");
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "city");
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "postalCode");
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "company");
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "email");
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "phone");
+    this.makeScriptAction(fillScript, identity, fillFields, filledFields, "username");
 
     let filledState = false;
     if (fillFields.state && identity.state && identity.state.length > 2) {
@@ -1788,40 +1327,26 @@ export default class AutofillService implements AutofillServiceInterface {
         IdentityAutoFillConstants.IsoProvinces[stateLower];
       if (isoState) {
         filledState = true;
-        const cipher = { type: cipherType, fieldType: "state" }; // Cozy customization: `"identity"` replaced by `cipherType`
-        this.makeScriptActionWithValue(
-          fillScript,
-          isoState,
-          fillFields.state,
-          filledFields,
-          cipher
-        );
+        this.makeScriptActionWithValue(fillScript, isoState, fillFields.state, filledFields);
       }
     }
 
     if (!filledState) {
-      this.makeScriptAction(fillScript, identity, fillFields, filledFields, "state", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+      this.makeScriptAction(fillScript, identity, fillFields, filledFields, "state");
     }
 
     let filledCountry = false;
     if (fillFields.country && identity.country && identity.country.length > 2) {
       const countryLower = identity.country.toLowerCase();
       const isoCountry = IdentityAutoFillConstants.IsoCountries[countryLower];
-      const cipher = { type: cipherType, fieldType: "country" }; // Cozy customization: `"identity"` replaced by `cipherType`
       if (isoCountry) {
         filledCountry = true;
-        this.makeScriptActionWithValue(
-          fillScript,
-          isoCountry,
-          fillFields.country,
-          filledFields,
-          cipher
-        );
+        this.makeScriptActionWithValue(fillScript, isoCountry, fillFields.country, filledFields);
       }
     }
 
     if (!filledCountry) {
-      this.makeScriptAction(fillScript, identity, fillFields, filledFields, "country", cipherType); // Cozy customization: `"identity"` replaced by `cipherType`
+      this.makeScriptAction(fillScript, identity, fillFields, filledFields, "country");
     }
 
     if (fillFields.name && (identity.firstName || identity.lastName)) {
@@ -1842,30 +1367,7 @@ export default class AutofillService implements AutofillServiceInterface {
         fullName += identity.lastName;
       }
 
-      const cipher = { type: cipherType, fieldType: "fullName" }; // Cozy customization: `"identity"` replaced by `cipherType`
-      this.makeScriptActionWithValue(fillScript, fullName, fillFields.name, filledFields, cipher);
-    }
-
-    if (fillFields.lastNameFirstName) {
-      const cipher = { type: cipherType, fieldType: "lastNameFirstName" }; // Cozy customization: `"identity"` replaced by `cipherType`
-      const nameToDisplay = identity.lastName + " " + identity.firstName;
-      this.makeScriptActionWithValue(
-        fillScript,
-        nameToDisplay,
-        fillFields.lastNameFirstName,
-        filledFields,
-        cipher
-      );
-    } else if (fillFields.firstNameLastName) {
-      const cipher = { type: cipherType, fieldType: "firstNameLastName" }; // Cozy customization: `"identity"` replaced by `cipherType`
-      const nameToDisplay = identity.firstName + " " + identity.lastName;
-      this.makeScriptActionWithValue(
-        fillScript,
-        nameToDisplay,
-        fillFields.firstNameLastName,
-        filledFields,
-        cipher
-      );
+      this.makeScriptActionWithValue(fillScript, fullName, fillFields.name, filledFields);
     }
 
     if (fillFields.address && AutofillService.hasValue(identity.address1)) {
@@ -1886,11 +1388,9 @@ export default class AutofillService implements AutofillServiceInterface {
         address += identity.address3;
       }
 
-      const cipher = { type: cipherType, fieldType: "fullAddress" }; // Cozy customization: `"identity"` replaced by `cipherType`
-      this.makeScriptActionWithValue(fillScript, address, fillFields.address, filledFields, cipher);
+      this.makeScriptActionWithValue(fillScript, address, fillFields.address, filledFields);
     }
 
-    fillScript.type = "autofillScript";
     return fillScript;
   }
 
@@ -1967,18 +1467,7 @@ export default class AutofillService implements AutofillServiceInterface {
     value = value
       .trim()
       .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
       .replace(/[^a-zA-Z0-9]+/g, "");
-    /*  @override by Cozy : don't take into account too long values :
-        A long string is not coherent with the description of a form to fill. It is likely a search form where
-        the element before the input ("label-left") is a select for the user to choose the category where to run
-        the search. */
-    if (value.length > 100) {
-      return false;
-    }
-    /* end override by Cozy */
-
     for (let i = 0; i < options.length; i++) {
       let option = options[i];
       const checkValueContains = containsOptions == null || containsOptions.indexOf(option) > -1;
@@ -2011,7 +1500,6 @@ export default class AutofillService implements AutofillServiceInterface {
     fieldProp?: string,
   ) {
     fieldProp = fieldProp || dataProp;
-    const cipher = { type: cipherType, fieldType: dataProp };
     this.makeScriptActionWithValue(
       fillScript,
       cipherData[dataProp],
@@ -2066,7 +1554,7 @@ export default class AutofillService implements AutofillServiceInterface {
 
     if (doFill) {
       filledFields[field.opid] = field;
-      AutofillService.fillByOpid(fillScript, field, dataValue, cipher);
+      AutofillService.fillByOpid(fillScript, field, dataValue);
     }
   }
 
@@ -2321,9 +1809,6 @@ export default class AutofillService implements AutofillServiceInterface {
       if (this.fieldPropertyIsMatch(field, "placeholder", names[i])) {
         return i;
       }
-      if (this.fieldPropertyIsMatch(field, "label-left", names[i])) {
-        return i;
-      }
     }
 
     return -1;
@@ -2398,7 +1883,7 @@ export default class AutofillService implements AutofillServiceInterface {
       }
     }
 
-    return fieldVal.toLowerCase() === name.toLowerCase();
+    return fieldVal.toLowerCase() === name;
   }
 
   /**
@@ -2533,7 +2018,7 @@ export default class AutofillService implements AutofillServiceInterface {
       fillScript.script.push(["click_on_opid", field.opid]);
       fillScript.script.push(["focus_by_opid", field.opid]);
     }
-    fillScript.script.push(["fill_by_opid", field.opid, value, { field: field, cipher: cipher }]);
+    fillScript.script.push(["fill_by_opid", field.opid, value]);
   }
 
   /**

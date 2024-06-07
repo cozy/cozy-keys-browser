@@ -1,4 +1,3 @@
-
 import { UnauthGuard as BaseUnauthGuardService } from "@bitwarden/angular/auth/guards";
 
 /* COZY IMPORTS */
@@ -14,7 +13,11 @@ export class UnauthGuardService extends BaseUnauthGuardService {
   protected homepage = "tabs/current";
 
   // Cozy custo
-  constructor(authService: AuthService, router: Router, private historyService: HistoryService) {
+  constructor(
+    authService: AuthService,
+    router: Router,
+    private historyService: HistoryService,
+  ) {
     super(authService, router);
   }
 

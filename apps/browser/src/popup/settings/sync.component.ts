@@ -17,7 +17,7 @@ export class SyncComponent implements OnInit {
     private syncService: SyncService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
-    private router: Router
+    private router: Router,
   ) {}
 
   @HostListener("window:keydown", ["$event"])

@@ -215,7 +215,7 @@ export class TwoFactorComponent extends BaseTwoFactorComponent {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("inPageMenuLogin2FACheckError")
+        this.i18nService.t("inPageMenuLogin2FACheckError"),
       );
       /* end custo */
     } else {

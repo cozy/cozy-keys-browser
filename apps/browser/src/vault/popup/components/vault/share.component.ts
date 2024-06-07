@@ -18,7 +18,7 @@ import { CollectionService } from "@bitwarden/common/vault/abstractions/collecti
 /* eslint-disable */
 import { HistoryService } from "../../../../popup/services/history.service";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
-import { BrowserApi } from "../../../../browser/browserApi";
+import { BrowserApi } from "../../../../platform/browser/browser-api";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -38,7 +38,7 @@ export class ShareComponent extends BaseShareComponent {
     private router: Router,
     organizationService: OrganizationService,
     private historyService: HistoryService,
-    private cozyClientService: CozyClientService
+    private cozyClientService: CozyClientService,
   ) {
     super(
       collectionService,

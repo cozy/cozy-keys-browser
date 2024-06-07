@@ -12,12 +12,12 @@ import BrowserPopupUtils from "../platform/popup/browser-popup-utils";
 import { CozyClientService } from "./services/cozyClient.service";
 import { Router, NavigationEnd, Event as NavigationEvent, RouterOutlet } from "@angular/router";
 import { routerTransition } from "./app-routing.animations";
-import { BrowserStateService as StateService } from "../services/abstractions/browser-state.service";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
-import { BrowserApi } from "src/platform/browser/browser-api";
 const BroadcasterSubscriptionId = "PremiumBanner";
 // @ts-ignore
 import flag from "cozy-flags";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { BrowserApi } from "../platform/browser/browser-api";
 /* eslint-enable */
 /* END */
 
@@ -45,7 +45,7 @@ export class TabsComponent implements OnInit, OnDestroy {
     private router: Router,
     private stateService: StateService,
     private broadcasterService: BroadcasterService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
   ) {
     this.event$ = this.router.events
       .pipe(takeUntil(this.destroy$))

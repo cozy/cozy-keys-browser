@@ -1,14 +1,15 @@
 import { Jsonify } from "type-fest";
 
+import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
+
 import Domain from "../../../platform/models/domain/domain-base";
 import { EncString } from "../../../platform/models/domain/enc-string";
 import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
 import { FieldType, LinkedIdType } from "../../enums";
+import { ExpirationDateData } from "../data/expiration-date.data";
 import { FieldData } from "../data/field.data";
 import { LabelData } from "../data/label.data";
 import { FieldView } from "../view/field.view";
-import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
-import { ExpirationDateData } from "../data/expiration-date.data";
 
 export class Field extends Domain {
   name: EncString;

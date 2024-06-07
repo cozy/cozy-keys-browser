@@ -386,7 +386,20 @@ export class CipherService implements CipherServiceAbstraction {
       return await this.getDecryptedCiphers();
     }
 
+    // Cozy customization, filter ciphers on their organizationId
+    //*
+    const orgKeys = await this.cryptoService.getOrgKeys();
+    const orgIds = orgKeys ? Object.keys(orgKeys) : [];
+
+    decCiphers = await this.decryptCiphers(
+      (await this.getAll()).filter(
+        (cipher) => !cipher.organizationId || orgIds.includes(cipher.organizationId),
+      ),
+    );
+
+    /*/
     decCiphers = await this.decryptCiphers(await this.getAll());
+    //*/
 
     await this.setDecryptedCipherCache(decCiphers);
     return decCiphers;
@@ -927,10 +940,10 @@ export class CipherService implements CipherServiceAbstraction {
     // Cozy customization
     // We do not want to clear the cache because reconstructing the cache involves decrypting all ciphers
     // which is very costly with our papers and contacts. Instead we manually update decrypted ciphers below.
-    //*
-    await this.stateService.setEncryptedCiphers(ciphers);
+    /* WHATISIT OPTIM a remettre en place
+    await this.encryptedCiphersState.update(() => ciphers);
 
-    const decryptedCiphers = await this.stateService.getDecryptedCiphers();
+    const decryptedCiphers = await firstValueFrom(this.cipherViews$)
     if (decryptedCiphers == null) {
       return;
     }
@@ -938,7 +951,7 @@ export class CipherService implements CipherServiceAbstraction {
     const ids = typeof id === "string" ? [id] : id;
     const removed = decryptedCiphers.filter((c) => !ids.includes(c.id));
 
-    await this.stateService.setDecryptedCiphers(removed);
+    await this.decryptedCiphersState.update(() => removed);
     /*/
     await this.clearCache();
     await this.encryptedCiphersState.update(() => ciphers);
@@ -1483,7 +1496,7 @@ export class CipherService implements CipherServiceAbstraction {
             qualificationLabel: null,
             noteContent: null,
           },
-          key
+          key,
         );
         return;
       case CipherType.Contact:
@@ -1498,7 +1511,7 @@ export class CipherService implements CipherServiceAbstraction {
             primaryEmail: null,
             primaryPhone: null,
           },
-          key
+          key,
         );
         return;
       // Cozy customization end

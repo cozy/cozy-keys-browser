@@ -1,7 +1,6 @@
 require("./loginMenu.scss");
 
-import { Utils } from "@bitwarden/common/misc/utils";
-
+import { Utils } from "../../../../libs/common/src/platform/misc/utils.ts";
 import { CozySanitizeUrlService } from "../popup/services/cozySanitizeUrl.service";
 
 /* --------------------------------------------------------------------- */
@@ -83,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
           load();
         }
       },
-      false
+      false,
     );
   } else {
     // retrieve i18n values and set elements textcontent

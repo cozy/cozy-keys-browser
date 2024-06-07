@@ -246,15 +246,10 @@ import RuntimeBackground from "./runtime.background";
 
 /* start Cozy imports */
 /* eslint-disable */
-import { ApiService } from "../services/api.service";
-import { CipherService } from "../popup/services/cipher.service";
 import { CozyClientService } from "../popup/services/cozyClient.service";
 import { KonnectorsService } from "../popup/services/konnectors.service";
-import { MessagingService as MessagingServiceAbstraction } from "../services/abstractions/messaging.service";
-import { SyncService } from "../popup/services/sync.service";
-import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
-import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
-import { ThemeType } from "@bitwarden/common/enums/themeType";
+import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
+import { ThemeType } from "@bitwarden/common/platform/enums/theme-type.enum";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -315,8 +310,6 @@ export default class MainBackground {
   userVerificationService: UserVerificationServiceAbstraction;
   vaultFilterService: VaultFilterService;
   usernameGenerationService: UsernameGenerationServiceAbstraction;
-  cozyClientService: CozyClientService;
-  konnectorsService: KonnectorsService;
   encryptService: EncryptService;
   folderApiService: FolderApiServiceAbstraction;
   policyApiService: PolicyApiServiceAbstraction;
@@ -358,6 +351,11 @@ export default class MainBackground {
   offscreenDocumentService: OffscreenDocumentService;
   syncServiceListener: SyncServiceListener;
 
+  // Cozy customization
+  cozyClientService: CozyClientService;
+  konnectorsService: KonnectorsService;
+  // Cozy customization end
+
   onUpdatedRan: boolean;
   onReplacedRan: boolean;
   loginToAutoFill: CipherView = null;
@@ -379,7 +377,7 @@ export default class MainBackground {
   constructor(public popupOnlyContext: boolean = false) {
     // Services
     const lockedCallback = async (userId?: string) => {
-      /* @override by Cozy :
+      /* Cozy customization
         This callback is the lockedCallback of the VaultTimeoutService
         (see jslib/src/services/vaultTimeout.service.ts )
         When CB is fired, ask all tabs to activate login-in-page-menu
@@ -392,7 +390,8 @@ export default class MainBackground {
           tab: tab,
         });
       }
-      /* end @override by Cozy */
+      /* Cozy customization end */
+
       if (this.notificationsService != null) {
         // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -406,7 +405,23 @@ export default class MainBackground {
       }
     };
 
-    const logoutCallback = async (expired: boolean, userId?: UserId) =>
+    const logoutCallback = async (expired: boolean, userId?: UserId) => {
+      /* Cozy customization
+        This callback is the loggedOutCallback of the VaultTimeoutService
+        (see jslib/src/services/vaultTimeout.service.ts )
+        When CB is fired, ask all tabs to activate login-in-page-menu
+      */
+      const allTabs = await BrowserApi.getAllTabs();
+      for (const tab of allTabs) {
+        BrowserApi.tabSendMessage(tab, {
+          command: "autofillAnswerRequest",
+          subcommand: "loginIPMenuActivate",
+          isPinLocked: false,
+          tab: tab,
+        });
+      }
+      /* Cozy customization end */
+
       await this.logout(expired, userId);
     };
 
@@ -606,6 +621,7 @@ export default class MainBackground {
       this.appIdService,
       this.stateService,
       (expired: boolean) => this.logout(expired),
+      this.buildUserAgent(),
     );
     this.domainSettingsService = new DefaultDomainSettingsService(this.stateProvider);
     this.fileUploadService = new FileUploadService(this.logService);
@@ -727,6 +743,17 @@ export default class MainBackground {
       this.stateProvider,
     );
     this.folderApiService = new FolderApiService(this.folderService, this.apiService);
+
+    // Cozy customization
+    this.cozyClientService = new CozyClientService(
+      this.environmentService,
+      this.apiService,
+      this.messagingService,
+      this.cipherService,
+      this.stateService,
+      this.i18nService,
+    );
+    // Cozy customization end
 
     this.vaultTimeoutSettingsService = new VaultTimeoutSettingsService(
       this.userDecryptionOptionsService,
@@ -850,6 +877,8 @@ export default class MainBackground {
         this.billingAccountProfileStateService,
         this.tokenService,
         this.authService,
+        this.cozyClientService,
+        this.i18nService,
       );
 
       this.syncServiceListener = new SyncServiceListener(this.syncService, messageListener);
@@ -970,12 +999,15 @@ export default class MainBackground {
       this.accountService,
     );
 
+    // Cozy customization
     this.konnectorsService = new KonnectorsService(
       this.cipherService,
-      this.settingsService,
+      this.domainSettingsService,
       this.cozyClientService,
-      this.stateService
+      this.stateService,
+      this.autofillService,
     );
+    // Cozy customization end
 
     // Other fields
     this.isSafari = this.platformUtilsService.isSafari();
@@ -1002,6 +1034,8 @@ export default class MainBackground {
         this.fido2Background,
         messageListener,
         this.accountService,
+        this.syncService,
+        this.cozyClientService,
       );
       this.nativeMessagingBackground = new NativeMessagingBackground(
         this.accountService,
@@ -1031,6 +1065,7 @@ export default class MainBackground {
         this.policyService,
         this.folderService,
         this.stateService,
+        this.konnectorsService,
         this.userNotificationSettingsService,
         this.domainSettingsService,
         this.environmentService,
@@ -1233,7 +1268,7 @@ export default class MainBackground {
       const ciphers = await this.cipherService.getAllDecryptedForUrl(
         cozyUrl,
         undefined,
-        UriMatchType.Host
+        UriMatchStrategy.Host,
       );
       if (ciphers.length === 0) {
         return undefined;
@@ -1383,10 +1418,11 @@ export default class MainBackground {
 
     // Cozy customization, reset theme to LighContrasted if user did not manually changed it
     //*
-    const isUserSetTheme = await this.stateService.getIsUserSetTheme();
-    if (!isUserSetTheme) {
-      await this.stateService.setTheme(ThemeType.LightContrasted);
-    }
+    // TODO WHATISIT
+    // const isUserSetTheme = await this.stateService.getIsUserSetTheme();
+    // if (!isUserSetTheme) {
+    //   await this.stateService.setTheme(ThemeType.LightContrasted);
+    // }
     //*/
 
     // Cozy customization, logout OAuth client
@@ -1452,6 +1488,8 @@ export default class MainBackground {
     if (tab == null || !tab.id) {
       return;
     }
+
+    // Cozy customization INPAGEMENU
     const authStatus = await this.authService.getAuthStatus();
     if (authStatus !== AuthenticationStatus.Unlocked) {
       BrowserApi.tabSendMessage(
@@ -1461,10 +1499,11 @@ export default class MainBackground {
           subcommand: "loginIPMenuActivate",
           tab: tab,
         },
-        { frameId: frameId }
+        { frameId: frameId },
       );
       return;
     }
+    // Cozy customization end
 
     const options: any = {};
     if (frameId != null) {
@@ -1557,12 +1596,12 @@ export default class MainBackground {
     this.syncTimeout = setTimeout(async () => await this.fullSync(), 5 * 60 * 1000); // check every 5 minutes
   }
 
-  /* Cozy custo */
+  /* Cozy customization */
   private buildUserAgent(): string {
     const browserUA = navigator.userAgent;
     const appName = "io.cozy.pass.browser";
-    const appVersion = BrowserApi.getApplicationVersion() || "unknown";
+    const appVersion = this.platformUtilsService.getApplicationVersion() || "unknown";
     return `${browserUA} ${appName}-${appVersion}`;
   }
-  /* end custo */
+  /* Cozy customization end */
 }

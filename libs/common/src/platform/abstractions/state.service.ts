@@ -1,3 +1,4 @@
+import { KonnectorsOrg } from "../../../../../apps/browser/src/models/konnectorsOrganization";
 import { BiometricKey } from "../../auth/types/biometric-key";
 import { GeneratorOptions } from "../../tools/generator/generator-options";
 import { GeneratedPasswordHistory, PasswordGeneratorOptions } from "../../tools/generator/password";
@@ -179,4 +180,14 @@ export abstract class StateService<T extends Account = Account> {
   getProfilesMigrationHidden: (options?: StorageOptions) => Promise<boolean>;
   setProfilesMigrationHidden: (value: boolean, options?: StorageOptions) => Promise<void>;
   //*/
+  // Cozy customization
+  getDisableKonnectorsSuggestions: (options?: StorageOptions) => Promise<boolean>;
+  setDisableKonnectorsSuggestions: (value: boolean, options?: StorageOptions) => Promise<void>;
+  setHistoryState: (value: string) => Promise<void>;
+  getHistoryState: () => Promise<string>;
+  setKonnectorsOrganization: (value: KonnectorsOrg) => Promise<void>;
+  getKonnectorsOrganization: () => Promise<KonnectorsOrg>;
+  setBannerClosedByUser: (value: boolean) => Promise<void>;
+  getBannerClosedByUser: () => Promise<boolean>;
+  // Cozy customization end
 }

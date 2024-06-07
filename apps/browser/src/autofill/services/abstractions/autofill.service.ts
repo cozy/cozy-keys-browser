@@ -67,4 +67,5 @@ export abstract class AutofillService {
     cipherType?: CipherType,
   ) => Promise<string | null>;
   isPasswordRepromptRequired: (cipher: CipherView, tab: chrome.tabs.Tab) => Promise<boolean>;
+  getDefaultUriMatchStrategy: () => Promise<UriMatchStrategySetting>;
 }

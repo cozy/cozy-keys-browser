@@ -126,7 +126,10 @@ import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/pla
 import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/platform/abstractions/file-upload/file-upload.service";
-import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/platform/abstractions/i18n.service";
+import {
+  I18nService,
+  I18nService as I18nServiceAbstraction,
+} from "@bitwarden/common/platform/abstractions/i18n.service";
 import { KeyGenerationService as KeyGenerationServiceAbstraction } from "@bitwarden/common/platform/abstractions/key-generation.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/common/platform/abstractions/messaging.service";
@@ -250,6 +253,7 @@ import {
   IndividualVaultExportServiceAbstraction,
 } from "@bitwarden/vault-export-core";
 
+import { CozyClientService } from "../../../../apps/browser/src/popup/services/cozyClient.service";
 import { AuthGuard } from "../auth/guards/auth.guard";
 import { UnauthGuard } from "../auth/guards/unauth.guard";
 import { FormValidationErrorsService as FormValidationErrorsServiceAbstraction } from "../platform/abstractions/form-validation-errors.service";
@@ -629,6 +633,8 @@ const safeProviders: SafeProvider[] = [
       BillingAccountProfileStateService,
       TokenServiceAbstraction,
       AuthServiceAbstraction,
+      CozyClientService,
+      I18nService,
     ],
   }),
   safeProvider({

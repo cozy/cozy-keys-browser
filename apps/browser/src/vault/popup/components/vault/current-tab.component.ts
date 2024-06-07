@@ -102,7 +102,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     private configService: ConfigService,
     protected unassignedItemsBannerService: UnassignedItemsBannerService,
     private cozyClientService: CozyClientService,
-    private historyService: HistoryService
+    private historyService: HistoryService,
   ) {}
 
   async ngOnInit() {
@@ -290,7 +290,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
         this.platformUtilsService.showToast(
           "success",
           this.i18nService.t("TOTP"),
-          this.i18nService.t("TOTPCopiedInClipboard")
+          this.i18nService.t("TOTPCopiedInClipboard"),
         );
         return;
         // end custo

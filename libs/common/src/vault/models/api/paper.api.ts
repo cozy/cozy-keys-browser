@@ -2,7 +2,6 @@
 import { PaperType } from "@bitwarden/common/enums/paperType";
 import { BaseResponse } from "@bitwarden/common/models/response/base.response";
 
-
 export class PaperApi extends BaseResponse {
   type: PaperType;
   ownerName: string;

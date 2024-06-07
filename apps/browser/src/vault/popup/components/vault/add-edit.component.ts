@@ -27,7 +27,7 @@ import { CollectionService } from "@bitwarden/common/vault/abstractions/collecti
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
 import { BrowserApi } from "../../../../platform/browser/browser-api";
@@ -93,6 +93,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     private cozyClientService: CozyClientService,
     sendApiService: SendApiService,
     dialogService: DialogService,
+    toastService: ToastService,
     datePipe: DatePipe,
     configService: ConfigService,
   ) {
@@ -112,6 +113,7 @@ export class AddEditComponent extends BaseAddEditComponent {
       organizationService,
       sendApiService,
       dialogService,
+      toastService,
       window,
       datePipe,
       configService,
@@ -126,10 +128,10 @@ export class AddEditComponent extends BaseAddEditComponent {
   @HostListener("window:keydown", ["$event"])
   handleKeyDown(event: KeyboardEvent) {
     if (event.key === "Escape") {
-      this.cancel();
+      void this.cancel();
       event.preventDefault();
     } else if (event.key === "Enter" && event.getModifierState("Control")) {
-      this.submit();
+      void this.submit();
     }
   }
 
@@ -226,7 +228,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     await super.load();
     this.showAutoFillOnPageLoadOptions =
       this.cipher.type === CipherType.Login &&
-      (await firstValueFrom(this.autofillSettingsService.autofillOnPageLoad$));;
+      (await firstValueFrom(this.autofillSettingsService.autofillOnPageLoad$));
 
     // Cozy customization, override the page title to include the Item's type
     // part of this code is copied from the parent's `load()` method
@@ -246,7 +248,6 @@ export class AddEditComponent extends BaseAddEditComponent {
       this.title = this.i18nService.t(`add${currentTypeKey}`);
     }
     //*/
-
   }
 
   async submit(): Promise<boolean> {
@@ -298,7 +299,7 @@ export class AddEditComponent extends BaseAddEditComponent {
       /* Cozy customization
       this.location.back();
       */
-      this.konnectorsService.createSuggestions();
+      void this.konnectorsService.createSuggestions();
       this.historyService.gotoPreviousUrl();
       /* end custo */
     }
@@ -396,10 +397,11 @@ export class AddEditComponent extends BaseAddEditComponent {
     const confirmed = await deleteCipher(
       this.cipherService,
       this.i18nService,
-      this.platformUtilsService,
+      this.dialogService,
+      this.toastService,
       this.cipher,
-      this.stateService,
-      this.cozyClientService
+      this.cozyClientService,
+      this.organizationService,
     );
     if (confirmed) {
       /* Cozy customization

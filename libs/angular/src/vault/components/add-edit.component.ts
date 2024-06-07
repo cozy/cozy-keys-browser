@@ -36,7 +36,7 @@ import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view"
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 import { SecureNoteView } from "@bitwarden/common/vault/models/view/secure-note.view";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
 @Directive()
@@ -114,9 +114,10 @@ export class AddEditComponent implements OnInit, OnDestroy {
     protected policyService: PolicyService,
     protected logService: LogService,
     protected passwordRepromptService: PasswordRepromptService,
-    private organizationService: OrganizationService,
+    protected organizationService: OrganizationService,
     protected sendApiService: SendApiService,
     protected dialogService: DialogService,
+    protected toastService: ToastService,
     protected win: Window,
     protected datePipe: DatePipe,
     protected configService: ConfigService,

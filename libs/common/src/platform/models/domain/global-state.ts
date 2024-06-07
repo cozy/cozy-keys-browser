@@ -18,4 +18,5 @@ export class GlobalState {
   //*
   isUserSetTheme = false;
   //*/
+  disableKonnectorsSuggestions?: boolean;
 }

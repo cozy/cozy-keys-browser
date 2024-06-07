@@ -30,7 +30,7 @@ export class PasswordHistoryComponent extends BasePasswordHistoryComponent {
     i18nService: I18nService,
     private location: Location,
     private route: ActivatedRoute,
-    private historyService: HistoryService
+    private historyService: HistoryService,
   ) {
     super(cipherService, platformUtilsService, i18nService, window);
   }

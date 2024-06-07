@@ -1,19 +1,17 @@
 import Registry from "cozy-client/dist/registry";
 import { firstValueFrom } from "rxjs";
 
-import { SettingsService } from "@bitwarden/common/abstractions/settings.service";
-import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { AccountSettingsSettings } from "@bitwarden/common/models/domain/account";
+import { DomainSettingsService } from "@bitwarden/common/autofill/services/domain-settings.service";
+import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-/*
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-*/
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
+import { AutofillService } from "src/autofill/services/abstractions/autofill.service";
+
 import { KonnectorsOrg } from "../../models/konnectorsOrganization";
-import { BrowserStateService as StateService } from "../../services/abstractions/browser-state.service";
 
 import { CozyClientService } from "./cozyClient.service";
 
@@ -33,9 +31,10 @@ export class KonnectorsService {
 
   constructor(
     private cipherService: CipherService,
-    private settingsService: SettingsService,
+    private domainSettingsService: DomainSettingsService,
     private cozyClientService: CozyClientService,
-    private stateService: StateService
+    private stateService: StateService,
+    private autofillService: AutofillService,
   ) {}
 
   /**
@@ -58,7 +57,7 @@ export class KonnectorsService {
           allKonnectors,
           installedKonnectors,
           suggestedKonnectors,
-          ciphers
+          ciphers,
         );
         this.sendKonnectorsSuggestion(cozyClient, konnectorsToSuggest);
       }
@@ -101,14 +100,14 @@ export class KonnectorsService {
   getSuggestableKonnectors(
     registryKonnectors: any[],
     installedKonnectors: any[],
-    suggestedKonnectors: any[]
+    suggestedKonnectors: any[],
   ) {
     return registryKonnectors.filter((konn) => {
       const alreadySuggested = suggestedKonnectors.some(
-        (suggested) => suggested.slug === konn.slug
+        (suggested) => suggested.slug === konn.slug,
       );
       const alreadyInstalled = installedKonnectors.some(
-        (installed) => installed.slug === konn.slug
+        (installed) => installed.slug === konn.slug,
       );
       return !alreadySuggested && !alreadyInstalled;
     });
@@ -133,10 +132,10 @@ export class KonnectorsService {
     const eqDomainsPromise =
       domain == null
         ? Promise.resolve([])
-        : firstValueFrom(this.settingsService.settings$).then(
-            (settings: AccountSettingsSettings) => {
+        : firstValueFrom(this.domainSettingsService.equivalentDomains$).then(
+            (equivalentDomains) => {
               let matches: any[] = [];
-              settings?.equivalentDomains?.forEach((eqDomain: any) => {
+              equivalentDomains?.forEach((eqDomain: any) => {
                 if (eqDomain.length && eqDomain.indexOf(domain) >= 0) {
                   matches = matches.concat(eqDomain);
                 }
@@ -147,7 +146,7 @@ export class KonnectorsService {
               }
 
               return matches;
-            }
+            },
           );
     const matchingDomains = await eqDomainsPromise;
 
@@ -163,7 +162,7 @@ export class KonnectorsService {
           }
           const match = u.match == null ? defaultMatch : u.match;
           switch (match) {
-            case UriMatchType.Domain:
+            case UriMatchStrategy.Domain:
               if (domain != null && u.domain != null && matchingDomains.indexOf(u.domain) > -1) {
                 if (DomainMatchBlacklist.has(u.domain)) {
                   const domainUrlHost = Utils.getHost(url);
@@ -175,24 +174,24 @@ export class KonnectorsService {
                 }
               }
               break;
-            case UriMatchType.Host: {
+            case UriMatchStrategy.Host: {
               const urlHost = Utils.getHost(url);
               if (urlHost != null && urlHost === Utils.getHost(u.uri)) {
                 return true;
               }
               break;
             }
-            case UriMatchType.Exact:
+            case UriMatchStrategy.Exact:
               if (url === u.uri) {
                 return true;
               }
               break;
-            case UriMatchType.StartsWith:
+            case UriMatchStrategy.StartsWith:
               if (url.startsWith(u.uri)) {
                 return true;
               }
               break;
-            case UriMatchType.RegularExpression:
+            case UriMatchStrategy.RegularExpression:
               try {
                 const regex = new RegExp(u.uri, "i");
                 if (regex.test(url)) {
@@ -202,7 +201,7 @@ export class KonnectorsService {
                 //
               }
               break;
-            case UriMatchType.Never:
+            case UriMatchStrategy.Never:
             default:
               break;
           }
@@ -216,18 +215,18 @@ export class KonnectorsService {
     registryKonnectors: any[],
     installedKonnectors: any[],
     suggestedKonnectors: any[],
-    ciphers: CipherView[]
+    ciphers: CipherView[],
   ) {
     // Do not consider installed or already suggested konnectors
     const suggestableKonnectors = this.getSuggestableKonnectors(
       registryKonnectors,
       installedKonnectors,
-      suggestedKonnectors
+      suggestedKonnectors,
     );
     // Get default matching setting for urls
-    let defaultMatch = await this.stateService.getDefaultUriMatch();
+    let defaultMatch = await this.autofillService.getDefaultUriMatchStrategy();
     if (defaultMatch == null) {
-      defaultMatch = UriMatchType.Domain;
+      defaultMatch = UriMatchStrategy.Domain;
     }
     const promises = suggestableKonnectors.map(async (konnector) => {
       const url =
@@ -260,6 +259,7 @@ export class KonnectorsService {
     if (this.konnectorsOrg) {
       return this.konnectorsOrg;
     }
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     if (this.kOrgPromise) {
       return this.kOrgPromise;
     }

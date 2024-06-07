@@ -42,11 +42,27 @@ import { FolderResponse } from "../../../vault/models/response/folder.response";
 import { CollectionService } from "../../abstractions/collection.service";
 import { CollectionData } from "../../models/data/collection.data";
 import { CollectionDetailsResponse } from "../../models/response/collection.response";
-
+/* start Cozy imports */
+/* eslint-disable */
 import { CozyClientService } from "../../../../../../apps/browser/src/popup/services/cozyClient.service";
 import { fetchContactsAndConvertAsCiphers } from "../../../../../../libs/cozy/contactCipher";
 import { fetchPapersAndConvertAsCiphers } from "../../../../../../libs/cozy/paperCipher";
-import { I18nService } from "@bitwarden/common/platform/services/i18n.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { SyncCipherNotification } from "@bitwarden/common/models/response/notification.response";
+import { ProfileProviderOrganizationResponse } from "@bitwarden/common/admin-console/models/response/profile-provider-organization.response";
+/* eslint-enable */
+/* end Cozy imports */
+
+interface Member {
+  user_id: string;
+  key?: string;
+}
+
+type Members = { [id: string]: Member };
+
+interface CozyOrganizationDocument {
+  members?: Members;
+}
 
 export class SyncService extends CoreSyncService {
   constructor(
@@ -73,9 +89,9 @@ export class SyncService extends CoreSyncService {
     private logoutCallback: (expired: boolean) => Promise<void>,
     private billingAccountProfileStateService: BillingAccountProfileStateService,
     private tokenService: TokenService,
+    authService: AuthService,
     protected cozyClientService: CozyClientService,
     private i18nService: I18nService,
-    authService: AuthService,
   ) {
     super(
       stateService,
@@ -133,13 +149,13 @@ export class SyncService extends CoreSyncService {
           this.cipherService,
           this.cryptoService,
           this.cozyClientService,
-          this.i18nService
+          this.i18nService,
         ),
         fetchContactsAndConvertAsCiphers(
           this.cipherService,
           this.cryptoService,
           this.cozyClientService,
-          this.i18nService
+          this.i18nService,
         ),
       ];
 
@@ -383,5 +399,104 @@ export class SyncService extends CoreSyncService {
       });
     }
     return await this.policyService.replace(policies);
+  }
+
+  // Cozy customization
+  // Update remote sync date only for non-zero date, which is used for logout
+  override async setLastSync(date: Date, userId?: string): Promise<any> {
+    super.setLastSync(date, userId);
+
+    if (date.getTime() !== 0) {
+      await this.cozyClientService.updateSynchronizedAt();
+    }
+  }
+
+  override async syncUpsertCipher(
+    notification: SyncCipherNotification,
+    isEdit: boolean,
+  ): Promise<boolean> {
+    const isAuthenticated = await this.stateService.getIsAuthenticated();
+    if (!isAuthenticated) {
+      return false;
+    }
+
+    this.syncStarted();
+
+    try {
+      await this.syncUpsertOrganization(notification.organizationId, isEdit);
+
+      return super.syncUpsertCipher(notification, isEdit);
+    } catch (e) {
+      return this.syncCompleted(false);
+    }
+  }
+
+  protected async getOrganizationKey(organizationId: string): Promise<string> {
+    const client = await this.cozyClientService.getClientInstance();
+    const remoteOrganizationData: CozyOrganizationDocument = await client.stackClient.fetchJSON(
+      "GET",
+      `/data/com.bitwarden.organizations/${organizationId}`,
+      [],
+    );
+
+    const userId = await this.stateService.getUserId();
+
+    const remoteOrganizationUser = Object.values(remoteOrganizationData.members).find(
+      (member) => member.user_id === userId,
+    );
+
+    return remoteOrganizationUser?.key || "";
+  }
+
+  protected async syncUpsertOrganizationKey(organizationId: string) {
+    const remoteOrganizationKey = await this.getOrganizationKey(organizationId);
+
+    // WHATISIT
+    // await this.cryptoService.upsertOrganizationKey(organizationId, remoteOrganizationKey);
+  }
+
+  protected async syncUpsertOrganization(organizationId: string, isEdit: boolean) {
+    if (!organizationId) {
+      return;
+    }
+
+    const storedOrganization = await this.organizationService.get(organizationId);
+    const storedOrganizationkey = await this.cryptoService.getOrgKey(organizationId);
+
+    if (storedOrganization !== null && storedOrganizationkey != null) {
+      return;
+    }
+
+    const remoteOrganization = await this.organizationService.get(organizationId);
+    const remoteOrganizationResponse = (remoteOrganization as any).response;
+    const remoteProfileProviderOrganizationResponse = new ProfileProviderOrganizationResponse(
+      remoteOrganizationResponse,
+    );
+
+    if (remoteOrganization !== null) {
+      await this.organizationService.upsertOrganization(remoteProfileProviderOrganizationResponse);
+
+      await this.syncUpsertOrganizationKey(organizationId);
+
+      await this.syncUpsertCollections(organizationId, isEdit);
+    }
+  }
+
+  protected async syncUpsertCollections(organizationId: string, isEdit: boolean) {
+    const syncCollections = await this.apiService.getCollections(organizationId);
+
+    await this.collectionService.upsert(
+      syncCollections.data.map((col) => {
+        return {
+          externalId: col.externalId,
+          id: col.id,
+          name: col.name,
+          organizationId: col.organizationId,
+          readOnly: false,
+          manage: false,
+          hidePasswords: false,
+        };
+      }),
+    );
   }
 }

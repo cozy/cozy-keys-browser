@@ -36,12 +36,11 @@ import { BiometricStateService } from "@bitwarden/common/platform/biometrics/bio
 import { DialogService } from "@bitwarden/components";
 
 import { SetPinComponent } from "../../auth/popup/components/set-pin.component";
+import { CAN_SHARE_ORGANIZATION } from "../../cozy/flags";
 import { BiometricErrors, BiometricErrorTypes } from "../../models/biometricErrors";
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { enableAccountSwitching } from "../../platform/flags";
 import BrowserPopupUtils from "../../platform/popup/browser-popup-utils";
-
-import { CAN_SHARE_ORGANIZATION } from "../../cozy/flags";
 import { CozyClientService } from "../services/cozyClient.service";
 
 import { AboutComponent } from "./about.component";
@@ -460,7 +459,9 @@ export class SettingsComponent implements OnInit {
       acceptButtonText: { key: "continue" },
     });
     if (confirmed) {
-      await BrowserApi.createNewTab(this.cozyClientService.getAppURL("settings", "/profile/password"));
+      await BrowserApi.createNewTab(
+        this.cozyClientService.getAppURL("settings", "/profile/password"),
+      );
     }
   }
 

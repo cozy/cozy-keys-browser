@@ -1,9 +1,9 @@
 import formatISO from "date-fns/formatISO";
 import parseISO from "date-fns/parseISO";
-
 import { firstValueFrom, map } from "rxjs";
 import { Jsonify, JsonValue } from "type-fest";
 
+import { KonnectorsOrg } from "../../../../../apps/browser/src/models/konnectorsOrganization";
 import { AccountService } from "../../auth/abstractions/account.service";
 import { TokenService } from "../../auth/abstractions/token.service";
 import { BiometricKey } from "../../auth/types/biometric-key";
@@ -80,17 +80,17 @@ export class StateService<
 
   async setIsUserSetTheme(value: boolean, options?: StorageOptions): Promise<void> {
     const globals = await this.getGlobals(
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
     );
     globals.isUserSetTheme = value;
     await this.saveGlobals(
       globals,
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
     );
   }
   //*/
 
-   // Cozy customization, clean profiles after X days
+  // Cozy customization, clean profiles after X days
   //*
   async getProfilesCleanDeadline(options?: StorageOptions): Promise<Date | null> {
     const valueString = (
@@ -106,12 +106,12 @@ export class StateService<
 
   async setProfilesCleanDeadline(value: Date, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
     );
     account.settings.profilesCleanDeadline = formatISO(value);
     await this.saveAccount(
       account,
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
     );
   }
 
@@ -119,7 +119,7 @@ export class StateService<
     return (
       (
         await this.getAccount(
-          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
         )
       )?.profile?.profilesMigrationHidden ?? false
     );
@@ -127,13 +127,79 @@ export class StateService<
 
   async setProfilesMigrationHidden(value: boolean, options?: StorageOptions): Promise<void> {
     const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
     );
     account.profile.profilesMigrationHidden = value;
     await this.saveAccount(
       account,
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions())
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
     );
+  }
+  //*/
+
+  // Cozy customization
+  //*
+  async getDisableKonnectorsSuggestions(options?: StorageOptions): Promise<boolean> {
+    return (
+      (
+        await this.getGlobals(
+          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
+        )
+      )?.disableKonnectorsSuggestions ?? false // defaults to false
+    );
+  }
+
+  async setDisableKonnectorsSuggestions(value: boolean, options?: StorageOptions): Promise<void> {
+    const globals = await this.getGlobals(
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
+    );
+    globals.disableKonnectorsSuggestions = value;
+    await this.saveGlobals(
+      globals,
+      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
+    );
+  }
+
+  async setHistoryState(value: string): Promise<void> {
+    const account = await this.getAccount(await this.defaultInMemoryOptions());
+    if (!account) {
+      return;
+    }
+    account.history = value;
+    await this.saveAccount(account, await this.defaultInMemoryOptions());
+  }
+
+  async getHistoryState(): Promise<string> {
+    return (await this.getAccount(await this.defaultInMemoryOptions()))?.history;
+  }
+
+  async getKonnectorsOrganization(): Promise<KonnectorsOrg> {
+    const organizationString = (await this.getAccount(await this.defaultInMemoryOptions()))
+      ?.konnectorsOrganization;
+
+    return organizationString ? JSON.parse(organizationString) : null;
+  }
+
+  async setKonnectorsOrganization(value: KonnectorsOrg): Promise<void> {
+    const account = await this.getAccount(await this.defaultInMemoryOptions());
+    if (!account) {
+      return;
+    }
+    account.konnectorsOrganization = JSON.stringify(value);
+    await this.saveAccount(account, await this.defaultInMemoryOptions());
+  }
+
+  async setBannerClosedByUser(value: boolean) {
+    const account = await this.getAccount(await this.defaultInMemoryOptions());
+    if (!account) {
+      return;
+    }
+    account.bannerClosedByUser = value;
+    await this.saveAccount(account, await this.defaultInMemoryOptions());
+  }
+
+  async getBannerClosedByUser() {
+    return (await this.getAccount(await this.defaultInMemoryOptions()))?.bannerClosedByUser;
   }
   //*/
 

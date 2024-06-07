@@ -28,7 +28,7 @@ import { TotpService as TotpServiceAbstraction } from "@bitwarden/common/vault/a
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
 import { AutofillService } from "../../../../autofill/services/abstractions/autofill.service";
@@ -54,6 +54,7 @@ import { HistoryService } from "../../../../popup/services/history.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { PaperType } from "@bitwarden/common/enums/paperType";
 import { DomSanitizer } from "@angular/platform-browser";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 
 /* eslint-enable */
 /* end Cozy imports */
@@ -124,6 +125,8 @@ export class ViewComponent extends BaseViewComponent {
     private syncService: SyncService,
     private sanitizer: DomSanitizer,
     dialogService: DialogService,
+    toastService: ToastService,
+    organizationService: OrganizationService,
     datePipe: DatePipe,
     billingAccountProfileStateService: BillingAccountProfileStateService,
   ) {
@@ -147,6 +150,8 @@ export class ViewComponent extends BaseViewComponent {
       stateService,
       fileDownloadService,
       dialogService,
+      toastService,
+      organizationService,
       datePipe,
       billingAccountProfileStateService,
     );
@@ -156,7 +161,7 @@ export class ViewComponent extends BaseViewComponent {
   @HostListener("window:keydown", ["$event"])
   handleKeyDown(event: KeyboardEvent) {
     if (event.key === "Escape") {
-      this.close();
+      void this.close();
       event.preventDefault();
     }
   }
@@ -225,7 +230,7 @@ export class ViewComponent extends BaseViewComponent {
   // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension */
   @HostListener("window:unload", ["$event"])
   async unloadMnger(event?: any) {
-    this.historyService.updateTimeStamp();
+    void this.historyService.updateTimeStamp();
   }
   /* end custo */
 
@@ -284,14 +289,14 @@ export class ViewComponent extends BaseViewComponent {
           this.cipherService,
           this.i18nService,
           this.cipher,
-          this.cozyClientService
+          this.cozyClientService,
         );
       } else if (this.cipher.type === CipherType.Contact) {
         await favoriteContactCipher(
           this.cipherService,
           this.i18nService,
           this.cipher,
-          this.cozyClientService
+          this.cozyClientService,
         );
       } else {
         this.cipher.favorite = !this.cipher.favorite;
@@ -301,7 +306,9 @@ export class ViewComponent extends BaseViewComponent {
 
       const cipher = await this.cipherService.get(this.cipherId);
 
-      this.cipher = await cipher.decrypt(await this.cipherService.getKeyForCipherKeyDecryption(cipher));
+      this.cipher = await cipher.decrypt(
+        await this.cipherService.getKeyForCipherKeyDecryption(cipher),
+      );
     } catch {
       this.platformUtilsService.showToast("error", null, this.i18nService.t("unexpectedError"));
     }
@@ -324,7 +331,7 @@ export class ViewComponent extends BaseViewComponent {
       });
     }
     */
-    this.router.navigate(["/share-cipher"], {
+    void this.router.navigate(["/share-cipher"], {
       replaceUrl: true,
       queryParams: { cipherId: this.cipher.id },
     });
@@ -416,10 +423,11 @@ export class ViewComponent extends BaseViewComponent {
     const deleted = await deleteMethod(
       this.cipherService,
       this.i18nService,
-      this.platformUtilsService,
+      this.dialogService,
+      this.toastService,
       this.cipher,
-      this.stateService,
-      this.cozyClientService
+      this.cozyClientService,
+      this.organizationService,
     );
 
     if (deleted) {
@@ -513,7 +521,7 @@ export class ViewComponent extends BaseViewComponent {
         this.platformUtilsService.showToast(
           "success",
           this.i18nService.t("TOTP"),
-          this.i18nService.t("TOTPCopiedInClipboard")
+          this.i18nService.t("TOTPCopiedInClipboard"),
         );
         /* end custo */
       }
@@ -582,7 +590,7 @@ export class ViewComponent extends BaseViewComponent {
     } else if (this.cipher.type === CipherType.Paper && this.cipher.paper.type === PaperType.Note) {
       const returnUrl = this.cozyClientService.getAppURL(
         "mespapiers",
-        `/paper/files/${this.cipher.paper.qualificationLabel}`
+        `/paper/files/${this.cipher.paper.qualificationLabel}`,
       );
       const destinationUrl = this.cozyClientService.getAppURL("notes", `n/${this.cipher.id}`);
       const url = new URL(destinationUrl);

@@ -140,6 +140,24 @@ import {
 } from "../vault/models/response/collection.response";
 import { SyncResponse } from "../vault/models/response/sync.response";
 
+// Cozy customization
+function getDeviceName(deviceType: DeviceType): string {
+  switch (deviceType) {
+    case DeviceType.ChromeExtension:
+      return "Chrome";
+
+    case DeviceType.FirefoxExtension:
+      return "Firefox";
+
+    case DeviceType.SafariExtension:
+      return "Safari";
+
+    default:
+      return "";
+  }
+}
+// Cozy customization end
+
 /**
  * @deprecated The `ApiService` class is deprecated and calls should be extracted into individual
  * api services. The `send` method is still allowed to be used within api services. For background
@@ -208,7 +226,16 @@ export class ApiService implements ApiServiceAbstraction {
 
     const response = await this.fetch(
       new Request(env.getIdentityUrl() + "/connect/token", {
+        // Cozy customization, we pass the client name to the stack, so in cozy-settings we can show
+        // "Cozy Password (browser name)" in the connected devices list.
+        //*
+        body: this.qsStringify({
+          ...identityToken,
+          clientName: `Cozy Pass (${getDeviceName(this.device)})`,
+        }),
+        /*/
         body: this.qsStringify(identityToken),
+        //*/
         credentials: await this.getCredentials(),
         cache: "no-store",
         headers: headers,

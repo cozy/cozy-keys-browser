@@ -1,11 +1,9 @@
 import { VaultTimeoutService as BaseVaultTimeoutService } from "@bitwarden/common/services/vault-timeout/vault-timeout.service";
+import { UserId } from "@bitwarden/common/types/guid";
 
 import { SafariApp } from "../../browser/safariApp";
-import { BrowserStateService } from "../browser-state.service";
 
 export default class VaultTimeoutService extends BaseVaultTimeoutService {
-  protected stateService: BrowserStateService;
-
   startCheck() {
     // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -38,9 +36,9 @@ export default class VaultTimeoutService extends BaseVaultTimeoutService {
   }
 
   /* Cozy custo overided just in order to reset history */
-  async lock(userId?: string): Promise<void> {
+  async lock(userId?: UserId): Promise<void> {
     await this.stateService.setHistoryState(null);
-    super.lock(userId);
+    void super.lock(userId);
   }
   /* end custo */
 }

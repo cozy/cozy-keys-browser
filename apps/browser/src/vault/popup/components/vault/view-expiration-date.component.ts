@@ -28,7 +28,7 @@ export class ViewExpirationDateComponent implements OnInit {
     return makeExpiredMessage(
       this.field.expirationData.expirationDate,
       // @ts-expect-error I did not succeed in getting i18nService.translationLocale so I fallback to a private property
-      { lang: this.i18nService.systemLanguage }
+      { lang: this.i18nService.systemLanguage },
     );
   }
 
@@ -36,7 +36,7 @@ export class ViewExpirationDateComponent implements OnInit {
     return makeExpiresInMessage(
       this.field.expirationData.expirationDate,
       // @ts-expect-error I did not succeed in getting i18nService.translationLocale so I fallback to a private property
-      { lang: this.i18nService.systemLanguage }
+      { lang: this.i18nService.systemLanguage },
     );
   }
 }

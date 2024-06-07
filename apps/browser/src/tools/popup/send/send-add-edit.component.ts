@@ -146,6 +146,5 @@ export class SendAddEditComponent extends BaseAddEditComponent {
       this.location.back();
     }
     //*/
-
   }
 }
