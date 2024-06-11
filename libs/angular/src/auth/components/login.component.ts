@@ -95,10 +95,18 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
 
       const queryParamsEmail = params.email;
 
+      // Cozy customization, do not check for @ because we use cozy URL
+      //*
+      if (queryParamsEmail != null) {
+        this.formGroup.controls.email.setValue(queryParamsEmail);
+        this.paramEmailSet = true;
+      }
+      /*/
       if (queryParamsEmail != null && queryParamsEmail.indexOf("@") > -1) {
         this.formGroup.controls.email.setValue(queryParamsEmail);
         this.paramEmailSet = true;
       }
+      //*/
     });
 
     if (!this.paramEmailSet) {
@@ -323,7 +331,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
     return true;
   }
 
-  private getErrorToastMessage() {
+  protected getErrorToastMessage() {
     const error: AllValidationErrors = this.formValidationErrorService
       .getFormValidationErrors(this.formGroup.controls)
       .shift();

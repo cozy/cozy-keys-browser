@@ -66,6 +66,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     }
 
+    // Cozy customization
+    /*
     this.environmentSelector.onOpenSelfHostedSettings
       .pipe(takeUntil(this.destroyed$))
       .subscribe(() => {
@@ -74,6 +76,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.router.navigate(["environment"]);
       });
+    */
   }
 
   ngOnDestroy(): void {

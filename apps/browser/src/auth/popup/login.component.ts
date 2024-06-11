@@ -1,8 +1,8 @@
-/* Cozy custo
+/* Cozy customization
 import { Component, NgZone } from "@angular/core";
 */
-import { Component, NgZone, Input, OnInit } from "@angular/core";
-/* end custo */
+import { Component, NgZone, Input } from "@angular/core";
+/* Cozy customization end */
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
@@ -32,17 +32,16 @@ import { flagEnabled } from "../../platform/flags";
 
 /* start Cozy imports */
 /* eslint-disable */
-import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
-import { PreloginRequest } from "@bitwarden/common/models/request/prelogin.request";
-import { generateWebLink, Q } from "cozy-client";
+import { generateWebLink } from "cozy-client";
 import { CozySanitizeUrlService } from "../../popup/services/cozySanitizeUrl.service";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
 import { KonnectorsService } from "../../popup/services/konnectors.service";
-import { sanitizeUrlInput } from "./login.component.functions";
-import { AbstractThemingService } from "@bitwarden/angular/platform/services/theming/theming.service.abstraction";
-import { ThemeType } from "@bitwarden/common/platform/enums/theme-type.enum";
-import { ThemeStateService } from "@bitwarden/common/platform/theming/theme-state.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { ThemeStateService } from "@bitwarden/common/platform/theming/theme-state.service";
+import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
+import { ThemeType } from "@bitwarden/common/platform/enums";
+import { PreloginRequest } from "@bitwarden/common/models/request/prelogin.request";
+import { sanitizeUrlInput } from "./login.component.functions";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -81,35 +80,11 @@ const shouldRedirectToOIDCPasswordPage = (cozyConfiguration: CozyConfiguration) 
   selector: "app-login",
   templateUrl: "login.component.html",
 })
-/**
- *    This class is a mix of the LoginComponent from jslib and the one from the repo.
- *      jslib/src/angular/components/login.component.ts
- *
- *    We extended the component to avoid to have to modify jslib, as the private storageService
- *    prevented us to just override methods.
- *    See the original component:
- *    https://github.com/bitwarden/browser/blob/
- *    af8274247b2242fe93ad2f7ca4c13f9f7ecf2860/src/popup/accounts/login.component.ts
- */
-export class LoginComponent extends BaseLoginComponent implements OnInit {
-  showPasswordless = false;
-  /* Cozy custo */
+export class LoginComponent extends BaseLoginComponent {
+  /* Cozy customization */
   @Input() cozyUrl = "";
-  @Input() rememberCozyUrl = true;
-
-  email = "";
-  masterPassword = "";
-  showPassword = false;
-  formPromise: Promise<AuthResult>;
-  onSuccessfulLogin: () => Promise<any>;
-  onSuccessfulLoginNavigate: () => Promise<any>;
-  onSuccessfulLoginTwoFactorNavigate: () => Promise<any>;
-  onSuccessfulLoginForceResetNavigate: () => Promise<any>;
-
-  protected twoFactorRoute = "2fa";
-  protected successRoute = "/tabs/vault";
-  protected forcePasswordResetRoute = "update-temp-password";
-  /* end custo */
+  /* Cozy customization end */
+  showPasswordless = false;
   constructor(
     devicesApiService: DevicesApiServiceAbstraction,
     appIdService: AppIdService,
@@ -131,10 +106,10 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     ssoLoginService: SsoLoginServiceAbstraction,
     webAuthnLoginService: WebAuthnLoginServiceAbstraction,
     protected cozySanitizeUrlService: CozySanitizeUrlService,
-    private cozyClientService: CozyClientService,
-    private konnectorsService: KonnectorsService,
-    private themeStateService: ThemeStateService,
-    private apiService: ApiService,
+    protected cozyClientService: CozyClientService,
+    protected konnectorsService: KonnectorsService,
+    protected themeStateService: ThemeStateService,
+    protected apiService: ApiService,
   ) {
     super(
       devicesApiService,
@@ -157,10 +132,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
       webAuthnLoginService,
     );
     super.onSuccessfulLogin = async () => {
-      /* Cozy custo
-      await syncService.fullSync(true);
-      */
-     console.log('onSuccessfulLogin')
+      // Cozy customization
+      //*
       const syncPromise = syncService.fullSync(true).then(() => {
         this.cozyClientService.saveCozyCredentials(
           sanitizeUrlInput(this.formGroup.value.email, this.cozySanitizeUrlService),
@@ -169,7 +142,9 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
       });
       this.konnectorsService.getKonnectorsOrganization();
       return syncPromise;
-      /* end custo */
+      /*/
+      await syncService.fullSync(true);
+      //*/
     };
     super.successRoute = "/tabs/vault";
     this.showPasswordless = flagEnabled("showPasswordless");
@@ -189,7 +164,6 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     this.router.navigate(["environment"]);
   }
 
-  /** Commented by Cozy
   async launchSsoBrowser() {
     // Save off email for SSO
     await this.ssoLoginService.setSsoEmail(this.formGroup.value.email);
@@ -236,35 +210,34 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
         encodeURIComponent(this.formGroup.controls.email.value),
     );
   }
-  end comment */
 
-  /* Cozy custo */
-  async submit() {
+  // Cozy customization
+  async submit(showToast = true) {
     const data = this.formGroup.value;
 
     // await this.setupCaptcha();
 
     this.formGroup.markAllAsTouched();
 
+    if (data.masterPassword == null || data.masterPassword === "") {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("masterPassRequired")
+      );
+      return;
+    }
+
     try {
       const cozyUrl = sanitizeUrlInput(data.email, this.cozySanitizeUrlService);
-
-      if (data.masterPassword == null || data.masterPassword === "") {
-        this.platformUtilsService.showToast(
-          "error",
-          this.i18nService.t("errorOccurred"),
-          this.i18nService.t("masterPassRequired")
-        );
-        return;
-      }
 
       // This adds the scheme if missing
       await this.environmentService.setEnvironment(Region.SelfHosted, {
         base: cozyUrl + "/bitwarden",
       });
+
       // The email is based on the URL and necessary for login
       const hostname = Utils.getHostname(cozyUrl);
-      // this.email = "me@" + hostname;
 
       const credentials = new PasswordLoginCredentials(
         "me@" + hostname,
@@ -272,39 +245,50 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
         null,
         null
       );
+
       this.formPromise = this.loginStrategyService.logIn(credentials);
       const response = await this.formPromise;
 
       this.setLoginEmailValues();
       await this.loginEmailService.saveEmailSettings();
+
       if (this.handleCaptchaRequired(response)) {
+        return;
+      } else if (this.handleMigrateEncryptionKey(response)) {
         return;
       } else if (response.requiresTwoFactor) {
         if (this.onSuccessfulLoginTwoFactorNavigate != null) {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.onSuccessfulLoginTwoFactorNavigate();
         } else {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.router.navigate([this.twoFactorRoute]);
         }
-      } else if (response.forcePasswordReset) {
+      } else if (response.forcePasswordReset != ForceSetPasswordReason.None) {
         if (this.onSuccessfulLoginForceResetNavigate != null) {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.onSuccessfulLoginForceResetNavigate();
         } else {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.router.navigate([this.forcePasswordResetRoute]);
         }
       } else {
-        // WHATISIT
-        // const disableFavicon = await this.stateService.getDisableFavicon();
-        // await this.stateService.setDisableFavicon(!!disableFavicon);
-        // Cozy customization, set correct theme based on cozy's context
-        //*
-        await this.configureTheme();
-        //*/
         if (this.onSuccessfulLogin != null) {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.onSuccessfulLogin();
         }
         if (this.onSuccessfulLoginNavigate != null) {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.onSuccessfulLoginNavigate();
         } else {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.router.navigate([this.successRoute]);
         }
       }

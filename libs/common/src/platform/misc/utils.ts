@@ -253,11 +253,20 @@ export class Utils {
     });
   }
 
+  // Cozy customization, we use our id format
+  //*
+  static cozyidRegex = /[0-9a-z]{32}/;
+
+  static isGuid(id: string) {
+    return RegExp(Utils.cozyidRegex, "i").test(id);
+  }
+  /*/
   static guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 
   static isGuid(id: string) {
     return RegExp(Utils.guidRegex, "i").test(id);
   }
+  //*/
 
   static getHostname(uriString: string): string {
     if (Utils.isNullOrWhitespace(uriString)) {
