@@ -5,11 +5,11 @@ import flag from "cozy-flags";
 import { RealtimePlugin } from "cozy-realtime";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { SecureNoteType } from "@bitwarden/common/vault/enums";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
@@ -55,8 +55,8 @@ export class CozyClientService {
     protected apiService: ApiService,
     protected messagingService: MessagingService,
     protected cipherService: CipherService,
-    private stateService: StateService,
     private i18nService: I18nService,
+    private tokenService: TokenService,
   ) {
     this.flagChangedPointer = this.flagChanged.bind(this);
   }
@@ -100,7 +100,7 @@ export class CozyClientService {
         const oauthToken = {
           tokenType: "bearer",
           accessToken: token,
-          refreshToken: await this.stateService.getRefreshToken(),
+          refreshToken: await this.tokenService.getRefreshToken(),
           scope: "*",
         };
 
@@ -124,7 +124,7 @@ export class CozyClientService {
     const oauthToken = {
       tokenType: "bearer",
       accessToken: token,
-      refreshToken: await this.stateService.getRefreshToken(),
+      refreshToken: await this.tokenService.getRefreshToken(),
       scope: "*",
     };
 
@@ -242,7 +242,7 @@ export class CozyClientService {
   }
 
   async deleteOAuthClient() {
-    const { clientId, registrationAccessToken } = await this.stateService.getOauthTokens();
+    const { clientId, registrationAccessToken } = await this.tokenService.getCozyTokens();
     if (!clientId || !registrationAccessToken) {
       return;
     }

@@ -750,8 +750,8 @@ export default class MainBackground {
       this.apiService,
       this.messagingService,
       this.cipherService,
-      this.stateService,
       this.i18nService,
+      this.tokenService,
     );
     // Cozy customization end
 

@@ -184,6 +184,14 @@ export abstract class LoginStrategy {
       tokenResponse.refreshToken, // Note: CLI login via API key sends undefined for refresh token.
     );
 
+    // Cozy customization
+    await this.tokenService.setCozyTokens(
+      tokenResponse.accessToken,
+      tokenResponse.clientId,
+      tokenResponse.registrationAccessToken
+    );
+    // Cozy customization end
+
     await this.accountService.switchAccount(userId);
 
     await this.stateService.addAccount(

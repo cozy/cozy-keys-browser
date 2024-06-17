@@ -74,3 +74,16 @@ export const SECURITY_STAMP_MEMORY = new UserKeyDefinition<string>(TOKEN_MEMORY,
   deserializer: (securityStamp) => securityStamp,
   clearOn: ["logout"],
 });
+
+// Cozy customization
+export const CLIENT_ID_DISK = new UserKeyDefinition<string>(TOKEN_DISK, "clientId", {
+  deserializer: (clientId) => clientId,
+  clearOn: [], // Manually handled
+});
+
+
+export const REGISTRATION_ACCESS_TOKEN_DISK = new UserKeyDefinition<string>(TOKEN_DISK, "registrationAccessToken", {
+  deserializer: (registrationAccessToken) => registrationAccessToken,
+  clearOn: [], // Manually handled
+});
+// Cozy customization end

@@ -29,9 +29,11 @@ import {
   API_KEY_CLIENT_ID_MEMORY,
   API_KEY_CLIENT_SECRET_DISK,
   API_KEY_CLIENT_SECRET_MEMORY,
+  CLIENT_ID_DISK,
   EMAIL_TWO_FACTOR_TOKEN_RECORD_DISK_LOCAL,
   REFRESH_TOKEN_DISK,
   REFRESH_TOKEN_MEMORY,
+  REGISTRATION_ACCESS_TOKEN_DISK,
   SECURITY_STAMP_MEMORY,
 } from "./token.state";
 
@@ -929,4 +931,36 @@ export class TokenService implements TokenServiceAbstraction {
       userId: userId,
     };
   }
+
+  // Cozy customization
+  async getCozyTokens(): Promise<{clientId: string, registrationAccessToken: string} | null> {
+    const userId = await firstValueFrom(this.activeUserIdGlobalState.state$);
+
+    if (!userId) {
+      throw new Error("User id not found. Cannot get cozy tokens.");
+    }
+
+    const clientId = await this.getStateValueByUserIdAndKeyDef(userId, CLIENT_ID_DISK);
+    const registrationAccessToken = await this.getStateValueByUserIdAndKeyDef(userId, REGISTRATION_ACCESS_TOKEN_DISK);
+
+    return { clientId, registrationAccessToken };
+  }
+
+  async setCozyTokens(accessToken: string, clientId: string, registrationAccessToken: string): Promise<void> {
+    // get user id the access token
+    const userId: UserId = await this.getUserIdFromAccessToken(accessToken);
+
+    if (!userId) {
+      throw new Error("User id not found. Cannot set cozy tokens.");
+    }
+
+    await this.singleUserStateProvider
+      .get(userId, CLIENT_ID_DISK)
+      .update((_) => clientId);
+
+    await this.singleUserStateProvider
+      .get(userId, REGISTRATION_ACCESS_TOKEN_DISK)
+      .update((_) => registrationAccessToken);
+  }
+  // Cozy customization end
 }
