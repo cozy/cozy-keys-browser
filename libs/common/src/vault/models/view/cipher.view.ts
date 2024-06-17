@@ -188,6 +188,14 @@ export class CipherView implements View, InitializerMetadata {
       case CipherType.SecureNote:
         view.secureNote = SecureNoteView.fromJSON(obj.secureNote);
         break;
+      // Cozy customization
+      case CipherType.Paper:
+        view.paper = PaperView.fromJSON(obj.paper);
+        break;
+      case CipherType.Contact:
+        view.contact = ContactView.fromJSON(obj.contact);
+        break;
+      // Cozy customization end
       default:
         break;
     }

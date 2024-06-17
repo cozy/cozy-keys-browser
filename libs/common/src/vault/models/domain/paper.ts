@@ -1,4 +1,6 @@
 // Cozy customization
+import { Jsonify } from "type-fest";
+
 import { PaperType } from "../../../enums/paperType";
 import Domain from "../../../platform/models/domain/domain-base";
 import { EncString } from "../../../platform/models/domain/enc-string";
@@ -67,6 +69,28 @@ export class Paper extends Domain {
     );
 
     return p;
+  }
+
+  static fromJSON(obj: Partial<Jsonify<Paper>>): Paper {
+    if (obj == null) {
+      return null;
+    }
+
+    const type = obj.type;
+    const ownerName = EncString.fromJSON(obj.ownerName);
+    const illustrationThumbnailUrl = EncString.fromJSON(obj.illustrationThumbnailUrl);
+    const illustrationUrl = EncString.fromJSON(obj.illustrationUrl);
+    const qualificationLabel = EncString.fromJSON(obj.qualificationLabel);
+    const noteContent = EncString.fromJSON(obj.noteContent);
+
+    return Object.assign(new Paper(), obj, {
+      type,
+      ownerName,
+      illustrationThumbnailUrl,
+      illustrationUrl,
+      qualificationLabel,
+      noteContent,
+    });
   }
 }
 // Cozy customization end

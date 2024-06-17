@@ -321,6 +321,14 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
       case CipherType.SecureNote:
         domain.secureNote = SecureNote.fromJSON(obj.secureNote);
         break;
+      // Cozy customization
+      case CipherType.Paper:
+        domain.paper = Paper.fromJSON(obj.paper);
+        break;
+      case CipherType.Contact:
+        domain.contact = Contact.fromJSON(obj.contact);
+        break;
+      // Cozy customization end
       default:
         break;
     }
