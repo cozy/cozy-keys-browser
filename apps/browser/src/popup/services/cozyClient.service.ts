@@ -3,6 +3,7 @@
 import CozyClient, { HasMany, Q, QueryDefinition, generateWebLink } from "cozy-client";
 import flag from "cozy-flags";
 import { RealtimePlugin } from "cozy-realtime";
+import { firstValueFrom } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
@@ -69,6 +70,16 @@ export class CozyClientService {
     return new URL(vaultUrl).origin; // Remove the /bitwarden part
   }
 
+  async getCozyUrlAsync(): Promise<string> {
+    const env = await firstValueFrom(this.environmentService.environment$);
+    const vaultUrl = env.getWebVaultUrl();
+    if (!vaultUrl) {
+      return null;
+    }
+
+    return new URL(vaultUrl).origin; // Remove the /bitwarden part
+  }
+
   registerFlags() {
     flag.store.on("change", this.flagChangedPointer);
   }
@@ -118,7 +129,7 @@ export class CozyClientService {
       this.unregisterFlags();
       this.realTimeNotifications.unregister();
     }
-    const uri = this.getCozyURL();
+    const uri = await this.getCozyUrlAsync();
     const token = await this.apiService.getActiveBearerToken();
 
     const oauthToken = {
@@ -281,9 +292,9 @@ export class CozyClientService {
    * Returns true if appUrl points the currently connected cozy.
    * even if the appUrl points to a specific app (nested of flat urls)
    */
-  correspondsToConnectedCozyURL(appUrl: string): boolean {
+  async correspondsToConnectedCozyURL(appUrl: string): boolean {
     const appURL = new URL(appUrl);
-    const currentCozyURL = new URL(this.getCozyURL());
+    const currentCozyURL = new URL(await this.getCozyUrlAsync());
     if (this.subDomainType === "nested") {
       //remove first subdomain if there is one more than on the Cozy (would be an app nested domain)
       const currentCozyURLHosts = currentCozyURL.host.split(".");
@@ -334,7 +345,7 @@ export class CozyClientService {
       }
       // test that the cipher url realy matches the user's Cozy url
       for (const u of c.login.uris) {
-        if (this.correspondsToConnectedCozyURL(u.uri)) {
+        if (await this.correspondsToConnectedCozyURL(u.uri)) {
           ciphers.push(c);
           break;
         }
