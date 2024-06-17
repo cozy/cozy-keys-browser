@@ -95,6 +95,8 @@ export abstract class EnvironmentService {
   abstract environment$: Observable<Environment>;
   abstract cloudWebVaultUrl$: Observable<string>;
 
+  abstract getWebVaultUrlSync(): string;
+
   /**
    * Retrieve all the available regions for environment selectors.
    *

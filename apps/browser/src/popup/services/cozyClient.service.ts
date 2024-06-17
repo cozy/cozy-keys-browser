@@ -62,7 +62,7 @@ export class CozyClientService {
   }
 
   getCozyURL(): string {
-    const vaultUrl = this.environmentService.getWebVaultUrl();
+    const vaultUrl = this.environmentService.getWebVaultUrlSync();
     if (!vaultUrl) {
       return null;
     }
