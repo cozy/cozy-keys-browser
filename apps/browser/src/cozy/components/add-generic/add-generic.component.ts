@@ -58,12 +58,6 @@ export class AddGenericComponent implements OnInit, OnDestroy {
   back() {
     this.onCancelled.emit();
 
-    // WHATISIT
-    // if (this.popupUtilsService.inTab(window)) {
-    //   this.messagingService.send("closeTab");
-    //   return;
-    // }
-
     this.historyService.gotoPreviousUrl();
   }
 
