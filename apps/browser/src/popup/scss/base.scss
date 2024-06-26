@@ -195,30 +195,13 @@ header:not(bit-callout header, bit-dialog header, popup-page header) {
     height: 100%;
   }
 
-  button {
-    background-color: unset;
-    flex-grow: 0;
-    border: none;
-    padding: 0 10px;
-    &:hover,
-    &:focus {
-      @include themify($themes) {
-        background-color: themed("headerBackgroundHoverColor");
-      }
-    }
-  }
-
   .left,
   .right {
-    // flex: 1;
+    flex: 1;
     display: flex;
-    min-width: 10px;
-    flex-shrink: 0;
+    min-width: -webkit-min-content; /* Workaround to Chrome bug */
     .header-icon {
       margin-right: 5px;
-    }
-    &.empty {
-      padding-left: 10px;
     }
   }
 
@@ -231,20 +214,28 @@ header:not(bit-callout header, bit-dialog header, popup-page header) {
     }
   }
 
-  .right.solid {
-    min-width: 75px;
-  }
-
   .center {
     display: flex;
     align-items: center;
     text-align: center;
     min-width: 0;
-    flex-grow: 1;
   }
 
   .login-center {
     margin: auto;
+  }
+
+  button {
+    background-color: unset;
+    flex-grow: 0;
+    border: none;
+    padding: 0 10px;
+    &:hover,
+    &:focus {
+      @include themify($themes) {
+        background-color: themed("headerBackgroundHoverColor");
+      }
+    }
   }
 
   app-pop-out > button,
