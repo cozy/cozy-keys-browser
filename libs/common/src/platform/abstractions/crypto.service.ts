@@ -407,4 +407,7 @@ export abstract class CryptoService {
     encBuffer: EncArrayBuffer,
     key: SymmetricCryptoKey,
   ): Promise<Uint8Array>;
+  // Cozy customization
+  abstract upsertOrganizationKey(userId: UserId, organizationId: OrganizationId, key: string): Promise<void>
+  // Cozy customization end
 }

@@ -53,7 +53,7 @@ import {
 export class CryptoService implements CryptoServiceAbstraction {
   private readonly activeUserKeyState: ActiveUserState<UserKey>;
   private readonly activeUserEverHadUserKey: ActiveUserState<boolean>;
-  private readonly activeUserEncryptedOrgKeysState: ActiveUserState<
+  protected readonly activeUserEncryptedOrgKeysState: ActiveUserState<
     Record<OrganizationId, EncryptedOrganizationKeyData>
   >;
   private readonly activeUserOrgKeysState: DerivedState<Record<OrganizationId, OrgKey>>;
@@ -405,6 +405,10 @@ export class CryptoService implements CryptoServiceAbstraction {
     providerOrgs: ProfileProviderOrganizationResponse[],
     userId: UserId,
   ): Promise<void> {
+    // Cozy customization
+    orgs = orgs.filter((org) => org.key !== "");
+    // Cozy customization end
+
     await this.stateProvider.getUser(userId, USER_ENCRYPTED_ORGANIZATION_KEYS).update(() => {
       const encOrgKeyData: { [orgId: string]: EncryptedOrganizationKeyData } = {};
 
@@ -447,7 +451,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     return this.buildProtectedSymmetricKey(key, newSymKey.key);
   }
 
-  private async clearOrgKeys(userId: UserId): Promise<void> {
+  protected async clearOrgKeys(userId: UserId): Promise<void> {
     if (userId == null) {
       // nothing to do
       return;
@@ -1021,4 +1025,23 @@ export class CryptoService implements CryptoServiceAbstraction {
 
     return this.encryptService.decryptToBytes(encBuffer, key);
   }
+
+  // Cozy cuztomization
+  async upsertOrganizationKey(userId: UserId, organizationId: OrganizationId, key: string) {
+    if (key === "") {
+      return;
+    }
+
+    const encOrgKeys = await firstValueFrom(this.activeUserEncryptedOrgKeysState.state$);
+
+    encOrgKeys[organizationId] = key as unknown as EncryptedOrganizationKeyData;
+
+    // TODO: Is it useful to clear before the update ?
+    await this.clearOrgKeys(userId);
+
+    await this.stateProvider.getUser(userId, USER_ENCRYPTED_ORGANIZATION_KEYS).update(() => {
+      return encOrgKeys;
+    });
+  }
+  // Cozy cuztomization end
 }

@@ -50,6 +50,7 @@ import { fetchPapersAndConvertAsCiphers } from "../../../../../../libs/cozy/pape
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { SyncCipherNotification } from "@bitwarden/common/models/response/notification.response";
 import { ProfileProviderOrganizationResponse } from "@bitwarden/common/admin-console/models/response/profile-provider-organization.response";
+import { OrganizationId, UserId } from "@bitwarden/common/types/guid";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -449,10 +450,11 @@ export class SyncService extends CoreSyncService {
   }
 
   protected async syncUpsertOrganizationKey(organizationId: string) {
+    const userId = await this.stateService.getUserId();
+
     const remoteOrganizationKey = await this.getOrganizationKey(organizationId);
 
-    // WHATISIT
-    // await this.cryptoService.upsertOrganizationKey(organizationId, remoteOrganizationKey);
+    await this.cryptoService.upsertOrganizationKey(userId as UserId, organizationId as OrganizationId, remoteOrganizationKey);
   }
 
   protected async syncUpsertOrganization(organizationId: string, isEdit: boolean) {
