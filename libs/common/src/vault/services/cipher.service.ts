@@ -940,7 +940,6 @@ export class CipherService implements CipherServiceAbstraction {
     // Cozy customization
     // We do not want to clear the cache because reconstructing the cache involves decrypting all ciphers
     // which is very costly with our papers and contacts. Instead we manually update decrypted ciphers below.
-    /* WHATISIT OPTIM a remettre en place
     await this.encryptedCiphersState.update(() => ciphers);
 
     const decryptedCiphers = await firstValueFrom(this.cipherViews$)
@@ -948,10 +947,19 @@ export class CipherService implements CipherServiceAbstraction {
       return;
     }
 
-    const ids = typeof id === "string" ? [id] : id;
-    const removed = decryptedCiphers.filter((c) => !ids.includes(c.id));
+    if (typeof id === "string") {
+      const cipherId = id as CipherId;
+      if (decryptedCiphers[cipherId] == null) {
+        return;
+      }
+      delete decryptedCiphers[cipherId];
+    } else {
+      (id as CipherId[]).forEach((i) => {
+        delete decryptedCiphers[i];
+      });
+    }
 
-    await this.decryptedCiphersState.update(() => removed);
+    await this.decryptedCiphersState.update(() => decryptedCiphers);
     /*/
     await this.clearCache();
     await this.encryptedCiphersState.update(() => ciphers);
