@@ -54,6 +54,9 @@ export class AngularThemingService implements AbstractThemingService {
         "theme_" + ThemeType.Dark,
         "theme_" + ThemeType.Nord,
         "theme_" + ThemeType.SolarizedDark,
+        // Cozy customization; avoid the need to restart the extension when changing from Light Contrasted theme
+        "theme_" + ThemeType.LightContrasted,
+        // Cozy customization end
       );
       document.documentElement.classList.add("theme_" + theme);
     });

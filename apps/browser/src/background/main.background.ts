@@ -130,7 +130,7 @@ import { DefaultStateProvider } from "@bitwarden/common/platform/state/implement
 import { InlineDerivedStateProvider } from "@bitwarden/common/platform/state/implementations/inline-derived-state";
 import { StateEventRegistrarService } from "@bitwarden/common/platform/state/state-event-registrar.service";
 /* eslint-enable import/no-restricted-paths */
-import { DefaultThemeStateService } from "@bitwarden/common/platform/theming/theme-state.service";
+import { DefaultThemeStateService, ThemeStateService } from "@bitwarden/common/platform/theming/theme-state.service";
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
 import { EventCollectionService } from "@bitwarden/common/services/event/event-collection.service";
@@ -354,6 +354,7 @@ export default class MainBackground {
   // Cozy customization
   cozyClientService: CozyClientService;
   konnectorsService: KonnectorsService;
+  themeStateService: ThemeStateService;
   // Cozy customization end
 
   onUpdatedRan: boolean;
@@ -1418,11 +1419,10 @@ export default class MainBackground {
 
     // Cozy customization, reset theme to LighContrasted if user did not manually changed it
     //*
-    // TODO WHATISIT
-    // const isUserSetTheme = await this.stateService.getIsUserSetTheme();
-    // if (!isUserSetTheme) {
-    //   await this.stateService.setTheme(ThemeType.LightContrasted);
-    // }
+    const isUserSetTheme = await this.stateService.getIsUserSetTheme();
+    if (!isUserSetTheme) {
+      await this.themeStateService.setSelectedTheme(ThemeType.LightContrasted);
+    }
     //*/
 
     // Cozy customization, logout OAuth client
