@@ -247,11 +247,9 @@ app-help-and-feedback .box-content {
   bottom: 55px;
   z-index: 1;
   flex: 0;
-  > div {
-    padding: 4px 0 11px 0;
-    @include themify($themes) {
-      background-color: themed("backgroundColor");
-    }
+  padding: 4px 0 11px 0;
+  @include themify($themes) {
+    background-color: themed("backgroundColor");
   }
 
   .close-premium {
