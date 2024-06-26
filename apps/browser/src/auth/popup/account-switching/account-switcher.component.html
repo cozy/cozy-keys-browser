@@ -2,7 +2,11 @@
   <div class="left">
     <button type="button" (click)="back()">{{ "close" | i18n }}</button>
   </div>
+  <!-- Cozy customization; only display active account in account switcher when logged in-->
+  <div class="center tw-font-bold">{{ "activeAccount" | i18n }}</div>
+  <!--
   <div class="center tw-font-bold">{{ "switchAccounts" | i18n }}</div>
+  -->
 </app-header>
 
 <main
@@ -16,6 +20,11 @@
     <div *ngIf="availableAccounts$ | async as availableAccounts">
       <ul class="tw-grid tw-list-none tw-gap-2" role="listbox">
         <ng-container *ngFor="let availableAccount of availableAccounts; first as isFirst">
+          <!-- Cozy customization; only display active account in account switcher when logged in-->
+          <li *ngIf="availableAccount.isActive" role="option">
+            <auth-account [account]="availableAccount" (loading)="loading = $event"></auth-account>
+          </li>
+          <!--
           <li *ngIf="availableAccount.isActive" class="tw-mb-4" role="option">
             <auth-account [account]="availableAccount" (loading)="loading = $event"></auth-account>
           </li>
@@ -25,6 +34,7 @@
           <li *ngIf="!availableAccount.isActive" role="option">
             <auth-account [account]="availableAccount" (loading)="loading = $event"></auth-account>
           </li>
+          -->
         </ng-container>
       </ul>
       <!--
