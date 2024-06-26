@@ -427,7 +427,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   // Cozy custo
   async fillOrLaunchCipher(cipher: CipherView) {
     // Get default matching setting for urls
-    let defaultMatch = await this.autofillService.getDefaultUriMatchStrategy(); // WHATISIT
+    let defaultMatch = await this.autofillService.getDefaultUriMatchStrategy();
     if (defaultMatch == null) {
       defaultMatch = UriMatchStrategy.Domain;
     }

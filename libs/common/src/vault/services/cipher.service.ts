@@ -73,7 +73,6 @@ import {
   DECRYPTED_CIPHERS,
 } from "./key-state/ciphers.state";
 
-// WHATISIT
 const CIPHER_KEY_ENC_MIN_SERVER_VER = new SemVer("2024.2.0");
 
 export class CipherService implements CipherServiceAbstraction {
