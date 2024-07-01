@@ -1,11 +1,11 @@
-import { ApplicationRef, ComponentFactoryResolver, Injectable, Injector } from "@angular/core";
+import { Injectable, Injector } from "@angular/core";
 import * as jq from "jquery";
 import { first } from "rxjs/operators";
 
 import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { ModalService as BaseModalService } from "@bitwarden/angular/services/modal.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { Utils } from "@bitwarden/common/misc/utils";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 @Injectable()
 export class ModalService extends BaseModalService {
@@ -13,12 +13,10 @@ export class ModalService extends BaseModalService {
   modalOpen = false;
 
   constructor(
-    componentFactoryResolver: ComponentFactoryResolver,
-    applicationRef: ApplicationRef,
     injector: Injector,
-    private messagingService: MessagingService
+    private messagingService: MessagingService,
   ) {
-    super(componentFactoryResolver, applicationRef, injector);
+    super(injector);
   }
 
   protected setupHandlers(modalRef: ModalRef) {

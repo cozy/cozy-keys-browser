@@ -2,14 +2,14 @@
 // Cozy customization
 import { IOCozyContact } from "cozy-client/types/types";
 
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 import { CozyClientService } from "../../apps/browser/src/popup/services/cozyClient.service";
 
@@ -20,11 +20,11 @@ const convertContactsAsCiphers = async (
   cipherService: CipherService,
   cryptoService: CryptoService,
   i18nService: I18nService,
-  contacts: IOCozyContact[]
+  contacts: IOCozyContact[],
 ): Promise<CipherData[]> => {
   const contactsCiphers = [];
 
-  const key = await cryptoService.getKeyForUserEncryption();
+  const key = await cryptoService.getUserKey();
 
   for (const contact of contacts) {
     try {
@@ -47,7 +47,7 @@ export const fetchContactsAndConvertAsCiphers = async (
   cipherService: CipherService,
   cryptoService: CryptoService,
   cozyClientService: CozyClientService,
-  i18nService: I18nService
+  i18nService: I18nService,
 ): Promise<CipherData[]> => {
   const client = await cozyClientService.getClientInstance();
 
@@ -58,14 +58,14 @@ export const fetchContactsAndConvertAsCiphers = async (
       cipherService,
       cryptoService,
       i18nService,
-      contacts
+      contacts,
     );
 
     return contactsCiphers;
   } catch (e) {
     console.log(
       "Error while fetching contacts and converting them as ciphers. Fallbacking to stored contacts.",
-      e
+      e,
     );
 
     return (await cipherService.getAll())
@@ -78,7 +78,7 @@ export const favoriteContactCipher = async (
   cipherService: CipherService,
   i18nService: I18nService,
   cipher: CipherView,
-  cozyClientService: CozyClientService
+  cozyClientService: CozyClientService,
 ): Promise<boolean> => {
   const client = await cozyClientService.getClientInstance();
 
@@ -102,18 +102,17 @@ export const favoriteContactCipher = async (
 export const deleteContactCipher = async (
   cipherService: CipherService,
   i18nService: I18nService,
-  platformUtilsService: PlatformUtilsService,
+  dialogService: DialogService,
+  toastService: ToastService,
   cipher: CipherView,
-  stateService: StateService,
-  cozyClientService: CozyClientService
+  cozyClientService: CozyClientService,
+  organizationService: OrganizationService,
 ): Promise<boolean> => {
-  const confirmed = await platformUtilsService.showDialog(
-    i18nService.t("deleteContactItemConfirmation"),
-    i18nService.t("deleteItem"),
-    i18nService.t("yes"),
-    i18nService.t("no"),
-    "warning"
-  );
+  const confirmed = await dialogService.openSimpleDialog({
+    title: i18nService.t("deleteItem"),
+    content: i18nService.t("deleteContactItemConfirmation"),
+    type: "warning",
+  });
 
   if (!confirmed) {
     return false;
@@ -128,7 +127,7 @@ export const deleteContactCipher = async (
   await cipherService.delete(cipher.id);
 
   const message = i18nService.t("deletedContactItem");
-  platformUtilsService.showToast("success", null, message);
+  toastService.showToast({ title: message, message, variant: "success" });
 
   return true;
 };

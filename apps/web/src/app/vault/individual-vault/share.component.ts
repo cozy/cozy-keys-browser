@@ -1,13 +1,13 @@
 import { Component, OnDestroy } from "@angular/core";
 
 import { ShareComponent as BaseShareComponent } from "@bitwarden/angular/components/share.component";
-import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
+import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 
 @Component({
   selector: "app-vault-share",
@@ -20,7 +20,7 @@ export class ShareComponent extends BaseShareComponent implements OnDestroy {
     i18nService: I18nService,
     cipherService: CipherService,
     organizationService: OrganizationService,
-    logService: LogService
+    logService: LogService,
   ) {
     super(
       collectionService,
@@ -28,7 +28,7 @@ export class ShareComponent extends BaseShareComponent implements OnDestroy {
       i18nService,
       cipherService,
       logService,
-      organizationService
+      organizationService,
     );
   }
 

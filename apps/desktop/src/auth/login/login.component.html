@@ -1,16 +1,4 @@
-<div id="login-page">
-  <div class="login-header">
-    <button
-      type="button"
-      appStopClick
-      (click)="settings()"
-      class="environment-urls-settings-icon"
-      attr.aria-label="{{ 'settings' | i18n }}"
-    >
-      <i class="bwi bwi-cog bwi-lg" aria-hidden="true"></i>
-      {{ "settings" | i18n }}
-    </button>
-  </div>
+<div id="login-page" class="page-top-padding">
   <form
     id="login-page"
     #form
@@ -19,7 +7,7 @@
     [formGroup]="formGroup"
     attr.aria-hidden="{{ showingModal }}"
   >
-    <div id="content" class="content">
+    <div id="content" class="content" style="padding-top: 50px">
       <img class="logo-image" alt="Bitwarden" />
       <p class="lead">{{ "loginOrCreateNewAccount" | i18n }}</p>
       <!-- start email -->
@@ -37,9 +25,8 @@
               />
             </div>
           </div>
-          <div class="box-footer" *ngIf="selfHostedDomain">
-            {{ "loggingInTo" | i18n: selfHostedDomain }}
-          </div>
+          <environment-selector #environmentSelector (onOpenSelfHostedSettings)="settings()">
+          </environment-selector>
         </div>
         <div class="checkbox remember-email">
           <label for="rememberEmail">
@@ -102,13 +89,17 @@
         </div>
         <div class="box last" [hidden]="!showCaptcha()">
           <div class="box-content">
-            <iframe id="hcaptcha_iframe" style="margin-top: 20px"></iframe>
+            <iframe
+              id="hcaptcha_iframe"
+              style="margin-top: 20px"
+              sandbox="allow-scripts allow-same-origin"
+            ></iframe>
             <div class="box-content-row">
               <button
                 class="btn block"
                 type="button"
                 routerLink="/accessibility-cookie"
-                (click)="setFormValues()"
+                (click)="setLoginEmailValues()"
               >
                 <i class="bwi bwi-universal-access" aria-hidden="true"></i>
                 {{ "loadAccessibilityCookie" | i18n }}
@@ -127,7 +118,7 @@
             </button>
           </div>
           <div class="buttons-row" *ngIf="showLoginWithDevice">
-            <button type="button" class="btn block" (click)="startPasswordlessLogin()">
+            <button type="button" class="btn block" (click)="startAuthRequestLogin()">
               <i class="bwi bwi-mobile" aria-hidden="true"></i>
               {{ "logInWithAnotherDevice" | i18n }}
             </button>
@@ -148,7 +139,7 @@
             type="button"
             class="text text-primary password-hint-btn"
             routerLink="/hint"
-            (click)="setFormValues()"
+            (click)="setLoginEmailValues()"
           >
             {{ "getMasterPasswordHint" | i18n }}
           </button>

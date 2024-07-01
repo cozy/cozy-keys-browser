@@ -1,4 +1,4 @@
-import { NotificationType } from "../../enums/notificationType";
+import { NotificationType } from "../../enums";
 
 import { BaseResponse } from "./base.response";
 
@@ -27,6 +27,7 @@ export class NotificationResponse extends BaseResponse {
         break;
       case NotificationType.SyncVault:
       case NotificationType.SyncCiphers:
+      case NotificationType.SyncOrganizations:
       case NotificationType.SyncOrgKeys:
       case NotificationType.SyncSettings:
       case NotificationType.LogOut:

@@ -1,7 +1,8 @@
-import { RouterTestingModule } from "@angular/router/testing";
-import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { Component, importProvidersFrom } from "@angular/core";
+import { RouterModule } from "@angular/router";
+import { StoryObj, Meta, moduleMetadata, applicationConfig } from "@storybook/angular";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 
 import { SharedModule } from "../shared/shared.module";
 import { I18nMockService } from "../utils/i18n-mock.service";
@@ -9,12 +10,18 @@ import { I18nMockService } from "../utils/i18n-mock.service";
 import { NavGroupComponent } from "./nav-group.component";
 import { NavigationModule } from "./navigation.module";
 
+@Component({
+  standalone: true,
+  template: "",
+})
+class DummyContentComponent {}
+
 export default {
   title: "Component Library/Nav/Nav Group",
   component: NavGroupComponent,
   decorators: [
     moduleMetadata({
-      imports: [SharedModule, RouterTestingModule, NavigationModule],
+      imports: [SharedModule, RouterModule, NavigationModule, DummyContentComponent],
       providers: [
         {
           provide: I18nService,
@@ -27,6 +34,19 @@ export default {
         },
       ],
     }),
+    applicationConfig({
+      providers: [
+        importProvidersFrom(
+          RouterModule.forRoot(
+            [
+              { path: "", redirectTo: "a", pathMatch: "full" },
+              { path: "**", component: DummyContentComponent },
+            ],
+            { useHash: true },
+          ),
+        ),
+      ],
+    }),
   ],
   parameters: {
     design: {
@@ -36,13 +56,14 @@ export default {
   },
 } as Meta;
 
-export const Default: Story<NavGroupComponent> = (args) => ({
-  props: args,
-  template: `
-      <bit-nav-group text="Hello World (Anchor)" [route]="['']" icon="bwi-filter" [open]="true">
-        <bit-nav-item text="Child A" route="#" icon="bwi-filter"></bit-nav-item>
-        <bit-nav-item text="Child B" route="#"></bit-nav-item>
-        <bit-nav-item text="Child C" route="#" icon="bwi-filter"></bit-nav-item>
+export const Default: StoryObj<NavGroupComponent> = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <bit-nav-group text="Hello World (Anchor)" [route]="['a']" icon="bwi-filter">
+        <bit-nav-item text="Child A" route="a" icon="bwi-filter"></bit-nav-item>
+        <bit-nav-item text="Child B" route="b"></bit-nav-item>
+        <bit-nav-item text="Child C" route="c" icon="bwi-filter"></bit-nav-item>
       </bit-nav-group>
       <bit-nav-group text="Lorem Ipsum (Button)" icon="bwi-filter">
         <bit-nav-item text="Child A" icon="bwi-filter"></bit-nav-item>
@@ -50,25 +71,28 @@ export const Default: Story<NavGroupComponent> = (args) => ({
         <bit-nav-item text="Child C" icon="bwi-filter"></bit-nav-item>
       </bit-nav-group>
     `,
-});
+  }),
+};
 
-export const Tree: Story<NavGroupComponent> = (args) => ({
-  props: args,
-  template: `
-    <bit-nav-group text="Tree example" icon="bwi-collection" [open]="true">
-      <bit-nav-group text="Level 1 - with children (empty)" route="#" icon="bwi-collection" variant="tree"></bit-nav-group>
-      <bit-nav-item text="Level 1 - no childen" route="#" icon="bwi-collection" variant="tree"></bit-nav-item>
-      <bit-nav-group text="Level 1 - with children" route="#" icon="bwi-collection" variant="tree" [open]="true">
-        <bit-nav-group text="Level 2 - with children" route="#" icon="bwi-collection" variant="tree" [open]="true">
-          <bit-nav-item text="Level 3 - no childen, no icon" route="#" variant="tree"></bit-nav-item>
-          <bit-nav-group text="Level 3 - with children" route="#" icon="bwi-collection" variant="tree" [open]="true">
-            <bit-nav-item text="Level 4 - no childen, no icon" route="#" variant="tree"></bit-nav-item>
+export const Tree: StoryObj<NavGroupComponent> = {
+  render: (args) => ({
+    props: args,
+    template: `
+      <bit-nav-group text="Tree example" icon="bwi-collection" [open]="true">
+        <bit-nav-group text="Level 1 - with children (empty)" route="t1" icon="bwi-collection" variant="tree"></bit-nav-group>
+        <bit-nav-item text="Level 1 - no children" route="t2" icon="bwi-collection" variant="tree"></bit-nav-item>
+        <bit-nav-group text="Level 1 - with children" route="t3" icon="bwi-collection" variant="tree" [open]="true">
+          <bit-nav-group text="Level 2 - with children" route="t4" icon="bwi-collection" variant="tree" [open]="true">
+            <bit-nav-item text="Level 3 - no children, no icon" route="t5" variant="tree"></bit-nav-item>
+            <bit-nav-group text="Level 3 - with children" route="t6" icon="bwi-collection" variant="tree" [open]="true">
+              <bit-nav-item text="Level 4 - no children, no icon" route="t7" variant="tree"></bit-nav-item>
+            </bit-nav-group>
           </bit-nav-group>
+          <bit-nav-group text="Level 2 - with children (empty)" route="t8" icon="bwi-collection" variant="tree" [open]="true"></bit-nav-group>
+          <bit-nav-item text="Level 2 - no children" route="t9" icon="bwi-collection" variant="tree"></bit-nav-item>
         </bit-nav-group>
-        <bit-nav-group text="Level 2 - with children (empty)" route="#" icon="bwi-collection" variant="tree" [open]="true"></bit-nav-group>
-        <bit-nav-item text="Level 2 - no childen" route="#" icon="bwi-collection" variant="tree"></bit-nav-item>
+        <bit-nav-item text="Level 1 - no children" route="t10" icon="bwi-collection" variant="tree"></bit-nav-item>
       </bit-nav-group>
-      <bit-nav-item text="Level 1 - no childen" route="#" icon="bwi-collection" variant="tree"></bit-nav-item>
-    </bit-nav-group>
-  `,
-});
+    `,
+  }),
+};

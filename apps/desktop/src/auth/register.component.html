@@ -100,7 +100,11 @@
         <div class="box last" [hidden]="!showCaptcha()">
           <div class="box-content">
             <div class="box-content-row">
-              <iframe id="hcaptcha_iframe" height="80"></iframe>
+              <iframe
+                id="hcaptcha_iframe"
+                height="80"
+                sandbox="allow-scripts allow-same-origin"
+              ></iframe>
               <button class="btn block" type="button" routerLink="/accessibility-cookie">
                 <i class="bwi bwi-universal-access" aria-hidden="true"></i>
                 {{ "loadAccessibilityCookie" | i18n }}
@@ -125,11 +129,11 @@
         <input type="checkbox" id="acceptPolicies" formControlName="acceptPolicies" />
         <label for="acceptPolicies">
           {{ "acceptPolicies" | i18n }}<br />
-          <a href="https://bitwarden.com/terms/" target="_blank" rel="noopener">{{
+          <a href="https://bitwarden.com/terms/" target="_blank" rel="noreferrer">{{
             "termsOfService" | i18n
           }}</a
           >,
-          <a href="https://bitwarden.com/privacy/" target="_blank" rel="noopener">{{
+          <a href="https://bitwarden.com/privacy/" target="_blank" rel="noreferrer">{{
             "privacyPolicy" | i18n
           }}</a>
         </label>

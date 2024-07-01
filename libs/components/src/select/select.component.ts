@@ -11,7 +11,7 @@ import {
 import { ControlValueAccessor, NgControl, Validators } from "@angular/forms";
 import { NgSelectComponent } from "@ng-select/ng-select";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 
 import { BitFormFieldControl } from "../form-field";
 
@@ -39,7 +39,10 @@ export class SelectComponent<T> implements BitFormFieldControl, ControlValueAcce
   private notifyOnChange?: (value: T) => void;
   private notifyOnTouched?: () => void;
 
-  constructor(private i18nService: I18nService, @Optional() @Self() private ngControl?: NgControl) {
+  constructor(
+    private i18nService: I18nService,
+    @Optional() @Self() private ngControl?: NgControl,
+  ) {
     if (ngControl != null) {
       ngControl.valueAccessor = this;
     }

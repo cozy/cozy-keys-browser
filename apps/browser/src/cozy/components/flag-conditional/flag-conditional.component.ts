@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
 import * as uuid from "uuid";
 
-import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 
 const BroadcasterSubscriptionId = "FlagConditionalComponent";
 
@@ -24,7 +24,7 @@ export class FlagConditionalComponent implements OnInit, OnDestroy {
 
   constructor(
     protected messagingService: MessagingService,
-    protected broadcasterService: BroadcasterService
+    protected broadcasterService: BroadcasterService,
   ) {}
 
   ngOnDestroy(): void {

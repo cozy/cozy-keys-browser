@@ -2,10 +2,19 @@
   "extends": "../../apps/web/tsconfig",
   "compilerOptions": {
     "paths": {
-      "@bitwarden/web-vault/*": ["../../apps/web/src/*"],
-      "@bitwarden/common/*": ["../../libs/common/src/*"],
+      "@bitwarden/admin-console": ["../../libs/admin-console/src"],
       "@bitwarden/angular/*": ["../../libs/angular/src/*"],
-      "@bitwarden/components": ["../../libs/components/src"]
+      "@bitwarden/auth": ["../../libs/auth/src"],
+      "@bitwarden/billing": ["../../libs/billing/src"],
+      "@bitwarden/common/*": ["../../libs/common/src/*"],
+      "@bitwarden/components": ["../../libs/components/src"],
+      "@bitwarden/vault-export-core": [
+        "../../libs/tools/export/vault-export/vault-export-core/src"
+      ],
+      "@bitwarden/vault-export-ui": ["../../libs/tools/export/vault-export/vault-export-core/src"],
+      "@bitwarden/platform": ["../../libs/platform/src"],
+      "@bitwarden/vault": ["../../libs/vault/src"],
+      "@bitwarden/web-vault/*": ["../../apps/web/src/*"]
     }
   },
   "include": ["src/**/*.stories.ts"]

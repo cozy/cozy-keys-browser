@@ -3,12 +3,14 @@
   [text]="text"
   [icon]="icon"
   [route]="route"
+  [relativeTo]="relativeTo"
+  [routerLinkActiveOptions]="routerLinkActiveOptions"
   [variant]="variant"
   (mainContentClicked)="toggle()"
   [treeDepth]="treeDepth"
   (mainContentClicked)="mainContentClicked.emit()"
   [ariaLabel]="ariaLabel"
-  [exactMatch]="exactMatch"
+  [hideActiveStyles]="parentHideActiveStyles"
 >
   <ng-template #button>
     <button
@@ -17,7 +19,7 @@
       [bitIconButton]="
         open ? 'bwi-angle-up' : variant === 'tree' ? 'bwi-angle-right' : 'bwi-angle-down'
       "
-      [buttonType]="'main'"
+      [buttonType]="'light'"
       (click)="toggle($event)"
       size="small"
       [title]="'toggleCollapse' | i18n"
@@ -29,11 +31,14 @@
   </ng-template>
 
   <!-- Show toggle to the left for trees otherwise to the right -->
-  <ng-container slot-start *ngIf="variant === 'tree'">
+  <ng-container slot="start" *ngIf="variant === 'tree'">
     <ng-container *ngTemplateOutlet="button"></ng-container>
   </ng-container>
-  <ng-container slot-end *ngIf="variant !== 'tree'">
-    <ng-container *ngTemplateOutlet="button"></ng-container>
+  <ng-container slot="end">
+    <ng-content select="[slot=end]"></ng-content>
+    <ng-container *ngIf="variant !== 'tree'">
+      <ng-container *ngTemplateOutlet="button"></ng-container>
+    </ng-container>
   </ng-container>
 </bit-nav-item>
 

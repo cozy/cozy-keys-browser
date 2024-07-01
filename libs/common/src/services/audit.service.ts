@@ -1,17 +1,17 @@
 import { ApiService } from "../abstractions/api.service";
 import { AuditService as AuditServiceAbstraction } from "../abstractions/audit.service";
-import { CryptoFunctionService } from "../abstractions/cryptoFunction.service";
-import { throttle } from "../misc/throttle";
-import { Utils } from "../misc/utils";
 import { BreachAccountResponse } from "../models/response/breach-account.response";
 import { ErrorResponse } from "../models/response/error.response";
+import { CryptoFunctionService } from "../platform/abstractions/crypto-function.service";
+import { throttle } from "../platform/misc/throttle";
+import { Utils } from "../platform/misc/utils";
 
 const PwnedPasswordsApi = "https://api.pwnedpasswords.com/range/";
 
 export class AuditService implements AuditServiceAbstraction {
   constructor(
     private cryptoFunctionService: CryptoFunctionService,
-    private apiService: ApiService
+    private apiService: ApiService,
   ) {}
 
   @throttle(100, () => "passwordLeaked")

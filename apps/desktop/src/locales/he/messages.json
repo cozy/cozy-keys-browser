@@ -24,7 +24,7 @@
     "message": "זהות"
   },
   "typeSecureNote": {
-    "message": "תזכורת מאובטחת"
+    "message": "פתק מאובטח"
   },
   "folders": {
     "message": "תיקיות"
@@ -36,7 +36,7 @@
     "message": "חיפוש בכספת"
   },
   "addItem": {
-    "message": "הוספת פריט"
+    "message": "הוסף פריט"
   },
   "shared": {
     "message": "משותף"
@@ -45,10 +45,10 @@
     "message": "שתף"
   },
   "moveToOrganization": {
-    "message": "העברה לארגון"
+    "message": "העבר לארגון"
   },
   "movedItemToOrg": {
-    "message": "$ITEMNAME$ הועבר ל־$ORGNAME$",
+    "message": "$ITEMNAME$ הועבר ל$ORGNAME$",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -61,13 +61,13 @@
     }
   },
   "moveToOrgDesc": {
-    "message": "בחר ארגון שאליו ברצונך להעביר פריט זה. ההעברה לארגון מעבירה את הבעלות על הפריט לאותו ארגון. לאחר העברת פריט זה לא תוכל עוד לקבוע באופן ישיר הבעלות."
+    "message": "בחר ארגון שאליו תרצה להעביר פריט זה. העברה לארגון מעבירה את הבעלות על הפריט לאותו ארגון. לאחר העברת פריט זה לא תהיה יותר הבעלים הישיר."
   },
   "attachments": {
     "message": "קבצים מצורפים"
   },
   "viewItem": {
-    "message": "צפה בפריט"
+    "message": "הצג פריט"
   },
   "name": {
     "message": "שם"
@@ -126,13 +126,13 @@
     "message": "מזעור בעת העתקה ללוח"
   },
   "minimizeOnCopyToClipboardDesc": {
-    "message": "מזער את החלון בזמן העתקה של מידע מפריט ללוח."
+    "message": "מזער את החלון בזמן העתקת מידע ללוח."
   },
   "toggleVisibility": {
     "message": "הצג או הסתר"
   },
   "toggleCollapse": {
-    "message": "הצג או הסתר",
+    "message": "פתח או סגור",
     "description": "Toggling an expand/collapse state."
   },
   "cardholderName": {
@@ -151,7 +151,7 @@
     "message": "קוד אבטחה"
   },
   "identityName": {
-    "message": "שם זהות"
+    "message": "שם הזהות"
   },
   "company": {
     "message": "חברה"
@@ -352,7 +352,7 @@
     "message": "פריט שהתווסף"
   },
   "editedItem": {
-    "message": "פריט שנערך"
+    "message": "פריט נשמר"
   },
   "deleteItem": {
     "message": "מחק פריט"
@@ -373,7 +373,7 @@
     "message": "האם אתה בטוח שברצונך לדרוס את הסיסמה הנוכחית?"
   },
   "overwriteUsername": {
-    "message": "כתוב מחדש את שם המשתמש"
+    "message": "דרוס את שם המשתמש"
   },
   "overwriteUsernameConfirmation": {
     "message": "האם אתה בטוח שברצונך לדרוס את שם המשתמש הנוכחי?"
@@ -403,8 +403,11 @@
   "length": {
     "message": "אורך"
   },
+  "passwordMinLength": {
+    "message": "אורך סיסמה מזערי"
+  },
   "uppercase": {
-    "message": "אותיות רישיות (A-Z)"
+    "message": "אותיות גדולות (A-Z)"
   },
   "lowercase": {
     "message": "אותיות קטנות (a-z)"
@@ -416,7 +419,7 @@
     "message": "תווים מיוחדים (!@#$%^&*)"
   },
   "numWords": {
-    "message": "מספר מילים"
+    "message": "כמות מילים"
   },
   "wordSeparator": {
     "message": "מפריד מילים"
@@ -458,28 +461,28 @@
     "message": "צרף קובץ חדש"
   },
   "deletedAttachment": {
-    "message": "קובץ מצורף שנמחק"
+    "message": "הקובץ המצורף נמחק"
   },
   "deleteAttachmentConfirmation": {
     "message": "האם אתה בטוח שברצונך למחוק קובץ מצורף זה?"
   },
   "attachmentSaved": {
-    "message": "הקובץ המצורף נשמר."
+    "message": "הקובץ המצורף נשמר"
   },
   "file": {
     "message": "קובץ"
   },
   "selectFile": {
-    "message": "בחירת קובץ."
+    "message": "בחר קובץ"
   },
   "maxFileSize": {
     "message": "גודל הקובץ המירבי הוא 500 מגה."
   },
-  "updateKey": {
-    "message": "לא ניתן להשתמש ביכולת זו עד שתעדכן את מפתח ההצפנה שלך."
+  "encryptionKeyMigrationRequired": {
+    "message": "נדרשת הסבת מפתח הצפנה. נא להיכנס דרך הכספת לאתרים כדי לעדכן את מפתח ההצפנה שלך."
   },
   "editedFolder": {
-    "message": "תיקיה שנערכה"
+    "message": "תיקייה שנשמרה"
   },
   "addedFolder": {
     "message": "תיקיה שנוספה"
@@ -488,7 +491,7 @@
     "message": "האם אתה בטוח שברצונך למחוק את התיקייה?"
   },
   "deletedFolder": {
-    "message": "תיקיה שנמחקה"
+    "message": "תיקייה נמחקה"
   },
   "loginOrCreateNewAccount": {
     "message": "היכנס או צור חשבון חדש כדי לגשת לכספת המאובטחת שלך."
@@ -536,13 +539,13 @@
     "message": "כתובת אימייל לא תקינה."
   },
   "masterPasswordRequired": {
-    "message": "הסיסמה הראשית נדרשת."
+    "message": "יש להזין את הסיסמה הראשית."
   },
   "confirmMasterPasswordRequired": {
-    "message": "נדרשת חזרה על הסיסמה הראשית."
+    "message": "יש להזין את הסיסמה הראשית שוב."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "הסיסמת הראשית חייבת להכיל $VALUE$ תווים לפחות.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -557,6 +560,12 @@
   "newAccountCreated": {
     "message": "החשבון החדש שלך נוצר בהצלחה! כעת ניתן להתחבר למערכת."
   },
+  "youSuccessfullyLoggedIn": {
+    "message": "נכנסת בהצלחה"
+  },
+  "youMayCloseThisWindow": {
+    "message": "אפשר לסגור את החלון הזה"
+  },
   "masterPassSent": {
     "message": "שלחנו לך אימייל עם רמז לסיסמה הראשית."
   },
@@ -570,10 +579,10 @@
     "message": "אין פריטים להצגה ברשימה."
   },
   "sendVerificationCode": {
-    "message": "שליחת קוד אימות לדוא״ל שלך"
+    "message": "שלח קוד אימות לאימייל שלך"
   },
   "sendCode": {
-    "message": "שליחת קוד"
+    "message": "שלח קוד"
   },
   "codeSent": {
     "message": "קוד נשלח"
@@ -582,7 +591,7 @@
     "message": "קוד אימות"
   },
   "confirmIdentity": {
-    "message": "יש לאשר את זהותך כדי להמשיך."
+    "message": "אשר את זהותך כדי להמשיך."
   },
   "verificationCodeRequired": {
     "message": "נדרש קוד אימות."
@@ -630,7 +639,7 @@
     "message": "הכנס את מפתח האבטחה שלך אל כניסת ה-USB במחשבך. אם יש לו כפתור, גע בו."
   },
   "recoveryCodeDesc": {
-    "message": "איבדת גישה לכל ספקי האימות הדו-שלבי שלך? השתמש בקוד האימות כדי לבטל את הספקים הקיימים מתוך החשבון שלך."
+    "message": "איבדת גישה לכל ספקי האימות הדו-שלבי שלך? השתמש בקוד שחזור כדי לבטל את כל הספקים הקיימים בחשבונך."
   },
   "recoveryCodeTitle": {
     "message": "קוד שחזור"
@@ -660,7 +669,7 @@
     "message": "FIDO2 WebAuthn"
   },
   "webAuthnDesc": {
-    "message": "השתמש בכל מפתח אבטחה המותאם ל- WebAuthn כדי לגשת לחשבונך."
+    "message": "השתמש במפתח אבטחה התומך בWebAuthn כדי לגשת לחשבונך."
   },
   "emailTitle": {
     "message": "אימייל"
@@ -672,7 +681,7 @@
     "message": "פרטי כניסה לא זמינים"
   },
   "noTwoStepProviders": {
-    "message": "כניסה דו-שלבית פעילה בחשבון זה, אך אף אחד מספקי הכניסה הדו-שלבית לא נתמכים במכשיר זה."
+    "message": "בחשבון זה כניסה דו-שלבית מאופשרת, אך כל ספקי הכניסה שהוגדרו, לא נתמכים במכשיר זה."
   },
   "noTwoStepProviders2": {
     "message": "אנא הוסף ספקים אחרים שיש להם תמיכה במכשירים נוספים (לדוגמא - אפליקציית אימות)."
@@ -711,7 +720,7 @@
     "message": "כתובת שרת אייקונים"
   },
   "environmentSaved": {
-    "message": "כתובות הסביבה נשמרו."
+    "message": "כתובות הסביבה נשמרו"
   },
   "ok": {
     "message": "אישור"
@@ -744,13 +753,13 @@
     "message": "התנתק"
   },
   "addNewLogin": {
-    "message": "הוסף פרטי כניסה חדשה"
+    "message": "פרטי התחברות חדשים"
   },
   "addNewItem": {
-    "message": "הוספת פריט חדש"
+    "message": "פריט חדש"
   },
   "addNewFolder": {
-    "message": "הוספת תיקייה חדשה"
+    "message": "תיקייה חדשה"
   },
   "view": {
     "message": "הצג"
@@ -762,16 +771,19 @@
     "message": "טוען..."
   },
   "lockVault": {
-    "message": "נעילת כספת"
+    "message": "נעל את הכספת"
   },
   "passwordGenerator": {
     "message": "יוצר הסיסמאות"
   },
   "contactUs": {
-    "message": "יצירת קשר אתנו"
+    "message": "צור קשר"
+  },
+  "helpAndFeedback": {
+    "message": "עזרה ומשוב"
   },
   "getHelp": {
-    "message": "קבלת עזרה"
+    "message": "קבל עזרה"
   },
   "fileBugReport": {
     "message": "דווח על באג"
@@ -783,13 +795,16 @@
     "message": "עקוב אחרינו"
   },
   "syncVault": {
-    "message": "סנכרן כספת"
+    "message": "סנכרון כספת"
   },
   "changeMasterPass": {
     "message": "החלף סיסמה ראשית"
   },
-  "changeMasterPasswordConfirmation": {
-    "message": "באפשרותך לשנות את הסיסמה הראשית שלך דרך הכספת באתר bitwarden.com. האם ברצונך לפתוח את האתר כעת?"
+  "continueToWebApp": {
+    "message": "Continue to web app?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "You can change your master password on the Bitwarden web app."
   },
   "fingerprintPhrase": {
     "message": "סיסמת טביעת אצבע",
@@ -815,7 +830,7 @@
     "message": "הסינכרון נכשל"
   },
   "yourVaultIsLocked": {
-    "message": "הכספת שלך נעולה. הזן את הסיסמה הראשית שלך כדי להמשיך."
+    "message": "הכספת שלך נעולה. אמת את זהותך כדי להמשיך."
   },
   "unlock": {
     "message": "בטל נעילה"
@@ -837,13 +852,13 @@
     "message": "סיסמה ראשית שגויה"
   },
   "twoStepLoginConfirmation": {
-    "message": "התחברות בשני-שלבים הופכת את החשבון שלך למאובטח יותר בכך שאתה נדרש לוודא בכל כניסה בעזרת מכשיר אחר כדוגמת מפתח אבטחה, תוכנת אימות, SMS, שיחת טלפון, או אימייל. ניתן להפעיל את \"התחברות בשני-שלבים\" בכספת שבאתר bitwarden.com. האם ברצונך לפתוח את האתר כעת?"
+    "message": "אימות דו שלבי הופך את החשבון שלך למאובטח יותר בכך שתצטרך לאשר התחברות בעזרת מפתח אבטחה, תוכנת אימות, SMS, שיחת טלפון, או אימייל. ניתן להפעיל את \"אימות דו שלבי\" בכספת שבאתר bitwarden.com. האם ברצונך לפתוח את האתר כעת?"
   },
   "twoStepLogin": {
-    "message": "התחברות בשני-שלבים"
+    "message": "אימות דו שלבי להתחברות"
   },
   "vaultTimeout": {
-    "message": "משך זמן מירבי עבור חיבור לכספת"
+    "message": "סגירת כספת אוטומטית"
   },
   "vaultTimeoutDesc": {
     "message": "בחר כמה זמן יעבור כדי שהכספת תסגר לאחר חוסר פעילות ותבצע את הפעולה שנבחרה."
@@ -911,7 +926,7 @@
     "message": "הצג סמלים של אתרי האינטרננט"
   },
   "faviconDesc": {
-    "message": "בכל נסיון התחברות הצג תמונה לזיהוי."
+    "message": "הצג תמונה מוכרת בכל נסיון התחברות."
   },
   "enableMinToTray": {
     "message": "מזער למגש המערכת"
@@ -920,10 +935,10 @@
     "message": "בלחיצה על מזעור החלון, יופיע אייקון במגש המערכת (לרוב, ליד השעון)."
   },
   "enableMinToMenuBar": {
-    "message": "מזער למגש המערכת"
+    "message": "מזער לשורת התפריטים"
   },
   "enableMinToMenuBarDesc": {
-    "message": "במזעור חלון, הצג סמל במגש המערכת."
+    "message": "בלחיצה על מזעור החלון, יופיע אייקון בשורת התפריטים."
   },
   "enableCloseToTray": {
     "message": "סגור למגש המערכת"
@@ -932,10 +947,10 @@
     "message": "בלחיצה על סגירת החלון, יופיע אייקון במגש המערכת (לרוב, ליד השעון)."
   },
   "enableCloseToMenuBar": {
-    "message": "סגור למגש המערכת"
+    "message": "סגור לשורת התפריטים"
   },
   "enableCloseToMenuBarDesc": {
-    "message": "בעת סגירת חלון, הצג סמל במגש המערכת."
+    "message": "בעת סגירת חלון, הצג סמל בשורת התפריטים."
   },
   "enableTray": {
     "message": "אפשר אייקון במגש המערכת"
@@ -1074,8 +1089,8 @@
   "premiumSignUpStorage": {
     "message": "1 ג'יגה של מקום אחסון מוצפן עבור קבצים מצורפים."
   },
-  "premiumSignUpTwoStep": {
-    "message": "אפשרויות כניסה דו שלבית מתקדמות כמו YubiKey, FIDO U2F, וDuo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "אפשרויות כניסה דו שלבית קנייניות כמו YubiKey ו־Duo."
   },
   "premiumSignUpReports": {
     "message": "היגיינת סיסמאות, מצב בריאות החשבון, ודיווחים מעודכנים על פרצות חדשות בכדי לשמור על הכספת שלך בטוחה."
@@ -1269,7 +1284,7 @@
     "message": "הסתר למגש המערכת"
   },
   "alwaysOnTop": {
-    "message": "תמיד מעל כל החלונות",
+    "message": "תמיד עליון",
     "description": "Application window should always stay on top of other windows"
   },
   "dateUpdated": {
@@ -1288,28 +1303,28 @@
     "message": "יצוא כספת"
   },
   "fileFormat": {
-    "message": "פורמט קובץ"
+    "message": "תבנית קובץ"
   },
   "hCaptchaUrl": {
     "message": "כתובת אתר hCaptcha",
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "loadAccessibilityCookie": {
-    "message": "טען עוגיות נגישות Cookie"
+    "message": "טען עוגיית נגישות"
   },
   "registerAccessibilityUser": {
     "message": "הירשם כמשתמש נגישות ב-",
     "description": "ex. Register as an accessibility user at hcaptcha.com"
   },
   "copyPasteLink": {
-    "message": "Copy והדבק את הקישור sent ל-email שלך למטה"
+    "message": "העתק והדבק את הקישור שנשלח לאימייל שלך"
   },
   "enterhCaptchaUrl": {
-    "message": "הזן את כתובת האתר לטעינת קובץ Cookie של נגישות עבור hCaptcha",
+    "message": "הזן את כתובת האתר לטעינת עוגיית נגישות עבור hCaptcha",
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "hCaptchaUrlRequired": {
-    "message": "נדרשת כתובת אתר hCaptcha",
+    "message": "יש להזין את כתובת האתר hCaptcha",
     "description": "hCaptcha is the name of a website, should not be translated"
   },
   "invalidUrl": {
@@ -1319,10 +1334,10 @@
     "message": "בוצע"
   },
   "accessibilityCookieSaved": {
-    "message": "קובץ Cookie הנגישות נשמר!"
+    "message": "עוגיית הנגישות נשמרה!"
   },
   "noAccessibilityCookieSaved": {
-    "message": "לא נשמרה קובץ Cookie של נגישות"
+    "message": "עוגיית הנגישות לא נשמרה"
   },
   "warning": {
     "message": "אזהרה",
@@ -1335,7 +1350,7 @@
     "message": "הקובץ מכיל את פרטי הכספת שלך בפורמט לא מוצפן. מומלץ להעביר את הקובץ רק בדרכים מוצפנות, ומאוד לא מומלץ לשמור או לשלוח את הקובץ הזה בדרכים לא מוצפנות (כדוגמת סתם אימייל). מחק את הקובץ מיד לאחר שסיימת את השימוש בו."
   },
   "encExportKeyWarningDesc": {
-    "message": "ייצוא זה מצפין את הנתונים שלך באמצעות מפתח ההצפנה של חשבונך. אם אי פעם תחדש את מפתח ההצפנה עבור חשבונך, יהיה עליך לייצא שוב מכיוון שלא תוכל לפענח מקובץ ייצוא זה."
+    "message": "יצוא זה מצפין את המידע שלך בעזרת מפתח ההצפנה הנוכחי שלך. אם תחליף (rotate) את מפתחות ההצפנה של החשבון שלך, עליך לבצע ייצוא חדש משום שלא תוכל לפענח את הקובץ הקיים."
   },
   "encExportAccountWarningDesc": {
     "message": "מפתחות הצפנת חשבון ייחודיים לכל חשבון משתמש של Bitwarden, כך שלא ניתן לייבא ייצוא מוצפן לחשבון אחר."
@@ -1386,8 +1401,14 @@
   "invalidPin": {
     "message": "קוד PIN לא תקין."
   },
+  "tooManyInvalidPinEntryAttemptsLoggingOut": {
+    "message": "יותר מדי ניסיונות שגויים להקלדת קוד אישי. יצאת מהמערכת."
+  },
   "unlockWithWindowsHello": {
     "message": "שחרור נעילה עם Windows Hello"
+  },
+  "additionalWindowsHelloSettings": {
+    "message": "הגדרות נוספות של Windows Hello"
   },
   "windowsHelloConsentMessage": {
     "message": "אימות עבור Bitwarden."
@@ -1395,14 +1416,23 @@
   "unlockWithTouchId": {
     "message": "שחרור נעילה עם Touch ID"
   },
+  "additionalTouchIdSettings": {
+    "message": "הגדרות Touch ID נוספות"
+  },
   "touchIdConsentMessage": {
     "message": "פתח את הכספת שלך"
   },
   "autoPromptWindowsHello": {
-    "message": "הצג בקשה של Windows Hello בעת האתחול"
+    "message": "הצג את Windows Hello בפתיחת האפליקציה"
   },
   "autoPromptTouchId": {
-    "message": "הצג בקשה של Touch ID בעת האתחול"
+    "message": "הצג בקשה של Touch ID בפתיחת האפליקציה"
+  },
+  "requirePasswordOnStart": {
+    "message": "לדרוש סיסמה או קוד אישי עם הפעלת היישום"
+  },
+  "recommendedForSecurity": {
+    "message": "מומלץ לשיפור אבטחת מידע."
   },
   "lockWithMasterPassOnRestart": {
     "message": "נעל בעזרת הסיסמה הראשית בהפעלה מחדש"
@@ -1411,10 +1441,10 @@
     "message": "מחק חשבון"
   },
   "deleteAccountDesc": {
-    "message": "המשך למטה כדי למחוק את חשבונך ואת כל נתוני הכספת."
+    "message": "המשך כאן בכדי למחוק את החשבון שלך וכל המידע שבכספת."
   },
   "deleteAccountWarning": {
-    "message": "מחיקת החשבון שלך היא לצמיתות. אי אפשר לבטל את זה."
+    "message": "מחיקת חשבון היא פעולה בלתי הפיכה."
   },
   "accountDeleted": {
     "message": "החשבון נמחק"
@@ -1426,13 +1456,13 @@
     "message": "העדפות"
   },
   "enableMenuBar": {
-    "message": "אפשר אייקון בתפריט"
+    "message": "הצג אייקון בשורת התפריטים"
   },
   "enableMenuBarDesc": {
     "message": "הצג תמיד אייקון בתפריט."
   },
   "hideToMenuBar": {
-    "message": "הסתר לתפריט"
+    "message": "הסתר לשורת התפריטים"
   },
   "selectOneCollection": {
     "message": "עליך לבחור לפחות אוסף אחד."
@@ -1472,10 +1502,13 @@
     "message": "פעולה לביצוע בכספת בתום זמן החיבור"
   },
   "vaultTimeoutActionLockDesc": {
-    "message": "כספת נעולה דורשת שתזין את הסיסמה הראשית בכדי לגשת לפרטים שבתוכה."
+    "message": "יש להשתמש בסיסמה הראשית או בשיטת פתיחה אחרת כדי לגשת לכספת שוב."
   },
   "vaultTimeoutActionLogOutDesc": {
-    "message": "בכדי לקבל גישה לכספת שיצאו ממנה, יש לבצע אימות מחדש."
+    "message": "יש לבצע אימות מחדש כדי לגשת לכספת שוב."
+  },
+  "unlockMethodNeededToChangeTimeoutActionDesc": {
+    "message": "יש להגדיר שיטת שחרור נעילה כדי לשנות את פעולת תום הזמן של הכספת שלך."
   },
   "lock": {
     "message": "נעילה",
@@ -1497,12 +1530,6 @@
   "permanentlyDeletedItem": {
     "message": "פריט שנמחק לצמיתות"
   },
-  "restoreItem": {
-    "message": "שחזר פריט"
-  },
-  "restoreItemConfirmation": {
-    "message": "האם אתה בטוח שברצונך לשחזר פריט זה?"
-  },
   "restoredItem": {
     "message": "פריט ששוחזר"
   },
@@ -1521,8 +1548,20 @@
   "setMasterPassword": {
     "message": "הגדרת סיסמה ראשית"
   },
-  "ssoCompleteRegistration": {
-    "message": "כדי להשלים את הכניסה עם SSO, נא להגדיר סיסמה ראשית כדי לגשת ולהגן על הכספת שלך."
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "Your organization permissions were updated, requiring you to set a master password.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "Your organization requires you to set a master password.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "verificationRequired": {
+    "message": "נדרש אימות",
+    "description": "Default title for the user verification dialog."
+  },
+  "currentMasterPass": {
+    "message": "Current master password"
   },
   "newMasterPass": {
     "message": "סיסמה ראשית חדשה"
@@ -1593,6 +1632,12 @@
   "browserIntegrationUnsupportedTitle": {
     "message": "שילוב הדפדפן אינו נתמך"
   },
+  "browserIntegrationErrorTitle": {
+    "message": "Error enabling browser integration"
+  },
+  "browserIntegrationErrorDesc": {
+    "message": "An error has occurred while enabling browser integration."
+  },
   "browserIntegrationMasOnlyDesc": {
     "message": "למצער, אינטגרצייה עם הדפדפן בשלב זה נתמכת רק על ידי גרסת חנות האפליקציות של מקינטוש."
   },
@@ -1607,6 +1652,12 @@
   },
   "enableBrowserIntegrationFingerprintDesc": {
     "message": "הפעל שכבת אבטחה נוספת באמצעות בקשת אימות טביעות אצבע בעת יצירת קישור בין שולחן העבודה לדפדפן. כשהוא מופעל, זה דורש התערבות ואימות משתמש בכל פעם שנוצר חיבור."
+  },
+  "enableHardwareAcceleration": {
+    "message": "להשתמש בהאצת חומרה"
+  },
+  "enableHardwareAccelerationDesc": {
+    "message": "ההגדרה הזאת פעילה כברירת מחדל. יש לכבות רק אם יש כל מיני תקלות גרפיות. צריך להפעיל מחדש."
   },
   "approve": {
     "message": "לְאַשֵׁר"
@@ -1646,6 +1697,9 @@
   },
   "personalOwnershipPolicyInEffect": {
     "message": "מדיניות ארגון מסויימת משפיעה על אפשרויות הבעלות."
+  },
+  "personalOwnershipPolicyInEffectImports": {
+    "message": "An organization policy has blocked importing items into your individual vault."
   },
   "allSends": {
     "message": "כל השליחות",
@@ -1840,6 +1894,45 @@
   "updateMasterPasswordWarning": {
     "message": "הסיסמה הראשית שלך שונתה לאחרונה על ידי מנהל הארגון שלך. כדי לגשת לכספת, עליך לעדכן אותה כעת. בהמשך תנותק מההפעלה הנוכחית שלך ותידרש להיכנס שוב. הפעלות אחרות הפתוחות במכשירים שונים ימשיכו להיות פעילים עד משך שעה אחת."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+  },
+  "tryAgain": {
+    "message": "לנסות שוב"
+  },
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "צריך אימות לביצוע הפעולה הזאת. נא להגדיר קוד אישי כדי להמשיך."
+  },
+  "setPin": {
+    "message": "הגדרת קוד אישי"
+  },
+  "verifyWithBiometrics": {
+    "message": "אימות עם זיהוי ביומטרי"
+  },
+  "awaitingConfirmation": {
+    "message": "בהמתנה לאישור"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "לא ניתן להשלים את האימות הביומטרי."
+  },
+  "needADifferentMethod": {
+    "message": "עדיף שיטה אחרת?"
+  },
+  "useMasterPassword": {
+    "message": "להשתמש בסיסמה ראשית"
+  },
+  "usePin": {
+    "message": "להשתמש בקוד אישי"
+  },
+  "useBiometrics": {
+    "message": "להשתמש בזיהוי ביומטרי"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "נא למלא את קוד האימות שנשלח לכתובת הדוא״ל שלך."
+  },
+  "resendCode": {
+    "message": "שליחת הקוד מחדש"
+  },
   "hours": {
     "message": "שעות"
   },
@@ -1856,6 +1949,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1940,8 +2059,8 @@
   "exportingPersonalVaultTitle": {
     "message": "הכספת האישית מיוצאת"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "רק פריטי הכספת האישית שמשויכת עם $EMAIL$ ייוצאו. פריטי הכספת הארגוניים לא יהיו חלק מהייצוא.",
+  "exportingIndividualVaultDescription": {
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2035,9 +2154,6 @@
   "neverLockWarning": {
     "message": "האם אתה בטוח שברצונך להשתמש באפשרות \"לעולם לא\"? על ידי הגדרת אפשרויות הנעילה ל\"לעולם לא\", מפתח ההצפנה של הכספת שלך יישמר במכשיר שלך. אם אתה משתמש באפשרות זו, ודא שאתה שומר על המכשיר שלך מוגן כראוי."
   },
-  "cardBrandMir": {
-    "message": "Mir"
-  },
   "vault": {
     "message": "כספת"
   },
@@ -2068,36 +2184,36 @@
   "logInWithAnotherDevice": {
     "message": "התחבר עם מכשיר אחר"
   },
-  "logInInitiated": {
-    "message": "Log in initiated"
+  "loginInitiated": {
+    "message": "Login initiated"
   },
   "notificationSentDevice": {
-    "message": "A notification has been sent to your device."
+    "message": "התראה נשלחה למכשירך."
   },
   "fingerprintMatchInfo": {
-    "message": "Please make sure your vault is unlocked and Fingerprint phrase matches the other device."
+    "message": "וודא שהכספת שלך לא נעולה ושם המזהה שלך מתאים למכשיר השני."
   },
   "fingerprintPhraseHeader": {
-    "message": "Fingerprint phrase"
+    "message": "שם מזהה"
   },
   "needAnotherOption": {
-    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+    "message": "התחברות עם מכשיר צריכה להיות מוגדרת בהגדרות האפליקציה. זקוק/ה לאפשרות נוספת?"
   },
   "viewAllLoginOptions": {
-    "message": "View all login options"
+    "message": "צפייה בכל אפשרות ההתחברות"
   },
   "resendNotification": {
-    "message": "Resend notification"
+    "message": "שליחת התראה מחדש"
   },
   "toggleCharacterCount": {
     "message": "החלפת מצב ספירת תווים",
     "description": "'Character count' describes a feature that displays a number next to each character of the password."
   },
   "areYouTryingtoLogin": {
-    "message": "Are you trying to log in?"
+    "message": "האם את/ה מנסה להתחבר? "
   },
   "logInAttemptBy": {
-    "message": "Login attempt by $EMAIL$",
+    "message": "ניסיון התחברות של $EMAIL$",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2106,25 +2222,25 @@
     }
   },
   "deviceType": {
-    "message": "Device Type"
+    "message": "סוג מכשיר"
   },
   "ipAddress": {
-    "message": "IP Address"
+    "message": "‏כתובת IP"
   },
   "time": {
-    "message": "Time"
+    "message": "זמן"
   },
   "confirmLogIn": {
-    "message": "Confirm login"
+    "message": "אישור ההתחברות"
   },
   "denyLogIn": {
-    "message": "Deny login"
+    "message": "ביטול התחברות"
   },
   "approveLoginRequests": {
-    "message": "Approve login requests"
+    "message": "אישור בקשות התחברות"
   },
   "logInConfirmedForEmailOnDevice": {
-    "message": "Login confirmed for $EMAIL$ on $DEVICE$",
+    "message": "התחברות אושרה עבור $EMAIL$ במכשיר $DEVICE$",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2188,7 +2304,7 @@
     "message": "Check known data breaches for this password"
   },
   "important": {
-    "message": "Important:"
+    "message": "חשוב:"
   },
   "masterPasswordHint": {
     "message": "Your master password cannot be recovered if you forget it!"
@@ -2201,5 +2317,408 @@
         "example": "14"
       }
     }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden recommends updating your biometric settings to require your master password (or PIN) on the first unlock. Would you like to update your settings now?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Recommended Settings Update"
+  },
+  "deviceApprovalRequired": {
+    "message": "Device approval required. Select an approval option below:"
+  },
+  "rememberThisDevice": {
+    "message": "Remember this device"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "Uncheck if using a public device"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "Approve from your other device"
+  },
+  "requestAdminApproval": {
+    "message": "Request admin approval"
+  },
+  "approveWithMasterPassword": {
+    "message": "Approve with master password"
+  },
+  "region": {
+    "message": "Region"
+  },
+  "ssoIdentifierRequired": {
+    "message": "Organization SSO identifier is required."
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "loggingInOn": {
+    "message": "Logging in on"
+  },
+  "selfHostedServer": {
+    "message": "self-hosted"
+  },
+  "accessDenied": {
+    "message": "Access denied. You do not have permission to view this page."
+  },
+  "accountSuccessfullyCreated": {
+    "message": "Account successfully created!"
+  },
+  "adminApprovalRequested": {
+    "message": "Admin approval requested"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "Your request has been sent to your admin."
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "You will be notified once approved."
+  },
+  "troubleLoggingIn": {
+    "message": "Trouble logging in?"
+  },
+  "loginApproved": {
+    "message": "Login approved"
+  },
+  "userEmailMissing": {
+    "message": "User email missing"
+  },
+  "deviceTrusted": {
+    "message": "Device trusted"
+  },
+  "inputRequired": {
+    "message": "Input is required."
+  },
+  "required": {
+    "message": "required"
+  },
+  "search": {
+    "message": "Search"
+  },
+  "inputMinLength": {
+    "message": "Input must be at least $COUNT$ characters long.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxLength": {
+    "message": "Input must not exceed $COUNT$ characters in length.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "inputForbiddenCharacters": {
+    "message": "The following characters are not allowed: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "Input value must be at least $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "Input value must not exceed $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
+  },
+  "multipleInputEmails": {
+    "message": "1 or more emails are invalid"
+  },
+  "inputTrimValidator": {
+    "message": "Input must not contain only whitespace.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
+  "inputEmail": {
+    "message": "Input is not an email address."
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ field(s) above need your attention.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "selectPlaceholder": {
+    "message": "-- Select --"
+  },
+  "multiSelectPlaceholder": {
+    "message": "-- Type to filter --"
+  },
+  "multiSelectLoading": {
+    "message": "Retrieving options..."
+  },
+  "multiSelectNotFound": {
+    "message": "No items found"
+  },
+  "multiSelectClearAll": {
+    "message": "Clear all"
+  },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ more",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "submenu": {
+    "message": "Submenu"
+  },
+  "skipToContent": {
+    "message": "Skip to content"
+  },
+  "typePasskey": {
+    "message": "Passkey"
+  },
+  "passkeyNotCopied": {
+    "message": "Passkey will not be copied"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "The passkey will not be copied to the cloned item. Do you want to continue cloning this item?"
+  },
+  "aliasDomain": {
+    "message": "Alias domain"
+  },
+  "importData": {
+    "message": "Import data",
+    "description": "Used for the desktop menu item and the header of the import dialog"
+  },
+  "importError": {
+    "message": "Import error"
+  },
+  "importErrorDesc": {
+    "message": "There was a problem with the data you tried to import. Please resolve the errors listed below in your source file and try again."
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Resolve the errors below and try again."
+  },
+  "description": {
+    "message": "Description"
+  },
+  "importSuccess": {
+    "message": "Data successfully imported"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "A total of $AMOUNT$ items were imported.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "total": {
+    "message": "Total"
+  },
+  "importWarning": {
+    "message": "You are importing data to $ORGANIZATION$. Your data may be shared with members of this organization. Do you want to proceed?",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "Launch Duo and follow the steps to finish logging in."
+  },
+  "duoRequiredByOrgForAccount": {
+    "message": "Duo two-step login is required for your account."
+  },
+  "launchDuo": {
+    "message": "Launch Duo in Browser"
+  },
+  "importFormatError": {
+    "message": "Data is not formatted correctly. Please check your import file and try again."
+  },
+  "importNothingError": {
+    "message": "Nothing was imported."
+  },
+  "importEncKeyError": {
+    "message": "Error decrypting the exported file. Your encryption key does not match the encryption key used export the data."
+  },
+  "invalidFilePassword": {
+    "message": "Invalid file password, please use the password you entered when you created the export file."
+  },
+  "importDestination": {
+    "message": "Import destination"
+  },
+  "learnAboutImportOptions": {
+    "message": "Learn about your import options"
+  },
+  "selectImportFolder": {
+    "message": "Select a folder"
+  },
+  "selectImportCollection": {
+    "message": "Select a collection"
+  },
+  "importTargetHint": {
+    "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "File contains unassigned items."
+  },
+  "selectFormat": {
+    "message": "Select the format of the import file"
+  },
+  "selectImportFile": {
+    "message": "Select the import file"
+  },
+  "chooseFile": {
+    "message": "Choose File"
+  },
+  "noFileChosen": {
+    "message": "No file chosen"
+  },
+  "orCopyPasteFileContents": {
+    "message": "or copy/paste the import file contents"
+  },
+  "instructionsFor": {
+    "message": "$NAME$ Instructions",
+    "description": "The title for the import tool instructions.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "LastPass (csv)"
+      }
+    }
+  },
+  "confirmVaultImport": {
+    "message": "Confirm vault import"
+  },
+  "confirmVaultImportDesc": {
+    "message": "This file is password-protected. Please enter the file password to import data."
+  },
+  "confirmFilePassword": {
+    "message": "Confirm file password"
+  },
+  "multifactorAuthenticationCancelled": {
+    "message": "Multifactor authentication cancelled"
+  },
+  "noLastPassDataFound": {
+    "message": "No LastPass data found"
+  },
+  "incorrectUsernameOrPassword": {
+    "message": "Incorrect username or password"
+  },
+  "incorrectPassword": {
+    "message": "סיסמה שגויה"
+  },
+  "incorrectCode": {
+    "message": "קוד שגוי"
+  },
+  "incorrectPin": {
+    "message": "קוד אישי שגוי"
+  },
+  "multifactorAuthenticationFailed": {
+    "message": "Multifactor authentication failed"
+  },
+  "includeSharedFolders": {
+    "message": "Include shared folders"
+  },
+  "lastPassEmail": {
+    "message": "LastPass Email"
+  },
+  "importingYourAccount": {
+    "message": "Importing your account..."
+  },
+  "lastPassMFARequired": {
+    "message": "LastPass multifactor authentication required"
+  },
+  "lastPassMFADesc": {
+    "message": "Enter your one-time passcode from your authentication app"
+  },
+  "lastPassOOBDesc": {
+    "message": "Approve the login request in your authentication app or enter a one-time passcode."
+  },
+  "passcode": {
+    "message": "Passcode"
+  },
+  "lastPassMasterPassword": {
+    "message": "LastPass master password"
+  },
+  "lastPassAuthRequired": {
+    "message": "LastPass authentication required"
+  },
+  "awaitingSSO": {
+    "message": "Awaiting SSO authentication"
+  },
+  "awaitingSSODesc": {
+    "message": "Please continue to log in using your company credentials."
+  },
+  "seeDetailedInstructions": {
+    "message": "See detailed instructions on our help site at",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "importDirectlyFromLastPass": {
+    "message": "Import directly from LastPass"
+  },
+  "importFromCSV": {
+    "message": "Import from CSV"
+  },
+  "lastPassTryAgainCheckEmail": {
+    "message": "Try again or look for an email from LastPass to verify it's you."
+  },
+  "collection": {
+    "message": "Collection"
+  },
+  "lastPassYubikeyDesc": {
+    "message": "Insert the YubiKey associated with your LastPass account into your computer's USB port, then touch its button."
+  },
+  "commonImportFormats": {
+    "message": "תסדירים נפוצים",
+    "description": "Label indicating the most common import formats"
+  },
+  "success": {
+    "message": "Success"
+  },
+  "troubleshooting": {
+    "message": "Troubleshooting"
+  },
+  "disableHardwareAccelerationRestart": {
+    "message": "Disable hardware acceleration and restart"
+  },
+  "enableHardwareAccelerationRestart": {
+    "message": "Enable hardware acceleration and restart"
+  },
+  "removePasskey": {
+    "message": "Remove passkey"
+  },
+  "passkeyRemoved": {
+    "message": "Passkey removed"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Error assigning target collection."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Error assigning target folder."
   }
 }

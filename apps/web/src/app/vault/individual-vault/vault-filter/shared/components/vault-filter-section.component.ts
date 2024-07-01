@@ -1,8 +1,9 @@
 import { Component, InjectionToken, Injector, Input, OnDestroy, OnInit } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { Observable, Subject, takeUntil } from "rxjs";
+import { map } from "rxjs/operators";
 
-import { Organization } from "@bitwarden/common/models/domain/organization";
-import { ITreeNodeObject, TreeNode } from "@bitwarden/common/models/domain/tree-node";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { ITreeNodeObject, TreeNode } from "@bitwarden/common/vault/models/domain/tree-node";
 
 import { VaultFilterService } from "../../services/abstractions/vault-filter.service";
 import { VaultFilterSection, VaultFilterType } from "../models/vault-filter-section.type";
@@ -14,6 +15,7 @@ import { VaultFilter } from "../models/vault-filter.model";
 })
 export class VaultFilterSectionComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
+  protected flexibleCollectionsEnabled: boolean;
 
   @Input() activeFilter: VaultFilter;
   @Input() section: VaultFilterSection;
@@ -23,7 +25,10 @@ export class VaultFilterSectionComponent implements OnInit, OnDestroy {
 
   private injectors = new Map<string, Injector>();
 
-  constructor(private vaultFilterService: VaultFilterService, private injector: Injector) {
+  constructor(
+    private vaultFilterService: VaultFilterService,
+    private injector: Injector,
+  ) {
     this.vaultFilterService.collapsedFilterNodes$
       .pipe(takeUntil(this.destroy$))
       .subscribe((nodes) => {
@@ -31,10 +36,16 @@ export class VaultFilterSectionComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.section?.data$?.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       this.data = data;
     });
+    this.vaultFilterService
+      .getOrganizationFilter()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((org) => {
+        this.flexibleCollectionsEnabled = org != null ? org.flexibleCollections : false;
+      });
   }
 
   ngOnDestroy() {
@@ -63,11 +74,19 @@ export class VaultFilterSectionComponent implements OnInit, OnDestroy {
   }
 
   isNodeSelected(filterNode: TreeNode<VaultFilterType>) {
+    const { organizationId, cipherTypeId, folderId, collectionId, isCollectionSelected } =
+      this.activeFilter;
+
+    const collectionStatus = this.flexibleCollectionsEnabled
+      ? filterNode?.node.id === "AllCollections" &&
+        (isCollectionSelected || collectionId === "AllCollections")
+      : collectionId === filterNode?.node.id;
+
     return (
-      this.activeFilter.organizationId === filterNode?.node.id ||
-      this.activeFilter.cipherTypeId === filterNode?.node.id ||
-      this.activeFilter.folderId === filterNode?.node.id ||
-      this.activeFilter.collectionId === filterNode?.node.id
+      organizationId === filterNode?.node.id ||
+      cipherTypeId === filterNode?.node.id ||
+      folderId === filterNode?.node.id ||
+      collectionStatus
     );
   }
 
@@ -85,10 +104,6 @@ export class VaultFilterSectionComponent implements OnInit, OnDestroy {
 
   get addInfo() {
     return this.section.add;
-  }
-
-  get showAddButton() {
-    return this.section.add && !this.section.add.route;
   }
 
   get showAddLink() {
@@ -124,9 +139,15 @@ export class VaultFilterSectionComponent implements OnInit, OnDestroy {
   // here we are creating a new injector for each filter that has options
   createInjector(data: VaultFilterType) {
     let inject = this.injectors.get(data.id);
+
     if (!inject) {
+      // Pass an observable to the component in order to update the component when the data changes
+      // as data binding does not work with dynamic components in Angular 15 (inputs are supported starting Angular 16)
+      const data$ = this.section.data$.pipe(
+        map((sectionNode) => sectionNode?.children?.find((node) => node.node.id === data.id)?.node),
+      );
       inject = Injector.create({
-        providers: [{ provide: OptionsInput, useValue: data }],
+        providers: [{ provide: OptionsInput, useValue: data$ }],
         parent: this.injector,
       });
       this.injectors.set(data.id, inject);
@@ -134,4 +155,4 @@ export class VaultFilterSectionComponent implements OnInit, OnDestroy {
     return inject;
   }
 }
-export const OptionsInput = new InjectionToken<VaultFilterType>("OptionsInput");
+export const OptionsInput = new InjectionToken<Observable<VaultFilterType>>("OptionsInput");

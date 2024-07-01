@@ -1,0 +1,92 @@
+<app-header></app-header>
+
+<bit-container>
+  <p>{{ "unsecuredWebsitesReportDesc" | i18n }}</p>
+  <div *ngIf="!hasLoaded && loading">
+    <i
+      class="bwi bwi-spinner bwi-spin text-muted"
+      title="{{ 'loading' | i18n }}"
+      aria-hidden="true"
+    ></i>
+    <span class="sr-only">{{ "loading" | i18n }}</span>
+  </div>
+  <div class="mt-4" *ngIf="hasLoaded">
+    <app-callout type="success" title="{{ 'goodNews' | i18n }}" *ngIf="!ciphers.length">
+      {{ "noUnsecuredWebsites" | i18n }}
+    </app-callout>
+    <ng-container *ngIf="ciphers.length">
+      <app-callout type="danger" title="{{ 'unsecuredWebsitesFound' | i18n }}">
+        {{ "unsecuredWebsitesFoundReportDesc" | i18n: (ciphers.length | number) : vaultMsg }}
+      </app-callout>
+
+      <bit-toggle-group
+        *ngIf="showFilterToggle && !isAdminConsoleActive"
+        [selected]="filterOrgStatus$ | async"
+        (selectedChange)="filterOrgToggle($event)"
+        [attr.aria-label]="'addAccessFilter' | i18n"
+      >
+        <ng-container *ngFor="let status of filterStatus">
+          <bit-toggle [value]="status">
+            {{ getName(status) }}
+            <span bitBadge variant="info"> {{ getCount(status) }} </span>
+          </bit-toggle>
+        </ng-container>
+      </bit-toggle-group>
+      <table class="table table-hover table-list table-ciphers">
+        <thead
+          class="tw-border-0 tw-border-b-2 tw-border-solid tw-border-secondary-300 tw-font-bold tw-text-muted"
+          *ngIf="!isAdminConsoleActive"
+        >
+          <tr>
+            <th></th>
+            <th>{{ "name" | i18n }}</th>
+            <th>{{ "owner" | i18n }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of ciphers">
+            <td class="table-list-icon">
+              <app-vault-icon [cipher]="c"></app-vault-icon>
+            </td>
+            <td class="reduced-lh wrap">
+              <a href="#" appStopClick (click)="selectCipher(c)" title="{{ 'editItem' | i18n }}">{{
+                c.name
+              }}</a>
+              <ng-container *ngIf="!organization && c.organizationId">
+                <i
+                  class="bwi bwi-collection"
+                  appStopProp
+                  title="{{ 'shared' | i18n }}"
+                  aria-hidden="true"
+                ></i>
+                <span class="sr-only">{{ "shared" | i18n }}</span>
+              </ng-container>
+              <ng-container *ngIf="c.hasAttachments">
+                <i
+                  class="bwi bwi-paperclip"
+                  appStopProp
+                  title="{{ 'attachments' | i18n }}"
+                  aria-hidden="true"
+                ></i>
+                <span class="sr-only">{{ "attachments" | i18n }}</span>
+              </ng-container>
+              <br />
+              <small>{{ c.subTitle }}</small>
+            </td>
+            <td>
+              <app-org-badge
+                *ngIf="!organization"
+                [disabled]="disabled"
+                [organizationId]="c.organizationId"
+                [organizationName]="c.organizationId | orgNameFromId: (organizations$ | async)"
+                appStopProp
+              >
+              </app-org-badge>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+  </div>
+  <ng-template #cipherAddEdit></ng-template>
+</bit-container>

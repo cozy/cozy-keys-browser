@@ -424,8 +424,11 @@ li.active .icon-cozy-inline > svg {
 
 .icon-paper-wrapper {
   border: 3px solid #fff;
-  box-shadow: 0px 2px 4px 0px rgba(29, 33, 42, 0.16), 0px 4px 16px 0px rgba(29, 33, 42, 0.16),
-    0px 0px 0px 0.5px rgba(29, 33, 42, 0.16), 0px 0px 0px 0.5px rgba(29, 33, 42, 0.16);
+  box-shadow:
+    0px 2px 4px 0px rgba(29, 33, 42, 0.16),
+    0px 4px 16px 0px rgba(29, 33, 42, 0.16),
+    0px 0px 0px 0.5px rgba(29, 33, 42, 0.16),
+    0px 0px 0px 0.5px rgba(29, 33, 42, 0.16);
   // Reduce default border-radius
   border-radius: 3px !important;
   // Increase max-width and max-height to take into account border
@@ -962,9 +965,12 @@ img,
 .callout,
 .row-label,
 .modal-title,
-.overlay-container,
-.swal2-container {
+.overlay-container {
   user-select: none;
+
+  &.user-select {
+    user-select: auto;
+  }
 }
 
 app-about .modal-body > *,

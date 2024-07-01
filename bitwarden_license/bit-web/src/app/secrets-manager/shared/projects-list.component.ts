@@ -1,7 +1,9 @@
 import { SelectionModel } from "@angular/cdk/collections";
-import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { map } from "rxjs";
 
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { TableDataSource } from "@bitwarden/components";
 
 import { ProjectListView } from "../models/view/project-list.view";
@@ -10,9 +12,7 @@ import { ProjectListView } from "../models/view/project-list.view";
   selector: "sm-projects-list",
   templateUrl: "./projects-list.component.html",
 })
-export class ProjectsListComponent implements OnDestroy {
-  protected dataSource = new TableDataSource<ProjectListView>();
-
+export class ProjectsListComponent {
   @Input()
   get projects(): ProjectListView[] {
     return this._projects;
@@ -26,39 +26,40 @@ export class ProjectsListComponent implements OnDestroy {
 
   @Input()
   set search(search: string) {
+    this.selection.clear();
     this.dataSource.filter = search;
   }
 
   @Output() editProjectEvent = new EventEmitter<string>();
   @Output() deleteProjectEvent = new EventEmitter<ProjectListView[]>();
-  @Output() onProjectCheckedEvent = new EventEmitter<string[]>();
   @Output() newProjectEvent = new EventEmitter();
 
-  private destroy$: Subject<void> = new Subject<void>();
-
   selection = new SelectionModel<string>(true, []);
+  protected dataSource = new TableDataSource<ProjectListView>();
+  protected hasWriteAccessOnSelected$ = this.selection.changed.pipe(
+    map((_) => this.selectedHasWriteAccess()),
+  );
 
-  constructor() {
-    this.selection.changed
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((_) => this.onProjectCheckedEvent.emit(this.selection.selected));
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  constructor(
+    private i18nService: I18nService,
+    private platformUtilsService: PlatformUtilsService,
+  ) {}
 
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.projects.length;
-    return numSelected === numRows;
+    if (this.selection.selected?.length > 0) {
+      const numSelected = this.selection.selected.length;
+      const numRows = this.dataSource.filteredData.length;
+      return numSelected === numRows;
+    }
+    return false;
   }
 
   toggleAll() {
-    this.isAllSelected()
-      ? this.selection.clear()
-      : this.selection.select(...this.projects.map((s) => s.id));
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.selection.select(...this.dataSource.filteredData.map((s) => s.id));
+    }
   }
 
   deleteProject(projectId: string) {
@@ -66,8 +67,26 @@ export class ProjectsListComponent implements OnDestroy {
   }
 
   bulkDeleteProjects() {
-    this.deleteProjectEvent.emit(
-      this.projects.filter((project) => this.selection.isSelected(project.id))
+    if (this.selection.selected.length >= 1) {
+      this.deleteProjectEvent.emit(
+        this.projects.filter((project) => this.selection.isSelected(project.id)),
+      );
+    } else {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccurred"),
+        this.i18nService.t("nothingSelected"),
+      );
+    }
+  }
+
+  private selectedHasWriteAccess() {
+    const selectedProjects = this.projects.filter((project) =>
+      this.selection.isSelected(project.id),
     );
+    if (selectedProjects.some((project) => project.write)) {
+      return true;
+    }
+    return false;
   }
 }

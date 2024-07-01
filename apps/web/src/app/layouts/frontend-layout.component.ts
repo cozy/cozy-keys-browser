@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
 @Component({
   selector: "app-frontend-layout",
@@ -15,6 +15,7 @@ export class FrontendLayoutComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.year = new Date().getFullYear().toString();
     this.version = await this.platformUtilsService.getApplicationVersion();
+
     document.body.classList.add("layout_frontend");
   }
 

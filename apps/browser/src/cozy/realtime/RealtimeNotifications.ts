@@ -1,7 +1,7 @@
 import CozyClient from "cozy-client";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
 import { convertContactToCipherData } from "../../../../../libs/cozy/contact.helper";
@@ -18,7 +18,7 @@ export class RealTimeNotifications {
     private messagingService: MessagingService,
     private cipherService: CipherService,
     private i18nService: I18nService,
-    private client: CozyClient
+    private client: CozyClient,
   ) {}
 
   async init(): Promise<void> {
@@ -30,12 +30,12 @@ export class RealTimeNotifications {
     await realtime.subscribe(
       "created",
       doctypeContact,
-      this.dispatchCreateOrUpdateContact.bind(this)
+      this.dispatchCreateOrUpdateContact.bind(this),
     );
     await realtime.subscribe(
       "updated",
       doctypeContact,
-      this.dispatchCreateOrUpdateContact.bind(this)
+      this.dispatchCreateOrUpdateContact.bind(this),
     );
     await realtime.subscribe("deleted", doctypeContact, this.dispatchDeleteCipher.bind(this));
 
@@ -71,7 +71,7 @@ export class RealTimeNotifications {
       this.cipherService,
       this.i18nService,
       data,
-      null
+      null,
     );
     await this.cipherService.upsert(cipherData);
     this.messagingService.send("syncedUpsertedCipher", { cipherId: data._id });
@@ -113,7 +113,7 @@ export class RealTimeNotifications {
         hydratedData,
         {
           noteIllustrationUrl,
-        }
+        },
       );
     } else {
       const baseUrl = this.client.getStackClient().uri;
@@ -124,7 +124,7 @@ export class RealTimeNotifications {
         hydratedData,
         {
           baseUrl,
-        }
+        },
       );
     }
 

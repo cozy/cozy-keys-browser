@@ -16,11 +16,13 @@ export class BulkOperationStatus {
 }
 
 @Component({
-  selector: "sm-bulk-status-dialog",
   templateUrl: "./bulk-status-dialog.component.html",
 })
 export class BulkStatusDialogComponent implements OnInit {
-  constructor(public dialogRef: DialogRef, @Inject(DIALOG_DATA) public data: BulkStatusDetails) {}
+  constructor(
+    public dialogRef: DialogRef,
+    @Inject(DIALOG_DATA) public data: BulkStatusDetails,
+  ) {}
 
   ngOnInit(): void {
     // TODO remove null checks once strictNullChecks in TypeScript is turned on.
@@ -33,7 +35,7 @@ export class BulkStatusDialogComponent implements OnInit {
     ) {
       this.dialogRef.close();
       throw new Error(
-        "The bulk status dialog was not called with the appropriate operation values."
+        "The bulk status dialog was not called with the appropriate operation values.",
       );
     }
   }

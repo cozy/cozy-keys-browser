@@ -1,5 +1,7 @@
-import { PlatformUtilsService } from "../../../../abstractions/platformUtils.service";
-import { DeviceType } from "../../../../enums/deviceType";
+import { Jsonify } from "type-fest";
+
+import { DeviceType } from "../../../../enums";
+import { PlatformUtilsService } from "../../../../platform/abstractions/platform-utils.service";
 
 export class DeviceRequest {
   type: DeviceType;
@@ -12,5 +14,9 @@ export class DeviceRequest {
     this.name = platformUtilsService.getDeviceString();
     this.identifier = appId;
     this.pushToken = null;
+  }
+
+  static fromJSON(json: Jsonify<DeviceRequest>) {
+    return Object.assign(Object.create(DeviceRequest.prototype), json);
   }
 }

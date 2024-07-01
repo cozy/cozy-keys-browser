@@ -1,0 +1,88 @@
+<bit-dialog>
+  <ng-container bitDialogTitle>
+    <h1>{{ bulkTitle }}</h1>
+  </ng-container>
+  <div bitDialogContent>
+    <bit-callout type="danger" *ngIf="users.length <= 0">
+      {{ "noSelectedUsersApplicable" | i18n }}
+    </bit-callout>
+
+    <bit-callout type="danger" *ngIf="error">
+      {{ error }}
+    </bit-callout>
+
+    <ng-container *ngIf="!done">
+      <bit-callout type="warning" *ngIf="users.length > 0 && !error && isRevoking">
+        <p>{{ "revokeUsersWarning" | i18n }}</p>
+        <p *ngIf="this.showNoMasterPasswordWarning">
+          {{ "removeMembersWithoutMasterPasswordWarning" | i18n }}
+        </p>
+      </bit-callout>
+
+      <bit-table>
+        <ng-container header>
+          <tr>
+            <th bitCell colspan="2">{{ "user" | i18n }}</th>
+            <th bitCell *ngIf="this.showNoMasterPasswordWarning">{{ "details" | i18n }}</th>
+          </tr>
+        </ng-container>
+        <ng-template body>
+          <tr bitRow *ngFor="let user of users">
+            <td bitCell width="30">
+              <bit-avatar [text]="user | userName" [id]="user.id" size="small"></bit-avatar>
+            </td>
+            <td bitCell>
+              {{ user.email }}
+              <small class="tw-block tw-text-muted" *ngIf="user.name">{{ user.name }}</small>
+            </td>
+            <td bitCell *ngIf="this.showNoMasterPasswordWarning">
+              <span class="tw-block tw-lowercase tw-text-muted">
+                <ng-container *ngIf="user.hasMasterPassword === true"> - </ng-container>
+                <ng-container *ngIf="user.hasMasterPassword === false">
+                  <i class="bwi bwi-exclamation-triangle" aria-hidden="true"></i>
+                  {{ "noMasterPassword" | i18n }}
+                </ng-container>
+              </span>
+            </td>
+          </tr>
+        </ng-template>
+      </bit-table>
+    </ng-container>
+
+    <ng-container *ngIf="done">
+      <bit-table>
+        <ng-container header>
+          <tr>
+            <th bitCell colspan="2">{{ "user" | i18n }}</th>
+            <th>{{ "status" | i18n }}</th>
+          </tr>
+        </ng-container>
+        <ng-template body>
+          <tr bitRow *ngFor="let user of users">
+            <td bitCell width="30">
+              <bit-avatar [text]="user | userName" [id]="user.id" size="small"></bit-avatar>
+            </td>
+            <td bitCell>
+              {{ user.email }}
+              <small class="tw-block tw-text-muted" *ngIf="user.name">{{ user.name }}</small>
+            </td>
+            <td bitCell *ngIf="statuses.has(user.id)">
+              {{ statuses.get(user.id) }}
+            </td>
+            <td bitCell *ngIf="!statuses.has(user.id)">
+              {{ "bulkFilteredMessage" | i18n }}
+            </td>
+          </tr>
+        </ng-template>
+      </bit-table>
+    </ng-container>
+  </div>
+  <ng-container bitDialogFooter>
+    <button type="button" bitButton *ngIf="!done && users.length > 0" [bitAction]="submit">
+      {{ bulkTitle }}
+    </button>
+    <button type="button" bitButton buttonType="secondary" bitDialogClose>
+      {{ "close" | i18n }}
+    </button>
+  </ng-container>
+</bit-dialog>

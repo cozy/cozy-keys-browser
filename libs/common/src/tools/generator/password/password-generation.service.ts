@@ -1,19 +1,20 @@
-import * as zxcvbn from "zxcvbn";
-
-import { CryptoService } from "../../../abstractions/crypto.service";
-import { PolicyService } from "../../../abstractions/policy/policy.service.abstraction";
-import { StateService } from "../../../abstractions/state.service";
-import { PolicyType } from "../../../enums/policyType";
-import { EFFLongWordList } from "../../../misc/wordlist";
-import { EncString } from "../../../models/domain/enc-string";
-import { PasswordGeneratorPolicyOptions } from "../../../models/domain/password-generator-policy-options";
+import { PolicyService } from "../../../admin-console/abstractions/policy/policy.service.abstraction";
+import { PolicyType } from "../../../admin-console/enums";
+import { PasswordGeneratorPolicyOptions } from "../../../admin-console/models/domain/password-generator-policy-options";
+import { CryptoService } from "../../../platform/abstractions/crypto.service";
+import { StateService } from "../../../platform/abstractions/state.service";
+import { EFFLongWordList } from "../../../platform/misc/wordlist";
+import { EncString } from "../../../platform/models/domain/enc-string";
+import { PasswordGenerationServiceAbstraction } from "../abstractions/password-generation.service.abstraction";
+import { PassphraseGeneratorOptionsEvaluator } from "../passphrase/passphrase-generator-options-evaluator";
 
 import { GeneratedPasswordHistory } from "./generated-password-history";
-import { PasswordGenerationServiceAbstraction } from "./password-generation.service.abstraction";
 import { PasswordGeneratorOptions } from "./password-generator-options";
+import { PasswordGeneratorOptionsEvaluator } from "./password-generator-options-evaluator";
 
 const DefaultOptions: PasswordGeneratorOptions = {
   length: 14,
+  minLength: 5,
   ambiguous: false,
   number: true,
   minNumber: 1,
@@ -22,7 +23,7 @@ const DefaultOptions: PasswordGeneratorOptions = {
   lowercase: true,
   minLowercase: 0,
   special: false,
-  minSpecial: 1,
+  minSpecial: 0,
   type: "password",
   numWords: 3,
   wordSeparator: "-",
@@ -30,30 +31,24 @@ const DefaultOptions: PasswordGeneratorOptions = {
   includeNumber: false,
 };
 
+const DefaultPolicy = new PasswordGeneratorPolicyOptions();
+
 const MaxPasswordsInHistory = 100;
 
 export class PasswordGenerationService implements PasswordGenerationServiceAbstraction {
   constructor(
     private cryptoService: CryptoService,
     private policyService: PolicyService,
-    private stateService: StateService
+    private stateService: StateService,
   ) {}
 
   async generatePassword(options: PasswordGeneratorOptions): Promise<string> {
-    // overload defaults with given options
-    const o = Object.assign({}, DefaultOptions, options);
-
-    if (o.type === "passphrase") {
-      return this.generatePassphrase(options);
+    if ((options.type ?? DefaultOptions.type) === "passphrase") {
+      return this.generatePassphrase({ ...DefaultOptions, ...options });
     }
 
-    // sanitize
-    this.sanitizePasswordLength(o, true);
-
-    const minLength: number = o.minUppercase + o.minLowercase + o.minNumber + o.minSpecial;
-    if (o.length < minLength) {
-      o.length = minLength;
-    }
+    const evaluator = new PasswordGeneratorOptionsEvaluator(DefaultPolicy);
+    const o = evaluator.sanitize({ ...DefaultOptions, ...options });
 
     const positions: string[] = [];
     if (o.lowercase && o.minLowercase > 0) {
@@ -146,13 +141,11 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
   }
 
   async generatePassphrase(options: PasswordGeneratorOptions): Promise<string> {
-    const o = Object.assign({}, DefaultOptions, options);
+    const evaluator = new PassphraseGeneratorOptionsEvaluator(DefaultPolicy);
+    const o = evaluator.sanitize({ ...DefaultOptions, ...options });
 
     if (o.numWords == null || o.numWords <= 2) {
       o.numWords = DefaultOptions.numWords;
-    }
-    if (o.wordSeparator == null || o.wordSeparator.length === 0 || o.wordSeparator.length > 1) {
-      o.wordSeparator = " ";
     }
     if (o.capitalize == null) {
       o.capitalize = false;
@@ -192,67 +185,28 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
   }
 
   async enforcePasswordGeneratorPoliciesOnOptions(
-    options: PasswordGeneratorOptions
+    options: PasswordGeneratorOptions,
   ): Promise<[PasswordGeneratorOptions, PasswordGeneratorPolicyOptions]> {
-    let enforcedPolicyOptions = await this.getPasswordGeneratorPolicyOptions();
-    if (enforcedPolicyOptions != null) {
-      if (options.length < enforcedPolicyOptions.minLength) {
-        options.length = enforcedPolicyOptions.minLength;
-      }
+    let policy = await this.getPasswordGeneratorPolicyOptions();
+    policy = policy ?? new PasswordGeneratorPolicyOptions();
 
-      if (enforcedPolicyOptions.useUppercase) {
-        options.uppercase = true;
-      }
-
-      if (enforcedPolicyOptions.useLowercase) {
-        options.lowercase = true;
-      }
-
-      if (enforcedPolicyOptions.useNumbers) {
-        options.number = true;
-      }
-
-      if (options.minNumber < enforcedPolicyOptions.numberCount) {
-        options.minNumber = enforcedPolicyOptions.numberCount;
-      }
-
-      if (enforcedPolicyOptions.useSpecial) {
-        options.special = true;
-      }
-
-      if (options.minSpecial < enforcedPolicyOptions.specialCount) {
-        options.minSpecial = enforcedPolicyOptions.specialCount;
-      }
-
-      // Must normalize these fields because the receiving call expects all options to pass the current rules
-      if (options.minSpecial + options.minNumber > options.length) {
-        options.minSpecial = options.length - options.minNumber;
-      }
-
-      if (options.numWords < enforcedPolicyOptions.minNumberWords) {
-        options.numWords = enforcedPolicyOptions.minNumberWords;
-      }
-
-      if (enforcedPolicyOptions.capitalize) {
-        options.capitalize = true;
-      }
-
-      if (enforcedPolicyOptions.includeNumber) {
-        options.includeNumber = true;
-      }
-
-      // Force default type if password/passphrase selected via policy
-      if (
-        enforcedPolicyOptions.defaultType === "password" ||
-        enforcedPolicyOptions.defaultType === "passphrase"
-      ) {
-        options.type = enforcedPolicyOptions.defaultType;
-      }
-    } else {
-      // UI layer expects an instantiated object to prevent more explicit null checks
-      enforcedPolicyOptions = new PasswordGeneratorPolicyOptions();
+    // Force default type if password/passphrase selected via policy
+    if (policy.defaultType === "password" || policy.defaultType === "passphrase") {
+      options.type = policy.defaultType;
     }
-    return [options, enforcedPolicyOptions];
+
+    const evaluator =
+      options.type == "password"
+        ? new PasswordGeneratorOptionsEvaluator(policy)
+        : new PassphraseGeneratorOptionsEvaluator(policy);
+
+    // Ensure the options to pass the current rules
+    const withPolicy = evaluator.applyPolicy(options);
+    const sanitized = evaluator.sanitize(withPolicy);
+
+    // callers assume this function updates the options parameter
+    const result = Object.assign(options, sanitized);
+    return [result, policy];
   }
 
   async getPasswordGeneratorPolicyOptions(): Promise<PasswordGeneratorPolicyOptions> {
@@ -338,7 +292,7 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
   }
 
   async getHistory(): Promise<GeneratedPasswordHistory[]> {
-    const hasKey = await this.cryptoService.hasKey();
+    const hasKey = await this.cryptoService.hasUserKey();
     if (!hasKey) {
       return new Array<GeneratedPasswordHistory>();
     }
@@ -358,7 +312,7 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
 
   async addHistory(password: string): Promise<void> {
     // Cannot add new history if no key is available
-    const hasKey = await this.cryptoService.hasKey();
+    const hasKey = await this.cryptoService.hasUserKey();
     if (!hasKey) {
       return;
     }
@@ -387,82 +341,6 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
     await this.stateService.setDecryptedPasswordGenerationHistory(null, { userId: userId });
   }
 
-  passwordStrength(password: string, userInputs: string[] = null): zxcvbn.ZXCVBNResult {
-    if (password == null || password.length === 0) {
-      return null;
-    }
-    let globalUserInputs = ["bitwarden", "bit", "warden"];
-    if (userInputs != null && userInputs.length > 0) {
-      globalUserInputs = globalUserInputs.concat(userInputs);
-    }
-    // Use a hash set to get rid of any duplicate user inputs
-    const finalUserInputs = Array.from(new Set(globalUserInputs));
-    const result = zxcvbn(password, finalUserInputs);
-    return result;
-  }
-
-  normalizeOptions(
-    options: PasswordGeneratorOptions,
-    enforcedPolicyOptions: PasswordGeneratorPolicyOptions
-  ) {
-    options.minLowercase = 0;
-    options.minUppercase = 0;
-
-    if (!options.length || options.length < 5) {
-      options.length = 5;
-    } else if (options.length > 128) {
-      options.length = 128;
-    }
-
-    if (options.length < enforcedPolicyOptions.minLength) {
-      options.length = enforcedPolicyOptions.minLength;
-    }
-
-    if (!options.minNumber) {
-      options.minNumber = 0;
-    } else if (options.minNumber > options.length) {
-      options.minNumber = options.length;
-    } else if (options.minNumber > 9) {
-      options.minNumber = 9;
-    }
-
-    if (options.minNumber < enforcedPolicyOptions.numberCount) {
-      options.minNumber = enforcedPolicyOptions.numberCount;
-    }
-
-    if (!options.minSpecial) {
-      options.minSpecial = 0;
-    } else if (options.minSpecial > options.length) {
-      options.minSpecial = options.length;
-    } else if (options.minSpecial > 9) {
-      options.minSpecial = 9;
-    }
-
-    if (options.minSpecial < enforcedPolicyOptions.specialCount) {
-      options.minSpecial = enforcedPolicyOptions.specialCount;
-    }
-
-    if (options.minSpecial + options.minNumber > options.length) {
-      options.minSpecial = options.length - options.minNumber;
-    }
-
-    if (options.numWords == null || options.length < 3) {
-      options.numWords = 3;
-    } else if (options.numWords > 20) {
-      options.numWords = 20;
-    }
-
-    if (options.numWords < enforcedPolicyOptions.minNumberWords) {
-      options.numWords = enforcedPolicyOptions.minNumberWords;
-    }
-
-    if (options.wordSeparator != null && options.wordSeparator.length > 1) {
-      options.wordSeparator = options.wordSeparator[0];
-    }
-
-    this.sanitizePasswordLength(options, false);
-  }
-
   private capitalize(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -477,7 +355,7 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
   }
 
   private async encryptHistory(
-    history: GeneratedPasswordHistory[]
+    history: GeneratedPasswordHistory[],
   ): Promise<GeneratedPasswordHistory[]> {
     if (history == null || history.length === 0) {
       return Promise.resolve([]);
@@ -492,7 +370,7 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
   }
 
   private async decryptHistory(
-    history: GeneratedPasswordHistory[]
+    history: GeneratedPasswordHistory[],
   ): Promise<GeneratedPasswordHistory[]> {
     if (history == null || history.length === 0) {
       return Promise.resolve([]);
@@ -519,56 +397,6 @@ export class PasswordGenerationService implements PasswordGenerationServiceAbstr
     for (let i = array.length - 1; i > 0; i--) {
       const j = await this.cryptoService.randomNumber(0, i);
       [array[i], array[j]] = [array[j], array[i]];
-    }
-  }
-
-  private sanitizePasswordLength(options: any, forGeneration: boolean) {
-    let minUppercaseCalc = 0;
-    let minLowercaseCalc = 0;
-    let minNumberCalc: number = options.minNumber;
-    let minSpecialCalc: number = options.minSpecial;
-
-    if (options.uppercase && options.minUppercase <= 0) {
-      minUppercaseCalc = 1;
-    } else if (!options.uppercase) {
-      minUppercaseCalc = 0;
-    }
-
-    if (options.lowercase && options.minLowercase <= 0) {
-      minLowercaseCalc = 1;
-    } else if (!options.lowercase) {
-      minLowercaseCalc = 0;
-    }
-
-    if (options.number && options.minNumber <= 0) {
-      minNumberCalc = 1;
-    } else if (!options.number) {
-      minNumberCalc = 0;
-    }
-
-    if (options.special && options.minSpecial <= 0) {
-      minSpecialCalc = 1;
-    } else if (!options.special) {
-      minSpecialCalc = 0;
-    }
-
-    // This should never happen but is a final safety net
-    if (!options.length || options.length < 1) {
-      options.length = 10;
-    }
-
-    const minLength: number = minUppercaseCalc + minLowercaseCalc + minNumberCalc + minSpecialCalc;
-    // Normalize and Generation both require this modification
-    if (options.length < minLength) {
-      options.length = minLength;
-    }
-
-    // Apply other changes if the options object passed in is for generation
-    if (forGeneration) {
-      options.minUppercase = minUppercaseCalc;
-      options.minLowercase = minLowercaseCalc;
-      options.minNumber = minNumberCalc;
-      options.minSpecial = minSpecialCalc;
     }
   }
 }

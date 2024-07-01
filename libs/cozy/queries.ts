@@ -69,7 +69,7 @@ export const fetchPaper = async (client: CozyClient, _id: string) => {
 
   const { data } = await client.query(
     fileQueryWithContact.definition(),
-    fileQueryWithContact.options
+    fileQueryWithContact.options,
   );
 
   return data;
@@ -112,7 +112,7 @@ export const fetchContacts = async (client: CozyClient): Promise<IOCozyContact[]
 
   const data: IOCozyContact[] = await client.queryAll(
     contactsQuery.definition,
-    contactsQuery.options
+    contactsQuery.options,
   );
 
   return data;

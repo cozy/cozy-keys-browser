@@ -1,14 +1,19 @@
+import { firstValueFrom } from "rxjs";
+
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
-import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
 import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { SecretVerificationRequest } from "@bitwarden/common/auth/models/request/secret-verification.request";
-import { HashPurpose } from "@bitwarden/common/enums/hashPurpose";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { ConsoleLogService } from "@bitwarden/common/services/consoleLog.service";
+import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { HashPurpose } from "@bitwarden/common/platform/enums";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 
 import { ConvertToKeyConnectorCommand } from "../../commands/convert-to-key-connector.command";
@@ -18,6 +23,8 @@ import { CliUtils } from "../../utils";
 
 export class UnlockCommand {
   constructor(
+    private accountService: AccountService,
+    private masterPasswordService: InternalMasterPasswordServiceAbstraction,
     private cryptoService: CryptoService,
     private stateService: StateService,
     private cryptoFunctionService: CryptoFunctionService,
@@ -27,7 +34,8 @@ export class UnlockCommand {
     private environmentService: EnvironmentService,
     private syncService: SyncService,
     private organizationApiService: OrganizationApiServiceAbstraction,
-    private logout: () => Promise<void>
+    private logout: () => Promise<void>,
+    private kdfConfigService: KdfConfigService,
   ) {}
 
   async run(password: string, cmdOptions: Record<string, any>) {
@@ -42,32 +50,34 @@ export class UnlockCommand {
 
     await this.setNewSessionKey();
     const email = await this.stateService.getEmail();
-    const kdf = await this.stateService.getKdfType();
-    const kdfConfig = await this.stateService.getKdfConfig();
-    const key = await this.cryptoService.makeKey(password, email, kdf, kdfConfig);
-    const storedKeyHash = await this.cryptoService.getKeyHash();
+    const kdfConfig = await this.kdfConfigService.getKdfConfig();
+    const masterKey = await this.cryptoService.makeMasterKey(password, email, kdfConfig);
+    const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+    const storedMasterKeyHash = await firstValueFrom(
+      this.masterPasswordService.masterKeyHash$(userId),
+    );
 
     let passwordValid = false;
-    if (key != null) {
-      if (storedKeyHash != null) {
-        passwordValid = await this.cryptoService.compareAndUpdateKeyHash(password, key);
+    if (masterKey != null) {
+      if (storedMasterKeyHash != null) {
+        passwordValid = await this.cryptoService.compareAndUpdateKeyHash(password, masterKey);
       } else {
-        const serverKeyHash = await this.cryptoService.hashPassword(
+        const serverKeyHash = await this.cryptoService.hashMasterKey(
           password,
-          key,
-          HashPurpose.ServerAuthorization
+          masterKey,
+          HashPurpose.ServerAuthorization,
         );
         const request = new SecretVerificationRequest();
         request.masterPasswordHash = serverKeyHash;
         try {
           await this.apiService.postAccountVerifyPassword(request);
           passwordValid = true;
-          const localKeyHash = await this.cryptoService.hashPassword(
+          const localKeyHash = await this.cryptoService.hashMasterKey(
             password,
-            key,
-            HashPurpose.LocalAuthorization
+            masterKey,
+            HashPurpose.LocalAuthorization,
           );
-          await this.cryptoService.setKeyHash(localKeyHash);
+          await this.masterPasswordService.setMasterKeyHash(localKeyHash, userId);
         } catch {
           // Ignore
         }
@@ -75,7 +85,9 @@ export class UnlockCommand {
     }
 
     if (passwordValid) {
-      await this.cryptoService.setKey(key);
+      await this.masterPasswordService.setMasterKey(masterKey, userId);
+      const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
+      await this.cryptoService.setUserKey(userKey);
 
       if (await this.keyConnectorService.getConvertAccountRequired()) {
         const convertToKeyConnectorCommand = new ConvertToKeyConnectorCommand(
@@ -83,7 +95,7 @@ export class UnlockCommand {
           this.environmentService,
           this.syncService,
           this.organizationApiService,
-          this.logout
+          this.logout,
         );
         const convertResponse = await convertToKeyConnectorCommand.run();
         if (!convertResponse.success) {
@@ -115,7 +127,7 @@ export class UnlockCommand {
         '"\n\n' +
         "You can also pass the session key to any command with the `--session` option. ex:\n" +
         "$ bw list items --session " +
-        process.env.BW_SESSION
+        process.env.BW_SESSION,
     );
     res.raw = process.env.BW_SESSION;
     return Response.success(res);

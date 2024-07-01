@@ -2,7 +2,7 @@ import { dialog, shell } from "electron";
 import log from "electron-log";
 import { autoUpdater } from "electron-updater";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 
 import { isAppImage, isDev, isMacAppStore, isWindowsPortable, isWindowsStore } from "../utils";
 
@@ -16,7 +16,10 @@ export class UpdaterMain {
   private doingUpdateCheckWithFeedback = false;
   private canUpdate = false;
 
-  constructor(private i18nService: I18nService, private windowMain: WindowMain) {
+  constructor(
+    private i18nService: I18nService,
+    private windowMain: WindowMain,
+  ) {
     autoUpdater.logger = log;
 
     const linuxCanUpdate = process.platform === "linux" && isAppImage();
@@ -24,8 +27,7 @@ export class UpdaterMain {
       process.platform === "win32" && !isWindowsStore() && !isWindowsPortable();
     const macCanUpdate = process.platform === "darwin" && !isMacAppStore();
     this.canUpdate =
-      process.env.ELECTRON_NO_UPDATER !== "1" &&
-      (linuxCanUpdate || windowsCanUpdate || macCanUpdate);
+      !this.userDisabledUpdates() && (linuxCanUpdate || windowsCanUpdate || macCanUpdate);
   }
 
   async init() {
@@ -55,6 +57,8 @@ export class UpdaterMain {
         });
 
         if (result.response === 0) {
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           autoUpdater.downloadUpdate();
         } else {
           this.reset();
@@ -64,6 +68,8 @@ export class UpdaterMain {
 
     autoUpdater.on("update-not-available", () => {
       if (this.doingUpdateCheckWithFeedback && this.windowMain.win != null) {
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         dialog.showMessageBox(this.windowMain.win, {
           message: this.i18nService.t("noUpdatesAvailable"),
           buttons: [this.i18nService.t("ok")],
@@ -102,7 +108,7 @@ export class UpdaterMain {
       if (this.doingUpdateCheckWithFeedback) {
         dialog.showErrorBox(
           this.i18nService.t("updateError"),
-          error == null ? this.i18nService.t("unknown") : (error.stack || error).toString()
+          error == null ? this.i18nService.t("unknown") : (error.stack || error).toString(),
         );
       }
 
@@ -117,6 +123,8 @@ export class UpdaterMain {
 
     if (!this.canUpdate) {
       if (withFeedback) {
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         shell.openExternal("https://github.com/bitwarden/clients/releases");
       }
 
@@ -134,5 +142,14 @@ export class UpdaterMain {
   private reset() {
     autoUpdater.autoDownload = true;
     this.doingUpdateCheck = false;
+  }
+
+  private userDisabledUpdates(): boolean {
+    for (const arg of process.argv) {
+      if (arg != null && arg.toUpperCase().indexOf("--ELECTRON_NO_UPDATER=1") > -1) {
+        return true;
+      }
+    }
+    return process.env.ELECTRON_NO_UPDATER === "1";
   }
 }

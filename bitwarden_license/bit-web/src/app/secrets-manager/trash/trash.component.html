@@ -1,6 +1,6 @@
-<sm-header>
+<app-header>
   <sm-new-menu></sm-new-menu>
-</sm-header>
+</app-header>
 <bit-callout type="warning" [title]="'warning' | i18n">{{
   "trashCleanupWarning" | i18n
 }}</bit-callout>
@@ -9,4 +9,5 @@
   (restoreSecretsEvent)="openRestoreSecret($event)"
   [secrets]="secrets$ | async"
   [trash]="true"
+  (copySecretUuidEvent)="copySecretUuid($event)"
 ></sm-secrets-list>

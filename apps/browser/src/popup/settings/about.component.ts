@@ -1,25 +1,32 @@
+import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, combineLatest, defer, map } from "rxjs";
 
-import { ConfigServiceAbstraction } from "@bitwarden/common/abstractions/config/config.service.abstraction";
-import { ServerConfig } from "@bitwarden/common/abstractions/config/server-config";
-import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-
-import { BrowserApi } from "../../browser/browserApi";
+import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { ButtonModule, DialogModule } from "@bitwarden/components";
 
 @Component({
-  selector: "app-about",
   templateUrl: "about.component.html",
+  standalone: true,
+  imports: [CommonModule, JslibModule, DialogModule, ButtonModule],
 })
 export class AboutComponent {
-  serverConfig$: Observable<ServerConfig>;
+  protected year = new Date().getFullYear();
+  protected version$: Observable<string>;
 
-  year = new Date().getFullYear();
-  version = BrowserApi.getApplicationVersion();
-  isCloud: boolean;
+  protected data$ = combineLatest([
+    this.configService.serverConfig$,
+    this.environmentService.environment$.pipe(map((env) => env.isCloud())),
+  ]).pipe(map(([serverConfig, isCloud]) => ({ serverConfig, isCloud })));
 
-  constructor(configService: ConfigServiceAbstraction, environmentService: EnvironmentService) {
-    this.serverConfig$ = configService.serverConfig$;
-    this.isCloud = environmentService.isCloud();
+  constructor(
+    private configService: ConfigService,
+    private environmentService: EnvironmentService,
+    private platformUtilsService: PlatformUtilsService,
+  ) {
+    this.version$ = defer(() => this.platformUtilsService.getApplicationVersion());
   }
 }

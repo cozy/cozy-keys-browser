@@ -1,4 +1,4 @@
-import { DeviceType } from "../../../enums/deviceType";
+import { DeviceType } from "../../../enums";
 import { BaseResponse } from "../../../models/response/base.response";
 
 const RequestTimeOut = 60000 * 15; //15 Minutes
@@ -36,7 +36,7 @@ export class AuthRequestResponse extends BaseResponse {
       requestDate.getUTCHours(),
       requestDate.getUTCMinutes(),
       requestDate.getUTCSeconds(),
-      requestDate.getUTCMilliseconds()
+      requestDate.getUTCMilliseconds(),
     );
 
     const dateNow = new Date(Date.now());
@@ -47,7 +47,7 @@ export class AuthRequestResponse extends BaseResponse {
       dateNow.getUTCHours(),
       dateNow.getUTCMinutes(),
       dateNow.getUTCSeconds(),
-      dateNow.getUTCMilliseconds()
+      dateNow.getUTCMilliseconds(),
     );
 
     this.isExpired = dateNowUTC - requestDateUTC >= RequestTimeOut;

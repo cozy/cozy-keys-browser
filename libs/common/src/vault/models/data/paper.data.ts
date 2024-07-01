@@ -1,6 +1,6 @@
 // Cozy customization
 import { PaperType } from "../../../enums/paperType";
-import { PaperApi } from "../../../models/api/paper.api";
+import { PaperApi } from "../api/paper.api";
 
 export class PaperData {
   type: PaperType;

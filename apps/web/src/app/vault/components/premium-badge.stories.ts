@@ -1,24 +1,18 @@
 import { Meta, moduleMetadata, Story } from "@storybook/angular";
+import { of } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { StorageOptions } from "@bitwarden/common/models/domain/storage-options";
+import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { MessageSender } from "@bitwarden/common/platform/messaging";
 import { BadgeModule, I18nMockService } from "@bitwarden/components";
 
 import { PremiumBadgeComponent } from "./premium-badge.component";
 
-class MockMessagingService implements MessagingService {
-  send(subscriber: string, arg?: any) {
+class MockMessagingService implements MessageSender {
+  send = () => {
     alert("Clicked on badge");
-  }
-}
-
-class MockedStateService implements Partial<StateService> {
-  async getCanAccessPremium(options?: StorageOptions) {
-    return false;
-  }
+  };
 }
 
 export default {
@@ -37,15 +31,15 @@ export default {
           },
         },
         {
-          provide: MessagingService,
+          provide: MessageSender,
           useFactory: () => {
             return new MockMessagingService();
           },
         },
         {
-          provide: StateService,
-          useFactory: () => {
-            return new MockedStateService();
+          provide: BillingAccountProfileStateService,
+          useValue: {
+            hasPremiumFromAnySource$: of(false),
           },
         },
       ],

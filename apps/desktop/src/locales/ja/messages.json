@@ -403,6 +403,9 @@
   "length": {
     "message": "長さ"
   },
+  "passwordMinLength": {
+    "message": "パスワードの最低文字数"
+  },
   "uppercase": {
     "message": "大文字（A-Z）"
   },
@@ -475,8 +478,8 @@
   "maxFileSize": {
     "message": "最大ファイルサイズは500MBです。"
   },
-  "updateKey": {
-    "message": "暗号キーを更新するまでこの機能は使用できません。"
+  "encryptionKeyMigrationRequired": {
+    "message": "暗号化キーの移行が必要です。暗号化キーを更新するには、ウェブ保管庫からログインしてください。"
   },
   "editedFolder": {
     "message": "フォルダーを編集しました"
@@ -556,6 +559,12 @@
   },
   "newAccountCreated": {
     "message": "新しいアカウントを作成しました！今すぐログインできます。"
+  },
+  "youSuccessfullyLoggedIn": {
+    "message": "ログインに成功しました"
+  },
+  "youMayCloseThisWindow": {
+    "message": "ウィンドウを閉じて大丈夫です"
   },
   "masterPassSent": {
     "message": "あなたのマスターパスワードのヒントを記載したメールを送信しました。"
@@ -770,6 +779,9 @@
   "contactUs": {
     "message": "お問い合わせ"
   },
+  "helpAndFeedback": {
+    "message": "ヘルプとフィードバック"
+  },
   "getHelp": {
     "message": "ヘルプ"
   },
@@ -788,8 +800,11 @@
   "changeMasterPass": {
     "message": "マスターパスワードの変更"
   },
-  "changeMasterPasswordConfirmation": {
-    "message": "マスターパスワードは bitwarden.com ウェブ保管庫で変更できます。ウェブサイトを開きますか？"
+  "continueToWebApp": {
+    "message": "ウェブアプリに進みますか?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "Bitwarden ウェブアプリでマスターパスワードを変更できます。"
   },
   "fingerprintPhrase": {
     "message": "パスフレーズ",
@@ -1074,8 +1089,8 @@
   "premiumSignUpStorage": {
     "message": "1GB の暗号化されたファイルストレージ。"
   },
-  "premiumSignUpTwoStep": {
-    "message": "YubiKey、FIDO U2F、Duoなどの追加の2段階認証ログインオプション"
+  "premiumSignUpTwoStepOptions": {
+    "message": "YubiKey、Duo などのプロプライエタリな2段階認証オプション。"
   },
   "premiumSignUpReports": {
     "message": "保管庫を安全に保つための、パスワードやアカウントの健全性、データ侵害に関するレポート。"
@@ -1386,14 +1401,23 @@
   "invalidPin": {
     "message": "PIN コードが間違っています。"
   },
+  "tooManyInvalidPinEntryAttemptsLoggingOut": {
+    "message": "無効な PIN 入力の試行回数が多すぎます。ログアウトします。"
+  },
   "unlockWithWindowsHello": {
     "message": "Windows Hello でロック解除"
+  },
+  "additionalWindowsHelloSettings": {
+    "message": "追加の Windows Hello 設定"
   },
   "windowsHelloConsentMessage": {
     "message": "Bitwarden の認証を行います。"
   },
   "unlockWithTouchId": {
     "message": "Touch ID でロック解除"
+  },
+  "additionalTouchIdSettings": {
+    "message": "追加の Touch ID 設定"
   },
   "touchIdConsentMessage": {
     "message": "Bitwarden の認証を行います。"
@@ -1403,6 +1427,12 @@
   },
   "autoPromptTouchId": {
     "message": "起動時に Touch ID を要求する"
+  },
+  "requirePasswordOnStart": {
+    "message": "アプリ起動時にパスワードまたは PIN を要求"
+  },
+  "recommendedForSecurity": {
+    "message": "セキュリティ向上のためおすすめします。"
   },
   "lockWithMasterPassOnRestart": {
     "message": "再起動時にマスターパスワードでロック"
@@ -1477,6 +1507,9 @@
   "vaultTimeoutActionLogOutDesc": {
     "message": "ログアウトした保管庫にアクセスするには、再認証してください。"
   },
+  "unlockMethodNeededToChangeTimeoutActionDesc": {
+    "message": "保管庫のタイムアウト動作を変更するには、ロック解除方法を設定してください。"
+  },
   "lock": {
     "message": "ロック",
     "description": "Verb form: to make secure or inaccesible by"
@@ -1497,12 +1530,6 @@
   "permanentlyDeletedItem": {
     "message": "完全に削除されたアイテム"
   },
-  "restoreItem": {
-    "message": "アイテムをリストア"
-  },
-  "restoreItemConfirmation": {
-    "message": "このアイテムをリストアしますか？"
-  },
   "restoredItem": {
     "message": "リストアされたアイテム"
   },
@@ -1521,8 +1548,20 @@
   "setMasterPassword": {
     "message": "マスターパスワードを設定"
   },
-  "ssoCompleteRegistration": {
-    "message": "SSO ログインを完了するには、保管庫にアクセス・保護するためのマスターパスワードを設定してください。"
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "組織権限が更新され、マスターパスワードの設定が必要になりました。",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "あなたの組織では、マスターパスワードの設定を義務付けています。",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "verificationRequired": {
+    "message": "認証が必要です",
+    "description": "Default title for the user verification dialog."
+  },
+  "currentMasterPass": {
+    "message": "現在のマスターパスワード"
   },
   "newMasterPass": {
     "message": "新しいマスターパスワード"
@@ -1593,6 +1632,12 @@
   "browserIntegrationUnsupportedTitle": {
     "message": "ブラウザー統合はサポートされていません"
   },
+  "browserIntegrationErrorTitle": {
+    "message": "ブラウザー連携を有効にする際にエラーが発生しました"
+  },
+  "browserIntegrationErrorDesc": {
+    "message": "ブラウザー統合の有効化中にエラーが発生しました。"
+  },
   "browserIntegrationMasOnlyDesc": {
     "message": "残念ながら、ブラウザ統合は、Mac App Storeのバージョンでのみサポートされています。"
   },
@@ -1607,6 +1652,12 @@
   },
   "enableBrowserIntegrationFingerprintDesc": {
     "message": "デスクトップとブラウザ間のリンクを確立する際にパスフレーズを要求することで、さらなるセキュリティ層を有効にします。 有効にすると、接続を確立するたびにユーザーによる確認が必要になります。"
+  },
+  "enableHardwareAcceleration": {
+    "message": "ハードウェアアクセラレーションを使用する"
+  },
+  "enableHardwareAccelerationDesc": {
+    "message": "デフォルトではこの設定はオンになっています。グラフィックの問題が発生した場合のみオフにしてください。再起動が必要です。"
   },
   "approve": {
     "message": "承認"
@@ -1647,6 +1698,9 @@
   "personalOwnershipPolicyInEffect": {
     "message": "組織のポリシーは、所有者のオプションに影響を与えています。"
   },
+  "personalOwnershipPolicyInEffectImports": {
+    "message": "組織のポリシーにより、個々の保管庫へのアイテムのインポートがブロックされました。"
+  },
   "allSends": {
     "message": "すべての Send",
     "description": "'Sends' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -1666,7 +1720,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "myVault": {
-    "message": "保管庫"
+    "message": "自分の保管庫"
   },
   "text": {
     "message": "テキスト"
@@ -1840,6 +1894,45 @@
   "updateMasterPasswordWarning": {
     "message": "マスターパスワードは最近組織の管理者によって変更されました。保管庫にアクセスするには、今すぐ更新する必要があります。 続行すると現在のセッションからログアウトし、再度ログインする必要があります。 他のデバイスでのアクティブなセッションは、最大1時間アクティブになり続けることがあります。"
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "マスターパスワードが組織のポリシーに適合していません。保管庫にアクセスするには、今すぐマスターパスワードを更新しなければなりません。続行すると現在のセッションからログアウトし、再度ログインする必要があります。 他のデバイス上のアクティブなセッションは、最大1時間アクティブであり続けることがあります。"
+  },
+  "tryAgain": {
+    "message": "再試行"
+  },
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "この操作には認証が必要です。続行するには PIN を設定してください。"
+  },
+  "setPin": {
+    "message": "PIN を設定"
+  },
+  "verifyWithBiometrics": {
+    "message": "生体認証による確認"
+  },
+  "awaitingConfirmation": {
+    "message": "確認中"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "生体認証を完了できませんでした。"
+  },
+  "needADifferentMethod": {
+    "message": "別の方法が必要ですか？"
+  },
+  "useMasterPassword": {
+    "message": "マスターパスワードを使用"
+  },
+  "usePin": {
+    "message": "PIN を使用"
+  },
+  "useBiometrics": {
+    "message": "生体認証を使用"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "メールアドレスに送信された認証コードを入力してください。"
+  },
+  "resendCode": {
+    "message": "コードを再送信する"
+  },
   "hours": {
     "message": "時間"
   },
@@ -1856,6 +1949,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "組織のポリシーがデータ保管庫のタイムアウトに影響しています。保管庫のタイムアウトの最大許容値は、$HOURS$時間$MINUTES$分です。保管庫タイムアウト時のアクションは、$ACTION$に設定されています。",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "組織のポリシーで、保管庫のタイムアウトアクションが$ACTION$に設定されています。",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1940,8 +2059,8 @@
   "exportingPersonalVaultTitle": {
     "message": "個人保管庫のエクスポート"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "$EMAIL$ に関連付けられた個人用保管庫アイテムのみがエクスポートされます。組織用保管庫アイテムは含まれません。",
+  "exportingIndividualVaultDescription": {
+    "message": "$EMAIL$ に関連付けられた個人の保管庫アイテムのみがエクスポートされます。組織の保管庫アイテムは含まれません。 保管庫アイテム情報のみがエクスポートされ、関連する添付ファイルはエクスポートされません。",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -2005,7 +2124,7 @@
     "message": "組織の検索"
   },
   "searchMyVault": {
-    "message": "保管庫を検索"
+    "message": "自分の保管庫内を検索"
   },
   "forwardedEmail": {
     "message": "転送されたメールエイリアス"
@@ -2034,9 +2153,6 @@
   },
   "neverLockWarning": {
     "message": "本当に「なし」オプションを使用しますか？ロックオプションを「なし」に設定すると、保管庫の暗号化キーがデバイスに保存されます。 このオプションを使用する場合は、デバイスを適切に保護する必要があります。"
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "vault": {
     "message": "保管庫"
@@ -2068,7 +2184,7 @@
   "logInWithAnotherDevice": {
     "message": "別のデバイスでログイン"
   },
-  "logInInitiated": {
+  "loginInitiated": {
     "message": "ログイン開始"
   },
   "notificationSentDevice": {
@@ -2201,5 +2317,408 @@
         "example": "14"
       }
     }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Bitwarden は最初のロック解除時にマスターパスワード（または PIN）を要求するよう生体認証設定を更新することをおすすめします。今すぐ設定を更新しますか？"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "設定の更新を推奨"
+  },
+  "deviceApprovalRequired": {
+    "message": "デバイスの承認が必要です。以下から承認オプションを選択してください:"
+  },
+  "rememberThisDevice": {
+    "message": "このデバイスを記憶する"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "パブリックデバイスを使用している場合はチェックしないでください"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "他のデバイスから承認する"
+  },
+  "requestAdminApproval": {
+    "message": "管理者の承認を要求する"
+  },
+  "approveWithMasterPassword": {
+    "message": "マスターパスワードで承認する"
+  },
+  "region": {
+    "message": "リージョン"
+  },
+  "ssoIdentifierRequired": {
+    "message": "組織の SSO ID が必要です。"
+  },
+  "eu": {
+    "message": "EU",
+    "description": "European Union"
+  },
+  "loggingInOn": {
+    "message": "ログイン先"
+  },
+  "selfHostedServer": {
+    "message": "自己ホスト型"
+  },
+  "accessDenied": {
+    "message": "アクセスが拒否されました。このページを表示する権限がありません。"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "アカウントを正常に作成しました！"
+  },
+  "adminApprovalRequested": {
+    "message": "管理者の承認を要求しました"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "要求を管理者に送信しました。"
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "承認されると通知されます。 "
+  },
+  "troubleLoggingIn": {
+    "message": "ログインできない場合"
+  },
+  "loginApproved": {
+    "message": "ログインが承認されました"
+  },
+  "userEmailMissing": {
+    "message": "ユーザーのメールアドレスがありません"
+  },
+  "deviceTrusted": {
+    "message": "信頼されたデバイス"
+  },
+  "inputRequired": {
+    "message": "入力が必要です。"
+  },
+  "required": {
+    "message": "必須"
+  },
+  "search": {
+    "message": "検索"
+  },
+  "inputMinLength": {
+    "message": "$COUNT$ 文字以上でなければなりません。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxLength": {
+    "message": "$COUNT$ 文字を超えてはいけません。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "inputForbiddenCharacters": {
+    "message": "次の文字は許可されていません: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "入力値は少なくとも$MIN$桁でなければなりません。",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "入力値は$MAX$桁を超えてはいけません。",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
+  },
+  "multipleInputEmails": {
+    "message": "1つ以上のメールアドレスが無効です"
+  },
+  "inputTrimValidator": {
+    "message": "値を空白のみにしないでください。",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
+  "inputEmail": {
+    "message": "入力したものはメールアドレスではありません。"
+  },
+  "fieldsNeedAttention": {
+    "message": "上記の $COUNT$ 点を確認してください。",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "selectPlaceholder": {
+    "message": "-- 選択 --"
+  },
+  "multiSelectPlaceholder": {
+    "message": "-- 入力して絞り込み --"
+  },
+  "multiSelectLoading": {
+    "message": "オプションを取得中..."
+  },
+  "multiSelectNotFound": {
+    "message": "アイテムが見つかりません"
+  },
+  "multiSelectClearAll": {
+    "message": "すべてクリア"
+  },
+  "plusNMore": {
+    "message": "+ $QUANTITY$ 個以上",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "submenu": {
+    "message": "サブメニュー"
+  },
+  "skipToContent": {
+    "message": "コンテンツへ移動"
+  },
+  "typePasskey": {
+    "message": "パスキー"
+  },
+  "passkeyNotCopied": {
+    "message": "パスキーはコピーされません"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "パスキーは複製されたアイテムにコピーされません。このアイテムを複製しますか？"
+  },
+  "aliasDomain": {
+    "message": "エイリアスドメイン"
+  },
+  "importData": {
+    "message": "データのインポート",
+    "description": "Used for the desktop menu item and the header of the import dialog"
+  },
+  "importError": {
+    "message": "インポート エラー"
+  },
+  "importErrorDesc": {
+    "message": "インポートしようとしたデータに問題がありました。以下のエラーをソースファイルで解決し、もう一度やり直してください。"
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "以下のエラーを解決してやり直してください。"
+  },
+  "description": {
+    "message": "説明"
+  },
+  "importSuccess": {
+    "message": "データをインポートしました"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "合計 $AMOUNT$ 件のアイテムをインポートしました。",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "total": {
+    "message": "合計"
+  },
+  "importWarning": {
+    "message": "$ORGANIZATION$にデータをインポートしています。データはこの組織のメンバーと共有される可能性があります。続行しますか？",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "ログインを完了するには Duo を起動し手順に従ってください。"
+  },
+  "duoRequiredByOrgForAccount": {
+    "message": "アカウントには Duo 二段階認証が必要です。"
+  },
+  "launchDuo": {
+    "message": "ブラウザで Duo を起動"
+  },
+  "importFormatError": {
+    "message": "データが正しい形式ではありません。インポートするファイルを確認してやり直してください。"
+  },
+  "importNothingError": {
+    "message": "何もインポートされませんでした。"
+  },
+  "importEncKeyError": {
+    "message": "エクスポートされたファイルの復号でエラーが発生しました。暗号化キーが、データをエクスポートするために使用された暗号化キーと一致しません。"
+  },
+  "invalidFilePassword": {
+    "message": "無効なファイルパスワードです。エクスポートファイルを作成したときに入力したパスワードを使用してください。"
+  },
+  "importDestination": {
+    "message": "インポート先"
+  },
+  "learnAboutImportOptions": {
+    "message": "インポートオプションの詳細"
+  },
+  "selectImportFolder": {
+    "message": "フォルダーを選択"
+  },
+  "selectImportCollection": {
+    "message": "コレクションを選択"
+  },
+  "importTargetHint": {
+    "message": "インポートしたファイルコンテンツを $DESTINATION$ に移動したい場合は、このオプションを選択してください。",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "割り当てられていないアイテムがファイルに含まれています。"
+  },
+  "selectFormat": {
+    "message": "インポートするファイルの形式を選択"
+  },
+  "selectImportFile": {
+    "message": "インポートするファイルを選択"
+  },
+  "chooseFile": {
+    "message": "ファイルを選択"
+  },
+  "noFileChosen": {
+    "message": "ファイルが選択されていません"
+  },
+  "orCopyPasteFileContents": {
+    "message": "またはインポートするファイルの中身をコピーして貼り付け"
+  },
+  "instructionsFor": {
+    "message": "$NAME$ 向けの説明",
+    "description": "The title for the import tool instructions.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "LastPass (csv)"
+      }
+    }
+  },
+  "confirmVaultImport": {
+    "message": "保管庫のインポートの確認"
+  },
+  "confirmVaultImportDesc": {
+    "message": "このファイルはパスワードで保護されています。インポートするファイルのパスワードを入力してください。"
+  },
+  "confirmFilePassword": {
+    "message": "ファイルパスワードの確認"
+  },
+  "multifactorAuthenticationCancelled": {
+    "message": "多要素認証がキャンセルされました"
+  },
+  "noLastPassDataFound": {
+    "message": "LastPass データが見つかりません"
+  },
+  "incorrectUsernameOrPassword": {
+    "message": "ユーザー名またはパスワードが間違っています"
+  },
+  "incorrectPassword": {
+    "message": "パスワードが違います"
+  },
+  "incorrectCode": {
+    "message": "コードが違います"
+  },
+  "incorrectPin": {
+    "message": "PIN が正しくありません"
+  },
+  "multifactorAuthenticationFailed": {
+    "message": "多要素認証に失敗しました"
+  },
+  "includeSharedFolders": {
+    "message": "共有フォルダーを含める"
+  },
+  "lastPassEmail": {
+    "message": "LastPass メールアドレス"
+  },
+  "importingYourAccount": {
+    "message": "アカウントをインポートしています..."
+  },
+  "lastPassMFARequired": {
+    "message": "LastPass の多要素認証が必要です"
+  },
+  "lastPassMFADesc": {
+    "message": "認証アプリに表示されているワンタイムパスコードを入力してください"
+  },
+  "lastPassOOBDesc": {
+    "message": "認証アプリでログイン要求を承認するか、ワンタイムパスコードを入力してください。"
+  },
+  "passcode": {
+    "message": "パスコード"
+  },
+  "lastPassMasterPassword": {
+    "message": "LastPass マスターパスワード"
+  },
+  "lastPassAuthRequired": {
+    "message": "LastPass 認証が必要です"
+  },
+  "awaitingSSO": {
+    "message": "SSO 認証を待機中"
+  },
+  "awaitingSSODesc": {
+    "message": "会社の資格情報を使用してログインを続けてください。"
+  },
+  "seeDetailedInstructions": {
+    "message": "詳細な手順はこちらをご覧ください：",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "importDirectlyFromLastPass": {
+    "message": "LastPass から直接インポート"
+  },
+  "importFromCSV": {
+    "message": "CSV からインポート"
+  },
+  "lastPassTryAgainCheckEmail": {
+    "message": "もう一度お試しいただくか、LastPass からのメールを探して認証してください。"
+  },
+  "collection": {
+    "message": "コレクション"
+  },
+  "lastPassYubikeyDesc": {
+    "message": "LastPass アカウントに関連付けられた YubiKey を USB ポートに挿入し、ボタンをタッチしてください。"
+  },
+  "commonImportFormats": {
+    "message": "一般的な形式",
+    "description": "Label indicating the most common import formats"
+  },
+  "success": {
+    "message": "成功"
+  },
+  "troubleshooting": {
+    "message": "トラブルシューティング"
+  },
+  "disableHardwareAccelerationRestart": {
+    "message": "ハードウェアアクセラレーションを無効にして再起動する"
+  },
+  "enableHardwareAccelerationRestart": {
+    "message": "ハードウェアアクセラレーションを有効にして再起動する"
+  },
+  "removePasskey": {
+    "message": "パスキーを削除"
+  },
+  "passkeyRemoved": {
+    "message": "パスキーを削除しました"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "ターゲットコレクションの割り当てに失敗しました。"
+  },
+  "errorAssigningTargetFolder": {
+    "message": "ターゲットフォルダーの割り当てに失敗しました。"
   }
 }

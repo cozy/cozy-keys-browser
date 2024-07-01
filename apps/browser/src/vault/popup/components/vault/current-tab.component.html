@@ -1,4 +1,4 @@
-<header>
+<app-header>
   <h1 class="sr-only">{{ "currentTab" | i18n }}</h1>
   <div class="left">
     <!-- Cozy custo
@@ -19,7 +19,7 @@
       ></span>
     </button>
   </div>
-  <div class="search" (click)="back()">
+  <div class="search center" (click)="back()">
     <i class="icon-cozy icon-search"></i>
     <div id="search-tag">
       <span id="search-tag-text">{{ "forThisWebSite" | i18n }}</span>
@@ -51,16 +51,43 @@
     </button>
     <!-- end custo -->
   </div>
-</header>
+</app-header>
 <main tabindex="-1">
   <div class="no-items" *ngIf="!loaded">
     <i class="bwi bwi-spinner bwi-spin bwi-3x" aria-hidden="true"></i>
   </div>
-  <div *ngIf="loaded">
+  <ng-container *ngIf="loaded">
     <!-- Cozy custo
     <app-vault-select (onVaultSelectionChanged)="load()"></app-vault-select>
-    <app-callout *ngIf="showHowToAutofill" type="info" title="{{ 'howToAutofill' | i18n }}">
-      <p>{{ autofillCalloutText }}</p>
+    <app-callout
+      *ngIf="
+        (unassignedItemsBannerEnabled$ | async) &&
+        (unassignedItemsBannerService.showBanner$ | async) &&
+        !(unassignedItemsBannerService.loading$ | async)
+      "
+      type="info"
+    >
+      <p>
+        {{ unassignedItemsBannerService.bannerText$ | async | i18n }}
+        {{ "unassignedItemsBannerCTAPartOne" | i18n }}
+        <a
+          [href]="unassignedItemsBannerService.adminConsoleUrl$ | async"
+          bitLink
+          linkType="contrast"
+          target="_blank"
+          rel="noreferrer"
+          >{{ "adminConsole" | i18n }}</a
+        >
+        {{ "unassignedItemsBannerCTAPartTwo" | i18n }}
+        <a
+          href="https://bitwarden.com/help/unassigned-vault-items-moved-to-admin-console"
+          bitLink
+          linkType="contrast"
+          target="_blank"
+          rel="noreferrer"
+          >{{ "learnMore" | i18n }}</a
+        >
+      </p>
     -->
     <app-callout *ngIf="showHowToAutofill" type="info" title="{{ 'howToAutofill' | i18n }}">
       <div class="icon-cozy-inline">
@@ -89,15 +116,10 @@
         type="button"
         class="btn primary callout-half"
         appStopClick
-        (click)="dismissCallout()"
+        (click)="unassignedItemsBannerService.hideBanner()"
       >
         {{ "gotIt" | i18n }}
       </button>
-      <!-- Cozy custo : commented
-      <button type="button" class="btn callout-half" appStopClick (click)="goToSettings()">
-        {{ "autofillSettings" | i18n }}
-      </button>
-      -->
     </app-callout>
     <div class="box list">
       <h2 class="box-header">
@@ -217,5 +239,5 @@
         <!-- end custo -->
       </div>
     </div>
-  </div>
+  </ng-container>
 </main>

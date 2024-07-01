@@ -1,0 +1,11 @@
+<app-callout type="warning">
+  {{ "experimentalFeature" | i18n }}
+  <a href="https://bitwarden.com/help/auto-fill-browser/" target="_blank" rel="noreferrer">{{
+    "learnMoreAboutAutofill" | i18n
+  }}</a>
+</app-callout>
+
+<bit-form-control>
+  <input type="checkbox" bitCheckbox [formControl]="enabled" />
+  <bit-label>{{ "turnOn" | i18n }}</bit-label>
+</bit-form-control>

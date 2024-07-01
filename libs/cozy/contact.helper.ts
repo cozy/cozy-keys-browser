@@ -1,8 +1,8 @@
 import { models } from "cozy-client";
 import { IOCozyContact } from "cozy-client/types/types";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
@@ -27,7 +27,7 @@ export const convertContactToCipherData = async (
   cipherService: CipherService,
   i18nService: I18nService,
   contact: IOCozyContact,
-  key?: SymmetricCryptoKey
+  key?: SymmetricCryptoKey,
 ): Promise<CipherData> => {
   // Temporary type fix because contact.cozyMetadata is not properly typed
   const cozyMetadata = contact.cozyMetadata as any;
@@ -66,7 +66,7 @@ export const convertContactToCipherData = async (
 
 const chooseAddress = (cipher: CipherView): FieldView => {
   const homeAddress = cipher.fields.find(
-    (f) => f.cozyType === "address" && f.label?.label === "home"
+    (f) => f.cozyType === "address" && f.label?.label === "home",
   );
 
   if (homeAddress) {
@@ -74,7 +74,7 @@ const chooseAddress = (cipher: CipherView): FieldView => {
   }
 
   const workAddress = cipher.fields.find(
-    (f) => f.cozyType === "address" && f.label?.label === "work"
+    (f) => f.cozyType === "address" && f.label?.label === "work",
   );
 
   if (workAddress) {
@@ -86,10 +86,10 @@ const chooseAddress = (cipher: CipherView): FieldView => {
 
 const formatAddress = (cipher: CipherView, chosenAddress: FieldView): string => {
   const addressNumber = cipher.fields.find(
-    (f) => f.parentId === chosenAddress.id && f.cozyType === "number"
+    (f) => f.parentId === chosenAddress.id && f.cozyType === "number",
   )?.value;
   const addressStreet = cipher.fields.find(
-    (f) => f.parentId === chosenAddress.id && f.cozyType === "street"
+    (f) => f.parentId === chosenAddress.id && f.cozyType === "street",
   )?.value;
 
   if (addressNumber && addressStreet) {
@@ -122,16 +122,16 @@ export const generateIdentityViewFromCipherView = (cipher: CipherView): Identity
   if (chosenAddress) {
     identity.address1 = formatAddress(cipher, chosenAddress);
     identity.city = cipher.fields.find(
-      (f) => f.parentId === chosenAddress.id && f.cozyType === "city"
+      (f) => f.parentId === chosenAddress.id && f.cozyType === "city",
     )?.value;
     identity.state = cipher.fields.find(
-      (f) => f.parentId === chosenAddress.id && f.cozyType === "region"
+      (f) => f.parentId === chosenAddress.id && f.cozyType === "region",
     )?.value;
     identity.postalCode = cipher.fields.find(
-      (f) => f.parentId === chosenAddress.id && f.cozyType === "code"
+      (f) => f.parentId === chosenAddress.id && f.cozyType === "code",
     )?.value;
     identity.country = cipher.fields.find(
-      (f) => f.parentId === chosenAddress.id && f.cozyType === "country"
+      (f) => f.parentId === chosenAddress.id && f.cozyType === "country",
     )?.value;
   }
 

@@ -1,7 +1,7 @@
 import { Directive, OnInit } from "@angular/core";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import {
   GeneratedPasswordHistory,
   PasswordGenerationServiceAbstraction,
@@ -15,17 +15,17 @@ export class PasswordGeneratorHistoryComponent implements OnInit {
     protected passwordGenerationService: PasswordGenerationServiceAbstraction,
     protected platformUtilsService: PlatformUtilsService,
     protected i18nService: I18nService,
-    private win: Window
+    private win: Window,
   ) {}
 
   async ngOnInit() {
     this.history = await this.passwordGenerationService.getHistory();
   }
 
-  clear() {
+  clear = async () => {
     this.history = [];
-    this.passwordGenerationService.clear();
-  }
+    await this.passwordGenerationService.clear();
+  };
 
   copy(password: string) {
     const copyOptions = this.win != null ? { window: this.win } : null;
@@ -33,7 +33,7 @@ export class PasswordGeneratorHistoryComponent implements OnInit {
     this.platformUtilsService.showToast(
       "info",
       null,
-      this.i18nService.t("valueCopied", this.i18nService.t("password"))
+      this.i18nService.t("valueCopied", this.i18nService.t("password")),
     );
   }
 }

@@ -1,15 +1,17 @@
-import { UriMatchType } from "../../../enums/uriMatchType";
-import { LoginUriApi } from "../../../models/api/login-uri.api";
+import { UriMatchStrategySetting } from "../../../models/domain/domain-service";
+import { LoginUriApi } from "../api/login-uri.api";
 
 export class LoginUriData {
   uri: string;
-  match: UriMatchType = null;
+  uriChecksum: string;
+  match: UriMatchStrategySetting = null;
 
   constructor(data?: LoginUriApi) {
     if (data == null) {
       return;
     }
     this.uri = data.uri;
+    this.uriChecksum = data.uriChecksum;
     this.match = data.match;
   }
 }

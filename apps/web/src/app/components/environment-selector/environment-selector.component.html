@@ -1,0 +1,26 @@
+<div class="tw-mb-1" *ngIf="showRegionSelector">
+  <bit-menu #environmentOptions>
+    <a
+      *ngFor="let region of availableRegions"
+      bitMenuItem
+      [attr.href]="
+        region == currentRegion ? 'javascript:void(0)' : region.urls.webVault + routeAndParams
+      "
+      class="pr-4"
+    >
+      <i
+        class="bwi bwi-fw bwi-sm bwi-check pb-1"
+        aria-hidden="true"
+        [style.visibility]="region == currentRegion ? 'visible' : 'hidden'"
+      ></i>
+      {{ region.domain }}
+    </a>
+  </bit-menu>
+  <div>
+    {{ "server" | i18n }}:
+    <a [routerLink]="[]" [bitMenuTriggerFor]="environmentOptions">
+      <b>{{ currentRegion?.domain }}</b
+      ><i class="bwi bwi-fw bwi-sm bwi-angle-down" aria-hidden="true"></i>
+    </a>
+  </div>
+</div>

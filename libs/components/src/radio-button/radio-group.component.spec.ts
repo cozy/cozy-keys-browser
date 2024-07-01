@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
 import { By } from "@angular/platform-browser";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 
 import { I18nMockService } from "../utils/i18n-mock.service";
 
@@ -23,6 +23,8 @@ describe("RadioGroupComponent", () => {
       providers: [{ provide: I18nService, useValue: new I18nMockService({}) }],
     });
 
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     TestBed.compileComponents();
     fixture = TestBed.createComponent(TestApp);
     fixture.detectChanges();

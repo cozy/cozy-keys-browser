@@ -2,13 +2,11 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/cor
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import { CozyClientService } from "../../../popup/services/cozyClient.service";
 import { HistoryService } from "../../../popup/services/history.service";
-import { PopupUtilsService } from "../../../popup/services/popup-utils.service";
 
 @Component({
   selector: "app-vault-add-generic",
@@ -27,11 +25,9 @@ export class AddGenericComponent implements OnInit, OnDestroy {
 
   constructor(
     private cozyClientService: CozyClientService,
-    private messagingService: MessagingService,
-    private popupUtilsService: PopupUtilsService,
     private historyService: HistoryService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -61,11 +57,6 @@ export class AddGenericComponent implements OnInit, OnDestroy {
 
   back() {
     this.onCancelled.emit();
-
-    if (this.popupUtilsService.inTab(window)) {
-      this.messagingService.send("closeTab");
-      return;
-    }
 
     this.historyService.gotoPreviousUrl();
   }

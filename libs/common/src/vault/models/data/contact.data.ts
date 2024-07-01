@@ -1,5 +1,5 @@
 // Cozy customization
-import { ContactApi } from "../../../models/api/contact.api";
+import { ContactApi } from "../api/contact.api";
 
 export class ContactData {
   displayName: string;

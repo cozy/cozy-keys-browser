@@ -9,14 +9,13 @@ import {
 import { ActivatedRoute } from "@angular/router";
 import { concatMap, Subject, takeUntil } from "rxjs";
 
-import { SelectOptions } from "@bitwarden/angular/interfaces/selectOptions";
 import { ControlsOf } from "@bitwarden/angular/types/controls-of";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { OrganizationApiServiceAbstraction } from "@bitwarden/common/abstractions/organization/organization-api.service.abstraction";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import {
+  MemberDecryptionType,
   OpenIdConnectRedirectBehavior,
   Saml2BindingType,
   Saml2NameIdFormat,
@@ -27,10 +26,18 @@ import { SsoConfigApi } from "@bitwarden/common/auth/models/api/sso-config.api";
 import { OrganizationSsoRequest } from "@bitwarden/common/auth/models/request/organization-sso.request";
 import { OrganizationSsoResponse } from "@bitwarden/common/auth/models/response/organization-sso.response";
 import { SsoConfigView } from "@bitwarden/common/auth/models/view/sso-config.view";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { Organization } from "@bitwarden/common/models/domain/organization";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 import { ssoTypeValidator } from "./sso-type.validator";
+
+interface SelectOptions {
+  name: string;
+  value: any;
+  disabled?: boolean;
+}
 
 const defaultSigningAlgorithm = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256";
 
@@ -40,6 +47,7 @@ const defaultSigningAlgorithm = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha2
 })
 export class SsoComponent implements OnInit, OnDestroy {
   readonly ssoType = SsoType;
+  readonly memberDecryptionType = MemberDecryptionType;
 
   readonly ssoTypeOptions: SelectOptions[] = [
     { name: this.i18nService.t("selectType"), value: SsoType.None, disabled: true },
@@ -83,6 +91,8 @@ export class SsoComponent implements OnInit, OnDestroy {
   ];
 
   private destroy$ = new Subject<void>();
+  showTdeOptions = false;
+  showKeyConnectorOptions = false;
 
   showOpenIdCustomizations = false;
 
@@ -90,11 +100,11 @@ export class SsoComponent implements OnInit, OnDestroy {
   haveTestedKeyConnector = false;
   organizationId: string;
   organization: Organization;
-  formPromise: Promise<OrganizationSsoResponse>;
 
   callbackPath: string;
   signedOutCallbackPath: string;
   spEntityId: string;
+  spEntityIdStatic: string;
   spMetadataUrl: string;
   spAcsUrl: string;
 
@@ -106,7 +116,7 @@ export class SsoComponent implements OnInit, OnDestroy {
       metadataAddress: new FormControl(),
       redirectBehavior: new FormControl(
         OpenIdConnectRedirectBehavior.RedirectGet,
-        Validators.required
+        Validators.required,
       ),
       getClaimsFromUserInfoEndpoint: new FormControl(),
       additionalScopes: new FormControl(),
@@ -118,11 +128,12 @@ export class SsoComponent implements OnInit, OnDestroy {
     },
     {
       updateOn: "blur",
-    }
+    },
   );
 
   protected samlForm = this.formBuilder.group<ControlsOf<SsoConfigView["saml"]>>(
     {
+      spUniqueEntityId: new FormControl(true, { updateOn: "change" }),
       spNameIdFormat: new FormControl(Saml2NameIdFormat.NotConfigured),
       spOutboundSigningAlgorithm: new FormControl(defaultSigningAlgorithm),
       spSigningBehavior: new FormControl(Saml2SigningBehavior.IfIdpWantAuthnRequestsSigned),
@@ -142,12 +153,12 @@ export class SsoComponent implements OnInit, OnDestroy {
     },
     {
       updateOn: "blur",
-    }
+    },
   );
 
   protected ssoConfigForm = this.formBuilder.group<ControlsOf<SsoConfigView>>({
     configType: new FormControl(SsoType.None),
-    keyConnectorEnabled: new FormControl(false),
+    memberDecryptionType: new FormControl(MemberDecryptionType.MasterPassword),
     keyConnectorUrl: new FormControl(""),
     openId: this.openIdForm,
     saml: this.samlForm,
@@ -174,7 +185,8 @@ export class SsoComponent implements OnInit, OnDestroy {
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private organizationService: OrganizationService,
-    private organizationApiService: OrganizationApiServiceAbstraction
+    private organizationApiService: OrganizationApiServiceAbstraction,
+    private configService: ConfigService,
   ) {}
 
   async ngOnInit() {
@@ -220,9 +232,11 @@ export class SsoComponent implements OnInit, OnDestroy {
           this.organizationId = params.organizationId;
           await this.load();
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
+
+    this.showKeyConnectorOptions = this.platformUtilsService.isSelfHost();
   }
 
   ngOnDestroy(): void {
@@ -238,16 +252,17 @@ export class SsoComponent implements OnInit, OnDestroy {
     this.callbackPath = ssoSettings.urls.callbackPath;
     this.signedOutCallbackPath = ssoSettings.urls.signedOutCallbackPath;
     this.spEntityId = ssoSettings.urls.spEntityId;
+    this.spEntityIdStatic = ssoSettings.urls.spEntityIdStatic;
     this.spMetadataUrl = ssoSettings.urls.spMetadataUrl;
     this.spAcsUrl = ssoSettings.urls.spAcsUrl;
 
     this.loading = false;
   }
 
-  async submit() {
+  submit = async () => {
     this.updateFormValidationState(this.ssoConfigForm);
 
-    if (this.ssoConfigForm.value.keyConnectorEnabled) {
+    if (this.ssoConfigForm.value.memberDecryptionType === MemberDecryptionType.KeyConnector) {
       this.haveTestedKeyConnector = false;
       await this.validateKeyConnectorUrl();
     }
@@ -262,18 +277,11 @@ export class SsoComponent implements OnInit, OnDestroy {
     request.identifier = this.ssoIdentifierCtrl.value === "" ? null : this.ssoIdentifierCtrl.value;
     request.data = SsoConfigApi.fromView(this.ssoConfigForm.getRawValue());
 
-    this.formPromise = this.organizationApiService.updateSso(this.organizationId, request);
+    const response = await this.organizationApiService.updateSso(this.organizationId, request);
+    this.populateForm(response);
 
-    try {
-      const response = await this.formPromise;
-      this.populateForm(response);
-      this.platformUtilsService.showToast("success", null, this.i18nService.t("ssoSettingsSaved"));
-    } catch {
-      // Logged by appApiAction, do nothing
-    }
-
-    this.formPromise = null;
-  }
+    this.platformUtilsService.showToast("success", null, this.i18nService.t("ssoSettingsSaved"));
+  };
 
   async validateKeyConnectorUrl() {
     if (this.haveTestedKeyConnector) {
@@ -313,7 +321,7 @@ export class SsoComponent implements OnInit, OnDestroy {
 
   get enableTestKeyConnector() {
     return (
-      this.ssoConfigForm.get("keyConnectorEnabled").value &&
+      this.ssoConfigForm.value?.memberDecryptionType === MemberDecryptionType.KeyConnector &&
       !Utils.isNullOrWhitespace(this.keyConnectorUrl?.value)
     );
   }
@@ -357,7 +365,7 @@ export class SsoComponent implements OnInit, OnDestroy {
     const errorCount = this.getErrorCount(this.ssoConfigForm);
     const errorCountText = this.i18nService.t(
       errorCount === 1 ? "formErrorSummarySingle" : "formErrorSummaryPlural",
-      errorCount.toString()
+      errorCount.toString(),
     );
 
     const div = document.createElement("div");

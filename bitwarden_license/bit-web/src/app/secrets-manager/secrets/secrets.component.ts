@@ -2,8 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatestWith, Observable, startWith, switchMap } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
 
 import { SecretListView } from "../models/view/secret-list.view";
@@ -29,13 +30,15 @@ export class SecretsComponent implements OnInit {
   protected search: string;
 
   private organizationId: string;
+  private organizationEnabled: boolean;
 
   constructor(
     private route: ActivatedRoute,
     private secretService: SecretService,
     private dialogService: DialogService,
     private platformUtilsService: PlatformUtilsService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private organizationService: OrganizationService,
   ) {}
 
   ngOnInit() {
@@ -44,8 +47,12 @@ export class SecretsComponent implements OnInit {
       combineLatestWith(this.route.params),
       switchMap(async ([_, params]) => {
         this.organizationId = params.organizationId;
+        this.organizationEnabled = (
+          await this.organizationService.get(params.organizationId)
+        )?.enabled;
+
         return await this.getSecrets();
-      })
+      }),
     );
 
     if (this.route.snapshot.queryParams.search) {
@@ -63,6 +70,7 @@ export class SecretsComponent implements OnInit {
         organizationId: this.organizationId,
         operation: OperationType.Edit,
         secretId: secretId,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -80,6 +88,7 @@ export class SecretsComponent implements OnInit {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -93,7 +102,11 @@ export class SecretsComponent implements OnInit {
       id,
       this.platformUtilsService,
       this.i18nService,
-      this.secretService
+      this.secretService,
     );
+  }
+
+  copySecretUuid(id: string) {
+    SecretsListComponent.copySecretUuid(id, this.platformUtilsService, this.i18nService);
   }
 }

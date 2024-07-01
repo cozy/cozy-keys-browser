@@ -1,0 +1,8 @@
+<app-callout type="warning">
+  {{ "twoStepLoginPolicyWarning" | i18n }}
+</app-callout>
+
+<bit-form-control>
+  <input type="checkbox" bitCheckbox [formControl]="enabled" />
+  <bit-label>{{ "turnOn" | i18n }}</bit-label>
+</bit-form-control>

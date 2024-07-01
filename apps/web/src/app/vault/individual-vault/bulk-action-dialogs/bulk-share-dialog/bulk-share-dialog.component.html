@@ -7,7 +7,7 @@
     <p>
       {{
         "moveSelectedItemsCountDesc"
-          | i18n: this.ciphers.length:shareableCiphers.length:nonShareableCount
+          | i18n: this.ciphers.length : shareableCiphers.length : nonShareableCount
       }}
     </p>
     <bit-form-field>
@@ -62,12 +62,12 @@
       </tbody>
     </table>
   </span>
-  <div bitDialogFooter class="tw-flex tw-flex-row tw-gap-2">
+  <ng-container bitDialogFooter>
     <button bitButton type="submit" buttonType="primary" [bitAction]="submit">
       {{ "save" | i18n }}
     </button>
     <button bitButton type="button" buttonType="secondary" (click)="cancel()">
       {{ "cancel" | i18n }}
     </button>
-  </div>
+  </ng-container>
 </bit-dialog>

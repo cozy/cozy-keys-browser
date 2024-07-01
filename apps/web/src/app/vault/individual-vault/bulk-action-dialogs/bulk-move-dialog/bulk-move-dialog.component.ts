@@ -3,8 +3,8 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { firstValueFrom, Observable } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
@@ -26,23 +26,22 @@ export enum BulkMoveDialogResult {
  */
 export const openBulkMoveDialog = (
   dialogService: DialogService,
-  config: DialogConfig<BulkMoveDialogParams>
+  config: DialogConfig<BulkMoveDialogParams>,
 ) => {
   return dialogService.open<BulkMoveDialogResult, BulkMoveDialogParams>(
     BulkMoveDialogComponent,
-    config
+    config,
   );
 };
 
 @Component({
-  selector: "vault-bulk-move-dialog",
   templateUrl: "bulk-move-dialog.component.html",
 })
 export class BulkMoveDialogComponent implements OnInit {
   cipherIds: string[] = [];
 
   formGroup = this.formBuilder.group({
-    folderId: ["", [Validators.required]],
+    folderId: ["", [Validators.nullValidator]],
   });
   folders$: Observable<FolderView[]>;
 
@@ -53,7 +52,7 @@ export class BulkMoveDialogComponent implements OnInit {
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private folderService: FolderService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
   ) {
     this.cipherIds = params.cipherIds ?? [];
   }

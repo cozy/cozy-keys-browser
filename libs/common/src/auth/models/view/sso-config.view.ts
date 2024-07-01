@@ -1,5 +1,6 @@
 import { View } from "../../../models/view/view";
 import {
+  MemberDecryptionType,
   OpenIdConnectRedirectBehavior,
   Saml2BindingType,
   Saml2NameIdFormat,
@@ -14,7 +15,7 @@ export class SsoConfigView extends View {
 
   configType: SsoType;
 
-  keyConnectorEnabled: boolean;
+  memberDecryptionType: MemberDecryptionType;
   keyConnectorUrl: string;
 
   openId: {
@@ -33,6 +34,7 @@ export class SsoConfigView extends View {
   };
 
   saml: {
+    spUniqueEntityId: boolean;
     spNameIdFormat: Saml2NameIdFormat;
     spOutboundSigningAlgorithm: string;
     spSigningBehavior: Saml2SigningBehavior;
@@ -66,8 +68,8 @@ export class SsoConfigView extends View {
     }
 
     this.configType = orgSsoResponse.data.configType;
+    this.memberDecryptionType = orgSsoResponse.data.memberDecryptionType;
 
-    this.keyConnectorEnabled = orgSsoResponse.data.keyConnectorEnabled;
     this.keyConnectorUrl = orgSsoResponse.data.keyConnectorUrl;
 
     if (this.configType === SsoType.OpenIdConnect) {
@@ -87,6 +89,7 @@ export class SsoConfigView extends View {
       };
     } else if (this.configType === SsoType.Saml2) {
       this.saml = {
+        spUniqueEntityId: orgSsoResponse.data.spUniqueEntityId,
         spNameIdFormat: orgSsoResponse.data.spNameIdFormat,
         spOutboundSigningAlgorithm: orgSsoResponse.data.spOutboundSigningAlgorithm,
         spSigningBehavior: orgSsoResponse.data.spSigningBehavior,

@@ -15,13 +15,11 @@ import {
 } from "@angular/core";
 import { BehaviorSubject, concatMap, map, merge, Observable, Subject, takeUntil } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import {
-  isNotProviderUser,
-  OrganizationService,
-} from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { Organization } from "@bitwarden/common/models/domain/organization";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 import { VaultFilterService } from "../../../services/vault-filter.service";
 
@@ -34,7 +32,7 @@ import { VaultFilterService } from "../../../services/vault-filter.service";
         "void",
         style({
           opacity: 0,
-        })
+        }),
       ),
       transition(
         "void => open",
@@ -42,8 +40,8 @@ import { VaultFilterService } from "../../../services/vault-filter.service";
           "100ms linear",
           style({
             opacity: 1,
-          })
-        )
+          }),
+        ),
       ),
       transition("* => void", animate("100ms linear", style({ opacity: 0 }))),
     ]),
@@ -64,7 +62,7 @@ export class VaultSelectComponent implements OnInit, OnDestroy {
   selectedVault$: Observable<string | null> = this._selectedVault.asObservable();
 
   enforcePersonalOwnership = false;
-  overlayPostition: ConnectedPosition[] = [
+  overlayPosition: ConnectedPosition[] = [
     {
       originX: "start",
       originY: "bottom",
@@ -89,7 +87,7 @@ export class VaultSelectComponent implements OnInit, OnDestroy {
     private overlay: Overlay,
     private viewContainerRef: ViewContainerRef,
     private platformUtilsService: PlatformUtilsService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
   ) {}
 
   @HostListener("document:keydown.escape", ["$event"])
@@ -101,11 +99,9 @@ export class VaultSelectComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.organizations$ = this.organizationService.organizations$
+    this.organizations$ = this.organizationService.memberOrganizations$
       .pipe(takeUntil(this._destroy))
-      .pipe(
-        map((orgs) => orgs.filter(isNotProviderUser).sort((a, b) => a.name.localeCompare(b.name)))
-      );
+      .pipe(map((orgs) => orgs.sort(Utils.getSortFunction(this.i18nService, "name"))));
 
     this.organizations$
       .pipe(
@@ -122,14 +118,14 @@ export class VaultSelectComponent implements OnInit, OnDestroy {
               this._selectedVault.next(this.i18nService.t(this.vaultFilterService.myVault));
             } else if (this.vaultFilterService.vaultFilter.selectedOrganizationId != null) {
               const selectedOrganization = organizations.find(
-                (o) => o.id === this.vaultFilterService.vaultFilter.selectedOrganizationId
+                (o) => o.id === this.vaultFilterService.vaultFilter.selectedOrganizationId,
               );
               this._selectedVault.next(selectedOrganization.name);
             } else {
               this._selectedVault.next(this.i18nService.t(this.vaultFilterService.allVaults));
             }
           }
-        })
+        }),
       )
       .pipe(takeUntil(this._destroy))
       .subscribe();
@@ -153,7 +149,7 @@ export class VaultSelectComponent implements OnInit, OnDestroy {
       .withPush(true)
       .withViewportMargin(10)
       .withGrowAfterOpen(true)
-      .withPositions(this.overlayPostition);
+      .withPositions(this.overlayPosition);
 
     this.overlayRef = this.overlay.create({
       hasBackdrop: true,
@@ -171,7 +167,7 @@ export class VaultSelectComponent implements OnInit, OnDestroy {
     merge(
       this.overlayRef.outsidePointerEvents(),
       this.overlayRef.backdropClick(),
-      this.overlayRef.detachments()
+      this.overlayRef.detachments(),
       // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     ).subscribe(() => {
       this.close();
@@ -191,7 +187,7 @@ export class VaultSelectComponent implements OnInit, OnDestroy {
       this.platformUtilsService.showToast(
         "error",
         null,
-        this.i18nService.t("disabledOrganizationFilterError")
+        this.i18nService.t("disabledOrganizationFilterError"),
       );
     } else {
       this._selectedVault.next(organization.name);

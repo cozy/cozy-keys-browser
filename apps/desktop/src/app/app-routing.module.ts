@@ -1,14 +1,19 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { AuthGuard } from "@bitwarden/angular/auth/guards/auth.guard";
-import { LockGuard } from "@bitwarden/angular/auth/guards/lock.guard";
+import {
+  AuthGuard,
+  lockGuard,
+  redirectGuard,
+  tdeDecryptionRequiredGuard,
+} from "@bitwarden/angular/auth/guards";
 
 import { AccessibilityCookieComponent } from "../auth/accessibility-cookie.component";
-import { LoginGuard } from "../auth/guards/login.guard";
+import { maxAccountsGuardFn } from "../auth/guards/max-accounts.guard";
 import { HintComponent } from "../auth/hint.component";
 import { LockComponent } from "../auth/lock.component";
-import { LoginWithDeviceComponent } from "../auth/login/login-with-device.component";
+import { LoginDecryptionOptionsComponent } from "../auth/login/login-decryption-options/login-decryption-options.component";
+import { LoginViaAuthRequestComponent } from "../auth/login/login-via-auth-request.component";
 import { LoginComponent } from "../auth/login/login.component";
 import { RegisterComponent } from "../auth/register.component";
 import { RemovePasswordComponent } from "../auth/remove-password.component";
@@ -18,25 +23,39 @@ import { TwoFactorComponent } from "../auth/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/update-temp-password.component";
 import { VaultComponent } from "../vault/app/vault/vault.component";
 
-import { SendComponent } from "./send/send.component";
+import { SendComponent } from "./tools/send/send.component";
 
 const routes: Routes = [
-  { path: "", redirectTo: "/vault", pathMatch: "full" },
+  {
+    path: "",
+    pathMatch: "full",
+    children: [], // Children lets us have an empty component.
+    canActivate: [redirectGuard({ loggedIn: "/vault", loggedOut: "/login", locked: "/lock" })],
+  },
   {
     path: "lock",
     component: LockComponent,
-    canActivate: [LockGuard],
+    canActivate: [lockGuard()],
   },
   {
     path: "login",
     component: LoginComponent,
-    canActivate: [LoginGuard],
+    canActivate: [maxAccountsGuardFn()],
   },
   {
     path: "login-with-device",
-    component: LoginWithDeviceComponent,
+    component: LoginViaAuthRequestComponent,
+  },
+  {
+    path: "admin-approval-requested",
+    component: LoginViaAuthRequestComponent,
   },
   { path: "2fa", component: TwoFactorComponent },
+  {
+    path: "login-initiated",
+    component: LoginDecryptionOptionsComponent,
+    canActivate: [tdeDecryptionRequiredGuard()],
+  },
   { path: "register", component: RegisterComponent },
   {
     path: "vault",

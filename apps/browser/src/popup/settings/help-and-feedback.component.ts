@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 
-import { BrowserApi } from "../../browser/browserApi";
+import { BrowserApi } from "../../platform/browser/browser-api";
 import { CozyClientService } from "../services/cozyClient.service";
 
 @Component({

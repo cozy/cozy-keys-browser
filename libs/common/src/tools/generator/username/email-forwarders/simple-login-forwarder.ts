@@ -17,7 +17,7 @@ export class SimpleLoginForwarder implements Forwarder {
         "Content-Type": "application/json",
       }),
     };
-    let url = "https://app.simplelogin.io/api/alias/random/new";
+    let url = options.simplelogin.baseUrl + "/api/alias/random/new";
     if (options.website != null) {
       url += "?hostname=" + options.website;
     }
@@ -35,13 +35,9 @@ export class SimpleLoginForwarder implements Forwarder {
     if (response.status === 401) {
       throw "Invalid SimpleLogin API key.";
     }
-    try {
-      const json = await response.json();
-      if (json?.error != null) {
-        throw "SimpleLogin error:" + json.error;
-      }
-    } catch {
-      // Do nothing...
+    const json = await response.json();
+    if (json?.error != null) {
+      throw "SimpleLogin error:" + json.error;
     }
     throw "Unknown SimpleLogin error occurred.";
   }

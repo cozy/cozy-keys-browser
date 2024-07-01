@@ -315,10 +315,6 @@
   }
 }
 
-.unlock-box {
-  margin-top: 58px;
-}
-
 .stacked-boxes {
   display: flex;
   flex-direction: column;
@@ -451,7 +447,8 @@
     }
   }
 
-  .img-right {
+  .img-right,
+  .txt-right {
     float: right;
     margin-left: 10px;
   }
@@ -903,7 +900,7 @@ form {
   }
 }
 
-/* Cozy custo */
+/* Cozy customization */
 .explanation {
   padding-top: 60px;
   padding-bottom: 10px;
@@ -922,4 +919,25 @@ select:focus-visible {
 .box.list .box-content .box-content-row .no-white-space {
   white-space: normal !important;
 }
-/* end custo */
+/* Cozy customization end */
+
+.account-switcher-row {
+  @include themify($themes) {
+    color: themed("textColor");
+    background-color: themed("boxBackgroundColor");
+  }
+
+  &:hover,
+  &:focus,
+  &.active {
+    @include themify($themes) {
+      background-color: themed("listItemBackgroundHoverColor");
+    }
+  }
+
+  &-details {
+    @include themify($themes) {
+      color: themed("mutedColor");
+    }
+  }
+}

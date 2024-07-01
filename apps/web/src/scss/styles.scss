@@ -20,11 +20,11 @@
 @import "~bootstrap/scss/_buttons";
 @import "~bootstrap/scss/_transitions";
 @import "~bootstrap/scss/_dropdown";
-@import "~bootstrap/scss/_button-group";
+// @import "~bootstrap/scss/_button-group";
 @import "~bootstrap/scss/_input-group";
 // @import "~bootstrap/scss/_custom-forms";
 @import "~bootstrap/scss/_nav";
-@import "~bootstrap/scss/_navbar";
+// @import "~bootstrap/scss/_navbar";
 @import "~bootstrap/scss/_card";
 // @import "~bootstrap/scss/_breadcrumb";
 // @import "~bootstrap/scss/_pagination";
@@ -43,18 +43,13 @@
 @import "~bootstrap/scss/_utilities";
 @import "~bootstrap/scss/_print";
 
-@import "~ngx-toastr/toastr";
-@import "~#sweetalert2";
-
 @import "./base";
 @import "./buttons";
 @import "./callouts";
 @import "./cards";
 @import "./forms";
-@import "./navigation";
 @import "./modals";
 @import "./pages";
 @import "./plugins";
 @import "./tables";
-@import "./toasts";
 @import "./vault-filters";

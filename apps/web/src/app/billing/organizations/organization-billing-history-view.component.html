@@ -1,0 +1,28 @@
+<app-header>
+  <button
+    type="button"
+    bitButton
+    buttonType="secondary"
+    (click)="load()"
+    class="tw-ml-auto"
+    *ngIf="firstLoaded"
+    [disabled]="loading"
+  >
+    <i class="bwi bwi-refresh bwi-fw" [ngClass]="{ 'bwi-spin': loading }" aria-hidden="true"></i>
+    {{ "refresh" | i18n }}
+  </button>
+</app-header>
+
+<bit-container>
+  <ng-container *ngIf="!firstLoaded && loading">
+    <i
+      class="bwi bwi-spinner bwi-spin tw-text-muted"
+      title="{{ 'loading' | i18n }}"
+      aria-hidden="true"
+    ></i>
+    <span class="tw-sr-only">{{ "loading" | i18n }}</span>
+  </ng-container>
+  <ng-container *ngIf="billing">
+    <app-billing-history [billing]="billing"></app-billing-history>
+  </ng-container>
+</bit-container>

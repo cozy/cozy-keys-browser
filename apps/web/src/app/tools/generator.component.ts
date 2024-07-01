@@ -1,14 +1,14 @@
-import { Component, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { GeneratorComponent as BaseGeneratorComponent } from "@bitwarden/angular/tools/generator/components/generator.component";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
+import { DialogService } from "@bitwarden/components";
 
 import { PasswordGeneratorHistoryComponent } from "./password-generator-history.component";
 
@@ -17,9 +17,6 @@ import { PasswordGeneratorHistoryComponent } from "./password-generator-history.
   templateUrl: "generator.component.html",
 })
 export class GeneratorComponent extends BaseGeneratorComponent {
-  @ViewChild("historyTemplate", { read: ViewContainerRef, static: true })
-  historyModalRef: ViewContainerRef;
-
   constructor(
     passwordGenerationService: PasswordGenerationServiceAbstraction,
     usernameGenerationService: UsernameGenerationServiceAbstraction,
@@ -28,7 +25,7 @@ export class GeneratorComponent extends BaseGeneratorComponent {
     i18nService: I18nService,
     logService: LogService,
     route: ActivatedRoute,
-    private modalService: ModalService
+    private dialogService: DialogService,
   ) {
     super(
       passwordGenerationService,
@@ -38,7 +35,7 @@ export class GeneratorComponent extends BaseGeneratorComponent {
       i18nService,
       logService,
       route,
-      window
+      window,
     );
     if (platformUtilsService.isSelfHost()) {
       // Allow only valid email forwarders for self host
@@ -46,8 +43,12 @@ export class GeneratorComponent extends BaseGeneratorComponent {
     }
   }
 
+  get isSelfHosted(): boolean {
+    return this.platformUtilsService.isSelfHost();
+  }
+
   async history() {
-    await this.modalService.openViewRef(PasswordGeneratorHistoryComponent, this.historyModalRef);
+    this.dialogService.open(PasswordGeneratorHistoryComponent);
   }
 
   lengthChanged() {

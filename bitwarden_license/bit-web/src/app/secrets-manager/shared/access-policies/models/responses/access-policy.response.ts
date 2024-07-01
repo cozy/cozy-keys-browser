@@ -22,6 +22,7 @@ export class UserProjectAccessPolicyResponse extends BaseAccessPolicyResponse {
   organizationUserName: string;
   grantedProjectId: string;
   userId: string;
+  currentUser: boolean;
 
   constructor(response: any) {
     super(response);
@@ -29,6 +30,7 @@ export class UserProjectAccessPolicyResponse extends BaseAccessPolicyResponse {
     this.organizationUserName = this.getResponseProperty("OrganizationUserName");
     this.grantedProjectId = this.getResponseProperty("GrantedProjectId");
     this.userId = this.getResponseProperty("UserId");
+    this.currentUser = this.getResponseProperty("CurrentUser");
   }
 }
 
@@ -37,6 +39,7 @@ export class UserServiceAccountAccessPolicyResponse extends BaseAccessPolicyResp
   organizationUserName: string;
   grantedServiceAccountId: string;
   userId: string;
+  currentUser: boolean;
 
   constructor(response: any) {
     super(response);
@@ -44,6 +47,7 @@ export class UserServiceAccountAccessPolicyResponse extends BaseAccessPolicyResp
     this.organizationUserName = this.getResponseProperty("OrganizationUserName");
     this.grantedServiceAccountId = this.getResponseProperty("GrantedServiceAccountId");
     this.userId = this.getResponseProperty("UserId");
+    this.currentUser = this.getResponseProperty("CurrentUser");
   }
 }
 

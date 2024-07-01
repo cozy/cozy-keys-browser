@@ -1,13 +1,5 @@
-<!-- Cozy custo
-<div class="tab-page" [@routerTransition]="getState(o)">
--->
-<div
-  [ngClass]="{ 'tab-page': true, 'with-banner': shouldDisplayPremiumNote() }"
-  [@routerTransition]="getState(o)"
->
-  <!-- end custo -->
-  <router-outlet #o="outlet"></router-outlet>
-  <!-- Cozy custo - Premium banner -->
+<div class="tab-page">
+  <router-outlet></router-outlet>
   <div *ngIf="shouldDisplayPremiumNote()" id="premium-banner">
     <button
       type="button"
@@ -23,9 +15,20 @@
       <a (click)="openPremiumPage()" href="#">{{ "premiumDesc2" | i18n }}</a>
     </p>
   </div>
-  <!-- end custo -->
   <nav class="tabs">
     <ul>
+      <!-- Cozy customization; hide "This web page" tab
+      <li routerLinkActive="active" #rlaCurrentTab="routerLinkActive" *ngIf="showCurrentTab">
+        <button
+          type="button"
+          routerLink="current"
+          appA11yTitle="{{ 'currentTab' | i18n }}"
+          [attr.aria-pressed]="rlaCurrentTab.isActive"
+        >
+          <i class="bwi bwi-folder-closed-f bwi-2x" aria-hidden="true"></i>{{ "tab" | i18n }}
+        </button>
+      </li>
+      -->
       <li routerLinkActive="active" #rlaMyVault="routerLinkActive">
         <button
           type="button"
@@ -34,9 +37,21 @@
           appA11yTitle="{{ 'myVault' | i18n }}"
           [attr.aria-pressed]="rlaMyVault.isActive"
         >
-          <i class="bwi bwi-lock-f bwi-2x" aria-hidden="true"></i>{{ "myVault" | i18n }}
+          <i class="bwi bwi-lock-f bwi-2x" aria-hidden="true"></i>{{ "vault" | i18n }}
         </button>
       </li>
+      <!-- Cozy customization; hide "Send" tab
+      <li routerLinkActive="active" #rlaSend="routerLinkActive">
+        <button
+          type="button"
+          routerLink="send"
+          appA11yTitle="{{ 'send' | i18n }}"
+          [attr.aria-pressed]="rlaSend.isActive"
+        >
+          <i class="bwi bwi-send-f bwi-2x" aria-hidden="true"></i>{{ "send" | i18n }}
+        </button>
+      </li>
+      -->
       <li routerLinkActive="active" #rlaGenerator="routerLinkActive">
         <button
           type="button"
@@ -59,7 +74,7 @@
           <i class="bwi bwi-cog-f bwi-2x" aria-hidden="true"></i>{{ "settings" | i18n }}
         </button>
       </li>
-
+      <!-- Cozy customization; add "My Cozy" tab -->
       <li>
         <a
           class="tab-icon-cozy"
@@ -70,6 +85,7 @@
           <i class="bwi bwi-2x tab-icon-cozy-cloud" aria-hidden="true"></i>{{ "myCozyTab" | i18n }}
         </a>
       </li>
+      <!-- Cozy customization end-->
     </ul>
   </nav>
 </div>

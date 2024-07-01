@@ -14,6 +14,11 @@ concurrently(
       prefixColor: "yellow",
     },
     {
+      name: "Prel",
+      command: "npm run build:preload:watch",
+      prefixColor: "magenta",
+    },
+    {
       name: "Rend",
       command: "npm run build:renderer:watch",
       prefixColor: "cyan",
@@ -21,7 +26,7 @@ concurrently(
     {
       name: "Elec",
       command: `npx wait-on ./build/main.js && npx electron --inspect=5858 ${args.join(
-        " "
+        " ",
       )} ./build --watch`,
       prefixColor: "green",
     },
@@ -30,5 +35,5 @@ concurrently(
     prefix: "name",
     outputStream: process.stdout,
     killOthers: ["success", "failure"],
-  }
+  },
 );

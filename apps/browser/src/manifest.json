@@ -16,28 +16,31 @@
   },
   "content_scripts": [
     {
+      "all_frames": false,
+      "js": ["content/content-message-handler.js"],
+      "matches": ["*://*/*", "file:///*"],
+      "exclude_matches": ["*://*/*.xml*", "file:///*.xml*"],
+      "run_at": "document_start"
+    },
+    {
       "all_frames": true,
-      "js": [
-        "content/autofill.js",
-        "content/autofiller.js",
-        "content/notificationBar.js",
-        "content/contextMenuHandler.js",
-        "content/appInfo.js"
-      ],
-      "matches": ["http://*/*", "https://*/*", "file:///*"],
+      "css": ["content/autofill.css"],
+      "js": ["content/trigger-autofill-script-injection.js"],
+      "matches": ["*://*/*", "file:///*"],
+      "exclude_matches": ["*://*/*.xml*", "file:///*.xml*"],
       "run_at": "document_start"
     },
     {
       "all_frames": false,
-      "js": ["content/message_handler.js"],
-      "matches": ["http://*/*", "https://*/*", "file:///*"],
+      "js": ["content/lp-fileless-importer.js"],
+      "matches": ["https://lastpass.com/export.php"],
       "run_at": "document_start"
     },
     {
       "all_frames": true,
-      "css": ["content/autofill.css", "content/notification.css"],
+      "js": ["content/appInfo.js"],
       "matches": ["http://*/*", "https://*/*", "file:///*"],
-      "run_at": "document_end"
+      "run_at": "document_start"
     }
   ],
   "background": {
@@ -53,6 +56,8 @@
     "default_popup": "popup/index.html"
   },
   "permissions": [
+    "<all_urls>",
+    "*://*/*",
     "tabs",
     "contextMenus",
     "storage",
@@ -60,13 +65,16 @@
     "clipboardRead",
     "clipboardWrite",
     "idle",
-    "http://*/*",
-    "https://*/*",
     "webRequest",
-    "webRequestBlocking"
+    "webRequestBlocking",
+    "webNavigation"
   ],
-  "optional_permissions": ["nativeMessaging"],
+  "optional_permissions": ["nativeMessaging", "privacy"],
   "content_security_policy": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
+  "sandbox": {
+    "pages": ["overlay/button.html", "overlay/list.html"],
+    "content_security_policy": "sandbox allow-scripts; script-src 'self'"
+  },
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
@@ -99,16 +107,21 @@
     }
   },
   "web_accessible_resources": [
+    "content/fido2/page-script.js",
+    "content/lp-suppress-import-download.js",
     "notification/bar.html",
     "images/icon38.png",
     "images/icon38_locked.png",
+    "overlay/button.html",
+    "overlay/list.html",
+    "popup/fonts/*",
     "inPageMenu/menu.html",
     "inPageMenu/loginMenu.html"
   ],
   "applications": {
     "gecko": {
-      "id": "{d99217fe-4f35-4ede-8dc8-728920f75c26}",
-      "strict_min_version": "57.0"
+      "id": "{446900e4-71c2-419f-a6a7-df9c091e268b}",
+      "strict_min_version": "91.0"
     }
   },
   "sidebar_action": {

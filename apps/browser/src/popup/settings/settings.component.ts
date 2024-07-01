@@ -1,29 +1,50 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { UntypedFormControl } from "@angular/forms";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { FormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 import { generateWebLink } from "cozy-client";
-import Swal from "sweetalert2";
+import {
+  BehaviorSubject,
+  combineLatest,
+  concatMap,
+  distinctUntilChanged,
+  filter,
+  firstValueFrom,
+  map,
+  Observable,
+  pairwise,
+  Subject,
+  switchMap,
+  takeUntil,
+} from "rxjs";
 
-import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { VaultTimeoutService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeout.service";
-import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vaultTimeout/vaultTimeoutSettings.service";
-import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
-import { DeviceType } from "@bitwarden/common/enums/deviceType";
+import { FingerprintDialogComponent } from "@bitwarden/auth/angular";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
+import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { PolicyType } from "@bitwarden/common/admin-console/enums";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
+import { DeviceType } from "@bitwarden/common/enums";
+import { VaultTimeoutAction } from "@bitwarden/common/enums/vault-timeout-action.enum";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
+import { DialogService } from "@bitwarden/components";
 
-import { BrowserApi } from "../../browser/browserApi";
+import { SetPinComponent } from "../../auth/popup/components/set-pin.component";
 import { CAN_SHARE_ORGANIZATION } from "../../cozy/flags";
 import { BiometricErrors, BiometricErrorTypes } from "../../models/biometricErrors";
-import { SetPinComponent } from "../components/set-pin.component";
+import { BrowserApi } from "../../platform/browser/browser-api";
+import { enableAccountSwitching } from "../../platform/flags";
+import BrowserPopupUtils from "../../platform/popup/browser-popup-utils";
 import { CozyClientService } from "../services/cozyClient.service";
-import { PopupUtilsService } from "../services/popup-utils.service";
 
 import { AboutComponent } from "./about.component";
+import { AwaitDesktopDialogComponent } from "./await-desktop-dialog.component";
 
 const RateUrls = {
   [DeviceType.ChromeExtension]:
@@ -44,22 +65,33 @@ const RateUrls = {
  */
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class SettingsComponent implements OnInit {
-  @ViewChild("vaultTimeoutActionSelect", { read: ElementRef, static: true })
-  vaultTimeoutActionSelectRef: ElementRef;
+  protected readonly VaultTimeoutAction = VaultTimeoutAction;
   CAN_SHARE_ORGANIZATION = CAN_SHARE_ORGANIZATION; // Cozy need
-  vaultTimeouts: any[];
-  vaultTimeoutActions: any[];
-  vaultTimeoutAction: string;
-  pin: boolean = null;
+  availableVaultTimeoutActions: VaultTimeoutAction[] = [];
+  vaultTimeoutOptions: any[];
+  vaultTimeoutPolicyCallout: Observable<{
+    timeout: { hours: number; minutes: number };
+    action: VaultTimeoutAction;
+  }>;
   supportsBiometric: boolean;
-  biometric = false;
-  enableAutoBiometricsPrompt = true;
-  previousVaultTimeout: number = null;
   showChangeMasterPass = true;
+  accountSwitcherEnabled = false;
 
-  vaultTimeout: UntypedFormControl = new UntypedFormControl(null);
+  form = this.formBuilder.group({
+    vaultTimeout: [null as number | null],
+    vaultTimeoutAction: [VaultTimeoutAction.Lock],
+    pin: [null as boolean | null],
+    biometric: false,
+    enableAutoBiometricsPrompt: true,
+  });
+
+  private refreshTimeoutSettings$ = new BehaviorSubject<void>(undefined);
+  private destroy$ = new Subject<void>();
 
   constructor(
+    private accountService: AccountService,
+    private policyService: PolicyService,
+    private formBuilder: FormBuilder,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private vaultTimeoutService: VaultTimeoutService,
@@ -69,17 +101,35 @@ export class SettingsComponent implements OnInit {
     private environmentService: EnvironmentService,
     private cryptoService: CryptoService,
     private stateService: StateService,
-    private popupUtilsService: PopupUtilsService,
-    private modalService: ModalService,
-    private keyConnectorService: KeyConnectorService,
-    private cozyClientService: CozyClientService
-  ) {}
+    private userVerificationService: UserVerificationService,
+    private dialogService: DialogService,
+    private changeDetectorRef: ChangeDetectorRef,
+    private biometricStateService: BiometricStateService,
+    private cozyClientService: CozyClientService,
+  ) {
+    this.accountSwitcherEnabled = enableAccountSwitching();
+  }
 
   async ngOnInit() {
+    const maximumVaultTimeoutPolicy = this.policyService.get$(PolicyType.MaximumVaultTimeout);
+    this.vaultTimeoutPolicyCallout = maximumVaultTimeoutPolicy.pipe(
+      filter((policy) => policy != null),
+      map((policy) => {
+        let timeout;
+        if (policy.data?.minutes) {
+          timeout = {
+            hours: Math.floor(policy.data?.minutes / 60),
+            minutes: policy.data?.minutes % 60,
+          };
+        }
+        return { timeout: timeout, action: policy.data?.action };
+      }),
+    );
+
     const showOnLocked =
       !this.platformUtilsService.isFirefox() && !this.platformUtilsService.isSafari();
 
-    this.vaultTimeouts = [
+    this.vaultTimeoutOptions = [
       { name: this.i18nService.t("immediately"), value: 0 },
       { name: this.i18nService.t("oneMinute"), value: 1 },
       { name: this.i18nService.t("fiveMinutes"), value: 5 },
@@ -92,133 +142,203 @@ export class SettingsComponent implements OnInit {
     ];
 
     if (showOnLocked) {
-      this.vaultTimeouts.push({ name: this.i18nService.t("onLocked"), value: -2 });
+      this.vaultTimeoutOptions.push({ name: this.i18nService.t("onLocked"), value: -2 });
     }
 
-    this.vaultTimeouts.push({ name: this.i18nService.t("onRestart"), value: -1 });
-    this.vaultTimeouts.push({ name: this.i18nService.t("never"), value: null });
-
-    this.vaultTimeoutActions = [
-      { name: this.i18nService.t("lock"), value: "lock" },
-      { name: this.i18nService.t("logOut"), value: "logOut" },
-    ];
+    this.vaultTimeoutOptions.push({ name: this.i18nService.t("onRestart"), value: -1 });
+    this.vaultTimeoutOptions.push({ name: this.i18nService.t("never"), value: null });
 
     let timeout = await this.vaultTimeoutSettingsService.getVaultTimeout();
-    if (timeout != null) {
-      if (timeout === -2 && !showOnLocked) {
-        timeout = -1;
-      }
-      this.vaultTimeout.setValue(timeout);
+    if (timeout === -2 && !showOnLocked) {
+      timeout = -1;
     }
-    this.previousVaultTimeout = this.vaultTimeout.value;
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.vaultTimeout.valueChanges.subscribe(async (value) => {
-      await this.saveVaultTimeout(value);
-    });
+    const pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
 
-    const action = await this.stateService.getVaultTimeoutAction();
-    this.vaultTimeoutAction = action == null ? "lock" : action;
+    this.form.controls.vaultTimeout.valueChanges
+      .pipe(
+        pairwise(),
+        concatMap(async ([previousValue, newValue]) => {
+          await this.saveVaultTimeout(previousValue, newValue);
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
 
-    const pinSet = await this.vaultTimeoutSettingsService.isPinLockSet();
-    this.pin = pinSet[0] || pinSet[1];
+    this.form.controls.vaultTimeoutAction.valueChanges
+      .pipe(
+        pairwise(),
+        concatMap(async ([previousValue, newValue]) => {
+          await this.saveVaultTimeoutAction(previousValue, newValue);
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+
+    const initialValues = {
+      vaultTimeout: timeout,
+      vaultTimeoutAction: await firstValueFrom(
+        this.vaultTimeoutSettingsService.vaultTimeoutAction$(),
+      ),
+      pin: pinStatus !== "DISABLED",
+      biometric: await this.vaultTimeoutSettingsService.isBiometricLockSet(),
+      enableAutoBiometricsPrompt: await firstValueFrom(
+        this.biometricStateService.promptAutomatically$,
+      ),
+    };
+    this.form.patchValue(initialValues); // Emit event to initialize `pairwise` operator
 
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
-    this.biometric = await this.vaultTimeoutSettingsService.isBiometricLockSet();
-    this.enableAutoBiometricsPrompt = !(await this.stateService.getDisableAutoBiometricsPrompt());
-    this.showChangeMasterPass = !(await this.keyConnectorService.getUsesKeyConnector());
+    this.showChangeMasterPass = await this.userVerificationService.hasMasterPassword();
+
+    this.form.controls.pin.valueChanges
+      .pipe(
+        concatMap(async (value) => {
+          await this.updatePin(value);
+          this.refreshTimeoutSettings$.next();
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+
+    this.form.controls.biometric.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        concatMap(async (enabled) => {
+          await this.updateBiometric(enabled);
+          if (enabled) {
+            this.form.controls.enableAutoBiometricsPrompt.enable();
+          } else {
+            this.form.controls.enableAutoBiometricsPrompt.disable();
+          }
+          this.refreshTimeoutSettings$.next();
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+
+    this.refreshTimeoutSettings$
+      .pipe(
+        switchMap(() =>
+          combineLatest([
+            this.vaultTimeoutSettingsService.availableVaultTimeoutActions$(),
+            this.vaultTimeoutSettingsService.vaultTimeoutAction$(),
+          ]),
+        ),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(([availableActions, action]) => {
+        this.availableVaultTimeoutActions = availableActions;
+        this.form.controls.vaultTimeoutAction.setValue(action, { emitEvent: false });
+        // NOTE: The UI doesn't properly update without detect changes.
+        // I've even tried using an async pipe, but it still doesn't work. I'm not sure why.
+        // Using an async pipe means that we can't call `detectChanges` AFTER the data has change
+        // meaning that we are forced to use regular class variables instead of observables.
+        this.changeDetectorRef.detectChanges();
+      });
+
+    this.refreshTimeoutSettings$
+      .pipe(
+        switchMap(() =>
+          combineLatest([
+            this.vaultTimeoutSettingsService.availableVaultTimeoutActions$(),
+            maximumVaultTimeoutPolicy,
+          ]),
+        ),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(([availableActions, policy]) => {
+        if (policy?.data?.action || availableActions.length <= 1) {
+          this.form.controls.vaultTimeoutAction.disable({ emitEvent: false });
+        } else {
+          this.form.controls.vaultTimeoutAction.enable({ emitEvent: false });
+        }
+      });
   }
 
-  async saveVaultTimeout(newValue: number) {
+  async saveVaultTimeout(previousValue: number, newValue: number) {
     if (newValue == null) {
-      const confirmed = await this.platformUtilsService.showDialog(
-        this.i18nService.t("neverLockWarning"),
-        null,
-        this.i18nService.t("yes"),
-        this.i18nService.t("cancel"),
-        "warning"
-      );
+      const confirmed = await this.dialogService.openSimpleDialog({
+        title: { key: "warning" },
+        content: { key: "neverLockWarning" },
+        type: "warning",
+      });
+
       if (!confirmed) {
-        this.vaultTimeout.setValue(this.previousVaultTimeout);
+        this.form.controls.vaultTimeout.setValue(previousValue, { emitEvent: false });
         return;
       }
     }
 
     // The minTimeoutError does not apply to browser because it supports Immediately
     // So only check for the policyError
-    if (this.vaultTimeout.hasError("policyError")) {
+    if (this.form.controls.vaultTimeout.hasError("policyError")) {
       this.platformUtilsService.showToast(
         "error",
         null,
-        this.i18nService.t("vaultTimeoutTooLarge")
+        this.i18nService.t("vaultTimeoutTooLarge"),
       );
       return;
     }
 
-    this.previousVaultTimeout = this.vaultTimeout.value;
-
     await this.vaultTimeoutSettingsService.setVaultTimeoutOptions(
-      this.vaultTimeout.value,
-      this.vaultTimeoutAction
+      newValue,
+      await firstValueFrom(this.vaultTimeoutSettingsService.vaultTimeoutAction$()),
     );
-    if (this.previousVaultTimeout == null) {
+    if (newValue == null) {
       this.messagingService.send("bgReseedStorage");
     }
   }
 
-  async saveVaultTimeoutAction(newValue: string) {
-    if (newValue === "logOut") {
-      const confirmed = await this.platformUtilsService.showDialog(
-        this.i18nService.t("vaultTimeoutLogOutConfirmation"),
-        this.i18nService.t("vaultTimeoutLogOutConfirmationTitle"),
-        this.i18nService.t("yes"),
-        this.i18nService.t("cancel"),
-        "warning"
-      );
+  async saveVaultTimeoutAction(previousValue: VaultTimeoutAction, newValue: VaultTimeoutAction) {
+    if (newValue === VaultTimeoutAction.LogOut) {
+      const confirmed = await this.dialogService.openSimpleDialog({
+        title: { key: "vaultTimeoutLogOutConfirmationTitle" },
+        content: { key: "vaultTimeoutLogOutConfirmation" },
+        type: "warning",
+      });
+
       if (!confirmed) {
-        this.vaultTimeoutActions.forEach((option: any, i) => {
-          if (option.value === this.vaultTimeoutAction) {
-            this.vaultTimeoutActionSelectRef.nativeElement.value =
-              i + ": " + this.vaultTimeoutAction;
-          }
+        this.form.controls.vaultTimeoutAction.setValue(previousValue, {
+          emitEvent: false,
         });
         return;
       }
     }
 
-    if (this.vaultTimeout.hasError("policyError")) {
+    if (this.form.controls.vaultTimeout.hasError("policyError")) {
       this.platformUtilsService.showToast(
         "error",
         null,
-        this.i18nService.t("vaultTimeoutTooLarge")
+        this.i18nService.t("vaultTimeoutTooLarge"),
       );
       return;
     }
 
-    this.vaultTimeoutAction = newValue;
     await this.vaultTimeoutSettingsService.setVaultTimeoutOptions(
-      this.vaultTimeout.value,
-      this.vaultTimeoutAction
+      this.form.value.vaultTimeout,
+      newValue,
     );
+    this.refreshTimeoutSettings$.next();
   }
 
-  async updatePin() {
-    if (this.pin) {
-      const ref = this.modalService.open(SetPinComponent, { allowMultipleModals: true });
+  async updatePin(value: boolean) {
+    if (value) {
+      const dialogRef = SetPinComponent.open(this.dialogService);
 
-      if (ref == null) {
-        this.pin = false;
+      if (dialogRef == null) {
+        this.form.controls.pin.setValue(false, { emitEvent: false });
         return;
       }
 
-      this.pin = await ref.onClosedPromise();
+      const userHasPinSet = await firstValueFrom(dialogRef.closed);
+      this.form.controls.pin.setValue(userHasPinSet, { emitEvent: false });
     } else {
-      await this.cryptoService.clearPinProtectedKey();
       await this.vaultTimeoutSettingsService.clear();
     }
   }
 
-  async updateBiometric() {
-    if (this.biometric && this.supportsBiometric) {
+  async updateBiometric(enabled: boolean) {
+    if (enabled && this.supportsBiometric) {
       let granted;
       try {
         granted = await BrowserApi.requestPermission({ permissions: ["nativeMessaging"] });
@@ -226,89 +346,86 @@ export class SettingsComponent implements OnInit {
         // eslint-disable-next-line
         console.error(e);
 
-        if (this.platformUtilsService.isFirefox() && this.popupUtilsService.inSidebar(window)) {
-          await this.platformUtilsService.showDialog(
-            this.i18nService.t("nativeMessaginPermissionSidebarDesc"),
-            this.i18nService.t("nativeMessaginPermissionSidebarTitle"),
-            this.i18nService.t("ok"),
-            null
-          );
-          this.biometric = false;
+        if (this.platformUtilsService.isFirefox() && BrowserPopupUtils.inSidebar(window)) {
+          await this.dialogService.openSimpleDialog({
+            title: { key: "nativeMessaginPermissionSidebarTitle" },
+            content: { key: "nativeMessaginPermissionSidebarDesc" },
+            acceptButtonText: { key: "ok" },
+            cancelButtonText: null,
+            type: "info",
+          });
+
+          this.form.controls.biometric.setValue(false);
           return;
         }
       }
 
       if (!granted) {
-        await this.platformUtilsService.showDialog(
-          this.i18nService.t("nativeMessaginPermissionErrorDesc"),
-          this.i18nService.t("nativeMessaginPermissionErrorTitle"),
-          this.i18nService.t("ok"),
-          null
-        );
-        this.biometric = false;
+        await this.dialogService.openSimpleDialog({
+          title: { key: "nativeMessaginPermissionErrorTitle" },
+          content: { key: "nativeMessaginPermissionErrorDesc" },
+          acceptButtonText: { key: "ok" },
+          cancelButtonText: null,
+          type: "danger",
+        });
+
+        this.form.controls.biometric.setValue(false);
         return;
       }
 
-      const submitted = Swal.fire({
-        heightAuto: false,
-        buttonsStyling: false,
-        titleText: this.i18nService.t("awaitDesktop"),
-        text: this.i18nService.t("awaitDesktopDesc"),
-        icon: "info",
-        iconHtml: '<i class="swal-custom-icon bwi bwi-info-circle text-info"></i>',
-        showCancelButton: true,
-        cancelButtonText: this.i18nService.t("cancel"),
-        showConfirmButton: false,
-        allowOutsideClick: false,
-      });
+      const awaitDesktopDialogRef = AwaitDesktopDialogComponent.open(this.dialogService);
+      const awaitDesktopDialogClosed = firstValueFrom(awaitDesktopDialogRef.closed);
 
-      await this.stateService.setBiometricAwaitingAcceptance(true);
-      await this.cryptoService.toggleKey();
+      await this.cryptoService.refreshAdditionalKeys();
 
       await Promise.race([
-        submitted.then(async (result) => {
-          if (result.dismiss === Swal.DismissReason.cancel) {
-            this.biometric = false;
-            await this.stateService.setBiometricAwaitingAcceptance(null);
+        awaitDesktopDialogClosed.then(async (result) => {
+          if (result !== true) {
+            this.form.controls.biometric.setValue(false);
           }
         }),
         this.platformUtilsService
           .authenticateBiometric()
           .then((result) => {
-            this.biometric = result;
-
-            Swal.close();
-            if (this.biometric === false) {
+            this.form.controls.biometric.setValue(result);
+            if (!result) {
               this.platformUtilsService.showToast(
                 "error",
                 this.i18nService.t("errorEnableBiometricTitle"),
-                this.i18nService.t("errorEnableBiometricDesc")
+                this.i18nService.t("errorEnableBiometricDesc"),
               );
             }
           })
           .catch((e) => {
             // Handle connection errors
-            this.biometric = false;
+            this.form.controls.biometric.setValue(false);
 
-            const error = BiometricErrors[e as BiometricErrorTypes];
+            const error = BiometricErrors[e.message as BiometricErrorTypes];
 
-            this.platformUtilsService.showDialog(
-              this.i18nService.t(error.description),
-              this.i18nService.t(error.title),
-              this.i18nService.t("ok"),
-              null,
-              "error"
-            );
+            // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            this.dialogService.openSimpleDialog({
+              title: { key: error.title },
+              content: { key: error.description },
+              acceptButtonText: { key: "ok" },
+              cancelButtonText: null,
+              type: "danger",
+            });
+          })
+          .finally(() => {
+            awaitDesktopDialogRef.close(true);
           }),
       ]);
     } else {
-      await this.stateService.setBiometricUnlock(null);
-      await this.stateService.setBiometricFingerprintValidated(false);
+      await this.biometricStateService.setBiometricUnlockEnabled(false);
+      await this.biometricStateService.setFingerprintValidated(false);
     }
   }
 
   async updateAutoBiometricsPrompt() {
-    await this.stateService.setDisableAutoBiometricsPrompt(!this.enableAutoBiometricsPrompt);
+    await this.biometricStateService.setPromptAutomatically(
+      this.form.value.enableAutoBiometricsPrompt,
+    );
   }
 
   async lock() {
@@ -316,63 +433,69 @@ export class SettingsComponent implements OnInit {
   }
 
   async logOut() {
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t("logOutConfirmation"),
-      this.i18nService.t("logOut"),
-      this.i18nService.t("yes"),
-      this.i18nService.t("cancel")
-    );
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "logOut" },
+      content: { key: "logOutConfirmation" },
+      type: "info",
+    });
+
+    const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
     if (confirmed) {
-      this.messagingService.send("logout");
       setTimeout(() => {
         // for security reasons the addon will be relaoded at logout.
         // In order to avoid blinking experience we immediately close the popup.
         // https://github.com/bitwarden/clients/issues/3166
         window.close();
       }, 300);
+      this.messagingService.send("logout", { userId: userId });
     }
   }
 
   async changePassword() {
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t("changeMasterPasswordConfirmation"),
-      this.i18nService.t("changeMasterPassword"),
-      this.i18nService.t("yes"),
-      this.i18nService.t("cancel")
-    );
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "continueToWebApp" },
+      content: { key: "changeMasterPasswordOnWebConfirmation" },
+      type: "info",
+      acceptButtonText: { key: "continue" },
+    });
     if (confirmed) {
-      BrowserApi.createNewTab(this.cozyClientService.getAppURL("settings", "/profile/password"));
+      await BrowserApi.createNewTab(
+        this.cozyClientService.getAppURL("settings", "/profile/password"),
+      );
     }
   }
 
   /* commented by Cozy
   async twoStep() {
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t("twoStepLoginConfirmation"),
-      this.i18nService.t("twoStepLogin"),
-      this.i18nService.t("yes"),
-      this.i18nService.t("cancel")
-    );
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "twoStepLogin" },
+      content: { key: "twoStepLoginConfirmation" },
+      type: "info",
+    });
     if (confirmed) {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       BrowserApi.createNewTab("https://bitwarden.com/help/setup-two-step-login/");
     }
   }
 
   async share() {
-    const confirmed = await this.platformUtilsService.showDialog(
-      this.i18nService.t("learnOrgConfirmation"),
-      this.i18nService.t("learnOrg"),
-      this.i18nService.t("yes"),
-      this.i18nService.t("cancel")
-    );
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "learnOrg" },
+      content: { key: "learnOrgConfirmation" },
+      type: "info",
+    });
     if (confirmed) {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       BrowserApi.createNewTab("https://bitwarden.com/help/about-organizations/");
     }
   }
 
   async webVault() {
-    const url = this.environmentService.getWebVaultUrl();
-    BrowserApi.createNewTab(url);
+    const env = await firstValueFrom(this.environmentService.environment$);
+    const url = env.getWebVaultUrl();
+    await BrowserApi.createNewTab(url);
   }
   END */
 
@@ -391,6 +514,8 @@ export class SettingsComponent implements OnInit {
   }
 
   export() {
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.router.navigate(["/export"]);
   }
 
@@ -399,38 +524,25 @@ export class SettingsComponent implements OnInit {
   }
 
   about() {
-    this.modalService.open(AboutComponent);
+    this.dialogService.open(AboutComponent);
   }
 
   async fingerprint() {
     const fingerprint = await this.cryptoService.getFingerprint(
-      await this.stateService.getUserId()
+      await this.stateService.getUserId(),
     );
-    const p = document.createElement("p");
-    p.innerText = this.i18nService.t("yourAccountsFingerprint") + ":";
-    const p2 = document.createElement("p");
-    p2.innerText = fingerprint.join("-");
-    const div = document.createElement("div");
-    div.appendChild(p);
-    div.appendChild(p2);
 
-    const result = await Swal.fire({
-      heightAuto: false,
-      buttonsStyling: false,
-      html: div,
-      showCancelButton: true,
-      cancelButtonText: this.i18nService.t("close"),
-      showConfirmButton: false,
-      confirmButtonText: this.i18nService.t("learnMore"),
+    const dialogRef = FingerprintDialogComponent.open(this.dialogService, {
+      fingerprint,
     });
 
-    if (result.value) {
-      this.platformUtilsService.launchUri("https://bitwarden.com/help/fingerprint-phrase/");
-    }
+    return firstValueFrom(dialogRef.closed);
   }
 
   rate() {
     const deviceType = this.platformUtilsService.getDevice();
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     BrowserApi.createNewTab((RateUrls as any)[deviceType]);
   }
 
@@ -449,5 +561,10 @@ export class SettingsComponent implements OnInit {
 
   getCozyURL() {
     return this.cozyClientService.getCozyURL();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

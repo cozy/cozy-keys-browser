@@ -4,7 +4,6 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
-import { ToastrModule } from "ngx-toastr";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import {
@@ -16,6 +15,7 @@ import {
   CalloutModule,
   CheckboxModule,
   ColorPasswordModule,
+  ContainerComponent,
   DialogModule,
   FormFieldModule,
   IconButtonModule,
@@ -23,7 +23,10 @@ import {
   LinkModule,
   MenuModule,
   MultiSelectModule,
+  ProgressModule,
   RadioButtonModule,
+  SectionComponent,
+  SelectModule,
   TableModule,
   TabsModule,
   ToggleGroupModule,
@@ -48,7 +51,6 @@ import "./locales";
     ReactiveFormsModule,
     InfiniteScrollModule,
     RouterModule,
-    ToastrModule,
     JslibModule,
 
     // Component library modules
@@ -61,6 +63,7 @@ import "./locales";
     CalloutModule,
     CheckboxModule,
     ColorPasswordModule,
+    ContainerComponent,
     DialogModule,
     FormFieldModule,
     IconButtonModule,
@@ -68,7 +71,9 @@ import "./locales";
     LinkModule,
     MenuModule,
     MultiSelectModule,
+    ProgressModule,
     RadioButtonModule,
+    SectionComponent,
     TableModule,
     TabsModule,
     ToggleGroupModule,
@@ -83,7 +88,6 @@ import "./locales";
     ReactiveFormsModule,
     InfiniteScrollModule,
     RouterModule,
-    ToastrModule,
     JslibModule,
 
     // Component library
@@ -95,6 +99,7 @@ import "./locales";
     CalloutModule,
     CheckboxModule,
     ColorPasswordModule,
+    ContainerComponent,
     DialogModule,
     FormFieldModule,
     IconButtonModule,
@@ -102,7 +107,10 @@ import "./locales";
     LinkModule,
     MenuModule,
     MultiSelectModule,
+    ProgressModule,
     RadioButtonModule,
+    SectionComponent,
+    SelectModule,
     TableModule,
     TabsModule,
     ToggleGroupModule,

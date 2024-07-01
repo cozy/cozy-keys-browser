@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
 import { firstValueFrom, Subject } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
-import { PolicyType } from "@bitwarden/common/enums/policyType";
-import { TreeNode } from "@bitwarden/common/models/domain/tree-node";
-import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { PolicyType } from "@bitwarden/common/admin-console/enums";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { CipherType } from "@bitwarden/common/vault/enums";
+import { TreeNode } from "@bitwarden/common/vault/models/domain/tree-node";
 
 import { VaultFilterService } from "../services/abstractions/vault-filter.service";
 import {
@@ -32,12 +32,12 @@ import { OrganizationOptionsComponent } from "./organization-options.component";
 export class VaultFilterComponent implements OnInit, OnDestroy {
   filters?: VaultFilterList;
   @Input() activeFilter: VaultFilter = new VaultFilter();
-  @Output() onSearchTextChanged = new EventEmitter<string>();
-  @Output() onAddFolder = new EventEmitter<never>();
   @Output() onEditFolder = new EventEmitter<FolderFilter>();
 
+  @Input() searchText = "";
+  @Output() searchTextChanged = new EventEmitter<string>();
+
   isLoaded = false;
-  searchText = "";
 
   protected destroy$: Subject<void> = new Subject<void>();
 
@@ -84,7 +84,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     protected vaultFilterService: VaultFilterService,
     protected policyService: PolicyService,
     protected i18nService: I18nService,
-    protected platformUtilsService: PlatformUtilsService
+    protected platformUtilsService: PlatformUtilsService,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -99,9 +99,9 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  searchTextChanged(t: string) {
+  onSearchTextChanged(t: string) {
     this.searchText = t;
-    this.onSearchTextChanged.emit(t);
+    this.searchTextChanged.emit(t);
   }
 
   applyOrganizationFilter = async (orgNode: TreeNode<OrganizationFilter>): Promise<void> => {
@@ -109,7 +109,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       this.platformUtilsService.showToast(
         "error",
         null,
-        this.i18nService.t("disabledOrganizationFilterError")
+        this.i18nService.t("disabledOrganizationFilterError"),
       );
       return;
     }
@@ -141,10 +141,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     filter.selectedCollectionNode = collectionNode;
   };
 
-  addFolder = async (): Promise<void> => {
-    this.onAddFolder.emit();
-  };
-
   editFolder = async (folder: FolderFilter): Promise<void> => {
     this.onEditFolder.emit(folder);
   };
@@ -166,7 +162,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   protected async addOrganizationFilter(): Promise<VaultFilterSection> {
     const singleOrgPolicy = await this.policyService.policyAppliesToUser(PolicyType.SingleOrg);
     const personalVaultPolicy = await this.policyService.policyAppliesToUser(
-      PolicyType.PersonalOwnership
+      PolicyType.PersonalOwnership,
     );
 
     const addAction = !singleOrgPolicy
@@ -225,7 +221,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     const typeFilterSection: VaultFilterSection = {
       data$: this.vaultFilterService.buildTypeTree(
         { id: "AllItems", name: "allItems", type: "all", icon: "" },
-        allTypeFilters.filter((f) => !excludeTypes.includes(f.type))
+        allTypeFilters.filter((f) => !excludeTypes.includes(f.type)),
       ),
       header: {
         showHeader: true,
@@ -247,10 +243,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       edit: {
         text: "editFolder",
         action: this.editFolder,
-      },
-      add: {
-        text: "Add Folder",
-        action: this.addFolder,
       },
     };
     return folderFilterSection;
@@ -284,7 +276,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
             type: "trash",
             icon: "bwi-trash",
           },
-        ]
+        ],
       ),
       header: {
         showHeader: false,

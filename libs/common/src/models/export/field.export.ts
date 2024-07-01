@@ -1,8 +1,9 @@
-import { FieldType } from "../../enums/fieldType";
-import { LinkedIdType } from "../../enums/linkedIdType";
+import { EncString } from "../../platform/models/domain/enc-string";
+import { FieldType, LinkedIdType } from "../../vault/enums";
 import { Field as FieldDomain } from "../../vault/models/domain/field";
 import { FieldView } from "../../vault/models/view/field.view";
-import { EncString } from "../domain/enc-string";
+
+import { safeGetString } from "./utils";
 
 export class FieldExport {
   static template(): FieldExport {
@@ -39,13 +40,8 @@ export class FieldExport {
       return;
     }
 
-    if (o instanceof FieldView) {
-      this.name = o.name;
-      this.value = o.value;
-    } else {
-      this.name = o.name?.encryptedString;
-      this.value = o.value?.encryptedString;
-    }
+    this.name = safeGetString(o.name);
+    this.value = safeGetString(o.value);
     this.type = o.type;
     this.linkedId = o.linkedId;
   }

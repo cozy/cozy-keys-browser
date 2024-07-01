@@ -1,21 +1,23 @@
-import { Injectable } from "@angular/core";
-
-import { UnauthGuard as BaseUnauthGuardService } from "@bitwarden/angular/auth/guards/unauth.guard";
+import { UnauthGuard as BaseUnauthGuardService } from "@bitwarden/angular/auth/guards";
 
 /* COZY IMPORTS */
 /* eslint-disable */
-import { CanActivate, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { HistoryService } from "../../../popup/services/history.service";
 /* eslint-enable */
 /* END COZY IMPORTS */
-@Injectable()
+
 export class UnauthGuardService extends BaseUnauthGuardService {
   protected homepage = "tabs/current";
 
   // Cozy custo
-  constructor(authService: AuthService, router: Router, private historyService: HistoryService) {
+  constructor(
+    authService: AuthService,
+    router: Router,
+    private historyService: HistoryService,
+  ) {
     super(authService, router);
   }
 

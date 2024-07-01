@@ -285,7 +285,7 @@ function updateRows(rowsListType) {
         detail.textContent = formatCipherData(
           cipher.card,
           currentFieldData.card,
-          currentFieldData.fieldFormat
+          currentFieldData.fieldFormat,
         );
         break;
       case "ids":

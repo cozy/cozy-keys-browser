@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { models } from "cozy-client";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 
 const { makeExpiredMessage, makeExpiresInMessage } = models.paper;
@@ -28,7 +28,7 @@ export class ViewExpirationDateComponent implements OnInit {
     return makeExpiredMessage(
       this.field.expirationData.expirationDate,
       // @ts-expect-error I did not succeed in getting i18nService.translationLocale so I fallback to a private property
-      { lang: this.i18nService.systemLanguage }
+      { lang: this.i18nService.systemLanguage },
     );
   }
 
@@ -36,7 +36,7 @@ export class ViewExpirationDateComponent implements OnInit {
     return makeExpiresInMessage(
       this.field.expirationData.expirationDate,
       // @ts-expect-error I did not succeed in getting i18nService.translationLocale so I fallback to a private property
-      { lang: this.i18nService.systemLanguage }
+      { lang: this.i18nService.systemLanguage },
     );
   }
 }

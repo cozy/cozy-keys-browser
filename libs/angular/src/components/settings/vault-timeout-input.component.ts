@@ -1,4 +1,4 @@
-import { Directive, Input, OnDestroy, OnInit } from "@angular/core";
+import { Directive, Input, OnChanges, OnDestroy, OnInit } from "@angular/core";
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -6,16 +6,26 @@ import {
   ValidationErrors,
   Validator,
 } from "@angular/forms";
-import { combineLatestWith, Subject, takeUntil } from "rxjs";
+import { filter, map, Observable, Subject, takeUntil } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
-import { PolicyType } from "@bitwarden/common/enums/policyType";
-import { Policy } from "@bitwarden/common/models/domain/policy";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { PolicyType } from "@bitwarden/common/admin-console/enums";
+import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
+import { VaultTimeoutAction } from "@bitwarden/common/enums/vault-timeout-action.enum";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+
+interface VaultTimeoutFormValue {
+  vaultTimeout: number | null;
+  custom: {
+    hours: number | null;
+    minutes: number | null;
+  };
+}
 
 @Directive()
 export class VaultTimeoutInputComponent
-  implements ControlValueAccessor, Validator, OnInit, OnDestroy
+  implements ControlValueAccessor, Validator, OnInit, OnDestroy, OnChanges
 {
   get showCustom() {
     return this.form.get("vaultTimeout").value === VaultTimeoutInputComponent.CUSTOM_VALUE;
@@ -38,10 +48,12 @@ export class VaultTimeoutInputComponent
     }),
   });
 
-  @Input() vaultTimeouts: { name: string; value: number }[];
+  @Input() vaultTimeoutOptions: { name: string; value: number }[];
   vaultTimeoutPolicy: Policy;
   vaultTimeoutPolicyHours: number;
   vaultTimeoutPolicyMinutes: number;
+
+  protected canLockVault$: Observable<boolean>;
 
   private onChange: (vaultTimeout: number) => void;
   private validatorChange: () => void;
@@ -50,43 +62,59 @@ export class VaultTimeoutInputComponent
   constructor(
     private formBuilder: FormBuilder,
     private policyService: PolicyService,
-    private i18nService: I18nService
+    private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
+    private i18nService: I18nService,
   ) {}
 
   async ngOnInit() {
     this.policyService
-      .policyAppliesToActiveUser$(PolicyType.MaximumVaultTimeout)
-      .pipe(combineLatestWith(this.policyService.policies$), takeUntil(this.destroy$))
-      .subscribe(([policyAppliesToActiveUser, policies]) => {
-        if (policyAppliesToActiveUser) {
-          const vaultTimeoutPolicy = policies.find(
-            (policy) => policy.type === PolicyType.MaximumVaultTimeout && policy.enabled
-          );
+      .get$(PolicyType.MaximumVaultTimeout)
+      .pipe(
+        filter((policy) => policy != null),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((policy) => {
+        this.vaultTimeoutPolicy = policy;
+        this.applyVaultTimeoutPolicy();
+      });
 
-          this.vaultTimeoutPolicy = vaultTimeoutPolicy;
-          this.applyVaultTimeoutPolicy();
+    this.form.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value: VaultTimeoutFormValue) => {
+        if (this.onChange) {
+          this.onChange(this.getVaultTimeout(value));
         }
       });
 
-    // eslint-disable-next-line rxjs/no-async-subscribe
-    this.form.valueChanges.subscribe(async (value) => {
-      this.onChange(this.getVaultTimeout(value));
-    });
+    // Assign the current value to the custom fields
+    // so that if the user goes from a numeric value to custom
+    // we can initialize the custom fields with the current value
+    // ex: user picks 5 min, goes to custom, we want to show 0 hr, 5 min in the custom fields
+    this.form.controls.vaultTimeout.valueChanges
+      .pipe(
+        filter((value) => value !== VaultTimeoutInputComponent.CUSTOM_VALUE),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((value) => {
+        const current = Math.max(value, 0);
 
-    // Assign the previous value to the custom fields
-    this.form.get("vaultTimeout").valueChanges.subscribe((value) => {
-      if (value !== VaultTimeoutInputComponent.CUSTOM_VALUE) {
-        return;
-      }
-
-      const current = Math.max(this.form.value.vaultTimeout, 0);
-      this.form.patchValue({
-        custom: {
-          hours: Math.floor(current / 60),
-          minutes: current % 60,
-        },
+        // This cannot emit an event b/c it would cause form.valueChanges to fire again
+        // and we are already handling that above so just silently update
+        // custom fields when vaultTimeout changes to a non-custom value
+        this.form.patchValue(
+          {
+            custom: {
+              hours: Math.floor(current / 60),
+              minutes: current % 60,
+            },
+          },
+          { emitEvent: false },
+        );
       });
-    });
+
+    this.canLockVault$ = this.vaultTimeoutSettingsService
+      .availableVaultTimeoutActions$()
+      .pipe(map((actions) => actions.includes(VaultTimeoutAction.Lock)));
   }
 
   ngOnDestroy() {
@@ -95,13 +123,17 @@ export class VaultTimeoutInputComponent
   }
 
   ngOnChanges() {
-    this.vaultTimeouts.push({
-      name: this.i18nService.t("custom"),
-      value: VaultTimeoutInputComponent.CUSTOM_VALUE,
-    });
+    if (
+      !this.vaultTimeoutOptions.find((p) => p.value === VaultTimeoutInputComponent.CUSTOM_VALUE)
+    ) {
+      this.vaultTimeoutOptions.push({
+        name: this.i18nService.t("custom"),
+        value: VaultTimeoutInputComponent.CUSTOM_VALUE,
+      });
+    }
   }
 
-  getVaultTimeout(value: any) {
+  getVaultTimeout(value: VaultTimeoutFormValue) {
     if (value.vaultTimeout !== VaultTimeoutInputComponent.CUSTOM_VALUE) {
       return value.vaultTimeout;
     }
@@ -114,7 +146,7 @@ export class VaultTimeoutInputComponent
       return;
     }
 
-    if (this.vaultTimeouts.every((p) => p.value !== value)) {
+    if (this.vaultTimeoutOptions.every((p) => p.value !== value)) {
       this.form.setValue({
         vaultTimeout: VaultTimeoutInputComponent.CUSTOM_VALUE,
         custom: {
@@ -166,11 +198,11 @@ export class VaultTimeoutInputComponent
     this.vaultTimeoutPolicyHours = Math.floor(this.vaultTimeoutPolicy.data.minutes / 60);
     this.vaultTimeoutPolicyMinutes = this.vaultTimeoutPolicy.data.minutes % 60;
 
-    this.vaultTimeouts = this.vaultTimeouts.filter(
+    this.vaultTimeoutOptions = this.vaultTimeoutOptions.filter(
       (t) =>
         t.value <= this.vaultTimeoutPolicy.data.minutes &&
         (t.value > 0 || t.value === VaultTimeoutInputComponent.CUSTOM_VALUE) &&
-        t.value != null
+        t.value != null,
     );
     this.validatorChange();
   }
