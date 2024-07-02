@@ -114,9 +114,7 @@
     "images/icon38_locked.png",
     "overlay/button.html",
     "overlay/list.html",
-    "popup/fonts/*",
-    "inPageMenu/menu.html",
-    "inPageMenu/loginMenu.html"
+    "popup/fonts/*"
   ],
   "applications": {
     "gecko": {

@@ -117,18 +117,6 @@ let plugins = [
     filename: "overlay/list.html",
     chunks: ["overlay/list"],
   }),
-  new HtmlWebpackPlugin({
-    template: "./src/inPageMenu/menu.html",
-    filename: "inPageMenu/menu.html",
-    chunks: ["inPageMenu/menu"],
-    cache: false, // Remove after upgrading to Webpack 5
-  }),
-  new HtmlWebpackPlugin({
-    template: "./src/inPageMenu/loginMenu.html",
-    filename: "inPageMenu/loginMenu.html",
-    chunks: ["inPageMenu/loginMenu"],
-    cache: false, // Remove after upgrading to Webpack 5
-  }),
   new CopyWebpackPlugin({
     patterns: [
       manifestVersion == 3
@@ -140,7 +128,6 @@ let plugins = [
       { from: "./src/popup/images", to: "popup/images" },
       { from: "./src/autofill/content/autofill.css", to: "content" },
       { from: "./src/content/notification.css", to: "content" },
-      { from: "./src/inPageMenu/images", to: "inPageMenu/images" },
     ],
   }),
   new MiniCssExtractPlugin({
@@ -208,8 +195,6 @@ const mainConfig = {
     "content/lp-fileless-importer": "./src/tools/content/lp-fileless-importer.ts",
     "content/send-on-installed-message": "./src/vault/content/send-on-installed-message.ts",
     "content/lp-suppress-import-download": "./src/tools/content/lp-suppress-import-download.ts",
-    "inPageMenu/menu": "./src/inPageMenu/menu.js",
-    "inPageMenu/loginMenu": "./src/inPageMenu/loginMenu.js",
     "content/appInfo": "./src/content/appInfo.ts",
   },
   optimization: {
