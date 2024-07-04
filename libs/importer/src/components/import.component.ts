@@ -16,6 +16,8 @@ import { concat, Observable, Subject, lastValueFrom, combineLatest, firstValueFr
 import { filter, map, takeUntil } from "rxjs/operators";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { safeProvider, SafeProvider } from "@bitwarden/angular/platform/utils/safe-provider";
+import { PinServiceAbstraction } from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import {
   canAccessImport,
@@ -64,6 +66,27 @@ import {
 } from "./dialog";
 import { ImportLastPassComponent } from "./lastpass";
 
+const safeProviders: SafeProvider[] = [
+  safeProvider({
+    provide: ImportApiServiceAbstraction,
+    useClass: ImportApiService,
+    deps: [ApiService],
+  }),
+  safeProvider({
+    provide: ImportServiceAbstraction,
+    useClass: ImportService,
+    deps: [
+      CipherService,
+      FolderService,
+      ImportApiServiceAbstraction,
+      I18nService,
+      CollectionService,
+      CryptoService,
+      PinServiceAbstraction,
+    ],
+  }),
+];
+
 @Component({
   selector: "tools-import",
   templateUrl: "import.component.html",
@@ -81,25 +104,7 @@ import { ImportLastPassComponent } from "./lastpass";
     ImportLastPassComponent,
     RadioButtonModule,
   ],
-  providers: [
-    {
-      provide: ImportApiServiceAbstraction,
-      useClass: ImportApiService,
-      deps: [ApiService],
-    },
-    {
-      provide: ImportServiceAbstraction,
-      useClass: ImportService,
-      deps: [
-        CipherService,
-        FolderService,
-        ImportApiServiceAbstraction,
-        I18nService,
-        CollectionService,
-        CryptoService,
-      ],
-    },
-  ],
+  providers: safeProviders,
 })
 export class ImportComponent implements OnInit, OnDestroy {
   featuredImportOptions: ImportOption[];
@@ -132,7 +137,7 @@ export class ImportComponent implements OnInit, OnDestroy {
   protected destroy$ = new Subject<void>();
 
   private _importBlockedByPolicy = false;
-  private _isFromAC = false;
+  protected isFromAC = false;
 
   formGroup = this.formBuilder.group({
     vaultSelector: [
@@ -232,7 +237,7 @@ export class ImportComponent implements OnInit, OnDestroy {
         .then((collections) => collections.sort(Utils.getSortFunction(this.i18nService, "name"))),
     );
 
-    this._isFromAC = true;
+    this.isFromAC = true;
   }
 
   private handleImportInit() {
@@ -359,7 +364,7 @@ export class ImportComponent implements OnInit, OnDestroy {
         importContents,
         this.organizationId,
         this.formGroup.controls.targetSelector.value,
-        (await this.canAccessImportExport(this.organizationId)) && this._isFromAC,
+        (await this.canAccessImportExport(this.organizationId)) && this.isFromAC,
       );
 
       //No errors, display success message

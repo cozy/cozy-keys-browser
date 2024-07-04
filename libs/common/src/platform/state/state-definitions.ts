@@ -35,32 +35,42 @@ export const BILLING_DISK = new StateDefinition("billing", "disk");
 
 // Auth
 
+export const ACCOUNT_DISK = new StateDefinition("account", "disk");
+export const ACCOUNT_MEMORY = new StateDefinition("account", "memory");
+export const AUTH_REQUEST_DISK_LOCAL = new StateDefinition("authRequestLocal", "disk", {
+  web: "disk-local",
+});
+export const AVATAR_DISK = new StateDefinition("avatar", "disk", { web: "disk-local" });
+export const DEVICE_TRUST_DISK_LOCAL = new StateDefinition("deviceTrust", "disk", {
+  web: "disk-local",
+});
 export const KDF_CONFIG_DISK = new StateDefinition("kdfConfig", "disk");
 export const KEY_CONNECTOR_DISK = new StateDefinition("keyConnector", "disk");
-export const ACCOUNT_MEMORY = new StateDefinition("account", "memory");
-export const ACCOUNT_DISK = new StateDefinition("account", "disk");
-export const MASTER_PASSWORD_MEMORY = new StateDefinition("masterPassword", "memory");
-export const MASTER_PASSWORD_DISK = new StateDefinition("masterPassword", "disk");
-export const TWO_FACTOR_MEMORY = new StateDefinition("twoFactor", "memory");
-export const AVATAR_DISK = new StateDefinition("avatar", "disk", { web: "disk-local" });
-export const ROUTER_DISK = new StateDefinition("router", "disk");
 export const LOGIN_EMAIL_DISK = new StateDefinition("loginEmail", "disk", {
   web: "disk-local",
 });
 export const LOGIN_STRATEGY_MEMORY = new StateDefinition("loginStrategy", "memory");
-export const AUTH_REQUEST_DISK_LOCAL = new StateDefinition("authRequestLocal", "disk", {
-  web: "disk-local",
-});
+export const MASTER_PASSWORD_DISK = new StateDefinition("masterPassword", "disk");
+export const MASTER_PASSWORD_MEMORY = new StateDefinition("masterPassword", "memory");
+export const PIN_DISK = new StateDefinition("pinUnlock", "disk");
+export const PIN_MEMORY = new StateDefinition("pinUnlock", "memory");
+export const ROUTER_DISK = new StateDefinition("router", "disk");
 export const SSO_DISK = new StateDefinition("ssoLogin", "disk");
 export const TOKEN_DISK = new StateDefinition("token", "disk");
 export const TOKEN_DISK_LOCAL = new StateDefinition("tokenDiskLocal", "disk", {
   web: "disk-local",
 });
 export const TOKEN_MEMORY = new StateDefinition("token", "memory");
-export const DEVICE_TRUST_DISK_LOCAL = new StateDefinition("deviceTrust", "disk", {
-  web: "disk-local",
-});
+export const TWO_FACTOR_MEMORY = new StateDefinition("twoFactor", "memory");
 export const USER_DECRYPTION_OPTIONS_DISK = new StateDefinition("userDecryptionOptions", "disk");
+export const ORGANIZATION_INVITE_DISK = new StateDefinition("organizationInvite", "disk");
+export const VAULT_TIMEOUT_SETTINGS_DISK_LOCAL = new StateDefinition(
+  "vaultTimeoutSettings",
+  "disk",
+  {
+    web: "disk-local",
+  },
+);
 
 // Autofill
 
@@ -151,3 +161,7 @@ export const CIPHERS_DISK_LOCAL = new StateDefinition("ciphersLocal", "disk", {
 export const CIPHERS_MEMORY = new StateDefinition("ciphersMemory", "memory", {
   browser: "memory-large-object",
 });
+export const PREMIUM_BANNER_DISK_LOCAL = new StateDefinition("premiumBannerReprompt", "disk", {
+  web: "disk-local",
+});
+export const BANNERS_DISMISSED_DISK = new StateDefinition("bannersDismissed", "disk");

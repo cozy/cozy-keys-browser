@@ -38,7 +38,11 @@ export class CollectionView implements View, ITreeNodeObject {
     }
   }
 
-  canEditItems(org: Organization, v1FlexibleCollections: boolean): boolean {
+  canEditItems(
+    org: Organization,
+    v1FlexibleCollections: boolean,
+    restrictProviderAccess: boolean,
+  ): boolean {
     if (org != null && org.id !== this.organizationId) {
       throw new Error(
         "Id of the organization provided does not match the org id of the collection.",
@@ -47,7 +51,7 @@ export class CollectionView implements View, ITreeNodeObject {
 
     if (org?.flexibleCollections) {
       return (
-        org?.canEditAllCiphers(v1FlexibleCollections) ||
+        org?.canEditAllCiphers(v1FlexibleCollections, restrictProviderAccess) ||
         this.manage ||
         (this.assigned && !this.readOnly)
       );
@@ -56,7 +60,10 @@ export class CollectionView implements View, ITreeNodeObject {
     return org?.canEditAnyCollection(false) || (org?.canEditAssignedCollections && this.assigned);
   }
 
-  // For editing collection details, not the items within it.
+  /**
+   * Returns true if the user can edit a collection (including user and group access) from the individual vault.
+   * After FCv1, does not include admin permissions - see {@link CollectionAdminView.canEdit}.
+   */
   canEdit(org: Organization, flexibleCollectionsV1Enabled: boolean): boolean {
     if (org != null && org.id !== this.organizationId) {
       throw new Error(
@@ -64,22 +71,46 @@ export class CollectionView implements View, ITreeNodeObject {
       );
     }
 
-    return org?.flexibleCollections
-      ? org?.canEditAnyCollection(flexibleCollectionsV1Enabled) || this.manage
-      : org?.canEditAnyCollection(flexibleCollectionsV1Enabled) || org?.canEditAssignedCollections;
+    if (flexibleCollectionsV1Enabled) {
+      // Only use individual permissions, not admin permissions
+      return this.manage;
+    }
+
+    return org?.canEditAnyCollection(flexibleCollectionsV1Enabled) || this.manage;
   }
 
-  // For deleting a collection, not the items within it.
-  canDelete(org: Organization): boolean {
+  /**
+   * Returns true if the user can delete a collection from the individual vault.
+   * After FCv1, does not include admin permissions - see {@link CollectionAdminView.canDelete}.
+   */
+  canDelete(org: Organization, flexibleCollectionsV1Enabled: boolean): boolean {
     if (org != null && org.id !== this.organizationId) {
       throw new Error(
         "Id of the organization provided does not match the org id of the collection.",
       );
     }
 
-    return org?.flexibleCollections
-      ? org?.canDeleteAnyCollection || (!org?.limitCollectionCreationDeletion && this.manage)
-      : org?.canDeleteAnyCollection || org?.canDeleteAssignedCollections;
+    const canDeleteManagedCollections = !org?.limitCollectionCreationDeletion || org.isAdmin;
+
+    if (flexibleCollectionsV1Enabled) {
+      // Only use individual permissions, not admin permissions
+      return canDeleteManagedCollections && this.manage;
+    }
+
+    return (
+      org?.canDeleteAnyCollection(flexibleCollectionsV1Enabled) ||
+      (canDeleteManagedCollections && this.manage)
+    );
+  }
+
+  /**
+   * Returns true if the user can view collection info and access in a read-only state from the individual vault
+   */
+  canViewCollectionInfo(
+    org: Organization | undefined,
+    flexibleCollectionsV1Enabled: boolean,
+  ): boolean {
+    return false;
   }
 
   static fromJSON(obj: Jsonify<CollectionView>) {

@@ -1,5 +1,6 @@
 import { firstValueFrom, map, timeout } from "rxjs";
 
+import { PinServiceAbstraction } from "../../../../auth/src/common/abstractions";
 import { VaultTimeoutSettingsService } from "../../abstractions/vault-timeout/vault-timeout-settings.service";
 import { AccountService } from "../../auth/abstractions/account.service";
 import { AuthService } from "../../auth/abstractions/auth.service";
@@ -20,6 +21,7 @@ export class SystemService implements SystemServiceAbstraction {
   private clearClipboardTimeoutFunction: () => Promise<any> = null;
 
   constructor(
+    private pinService: PinServiceAbstraction,
     private messagingService: MessagingService,
     private platformUtilsService: PlatformUtilsService,
     private reloadCallback: () => Promise<void> = null,
@@ -50,10 +52,13 @@ export class SystemService implements SystemServiceAbstraction {
       return;
     }
 
-    // User has set a PIN, with ask for master password on restart, to protect their vault
-    const ephemeralPin = await this.stateService.getPinKeyEncryptedUserKeyEphemeral();
-    if (ephemeralPin != null) {
-      return;
+    // If there is an active user, check if they have a pinKeyEncryptedUserKeyEphemeral. If so, prevent process reload upon lock.
+    const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+    if (userId != null) {
+      const ephemeralPin = await this.pinService.getPinKeyEncryptedUserKeyEphemeral(userId);
+      if (ephemeralPin != null) {
+        return;
+      }
     }
 
     this.cancelProcessReload();
@@ -68,23 +73,25 @@ export class SystemService implements SystemServiceAbstraction {
       clearInterval(this.reloadInterval);
       this.reloadInterval = null;
 
-      const currentUser = await firstValueFrom(
+      const activeUserId = await firstValueFrom(
         this.accountService.activeAccount$.pipe(
           map((a) => a?.id),
           timeout(500),
         ),
       );
       // Replace current active user if they will be logged out on reload
-      if (currentUser != null) {
+      if (activeUserId != null) {
         const timeoutAction = await firstValueFrom(
-          this.vaultTimeoutSettingsService.vaultTimeoutAction$().pipe(timeout(500)),
+          this.vaultTimeoutSettingsService
+            .getVaultTimeoutActionByUserId$(activeUserId)
+            .pipe(timeout(500)), // safety feature to avoid this call hanging and stopping process reload from clearing memory
         );
         if (timeoutAction === VaultTimeoutAction.LogOut) {
           const nextUser = await firstValueFrom(
             this.accountService.nextUpAccount$.pipe(map((account) => account?.id ?? null)),
           );
           // Can be removed once we migrate password generation history to state providers
-          await this.stateService.clearDecryptedData(currentUser);
+          await this.stateService.clearDecryptedData(activeUserId);
           await this.accountService.switchAccount(nextUser);
         }
       }

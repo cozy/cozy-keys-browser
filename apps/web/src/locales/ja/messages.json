@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "アクセスレベル"
   },
+  "accessing": {
+    "message": "アクセス中"
+  },
   "loggedOut": {
     "message": "ログアウトしました"
   },
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "アカウントが削除され、すべての関連するデータが削除されました。"
   },
+  "deleteOrganizationWarning": {
+    "message": "組織を恒久的に削除します。元に戻すことはできません。"
+  },
   "myAccount": {
     "message": "マイアカウント"
   },
@@ -1710,11 +1716,11 @@
   "twoFactorDuoDesc": {
     "message": "Bitwardenアプリの情報をDuoの管理パネルから入力して下さい。"
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "連携キー"
+  "twoFactorDuoClientId": {
+    "message": "Client Id"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "秘密鍵"
+  "twoFactorDuoClientSecret": {
+    "message": "Client Secret"
   },
   "twoFactorDuoApiHostname": {
     "message": "API のホスト名"
@@ -2788,6 +2794,12 @@
   "all": {
     "message": "すべて"
   },
+  "addAccess": {
+    "message": "アクセスを追加"
+  },
+  "addAccessFilter": {
+    "message": "アクセスフィルタを追加"
+  },
   "refresh": {
     "message": "更新"
   },
@@ -3235,6 +3247,27 @@
   "device": {
     "message": "デバイス"
   },
+  "creatingAccountOn": {
+    "message": "アカウント作成："
+  },
+  "checkYourEmail": {
+    "message": "メールをご確認ください"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "アカウントの作成を続けるには"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "に送られたメールのリンクを開いてください。"
+  },
+  "noEmail": {
+    "message": "メールがありませんか?"
+  },
+  "goBack": {
+    "message": "戻って"
+  },
+  "toEditYourEmailAddress": {
+    "message": "メールアドレスを編集してください。"
+  },
   "view": {
     "message": "表示"
   },
@@ -3381,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "Bitwardenアカウント削除のリクエストがありました。削除する場合はボタンをクリックしてください。"
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "Bitwarden 組織の削除をリクエストしました。"
   },
   "myOrganization": {
     "message": "組織"
@@ -3558,6 +3594,12 @@
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "サブスクリプションを調整すると、請求の合計が日割りで変更されます。新たに招待されたユーザーがお客様の契約数を超えた場合、お客様は直ちに追加ユーザー分の日割り計算を請求されます。"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "バンドルオファーなしで"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "シートを追加したい場合はお問い合わせください"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "サブスクリプションを調整すると、請求の合計が日割りで変更されます。新しく招待されたユーザーがお客様の契約数を超えた場合、契約数が$MAX$名に達するまで、追加されたユーザーに対する日割り計算の請求が即座に請求されます。",
@@ -4526,7 +4568,7 @@
     "message": "権限"
   },
   "managerPermissions": {
-    "message": "権限の管理"
+    "message": "管理者権限"
   },
   "adminPermissions": {
     "message": "管理者権限"
@@ -5802,6 +5844,108 @@
   "forwardedEmailDesc": {
     "message": "外部転送サービスを使用してメールエイリアスを生成します。"
   },
+  "forwarderError": {
+    "message": "$SERVICENAME$ エラー: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Bitwarden によって生成されました。",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "ウェブサイト: $WEBSITE$ Bitwarden によって生成されました。",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "不正な$SERVICENAME$ API トークン",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "不正な$SERVICENAME$ API トークン: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "$SERVICENAME$ マスク済みメールアカウント ID を取得できませんでした。",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "不正な $SERVICENAME$ ドメインです。",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "不正な $SERVICENAME$ URL です。",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "不明な $SERVICENAME$ エラーが起きました。",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "不明な転送先: '$SERVICENAME$'",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "ホスト名",
     "description": "Part of a URL."
@@ -6480,8 +6624,8 @@
   "editGroupCollectionsDesc": {
     "message": "このグループに追加してコレクションへのアクセスを許可します。"
   },
-  "editGroupCollectionsRestrictionsDesc": {
-    "message": "You can only assign collections you manage."
+  "restrictedCollectionAssignmentDesc": {
+    "message": "自分が管理しているコレクションのみを割り当てることができます。"
   },
   "accessAllCollectionsDesc": {
     "message": "現在および将来のすべてのコレクションへのアクセスを許可します。"
@@ -6714,8 +6858,8 @@
   "selectGroups": {
     "message": "グループを選択"
   },
-  "userPermissionOverrideHelper": {
-    "message": "メンバーの権限設定は、そのメンバーのグループによって設定された権限に置き換えられます"
+  "userPermissionOverrideHelperDesc": {
+    "message": "メンバーの権限設定は、そのメンバーのグループによって設定された権限に置き換えられます。"
   },
   "noMembersOrGroupsAdded": {
     "message": "メンバーまたはグループが追加されていません"
@@ -6906,7 +7050,7 @@
   "updateLowKdfIterationsDesc": {
     "message": "新しいセキュリティの推奨事項に対応し、アカウントの保護を向上させるために、暗号化設定を更新してください。"
   },
-  "changeKdfLoggedOutWarning": {
+  "kdfSettingsChangeLogoutWarning": {
     "message": "続行すると、すべてのアクティブなセッションからログアウトします。再度ログインし、2段階認証を完了する必要があります。 暗号化設定を変更する前に、保管庫をエクスポートしてデータの損失を防ぐことをおすすめします。"
   },
   "secretsManager": {
@@ -7527,6 +7671,12 @@
   "readOnlyCollectionAccess": {
     "message": "このコレクションを管理する権限がありません。"
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "「管理可能」権限がありません"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "コレクションの削除を含む完全なコレクション管理を許可するには「管理可能」権限を許可してください。"
+  },
   "grantCollectionAccess": {
     "message": "グループまたはメンバーにこのコレクションへのアクセスを許可します。"
   },
@@ -7557,13 +7707,6 @@
     "message": "支払い方法を追加してください",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "柔軟性を高めるために、新しい設定と権限を追加します。 マネージャーのロールを「管理可能」権限に置き換えます。 そして、ユーザーがコレクションを作成できるようにするオプションを導入し、コレクションへの管理者のアクセスを制限します。",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "コレクション管理の詳細はこちら"
-  },
   "organizationInformation": {
     "message": "組織情報"
   },
@@ -7575,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "あなたのメールアドレスに確認メールを送信しました："
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "この操作は元に戻せません"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "この機能を有効にすると、管理者ロールを非推奨にし、管理可能権限に置き換えます。 しばらく時間がかかります。完了するまで組織設定を変更しないでください。続行してもよろしいですか？"
   },
   "sorryToSeeYouGo": {
     "message": "お別れするのは残念です！キャンセルする理由を共有して、Bitwarden の改善にご協力ください。",
@@ -7632,13 +7769,10 @@
   "success": {
     "message": "成功"
   },
-  "viewCollection": {
-    "message": "コレクションを表示"
-  },
   "restrictedGroupAccess": {
     "message": "あなた自身をグループに追加することはできません。"
   },
-  "restrictedCollectionAccess": {
+  "cannotAddYourselfToCollections": {
     "message": "コレクションに自分自身を追加することはできません。"
   },
   "assign": {
@@ -8075,5 +8209,93 @@
   },
   "manageBillingFromProviderPortalMessage": {
     "message": "プロバイダーポータルからの請求を管理"
+  },
+  "viewItemsIn": {
+    "message": "$NAME$ のアイテムを表示",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "$NAME$ に戻る",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "戻る",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "$NAME$ を削除",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "viewInfo": {
+    "message": "情報を表示"
+  },
+  "viewAccess": {
+    "message": "アクセスを表示"
+  },
+  "noCollectionsSelected": {
+    "message": "コレクションが選択されていません。"
+  },
+  "updateName": {
+    "message": "名前を更新"
+  },
+  "updatedOrganizationName": {
+    "message": "組織名を更新済み"
+  },
+  "providerPlan": {
+    "message": "マネージドサービスプロバイダー"
+  },
+  "orgSeats": {
+    "message": "組織のシート"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$%割引",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "lowKDFIterationsBanner": {
+    "message": "KDF 反復回数が少ないです。あなたのアカウントのセキュリティを向上させるために反復回数を増やしてください。"
+  },
+  "changeKDFSettings": {
+    "message": "KDF 設定の変更"
+  },
+  "secureYourInfrastructure": {
+    "message": "インフラストラクチャの保護"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "家族やビジネスを保護"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "モニタリングレポートでセキュリティギャップを解消"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "監視を強化できる有料プランにアップグレードすると、セキュリティ脆弱性に素早く対応できます。"
+  },
+  "approveAllRequests": {
+    "message": "すべての要求を承認する"
+  },
+  "allLoginRequestsApproved": {
+    "message": "すべてのログイン要求を承認しました"
   }
 }

@@ -801,10 +801,10 @@
     "message": "Ändra huvudlösenord"
   },
   "continueToWebApp": {
-    "message": "Continue to web app?"
+    "message": "Fortsätt till webapp?"
   },
   "changeMasterPasswordOnWebConfirmation": {
-    "message": "You can change your master password on the Bitwarden web app."
+    "message": "Du kan ändra ditt huvudlösenord i Bitwardens webbapp."
   },
   "fingerprintPhrase": {
     "message": "Fingeravtrycksfras",
@@ -1299,11 +1299,41 @@
     "message": "Lösenordet uppdaterades",
     "description": "ex. Date this password was updated"
   },
+  "exportFrom": {
+    "message": "Exportera från"
+  },
   "exportVault": {
     "message": "Exportera valv"
   },
   "fileFormat": {
     "message": "Filformat"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "This file export will be password protected and require the file password to decrypt."
+  },
+  "filePassword": {
+    "message": "File password"
+  },
+  "exportPasswordDescription": {
+    "message": "This password will be used to export and import this file"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
+  },
+  "passwordProtected": {
+    "message": "Password protected"
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Set a file password to encrypt the export and import it to any Bitwarden account using the password for decryption."
+  },
+  "exportTypeHeading": {
+    "message": "Export type"
+  },
+  "accountRestricted": {
+    "message": "Account restricted"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "“File password”  and “Confirm file password“ do not match."
   },
   "hCaptchaUrl": {
     "message": "hCaptcha-URL",
@@ -1633,10 +1663,10 @@
     "message": "Webbläsarintegration stöds inte"
   },
   "browserIntegrationErrorTitle": {
-    "message": "Error enabling browser integration"
+    "message": "Fel vid aktivering av webbläsarintegration"
   },
   "browserIntegrationErrorDesc": {
-    "message": "An error has occurred while enabling browser integration."
+    "message": "Ett fel uppstod vid aktivering av webbläsarintegration."
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Tyvärr stöds webbläsarintegration för tillfället endast i versionen från Mac App Store."
@@ -1654,10 +1684,10 @@
     "message": "Aktivera ett ytterligare säkerhetslager genom att kräva validering av fingeravtrycksfrasen när du upprättar en länk mellan skrivbordet och webbläsaren. När det här är aktiverat krävs ingripande och verifiering från användaren varje gång en anslutning etableras."
   },
   "enableHardwareAcceleration": {
-    "message": "Use hardware acceleration"
+    "message": "Använd hårdvaruacceleration"
   },
   "enableHardwareAccelerationDesc": {
-    "message": "By default this setting is ON. Turn OFF only if you experience graphical issues. Restart is required."
+    "message": "Som standard är den här inställningen påslagen. Stäng endast av om du upplever grafiska problem. Omstart krävs."
   },
   "approve": {
     "message": "Godkänn"
@@ -1699,7 +1729,7 @@
     "message": "En organisationspolicy påverkar dina ägarskapsalternativ."
   },
   "personalOwnershipPolicyInEffectImports": {
-    "message": "An organization policy has blocked importing items into your individual vault."
+    "message": "En organisationspolicy har blockerat importering av objekt till ditt personliga valv."
   },
   "allSends": {
     "message": "Alla Sends",
@@ -1953,7 +1983,7 @@
     }
   },
   "vaultTimeoutPolicyWithActionInEffect": {
-    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "message": "Dina organisationspolicys påverkar ditt valvs timeout. Maximal tillåten tid innan timeout är $HOURS$ timme(ar) och $MINUTES$ minut(er). Ditt valvs timeout-åtgärd är angivet som $ACTION$.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -1970,7 +2000,7 @@
     }
   },
   "vaultTimeoutActionPolicyInEffect": {
-    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "message": "Dina organisationspolicys har satt din timeout-åtgärd till $ACTION$.",
     "placeholders": {
       "action": {
         "content": "$1",
@@ -2050,6 +2080,9 @@
   "switchAccount": {
     "message": "Byt konto"
   },
+  "alreadyHaveAccount": {
+    "message": "Har du redan ett konto?"
+  },
   "options": {
     "message": "Alternativ"
   },
@@ -2060,11 +2093,23 @@
     "message": "Exporterar individuellt valv"
   },
   "exportingIndividualVaultDescription": {
-    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
+    "message": "Endast de personliga valvobjekten som är associerade med $EMAIL$ kommer att exporteras. Organisationers valv kommer inte att inkluderas. Endast information om valv kommer att exporteras och kommer inte att innehålla tillhörande bilagor.",
     "placeholders": {
       "email": {
         "content": "$1",
         "example": "name@example.com"
+      }
+    }
+  },
+  "exportingOrganizationVaultTitle": {
+    "message": "Exporting organization vault"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
       }
     }
   },
@@ -2131,6 +2176,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Skapa ett e-postalias med en extern vidarebefordranstjänst."
+  },
+  "forwarderError": {
+    "message": "$SERVICENAME$-fel: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Genererad av Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Webbplats: $WEBSITE$. Genererad av Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Ogiltig $SERVICENAME$ API-token",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Ogiltig $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Gick inte att få $SERVICENAME$ maskerat e-postkonto-ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Ogiltig $SERVICENAME$-domän.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Ogiltig $SERVICENAME$-URL.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Okänt $SERVICENAME$ fel uppstod.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Okänd vidarebefordrare: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Värdnamn",
@@ -2288,6 +2435,27 @@
   "logInRequested": {
     "message": "Inloggning begärd"
   },
+  "creatingAccountOn": {
+    "message": "Skapa konto på"
+  },
+  "checkYourEmail": {
+    "message": "Kolla din e-post"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Följ länken i e-postmeddelandet som skickats till"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "och fortsätt att skapa ditt konto."
+  },
+  "noEmail": {
+    "message": "Ingen e-post?"
+  },
+  "goBack": {
+    "message": "Gå tillbaka"
+  },
+  "toEditYourEmailAddress": {
+    "message": "för att redigera din e-postadress."
+  },
   "exposedMasterPassword": {
     "message": "Huvudlösenordet har exponerats"
   },
@@ -2319,19 +2487,19 @@
     }
   },
   "windowsBiometricUpdateWarning": {
-    "message": "Bitwarden recommends updating your biometric settings to require your master password (or PIN) on the first unlock. Would you like to update your settings now?"
+    "message": "Bitwarden rekommenderar att du uppdaterar dina biometriska inställningar för att kräva ditt huvudlösenord (eller PIN) på den första upplåsningen. Vill du uppdatera dina inställningar nu?"
   },
   "windowsBiometricUpdateWarningTitle": {
-    "message": "Recommended Settings Update"
+    "message": "Rekommenderade inställningsuppdateringar"
   },
   "deviceApprovalRequired": {
-    "message": "Device approval required. Select an approval option below:"
+    "message": "Godkännande av enhet krävs. Välj ett godkännandealternativ nedan:"
   },
   "rememberThisDevice": {
     "message": "Kom ihåg denna enhet"
   },
   "uncheckIfPublicDevice": {
-    "message": "Uncheck if using a public device"
+    "message": "Avmarkera om du använder en offentlig enhet"
   },
   "approveFromYourOtherDevice": {
     "message": "Godkänn från din andra enhet"
@@ -2359,7 +2527,7 @@
     "message": "självhostad"
   },
   "accessDenied": {
-    "message": "Access denied. You do not have permission to view this page."
+    "message": "Åtkomst nekad. Du har inte behörighet att se denna sida."
   },
   "accountSuccessfullyCreated": {
     "message": "Ditt konto har skapats!"
@@ -2404,7 +2572,7 @@
     }
   },
   "inputMaxLength": {
-    "message": "Input must not exceed $COUNT$ characters in length.",
+    "message": "Inmatningen får inte överstiga $COUNT$ tecken i längd.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2422,7 +2590,7 @@
     }
   },
   "inputMinValue": {
-    "message": "Input value must be at least $MIN$.",
+    "message": "Inmatningsvärdet måste vara minst $MIN$.",
     "placeholders": {
       "min": {
         "content": "$1",
@@ -2431,7 +2599,7 @@
     }
   },
   "inputMaxValue": {
-    "message": "Input value must not exceed $MAX$.",
+    "message": "Inmatningsvärdet får inte överstiga $MAX$.",
     "placeholders": {
       "max": {
         "content": "$1",
@@ -2443,7 +2611,7 @@
     "message": "En eller flera e-postadresser är ogiltiga"
   },
   "inputTrimValidator": {
-    "message": "Input must not contain only whitespace.",
+    "message": "Indata får inte bara innehålla blanksteg.",
     "description": "Notification to inform the user that a form's input can't contain only whitespace."
   },
   "inputEmail": {
@@ -2574,7 +2742,7 @@
     "message": "Välj en samling"
   },
   "importTargetHint": {
-    "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
+    "message": "Välj det här alternativet om du vill att innehållet i den importerade filen ska flyttas till en $DESTINATION$",
     "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
     "placeholders": {
       "destination": {
@@ -2621,7 +2789,7 @@
     "message": "Bekräfta fillösenord"
   },
   "multifactorAuthenticationCancelled": {
-    "message": "Multifactor authentication cancelled"
+    "message": "Flerfaktorsautentisering avbruten"
   },
   "noLastPassDataFound": {
     "message": "Ingen LastPass-data hittades"
@@ -2639,7 +2807,7 @@
     "message": "Felaktig PIN-kod"
   },
   "multifactorAuthenticationFailed": {
-    "message": "Multifactor authentication failed"
+    "message": "Flerfaktorsautentisering misslyckades"
   },
   "includeSharedFolders": {
     "message": "Inkludera delade mappar"
@@ -2651,13 +2819,13 @@
     "message": "Importerar ditt konto..."
   },
   "lastPassMFARequired": {
-    "message": "LastPass multifactor authentication required"
+    "message": "LastPass flerfaktorsautentisering krävs"
   },
   "lastPassMFADesc": {
     "message": "Ange din engångskod från din autentiseringsapp"
   },
   "lastPassOOBDesc": {
-    "message": "Approve the login request in your authentication app or enter a one-time passcode."
+    "message": "Godkänn inloggningsbegäran i din autentiseringsapp eller ange en engångskod."
   },
   "passcode": {
     "message": "Kod"
@@ -2698,16 +2866,16 @@
     "description": "Label indicating the most common import formats"
   },
   "success": {
-    "message": "Success"
+    "message": "Lyckades"
   },
   "troubleshooting": {
     "message": "Felsökning"
   },
   "disableHardwareAccelerationRestart": {
-    "message": "Disable hardware acceleration and restart"
+    "message": "Inaktivera hårdvaruacceleration och starta om"
   },
   "enableHardwareAccelerationRestart": {
-    "message": "Enable hardware acceleration and restart"
+    "message": "Inaktivera hårdvaruacceleration och starta om"
   },
   "removePasskey": {
     "message": "Ta bort nyckel"
@@ -2716,9 +2884,43 @@
     "message": "Nyckel borttagen"
   },
   "errorAssigningTargetCollection": {
-    "message": "Error assigning target collection."
+    "message": "Fel vid tilldelning av målsamling."
   },
   "errorAssigningTargetFolder": {
-    "message": "Error assigning target folder."
+    "message": "Fel vid tilldelning av målmapp."
+  },
+  "viewItemsIn": {
+    "message": "Visa objekt i $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Tillbaka till $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Tillbaka",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Ta bort $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }

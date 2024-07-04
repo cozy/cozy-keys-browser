@@ -16,8 +16,6 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
-import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { VaultOnboardingMessages } from "@bitwarden/common/vault/enums/vault-onboarding.enum";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -44,7 +42,6 @@ export class VaultOnboardingComponent implements OnInit, OnChanges, OnDestroy {
   private destroy$ = new Subject<void>();
   isNewAccount: boolean;
   private readonly onboardingReleaseDate = new Date("2024-04-02");
-  showOnboardingAccess$: Observable<boolean>;
 
   protected currentTasks: VaultOnboardingTasks;
 
@@ -55,14 +52,10 @@ export class VaultOnboardingComponent implements OnInit, OnChanges, OnDestroy {
     protected platformUtilsService: PlatformUtilsService,
     protected policyService: PolicyService,
     private apiService: ApiService,
-    private configService: ConfigService,
     private vaultOnboardingService: VaultOnboardingServiceAbstraction,
   ) {}
 
   async ngOnInit() {
-    this.showOnboardingAccess$ = await this.configService.getFeatureFlag$(
-      FeatureFlag.VaultOnboarding,
-    );
     this.onboardingTasks$ = this.vaultOnboardingService.vaultOnboardingState$;
     await this.setOnboardingTasks();
     this.setInstallExtLink();
@@ -169,7 +162,7 @@ export class VaultOnboardingComponent implements OnInit, OnChanges, OnDestroy {
   setInstallExtLink() {
     if (this.platformUtilsService.isChrome()) {
       this.extensionUrl =
-        "https://chrome.google.com/webstore/detail/bitwarden-free-password-m/nngceckbapebfimnlniiiahkandclblb";
+        "https://chromewebstore.google.com/detail/bitwarden-password-manage/nngceckbapebfimnlniiiahkandclblb";
     } else if (this.platformUtilsService.isFirefox()) {
       this.extensionUrl =
         "https://addons.mozilla.org/en-US/firefox/addon/bitwarden-password-manager/";

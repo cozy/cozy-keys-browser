@@ -579,7 +579,10 @@
     "message": "存取"
   },
   "accessLevel": {
-    "message": "Access level"
+    "message": "存取等級"
+  },
+  "accessing": {
+    "message": "Accessing"
   },
   "loggedOut": {
     "message": "已登出"
@@ -615,10 +618,10 @@
     "message": "使用主密碼登入"
   },
   "readingPasskeyLoading": {
-    "message": "正在讀取金輪..."
+    "message": "正在讀取密碼金輪..."
   },
   "readingPasskeyLoadingInfo": {
-    "message": "請保持視窗開啟，並按照瀏覽器指示操作。"
+    "message": "保持此視窗打開，然後按照瀏覽器的提示進行操作。"
   },
   "useADifferentLogInMethod": {
     "message": "使用不同的登入方法"
@@ -627,10 +630,10 @@
     "message": "使用密碼金鑰登入"
   },
   "invalidPasskeyPleaseTryAgain": {
-    "message": "無效的金鑰。請再試一次。"
+    "message": "無效的密碼金鑰，請再試一次。"
   },
   "twoFactorForPasskeysNotSupportedOnClientUpdateToLogIn": {
-    "message": "不支援的密碼金鑰的 2FA 兩階段認證。更新 app 以登入"
+    "message": "不支援密碼金鑰 2FA。請更新 app 以登入。"
   },
   "loginWithPasskeyInfo": {
     "message": "使用已產生的密碼金輪，無需密碼即可自動登入。生物特徵辨識（例如面部識別或指紋）或其他 FIDO2 安全方式將用於確認您的身分。"
@@ -642,7 +645,7 @@
     "message": "瞭解更多關於無密碼登入的資訊"
   },
   "creatingPasskeyLoading": {
-    "message": "正在建立密碼金輪..."
+    "message": "正在建立密碼金鑰..."
   },
   "creatingPasskeyLoadingInfo": {
     "message": "保持此視窗打開，然後按照瀏覽器的提示進行操作。"
@@ -657,7 +660,7 @@
     "message": "密碼金鑰已成功建立！"
   },
   "customPasskeyNameInfo": {
-    "message": "命名您的密碼金輪以方便您辨識它。"
+    "message": "命名您的密碼金鑰以方便您辨識它。"
   },
   "useForVaultEncryption": {
     "message": "用於密碼庫加密"
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "您的帳戶已經關閉，所有關聯的資料也已經被刪除。"
   },
+  "deleteOrganizationWarning": {
+    "message": "Deleting your organization is permanent. It cannot be undone."
+  },
   "myAccount": {
     "message": "我的帳戶"
   },
@@ -1351,7 +1357,7 @@
     "message": "匯入資料"
   },
   "onboardingImportDataDetailsPartOne": {
-    "message": "If you don't have any data to import, you can create a ",
+    "message": "如果你沒有任何資料要匯入，你可以建立一個",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsLink": {
@@ -1359,11 +1365,11 @@
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
-    "message": " instead.",
+    "message": "。",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead."
   },
   "onboardingImportDataDetailsPartTwoWithOrgs": {
-    "message": " instead. You may need to wait until your administrator confirms your organization membership.",
+    "message": "。你可能需要等待管理員確認你的組織會員資格。",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. You may need to wait until your administrator confirms your organization membership."
   },
   "importError": {
@@ -1710,11 +1716,11 @@
   "twoFactorDuoDesc": {
     "message": "請輸入來自您的 Duo 管理面板的 Bitwarden 應用程式資訊。"
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "整合金鑰"
+  "twoFactorDuoClientId": {
+    "message": "用戶端 ID"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "秘密金鑰"
+  "twoFactorDuoClientSecret": {
+    "message": "用戶端秘密"
   },
   "twoFactorDuoApiHostname": {
     "message": "API 主機名稱"
@@ -1810,7 +1816,7 @@
     "message": "發現不安全的網站"
   },
   "unsecuredWebsitesFoundReportDesc": {
-    "message": "We found $COUNT$ items in your $VAULT$ with unsecured URIs. You should change their URI scheme to https:// if the website allows it.",
+    "message": "我們在你的 $VAULT$ 中發現了 $COUNT$ 項項目具有不安全的 URI。如果網站允許，你應該將其 URI 協定變更為 https://。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1863,7 +1869,7 @@
     "message": "發現暴露的密碼"
   },
   "exposedPasswordsFoundReportDesc": {
-    "message": "We found $COUNT$ items in your $VAULT$ that have passwords that were exposed in known data breaches. You should change them to use a new password.",
+    "message": "我們在你的 $VAULT$ 中發現 $COUNT$ 項項目的密碼在已知資料外洩事件中暴露。你應該變更它們以使用新密碼。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1900,7 +1906,7 @@
     "message": "發現弱式密碼"
   },
   "weakPasswordsFoundReportDesc": {
-    "message": "We found $COUNT$ items in your $VAULT$ with passwords that are not strong. You should update them to use stronger passwords.",
+    "message": "我們在你的 $VAULT$ 中發現 $COUNT$ 項項目的密碼強度不足。你應該更新它們以使用更強的密碼。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2102,7 +2108,7 @@
     "message": "附加項目"
   },
   "premiumAccess": {
-    "message": "進階存取"
+    "message": "進階版存取"
   },
   "premiumAccessDesc": {
     "message": "您可以為您的組織的所有成員添加進階存取，只需 $PRICE$ /$INTERVAL$.",
@@ -2299,7 +2305,7 @@
     "description": "Payment/credit transactions."
   },
   "noTransactions": {
-    "message": "無交易記錄"
+    "message": "無交易記錄。"
   },
   "chargeNoun": {
     "message": "費用",
@@ -2696,7 +2702,7 @@
     "message": "唯讀"
   },
   "newCollection": {
-    "message": "新集合"
+    "message": "新增集合"
   },
   "addCollection": {
     "message": "新增集合"
@@ -2787,6 +2793,12 @@
   },
   "all": {
     "message": "全部"
+  },
+  "addAccess": {
+    "message": "添加存取權限"
+  },
+  "addAccessFilter": {
+    "message": "新增存取過濾器"
   },
   "refresh": {
     "message": "重新整理"
@@ -3023,7 +3035,7 @@
     }
   },
   "deletedCollections": {
-    "message": "已刪除集合"
+    "message": "已刪除的集合"
   },
   "deletedCollectionId": {
     "message": "已刪除集合 $ID$。",
@@ -3235,6 +3247,27 @@
   "device": {
     "message": "裝置"
   },
+  "creatingAccountOn": {
+    "message": "Creating account on"
+  },
+  "checkYourEmail": {
+    "message": "Check your email"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Follow the link in the email sent to"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "and continue creating your account."
+  },
+  "noEmail": {
+    "message": "No email?"
+  },
+  "goBack": {
+    "message": "Go back"
+  },
+  "toEditYourEmailAddress": {
+    "message": "to edit your email address."
+  },
   "view": {
     "message": "檢視"
   },
@@ -3381,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "您已要求刪除您的 Bitwarden 帳戶。點選下方的按鈕以確認。"
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "You have requested to delete your Bitwarden organization."
   },
   "myOrganization": {
     "message": "我的組織"
@@ -3558,6 +3594,12 @@
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "調整訂閱將會依比例變更您的計費總額。若新邀請的成員超過您的訂閱席位，您將立即收到依比例收取的額外使用者費用。"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "如果你想新增額外的"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "seats without the bundled offer, please contact"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "調整訂閱將會依比例變更您的計費總額。若新邀請的成員超過您的訂閱席位，您將立即收到依比例收取的額外使用者費用，直到您達到 $MAX$ 席位限制。",
@@ -5802,6 +5844,108 @@
   "forwardedEmailDesc": {
     "message": "使用外部轉寄服務產生一個電子郵件別名。"
   },
+  "forwarderError": {
+    "message": "$SERVICENAME$ 錯誤：$ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "由 Bitwarden 產生。",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "網站：$WEBSITE$。由 Bitwarden 產生。",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Invalid $SERVICENAME$ API token",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "無效的 $SERVICENAME$ 網域。",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "無效的 $SERVICENAME$ 網址。",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Unknown $SERVICENAME$ error occurred.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "主機名稱",
     "description": "Part of a URL."
@@ -6480,7 +6624,7 @@
   "editGroupCollectionsDesc": {
     "message": "透過將他們添加到此群組，授予對集合的存取權限。"
   },
-  "editGroupCollectionsRestrictionsDesc": {
+  "restrictedCollectionAssignmentDesc": {
     "message": "You can only assign collections you manage."
   },
   "accessAllCollectionsDesc": {
@@ -6714,8 +6858,8 @@
   "selectGroups": {
     "message": "選擇群組"
   },
-  "userPermissionOverrideHelper": {
-    "message": "為成員設定的權限將取代該成員所在群組設定的權限"
+  "userPermissionOverrideHelperDesc": {
+    "message": "Permissions set for a member will replace permissions set by that member's group."
   },
   "noMembersOrGroupsAdded": {
     "message": "未新增任何成員或群組"
@@ -6906,8 +7050,8 @@
   "updateLowKdfIterationsDesc": {
     "message": "更新您的加密設定以滿足新的安全建議以及提升帳號保護。"
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "繼續操作會登出您所有活動工作階段。您需要重新登入並完成兩步驟登入設定。 我們建議在變更加密設定之前匯出您的密碼庫，以防止資料遺失。"
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login, if any. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
   "secretsManager": {
     "message": "Secrets Manager"
@@ -7425,7 +7569,7 @@
     "message": "Owners and admins can manage all collections and items"
   },
   "updatedCollectionManagement": {
-    "message": "Updated collection management setting"
+    "message": "更新了集合管理設定"
   },
   "passwordManagerPlanPrice": {
     "message": "密碼管理器方案價格"
@@ -7485,10 +7629,10 @@
     "message": "密碼金鑰不會被複製"
   },
   "passkeyNotCopiedAlert": {
-    "message": "密碼金鑰不會被複製到克隆的項目。您想繼續克隆該項目嗎？"
+    "message": "密碼金鑰不會被複製到新的項目中。您要繼續複製此項目嗎？"
   },
   "modifiedCollectionManagement": {
-    "message": "Modified collection management setting $ID$.",
+    "message": "修改了集合管理設定 $ID$。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -7527,6 +7671,12 @@
   "readOnlyCollectionAccess": {
     "message": "You do not have access to manage this collection."
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "Missing Can Manage Permissions"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Grant Can manage permissions to allow full collection management including deletion of collection."
+  },
   "grantCollectionAccess": {
     "message": "Grant groups or members access to this collection."
   },
@@ -7557,13 +7707,6 @@
     "message": "新增付款方式",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "Add new settings and permissions for additional flexibility. Replace the Manager role with the \"can manage\" permission, and introduce options to allow users to create collections as well as restrict administrative access to collections.",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "Learn more about collection management"
-  },
   "organizationInformation": {
     "message": "組織資訊"
   },
@@ -7574,20 +7717,14 @@
     "message": "Thank you for signing up for Bitwarden Secrets Manager!"
   },
   "smFreeTrialConfirmationEmail": {
-    "message": "We've sent a confirmation email to your email at "
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "此操作是不可逆轉的"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "Turning on this feature will deprecate the manager role and replace it with a Can manage permission. This will take a few moments. Do not make any organization changes until it is complete. Are you sure you want to proceed?"
+    "message": "我們已向你的電子郵件地址傳送了一封確認電子郵件"
   },
   "sorryToSeeYouGo": {
     "message": "Sorry to see you go! Help improve Bitwarden by sharing why you're canceling.",
     "description": "A message shown to users as part of an offboarding survey asking them to provide more information on their subscription cancelation."
   },
   "selectCancellationReason": {
-    "message": "Select a reason for canceling",
+    "message": "選擇取消原因",
     "description": "Used as a form field label for a select input on the offboarding survey."
   },
   "anyOtherFeedback": {
@@ -7595,54 +7732,51 @@
     "description": "Used as a form field label for a textarea input on the offboarding survey."
   },
   "missingFeatures": {
-    "message": "Missing features",
+    "message": "缺少功能",
     "description": "An option for the offboarding survey shown when a user cancels their subscription."
   },
   "movingToAnotherTool": {
-    "message": "Moving to another tool",
+    "message": "轉移至另一個工具",
     "description": "An option for the offboarding survey shown when a user cancels their subscription."
   },
   "tooDifficultToUse": {
-    "message": "Too difficult to use",
+    "message": "太難使用了",
     "description": "An option for the offboarding survey shown when a user cancels their subscription."
   },
   "notUsingEnough": {
-    "message": "Not using enough",
+    "message": "使用不足",
     "description": "An option for the offboarding survey shown when a user cancels their subscription."
   },
   "tooExpensive": {
-    "message": "Too expensive",
+    "message": "太貴了",
     "description": "An option for the offboarding survey shown when a user cancels their subscription."
   },
   "freeForOneYear": {
-    "message": "Free for 1 year"
+    "message": "免費 1 年"
   },
   "newWebApp": {
     "message": "Welcome to the new and improved web app. Learn more about what’s changed."
   },
   "releaseBlog": {
-    "message": "Read release blog"
+    "message": "閱讀發佈部落格"
   },
   "adminConsole": {
-    "message": "Admin Console"
+    "message": "管理員控制台"
   },
   "providerPortal": {
-    "message": "Provider Portal"
+    "message": "提供者入口網站"
   },
   "success": {
-    "message": "Success"
-  },
-  "viewCollection": {
-    "message": "View collection"
+    "message": "成功"
   },
   "restrictedGroupAccess": {
-    "message": "You cannot add yourself to groups."
+    "message": "你無法將自己新增至群組。"
   },
-  "restrictedCollectionAccess": {
+  "cannotAddYourselfToCollections": {
     "message": "You cannot add yourself to collections."
   },
   "assign": {
-    "message": "Assign"
+    "message": "指派"
   },
   "assignToCollections": {
     "message": "Assign to collections"
@@ -7676,7 +7810,7 @@
     }
   },
   "items": {
-    "message": "Items"
+    "message": "項目"
   },
   "assignedSeats": {
     "message": "Assigned seats"
@@ -7700,7 +7834,7 @@
     "message": "Adjustments to seats will be reflected in the next billing cycle."
   },
   "unassignedSeatsDescription": {
-    "message": "Unassigned subscription seats"
+    "message": "未分配的訂閱席位"
   },
   "purchaseSeatDescription": {
     "message": "Additional seats purchased"
@@ -7760,22 +7894,22 @@
     "description": "The body of a warning box shown to a user whose subscription is unpaid."
   },
   "cancellationDate": {
-    "message": "Cancellation date",
+    "message": "取消日期",
     "description": "The date header used when a subscription is cancelled."
   },
   "machineAccountsCannotCreate": {
     "message": "Machine accounts cannot be created in suspended organizations. Please contact your organization owner for assistance."
   },
   "machineAccount": {
-    "message": "Machine account",
+    "message": "機器帳戶",
     "description": "A machine user which can be used to automate processes and access secrets in the system."
   },
   "machineAccounts": {
-    "message": "Machine accounts",
+    "message": "機器帳戶",
     "description": "The title for the section that deals with machine accounts."
   },
   "newMachineAccount": {
-    "message": "New machine account",
+    "message": "新增機器賬戶",
     "description": "Title for creating a new machine account."
   },
   "machineAccountsNoItemsMessage": {
@@ -7783,19 +7917,19 @@
     "description": "Message to encourage the user to start creating machine accounts."
   },
   "machineAccountsNoItemsTitle": {
-    "message": "Nothing to show yet",
+    "message": "尚無要顯示的內容",
     "description": "Title to indicate that there are no machine accounts to display."
   },
   "deleteMachineAccounts": {
-    "message": "Delete machine accounts",
+    "message": "刪除機器帳戶",
     "description": "Title for the action to delete one or multiple machine accounts."
   },
   "deleteMachineAccount": {
-    "message": "Delete machine account",
+    "message": "刪除機器帳戶",
     "description": "Title for the action to delete a single machine account."
   },
   "viewMachineAccount": {
-    "message": "View machine account",
+    "message": "檢視機器賬戶",
     "description": "Action to view the details of a machine account."
   },
   "deleteMachineAccountDialogMessage": {
@@ -7811,7 +7945,7 @@
     "message": "Deleting machine accounts is permanent and irreversible."
   },
   "deleteMachineAccountsConfirmMessage": {
-    "message": "Delete $COUNT$ machine accounts",
+    "message": "刪除 $COUNT$ 個機器賬戶",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -7820,29 +7954,29 @@
     }
   },
   "deleteMachineAccountToast": {
-    "message": "Machine account deleted"
+    "message": "機器帳戶已刪除"
   },
   "deleteMachineAccountsToast": {
-    "message": "Machine accounts deleted"
+    "message": "機器帳戶已刪除"
   },
   "searchMachineAccounts": {
-    "message": "Search machine accounts",
+    "message": "搜尋機器帳戶",
     "description": "Placeholder text for searching machine accounts."
   },
   "editMachineAccount": {
-    "message": "Edit machine account",
+    "message": "編輯機器賬戶",
     "description": "Title for editing a machine account."
   },
   "machineAccountName": {
-    "message": "Machine account name",
+    "message": "機器賬戶名稱",
     "description": "Label for the name of a machine account"
   },
   "machineAccountCreated": {
-    "message": "Machine account created",
+    "message": "機器賬戶已建立",
     "description": "Notifies that a new machine account has been created"
   },
   "machineAccountUpdated": {
-    "message": "Machine account updated",
+    "message": "機器賬戶已更新",
     "description": "Notifies that a machine account has been updated"
   },
   "projectMachineAccountsDescription": {
@@ -7861,16 +7995,16 @@
     "message": "Assign projects to this machine account. "
   },
   "createMachineAccount": {
-    "message": "Create a machine account"
+    "message": "建立機器賬戶"
   },
   "maPeopleWarningMessage": {
     "message": "Removing people from a machine account does not remove the access tokens they created. For security best practice, it is recommended to revoke access tokens created by people removed from a machine account."
   },
   "smAccessRemovalWarningMaTitle": {
-    "message": "Remove access to this machine account"
+    "message": "移除對此機器賬戶的存取權限"
   },
   "smAccessRemovalWarningMaMessage": {
-    "message": "This action will remove your access to the machine account."
+    "message": "此動作將移除您對此機器賬戶的存取權限"
   },
   "machineAccountsIncluded": {
     "message": "$COUNT$ machine accounts included",
@@ -7924,7 +8058,7 @@
     "message": "Max potential machine account cost"
   },
   "machineAccountAccessUpdated": {
-    "message": "Machine account access updated"
+    "message": "機器賬戶存取權限已更新"
   },
   "restrictedGroupAccessDesc": {
     "message": "You cannot add yourself to a group."
@@ -7947,13 +8081,13 @@
     "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
   },
   "deleteProvider": {
-    "message": "Delete provider"
+    "message": "刪除提供者"
   },
   "deleteProviderConfirmation": {
-    "message": "Deleting a provider is permanent and irreversible. Enter your master password to confirm the deletion of the provider and all associated data."
+    "message": "刪除提供者是永久性的且不可逆轉。輸入您的主密碼以確認刪除提供者和所有關聯資料。"
   },
   "deleteProviderName": {
-    "message": "Cannot delete $ID$",
+    "message": "無法刪除 $ID$",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -7971,7 +8105,7 @@
     }
   },
   "providerDeleted": {
-    "message": "Provider deleted"
+    "message": "提供者已刪除"
   },
   "providerDeletedDesc": {
     "message": "The Provider and all associated data has been deleted."
@@ -7989,91 +8123,179 @@
     "message": "Error assigning target folder."
   },
   "integrationsAndSdks": {
-    "message": "Integrations & SDKs",
+    "message": "整合和軟體開發工具包",
     "description": "The title for the section that deals with integrations and SDKs."
   },
   "integrations": {
-    "message": "Integrations"
+    "message": "整合"
   },
   "integrationsDesc": {
     "message": "Automatically sync secrets from Bitwarden Secrets Manager to a third-party service."
   },
   "sdks": {
-    "message": "SDKs"
+    "message": "軟體開發工具包"
   },
   "sdksDesc": {
-    "message": "Use Bitwarden Secrets Manager SDK in the following programming languages to build your own applications."
+    "message": "使用 Bitwarden 機密管理軟體開發工具包於下列程式語言來建立你自己的應用程式。"
   },
   "setUpGithubActions": {
-    "message": "Set up Github Actions"
+    "message": "設定 GitHub Actions"
   },
   "setUpGitlabCICD": {
-    "message": "Set up GitLab CI/CD"
+    "message": "設定 GitLab CI/CD"
   },
   "setUpAnsible": {
-    "message": "Set up Ansible"
+    "message": "設定 Ansible"
   },
   "cSharpSDKRepo": {
-    "message": "View C# repository"
+    "message": "檢視 C# 儲存庫"
   },
   "cPlusPlusSDKRepo": {
-    "message": "View C++ repository"
+    "message": "檢視 C++ 儲存庫"
   },
   "jsWebAssemblySDKRepo": {
-    "message": "View JS WebAssembly repository"
+    "message": "檢視 JS WebAssembly 儲存庫"
   },
   "javaSDKRepo": {
-    "message": "View Java repository"
+    "message": "檢視 Java 儲存庫"
   },
   "pythonSDKRepo": {
-    "message": "View Python repository"
+    "message": "檢視 Python 儲存庫"
   },
   "phpSDKRepo": {
-    "message": "View php repository"
+    "message": "檢視 PHP 儲存庫"
   },
   "rubySDKRepo": {
-    "message": "View Ruby repository"
+    "message": "檢視 Ruby 儲存庫"
   },
   "goSDKRepo": {
-    "message": "View Go repository"
+    "message": "檢視 Go 儲存庫"
   },
   "createNewClientToManageAsProvider": {
     "message": "Create a new client organization to manage as a Provider. Additional seats will be reflected in the next billing cycle."
   },
   "selectAPlan": {
-    "message": "Select a plan"
+    "message": "選擇一個計劃"
   },
   "thirtyFivePercentDiscount": {
-    "message": "35% Discount"
+    "message": "35% 折扣"
   },
   "monthPerMember": {
     "message": "month per member"
   },
   "seats": {
-    "message": "Seats"
+    "message": "席位"
   },
   "addOrganization": {
-    "message": "Add organization"
+    "message": "新增組織"
   },
   "createdNewClient": {
     "message": "Successfully created new client"
   },
   "noAccess": {
-    "message": "No access"
+    "message": "無存取權限"
   },
   "collectionAdminConsoleManaged": {
     "message": "This collection is only accessible from the admin console"
   },
   "organizationOptionsMenu": {
-    "message": "Toggle Organization Menu"
+    "message": "切換組織選單"
   },
   "vaultItemSelect": {
-    "message": "Select vault item"
+    "message": "選擇密碼庫項目"
   },
   "collectionItemSelect": {
-    "message": "Select collection item"
+    "message": "選擇集合項目"
   },
   "manageBillingFromProviderPortalMessage": {
-    "message": "Manage billing from the Provider Portal"
+    "message": "從提供者入口網站管理計費"
+  },
+  "viewItemsIn": {
+    "message": "View items in $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Back to $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Back",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Remove $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "viewInfo": {
+    "message": "檢視資訊"
+  },
+  "viewAccess": {
+    "message": "檢視存取權限"
+  },
+  "noCollectionsSelected": {
+    "message": "你還沒有選擇任何集合。"
+  },
+  "updateName": {
+    "message": "更新名称"
+  },
+  "updatedOrganizationName": {
+    "message": "更新了組織名稱"
+  },
+  "providerPlan": {
+    "message": "代管服務供應商"
+  },
+  "orgSeats": {
+    "message": "組織席位"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$% 折扣",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "lowKDFIterationsBanner": {
+    "message": "低 KDF 迭代。增加迭代次數以提高帳號的安全性。"
+  },
+  "changeKDFSettings": {
+    "message": "變更 KDF 設定"
+  },
+  "secureYourInfrastructure": {
+    "message": "保護你的基礎設施"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "保護你的家庭或企業"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "透過監控報告以彌補安全漏洞"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Stay ahead of security vulnerabilities by upgrading to a paid plan for enhanced monitoring."
+  },
+  "approveAllRequests": {
+    "message": "Approve all requests"
+  },
+  "allLoginRequestsApproved": {
+    "message": "All login requests approved"
   }
 }

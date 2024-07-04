@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "Ниво на достъп"
   },
+  "accessing": {
+    "message": "Accessing"
+  },
   "loggedOut": {
     "message": "Бяхте отписани"
   },
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "Абонаментът ви е окончателно прекратен и всички данни към него са изтрити."
   },
+  "deleteOrganizationWarning": {
+    "message": "Изтриването на организацията Ви е окончателно и необратимо."
+  },
   "myAccount": {
     "message": "Абонамент"
   },
@@ -1710,11 +1716,11 @@
   "twoFactorDuoDesc": {
     "message": "Въведете информацията за приложението на Битуорден от административния панел на Duo."
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "Ключ за интеграция"
+  "twoFactorDuoClientId": {
+    "message": "Клиентски идентификатор"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "Таен ключ"
+  "twoFactorDuoClientSecret": {
+    "message": "Клиентска тайна"
   },
   "twoFactorDuoApiHostname": {
     "message": "Адрес на сървъра за API"
@@ -2788,6 +2794,12 @@
   "all": {
     "message": "Всички"
   },
+  "addAccess": {
+    "message": "Добавяне на достъп"
+  },
+  "addAccessFilter": {
+    "message": "Добавяне на филтър за достъп"
+  },
   "refresh": {
     "message": "Опресняване"
   },
@@ -3235,6 +3247,27 @@
   "device": {
     "message": "Устройство"
   },
+  "creatingAccountOn": {
+    "message": "Създаване на регистрация в"
+  },
+  "checkYourEmail": {
+    "message": "Проверете е-пощата си"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Последвайте връзката в е-писмото изпратено до"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "и продължете със създаването на регистрацията си."
+  },
+  "noEmail": {
+    "message": "Не сте получили е-писмо?"
+  },
+  "goBack": {
+    "message": "Върнете се назад"
+  },
+  "toEditYourEmailAddress": {
+    "message": ", за да редактирате адреса на е-пощата си."
+  },
   "view": {
     "message": "Изглед"
   },
@@ -3381,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "Заявили сте, че искате да изтриете абонамента си към Битуорден. Натиснете бутона по-долу, за да потвърдите това решение."
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "Вие поискахте изтриване на Вашата организация в Битуорден."
   },
   "myOrganization": {
     "message": "Моята организация"
@@ -3558,6 +3594,12 @@
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "Промените в абонамента Ви ще предизвикат пропорционални промени в сумата, която плащате. Ако новопоканените потребители превишат ограничението на абонамента Ви, незабавно ще получите съответстващо пропорционално задължение за допълнителните потребители."
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "Ако искате да добавите допълнителни"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "места без да ползвате пакетното предложение, свържете се с нас"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "Промените в абонамента Ви ще предизвикат пропорционални промени в сумата, която плащате. Ако новопоканените потребители превишат ограничението на абонамента Ви, незабавно ще получите съответстващо пропорционално задължение за допълнителните потребители, докато не бъде достигнато ограничението от $MAX$ потребители.",
@@ -5802,6 +5844,108 @@
   "forwardedEmailDesc": {
     "message": "Generate an email alias with an external forwarding service."
   },
+  "forwarderError": {
+    "message": "Грешка от $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Създадено от Битуорден.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Уебсайт: $WEBSITE$. Създадено от Битуорден.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Неправилен идентификатор за ППИ на $SERVICENAME$",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Неправилен идентификатор за ППИ на $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Не може да бъде получен идентификатор на маскиран чрез е-поща акаунт от $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Неправилен домейн за $SERVICENAME$.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Неправилен адрес на $SERVICENAME$.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Възникна неочаквана грешка свързана с $SERVICENAME$.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Неизвестна пренасочваща услуга: „$SERVICENAME$“.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "Име на сървъра",
     "description": "Part of a URL."
@@ -6480,7 +6624,7 @@
   "editGroupCollectionsDesc": {
     "message": "Дайте достъп до колекциите, като ги добавите към тази група."
   },
-  "editGroupCollectionsRestrictionsDesc": {
+  "restrictedCollectionAssignmentDesc": {
     "message": "Можете да свързвате само колекции, които имате право да управлявате."
   },
   "accessAllCollectionsDesc": {
@@ -6714,8 +6858,8 @@
   "selectGroups": {
     "message": "Изберете групи"
   },
-  "userPermissionOverrideHelper": {
-    "message": "Правата дадени на един член ще заменят правата дадени му от неговата група"
+  "userPermissionOverrideHelperDesc": {
+    "message": "Правата дадени на един член ще заменят правата дадени му от неговата група."
   },
   "noMembersOrGroupsAdded": {
     "message": "Няма добавени членове или групи"
@@ -6906,8 +7050,8 @@
   "updateLowKdfIterationsDesc": {
     "message": "Променете настройките си за шифроване, така че да отговарят на новите препоръки за сигурността и да подобрите защитата на регистрацията си."
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "Ако продължите, ще излезете от всички активни сесии. Ще трябва да се впишете отново и да завършите настройката на двустепенното удостоверяване. Препоръчително е да изнесете трезора си преди да променяте настройките за шифроване, за да избегнете загуба на данни."
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "Ако продължите, ще излезете от всички активни сесии. Ще трябва да се впишете отново и да извършите двустепенно удостоверяване, ако такова е настроено. Препоръчително е да изнесете трезора си преди да променяте настройките за шифроване, за да избегнете загуба на данни."
   },
   "secretsManager": {
     "message": "Управление на тайни"
@@ -7527,6 +7671,12 @@
   "readOnlyCollectionAccess": {
     "message": "Нямате достъп за управление на тази колекция."
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "Липсват правомощия за управление"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Дайте правомощия за управление, за да позволите пълното управление на колекции, включително изтриването им."
+  },
   "grantCollectionAccess": {
     "message": "Дайте права на групи и членове до тази колекция."
   },
@@ -7557,13 +7707,6 @@
     "message": "добавете разплащателен метод",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "Можете да добавяте нови настройки и права, за допълнителна персонализация. Заменете ролята на управителя с правото „може да управлява“, или добавете опции, които позволяват на потребителите да създават колекции, както и да ограничават администраторския достъп до колекциите.",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "Научете повече за управлението на колекции"
-  },
   "organizationInformation": {
     "message": "Информация за организацията"
   },
@@ -7575,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "Изпратихме Ви е-писмо за потвърждение до е-пощата Ви, на адрес: "
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "Това действие е необратимо"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "Ако включите тази функционалност, ролята на управителя ще бъде премахната и заменена от правомощието „може да управлява“. Това ще отнаме съвсем малко време. Не правете промени в организацията, докато процесът не завърши. Наистина ли искате да продължите?"
   },
   "sorryToSeeYouGo": {
     "message": "Съжаляваме, че ни напускате! Помогнете ни да подобрим Битуорден, като споделите с нас защо прекратявате абонамента си.",
@@ -7632,13 +7769,10 @@
   "success": {
     "message": "Успех"
   },
-  "viewCollection": {
-    "message": "Преглед на колекцията"
-  },
   "restrictedGroupAccess": {
     "message": "Не може да добавяте себе си към групи."
   },
-  "restrictedCollectionAccess": {
+  "cannotAddYourselfToCollections": {
     "message": "Не може да добавяте себе си към колекции."
   },
   "assign": {
@@ -8075,5 +8209,93 @@
   },
   "manageBillingFromProviderPortalMessage": {
     "message": "Управление на плащанията от Портала за доставчици"
+  },
+  "viewItemsIn": {
+    "message": "Преглед на елементите в $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Назад към $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Назад",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Премахване на $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "viewInfo": {
+    "message": "Преглед на информацията"
+  },
+  "viewAccess": {
+    "message": "Преглед на достъпа"
+  },
+  "noCollectionsSelected": {
+    "message": "Не сте избрали нито една колекция."
+  },
+  "updateName": {
+    "message": "Промяна на името"
+  },
+  "updatedOrganizationName": {
+    "message": "Името на организацията е променено"
+  },
+  "providerPlan": {
+    "message": "Managed Service Provider"
+  },
+  "orgSeats": {
+    "message": "Места в организацията"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$% отстъпка",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "lowKDFIterationsBanner": {
+    "message": "Малък брой повторения за KDF. Увеличете броя повторения, за да подсилите защитата на регистрацията си."
+  },
+  "changeKDFSettings": {
+    "message": "Промяна на настройките за KDF"
+  },
+  "secureYourInfrastructure": {
+    "message": "Подсигурете инфраструктурата си"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Защитете семейството или бизнеса си"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Отстранете пропуските в сигурността с докладите за наблюдение"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Не допускайте уязвимост в сигурността си като надградите до платен план с подобрено наблюдение."
+  },
+  "approveAllRequests": {
+    "message": "Одобряване на всички заявки"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Всички заявки за вписване са одобрени"
   }
 }

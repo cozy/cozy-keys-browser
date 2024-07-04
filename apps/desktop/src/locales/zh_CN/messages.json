@@ -1299,11 +1299,41 @@
     "message": "密码更新于",
     "description": "ex. Date this password was updated"
   },
+  "exportFrom": {
+    "message": "导出自"
+  },
   "exportVault": {
     "message": "导出密码库"
   },
   "fileFormat": {
     "message": "文件格式"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "此文件导出将受密码保护，需要文件密码才能解密。"
+  },
+  "filePassword": {
+    "message": "文件密码"
+  },
+  "exportPasswordDescription": {
+    "message": "此密码将用于导出和导入此文件"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "使用衍生自您账户的用户名和主密码的账户加密密钥，以加密此导出并限制只能导入到当前的 Bitwarden 账户。"
+  },
+  "passwordProtected": {
+    "message": "密码保护"
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "设置一个文件密码用来加密此导出，并使用此密码解密以导入到任意 Bitwarden 账户。"
+  },
+  "exportTypeHeading": {
+    "message": "导出类型"
+  },
+  "accountRestricted": {
+    "message": "账户受限"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "「文件密码」与「确认文件密码」不一致。"
   },
   "hCaptchaUrl": {
     "message": "hCaptcha URL",
@@ -1916,7 +1946,7 @@
     "message": "无法完成生物识别。"
   },
   "needADifferentMethod": {
-    "message": "使用其他方式？"
+    "message": "尝试其他方式吗？"
   },
   "useMasterPassword": {
     "message": "使用主密码"
@@ -2050,6 +2080,9 @@
   "switchAccount": {
     "message": "切换账户"
   },
+  "alreadyHaveAccount": {
+    "message": "已经拥有账户了吗？"
+  },
   "options": {
     "message": "选项"
   },
@@ -2065,6 +2098,18 @@
       "email": {
         "content": "$1",
         "example": "name@example.com"
+      }
+    }
+  },
+  "exportingOrganizationVaultTitle": {
+    "message": "正在导出组织密码库"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "仅会导出与 $ORGANIZATION$ 关联的组织密码库数据。不包括个人密码库和其他组织中的项目。",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
       }
     }
   },
@@ -2132,6 +2177,108 @@
   "forwardedEmailDesc": {
     "message": "使用外部转发服务生成一个电子邮件别名。"
   },
+  "forwarderError": {
+    "message": "$SERVICENAME$ 错误：$ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "由 Bitwarden 生成。",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "网站：$WEBSITE$。由 Bitwarden 生成。",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "无效的 $SERVICENAME$ API 令牌",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "无效的 $SERVICENAME$ API 令牌：$ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "无效的 $SERVICENAME$ 域名。",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "无效的 $SERVICENAME$ URL。",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "发生未知的 $SERVICENAME$ 错误。",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "未知的转发服务：$SERVICENAME$。",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "主机名",
     "description": "Part of a URL."
@@ -2167,7 +2314,7 @@
     "message": "记住电子邮件地址"
   },
   "notYou": {
-    "message": "不是你？"
+    "message": "不是您吗？"
   },
   "newAroundHere": {
     "message": "初来乍到吗？"
@@ -2287,6 +2434,27 @@
   },
   "logInRequested": {
     "message": "已请求登录"
+  },
+  "creatingAccountOn": {
+    "message": "创建账户于"
+  },
+  "checkYourEmail": {
+    "message": "检查您的电子邮箱"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "点击发送到电子邮件中的链接"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "然后继续创建您的账户。"
+  },
+  "noEmail": {
+    "message": "没收到电子邮件吗？"
+  },
+  "goBack": {
+    "message": "返回"
+  },
+  "toEditYourEmailAddress": {
+    "message": "编辑您的电子邮件地址。"
   },
   "exposedMasterPassword": {
     "message": "已暴露的主密码"
@@ -2685,7 +2853,7 @@
     "message": "从 CSV 导入"
   },
   "lastPassTryAgainCheckEmail": {
-    "message": "请重试或查找来自 LastPass 的电子邮件以验证您的身份。"
+    "message": "请重试或查找来自 LastPass 的可以验证您的身份的电子邮件。"
   },
   "collection": {
     "message": "集合"
@@ -2720,5 +2888,39 @@
   },
   "errorAssigningTargetFolder": {
     "message": "分配目标文件夹时出错。"
+  },
+  "viewItemsIn": {
+    "message": "查看 $NAME$ 中的项目",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "返回 $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "返回",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "删除 $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }

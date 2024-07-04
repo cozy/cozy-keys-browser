@@ -12,6 +12,9 @@
       "@bitwarden/billing": ["../../libs/billing/src"],
       "@bitwarden/common/*": ["../../libs/common/src/*"],
       "@bitwarden/components": ["../../libs/components/src"],
+      "@bitwarden/generator-components": ["../../libs/tools/generator/components/src"],
+      "@bitwarden/generator-core": ["../../libs/tools/generator/core/src"],
+      "@bitwarden/generator-extensions": ["../../libs/tools/generator/extensions/src"],
       "@bitwarden/vault-export-core": [
         "../../libs/tools/export/vault-export/vault-export-core/src"
       ],
@@ -19,6 +22,7 @@
       "@bitwarden/importer/core": ["../../libs/importer/src"],
       "@bitwarden/importer/ui": ["../../libs/importer/src/components"],
       "@bitwarden/platform": ["../../libs/platform/src"],
+      "@bitwarden/send-ui": ["../../libs/tools/send/send-ui/src"],
       "@bitwarden/vault": ["../../libs/vault/src"],
       "@bitwarden/web-vault/*": ["src/*"]
     }
@@ -27,12 +31,7 @@
     "strictTemplates": true,
     "preserveWhitespaces": true
   },
-  "files": [
-    "src/polyfills.ts",
-    "src/main.ts",
-    "../../bitwarden_license/bit-web/src/main.ts",
-    "src/theme.ts"
-  ],
+  "files": ["src/polyfills.ts", "src/main.ts", "src/theme.ts"],
   "include": [
     "src/connectors/*.ts",
     "src/**/*.stories.ts",

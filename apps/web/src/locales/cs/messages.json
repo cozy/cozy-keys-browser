@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "Úroveň přístupu"
   },
+  "accessing": {
+    "message": "Přistupování"
+  },
   "loggedOut": {
     "message": "Odhlášení"
   },
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "Váš účet byl uzavřen a všechna související data byla smazána."
   },
+  "deleteOrganizationWarning": {
+    "message": "Smazání Vaší organizace je trvalé. Tuto akci nelze vrátit zpět."
+  },
   "myAccount": {
     "message": "Můj účet"
   },
@@ -1710,11 +1716,11 @@
   "twoFactorDuoDesc": {
     "message": "Zadejte informace o aplikaci Bitwarden z panelu Duo Admin."
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "Integrační klíč"
+  "twoFactorDuoClientId": {
+    "message": "ID klienta"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "Tajný klíč"
+  "twoFactorDuoClientSecret": {
+    "message": "Tajný klíč klienta"
   },
   "twoFactorDuoApiHostname": {
     "message": "Hostitel API"
@@ -2788,6 +2794,12 @@
   "all": {
     "message": "Vše"
   },
+  "addAccess": {
+    "message": "Přidat přístup"
+  },
+  "addAccessFilter": {
+    "message": "Přidat přístupový filtr"
+  },
   "refresh": {
     "message": "Obnovit"
   },
@@ -3235,6 +3247,27 @@
   "device": {
     "message": "Zařízení"
   },
+  "creatingAccountOn": {
+    "message": "Vytváření účtu na"
+  },
+  "checkYourEmail": {
+    "message": "Zkontrolujte Váš e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Následujte pokyny v e-mailu poslaném na"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "a pokračujte ve vytváření Vašeho účtu."
+  },
+  "noEmail": {
+    "message": "Žádný e-mail?"
+  },
+  "goBack": {
+    "message": "Zpět"
+  },
+  "toEditYourEmailAddress": {
+    "message": "pro úpravu Vaší e-mailové adresy."
+  },
   "view": {
     "message": "Zobrazit"
   },
@@ -3381,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "Požádali jste o smazání svého účtu na Bitwardenu. Pro potvrzení použijte tlačítko níže."
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "Požádali jste o smazání Vaší organizace u Bitwardenu."
   },
   "myOrganization": {
     "message": "Moje organizace"
@@ -3558,6 +3594,12 @@
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "Úpravy Vašeho předplatného budou mít za následek poměrné změny Vašich fakturačních součtů. Pokud počet nově pozvaných členů překročí počet členů v předplatném, bude Vám okamžitě doúčtován poměrný poplatek za další členy."
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "Pokud chcete přidat další"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "uživatele bez hromadné nabídky, kontaktujte"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "Úpravy Vašeho předplatného budou mít za následek poměrné změny Vašich fakturačních součtů. Pokud počet nově pozvaných členů překročí počet členů v předplatném, bude Vám okamžitě doúčtován poměrný poplatek za další členy dokud nebude dosaženo maximálního limitu: $MAX$.",
@@ -5802,6 +5844,108 @@
   "forwardedEmailDesc": {
     "message": "Vygeneruje alias e-mailu pomocí externí přeposílací služby."
   },
+  "forwarderError": {
+    "message": "Chyba $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Vygenerováno Bitwardenem.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Webová stránka: $WEBSITE$. Vygenerováno Bitwardenem.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Neplatný token API $SERVICENAME$",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Neplatný token API $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Nelze získat maskované ID e-mailového účtu $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Neplatná doména $SERVICENAME$.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Neplatné URL $SERVICENAME$.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Došlo k neznámé chybě $SERVICENAME$.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Neznámý přeposílatel: $SERVICENAME$.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "Název hostitele",
     "description": "Part of a URL."
@@ -6480,7 +6624,7 @@
   "editGroupCollectionsDesc": {
     "message": "Udělí členům přístup ke kolekcím přidáním do této skupiny."
   },
-  "editGroupCollectionsRestrictionsDesc": {
+  "restrictedCollectionAssignmentDesc": {
     "message": "Můžete přiřadit jen Vámi spravované kolekce."
   },
   "accessAllCollectionsDesc": {
@@ -6714,8 +6858,8 @@
   "selectGroups": {
     "message": "Zvolte skupiny"
   },
-  "userPermissionOverrideHelper": {
-    "message": "Oprávnění nastavená pro člena nahradí oprávnění nastavená skupinou tohoto člena"
+  "userPermissionOverrideHelperDesc": {
+    "message": "Oprávnění nastavená pro člena nahradí oprávnění nastavená skupinou tohoto člena."
   },
   "noMembersOrGroupsAdded": {
     "message": "Nebyli přidáni žádní členové ani skupiny"
@@ -6906,8 +7050,8 @@
   "updateLowKdfIterationsDesc": {
     "message": "Aktualizujte své nastavení šifrování tak, aby splňovalo nová bezpečnostní doporučení a zlepšilo ochranu účtu."
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "Pokračováním se odhlásíte ze všech aktivních relací. Budete se muset znovu přihlásit a dokončit nastavení dvoufázového přihlášení. Před změnou nastavení šifrování doporučujeme exportovat trezor, aby nedošlo ke ztrátě dat."
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "Pokračováním se odhlásíte ze všech aktivních relací. Budete se muset znovu přihlásit a dokončit nastavení dvoufázového přihlášení, pokud nějaké máte. Před změnou nastavení šifrování doporučujeme exportovat trezor, aby nedošlo ke ztrátě dat."
   },
   "secretsManager": {
     "message": "Správce tajných klíčů"
@@ -7527,6 +7671,12 @@
   "readOnlyCollectionAccess": {
     "message": "Nemáte přístup ke správě této kolekce."
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "Chybějící oprávnění \"Může spravovat\""
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Udělte oprávnění \"Může spravovat\" pro úplnou správu kolekce, včetně jejího smazání."
+  },
   "grantCollectionAccess": {
     "message": "Udělí skupinám nebo členům přístup k této kolekci."
   },
@@ -7557,13 +7707,6 @@
     "message": "přidejte platební metodu",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "Přidá nová nastavení a oprávnění pro další flexibilitu. Nahradí roli správce oprávněním \"can manage\" a zavede volby, které umožní uživatelům vytvářet kolekce a také omezovat přístup ke kolekcím pro správce.",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "Více o správě kolekce"
-  },
   "organizationInformation": {
     "message": "Informace o organizaci"
   },
@@ -7575,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "Potvrzovací e-mail byl odeslán na "
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "Tato akce je nevratná"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "Zapnutí této funkce zruší roli správce a nahradí ji oprávněním Can manage. Toto bude trvat několik okamžiků. Neprovádějte žádné změny organizace, dokud nebude akce dokončena. Opravdu chcete pokračovat?"
   },
   "sorryToSeeYouGo": {
     "message": "Je nám líto, že odcházíte! Pomozte nám Bitwarden vylepšit a řekněte nám, co se Vám nelíbí.",
@@ -7632,13 +7769,10 @@
   "success": {
     "message": "Úspěch"
   },
-  "viewCollection": {
-    "message": "Zobrazit kolekci"
-  },
   "restrictedGroupAccess": {
     "message": "Do skupin nemůžete přidat sami sebe."
   },
-  "restrictedCollectionAccess": {
+  "cannotAddYourselfToCollections": {
     "message": "Do kolekcí nemůžete přidat sami sebe."
   },
   "assign": {
@@ -8075,5 +8209,93 @@
   },
   "manageBillingFromProviderPortalMessage": {
     "message": "Spravovat fakturaci z portálu poskytovatele"
+  },
+  "viewItemsIn": {
+    "message": "Zobrazit položky v $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Zpět do $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Zpět",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Odebrat $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "viewInfo": {
+    "message": "Zobrazit informace"
+  },
+  "viewAccess": {
+    "message": "Zobrazit přístup"
+  },
+  "noCollectionsSelected": {
+    "message": "Nevybrali jste žádné kolekce."
+  },
+  "updateName": {
+    "message": "Aktualizovat název"
+  },
+  "updatedOrganizationName": {
+    "message": "Aktualizovaný název organizace"
+  },
+  "providerPlan": {
+    "message": "Spravovaný poskytovatel služby"
+  },
+  "orgSeats": {
+    "message": "Počet uživatelů v organizaci"
+  },
+  "providerDiscount": {
+    "message": "Sleva $AMOUNT$ %",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "lowKDFIterationsBanner": {
+    "message": "Nízké iterace KDF. Zvyšte iterace pro zvýšení bezpečnosti Vašeho účtu."
+  },
+  "changeKDFSettings": {
+    "message": "Změnit nastavení KDF"
+  },
+  "secureYourInfrastructure": {
+    "message": "Zabezpečte Vaši infrastrukturu"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Ochraňte svou rodinu nebo byznys"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Odeberte bezpečnostní nedostatky pomocí monitorovacích zpráv"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Přechodem na placený plán rozšířeného monitorování získáte náskok před zranitelnostmi zabezpečení."
+  },
+  "approveAllRequests": {
+    "message": "Schválit všechny požadavky"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Všechny žádosti o přihlášení byly schváleny"
   }
 }

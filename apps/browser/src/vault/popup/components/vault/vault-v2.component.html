@@ -1,0 +1,64 @@
+<popup-page>
+  <popup-header slot="header" [pageTitle]="'vault' | i18n">
+    <ng-container slot="end">
+      <!-- TODO PM-6826: add selectedVault query param -->
+      <a bitButton buttonType="primary" type="button" routerLink="/add-cipher">
+        <i class="bwi bwi-plus-f" aria-hidden="true"></i>
+        {{ "new" | i18n }}
+      </a>
+      <app-pop-out></app-pop-out>
+      <app-current-account></app-current-account>
+    </ng-container>
+  </popup-header>
+
+  <div *ngIf="showEmptyState$ | async" class="tw-flex tw-flex-col tw-h-full tw-justify-center">
+    <bit-no-items [icon]="vaultIcon">
+      <ng-container slot="title">{{ "yourVaultIsEmpty" | i18n }}</ng-container>
+      <ng-container slot="description">{{ "autofillSuggestionsTip" | i18n }}</ng-container>
+      <button slot="button" type="button" bitButton buttonType="primary" (click)="addCipher()">
+        {{ "new" | i18n }}
+      </button>
+    </bit-no-items>
+  </div>
+
+  <ng-container *ngIf="!(showEmptyState$ | async)">
+    <app-vault-v2-search (searchTextChanged)="handleSearchTextChange($event)">
+    </app-vault-v2-search>
+
+    <app-vault-list-filters></app-vault-list-filters>
+
+    <div
+      *ngIf="(showNoResultsState$ | async) && !(showDeactivatedOrg$ | async)"
+      class="tw-flex tw-flex-col tw-h-full tw-justify-center"
+    >
+      <bit-no-items>
+        <ng-container slot="title">{{ "noItemsMatchSearch" | i18n }}</ng-container>
+        <ng-container slot="description">{{ "clearFiltersOrTryAnother" | i18n }}</ng-container>
+      </bit-no-items>
+    </div>
+
+    <div
+      *ngIf="showDeactivatedOrg$ | async"
+      class="tw-flex tw-flex-col tw-h-full tw-justify-center"
+    >
+      <bit-no-items [icon]="deactivatedIcon">
+        <ng-container slot="title">{{ "organizationIsDeactivated" | i18n }}</ng-container>
+        <ng-container slot="description">{{ "contactYourOrgAdmin" | i18n }}</ng-container>
+      </bit-no-items>
+    </div>
+
+    <ng-container *ngIf="!(showNoResultsState$ | async) && !(showDeactivatedOrg$ | async)">
+      <app-autofill-vault-list-items></app-autofill-vault-list-items>
+      <app-vault-list-items-container
+        [title]="'favorites' | i18n"
+        [ciphers]="favoriteCiphers$ | async"
+        id="favorites"
+      ></app-vault-list-items-container>
+      <app-vault-list-items-container
+        [title]="'allItems' | i18n"
+        [ciphers]="remainingCiphers$ | async"
+        id="allItems"
+      ></app-vault-list-items-container>
+    </ng-container>
+  </ng-container>
+</popup-page>

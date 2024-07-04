@@ -1,3 +1,4 @@
+import { DialogRef } from "@angular/cdk/dialog";
 import {
   Component,
   NgZone,
@@ -13,6 +14,7 @@ import { filter, firstValueFrom, map, Subject, takeUntil, timeout } from "rxjs";
 import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { FingerprintDialogComponent } from "@bitwarden/auth/angular";
+import { LogoutReason } from "@bitwarden/auth/common";
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
@@ -42,12 +44,13 @@ import { clearCaches } from "@bitwarden/common/platform/misc/sequentialize";
 import { StateEventRunnerService } from "@bitwarden/common/platform/state";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { UserId } from "@bitwarden/common/types/guid";
+import { VaultTimeout, VaultTimeoutStringType } from "@bitwarden/common/types/vault-timeout.type";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CipherType } from "@bitwarden/common/vault/enums";
-import { DialogService, ToastService } from "@bitwarden/components";
+import { DialogService, ToastOptions, ToastService } from "@bitwarden/components";
 
 import { DeleteAccountComponent } from "../auth/delete-account.component";
 import { LoginApprovalComponent } from "../auth/login/login-approval.component";
@@ -56,7 +59,7 @@ import { PremiumComponent } from "../vault/app/accounts/premium.component";
 import { FolderAddEditComponent } from "../vault/app/vault/folder-add-edit.component";
 
 import { SettingsComponent } from "./accounts/settings.component";
-import { ExportComponent } from "./tools/export/export.component";
+import { ExportDesktopComponent } from "./tools/export/export-desktop.component";
 import { GeneratorComponent } from "./tools/generator.component";
 import { ImportDesktopComponent } from "./tools/import/import-desktop.component";
 import { PasswordGeneratorHistoryComponent } from "./tools/password-generator-history.component";
@@ -64,12 +67,6 @@ import { PasswordGeneratorHistoryComponent } from "./tools/password-generator-hi
 const BroadcasterSubscriptionId = "AppComponent";
 const IdleTimeout = 60000 * 10; // 10 minutes
 const SyncInterval = 6 * 60 * 60 * 1000; // 6 hours
-
-const systemTimeoutOptions = {
-  onLock: -2,
-  onSuspend: -3,
-  onIdle: -4,
-};
 
 @Component({
   selector: "app-root",
@@ -113,6 +110,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private idleTimer: number = null;
   private isIdle = false;
   private activeUserId: UserId = null;
+  private activeSimpleDialog: DialogRef<boolean> = null;
 
   private destroy$ = new Subject<void>();
 
@@ -212,7 +210,7 @@ export class AppComponent implements OnInit, OnDestroy {
             break;
           case "logout":
             this.loading = message.userId == null || message.userId === this.activeUserId;
-            await this.logOut(!!message.expired, message.userId);
+            await this.logOut(message.logoutReason, message.userId);
             this.loading = false;
             break;
           case "lockVault":
@@ -371,7 +369,7 @@ export class AppComponent implements OnInit, OnDestroy {
             await this.dialogService.open(ImportDesktopComponent);
             break;
           case "exportVault":
-            await this.openExportVault();
+            await this.dialogService.open(ExportDesktopComponent);
             break;
           case "newLogin":
             this.routeToVault("add", CipherType.Login);
@@ -416,7 +414,8 @@ export class AppComponent implements OnInit, OnDestroy {
                 this.masterPasswordService.forceSetPasswordReason$(message.userId),
               )) != ForceSetPasswordReason.None;
             if (locked) {
-              this.messagingService.send("locked", { userId: message.userId });
+              this.modalService.closeAll();
+              await this.router.navigate(["lock"]);
             } else if (forcedPasswordReset) {
               // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
               // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -433,13 +432,13 @@ export class AppComponent implements OnInit, OnDestroy {
             break;
           }
           case "systemSuspended":
-            await this.checkForSystemTimeout(systemTimeoutOptions.onSuspend);
+            await this.checkForSystemTimeout(VaultTimeoutStringType.OnSleep);
             break;
           case "systemLocked":
-            await this.checkForSystemTimeout(systemTimeoutOptions.onLock);
+            await this.checkForSystemTimeout(VaultTimeoutStringType.OnLocked);
             break;
           case "systemIdle":
-            await this.checkForSystemTimeout(systemTimeoutOptions.onIdle);
+            await this.checkForSystemTimeout(VaultTimeoutStringType.OnIdle);
             break;
           case "openLoginApproval":
             if (message.notificationId != null) {
@@ -465,26 +464,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
-  }
-
-  async openExportVault() {
-    this.modalService.closeAll();
-
-    const [modal, childComponent] = await this.modalService.openViewRef(
-      ExportComponent,
-      this.exportVaultModalRef,
-    );
-    this.modal = modal;
-
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    childComponent.onSaved.subscribe(() => {
-      this.modal.close();
-    });
-
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    this.modal.onClosed.subscribe(() => {
-      this.modal = null;
-    });
   }
 
   async addFolder() {
@@ -569,9 +548,73 @@ export class AppComponent implements OnInit, OnDestroy {
     this.messagingService.send("updateAppMenu", { updateRequest: updateRequest });
   }
 
+  private async displayLogoutReason(logoutReason: LogoutReason) {
+    let toastOptions: ToastOptions;
+
+    switch (logoutReason) {
+      case "invalidSecurityStamp":
+      case "sessionExpired": {
+        toastOptions = {
+          variant: "warning",
+          title: this.i18nService.t("loggedOut"),
+          message: this.i18nService.t("loginExpired"),
+        };
+        break;
+      }
+      // We don't expect these scenarios to be common, but we want the user to
+      // understand why they are being logged out before a process reload.
+      case "accessTokenUnableToBeDecrypted": {
+        // Don't create multiple dialogs if this fires multiple times
+        if (this.activeSimpleDialog) {
+          // Let the caller of this function listen for the dialog to close
+          return firstValueFrom(this.activeSimpleDialog.closed);
+        }
+
+        this.activeSimpleDialog = this.dialogService.openSimpleDialogRef({
+          title: { key: "loggedOut" },
+          content: { key: "accessTokenUnableToBeDecrypted" },
+          acceptButtonText: { key: "ok" },
+          cancelButtonText: null,
+          type: "danger",
+        });
+
+        await firstValueFrom(this.activeSimpleDialog.closed);
+        this.activeSimpleDialog = null;
+
+        break;
+      }
+      case "refreshTokenSecureStorageRetrievalFailure": {
+        // Don't create multiple dialogs if this fires multiple times
+        if (this.activeSimpleDialog) {
+          // Let the caller of this function listen for the dialog to close
+          return firstValueFrom(this.activeSimpleDialog.closed);
+        }
+
+        this.activeSimpleDialog = this.dialogService.openSimpleDialogRef({
+          title: { key: "loggedOut" },
+          content: { key: "refreshTokenSecureStorageRetrievalFailure" },
+          acceptButtonText: { key: "ok" },
+          cancelButtonText: null,
+          type: "danger",
+        });
+
+        await firstValueFrom(this.activeSimpleDialog.closed);
+        this.activeSimpleDialog = null;
+
+        break;
+      }
+    }
+
+    if (toastOptions) {
+      this.toastService.showToast(toastOptions);
+    }
+  }
+
   // Even though the userId parameter is no longer optional doesn't mean a message couldn't be
   // passing null-ish values to us.
-  private async logOut(expired: boolean, userId: UserId) {
+  private async logOut(logoutReason: LogoutReason, userId: UserId) {
+    await this.displayLogoutReason(logoutReason);
+
     const activeUserId = await firstValueFrom(
       this.accountService.activeAccount$.pipe(map((a) => a?.id)),
     );
@@ -612,7 +655,6 @@ export class AppComponent implements OnInit, OnDestroy {
       await this.cipherService.clear(userBeingLoggedOut);
       await this.folderService.clear(userBeingLoggedOut);
       await this.collectionService.clear(userBeingLoggedOut);
-      await this.passwordGenerationService.clear(userBeingLoggedOut);
       await this.vaultTimeoutSettingsService.clear(userBeingLoggedOut);
       await this.biometricStateService.logout(userBeingLoggedOut);
 
@@ -645,15 +687,7 @@ export class AppComponent implements OnInit, OnDestroy {
     // This must come last otherwise the logout will prematurely trigger
     // a process reload before all the state service user data can be cleaned up
     if (userBeingLoggedOut === activeUserId) {
-      this.authService.logOut(async () => {
-        if (expired) {
-          this.platformUtilsService.showToast(
-            "warning",
-            this.i18nService.t("loggedOut"),
-            this.i18nService.t("loginExpired"),
-          );
-        }
-      });
+      this.authService.logOut(async () => {});
     }
   }
 
@@ -724,7 +758,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async checkForSystemTimeout(timeout: number): Promise<void> {
+  private async checkForSystemTimeout(timeout: VaultTimeout): Promise<void> {
     const accounts = await firstValueFrom(this.accountService.accounts$);
     for (const userId in accounts) {
       if (userId == null) {
@@ -735,15 +769,19 @@ export class AppComponent implements OnInit, OnDestroy {
         // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         options[1] === "logOut"
-          ? this.logOut(false, userId as UserId)
+          ? this.logOut("vaultTimeout", userId as UserId)
           : await this.vaultTimeoutService.lock(userId);
       }
     }
   }
 
-  private async getVaultTimeoutOptions(userId: string): Promise<[number, string]> {
-    const timeout = await this.stateService.getVaultTimeout({ userId: userId });
-    const action = await this.stateService.getVaultTimeoutAction({ userId: userId });
+  private async getVaultTimeoutOptions(userId: string): Promise<[VaultTimeout, string]> {
+    const timeout = await firstValueFrom(
+      this.vaultTimeoutSettingsService.getVaultTimeoutByUserId$(userId),
+    );
+    const action = await firstValueFrom(
+      this.vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$(userId),
+    );
     return [timeout, action];
   }
 

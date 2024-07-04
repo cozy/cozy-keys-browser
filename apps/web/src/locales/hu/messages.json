@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "Hozzáférési szint"
   },
+  "accessing": {
+    "message": "Elérés"
+  },
   "loggedOut": {
     "message": "Megtörtént a kijelentkezés."
   },
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "A fiók bezárásra került és minden társított adat törölve lett."
   },
+  "deleteOrganizationWarning": {
+    "message": "A szervezet végleges törlése folyamatban van. A művelet nem vonható vissza."
+  },
   "myAccount": {
     "message": "Saját fiók"
   },
@@ -1710,11 +1716,11 @@
   "twoFactorDuoDesc": {
     "message": "A Bitwarden alkalmazás információjának megadása a Duo Admin panelről."
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "Integrációs kulcs"
+  "twoFactorDuoClientId": {
+    "message": "Ügyfél azonosító"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "Titkos kulcs"
+  "twoFactorDuoClientSecret": {
+    "message": "Ügyfél titkos kód"
   },
   "twoFactorDuoApiHostname": {
     "message": "API kiszolgálónév"
@@ -2788,6 +2794,12 @@
   "all": {
     "message": "Összes"
   },
+  "addAccess": {
+    "message": "Hozzáférés hozzáadása"
+  },
+  "addAccessFilter": {
+    "message": "Hozzáférés szűrő hozzáadása"
+  },
   "refresh": {
     "message": "Frissítés"
   },
@@ -3235,6 +3247,27 @@
   "device": {
     "message": "Eszköz"
   },
+  "creatingAccountOn": {
+    "message": "Fiók létrehozása:"
+  },
+  "checkYourEmail": {
+    "message": "Email cím postaláda ellenőrzése"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Kövessük a hivatkozást az elküldött emailben"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "és folytassuk a fiók létrehozását."
+  },
+  "noEmail": {
+    "message": "Nem érkezett email?"
+  },
+  "goBack": {
+    "message": "Vissza"
+  },
+  "toEditYourEmailAddress": {
+    "message": "az email cím szerkesztéséhez."
+  },
   "view": {
     "message": "Megtekintés"
   },
@@ -3381,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "A Bitwarden fiók törlését kértük. Kattintás a lenti gombra a megerősítéshez."
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "A saját Bitwarden szervezet törlése lett kérve."
   },
   "myOrganization": {
     "message": "Saját szervezet"
@@ -3558,6 +3594,12 @@
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "Az előfizetés módosítása a számlázási összegek arányos módosítását eredményezi. Ha az újonnan meghívott felhasználók túllépik az előfizetői helyeket, akkor haladéktalanul külön díjat kapunk a további felhasználókért."
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "Ha szeretnénk hozzáadni további"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "helyeket a csomagban szereplő ajánlat nélkül, vegyük fel a kapcsolatot"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "Az előfizetés módosítása a számlázási összegek arányos módosítását eredményezi. Ha az újonnan meghívott felhasználók túllépik az előfizetési helyeket, akkor haladéktalanul külön díjat kapunk a további felhasználókért, amíg el nem érjük a $MAX$ helykorlátot.",
@@ -5802,6 +5844,108 @@
   "forwardedEmailDesc": {
     "message": "Email álnév generálása külső továbbító szolgáltatással."
   },
+  "forwarderError": {
+    "message": "$SERVICENAME$ hiba: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Generálta: Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Webhely: $WEBSITE$. Generálta: Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "$SERVICENAME$ API vezérjel érvénytelen.",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "$SERVICENAME$ API vezérjel érvénytelen: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Nem lehet beolvasni $SERVICENAME$ maszkolt email fiók azonosítót.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "$SERVICENAME$ domain érvénytelen.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "$SERVICENAME$ webcím érvénytelen.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Ismeretlen $SERVICENAME$ hiba történt.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Ismeretlen továbbító: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "Kiszolglónév",
     "description": "Part of a URL."
@@ -6480,7 +6624,7 @@
   "editGroupCollectionsDesc": {
     "message": "Hozzáférés kiosztása gyűjteményekhez csoporthoz adásukkal."
   },
-  "editGroupCollectionsRestrictionsDesc": {
+  "restrictedCollectionAssignmentDesc": {
     "message": "Csak a saját kezelésű gyűjteményeket lehet hozzárendelni."
   },
   "accessAllCollectionsDesc": {
@@ -6714,7 +6858,7 @@
   "selectGroups": {
     "message": "Csoportok kiválasztása"
   },
-  "userPermissionOverrideHelper": {
+  "userPermissionOverrideHelperDesc": {
     "message": "A tagok számára beállított jogosultságok felváltják az adott tag csoportja által beállított jogosultságokat."
   },
   "noMembersOrGroupsAdded": {
@@ -6906,8 +7050,8 @@
   "updateLowKdfIterationsDesc": {
     "message": "Frissítsük a titkosítási beállításokat, hogy megfeleljünk az új biztonsági ajánlásoknak és javítsuk a fiókvédelmet."
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "A folytatással minden aktív munkamenetből kijelentkezünkk. Újra be kell jelentkezni és ki kell tölteni a kétlépcsős bejelentkezési beállításokat. Az adatvesztés elkerülése érdekében célszerű a titkosítási beállítások módosítása előtt a széf exportálása."
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "A folytatás kijelentkeztet az összes aktív munkamenetből. Újra be kell jelentkezni és kétlépcsős bejelentkezést kell végrehajtani, ha van ilyen. Célszerű a titkosítási beállítások módosítása előtt a széf exportálása az adatvesztés elkerülése érdekében."
   },
   "secretsManager": {
     "message": "Titkos kód kezelő"
@@ -7527,6 +7671,12 @@
   "readOnlyCollectionAccess": {
     "message": "Nincs jogosultság ennek a gyűjteménynek a kezelésére."
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "Missing Can Manage Permissions"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Grant Can manage permissions to allow full collection management including deletion of collection."
+  },
   "grantCollectionAccess": {
     "message": "Adjunk hozzáférést csoportoknak vagy személyeknek eennél a gyűjteménynél."
   },
@@ -7557,13 +7707,6 @@
     "message": "fitetési metódus hozzáadása",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "Adjunk hozzá új beállításokat és jogosultságokat a nagyobb rugalmasság érdekében. Cseréljük le a Kezelő szerepet a \"kezelheti\" jogosultsággal és vezessünk be olyan opciókat, amelyek lehetővé teszik a felhasználók számára gyűjtemények létrehozását, valamint a gyűjtemények adminisztrátori hozzáférésének korlátozását.",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "További információ a gyűjteménykezelésről"
-  },
   "organizationInformation": {
     "message": "Szervezeti információ"
   },
@@ -7575,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "A megerősítő email elküldésre került az email címre:"
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "Ez a művelet visszavonhatatlan."
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "Ezt a funkciót bekapcsolva a kezelői szerepkör elavul és az egy Kezelheti jogosultsággal kerül felváltásra. Ez eltart néhány pillanatig. Ne hajtsunk végre semmilyen szervezeti változtatást, amíg az be nem fejeződött. Biztosan folytatjuk?"
   },
   "sorryToSeeYouGo": {
     "message": "Sorry to see you go! Help improve Bitwarden by sharing why you're canceling.",
@@ -7632,13 +7769,10 @@
   "success": {
     "message": "Sikeres"
   },
-  "viewCollection": {
-    "message": "Gyűjtemény megtekintése"
-  },
   "restrictedGroupAccess": {
     "message": "Nem adhadjuk magunkat a csoporthoz."
   },
-  "restrictedCollectionAccess": {
+  "cannotAddYourselfToCollections": {
     "message": "Nem adhadjuk magunkat a gyűjteményhez."
   },
   "assign": {
@@ -8075,5 +8209,93 @@
   },
   "manageBillingFromProviderPortalMessage": {
     "message": "A számlázás kezelése a szolgáltatói portálon keresztül"
+  },
+  "viewItemsIn": {
+    "message": "$NAME$ elemek megtekintése",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Vissza: $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Vissza",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "$NAME$ eltávolítása",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "viewInfo": {
+    "message": "Infó megtekintése"
+  },
+  "viewAccess": {
+    "message": "Hozzáférés megtekintése"
+  },
+  "noCollectionsSelected": {
+    "message": "Nincs semmilyen gyűjtemény kiválasztva."
+  },
+  "updateName": {
+    "message": "Név frissítés"
+  },
+  "updatedOrganizationName": {
+    "message": "Frissített szervezeti név"
+  },
+  "providerPlan": {
+    "message": "Menedzselt szolgáltató"
+  },
+  "orgSeats": {
+    "message": "Szervezeti helyek"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$% kedvezmény",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "lowKDFIterationsBanner": {
+    "message": "Alacsony a KDF iterációk száma. Növeljük az iterációk számát a fiók biztonságának javítása érdekében."
+  },
+  "changeKDFSettings": {
+    "message": "KDF beállítások megváltoztatása"
+  },
+  "secureYourInfrastructure": {
+    "message": "Infrastruktúra biztosítása"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Család vagy üzlet megvédése"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Close security gaps with monitoring reports"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Stay ahead of security vulnerabilities by upgrading to a paid plan for enhanced monitoring."
+  },
+  "approveAllRequests": {
+    "message": "Összes kérelem jóváhagyása"
+  },
+  "allLoginRequestsApproved": {
+    "message": "At összes bejelentkezési kérés óváhagyásra került."
   }
 }

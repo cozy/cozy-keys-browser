@@ -1002,17 +1002,13 @@ html.force_redraw {
   border-radius: 50% !important;
 }
 
-.security-code-desc {
-  text-align: left;
-}
-
-.security-code {
-  @include themify($themes) {
-    color: themed("primaryAccentColor");
-  }
-  font-size: 17px;
-}
-
-.empty-top {
-  height: 75px;
+/* override for vault icon in browser (pre extension refresh) */
+app-vault-icon:not(app-vault-list-items-container app-vault-icon) > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: left;
+  height: 36px;
+  width: 34px;
+  margin-left: -5px;
 }

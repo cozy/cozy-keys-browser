@@ -1,17 +1,17 @@
 import { Location } from "@angular/common";
 /* Cozy custo
-import { Component } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 */
-import { Component, ElementRef, ViewChild, OnDestroy } from "@angular/core";
+import { Component, NgZone, ElementRef, ViewChild, OnDestroy } from "@angular/core";
 /* end custo */
 import { ActivatedRoute } from "@angular/router";
-import { firstValueFrom } from "rxjs";
+import { Subject, firstValueFrom } from "rxjs";
 
 import { GeneratorComponent as BaseGeneratorComponent } from "@bitwarden/angular/tools/generator/components/generator.component";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -23,7 +23,6 @@ import { AddEditCipherInfo } from "@bitwarden/common/vault/types/add-edit-cipher
 import { HistoryService } from "../../../popup/services/history.service";
 import { CozyClientService } from "../../../popup/services/cozyClient.service";
 import { first } from "rxjs/operators";
-import { Subject } from "rxjs";
 /* eslint-enable */
 /* END */
 
@@ -44,10 +43,11 @@ export class GeneratorComponent extends BaseGeneratorComponent implements OnDest
     usernameGenerationService: UsernameGenerationServiceAbstraction,
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService,
-    stateService: StateService,
+    accountService: AccountService,
     cipherService: CipherService,
     route: ActivatedRoute,
     logService: LogService,
+    ngZone: NgZone,
     private location: Location,
     private historyService: HistoryService,
     protected cozyClientService: CozyClientService,
@@ -56,10 +56,11 @@ export class GeneratorComponent extends BaseGeneratorComponent implements OnDest
       passwordGenerationService,
       usernameGenerationService,
       platformUtilsService,
-      stateService,
+      accountService,
       i18nService,
       logService,
       route,
+      ngZone,
       window,
       cozyClientService,
     );

@@ -15,7 +15,7 @@ function postWindowMessage(data: any, origin = "https://localhost/", source = wi
   globalThis.dispatchEvent(new MessageEvent("message", { data, origin, source }));
 }
 
-function sendExtensionRuntimeMessage(
+function sendMockExtensionMessage(
   message: any,
   sender?: chrome.runtime.MessageSender,
   sendResponse?: CallableFunction,
@@ -98,11 +98,39 @@ function triggerTabOnRemovedEvent(tabId: number, removeInfo: chrome.tabs.TabRemo
   });
 }
 
+function mockQuerySelectorAllDefinedCall() {
+  const originalDocumentQuerySelectorAll = document.querySelectorAll;
+  document.querySelectorAll = function (selector: string) {
+    return originalDocumentQuerySelectorAll.call(
+      document,
+      selector === ":defined" ? "*" : selector,
+    );
+  };
+
+  const originalShadowRootQuerySelectorAll = ShadowRoot.prototype.querySelectorAll;
+  ShadowRoot.prototype.querySelectorAll = function (selector: string) {
+    return originalShadowRootQuerySelectorAll.call(this, selector === ":defined" ? "*" : selector);
+  };
+
+  const originalElementQuerySelectorAll = Element.prototype.querySelectorAll;
+  Element.prototype.querySelectorAll = function (selector: string) {
+    return originalElementQuerySelectorAll.call(this, selector === ":defined" ? "*" : selector);
+  };
+
+  return {
+    mockRestore: () => {
+      document.querySelectorAll = originalDocumentQuerySelectorAll;
+      ShadowRoot.prototype.querySelectorAll = originalShadowRootQuerySelectorAll;
+      Element.prototype.querySelectorAll = originalElementQuerySelectorAll;
+    },
+  };
+}
+
 export {
   triggerTestFailure,
   flushPromises,
   postWindowMessage,
-  sendExtensionRuntimeMessage,
+  sendMockExtensionMessage,
   triggerRuntimeOnConnectEvent,
   sendPortMessage,
   triggerPortOnDisconnectEvent,
@@ -111,4 +139,5 @@ export {
   triggerTabOnReplacedEvent,
   triggerTabOnUpdatedEvent,
   triggerTabOnRemovedEvent,
+  mockQuerySelectorAllDefinedCall,
 };

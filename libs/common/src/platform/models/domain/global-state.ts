@@ -1,9 +1,6 @@
 import { ThemeType } from "../../enums/theme-type.enum";
 
 export class GlobalState {
-  organizationInvitation?: any;
-  vaultTimeout?: number;
-  vaultTimeoutAction?: string;
   enableBrowserIntegration?: boolean;
   enableBrowserIntegrationFingerprint?: boolean;
   enableDuckDuckGoBrowserIntegration?: boolean;

@@ -22,7 +22,6 @@ import { HtmlStorageLocation, StorageLocation } from "../enums";
 import { StateFactory } from "../factories/state-factory";
 import { Utils } from "../misc/utils";
 import { Account, AccountData, AccountSettings } from "../models/domain/account";
-import { EncString } from "../models/domain/enc-string";
 import { GlobalState } from "../models/domain/global-state";
 import { State } from "../models/domain/state";
 import { StorageOptions } from "../models/domain/storage-options";
@@ -356,45 +355,6 @@ export class StateService<
     await this.saveSecureStorageKey(partialKeys.userBiometricKey, value, options);
   }
 
-  async getPinKeyEncryptedUserKey(options?: StorageOptions): Promise<EncString> {
-    return EncString.fromJSON(
-      (await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions())))
-        ?.settings?.pinKeyEncryptedUserKey,
-    );
-  }
-
-  async setPinKeyEncryptedUserKey(value: EncString, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-    account.settings.pinKeyEncryptedUserKey = value?.encryptedString;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-  }
-
-  async getPinKeyEncryptedUserKeyEphemeral(options?: StorageOptions): Promise<EncString> {
-    return EncString.fromJSON(
-      (await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions())))
-        ?.settings?.pinKeyEncryptedUserKeyEphemeral,
-    );
-  }
-
-  async setPinKeyEncryptedUserKeyEphemeral(
-    value: EncString,
-    options?: StorageOptions,
-  ): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
-    );
-    account.settings.pinKeyEncryptedUserKeyEphemeral = value?.encryptedString;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
-    );
-  }
-
   /**
    * @deprecated Use UserKeyAuto instead
    */
@@ -505,29 +465,6 @@ export class StateService<
     );
   }
 
-  /**
-   * @deprecated Use getPinKeyEncryptedUserKeyEphemeral instead
-   */
-  async getDecryptedPinProtected(options?: StorageOptions): Promise<EncString> {
-    return (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
-    )?.settings?.pinProtected?.decrypted;
-  }
-
-  /**
-   * @deprecated Use setPinKeyEncryptedUserKeyEphemeral instead
-   */
-  async setDecryptedPinProtected(value: EncString, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
-    );
-    account.settings.pinProtected.decrypted = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
-    );
-  }
-
   async getDuckDuckGoSharedKey(options?: StorageOptions): Promise<string> {
     options = this.reconcileOptions(options, await this.defaultSecureStorageOptions());
     if (options?.userId == null) {
@@ -544,23 +481,6 @@ export class StateService<
     value == null
       ? await this.secureStorageService.remove(DDG_SHARED_KEY, options)
       : await this.secureStorageService.save(DDG_SHARED_KEY, value, options);
-  }
-
-  async getEmail(options?: StorageOptions): Promise<string> {
-    return (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
-    )?.profile?.email;
-  }
-
-  async setEmail(value: string, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
-    );
-    account.profile.email = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
-    );
   }
 
   async getEnableBrowserIntegration(options?: StorageOptions): Promise<boolean> {
@@ -648,23 +568,6 @@ export class StateService<
     );
   }
 
-  async getEncryptedPinProtected(options?: StorageOptions): Promise<string> {
-    return (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
-    )?.settings?.pinProtected?.encrypted;
-  }
-
-  async setEncryptedPinProtected(value: string, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-    account.settings.pinProtected.encrypted = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-  }
-
   async getIsAuthenticated(options?: StorageOptions): Promise<boolean> {
     return (
       (await this.tokenService.getAccessToken(options?.userId as UserId)) != null &&
@@ -704,23 +607,6 @@ export class StateService<
     await this.saveAccount(
       account,
       this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-  }
-
-  async getOrganizationInvitation(options?: StorageOptions): Promise<any> {
-    return (
-      await this.getGlobals(this.reconcileOptions(options, await this.defaultInMemoryOptions()))
-    )?.organizationInvitation;
-  }
-
-  async setOrganizationInvitation(value: any, options?: StorageOptions): Promise<void> {
-    const globals = await this.getGlobals(
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
-    );
-    globals.organizationInvitation = value;
-    await this.saveGlobals(
-      globals,
-      this.reconcileOptions(options, await this.defaultInMemoryOptions()),
     );
   }
 
@@ -781,70 +667,10 @@ export class StateService<
     );
   }
 
-  async getProtectedPin(options?: StorageOptions): Promise<string> {
-    return (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
-    )?.settings?.protectedPin;
-  }
-
-  async setProtectedPin(value: string, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-    account.settings.protectedPin = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskOptions()),
-    );
-  }
-
   async getUserId(options?: StorageOptions): Promise<string> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
     )?.profile?.userId;
-  }
-
-  async getVaultTimeout(options?: StorageOptions): Promise<number> {
-    const accountVaultTimeout = (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
-    )?.settings?.vaultTimeout;
-    return accountVaultTimeout;
-  }
-
-  async setVaultTimeout(value: number, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
-    );
-    account.settings.vaultTimeout = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
-    );
-  }
-
-  async getVaultTimeoutAction(options?: StorageOptions): Promise<string> {
-    const accountVaultTimeoutAction = (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()))
-    )?.settings?.vaultTimeoutAction;
-    return (
-      accountVaultTimeoutAction ??
-      (
-        await this.getGlobals(
-          this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
-        )
-      )?.vaultTimeoutAction
-    );
-  }
-
-  async setVaultTimeoutAction(value: string, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
-    );
-    account.settings.vaultTimeoutAction = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskLocalOptions()),
-    );
   }
 
   protected async getGlobals(options: StorageOptions): Promise<TGlobalState> {

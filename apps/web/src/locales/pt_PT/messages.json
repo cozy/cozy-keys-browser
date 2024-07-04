@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "Nível de acesso"
   },
+  "accessing": {
+    "message": "A aceder"
+  },
   "loggedOut": {
     "message": "Sessão terminada"
   },
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "A sua conta foi encerrada e todos os dados associados foram eliminados."
   },
+  "deleteOrganizationWarning": {
+    "message": "A eliminação da sua organização é permanente. Não pode ser anulada."
+  },
   "myAccount": {
     "message": "A minha conta"
   },
@@ -1710,11 +1716,11 @@
   "twoFactorDuoDesc": {
     "message": "Introduza as informações da aplicação Bitwarden a partir do painel de administração do seu Duo."
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "Chave de integração"
+  "twoFactorDuoClientId": {
+    "message": "ID do cliente"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "Chave secreta"
+  "twoFactorDuoClientSecret": {
+    "message": "Segredo do cliente"
   },
   "twoFactorDuoApiHostname": {
     "message": "Nome de domínio da API"
@@ -2788,6 +2794,12 @@
   "all": {
     "message": "Todos"
   },
+  "addAccess": {
+    "message": "Adicionar acesso"
+  },
+  "addAccessFilter": {
+    "message": "Adicionar filtro de acesso"
+  },
   "refresh": {
     "message": "Atualizar"
   },
@@ -3235,6 +3247,27 @@
   "device": {
     "message": "Dispositivo"
   },
+  "creatingAccountOn": {
+    "message": "A criar conta em"
+  },
+  "checkYourEmail": {
+    "message": "Verifique o seu e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Siga o link no e-mail enviado para"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "e continue a criação da sua conta."
+  },
+  "noEmail": {
+    "message": "Não recebeu o e-mail?"
+  },
+  "goBack": {
+    "message": "Volte atrás"
+  },
+  "toEditYourEmailAddress": {
+    "message": "para editar o seu endereço de e-mail."
+  },
   "view": {
     "message": "Ver"
   },
@@ -3381,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "Pediu para eliminar a sua conta Bitwarden. Clique no botão abaixo para confirmar."
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "Pediu para eliminar a sua organização do Bitwarden."
   },
   "myOrganization": {
     "message": "A minha organização"
@@ -3558,6 +3594,12 @@
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "Os ajustes à sua subscrição resultarão em alterações proporcionais aos seus totais de faturação. Se os novos utilizadores convidados excederem o número de licenças da sua subscrição, receberá imediatamente uma cobrança proporcional pelos utilizadores adicionais."
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "Se pretender adicionar mais"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "lugares sem a oferta agregada, por favor, contacte"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "Os ajustes à sua subscrição resultarão em alterações proporcionais aos seus totais de faturação. Se os novos utilizadores convidados excederem o número de licenças da sua subscrição, receberá imediatamente uma cobrança proporcional pelos utilizadores adicionais até que o seu limite de $MAX$ licenças seja atingido.",
@@ -5802,6 +5844,108 @@
   "forwardedEmailDesc": {
     "message": "Gerar um alias de e-mail com um serviço de reencaminhamento externo."
   },
+  "forwarderError": {
+    "message": "Erro no $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Gerado pelo Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Site: $WEBSITE$. Gerado pelo Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Token da API de $SERVICENAME$ inválido",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Token da API de $SERVICENAME$ inválido: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Não foi possível obter o ID da conta de e-mail mascarada de $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Domínio de $SERVICENAME$ inválido.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "URL de $SERVICENAME$ inválido.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Ocorreu um erro desconhecido de $SERVICENAME$.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Reencaminhador desconhecido: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "Nome de domínio",
     "description": "Part of a URL."
@@ -6480,8 +6624,8 @@
   "editGroupCollectionsDesc": {
     "message": "Conceder aos membros acesso às coleções adicionando-os a este grupo."
   },
-  "editGroupCollectionsRestrictionsDesc": {
-    "message": "Só pode atribuir colecções que gere."
+  "restrictedCollectionAssignmentDesc": {
+    "message": "Só pode atribuir coleções que gere."
   },
   "accessAllCollectionsDesc": {
     "message": "Conceder acesso a todas as coleções atuais e futuras."
@@ -6714,8 +6858,8 @@
   "selectGroups": {
     "message": "Selecionar grupos"
   },
-  "userPermissionOverrideHelper": {
-    "message": "As permissões definidas para um membro substituirão as permissões definidas pelo grupo desse membro"
+  "userPermissionOverrideHelperDesc": {
+    "message": "As permissões definidas para um membro substituirão as permissões definidas pelo grupo desse membro."
   },
   "noMembersOrGroupsAdded": {
     "message": "Não foram adicionados membros ou grupos"
@@ -6906,8 +7050,8 @@
   "updateLowKdfIterationsDesc": {
     "message": "Atualize as suas definições de encriptação para cumprir as novas recomendações de segurança e melhorar a proteção da conta."
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "Ao prosseguir, terminará todas as sessões ativas. Terá de iniciar sessão novamente e concluir a configuração da verificação de dois passos. Recomendamos que exporte o seu cofre antes de alterar as definições de encriptação para evitar a perda de dados."
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "Ao prosseguir, sairá de todas as sessões ativas. Terá de voltar a iniciar sessão e concluir a verificação de dois passos, caso exista. Recomendamos que exporte o seu cofre antes de alterar as definições de encriptação para evitar a perda de dados."
   },
   "secretsManager": {
     "message": "Gestor de Segredos"
@@ -7527,6 +7671,12 @@
   "readOnlyCollectionAccess": {
     "message": "Não tem acesso para gerir esta coleção."
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "Faltam permissões Pode gerir"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Conceda permissões Pode gerir para permitir a gestão completa da coleção, incluindo a eliminação da coleção."
+  },
   "grantCollectionAccess": {
     "message": "Conceder a grupos ou membros acesso a esta coleção."
   },
@@ -7557,13 +7707,6 @@
     "message": "adicione um método de pagamento",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "Adicione novas definições e permissões para maior flexibilidade. Substitua a função de Gestor pela permissão \"pode gerir\" e introduza opções que permitam aos utilizadores criar coleções, bem como restringir o acesso administrativo às coleções.",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "Saiba mais sobre a gestão de coleções"
-  },
   "organizationInformation": {
     "message": "Informações sobre a organização"
   },
@@ -7575,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "Enviámos um e-mail de confirmação para o seu e-mail:"
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "Esta ação é irreversível"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "Ao ativar esta funcionalidade, o papel de gestor será descontinuado e substituído por uma permissão \"Pode gerir\". Isto demorará alguns momentos. Não efetue quaisquer alterações na organização até que esteja concluído. Tem a certeza de que pretende continuar?"
   },
   "sorryToSeeYouGo": {
     "message": "Lamentamos vê-lo partir! Ajude a melhorar o Bitwarden partilhando o motivo do seu cancelamento.",
@@ -7632,14 +7769,11 @@
   "success": {
     "message": "Com sucesso"
   },
-  "viewCollection": {
-    "message": "Ver coleção"
-  },
   "restrictedGroupAccess": {
     "message": "Não se pode adicionar a si próprio a grupos."
   },
-  "restrictedCollectionAccess": {
-    "message": "Não se pode adicionar a si próprio a coleções."
+  "cannotAddYourselfToCollections": {
+    "message": "Não se pode adicionar a si próprio às coleções."
   },
   "assign": {
     "message": "Atribuir"
@@ -8075,5 +8209,93 @@
   },
   "manageBillingFromProviderPortalMessage": {
     "message": "Gira a faturação a partir do Portal do fornecedor"
+  },
+  "viewItemsIn": {
+    "message": "Ver itens em $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Voltar a $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Voltar",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Remover $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "viewInfo": {
+    "message": "Ver informações"
+  },
+  "viewAccess": {
+    "message": "Ver acesso"
+  },
+  "noCollectionsSelected": {
+    "message": "Não selecionou nenhuma coleção."
+  },
+  "updateName": {
+    "message": "Atualizar nome"
+  },
+  "updatedOrganizationName": {
+    "message": "Nome da organização atualizado"
+  },
+  "providerPlan": {
+    "message": "Fornecedor de serviços geridos"
+  },
+  "orgSeats": {
+    "message": "Lugares da organização"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$% de desconto",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "lowKDFIterationsBanner": {
+    "message": "Baixa quantidade de iterações do KDF. Aumente as suas iterações para melhorar a segurança da sua conta."
+  },
+  "changeKDFSettings": {
+    "message": "Alterar as definições do KDF"
+  },
+  "secureYourInfrastructure": {
+    "message": "Proteja a sua infraestrutura"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Proteja a sua família ou empresa"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Colmatar as lacunas de segurança com relatórios de monitorização"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Mantenha-se à frente das vulnerabilidades de segurança atualizando para um plano pago para uma monitorização melhorada."
+  },
+  "approveAllRequests": {
+    "message": "Aprovar todos os pedidos"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Todos os pedidos de início de sessão aprovados"
   }
 }

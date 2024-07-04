@@ -1299,11 +1299,41 @@
     "message": "パスワード更新日",
     "description": "ex. Date this password was updated"
   },
+  "exportFrom": {
+    "message": "エクスポート元"
+  },
   "exportVault": {
     "message": "保管庫のエクスポート"
   },
   "fileFormat": {
     "message": "ファイル形式"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "エクスポートするファイルはパスワードで保護され、復号するにはファイルパスワードが必要になります。"
+  },
+  "filePassword": {
+    "message": "ファイルパスワード"
+  },
+  "exportPasswordDescription": {
+    "message": "このパスワードはこのファイルのエクスポートとインポート時に使用します"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "アカウントのユーザー名とマスターパスワードから得られる暗号化キーを使用してエクスポートするデータを暗号化し、現在の Bitwarden アカウントのみがインポートできるよう制限します。"
+  },
+  "passwordProtected": {
+    "message": "パスワード保護あり"
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "エクスポートを暗号化するためのファイルパスワードを設定します。そのパスワードを使用して、任意の Bitwarden アカウントにインポートします。"
+  },
+  "exportTypeHeading": {
+    "message": "エクスポートの種類"
+  },
+  "accountRestricted": {
+    "message": "アカウント制限"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "「ファイルパスワード」と「ファイルパスワードの確認」が一致しません。"
   },
   "hCaptchaUrl": {
     "message": "hCaptcha URL",
@@ -2050,6 +2080,9 @@
   "switchAccount": {
     "message": "アカウント切替"
   },
+  "alreadyHaveAccount": {
+    "message": "すでにアカウントをお持ちですか？"
+  },
   "options": {
     "message": "オプション"
   },
@@ -2065,6 +2098,18 @@
       "email": {
         "content": "$1",
         "example": "name@example.com"
+      }
+    }
+  },
+  "exportingOrganizationVaultTitle": {
+    "message": "組織保管庫のエクスポート"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "$ORGANIZATION$ に関連付けられた組織保管庫のみがエクスポートされます。個々の保管庫または他の組織にあるアイテムは含まれません。",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
       }
     }
   },
@@ -2131,6 +2176,108 @@
   },
   "forwardedEmailDesc": {
     "message": "外部転送サービスを使用してメールエイリアスを生成します。"
+  },
+  "forwarderError": {
+    "message": "$SERVICENAME$ エラー: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Bitwarden によって生成されました。",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "ウェブサイト: $WEBSITE$ Bitwarden によって生成されました。",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "不正な$SERVICENAME$ API トークン",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "不正な$SERVICENAME$ API トークン: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "$SERVICENAME$ マスク済みメールアカウント ID を取得できませんでした。",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "不正な $SERVICENAME$ ドメインです。",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "不正な $SERVICENAME$ URL です。",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "不明な $SERVICENAME$ エラーが起きました。",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "不明な転送先: '$SERVICENAME$'",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "ホスト名",
@@ -2287,6 +2434,27 @@
   },
   "logInRequested": {
     "message": "ログインリクエスト済み"
+  },
+  "creatingAccountOn": {
+    "message": "アカウント作成："
+  },
+  "checkYourEmail": {
+    "message": "メールをご確認ください"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "アカウントの作成を続けるには"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "に送られたメールのリンクを開いてください。"
+  },
+  "noEmail": {
+    "message": "メールがありませんか?"
+  },
+  "goBack": {
+    "message": "戻って"
+  },
+  "toEditYourEmailAddress": {
+    "message": "メールアドレスを編集してください。"
   },
   "exposedMasterPassword": {
     "message": "流出したマスターパスワード"
@@ -2720,5 +2888,39 @@
   },
   "errorAssigningTargetFolder": {
     "message": "ターゲットフォルダーの割り当てに失敗しました。"
+  },
+  "viewItemsIn": {
+    "message": "$NAME$ のアイテムを表示",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "$NAME$ に戻る",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "戻る",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "$NAME$ を削除",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }
