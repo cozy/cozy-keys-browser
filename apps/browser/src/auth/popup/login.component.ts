@@ -18,6 +18,7 @@ import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstraction
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { WebAuthnLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-login.service.abstraction";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EnvironmentService, Region } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -25,8 +26,8 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { flagEnabled } from "../../platform/flags";
 
@@ -110,6 +111,7 @@ export class LoginComponent extends BaseLoginComponent {
     protected konnectorsService: KonnectorsService,
     protected themeStateService: ThemeStateService,
     protected apiService: ApiService,
+    configService: ConfigService,
   ) {
     super(
       devicesApiService,
@@ -130,6 +132,7 @@ export class LoginComponent extends BaseLoginComponent {
       loginEmailService,
       ssoLoginService,
       webAuthnLoginService,
+      configService,
     );
     super.onSuccessfulLogin = async () => {
       // Cozy customization

@@ -1,4 +1,6 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { DIALOG_DATA, DialogConfig, DialogRef } from "@angular/cdk/dialog";
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from "@angular/core";
+import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { firstValueFrom, map } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -38,18 +40,25 @@ export class TwoFactorAuthenticatorComponent
   extends TwoFactorBaseComponent
   implements OnInit, OnDestroy
 {
+  @Output() onChangeStatus = new EventEmitter<boolean>();
   type = TwoFactorProviderType.Authenticator;
   key: string;
-  token: string;
   formPromise: Promise<TwoFactorAuthenticatorResponse>;
 
   override componentName = "app-two-factor-authenticator";
   private qrScript: HTMLScriptElement;
 
+  formGroup = this.formBuilder.group({
+    token: new FormControl(null, [Validators.required, Validators.minLength(6)]),
+  });
+
   constructor(
+    @Inject(DIALOG_DATA) protected data: AuthResponse<TwoFactorAuthenticatorResponse>,
+    private dialogRef: DialogRef,
     apiService: ApiService,
     i18nService: I18nService,
     userVerificationService: UserVerificationService,
+    private formBuilder: FormBuilder,
     platformUtilsService: PlatformUtilsService,
     logService: LogService,
     private accountService: AccountService,
@@ -68,12 +77,17 @@ export class TwoFactorAuthenticatorComponent
     this.qrScript.async = true;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     window.document.body.appendChild(this.qrScript);
+    await this.auth(this.data);
   }
 
   ngOnDestroy() {
     window.document.body.removeChild(this.qrScript);
+  }
+
+  validateTokenControl() {
+    this.formGroup.controls.token.markAsTouched();
   }
 
   auth(authResponse: AuthResponse<TwoFactorAuthenticatorResponse>) {
@@ -81,17 +95,27 @@ export class TwoFactorAuthenticatorComponent
     return this.processResponse(authResponse.response);
   }
 
-  submit() {
-    if (this.enabled) {
-      return super.disable(this.formPromise);
-    } else {
-      return this.enable();
+  submit = async () => {
+    if (this.formGroup.invalid && !this.enabled) {
+      return;
     }
+    if (this.enabled) {
+      await this.disableAuthentication(this.formPromise);
+      this.onChangeStatus.emit(this.enabled);
+      this.close();
+    } else {
+      await this.enable();
+      this.onChangeStatus.emit(this.enabled);
+    }
+  };
+
+  private async disableAuthentication(promise: Promise<unknown>) {
+    return super.disable(promise);
   }
 
   protected async enable() {
     const request = await this.buildRequestModel(UpdateTwoFactorAuthenticatorRequest);
-    request.token = this.token;
+    request.token = this.formGroup.value.token;
     request.key = this.key;
 
     return super.enable(async () => {
@@ -102,7 +126,7 @@ export class TwoFactorAuthenticatorComponent
   }
 
   private async processResponse(response: TwoFactorAuthenticatorResponse) {
-    this.token = null;
+    this.formGroup.get("token").setValue(null);
     this.enabled = response.enabled;
     this.key = response.key;
     const email = await firstValueFrom(
@@ -120,5 +144,41 @@ export class TwoFactorAuthenticatorComponent
         size: 160,
       });
     }, 100);
+  }
+
+  close = () => {
+    this.dialogRef.close(this.enabled);
+  };
+
+  static open(
+    dialogService: DialogService,
+    config: DialogConfig<AuthResponse<TwoFactorAuthenticatorResponse>>,
+  ) {
+    return dialogService.open<boolean>(TwoFactorAuthenticatorComponent, config);
+  }
+
+  async launchExternalUrl(url: string) {
+    const hostname = new URL(url).hostname;
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: this.i18nService.t("continueToExternalUrlTitle", hostname),
+      content: this.i18nService.t("continueToExternalUrlDesc"),
+      type: "info",
+      acceptButtonText: { key: "continue" },
+    });
+    if (confirmed) {
+      this.platformUtilsService.launchUri(url);
+    }
+  }
+
+  async launchBitwardenUrl(url: string) {
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: this.i18nService.t("twoStepContinueToBitwardenUrlTitle"),
+      content: this.i18nService.t("twoStepContinueToBitwardenUrlDesc"),
+      type: "info",
+      acceptButtonText: { key: "continue" },
+    });
+    if (confirmed) {
+      this.platformUtilsService.launchUri(url);
+    }
   }
 }

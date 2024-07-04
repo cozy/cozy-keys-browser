@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Креирај налог"
   },
+  "setAStrongPassword": {
+    "message": "Поставите јаку лозинку"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завршите креирање налога постављањем лозинке"
+  },
   "logIn": {
     "message": "Пријавите се"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Савет Главне Лозинке (опционо)"
+  },
+  "masterPassHintText": {
+    "message": "Ако заборавите лозинку, наговештај за лозинку се може послати на ваш имејл. $CURRENT$/$MAXIMUM$ карактера максимум.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Подешавања"
@@ -554,17 +573,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "Потврђена Главна Лозинка се не подудара."
-  },
-  "newAccountCreated": {
-    "message": "Ваш налог је креиран! Сада се можете пријавити."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "Успешно сте се пријавили"
   },
   "youMayCloseThisWindow": {
     "message": "Можете затворити овај прозор"
+  },
+  "masterPassDoesntMatch": {
+    "message": "Потврђена Главна Лозинка се не подудара."
+  },
+  "newAccountCreated": {
+    "message": "Ваш налог је креиран! Сада се можете пријавити."
   },
   "masterPassSent": {
     "message": "Послали смо Вам поруку са саветом главне лозинке."
@@ -647,18 +666,18 @@
   "authenticatorAppTitle": {
     "message": "Апликација Аутентификатор"
   },
-  "authenticatorAppDesc": {
-    "message": "Користите апликацију за аутентификацију (као што је Authy или Google Authenticator) за генерисање верификационих кодова.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Унесите кôд који генерише апликација за аутентификацију као што је Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "YubiKey OTP сигурносни кључ"
+  "yubiKeyTitleV2": {
+    "message": "Yubico OTP сигурносни кључ"
   },
   "yubiKeyDesc": {
     "message": "Користите YubiKey за приступ налогу. Ради са YubiKey 4, 4 Nano, 4C, и NEO уређајима."
   },
-  "duoDesc": {
-    "message": "Провери са Duo Security користећи Duo Mobile апликацију, СМС, телефонски позив, или U2F кључ.",
+  "duoDescV2": {
+    "message": "Унесите кôд који је генерисао Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -674,8 +693,8 @@
   "emailTitle": {
     "message": "Имејл"
   },
-  "emailDesc": {
-    "message": "Верификациони кодови ће вам бити послати имејлом."
+  "emailDescV2": {
+    "message": "Унесите кôд послат на ваш имејл."
   },
   "loginUnavailable": {
     "message": "Пријава недоступна"
@@ -694,6 +713,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Наведите основни УРЛ ваше локалне Bitwarden инсталације."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Наведите основну УРЛ адресу вашег локалног хостовања Bitwarden-а. Пример: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "За напредну конфигурацију, можете навести основну УРЛ адресу сваке услуге независно."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Морате додати или основни УРЛ сервера или бар једно прилагођено окружење."
   },
   "customEnvironment": {
     "message": "Прилагођено окружење"
@@ -742,6 +770,9 @@
   },
   "loggedOut": {
     "message": "Одјављено"
+  },
+  "loggedOutDesc": {
+    "message": "Одјављени сте са свог налога."
   },
   "loginExpired": {
     "message": "Ваша сесија је истекла."
@@ -1212,6 +1243,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Грешка при освежавању токена приступа"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Није пронађен токен за освежавање или АПИ кључеви. Покушајте да се одјавите и поново пријавите."
+  },
   "help": {
     "message": "Помоћ"
   },
@@ -1300,7 +1337,7 @@
     "description": "ex. Date this password was updated"
   },
   "exportFrom": {
-    "message": "Export from"
+    "message": "Извоз од"
   },
   "exportVault": {
     "message": "Извоз сефа"
@@ -1309,31 +1346,31 @@
     "message": "Формат датотеке"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "This file export will be password protected and require the file password to decrypt."
+    "message": "Овај извоз ће бити заштићен лозинком и захтеваће лозинку датотеке за дешифровање."
   },
   "filePassword": {
-    "message": "File password"
+    "message": "Лозинка датотеке"
   },
   "exportPasswordDescription": {
-    "message": "This password will be used to export and import this file"
+    "message": "Ова лозинка ће се користити за извоз и увоз ове датотеке"
   },
   "accountRestrictedOptionDescription": {
-    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
+    "message": "Користите кључ за шифровање вашег налога, изведен из корисничког имена и главне лозинке, да шифрујете извоз и ограничите увоз само на тренутни Bitwarden налог."
   },
   "passwordProtected": {
-    "message": "Password protected"
+    "message": "Заштићено лозинком"
   },
   "passwordProtectedOptionDescription": {
-    "message": "Set a file password to encrypt the export and import it to any Bitwarden account using the password for decryption."
+    "message": "Подесите лозинку за шифровање извоза и увоз у било који Bitwarden налог користећи лозинку за дешифровање."
   },
   "exportTypeHeading": {
-    "message": "Export type"
+    "message": "Тип извоза"
   },
   "accountRestricted": {
-    "message": "Account restricted"
+    "message": "Налог је ограничен"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "“File password”  and “Confirm file password“ do not match."
+    "message": "Унете лозинке се не подударају."
   },
   "hCaptchaUrl": {
     "message": "hCaptcha Url",
@@ -1640,6 +1677,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ваша нова главна лозинка не испуњава захтеве полисе."
+  },
+  "receiveMarketingEmails": {
+    "message": "Добијајте е-пошту од Bitwarden-а за најаве, савете и могућности истраживања."
+  },
+  "unsubscribe": {
+    "message": "Одјави се"
+  },
+  "atAnyTime": {
+    "message": "било када."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ако наставите, слажете се са"
+  },
+  "and": {
+    "message": "и"
   },
   "acceptPolicies": {
     "message": "Означавањем овог поља пристајете на следеће:"
@@ -2102,10 +2154,10 @@
     }
   },
   "exportingOrganizationVaultTitle": {
-    "message": "Exporting organization vault"
+    "message": "Извоз сефа организације"
   },
   "exportingOrganizationVaultDesc": {
-    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
+    "message": "Биће извезен само сеф организације повезан са $ORGANIZATION$. Ставке у појединачним сефовима или другим организацијама неће бити укључене.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -2383,9 +2435,6 @@
   "denyLogIn": {
     "message": "Одбиј пријављивање"
   },
-  "approveLoginRequests": {
-    "message": "Одобравање захтева за пријављивање"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Пријава потврђена за $EMAIL$ на $DEVICE$",
     "placeholders": {
@@ -2419,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Овај захтев више не важи."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Користите овај уређај за одобравање захтева за пријављивање са других уређаја."
   },
   "confirmLoginAtemptForMail": {
     "message": "Потврдити пријаву за $EMAIL$",
@@ -2473,6 +2519,12 @@
   },
   "important": {
     "message": "Важно:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Одјављени сте јер ваш токен за приступ није могао да се дешифрује. Пријавите се поново да бисте решили овај проблем."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Одјављени сте јер ваш токен за освежавање није могао да се преузме. Пријавите се поново да бисте решили овај проблем."
   },
   "masterPasswordHint": {
     "message": "Ваша главна лозинка се не може повратити ако је заборавите!"
@@ -2653,6 +2705,9 @@
   "submenu": {
     "message": "Под-мени"
   },
+  "toggleSideNavigation": {
+    "message": "Укључите бочну навигацију"
+  },
   "skipToContent": {
     "message": "Прескочи на садржај"
   },
@@ -2787,6 +2842,9 @@
   },
   "confirmFilePassword": {
     "message": "Потврдити лозинку датотеке"
+  },
+  "exportSuccess": {
+    "message": "Подаци из сефа су извезени"
   },
   "multifactorAuthenticationCancelled": {
     "message": "Вишефакторска аутентификација је отказана"

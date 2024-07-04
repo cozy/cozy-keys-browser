@@ -587,6 +587,9 @@
   "loggedOut": {
     "message": "Odhlášení"
   },
+  "loggedOutDesc": {
+    "message": "Byli jste odhlášeni ze svého účtu."
+  },
   "loginExpired": {
     "message": "Platnost přihlášení vypršela."
   },
@@ -710,6 +713,12 @@
   "createAccount": {
     "message": "Vytvořit účet"
   },
+  "setAStrongPassword": {
+    "message": "Nastavit hlavní heslo"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Dokončete vytváření účtu nastavením hesla"
+  },
   "newAroundHere": {
     "message": "Jste tu noví?"
   },
@@ -718,6 +727,9 @@
   },
   "logIn": {
     "message": "Přihlásit se"
+  },
+  "verifyIdentity": {
+    "message": "Ověřte svou totožnost"
   },
   "logInInitiated": {
     "message": "Bylo zahájeno přihlášení"
@@ -754,6 +766,19 @@
   },
   "masterPassHintLabel": {
     "message": "Nápověda k hlavnímu heslu"
+  },
+  "masterPassHintText": {
+    "message": "Pokud zapomenete své heslo, může být nápověda k heslu odeslána na Váš e-mail. $CURRENT$/$MAXIMUM$ znaků maximálně.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Nastavení"
@@ -937,18 +962,18 @@
   "authenticatorAppTitle": {
     "message": "Ověřovací aplikace"
   },
-  "authenticatorAppDesc": {
-    "message": "Použijte ověřovací aplikaci (jako je Authy nebo Google Authenticator) pro generování časově omezených kódů.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Zadejte kód vygenerovaný ověřovací aplikací, jako je Autentikátor Bitwarden.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
+  "yubiKeyTitleV2": {
     "message": "Bezpečnostní klíč YubiKey OTP"
   },
   "yubiKeyDesc": {
     "message": "Použije YubiKey pro přístup k Vašemu trezoru. Podporuje YubiKey 4, 5 a NEO."
   },
-  "duoDesc": {
-    "message": "Ověření pomocí Duo Security prostřednictvím aplikace Duo Mobile, SMS, telefonního hovoru nebo bezpečnostního klíče U2F.",
+  "duoDescV2": {
+    "message": "Zadejte kód vygenerovaný DUO Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -962,10 +987,10 @@
     "message": "Bezpečnostní klíč FIDO U2F"
   },
   "webAuthnTitle": {
-    "message": "FIDO2 WebAuthn"
+    "message": "Přístupový klíč"
   },
   "webAuthnDesc": {
-    "message": "Použije jakýkoli bezpečnostní klíč WebAuthn pro přístup k Vašemu účtu."
+    "message": "Používejte biometrické prvky Vašeho zařízení nebo bezpečnostní klíč kompatibilní s FIDO2."
   },
   "webAuthnMigrated": {
     "message": "(Migrováno z FIDO)"
@@ -973,8 +998,8 @@
   "emailTitle": {
     "message": "E-mail"
   },
-  "emailDesc": {
-    "message": "Ověřovací kódy Vám budou zaslány e-mailem."
+  "emailDescV2": {
+    "message": "Zadejte kód odeslaný na Váš e-mail."
   },
   "continue": {
     "message": "Pokračovat"
@@ -1049,6 +1074,12 @@
   },
   "copyUuid": {
     "message": "Kopírovat UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Chyba aktualizace přístupového tokenu"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nebyly nalezeny žádné obnovovací tokeny nebo API klíče. Zkuste se odhlásit a znovu se přihlásit."
   },
   "warning": {
     "message": "Varování"
@@ -1608,35 +1639,44 @@
   "twoStepLoginAuthDesc": {
     "message": "Zadejte hlavní heslo pro úpravu dvoufázového přihlášení."
   },
-  "twoStepAuthenticatorDesc": {
-    "message": "Pro nastavení dvoufázového přihlášení pomocí ověřovací aplikace postupujte podle následujících kroků:"
+  "twoStepAuthenticatorInstructionPrefix": {
+    "message": "Stáhnout ověřovací aplikaci, jako je"
   },
-  "twoStepAuthenticatorDownloadApp": {
-    "message": "Stáhněte si ověřovací aplikaci"
+  "twoStepAuthenticatorInstructionInfix1": {
+    "message": ","
   },
-  "twoStepAuthenticatorNeedApp": {
-    "message": "Potřebujete aplikaci pro dvoufázové ověření? Stáhněte si jednu z následujících:"
+  "twoStepAuthenticatorInstructionInfix2": {
+    "message": "nebo"
   },
-  "iosDevices": {
-    "message": "iOS zařízení"
+  "twoStepAuthenticatorInstructionSuffix": {
+    "message": "."
   },
-  "androidDevices": {
-    "message": "Android zařízení"
+  "continueToExternalUrlTitle": {
+    "message": "Pokračovat na $URL$?",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
   },
-  "windowsDevices": {
-    "message": "Windows zařízení"
+  "continueToExternalUrlDesc": {
+    "message": "Opouštíte Bitwarden a spouštíte externí webové stránky v novém okně."
   },
-  "twoStepAuthenticatorAppsRecommended": {
-    "message": "Tyto aplikace doporučujeme, nicméně další aplikace pro ověření budou fungovat také."
+  "twoStepContinueToBitwardenUrlTitle": {
+    "message": "Pokračovat na bitwarden.com?"
   },
-  "twoStepAuthenticatorScanCode": {
-    "message": "Naskenujte tento QR kód Vaší ověřovací aplikací"
+  "twoStepContinueToBitwardenUrlDesc": {
+    "message": "Autentikátor Bitwarden umožňuje ukládat ověřovací klíče a generovat TOTP kódy pro 2-fázové ověřování. Další informace naleznete na stránkách bitwarden.com"
+  },
+  "twoStepAuthenticatorScanCodeV2": {
+    "message": "Naskenujte QR kód pomocí Vaší ověřovací aplikace nebo zadejte klíč."
   },
   "key": {
     "message": "Klíč"
   },
-  "twoStepAuthenticatorEnterCode": {
-    "message": "Zadejte 6místný kód z ověřovací aplikace"
+  "twoStepAuthenticatorEnterCodeV2": {
+    "message": "Ověřovací kód"
   },
   "twoStepAuthenticatorReaddDesc": {
     "message": "V případě potřeby přidání do jiného zařízení je níže zobrazen QR kód (nebo klíč) vyžadovaný ověřovací aplikací."
@@ -2785,12 +2825,6 @@
   "userDesc": {
     "message": "Přistupuje k přiřazeným kolekcím a přidává je."
   },
-  "manager": {
-    "message": "Správce"
-  },
-  "managerDesc": {
-    "message": "Vytváří, maže a spravuje přístupy v přiřazených kolekcích."
-  },
   "all": {
     "message": "Vše"
   },
@@ -3718,6 +3752,21 @@
   "nothingSelected": {
     "message": "Nevybrali jste žádné položky."
   },
+  "receiveMarketingEmails": {
+    "message": "Získejte e-maily od Bitwardenu pro oznámení, poradenství a výzkumné příležitosti."
+  },
+  "unsubscribe": {
+    "message": "Odhlásit odběr"
+  },
+  "atAnyTime": {
+    "message": "kdykoli."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Pokračováním souhlasíte s"
+  },
+  "and": {
+    "message": "a"
+  },
   "acceptPolicies": {
     "message": "Zaškrtnutím tohoto políčka souhlasíte s následujícím:"
   },
@@ -4110,6 +4159,9 @@
   },
   "thisWindowWillCloseIn5Seconds": {
     "message": "Toto okno se automaticky zavře za 5 sekund"
+  },
+  "youMayCloseThisWindow": {
+    "message": "Toto okno můžete zavřít"
   },
   "includeAllTeamsFeatures": {
     "message": "Všechny funkce týmů, navíc:"
@@ -4567,12 +4619,6 @@
   "permission": {
     "message": "Oprávnění"
   },
-  "managerPermissions": {
-    "message": "Oprávnění správce"
-  },
-  "adminPermissions": {
-    "message": "Oprávnění administrátora"
-  },
   "accessEventLogs": {
     "message": "Přístup k protokolům událostí"
   },
@@ -4596,9 +4642,6 @@
   },
   "deleteAnyCollection": {
     "message": "Smazání jakékoli kolekce"
-  },
-  "manageAssignedCollections": {
-    "message": "Správa přiřazených kolekcí"
   },
   "editAssignedCollections": {
     "message": "Úprava přiřazených kolekcí"
@@ -5585,6 +5628,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Měnění fakturačního synchronizačního tokenu zruší platnost předchozího tokenu."
+  },
+  "selfHostedServer": {
+    "message": "vlastní hosting"
+  },
+  "customEnvironment": {
+    "message": "Vlastní prostředí"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Zadejte základní URL adresu Vaší vlastní hostované aplikace Bitwarden. Příklad: https://bitwarden.spolecnost.cz"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Pro rozšířená nastavení můžete zadat základní URL adresu každé služby zvlášť."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Musíte přidat buď základní adresu URL serveru nebo alespoň jedno vlastní prostředí."
+  },
+  "apiUrl": {
+    "message": "URL API serveru"
+  },
+  "webVaultUrl": {
+    "message": "URL serveru webového trezoru"
+  },
+  "identityUrl": {
+    "message": "URL serveru identity"
+  },
+  "notificationsUrl": {
+    "message": "URL serveru pro oznámení"
+  },
+  "iconsUrl": {
+    "message": "URL serveru ikon"
+  },
+  "environmentSaved": {
+    "message": "URL adresy prostředí uloženy"
   },
   "selfHostingTitle": {
     "message": "Vlastní hosting"
@@ -6627,12 +6703,6 @@
   "restrictedCollectionAssignmentDesc": {
     "message": "Můžete přiřadit jen Vámi spravované kolekce."
   },
-  "accessAllCollectionsDesc": {
-    "message": "Udělí přístup ke všem aktuálním i budoucím kolekcím."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "Pokud je zaškrtnuto, nahradí to všechna ostatní oprávnění ke kolekcím."
-  },
   "selectMembers": {
     "message": "Vybrat členy"
   },
@@ -6674,12 +6744,6 @@
   },
   "group": {
     "message": "Skupina"
-  },
-  "groupAccessAll": {
-    "message": "Tato skupina může vidět a upravovat vše."
-  },
-  "memberAccessAll": {
-    "message": "Tento uživatel může vidět a upravovat vše."
   },
   "domainVerification": {
     "message": "Ověření domény"
@@ -7616,6 +7680,9 @@
   "alreadyHaveAccount": {
     "message": "Už máte účet?"
   },
+  "toggleSideNavigation": {
+    "message": "Přepnout boční navigaci"
+  },
   "skipToContent": {
     "message": "Přeskočit na obsah"
   },
@@ -7834,7 +7901,7 @@
     "message": "Nastavení uživatelů bude započítáno v dalším fakturačním cyklu."
   },
   "unassignedSeatsDescription": {
-    "message": "Nepřiřazení uživatelé k odběru"
+    "message": "Nepřiřazení uživatelé"
   },
   "purchaseSeatDescription": {
     "message": "Další zakoupení uživatelé"
@@ -8141,11 +8208,17 @@
   "setUpGithubActions": {
     "message": "Nastavit akce GitHubu"
   },
+  "setUpKubernetes": {
+    "message": "Nastavit Kubernetes"
+  },
   "setUpGitlabCICD": {
     "message": "Nastavit GitLab CI/CD"
   },
   "setUpAnsible": {
     "message": "Nastavit Ansible"
+  },
+  "rustSDKRepo": {
+    "message": "Zobrazit repozitář Rust"
   },
   "cSharpSDKRepo": {
     "message": "Zobrazit repozitář C#"
@@ -8297,5 +8370,124 @@
   },
   "allLoginRequestsApproved": {
     "message": "Všechny žádosti o přihlášení byly schváleny"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Aktualizované daňové údaje"
+  },
+  "unverified": {
+    "message": "Neověřeno"
+  },
+  "verified": {
+    "message": "Ověřeno"
+  },
+  "viewSecret": {
+    "message": "Zobrazit tajný klíč"
+  },
+  "noClients": {
+    "message": "Žádní klienti k zobrazení."
+  },
+  "providerBillingEmailHint": {
+    "message": "Tato e-mailová adresa obdrží všechny faktury vztahující se k tomuto poskytovateli",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
+  },
+  "upgradeOrganizationEnterprise": {
+    "message": "Zjistěte bezpečnostní rizika díky auditu přístupu členů"
+  },
+  "onlyAvailableForEnterpriseOrganization": {
+    "message": "Rychle si prohlédněte přístup členů v rámci organizace a přejděte na plán Enterprise."
+  },
+  "date": {
+    "message": "Datum"
+  },
+  "exportClientReport": {
+    "message": "Exportovat hlášení klienta"
+  },
+  "memberAccessReport": {
+    "message": "Přístup členů"
+  },
+  "memberAccessReportDesc": {
+    "message": "Ujistěte se, že členové mají přístup k správným údajům a jejich účty jsou bezpečné. Použijte tuto zprávu k získání CSV přístupu členů a konfigurací účtu."
+  },
+  "higherKDFIterations": {
+    "message": "Více iterací KDF Vám může pomoci ochránit hlavní heslo před útočníkem, který by ho vylákal hrubou silou."
+  },
+  "incrementsOf100,000": {
+    "message": "přírůstky po 100 000"
+  },
+  "smallIncrements": {
+    "message": "malé přírůstky"
+  },
+  "kdfIterationRecommends": {
+    "message": "Doporučujeme 600 000 nebo více"
+  },
+  "kdfToHighWarningIncreaseInIncrements": {
+    "message": "U starších zařízení může příliš vysoké nastavení KDF vést k problémům s výkonem. Zvyšte hodnotu v $VALUE$ a otestujte svá zařízení.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "increments of 100,000"
+      }
+    }
+  },
+  "providerReinstate": {
+    "message": " Pro obnovení předplatného se obraťte na zákaznickou podporu."
+  },
+  "secretPeopleDescription": {
+    "message": "Udělí skupinám nebo osobám přístup k tomuto tajnému klíči. Oprávnění nastavená pro osoby přepíšou oprávnění nastavená skupinami."
+  },
+  "secretPeopleEmptyMessage": {
+    "message": "Přidejte osoby nebo skupiny pro sdílení přístupu k tomuto tajnému klíči"
+  },
+  "secretMachineAccountsDescription": {
+    "message": "Udělí strojovým účtům přístup k tomuto tajnému klíči."
+  },
+  "secretMachineAccountsEmptyMessage": {
+    "message": "Přidejte strojové účty pro udělení přístupu k tomuto tajnému klíči"
+  },
+  "smAccessRemovalWarningSecretTitle": {
+    "message": "Odebrat přístup k tomuto tajnému klíči"
+  },
+  "smAccessRemovalSecretMessage": {
+    "message": "Tato akce odebere Váš přístup k tomuto tajnému klíči."
+  },
+  "invoice": {
+    "message": "Faktura"
+  },
+  "unassignedSeatsAvailable": {
+    "message": "Máte $SEATS$ uživatelů k dispozici.",
+    "placeholders": {
+      "seats": {
+        "content": "$1",
+        "example": "10"
+      }
+    },
+    "description": "A message showing how many unassigned seats are available for a provider."
+  },
+  "contactYourProviderForAdditionalSeats": {
+    "message": "Obraťte se na správce svého poskytovatele pro nákup dalších uživatelů."
+  },
+  "open": {
+    "message": "Otevřít",
+    "description": "The status of an invoice."
+  },
+  "uncollectible": {
+    "message": "Nedobytné",
+    "description": "The status of an invoice."
+  },
+  "clientDetails": {
+    "message": "Detaily klienta"
+  },
+  "downloadCSV": {
+    "message": "Stáhnout CSV"
+  },
+  "billingHistoryDescription": {
+    "message": "Stáhněte si soubor CSV a získejte údaje o klientovi pro každé datum fakturace. Proporcionální poplatky nejsou v CSV zahrnuty a mohou se lišit od propojené faktury. Nejpřesnější údaje o vyúčtování naleznete v měsíčních fakturách.",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
   }
 }

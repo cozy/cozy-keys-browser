@@ -1,6 +1,6 @@
 import { Jsonify } from "type-fest";
 
-import { ProductType } from "../../../enums";
+import { ProductTierType } from "../../../billing/enums";
 import { OrganizationUserStatusType, OrganizationUserType, ProviderType } from "../../enums";
 import { PermissionsApi } from "../api/permissions.api";
 import { OrganizationData } from "../data/organization.data";
@@ -43,6 +43,7 @@ export class Organization {
   permissions: PermissionsApi;
   resetPasswordEnrolled: boolean;
   userId: string;
+  organizationUserId: string;
   hasPublicAndPrivateKeys: boolean;
   providerId: string;
   providerName: string;
@@ -57,7 +58,7 @@ export class Organization {
   isMember: boolean;
   familySponsorshipFriendlyName: string;
   familySponsorshipAvailable: boolean;
-  planProductType: ProductType;
+  productTierType: ProductTierType;
   keyConnectorEnabled: boolean;
   keyConnectorUrl: string;
   familySponsorshipLastSyncDate?: Date;
@@ -113,6 +114,7 @@ export class Organization {
     this.permissions = obj.permissions;
     this.resetPasswordEnrolled = obj.resetPasswordEnrolled;
     this.userId = obj.userId;
+    this.organizationUserId = obj.organizationUserId;
     this.hasPublicAndPrivateKeys = obj.hasPublicAndPrivateKeys;
     this.providerId = obj.providerId;
     this.providerName = obj.providerName;
@@ -121,7 +123,7 @@ export class Organization {
     this.isMember = obj.isMember;
     this.familySponsorshipFriendlyName = obj.familySponsorshipFriendlyName;
     this.familySponsorshipAvailable = obj.familySponsorshipAvailable;
-    this.planProductType = obj.planProductType;
+    this.productTierType = obj.productTierType;
     this.keyConnectorEnabled = obj.keyConnectorEnabled;
     this.keyConnectorUrl = obj.keyConnectorUrl;
     this.familySponsorshipLastSyncDate = obj.familySponsorshipLastSyncDate;
@@ -138,16 +140,6 @@ export class Organization {
       return true;
     }
     return this.enabled && this.status === OrganizationUserStatusType.Confirmed;
-  }
-
-  /**
-   * Whether a user has Manager permissions or greater
-   *
-   * @deprecated
-   * This is deprecated with the introduction of Flexible Collections.
-   */
-  get isManager() {
-    return this.type === OrganizationUserType.Manager || this.isAdmin;
   }
 
   /**
@@ -177,19 +169,13 @@ export class Organization {
   }
 
   get canCreateNewCollections() {
-    if (this.flexibleCollections) {
-      return (
-        !this.limitCollectionCreationDeletion ||
-        this.isAdmin ||
-        this.permissions.createNewCollections
-      );
-    }
-
-    return this.isManager || this.permissions.createNewCollections;
+    return (
+      !this.limitCollectionCreationDeletion || this.isAdmin || this.permissions.createNewCollections
+    );
   }
 
   canEditAnyCollection(flexibleCollectionsV1Enabled: boolean) {
-    if (!this.flexibleCollections || !flexibleCollectionsV1Enabled) {
+    if (!flexibleCollectionsV1Enabled) {
       // Pre-Flexible Collections v1 logic
       return this.isAdmin || this.permissions.editAnyCollection;
     }
@@ -209,23 +195,34 @@ export class Organization {
   }
 
   canEditUnassignedCiphers(restrictProviderAccessFlagEnabled: boolean) {
-    if (this.isProviderUser) {
-      return !restrictProviderAccessFlagEnabled;
+    // Providers can access items until the restrictProviderAccess flag is enabled
+    // After the flag is enabled and removed, this block will be deleted
+    // so that they permanently lose access to items
+    if (this.isProviderUser && !restrictProviderAccessFlagEnabled) {
+      return true;
     }
-    return this.isAdmin || this.permissions.editAnyCollection;
+
+    return (
+      this.type === OrganizationUserType.Admin ||
+      this.type === OrganizationUserType.Owner ||
+      this.permissions.editAnyCollection
+    );
   }
 
   canEditAllCiphers(
     flexibleCollectionsV1Enabled: boolean,
     restrictProviderAccessFlagEnabled: boolean,
   ) {
-    // Before Flexible Collections, any admin or anyone with editAnyCollection permission could edit all ciphers
-    if (!this.flexibleCollections || !flexibleCollectionsV1Enabled || !this.flexibleCollections) {
+    // Before Flexible Collections V1, any admin or anyone with editAnyCollection permission could edit all ciphers
+    if (!flexibleCollectionsV1Enabled) {
       return this.isAdmin || this.permissions.editAnyCollection;
     }
 
-    if (this.isProviderUser) {
-      return !restrictProviderAccessFlagEnabled;
+    // Providers can access items until the restrictProviderAccess flag is enabled
+    // After the flag is enabled and removed, this block will be deleted
+    // so that they permanently lose access to items
+    if (this.isProviderUser && !restrictProviderAccessFlagEnabled) {
+      return true;
     }
 
     // Post Flexible Collections V1, the allowAdminAccessToAllCollectionItems flag can restrict admins
@@ -265,33 +262,6 @@ export class Organization {
     return (
       this.isAdmin || this.permissions.editAnyCollection || this.permissions.deleteAnyCollection
     );
-  }
-
-  /**
-   * @deprecated
-   * This is deprecated with the introduction of Flexible Collections.
-   * This will always return false if FlexibleCollections flag is on.
-   */
-  get canEditAssignedCollections() {
-    return this.isManager || this.permissions.editAssignedCollections;
-  }
-
-  /**
-   * @deprecated
-   * This is deprecated with the introduction of Flexible Collections.
-   * This will always return false if FlexibleCollections flag is on.
-   */
-  get canDeleteAssignedCollections() {
-    return this.isManager || this.permissions.deleteAssignedCollections;
-  }
-
-  /**
-   * @deprecated
-   * This is deprecated with the introduction of Flexible Collections.
-   * This will always return false if FlexibleCollections flag is on.
-   */
-  get canViewAssignedCollections() {
-    return this.canDeleteAssignedCollections || this.canEditAssignedCollections;
   }
 
   get canManageGroups() {

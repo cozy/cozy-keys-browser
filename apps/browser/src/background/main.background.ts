@@ -73,6 +73,7 @@ import {
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { DefaultBillingAccountProfileStateService } from "@bitwarden/common/billing/services/account/billing-account-profile-state.service";
 import { ClientType } from "@bitwarden/common/enums";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { ConfigApiServiceAbstraction } from "@bitwarden/common/platform/abstractions/config/config-api.service.abstraction";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
@@ -136,6 +137,9 @@ import { DefaultStateProvider } from "@bitwarden/common/platform/state/implement
 import { InlineDerivedStateProvider } from "@bitwarden/common/platform/state/implementations/inline-derived-state";
 import { StateEventRegistrarService } from "@bitwarden/common/platform/state/state-event-registrar.service";
 /* eslint-enable import/no-restricted-paths */
+import { SyncService } from "@bitwarden/common/platform/sync";
+// eslint-disable-next-line no-restricted-imports -- Needed for service creation
+import { DefaultSyncService } from "@bitwarden/common/platform/sync/internal";
 import { DefaultThemeStateService, ThemeStateService } from "@bitwarden/common/platform/theming/theme-state.service";
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
@@ -144,12 +148,6 @@ import { EventUploadService } from "@bitwarden/common/services/event/event-uploa
 import { NotificationsService } from "@bitwarden/common/services/notifications.service";
 import { SearchService } from "@bitwarden/common/services/search.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vault-timeout/vault-timeout-settings.service";
-import {
-  legacyPasswordGenerationServiceFactory,
-  legacyUsernameGenerationServiceFactory,
-} from "@bitwarden/common/tools/generator";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
-import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
 import {
   PasswordStrengthService,
   PasswordStrengthServiceAbstraction,
@@ -166,8 +164,6 @@ import { CollectionService as CollectionServiceAbstraction } from "@bitwarden/co
 import { CipherFileUploadService as CipherFileUploadServiceAbstraction } from "@bitwarden/common/vault/abstractions/file-upload/cipher-file-upload.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/vault/abstractions/folder/folder-api.service.abstraction";
 import { InternalFolderService as InternalFolderServiceAbstraction } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
-import { SyncNotifierService as SyncNotifierServiceAbstraction } from "@bitwarden/common/vault/abstractions/sync/sync-notifier.service.abstraction";
-import { SyncService as SyncServiceAbstraction } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { TotpService as TotpServiceAbstraction } from "@bitwarden/common/vault/abstractions/totp.service";
 import { VaultSettingsService as VaultSettingsServiceAbstraction } from "@bitwarden/common/vault/abstractions/vault-settings/vault-settings.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -176,10 +172,14 @@ import { CollectionService } from "@bitwarden/common/vault/services/collection.s
 import { CipherFileUploadService } from "@bitwarden/common/vault/services/file-upload/cipher-file-upload.service";
 import { FolderApiService } from "@bitwarden/common/vault/services/folder/folder-api.service";
 import { FolderService } from "@bitwarden/common/vault/services/folder/folder.service";
-import { SyncNotifierService } from "@bitwarden/common/vault/services/sync/sync-notifier.service";
-import { SyncService } from "@bitwarden/common/vault/services/sync/sync.service";
 import { TotpService } from "@bitwarden/common/vault/services/totp.service";
 import { VaultSettingsService } from "@bitwarden/common/vault/services/vault-settings/vault-settings.service";
+import {
+  legacyPasswordGenerationServiceFactory,
+  PasswordGenerationServiceAbstraction,
+  legacyUsernameGenerationServiceFactory,
+  UsernameGenerationServiceAbstraction,
+} from "@bitwarden/generator-legacy";
 import {
   ImportApiService,
   ImportApiServiceAbstraction,
@@ -195,14 +195,18 @@ import {
   VaultExportServiceAbstraction,
 } from "@bitwarden/vault-export-core";
 
+import { OverlayBackground as OverlayBackgroundInterface } from "../autofill/background/abstractions/overlay.background";
 import ContextMenusBackground from "../autofill/background/context-menus.background";
 import NotificationBackground from "../autofill/background/notification.background";
-import OverlayBackground from "../autofill/background/overlay.background";
+import { OverlayBackground } from "../autofill/background/overlay.background";
 import TabsBackground from "../autofill/background/tabs.background";
 import WebRequestBackground from "../autofill/background/web-request.background";
 import { CipherContextMenuHandler } from "../autofill/browser/cipher-context-menu-handler";
 import { ContextMenuClickedHandler } from "../autofill/browser/context-menu-clicked-handler";
 import { MainContextMenuHandler } from "../autofill/browser/main-context-menu-handler";
+import LegacyOverlayBackground from "../autofill/deprecated/background/overlay.background.deprecated";
+import { Fido2Background as Fido2BackgroundAbstraction } from "../autofill/fido2/background/abstractions/fido2.background";
+import { Fido2Background } from "../autofill/fido2/background/fido2.background";
 import { AutofillService as AutofillServiceAbstraction } from "../autofill/services/abstractions/autofill.service";
 import AutofillService from "../autofill/services/autofill.service";
 import { SafariApp } from "../browser/safariApp";
@@ -234,8 +238,6 @@ import { SyncServiceListener } from "../platform/sync/sync-service.listener";
 import { fromChromeRuntimeMessaging } from "../platform/utils/from-chrome-runtime-messaging";
 import VaultTimeoutService from "../services/vault-timeout/vault-timeout.service";
 import FilelessImporterBackground from "../tools/background/fileless-importer.background";
-import { Fido2Background as Fido2BackgroundAbstraction } from "../vault/fido2/background/abstractions/fido2.background";
-import { Fido2Background } from "../vault/fido2/background/fido2.background";
 import { BrowserFido2UserInterfaceService } from "../vault/fido2/browser-fido2-user-interface.service";
 import { VaultFilterService } from "../vault/services/vault-filter.service";
 
@@ -277,8 +279,8 @@ export default class MainBackground {
   collectionService: CollectionServiceAbstraction;
   vaultTimeoutService: VaultTimeoutService;
   vaultTimeoutSettingsService: VaultTimeoutSettingsServiceAbstraction;
-  syncService: SyncServiceAbstraction;
   passwordGenerationService: PasswordGenerationServiceAbstraction;
+  syncService: SyncService;
   passwordStrengthService: PasswordStrengthServiceAbstraction;
   totpService: TotpServiceAbstraction;
   autofillService: AutofillServiceAbstraction;
@@ -315,7 +317,6 @@ export default class MainBackground {
   policyApiService: PolicyApiServiceAbstraction;
   sendApiService: SendApiServiceAbstraction;
   userVerificationApiService: UserVerificationApiServiceAbstraction;
-  syncNotifierService: SyncNotifierServiceAbstraction;
   fido2UserInterfaceService: Fido2UserInterfaceServiceAbstraction;
   fido2AuthenticatorService: Fido2AuthenticatorServiceAbstraction;
   fido2ClientService: Fido2ClientServiceAbstraction;
@@ -365,7 +366,7 @@ export default class MainBackground {
   private contextMenusBackground: ContextMenusBackground;
   private idleBackground: IdleBackground;
   private notificationBackground: NotificationBackground;
-  private overlayBackground: OverlayBackground;
+  private overlayBackground: OverlayBackgroundInterface;
   private filelessImporterBackground: FilelessImporterBackground;
   private runtimeBackground: RuntimeBackground;
   private tabsBackground: TabsBackground;
@@ -669,7 +670,6 @@ export default class MainBackground {
       this.i18nService,
       this.stateProvider,
     );
-    this.syncNotifierService = new SyncNotifierService();
 
     this.autofillSettingsService = new AutofillSettingsService(
       this.stateProvider,
@@ -790,7 +790,6 @@ export default class MainBackground {
     // Cozy customization end
 
     this.userVerificationService = new UserVerificationService(
-      this.stateService,
       this.cryptoService,
       this.accountService,
       this.masterPasswordService,
@@ -869,7 +868,7 @@ export default class MainBackground {
         messageListener,
       );
     } else {
-      this.syncService = new SyncService(
+      this.syncService = new DefaultSyncService(
         this.masterPasswordService,
         this.accountService,
         this.apiService,
@@ -917,6 +916,7 @@ export default class MainBackground {
       this.organizationService,
       this.eventUploadService,
       this.authService,
+      this.accountService,
     );
     this.totpService = new TotpService(this.cryptoFunctionService, this.logService);
 
@@ -936,6 +936,8 @@ export default class MainBackground {
       this.scriptInjectorService,
       this.accountService,
       this.authService,
+      this.configService,
+      messageListener,
     );
     this.auditService = new AuditService(this.cryptoFunctionService, this.apiService);
 
@@ -984,7 +986,6 @@ export default class MainBackground {
       logoutCallback,
       this.stateService,
       this.authService,
-      this.authRequestService,
       this.messagingService,
     );
 
@@ -1099,18 +1100,7 @@ export default class MainBackground {
         themeStateService,
         this.configService,
       );
-      this.overlayBackground = new OverlayBackground(
-        this.cipherService,
-        this.autofillService,
-        this.authService,
-        this.environmentService,
-        this.domainSettingsService,
-        this.stateService,
-        this.autofillSettingsService,
-        this.i18nService,
-        this.platformUtilsService,
-        themeStateService,
-      );
+
       this.filelessImporterBackground = new FilelessImporterBackground(
         this.configService,
         this.authService,
@@ -1119,11 +1109,6 @@ export default class MainBackground {
         this.importService,
         this.syncService,
         this.scriptInjectorService,
-      );
-      this.tabsBackground = new TabsBackground(
-        this,
-        this.notificationBackground,
-        this.overlayBackground,
       );
 
       const contextMenuClickedHandler = new ContextMenuClickedHandler(
@@ -1205,6 +1190,47 @@ export default class MainBackground {
     }
 
     this.userAutoUnlockKeyService = new UserAutoUnlockKeyService(this.cryptoService);
+
+    this.configService
+      .getFeatureFlag(FeatureFlag.InlineMenuPositioningImprovements)
+      .then(async (enabled) => {
+        if (!enabled) {
+          this.overlayBackground = new LegacyOverlayBackground(
+            this.cipherService,
+            this.autofillService,
+            this.authService,
+            this.environmentService,
+            this.domainSettingsService,
+            this.autofillSettingsService,
+            this.i18nService,
+            this.platformUtilsService,
+            themeStateService,
+          );
+        } else {
+          this.overlayBackground = new OverlayBackground(
+            this.logService,
+            this.cipherService,
+            this.autofillService,
+            this.authService,
+            this.environmentService,
+            this.domainSettingsService,
+            this.autofillSettingsService,
+            this.i18nService,
+            this.platformUtilsService,
+            themeStateService,
+          );
+        }
+
+        this.tabsBackground = new TabsBackground(
+          this,
+          this.notificationBackground,
+          this.overlayBackground,
+        );
+
+        await this.overlayBackground.init();
+        await this.tabsBackground.init();
+      })
+      .catch((error) => this.logService.error(`Error initializing OverlayBackground: ${error}`));
   }
 
   async bootstrap() {
@@ -1241,8 +1267,6 @@ export default class MainBackground {
     await this.notificationBackground.init();
     this.filelessImporterBackground.init();
     await this.commandsBackground.init();
-    await this.overlayBackground.init();
-    await this.tabsBackground.init();
     this.contextMenusBackground?.init();
     await this.idleBackground.init();
     this.webRequestBackground?.startListening();

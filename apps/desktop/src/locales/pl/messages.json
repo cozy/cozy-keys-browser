@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Utwórz konto"
   },
+  "setAStrongPassword": {
+    "message": "Ustaw silne hasło"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Ukończ tworzenie konta poprzez ustawienie hasła"
+  },
   "logIn": {
     "message": "Zaloguj się"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Podpowiedź do hasła głównego (opcjonalnie)"
+  },
+  "masterPassHintText": {
+    "message": "Jeśli zapomnisz hasła, podpowiedź hasła może zostać wysłana na Twój adres e-mail. $CURRENT$ z $MAXIMUM$ znaków.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Ustawienia"
@@ -554,17 +573,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "Hasła nie pasują do siebie."
-  },
-  "newAccountCreated": {
-    "message": "Konto zostało utworzone! Teraz możesz się zalogować."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "Zalogowałeś się pomyślnie"
   },
   "youMayCloseThisWindow": {
     "message": "Możesz zamknąć to okno"
+  },
+  "masterPassDoesntMatch": {
+    "message": "Hasła nie pasują do siebie."
+  },
+  "newAccountCreated": {
+    "message": "Konto zostało utworzone! Teraz możesz się zalogować."
   },
   "masterPassSent": {
     "message": "Wysłaliśmy Tobie wiadomość e-mail z podpowiedzią do hasła głównego."
@@ -647,18 +666,18 @@
   "authenticatorAppTitle": {
     "message": "Aplikacja uwierzytelniająca"
   },
-  "authenticatorAppDesc": {
-    "message": "Użyj aplikacji mobilnej (np. Authy lub Google Authenticator) do generowania czasowych kodów weryfikacyjnych.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Wprowadź kod wygenerowany przez aplikację uwierzytelniającą, jak Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "Klucz bezpieczeństwa YubiKey OTP"
+  "yubiKeyTitleV2": {
+    "message": "Klucz bezpieczeństwa Yubico OTP"
   },
   "yubiKeyDesc": {
     "message": "Użyj YubiKey jako metody dostępu do konta. Działa z YubiKey 4, 4 Nano, 4C i urządzeniami NEO."
   },
-  "duoDesc": {
-    "message": "Weryfikacja z użyciem Duo Security poprzez aplikację Duo Mobile, SMS, połączenie telefoniczne lub klucz bezpieczeństwa U2F.",
+  "duoDescV2": {
+    "message": "Wprowadź kod wygenerowany przez Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -674,8 +693,8 @@
   "emailTitle": {
     "message": "Adres e-mail"
   },
-  "emailDesc": {
-    "message": "Kody weryfikacyjne zostaną wysłane do Ciebie wiadomością e-mail."
+  "emailDescV2": {
+    "message": "Wpisz kod wysłany na Twój adres e-mail."
   },
   "loginUnavailable": {
     "message": "Logowanie jest niedostępne"
@@ -694,6 +713,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Wpisz podstawowy adres URL hostowanej instalacji Bitwarden."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Określ bazowy adres URL swojej instalacji Bitwarden. Przykład: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Dla zaawansowanych konfiguracji możesz określić podstawowy adres URL niezależnie dla każdej usługi."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Musisz dodać podstawowy adres URL serwera lub co najmniej jedno niestandardowe środowisko."
   },
   "customEnvironment": {
     "message": "Niestandardowe środowisko"
@@ -742,6 +770,9 @@
   },
   "loggedOut": {
     "message": "Wylogowano"
+  },
+  "loggedOutDesc": {
+    "message": "Zostałeś wylogowany z konta."
   },
   "loginExpired": {
     "message": "Twoja sesja wygasła."
@@ -1212,6 +1243,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Błąd podczas odświeżania tokenu"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nie znaleziono tokenu odświeżającego ani kluczy API. Spróbuj wylogować się i zalogować ponownie."
+  },
   "help": {
     "message": "Pomoc"
   },
@@ -1640,6 +1677,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Nowe hasło główne nie spełnia wymaganych zasad."
+  },
+  "receiveMarketingEmails": {
+    "message": "Otrzymuj e-maile od Bitwarden z ogłoszeniami, poradami i badaniami."
+  },
+  "unsubscribe": {
+    "message": "Anuluj subskrypcję"
+  },
+  "atAnyTime": {
+    "message": "w każdej chwili."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Kontynuując, zgadzasz się na"
+  },
+  "and": {
+    "message": "i"
   },
   "acceptPolicies": {
     "message": "Zaznaczając tę opcję, akceptujesz:"
@@ -2383,9 +2435,6 @@
   "denyLogIn": {
     "message": "Odrzuć logowanie"
   },
-  "approveLoginRequests": {
-    "message": "Zatwierdź prośby logowania"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Logowanie potwierdzone dla $EMAIL$ dnia $DEVICE$",
     "placeholders": {
@@ -2419,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Ta prośba nie jest już ważna."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Użyj tego urządzenia, aby zatwierdzić prośby logowania z innych urządzeń."
   },
   "confirmLoginAtemptForMail": {
     "message": "Potwierdź próbę logowania dla $EMAIL$",
@@ -2473,6 +2519,12 @@
   },
   "important": {
     "message": "Ważne:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Zostałeś wylogowany, ponieważ token dostępu nie mógł zostać odszyfrowany. Zaloguj się ponownie, aby rozwiązać ten problem."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Zostałeś wylogowany, ponieważ Twój token odświeżania nie mógł zostać pobrany. Zaloguj się ponownie, aby rozwiązać ten problem."
   },
   "masterPasswordHint": {
     "message": "Twoje hasło główne nie może zostać odzyskane, jeśli je zapomnisz!"
@@ -2653,6 +2705,9 @@
   "submenu": {
     "message": "Podmenu"
   },
+  "toggleSideNavigation": {
+    "message": "Przełącz nawigację boczną"
+  },
   "skipToContent": {
     "message": "Przejdź do treści"
   },
@@ -2787,6 +2842,9 @@
   },
   "confirmFilePassword": {
     "message": "Potwierdź hasło pliku"
+  },
+  "exportSuccess": {
+    "message": "Dane sejfu zostały wyeksportowane"
   },
   "multifactorAuthenticationCancelled": {
     "message": "Uwierzytelnianie wieloskładnikowe zostało anulowane"

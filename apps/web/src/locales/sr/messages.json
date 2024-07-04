@@ -582,10 +582,13 @@
     "message": "Ниво приступа"
   },
   "accessing": {
-    "message": "Accessing"
+    "message": "Приступ"
   },
   "loggedOut": {
     "message": "Одјављено"
+  },
+  "loggedOutDesc": {
+    "message": "Одјављени сте са свог налога."
   },
   "loginExpired": {
     "message": "Ваша сесија је истекла."
@@ -710,6 +713,12 @@
   "createAccount": {
     "message": "Креирај налог"
   },
+  "setAStrongPassword": {
+    "message": "Поставите јаку лозинку"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завршите креирање налога постављањем лозинке"
+  },
   "newAroundHere": {
     "message": "Нов овде?"
   },
@@ -718,6 +727,9 @@
   },
   "logIn": {
     "message": "Пријавите се"
+  },
+  "verifyIdentity": {
+    "message": "Потврдите идентитет"
   },
   "logInInitiated": {
     "message": "Пријава је покренута"
@@ -754,6 +766,19 @@
   },
   "masterPassHintLabel": {
     "message": "Савет Главне Лозинке"
+  },
+  "masterPassHintText": {
+    "message": "Ако заборавите лозинку, наговештај за лозинку се може послати на ваш имејл. $CURRENT$/$MAXIMUM$ карактера максимум.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Подешавања"
@@ -937,18 +962,18 @@
   "authenticatorAppTitle": {
     "message": "Апликација Аутентификатор"
   },
-  "authenticatorAppDesc": {
-    "message": "Користите апликацију за аутентификацију (као што је Authy или Google Authenticator) за генерисање верификационих кодова.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Унесите кôд који генерише апликација за аутентификацију као што је Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "YubiKey OTP сигурносни кључ"
+  "yubiKeyTitleV2": {
+    "message": "Yubico OTP сигурносни кључ"
   },
   "yubiKeyDesc": {
     "message": "Користите YubiKey за приступ налогу. Ради са YubiKey 4 и 5, и NEO уређаје."
   },
-  "duoDesc": {
-    "message": "Провери са Duo Security користећи Duo Mobile апликацију, СМС, телефонски позив, или U2F кључ.",
+  "duoDescV2": {
+    "message": "Унесите кôд који је генерисао Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -973,8 +998,8 @@
   "emailTitle": {
     "message": "Е-пошта"
   },
-  "emailDesc": {
-    "message": "Верификациони кодови ће вам бити послати имејлом."
+  "emailDescV2": {
+    "message": "Унесите код послат на вашу е-пошту."
   },
   "continue": {
     "message": "Настави"
@@ -1049,6 +1074,12 @@
   },
   "copyUuid": {
     "message": "Копирај UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Грешка при освежавању токена приступа"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Није пронађен токен за освежавање или АПИ кључеви. Покушајте да се одјавите и поново пријавите."
   },
   "warning": {
     "message": "Упозорење"
@@ -1608,35 +1639,44 @@
   "twoStepLoginAuthDesc": {
     "message": "Унесите главну лозинку да бисте изменили подешавања пријављивања у два корака."
   },
-  "twoStepAuthenticatorDesc": {
-    "message": "Следите ове кораке за подешавање пријаве у два корака помоћу апликације за проверу аутентичности:"
+  "twoStepAuthenticatorInstructionPrefix": {
+    "message": "Преузмите апликацију за аутентификацију као што је"
   },
-  "twoStepAuthenticatorDownloadApp": {
-    "message": "Преузмите апликацију за аутентификацију у два корака"
+  "twoStepAuthenticatorInstructionInfix1": {
+    "message": ","
   },
-  "twoStepAuthenticatorNeedApp": {
-    "message": "Треба вам апликација за аутентификацију у два корака? Преузмите једну од следеће"
+  "twoStepAuthenticatorInstructionInfix2": {
+    "message": "или"
   },
-  "iosDevices": {
-    "message": "iOS уређаји"
+  "twoStepAuthenticatorInstructionSuffix": {
+    "message": "."
   },
-  "androidDevices": {
-    "message": "Android уређаји"
+  "continueToExternalUrlTitle": {
+    "message": "Наставити на $URL$?",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
   },
-  "windowsDevices": {
-    "message": "Windows уређаји"
+  "continueToExternalUrlDesc": {
+    "message": "Напуштате Bitwarden и покрећете спољне веб странице у новом прозору."
   },
-  "twoStepAuthenticatorAppsRecommended": {
-    "message": "Ове апликације се препоручују, међутим, друге апликације за утврђивање аутентичности такође ће радити."
+  "twoStepContinueToBitwardenUrlTitle": {
+    "message": "Наставити на bitwarden.com?"
   },
-  "twoStepAuthenticatorScanCode": {
-    "message": "Скенирајте овај QR код са апликацијом за идентификљцију"
+  "twoStepContinueToBitwardenUrlDesc": {
+    "message": "Bitwarden Authenticator омогућава вам да чувате кључеве аутентификатора и генеришете ТОТП кодове за токове верификације у 2 корака. Сазнајте више на bitwarden.com."
+  },
+  "twoStepAuthenticatorScanCodeV2": {
+    "message": "Скенирајте КР кôд у наставку помоћу апликације за аутентификацију или унесите кључ."
   },
   "key": {
     "message": "Кључ"
   },
-  "twoStepAuthenticatorEnterCode": {
-    "message": "Унесите резултирајући шестоцифрени код из апликације"
+  "twoStepAuthenticatorEnterCodeV2": {
+    "message": "Верификациони кôд"
   },
   "twoStepAuthenticatorReaddDesc": {
     "message": "У случају да га требате додати на други уређај, доле је КР код (или кључ) који захтева ваша апликација за аутентификацију."
@@ -2785,12 +2825,6 @@
   "userDesc": {
     "message": "Редовни корисник са приступом додељеним колекцијама у вашој организацији."
   },
-  "manager": {
-    "message": "Менаџер"
-  },
-  "managerDesc": {
-    "message": "Менаџери могу да приступе додељеним колекцијама и управљају њима у вашој организацији."
-  },
   "all": {
     "message": "Све"
   },
@@ -3718,6 +3752,21 @@
   "nothingSelected": {
     "message": "Нисте ништа изабрали."
   },
+  "receiveMarketingEmails": {
+    "message": "Добијајте е-пошту од Bitwarden-а за најаве, савете и могућности истраживања."
+  },
+  "unsubscribe": {
+    "message": "Одјави се"
+  },
+  "atAnyTime": {
+    "message": "било када."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ако наставите, слажете се са"
+  },
+  "and": {
+    "message": "и"
+  },
   "acceptPolicies": {
     "message": "Означавањем овог поља пристајете на следеће:"
   },
@@ -4110,6 +4159,9 @@
   },
   "thisWindowWillCloseIn5Seconds": {
     "message": "Овај прозор ће се аутоматски затворити за 5 секунди"
+  },
+  "youMayCloseThisWindow": {
+    "message": "Можете затворити овај прозор"
   },
   "includeAllTeamsFeatures": {
     "message": "Све функције тима, плус:"
@@ -4567,12 +4619,6 @@
   "permission": {
     "message": "Дозвола"
   },
-  "managerPermissions": {
-    "message": "Менаџер созвола"
-  },
-  "adminPermissions": {
-    "message": "Админ дозволе"
-  },
   "accessEventLogs": {
     "message": "Приступе извештаја догађаја"
   },
@@ -4596,9 +4642,6 @@
   },
   "deleteAnyCollection": {
     "message": "Брише било коју колекцију"
-  },
-  "manageAssignedCollections": {
-    "message": "Управљање додељеним колекцијама"
   },
   "editAssignedCollections": {
     "message": "Уреди додељеним колекцијама"
@@ -5585,6 +5628,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Rotating the billing sync token will invalidate the previous token."
+  },
+  "selfHostedServer": {
+    "message": "личан хостинг"
+  },
+  "customEnvironment": {
+    "message": "Прилагођено окружење"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Наведите основну УРЛ адресу вашег локалног хостовања Bitwarden-а. Пример: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "За напредну конфигурацију, можете навести основну УРЛ адресу сваке услуге независно."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Морате додати или основни УРЛ сервера или бар једно прилагођено окружење."
+  },
+  "apiUrl": {
+    "message": "УРЛ АПИ Сервера"
+  },
+  "webVaultUrl": {
+    "message": "УРЛ сервера Сефа"
+  },
+  "identityUrl": {
+    "message": "УРЛ сервера идентитета"
+  },
+  "notificationsUrl": {
+    "message": "УРЛ сервера обавештења"
+  },
+  "iconsUrl": {
+    "message": "УРЛ сервера иконица"
+  },
+  "environmentSaved": {
+    "message": "УРЛ адресе окружења су сачуване"
   },
   "selfHostingTitle": {
     "message": "Ауто-хстинг"
@@ -6627,12 +6703,6 @@
   "restrictedCollectionAssignmentDesc": {
     "message": "Можете да доделите само колекције којима управљате."
   },
-  "accessAllCollectionsDesc": {
-    "message": "Grant access to all current and future collections."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "If checked, this will replace all other collection permissions."
-  },
   "selectMembers": {
     "message": "Изаберите чланове"
   },
@@ -6674,12 +6744,6 @@
   },
   "group": {
     "message": "Група"
-  },
-  "groupAccessAll": {
-    "message": "Ова група може приступити и изменити све ставке."
-  },
-  "memberAccessAll": {
-    "message": "Овај члан може приступити и изменити све ставке."
   },
   "domainVerification": {
     "message": "Верификација домена"
@@ -7616,6 +7680,9 @@
   "alreadyHaveAccount": {
     "message": "Већ имате налог?"
   },
+  "toggleSideNavigation": {
+    "message": "Укључите бочну навигацију"
+  },
   "skipToContent": {
     "message": "Прескочи на садржај"
   },
@@ -8141,11 +8208,17 @@
   "setUpGithubActions": {
     "message": "Подесити акције GitHub-а"
   },
+  "setUpKubernetes": {
+    "message": "Подесите Kubernetes"
+  },
   "setUpGitlabCICD": {
     "message": "Подесити GitLab CI/CD"
   },
   "setUpAnsible": {
     "message": "Подесити Ansible"
+  },
+  "rustSDKRepo": {
+    "message": "Преглед Rust спремишта"
   },
   "cSharpSDKRepo": {
     "message": "Преглед C# спремишта"
@@ -8293,9 +8366,128 @@
     "message": "Будите испред безбедносних пропуста надоградњом на плаћени план за побољшано праћење."
   },
   "approveAllRequests": {
-    "message": "Approve all requests"
+    "message": "Одобри све захтеве"
   },
   "allLoginRequestsApproved": {
-    "message": "All login requests approved"
+    "message": "Сви захтеви за пријаву су одобрени"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Ажуриране пореске информације"
+  },
+  "unverified": {
+    "message": "Непроверено"
+  },
+  "verified": {
+    "message": "Проверено"
+  },
+  "viewSecret": {
+    "message": "Види тајну"
+  },
+  "noClients": {
+    "message": "Нема клијената за попис"
+  },
+  "providerBillingEmailHint": {
+    "message": "Овај имејл ће примати све фактуре које се односе на овог провајдера",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
+  },
+  "upgradeOrganizationEnterprise": {
+    "message": "Идентификујте безбедносне ризике ревизијом приступа чланова"
+  },
+  "onlyAvailableForEnterpriseOrganization": {
+    "message": "Брзо прегледајте приступ чланова широм организације надоградњом на Enterprise план."
+  },
+  "date": {
+    "message": "Датум"
+  },
+  "exportClientReport": {
+    "message": "Извези извештај клијента"
+  },
+  "memberAccessReport": {
+    "message": "Приступ чланова"
+  },
+  "memberAccessReportDesc": {
+    "message": "Уверите се да чланови имају приступ правим акредитивима и да су њихови налози сигурни. Користите овај извештај да бисте добили ЦСВ приступ чланова и конфигурације налога."
+  },
+  "higherKDFIterations": {
+    "message": "Веће KDF итерације може помоћи у заштити ваше главне лозинке од грубе присиле од стране нападача."
+  },
+  "incrementsOf100,000": {
+    "message": "повећање од 100.000"
+  },
+  "smallIncrements": {
+    "message": "малим корацима"
+  },
+  "kdfIterationRecommends": {
+    "message": "Препоручујемо 600.000 или више"
+  },
+  "kdfToHighWarningIncreaseInIncrements": {
+    "message": "За старије уређаје, постављање вашег КДФ-а превисоко може довести до проблема са перформансама. Повећајте вредност у $VALUE$ и тестирајте своје уређаје.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "increments of 100,000"
+      }
+    }
+  },
+  "providerReinstate": {
+    "message": " Контактирајте корисничку подршку да бисте обновили претплату."
+  },
+  "secretPeopleDescription": {
+    "message": "Одобрите групама или особама приступ овој тајни. Дозволе постављене за особе ће заменити дозволе које су поставиле групе."
+  },
+  "secretPeopleEmptyMessage": {
+    "message": "Додајте особе или групе да бисте делили приступ овој тајни"
+  },
+  "secretMachineAccountsDescription": {
+    "message": "Одобрите налозима машине приступ овој тајни."
+  },
+  "secretMachineAccountsEmptyMessage": {
+    "message": "Додајте машинске налоге да бисте одобрили приступ овој тајни"
+  },
+  "smAccessRemovalWarningSecretTitle": {
+    "message": "Уклоните приступ овој тајни"
+  },
+  "smAccessRemovalSecretMessage": {
+    "message": "Ова радња ће вам уклонити приступ овој тајни."
+  },
+  "invoice": {
+    "message": "Фактура"
+  },
+  "unassignedSeatsAvailable": {
+    "message": "Имат $SEATS$ доступна нераспоређена места.",
+    "placeholders": {
+      "seats": {
+        "content": "$1",
+        "example": "10"
+      }
+    },
+    "description": "A message showing how many unassigned seats are available for a provider."
+  },
+  "contactYourProviderForAdditionalSeats": {
+    "message": "Обратите се свом админ провајдеру да бисте купили додатна места."
+  },
+  "open": {
+    "message": "Отвори",
+    "description": "The status of an invoice."
+  },
+  "uncollectible": {
+    "message": "Ненаплативо",
+    "description": "The status of an invoice."
+  },
+  "clientDetails": {
+    "message": "Детаљи клијента"
+  },
+  "downloadCSV": {
+    "message": "Преузми ЦСВ"
+  },
+  "billingHistoryDescription": {
+    "message": "Преузмите ЦСВ да бисте добили детаље о клијенту за сваки датум обрачуна. Пропорционални трошкови нису укључени у ЦСВ и могу се разликовати од повезане фактуре. За најтачније податке о обрачуну погледајте своје месечне фактуре.",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
   }
 }

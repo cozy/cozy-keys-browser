@@ -41,15 +41,21 @@ export abstract class TwoFactorBaseComponent {
     this.authed = true;
   }
 
+  /** @deprecated used for formPromise flows.*/
   protected async enable(enableFunction: () => Promise<void>) {
     try {
       await enableFunction();
       this.onUpdated.emit(true);
     } catch (e) {
       this.logService.error(e);
+      throw e;
     }
   }
 
+  /**
+   * @deprecated used for formPromise flows.
+   * TODO: Remove this method when formPromises are removed from all flows.
+   * */
   protected async disable(promise: Promise<unknown>) {
     const confirmed = await this.dialogService.openSimpleDialog({
       title: { key: "disable" },
@@ -76,6 +82,29 @@ export abstract class TwoFactorBaseComponent {
     } catch (e) {
       this.logService.error(e);
     }
+  }
+
+  protected async disableMethod() {
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: { key: "disable" },
+      content: { key: "twoStepDisableDesc" },
+      type: "warning",
+    });
+
+    if (!confirmed) {
+      return;
+    }
+
+    const request = await this.buildRequestModel(TwoFactorProviderRequest);
+    request.type = this.type;
+    if (this.organizationId != null) {
+      await this.apiService.putTwoFactorOrganizationDisable(this.organizationId, request);
+    } else {
+      await this.apiService.putTwoFactorDisable(request);
+    }
+    this.enabled = false;
+    this.platformUtilsService.showToast("success", null, this.i18nService.t("twoStepDisabled"));
+    this.onUpdated.emit(false);
   }
 
   protected async buildRequestModel<T extends SecretVerificationRequest>(

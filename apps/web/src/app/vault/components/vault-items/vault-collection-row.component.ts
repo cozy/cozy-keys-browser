@@ -69,9 +69,9 @@ export class VaultCollectionRowComponent {
     if (this.collection instanceof CollectionAdminView) {
       // Only show AddAccess if unmanaged and allowAdminAccessToAllCollectionItems is disabled
       return (
-        !this.organization.allowAdminAccessToAllCollectionItems &&
+        !this.organization?.allowAdminAccessToAllCollectionItems &&
         this.collection.unmanaged &&
-        this.organization.canEditUnmanagedCollections()
+        this.organization?.canEditUnmanagedCollections()
       );
     }
 
@@ -86,7 +86,7 @@ export class VaultCollectionRowComponent {
       return this.i18nService.t("canEdit");
     }
     if ((this.collection as CollectionAdminView).assigned) {
-      const permissionList = getPermissionList(this.organization?.flexibleCollections);
+      const permissionList = getPermissionList();
       return this.i18nService.t(
         permissionList.find((p) => p.perm === convertToPermission(this.collection))?.labelId,
       );

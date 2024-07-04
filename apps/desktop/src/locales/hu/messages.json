@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Fiók létrehozása"
   },
+  "setAStrongPassword": {
+    "message": "Erős jelszó beállítása"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "A fiók létrehozásának befejezése jelszó beállításával"
+  },
   "logIn": {
     "message": "Bejelentkezés"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Mesterjelszó emlékeztető (nem kötelező)"
+  },
+  "masterPassHintText": {
+    "message": "Ha elfelejtettük a jelszót, a jelszóra vonatkozó tippet elküldhetjük a saját email címre. $CURRENT$/$MAXIMUM$ maximum karakter.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Beállítások"
@@ -554,17 +573,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "A mesterjelszó megerősítése nem egyezik."
-  },
-  "newAccountCreated": {
-    "message": "A fiók létrehozásra került. Most már be lehet jelentkezni."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "A bejelentkezés sikeres volt."
   },
   "youMayCloseThisWindow": {
     "message": "Most már bezárható ez az ablak."
+  },
+  "masterPassDoesntMatch": {
+    "message": "A mesterjelszó megerősítése nem egyezik."
+  },
+  "newAccountCreated": {
+    "message": "A fiók létrehozásra került. Most már be lehet jelentkezni."
   },
   "masterPassSent": {
     "message": "Elküldtünk neked egy emailt a mesterjelszó emlékeztetővel."
@@ -647,18 +666,18 @@
   "authenticatorAppTitle": {
     "message": "Hitelesítő alkalmazás"
   },
-  "authenticatorAppDesc": {
-    "message": "Hitelesítő alkalmazás használata (mint például az Authy vagy a Google Authenticator) idő alapú ellenőrzőkód generálásához.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Adjunk meg egy hitelesítő alkalmazás, például a Bitwarden Authenticator által generált kódot.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "YubiKey OTP egyszeri időalapú jelszó biztonsági kulcs"
+  "yubiKeyTitleV2": {
+    "message": "YubiKey OTP biztonsági kulcs"
   },
   "yubiKeyDesc": {
     "message": "YubiKey használata a fiók eléréséhez. Működik a YubiKey 4, 4 Nano, 4C, és NEO eszközökkel."
   },
-  "duoDesc": {
-    "message": "Ellenőrzés Duo Security segítségével a Duo Mobile alkalmazás, SMS, telefonhívás vagy U2F biztonsági kulcs használatával.",
+  "duoDescV2": {
+    "message": "Adjuk meg a Duo Security által generált kódot.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -674,8 +693,8 @@
   "emailTitle": {
     "message": "Email cím"
   },
-  "emailDesc": {
-    "message": "Az ellenőrző kódok emailben kerülnek elküldésre."
+  "emailDescV2": {
+    "message": "Adjuk meg az email címre elküldött kódot."
   },
   "loginUnavailable": {
     "message": "A bejelentkezés nem érhető el."
@@ -694,6 +713,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "A helyileg üzemeltetett Bitwarden telepítés webcímének megadása."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Adjuk meg a helyileg tárolt Bitwarden telepítés alap webcímét. Példa: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Speciális konfigurációhoz külön-külön megadhatjuk az egyes szolgáltatások alap webcímét."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Hozzá kell adni az alapszerver webcímét vagy legalább egy egyedi környezetet."
   },
   "customEnvironment": {
     "message": "Egyedi környezet"
@@ -742,6 +770,9 @@
   },
   "loggedOut": {
     "message": "Megtörtént a kijelentkezés."
+  },
+  "loggedOutDesc": {
+    "message": "Megtörtént a kijelentkezés a fiókból."
   },
   "loginExpired": {
     "message": "A bejelentkezési munkamenet lejárt."
@@ -1212,6 +1243,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Hozzáférési vezérjel frissítési hiba"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nem található frissítési vezérjel vagy API kulcs. Próbáljunk meg kijelentkezni, majd újra bejelentkezni."
+  },
   "help": {
     "message": "Súgó"
   },
@@ -1640,6 +1677,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Az új mesterjelszó nem felel meg a szabály követelményeknek."
+  },
+  "receiveMarketingEmails": {
+    "message": "Emaileket kaphatunk a Bitwardentől bejelentésekről, tanácsokról és kutatási lehetőségekről."
+  },
+  "unsubscribe": {
+    "message": "Leiratkozás"
+  },
+  "atAnyTime": {
+    "message": "bármikor."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "A folytatással elfogadjuk"
+  },
+  "and": {
+    "message": "és"
   },
   "acceptPolicies": {
     "message": "A kapcsoló bekapcsolásával egyetértünk a következőkkel:"
@@ -2383,9 +2435,6 @@
   "denyLogIn": {
     "message": "Bejelentkezés megtagadása"
   },
-  "approveLoginRequests": {
-    "message": "Bejelentkezési kérelmek jóváhagyása"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "A bejelelentketés $EMAIL$ email címmel megerősítésre került $DEVICE$ eszközön.",
     "placeholders": {
@@ -2419,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "A kérés a továbbiakban már nem érvényes."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Ezen eszköz használata a más eszközökről történő bejelentkezési kérések jóváhagyására."
   },
   "confirmLoginAtemptForMail": {
     "message": "Bejelentkezési kísérlet megerősítése $EMAIL$ email címmel",
@@ -2473,6 +2519,12 @@
   },
   "important": {
     "message": "Fontos:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Megtörtént a kijelentkezés, mert a hozzáférési vezérjelet nem sikerült visszafejteni. Jelentkezzünk be újra a probléma megoldásához."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Megtörtént a kijelentkezés, mert a hozzáférési vezérjelet nem sikerült visszafejteni. Jelentkezzünk be újra a probléma megoldásához."
   },
   "masterPasswordHint": {
     "message": "Az elfelejtett mesterjelszó nem állítható helyre, ha elfelejtik!"
@@ -2653,6 +2705,9 @@
   "submenu": {
     "message": "Almenü"
   },
+  "toggleSideNavigation": {
+    "message": "Toggle side navigation"
+  },
   "skipToContent": {
     "message": "Ugrás a tartalomra"
   },
@@ -2787,6 +2842,9 @@
   },
   "confirmFilePassword": {
     "message": "Fájl jelszó megerősítés"
+  },
+  "exportSuccess": {
+    "message": "A széfadatok exportálásra kerültek."
   },
   "multifactorAuthenticationCancelled": {
     "message": "A többtényezős hitelesítés megszakításra került."

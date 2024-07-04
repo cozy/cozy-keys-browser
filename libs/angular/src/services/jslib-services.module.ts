@@ -133,10 +133,7 @@ import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/pla
 import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { FileUploadService as FileUploadServiceAbstraction } from "@bitwarden/common/platform/abstractions/file-upload/file-upload.service";
-import {
-  I18nService,
-  I18nService as I18nServiceAbstraction,
-} from "@bitwarden/common/platform/abstractions/i18n.service";
+import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { KeyGenerationService as KeyGenerationServiceAbstraction } from "@bitwarden/common/platform/abstractions/key-generation.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/common/platform/abstractions/messaging.service";
@@ -190,6 +187,9 @@ import { DefaultStateProvider } from "@bitwarden/common/platform/state/implement
 import { StateEventRegistrarService } from "@bitwarden/common/platform/state/state-event-registrar.service";
 import { StateEventRunnerService } from "@bitwarden/common/platform/state/state-event-runner.service";
 /* eslint-enable import/no-restricted-paths */
+import { SyncService } from "@bitwarden/common/platform/sync";
+// eslint-disable-next-line no-restricted-imports -- Needed for DI
+import { DefaultSyncService } from "@bitwarden/common/platform/sync/internal";
 import {
   DefaultThemeStateService,
   ThemeStateService,
@@ -202,12 +202,6 @@ import { NotificationsService } from "@bitwarden/common/services/notifications.s
 import { SearchService } from "@bitwarden/common/services/search.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vault-timeout/vault-timeout-settings.service";
 import { VaultTimeoutService } from "@bitwarden/common/services/vault-timeout/vault-timeout.service";
-import {
-  legacyPasswordGenerationServiceFactory,
-  legacyUsernameGenerationServiceFactory,
-} from "@bitwarden/common/tools/generator";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
-import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
 import {
   PasswordStrengthService,
   PasswordStrengthServiceAbstraction,
@@ -229,8 +223,6 @@ import {
   FolderService as FolderServiceAbstraction,
   InternalFolderService,
 } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
-import { SyncNotifierService as SyncNotifierServiceAbstraction } from "@bitwarden/common/vault/abstractions/sync/sync-notifier.service.abstraction";
-import { SyncService as SyncServiceAbstraction } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { TotpService as TotpServiceAbstraction } from "@bitwarden/common/vault/abstractions/totp.service";
 import { VaultSettingsService as VaultSettingsServiceAbstraction } from "@bitwarden/common/vault/abstractions/vault-settings/vault-settings.service";
 import { CipherService } from "@bitwarden/common/vault/services/cipher.service";
@@ -238,11 +230,15 @@ import { CollectionService } from "@bitwarden/common/vault/services/collection.s
 import { CipherFileUploadService } from "@bitwarden/common/vault/services/file-upload/cipher-file-upload.service";
 import { FolderApiService } from "@bitwarden/common/vault/services/folder/folder-api.service";
 import { FolderService } from "@bitwarden/common/vault/services/folder/folder.service";
-import { SyncNotifierService } from "@bitwarden/common/vault/services/sync/sync-notifier.service";
-import { SyncService } from "@bitwarden/common/vault/services/sync/sync.service";
 import { TotpService } from "@bitwarden/common/vault/services/totp.service";
 import { VaultSettingsService } from "@bitwarden/common/vault/services/vault-settings/vault-settings.service";
 import { ToastService } from "@bitwarden/components";
+import {
+  legacyPasswordGenerationServiceFactory,
+  legacyUsernameGenerationServiceFactory,
+  PasswordGenerationServiceAbstraction,
+  UsernameGenerationServiceAbstraction,
+} from "@bitwarden/generator-legacy";
 import {
   ImportApiService,
   ImportApiServiceAbstraction,
@@ -491,6 +487,7 @@ const safeProviders: SafeProvider[] = [
       UserVerificationServiceAbstraction,
       LogService,
       InternalAccountService,
+      EnvironmentService,
     ],
   }),
   safeProvider({
@@ -648,8 +645,8 @@ const safeProviders: SafeProvider[] = [
     deps: [ApiServiceAbstraction, FileUploadServiceAbstraction, InternalSendService],
   }),
   safeProvider({
-    provide: SyncServiceAbstraction,
-    useClass: SyncService,
+    provide: SyncService,
+    useClass: DefaultSyncService,
     deps: [
       InternalMasterPasswordServiceAbstraction,
       AccountServiceAbstraction,
@@ -676,7 +673,7 @@ const safeProviders: SafeProvider[] = [
       TokenServiceAbstraction,
       AuthServiceAbstraction,
       CozyClientService,
-      I18nService,
+      I18nServiceAbstraction,
     ],
   }),
   safeProvider({
@@ -802,14 +799,13 @@ const safeProviders: SafeProvider[] = [
     useClass: devFlagEnabled("noopNotifications") ? NoopNotificationsService : NotificationsService,
     deps: [
       LogService,
-      SyncServiceAbstraction,
+      SyncService,
       AppIdServiceAbstraction,
       ApiServiceAbstraction,
       EnvironmentService,
       LOGOUT_CALLBACK,
       StateServiceAbstraction,
       AuthServiceAbstraction,
-      AuthRequestServiceAbstraction,
       MessagingServiceAbstraction,
     ],
   }),
@@ -837,6 +833,7 @@ const safeProviders: SafeProvider[] = [
       OrganizationServiceAbstraction,
       EventUploadServiceAbstraction,
       AuthServiceAbstraction,
+      AccountServiceAbstraction,
     ],
   }),
   safeProvider({
@@ -882,7 +879,6 @@ const safeProviders: SafeProvider[] = [
     provide: UserVerificationServiceAbstraction,
     useClass: UserVerificationService,
     deps: [
-      StateServiceAbstraction,
       CryptoServiceAbstraction,
       AccountServiceAbstraction,
       InternalMasterPasswordServiceAbstraction,
@@ -948,12 +944,7 @@ const safeProviders: SafeProvider[] = [
     // it depends on SyncService so that new data can be retrieved through the sync
     // rather than updating the OrganizationService directly. Instead OrganizationService
     // subscribes to sync notifications and will update itself based on that.
-    deps: [ApiServiceAbstraction, SyncServiceAbstraction],
-  }),
-  safeProvider({
-    provide: SyncNotifierServiceAbstraction,
-    useClass: SyncNotifierService,
-    deps: [],
+    deps: [ApiServiceAbstraction, SyncService],
   }),
   safeProvider({
     provide: DefaultConfigService,
@@ -1128,7 +1119,7 @@ const safeProviders: SafeProvider[] = [
       EncryptService,
       I18nServiceAbstraction,
       OrganizationApiServiceAbstraction,
-      SyncServiceAbstraction,
+      SyncService,
     ],
   }),
   safeProvider({

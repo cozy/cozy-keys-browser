@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Account aanmaken"
   },
+  "setAStrongPassword": {
+    "message": "Sterk wachtwoord instellen"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Rond het aanmaken van je account af met het instellen van een wachtwoord"
+  },
   "logIn": {
     "message": "Inloggen"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Hoofdwachtwoordhint (optioneel)"
+  },
+  "masterPassHintText": {
+    "message": "Als je je wachtwoord vergeten bent, kan de hint naar je e-mail gestuurd worden. $CURRENT$/$MAXIMUM$ tekens maximaal.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Instellingen"
@@ -554,17 +573,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "De hoofdwachtwoorden komen niet overeen."
-  },
-  "newAccountCreated": {
-    "message": "Je nieuwe account is aangemaakt! Je kunt nu inloggen."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "Je bent succesvol ingelogd"
   },
   "youMayCloseThisWindow": {
     "message": "Je kunt dit venster sluiten"
+  },
+  "masterPassDoesntMatch": {
+    "message": "De hoofdwachtwoorden komen niet overeen."
+  },
+  "newAccountCreated": {
+    "message": "Je nieuwe account is aangemaakt! Je kunt nu inloggen."
   },
   "masterPassSent": {
     "message": "We hebben je een e-mail gestuurd met je hoofdwachtwoordhint."
@@ -647,18 +666,18 @@
   "authenticatorAppTitle": {
     "message": "Authenticatie-app"
   },
-  "authenticatorAppDesc": {
-    "message": "Gebruik een authenticatie-app (zoals Authy of Google Authenticator) om tijdgebaseerde authenticatiecodes te genereren.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Door een authenticatie-app zoals Bitwarden Authenticator gegenereerde code invoeren.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
+  "yubiKeyTitleV2": {
     "message": "YubiKey OTP-beveiligingssleutel"
   },
   "yubiKeyDesc": {
     "message": "Gebruik een YubiKey om toegang te krijgen tot je account. Werkt met YubiKey 4, 4 Nano, 4C en Neo-apparaten."
   },
-  "duoDesc": {
-    "message": "Verificatie met Duo Security middels de Duo Mobile-app, sms, spraakoproep of een U2F-beveiligingssleutel.",
+  "duoDescV2": {
+    "message": "Door Duo Security gegenereerde code invoeren.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -674,8 +693,8 @@
   "emailTitle": {
     "message": "E-mail"
   },
-  "emailDesc": {
-    "message": "Je ontvangt verificatiecodes via e-mail."
+  "emailDescV2": {
+    "message": "Via e-mail verstuurde code invoeren."
   },
   "loginUnavailable": {
     "message": "Login niet beschikbaar"
@@ -694,6 +713,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Geef de basis-URL van jouw zelfgehoste Bitwarden-installatie."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specificeer de basis-URL van je zelfgehoste Bitwarden-installatie. Bijvoorbeeld: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Voor geavanceerde instellingen, kun je de basis-URL van iedere dienst afzonderlijk instellen."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Je moet de basisserver-URL of ten minste één aangepaste omgeving toevoegen."
   },
   "customEnvironment": {
     "message": "Aangepaste omgeving"
@@ -742,6 +770,9 @@
   },
   "loggedOut": {
     "message": "Uitgelogd"
+  },
+  "loggedOutDesc": {
+    "message": "U bent uitgelogd uit uw account."
   },
   "loginExpired": {
     "message": "Je inlogsessie is verlopen."
@@ -1212,6 +1243,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Fout bij vernieuwen toegangstoken"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Geen vernieuwingstoken of API-sleutels gevonden. Probeer uit te loggen en weer in te loggen."
+  },
   "help": {
     "message": "Help"
   },
@@ -1641,6 +1678,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Je nieuwe hoofdwachtwoord voldoet niet aan de beleidseisen."
   },
+  "receiveMarketingEmails": {
+    "message": "Ontvang e-mailberichten van Bitwarden voor aankondigingen, advies en onderzoeksmogelijkheden."
+  },
+  "unsubscribe": {
+    "message": "Afmelden"
+  },
+  "atAnyTime": {
+    "message": "op ieder moment."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Door verder te gaan, ga je akkoord met de"
+  },
+  "and": {
+    "message": "en"
+  },
   "acceptPolicies": {
     "message": "Door dit vakje aan te vinken, ga je akkoord met het volgende:"
   },
@@ -1684,10 +1736,10 @@
     "message": "Schakel een extra beveiligingsniveau in door een vingerafdrukzin te vereisen bij het verbinden van je desktop en browser. Wanneer ingeschakeld moet je iedere verbinding verifiëren."
   },
   "enableHardwareAcceleration": {
-    "message": "Use hardware acceleration"
+    "message": "Gebruik hardware acceleratie"
   },
   "enableHardwareAccelerationDesc": {
-    "message": "By default this setting is ON. Turn OFF only if you experience graphical issues. Restart is required."
+    "message": "Standaard staat deze instelling aan. Zet dit alleen uit als je grafische problemen ondervindt. Opnieuw opstarten is vereist."
   },
   "approve": {
     "message": "Goedkeuren"
@@ -2178,7 +2230,7 @@
     "message": "Genereer een e-mailalias met een externe doorstuurservice."
   },
   "forwarderError": {
-    "message": "$SERVICENAME$ error: $ERRORMESSAGE$",
+    "message": "$SERVICENAME$ fout: $ERRORMESSAGE$",
     "description": "Reports an error returned by a forwarding service to the user.",
     "placeholders": {
       "servicename": {
@@ -2192,11 +2244,11 @@
     }
   },
   "forwarderGeneratedBy": {
-    "message": "Generated by Bitwarden.",
+    "message": "Gegenereerd door Bitwarden.",
     "description": "Displayed with the address on the forwarding service's configuration screen."
   },
   "forwarderGeneratedByWithWebsite": {
-    "message": "Website: $WEBSITE$. Generated by Bitwarden.",
+    "message": "Website: $WEBSITE$. Gegenereerd door Bitwarden.",
     "description": "Displayed with the address on the forwarding service's configuration screen.",
     "placeholders": {
       "WEBSITE": {
@@ -2206,7 +2258,7 @@
     }
   },
   "forwaderInvalidToken": {
-    "message": "Invalid $SERVICENAME$ API token",
+    "message": "Ongeldige $SERVICENAME$ API token",
     "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
     "placeholders": {
       "servicename": {
@@ -2216,7 +2268,7 @@
     }
   },
   "forwaderInvalidTokenWithMessage": {
-    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "message": "Ongeldige $SERVICENAME$ API token: $ERRORMESSAGE$",
     "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
     "placeholders": {
       "servicename": {
@@ -2230,7 +2282,7 @@
     }
   },
   "forwarderNoAccountId": {
-    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "message": "Kan $SERVICENAME$ gemaskerde e-mailaccount-ID niet verkrijgen.",
     "description": "Displayed when the forwarding service fails to return an account ID.",
     "placeholders": {
       "servicename": {
@@ -2240,7 +2292,7 @@
     }
   },
   "forwarderNoDomain": {
-    "message": "Invalid $SERVICENAME$ domain.",
+    "message": "Ongeldig $SERVICENAME$ domein.",
     "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
     "placeholders": {
       "servicename": {
@@ -2250,7 +2302,7 @@
     }
   },
   "forwarderNoUrl": {
-    "message": "Invalid $SERVICENAME$ url.",
+    "message": "Ongeldige $SERVICENAME$ url.",
     "description": "Displayed when the url of the forwarding service wasn't supplied.",
     "placeholders": {
       "servicename": {
@@ -2260,7 +2312,7 @@
     }
   },
   "forwarderUnknownError": {
-    "message": "Unknown $SERVICENAME$ error occurred.",
+    "message": "Onbekende $SERVICENAME$ fout opgetreden.",
     "description": "Displayed when the forwarding service failed due to an unknown error.",
     "placeholders": {
       "servicename": {
@@ -2270,7 +2322,7 @@
     }
   },
   "forwarderUnknownForwarder": {
-    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "message": "Onbekende doorstuurer: '$SERVICENAME$'.",
     "description": "Displayed when the forwarding service is not supported.",
     "placeholders": {
       "servicename": {
@@ -2383,9 +2435,6 @@
   "denyLogIn": {
     "message": "Inloggen afwijzen"
   },
-  "approveLoginRequests": {
-    "message": "Inlogverzoeken goedkeuren"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Inloggen voor $EMAIL$ bevestigd op $DEVICE$",
     "placeholders": {
@@ -2419,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Dit verzoek is niet langer geldig."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Gebruik dit apparaat voor het goedkeuren van inlogverzoeken van andere apparaten."
   },
   "confirmLoginAtemptForMail": {
     "message": "Inlogpoging voor $EMAIL$ bevestigen",
@@ -2473,6 +2519,12 @@
   },
   "important": {
     "message": "Belangrijk:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "U bent uitgelogd omdat uw toegangstoken niet kon worden gedecodeerd. Log opnieuw in om dit probleem op te lossen."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "U bent uitgelogd omdat uw toegangstoken niet kon worden opgehaald. Log opnieuw in om dit probleem op te lossen."
   },
   "masterPasswordHint": {
     "message": "Je hoofdwachtwoord kan niet hersteld worden als je het vergeet!"
@@ -2653,6 +2705,9 @@
   "submenu": {
     "message": "Submenu"
   },
+  "toggleSideNavigation": {
+    "message": "Zijnavigatie schakelen"
+  },
   "skipToContent": {
     "message": "Ga naar de inhoud"
   },
@@ -2788,6 +2843,9 @@
   "confirmFilePassword": {
     "message": "Bestandswachtwoord bevestigen"
   },
+  "exportSuccess": {
+    "message": "Kluisgegevens geëxporteerd"
+  },
   "multifactorAuthenticationCancelled": {
     "message": "Multifactor-authenticatie geannuleerd"
   },
@@ -2890,7 +2948,7 @@
     "message": "Fout bij toewijzen doelmap."
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "Items weergeven in $NAME$",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -2900,7 +2958,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "Terug naar $NAME$",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -2910,11 +2968,11 @@
     }
   },
   "back": {
-    "message": "Back",
+    "message": "Terug",
     "description": "Button text to navigate back"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "Verwijder $NAME$",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {

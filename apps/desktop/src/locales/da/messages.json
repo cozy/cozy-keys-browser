@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Opret konto"
   },
+  "setAStrongPassword": {
+    "message": "Indstil en stærk adgangskode"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Afslut kontooprettelsen med at indstille en adgangskode"
+  },
   "logIn": {
     "message": "Log ind"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Hovedadgangskodetip (valgfrit)"
+  },
+  "masterPassHintText": {
+    "message": "Glemmer du din adgangskode, kan adgangskodetippet sendes til din e-mail. $CURRENT$/$MAXIMUM$ tegns maksimum.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Indstillinger"
@@ -554,17 +573,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "De to adgangskoder matcher ikke."
-  },
-  "newAccountCreated": {
-    "message": "Den nye konto er oprettet! Der kan nu logges ind."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "Du er nu logget ind"
   },
   "youMayCloseThisWindow": {
     "message": "Dette vindue kan nu lukkes"
+  },
+  "masterPassDoesntMatch": {
+    "message": "De to adgangskoder matcher ikke."
+  },
+  "newAccountCreated": {
+    "message": "Den nye konto er oprettet! Der kan nu logges ind."
   },
   "masterPassSent": {
     "message": "Der er sendt en e-mail til dig med dit hovedadgangskodetip."
@@ -647,18 +666,18 @@
   "authenticatorAppTitle": {
     "message": "Godkendelses-app"
   },
-  "authenticatorAppDesc": {
-    "message": "Brug en godkendelses-app (såsom Authy eller Google Autenticator) til at generere tidsbaserede bekræftelseskoder.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Angiv en kode genereret af en godkendelses-app såsom Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "YubiKey OTP-sikkerhedsnøgle"
+  "yubiKeyTitleV2": {
+    "message": "Yubico OTP-sikkerhedsnøgle"
   },
   "yubiKeyDesc": {
     "message": "Brug en YubiKey for at tilgå din konto. Fungerer med YubiKey 4-, 4 Nano-, 4C- samt NEO-enheder."
   },
-  "duoDesc": {
-    "message": "Bekræft med Duo Security vha. Duo Mobile-app, SMS, telefonopkald eller U2F-sikkerhedsnøgle.",
+  "duoDescV2": {
+    "message": "Angiv en kode genereret af Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -674,8 +693,8 @@
   "emailTitle": {
     "message": "E-mail"
   },
-  "emailDesc": {
-    "message": "Bekræftelseskoder vil blive e-mailet til dig."
+  "emailDescV2": {
+    "message": "Angiv en kode tilsendt pr. e-mail."
   },
   "loginUnavailable": {
     "message": "Login utilgængelig"
@@ -694,6 +713,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Angiv grund-URL'en til den lokal-hostede Bitwarden-installation."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
   },
   "customEnvironment": {
     "message": "Tilpasset miljø"
@@ -742,6 +770,9 @@
   },
   "loggedOut": {
     "message": "Logget ud"
+  },
+  "loggedOutDesc": {
+    "message": "Der er blevet logget ud af kontoen."
   },
   "loginExpired": {
     "message": "Loginsessionen er udløbet."
@@ -1212,6 +1243,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Adgangstoken genopfriskningsfejl"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Ingen genopfriskningstoken eller API-nøgler fundet. Prøv at logge ud og dernæst ind igen."
+  },
   "help": {
     "message": "Hjælp"
   },
@@ -1640,6 +1677,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Din nye hovedadgangskode opfylder ikke politikkravene."
+  },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Afmeld"
+  },
+  "atAnyTime": {
+    "message": "til enhver tid."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ved at fortsætte, accepterer du"
+  },
+  "and": {
+    "message": "og"
   },
   "acceptPolicies": {
     "message": "Ved at afkrydse dette felt accepterer du flg.:"
@@ -2383,9 +2435,6 @@
   "denyLogIn": {
     "message": "Afvis login"
   },
-  "approveLoginRequests": {
-    "message": "Godkend loginanmodninger"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Login bekræftet for $EMAIL$ på $DEVICE$",
     "placeholders": {
@@ -2419,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Anmodningen er ikke længere gyldig."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Brug denne enhed til at godkende loginanmodninger fra andre enheder."
   },
   "confirmLoginAtemptForMail": {
     "message": "Bekræft loginforsøg for $EMAIL$",
@@ -2473,6 +2519,12 @@
   },
   "important": {
     "message": "Vigtigt:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Kontoen er blevet logget ud, fordi adgangstokenet ikke kunne dekrypteres. Log ind igen for at løse problemet."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Kontoen er blevet logget ud, fordi opfriskningstokenet ikke kunne dekrypteres. Log ind igen for at løse problemet."
   },
   "masterPasswordHint": {
     "message": "Hovedadgangskoden kan ikke gendannes, hvis den glemmes!"
@@ -2653,6 +2705,9 @@
   "submenu": {
     "message": "Undermenu"
   },
+  "toggleSideNavigation": {
+    "message": "Slå sidenavigering til/fra"
+  },
   "skipToContent": {
     "message": "Spring til indhold"
   },
@@ -2787,6 +2842,9 @@
   },
   "confirmFilePassword": {
     "message": "Bekræft filadgangskode"
+  },
+  "exportSuccess": {
+    "message": "Boksdata eksporteret"
   },
   "multifactorAuthenticationCancelled": {
     "message": "Multifaktorgodkendelse afbrudt"

@@ -17,6 +17,7 @@ import {
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
 
@@ -40,6 +41,10 @@ import {
   SecretDialogComponent,
   SecretOperation,
 } from "../secrets/dialog/secret-dialog.component";
+import {
+  SecretViewDialogComponent,
+  SecretViewDialogParams,
+} from "../secrets/dialog/secret-view-dialog.component";
 import { SecretService } from "../secrets/secret.service";
 import {
   ServiceAccountDialogComponent,
@@ -94,6 +99,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private smOnboardingTasksService: SMOnboardingTasksService,
+    private logService: LogService,
   ) {}
 
   ngOnInit() {
@@ -275,6 +281,15 @@ export class OverviewComponent implements OnInit, OnDestroy {
     });
   }
 
+  openViewSecret(secretId: string) {
+    this.dialogService.open<unknown, SecretViewDialogParams>(SecretViewDialogComponent, {
+      data: {
+        organizationId: this.organizationId,
+        secretId: secretId,
+      },
+    });
+  }
+
   openDeleteSecret(event: SecretListView[]) {
     this.dialogService.open<unknown, SecretDeleteOperation>(SecretDeleteDialogComponent, {
       data: {
@@ -297,12 +312,13 @@ export class OverviewComponent implements OnInit, OnDestroy {
     SecretsListComponent.copySecretName(name, this.platformUtilsService, this.i18nService);
   }
 
-  copySecretValue(id: string) {
-    SecretsListComponent.copySecretValue(
+  async copySecretValue(id: string) {
+    await SecretsListComponent.copySecretValue(
       id,
       this.platformUtilsService,
       this.i18nService,
       this.secretService,
+      this.logService,
     );
   }
 
@@ -310,11 +326,9 @@ export class OverviewComponent implements OnInit, OnDestroy {
     SecretsListComponent.copySecretUuid(id, this.platformUtilsService, this.i18nService);
   }
 
-  protected hideOnboarding() {
+  protected async hideOnboarding() {
     this.showOnboarding = false;
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.saveCompletedTasks(this.organizationId, {
+    await this.saveCompletedTasks(this.organizationId, {
       importSecrets: true,
       createSecret: true,
       createProject: true,

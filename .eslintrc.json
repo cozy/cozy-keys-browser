@@ -207,11 +207,29 @@
       }
     },
     {
-      "files": ["libs/tools/generator/extensions/src/**/*.ts"],
+      "files": ["libs/tools/generator/extensions/history/src/**/*.ts"],
       "rules": {
         "no-restricted-imports": [
           "error",
-          { "patterns": ["@bitwarden/generator-extensions/*", "src/**/*"] }
+          { "patterns": ["@bitwarden/generator-history/*", "src/**/*"] }
+        ]
+      }
+    },
+    {
+      "files": ["libs/tools/generator/extensions/legacy/src/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          { "patterns": ["@bitwarden/generator-legacy/*", "src/**/*"] }
+        ]
+      }
+    },
+    {
+      "files": ["libs/tools/generator/extensions/navigation/src/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          { "patterns": ["@bitwarden/generator-navigation/*", "src/**/*"] }
         ]
       }
     },
@@ -306,6 +324,26 @@
       "files": ["bitwarden_license/bit-common/src/**/*.ts"],
       "rules": {
         "no-restricted-imports": ["error", { "patterns": ["@bitwarden/bit-common/*", "src/**/*"] }]
+      }
+    },
+    {
+      "files": ["apps/**/*.ts"],
+      "rules": {
+        // Catches static imports
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": ["biwarden_license/**", "@bitwarden/bit-common/*", "@bitwarden/bit-web/*"]
+          }
+        ],
+        // Catches dynamic imports, e.g. in routing modules where modules are lazy-loaded
+        "no-restricted-syntax": [
+          "error",
+          {
+            "message": "Don't import Bitwarden licensed code into OSS code.",
+            "selector": "ImportExpression > Literal.source[value=/.*(bitwarden_license|bit-common|bit-web).*/]"
+          }
+        ]
       }
     }
   ]

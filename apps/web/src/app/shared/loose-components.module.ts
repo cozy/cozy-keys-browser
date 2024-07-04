@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import {
   PasswordCalloutComponent,
   UserVerificationFormInputComponent,
+  VaultTimeoutInputComponent,
 } from "@bitwarden/auth/angular";
 import { LayoutComponent, NavigationModule } from "@bitwarden/components";
 
@@ -28,7 +29,7 @@ import { RegisterFormModule } from "../auth/register-form/register-form.module";
 import { RemovePasswordComponent } from "../auth/remove-password.component";
 import { SetPasswordComponent } from "../auth/set-password.component";
 import { AccountComponent } from "../auth/settings/account/account.component";
-import { ChangeAvatarComponent } from "../auth/settings/account/change-avatar.component";
+import { ChangeAvatarDialogComponent } from "../auth/settings/account/change-avatar-dialog.component";
 import { ChangeEmailComponent } from "../auth/settings/account/change-email.component";
 import { DangerZoneComponent } from "../auth/settings/account/danger-zone.component";
 import { DeauthorizeSessionsComponent } from "../auth/settings/account/deauthorize-sessions.component";
@@ -70,7 +71,6 @@ import { ProductSwitcherModule } from "../layouts/product-switcher/product-switc
 import { UserLayoutComponent } from "../layouts/user-layout.component";
 import { DomainRulesComponent } from "../settings/domain-rules.component";
 import { PreferencesComponent } from "../settings/preferences.component";
-import { VaultTimeoutInputComponent } from "../settings/vault-timeout-input.component";
 import { GeneratorComponent } from "../tools/generator.component";
 import { PasswordGeneratorHistoryComponent } from "../tools/password-generator-history.component";
 import { AddEditComponent as SendAddEditComponent } from "../tools/send/add-edit.component";
@@ -116,6 +116,7 @@ import { SharedModule } from "./shared.module";
     UserLayoutComponent,
     PaymentMethodWarningsModule,
     VerifyRecoverDeleteOrgComponent,
+    VaultTimeoutInputComponent,
   ],
   declarations: [
     AcceptFamilySponsorshipComponent,
@@ -156,7 +157,7 @@ import { SharedModule } from "./shared.module";
     PreferencesComponent,
     PremiumBadgeComponent,
     ProfileComponent,
-    ChangeAvatarComponent,
+    ChangeAvatarDialogComponent,
     ProvidersComponent,
     PurgeVaultComponent,
     RecoverDeleteComponent,
@@ -183,7 +184,6 @@ import { SharedModule } from "./shared.module";
     TwoFactorYubiKeyComponent,
     UpdatePasswordComponent,
     UpdateTempPasswordComponent,
-    VaultTimeoutInputComponent,
     VerifyEmailTokenComponent,
     VerifyRecoverDeleteComponent,
     VerifyRecoverDeleteProviderComponent,
@@ -230,7 +230,7 @@ import { SharedModule } from "./shared.module";
     PreferencesComponent,
     PremiumBadgeComponent,
     ProfileComponent,
-    ChangeAvatarComponent,
+    ChangeAvatarDialogComponent,
     ProvidersComponent,
     PurgeVaultComponent,
     RecoverDeleteComponent,
@@ -258,7 +258,6 @@ import { SharedModule } from "./shared.module";
     UpdatePasswordComponent,
     UpdateTempPasswordComponent,
     UserLayoutComponent,
-    VaultTimeoutInputComponent,
     VerifyEmailTokenComponent,
     VerifyRecoverDeleteComponent,
     VerifyRecoverDeleteProviderComponent,

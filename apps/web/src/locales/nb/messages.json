@@ -579,13 +579,16 @@
     "message": "Tilgang"
   },
   "accessLevel": {
-    "message": "Access level"
+    "message": "Tilgangsnivå"
   },
   "accessing": {
-    "message": "Accessing"
+    "message": "Aksesserer"
   },
   "loggedOut": {
     "message": "Logget av"
+  },
+  "loggedOutDesc": {
+    "message": "You have been logged out of your account."
   },
   "loginExpired": {
     "message": "Din innloggingsøkt har utløpt."
@@ -612,79 +615,79 @@
     "message": "Logg på med enhet"
   },
   "loginWithDeviceEnabledNote": {
-    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
+    "message": "Logg på med enhet må settes opp i Bitwarden-innstillingene. Trenger du et annet alternativ?"
   },
   "loginWithMasterPassword": {
     "message": "Logg på med hovedpassord"
   },
   "readingPasskeyLoading": {
-    "message": "Reading passkey..."
+    "message": "Leser Passkey..."
   },
   "readingPasskeyLoadingInfo": {
-    "message": "Keep this window open and follow prompts from your browser."
+    "message": "Hold dette vinduet åpent og følg anvisningene fra nettleseren."
   },
   "useADifferentLogInMethod": {
-    "message": "Use a different log in method"
+    "message": "Bruk en annen innloggingsmetode"
   },
   "loginWithPasskey": {
-    "message": "Log in with passkey"
+    "message": "Logg inn med Passkey"
   },
   "invalidPasskeyPleaseTryAgain": {
-    "message": "Invalid Passkey. Please try again."
+    "message": "Ugyldig Passkey. Vennligst prøv igjen."
   },
   "twoFactorForPasskeysNotSupportedOnClientUpdateToLogIn": {
-    "message": "2FA for passkeys is not supported. Update the app to log in."
+    "message": "2FA for Passkeys støttes ikke. Oppdater appen for å logge inn."
   },
   "loginWithPasskeyInfo": {
-    "message": "Use a generated passkey that will automatically log you in without a password. Biometrics, like facial recognition or fingerprint, or another FIDO2 security method will verify your identity."
+    "message": "Bruk en generert Passkey som automatisk logger deg inn uten bruk av passord. Biometri, som ansiktsgjenkjenning eller fingeravtrykk, eller en annen FIDO2-sikkerhetsmetode, vil bekrefte identiteten din."
   },
   "newPasskey": {
-    "message": "New passkey"
+    "message": "Ny Passkey"
   },
   "learnMoreAboutPasswordless": {
-    "message": "Learn more about passwordless"
+    "message": "Lær mer om passordfri løsning"
   },
   "creatingPasskeyLoading": {
-    "message": "Creating passkey..."
+    "message": "Oppretter Passkey..."
   },
   "creatingPasskeyLoadingInfo": {
-    "message": "Keep this window open and follow prompts from your browser."
+    "message": "Hold dette vinduet åpent og følg anvisningene fra nettleseren."
   },
   "errorCreatingPasskey": {
-    "message": "Error creating passkey"
+    "message": "Feil ved oppretting av Passkey"
   },
   "errorCreatingPasskeyInfo": {
-    "message": "There was a problem creating your passkey."
+    "message": "Det oppstod et problem under oppretting av Passkeyen."
   },
   "passkeySuccessfullyCreated": {
-    "message": "Passkey successfully created!"
+    "message": "Passkey opprettet!"
   },
   "customPasskeyNameInfo": {
-    "message": "Name your passkey to help you identify it."
+    "message": "Gi Passkeyen et navn for å hjelpe deg med å identifisere den."
   },
   "useForVaultEncryption": {
-    "message": "Use for vault encryption"
+    "message": "Bruk for hvelvkryptering"
   },
   "useForVaultEncryptionInfo": {
-    "message": "Log in and unlock on supported devices without your master password. Follow the prompts from your browser to finalize setup."
+    "message": "Logg inn og lås opp på støttede enheter uten hovedpassord. Følg anvisningene fra nettleseren din for å avslutte oppsettet."
   },
   "useForVaultEncryptionErrorReadingPasskey": {
-    "message": "Error reading passkey. Try again or uncheck this option."
+    "message": "Feil under lesing av Paskey. Prøv igjen, eller fjern avmerkingen for dette alternativet."
   },
   "encryptionNotSupported": {
-    "message": "Encryption not supported"
+    "message": "Kryptering ikke støttet"
   },
   "enablePasskeyEncryption": {
-    "message": "Set up encryption"
+    "message": "Sett opp kryptering"
   },
   "usedForEncryption": {
-    "message": "Used for encryption"
+    "message": "Brukes til kryptering"
   },
   "loginWithPasskeyEnabled": {
-    "message": "Log in with passkey turned on"
+    "message": "Logg inn med Passkey aktivert"
   },
   "passkeySaved": {
-    "message": "$NAME$ saved",
+    "message": "$NAME$ lagret",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -693,22 +696,28 @@
     }
   },
   "passkeyRemoved": {
-    "message": "Passkey removed"
+    "message": "Passkey fjernet"
   },
   "removePasskey": {
-    "message": "Remove passkey"
+    "message": "Fjern Passkey"
   },
   "removePasskeyInfo": {
-    "message": "If all passkeys are removed, you will be unable to log into new devices without your master password."
+    "message": "Hvis alle Passkeys fjernes, vil det ikke være mulig å logge inn på nye enheter uten hovedpassordet ditt."
   },
   "passkeyLimitReachedInfo": {
-    "message": "Passkey limit reached. Remove a passkey to add another."
+    "message": "Grense for antall Passkeys er nådd. Fjern en Passkey for å legge til en annen."
   },
   "tryAgain": {
-    "message": "Try again"
+    "message": "Prøv igjen"
   },
   "createAccount": {
     "message": "Opprett en konto"
+  },
+  "setAStrongPassword": {
+    "message": "Set a strong password"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
   },
   "newAroundHere": {
     "message": "Er du ny her?"
@@ -718,6 +727,9 @@
   },
   "logIn": {
     "message": "Logg på"
+  },
+  "verifyIdentity": {
+    "message": "Verify your Identity"
   },
   "logInInitiated": {
     "message": "Pålogging startet"
@@ -754,6 +766,19 @@
   },
   "masterPassHintLabel": {
     "message": "Hint til hovedpassordet"
+  },
+  "masterPassHintText": {
+    "message": "If you forget your password, the password hint can be sent to your email. $CURRENT$/$MAXIMUM$ character maximum.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Innstillinger"
@@ -805,7 +830,7 @@
     "message": "En uventet feil har oppstått."
   },
   "expirationDateError": {
-    "message": "Please select an expiration date that is in the future."
+    "message": "Vennligst velg en utløpsdato som er frem i tid."
   },
   "emailAddress": {
     "message": "E-postadresse"
@@ -937,18 +962,18 @@
   "authenticatorAppTitle": {
     "message": "Autentiseringsapp"
   },
-  "authenticatorAppDesc": {
-    "message": "Bruk en autentiseringsapp (f․eks․ Authy eller Google Authenticator) for å generere tidsbegrensede verifiseringskoder.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Enter a code generated by an authenticator app like Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "YubiKey OTP-sikkerhetsnøkkel"
+  "yubiKeyTitleV2": {
+    "message": "Yubico OTP security key"
   },
   "yubiKeyDesc": {
     "message": "Bruk en YubiKey for å få tilgang til kontoen din. Virker med enheter av typene YubiKey 4, 4 Nano, 4C, og NEO."
   },
-  "duoDesc": {
-    "message": "Verifiser med Duo Security gjennom Duo Mobile-appen, SMS, telefonsamtale, eller en U2F-sikkerhetsnøkkel.",
+  "duoDescV2": {
+    "message": "Enter a code generated by Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -973,8 +998,8 @@
   "emailTitle": {
     "message": "E-post"
   },
-  "emailDesc": {
-    "message": "Verifiseringskoder vil bli sendt til deg med E-post."
+  "emailDescV2": {
+    "message": "Enter a code sent to your email."
   },
   "continue": {
     "message": "Fortsett"
@@ -1048,7 +1073,13 @@
     "message": "Kopier verifiseringskoden"
   },
   "copyUuid": {
-    "message": "Copy UUID"
+    "message": "Kopier UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
   },
   "warning": {
     "message": "Advarsel"
@@ -1057,7 +1088,7 @@
     "message": "Bekreft eksport av hvelvet"
   },
   "confirmSecretsExport": {
-    "message": "Confirm secrets export"
+    "message": "Bekreft eksport av hemmeligheter"
   },
   "exportWarningDesc": {
     "message": "Eksporten inneholder dine hvelvdata i ukryptert format. Du bør ikke lagre eller sende den eksporterte filen over usikre tjenester (som e-post). Slett filen umiddelbart etter at du er ferdig med å bruke den."
@@ -1075,13 +1106,13 @@
     "message": "Eksporter"
   },
   "exportFrom": {
-    "message": "Export from"
+    "message": "Eksport fra"
   },
   "exportVault": {
     "message": "Eksporter hvelvet"
   },
   "exportSecrets": {
-    "message": "Export secrets"
+    "message": "Eksporter hemmeligheter"
   },
   "fileFormat": {
     "message": "Filformat"
@@ -1608,35 +1639,44 @@
   "twoStepLoginAuthDesc": {
     "message": "Skriv inn ditt hovedpassord for å endre på 2-trinnsinnloggingsinnstillingene."
   },
-  "twoStepAuthenticatorDesc": {
-    "message": "Følg disse trinnene for å sette opp 2-trinnsinnlogging med en autentiseringsapp:"
+  "twoStepAuthenticatorInstructionPrefix": {
+    "message": "Download an authenticator app such as"
   },
-  "twoStepAuthenticatorDownloadApp": {
-    "message": "Last ned en 2-trinnsinnloggingsapp"
+  "twoStepAuthenticatorInstructionInfix1": {
+    "message": ","
   },
-  "twoStepAuthenticatorNeedApp": {
-    "message": "Trenger du en 2-trinnsinnloggingsapp? Last ned en av de følgende"
+  "twoStepAuthenticatorInstructionInfix2": {
+    "message": "or"
   },
-  "iosDevices": {
-    "message": "iOS-enheter"
+  "twoStepAuthenticatorInstructionSuffix": {
+    "message": "."
   },
-  "androidDevices": {
-    "message": "Android-enheter"
+  "continueToExternalUrlTitle": {
+    "message": "Continue to $URL$?",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
   },
-  "windowsDevices": {
-    "message": "Windows-enheter"
+  "continueToExternalUrlDesc": {
+    "message": "You are leaving Bitwarden and launching an external website in a new window."
   },
-  "twoStepAuthenticatorAppsRecommended": {
-    "message": "Disse appene er anbefalt, men andre autentiseringsapper vil også fungere."
+  "twoStepContinueToBitwardenUrlTitle": {
+    "message": "Continue to bitwarden.com?"
   },
-  "twoStepAuthenticatorScanCode": {
-    "message": "Skann denne QR-koden med din autentiseringsapp"
+  "twoStepContinueToBitwardenUrlDesc": {
+    "message": "Bitwarden Authenticator allows you to store authenticator keys and generate TOTP codes for 2-step verification flows. Learn more on the bitwarden.com website."
+  },
+  "twoStepAuthenticatorScanCodeV2": {
+    "message": "Scan the QR code below with your authenticator app or enter the key."
   },
   "key": {
     "message": "Nøkkel"
   },
-  "twoStepAuthenticatorEnterCode": {
-    "message": "Skriv inn den påfølgende 6-sifrede verifiseringskoden fra appen"
+  "twoStepAuthenticatorEnterCodeV2": {
+    "message": "Verification code"
   },
   "twoStepAuthenticatorReaddDesc": {
     "message": "Dersom du trenger å legge den til til en annen enhet, er QR-koden (eller -nøkkelen) som kreves av din autentiseringsapp nedenfor."
@@ -2785,12 +2825,6 @@
   "userDesc": {
     "message": "En vanlig bruker med tilgang til tilegnede samlinger i din organisasjon."
   },
-  "manager": {
-    "message": "Behandler"
-  },
-  "managerDesc": {
-    "message": "Behandlere har tilgang til og kan behandle tilegnede samlinger i din organisasjon."
-  },
   "all": {
     "message": "Alle"
   },
@@ -3718,6 +3752,21 @@
   "nothingSelected": {
     "message": "Du har ikke valgt noe."
   },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
+  },
   "acceptPolicies": {
     "message": "Ved å huke av denne boksen sier du deg enig i følgende:"
   },
@@ -4110,6 +4159,9 @@
   },
   "thisWindowWillCloseIn5Seconds": {
     "message": "This window will automatically close in 5 seconds"
+  },
+  "youMayCloseThisWindow": {
+    "message": "You may close this window"
   },
   "includeAllTeamsFeatures": {
     "message": "Alle Lag funksjoner, plus:"
@@ -4567,12 +4619,6 @@
   "permission": {
     "message": "Tillatelse"
   },
-  "managerPermissions": {
-    "message": "Ledertillatelser"
-  },
-  "adminPermissions": {
-    "message": "Admin-tillatelser"
-  },
   "accessEventLogs": {
     "message": "Få tilgang til hendelseslogger"
   },
@@ -4596,9 +4642,6 @@
   },
   "deleteAnyCollection": {
     "message": "Slett enhver samling"
-  },
-  "manageAssignedCollections": {
-    "message": "Administrer alle tildelte samlinger"
   },
   "editAssignedCollections": {
     "message": "Rediger tildelte samlinger"
@@ -5585,6 +5628,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Rotasjon av faktureringssynkroniserings-token vil gjøre den forrige token ugyldig."
+  },
+  "selfHostedServer": {
+    "message": "self-hosted"
+  },
+  "customEnvironment": {
+    "message": "Custom environment"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
+  },
+  "apiUrl": {
+    "message": "API server URL"
+  },
+  "webVaultUrl": {
+    "message": "Web vault server URL"
+  },
+  "identityUrl": {
+    "message": "Identity server URL"
+  },
+  "notificationsUrl": {
+    "message": "Notifications server URL"
+  },
+  "iconsUrl": {
+    "message": "Icons server URL"
+  },
+  "environmentSaved": {
+    "message": "Environment URLs saved"
   },
   "selfHostingTitle": {
     "message": "Selvhosting"
@@ -6627,12 +6703,6 @@
   "restrictedCollectionAssignmentDesc": {
     "message": "You can only assign collections you manage."
   },
-  "accessAllCollectionsDesc": {
-    "message": "Gi tilgang til alle nåværende og fremtidige samlinger."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "Hvis merket av, vil dette erstatte alle andre samlingstillatelser."
-  },
   "selectMembers": {
     "message": "Velg medlemmer"
   },
@@ -6674,12 +6744,6 @@
   },
   "group": {
     "message": "Gruppe"
-  },
-  "groupAccessAll": {
-    "message": "Denne gruppen har tilgang til og kan endre alle elementer."
-  },
-  "memberAccessAll": {
-    "message": "Dette medlemmet har tilgang til og kan endre alle elementer."
   },
   "domainVerification": {
     "message": "Domenebekreftelse"
@@ -7616,6 +7680,9 @@
   "alreadyHaveAccount": {
     "message": "Already have an account?"
   },
+  "toggleSideNavigation": {
+    "message": "Toggle side navigation"
+  },
   "skipToContent": {
     "message": "Skip to content"
   },
@@ -7834,7 +7901,7 @@
     "message": "Adjustments to seats will be reflected in the next billing cycle."
   },
   "unassignedSeatsDescription": {
-    "message": "Unassigned subscription seats"
+    "message": "Unassigned seats"
   },
   "purchaseSeatDescription": {
     "message": "Additional seats purchased"
@@ -8141,11 +8208,17 @@
   "setUpGithubActions": {
     "message": "Set up Github Actions"
   },
+  "setUpKubernetes": {
+    "message": "Set up Kubernetes"
+  },
   "setUpGitlabCICD": {
     "message": "Set up GitLab CI/CD"
   },
   "setUpAnsible": {
     "message": "Set up Ansible"
+  },
+  "rustSDKRepo": {
+    "message": "View Rust repository"
   },
   "cSharpSDKRepo": {
     "message": "View C# repository"
@@ -8297,5 +8370,124 @@
   },
   "allLoginRequestsApproved": {
     "message": "All login requests approved"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Updated tax information"
+  },
+  "unverified": {
+    "message": "Unverified"
+  },
+  "verified": {
+    "message": "Verified"
+  },
+  "viewSecret": {
+    "message": "View secret"
+  },
+  "noClients": {
+    "message": "There are no clients to list"
+  },
+  "providerBillingEmailHint": {
+    "message": "This email address will receive all invoices pertaining to this provider",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
+  },
+  "upgradeOrganizationEnterprise": {
+    "message": "Identify security risks by auditing member access"
+  },
+  "onlyAvailableForEnterpriseOrganization": {
+    "message": "Quickly view member access across the organization by upgrading to an Enterprise plan."
+  },
+  "date": {
+    "message": "Date"
+  },
+  "exportClientReport": {
+    "message": "Export client report"
+  },
+  "memberAccessReport": {
+    "message": "Member access"
+  },
+  "memberAccessReportDesc": {
+    "message": "Ensure members have access to the right credentials and their accounts are secure. Use this report to obtain a CSV of member access and account configurations."
+  },
+  "higherKDFIterations": {
+    "message": "Higher KDF iterations can help protect your master password from being brute forced by an attacker."
+  },
+  "incrementsOf100,000": {
+    "message": "increments of 100,000"
+  },
+  "smallIncrements": {
+    "message": "small increments"
+  },
+  "kdfIterationRecommends": {
+    "message": "We recommend 600,000 or more"
+  },
+  "kdfToHighWarningIncreaseInIncrements": {
+    "message": "For older devices, setting your KDF too high may lead to performance issues. Increase the value in $VALUE$ and test your devices.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "increments of 100,000"
+      }
+    }
+  },
+  "providerReinstate": {
+    "message": " Contact Customer Support to reinstate your subscription."
+  },
+  "secretPeopleDescription": {
+    "message": "Grant groups or people access to this secret. Permissions set for people will override permissions set by groups."
+  },
+  "secretPeopleEmptyMessage": {
+    "message": "Add people or groups to share access to this secret"
+  },
+  "secretMachineAccountsDescription": {
+    "message": "Grant machine accounts access to this secret."
+  },
+  "secretMachineAccountsEmptyMessage": {
+    "message": "Add machine accounts to grant access to this secret"
+  },
+  "smAccessRemovalWarningSecretTitle": {
+    "message": "Remove access to this secret"
+  },
+  "smAccessRemovalSecretMessage": {
+    "message": "This action will remove your access to this secret."
+  },
+  "invoice": {
+    "message": "Invoice"
+  },
+  "unassignedSeatsAvailable": {
+    "message": "You have $SEATS$ unassigned seats available.",
+    "placeholders": {
+      "seats": {
+        "content": "$1",
+        "example": "10"
+      }
+    },
+    "description": "A message showing how many unassigned seats are available for a provider."
+  },
+  "contactYourProviderForAdditionalSeats": {
+    "message": "Contact your provider admin to purchase additional seats."
+  },
+  "open": {
+    "message": "Open",
+    "description": "The status of an invoice."
+  },
+  "uncollectible": {
+    "message": "Uncollectible",
+    "description": "The status of an invoice."
+  },
+  "clientDetails": {
+    "message": "Client details"
+  },
+  "downloadCSV": {
+    "message": "Download CSV"
+  },
+  "billingHistoryDescription": {
+    "message": "Download a CSV to obtain client details for each billing date. Prorated charges are not included in the CSV and may vary from the linked invoice. For the most accurate billing details, refer to your monthly invoices.",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
   }
 }

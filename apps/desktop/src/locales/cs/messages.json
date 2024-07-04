@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Vytvořit účet"
   },
+  "setAStrongPassword": {
+    "message": "Nastavit hlavní heslo"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Dokončete vytváření účtu nastavením hesla"
+  },
   "logIn": {
     "message": "Přihlásit se"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Nápověda k hlavnímu heslu (volitelné)"
+  },
+  "masterPassHintText": {
+    "message": "Pokud zapomenete své heslo, může být nápověda k heslu odeslána na Váš e-mail. $CURRENT$/$MAXIMUM$ znaků maximálně.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Nastavení"
@@ -554,17 +573,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "Potvrzení hlavního hesla se neshoduje."
-  },
-  "newAccountCreated": {
-    "message": "Váš účet byl vytvořen! Můžete se přihlásit."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "Byli jste úspěšně přihlášeni"
   },
   "youMayCloseThisWindow": {
     "message": "Toto okno můžete zavřít"
+  },
+  "masterPassDoesntMatch": {
+    "message": "Potvrzení hlavního hesla se neshoduje."
+  },
+  "newAccountCreated": {
+    "message": "Váš účet byl vytvořen! Můžete se přihlásit."
   },
   "masterPassSent": {
     "message": "Poslali jsme vám e-mail s nápovědou k hlavnímu heslu."
@@ -647,18 +666,18 @@
   "authenticatorAppTitle": {
     "message": "Ověřovací aplikace"
   },
-  "authenticatorAppDesc": {
-    "message": "Použijte ověřovací aplikaci (jako je Authy nebo Google Authenticator) pro generování časově omezených kódů.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Zadejte kód vygenerovaný ověřovací aplikací, jako je Autentikátor Bitwarden.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
+  "yubiKeyTitleV2": {
     "message": "Bezpečnostní klíč YubiKey OTP"
   },
   "yubiKeyDesc": {
     "message": "Použije YubiKey pro přístup k Vašemu trezoru. Podporuje YubiKey 4, 4 Nano, 4C a NEO."
   },
-  "duoDesc": {
-    "message": "Ověření pomocí Duo Security prostřednictvím aplikace Duo Mobile, SMS, telefonního hovoru nebo bezpečnostního klíče U2F.",
+  "duoDescV2": {
+    "message": "Zadejte kód vygenerovaný DUO Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -674,8 +693,8 @@
   "emailTitle": {
     "message": "E-mail"
   },
-  "emailDesc": {
-    "message": "Ověřovací kódy Vám budou zaslány e-mailem."
+  "emailDescV2": {
+    "message": "Zadejte kód odeslaný na Váš e-mail."
   },
   "loginUnavailable": {
     "message": "Přihlášení není dostupné"
@@ -694,6 +713,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Zadejte základní URL adresu vlastní hostované aplikace Bitwarden."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Zadejte základní URL adresu Vaší vlastní hostované aplikace Bitwarden. Příklad: https://bitwarden.spolecnost.cz"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Pro rozšířená nastavení můžete zadat základní URL adresu každé služby zvlášť."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Musíte přidat buď základní adresu URL serveru nebo alespoň jedno vlastní prostředí."
   },
   "customEnvironment": {
     "message": "Vlastní prostředí"
@@ -742,6 +770,9 @@
   },
   "loggedOut": {
     "message": "Odhlášení"
+  },
+  "loggedOutDesc": {
+    "message": "Byli jste odhlášeni ze svého účtu."
   },
   "loginExpired": {
     "message": "Platnost přihlášení vypršela."
@@ -1212,6 +1243,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Chyba aktualizace přístupového tokenu"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nebyly nalezeny žádné obnovovací tokeny nebo API klíče. Zkuste se odhlásit a znovu se přihlásit."
+  },
   "help": {
     "message": "Nápověda"
   },
@@ -1640,6 +1677,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Vaše nové hlavní heslo nesplňuje požadavky zásad."
+  },
+  "receiveMarketingEmails": {
+    "message": "Získejte e-maily od Bitwardenu pro oznámení, poradenství a výzkumné příležitosti."
+  },
+  "unsubscribe": {
+    "message": "Odhlásit odběr"
+  },
+  "atAnyTime": {
+    "message": "kdykoli."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Pokračováním souhlasíte s"
+  },
+  "and": {
+    "message": "a"
   },
   "acceptPolicies": {
     "message": "Zaškrtnutím tohoto políčka souhlasíte s následujícím:"
@@ -2383,9 +2435,6 @@
   "denyLogIn": {
     "message": "Zamítnout přihlášení"
   },
-  "approveLoginRequests": {
-    "message": "Schválit žádosti o přihlášení"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Přihlášení bylo potvrzeno z $EMAIL$ pro $DEVICE$",
     "placeholders": {
@@ -2419,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Tento požadavek již není platný."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Použije toto zařízení pro schvalování žádostí o přihlášení z jiných zařízení."
   },
   "confirmLoginAtemptForMail": {
     "message": "Potvrďte pokus o přihlášení z $EMAIL$",
@@ -2473,6 +2519,12 @@
   },
   "important": {
     "message": "Důležité:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Byli jste odhlášeni, protože Váš přístupový token nelze dešifrovat. Pro vyřešení tohoto problému se přihlaste znovu."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Byli jste odhlášeni, protože Váš obnovovací token nelze získat. Pro vyřešení tohoto problému se přihlaste znovu."
   },
   "masterPasswordHint": {
     "message": "Pokud zapomenete Vaše hlavní heslo, nebude možné jej obnovit!"
@@ -2653,6 +2705,9 @@
   "submenu": {
     "message": "Podmenu"
   },
+  "toggleSideNavigation": {
+    "message": "Přepnout boční navigaci"
+  },
   "skipToContent": {
     "message": "Přeskočit na obsah"
   },
@@ -2787,6 +2842,9 @@
   },
   "confirmFilePassword": {
     "message": "Potvrzení hesla souboru"
+  },
+  "exportSuccess": {
+    "message": "Data trezoru byla exportována"
   },
   "multifactorAuthenticationCancelled": {
     "message": "Vícefázové ověření zrušeno"

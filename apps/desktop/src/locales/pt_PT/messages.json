@@ -266,7 +266,7 @@
     "message": "Nome próprio"
   },
   "middleName": {
-    "message": "Segundo nome"
+    "message": "Nome do meio"
   },
   "lastName": {
     "message": "Apelido"
@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Criar conta"
   },
+  "setAStrongPassword": {
+    "message": "Defina uma palavra-passe forte"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Termine a criação da sua conta definindo uma palavra-passe"
+  },
   "logIn": {
     "message": "Iniciar sessão"
   },
@@ -519,6 +525,19 @@
   },
   "masterPassHint": {
     "message": "Dica da palavra-passe mestra (opcional)"
+  },
+  "masterPassHintText": {
+    "message": "Se se esquecer da sua palavra-passe, a dica da palavra-passe pode ser enviada para o seu e-mail. Máximo de $CURRENT$/$MAXIMUM$ caracteres.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Definições"
@@ -554,17 +573,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "A confirmação da palavra-passe mestra não corresponde."
-  },
-  "newAccountCreated": {
-    "message": "A sua nova conta foi criada! Pode agora iniciar sessão."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "Iniciou sessão com sucesso"
   },
   "youMayCloseThisWindow": {
     "message": "Pode fechar esta janela"
+  },
+  "masterPassDoesntMatch": {
+    "message": "A confirmação da palavra-passe mestra não corresponde."
+  },
+  "newAccountCreated": {
+    "message": "A sua nova conta foi criada! Pode agora iniciar sessão."
   },
   "masterPassSent": {
     "message": "Enviámos-lhe um e-mail com a dica da sua palavra-passe mestra."
@@ -647,18 +666,18 @@
   "authenticatorAppTitle": {
     "message": "Aplicação de autenticação"
   },
-  "authenticatorAppDesc": {
-    "message": "Utilize uma aplicação de autenticação (como o Authy ou o Google Authenticator) para gerar códigos de verificação baseados no tempo.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Introduza um código gerado por uma aplicação de autenticação como o Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "Chave de segurança YubiKey OTP"
+  "yubiKeyTitleV2": {
+    "message": "Chave de segurança Yubico OTP"
   },
   "yubiKeyDesc": {
     "message": "Utilize uma YubiKey para aceder à sua conta. Funciona com os dispositivos YubiKey 4, 4 Nano, 4C e NEO."
   },
-  "duoDesc": {
-    "message": "Verifique com a Duo Security utilizando a aplicação Duo Mobile, SMS, chamada telefónica ou chave de segurança U2F.",
+  "duoDescV2": {
+    "message": "Introduza um código gerado pelo Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -674,8 +693,8 @@
   "emailTitle": {
     "message": "E-mail"
   },
-  "emailDesc": {
-    "message": "Os códigos de verificação ser-lhe-ão enviados por e-mail."
+  "emailDescV2": {
+    "message": "Introduza um código enviado para o seu e-mail."
   },
   "loginUnavailable": {
     "message": "Início de sessão indisponível"
@@ -695,6 +714,15 @@
   "selfHostedEnvironmentFooter": {
     "message": "Especifique o URL de base da sua instalação Bitwarden hospedada no local."
   },
+  "selfHostedBaseUrlHint": {
+    "message": "Especifique o URL de base da sua instalação Bitwarden hospedada no local. Exemplo: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Para uma configuração avançada, pode especificar o URL de base de cada serviço de forma independente."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Deve adicionar o URL do servidor de base ou pelo menos um ambiente personalizado."
+  },
   "customEnvironment": {
     "message": "Ambiente personalizado"
   },
@@ -708,7 +736,7 @@
     "message": "URL do servidor da API"
   },
   "webVaultUrl": {
-    "message": "URL do servidor do cofre web"
+    "message": "URL do servidor do cofre Web"
   },
   "identityUrl": {
     "message": "URL do servidor de identidade"
@@ -742,6 +770,9 @@
   },
   "loggedOut": {
     "message": "Sessão terminada"
+  },
+  "loggedOutDesc": {
+    "message": "Foi terminada a sessão da sua conta."
   },
   "loginExpired": {
     "message": "A sua sessão expirou."
@@ -1212,6 +1243,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Erro no acesso ao token de atualização"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Não foi encontrado nenhum token de atualização ou chaves API. Por favor, tente terminar a sessão e voltar a iniciá-la."
+  },
   "help": {
     "message": "Ajuda"
   },
@@ -1640,6 +1677,21 @@
   },
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "A sua nova palavra-passe mestra não cumpre os requisitos da política."
+  },
+  "receiveMarketingEmails": {
+    "message": "Receba e-mails do Bitwarden com anúncios, conselhos e oportunidades de investigação."
+  },
+  "unsubscribe": {
+    "message": "Anular subscrição"
+  },
+  "atAnyTime": {
+    "message": "a qualquer altura."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ao continuar, concorda com os"
+  },
+  "and": {
+    "message": "e"
   },
   "acceptPolicies": {
     "message": "Ao marcar esta caixa concorda com o seguinte:"
@@ -2383,9 +2435,6 @@
   "denyLogIn": {
     "message": "Recusar início de sessão"
   },
-  "approveLoginRequests": {
-    "message": "Aprovar pedidos de início de sessão"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Início de sessão confirmado para $EMAIL$ em $DEVICE$",
     "placeholders": {
@@ -2419,9 +2468,6 @@
   },
   "thisRequestIsNoLongerValid": {
     "message": "Este pedido já não é válido."
-  },
-  "approveLoginRequestDesc": {
-    "message": "Utilize este dispositivo para aprovar pedidos de início de sessão efetuados a partir de outros dispositivos."
   },
   "confirmLoginAtemptForMail": {
     "message": "Confirmar tentativa de início de sessão de $EMAIL$",
@@ -2473,6 +2519,12 @@
   },
   "important": {
     "message": "Importante:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "A sua sessão foi encerrada porque o seu token de acesso não pôde ser desencriptado. Por favor, inicie sessão novamente para resolver este problema."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "A sessão foi encerrada porque o seu token de atualização não pôde ser recuperado. Por favor, inicie sessão novamente para resolver este problema."
   },
   "masterPasswordHint": {
     "message": "A sua palavra-passe mestra não pode ser recuperada se a esquecer!"
@@ -2653,6 +2705,9 @@
   "submenu": {
     "message": "Submenu"
   },
+  "toggleSideNavigation": {
+    "message": "Ativar/desativar navegação lateral"
+  },
   "skipToContent": {
     "message": "Avançar para o conteúdo"
   },
@@ -2787,6 +2842,9 @@
   },
   "confirmFilePassword": {
     "message": "Confirmar a palavra-passe do ficheiro"
+  },
+  "exportSuccess": {
+    "message": "Dados do cofre exportados"
   },
   "multifactorAuthenticationCancelled": {
     "message": "Autenticação multifator cancelada"

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { combineLatest, Subject, switchMap, takeUntil, catchError } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { DialogService } from "@bitwarden/components";
@@ -11,7 +12,7 @@ import { DialogService } from "@bitwarden/components";
 import { AccessPolicySelectorService } from "../../shared/access-policies/access-policy-selector/access-policy-selector.service";
 import {
   ApItemValueType,
-  convertToProjectPeopleAccessPoliciesView,
+  convertToPeopleAccessPoliciesView,
 } from "../../shared/access-policies/access-policy-selector/models/ap-item-value.type";
 import {
   ApItemViewType,
@@ -38,8 +39,9 @@ export class ProjectPeopleComponent implements OnInit, OnDestroy {
       }),
     ),
     catchError(async () => {
+      this.logService.info("Error fetching project people access policies.");
       await this.router.navigate(["/sm", this.organizationId, "projects"]);
-      return [];
+      return undefined;
     }),
   );
 
@@ -70,6 +72,7 @@ export class ProjectPeopleComponent implements OnInit, OnDestroy {
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private accessPolicySelectorService: AccessPolicySelectorService,
+    private logService: LogService,
   ) {}
 
   ngOnInit(): void {
@@ -116,10 +119,7 @@ export class ProjectPeopleComponent implements OnInit, OnDestroy {
     }
 
     try {
-      const projectPeopleView = convertToProjectPeopleAccessPoliciesView(
-        this.projectId,
-        formValues,
-      );
+      const projectPeopleView = convertToPeopleAccessPoliciesView(formValues);
       const peoplePoliciesViews = await this.accessPolicyService.putProjectPeopleAccessPolicies(
         this.projectId,
         projectPeopleView,

@@ -165,6 +165,7 @@
                   appStopClick
                   (click)="removePasskey()"
                   appA11yTitle="{{ 'removePasskey' | i18n }}"
+                  *ngIf="!(!cipher.edit && editMode)"
                 >
                   <i class="bwi bwi-fw bwi-minus-circle bwi-lg" aria-hidden="true"></i>
                 </button>
@@ -565,6 +566,7 @@
           >
             <button
               type="button"
+              *ngIf="!(!cipher.edit && editMode)"
               appStopClick
               (click)="removeUri(u)"
               appA11yTitle="{{ 'remove' | i18n }}"
@@ -581,6 +583,7 @@
                 [hidden]="$any(u).showUriOptionsInput === true"
                 placeholder="{{ 'ex' | i18n }} https://google.com"
                 inputmode="url"
+                [readonly]="!cipher.edit && editMode"
                 appInputVerbatim
               />
               <label for="loginUriMatch{{ i }}" class="sr-only">
@@ -630,6 +633,7 @@
                 appA11yTitle="{{ 'toggleOptions' | i18n }}"
                 (click)="toggleUriOptions(u)"
                 [attr.aria-pressed]="$any(u).showOptions === true"
+                [disabled]="!cipher.edit && editMode"
               >
                 <i class="bwi bwi-fw bwi-lg bwi-cog" aria-hidden="true"></i>
               </button>

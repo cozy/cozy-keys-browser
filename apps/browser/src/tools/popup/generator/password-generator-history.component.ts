@@ -4,7 +4,8 @@ import { Component } from "@angular/core";
 import { PasswordGeneratorHistoryComponent as BasePasswordGeneratorHistoryComponent } from "@bitwarden/angular/tools/generator/components/password-generator-history.component";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { ToastService } from "@bitwarden/components";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 /* Cozy imports */
 import { HistoryService } from "../../../popup/services/history.service";
@@ -21,8 +22,9 @@ export class PasswordGeneratorHistoryComponent extends BasePasswordGeneratorHist
     i18nService: I18nService,
     private location: Location,
     private historyService: HistoryService,
+    toastService: ToastService,
   ) {
-    super(passwordGenerationService, platformUtilsService, i18nService, window);
+    super(passwordGenerationService, platformUtilsService, i18nService, window, toastService);
   }
 
   close() {

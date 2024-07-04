@@ -1,6 +1,6 @@
 import { APP_INITIALIZER, NgModule, NgZone } from "@angular/core";
 import { Router } from "@angular/router";
-import { Subject, merge } from "rxjs";
+import { Subject, merge, of } from "rxjs";
 
 import { UnauthGuard as BaseUnauthGuardService } from "@bitwarden/angular/auth/guards";
 import { AngularThemingService } from "@bitwarden/angular/platform/services/theming/angular-theming.service";
@@ -48,6 +48,7 @@ import {
 } from "@bitwarden/common/autofill/services/user-notification-settings.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { ClientType } from "@bitwarden/common/enums";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
@@ -80,11 +81,11 @@ import {
 } from "@bitwarden/common/platform/state";
 // eslint-disable-next-line import/no-restricted-paths -- Used for dependency injection
 import { InlineDerivedStateProvider } from "@bitwarden/common/platform/state/implementations/inline-derived-state";
+import { SyncService } from "@bitwarden/common/platform/sync";
 import { VaultTimeoutStringType } from "@bitwarden/common/types/vault-timeout.type";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { FolderService as FolderServiceAbstraction } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
-import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { TotpService as TotpServiceAbstraction } from "@bitwarden/common/vault/abstractions/totp.service";
 import { TotpService } from "@bitwarden/common/vault/services/totp.service";
 import { DialogService, ToastService } from "@bitwarden/components";
@@ -362,6 +363,8 @@ const safeProviders: SafeProvider[] = [
       ScriptInjectorService,
       AccountServiceAbstraction,
       AuthService,
+      ConfigService,
+      MessageListener,
     ],
   }),
   safeProvider({
@@ -504,14 +507,15 @@ const safeProviders: SafeProvider[] = [
     provide: SYSTEM_THEME_OBSERVABLE,
     useFactory: (platformUtilsService: PlatformUtilsService) => {
       // Safari doesn't properly handle the (prefers-color-scheme) media query in the popup window, it always returns light.
-      // In Safari, we have to use the background page instead, which comes with limitations like not dynamically changing the extension theme when the system theme is changed.
-      let windowContext = window;
+      // This means we have to use the background page instead, which comes with limitations like not dynamically
+      // changing the extension theme when the system theme is changed. We also have issues with memory leaks when
+      // holding the reference to the background page.
       const backgroundWindow = BrowserApi.getBackgroundPage();
       if (platformUtilsService.isSafari() && backgroundWindow) {
-        windowContext = backgroundWindow;
+        return of(AngularThemingService.getSystemThemeFromWindow(backgroundWindow));
+      } else {
+        return AngularThemingService.createSystemThemeFromWindow(window);
       }
-
-      return AngularThemingService.createSystemThemeFromWindow(windowContext);
     },
     deps: [PlatformUtilsService],
   }),

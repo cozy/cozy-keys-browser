@@ -20,13 +20,14 @@ import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/
 import { WebAuthnLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-login.service.abstraction";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { flagEnabled } from "../../../utils/flags";
 import { RouterService, StateService } from "../../core";
@@ -43,7 +44,6 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
   enforcedPasswordPolicyOptions: MasterPasswordPolicyOptions;
   policies: Policy[];
   showPasswordless = false;
-
   constructor(
     private acceptOrganizationInviteService: AcceptOrganizationInviteService,
     devicesApiService: DevicesApiServiceAbstraction,
@@ -68,6 +68,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     loginEmailService: LoginEmailServiceAbstraction,
     ssoLoginService: SsoLoginServiceAbstraction,
     webAuthnLoginService: WebAuthnLoginServiceAbstraction,
+    configService: ConfigService,
   ) {
     super(
       devicesApiService,
@@ -88,11 +89,18 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
       loginEmailService,
       ssoLoginService,
       webAuthnLoginService,
+      configService,
     );
     this.onSuccessfulLoginNavigate = this.goAfterLogIn;
     this.showPasswordless = flagEnabled("showPasswordless");
   }
+  submitForm = async (showToast = true) => {
+    return await this.submitFormHelper(showToast);
+  };
 
+  private async submitFormHelper(showToast: boolean) {
+    await super.submit(showToast);
+  }
   async ngOnInit() {
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
@@ -157,14 +165,14 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
   }
 
   async goToRegister() {
-    const email = this.formGroup.value.email;
-
-    if (email) {
-      await this.router.navigate(["/register"], { queryParams: { email: email } });
+    if (this.emailFormControl.valid) {
+      await this.router.navigate([this.registerRoute], {
+        queryParams: { email: this.emailFormControl.value },
+      });
       return;
     }
 
-    await this.router.navigate(["/register"]);
+    await this.router.navigate([this.registerRoute]);
   }
 
   protected override async handleMigrateEncryptionKey(result: AuthResult): Promise<boolean> {
