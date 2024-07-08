@@ -53,7 +53,12 @@ export const DefaultFeatureFlagValue = {
   [FeatureFlag.InlineMenuFieldQualification]: FALSE,
   [FeatureFlag.MemberAccessReport]: FALSE,
   [FeatureFlag.EnableTimeThreshold]: FALSE,
+  // Cozy customization, enable credit card autofill in inline menu
+  //*
+  [FeatureFlag.InlineMenuPositioningImprovements]: true,
+  /*/
   [FeatureFlag.InlineMenuPositioningImprovements]: FALSE,
+  //*/
 } satisfies Record<FeatureFlag, AllowedFeatureFlagTypes>;
 
 export type DefaultFeatureFlagValueType = typeof DefaultFeatureFlagValue;
