@@ -50,6 +50,13 @@ import {
   IdentityAutoFillConstants,
 } from "./autofill-constants";
 
+/* start Cozy imports */
+/* eslint-disable */
+import { generateIdentityViewFromCipherView } from "../../../../../libs/cozy/contact.helper";
+import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view";
+/* eslint-enable */
+/* end Cozy imports */
+
 export default class AutofillService implements AutofillServiceInterface {
   private openVaultItemPasswordRepromptPopout = openVaultItemPasswordRepromptPopout;
   private openPasswordRepromptPopoutDebounce: number | NodeJS.Timeout;
@@ -641,6 +648,29 @@ export default class AutofillService implements AutofillServiceInterface {
           options,
         );
         break;
+      // Cozy customization
+      case CipherType.Paper:
+        //  For papers, we only use the custom fields matching
+        break;
+      case CipherType.Contact:
+        // For contacts, we create an IdentityView with the contact content to leverage the generateIdentityFillScript
+        try {
+          options.cipher.identity = generateIdentityViewFromCipherView(options.cipher);
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.log("Failed to convert CipherView to IdentityView", e);
+        }
+
+        fillScript = this.generateIdentityFillScript(
+          fillScript,
+          pageDetails,
+          filledFields,
+          options
+        );
+
+        options.cipher.identity = new IdentityView();
+        break;
+      // Cozy customization end
       default:
         return null;
     }
