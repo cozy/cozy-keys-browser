@@ -109,7 +109,10 @@ export class SearchService implements SearchServiceAbstraction {
     filter: ((cipher: CipherView) => boolean) | ((cipher: CipherView) => boolean)[] = null,
     ciphers: CipherView[] = null
   ): Promise<CipherView[]> {
+    // Cozy customization, display logins before every other types (see below)
+    /*
     const results: CipherView[] = [];
+    */
     if (query != null) {
       query = SearchService.normalizeSearchQuery(query.trim().toLowerCase());
     }
@@ -168,6 +171,27 @@ export class SearchService implements SearchServiceAbstraction {
       });
     }
 
+    // Cozy customization, display logins before every other types
+    // For example, it avoids to have 100 Free invoices before 1 Free login
+    //*
+    const loginResults: CipherView[] = [];
+    const otherResults: CipherView[] = [];
+
+    if (searchResults != null) {
+      searchResults.forEach((r) => {
+        if (ciphersMap.has(r.ref)) {
+          const cipher = ciphersMap.get(r.ref);
+          if (cipher.type === CipherType.Login) {
+            loginResults.push(cipher);
+          } else {
+            otherResults.push(cipher);
+          }
+        }
+      });
+    }
+
+    const results = loginResults.concat(otherResults);
+    /*/
     if (searchResults != null) {
       searchResults.forEach((r) => {
         if (ciphersMap.has(r.ref)) {
@@ -175,6 +199,7 @@ export class SearchService implements SearchServiceAbstraction {
         }
       });
     }
+    //*/
     return results;
   }
 
