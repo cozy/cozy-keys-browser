@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "访问权限等级"
   },
+  "accessing": {
+    "message": "访问中"
+  },
   "loggedOut": {
     "message": "已注销"
   },
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "您的账户已被关闭，所有相关数据也已被删除。"
   },
+  "deleteOrganizationWarning": {
+    "message": "删除组织是永久性操作，无法撤销！"
+  },
   "myAccount": {
     "message": "我的账户"
   },
@@ -1355,7 +1361,7 @@
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsLink": {
-    "message": "新项目",
+    "message": "新的项目",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
@@ -1710,20 +1716,20 @@
   "twoFactorDuoDesc": {
     "message": "输入 Duo 管理面板提供的 Bitwarden 应用信息。"
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "集成密钥"
+  "twoFactorDuoClientId": {
+    "message": "Client ID"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "安全密钥"
+  "twoFactorDuoClientSecret": {
+    "message": "Client Secret"
   },
   "twoFactorDuoApiHostname": {
     "message": "API 主机名"
   },
   "twoFactorEmailDesc": {
-    "message": "按照以下步骤设置使用电子邮件两步登录:"
+    "message": "按照以下步骤设置使用电子邮件的两步登录："
   },
   "twoFactorEmailEnterEmail": {
-    "message": "输入您希望接收验证码的电子邮件"
+    "message": "输入您希望接收验证码的电子邮件地址"
   },
   "twoFactorEmailEnterCode": {
     "message": "输入电子邮件中的 6 位数验证码"
@@ -1863,7 +1869,7 @@
     "message": "发现暴露的密码"
   },
   "exposedPasswordsFoundReportDesc": {
-    "message": "We found $COUNT$ items in your $VAULT$ that have passwords that were exposed in known data breaches. You should change them to use a new password.",
+    "message": "我们在您的 $VAULT$ 中发现了 $COUNT$ 个在已知的数据泄露事件中暴露了密码的项目。您应更改它们以使用新的密码。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1900,7 +1906,7 @@
     "message": "发现弱密码"
   },
   "weakPasswordsFoundReportDesc": {
-    "message": "We found $COUNT$ items in your $VAULT$ with passwords that are not strong. You should update them to use stronger passwords.",
+    "message": "我们在您的 $VAULT$ 中发现了 $COUNT$ 个密码不够强的项目。您应更新它们以使用更强的密码。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2099,7 +2105,7 @@
     "message": "Bitwarden 家庭版计划。"
   },
   "addons": {
-    "message": "附加项目"
+    "message": "插件"
   },
   "premiumAccess": {
     "message": "高级会员"
@@ -2537,7 +2543,7 @@
     "message": "使用审核日志跟踪用户操作"
   },
   "enforce2faDuo": {
-    "message": "强制启用 Duo 的两步登录"
+    "message": "强制 Duo 2FA"
   },
   "priorityCustomerSupport": {
     "message": "优先客户支持"
@@ -2788,6 +2794,12 @@
   "all": {
     "message": "全部"
   },
+  "addAccess": {
+    "message": "Add Access"
+  },
+  "addAccessFilter": {
+    "message": "Add Access Filter"
+  },
   "refresh": {
     "message": "刷新"
   },
@@ -2840,7 +2852,7 @@
     "message": "停用了两步登录"
   },
   "recovered2fa": {
-    "message": "从两步登录中恢复了帐户。"
+    "message": "从两步登录中恢复了账户"
   },
   "failedLogin": {
     "message": "登录失败，密码不正确。"
@@ -3235,6 +3247,27 @@
   "device": {
     "message": "设备"
   },
+  "creatingAccountOn": {
+    "message": "创建账户于"
+  },
+  "checkYourEmail": {
+    "message": "检查您的电子邮箱"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "点击发送到电子邮件中的链接"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "然后继续创建您的账户。"
+  },
+  "noEmail": {
+    "message": "没收到电子邮件吗？"
+  },
+  "goBack": {
+    "message": "返回"
+  },
+  "toEditYourEmailAddress": {
+    "message": "编辑您的电子邮件地址。"
+  },
   "view": {
     "message": "查看"
   },
@@ -3382,6 +3415,9 @@
   "deleteRecoverConfirmDesc": {
     "message": "您已请求删除您的 Bitwarden 账户。单击下面的按钮以确认。"
   },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "您已请求删除您的 Bitwarden 组织。"
+  },
   "myOrganization": {
     "message": "我的组织"
   },
@@ -3497,7 +3533,7 @@
     "message": "账户类型"
   },
   "bankAccountTypeCompany": {
-    "message": "公司（商业）"
+    "message": "公司（企业）"
   },
   "bankAccountTypeIndividual": {
     "message": "个体（个人）"
@@ -3558,6 +3594,12 @@
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "调整订阅将导致按比例调整您的计费总金额。如果新邀请的成员超过了您的订阅席位，您将立即收到按比例的额外成员费用。"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "如果您想要添加额外的"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "无捆绑优惠的席位，请联系"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "调整订阅将导致按比例调整您的计费总金额。如果新邀请的成员超过了您的订阅席位，您将立即收到按比例的额外成员费用，直到达到您的 $MAX$ 席位限制。",
@@ -3674,7 +3716,7 @@
     "message": "退款"
   },
   "nothingSelected": {
-    "message": "您没有选择任何内容。"
+    "message": "您尚未选择任何内容。"
   },
   "acceptPolicies": {
     "message": "选中此框表示您同意："
@@ -4971,13 +5013,13 @@
     "message": "创建一个新的客户组织，该组织将作为提供商与你关联。您将可以访问和管理这个组织。"
   },
   "newClient": {
-    "message": "新客户端"
+    "message": "新增客户"
   },
   "addExistingOrganization": {
     "message": "添加现有组织"
   },
   "addNewOrganization": {
-    "message": "添加新组织"
+    "message": "添加新的组织"
   },
   "myProvider": {
     "message": "我的提供商"
@@ -5802,6 +5844,108 @@
   "forwardedEmailDesc": {
     "message": "使用外部转发服务生成一个电子邮件别名。"
   },
+  "forwarderError": {
+    "message": "$SERVICENAME$ 错误：$ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "由 Bitwarden 生成。",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "网站：$WEBSITE$。由 Bitwarden 生成。",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "无效的 $SERVICENAME$ API 令牌",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "无效的 $SERVICENAME$ API 令牌：$ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "无法获取 $SERVICENAME$ 电子邮件账户 ID。",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "无效的 $SERVICENAME$ 域名。",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "无效的 $SERVICENAME$ URL。",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "发生未知的 $SERVICENAME$ 错误。",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "未知的转发服务：$SERVICENAME$。",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "主机名",
     "description": "Part of a URL."
@@ -5990,7 +6134,7 @@
     "message": "正登录为"
   },
   "notYou": {
-    "message": "不是你？"
+    "message": "不是您吗？"
   },
   "pickAnAvatarColor": {
     "message": "选择头像颜色"
@@ -6480,7 +6624,7 @@
   "editGroupCollectionsDesc": {
     "message": "通过将集合添加到此群组来授予对集合的访问权限。"
   },
-  "editGroupCollectionsRestrictionsDesc": {
+  "restrictedCollectionAssignmentDesc": {
     "message": "您只能分配您管理的集合。"
   },
   "accessAllCollectionsDesc": {
@@ -6685,7 +6829,7 @@
     "message": "无法完成生物识别。"
   },
   "needADifferentMethod": {
-    "message": "Need a different method?"
+    "message": "尝试其他方式吗？"
   },
   "useMasterPassword": {
     "message": "使用主密码"
@@ -6714,8 +6858,8 @@
   "selectGroups": {
     "message": "选择群组"
   },
-  "userPermissionOverrideHelper": {
-    "message": "为成员设置的权限将取代该成员所在群组设置的权限"
+  "userPermissionOverrideHelperDesc": {
+    "message": "为成员设置的权限将替换为由该成员群组设置的权限。"
   },
   "noMembersOrGroupsAdded": {
     "message": "未添加任何成员或群组"
@@ -6736,7 +6880,7 @@
     "message": "成员角色"
   },
   "moreFromBitwarden": {
-    "message": "来自 Bitwarden 的更多产品"
+    "message": "更多来自 Bitwarden 的产品"
   },
   "switchProducts": {
     "message": "切换产品"
@@ -6906,8 +7050,8 @@
   "updateLowKdfIterationsDesc": {
     "message": "更新您的加密设置以满足新的安全建议以及增强账户保护。"
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "接下来将会注销您所有的活动会话。您将需要重新登录并完成两步登录设置。我们建议在更改您的加密设置之前导出您的密码库，以防数据丢失。"
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "接下来将会注销您所有的活动会话。您需要重新登录并完成两步登录（如果有）。我们建议您在更改加密设置前导出密码库，以防止数据丢失。"
   },
   "secretsManager": {
     "message": "机密管理器"
@@ -6963,10 +7107,10 @@
     "message": "创建账户"
   },
   "createSecret": {
-    "message": "创建一个机密"
+    "message": "创建机密"
   },
   "createProject": {
-    "message": "创建一个工程"
+    "message": "创建工程"
   },
   "createServiceAccount": {
     "message": "创建服务账户"
@@ -7470,7 +7614,7 @@
     "message": "别名域"
   },
   "alreadyHaveAccount": {
-    "message": "已经有一个账户？"
+    "message": "已经拥有账户了吗？"
   },
   "skipToContent": {
     "message": "跳转到内容"
@@ -7527,6 +7671,12 @@
   "readOnlyCollectionAccess": {
     "message": "您没有管理此集合的权限。"
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "缺少「可以管理」权限"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "授予「可以管理」权限以允许完整的集合管理，包括删除集合。"
+  },
   "grantCollectionAccess": {
     "message": "授予群组或成员对此集合的访问权限。"
   },
@@ -7557,13 +7707,6 @@
     "message": "请添加一个付款方式。",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "添加新的设置和权限以获得额外的灵活性。将经理角色替换为「可以管理」权限，并引入允许用户创建集合以及限制对集合的管理访问权限的选项。",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "了解更多关于集合管理的信息"
-  },
   "organizationInformation": {
     "message": "组织信息"
   },
@@ -7575,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "我们已经发送了一封确认邮件到 "
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "此操作不可逆"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "开启此功能将弃用经理角色，并将其替换为「可以管理」权限。这需要一些时间。在完成之前，请勿对组织进行任何更改。您确定要继续吗？"
   },
   "sorryToSeeYouGo": {
     "message": "很遗憾看到您离开！请分享您取消的原因，以帮助改进 Bitwarden。",
@@ -7630,15 +7767,12 @@
     "message": "提供商门户"
   },
   "success": {
-    "message": "Success"
-  },
-  "viewCollection": {
-    "message": "查看集合"
+    "message": "成功"
   },
   "restrictedGroupAccess": {
     "message": "您不能将自己添加到群组。"
   },
-  "restrictedCollectionAccess": {
+  "cannotAddYourselfToCollections": {
     "message": "您不能将自己添加到集合。"
   },
   "assign": {
@@ -7685,13 +7819,13 @@
     "message": "已分配"
   },
   "used": {
-    "message": "已用"
+    "message": "已使用"
   },
   "remaining": {
-    "message": "余额："
+    "message": "剩余"
   },
   "unlinkOrganization": {
-    "message": "脱离组织"
+    "message": "取消链接组织"
   },
   "manageSeats": {
     "message": "管理席位"
@@ -7867,7 +8001,7 @@
     "message": "从机器账户中移除人员并不会移除他们已创建的访问令牌。基于安全方面的最佳做法，建议吊销从机器账户中被移除的人员创建的访问令牌。"
   },
   "smAccessRemovalWarningMaTitle": {
-    "message": "移除此机器账户的访问权限"
+    "message": "移除对此机器账户的访问权限"
   },
   "smAccessRemovalWarningMaMessage": {
     "message": "此操作将移除您对此机器账户的访问权限。"
@@ -7939,11 +8073,11 @@
     "message": "注意：从 2024 年 5 月 2 日起，未分配的组织项目在您所有设备的「所有密码库」视图中将不再可见，只能通过管理控制台访问。"
   },
   "unassignedItemsBannerCTAPartOne": {
-    "message": "Assign these items to a collection from the",
+    "message": "将这些项目分配到集合，通过",
     "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
   },
   "unassignedItemsBannerCTAPartTwo": {
-    "message": "以使其可见。",
+    "message": "，以使其可见。",
     "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
   },
   "deleteProvider": {
@@ -7962,7 +8096,7 @@
     }
   },
   "deleteProviderWarningDescription": {
-    "message": "删除 $ID$ 之前，您必须取消链接所有的客户端。",
+    "message": "删除 $ID$ 之前，您必须取消链接所有的客户。",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -8041,7 +8175,7 @@
     "message": "创建一个新的客户组织作为提供商来管理。附加席位将反映在下一个计费周期中。"
   },
   "selectAPlan": {
-    "message": "选择套餐"
+    "message": "选择一个计划"
   },
   "thirtyFivePercentDiscount": {
     "message": "35% 折扣"
@@ -8056,10 +8190,10 @@
     "message": "添加组织"
   },
   "createdNewClient": {
-    "message": "Successfully created new client"
+    "message": "成功创建了新的客户"
   },
   "noAccess": {
-    "message": "暂无权限"
+    "message": "无访问权限"
   },
   "collectionAdminConsoleManaged": {
     "message": "此集合只能从管理控制台访问"
@@ -8074,6 +8208,94 @@
     "message": "选择集合项目"
   },
   "manageBillingFromProviderPortalMessage": {
-    "message": "在供应商门户中管理账单"
+    "message": "从提供商门户管理账单"
+  },
+  "viewItemsIn": {
+    "message": "查看 $NAME$ 中的项目",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "返回 $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "返回",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "删除 $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "viewInfo": {
+    "message": "查看信息"
+  },
+  "viewAccess": {
+    "message": "查看访问权限"
+  },
+  "noCollectionsSelected": {
+    "message": "您尚未选择任何集合。"
+  },
+  "updateName": {
+    "message": "更新名称"
+  },
+  "updatedOrganizationName": {
+    "message": "更新了组织名称"
+  },
+  "providerPlan": {
+    "message": "托管服务提供商"
+  },
+  "orgSeats": {
+    "message": "组织席位"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$ 折扣",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "lowKDFIterationsBanner": {
+    "message": "KDF 迭代低。请增加迭代次数以提高您账户的安全性。"
+  },
+  "changeKDFSettings": {
+    "message": "更改 KDF 设置"
+  },
+  "secureYourInfrastructure": {
+    "message": "保护您的基础设施"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "保护您的家庭或企业"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "通过监控报告弥补安全漏洞"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "升级到付费计划以加强监控，从而提前发现安全漏洞。"
+  },
+  "approveAllRequests": {
+    "message": "批准所有请求"
+  },
+  "allLoginRequestsApproved": {
+    "message": "所有登录请求已批准"
   }
 }

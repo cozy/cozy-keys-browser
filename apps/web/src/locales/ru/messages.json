@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "Уровень доступа"
   },
+  "accessing": {
+    "message": "Доступ"
+  },
   "loggedOut": {
     "message": "Вы вышли из хранилища"
   },
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "Ваш аккаунт был закрыт, а все связанные с ним данные удалены."
   },
+  "deleteOrganizationWarning": {
+    "message": "Удаление организации необратимо. Действие нельзя отменить."
+  },
   "myAccount": {
     "message": "Мой аккаунт"
   },
@@ -1710,11 +1716,11 @@
   "twoFactorDuoDesc": {
     "message": "Введите информацию о приложении Bitwarden из панели администратора Duo."
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "Ключ интеграции"
+  "twoFactorDuoClientId": {
+    "message": "ID клиента"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "Секретный ключ"
+  "twoFactorDuoClientSecret": {
+    "message": "Секрет клиента"
   },
   "twoFactorDuoApiHostname": {
     "message": "Имя хоста API"
@@ -2788,6 +2794,12 @@
   "all": {
     "message": "Все"
   },
+  "addAccess": {
+    "message": "Добавить доступ"
+  },
+  "addAccessFilter": {
+    "message": "Добавить фильтр доступа"
+  },
   "refresh": {
     "message": "Обновить"
   },
@@ -3235,6 +3247,27 @@
   "device": {
     "message": "Устройство"
   },
+  "creatingAccountOn": {
+    "message": "Создание аккаунта"
+  },
+  "checkYourEmail": {
+    "message": "Проверьте свою почту"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Перейдите по ссылке из отправленного письма"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "и продолжите создание аккаунта."
+  },
+  "noEmail": {
+    "message": "Нет письма?"
+  },
+  "goBack": {
+    "message": "Вернуться"
+  },
+  "toEditYourEmailAddress": {
+    "message": "для изменения адреса email."
+  },
   "view": {
     "message": "Просмотр"
   },
@@ -3381,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "Вы запросили удаление вашего аккаунта Bitwarden. Нажмите кнопку ниже, чтобы подтвердить."
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "Вы запросили удаление организации Bitwarden."
   },
   "myOrganization": {
     "message": "Моя организация"
@@ -3558,6 +3594,12 @@
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "Корректировка вашей подписки приведет к пропорциональным изменениям в сумме счетов. Если новых приглашенных пользователей будет больше, чем мест по подписке, вы сразу получите пропорциональную плату за дополнительных пользователей."
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "Если вы хотите добавить дополнительные"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "места без пакетного предложения, пожалуйста, свяжитесь с"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "Корректировка вашей подписки приведет к пропорциональным изменениям в сумме счетов. Если новых приглашенных пользователей будет больше, чем мест по подписке, вы сразу получите пропорциональную плату за дополнительных пользователей, пока не будет достигнут лимит мест ($MAX$).",
@@ -5802,6 +5844,108 @@
   "forwardedEmailDesc": {
     "message": "Создать псевдоним электронной почты для внешней службы пересылки."
   },
+  "forwarderError": {
+    "message": "Ошибка $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Создано Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Сайт: $WEBSITE$. Создано Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Неверный токен API $SERVICENAME$",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Неверный токен $SERVICENAME$ API: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Не удалось получить скрытый идентификатор email аккаунта $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Недопустимый домен $SERVICENAME$.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Некорректный URL $SERVICENAME$.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Произошла неизвестная ошибка $SERVICENAME$.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Неизвестный форвардер: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "Имя хоста",
     "description": "Part of a URL."
@@ -6480,7 +6624,7 @@
   "editGroupCollectionsDesc": {
     "message": "Предоставить доступ к коллекциям, при добавлении их в эту группу."
   },
-  "editGroupCollectionsRestrictionsDesc": {
+  "restrictedCollectionAssignmentDesc": {
     "message": "Вы можете назначать только те коллекции, которыми управляете."
   },
   "accessAllCollectionsDesc": {
@@ -6714,8 +6858,8 @@
   "selectGroups": {
     "message": "Выбрать группы"
   },
-  "userPermissionOverrideHelper": {
-    "message": "Разрешения, установленные для участника, заменят разрешения, установленные группой этого участника"
+  "userPermissionOverrideHelperDesc": {
+    "message": "Разрешения, установленные для участника, заменят разрешения, установленные группой этого участника."
   },
   "noMembersOrGroupsAdded": {
     "message": "Не добавлены участники или группы"
@@ -6906,8 +7050,8 @@
   "updateLowKdfIterationsDesc": {
     "message": "Обновите настройки шифрования в соответствии с новыми рекомендациями по безопасности и улучшите защиту аккаунта."
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "При продолжении все активные сессии будут завершены. Вам потребуется авторизоваться повторно и выполнить настройку двухэтапной аутентификации. Мы рекомендуем экспортировать хранилище перед изменением настроек шифрования, чтобы предотвратить потерю данных."
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "При продолжении все активные сессии будут завершены. Вам потребуется авторизоваться повторно и выполнить двухэтапную аутентификацию, если она включена. Мы рекомендуем экспортировать хранилище перед изменением настроек шифрования, чтобы предотвратить потерю данных."
   },
   "secretsManager": {
     "message": "Менеджер секретов"
@@ -7527,6 +7671,12 @@
   "readOnlyCollectionAccess": {
     "message": "У вас нет доступа к управлению этой коллекцией."
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "Недостаточно полномочий для управления"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Предоставить возможность управлять разрешениями коллекций, включая их удаление."
+  },
   "grantCollectionAccess": {
     "message": "Предоставить группам или участникам доступ к этой коллекции."
   },
@@ -7557,13 +7707,6 @@
     "message": "добавьте способ оплаты",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "Добавьте новые настройки и разрешения для обеспечения дополнительной гибкости. Замените роль менеджера разрешением \"может управлять\" и введите опции, позволяющие пользователям создавать коллекции, а также ограничивающие административный доступ к коллекциям.",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "Узнайте больше об управлении коллекциями"
-  },
   "organizationInformation": {
     "message": "Информация об организации"
   },
@@ -7575,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "Мы отправили письмо с подтверждением на "
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "Это действие необратимо"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "При включении этой опции роль менеджера будет аннулирована и заменена разрешением 'Может управлять'. Это займет несколько минут. Не вносите никаких изменений в организацию, пока операция не будет завершена. Готовы ли вы продолжить?"
   },
   "sorryToSeeYouGo": {
     "message": "Жаль, что вы уходите! Помогите нам улучшить Bitwarden, поделившись информацией о причинах отмены.",
@@ -7632,13 +7769,10 @@
   "success": {
     "message": "Успешно"
   },
-  "viewCollection": {
-    "message": "Посмотреть коллекцию"
-  },
   "restrictedGroupAccess": {
     "message": "Нельзя добавить самого себя в группы."
   },
-  "restrictedCollectionAccess": {
+  "cannotAddYourselfToCollections": {
     "message": "Нельзя добавить самого себя в коллекции."
   },
   "assign": {
@@ -8075,5 +8209,93 @@
   },
   "manageBillingFromProviderPortalMessage": {
     "message": "Управление биллингом на портале провайдера"
+  },
+  "viewItemsIn": {
+    "message": "Просмотр элементов в $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Вернуться к $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Назад",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Удалить $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "viewInfo": {
+    "message": "Просмотр информации"
+  },
+  "viewAccess": {
+    "message": "Просмотр доступа"
+  },
+  "noCollectionsSelected": {
+    "message": "Вы не выбрали ни одной коллекции."
+  },
+  "updateName": {
+    "message": "Обновить название"
+  },
+  "updatedOrganizationName": {
+    "message": "Название организации обновлено"
+  },
+  "providerPlan": {
+    "message": "Поставщик управляемых услуг"
+  },
+  "orgSeats": {
+    "message": "Места организации"
+  },
+  "providerDiscount": {
+    "message": "Скидка $AMOUNT$%",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "lowKDFIterationsBanner": {
+    "message": "Низкое количество итераций KDF. Увеличьте количество итераций, чтобы повысить защищенность вашего аккаунта."
+  },
+  "changeKDFSettings": {
+    "message": "Изменить параметры KDF"
+  },
+  "secureYourInfrastructure": {
+    "message": "Защитите вашу инфраструктуру"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Защитите свою семью или бизнес"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Устранение пробелов в системе безопасности с помощью мониторинговых отчетов"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Опережайте уязвимости в системе безопасности, перейдя на платный тарифный план для расширенного мониторинга."
+  },
+  "approveAllRequests": {
+    "message": "Одобрить все запросы"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Все запросы на вход одобрены"
   }
 }

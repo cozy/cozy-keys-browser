@@ -1299,11 +1299,41 @@
     "message": "Passwort aktualisiert",
     "description": "ex. Date this password was updated"
   },
+  "exportFrom": {
+    "message": "Export aus"
+  },
   "exportVault": {
     "message": "Tresor exportieren"
   },
   "fileFormat": {
     "message": "Dateiformat"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Dieser Datei-Export ist passwortgeschützt und erfordert das Dateipasswort zum Entschlüsseln."
+  },
+  "filePassword": {
+    "message": "Dateipasswort"
+  },
+  "exportPasswordDescription": {
+    "message": "Dieses Passwort wird zum Exportieren und Importieren dieser Datei verwendet"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Verwende den Verschlüsselungsschlüssel deines Kontos, abgeleitet vom Benutzernamen und Master-Passwort, um den Export zu verschlüsseln und den Import auf das aktuelle Bitwarden-Konto zu beschränken."
+  },
+  "passwordProtected": {
+    "message": "Passwortgeschützt"
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Lege ein Dateipasswort fest, um den Export zu verschlüsseln und importiere ihn in ein beliebiges Bitwarden-Konto, wobei das Passwort zum Entschlüsseln genutzt wird."
+  },
+  "exportTypeHeading": {
+    "message": "Exporttyp"
+  },
+  "accountRestricted": {
+    "message": "Konto eingeschränkt"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "„Dateipasswort“ und „Dateipasswort bestätigen“ stimmen nicht überein."
   },
   "hCaptchaUrl": {
     "message": "hCaptcha URL",
@@ -2050,6 +2080,9 @@
   "switchAccount": {
     "message": "Konto wechseln"
   },
+  "alreadyHaveAccount": {
+    "message": "Hast du bereits ein Konto?"
+  },
   "options": {
     "message": "Optionen"
   },
@@ -2065,6 +2098,18 @@
       "email": {
         "content": "$1",
         "example": "name@example.com"
+      }
+    }
+  },
+  "exportingOrganizationVaultTitle": {
+    "message": "Tresor der Organisation wird exportiert"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Nur der mit $ORGANIZATION$ verbundene Organisationstresor wird exportiert. Einträge in persönlichen Tresoren oder anderen Organisationen werden nicht berücksichtigt.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
       }
     }
   },
@@ -2131,6 +2176,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Erzeuge ein E-Mail-Alias mit einem externen Weiterleitungsdienst."
+  },
+  "forwarderError": {
+    "message": "$SERVICENAME$ Fehler: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Von Bitwarden generiert.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Webseite: $WEBSITE$. Von Bitwarden generiert.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Ungültiger API-Token von $SERVICENAME$",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Ungültiger API-Token von $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Maskierte E-Mail-Konto-ID für $SERVICENAME$ konnte nicht abgerufen werden.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Ungültige $SERVICENAME$-Domain.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Ungültige $SERVICENAME$-URL.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Unbekannter $SERVICENAME$-Fehler aufgetreten.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Unbekannter Weiterleitungsdienst: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Hostname",
@@ -2287,6 +2434,27 @@
   },
   "logInRequested": {
     "message": "Anmeldung angefordert"
+  },
+  "creatingAccountOn": {
+    "message": "Konto wird erstellt bei"
+  },
+  "checkYourEmail": {
+    "message": "Überprüfe deine E-Mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Folge dem Link in der E-Mail an"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "und fahre mit der Erstellung deines Kontos fort."
+  },
+  "noEmail": {
+    "message": "Keine E-Mail?"
+  },
+  "goBack": {
+    "message": "Geh zurück"
+  },
+  "toEditYourEmailAddress": {
+    "message": ", um deine E-Mail-Adresse zu bearbeiten."
   },
   "exposedMasterPassword": {
     "message": "Kompromittiertes Master-Passwort"
@@ -2720,5 +2888,39 @@
   },
   "errorAssigningTargetFolder": {
     "message": "Fehler beim Zuweisen des Ziel-Ordners."
+  },
+  "viewItemsIn": {
+    "message": "Einträge in $NAME$ anzeigen",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Zurück zu $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Zurück",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "$NAME$ entfernen",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }

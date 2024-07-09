@@ -3,7 +3,7 @@
     type="checkbox"
     bitCheckbox
     appStopProp
-    *ngIf="canDeleteCollection"
+    *ngIf="showCheckbox"
     [disabled]="disabled"
     [checked]="checked"
     (change)="$event ? this.checkedToggled.next() : null"
@@ -20,7 +20,7 @@
     bitLink
     [disabled]="disabled"
     type="button"
-    class="tw-w-full tw-truncate tw-text-start tw-leading-snug"
+    class="tw-flex tw-w-full tw-text-start tw-leading-snug"
     linkType="secondary"
     title="{{ 'viewCollectionWithName' | i18n: collection.name }}"
     [routerLink]="[]"
@@ -28,7 +28,10 @@
     queryParamsHandling="merge"
     appStopProp
   >
-    {{ collection.name }}
+    <span class="tw-truncate tw-mr-1">{{ collection.name }}</span>
+    <div>
+      <span *ngIf="showAddAccess" bitBadge variant="warning">{{ "addAccess" | i18n }}</span>
+    </div>
   </button>
 </td>
 <td bitCell [ngClass]="RowHeightClass" *ngIf="showOwner">
@@ -55,7 +58,7 @@
 </td>
 <td bitCell [ngClass]="RowHeightClass" class="tw-text-right">
   <button
-    *ngIf="canEditCollection || canDeleteCollection"
+    *ngIf="canEditCollection || canDeleteCollection || canViewCollectionInfo"
     [disabled]="disabled"
     [bitMenuTriggerFor]="collectionOptions"
     size="small"
@@ -65,14 +68,26 @@
     appStopProp
   ></button>
   <bit-menu #collectionOptions>
-    <button *ngIf="canEditCollection" type="button" bitMenuItem (click)="edit()">
-      <i class="bwi bwi-fw bwi-pencil-square" aria-hidden="true"></i>
-      {{ "editInfo" | i18n }}
-    </button>
-    <button *ngIf="canEditCollection" type="button" bitMenuItem (click)="access()">
-      <i class="bwi bwi-fw bwi-users" aria-hidden="true"></i>
-      {{ "access" | i18n }}
-    </button>
+    <ng-container *ngIf="canEditCollection">
+      <button type="button" bitMenuItem (click)="edit(false)">
+        <i class="bwi bwi-fw bwi-pencil-square" aria-hidden="true"></i>
+        {{ "editInfo" | i18n }}
+      </button>
+      <button type="button" bitMenuItem (click)="access(false)">
+        <i class="bwi bwi-fw bwi-users" aria-hidden="true"></i>
+        {{ "access" | i18n }}
+      </button>
+    </ng-container>
+    <ng-container *ngIf="!canEditCollection && canViewCollectionInfo">
+      <button type="button" bitMenuItem (click)="edit(true)">
+        <i class="bwi bwi-fw bwi-pencil-square" aria-hidden="true"></i>
+        {{ "viewInfo" | i18n }}
+      </button>
+      <button type="button" bitMenuItem (click)="access(true)">
+        <i class="bwi bwi-fw bwi-users" aria-hidden="true"></i>
+        {{ "viewAccess" | i18n }}
+      </button>
+    </ng-container>
     <button *ngIf="canDeleteCollection" type="button" bitMenuItem (click)="deleteCollection()">
       <span class="tw-text-danger">
         <i class="bwi bwi-fw bwi-trash" aria-hidden="true"></i>

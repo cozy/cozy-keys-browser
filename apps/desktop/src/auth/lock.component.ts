@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { firstValueFrom, switchMap } from "rxjs";
 
 import { LockComponent as BaseLockComponent } from "@bitwarden/angular/auth/components/lock.component";
-import { PinCryptoServiceAbstraction } from "@bitwarden/auth/common";
+import { PinServiceAbstraction } from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
@@ -26,6 +26,7 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
 const BroadcasterSubscriptionId = "LockComponent";
@@ -62,11 +63,12 @@ export class LockComponent extends BaseLockComponent {
     dialogService: DialogService,
     deviceTrustService: DeviceTrustServiceAbstraction,
     userVerificationService: UserVerificationService,
-    pinCryptoService: PinCryptoServiceAbstraction,
+    pinService: PinServiceAbstraction,
     biometricStateService: BiometricStateService,
     accountService: AccountService,
     authService: AuthService,
     kdfConfigService: KdfConfigService,
+    syncService: SyncService,
   ) {
     super(
       masterPasswordService,
@@ -88,11 +90,12 @@ export class LockComponent extends BaseLockComponent {
       dialogService,
       deviceTrustService,
       userVerificationService,
-      pinCryptoService,
+      pinService,
       biometricStateService,
       accountService,
       authService,
       kdfConfigService,
+      syncService,
     );
   }
 

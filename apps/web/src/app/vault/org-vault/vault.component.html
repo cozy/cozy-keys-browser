@@ -3,19 +3,20 @@
   [loading]="refreshing"
   [organization]="organization"
   [collection]="selectedCollection"
+  [searchText]="currentSearchText$ | async"
   (onAddCipher)="addCipher()"
   (onAddCollection)="addCollection()"
-  (onEditCollection)="editCollection(selectedCollection.node, $event.tab)"
+  (onEditCollection)="editCollection(selectedCollection.node, $event.tab, $event.readonly)"
   (onDeleteCollection)="deleteCollection(selectedCollection.node)"
+  (searchTextChanged)="filterSearchText($event)"
 ></app-org-vault-header>
 
 <div class="row">
-  <div class="col-3">
+  <div class="col-3" *ngIf="!hideVaultFilters">
     <div class="groupings">
       <div class="content">
         <div class="inner-content">
           <app-organization-vault-filter
-            #vaultFilter
             [organization]="organization"
             [activeFilter]="activeFilter"
             [searchText]="currentSearchText$ | async"
@@ -25,7 +26,21 @@
       </div>
     </div>
   </div>
-  <div class="col-9">
+  <div [class]="hideVaultFilters ? 'col-12' : 'col-9'">
+    <bit-toggle-group
+      *ngIf="showAddAccessToggle && activeFilter.selectedCollectionNode"
+      [selected]="addAccessStatus$ | async"
+      (selectedChange)="addAccessToggle($event)"
+      [attr.aria-label]="'addAccessFilter' | i18n"
+    >
+      <bit-toggle [value]="0">
+        {{ "all" | i18n }}
+      </bit-toggle>
+
+      <bit-toggle [value]="1">
+        {{ "addAccess" | i18n }}
+      </bit-toggle>
+    </bit-toggle-group>
     <app-callout type="warning" *ngIf="activeFilter.isDeleted" icon="bwi bwi-exclamation-triangle">
       {{ trashCleanupWarning }}
     </app-callout>
@@ -47,13 +62,16 @@
       [showPremiumFeatures]="organization?.useTotp"
       [showBulkMove]="false"
       [showBulkTrashOptions]="filter.type === 'trash'"
-      [useEvents]="organization?.useEvents"
+      [useEvents]="organization?.canAccessEventLogs"
       [showAdminActions]="true"
       (onEvent)="onVaultItemsEvent($event)"
       [showBulkEditCollectionAccess]="organization?.flexibleCollections"
       [showBulkAddToCollections]="organization?.flexibleCollections"
       [viewingOrgVault]="true"
       [flexibleCollectionsV1Enabled]="flexibleCollectionsV1Enabled"
+      [addAccessStatus]="addAccessStatus$ | async"
+      [addAccessToggle]="showAddAccessToggle"
+      [restrictProviderAccess]="restrictProviderAccessEnabled"
     >
     </app-vault-items>
     <ng-container *ngIf="!flexibleCollectionsV1Enabled">
@@ -98,8 +116,17 @@
       </bit-no-items>
       <collection-access-restricted
         *ngIf="showCollectionAccessRestricted"
+        [canEditCollection]="
+          selectedCollection?.node?.canEdit(organization, flexibleCollectionsV1Enabled)
+        "
+        [canViewCollectionInfo]="
+          selectedCollection?.node?.canViewCollectionInfo(
+            organization,
+            flexibleCollectionsV1Enabled
+          )
+        "
         (viewCollectionClicked)="
-          editCollection(selectedCollection.node, CollectionDialogTabType.Info, true)
+          editCollection(selectedCollection.node, $event.tab, $event.readonly)
         "
       >
       </collection-access-restricted>

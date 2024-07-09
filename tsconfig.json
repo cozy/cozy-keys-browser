@@ -22,14 +22,19 @@
       "@bitwarden/billing": ["./libs/billing/src"],
       "@bitwarden/common/*": ["./libs/common/src/*"],
       "@bitwarden/components": ["./libs/components/src"],
+      "@bitwarden/generator-components": ["./libs/tools/generator/components/src"],
+      "@bitwarden/generator-core": ["./libs/tools/generator/core/src"],
+      "@bitwarden/generator-extensions": ["./libs/tools/generator/extensions/src"],
       "@bitwarden/vault-export-core": ["./libs/tools/export/vault-export/vault-export-core/src"],
       "@bitwarden/vault-export-ui": ["./libs/tools/export/vault-export/vault-export-ui/src"],
       "@bitwarden/importer/core": ["./libs/importer/src"],
       "@bitwarden/importer/ui": ["./libs/importer/src/components"],
       "@bitwarden/platform": ["./libs/platform/src"],
+      "@bitwarden/send-ui": ["./libs/tools/send/send-ui/src"],
       "@bitwarden/node/*": ["./libs/node/src/*"],
       "@bitwarden/web-vault/*": ["./apps/web/src/*"],
-      "@bitwarden/vault": ["./libs/vault/src"]
+      "@bitwarden/vault": ["./libs/vault/src"],
+      "@bitwarden/bit-common/*": ["./bitwarden_license/bit-common/src/*"]
     },
     "plugins": [
       {
@@ -42,7 +47,8 @@
     "apps/web/src/**/*",
     "apps/browser/src/**/*",
     "libs/*/src/**/*",
-    "bitwarden_license/bit-web/src/**/*"
+    "bitwarden_license/bit-web/src/**/*",
+    "bitwarden_license/bit-common/src/**/*"
   ],
   "exclude": [
     "apps/web/src/**/*.spec.ts",

@@ -1,5 +1,5 @@
 <bit-layout variant="secondary">
-  <nav slot="sidebar" *ngIf="provider$ | async as provider">
+  <nav slot="sidebar" *ngIf="provider$ | async as provider" class="tw-flex tw-flex-col tw-h-full">
     <a routerLink="." class="tw-m-5 tw-mt-7 tw-block" [appA11yTitle]="'providerPortal' | i18n">
       <bit-icon [icon]="logo"></bit-icon>
     </a>
@@ -33,6 +33,7 @@
       *ngIf="canAccessBilling$ | async"
     >
       <bit-nav-item [text]="'subscription' | i18n" route="billing/subscription"></bit-nav-item>
+      <bit-nav-item [text]="'paymentMethod' | i18n" route="billing/payment-method"></bit-nav-item>
     </bit-nav-group>
     <bit-nav-item
       icon="bwi-cogs"
@@ -40,6 +41,9 @@
       route="settings"
       *ngIf="showSettingsTab(provider)"
     ></bit-nav-item>
+
+    <navigation-product-switcher class="tw-mt-auto"></navigation-product-switcher>
+
     <app-toggle-width></app-toggle-width>
   </nav>
   <app-payment-method-warnings

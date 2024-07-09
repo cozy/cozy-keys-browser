@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { firstValueFrom, Subject } from "rxjs";
 import { concatMap, map, take, takeUntil } from "rxjs/operators";
 
-import { PinCryptoServiceAbstraction } from "@bitwarden/auth/common";
+import { PinServiceAbstraction, PinLockType } from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
@@ -30,10 +30,10 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
 import { HashPurpose, KeySuffixOptions } from "@bitwarden/common/platform/enums";
-import { PinLockType } from "@bitwarden/common/services/vault-timeout/vault-timeout-settings.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { UserId } from "@bitwarden/common/types/guid";
 import { UserKey } from "@bitwarden/common/types/key";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
 @Directive()
@@ -55,7 +55,7 @@ export class LockComponent implements OnInit, OnDestroy {
   protected onSuccessfulSubmit: () => Promise<void>;
 
   private invalidPinAttempts = 0;
-  private pinStatus: PinLockType;
+  private pinLockType: PinLockType;
 
   private enforcedMasterPasswordOptions: MasterPasswordPolicyOptions = undefined;
 
@@ -81,11 +81,12 @@ export class LockComponent implements OnInit, OnDestroy {
     protected dialogService: DialogService,
     protected deviceTrustService: DeviceTrustServiceAbstraction,
     protected userVerificationService: UserVerificationService,
-    protected pinCryptoService: PinCryptoServiceAbstraction,
+    protected pinService: PinServiceAbstraction,
     protected biometricStateService: BiometricStateService,
     protected accountService: AccountService,
     protected authService: AuthService,
     protected kdfConfigService: KdfConfigService,
+    protected syncService: SyncService,
   ) {}
 
   async ngOnInit() {
@@ -168,7 +169,8 @@ export class LockComponent implements OnInit, OnDestroy {
     const MAX_INVALID_PIN_ENTRY_ATTEMPTS = 5;
 
     try {
-      const userKey = await this.pinCryptoService.decryptUserKeyWithPin(this.pin);
+      const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+      const userKey = await this.pinService.decryptUserKeyWithPin(this.pin, userId);
 
       if (userKey) {
         await this.setUserKeyAndContinue(userKey);
@@ -272,7 +274,7 @@ export class LockComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
+    const userKey = await this.masterPasswordService.decryptUserKeyWithMasterKey(masterKey);
     await this.masterPasswordService.setMasterKey(masterKey, userId);
     await this.setUserKeyAndContinue(userKey, true);
   }
@@ -318,6 +320,9 @@ export class LockComponent implements OnInit, OnDestroy {
       }
     }
 
+    // Vault can be de-synced since notifications get ignored while locked. Need to check whether sync is required using the sync service.
+    await this.syncService.fullSync(false);
+
     if (this.onSuccessfulSubmit != null) {
       await this.onSuccessfulSubmit();
     } else if (this.router != null) {
@@ -358,12 +363,13 @@ export class LockComponent implements OnInit, OnDestroy {
       return await this.vaultTimeoutService.logOut(userId);
     }
 
-    this.pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
+    this.pinLockType = await this.pinService.getPinLockType(userId);
 
-    let ephemeralPinSet = await this.stateService.getPinKeyEncryptedUserKeyEphemeral();
-    ephemeralPinSet ||= await this.stateService.getDecryptedPinProtected();
+    const ephemeralPinSet = await this.pinService.getPinKeyEncryptedUserKeyEphemeral(userId);
+
     this.pinEnabled =
-      (this.pinStatus === "TRANSIENT" && !!ephemeralPinSet) || this.pinStatus === "PERSISTANT";
+      (this.pinLockType === "EPHEMERAL" && !!ephemeralPinSet) || this.pinLockType === "PERSISTENT";
+
     this.masterPasswordEnabled = await this.userVerificationService.hasMasterPassword();
 
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
@@ -371,7 +377,9 @@ export class LockComponent implements OnInit, OnDestroy {
       (await this.vaultTimeoutSettingsService.isBiometricLockSet()) &&
       ((await this.cryptoService.hasUserKeyStored(KeySuffixOptions.Biometric)) ||
         !this.platformUtilsService.supportsSecureStorage());
-    this.email = await this.stateService.getEmail();
+    this.email = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.email)),
+    );
 
     this.webVaultHostname = (await this.environmentService.getEnvironment()).getHostname();
   }

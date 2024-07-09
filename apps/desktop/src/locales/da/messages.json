@@ -1299,11 +1299,41 @@
     "message": "Adgangskode opdateret",
     "description": "ex. Date this password was updated"
   },
+  "exportFrom": {
+    "message": "Eksportér fra"
+  },
   "exportVault": {
     "message": "Eksportér boks"
   },
   "fileFormat": {
     "message": "Filformat"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Denne fileksport vil være adgangskodebeskyttet og kræve filadgangskoden at dekryptere."
+  },
+  "filePassword": {
+    "message": "Filadgangskode"
+  },
+  "exportPasswordDescription": {
+    "message": "Denne adgangskode vil blive brugt ved eksport og import af denne fil"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Brug kontokrypteringsnøglen, dannet af kontobrugernavn og Hovedadgangskode, for at kryptere eksporten og hindre import til andre end den aktuelle Bitwarden-konto."
+  },
+  "passwordProtected": {
+    "message": "Adgangskodebeskyttet"
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Opsæt en adgangskode til både at kryptere eksporten samt dekryptere denne ved import til enhver Bitwarden-konto."
+  },
+  "exportTypeHeading": {
+    "message": "Eksporttype"
+  },
+  "accountRestricted": {
+    "message": "Konto begrænset"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "“Filadgangskode” og “Bekræft filadgangskode“ matcher ikke."
   },
   "hCaptchaUrl": {
     "message": "hCaptcha-URL",
@@ -2050,6 +2080,9 @@
   "switchAccount": {
     "message": "Skift konto"
   },
+  "alreadyHaveAccount": {
+    "message": "Har allerede en konto?"
+  },
   "options": {
     "message": "Indstillinger"
   },
@@ -2065,6 +2098,18 @@
       "email": {
         "content": "$1",
         "example": "name@example.com"
+      }
+    }
+  },
+  "exportingOrganizationVaultTitle": {
+    "message": "Eksport af organisationsboks"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Kun organisationsboksen tilknyttet $ORGANIZATION$ eksporteres. Emner i individuelle bokse eller andre organisationer medtages ikke.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
       }
     }
   },
@@ -2131,6 +2176,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Generér et e-mail alias med en ekstern viderestillingstjeneste."
+  },
+  "forwarderError": {
+    "message": "$SERVICENAME$-fejl: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Genereret af Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Websted: $WEBSITE$. Genereret af Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Ugyldigt $SERVICENAME$ API-token",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Ugyldigt $SERVICENAME$ API-token: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Kan ikke få $SERVICENAME$ maskeret e-mailkonto-ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Ugyldigt $SERVICENAME$-domæne.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Ugyldig $SERVICENAME$-URL.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Ukendt $SERVICENAME$-fejl opstod.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Ukendt videresender: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Værtsnavn",
@@ -2287,6 +2434,27 @@
   },
   "logInRequested": {
     "message": "Login anmodet"
+  },
+  "creatingAccountOn": {
+    "message": "Opretter konto på"
+  },
+  "checkYourEmail": {
+    "message": "Tjek din e-mail"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Følg linket i e-mailen sendt til"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "og fortsæt med kontooprettelsen."
+  },
+  "noEmail": {
+    "message": "Ingen e-mail?"
+  },
+  "goBack": {
+    "message": "Gå tilbage"
+  },
+  "toEditYourEmailAddress": {
+    "message": "for at redigere e-mailadressen."
   },
   "exposedMasterPassword": {
     "message": "Kompromitteret hovedadgangskode"
@@ -2720,5 +2888,39 @@
   },
   "errorAssigningTargetFolder": {
     "message": "Fejl ved tildeling af målmappe."
+  },
+  "viewItemsIn": {
+    "message": "Vis emner i $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Retur til $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Retur",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Fjern $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
   }
 }

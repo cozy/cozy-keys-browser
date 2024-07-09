@@ -43,6 +43,9 @@ export class VaultHeaderComponent implements OnInit {
   /** Currently selected collection */
   @Input() collection?: TreeNode<CollectionAdminView>;
 
+  /** The current search text in the header */
+  @Input() searchText: string;
+
   /** Emits an event when the new item button is clicked in the header */
   @Output() onAddCipher = new EventEmitter<void>();
 
@@ -50,15 +53,22 @@ export class VaultHeaderComponent implements OnInit {
   @Output() onAddCollection = new EventEmitter<void>();
 
   /** Emits an event when the edit collection button is clicked in the header */
-  @Output() onEditCollection = new EventEmitter<{ tab: CollectionDialogTabType }>();
+  @Output() onEditCollection = new EventEmitter<{
+    tab: CollectionDialogTabType;
+    readonly: boolean;
+  }>();
 
   /** Emits an event when the delete collection button is clicked in the header */
   @Output() onDeleteCollection = new EventEmitter<void>();
 
+  /** Emits an event when the search text changes in the header*/
+  @Output() searchTextChanged = new EventEmitter<string>();
+
   protected CollectionDialogTabType = CollectionDialogTabType;
   protected organizations$ = this.organizationService.organizations$;
 
-  private flexibleCollectionsV1Enabled = false;
+  protected flexibleCollectionsV1Enabled = false;
+  private restrictProviderAccessFlag = false;
 
   constructor(
     private organizationService: OrganizationService,
@@ -72,6 +82,9 @@ export class VaultHeaderComponent implements OnInit {
   async ngOnInit() {
     this.flexibleCollectionsV1Enabled = await firstValueFrom(
       this.configService.getFeatureFlag$(FeatureFlag.FlexibleCollectionsV1),
+    );
+    this.restrictProviderAccessFlag = await this.configService.getFeatureFlag(
+      FeatureFlag.RestrictProviderAccess,
     );
   }
 
@@ -183,8 +196,8 @@ export class VaultHeaderComponent implements OnInit {
     this.onAddCollection.emit();
   }
 
-  async editCollection(tab: CollectionDialogTabType): Promise<void> {
-    this.onEditCollection.emit({ tab });
+  async editCollection(tab: CollectionDialogTabType, readonly: boolean): Promise<void> {
+    this.onEditCollection.emit({ tab, readonly });
   }
 
   get canDeleteCollection(): boolean {
@@ -194,10 +207,33 @@ export class VaultHeaderComponent implements OnInit {
     }
 
     // Otherwise, check if we can delete the specified collection
-    return this.collection.node.canDelete(this.organization);
+    return this.collection.node.canDelete(this.organization, this.flexibleCollectionsV1Enabled);
+  }
+
+  get canViewCollectionInfo(): boolean {
+    return this.collection.node.canViewCollectionInfo(
+      this.organization,
+      this.flexibleCollectionsV1Enabled,
+    );
+  }
+
+  get canCreateCollection(): boolean {
+    return this.organization?.canCreateNewCollections;
+  }
+
+  get canCreateCipher(): boolean {
+    if (this.organization?.isProviderUser && this.restrictProviderAccessFlag) {
+      return false;
+    }
+    return true;
   }
 
   deleteCollection() {
     this.onDeleteCollection.emit();
+  }
+
+  onSearchTextChanged(t: string) {
+    this.searchText = t;
+    this.searchTextChanged.emit(t);
   }
 }

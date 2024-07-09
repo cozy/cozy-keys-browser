@@ -1,12 +1,10 @@
 import { Injectable } from "@angular/core";
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, map } from "rxjs";
 
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { DeviceTrustServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust.service.abstraction";
 import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
 import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
-import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
@@ -15,6 +13,7 @@ import { SendService } from "@bitwarden/common/tools/send/services/send.service.
 import { UserKey } from "@bitwarden/common/types/key";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CipherWithIdRequest } from "@bitwarden/common/vault/models/request/cipher-with-id.request";
 import { FolderWithIdRequest } from "@bitwarden/common/vault/models/request/folder-with-id.request";
 
@@ -39,8 +38,8 @@ export class UserKeyRotationService {
     private encryptService: EncryptService,
     private stateService: StateService,
     private accountService: AccountService,
-    private configService: ConfigService,
     private kdfConfigService: KdfConfigService,
+    private syncService: SyncService,
   ) {}
 
   /**
@@ -52,10 +51,16 @@ export class UserKeyRotationService {
       throw new Error("Invalid master password");
     }
 
+    if ((await this.syncService.getLastSync()) === null) {
+      throw new Error(
+        "The local vault is de-synced and the keys cannot be rotated. Please log out and log back in to resolve this issue.",
+      );
+    }
+
     // Create master key to validate the master password
     const masterKey = await this.cryptoService.makeMasterKey(
       masterPassword,
-      await this.stateService.getEmail(),
+      await firstValueFrom(this.accountService.activeAccount$.pipe(map((a) => a?.email))),
       await this.kdfConfigService.getKdfConfig(),
     );
 
@@ -90,11 +95,7 @@ export class UserKeyRotationService {
     request.emergencyAccessKeys = await this.emergencyAccessService.getRotatedKeys(newUserKey);
     request.resetPasswordKeys = await this.resetPasswordService.getRotatedKeys(newUserKey);
 
-    if (await this.configService.getFeatureFlag(FeatureFlag.KeyRotationImprovements)) {
-      await this.apiService.postUserKeyUpdate(request);
-    } else {
-      await this.rotateUserKeyAndEncryptedDataLegacy(request);
-    }
+    await this.apiService.postUserKeyUpdate(request);
 
     const activeAccount = await firstValueFrom(this.accountService.activeAccount$);
     await this.deviceTrustService.rotateDevicesTrust(
@@ -138,17 +139,5 @@ export class UserKeyRotationService {
         return new FolderWithIdRequest(encryptedFolder);
       }),
     );
-  }
-
-  private async rotateUserKeyAndEncryptedDataLegacy(request: UpdateKeyRequest): Promise<void> {
-    // Update keys, ciphers, folders, and sends
-    await this.apiService.postUserKeyUpdate(request);
-
-    // Update emergency access keys
-    await this.emergencyAccessService.postLegacyRotation(request.emergencyAccessKeys);
-
-    // Update account recovery keys
-    const userId = await this.stateService.getUserId();
-    await this.resetPasswordService.postLegacyRotation(userId, request.resetPasswordKeys);
   }
 }

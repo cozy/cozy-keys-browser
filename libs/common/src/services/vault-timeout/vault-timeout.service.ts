@@ -1,5 +1,7 @@
 import { combineLatest, filter, firstValueFrom, map, switchMap, timeout } from "rxjs";
 
+import { LogoutReason } from "@bitwarden/auth/common";
+
 import { SearchService } from "../../abstractions/search.service";
 import { VaultTimeoutSettingsService } from "../../abstractions/vault-timeout/vault-timeout-settings.service";
 import { VaultTimeoutService as VaultTimeoutServiceAbstraction } from "../../abstractions/vault-timeout/vault-timeout.service";
@@ -34,7 +36,10 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private stateEventRunnerService: StateEventRunnerService,
     private lockedCallback: (userId?: string) => Promise<void> = null,
-    private loggedOutCallback: (expired: boolean, userId?: string) => Promise<void> = null,
+    private loggedOutCallback: (
+      logoutReason: LogoutReason,
+      userId?: string,
+    ) => Promise<void> = null,
   ) {}
 
   async init(checkOnInterval: boolean) {
@@ -145,7 +150,7 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
 
   async logOut(userId?: string): Promise<void> {
     if (this.loggedOutCallback != null) {
-      await this.loggedOutCallback(false, userId);
+      await this.loggedOutCallback("vaultTimeout", userId);
     }
   }
 
@@ -170,8 +175,11 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
       return false;
     }
 
-    const vaultTimeout = await this.vaultTimeoutSettingsService.getVaultTimeout(userId);
-    if (vaultTimeout == null || vaultTimeout < 0) {
+    const vaultTimeout = await firstValueFrom(
+      this.vaultTimeoutSettingsService.getVaultTimeoutByUserId$(userId),
+    );
+
+    if (typeof vaultTimeout === "string") {
       return false;
     }
 
@@ -186,7 +194,7 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
 
   private async executeTimeoutAction(userId: UserId): Promise<void> {
     const timeoutAction = await firstValueFrom(
-      this.vaultTimeoutSettingsService.vaultTimeoutAction$(userId),
+      this.vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$(userId),
     );
     timeoutAction === VaultTimeoutAction.LogOut
       ? await this.logOut(userId)

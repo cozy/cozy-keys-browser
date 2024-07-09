@@ -14,13 +14,13 @@ import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { AutofillSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/autofill-settings.service";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
@@ -34,6 +34,7 @@ import { BrowserApi } from "../../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
 import { PopupCloseWarningService } from "../../../../popup/services/popup-close-warning.service";
 import { BrowserFido2UserInterfaceSession } from "../../../fido2/browser-fido2-user-interface.service";
+import { Fido2UserVerificationService } from "../../../services/fido2-user-verification.service";
 import { fido2PopoutSessionData$ } from "../../utils/fido2-popout-session-data";
 import { closeAddEditVaultItemPopout, VaultPopoutType } from "../../utils/vault-popout-window";
 
@@ -75,7 +76,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     i18nService: I18nService,
     platformUtilsService: PlatformUtilsService,
     auditService: AuditService,
-    stateService: StateService,
+    accountService: AccountService,
     private autofillSettingsService: AutofillSettingsServiceAbstraction,
     collectionService: CollectionService,
     messagingService: MessagingService,
@@ -96,6 +97,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     toastService: ToastService,
     datePipe: DatePipe,
     configService: ConfigService,
+    private fido2UserVerificationService: Fido2UserVerificationService,
   ) {
     super(
       cipherService,
@@ -103,7 +105,7 @@ export class AddEditComponent extends BaseAddEditComponent {
       i18nService,
       platformUtilsService,
       auditService,
-      stateService,
+      accountService,
       collectionService,
       messagingService,
       eventCollectionService,
@@ -252,11 +254,17 @@ export class AddEditComponent extends BaseAddEditComponent {
 
   async submit(): Promise<boolean> {
     const fido2SessionData = await firstValueFrom(this.fido2PopoutSessionData$);
-    const { isFido2Session, sessionId, userVerification } = fido2SessionData;
+    const { isFido2Session, sessionId, userVerification, fromLock } = fido2SessionData;
     const inFido2PopoutWindow = BrowserPopupUtils.inPopout(window) && isFido2Session;
+
     if (
       inFido2PopoutWindow &&
-      !(await this.handleFido2UserVerification(sessionId, userVerification))
+      userVerification &&
+      !(await this.fido2UserVerificationService.handleUserVerification(
+        userVerification,
+        this.cipher,
+        fromLock,
+      ))
     ) {
       return false;
     }
@@ -450,14 +458,6 @@ export class AddEditComponent extends BaseAddEditComponent {
         document.getElementById("name").focus();
       }
     }, 200);
-  }
-
-  private async handleFido2UserVerification(
-    sessionId: string,
-    userVerification: boolean,
-  ): Promise<boolean> {
-    // We are bypassing user verification pending implementation of PIN and biometric support.
-    return true;
   }
 
   repromptChanged() {

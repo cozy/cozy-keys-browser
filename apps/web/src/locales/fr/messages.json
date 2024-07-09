@@ -581,6 +581,9 @@
   "accessLevel": {
     "message": "Niveau d'accès"
   },
+  "accessing": {
+    "message": "Accès en cours"
+  },
   "loggedOut": {
     "message": "Déconnecté"
   },
@@ -1341,6 +1344,9 @@
   "accountDeletedDesc": {
     "message": "Votre compte a été fermé et toutes les données associées ont été supprimées."
   },
+  "deleteOrganizationWarning": {
+    "message": "La suppression de votre organisation est permanente. Elle ne peut pas être annulée."
+  },
   "myAccount": {
     "message": "Mon compte"
   },
@@ -1710,11 +1716,11 @@
   "twoFactorDuoDesc": {
     "message": "Entrez les informations de l'application Bitwarden provenant de votre panneau Duo Admin."
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "Clé d'intégration"
+  "twoFactorDuoClientId": {
+    "message": "ID du client"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "Clé secrète"
+  "twoFactorDuoClientSecret": {
+    "message": "Secret du client"
   },
   "twoFactorDuoApiHostname": {
     "message": "Nom d'hôte de l'API"
@@ -2788,6 +2794,12 @@
   "all": {
     "message": "Tous"
   },
+  "addAccess": {
+    "message": "Ajouter Access"
+  },
+  "addAccessFilter": {
+    "message": "Ajouter un filtre Access"
+  },
   "refresh": {
     "message": "Actualiser"
   },
@@ -3235,6 +3247,27 @@
   "device": {
     "message": "Appareil"
   },
+  "creatingAccountOn": {
+    "message": "Création du compte sur"
+  },
+  "checkYourEmail": {
+    "message": "Vérifiez vos courriels"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Suivez le lien dans le courriel envoyé à"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "et continuer à créer votre compte."
+  },
+  "noEmail": {
+    "message": "Pas courriel?"
+  },
+  "goBack": {
+    "message": "Revenir en arrière"
+  },
+  "toEditYourEmailAddress": {
+    "message": "pour modifier votre adresse courriel."
+  },
   "view": {
     "message": "Voir"
   },
@@ -3381,6 +3414,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "Vous avez demandé de supprimer votre compte Bitwarden. Cliquez sur le bouton ci-dessous pour confirmer."
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "Vous avez demandé à supprimer votre organisation Bitwarden."
   },
   "myOrganization": {
     "message": "Mon organisation"
@@ -3558,6 +3594,12 @@
   },
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "Les ajustements apportés à votre abonnement entraîneront des modifications au prorata de vos totaux de facturation. Si les utilisateurs nouvellement invités dépassent votre nombre de licences, vous recevrez immédiatement des frais au prorata pour les utilisateurs supplémentaires."
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "Si vous souhaitez ajouter"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "des licences sans l'offre groupée, veuillez contacter"
   },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "Les ajustements apportés à votre abonnement entraîneront des modifications au prorata de vos totaux de facturation. Si les utilisateurs nouvellement invités dépassent votre nombre de licences, vous recevrez immédiatement des frais au prorata pour les utilisateurs supplémentaires jusqu'à ce que votre limite de $MAX$ licences soit atteinte.",
@@ -5802,6 +5844,108 @@
   "forwardedEmailDesc": {
     "message": "Générer un alias de courriel avec un service de transfert externe."
   },
+  "forwarderError": {
+    "message": "Erreur $SERVICENAME$ : $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Généré par Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Site web : $WEBSITE$. Généré par Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Jeton API $SERVICENAME$ invalide",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Jeton API $SERVICENAME$ non valide : $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Impossible d'obtenir l'ID du compte de courriel masqué $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Domaine de $SERVICENAME$ invalide.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "L'URL $SERVICENAME$ invalide.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Une erreur $SERVICENAME$ inconnue s'est produite.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Émetteur inconnu: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "Nom d'hôte",
     "description": "Part of a URL."
@@ -6480,8 +6624,8 @@
   "editGroupCollectionsDesc": {
     "message": "Accorder l'accès aux collections en les ajoutant à ce groupe."
   },
-  "editGroupCollectionsRestrictionsDesc": {
-    "message": "Vous ne pouvez affecter que les collections que vous gérez."
+  "restrictedCollectionAssignmentDesc": {
+    "message": "Vous pouvez seulement assigner les collections que vous gérez."
   },
   "accessAllCollectionsDesc": {
     "message": "Accorder l'accès à toutes les collections actuelles et futures."
@@ -6714,8 +6858,8 @@
   "selectGroups": {
     "message": "Sélectionner les groupes"
   },
-  "userPermissionOverrideHelper": {
-    "message": "Les permissions définies pour un membre remplaceront les permissions définies par le groupe de ce membre"
+  "userPermissionOverrideHelperDesc": {
+    "message": "Les permissions définies pour un membre remplaceront les permissions définies par le groupe de ce membre."
   },
   "noMembersOrGroupsAdded": {
     "message": "Aucun membre ou groupe ajouté"
@@ -6906,8 +7050,8 @@
   "updateLowKdfIterationsDesc": {
     "message": "Mettez à jour vos paramètres de chiffrement pour répondre à de nouvelles recommandations de sécurité et améliorer la protection de votre compte."
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "En poursuivant, vous serez déconnecté de toutes les sessions actives. Vous devrez vous reconnecter et terminer la configuration de l'authentification à deux facteurs. Nous vous recommandons d'exporter votre coffre avant de modifier vos paramètres de chiffrement afin d'éviter toute perte de données."
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "Effectuer cette action vous déconnectera de toutes les sessions actives. Vous devrez vous connecter à nouveau et compléter votre authentification à 2 facteurs, s'il y a lieu. Nous vous recommandons d'exporter votre coffre avant de modifier vos paramètres de chiffrement pour prévenir la perte de vos données."
   },
   "secretsManager": {
     "message": "Secrets Manager"
@@ -7527,6 +7671,12 @@
   "readOnlyCollectionAccess": {
     "message": "Vous n'avez pas accès à la gestion de cette collection."
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "\"Peut Gérer les Permissions\" manquant"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Accorder \"Peut Gérer les Permissions\" pour permettre une gestion complète de la collection, y compris la suppression de la collection."
+  },
   "grantCollectionAccess": {
     "message": "Accorder l'accès à cette collection aux groupes ou aux membres."
   },
@@ -7557,13 +7707,6 @@
     "message": "ajouter un moyen de paiement",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "Ajoutez de nouveaux paramètres et autorisations pour une flexibilité additionnelle. Remplacez le rôle de Gestionnaire avec l'autorisation \"peut gérer\", et introduisez des options pour autoriser les utilisateurs à créer des collections tout comme à restreindre l'accès administratif aux collections.",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "En savoir plus sur la gestion des collections"
-  },
   "organizationInformation": {
     "message": "Informations sur l'organisation"
   },
@@ -7575,12 +7718,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "Nous avons envoyé un courriel de confirmation à votre adresse de messagerie à "
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "Cette action est irréversible"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "Activer cette fonctionnalité remplacera le rôle du gestionnaire par une autorisation Peut gérer. Cela prendra quelques instants. N'apportez aucune modification à l'organisation tant que ceci n'est pas terminé. Êtes-vous sûr de vouloir continuer ?"
   },
   "sorryToSeeYouGo": {
     "message": "Désolé de vous voir partir! Aidez à améliorer Bitwarden en partageant pourquoi vous annulez.",
@@ -7632,14 +7769,11 @@
   "success": {
     "message": "Succès"
   },
-  "viewCollection": {
-    "message": "Afficher la Collection"
-  },
   "restrictedGroupAccess": {
     "message": "Vous ne pouvez vous ajoutez vous-même aux groupes."
   },
-  "restrictedCollectionAccess": {
-    "message": "Vous ne pouvez vous ajoutez vous-même aux collections."
+  "cannotAddYourselfToCollections": {
+    "message": "You cannot add yourself to collections."
   },
   "assign": {
     "message": "Assigner"
@@ -7962,7 +8096,7 @@
     }
   },
   "deleteProviderWarningDescription": {
-    "message": "You must unlink all clients before you can delete $ID$.",
+    "message": "Vous devez dissocier tous les clients avant de pouvoir supprimer $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -8075,5 +8209,93 @@
   },
   "manageBillingFromProviderPortalMessage": {
     "message": "Gérer la facturation depuis le Portail Fournisseur"
+  },
+  "viewItemsIn": {
+    "message": "Voir les éléments dans $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Retour à $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Précédent",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Retirer $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "viewInfo": {
+    "message": "Afficher les informations"
+  },
+  "viewAccess": {
+    "message": "Afficher les accès"
+  },
+  "noCollectionsSelected": {
+    "message": "Vous n'avez sélectionné aucune collection."
+  },
+  "updateName": {
+    "message": "Mettre le nom à jour"
+  },
+  "updatedOrganizationName": {
+    "message": "Nom de l'organisation mis à jour"
+  },
+  "providerPlan": {
+    "message": "Service Provider géré"
+  },
+  "orgSeats": {
+    "message": "Licences de l'Organisation"
+  },
+  "providerDiscount": {
+    "message": "Remise de $AMOUNT$%",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "lowKDFIterationsBanner": {
+    "message": "Nombres d'itérations KDF bas. Augmentez vos itérations pour améliorer la sécurité de votre compte."
+  },
+  "changeKDFSettings": {
+    "message": "Modifier les paramètres KDF"
+  },
+  "secureYourInfrastructure": {
+    "message": "Sécurisez votre infrastructure"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Protégez votre famille ou votre entreprise"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Fermer les failles de sécurité avec des rapports de surveillance"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Restez en avance sur les vulnérabilités de sécurité en passant à un plan payant pour une surveillance améliorée."
+  },
+  "approveAllRequests": {
+    "message": "Approuver toutes les demandes"
+  },
+  "allLoginRequestsApproved": {
+    "message": "Toutes les demandes de connexion approuvées"
   }
 }

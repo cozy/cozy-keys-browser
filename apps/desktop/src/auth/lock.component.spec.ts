@@ -6,7 +6,7 @@ import { of } from "rxjs";
 
 import { LockComponent as BaseLockComponent } from "@bitwarden/angular/auth/components/lock.component";
 import { I18nPipe } from "@bitwarden/angular/platform/pipes/i18n.pipe";
-import { PinCryptoServiceAbstraction } from "@bitwarden/auth/common";
+import { PinServiceAbstraction } from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
@@ -32,6 +32,7 @@ import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { FakeAccountService, mockAccountServiceWith } from "@bitwarden/common/spec";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { UserId } from "@bitwarden/common/types/guid";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
 import { LockComponent } from "./lock.component";
@@ -155,8 +156,8 @@ describe("LockComponent", () => {
           useValue: mock<UserVerificationService>(),
         },
         {
-          provide: PinCryptoServiceAbstraction,
-          useValue: mock<PinCryptoServiceAbstraction>(),
+          provide: PinServiceAbstraction,
+          useValue: mock<PinServiceAbstraction>(),
         },
         {
           provide: BiometricStateService,
@@ -173,6 +174,10 @@ describe("LockComponent", () => {
         {
           provide: KdfConfigService,
           useValue: mock<KdfConfigService>(),
+        },
+        {
+          provide: SyncService,
+          useValue: mock<SyncService>(),
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

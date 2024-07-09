@@ -1,6 +1,8 @@
 import { MockProxy, any, mock } from "jest-mock-extended";
 import { BehaviorSubject, from, of } from "rxjs";
 
+import { LogoutReason } from "@bitwarden/auth/common";
+
 import { FakeAccountService, mockAccountServiceWith } from "../../../spec/fake-account-service";
 import { SearchService } from "../../abstractions/search.service";
 import { VaultTimeoutSettingsService } from "../../abstractions/vault-timeout/vault-timeout-settings.service";
@@ -15,6 +17,7 @@ import { StateService } from "../../platform/abstractions/state.service";
 import { Utils } from "../../platform/misc/utils";
 import { StateEventRunnerService } from "../../platform/state";
 import { UserId } from "../../types/guid";
+import { VaultTimeout, VaultTimeoutStringType } from "../../types/vault-timeout.type";
 import { CipherService } from "../../vault/abstractions/cipher.service";
 import { CollectionService } from "../../vault/abstractions/collection.service";
 import { FolderService } from "../../vault/abstractions/folder/folder.service.abstraction";
@@ -35,7 +38,7 @@ describe("VaultTimeoutService", () => {
   let vaultTimeoutSettingsService: MockProxy<VaultTimeoutSettingsService>;
   let stateEventRunnerService: MockProxy<StateEventRunnerService>;
   let lockedCallback: jest.Mock<Promise<void>, [userId: string]>;
-  let loggedOutCallback: jest.Mock<Promise<void>, [expired: boolean, userId?: string]>;
+  let loggedOutCallback: jest.Mock<Promise<void>, [logoutReason: LogoutReason, userId?: string]>;
 
   let vaultTimeoutActionSubject: BehaviorSubject<VaultTimeoutAction>;
   let availableVaultTimeoutActionsSubject: BehaviorSubject<VaultTimeoutAction[]>;
@@ -63,7 +66,9 @@ describe("VaultTimeoutService", () => {
 
     vaultTimeoutActionSubject = new BehaviorSubject(VaultTimeoutAction.Lock);
 
-    vaultTimeoutSettingsService.vaultTimeoutAction$.mockReturnValue(vaultTimeoutActionSubject);
+    vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$.mockReturnValue(
+      vaultTimeoutActionSubject,
+    );
 
     availableVaultTimeoutActionsSubject = new BehaviorSubject<VaultTimeoutAction[]>([]);
 
@@ -93,7 +98,7 @@ describe("VaultTimeoutService", () => {
         authStatus?: AuthenticationStatus;
         isAuthenticated?: boolean;
         lastActive?: number;
-        vaultTimeout?: number;
+        vaultTimeout?: VaultTimeout;
         timeoutAction?: VaultTimeoutAction;
         availableTimeoutActions?: VaultTimeoutAction[];
       }
@@ -121,8 +126,8 @@ describe("VaultTimeoutService", () => {
       return Promise.resolve(accounts[options.userId ?? globalSetups?.userId]?.isAuthenticated);
     });
 
-    vaultTimeoutSettingsService.getVaultTimeout.mockImplementation((userId) => {
-      return Promise.resolve(accounts[userId]?.vaultTimeout);
+    vaultTimeoutSettingsService.getVaultTimeoutByUserId$.mockImplementation((userId) => {
+      return new BehaviorSubject<VaultTimeout>(accounts[userId]?.vaultTimeout);
     });
 
     stateService.getUserId.mockResolvedValue(globalSetups?.userId);
@@ -161,7 +166,7 @@ describe("VaultTimeoutService", () => {
 
     platformUtilsService.isViewOpen.mockResolvedValue(globalSetups?.isViewOpen ?? false);
 
-    vaultTimeoutSettingsService.vaultTimeoutAction$.mockImplementation((userId) => {
+    vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$.mockImplementation((userId) => {
       return new BehaviorSubject<VaultTimeoutAction>(accounts[userId]?.timeoutAction);
     });
 
@@ -187,7 +192,7 @@ describe("VaultTimeoutService", () => {
   };
 
   const expectUserToHaveLoggedOut = (userId: string) => {
-    expect(loggedOutCallback).toHaveBeenCalledWith(false, userId);
+    expect(loggedOutCallback).toHaveBeenCalledWith("vaultTimeout", userId);
   };
 
   const expectNoAction = (userId: string) => {
@@ -212,18 +217,18 @@ describe("VaultTimeoutService", () => {
     );
 
     it.each([
-      null, // never
-      -1, // onRestart
-      -2, // onLocked
-      -3, // onSleep
-      -4, // onIdle
+      VaultTimeoutStringType.Never,
+      VaultTimeoutStringType.OnRestart,
+      VaultTimeoutStringType.OnLocked,
+      VaultTimeoutStringType.OnSleep,
+      VaultTimeoutStringType.OnIdle,
     ])(
       "does not log out or lock a user who has %s as their vault timeout",
       async (vaultTimeout) => {
         setupAccounts({
           1: {
             authStatus: AuthenticationStatus.Unlocked,
-            vaultTimeout: vaultTimeout,
+            vaultTimeout: vaultTimeout as VaultTimeout,
             isAuthenticated: true,
           },
         });

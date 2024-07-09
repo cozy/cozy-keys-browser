@@ -1,6 +1,9 @@
 import { firstValueFrom } from "rxjs";
 
+import { LogoutReason } from "@bitwarden/auth/common";
+
 import { ApiService as ApiServiceAbstraction } from "../abstractions/api.service";
+import { VaultTimeoutSettingsService } from "../abstractions/vault-timeout/vault-timeout-settings.service";
 import { OrganizationConnectionType } from "../admin-console/enums";
 import { OrganizationSponsorshipCreateRequest } from "../admin-console/models/request/organization/organization-sponsorship-create.request";
 import { OrganizationSponsorshipRedeemRequest } from "../admin-console/models/request/organization/organization-sponsorship-redeem.request";
@@ -115,8 +118,8 @@ import { ProfileResponse } from "../models/response/profile.response";
 import { UserKeyResponse } from "../models/response/user-key.response";
 import { AppIdService } from "../platform/abstractions/app-id.service";
 import { EnvironmentService } from "../platform/abstractions/environment.service";
+import { LogService } from "../platform/abstractions/log.service";
 import { PlatformUtilsService } from "../platform/abstractions/platform-utils.service";
-import { StateService } from "../platform/abstractions/state.service";
 import { Utils } from "../platform/misc/utils";
 import { UserId } from "../types/guid";
 import { AttachmentRequest } from "../vault/models/request/attachment.request";
@@ -138,6 +141,7 @@ import {
   CollectionDetailsResponse,
   CollectionResponse,
 } from "../vault/models/response/collection.response";
+import { OptionalCipherResponse } from "../vault/models/response/optional-cipher.response";
 import { SyncResponse } from "../vault/models/response/sync.response";
 
 // Cozy customization
@@ -174,8 +178,10 @@ export class ApiService implements ApiServiceAbstraction {
     private platformUtilsService: PlatformUtilsService,
     private environmentService: EnvironmentService,
     private appIdService: AppIdService,
-    private stateService: StateService,
-    private logoutCallback: (expired: boolean) => Promise<void>,
+    private refreshAccessTokenErrorCallback: () => void,
+    private logService: LogService,
+    private logoutCallback: (logoutReason: LogoutReason) => Promise<void>,
+    private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private customUserAgent: string = null,
   ) {
     this.device = platformUtilsService.getDevice();
@@ -271,9 +277,10 @@ export class ApiService implements ApiServiceAbstraction {
 
   async refreshIdentityToken(): Promise<any> {
     try {
-      await this.doAuthRefresh();
+      await this.refreshToken();
     } catch (e) {
-      return Promise.reject(null);
+      this.logService.error("Error refreshing access token: ", e);
+      throw e;
     }
   }
 
@@ -597,9 +604,15 @@ export class ApiService implements ApiServiceAbstraction {
   async putCipherCollections(
     id: string,
     request: CipherCollectionsRequest,
-  ): Promise<CipherResponse> {
-    const response = await this.send("PUT", "/ciphers/" + id + "/collections", request, true, true);
-    return new CipherResponse(response);
+  ): Promise<OptionalCipherResponse> {
+    const response = await this.send(
+      "PUT",
+      "/ciphers/" + id + "/collections_v2",
+      request,
+      true,
+      true,
+    );
+    return new OptionalCipherResponse(response);
   }
 
   putCipherCollectionsAdmin(id: string, request: CipherCollectionsRequest): Promise<any> {
@@ -1591,8 +1604,7 @@ export class ApiService implements ApiServiceAbstraction {
   async getActiveBearerToken(): Promise<string> {
     let accessToken = await this.tokenService.getAccessToken();
     if (await this.tokenService.tokenNeedsRefresh()) {
-      await this.doAuthRefresh();
-      accessToken = await this.tokenService.getAccessToken();
+      accessToken = await this.refreshToken();
     }
     return accessToken;
   }
@@ -1732,22 +1744,24 @@ export class ApiService implements ApiServiceAbstraction {
     );
   }
 
-  protected async doAuthRefresh(): Promise<void> {
+  protected async refreshToken(): Promise<string> {
     const refreshToken = await this.tokenService.getRefreshToken();
     if (refreshToken != null && refreshToken !== "") {
-      return this.doRefreshToken();
+      return this.refreshAccessToken();
     }
 
     const clientId = await this.tokenService.getClientId();
     const clientSecret = await this.tokenService.getClientSecret();
     if (!Utils.isNullOrWhitespace(clientId) && !Utils.isNullOrWhitespace(clientSecret)) {
-      return this.doApiTokenRefresh();
+      return this.refreshApiToken();
     }
 
-    throw new Error("Cannot refresh token, no refresh token or api keys are stored");
+    this.refreshAccessTokenErrorCallback();
+
+    throw new Error("Cannot refresh access token, no refresh token or api keys are stored.");
   }
 
-  protected async doRefreshToken(): Promise<void> {
+  protected async refreshAccessToken(): Promise<string> {
     const refreshToken = await this.tokenService.getRefreshToken();
     if (refreshToken == null || refreshToken === "") {
       throw new Error();
@@ -1781,22 +1795,32 @@ export class ApiService implements ApiServiceAbstraction {
       const responseJson = await response.json();
       const tokenResponse = new IdentityTokenResponse(responseJson);
 
-      const vaultTimeoutAction = await this.stateService.getVaultTimeoutAction();
-      const vaultTimeout = await this.stateService.getVaultTimeout();
+      const newDecodedAccessToken = await this.tokenService.decodeAccessToken(
+        tokenResponse.accessToken,
+      );
+      const userId = newDecodedAccessToken.sub;
 
-      await this.tokenService.setTokens(
+      const vaultTimeoutAction = await firstValueFrom(
+        this.vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$(userId),
+      );
+      const vaultTimeout = await firstValueFrom(
+        this.vaultTimeoutSettingsService.getVaultTimeoutByUserId$(userId),
+      );
+
+      const refreshedTokens = await this.tokenService.setTokens(
         tokenResponse.accessToken,
         vaultTimeoutAction as VaultTimeoutAction,
         vaultTimeout,
         tokenResponse.refreshToken,
       );
+      return refreshedTokens.accessToken;
     } else {
       const error = await this.handleError(response, true, true);
       return Promise.reject(error);
     }
   }
 
-  protected async doApiTokenRefresh(): Promise<void> {
+  protected async refreshApiToken(): Promise<string> {
     const clientId = await this.tokenService.getClientId();
     const clientSecret = await this.tokenService.getClientSecret();
 
@@ -1814,14 +1838,22 @@ export class ApiService implements ApiServiceAbstraction {
       throw new Error("Invalid response received when refreshing api token");
     }
 
-    const vaultTimeoutAction = await this.stateService.getVaultTimeoutAction();
-    const vaultTimeout = await this.stateService.getVaultTimeout();
+    const newDecodedAccessToken = await this.tokenService.decodeAccessToken(response.accessToken);
+    const userId = newDecodedAccessToken.sub;
 
-    await this.tokenService.setAccessToken(
+    const vaultTimeoutAction = await firstValueFrom(
+      this.vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$(userId),
+    );
+    const vaultTimeout = await firstValueFrom(
+      this.vaultTimeoutSettingsService.getVaultTimeoutByUserId$(userId),
+    );
+
+    const refreshedToken = await this.tokenService.setAccessToken(
       response.accessToken,
       vaultTimeoutAction as VaultTimeoutAction,
       vaultTimeout,
     );
+    return refreshedToken;
   }
 
   async send(
@@ -1913,7 +1945,7 @@ export class ApiService implements ApiServiceAbstraction {
           responseJson != null &&
           responseJson.error === "invalid_grant")
       ) {
-        await this.logoutCallback(true);
+        await this.logoutCallback("invalidGrantError");
         return null;
       }
     }

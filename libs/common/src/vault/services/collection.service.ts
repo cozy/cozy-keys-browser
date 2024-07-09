@@ -6,13 +6,13 @@ import { I18nService } from "../../platform/abstractions/i18n.service";
 import { Utils } from "../../platform/misc/utils";
 import {
   ActiveUserState,
-  KeyDefinition,
   StateProvider,
   COLLECTION_DATA,
   DeriveDefinition,
   DerivedState,
+  UserKeyDefinition,
 } from "../../platform/state";
-import { CollectionId, UserId } from "../../types/guid";
+import { CollectionId, OrganizationId, UserId } from "../../types/guid";
 import { CollectionService as CollectionServiceAbstraction } from "../../vault/abstractions/collection.service";
 import { CollectionData } from "../models/data/collection.data";
 import { Collection } from "../models/domain/collection";
@@ -20,11 +20,12 @@ import { TreeNode } from "../models/domain/tree-node";
 import { CollectionView } from "../models/view/collection.view";
 import { ServiceUtils } from "../service-utils";
 
-const ENCRYPTED_COLLECTION_DATA_KEY = KeyDefinition.record<CollectionData, CollectionId>(
+const ENCRYPTED_COLLECTION_DATA_KEY = UserKeyDefinition.record<CollectionData, CollectionId>(
   COLLECTION_DATA,
   "collections",
   {
     deserializer: (jsonData: Jsonify<CollectionData>) => CollectionData.fromJSON(jsonData),
+    clearOn: ["logout"],
   },
 );
 
@@ -108,9 +109,16 @@ export class CollectionService implements CollectionServiceAbstraction {
       return [];
     }
     const decCollections: CollectionView[] = [];
+
+    const organizationKeys = await firstValueFrom(this.cryptoService.activeUserOrgKeys$);
+
     const promises: Promise<any>[] = [];
     collections.forEach((collection) => {
-      promises.push(collection.decrypt().then((c) => decCollections.push(c)));
+      promises.push(
+        collection
+          .decrypt(organizationKeys[collection.organizationId as OrganizationId])
+          .then((c) => decCollections.push(c)),
+      );
     });
     await Promise.all(promises);
     return decCollections.sort(Utils.getSortFunction(this.i18nService, "name"));

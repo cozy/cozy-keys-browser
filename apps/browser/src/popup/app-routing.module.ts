@@ -21,11 +21,14 @@ import { LoginComponent } from "../auth/popup/login.component";
 import { RegisterComponent } from "../auth/popup/register.component";
 import { RemovePasswordComponent } from "../auth/popup/remove-password.component";
 import { SetPasswordComponent } from "../auth/popup/set-password.component";
+import { AccountSecurityComponent } from "../auth/popup/settings/account-security.component";
 import { SsoComponent } from "../auth/popup/sso.component";
 import { TwoFactorOptionsComponent } from "../auth/popup/two-factor-options.component";
 import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
 import { AutofillComponent } from "../autofill/popup/settings/autofill.component";
+import { ExcludedDomainsComponent } from "../autofill/popup/settings/excluded-domains.component";
+import { NotificationsSettingsComponent } from "../autofill/popup/settings/notifications.component";
 import { PremiumComponent } from "../billing/popup/settings/premium.component";
 import { AddGenericComponent } from "../cozy/components/add-generic/add-generic.component";
 import BrowserPopupUtils from "../platform/popup/browser-popup-utils";
@@ -34,8 +37,15 @@ import { PasswordGeneratorHistoryComponent } from "../tools/popup/generator/pass
 import { SendAddEditComponent } from "../tools/popup/send/send-add-edit.component";
 import { SendGroupingsComponent } from "../tools/popup/send/send-groupings.component";
 import { SendTypeComponent } from "../tools/popup/send/send-type.component";
-import { ExportComponent } from "../tools/popup/settings/export.component";
+import { AboutPageV2Component } from "../tools/popup/settings/about-page/about-page-v2.component";
+import { AboutPageComponent } from "../tools/popup/settings/about-page/about-page.component";
+import { MoreFromBitwardenPageV2Component } from "../tools/popup/settings/about-page/more-from-bitwarden-page-v2.component";
+import { MoreFromBitwardenPageComponent } from "../tools/popup/settings/about-page/more-from-bitwarden-page.component";
+import { ExportBrowserComponent } from "../tools/popup/settings/export/export-browser.component";
+import { ImportBrowserV2Component } from "../tools/popup/settings/import/import-browser-v2.component";
 import { ImportBrowserComponent } from "../tools/popup/settings/import/import-browser.component";
+import { SettingsV2Component } from "../tools/popup/settings/settings-v2.component";
+import { SettingsComponent } from "../tools/popup/settings/settings.component";
 import { Fido2Component } from "../vault/popup/components/fido2/fido2.component";
 import { AddEditComponent } from "../vault/popup/components/vault/add-edit.component";
 import { AttachmentsComponent } from "../vault/popup/components/vault/attachments.component";
@@ -45,17 +55,17 @@ import { PasswordHistoryComponent } from "../vault/popup/components/vault/passwo
 import { ShareComponent } from "../vault/popup/components/vault/share.component";
 import { VaultFilterComponent } from "../vault/popup/components/vault/vault-filter.component";
 import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items.component";
+import { VaultV2Component } from "../vault/popup/components/vault/vault-v2.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
+import { AppearanceComponent } from "../vault/popup/settings/appearance.component";
 import { FolderAddEditComponent } from "../vault/popup/settings/folder-add-edit.component";
+import { FoldersComponent } from "../vault/popup/settings/folders.component";
+import { SyncComponent } from "../vault/popup/settings/sync.component";
+import { VaultSettingsV2Component } from "../vault/popup/settings/vault-settings-v2.component";
+import { VaultSettingsComponent } from "../vault/popup/settings/vault-settings.component";
 
 import { extensionRefreshRedirect, extensionRefreshSwap } from "./extension-refresh-route-utils";
 import { debounceNavigationGuard } from "./services/debounce-navigation.service";
-import { ExcludedDomainsComponent } from "./settings/excluded-domains.component";
-import { FoldersComponent } from "./settings/folders.component";
-import { HelpAndFeedbackComponent } from "./settings/help-and-feedback.component";
-import { OptionsComponent } from "./settings/options.component";
-import { SettingsComponent } from "./settings/settings.component";
-import { SyncComponent } from "./settings/sync.component";
 import { TabsV2Component } from "./tabs-v2.component";
 import { TabsComponent } from "./tabs.component";
 
@@ -236,15 +246,14 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { state: "generator-history" },
   },
-  {
+  ...extensionRefreshSwap(ImportBrowserComponent, ImportBrowserV2Component, {
     path: "import",
-    component: ImportBrowserComponent,
     canActivate: [AuthGuard],
     data: { state: "import" },
-  },
+  }),
   {
     path: "export",
-    component: ExportComponent,
+    component: ExportBrowserComponent,
     canActivate: [AuthGuard],
     data: { state: "export" },
   },
@@ -254,6 +263,23 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { state: "autofill" },
   },
+  {
+    path: "account-security",
+    component: AccountSecurityComponent,
+    canActivate: [AuthGuard],
+    data: { state: "account-security" },
+  },
+  {
+    path: "notifications",
+    component: NotificationsSettingsComponent,
+    canActivate: [AuthGuard],
+    data: { state: "notifications" },
+  },
+  ...extensionRefreshSwap(VaultSettingsComponent, VaultSettingsV2Component, {
+    path: "vault-settings",
+    canActivate: [AuthGuard],
+    data: { state: "vault-settings" },
+  }),
   {
     path: "folders",
     component: FoldersComponent,
@@ -291,10 +317,10 @@ const routes: Routes = [
     data: { state: "premium" },
   },
   {
-    path: "options",
-    component: OptionsComponent,
+    path: "appearance",
+    component: AppearanceComponent,
     canActivate: [AuthGuard],
-    data: { state: "options" },
+    data: { state: "appearance" },
   },
   {
     path: "clone-cipher",
@@ -326,12 +352,16 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { state: "update-temp-password" },
   },
-  {
-    path: "help-and-feedback",
-    component: HelpAndFeedbackComponent,
+  ...extensionRefreshSwap(AboutPageComponent, AboutPageV2Component, {
+    path: "about",
     canActivate: [AuthGuard],
-    data: { state: "help-and-feedback" },
-  },
+    data: { state: "about" },
+  }),
+  ...extensionRefreshSwap(MoreFromBitwardenPageComponent, MoreFromBitwardenPageV2Component, {
+    path: "more-from-bitwarden",
+    canActivate: [AuthGuard],
+    data: { state: "moreFromBitwarden" },
+  }),
   ...extensionRefreshSwap(TabsComponent, TabsV2Component, {
     path: "tabs",
     data: { state: "tabs" },
@@ -349,24 +379,22 @@ const routes: Routes = [
         data: { state: "tabs_current" },
         runGuardsAndResolvers: "always",
       },
-      {
+      ...extensionRefreshSwap(VaultFilterComponent, VaultV2Component, {
         path: "vault",
-        component: VaultFilterComponent,
         canActivate: [AuthGuard],
         data: { state: "tabs_vault" },
-      },
+      }),
       {
         path: "generator",
         component: GeneratorComponent,
         canActivate: [AuthGuard],
         data: { state: "tabs_generator" },
       },
-      {
+      ...extensionRefreshSwap(SettingsComponent, SettingsV2Component, {
         path: "settings",
-        component: SettingsComponent,
         canActivate: [AuthGuard],
         data: { state: "tabs_settings" },
-      },
+      }),
       {
         path: "send",
         component: SendGroupingsComponent,
