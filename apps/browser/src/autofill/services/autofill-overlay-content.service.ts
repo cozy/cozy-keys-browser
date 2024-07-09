@@ -905,7 +905,12 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
         pageDetails,
       )
     ) {
+      // Cozy customization; replace Identity by Contact in autofill
+      //*
+      autofillFieldData.filledByCipherType = CipherType.Contact;
+      /*/
       autofillFieldData.filledByCipherType = CipherType.Identity;
+      //*/
       autofillFieldData.showInlineMenuAccountCreation = true;
       return false;
     }
@@ -916,7 +921,12 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
         pageDetails,
       )
     ) {
+      // Cozy customization; replace Identity by Contact in autofill
+      //*
+      autofillFieldData.filledByCipherType = CipherType.Contact;
+      /*/
       autofillFieldData.filledByCipherType = CipherType.Identity;
+      //*/
       return false;
     }
 

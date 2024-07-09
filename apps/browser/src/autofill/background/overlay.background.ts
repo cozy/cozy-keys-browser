@@ -291,13 +291,14 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       await this.cipherService.getAllDecryptedForUrl(currentTab.url, [
         CipherType.Card,
         CipherType.Identity,
+        CipherType.Contact // Cozy customization; add contact to autofill
       ])
     ).sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
     for (let cipherIndex = 0; cipherIndex < cipherViews.length; cipherIndex++) {
       const cipherView = cipherViews[cipherIndex];
       if (
         !this.cardAndIdentityCiphers.has(cipherView) &&
-        [CipherType.Card, CipherType.Identity].includes(cipherView.type)
+        [CipherType.Card, CipherType.Identity, CipherType.Contact].includes(cipherView.type) // Cozy customization; add contact to autofill
       ) {
         this.cardAndIdentityCiphers.add(cipherView);
       }
@@ -340,6 +341,13 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         continue;
       }
 
+      // Cozy customization; add contact to autofill
+      const contact =
+        cipher.type === CipherType.Contact
+          ? this.getContactCipherData(cipher, showLoginAccountCreation)
+          : null;
+      // Cozy customization end
+
       inlineMenuCipherData.push({
         id: inlineMenuCipherId,
         name: cipher.name,
@@ -351,6 +359,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         login: cipher.type === CipherType.Login ? { username: cipher.login.username } : null,
         card: cipher.type === CipherType.Card ? cipher.card.subTitle : null,
         identity,
+        contact, // Cozy customization; add contact to autofill
       });
     }
 
@@ -380,6 +389,28 @@ export class OverlayBackground implements OverlayBackgroundInterface {
           : cipher.identity.username,
     };
   }
+
+  // Cozy customization; add contact to autofill
+  private getContactCipherData(
+    cipher: CipherView,
+    showLoginAccountCreation: boolean,
+  ): { fullName: string; username?: string } {
+    const fullName = cipher.contact.displayName;
+
+    if (
+      !showLoginAccountCreation ||
+      !this.focusedFieldData?.accountCreationFieldType ||
+      this.focusedFieldData.accountCreationFieldType === "password"
+    ) {
+      return { fullName };
+    }
+
+    return {
+      fullName,
+      username: cipher.contact.primaryEmail
+    };
+  }
+  // Cozy customization end
 
   private showLoginAccountCreation(): boolean {
     if (typeof this.focusedFieldData?.showLoginAccountCreation !== "undefined") {

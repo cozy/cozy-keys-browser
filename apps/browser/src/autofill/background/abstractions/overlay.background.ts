@@ -144,6 +144,12 @@ export type InlineMenuCipherData = {
     fullName: string;
     username?: string;
   };
+  // Cozy customization; add contact to autofill
+  contact?: {
+    fullName: string;
+    username?: string;
+  };
+  // Cozy customization end
 };
 
 export type BackgroundMessageParam = {
