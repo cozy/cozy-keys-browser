@@ -29,7 +29,7 @@ export class BitInputDirective implements BitFormFieldControl {
       "tw-bg-background-alt",
       "tw-border",
       "tw-border-solid",
-      this.hasError ? "tw-border-danger-500" : "tw-border-secondary-500",
+      this.hasError ? "tw-border-danger-600" : "tw-border-secondary-600",
       "tw-text-main",
       "tw-placeholder-text-muted",
       // Rounded
@@ -44,6 +44,7 @@ export class BitInputDirective implements BitFormFieldControl {
       "focus:tw-ring-primary-700",
       "focus:tw-z-10",
       "disabled:tw-bg-secondary-100",
+      "[&:is(input,textarea):read-only]:tw-bg-secondary-100",
     ].filter((s) => s != "");
   }
 
@@ -78,15 +79,9 @@ export class BitInputDirective implements BitFormFieldControl {
     return this.id;
   }
 
-  private isActive = true;
-  @HostListener("blur")
-  onBlur() {
-    this.isActive = true;
-  }
-
   @HostListener("input")
   onInput() {
-    this.isActive = false;
+    this.ngControl?.control?.markAsUntouched();
   }
 
   get hasError() {
@@ -97,7 +92,7 @@ export class BitInputDirective implements BitFormFieldControl {
         this.ngControl?.errors != null
       );
     } else {
-      return this.ngControl?.status === "INVALID" && this.ngControl?.touched && this.isActive;
+      return this.ngControl?.status === "INVALID" && this.ngControl?.touched;
     }
   }
 
@@ -109,7 +104,7 @@ export class BitInputDirective implements BitFormFieldControl {
   constructor(
     @Optional() @Self() private ngControl: NgControl,
     private ngZone: NgZone,
-    private elementRef: ElementRef<HTMLInputElement>
+    private elementRef: ElementRef<HTMLInputElement>,
   ) {}
 
   focus() {

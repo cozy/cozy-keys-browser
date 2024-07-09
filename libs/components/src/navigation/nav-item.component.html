@@ -1,7 +1,7 @@
 <div
   class="tw-relative"
   [ngClass]="[
-    showActiveStyles ? 'tw-bg-background-alt4' : 'tw-bg-background-alt3',
+    showActiveStyles ? 'tw-bg-background-alt4' : 'tw-bg-background-alt3 hover:tw-bg-primary-300/60',
     fvwStyles$ | async
   ]"
 >
@@ -14,9 +14,9 @@
   >
     <div
       #slotStart
-      class="[&>*:focus-visible::before]:!tw-ring-text-alt2 [&>*]:!tw-text-alt2 [&>*:hover]:!tw-border-text-alt2"
+      class="[&>*:focus-visible::before]:!tw-ring-text-alt2 [&>*:hover]:!tw-border-text-alt2 [&>*]:!tw-text-alt2"
     >
-      <ng-content select="[slot-start]"></ng-content>
+      <ng-content select="[slot=start]"></ng-content>
     </div>
     <!-- Default content for #slotStart (for consistent sizing) -->
     <div
@@ -39,7 +39,9 @@
     <!-- Main content of `NavItem` -->
     <ng-template #anchorAndButtonContent>
       <i class="bwi bwi-fw tw-text-alt2 tw-mx-1 {{ icon }}"></i
-      ><span [ngClass]="showActiveStyles ? 'tw-font-bold' : 'tw-font-semibold'">{{ text }}</span>
+      ><span [title]="text" [ngClass]="showActiveStyles ? 'tw-font-bold' : 'tw-font-semibold'">{{
+        text
+      }}</span>
     </ng-template>
 
     <!-- Show if a value was passed to `this.to` -->
@@ -47,13 +49,14 @@
       <!-- The `fvw` class passes focus to `this.focusVisibleWithin$` -->
       <!-- The following `class` field should match the `#isButton` class field below -->
       <a
-        class="fvw tw-w-full tw-overflow-hidden tw-text-ellipsis tw-whitespace-nowrap tw-border-none tw-bg-transparent tw-p-0 tw-text-start !tw-text-alt2 hover:tw-text-alt2 hover:tw-no-underline focus:tw-outline-none [&>:not(.bwi)]:hover:tw-underline"
+        class="fvw tw-w-full tw-truncate tw-border-none tw-bg-transparent tw-p-0 tw-text-start !tw-text-alt2 hover:tw-text-alt2 hover:tw-no-underline focus:tw-outline-none [&>:not(.bwi)]:hover:tw-underline"
         [routerLink]="route"
+        [relativeTo]="relativeTo"
         [attr.aria-label]="ariaLabel || text"
         routerLinkActive
-        [routerLinkActiveOptions]="rlaOptions"
+        [routerLinkActiveOptions]="routerLinkActiveOptions"
         [ariaCurrentWhenActive]="'page'"
-        (isActiveChange)="setActive($event)"
+        (isActiveChange)="setIsActive($event)"
         (click)="mainContentClicked.emit()"
       >
         <ng-container *ngTemplateOutlet="anchorAndButtonContent"></ng-container>
@@ -65,7 +68,7 @@
       <!-- Class field should match `#isAnchor` class field above -->
       <button
         type="button"
-        class="fvw tw-w-full tw-overflow-hidden tw-text-ellipsis tw-whitespace-nowrap tw-border-none tw-bg-transparent tw-p-0 tw-text-start !tw-text-alt2 hover:tw-text-alt2 hover:tw-no-underline focus:tw-outline-none [&>:not(.bwi)]:hover:tw-underline"
+        class="fvw tw-w-full tw-truncate tw-border-none tw-bg-transparent tw-p-0 tw-text-start !tw-text-alt2 hover:tw-text-alt2 hover:tw-no-underline focus:tw-outline-none [&>:not(.bwi)]:hover:tw-underline"
         (click)="mainContentClicked.emit()"
       >
         <ng-container *ngTemplateOutlet="anchorAndButtonContent"></ng-container>
@@ -73,9 +76,9 @@
     </ng-template>
 
     <div
-      class="tw-flex tw-gap-1 [&>*:focus-visible::before]:!tw-ring-text-alt2 [&>*]:!tw-text-alt2 [&>*:hover]:!tw-border-text-alt2"
+      class="tw-flex tw-gap-1 [&>*:focus-visible::before]:!tw-ring-text-alt2 [&>*:hover]:!tw-border-text-alt2 [&>*]:tw-text-alt2"
     >
-      <ng-content select="[slot-end]"></ng-content>
+      <ng-content select="[slot=end]"></ng-content>
     </div>
   </div>
 </div>

@@ -4,10 +4,10 @@
     <div class="alert-message">
       <div class="alert-title">{{ "profileMigrationTitle" | i18n }}</div>
       <div *ngIf="profilesCount === 1">
-        {{ "profileMigrationContentSingle" | i18n: deadline:remaining }}
+        {{ "profileMigrationContentSingle" | i18n: deadline : remaining }}
       </div>
       <div *ngIf="profilesCount > 1">
-        {{ "profileMigrationContentMultiple" | i18n: deadline:remaining:profilesCount }}
+        {{ "profileMigrationContentMultiple" | i18n: deadline : remaining : profilesCount }}
       </div>
     </div>
     <div class="alert-action">

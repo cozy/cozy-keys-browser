@@ -1,7 +1,3 @@
-<app-callout type="info" *ngIf="vaultTimeoutPolicy">
-  {{ "vaultTimeoutPolicyInEffect" | i18n: vaultTimeoutPolicyHours:vaultTimeoutPolicyMinutes }}
-</app-callout>
-
 <div [formGroup]="form">
   <div class="form-group">
     <label for="vaultTimeout">{{ "vaultTimeout" | i18n }}</label>
@@ -11,9 +7,11 @@
       formControlName="vaultTimeout"
       class="form-control"
     >
-      <option *ngFor="let o of vaultTimeouts" [ngValue]="o.value">{{ o.name }}</option>
+      <option *ngFor="let o of vaultTimeoutOptions" [ngValue]="o.value">{{ o.name }}</option>
     </select>
-    <small class="form-text text-muted">{{ "vaultTimeoutDesc" | i18n }}</small>
+    <small class="form-text text-muted">{{
+      ((canLockVault$ | async) ? "vaultTimeoutDesc" : "vaultTimeoutLogoutDesc") | i18n
+    }}</small>
   </div>
   <div class="form-group" *ngIf="showCustom" formGroupName="custom">
     <label for="customVaultTimeout">{{ "customVaultTimeout" | i18n }}</label>

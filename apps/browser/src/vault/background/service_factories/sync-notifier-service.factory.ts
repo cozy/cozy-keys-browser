@@ -5,7 +5,7 @@ import {
   FactoryOptions,
   CachedServices,
   factory,
-} from "../../../background/service_factories/factory-options";
+} from "../../../platform/background/service-factories/factory-options";
 
 type SyncNotifierServiceFactoryOptions = FactoryOptions;
 
@@ -13,9 +13,9 @@ export type SyncNotifierServiceInitOptions = SyncNotifierServiceFactoryOptions;
 
 export function syncNotifierServiceFactory(
   cache: { syncNotifierService?: AbstractSyncNotifierService } & CachedServices,
-  opts: SyncNotifierServiceInitOptions
+  opts: SyncNotifierServiceInitOptions,
 ): Promise<AbstractSyncNotifierService> {
   return factory(cache, "syncNotifierService", opts, () =>
-    Promise.resolve(new SyncNotifierService())
+    Promise.resolve(new SyncNotifierService()),
   );
 }

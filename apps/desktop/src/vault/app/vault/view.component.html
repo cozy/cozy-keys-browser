@@ -1,5 +1,3 @@
-<!-- Please remove this disable statement when editing this file! -->
-<!-- eslint-disable @angular-eslint/template/button-has-type -->
 <div class="content">
   <div class="inner-content" *ngIf="cipher">
     <div class="box">
@@ -54,7 +52,7 @@
               <div
                 *ngIf="showPassword && !showPasswordCount"
                 class="monospaced password-wrapper"
-                appSelectCopy
+                [appCopyText]="cipher.login.password"
                 [innerHTML]="cipher.login.password | colorPassword"
               ></div>
               <div
@@ -119,6 +117,16 @@
                 <i class="bwi bwi-lg bwi-clone" aria-hidden="true"></i>
               </button>
             </div>
+          </div>
+          <!--Passkey-->
+          <div
+            class="box-content-row text-muted"
+            *ngIf="cipher.login.hasFido2Credentials"
+            tabindex="0"
+            attr.aria-label="{{ 'typePasskey' | i18n }} {{ fido2CredentialCreationDateValue }}"
+          >
+            <span class="row-label">{{ "typePasskey" | i18n }}</span>
+            {{ fido2CredentialCreationDateValue }}
           </div>
           <div
             class="box-content-row box-content-row-flex totp"
@@ -440,7 +448,7 @@
         </div>
       </div>
     </div>
-    <div class="box" *ngIf="cipher.folderId">
+    <div class="box" *ngIf="cipher.folderId && folder">
       <div class="box-content">
         <div class="box-content-row">
           <label
@@ -532,6 +540,7 @@
 </div>
 <div class="footer" *ngIf="cipher">
   <button
+    type="button"
     class="primary"
     (click)="edit()"
     appA11yTitle="{{ 'edit' | i18n }}"
@@ -540,6 +549,7 @@
     <i class="bwi bwi-pencil bwi-fw bwi-lg" aria-hidden="true"></i>
   </button>
   <button
+    type="button"
     class="primary"
     (click)="restore()"
     appA11yTitle="{{ 'restore' | i18n }}"
@@ -548,6 +558,7 @@
     <i class="bwi bwi-undo bwi-fw bwi-lg" aria-hidden="true"></i>
   </button>
   <button
+    type="button"
     class="primary"
     *ngIf="!cipher?.organizationId && !cipher.isDeleted"
     (click)="clone()"

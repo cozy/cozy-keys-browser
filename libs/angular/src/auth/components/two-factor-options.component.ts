@@ -1,10 +1,15 @@
 import { Directive, EventEmitter, OnInit, Output } from "@angular/core";
 import { Router } from "@angular/router";
+import { firstValueFrom } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { TwoFactorService } from "@bitwarden/common/auth/abstractions/two-factor.service";
+import {
+  TwoFactorProviderDetails,
+  TwoFactorService,
+} from "@bitwarden/common/auth/abstractions/two-factor.service";
 import { TwoFactorProviderType } from "@bitwarden/common/auth/enums/two-factor-provider-type";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
 @Directive()
 export class TwoFactorOptionsComponent implements OnInit {
@@ -18,19 +23,22 @@ export class TwoFactorOptionsComponent implements OnInit {
     protected router: Router,
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService,
-    protected win: Window
+    protected win: Window,
+    protected environmentService: EnvironmentService,
   ) {}
 
-  ngOnInit() {
-    this.providers = this.twoFactorService.getSupportedProviders(this.win);
+  async ngOnInit() {
+    this.providers = await this.twoFactorService.getSupportedProviders(this.win);
   }
 
-  choose(p: any) {
+  async choose(p: TwoFactorProviderDetails) {
     this.onProviderSelected.emit(p.type);
   }
 
-  recover() {
-    this.platformUtilsService.launchUri("https://bitwarden.com/help/lost-two-step-device/");
+  async recover() {
+    const env = await firstValueFrom(this.environmentService.environment$);
+    const webVault = env.getWebVaultUrl();
+    this.platformUtilsService.launchUri(webVault + "/#/recover-2fa");
     this.onRecoverSelected.emit();
   }
 }

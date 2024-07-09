@@ -13,8 +13,7 @@
         [disabled]="form.loading"
         *ngIf="
           selectedProviderType != null &&
-          selectedProviderType !== providerType.Duo &&
-          selectedProviderType !== providerType.OrganizationDuo &&
+          !isDuoProvider &&
           (selectedProviderType !== providerType.WebAuthn || form.loading)
         "
       >
@@ -24,6 +23,7 @@
     </div>
   </header>
   <main tabindex="-1">
+    <!-- Authenticator / Email -->
     <ng-container
       *ngIf="
         selectedProviderType === providerType.Authenticator ||
@@ -61,6 +61,7 @@
         </div>
       </div>
     </ng-container>
+    < YubiKey >
     <ng-container *ngIf="selectedProviderType === providerType.Yubikey">
       <div class="content text-center">
         <p class="text-center">{{ "insertYubiKey" | i18n }}</p>
@@ -87,9 +88,10 @@
         </div>
       </div>
     </ng-container>
+    < WebAuthN (not-webAuthN tab) >
     <ng-container *ngIf="selectedProviderType === providerType.WebAuthn && !webAuthnNewTab">
       <div id="web-authn-frame">
-        <iframe id="webauthn_iframe" [attr.allow]="webAuthnAllow"></iframe>
+        <iframe id="webauthn_iframe" sandbox="allow-scripts allow-same-origin"></iframe>
       </div>
       <div class="box">
         <div class="box-content">
@@ -100,6 +102,7 @@
         </div>
       </div>
     </ng-container>
+    < WebAuthN (webAuthN tab) >
     <ng-container *ngIf="selectedProviderType === providerType.WebAuthn && webAuthnNewTab">
       <div class="content text-center" *ngIf="webAuthnNewTab">
         <p class="text-center">{{ "webAuthnNewTab" | i18n }}</p>
@@ -108,37 +111,96 @@
         </button>
       </div>
     </ng-container>
-    <ng-container
-      *ngIf="
-        selectedProviderType === providerType.Duo ||
-        selectedProviderType === providerType.OrganizationDuo
-      "
-    >
-      <div id="duo-frame"><iframe id="duo_iframe"></iframe></div>
-      <div class="box">
-        <div class="box-content">
-          <div class="box-content-row box-content-row-checkbox" appBoxRow>
-            <label for="remember">{{ "rememberMe" | i18n }}</label>
-            <input id="remember" type="checkbox" name="Remember" [(ngModel)]="remember" />
+    < Duo >
+    <ng-container *ngIf="isDuoProvider">
+      <div *ngIf="duoFrameless" class="tw-my-4">
+        <p class="tw-mb-0 tw-text-center">
+          {{ "duoRequiredForAccount" | i18n }}
+        </p>
+
+        <p class="tw-text-center" *ngIf="!inPopout">
+          {{ "popoutTheExtensionToCompleteLogin" | i18n }}
+        </p>
+
+        <ng-container *ngIf="inPopout">
+          <p class="tw-text-center">{{ "launchDuoAndFollowStepsToFinishLoggingIn" | i18n }}</p>
+
+          <ng-container *ngTemplateOutlet="duoRememberMe"></ng-container>
+        </ng-container>
+      </div>
+
+      <ng-container *ngIf="!duoFrameless">
+        <div id="duo-frame">
+          <iframe
+            id="duo_iframe"
+            sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          ></iframe>
+        </div>
+
+        <ng-container *ngTemplateOutlet="duoRememberMe"></ng-container>
+      </ng-container>
+
+      <ng-template #duoRememberMe>
+        <div class="box">
+          <div class="box-content">
+            <div class="box-content-row box-content-row-checkbox" appBoxRow>
+              <label for="remember">{{ "rememberMe" | i18n }}</label>
+              <input id="remember" type="checkbox" name="Remember" [(ngModel)]="remember" />
+            </div>
           </div>
           -->
         </div>
       </div>
     </ng-container>
     <div class="box-content-row" [hidden]="!showCaptcha()">
-      <iframe id="hcaptcha_iframe" height="80"></iframe>
+      <iframe id="hcaptcha_iframe" height="80" sandbox="allow-scripts allow-same-origin"></iframe>
     </div>
     <div class="content" *ngIf="selectedProviderType == null">
       <p class="text-center">{{ "noTwoStepProviders" | i18n }}</p>
       <p class="text-center">{{ "noTwoStepProviders2" | i18n }}</p>
     </div>
+    <!-- Buttons -->
     <div class="content no-vpad" *ngIf="selectedProviderType != null">
       <!-- Cozy custo
-      <p class="text-center">
-        <button type="button" appStopClick (click)="anotherMethod()">
-          {{ "useAnotherTwoStepMethod" | i18n }}
+      <ng-container *ngIf="duoFrameless && isDuoProvider">
+        <button
+          *ngIf="inPopout"
+          bitButton
+          type="button"
+          class="tw-mb-2"
+          buttonType="primary"
+          [block]="true"
+          appStopClick
+          (click)="launchDuoFrameless()"
+        >
+          {{ "launchDuo" | i18n }}
         </button>
-      </p>
+
+        <button
+          *ngIf="!inPopout"
+          bitButton
+          type="button"
+          class="tw-mb-2"
+          buttonType="primary"
+          [block]="true"
+          appStopClick
+          (click)="popoutCurrentPage()"
+        >
+          {{ "popoutExtension" | i18n }}
+        </button>
+      </ng-container>
+
+      <button
+        bitButton
+        type="button"
+        buttonType="secondary"
+        [block]="true"
+        appStopClick
+        (click)="anotherMethod()"
+      >
+        {{ "useAnotherTwoStepMethod" | i18n }}
+      </button>
+
       <p *ngIf="selectedProviderType === providerType.Email" class="text-center">
         <button type="button" appStopClick (click)="sendEmail(true)" [appApiAction]="emailPromise">
           {{ "sendVerificationCodeEmailAgain" | i18n }}

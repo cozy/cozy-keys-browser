@@ -1,88 +1,117 @@
-/* eslint-disable no-console */
-import { CozyClientService } from "../../../../../../apps/browser/src/popup/services/cozyClient.service";
-import { fetchContactsAndConvertAsCiphers } from "../../../../../../libs/cozy/contactCipher";
-import { fetchPapersAndConvertAsCiphers } from "../../../../../../libs/cozy/paperCipher";
+import { firstValueFrom } from "rxjs";
+
+import { UserDecryptionOptionsServiceAbstraction } from "@bitwarden/auth/common";
+
 import { ApiService } from "../../../abstractions/api.service";
-import { CollectionService } from "../../../abstractions/collection.service";
-import { CryptoService } from "../../../abstractions/crypto.service";
-import { I18nService } from "../../../abstractions/i18n.service";
-import { LogService } from "../../../abstractions/log.service";
-import { MessagingService } from "../../../abstractions/messaging.service";
-import { InternalOrganizationService } from "../../../abstractions/organization/organization.service.abstraction";
-import { InternalPolicyService } from "../../../abstractions/policy/policy.service.abstraction";
-import { ProviderService } from "../../../abstractions/provider.service";
-import { SendService } from "../../../abstractions/send.service";
-import { SettingsService } from "../../../abstractions/settings.service";
-import { StateService } from "../../../abstractions/state.service";
+import { InternalOrganizationServiceAbstraction } from "../../../admin-console/abstractions/organization/organization.service.abstraction";
+import { InternalPolicyService } from "../../../admin-console/abstractions/policy/policy.service.abstraction";
+import { ProviderService } from "../../../admin-console/abstractions/provider.service";
+import { OrganizationUserType } from "../../../admin-console/enums";
+import { OrganizationData } from "../../../admin-console/models/data/organization.data";
+import { PolicyData } from "../../../admin-console/models/data/policy.data";
+import { ProviderData } from "../../../admin-console/models/data/provider.data";
+import { PolicyResponse } from "../../../admin-console/models/response/policy.response";
+import { AccountService } from "../../../auth/abstractions/account.service";
+import { AuthService } from "../../../auth/abstractions/auth.service";
+import { AvatarService } from "../../../auth/abstractions/avatar.service";
 import { KeyConnectorService } from "../../../auth/abstractions/key-connector.service";
-import { sequentialize } from "../../../misc/sequentialize";
-import { CollectionData } from "../../../models/data/collection.data";
-import { OrganizationData } from "../../../models/data/organization.data";
-import { PolicyData } from "../../../models/data/policy.data";
-import { ProviderData } from "../../../models/data/provider.data";
-import { SendData } from "../../../models/data/send.data";
-import { CollectionDetailsResponse } from "../../../models/response/collection.response";
+import { InternalMasterPasswordServiceAbstraction } from "../../../auth/abstractions/master-password.service.abstraction";
+import { TokenService } from "../../../auth/abstractions/token.service";
+import { ForceSetPasswordReason } from "../../../auth/models/domain/force-set-password-reason";
+import { DomainSettingsService } from "../../../autofill/services/domain-settings.service";
+import { BillingAccountProfileStateService } from "../../../billing/abstractions/account/billing-account-profile-state.service";
 import { DomainsResponse } from "../../../models/response/domains.response";
-import {
-  SyncCipherNotification,
-  SyncFolderNotification,
-  SyncSendNotification,
-} from "../../../models/response/notification.response";
-import { PolicyResponse } from "../../../models/response/policy.response";
 import { ProfileResponse } from "../../../models/response/profile.response";
-import { SendResponse } from "../../../models/response/send.response";
+import { CryptoService } from "../../../platform/abstractions/crypto.service";
+import { LogService } from "../../../platform/abstractions/log.service";
+import { StateService } from "../../../platform/abstractions/state.service";
+import { MessageSender } from "../../../platform/messaging";
+import { sequentialize } from "../../../platform/misc/sequentialize";
+import { CoreSyncService } from "../../../platform/sync/core-sync.service";
+import { SendData } from "../../../tools/send/models/data/send.data";
+import { SendResponse } from "../../../tools/send/models/response/send.response";
+import { SendApiService } from "../../../tools/send/services/send-api.service.abstraction";
+import { InternalSendService } from "../../../tools/send/services/send.service.abstraction";
 import { CipherService } from "../../../vault/abstractions/cipher.service";
 import { FolderApiServiceAbstraction } from "../../../vault/abstractions/folder/folder-api.service.abstraction";
 import { InternalFolderService } from "../../../vault/abstractions/folder/folder.service.abstraction";
-import { SyncService as SyncServiceAbstraction } from "../../../vault/abstractions/sync/sync.service.abstraction";
 import { CipherData } from "../../../vault/models/data/cipher.data";
 import { FolderData } from "../../../vault/models/data/folder.data";
 import { CipherResponse } from "../../../vault/models/response/cipher.response";
 import { FolderResponse } from "../../../vault/models/response/folder.response";
+import { CollectionService } from "../../abstractions/collection.service";
+import { CollectionData } from "../../models/data/collection.data";
+import { CollectionDetailsResponse } from "../../models/response/collection.response";
+/* start Cozy imports */
+/* eslint-disable */
+import { CozyClientService } from "../../../../../../apps/browser/src/popup/services/cozyClient.service";
+import { fetchContactsAndConvertAsCiphers } from "../../../../../../libs/cozy/contactCipher";
+import { fetchPapersAndConvertAsCiphers } from "../../../../../../libs/cozy/paperCipher";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { SyncCipherNotification } from "@bitwarden/common/models/response/notification.response";
+import { ProfileProviderOrganizationResponse } from "@bitwarden/common/admin-console/models/response/profile-provider-organization.response";
+import { OrganizationId, UserId } from "@bitwarden/common/types/guid";
+/* eslint-enable */
+/* end Cozy imports */
 
-export class SyncService implements SyncServiceAbstraction {
-  syncInProgress = false;
+interface Member {
+  user_id: string;
+  key?: string;
+}
 
+type Members = { [id: string]: Member };
+
+interface CozyOrganizationDocument {
+  members?: Members;
+}
+
+export class SyncService extends CoreSyncService {
   constructor(
-    private apiService: ApiService,
-    private settingsService: SettingsService,
-    private folderService: InternalFolderService,
-    private cipherService: CipherService,
+    private masterPasswordService: InternalMasterPasswordServiceAbstraction,
+    accountService: AccountService,
+    apiService: ApiService,
+    private domainSettingsService: DomainSettingsService,
+    folderService: InternalFolderService,
+    cipherService: CipherService,
     private cryptoService: CryptoService,
-    private collectionService: CollectionService,
-    private messagingService: MessagingService,
+    collectionService: CollectionService,
+    messageSender: MessageSender,
     private policyService: InternalPolicyService,
-    private sendService: SendService,
-    private logService: LogService,
+    sendService: InternalSendService,
+    logService: LogService,
     private keyConnectorService: KeyConnectorService,
-    private stateService: StateService,
+    stateService: StateService,
     private providerService: ProviderService,
-    private folderApiService: FolderApiServiceAbstraction,
-    private organizationService: InternalOrganizationService,
+    folderApiService: FolderApiServiceAbstraction,
+    private organizationService: InternalOrganizationServiceAbstraction,
+    sendApiService: SendApiService,
+    private userDecryptionOptionsService: UserDecryptionOptionsServiceAbstraction,
+    private avatarService: AvatarService,
     private logoutCallback: (expired: boolean) => Promise<void>,
+    private billingAccountProfileStateService: BillingAccountProfileStateService,
+    private tokenService: TokenService,
+    authService: AuthService,
     protected cozyClientService: CozyClientService,
-    private i18nService: I18nService
-  ) {}
-
-  async getLastSync(): Promise<Date> {
-    if ((await this.stateService.getUserId()) == null) {
-      return null;
-    }
-
-    const lastSync = await this.stateService.getLastSync();
-    if (lastSync) {
-      return new Date(lastSync);
-    }
-
-    return null;
-  }
-
-  async setLastSync(date: Date, userId?: string): Promise<any> {
-    await this.stateService.setLastSync(date.toJSON(), { userId: userId });
+    private i18nService: I18nService,
+  ) {
+    super(
+      stateService,
+      folderService,
+      folderApiService,
+      messageSender,
+      logService,
+      cipherService,
+      collectionService,
+      apiService,
+      accountService,
+      authService,
+      sendService,
+      sendApiService,
+    );
   }
 
   @sequentialize(() => "fullSync")
-  async fullSync(forceSync: boolean, allowThrowOnError = false): Promise<boolean> {
+  override async fullSync(forceSync: boolean, allowThrowOnError = false): Promise<boolean> {
     this.syncStarted();
     const isAuthenticated = await this.stateService.getIsAuthenticated();
     if (!isAuthenticated) {
@@ -95,6 +124,7 @@ export class SyncService implements SyncServiceAbstraction {
       needsSync = await this.needsSyncing(forceSync);
     } catch (e) {
       if (allowThrowOnError) {
+        this.syncCompleted(false);
         throw e;
       }
     }
@@ -120,13 +150,13 @@ export class SyncService implements SyncServiceAbstraction {
           this.cipherService,
           this.cryptoService,
           this.cozyClientService,
-          this.i18nService
+          this.i18nService,
         ),
         fetchContactsAndConvertAsCiphers(
           this.cipherService,
           this.cryptoService,
           this.cozyClientService,
-          this.i18nService
+          this.i18nService,
         ),
       ];
 
@@ -155,164 +185,12 @@ export class SyncService implements SyncServiceAbstraction {
       return this.syncCompleted(true);
     } catch (e) {
       if (allowThrowOnError) {
+        this.syncCompleted(false);
         throw e;
       } else {
         return this.syncCompleted(false);
       }
     }
-  }
-
-  async syncUpsertFolder(notification: SyncFolderNotification, isEdit: boolean): Promise<boolean> {
-    this.syncStarted();
-    if (await this.stateService.getIsAuthenticated()) {
-      try {
-        const localFolder = await this.folderService.get(notification.id);
-        if (
-          (!isEdit && localFolder == null) ||
-          (isEdit && localFolder != null && localFolder.revisionDate < notification.revisionDate)
-        ) {
-          const remoteFolder = await this.folderApiService.get(notification.id);
-          if (remoteFolder != null) {
-            await this.folderService.upsert(new FolderData(remoteFolder));
-            this.messagingService.send("syncedUpsertedFolder", { folderId: notification.id });
-            return this.syncCompleted(true);
-          }
-        }
-      } catch (e) {
-        this.logService.error(e);
-      }
-    }
-    return this.syncCompleted(false);
-  }
-
-  async syncDeleteFolder(notification: SyncFolderNotification): Promise<boolean> {
-    this.syncStarted();
-    if (await this.stateService.getIsAuthenticated()) {
-      await this.folderService.delete(notification.id);
-      this.messagingService.send("syncedDeletedFolder", { folderId: notification.id });
-      this.syncCompleted(true);
-      return true;
-    }
-    return this.syncCompleted(false);
-  }
-
-  async syncUpsertCipher(notification: SyncCipherNotification, isEdit: boolean): Promise<boolean> {
-    this.syncStarted();
-    if (await this.stateService.getIsAuthenticated()) {
-      try {
-        let shouldUpdate = true;
-        const localCipher = await this.cipherService.get(notification.id);
-        if (localCipher != null && localCipher.revisionDate >= notification.revisionDate) {
-          shouldUpdate = false;
-        }
-
-        let checkCollections = false;
-        if (shouldUpdate) {
-          if (isEdit) {
-            shouldUpdate = localCipher != null;
-            checkCollections = true;
-          } else {
-            if (notification.collectionIds == null || notification.organizationId == null) {
-              shouldUpdate = localCipher == null;
-            } else {
-              shouldUpdate = false;
-              checkCollections = true;
-            }
-          }
-        }
-
-        if (
-          !shouldUpdate &&
-          checkCollections &&
-          notification.organizationId != null &&
-          notification.collectionIds != null &&
-          notification.collectionIds.length > 0
-        ) {
-          const collections = await this.collectionService.getAll();
-          if (collections != null) {
-            for (let i = 0; i < collections.length; i++) {
-              if (notification.collectionIds.indexOf(collections[i].id) > -1) {
-                shouldUpdate = true;
-                break;
-              }
-            }
-          }
-        }
-
-        if (shouldUpdate) {
-          const remoteCipher = await this.apiService.getFullCipherDetails(notification.id);
-          if (remoteCipher != null) {
-            await this.cipherService.upsert(new CipherData(remoteCipher));
-            this.messagingService.send("syncedUpsertedCipher", { cipherId: notification.id });
-            return this.syncCompleted(true);
-          }
-        }
-      } catch (e) {
-        if (e != null && e.statusCode === 404 && isEdit) {
-          await this.cipherService.delete(notification.id);
-          this.messagingService.send("syncedDeletedCipher", { cipherId: notification.id });
-          return this.syncCompleted(true);
-        }
-      }
-    }
-    return this.syncCompleted(false);
-  }
-
-  async syncDeleteCipher(notification: SyncCipherNotification): Promise<boolean> {
-    this.syncStarted();
-    if (await this.stateService.getIsAuthenticated()) {
-      await this.cipherService.delete(notification.id);
-      this.messagingService.send("syncedDeletedCipher", { cipherId: notification.id });
-      return this.syncCompleted(true);
-    }
-    return this.syncCompleted(false);
-  }
-
-  async syncUpsertSend(notification: SyncSendNotification, isEdit: boolean): Promise<boolean> {
-    this.syncStarted();
-    if (await this.stateService.getIsAuthenticated()) {
-      try {
-        const localSend = await this.sendService.get(notification.id);
-        if (
-          (!isEdit && localSend == null) ||
-          (isEdit && localSend != null && localSend.revisionDate < notification.revisionDate)
-        ) {
-          const remoteSend = await this.apiService.getSend(notification.id);
-          if (remoteSend != null) {
-            await this.sendService.upsert(new SendData(remoteSend));
-            this.messagingService.send("syncedUpsertedSend", { sendId: notification.id });
-            return this.syncCompleted(true);
-          }
-        }
-      } catch (e) {
-        this.logService.error(e);
-      }
-    }
-    return this.syncCompleted(false);
-  }
-
-  async syncDeleteSend(notification: SyncSendNotification): Promise<boolean> {
-    this.syncStarted();
-    if (await this.stateService.getIsAuthenticated()) {
-      await this.sendService.delete(notification.id);
-      this.messagingService.send("syncedDeletedSend", { sendId: notification.id });
-      this.syncCompleted(true);
-      return true;
-    }
-    return this.syncCompleted(false);
-  }
-
-  // Helpers
-
-  private syncStarted() {
-    this.syncInProgress = true;
-    this.messagingService.send("syncStarted");
-  }
-
-  private syncCompleted(successfully: boolean): boolean {
-    this.syncInProgress = false;
-    this.messagingService.send("syncCompleted", { successfully: successfully });
-    return successfully;
   }
 
   private async needsSyncing(forceSync: boolean) {
@@ -333,7 +211,7 @@ export class SyncService implements SyncServiceAbstraction {
   }
 
   private async syncProfile(response: ProfileResponse) {
-    const stamp = await this.stateService.getSecurityStamp();
+    const stamp = await this.tokenService.getSecurityStamp(response.id);
     if (stamp != null && stamp !== response.securityStamp) {
       if (this.logoutCallback != null) {
         await this.logoutCallback(true);
@@ -342,44 +220,113 @@ export class SyncService implements SyncServiceAbstraction {
       throw new Error("Stamp has changed");
     }
 
-    await this.cryptoService.setEncKey(response.key);
-    await this.cryptoService.setEncPrivateKey(response.privateKey);
-    await this.cryptoService.setProviderKeys(response.providers);
-    await this.cryptoService.setOrgKeys(response.organizations, response.providerOrganizations);
-    await this.stateService.setAvatarColor(response.avatarColor);
-    await this.stateService.setSecurityStamp(response.securityStamp);
-    await this.stateService.setEmailVerified(response.emailVerified);
-    await this.stateService.setHasPremiumPersonally(response.premiumPersonally);
-    await this.stateService.setHasPremiumFromOrganization(response.premiumFromOrganization);
-    await this.stateService.setForcePasswordReset(response.forcePasswordReset);
+    await this.cryptoService.setMasterKeyEncryptedUserKey(response.key);
+    await this.cryptoService.setPrivateKey(response.privateKey, response.id);
+    await this.cryptoService.setProviderKeys(response.providers, response.id);
+    await this.cryptoService.setOrgKeys(
+      response.organizations,
+      response.providerOrganizations,
+      response.id,
+    );
+    await this.avatarService.setSyncAvatarColor(response.id, response.avatarColor);
+    await this.tokenService.setSecurityStamp(response.securityStamp, response.id);
+    await this.accountService.setAccountEmailVerified(response.id, response.emailVerified);
+
+    await this.billingAccountProfileStateService.setHasPremium(
+      response.premiumPersonally,
+      response.premiumFromOrganization,
+    );
     await this.keyConnectorService.setUsesKeyConnector(response.usesKeyConnector);
 
-    const organizations: { [id: string]: OrganizationData } = {};
-    response.organizations.forEach((o) => {
-      organizations[o.id] = new OrganizationData(o);
-    });
+    await this.setForceSetPasswordReasonIfNeeded(response);
 
     const providers: { [id: string]: ProviderData } = {};
     response.providers.forEach((p) => {
       providers[p.id] = new ProviderData(p);
     });
 
+    await this.providerService.save(providers);
+
+    await this.syncProfileOrganizations(response);
+
+    if (await this.keyConnectorService.userNeedsMigration()) {
+      await this.keyConnectorService.setConvertAccountRequired(true);
+      this.messageSender.send("convertAccountToKeyConnector");
+    } else {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.keyConnectorService.removeConvertAccountRequired();
+    }
+  }
+
+  private async setForceSetPasswordReasonIfNeeded(profileResponse: ProfileResponse) {
+    // The `forcePasswordReset` flag indicates an admin has reset the user's password and must be updated
+    if (profileResponse.forcePasswordReset) {
+      await this.masterPasswordService.setForceSetPasswordReason(
+        ForceSetPasswordReason.AdminForcePasswordReset,
+        profileResponse.id,
+      );
+    }
+
+    const userDecryptionOptions = await firstValueFrom(
+      this.userDecryptionOptionsService.userDecryptionOptionsById$(profileResponse.id),
+    );
+
+    if (userDecryptionOptions === null || userDecryptionOptions === undefined) {
+      this.logService.error("Sync: Account decryption options are null or undefined.");
+    }
+
+    // Even though TDE users should only be in a single org (per single org policy), check
+    // through all orgs for the manageResetPassword permission. If they have it in any org,
+    // they should be forced to set a password.
+    let hasManageResetPasswordPermission = false;
+    for (const org of profileResponse.organizations) {
+      const isAdmin = org.type === OrganizationUserType.Admin;
+      const isOwner = org.type === OrganizationUserType.Owner;
+
+      // Note: apparently permissions only come down populated for custom roles.
+      if (isAdmin || isOwner || (org.permissions && org.permissions.manageResetPassword)) {
+        hasManageResetPasswordPermission = true;
+        break;
+      }
+    }
+
+    if (
+      userDecryptionOptions.trustedDeviceOption !== undefined &&
+      !userDecryptionOptions.hasMasterPassword &&
+      hasManageResetPasswordPermission
+    ) {
+      // TDE user w/out MP went from having no password reset permission to having it.
+      // Must set the force password reset reason so the auth guard will redirect to the set password page.
+      const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+      await this.masterPasswordService.setForceSetPasswordReason(
+        ForceSetPasswordReason.TdeUserWithoutPasswordHasPasswordResetPermission,
+        userId,
+      );
+    }
+  }
+
+  private async syncProfileOrganizations(response: ProfileResponse) {
+    const organizations: { [id: string]: OrganizationData } = {};
+    response.organizations.forEach((o) => {
+      organizations[o.id] = new OrganizationData(o, {
+        isMember: true,
+        isProviderUser: false,
+      });
+    });
+
     response.providerOrganizations.forEach((o) => {
       if (organizations[o.id] == null) {
-        organizations[o.id] = new OrganizationData(o);
+        organizations[o.id] = new OrganizationData(o, {
+          isMember: false,
+          isProviderUser: true,
+        });
+      } else {
         organizations[o.id].isProviderUser = true;
       }
     });
 
     await this.organizationService.replace(organizations);
-    await this.providerService.save(providers);
-
-    if (await this.keyConnectorService.userNeedsMigration()) {
-      await this.keyConnectorService.setConvertAccountRequired(true);
-      this.messagingService.send("convertAccountToKeyConnector");
-    } else {
-      this.keyConnectorService.removeConvertAccountRequired();
-    }
   }
 
   private async syncFolders(response: FolderResponse[]) {
@@ -442,7 +389,7 @@ export class SyncService implements SyncServiceAbstraction {
       });
     }
 
-    return this.settingsService.setEquivalentDomains(eqDomains);
+    return this.domainSettingsService.setEquivalentDomains(eqDomains);
   }
 
   private async syncPolicies(response: PolicyResponse[]) {
@@ -453,5 +400,105 @@ export class SyncService implements SyncServiceAbstraction {
       });
     }
     return await this.policyService.replace(policies);
+  }
+
+  // Cozy customization
+  // Update remote sync date only for non-zero date, which is used for logout
+  override async setLastSync(date: Date, userId?: string): Promise<any> {
+    super.setLastSync(date, userId);
+
+    if (date.getTime() !== 0) {
+      await this.cozyClientService.updateSynchronizedAt();
+    }
+  }
+
+  override async syncUpsertCipher(
+    notification: SyncCipherNotification,
+    isEdit: boolean,
+  ): Promise<boolean> {
+    const isAuthenticated = await this.stateService.getIsAuthenticated();
+    if (!isAuthenticated) {
+      return false;
+    }
+
+    this.syncStarted();
+
+    try {
+      await this.syncUpsertOrganization(notification.organizationId, isEdit);
+
+      return super.syncUpsertCipher(notification, isEdit);
+    } catch (e) {
+      return this.syncCompleted(false);
+    }
+  }
+
+  protected async getOrganizationKey(organizationId: string): Promise<string> {
+    const client = await this.cozyClientService.getClientInstance();
+    const remoteOrganizationData: CozyOrganizationDocument = await client.stackClient.fetchJSON(
+      "GET",
+      `/data/com.bitwarden.organizations/${organizationId}`,
+      [],
+    );
+
+    const userId = await this.stateService.getUserId();
+
+    const remoteOrganizationUser = Object.values(remoteOrganizationData.members).find(
+      (member) => member.user_id === userId,
+    );
+
+    return remoteOrganizationUser?.key || "";
+  }
+
+  protected async syncUpsertOrganizationKey(organizationId: string) {
+    const userId = await this.stateService.getUserId();
+
+    const remoteOrganizationKey = await this.getOrganizationKey(organizationId);
+
+    await this.cryptoService.upsertOrganizationKey(userId as UserId, organizationId as OrganizationId, remoteOrganizationKey);
+  }
+
+  protected async syncUpsertOrganization(organizationId: string, isEdit: boolean) {
+    if (!organizationId) {
+      return;
+    }
+
+    const storedOrganization = await this.organizationService.get(organizationId);
+    const storedOrganizationkey = await this.cryptoService.getOrgKey(organizationId);
+
+    if (storedOrganization !== null && storedOrganizationkey != null) {
+      return;
+    }
+
+    const remoteOrganization = await this.organizationService.get(organizationId);
+    const remoteOrganizationResponse = (remoteOrganization as any).response;
+    const remoteProfileProviderOrganizationResponse = new ProfileProviderOrganizationResponse(
+      remoteOrganizationResponse,
+    );
+
+    if (remoteOrganization !== null) {
+      await this.organizationService.upsertOrganization(remoteProfileProviderOrganizationResponse);
+
+      await this.syncUpsertOrganizationKey(organizationId);
+
+      await this.syncUpsertCollections(organizationId, isEdit);
+    }
+  }
+
+  protected async syncUpsertCollections(organizationId: string, isEdit: boolean) {
+    const syncCollections = await this.apiService.getCollections(organizationId);
+
+    await this.collectionService.upsert(
+      syncCollections.data.map((col) => {
+        return {
+          externalId: col.externalId,
+          id: col.id,
+          name: col.name,
+          organizationId: col.organizationId,
+          readOnly: false,
+          manage: false,
+          hidePasswords: false,
+        };
+      }),
+    );
   }
 }

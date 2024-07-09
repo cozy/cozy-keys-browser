@@ -2,11 +2,10 @@ import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Directive, Input, OnChanges, SimpleChanges } from "@angular/core";
 
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { EventType } from "@bitwarden/common/enums/eventType";
-import { FieldType } from "@bitwarden/common/enums/fieldType";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { EventType } from "@bitwarden/common/enums";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { FieldType, CipherType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 
@@ -27,7 +26,7 @@ export class AddEditCustomFieldsComponent implements OnChanges {
 
   constructor(
     private i18nService: I18nService,
-    private eventCollectionService: EventCollectionService
+    private eventCollectionService: EventCollectionService,
   ) {
     this.addFieldTypeOptions = [
       { name: i18nService.t("cfTypeText"), value: FieldType.Text },
@@ -77,9 +76,11 @@ export class AddEditCustomFieldsComponent implements OnChanges {
     const f = field as any;
     f.showValue = !f.showValue;
     if (this.editMode && f.showValue) {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.eventCollectionService.collect(
         EventType.Cipher_ClientToggledHiddenFieldVisible,
-        this.cipher.id
+        this.cipher.id,
       );
     }
   }
@@ -99,7 +100,7 @@ export class AddEditCustomFieldsComponent implements OnChanges {
 
     const options: any = [];
     this.cipher.linkedFieldOptions.forEach((linkedFieldOption, id) =>
-      options.push({ name: this.i18nService.t(linkedFieldOption.i18nKey), value: id })
+      options.push({ name: this.i18nService.t(linkedFieldOption.i18nKey), value: id }),
     );
     this.linkedFieldOptions = options.sort(Utils.getSortFunction(this.i18nService, "name"));
   }

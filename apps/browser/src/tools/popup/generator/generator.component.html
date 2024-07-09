@@ -1,4 +1,4 @@
-<header>
+<app-header [hideAccountSwitcher]="comingFromAddEdit">
   <div class="left">
     <!--
     <app-pop-out [show]="!comingFromAddEdit"></app-pop-out>
@@ -15,16 +15,16 @@
       {{ "select" | i18n }}
     </button>
   </div>
-</header>
+</app-header>
 <main tabindex="-1">
   <app-callout type="info" *ngIf="enforcedPasswordPolicyOptions?.inEffect() && type === 'password'">
     {{ "passwordGeneratorPolicyInEffect" | i18n }}
   </app-callout>
-  <div class="generated-block box-content-row box-content-row-flex" *ngIf="type === 'password'">
+  <div class="generated-block" *ngIf="type === 'password'">
     <div
-      class="generated-wrapper row-main"
+      class="generated-wrapper"
       [innerHTML]="password | colorPassword"
-      appSelectCopy
+      [appCopyText]="password"
     ></div>
     <div class="action-buttons">
       <button
@@ -47,11 +47,11 @@
       </button>
     </div>
   </div>
-  <div class="generated-block box-content-row box-content-row-flex" *ngIf="type === 'username'">
+  <div class="generated-block" *ngIf="type === 'username'">
     <div
-      class="generated-wrapper row-main"
+      class="generated-wrapper"
       [innerHTML]="username | colorPassword"
-      appSelectCopy
+      [appCopyText]="username"
     ></div>
     <div class="action-buttons" #form [appApiAction]="usernameGeneratingPromise">
       <button
@@ -80,7 +80,7 @@
     </div>
   </div>
   <!-- Cozy commented
-  <div class="box">
+  <div class="box" *ngIf="!comingFromAddEdit">
     <div class="box-content">
       <div class="box-content-row" role="radiogroup" aria-labelledby="typeHeading">
         <label id="typeHeading" class="radio-header">{{
@@ -95,7 +95,6 @@
             [value]="o.value"
             (change)="typeChanged()"
             [checked]="type === o.value"
-            [disabled]="comingFromAddEdit && type !== o.value"
           />
           <label for="type_{{ o.value }}">
             {{ o.name }}
@@ -136,22 +135,84 @@
           {{ "options" | i18n }}
         </h2>
         <div class="box-content">
-          <div class="box-content-row" role="radiogroup" aria-labelledby="passwordTypeHeading">
-            <label id="passwordTypeHeading" class="radio-header">{{ "passwordType" | i18n }}</label>
-            <div class="radio-group text-default" appBoxRow *ngFor="let o of passTypeOptions">
-              <input
-                type="radio"
-                [(ngModel)]="passwordOptions.type"
-                name="PasswordType"
-                id="passwordtype_{{ o.value }}"
-                [value]="o.value"
-                (change)="savePasswordOptions()"
-                [checked]="passwordOptions.type === o.value"
-              />
-              <label for="passwordtype_{{ o.value }}">
-                {{ o.name }}
-              </label>
-            </div>
+          <div class="box-content-row box-content-row-slider" appBoxRow>
+            <label for="length">{{ "length" | i18n }}</label>
+            <input
+              id="length"
+              type="number"
+              [min]="passwordOptions.minLength"
+              max="128"
+              [(ngModel)]="passwordOptions.length"
+              (change)="savePasswordOptions()"
+            />
+            <input
+              id="lengthRange"
+              type="range"
+              [min]="passwordOptions.minLength"
+              max="128"
+              step="1"
+              [(ngModel)]="passwordOptions.length"
+              (change)="sliderChanged()"
+              (input)="sliderInput()"
+              attr.aria-label="{{ 'length' | i18n }}"
+              tabindex="-1"
+            />
+          </div>
+          <div class="box-content-row" appBoxRow>
+            <span>{{ "passwordMinLength" | i18n }}</span>
+            <span
+              class="sr-only"
+              attr.aria-label="{{ 'passwordMinLength' | i18n }}"
+              role="status"
+              aria-live="polite"
+            >
+              {{ passwordOptionsMinLengthForReader$ | async }}
+            </span>
+            <span class="txt-right">{{ passwordOptions.minLength }}</span>
+          </div>
+          <div class="box-content-row box-content-row-checkbox" appBoxRow>
+            <label for="uppercase">A-Z</label>
+            <input
+              id="uppercase"
+              type="checkbox"
+              (change)="savePasswordOptions()"
+              attr.aria-label="{{ 'uppercase' | i18n }}"
+              [disabled]="enforcedPasswordPolicyOptions.useUppercase"
+              [(ngModel)]="passwordOptions.uppercase"
+            />
+          </div>
+          <div class="box-content-row box-content-row-checkbox" appBoxRow>
+            <label for="lowercase">a-z</label>
+            <input
+              id="lowercase"
+              type="checkbox"
+              (change)="savePasswordOptions()"
+              attr.aria-label="{{ 'lowercase' | i18n }}"
+              [disabled]="enforcedPasswordPolicyOptions.useLowercase"
+              [(ngModel)]="passwordOptions.lowercase"
+            />
+          </div>
+          <div class="box-content-row box-content-row-checkbox" appBoxRow>
+            <label for="numbers">0-9</label>
+            <input
+              id="numbers"
+              type="checkbox"
+              attr.aria-label="{{ 'numbers' | i18n }}"
+              [disabled]="enforcedPasswordPolicyOptions.useNumbers"
+              [ngModel]="passwordOptions.number"
+              (ngModelChange)="setPasswordOptionsNumber($event)"
+            />
+          </div>
+          <div class="box-content-row box-content-row-checkbox" appBoxRow>
+            <label for="special">!@#$%^&*</label>
+            <input
+              id="special"
+              type="checkbox"
+              attr.aria-label="{{ 'specialCharacters' | i18n }}"
+              [disabled]="enforcedPasswordPolicyOptions.useSpecial"
+              [ngModel]="passwordOptions.special"
+              (ngModelChange)="setPasswordOptionsSpecial($event)"
+            />
           </div>
         </div>
       </div>
@@ -332,7 +393,7 @@
             <a
               href="https://bitwarden.com/help/generator/#username-types"
               target="_blank"
-              rel="noopener"
+              rel="noreferrer"
               appA11yTitle="{{ 'learnMore' | i18n }}"
             >
               <!-- Cozy custo
@@ -390,6 +451,16 @@
               (blur)="saveUsernameOptions()"
             />
           </div>
+          <div class="box-content-row" appBoxRow>
+            <label for="simplelogin-baseUrl">{{ "baseUrl" | i18n }}</label>
+            <input
+              id="simplelogin-baseUrl"
+              type="text"
+              name="SimpleLoginDomain"
+              [(ngModel)]="usernameOptions.forwardedSimpleLoginBaseUrl"
+              (blur)="saveUsernameOptions()"
+            />
+          </div>
         </ng-container>
         <ng-container *ngIf="usernameOptions.forwardedService === 'duckduckgo'">
           <div class="box-content-row" appBoxRow>
@@ -415,12 +486,22 @@
             />
           </div>
           <div class="box-content-row" appBoxRow>
-            <label for="anonaddy-domain">{{ "domainName" | i18n }}</label>
+            <label for="anonaddy-domain">{{ "aliasDomain" | i18n }}</label>
             <input
               id="anonaddy-domain"
               type="text"
               name="AnonAddyDomain"
               [(ngModel)]="usernameOptions.forwardedAnonAddyDomain"
+              (blur)="saveUsernameOptions()"
+            />
+          </div>
+          <div class="box-content-row" appBoxRow>
+            <label for="anonaddy-baseUrl">{{ "baseUrl" | i18n }}</label>
+            <input
+              id="anonaddy-baseUrl"
+              type="text"
+              name="AnonAddyDomain"
+              [(ngModel)]="usernameOptions.forwardedAnonAddyBaseUrl"
               (blur)="saveUsernameOptions()"
             />
           </div>
@@ -445,6 +526,28 @@
               type="password"
               name="FastmailApiToken"
               [(ngModel)]="usernameOptions.forwardedFastmailApiToken"
+              (blur)="saveUsernameOptions()"
+            />
+          </div>
+        </ng-container>
+        <ng-container *ngIf="usernameOptions.forwardedService === 'forwardemail'">
+          <div class="box-content-row" appBoxRow>
+            <label for="forwardemail-accessToken">{{ "apiAccessToken" | i18n }}</label>
+            <input
+              id="forwardemail-accessToken"
+              type="password"
+              name="ForwardEmailAccessToken"
+              [(ngModel)]="usernameOptions.forwardedForwardEmailApiToken"
+              (blur)="saveUsernameOptions()"
+            />
+          </div>
+          <div class="box-content-row" appBoxRow>
+            <label for="forwardemail-domain">{{ "aliasDomain" | i18n }}</label>
+            <input
+              id="forwardemail-domain"
+              type="text"
+              name="ForwardEmailDomain"
+              [(ngModel)]="usernameOptions.forwardedForwardEmailDomain"
               (blur)="saveUsernameOptions()"
             />
           </div>

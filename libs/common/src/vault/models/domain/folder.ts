@@ -1,7 +1,7 @@
 import { Jsonify } from "type-fest";
 
-import Domain from "../../../models/domain/domain-base";
-import { EncString } from "../../../models/domain/enc-string";
+import Domain from "../../../platform/models/domain/domain-base";
+import { EncString } from "../../../platform/models/domain/enc-string";
 import { FolderData } from "../data/folder.data";
 import { FolderView } from "../view/folder.view";
 
@@ -23,7 +23,7 @@ export class Folder extends Domain {
         id: null,
         name: null,
       },
-      ["id"]
+      ["id"],
     );
 
     this.revisionDate = obj.revisionDate != null ? new Date(obj.revisionDate) : null;
@@ -35,7 +35,7 @@ export class Folder extends Domain {
       {
         name: null,
       },
-      null
+      null,
     );
   }
 

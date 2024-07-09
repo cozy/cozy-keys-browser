@@ -1,11 +1,10 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { map } from "rxjs";
+import { concatMap } from "rxjs";
 
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import { Organization } from "@bitwarden/common/models/domain/organization";
-
-import { SecretsManagerLogo } from "./secrets-manager-logo";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { SecretsManagerLogo } from "@bitwarden/web-vault/app/layouts/secrets-manager-logo";
 
 @Component({
   selector: "sm-navigation",
@@ -15,8 +14,13 @@ export class NavigationComponent {
   protected readonly logo = SecretsManagerLogo;
   protected orgFilter = (org: Organization) => org.canAccessSecretsManager;
   protected isAdmin$ = this.route.params.pipe(
-    map((params) => this.organizationService.get(params.organizationId)?.isAdmin)
+    concatMap(
+      async (params) => (await this.organizationService.get(params.organizationId))?.isAdmin,
+    ),
   );
 
-  constructor(private route: ActivatedRoute, private organizationService: OrganizationService) {}
+  constructor(
+    protected route: ActivatedRoute,
+    private organizationService: OrganizationService,
+  ) {}
 }

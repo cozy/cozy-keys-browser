@@ -80,7 +80,7 @@
                 (click)="generateUsername()"
                 *ngIf="!(!cipher.edit && editMode)"
               >
-                <i class="bwi bwi-lg bwi-generate" aria-hidden="true"></i>
+                <i class="bwi bwi-fw bwi-lg bwi-generate" aria-hidden="true"></i>
               </button>
             </div>
           </div>
@@ -111,12 +111,12 @@
                 *ngIf="cipher.viewPassword"
               >
                 <i
-                  class="bwi bwi-lg bwi-check-circle"
+                  class="bwi bwi-fw bwi-lg bwi-check-circle"
                   [hidden]="$any(checkPasswordBtn).loading"
                   aria-hidden="true"
                 ></i>
                 <i
-                  class="bwi bwi-lg bwi-spinner bwi-spin"
+                  class="bwi bwi-fw bwi-lg bwi-spinner bwi-spin"
                   [hidden]="!$any(checkPasswordBtn).loading"
                   aria-hidden="true"
                 ></i>
@@ -128,11 +128,11 @@
                 appBlurClick
                 appA11yTitle="{{ 'toggleVisibility' | i18n }}"
                 (click)="togglePassword()"
-                *ngIf="cipher.viewPassword"
+                *ngIf="cipher.viewPassword && cipher.login.password"
                 [attr.aria-pressed]="showPassword"
               >
                 <i
-                  class="bwi bwi-lg"
+                  class="bwi bwi-fw bwi-lg"
                   aria-hidden="true"
                   [ngClass]="{ 'bwi-eye': !showPassword, 'bwi-eye-slash': showPassword }"
                 ></i>
@@ -146,24 +146,91 @@
                 (click)="generatePassword()"
                 *ngIf="cipher.viewPassword && !(!cipher.edit && editMode)"
               >
-                <i class="bwi bwi-lg bwi-generate" aria-hidden="true"></i>
+                <i class="bwi bwi-fw bwi-lg bwi-generate" aria-hidden="true"></i>
               </button>
             </div>
           </div>
-          <div class="box-content-row" appBoxRow>
-            <label for="loginTotp">{{ "authenticatorKeyTotp" | i18n }}</label>
-            <input
-              id="loginTotp"
-              type="{{ cipher.viewPassword ? 'text' : 'password' }}"
-              name="Login.Totp"
-              class="monospaced"
-              [(ngModel)]="cipher.login.totp"
-              appInputVerbatim
-              [disabled]="!cipher.viewPassword"
-              [readonly]="!cipher.edit && editMode"
-            />
+
+          <!--Passkey-->
+          <div
+            class="box"
+            *ngIf="cipher.login.hasFido2Credentials && !cloneMode"
+            tabindex="0"
+            attr.aria-label="{{ 'typePasskey' | i18n }} {{ fido2CredentialCreationDateValue }}"
+          >
+            <div class="box-content">
+              <div class="box-content-row box-content-row-multi text-muted" appBoxRow>
+                <button
+                  type="button"
+                  appStopClick
+                  (click)="removePasskey()"
+                  appA11yTitle="{{ 'removePasskey' | i18n }}"
+                >
+                  <i class="bwi bwi-fw bwi-minus-circle bwi-lg" aria-hidden="true"></i>
+                </button>
+                <div class="row-main">
+                  <span class="row-label">{{ "typePasskey" | i18n }}</span>
+                  {{ "dateCreated" | i18n }}
+                  {{ cipher.login.fido2Credentials[0].creationDate | date: "short" }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="box-content-row box-content-row-flex" appBoxRow>
+            <div class="row-main">
+              <label for="loginTotp">{{ "authenticatorKeyTotp" | i18n }}</label>
+              <input
+                id="loginTotp"
+                type="{{ showTotpSeed ? 'text' : 'password' }}"
+                name="Login.Totp"
+                class="monospaced"
+                [(ngModel)]="cipher.login.totp"
+                appInputVerbatim
+                [disabled]="!cipher.viewPassword"
+                [readonly]="!cipher.edit && editMode"
+              />
+            </div>
+            <div class="action-buttons">
+              <button
+                type="button"
+                class="row-btn"
+                appStopClick
+                appA11yTitle="{{ 'toggleVisibility' | i18n }}"
+                (click)="toggleTotpSeed()"
+                *ngIf="cipher.viewPassword && cipher.login.totp"
+                [attr.aria-pressed]="showTotpSeed"
+              >
+                <i
+                  class="bwi bwi-fw bwi-lg"
+                  aria-hidden="true"
+                  [ngClass]="{ 'bwi-eye': !showTotpSeed, 'bwi-eye-slash': showTotpSeed }"
+                ></i>
+              </button>
+              <button
+                type="button"
+                class="row-btn"
+                appStopClick
+                appA11yTitle="{{ 'copyTOTP' | i18n }}"
+                (click)="copy(cipher.login.totp, 'totp', 'TOTP')"
+                *ngIf="cipher.viewPassword"
+              >
+                <i class="bwi bwi-fw bwi-lg bwi-clone" aria-hidden="true"></i>
+              </button>
+              <button
+                type="button"
+                class="row-btn"
+                appStopClick
+                appA11yTitle="{{ 'totpCapture' | i18n }}"
+                (click)="captureTOTPFromTab()"
+                *ngIf="!(!cipher.edit && editMode)"
+              >
+                <i class="bwi bwi-fw bwi-lg bwi-camera" aria-hidden="true"></i>
+              </button>
+            </div>
           </div>
         </div>
+
         <!-- Card -->
         <div *ngIf="cipher.type === cipherType.Card">
           <div class="box-content-row" appBoxRow>
@@ -184,6 +251,7 @@
                 class="monospaced"
                 type="{{ showCardNumber ? 'text' : 'password' }}"
                 name="Card.Number"
+                (input)="onCardNumberChange()"
                 [(ngModel)]="cipher.card.number"
                 appInputVerbatim
                 [readonly]="!cipher.edit && editMode"
@@ -200,7 +268,7 @@
                 [attr.aria-pressed]="showCardNumber"
               >
                 <i
-                  class="bwi bwi-lg"
+                  class="bwi bwi-fw bwi-lg"
                   aria-hidden="true"
                   [ngClass]="{ 'bwi-eye': !showCardNumber, 'bwi-eye-slash': showCardNumber }"
                 ></i>
@@ -278,7 +346,7 @@
                 [attr.aria-pressed]="showCardCode"
               >
                 <i
-                  class="bwi bwi-lg"
+                  class="bwi bwi-fw bwi-lg"
                   aria-hidden="true"
                   [ngClass]="{ 'bwi-eye': !showCardCode, 'bwi-eye-slash': showCardCode }"
                 ></i>
@@ -501,7 +569,7 @@
               (click)="removeUri(u)"
               appA11yTitle="{{ 'remove' | i18n }}"
             >
-              <i class="bwi bwi-minus-circle bwi-lg" aria-hidden="true"></i>
+              <i class="bwi bwi-fw bwi-minus-circle bwi-lg" aria-hidden="true"></i>
             </button>
             <div class="row-main">
               <label for="loginUri{{ i }}">{{ "uriPosition" | i18n: i + 1 }}</label>
@@ -553,7 +621,7 @@
                 (click)="toggleUriInput(u)"
                 [attr.aria-pressed]="$any(u).showCurrentUris === true"
               >
-                <i aria-hidden="true" class="bwi bwi-lg bwi-list"></i>
+                <i aria-hidden="true" class="bwi bwi-fw bwi-lg bwi-list"></i>
               </button>
               <button
                 type="button"
@@ -563,7 +631,7 @@
                 (click)="toggleUriOptions(u)"
                 [attr.aria-pressed]="$any(u).showOptions === true"
               >
-                <i class="bwi bwi-lg bwi-cog" aria-hidden="true"></i>
+                <i class="bwi bwi-fw bwi-lg bwi-cog" aria-hidden="true"></i>
               </button>
             </div>
           </div>
@@ -587,6 +655,7 @@
           <select
             id="autofillOnPageLoad"
             name="AutofillOnPageLoad"
+            [disabled]="reprompt"
             [(ngModel)]="cipher.login.autofillOnPageLoad"
           >
             <option *ngFor="let o of autofillOnPageLoadOptions" [ngValue]="o.value">
@@ -594,6 +663,9 @@
             </option>
           </select>
         </div>
+      </div>
+      <div class="box-footer !tw-mb-0 !tw-pb-0" *ngIf="reprompt">
+        {{ "turnOffMasterPasswordPromptToEditField" | i18n }}
       </div>
     </div>
     <div class="box">
@@ -618,7 +690,7 @@
             {{ "passwordPrompt" | i18n }}
             <a
               target="_blank"
-              rel="noopener"
+              rel="noreferrer"
               appA11yTitle="{{ 'learnMore' | i18n }}"
               href="https://bitwarden.com/help/managing-items/#protect-individual-items"
             >

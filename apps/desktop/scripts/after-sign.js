@@ -2,8 +2,8 @@
 require("dotenv").config();
 const path = require("path");
 
+const { notarize } = require("@electron/notarize");
 const { deepAssign } = require("builder-util");
-const { notarize } = require("electron-notarize");
 const fse = require("fs-extra");
 
 exports.default = run;
@@ -24,7 +24,7 @@ async function run(context) {
       fse.mkdirSync(path.join(appPath, "Contents/PlugIns"));
       fse.copySync(
         path.join(plugIn, "safari.appex"),
-        path.join(appPath, "Contents/PlugIns/safari.appex")
+        path.join(appPath, "Contents/PlugIns/safari.appex"),
       );
 
       // Resign to sign safari extension
@@ -32,7 +32,7 @@ async function run(context) {
         const masBuildOptions = deepAssign(
           {},
           context.packager.platformSpecificBuildOptions,
-          context.packager.config.mas
+          context.packager.config.mas,
         );
         if (context.targets.some((e) => e.name === "mas-dev")) {
           deepAssign(masBuildOptions, {
@@ -53,8 +53,9 @@ async function run(context) {
     const appleId = process.env.APPLE_ID_USERNAME || process.env.APPLEID;
     const appleIdPassword = process.env.APPLE_ID_PASSWORD || `@keychain:AC_PASSWORD`;
     return await notarize({
-      appBundleId: "com.bitwarden.desktop",
+      tool: "notarytool",
       appPath: appPath,
+      teamId: "LTZ2PFU5D6",
       appleId: appleId,
       appleIdPassword: appleIdPassword,
     });

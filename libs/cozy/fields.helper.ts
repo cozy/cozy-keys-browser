@@ -1,9 +1,9 @@
 import { models } from "cozy-client";
 import { IOCozyContact } from "cozy-client/types/types";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
 import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
-import { FieldType } from "@bitwarden/common/enums/fieldType";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { FieldType } from "@bitwarden/common/vault/enums";
 import { ExpirationDateData } from "@bitwarden/common/vault/models/data/expiration-date.data";
 import { LabelData } from "@bitwarden/common/vault/models/data/label.data";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
@@ -238,7 +238,7 @@ const cleanEmptyAddresses = (builtFields: FieldView[]): void => {
 
 export const buildFieldsFromContact = (
   i18nService: I18nService,
-  contact: IOCozyContact
+  contact: IOCozyContact,
 ): FieldView[] => {
   const builtFields: FieldView[] = [];
 

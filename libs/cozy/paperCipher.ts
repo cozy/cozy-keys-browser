@@ -2,15 +2,15 @@
 // Cozy customization
 import CozyClient from "cozy-client/types/CozyClient";
 
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PaperType } from "@bitwarden/common/enums/paperType";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 import { CozyClientService } from "../../apps/browser/src/popup/services/cozyClient.service";
 
@@ -23,7 +23,7 @@ export const convertPapersAsCiphers = async (
   cryptoService: CryptoService,
   i18nService: I18nService,
   client: CozyClient,
-  papers: any
+  papers: any,
 ): Promise<CipherData[]> => {
   const baseUrl = client.getStackClient().uri;
 
@@ -31,7 +31,7 @@ export const convertPapersAsCiphers = async (
 
   const noteIllustrationUrl = await fetchNoteIllustrationUrl(client);
 
-  const key = await cryptoService.getKeyForUserEncryption();
+  const key = await cryptoService.getUserKey();
 
   for (const paper of papers) {
     let cipherData;
@@ -44,7 +44,7 @@ export const convertPapersAsCiphers = async (
           {
             noteIllustrationUrl,
           },
-          key
+          key,
         );
       } else {
         cipherData = await convertPaperToCipherData(
@@ -54,7 +54,7 @@ export const convertPapersAsCiphers = async (
           {
             baseUrl,
           },
-          key
+          key,
         );
       }
 
@@ -75,7 +75,7 @@ export const fetchPapersAndConvertAsCiphers = async (
   cipherService: CipherService,
   cryptoService: CryptoService,
   cozyClientService: CozyClientService,
-  i18nService: I18nService
+  i18nService: I18nService,
 ): Promise<CipherData[]> => {
   const client = await cozyClientService.getClientInstance();
 
@@ -87,14 +87,14 @@ export const fetchPapersAndConvertAsCiphers = async (
       cryptoService,
       i18nService,
       client,
-      papers
+      papers,
     );
 
     return papersCiphers;
   } catch (e) {
     console.log(
       "Error while fetching papers and converting them as ciphers. Fallbacking to stored papers.",
-      e
+      e,
     );
 
     return (await cipherService.getAll())
@@ -107,7 +107,7 @@ export const favoritePaperCipher = async (
   cipherService: CipherService,
   i18nService: I18nService,
   cipher: CipherView,
-  cozyClientService: CozyClientService
+  cozyClientService: CozyClientService,
 ): Promise<boolean> => {
   const client = await cozyClientService.getClientInstance();
 
@@ -132,7 +132,7 @@ export const favoritePaperCipher = async (
       updatePaperWithContacts,
       {
         baseUrl: client.getStackClient().uri,
-      }
+      },
     );
   } else if (cipher.paper.type === PaperType.Note) {
     cipherData = await convertNoteToCipherData(
@@ -141,7 +141,7 @@ export const favoritePaperCipher = async (
       updatePaperWithContacts,
       {
         noteIllustrationUrl: await fetchNoteIllustrationUrl(client),
-      }
+      },
     );
   }
 
@@ -153,18 +153,17 @@ export const favoritePaperCipher = async (
 export const deletePaperCipher = async (
   cipherService: CipherService,
   i18nService: I18nService,
-  platformUtilsService: PlatformUtilsService,
+  dialogService: DialogService,
+  toastService: ToastService,
   cipher: CipherView,
-  stateService: StateService,
-  cozyClientService: CozyClientService
+  cozyClientService: CozyClientService,
+  organizationService: OrganizationService,
 ): Promise<boolean> => {
-  const confirmed = await platformUtilsService.showDialog(
-    i18nService.t("deletePaperItemConfirmation"),
-    i18nService.t("deleteItem"),
-    i18nService.t("yes"),
-    i18nService.t("no"),
-    "warning"
-  );
+  const confirmed = await dialogService.openSimpleDialog({
+    title: i18nService.t("deleteItem"),
+    content: i18nService.t("deletePaperItemConfirmation"),
+    type: "warning",
+  });
 
   if (!confirmed) {
     return false;
@@ -178,7 +177,7 @@ export const deletePaperCipher = async (
   await cipherService.delete(cipher.id);
 
   const message = i18nService.t("deletedPaperItem");
-  platformUtilsService.showToast("success", null, message);
+  toastService.showToast({ title: message, message, variant: "success" });
 
   return true;
 };

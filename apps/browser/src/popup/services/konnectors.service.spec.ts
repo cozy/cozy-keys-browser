@@ -1,15 +1,12 @@
 // import { mock, MockProxy } from "jest-mock-extended";
 import { of } from "rxjs";
 
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { AbstractStorageService as StorageService } from "@bitwarden/common/abstractions/storage.service";
+import { AbstractStorageService as StorageService } from "@bitwarden/common/platform/abstractions/storage.service";
 // import { SettingsService } from "@bitwarden/common/services/settings.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
-
-// import { BrowserStateService } from "../../services/abstractions/browser-state.service";
 
 import { KonnectorsService } from "./konnectors.service";
 
@@ -42,6 +39,9 @@ const buildCiphers = (ciphers: any[]) => {
 };
 
 export class TestStorageService implements StorageService {
+  get valuesRequireDeserialization(): boolean {
+    throw new Error("Method not implemented.");
+  }
   async get<T>(key: string): Promise<T> {
     return new Promise((resolve) => resolve(null));
   }
@@ -80,7 +80,8 @@ describe("Konnectors Service", () => {
     null,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     /* @ts-ignore */
-    new TestStateService()
+    new TestStateService(),
+    null,
   );
 
   it("should suggest konnectors by full url match", async () => {
@@ -90,7 +91,7 @@ describe("Konnectors Service", () => {
       konnectors,
       [],
       [],
-      ciphers
+      ciphers,
     );
     expect(suggested).toEqual(konnectors);
   });
@@ -101,7 +102,7 @@ describe("Konnectors Service", () => {
       konnectors,
       [],
       [],
-      ciphers
+      ciphers,
     );
     expect(suggested).toEqual(konnectors);
 
@@ -111,7 +112,7 @@ describe("Konnectors Service", () => {
       konnectors2,
       [],
       [],
-      ciphers2
+      ciphers2,
     );
     expect(suggested2).toEqual(konnectors2);
   });
@@ -122,7 +123,7 @@ describe("Konnectors Service", () => {
       konnectors,
       [],
       [],
-      ciphers
+      ciphers,
     );
     expect(suggested).toEqual(konnectors);
 
@@ -132,7 +133,7 @@ describe("Konnectors Service", () => {
       konnectors2,
       [],
       [],
-      ciphers2
+      ciphers2,
     );
     expect(suggested2).toEqual(konnectors2);
   });
@@ -149,7 +150,7 @@ describe("Konnectors Service", () => {
       konnectors,
       [],
       [],
-      ciphers
+      ciphers,
     );
     expect(suggested).toEqual([]);
   });
@@ -160,7 +161,7 @@ describe("Konnectors Service", () => {
       konnectors,
       [],
       [],
-      ciphers
+      ciphers,
     );
     expect(suggested).toEqual([]);
   });
@@ -173,7 +174,7 @@ describe("Konnectors Service", () => {
       konnectors,
       installedKonnectors,
       suggestedKonnectors,
-      ciphers
+      ciphers,
     );
     expect(suggested).toEqual([]);
   });

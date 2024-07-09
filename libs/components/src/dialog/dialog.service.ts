@@ -16,26 +16,20 @@ import {
   TemplateRef,
 } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
-import { filter, Subject, switchMap, takeUntil } from "rxjs";
+import { filter, firstValueFrom, Subject, switchMap, takeUntil } from "rxjs";
 
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 
-import { SimpleDialogOptions } from "./simple-configurable-dialog/models/simple-dialog-options";
-import { SimpleConfigurableDialogComponent } from "./simple-configurable-dialog/simple-configurable-dialog.component";
+import { SimpleConfigurableDialogComponent } from "./simple-dialog/simple-configurable-dialog/simple-configurable-dialog.component";
+import { SimpleDialogOptions, Translation } from "./simple-dialog/types";
 
 @Injectable()
 export class DialogService extends Dialog implements OnDestroy {
   private _destroy$ = new Subject<void>();
 
-  private backDropClasses = [
-    "tw-fixed",
-    "tw-bg-black",
-    "tw-bg-opacity-30",
-    "tw-inset-0",
-    // CDK dialog panels have a default z-index of 1000. Matching this allows us to easily stack dialogs.
-    "tw-z-[1000]",
-  ];
+  private backDropClasses = ["tw-fixed", "tw-bg-black", "tw-bg-opacity-30", "tw-inset-0"];
 
   constructor(
     /** Parent class constructor */
@@ -48,7 +42,9 @@ export class DialogService extends Dialog implements OnDestroy {
 
     /** Not in parent class */
     @Optional() router: Router,
-    @Optional() authService: AuthService
+    @Optional() authService: AuthService,
+
+    protected i18nService: I18nService,
   ) {
     super(_overlay, _injector, _defaultOptions, _parentDialog, _overlayContainer, scrollStrategy);
 
@@ -59,7 +55,7 @@ export class DialogService extends Dialog implements OnDestroy {
           filter((event) => event instanceof NavigationEnd),
           switchMap(() => authService.getAuthStatus()),
           filter((v) => v !== AuthenticationStatus.Unlocked),
-          takeUntil(this._destroy$)
+          takeUntil(this._destroy$),
         )
         .subscribe(() => this.closeAll());
     }
@@ -73,7 +69,7 @@ export class DialogService extends Dialog implements OnDestroy {
 
   override open<R = unknown, D = unknown, C = unknown>(
     componentOrTemplateRef: ComponentType<C> | TemplateRef<C>,
-    config?: DialogConfig<D, DialogRef<R, C>>
+    config?: DialogConfig<D, DialogRef<R, C>>,
   ): DialogRef<R, C> {
     config = {
       backdropClass: this.backDropClasses,
@@ -84,18 +80,48 @@ export class DialogService extends Dialog implements OnDestroy {
   }
 
   /**
+   * Opens a simple dialog, returns true if the user accepted the dialog.
+   *
+   * @param {SimpleDialogOptions} simpleDialogOptions - An object containing options for the dialog.
+   * @returns `boolean` - True if the user accepted the dialog, false otherwise.
+   */
+  async openSimpleDialog(simpleDialogOptions: SimpleDialogOptions): Promise<boolean> {
+    const dialogRef = this.openSimpleDialogRef(simpleDialogOptions);
+
+    return firstValueFrom(dialogRef.closed);
+  }
+
+  /**
    * Opens a simple dialog.
+   *
+   * You should probably use `openSimpleDialog` instead, unless you need to programmatically close the dialog.
    *
    * @param {SimpleDialogOptions} simpleDialogOptions - An object containing options for the dialog.
    * @returns `DialogRef` - The reference to the opened dialog.
    * Contains a closed observable which can be subscribed to for determining which button
-   * a user pressed (see `SimpleDialogCloseType`)
+   * a user pressed
    */
-  openSimpleDialog(simpleDialogOptions: SimpleDialogOptions): DialogRef {
-    // Method needs to return dialog reference so devs can sub to closed and get results.
-    return this.open(SimpleConfigurableDialogComponent, {
+  openSimpleDialogRef(simpleDialogOptions: SimpleDialogOptions): DialogRef<boolean> {
+    return this.open<boolean, SimpleDialogOptions>(SimpleConfigurableDialogComponent, {
       data: simpleDialogOptions,
       disableClose: simpleDialogOptions.disableClose,
     });
+  }
+
+  protected translate(translation: string | Translation, defaultKey?: string): string {
+    if (translation == null && defaultKey == null) {
+      return null;
+    }
+
+    if (translation == null) {
+      return this.i18nService.t(defaultKey);
+    }
+
+    // Translation interface use implies we must localize.
+    if (typeof translation === "object") {
+      return this.i18nService.t(translation.key, ...(translation.placeholders ?? []));
+    }
+
+    return translation;
   }
 }

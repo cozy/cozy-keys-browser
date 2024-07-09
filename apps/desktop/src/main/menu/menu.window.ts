@@ -1,7 +1,7 @@
 import { MenuItemConstructorOptions } from "electron";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 
 import { isMac } from "../../utils";
 import { WindowMain } from "../window.main";
@@ -33,7 +33,7 @@ export class WindowMenu implements IMenubarMenu {
   constructor(
     i18nService: I18nService,
     messagingService: MessagingService,
-    windowMain: WindowMain
+    windowMain: WindowMain,
   ) {
     this._i18nService = i18nService;
     this._messagingService = messagingService;

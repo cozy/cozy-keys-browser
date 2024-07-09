@@ -46,5 +46,17 @@
   },
   "ssoKeyConnectorError": {
     "message": "Key Connector error: make sure Key Connector is available and working correctly."
+  },
+  "unsupportedEncryptedImport": {
+    "message": "Importing encrypted files is currently not supported."
+  },
+  "importUnassignedItemsError": {
+    "message": "File contains unassigned items."
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Error assigning target collection."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Error assigning target folder."
   }
 }

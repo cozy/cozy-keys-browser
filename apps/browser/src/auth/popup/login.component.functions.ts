@@ -2,7 +2,7 @@ import { CozySanitizeUrlService } from "../../popup/services/cozySanitizeUrl.ser
 
 export const sanitizeUrlInput = (
   inputUrl: string,
-  cozySanitizeUrlService: CozySanitizeUrlService
+  cozySanitizeUrlService: CozySanitizeUrlService,
 ): string => {
   // Prevent empty url
   if (!inputUrl) {

@@ -1,8 +1,8 @@
 import { Directive, HostListener, Input, OnDestroy, Optional } from "@angular/core";
 import { BehaviorSubject, finalize, Subject, takeUntil, tap } from "rxjs";
 
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { ValidationService } from "@bitwarden/common/abstractions/validation.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 
 import { ButtonLikeAbstraction } from "../shared/button-like.abstraction";
 import { FunctionReturningAwaitable, functionToObservable } from "../utils/function-to-observable";
@@ -20,14 +20,14 @@ export class BitActionDirective implements OnDestroy {
 
   disabled = false;
 
-  @Input("bitAction") protected handler: FunctionReturningAwaitable;
+  @Input("bitAction") handler: FunctionReturningAwaitable;
 
   readonly loading$ = this._loading$.asObservable();
 
   constructor(
     private buttonComponent: ButtonLikeAbstraction,
     @Optional() private validationService?: ValidationService,
-    @Optional() private logService?: LogService
+    @Optional() private logService?: LogService,
   ) {}
 
   get loading() {
@@ -55,7 +55,7 @@ export class BitActionDirective implements OnDestroy {
           },
         }),
         finalize(() => (this.loading = false)),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }

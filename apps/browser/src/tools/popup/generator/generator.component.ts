@@ -5,14 +5,16 @@ import { Component } from "@angular/core";
 import { Component, ElementRef, ViewChild, OnDestroy } from "@angular/core";
 /* end custo */
 import { ActivatedRoute } from "@angular/router";
+import { firstValueFrom } from "rxjs";
 
 import { GeneratorComponent as BaseGeneratorComponent } from "@bitwarden/angular/tools/generator/components/generator.component";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { AddEditCipherInfo } from "@bitwarden/common/vault/types/add-edit-cipher-info";
 
@@ -35,6 +37,7 @@ export class GeneratorComponent extends BaseGeneratorComponent implements OnDest
   protected destroy$ = new Subject<void>();
 
   @ViewChild("emailInput") emailInputElement: ElementRef;
+  private cipherService: CipherService;
 
   constructor(
     passwordGenerationService: PasswordGenerationServiceAbstraction,
@@ -42,11 +45,12 @@ export class GeneratorComponent extends BaseGeneratorComponent implements OnDest
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService,
     stateService: StateService,
+    cipherService: CipherService,
     route: ActivatedRoute,
     logService: LogService,
     private location: Location,
     private historyService: HistoryService,
-    protected cozyClientService: CozyClientService
+    protected cozyClientService: CozyClientService,
   ) {
     super(
       passwordGenerationService,
@@ -57,12 +61,13 @@ export class GeneratorComponent extends BaseGeneratorComponent implements OnDest
       logService,
       route,
       window,
-      cozyClientService
+      cozyClientService,
     );
+    this.cipherService = cipherService;
   }
 
   async ngOnInit() {
-    this.addEditCipherInfo = await this.stateService.getAddEditCipherInfo();
+    this.addEditCipherInfo = await firstValueFrom(this.cipherService.addEditCipherInfo$);
     if (this.addEditCipherInfo != null) {
       this.cipherState = this.addEditCipherInfo.cipher;
     }
@@ -102,7 +107,9 @@ export class GeneratorComponent extends BaseGeneratorComponent implements OnDest
     }
     /* Cozy custo
     this.addEditCipherInfo.cipher = this.cipherState;
-    this.stateService.setAddEditCipherInfo(this.addEditCipherInfo);
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this.cipherService.setAddEditCipherInfo(this.addEditCipherInfo);
     */
     this.historyService.updatePreviousAddEditCipher(this.cipherState);
     /* end custo */

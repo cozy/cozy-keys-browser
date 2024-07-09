@@ -3,26 +3,31 @@ import * as path from "path";
 
 import { app, ipcMain } from "electron";
 
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 
 import { Main } from "../main";
+import { DesktopSettingsService } from "../platform/services/desktop-settings.service";
 
 import { MenuUpdateRequest } from "./menu/menu.updater";
 
 const SyncInterval = 5 * 60 * 1000; // 5 minutes
 
 export class MessagingMain {
-  private syncTimeout: NodeJS.Timer;
+  private syncTimeout: NodeJS.Timeout;
 
-  constructor(private main: Main, private stateService: StateService) {}
+  constructor(
+    private main: Main,
+    private stateService: StateService,
+    private desktopSettingsService: DesktopSettingsService,
+  ) {}
 
-  init() {
+  async init() {
     this.scheduleNextSync();
     if (process.platform === "linux") {
-      this.stateService.setOpenAtLogin(fs.existsSync(this.linuxStartupFile()));
+      await this.desktopSettingsService.setOpenAtLogin(fs.existsSync(this.linuxStartupFile()));
     } else {
       const loginSettings = app.getLoginItemSettings();
-      this.stateService.setOpenAtLogin(loginSettings.openAtLogin);
+      await this.desktopSettingsService.setOpenAtLogin(loginSettings.openAtLogin);
     }
     ipcMain.on("messagingService", async (event: any, message: any) => this.onMessage(message));
   }
@@ -33,10 +38,14 @@ export class MessagingMain {
         this.scheduleNextSync();
         break;
       case "updateAppMenu":
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.main.menuMain.updateApplicationMenuState(message.updateRequest);
         this.updateTrayMenu(message.updateRequest);
         break;
       case "minimizeOnCopy":
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.stateService.getMinimizeOnCopyToClipboard().then((shouldMinimize) => {
           if (shouldMinimize && this.main.windowMain.win !== null) {
             this.main.windowMain.win.minimize();
@@ -50,6 +59,8 @@ export class MessagingMain {
         this.main.trayMain.removeTray();
         break;
       case "hideToTray":
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.main.trayMain.hideToTray();
         break;
       case "addOpenAtLogin":
@@ -63,22 +74,6 @@ export class MessagingMain {
         break;
       case "getWindowIsFocused":
         this.windowIsFocused();
-        break;
-      case "enableBrowserIntegration":
-        this.main.nativeMessagingMain.generateManifests();
-        this.main.nativeMessagingMain.listen();
-        break;
-      case "enableDuckDuckGoBrowserIntegration":
-        this.main.nativeMessagingMain.generateDdgManifests();
-        this.main.nativeMessagingMain.listen();
-        break;
-      case "disableBrowserIntegration":
-        this.main.nativeMessagingMain.removeManifests();
-        this.main.nativeMessagingMain.stop();
-        break;
-      case "disableDuckDuckGoBrowserIntegration":
-        this.main.nativeMessagingMain.removeDdgManifests();
-        this.main.nativeMessagingMain.stop();
         break;
       default:
         break;

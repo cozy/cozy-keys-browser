@@ -31,7 +31,7 @@ export class CipherRowComponent implements OnChanges {
   constructor(
     protected konnectorService: KonnectorsService,
     private syncService: SyncService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
   ) {}
   /* Cozy custo */
   @Output() onAutofill = new EventEmitter<CipherView>();
@@ -96,7 +96,7 @@ export class CipherRowComponent implements OnChanges {
   async ngOnChanges() {
     if (this.cipher.organizationId) {
       this.isKonnector = await this.konnectorService.isKonnectorsOrganization(
-        this.cipher.organizationId
+        this.cipher.organizationId,
       );
     } else {
       this.isKonnector = false;

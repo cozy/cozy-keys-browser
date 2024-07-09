@@ -10,13 +10,28 @@
     "types": [],
     "baseUrl": ".",
     "paths": {
+      "@bitwarden/admin-console": ["../../libs/admin-console/src"],
+      "@bitwarden/angular/*": ["../../libs/angular/src/*"],
+      "@bitwarden/auth/common": ["../../libs/auth/src/common"],
+      "@bitwarden/auth/angular": ["../../libs/auth/src/angular"],
+      "@bitwarden/billing": ["../../libs/billing/src"],
       "@bitwarden/common/*": ["../../libs/common/src/*"],
-      "@bitwarden/angular/*": ["../../libs/angular/src/*"]
-    }
+      "@bitwarden/components": ["../../libs/components/src"],
+      "@bitwarden/vault-export-core": [
+        "../../libs/tools/export/vault-export/vault-export-core/src"
+      ],
+      "@bitwarden/vault-export-ui": ["../../libs/tools/export/vault-export/vault-export-ui/src"],
+      "@bitwarden/importer/core": ["../../libs/importer/src"],
+      "@bitwarden/importer/ui": ["../../libs/importer/src/components"],
+      "@bitwarden/node/*": ["../../libs/node/src/*"],
+      "@bitwarden/platform": ["../../libs/platform/src"],
+      "@bitwarden/vault": ["../../libs/vault/src"]
+    },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "strictTemplates": true,
     "preserveWhitespaces": true
   },
-  "include": ["src", "../../libs/common/src/services/**/*.worker.ts"]
+  "include": ["src", "../../libs/common/src/platform/services/**/*.worker.ts"]
 }
