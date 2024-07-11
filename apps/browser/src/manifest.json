@@ -108,7 +108,7 @@
   "applications": {
     "gecko": {
       "id": "{d99217fe-4f35-4ede-8dc8-728920f75c26}",
-      "strict_min_version": "57.0"
+      "strict_min_version": "91.0"
     }
   },
   "sidebar_action": {
