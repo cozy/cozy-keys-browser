@@ -8,6 +8,8 @@ import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authenticatio
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 
+import { HistoryService } from "../../../../../apps/browser/src/popup/services/history.service";
+
 export interface RedirectRoutes {
   loggedIn: string;
   loggedOut: string;
@@ -30,8 +32,10 @@ const defaultRoutes: RedirectRoutes = {
 export function redirectGuard(overrides: Partial<RedirectRoutes> = {}): CanActivateFn {
   const routes = { ...defaultRoutes, ...overrides };
   return async (route) => {
+    console.log("redirectGuard")
     const authService = inject(AuthService);
     const cryptoService = inject(CryptoService);
+    const historyService = inject(HistoryService);
     const deviceTrustService = inject(DeviceTrustServiceAbstraction);
     const logService = inject(LogService);
     const router = inject(Router);
@@ -43,7 +47,9 @@ export function redirectGuard(overrides: Partial<RedirectRoutes> = {}): CanActiv
     }
 
     if (authStatus === AuthenticationStatus.Unlocked) {
-      return router.createUrlTree([routes.loggedIn], { queryParams: route.queryParams });
+      historyService.gotoCurrentUrl();
+      return true;
+      // return router.createUrlTree([routes.loggedIn], { queryParams: route.queryParams });
     }
 
     // If locked, TDE is enabled, and the user hasn't decrypted yet, then redirect to the

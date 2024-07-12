@@ -5,7 +5,7 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import { BrowserApi } from "../../platform/browser/browser-api";
+// import { BrowserApi } from "../../platform/browser/browser-api";
 
 /*
 
@@ -31,19 +31,26 @@ export class HistoryService {
   private rootPaths: string[] = ["/tabs/vault", "/tabs/generator", "/tabs/settings"];
   private currentUrlInProgress = false;
   private previousUrlInProgress = false;
-  private stateService: StateService;
-  private cipherService: CipherService;
+  // private stateService: StateService;
+  // private cipherService: CipherService;
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private stateService: StateService,
+    private cipherService: CipherService
+  ) {
     // retrieve the stateService (standard injection was not working ?)
-    const page = BrowserApi.getBackgroundPage();
-    this.stateService = page.bitwardenMain["stateService"];
-    this.cipherService = page.bitwardenMain["cipherService"];
+    // const page = BrowserApi.getBackgroundPage();
+    // this.stateService = page.bitwardenMain["stateService"];
+    // this.cipherService = page.bitwardenMain["cipherService"];
+
+    console.log('🟢 stateService', stateService)
+    console.log('🟢 cipherService', cipherService)
 
     // listen to router to feed the history
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        // console.log("navigationEnd event on url", event.url);
+        console.log("navigationEnd event on url", event.url);
         if (this.currentUrlInProgress) {
           this.currentUrlInProgress = false;
         } else if (this.previousUrlInProgress) {
@@ -73,8 +80,9 @@ export class HistoryService {
   }
 
   async init() {
-    // console.log("historyService.init()");
+    console.log("historyService.init()");
     const histStr: string = await this.stateService.getHistoryState();
+    console.log("histStr", histStr)
     if (histStr === "/" || !histStr) {
       this.hist = this.defaultHist.slice();
       return;
@@ -124,6 +132,7 @@ export class HistoryService {
   }
 
   private gotoToUrl(urlStr: any) {
+    console.log("gotoToUrl", urlStr)
     if (typeof urlStr !== "string") {
       urlStr = urlStr.url;
     }

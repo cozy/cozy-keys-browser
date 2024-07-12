@@ -22,6 +22,7 @@ export class UnauthGuardService extends BaseUnauthGuardService {
   }
 
   async canActivate() {
+    console.log('🐸 canActivate')
     const authStatus = await this.authService.getAuthStatus();
 
     if (authStatus === AuthenticationStatus.LoggedOut) {
