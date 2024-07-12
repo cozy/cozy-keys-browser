@@ -28,10 +28,6 @@ export class InlineMenuFieldQualificationService
   private passwordFieldExcludeListString = AutoFillConstants.PasswordFieldExcludeList.join(",");
   private currentPasswordAutocompleteValue = "current-password";
   private newPasswordAutoCompleteValue = "new-password";
-  private passwordAutoCompleteValues = new Set([
-    this.currentPasswordAutocompleteValue,
-    this.newPasswordAutoCompleteValue,
-  ]);
   private autofillFieldKeywordsMap: AutofillKeywordsMap = new WeakMap();
   private autocompleteDisabledValues = new Set(["off", "false"]);
   private newFieldKeywords = new Set(["new", "change", "neue", "ändern"]);
@@ -242,6 +238,11 @@ export class InlineMenuFieldQualificationService
     );
   }
 
+  /** Validates the provided field as a field for an account creation form.
+   *
+   * @param field - The field to validate
+   * @param pageDetails - The details of the page that the field is on.
+   */
   isFieldForAccountCreationForm(field: AutofillField, pageDetails: AutofillPageDetails): boolean {
     if (!this.isUsernameField(field) && !this.isPasswordField(field)) {
       return false;
@@ -250,17 +251,22 @@ export class InlineMenuFieldQualificationService
     const parentForm = pageDetails.forms[field.form];
 
     if (!parentForm) {
+      // If the field does not have a parent form, but we can identify that the page contains at least
+      // one new password field, we should assume that the field is part of an account creation form.
       const newPasswordFields = pageDetails.fields.filter(this.isNewPasswordField);
       if (newPasswordFields.length >= 1) {
         return true;
       }
 
+      // If no password fields are found on the page, check for keywords that indicate the field is
+      // part of an account creation form.
       return (
         !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
         this.keywordsFoundInFieldData(field, this.accountCreationFieldKeywords)
       );
     }
 
+    // If the field has a parent form, check the fields from that form exclusively
     const fieldsFromSameForm = pageDetails.fields.filter((f) => f.form === field.form);
     const newPasswordFields = fieldsFromSameForm.filter(this.isNewPasswordField);
     if (newPasswordFields.length >= 1) {
@@ -273,7 +279,13 @@ export class InlineMenuFieldQualificationService
     );
   }
 
-  isFieldForIdentityForm(field: AutofillField, pageDetails: AutofillPageDetails): boolean {
+  /**
+   * Validates the provided field as a field for an identity form.
+   *
+   * @param field - The field to validate
+   * @param _pageDetails - Currently unused, will likely be required in the future
+   */
+  isFieldForIdentityForm(field: AutofillField, _pageDetails: AutofillPageDetails): boolean {
     if (this.fieldContainsAutocompleteValues(field, this.identityAutocompleteValues)) {
       return true;
     }
@@ -451,7 +463,7 @@ export class InlineMenuFieldQualificationService
   }
 
   /**
-   * Validates the provided field as a field for a credit card name field.
+   * Validates the provided field as a credit card name field.
    *
    * @param field - The field to validate
    */
@@ -467,7 +479,7 @@ export class InlineMenuFieldQualificationService
   };
 
   /**
-   * Validates the provided field as a field for a credit card number field.
+   * Validates the provided field as a credit card number field.
    *
    * @param field - The field to validate
    */
@@ -483,7 +495,7 @@ export class InlineMenuFieldQualificationService
   };
 
   /**
-   * Validates the provided field as a field for a credit card expiration date field.
+   * Validates the provided field as a credit card expiration date field.
    *
    * @param field - The field to validate
    */
@@ -501,7 +513,7 @@ export class InlineMenuFieldQualificationService
   };
 
   /**
-   * Validates the provided field as a field for a credit card expiration month field.
+   * Validates the provided field as a credit card expiration month field.
    *
    * @param field - The field to validate
    */
@@ -519,7 +531,7 @@ export class InlineMenuFieldQualificationService
   };
 
   /**
-   * Validates the provided field as a field for a credit card expiration year field.
+   * Validates the provided field as a credit card expiration year field.
    *
    * @param field - The field to validate
    */
@@ -537,7 +549,7 @@ export class InlineMenuFieldQualificationService
   };
 
   /**
-   * Validates the provided field as a field for a credit card CVV field.
+   * Validates the provided field as a credit card CVV field.
    *
    * @param field - The field to validate
    */
@@ -552,6 +564,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity title type field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityTitle = (field: AutofillField): boolean => {
     if (
       this.fieldContainsAutocompleteValues(field, this.identityHonorificPrefixAutocompleteValue)
@@ -565,6 +582,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity full name field.
+   *
+   * @param field
+   */
   isFieldForIdentityFirstName = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.identityFirstNameAutocompleteValue)) {
       return true;
@@ -576,6 +598,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity middle name field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityMiddleName = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.identityMiddleNameAutocompleteValue)) {
       return true;
@@ -587,6 +614,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   *  Validates the provided field as an identity last name field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityLastName = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.identityLastNameAutocompleteValue)) {
       return true;
@@ -598,6 +630,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity full name field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityFullName = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.identityFullNameAutocompleteValue)) {
       return true;
@@ -609,6 +646,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity address field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityAddress1 = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.identityAddressLine1AutocompleteValue)) {
       return true;
@@ -620,6 +662,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity address field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityAddress2 = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.identityAddressLine2AutocompleteValue)) {
       return true;
@@ -631,6 +678,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity address field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityAddress3 = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.identityAddressLine3AutocompleteValue)) {
       return true;
@@ -642,6 +694,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity city field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityCity = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.identityAddressCityAutocompleteValue)) {
       return true;
@@ -653,6 +710,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity state field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityState = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.identityAddressStateAutocompleteValue)) {
       return true;
@@ -664,6 +726,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity postal code field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityPostalCode = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.identityPostalCodeAutocompleteValue)) {
       return true;
@@ -675,6 +742,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity country field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityCountry = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.identityCountryAutocompleteValues)) {
       return true;
@@ -686,6 +758,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity company field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityCompany = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.identityCompanyAutocompleteValue)) {
       return true;
@@ -697,6 +774,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity phone field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityPhone = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.identityPhoneAutocompleteValue)) {
       return true;
@@ -708,6 +790,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity email field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityEmail = (field: AutofillField): boolean => {
     if (
       this.fieldContainsAutocompleteValues(field, this.emailAutocompleteValue) ||
@@ -722,6 +809,11 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  /**
+   * Validates the provided field as an identity username field.
+   *
+   * @param field - The field to validate
+   */
   isFieldForIdentityUsername = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.usernameAutocompleteValue)) {
       return true;
@@ -749,6 +841,11 @@ export class InlineMenuFieldQualificationService
     return this.keywordsFoundInFieldData(field, AutoFillConstants.UsernameFieldNames);
   };
 
+  /**
+   * Validates the provided field as an email field.
+   *
+   * @param field - The field to validate
+   */
   isEmailField = (field: AutofillField): boolean => {
     if (field.type === "email") {
       return true;

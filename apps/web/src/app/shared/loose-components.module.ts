@@ -19,10 +19,7 @@ import { UnsecuredWebsitesReportComponent as OrgUnsecuredWebsitesReportComponent
 import { WeakPasswordsReportComponent as OrgWeakPasswordsReportComponent } from "../admin-console/organizations/tools/weak-passwords-report.component";
 import { ProvidersComponent } from "../admin-console/providers/providers.component";
 import { VerifyRecoverDeleteProviderComponent } from "../admin-console/providers/verify-recover-delete-provider.component";
-import { SponsoredFamiliesComponent } from "../admin-console/settings/sponsored-families.component";
-import { SponsoringOrgRowComponent } from "../admin-console/settings/sponsoring-org-row.component";
 import { HintComponent } from "../auth/hint.component";
-import { LockComponent } from "../auth/lock.component";
 import { RecoverDeleteComponent } from "../auth/recover-delete.component";
 import { RecoverTwoFactorComponent } from "../auth/recover-two-factor.component";
 import { RegisterFormModule } from "../auth/register-form/register-form.module";
@@ -62,6 +59,8 @@ import { UpdatePasswordComponent } from "../auth/update-password.component";
 import { UpdateTempPasswordComponent } from "../auth/update-temp-password.component";
 import { VerifyEmailTokenComponent } from "../auth/verify-email-token.component";
 import { VerifyRecoverDeleteComponent } from "../auth/verify-recover-delete.component";
+import { SponsoredFamiliesComponent } from "../billing/settings/sponsored-families.component";
+import { SponsoringOrgRowComponent } from "../billing/settings/sponsoring-org-row.component";
 import { PaymentMethodWarningsModule } from "../billing/shared";
 import { DynamicAvatarComponent } from "../components/dynamic-avatar.component";
 import { SelectableAvatarComponent } from "../components/selectable-avatar.component";
@@ -141,7 +140,6 @@ import { SharedModule } from "./shared.module";
     FolderAddEditComponent,
     FrontendLayoutComponent,
     HintComponent,
-    LockComponent,
     OrgAddEditComponent,
     OrgAttachmentsComponent,
     OrgCollectionsComponent,
@@ -213,7 +211,6 @@ import { SharedModule } from "./shared.module";
     FolderAddEditComponent,
     FrontendLayoutComponent,
     HintComponent,
-    LockComponent,
     OrgAddEditComponent,
     OrganizationLayoutComponent,
     OrgAttachmentsComponent,

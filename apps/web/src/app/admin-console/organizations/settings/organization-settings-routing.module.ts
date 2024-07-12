@@ -4,7 +4,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { canAccessSettingsTab } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 
-import { OrganizationPermissionsGuard } from "../../organizations/guards/org-permissions.guard";
+import { organizationPermissionsGuard } from "../../organizations/guards/org-permissions.guard";
 import { organizationRedirectGuard } from "../../organizations/guards/org-redirect.guard";
 import { PoliciesComponent } from "../../organizations/policies";
 
@@ -14,8 +14,7 @@ import { TwoFactorSetupComponent } from "./two-factor-setup.component";
 const routes: Routes = [
   {
     path: "",
-    canActivate: [OrganizationPermissionsGuard],
-    data: { organizationPermissions: canAccessSettingsTab },
+    canActivate: [organizationPermissionsGuard(canAccessSettingsTab)],
     children: [
       {
         path: "",
@@ -23,18 +22,27 @@ const routes: Routes = [
         canActivate: [organizationRedirectGuard(getSettingsRoute)],
         children: [], // This is required to make the auto redirect work,
       },
-      { path: "account", component: AccountComponent, data: { titleId: "organizationInfo" } },
+      {
+        path: "account",
+        component: AccountComponent,
+        canActivate: [organizationPermissionsGuard((o) => o.isOwner)],
+        data: {
+          titleId: "organizationInfo",
+        },
+      },
       {
         path: "two-factor",
         component: TwoFactorSetupComponent,
-        data: { titleId: "twoStepLogin" },
+        canActivate: [organizationPermissionsGuard((o) => o.use2fa && o.isOwner)],
+        data: {
+          titleId: "twoStepLogin",
+        },
       },
       {
         path: "policies",
         component: PoliciesComponent,
-        canActivate: [OrganizationPermissionsGuard],
+        canActivate: [organizationPermissionsGuard((org) => org.canManagePolicies)],
         data: {
-          organizationPermissions: (org: Organization) => org.canManagePolicies,
           titleId: "policies",
         },
       },
@@ -45,10 +53,9 @@ const routes: Routes = [
             path: "import",
             loadComponent: () =>
               import("./org-import.component").then((mod) => mod.OrgImportComponent),
-            canActivate: [OrganizationPermissionsGuard],
+            canActivate: [organizationPermissionsGuard((org) => org.canAccessImportExport)],
             data: {
               titleId: "importData",
-              organizationPermissions: (org: Organization) => org.canAccessImportExport,
             },
           },
           {
@@ -57,10 +64,9 @@ const routes: Routes = [
               import("../tools/vault-export/org-vault-export.component").then(
                 (mod) => mod.OrganizationVaultExportComponent,
               ),
-            canActivate: [OrganizationPermissionsGuard],
+            canActivate: [organizationPermissionsGuard((org) => org.canAccessImportExport)],
             data: {
               titleId: "exportVault",
-              organizationPermissions: (org: Organization) => org.canAccessImportExport,
             },
           },
         ],

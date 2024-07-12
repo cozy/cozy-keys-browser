@@ -7,7 +7,7 @@ type AutofillInlineMenuListMessage = { command: string };
 
 export type UpdateAutofillInlineMenuListCiphersMessage = AutofillInlineMenuListMessage & {
   ciphers: InlineMenuCipherData[];
-  showLoginAccountCreation?: boolean;
+  showInlineMenuAccountCreation?: boolean;
 };
 
 export type InitAutofillInlineMenuListMessage = AutofillInlineMenuListMessage & {
@@ -17,7 +17,7 @@ export type InitAutofillInlineMenuListMessage = AutofillInlineMenuListMessage & 
   translations: Record<string, string>;
   ciphers?: InlineMenuCipherData[];
   filledByCipherType?: CipherType;
-  showLoginAccountCreation?: boolean;
+  showInlineMenuAccountCreation?: boolean;
   portKey: string;
 };
 

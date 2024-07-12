@@ -8,7 +8,6 @@ import {
   AuthRequestServiceAbstraction,
   AuthRequestService,
   LoginEmailServiceAbstraction,
-  LoginEmailService,
   LogoutReason,
 } from "@bitwarden/auth/common";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
@@ -88,6 +87,7 @@ import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/platfor
 import { KeyGenerationService as KeyGenerationServiceAbstraction } from "@bitwarden/common/platform/abstractions/key-generation.service";
 import { LogService as LogServiceAbstraction } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService as StateServiceAbstraction } from "@bitwarden/common/platform/abstractions/state.service";
 import {
   AbstractStorageService,
   ObservableStorageService,
@@ -103,6 +103,7 @@ import { Message, MessageListener, MessageSender } from "@bitwarden/common/platf
 import { SubjectMessageSender } from "@bitwarden/common/platform/messaging/internal";
 import { Lazy } from "@bitwarden/common/platform/misc/lazy";
 import { clearCaches } from "@bitwarden/common/platform/misc/sequentialize";
+import { Account } from "@bitwarden/common/platform/models/domain/account";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { AppIdService } from "@bitwarden/common/platform/services/app-id.service";
@@ -118,6 +119,7 @@ import { FileUploadService } from "@bitwarden/common/platform/services/file-uplo
 import { KeyGenerationService } from "@bitwarden/common/platform/services/key-generation.service";
 import { MigrationBuilderService } from "@bitwarden/common/platform/services/migration-builder.service";
 import { MigrationRunner } from "@bitwarden/common/platform/services/migration-runner";
+import { StateService } from "@bitwarden/common/platform/services/state.service";
 import { SystemService } from "@bitwarden/common/platform/services/system.service";
 import { UserAutoUnlockKeyService } from "@bitwarden/common/platform/services/user-auto-unlock-key.service";
 import { WebCryptoFunctionService } from "@bitwarden/common/platform/services/web-crypto-function.service";
@@ -210,22 +212,18 @@ import { Fido2Background } from "../autofill/fido2/background/fido2.background";
 import { AutofillService as AutofillServiceAbstraction } from "../autofill/services/abstractions/autofill.service";
 import AutofillService from "../autofill/services/autofill.service";
 import { SafariApp } from "../browser/safariApp";
-import { Account } from "../models/account";
 import { BrowserApi } from "../platform/browser/browser-api";
-import { flagEnabled } from "../platform/flags";
 import { UpdateBadge } from "../platform/listeners/update-badge";
 /* eslint-disable no-restricted-imports */
 import { ChromeMessageSender } from "../platform/messaging/chrome-message.sender";
 /* eslint-enable no-restricted-imports */
 import { OffscreenDocumentService } from "../platform/offscreen-document/abstractions/offscreen-document";
 import { DefaultOffscreenDocumentService } from "../platform/offscreen-document/offscreen-document.service";
-import { BrowserStateService as StateServiceAbstraction } from "../platform/services/abstractions/browser-state.service";
 import { BrowserCryptoService } from "../platform/services/browser-crypto.service";
 import { BrowserEnvironmentService } from "../platform/services/browser-environment.service";
 import BrowserLocalStorageService from "../platform/services/browser-local-storage.service";
 import BrowserMemoryStorageService from "../platform/services/browser-memory-storage.service";
 import { BrowserScriptInjectorService } from "../platform/services/browser-script-injector.service";
-import { DefaultBrowserStateService } from "../platform/services/default-browser-state.service";
 import I18nService from "../platform/services/i18n.service";
 import { LocalBackedSessionStorageService } from "../platform/services/local-backed-session-storage.service";
 import { BackgroundPlatformUtilsService } from "../platform/services/platform-utils/background-platform-utils.service";
@@ -518,14 +516,13 @@ export default class MainBackground {
       storageServiceProvider,
     );
 
-    this.encryptService =
-      flagEnabled("multithreadDecryption") && BrowserApi.isManifestVersion(2)
-        ? new MultithreadEncryptServiceImplementation(
-            this.cryptoFunctionService,
-            this.logService,
-            true,
-          )
-        : new EncryptServiceImplementation(this.cryptoFunctionService, this.logService, true);
+    this.encryptService = BrowserApi.isManifestVersion(2)
+      ? new MultithreadEncryptServiceImplementation(
+          this.cryptoFunctionService,
+          this.logService,
+          true,
+        )
+      : new EncryptServiceImplementation(this.cryptoFunctionService, this.logService, true);
 
     this.singleUserStateProvider = new DefaultSingleUserStateProvider(
       storageServiceProvider,
@@ -574,7 +571,7 @@ export default class MainBackground {
       ClientType.Browser,
     );
 
-    this.stateService = new DefaultBrowserStateService(
+    this.stateService = new StateService(
       this.storageService,
       this.secureStorageService,
       this.memoryStorageService,
@@ -741,8 +738,6 @@ export default class MainBackground {
     this.billingAccountProfileStateService = new DefaultBillingAccountProfileStateService(
       this.stateProvider,
     );
-
-    this.loginEmailService = new LoginEmailService(this.stateProvider);
 
     this.ssoLoginService = new SsoLoginService(this.stateProvider);
 
@@ -1019,7 +1014,6 @@ export default class MainBackground {
       this.messagingService,
       this.platformUtilsService,
       systemUtilsServiceReloadCallback,
-      this.stateService,
       this.autofillSettingsService,
       this.vaultTimeoutSettingsService,
       this.biometricStateService,
@@ -1091,7 +1085,6 @@ export default class MainBackground {
         this.authService,
         this.policyService,
         this.folderService,
-        this.stateService,
         this.konnectorsService,
         this.userNotificationSettingsService,
         this.domainSettingsService,
@@ -1148,7 +1141,6 @@ export default class MainBackground {
 
     this.idleBackground = new IdleBackground(
       this.vaultTimeoutService,
-      this.stateService,
       this.notificationsService,
       this.accountService,
       this.vaultTimeoutSettingsService,
@@ -1369,11 +1361,6 @@ export default class MainBackground {
   async switchAccount(userId: UserId) {
     let nextAccountStatus: AuthenticationStatus;
     try {
-      const currentlyActiveAccount = await firstValueFrom(
-        this.accountService.activeAccount$.pipe(map((account) => account?.id)),
-      );
-      // can be removed once password generation history is migrated to state providers
-      await this.stateService.clearDecryptedData(currentlyActiveAccount);
       // HACK to ensure account is switched before proceeding
       const switchPromise = firstValueFrom(
         this.accountService.activeAccount$.pipe(
@@ -1394,9 +1381,6 @@ export default class MainBackground {
       clearCaches();
 
       if (userId == null) {
-        this.loginEmailService.setRememberEmail(false);
-        await this.loginEmailService.saveEmailSettings();
-
         await this.refreshBadge();
         await this.refreshMenu();
         await this.overlayBackground?.updateOverlayCiphers(); // null in popup only contexts

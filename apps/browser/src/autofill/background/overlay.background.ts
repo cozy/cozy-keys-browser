@@ -251,7 +251,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     this.inlineMenuListPort?.postMessage({
       command: "updateAutofillInlineMenuListCiphers",
       ciphers,
-      showLoginAccountCreation: this.showLoginAccountCreation(),
+      showInlineMenuAccountCreation: this.showInlineMenuAccountCreation(),
     });
   }
 
@@ -314,67 +314,161 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   private async getInlineMenuCipherData(): Promise<InlineMenuCipherData[]> {
     const showFavicons = await firstValueFrom(this.domainSettingsService.showFavicons$);
     const inlineMenuCiphersArray = Array.from(this.inlineMenuCiphers);
-    const inlineMenuCipherData: InlineMenuCipherData[] = [];
+    let inlineMenuCipherData: InlineMenuCipherData[] = [];
 
-    const showLoginAccountCreation =
-      this.focusedFieldData?.showLoginAccountCreation || this.showLoginAccountCreation();
-
-    for (let cipherIndex = 0; cipherIndex < inlineMenuCiphersArray.length; cipherIndex++) {
-      const [inlineMenuCipherId, cipher] = inlineMenuCiphersArray[cipherIndex];
-      if (!showLoginAccountCreation && this.focusedFieldData?.filledByCipherType !== cipher.type) {
-        continue;
-      }
-
-      if (
-        showLoginAccountCreation &&
-        (cipher.type !== CipherType.Identity || !this.focusedFieldData?.accountCreationFieldType)
-      ) {
-        continue;
-      }
-
-      const identity =
-        cipher.type === CipherType.Identity
-          ? this.getIdentityCipherData(cipher, showLoginAccountCreation)
-          : null;
-
-      if (showLoginAccountCreation && !identity?.username) {
-        continue;
-      }
-
-      // Cozy customization; add contact to autofill
-      const contact =
-        cipher.type === CipherType.Contact
-          ? this.getContactCipherData(cipher, showLoginAccountCreation)
-          : null;
-      // Cozy customization end
-
-      inlineMenuCipherData.push({
-        id: inlineMenuCipherId,
-        name: cipher.name,
-        type: cipher.type,
-        reprompt: cipher.reprompt,
-        favorite: cipher.favorite,
-        icon: buildCipherIcon(this.iconsServerUrl, cipher, showFavicons),
-        accountCreationFieldType: this.focusedFieldData?.accountCreationFieldType,
-        login: cipher.type === CipherType.Login ? { username: cipher.login.username } : null,
-        card: cipher.type === CipherType.Card ? cipher.card.subTitle : null,
-        identity,
-        contact, // Cozy customization; add contact to autofill
-      });
+    if (this.showInlineMenuAccountCreation()) {
+      inlineMenuCipherData = this.buildInlineMenuAccountCreationCiphers(
+        inlineMenuCiphersArray,
+        true,
+      );
+    } else {
+      inlineMenuCipherData = this.buildInlineMenuCiphers(inlineMenuCiphersArray, showFavicons);
     }
 
     this.currentInlineMenuCiphersCount = inlineMenuCipherData.length;
     return inlineMenuCipherData;
   }
 
+  /**
+   * Builds the inline menu ciphers for a form field that is meant for account creation.
+   *
+   * @param inlineMenuCiphersArray - Array of inline menu ciphers
+   * @param showFavicons - Identifies whether favicons should be shown
+   */
+  private buildInlineMenuAccountCreationCiphers(
+    inlineMenuCiphersArray: [string, CipherView][],
+    showFavicons: boolean,
+  ) {
+    const inlineMenuCipherData: InlineMenuCipherData[] = [];
+    const accountCreationLoginCiphers: InlineMenuCipherData[] = [];
+
+    for (let cipherIndex = 0; cipherIndex < inlineMenuCiphersArray.length; cipherIndex++) {
+      const [inlineMenuCipherId, cipher] = inlineMenuCiphersArray[cipherIndex];
+
+      if (cipher.type === CipherType.Login) {
+        accountCreationLoginCiphers.push(
+          this.buildCipherData(inlineMenuCipherId, cipher, showFavicons, true),
+        );
+        continue;
+      }
+
+      if (cipher.type !== CipherType.Identity || !this.focusedFieldData?.accountCreationFieldType) {
+        continue;
+      }
+
+      const identity = this.getIdentityCipherData(cipher, true);
+      if (!identity?.username) {
+        continue;
+      }
+
+      inlineMenuCipherData.push(
+        this.buildCipherData(inlineMenuCipherId, cipher, showFavicons, true, identity),
+      );
+    }
+
+    if (accountCreationLoginCiphers.length) {
+      return inlineMenuCipherData.concat(accountCreationLoginCiphers);
+    }
+
+    return inlineMenuCipherData;
+  }
+
+  /**
+   * Builds the inline menu ciphers for a form field that is not meant for account creation.
+   *
+   * @param inlineMenuCiphersArray - Array of inline menu ciphers
+   * @param showFavicons - Identifies whether favicons should be shown
+   */
+  private buildInlineMenuCiphers(
+    inlineMenuCiphersArray: [string, CipherView][],
+    showFavicons: boolean,
+  ) {
+    const inlineMenuCipherData: InlineMenuCipherData[] = [];
+
+    for (let cipherIndex = 0; cipherIndex < inlineMenuCiphersArray.length; cipherIndex++) {
+      const [inlineMenuCipherId, cipher] = inlineMenuCiphersArray[cipherIndex];
+      if (this.focusedFieldData?.filledByCipherType !== cipher.type) {
+        continue;
+      }
+
+      inlineMenuCipherData.push(this.buildCipherData(inlineMenuCipherId, cipher, showFavicons));
+    }
+
+    return inlineMenuCipherData;
+  }
+
+  /**
+   * Builds the cipher data for the inline menu list.
+   *
+   * @param inlineMenuCipherId - The ID of the inline menu cipher
+   * @param cipher - The cipher to build data for
+   * @param showFavicons - Identifies whether favicons should be shown
+   * @param showInlineMenuAccountCreation - Identifies whether the inline menu is for account creation
+   * @param identityData - Pre-created identity data
+   */
+  private buildCipherData(
+    inlineMenuCipherId: string,
+    cipher: CipherView,
+    showFavicons: boolean,
+    showInlineMenuAccountCreation: boolean = false,
+    identityData?: { fullName: string; username?: string },
+  ): InlineMenuCipherData {
+    const inlineMenuData: InlineMenuCipherData = {
+      id: inlineMenuCipherId,
+      name: cipher.name,
+      type: cipher.type,
+      reprompt: cipher.reprompt,
+      favorite: cipher.favorite,
+      icon: buildCipherIcon(this.iconsServerUrl, cipher, showFavicons),
+      accountCreationFieldType: this.focusedFieldData?.accountCreationFieldType,
+    };
+
+    if (cipher.type === CipherType.Login) {
+      inlineMenuData.login = { username: cipher.login.username };
+      return inlineMenuData;
+    }
+
+    if (cipher.type === CipherType.Card) {
+      inlineMenuData.card = cipher.card.subTitle;
+      return inlineMenuData;
+    }
+
+    // Cozy customization; add contact to autofill
+    if (cipher.type === CipherType.Contact) {
+      inlineMenuData.contact = this.getContactCipherData(cipher, showInlineMenuAccountCreation);
+      return inlineMenuData;
+    }
+    // Cozy customization end
+
+    inlineMenuData.identity =
+      identityData || this.getIdentityCipherData(cipher, showInlineMenuAccountCreation);
+    return inlineMenuData;
+  }
+
+  /**
+   * Gets the identity data for a cipher based on whether the inline menu is for account creation.
+   *
+   * @param cipher - The cipher to get the identity data for
+   * @param showInlineMenuAccountCreation - Identifies whether the inline menu is for account creation
+   */
   private getIdentityCipherData(
     cipher: CipherView,
-    showLoginAccountCreation: boolean,
+    showInlineMenuAccountCreation: boolean = false,
   ): { fullName: string; username?: string } {
-    const fullName = `${cipher.identity.firstName} ${cipher.identity.lastName}`;
+    const { firstName, lastName } = cipher.identity;
+
+    let fullName = "";
+    if (firstName) {
+      fullName += firstName;
+    }
+
+    if (lastName) {
+      fullName += ` ${lastName}`;
+      fullName = fullName.trim();
+    }
 
     if (
-      !showLoginAccountCreation ||
+      !showInlineMenuAccountCreation ||
       !this.focusedFieldData?.accountCreationFieldType ||
       this.focusedFieldData.accountCreationFieldType === "password"
     ) {
@@ -412,9 +506,12 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   }
   // Cozy customization end
 
-  private showLoginAccountCreation(): boolean {
-    if (typeof this.focusedFieldData?.showLoginAccountCreation !== "undefined") {
-      return this.focusedFieldData?.showLoginAccountCreation;
+  /**
+   * Identifies whether the inline menu is being shown on an account creation field.
+   */
+  private showInlineMenuAccountCreation(): boolean {
+    if (typeof this.focusedFieldData?.showInlineMenuAccountCreation !== "undefined") {
+      return this.focusedFieldData?.showInlineMenuAccountCreation;
     }
 
     if (this.focusedFieldData?.filledByCipherType !== CipherType.Login) {
@@ -1029,9 +1126,20 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     const previousFocusedFieldData = this.focusedFieldData;
     this.focusedFieldData = { ...focusedFieldData, tabId: sender.tab.id, frameId: sender.frameId };
 
-    void this.updateIdentityCiphersOnLoginField(previousFocusedFieldData);
+    const accountCreationFieldBlurred =
+      previousFocusedFieldData?.showInlineMenuAccountCreation &&
+      !this.focusedFieldData.showInlineMenuAccountCreation;
+
+    if (accountCreationFieldBlurred || this.showInlineMenuAccountCreation()) {
+      void this.updateIdentityCiphersOnLoginField(previousFocusedFieldData);
+    }
   }
 
+  /**
+   * Triggers an update of populated identity ciphers when a login field is focused.
+   *
+   * @param previousFocusedFieldData - The data set of the previously focused field
+   */
   private async updateIdentityCiphersOnLoginField(previousFocusedFieldData: FocusedFieldData) {
     if (
       !previousFocusedFieldData ||
@@ -1041,22 +1149,11 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       return;
     }
 
-    const command = "updateAutofillInlineMenuListCiphers";
-    const showLoginAccountCreation =
-      this.focusedFieldData?.showLoginAccountCreation || this.showLoginAccountCreation();
-
-    if (showLoginAccountCreation && !this.focusedFieldData?.accountCreationFieldType) {
-      this.inlineMenuListPort?.postMessage({ command, ciphers: [], showLoginAccountCreation });
-      return;
-    }
-
-    if (
-      this.focusedFieldData?.accountCreationFieldType ||
-      (previousFocusedFieldData.showLoginAccountCreation && !showLoginAccountCreation)
-    ) {
-      const ciphers = await this.getInlineMenuCipherData();
-      this.inlineMenuListPort?.postMessage({ command, ciphers, showLoginAccountCreation });
-    }
+    this.inlineMenuListPort?.postMessage({
+      command: "updateAutofillInlineMenuListCiphers",
+      ciphers: await this.getInlineMenuCipherData(),
+      showInlineMenuAccountCreation: this.showInlineMenuAccountCreation(),
+    });
   }
 
   /**
@@ -1419,6 +1516,11 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     return cipherView;
   }
 
+  /**
+   * Builds a new identity cipher view with the provided identity data.
+   *
+   * @param identity - The identity data captured from the extension message
+   */
   private buildIdentityCipherView(identity: NewIdentityCipherData) {
     const identityView = new IdentityView();
     identityView.title = identity.title || "";
@@ -1438,21 +1540,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     identityView.username = identity.username || "";
 
     if (identity.fullName && !identityView.firstName && !identityView.lastName) {
-      const fullNameParts = identity.fullName.split(" ");
-      if (fullNameParts.length === 3) {
-        identityView.firstName = fullNameParts[0] || "";
-        identityView.middleName = fullNameParts[1] || "";
-        identityView.lastName = fullNameParts[2] || "";
-      }
-
-      if (fullNameParts.length === 2) {
-        identityView.firstName = fullNameParts[0] || "";
-        identityView.lastName = fullNameParts[1] || "";
-      }
-
-      if (fullNameParts.length === 1) {
-        identityView.firstName = fullNameParts[0] || "";
-      }
+      this.buildIdentityNameParts(identity, identityView);
     }
 
     const cipherView = new CipherView();
@@ -1462,6 +1550,32 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     cipherView.identity = identityView;
 
     return cipherView;
+  }
+
+  /**
+   * Splits the identity full name into first, middle, and last name parts.
+   *
+   * @param identity - The identity data captured from the extension message
+   * @param identityView - The identity view to update
+   */
+  private buildIdentityNameParts(identity: NewIdentityCipherData, identityView: IdentityView) {
+    const fullNameParts = identity.fullName.split(" ");
+    if (fullNameParts.length === 1) {
+      identityView.firstName = fullNameParts[0] || "";
+
+      return;
+    }
+
+    if (fullNameParts.length === 2) {
+      identityView.firstName = fullNameParts[0] || "";
+      identityView.lastName = fullNameParts[1] || "";
+
+      return;
+    }
+
+    identityView.firstName = fullNameParts[0] || "";
+    identityView.middleName = fullNameParts[1] || "";
+    identityView.lastName = fullNameParts[2] || "";
   }
 
   /**
@@ -1787,7 +1901,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         ? AutofillOverlayPort.ListMessageConnector
         : AutofillOverlayPort.ButtonMessageConnector,
       filledByCipherType: this.focusedFieldData?.filledByCipherType,
-      showLoginAccountCreation: this.showLoginAccountCreation(),
+      showInlineMenuAccountCreation: this.showInlineMenuAccountCreation(),
     });
     void this.updateInlineMenuPosition(
       {

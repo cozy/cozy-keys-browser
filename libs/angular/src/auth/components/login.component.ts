@@ -8,15 +8,14 @@ import {
   LoginStrategyServiceAbstraction,
   LoginEmailServiceAbstraction,
   PasswordLoginCredentials,
+  RegisterRouteService,
 } from "@bitwarden/auth/common";
 import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { WebAuthnLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-login.service.abstraction";
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
 import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
-import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -63,7 +62,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
   protected twoFactorRoute = "2fa";
   protected successRoute = "vault";
   // TODO: remove when email verification flag is removed
-  protected registerRoute = "/register";
+  protected registerRoute$ = this.registerRouteService.registerRoute$();
   protected forcePasswordResetRoute = "update-temp-password";
 
   protected destroy$ = new Subject<void>();
@@ -91,21 +90,12 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
     protected loginEmailService: LoginEmailServiceAbstraction,
     protected ssoLoginService: SsoLoginServiceAbstraction,
     protected webAuthnLoginService: WebAuthnLoginServiceAbstraction,
-    protected configService: ConfigService,
+    protected registerRouteService: RegisterRouteService,
   ) {
     super(environmentService, i18nService, platformUtilsService);
   }
 
   async ngOnInit() {
-    // TODO: remove when email verification flag is removed
-    const emailVerification = await this.configService.getFeatureFlag(
-      FeatureFlag.EmailVerification,
-    );
-
-    if (emailVerification) {
-      this.registerRoute = "/signup";
-    }
-
     this.route?.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       if (!params) {
         return;
@@ -128,17 +118,8 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
     });
 
     if (!this.paramEmailSet) {
-      const storedEmail = await firstValueFrom(this.loginEmailService.storedEmail$);
-      this.formGroup.controls.email.setValue(storedEmail ?? "");
+      await this.loadEmailSettings();
     }
-
-    let rememberEmail = this.loginEmailService.getRememberEmail();
-
-    if (rememberEmail == null) {
-      rememberEmail = (await firstValueFrom(this.loginEmailService.storedEmail$)) != null;
-    }
-
-    this.formGroup.controls.rememberEmail.setValue(rememberEmail);
   }
 
   ngOnDestroy() {
@@ -176,8 +157,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
       this.formPromise = this.loginStrategyService.logIn(credentials);
       const response = await this.formPromise;
 
-      this.setLoginEmailValues();
-      await this.loginEmailService.saveEmailSettings();
+      await this.saveEmailSettings();
 
       if (this.handleCaptchaRequired(response)) {
         return;
@@ -199,6 +179,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.onSuccessfulLoginForceResetNavigate();
         } else {
+          this.loginEmailService.clearValues();
           // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.router.navigate([this.forcePasswordResetRoute]);
@@ -214,6 +195,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.onSuccessfulLoginNavigate();
         } else {
+          this.loginEmailService.clearValues();
           // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.router.navigate([this.successRoute]);
@@ -243,12 +225,14 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
       return;
     }
 
-    this.setLoginEmailValues();
+    await this.saveEmailSettings();
     await this.router.navigate(["/login-with-device"]);
   }
 
   async launchSsoBrowser(clientId: string, ssoRedirectUri: string) {
-    await this.saveEmailSettings();
+    // Save off email for SSO
+    await this.ssoLoginService.setSsoEmail(this.formGroup.value.email);
+
     // Generate necessary sso params
     const passwordOptions: any = {
       type: "password",
@@ -319,17 +303,28 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
     }
   }
 
-  setLoginEmailValues() {
-    this.loginEmailService.setEmail(this.formGroup.value.email);
-    this.loginEmailService.setRememberEmail(this.formGroup.value.rememberEmail);
+  private async loadEmailSettings() {
+    // Try to load from memory first
+    const email = this.loginEmailService.getEmail();
+    const rememberEmail = this.loginEmailService.getRememberEmail();
+    if (email) {
+      this.formGroup.controls.email.setValue(email);
+      this.formGroup.controls.rememberEmail.setValue(rememberEmail);
+    } else {
+      // If not in memory, check email on disk
+      const storedEmail = await firstValueFrom(this.loginEmailService.storedEmail$);
+      if (storedEmail) {
+        // If we have a stored email, rememberEmail should default to true
+        this.formGroup.controls.email.setValue(storedEmail);
+        this.formGroup.controls.rememberEmail.setValue(true);
+      }
+    }
   }
 
-  async saveEmailSettings() {
-    this.setLoginEmailValues();
+  protected async saveEmailSettings() {
+    this.loginEmailService.setEmail(this.formGroup.value.email);
+    this.loginEmailService.setRememberEmail(this.formGroup.value.rememberEmail);
     await this.loginEmailService.saveEmailSettings();
-
-    // Save off email for SSO
-    await this.ssoLoginService.setSsoEmail(this.formGroup.value.email);
   }
 
   // Legacy accounts used the master key to encrypt data. Migration is required

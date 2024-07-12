@@ -56,7 +56,7 @@
            clicking on the link. Mousedown fires before onBlur. 
       -->
       <a
-        [routerLink]="registerRoute"
+        [routerLink]="registerRoute$ | async"
         [queryParams]="emailFormControl.valid ? { email: emailFormControl.value } : {}"
         (mousedown)="goToRegister()"
         >{{ "createAccount" | i18n }}</a
@@ -75,7 +75,7 @@
         class="tw-mt-2"
         routerLink="/hint"
         (mousedown)="goToHint()"
-        (click)="setLoginEmailValues()"
+        (click)="saveEmailSettings()"
         >{{ "getMasterPasswordHint" | i18n }}</a
       >
     </div>

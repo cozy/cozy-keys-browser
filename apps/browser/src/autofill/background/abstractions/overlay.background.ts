@@ -38,7 +38,7 @@ export type FocusedFieldData = {
   tabId?: number;
   frameId?: number;
   accountCreationFieldType?: string;
-  showLoginAccountCreation?: boolean;
+  showInlineMenuAccountCreation?: boolean;
 };
 
 export type InlineMenuElementPosition = {
