@@ -16,6 +16,9 @@ export type InitAutofillInlineMenuListMessage = AutofillInlineMenuListMessage & 
   theme: string;
   translations: Record<string, string>;
   ciphers?: InlineMenuCipherData[];
+  // Cozy customization
+  lastFilledCipherId?: string;
+  // Cozy customization end
   filledByCipherType?: CipherType;
   showInlineMenuAccountCreation?: boolean;
   portKey: string;
