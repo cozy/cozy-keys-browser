@@ -72,6 +72,9 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   private readonly openUnlockPopout = openUnlockPopout;
   private readonly openViewVaultItemPopout = openViewVaultItemPopout;
   private readonly openAddEditVaultItemPopout = openAddEditVaultItemPopout;
+  // Cozy customization
+  private lastFilledCipherId: string;
+  // Cozy customization end
   private pageDetailsForTab: PageDetailsForTab = {};
   private subFrameOffsetsForTab: SubFrameOffsetsForTab = {};
   private portKeyForTab: Record<number, string> = {};
@@ -790,6 +793,10 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       fillNewPassword: true,
       allowTotpAutofill: true,
     });
+
+    // Cozy customization
+    this.lastFilledCipherId = inlineMenuCipherId;
+    // Cozy customization end
 
     if (totpCode) {
       this.platformUtilsService.copyToClipboard(totpCode);
@@ -1910,6 +1917,9 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       theme: await firstValueFrom(this.themeStateService.selectedTheme$),
       translations: this.getInlineMenuTranslations(),
       ciphers: isInlineMenuListPort ? await this.getInlineMenuCipherData() : null,
+      // Cozy customization
+      lastFilledCipherId: this.lastFilledCipherId,
+      // Cozy customization end
       portKey: this.portKeyForTab[port.sender.tab.id],
       portName: isInlineMenuListPort
         ? AutofillOverlayPort.ListMessageConnector
