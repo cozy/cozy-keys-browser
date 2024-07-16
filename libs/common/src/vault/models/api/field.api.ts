@@ -1,4 +1,5 @@
 import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
+
 import { BaseResponse } from "../../../models/response/base.response";
 import { FieldType, LinkedIdType } from "../../enums";
 import { ExpirationDateData } from "../data/expiration-date.data";

@@ -37,7 +37,6 @@ import { BrowserFido2UserInterfaceSession } from "../../../fido2/browser-fido2-u
 import { Fido2UserVerificationService } from "../../../services/fido2-user-verification.service";
 import { fido2PopoutSessionData$ } from "../../utils/fido2-popout-session-data";
 import { closeAddEditVaultItemPopout, VaultPopoutType } from "../../utils/vault-popout-window";
-
 /* Cozy imports */
 /* eslint-disable */
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";

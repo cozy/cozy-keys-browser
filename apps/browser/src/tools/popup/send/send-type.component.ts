@@ -20,7 +20,6 @@ import { DialogService, ToastService } from "@bitwarden/components";
 import { BrowserComponentState } from "../../../models/browserComponentState";
 import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 import { BrowserSendStateService } from "../services/browser-send-state.service";
-
 /** Start Cozy imports */
 /* eslint-disable */
 import { HistoryService } from "../../../popup/services/history.service";
