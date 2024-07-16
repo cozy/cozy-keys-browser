@@ -6,6 +6,12 @@ import { PageDetail } from "../../services/abstractions/autofill.service";
 
 import { LockedVaultPendingNotificationsData } from "./notification.background";
 
+/* start Cozy imports */
+/* eslint-disable */
+import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
+/* eslint-enable */
+/* end Cozy imports */
+
 export type PageDetailsForTab = Record<
   chrome.runtime.MessageSender["tab"]["id"],
   Map<chrome.runtime.MessageSender["frameId"], PageDetail>
@@ -39,6 +45,10 @@ export type FocusedFieldData = {
   frameId?: number;
   accountCreationFieldType?: string;
   showInlineMenuAccountCreation?: boolean;
+  // Cozy customization
+  fieldQualifier?: AutofillFieldQualifierType;
+  fieldValue?: string;
+  // Cozy customization end
 };
 
 export type InlineMenuElementPosition = {
