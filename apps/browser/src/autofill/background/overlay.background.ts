@@ -2145,6 +2145,8 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       ciphers: isInlineMenuListPort ? await this.getInlineMenuCipherData() : null,
       // Cozy customization
       lastFilledCipherId: this.lastFilledCipherId,
+      fieldQualifier: this.focusedFieldData?.fieldQualifier,
+      fieldValue: this.focusedFieldData?.fieldValue,
       // Cozy customization end
       portKey: this.portKeyForTab[port.sender.tab.id],
       portName: isInlineMenuListPort
