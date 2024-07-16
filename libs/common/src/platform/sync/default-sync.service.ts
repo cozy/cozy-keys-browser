@@ -463,7 +463,11 @@ export class DefaultSyncService extends CoreSyncService {
 
     const remoteOrganizationKey = await this.getOrganizationKey(organizationId);
 
-    await this.cryptoService.upsertOrganizationKey(userId as UserId, organizationId as OrganizationId, remoteOrganizationKey);
+    await this.cryptoService.upsertOrganizationKey(
+      userId as UserId,
+      organizationId as OrganizationId,
+      remoteOrganizationKey,
+    );
   }
 
   protected async syncUpsertOrganization(organizationId: string, isEdit: boolean) {

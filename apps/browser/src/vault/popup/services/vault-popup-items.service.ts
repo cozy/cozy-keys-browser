@@ -254,7 +254,7 @@ export class VaultPopupItemsService {
       [CipherType.Identity]: 3,
       [CipherType.SecureNote]: 4,
       [CipherType.Paper]: 1000,
-      [CipherType.Contact]: 1001
+      [CipherType.Contact]: 1001,
     };
 
     // Compare types first

@@ -223,8 +223,12 @@ export abstract class TokenService {
   setSecurityStamp: (securityStamp: string, userId?: UserId) => Promise<void>;
 
   // Cozy customization
-  setCozyTokens: (accessToken: string, clientId: string, registrationAccessToken: string) => Promise<void>;
+  setCozyTokens: (
+    accessToken: string,
+    clientId: string,
+    registrationAccessToken: string,
+  ) => Promise<void>;
 
-  getCozyTokens: () => Promise<{clientId: string, registrationAccessToken: string}>;
+  getCozyTokens: () => Promise<{ clientId: string; registrationAccessToken: string }>;
   // Cozy customization end
 }

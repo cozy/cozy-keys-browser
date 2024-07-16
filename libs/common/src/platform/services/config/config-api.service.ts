@@ -26,6 +26,5 @@ export class ConfigApiService implements ConfigApiServiceAbstraction {
     const r = await this.apiService.send("GET", "/config", null, authed, true);
     return new ServerConfigResponse(r);
     //*/
-
   }
 }

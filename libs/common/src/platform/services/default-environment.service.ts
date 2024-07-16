@@ -128,7 +128,7 @@ export class DefaultEnvironmentService implements EnvironmentService {
   protected webVaultUrlSync: string;
 
   getWebVaultUrlSync() {
-    return this.webVaultUrlSync
+    return this.webVaultUrlSync;
   }
 
   // We intentionally don't want the helper on account service, we want the null back if there is no active user

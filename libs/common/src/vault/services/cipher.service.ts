@@ -394,7 +394,7 @@ export class CipherService implements CipherServiceAbstraction {
       (await this.getAll()).filter(
         (cipher) => !cipher.organizationId || orgIds.includes(cipher.organizationId),
       ),
-      activeUserId
+      activeUserId,
     );
 
     /*/
@@ -959,7 +959,7 @@ export class CipherService implements CipherServiceAbstraction {
     // which is very costly with our papers and contacts. Instead we manually update decrypted ciphers below.
     await this.encryptedCiphersState.update(() => ciphers);
 
-    const decryptedCiphers = await firstValueFrom(this.cipherViews$)
+    const decryptedCiphers = await firstValueFrom(this.cipherViews$);
     if (decryptedCiphers == null) {
       return;
     }

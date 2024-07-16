@@ -1,4 +1,3 @@
-
 // Cozy customization, file is heavily modified to manage premium banner
 //*
 import { Component, NgZone, OnInit } from "@angular/core";
@@ -72,7 +71,7 @@ export class TabsComponent implements OnInit {
     }
 
     TabsComponent.showBanner =
-      !await this.cozyClientService.getFlagValue("passwords.can-share-organizations") &&
+      !(await this.cozyClientService.getFlagValue("passwords.can-share-organizations")) &&
       TabsComponent.isVaultTooOld &&
       !TabsComponent.closedByUser;
   }

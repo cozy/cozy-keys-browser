@@ -123,8 +123,8 @@ export class Account {
   //*
   settings: {
     profilesCleanDeadline?: string;
-  }
-    //*/
+  };
+  //*/
 
   constructor(init: Partial<Account>) {
     Object.assign(this, {

@@ -52,7 +52,7 @@ export class AboutPageComponent {
     private dialogService: DialogService,
     private environmentService: EnvironmentService,
     private platformUtilsService: PlatformUtilsService,
-    private cozyClientService: CozyClientService
+    private cozyClientService: CozyClientService,
   ) {}
 
   about() {

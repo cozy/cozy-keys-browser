@@ -291,7 +291,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       await this.cipherService.getAllDecryptedForUrl(currentTab.url, [
         CipherType.Card,
         CipherType.Identity,
-        CipherType.Contact // Cozy customization; add contact to autofill
+        CipherType.Contact, // Cozy customization; add contact to autofill
       ])
     ).sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
     for (let cipherIndex = 0; cipherIndex < cipherViews.length; cipherIndex++) {
@@ -501,7 +501,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
 
     return {
       fullName,
-      username: cipher.contact.primaryEmail
+      username: cipher.contact.primaryEmail,
     };
   }
   // Cozy customization end

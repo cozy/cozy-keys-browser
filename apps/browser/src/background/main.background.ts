@@ -142,7 +142,10 @@ import { StateEventRegistrarService } from "@bitwarden/common/platform/state/sta
 import { SyncService } from "@bitwarden/common/platform/sync";
 // eslint-disable-next-line no-restricted-imports -- Needed for service creation
 import { DefaultSyncService } from "@bitwarden/common/platform/sync/internal";
-import { DefaultThemeStateService, ThemeStateService } from "@bitwarden/common/platform/theming/theme-state.service";
+import {
+  DefaultThemeStateService,
+  ThemeStateService,
+} from "@bitwarden/common/platform/theming/theme-state.service";
 import { ApiService } from "@bitwarden/common/services/api.service";
 import { AuditService } from "@bitwarden/common/services/audit.service";
 import { EventCollectionService } from "@bitwarden/common/services/event/event-collection.service";
@@ -651,7 +654,7 @@ export default class MainBackground {
       this.logService,
       (logoutReason: LogoutReason, userId?: UserId) => this.logout(logoutReason, userId),
       this.vaultTimeoutSettingsService,
-      this.buildUserAgent()
+      this.buildUserAgent(),
     );
 
     this.domainSettingsService = new DefaultDomainSettingsService(this.stateProvider);

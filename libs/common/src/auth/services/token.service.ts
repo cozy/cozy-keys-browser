@@ -1120,7 +1120,7 @@ export class TokenService implements TokenServiceAbstraction {
   }
 
   // Cozy customization
-  async getCozyTokens(): Promise<{clientId: string, registrationAccessToken: string} | null> {
+  async getCozyTokens(): Promise<{ clientId: string; registrationAccessToken: string } | null> {
     const userId = await firstValueFrom(this.activeUserIdGlobalState.state$);
 
     if (!userId) {
@@ -1128,12 +1128,19 @@ export class TokenService implements TokenServiceAbstraction {
     }
 
     const clientId = await this.getStateValueByUserIdAndKeyDef(userId, CLIENT_ID_DISK);
-    const registrationAccessToken = await this.getStateValueByUserIdAndKeyDef(userId, REGISTRATION_ACCESS_TOKEN_DISK);
+    const registrationAccessToken = await this.getStateValueByUserIdAndKeyDef(
+      userId,
+      REGISTRATION_ACCESS_TOKEN_DISK,
+    );
 
     return { clientId, registrationAccessToken };
   }
 
-  async setCozyTokens(accessToken: string, clientId: string, registrationAccessToken: string): Promise<void> {
+  async setCozyTokens(
+    accessToken: string,
+    clientId: string,
+    registrationAccessToken: string,
+  ): Promise<void> {
     // get user id the access token
     const userId: UserId = await this.getUserIdFromAccessToken(accessToken);
 
@@ -1141,9 +1148,7 @@ export class TokenService implements TokenServiceAbstraction {
       throw new Error("User id not found. Cannot set cozy tokens.");
     }
 
-    await this.singleUserStateProvider
-      .get(userId, CLIENT_ID_DISK)
-      .update((_) => clientId);
+    await this.singleUserStateProvider.get(userId, CLIENT_ID_DISK).update((_) => clientId);
 
     await this.singleUserStateProvider
       .get(userId, REGISTRATION_ACCESS_TOKEN_DISK)

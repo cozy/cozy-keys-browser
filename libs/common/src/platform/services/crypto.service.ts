@@ -898,7 +898,9 @@ export class CryptoService implements CryptoServiceAbstraction {
       return;
     }
 
-    const encOrgKeys = await firstValueFrom(this.stateProvider.getUser(userId, USER_ENCRYPTED_ORGANIZATION_KEYS).state$);
+    const encOrgKeys = await firstValueFrom(
+      this.stateProvider.getUser(userId, USER_ENCRYPTED_ORGANIZATION_KEYS).state$,
+    );
 
     encOrgKeys[organizationId] = key as unknown as EncryptedOrganizationKeyData;
 

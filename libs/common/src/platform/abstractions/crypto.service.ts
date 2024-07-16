@@ -386,7 +386,11 @@ export abstract class CryptoService {
   ): Promise<Uint8Array>;
 
   // Cozy customization
-  abstract upsertOrganizationKey(userId: UserId, organizationId: OrganizationId, key: string): Promise<void>
+  abstract upsertOrganizationKey(
+    userId: UserId,
+    organizationId: OrganizationId,
+    key: string,
+  ): Promise<void>;
   // Cozy customization end
 
   /**

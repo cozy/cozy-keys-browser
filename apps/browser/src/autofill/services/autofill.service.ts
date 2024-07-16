@@ -665,7 +665,7 @@ export default class AutofillService implements AutofillServiceInterface {
           fillScript,
           pageDetails,
           filledFields,
-          options
+          options,
         );
 
         options.cipher.identity = new IdentityView();

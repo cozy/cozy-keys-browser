@@ -20,7 +20,10 @@ import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/
 import { WebAuthnLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-login.service.abstraction";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
-import { EnvironmentService, Region } from "@bitwarden/common/platform/abstractions/environment.service";
+import {
+  EnvironmentService,
+  Region,
+} from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
@@ -140,7 +143,7 @@ export class LoginComponent extends BaseLoginComponent {
       const syncPromise = syncService.fullSync(true).then(() => {
         this.cozyClientService.saveCozyCredentials(
           sanitizeUrlInput(this.formGroup.value.email, this.cozySanitizeUrlService),
-          this.formGroup.value.masterPassword
+          this.formGroup.value.masterPassword,
         );
       });
       this.konnectorsService.getKonnectorsOrganization();
@@ -226,7 +229,7 @@ export class LoginComponent extends BaseLoginComponent {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPassRequired")
+        this.i18nService.t("masterPassRequired"),
       );
       return;
     }
@@ -246,7 +249,7 @@ export class LoginComponent extends BaseLoginComponent {
         "me@" + hostname,
         data.masterPassword,
         null,
-        null
+        null,
       );
 
       this.formPromise = this.loginStrategyService.logIn(credentials);
@@ -307,7 +310,7 @@ export class LoginComponent extends BaseLoginComponent {
   //*
   async configureTheme() {
     const useContrastedThemeByDefault = await this.cozyClientService.getFlagValue(
-      "passwords.theme.default-contrasted"
+      "passwords.theme.default-contrasted",
     );
 
     const isUserSetTheme = await this.stateService.getIsUserSetTheme();
@@ -333,7 +336,7 @@ export class LoginComponent extends BaseLoginComponent {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("cozyUrlRequired")
+        this.i18nService.t("cozyUrlRequired"),
       );
       return;
     }
@@ -347,7 +350,7 @@ export class LoginComponent extends BaseLoginComponent {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("invalidCozyUrl")
+        this.i18nService.t("invalidCozyUrl"),
       );
       return;
     }
