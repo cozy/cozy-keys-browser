@@ -770,6 +770,16 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
     const { width, height, top, left } =
       await this.getMostRecentlyFocusedFieldRects(formFieldElement);
     const autofillFieldData = this.formFieldElements.get(formFieldElement);
+
+    // Cozy customization; ensure fieldQualifier is present for contacts
+    if (
+      autofillFieldData?.fieldQualifier ||
+      autofillFieldData?.filledByCipherType === CipherType.Contact
+    ) {
+      this.qualifyUserFilledIdentityField(autofillFieldData);
+    }
+    // Cozy customization end
+
     let accountCreationFieldType = null;
     if (
       (autofillFieldData?.showInlineMenuAccountCreation ||
@@ -788,6 +798,8 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       focusedFieldRects: { width, height, top, left },
       filledByCipherType: autofillFieldData?.filledByCipherType,
       showInlineMenuAccountCreation: autofillFieldData?.showInlineMenuAccountCreation,
+      fieldQualifier: autofillFieldData.fieldQualifier,
+      fieldValue: formFieldElement.value,
       accountCreationFieldType,
     };
 
