@@ -1,11 +1,12 @@
 import { Jsonify } from "type-fest";
 
+import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
+
 import { View } from "../../../models/view/view";
 import { FieldType, LinkedIdType } from "../../enums";
-import { Field } from "../domain/field";
-import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
 import { ExpirationDateData } from "../data/expiration-date.data";
 import { LabelData } from "../data/label.data";
+import { Field } from "../domain/field";
 
 export class FieldView implements View {
   name: string = null;

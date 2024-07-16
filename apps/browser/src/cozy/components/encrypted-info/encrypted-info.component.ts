@@ -31,6 +31,7 @@ export class EncryptedInfoComponent implements OnInit {
   async moreInfo() {
     const infoUrl =
       "https://support.cozy.io/394-comment-puis-je-parametrer-mon-gestionnaire-de-mot-de-passe/";
+    // eslint-disable-next-line no-restricted-globals
     window.open(infoUrl);
   }
 

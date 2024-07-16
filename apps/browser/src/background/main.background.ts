@@ -1642,7 +1642,8 @@ export default class MainBackground {
   private buildUserAgent(): string {
     const browserUA = navigator.userAgent;
     const appName = "io.cozy.pass.browser";
-    const appVersion = this.platformUtilsService.getApplicationVersion() || "unknown";
+    const manifest = chrome.runtime.getManifest();
+    const appVersion = manifest.version_name || manifest.version || "unknown";
     return `${browserUA} ${appName}-${appVersion}`;
   }
   /* Cozy customization end */

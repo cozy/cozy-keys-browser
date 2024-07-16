@@ -24,8 +24,8 @@ import { BrowserSendStateService } from "../tools/popup/services/browser-send-st
 import { VaultBrowserStateService } from "../vault/services/vault-browser-state.service";
 
 import { routerTransition } from "./app-routing.animations";
-import { HistoryService } from "./services/history.service";
 import { DesktopSyncVerificationDialogComponent } from "./components/desktop-sync-verification-dialog.component";
+import { HistoryService } from "./services/history.service";
 
 @Component({
   selector: "app-root",
