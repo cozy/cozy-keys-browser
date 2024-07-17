@@ -42,15 +42,15 @@ import { SystemService } from "@bitwarden/common/platform/abstractions/system.se
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
 import { clearCaches } from "@bitwarden/common/platform/misc/sequentialize";
 import { StateEventRunnerService } from "@bitwarden/common/platform/state";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { SyncService } from "@bitwarden/common/platform/sync";
 import { UserId } from "@bitwarden/common/types/guid";
 import { VaultTimeout, VaultTimeoutStringType } from "@bitwarden/common/types/vault-timeout.type";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
-import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { DialogService, ToastOptions, ToastService } from "@bitwarden/components";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { DeleteAccountComponent } from "../auth/delete-account.component";
 import { LoginApprovalComponent } from "../auth/login/login-approval.component";
@@ -403,7 +403,6 @@ export class AppComponent implements OnInit, OnDestroy {
             // Clear sequentialized caches
             clearCaches();
             if (message.userId != null) {
-              await this.stateService.clearDecryptedData(message.userId);
               await this.accountService.switchAccount(message.userId);
             }
             const locked =
@@ -423,12 +422,13 @@ export class AppComponent implements OnInit, OnDestroy {
             } else {
               this.messagingService.send("unlocked");
               this.loading = true;
-              await this.syncService.fullSync(true);
+              await this.syncService.fullSync(false);
               this.loading = false;
               // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
               // eslint-disable-next-line @typescript-eslint/no-floating-promises
               this.router.navigate(["vault"]);
             }
+            this.messagingService.send("finishSwitchAccount");
             break;
           }
           case "systemSuspended":

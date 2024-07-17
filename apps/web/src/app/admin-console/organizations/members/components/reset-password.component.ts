@@ -17,8 +17,8 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { DialogService } from "@bitwarden/components";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { OrganizationUserResetPasswordService } from "../services/organization-user-reset-password/organization-user-reset-password.service";
 
@@ -31,7 +31,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   @Input() email: string;
   @Input() id: string;
   @Input() organizationId: string;
-  @Output() onPasswordReset = new EventEmitter();
+  @Output() passwordReset = new EventEmitter();
   @ViewChild(PasswordStrengthComponent) passwordStrengthComponent: PasswordStrengthComponent;
 
   enforcedPolicyOptions: MasterPasswordPolicyOptions;
@@ -156,7 +156,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         null,
         this.i18nService.t("resetPasswordSuccess"),
       );
-      this.onPasswordReset.emit();
+      this.passwordReset.emit();
     } catch (e) {
       this.logService.error(e);
     }

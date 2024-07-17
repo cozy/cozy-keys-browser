@@ -62,7 +62,7 @@ import { UpdateTwoFactorDuoRequest } from "../auth/models/request/update-two-fac
 import { UpdateTwoFactorEmailRequest } from "../auth/models/request/update-two-factor-email.request";
 import { UpdateTwoFactorWebAuthnDeleteRequest } from "../auth/models/request/update-two-factor-web-authn-delete.request";
 import { UpdateTwoFactorWebAuthnRequest } from "../auth/models/request/update-two-factor-web-authn.request";
-import { UpdateTwoFactorYubioOtpRequest } from "../auth/models/request/update-two-factor-yubio-otp.request";
+import { UpdateTwoFactorYubikeyOtpRequest } from "../auth/models/request/update-two-factor-yubikey-otp.request";
 import { ApiKeyResponse } from "../auth/models/response/api-key.response";
 import { AuthRequestResponse } from "../auth/models/response/auth-request.response";
 import { DeviceVerificationResponse } from "../auth/models/response/device-verification.response";
@@ -70,7 +70,6 @@ import { IdentityCaptchaResponse } from "../auth/models/response/identity-captch
 import { IdentityTokenResponse } from "../auth/models/response/identity-token.response";
 import { IdentityTwoFactorResponse } from "../auth/models/response/identity-two-factor.response";
 import { KeyConnectorUserKeyResponse } from "../auth/models/response/key-connector-user-key.response";
-import { MasterPasswordPolicyResponse } from "../auth/models/response/master-password-policy.response";
 import { PreloginResponse } from "../auth/models/response/prelogin.response";
 import { RegisterResponse } from "../auth/models/response/register.response";
 import { SsoPreValidateResponse } from "../auth/models/response/sso-pre-validate.response";
@@ -121,6 +120,7 @@ import { EnvironmentService } from "../platform/abstractions/environment.service
 import { LogService } from "../platform/abstractions/log.service";
 import { PlatformUtilsService } from "../platform/abstractions/platform-utils.service";
 import { Utils } from "../platform/misc/utils";
+import { SyncResponse } from "../platform/sync";
 import { UserId } from "../types/guid";
 import { AttachmentRequest } from "../vault/models/request/attachment.request";
 import { CipherBulkDeleteRequest } from "../vault/models/request/cipher-bulk-delete.request";
@@ -142,7 +142,6 @@ import {
   CollectionResponse,
 } from "../vault/models/response/collection.response";
 import { OptionalCipherResponse } from "../vault/models/response/optional-cipher.response";
-import { SyncResponse } from "../vault/models/response/sync.response";
 
 // Cozy customization
 function getDeviceName(deviceType: DeviceType): string {
@@ -449,12 +448,6 @@ export class ApiService implements ApiServiceAbstraction {
 
   postAccountVerifyEmailToken(request: VerifyEmailRequest): Promise<any> {
     return this.send("POST", "/accounts/verify-email-token", request, false, false);
-  }
-
-  postAccountVerifyPassword(
-    request: SecretVerificationRequest,
-  ): Promise<MasterPasswordPolicyResponse> {
-    return this.send("POST", "/accounts/verify-password", request, true, true);
   }
 
   postAccountRecoverDelete(request: DeleteRecoverRequest): Promise<any> {
@@ -829,7 +822,7 @@ export class ApiService implements ApiServiceAbstraction {
       true,
       true,
     );
-    return new CollectionDetailsResponse(r);
+    return new CollectionAccessDetailsResponse(r);
   }
 
   async putCollection(
@@ -844,7 +837,7 @@ export class ApiService implements ApiServiceAbstraction {
       true,
       true,
     );
-    return new CollectionDetailsResponse(r);
+    return new CollectionAccessDetailsResponse(r);
   }
 
   async putCollectionUsers(
@@ -1061,7 +1054,7 @@ export class ApiService implements ApiServiceAbstraction {
   }
 
   async putTwoFactorYubiKey(
-    request: UpdateTwoFactorYubioOtpRequest,
+    request: UpdateTwoFactorYubikeyOtpRequest,
   ): Promise<TwoFactorYubiKeyResponse> {
     const r = await this.send("PUT", "/two-factor/yubikey", request, true, true);
     return new TwoFactorYubiKeyResponse(r);
@@ -1915,9 +1908,12 @@ export class ApiService implements ApiServiceAbstraction {
 
     const responseType = response.headers.get("content-type");
     const responseIsJson = responseType != null && responseType.indexOf("application/json") !== -1;
+    const responseIsCsv = responseType != null && responseType.indexOf("text/csv") !== -1;
     if (hasResponse && response.status === 200 && responseIsJson) {
       const responseJson = await response.json();
       return responseJson;
+    } else if (hasResponse && response.status === 200 && responseIsCsv) {
+      return await response.text();
     } else if (response.status !== 200) {
       const error = await this.handleError(response, false, authed);
       return Promise.reject(error);

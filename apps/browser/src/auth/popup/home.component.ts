@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
+import { FormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Subject, firstValueFrom, takeUntil } from "rxjs";
+import { Subject, firstValueFrom } from "rxjs";
 
 import { EnvironmentSelectorComponent } from "@bitwarden/angular/auth/components/environment-selector.component";
-import { LoginEmailServiceAbstraction } from "@bitwarden/auth/common";
-import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { LoginEmailServiceAbstraction, RegisterRouteService } from "@bitwarden/auth/common";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
@@ -13,9 +12,6 @@ import { AccountSwitcherService } from "./account-switching/services/account-swi
 
 /* start Cozy imports */
 /* eslint-disable */
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
-import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/abstractions/password-generation.service.abstraction";
 import { BrowserApi } from "../../platform/browser/browser-api";
 /* eslint-enable */
 /* end Cozy imports */
@@ -39,17 +35,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     rememberEmail: [false],
   });
 
+  // TODO: remove when email verification flag is removed
+  registerRoute$ = this.registerRouteService.registerRoute$();
+
   constructor(
     protected platformUtilsService: PlatformUtilsService,
     private formBuilder: FormBuilder,
     private router: Router,
     private i18nService: I18nService,
-    private environmentService: EnvironmentService,
     private loginEmailService: LoginEmailServiceAbstraction,
     private accountSwitcherService: AccountSwitcherService,
-    private cryptoFunctionService: CryptoFunctionService,
-    private passwordGenerationService: PasswordGenerationServiceAbstraction,
-    private stateService: StateService,
+    private registerRouteService: RegisterRouteService,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -69,13 +65,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Cozy customization
     /*
     this.environmentSelector.onOpenSelfHostedSettings
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe(() => {
-        this.setLoginEmailValues();
-        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.router.navigate(["environment"]);
-      });
+      .pipe(
+        switchMap(async () => {
+          await this.setLoginEmailValues();
+          await this.router.navigate(["environment"]);
+        }),
+        takeUntil(this.destroyed$),
+      )
+      .subscribe();
     */
   }
 
@@ -100,14 +97,15 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.setLoginEmailValues();
-
+    await this.setLoginEmailValues();
     await this.router.navigate(["login"], { queryParams: { email: this.formGroup.value.email } });
   }
 
-  setLoginEmailValues() {
-    this.loginEmailService.setEmail(this.formGroup.value.email);
+  async setLoginEmailValues() {
+    // Note: Browser saves email settings here instead of the login component
     this.loginEmailService.setRememberEmail(this.formGroup.value.rememberEmail);
+    this.loginEmailService.setEmail(this.formGroup.value.email);
+    await this.loginEmailService.saveEmailSettings();
   }
 
   /* Cozy custo */

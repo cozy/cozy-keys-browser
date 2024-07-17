@@ -1,0 +1,38 @@
+<bit-section>
+  <bit-section-header>
+    <h2 bitTypography="h6">{{ "itemDetails" | i18n }}</h2>
+  </bit-section-header>
+  <bit-card>
+    <div class="tw-pb-2 tw-mb-4 tw-border-0 tw-border-b tw-border-solid tw-border-secondary-300">
+      <label class="tw-block tw-w-full tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
+        {{ "itemName" | i18n }}
+      </label>
+      <input readonly bitInput type="text" [value]="cipher.name" aria-readonly="true" />
+    </div>
+
+    <div *ngIf="cipher.collectionIds || cipher.organizationId || cipher.folderId">
+      <p
+        *ngIf="!cipher.organizationId"
+        [ngClass]="{ 'tw-mb-3': cipher.collectionIds }"
+        bitTypography="body2"
+      >
+        <i class="bwi bwi-user bwi-lg bwi-fw"></i> {{ "ownerYou" | i18n }}
+      </p>
+      <p
+        *ngIf="cipher.organizationId && organization"
+        [ngClass]="{ 'tw-mb-3': cipher.collectionIds }"
+        bitTypography="body2"
+      >
+        <i class="bwi bwi-business bwi-lg bwi-fw"></i> {{ organization.name }}
+      </p>
+      <ul *ngIf="cipher.collectionIds && collections" [ngClass]="{ 'tw-mb-2': cipher.folderId }">
+        <p *ngFor="let collection of collections" class="tw-mb-1" bitTypography="body2">
+          <i class="bwi bwi-collection bwi-lg bwi-fw"></i> {{ collection.name }}
+        </p>
+      </ul>
+      <p *ngIf="cipher.folderId && folder" bitTypography="body2">
+        <i class="bwi bwi-folder bwi-lg bwi-fw"></i> {{ folder.name }}
+      </p>
+    </div>
+  </bit-card>
+</bit-section>

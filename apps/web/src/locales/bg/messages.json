@@ -173,6 +173,10 @@
     "message": "Няма папка",
     "description": "This is the folder for uncategorized items"
   },
+  "selfOwnershipLabel": {
+    "message": "Вие",
+    "description": "Used as a label to indicate that the user is the owner of an item."
+  },
   "addFolder": {
     "message": "Добавяне на папка"
   },
@@ -401,6 +405,21 @@
   "item": {
     "message": "Елемент"
   },
+  "itemDetails": {
+    "message": "Подробности за елемента"
+  },
+  "itemName": {
+    "message": "Име на елемента"
+  },
+  "cannotRemoveViewOnlyCollections": {
+    "message": "Не можете да премахвате колекции с права „Само за преглед“: $COLLECTIONS$",
+    "placeholders": {
+      "collections": {
+        "content": "$1",
+        "example": "Work, Personal"
+      }
+    }
+  },
   "ex": {
     "message": "напр.",
     "description": "Short abbreviation for 'example'."
@@ -587,6 +606,9 @@
   "loggedOut": {
     "message": "Бяхте отписани"
   },
+  "loggedOutDesc": {
+    "message": "Бяхте отписан(а) от регистрацията си."
+  },
   "loginExpired": {
     "message": "Сесията ви изтече."
   },
@@ -710,6 +732,12 @@
   "createAccount": {
     "message": "Създаване на абонамент"
   },
+  "setAStrongPassword": {
+    "message": "Използвайте сложна парола"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завършете регистрацията си като зададете парола"
+  },
   "newAroundHere": {
     "message": "За пръв път ли сте тук?"
   },
@@ -718,6 +746,9 @@
   },
   "logIn": {
     "message": "Вписване"
+  },
+  "verifyIdentity": {
+    "message": "Потвърдете самоличността си"
   },
   "logInInitiated": {
     "message": "Вписването е стартирано"
@@ -754,6 +785,19 @@
   },
   "masterPassHintLabel": {
     "message": "Подсказка за главната парола"
+  },
+  "masterPassHintText": {
+    "message": "Ако забравите паролата си, подсказката може да бъде изпратена на е-пощата Ви. $CURRENT$/$MAXIMUM$ максимален брой знаци.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Настройки"
@@ -810,8 +854,8 @@
   "emailAddress": {
     "message": "Адрес на електронната поща"
   },
-  "yourVaultIsLocked": {
-    "message": "Трезорът е заключен — въведете главната си парола, за да продължите."
+  "yourVaultIsLockedV2": {
+    "message": "Трезорът Ви е заключен."
   },
   "uuid": {
     "message": "UUID"
@@ -937,18 +981,18 @@
   "authenticatorAppTitle": {
     "message": "Приложение за удостоверяване"
   },
-  "authenticatorAppDesc": {
-    "message": "Използвайте приложение за удостоверяване (като Authy или Google Authenticator) за генерирането на временни кодове за потвърждение.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Въведете код създаден чрез приложение за удостоверяване, като например това на Битуорден.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "Устройство YubiKey OTP"
+  "yubiKeyTitleV2": {
+    "message": "Ключ за сигурност YubiKey OTP"
   },
   "yubiKeyDesc": {
     "message": "Използвайте устройство на YubiKey, за да влезете в абонамента си. Поддържат се моделите YubiKey 4, 4 Nano, 4C и NEO."
   },
-  "duoDesc": {
-    "message": "Удостоверяване чрез Duo Security, с ползване на приложението Duo Mobile, SMS, телефонен разговор или устройство U2F.",
+  "duoDescV2": {
+    "message": "Въведете код създаден чрез Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -973,8 +1017,8 @@
   "emailTitle": {
     "message": "Електронна поща"
   },
-  "emailDesc": {
-    "message": "Кодовете за потвърждение ще ви бъдат пратени по електронна поща."
+  "emailDescV2": {
+    "message": "Въведете кода изпратен на е-пощата Ви."
   },
   "continue": {
     "message": "Продължаване"
@@ -1016,7 +1060,7 @@
     "message": "Наистина ли искате да продължите?"
   },
   "moveSelectedItemsDesc": {
-    "message": "Избор на папка, в която да се преместят $COUNT$ избрани записи.",
+    "message": "Choose a folder that you would like to add the $COUNT$ selected item(s) to.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1049,6 +1093,12 @@
   },
   "copyUuid": {
     "message": "Copy UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Грешка при опресняването на идентификатора за достъп"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Няма намерен идентификатор за опресняване или ключове за ППИ. Опитайте да се отпишете и да се впишете отново."
   },
   "warning": {
     "message": "Внимание"
@@ -1608,35 +1658,47 @@
   "twoStepLoginAuthDesc": {
     "message": "Въведете главната си парола, за да променяте настройките за двустепенно удостоверяване."
   },
-  "twoStepAuthenticatorDesc": {
-    "message": "Следвайте тези стъпки, за да настроите двустепенно удостоверяване:"
+  "twoStepAuthenticatorInstructionPrefix": {
+    "message": "Свалете приложение за удостоверяване, като например"
   },
-  "twoStepAuthenticatorDownloadApp": {
-    "message": "Изтегляне на приложение за двустепенно удостоверяване"
+  "twoStepAuthenticatorInstructionInfix1": {
+    "message": ","
   },
-  "twoStepAuthenticatorNeedApp": {
-    "message": "Ако ви трябва приложение за двустепенно удостоверяване, пробвайте някое от следните:"
+  "twoStepAuthenticatorInstructionInfix2": {
+    "message": "или"
   },
-  "iosDevices": {
-    "message": "Устройства с iOS"
+  "twoStepAuthenticatorInstructionSuffix": {
+    "message": "."
   },
-  "androidDevices": {
-    "message": "Устройства с Android"
+  "continueToExternalUrlTitle": {
+    "message": "Продължаване към $URL$?",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
   },
-  "windowsDevices": {
-    "message": "Устройства с Windows"
+  "continueToExternalUrlDesc": {
+    "message": "Напускате Битуорден. Външният уеб сайт ще бъде зареден в нов прозорец."
   },
-  "twoStepAuthenticatorAppsRecommended": {
-    "message": "Това са само препоръчаните приложения. Другите приложения за идентификация също ще работят."
+  "twoStepContinueToBitwardenUrlTitle": {
+    "message": "Продължаване към bitwarden.com?"
   },
-  "twoStepAuthenticatorScanCode": {
-    "message": "Сканирайте този QR код с приложението си за идентификация"
+  "twoStepContinueToBitwardenUrlDesc": {
+    "message": "Приложението за удостоверяване на Битуорден позволява да запазвате ключове за удостоверяване, както и да създавате еднократни кодове за достъп за местата, където се изисква удостоверяване в 2 стъпки. Научете повече в уеб сайта bitwarden.com"
+  },
+  "twoStepAuthenticatorScanCodeV2": {
+    "message": "Сканирайте QR-кода по-долу с приложението за удостоверяване, или въведете ключа."
+  },
+  "twoStepAuthenticatorQRCanvasError": {
+    "message": "QR-кодът не може да бъде зареден. Опитайте отново или използвайте ключа по-долу."
   },
   "key": {
     "message": "Ключ"
   },
-  "twoStepAuthenticatorEnterCode": {
-    "message": "Въведете 6-цифрения код за потвърждение от приложението"
+  "twoStepAuthenticatorEnterCodeV2": {
+    "message": "Код за потвърждаване"
   },
   "twoStepAuthenticatorReaddDesc": {
     "message": "Ако трябва да добавите и друго устройство, по-долу е QR кодът или ключът, изисквани от приложението ви за идентификация."
@@ -2755,9 +2817,6 @@
   "invited": {
     "message": "Поканен"
   },
-  "accepted": {
-    "message": "Приел"
-  },
   "confirmed": {
     "message": "Потвърдил"
   },
@@ -2784,12 +2843,6 @@
   },
   "userDesc": {
     "message": "Редови потребител с достъп до определени колекции в организацията."
-  },
-  "manager": {
-    "message": "Мениджър"
-  },
-  "managerDesc": {
-    "message": "Мениджърите достъпват и управляват зададените им колекции в организацията."
   },
   "all": {
     "message": "Всички"
@@ -3349,6 +3402,9 @@
   "emailVerified": {
     "message": "Адресът на електронната ви поща е потвърден."
   },
+  "emailVerifiedV2": {
+    "message": "Е-пощата е потвърдена"
+  },
   "emailVerifiedFailed": {
     "message": "Адресът на електронната ви поща не е потвърден. Пробвайте да изпратите ново писмо за потвърждение."
   },
@@ -3655,6 +3711,15 @@
       }
     }
   },
+  "subscriptionSeatMaxReached": {
+    "message": "Не можете да поканите повече от $COUNT$ членове без да увеличите броя на местата.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
   "seatsToAdd": {
     "message": "Брой потребители за добавяне"
   },
@@ -3717,6 +3782,21 @@
   },
   "nothingSelected": {
     "message": "Не сте избрали нищо."
+  },
+  "receiveMarketingEmails": {
+    "message": "Получавайте е-писма от Битоурден за новини, съвети и възможности за проучвания."
+  },
+  "unsubscribe": {
+    "message": "Отписване"
+  },
+  "atAnyTime": {
+    "message": "по всяко време."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ако продължите, Вие се съгласявате с"
+  },
+  "and": {
+    "message": "и"
   },
   "acceptPolicies": {
     "message": "Чрез тази отметка вие се съгласявате със следните:"
@@ -4110,6 +4190,9 @@
   },
   "thisWindowWillCloseIn5Seconds": {
     "message": "Този прозорец ще се затвори автоматично след 5 секунди"
+  },
+  "youMayCloseThisWindow": {
+    "message": "Може да затворите този прозорец"
   },
   "includeAllTeamsFeatures": {
     "message": "Всички възможности на Екипния план, плюс:"
@@ -4567,12 +4650,6 @@
   "permission": {
     "message": "Право"
   },
-  "managerPermissions": {
-    "message": "Права на управителя"
-  },
-  "adminPermissions": {
-    "message": "Права на администратора"
-  },
   "accessEventLogs": {
     "message": "Достъп до журналите"
   },
@@ -4596,9 +4673,6 @@
   },
   "deleteAnyCollection": {
     "message": "Изтриване на всякакви колекции"
-  },
-  "manageAssignedCollections": {
-    "message": "Управление на възложените колекции"
   },
   "editAssignedCollections": {
     "message": "Редактиране на възложените колекции"
@@ -5585,6 +5659,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Пресъздаването на идентификатора за синхронизиране на плащанията ще направи така, че досегашният вече няма да работи."
+  },
+  "selfHostedServer": {
+    "message": "собствен хостинг"
+  },
+  "customEnvironment": {
+    "message": "Специална среда"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Посочете базовия адрес на Вашата собствена инсталация на Битуорден. Пример: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "За по-детайлна настройка, може да укажете основния адрес на всяка услуга поотделно."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Трябва да добавите или основния адрес на сървъра, или поне една специална среда."
+  },
+  "apiUrl": {
+    "message": "Адрес на сървъра за ППИ"
+  },
+  "webVaultUrl": {
+    "message": "Адрес на сървъра за трезора по уеб"
+  },
+  "identityUrl": {
+    "message": "Адрес на сървъра за самоличности"
+  },
+  "notificationsUrl": {
+    "message": "Адрес на сървъра за известия"
+  },
+  "iconsUrl": {
+    "message": "Адрес на сървъра за иконки"
+  },
+  "environmentSaved": {
+    "message": "Адресите на средата са запазени"
   },
   "selfHostingTitle": {
     "message": "Self-hosting"
@@ -6627,12 +6734,6 @@
   "restrictedCollectionAssignmentDesc": {
     "message": "Можете да свързвате само колекции, които имате право да управлявате."
   },
-  "accessAllCollectionsDesc": {
-    "message": "Дайте достъп до всички текущи и бъдещи колекции."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "Ако е избрано, това ще замени всички останали права свързани с колекцията."
-  },
   "selectMembers": {
     "message": "Изберете членове"
   },
@@ -6674,12 +6775,6 @@
   },
   "group": {
     "message": "Група"
-  },
-  "groupAccessAll": {
-    "message": "Тази група има достъп до всички записи и може да ги редактира."
-  },
-  "memberAccessAll": {
-    "message": "Този член има достъп до всички записи и може да ги редактира."
   },
   "domainVerification": {
     "message": "Потвърждаване на домейн"
@@ -7616,6 +7711,9 @@
   "alreadyHaveAccount": {
     "message": "Вече имате регистрация?"
   },
+  "toggleSideNavigation": {
+    "message": "Превключване на страничната навигация"
+  },
   "skipToContent": {
     "message": "Прескачане към съдържанието"
   },
@@ -7785,7 +7883,7 @@
     "message": "Свързване с тези колекции"
   },
   "bulkCollectionAssignmentDialogDescription": {
-    "message": "Изберете колекциите, с които да бъдат споделени тези елементи. Когато даден елемент бъде променен в една колекция, промяната ще бъде отразена във всички колекции. Само членовете на организацията с достъп до тези колекции ще могат да виждат елементите."
+    "message": "Only organization members with access to these collections will be able to see the items."
   },
   "selectCollectionsToAssign": {
     "message": "Изберете колекции за свързване"
@@ -8063,23 +8161,6 @@
   "restrictedGroupAccessDesc": {
     "message": "Не може да добавяте себе си към групи."
   },
-  "unassignedItemsBannerSelfHost": {
-    "message": "Известие: от 2 май 2024г. неразпределените елементи на организациите вече няма се виждат в изгледа с „Всички трезори“ на различните устройства, а ще бъдат достъпни само през Административната конзола. Добавете тези елементи към някоя колекция в Административната конзола, за да станат видими."
-  },
-  "unassignedItemsBannerNotice": {
-    "message": "Известие: неразпределените елементи в организацията вече няма да се виждат в изгледа с всички трезори на различните устройства, а са достъпни само през Административната конзола."
-  },
-  "unassignedItemsBannerSelfHostNotice": {
-    "message": "Известие: след 16 май 2024, неразпределените елементи в организацията вече няма да се виждат в изгледа с всички трезори на различните устройства, а ще бъдат достъпни само през Административната конзола."
-  },
-  "unassignedItemsBannerCTAPartOne": {
-    "message": "Добавете тези елементи към колекция в",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
-  "unassignedItemsBannerCTAPartTwo": {
-    "message": "за да ги направите видими.",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
   "deleteProvider": {
     "message": "Изтриване на доставчик"
   },
@@ -8141,11 +8222,17 @@
   "setUpGithubActions": {
     "message": "Настройка на действия в Github"
   },
+  "setUpKubernetes": {
+    "message": "Настройка на Kubernetes"
+  },
   "setUpGitlabCICD": {
     "message": "Настройка на GitLab CI/CD"
   },
   "setUpAnsible": {
     "message": "Настройка на Ansible"
+  },
+  "rustSDKRepo": {
+    "message": "Преглед на хранилището за Rust"
   },
   "cSharpSDKRepo": {
     "message": "Преглед на хранилището за C#"
@@ -8297,5 +8384,179 @@
   },
   "allLoginRequestsApproved": {
     "message": "Всички заявки за вписване са одобрени"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Биткойн"
+  },
+  "updatedTaxInformation": {
+    "message": "Обновена данъчна информация"
+  },
+  "unverified": {
+    "message": "Непотвърден"
+  },
+  "verified": {
+    "message": "Потвърден"
+  },
+  "viewSecret": {
+    "message": "Преглед на тайната"
+  },
+  "noClients": {
+    "message": "Няма клиенти за показване"
+  },
+  "providerBillingEmailHint": {
+    "message": "На този адрес ще бъдат изпращани всички фактури свързани с този доставчик",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
+  },
+  "upgradeOrganizationEnterprise": {
+    "message": "Откривайте потенциални рискове за сигурността като преглеждате достъпа на членовете"
+  },
+  "onlyAvailableForEnterpriseOrganization": {
+    "message": "Преглеждайте лесно достъпа на членовете в цялата организация, като надградите до плана за големи организации."
+  },
+  "date": {
+    "message": "Дата"
+  },
+  "exportClientReport": {
+    "message": "Изнасяне на клиентската справка"
+  },
+  "memberAccessReport": {
+    "message": "Достъп на членовете"
+  },
+  "memberAccessReportDesc": {
+    "message": "Уверете се, че членовете имат достъп до правилните идентификационни данни, както и че регистрациите им са защитени. Използвайте този доклад, за да получите файл CSV с достъпа на членовете и настройките на регистрациите им."
+  },
+  "memberAccessReportPageDesc": {
+    "message": "Направете проверка на достъпа на членовете до групи, колекции и елементи в колекциите. Изнасянето на на данните като файл CSV предоставя подробна разбивка по членове, включително информация относно правата за колекции и настройките на регистрациите."
+  },
+  "higherKDFIterations": {
+    "message": "По-високите стойности за броя на повторения на KDF може да защитят главната Ви парола от атаки тип „груба сила“."
+  },
+  "incrementsOf100,000": {
+    "message": "стъпки от 100 000"
+  },
+  "smallIncrements": {
+    "message": "малки стъпки"
+  },
+  "kdfIterationRecommends": {
+    "message": "Препоръчваме 600 000 или повече"
+  },
+  "kdfToHighWarningIncreaseInIncrements": {
+    "message": "Задаването на прекалено висока стойност за KDF може да натовари прекомерно по-старите устройства. Увеличете стойността на $VALUE$ и изпробвайте устройствата си.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "increments of 100,000"
+      }
+    }
+  },
+  "providerReinstate": {
+    "message": " Свържете се с поддръжката, за да възобновите абонамента си."
+  },
+  "secretPeopleDescription": {
+    "message": "Дайте достъп на групи или отделни хора до тази тайна. Правата дадени на отделни хора ще имат превес на тези дадени им от групите."
+  },
+  "secretPeopleEmptyMessage": {
+    "message": "Добавете хора или групи, с които да споделите достъпа до тази тайна"
+  },
+  "secretMachineAccountsDescription": {
+    "message": "Дайте достъп на машинните акаунти до тази тайна."
+  },
+  "secretMachineAccountsEmptyMessage": {
+    "message": "Добавете машинни акаунти, за да дадете достъп до тази тайна"
+  },
+  "smAccessRemovalWarningSecretTitle": {
+    "message": "Премахване на достъпа до тази тайна"
+  },
+  "smAccessRemovalSecretMessage": {
+    "message": "Това действие ще премахне достъпа Ви до тази тайна."
+  },
+  "invoice": {
+    "message": "Фактура"
+  },
+  "unassignedSeatsAvailable": {
+    "message": "Имате $SEATS$ неразпределени места.",
+    "placeholders": {
+      "seats": {
+        "content": "$1",
+        "example": "10"
+      }
+    },
+    "description": "A message showing how many unassigned seats are available for a provider."
+  },
+  "contactYourProviderForAdditionalSeats": {
+    "message": "Свържете се с администратора на доставчика си, за да закупи допълнителни места."
+  },
+  "open": {
+    "message": "Отваряне",
+    "description": "The status of an invoice."
+  },
+  "uncollectible": {
+    "message": "Плащането не може да бъде получено",
+    "description": "The status of an invoice."
+  },
+  "clientDetails": {
+    "message": "Подробности за клиента"
+  },
+  "downloadCSV": {
+    "message": "Сваляне на CSV"
+  },
+  "monthlySubscriptionUserSeatsMessage": {
+    "message": "Промените в абонамента Ви ще добавят частични такси към общата сума за плащане в следващия платежен цикъл. "
+  },
+  "annualSubscriptionUserSeatsMessage": {
+    "message": "Промените в абонамента Ви ще добавят частични такси към общата сума за плащане в месечния платежен цикъл. "
+  },
+  "billingHistoryDescription": {
+    "message": "Свалете файл CSV с подробна информация за клиента и всяка платежна дата. Частичните плащания може да не са включени във файла и да се различават с данните във фактурата. Най-точната информация относно плащанията може да бъде намерена в месечните фактури.",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "noInvoicesToList": {
+    "message": "Няма фактури за показване",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "providerClientVaultPrivacyNotification": {
+    "message": "Обявление: По-късно този месец поверителността на клиентския трезор ще бъде подобрена и членовете на доставчик вече няма да имат директен достъп до елементите в клиентския трезор. Ако имате въпроси,",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'."
+  },
+  "contactBitwardenSupport": {
+    "message": "свържете се с поддръжката на Битуорден.",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'. 'Bitwarden' should not be translated"
+  },
+  "sponsored": {
+    "message": "Спонсорирано"
+  },
+  "licenseAndBillingManagementDesc": {
+    "message": "След като направите промени в облачния сървър на Битуорден, качете файла с лиценза си, за да приложите последните промени."
+  },
+  "addToFolder": {
+    "message": "Добавяне в папка"
+  },
+  "selectFolder": {
+    "message": "Изберете папка"
+  },
+  "personalItemsTransferWarning": {
+    "message": "$PERSONAL_ITEMS_COUNT$ ще бъдат преместени завинаги в избраната организация. Вече няма да притежавате тези елементи.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2 items"
+      }
+    }
+  },
+  "personalItemsWithOrgTransferWarning": {
+    "message": "$PERSONAL_ITEMS_COUNT$ ще бъдат преместени завинаги в $ORG$. Вече няма да притежавате тези елементи.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2 items"
+      },
+      "org": {
+        "content": "$2",
+        "example": "Organization name"
+      }
+    }
   }
 }

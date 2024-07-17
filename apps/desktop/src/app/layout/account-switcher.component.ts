@@ -12,6 +12,7 @@ import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authenticatio
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { CommandDefinition, MessageListener } from "@bitwarden/common/platform/messaging";
 import { UserId } from "@bitwarden/common/types/guid";
 
 type ActiveAccount = {
@@ -75,12 +76,14 @@ export class AccountSwitcherComponent {
   showSwitcher$: Observable<boolean>;
 
   numberOfAccounts$: Observable<number>;
+  disabled = false;
 
   constructor(
     private stateService: StateService,
     private authService: AuthService,
     private avatarService: AvatarService,
     private messagingService: MessagingService,
+    private messageListener: MessageListener,
     private router: Router,
     private environmentService: EnvironmentService,
     private loginEmailService: LoginEmailServiceAbstraction,
@@ -159,19 +162,20 @@ export class AccountSwitcherComponent {
   async switch(userId: string) {
     this.close();
 
-    this.messagingService.send("switchAccount", { userId: userId });
+    this.disabled = true;
+    const accountSwitchFinishedPromise = firstValueFrom(
+      this.messageListener.messages$(new CommandDefinition("finishSwitchAccount")),
+    );
+    this.messagingService.send("switchAccount", { userId });
+    await accountSwitchFinishedPromise;
+    this.disabled = false;
   }
 
   async addAccount() {
     this.close();
 
-    this.loginEmailService.setRememberEmail(false);
-    await this.loginEmailService.saveEmailSettings();
-
-    await this.router.navigate(["/login"]);
-    const activeAccount = await firstValueFrom(this.accountService.activeAccount$);
-    await this.stateService.clearDecryptedData(activeAccount?.id as UserId);
     await this.accountService.switchAccount(null);
+    await this.router.navigate(["/login"]);
   }
 
   private async createInactiveAccounts(baseAccounts: {

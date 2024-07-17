@@ -1,0 +1,54 @@
+name: Build distribuables
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality_checks:
+    name: Build distribuables
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20.15.1'
+        cache: 'npm'
+
+    - name: Install build dependencies
+      run : |
+        npm install -g node-pre-gyp jest
+
+    - name: Install dependencies
+      run: npm ci --legacy-peer-deps
+
+    - name: Dist Chrome
+      run : |
+        cd apps/browser
+        npm run dist:chrome
+
+    - name: Dist Firefox
+      run: |
+        cd apps/browser
+        npm run dist:firefox
+
+    - name: Upload Chrome artifact to GitHub
+      uses: actions/upload-artifact@v3
+      with:
+        name: Chrome
+        path: |
+          apps/browser/dist/dist-chrome.zip
+
+    - name: Upload Firefox artifact to GitHub
+      uses: actions/upload-artifact@v3
+      with:
+        name: Firefox
+        path: |
+          apps/browser/dist/dist-firefox.zip

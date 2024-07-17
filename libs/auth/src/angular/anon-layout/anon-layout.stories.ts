@@ -1,10 +1,11 @@
 import { Meta, StoryObj, moduleMetadata } from "@storybook/angular";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, of } from "rxjs";
 
 import { ClientType } from "@bitwarden/common/enums";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { ThemeStateService } from "@bitwarden/common/platform/theming/theme-state.service";
 
 import { ButtonModule } from "../../../../components/src/button";
 import { I18nMockService } from "../../../../components/src/utils/i18n-mock.service";
@@ -44,6 +45,12 @@ export default {
                 return "bitwarden.com";
               },
             }).asObservable(),
+          },
+        },
+        {
+          provide: ThemeStateService,
+          useValue: {
+            selectedTheme$: of("light"),
           },
         },
       ],
@@ -112,6 +119,24 @@ export const WithLongContent: Story = {
         <div slot="secondary" class="text-center">
           <div class="tw-font-bold tw-mb-2">Secondary Projected Content (optional)</div>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias laborum nostrum natus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias laborum nostrum natus. Expedita, quod est?          </p>
+          <button bitButton>Perform Action</button>
+        </div>
+      </auth-anon-layout>
+    `,
+  }),
+};
+
+export const WithThinPrimaryContent: Story = {
+  render: (args) => ({
+    props: args,
+    template:
+      // Projected content (the <div>'s) and styling is just a sample and can be replaced with any content/styling.
+      `
+      <auth-anon-layout [title]="title" [subtitle]="subtitle" [showReadonlyHostname]="showReadonlyHostname">
+        <div class="text-center">Lorem ipsum</div>
+
+        <div slot="secondary" class="text-center">
+          <div class="tw-font-bold tw-mb-2">Secondary Projected Content (optional)</div>
           <button bitButton>Perform Action</button>
         </div>
       </auth-anon-layout>

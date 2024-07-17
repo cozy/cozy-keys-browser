@@ -6,7 +6,6 @@ import { UserId } from "../../../types/guid";
 import { InternalOrganizationServiceAbstraction } from "../../abstractions/organization/organization.service.abstraction";
 import { OrganizationData } from "../../models/data/organization.data";
 import { Organization } from "../../models/domain/organization";
-
 /** Cozy custo */
 /* eslint-disable */
 import { ProfileOrganizationResponse } from "../../models/response/profile-organization.response";

@@ -1,25 +1,29 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
+import { ProductTierType } from "@bitwarden/common/billing/enums";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+
+import { UpdateLicenseDialogResult } from "./update-license-types";
 
 @Component({
   selector: "app-update-license",
   templateUrl: "update-license.component.html",
 })
-export class UpdateLicenseComponent {
+export class UpdateLicenseComponent implements OnInit {
   @Input() organizationId: string;
   @Input() showCancel = true;
+  @Input() showAutomaticSyncAndManualUpload: boolean;
   @Output() onUpdated = new EventEmitter();
   @Output() onCanceled = new EventEmitter();
 
   formPromise: Promise<void>;
   title: string = this.i18nService.t("updateLicense");
   updateLicenseForm = this.formBuilder.group({
-    file: [null, Validators.required],
+    file: [null],
   });
   licenseFile: File = null;
   constructor(
@@ -29,6 +33,13 @@ export class UpdateLicenseComponent {
     private organizationApiService: OrganizationApiServiceAbstraction,
     private formBuilder: FormBuilder,
   ) {}
+  async ngOnInit() {
+    const org = await this.organizationApiService.get(this.organizationId);
+    if (org.plan.productTier !== ProductTierType.Families) {
+      this.updateLicenseForm.setValidators([Validators.required]);
+      this.updateLicenseForm.updateValueAndValidity();
+    }
+  }
   protected setSelectedFile(event: Event) {
     const fileInputEl = <HTMLInputElement>event.target;
     const file: File = fileInputEl.files.length > 0 ? fileInputEl.files[0] : null;
@@ -69,6 +80,7 @@ export class UpdateLicenseComponent {
       this.i18nService.t("licenseUploadSuccess"),
     );
     this.onUpdated.emit();
+    return new Promise((resolve) => resolve(UpdateLicenseDialogResult.Updated));
   };
 
   cancel = () => {

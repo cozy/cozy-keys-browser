@@ -1,3 +1,4 @@
+import { DialogRef } from "@angular/cdk/dialog";
 import { Component } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 
@@ -7,17 +8,15 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
 
+import { UpdateLicenseDialogResult } from "./update-license-types";
 import { UpdateLicenseComponent } from "./update-license.component";
 
-export enum UpdateLicenseDialogResult {
-  Updated = "updated",
-  Cancelled = "cancelled",
-}
 @Component({
   templateUrl: "update-license-dialog.component.html",
 })
 export class UpdateLicenseDialogComponent extends UpdateLicenseComponent {
   constructor(
+    private dialogRef: DialogRef,
     apiService: ApiService,
     i18nService: I18nService,
     platformUtilsService: PlatformUtilsService,
@@ -27,10 +26,19 @@ export class UpdateLicenseDialogComponent extends UpdateLicenseComponent {
     super(apiService, i18nService, platformUtilsService, organizationApiService, formBuilder);
   }
   async submitLicense() {
-    await this.submit();
+    const result = await this.submit();
+    if (result === UpdateLicenseDialogResult.Updated) {
+      this.dialogRef.close(UpdateLicenseDialogResult.Updated);
+    }
   }
+
   submitLicenseDialog = async () => {
     await this.submitLicense();
+  };
+
+  cancel = async () => {
+    await this.cancel();
+    this.dialogRef.close(UpdateLicenseDialogResult.Cancelled);
   };
   static open(dialogService: DialogService) {
     return dialogService.open<UpdateLicenseDialogResult>(UpdateLicenseDialogComponent);

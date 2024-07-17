@@ -1,6 +1,6 @@
 import { DatePipe } from "@angular/common";
 import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
-import { concatMap, firstValueFrom, map, Observable, Subject, takeUntil } from "rxjs";
+import { concatMap, firstValueFrom, Observable, Subject, takeUntil } from "rxjs";
 
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";

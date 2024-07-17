@@ -1,9 +1,5 @@
 import { KonnectorsOrg } from "../../../../../apps/browser/src/models/konnectorsOrganization";
 import { BiometricKey } from "../../auth/types/biometric-key";
-import { GeneratorOptions } from "../../tools/generator/generator-options";
-import { GeneratedPasswordHistory, PasswordGeneratorOptions } from "../../tools/generator/password";
-import { UsernameGeneratorOptions } from "../../tools/generator/username";
-import { UserId } from "../../types/guid";
 import { Account } from "../models/domain/account";
 import { StorageOptions } from "../models/domain/storage-options";
 
@@ -23,7 +19,6 @@ export type InitOptions = {
 
 export abstract class StateService<T extends Account = Account> {
   addAccount: (account: T) => Promise<void>;
-  clearDecryptedData: (userId: UserId) => Promise<void>;
   clean: (options?: StorageOptions) => Promise<void>;
   init: (initOptions?: InitOptions) => Promise<void>;
 
@@ -74,29 +69,8 @@ export abstract class StateService<T extends Account = Account> {
    * @deprecated For migration purposes only, use setUserKeyBiometric instead
    */
   setCryptoMasterKeyBiometric: (value: BiometricKey, options?: StorageOptions) => Promise<void>;
-  getDecryptedPasswordGenerationHistory: (
-    options?: StorageOptions,
-  ) => Promise<GeneratedPasswordHistory[]>;
-  setDecryptedPasswordGenerationHistory: (
-    value: GeneratedPasswordHistory[],
-    options?: StorageOptions,
-  ) => Promise<void>;
   getDuckDuckGoSharedKey: (options?: StorageOptions) => Promise<string>;
   setDuckDuckGoSharedKey: (value: string, options?: StorageOptions) => Promise<void>;
-  getEnableBrowserIntegration: (options?: StorageOptions) => Promise<boolean>;
-  setEnableBrowserIntegration: (value: boolean, options?: StorageOptions) => Promise<void>;
-  getEnableBrowserIntegrationFingerprint: (options?: StorageOptions) => Promise<boolean>;
-  setEnableBrowserIntegrationFingerprint: (
-    value: boolean,
-    options?: StorageOptions,
-  ) => Promise<void>;
-  getEncryptedPasswordGenerationHistory: (
-    options?: StorageOptions,
-  ) => Promise<GeneratedPasswordHistory[]>;
-  setEncryptedPasswordGenerationHistory: (
-    value: GeneratedPasswordHistory[],
-    options?: StorageOptions,
-  ) => Promise<void>;
   // Cozy customization, track if user manually set a preferred theme
   //*
   getIsUserSetTheme: (options?: StorageOptions) => Promise<boolean>;
@@ -105,20 +79,6 @@ export abstract class StateService<T extends Account = Account> {
   getIsAuthenticated: (options?: StorageOptions) => Promise<boolean>;
   getLastSync: (options?: StorageOptions) => Promise<string>;
   setLastSync: (value: string, options?: StorageOptions) => Promise<void>;
-  getMinimizeOnCopyToClipboard: (options?: StorageOptions) => Promise<boolean>;
-  setMinimizeOnCopyToClipboard: (value: boolean, options?: StorageOptions) => Promise<void>;
-  getPasswordGenerationOptions: (options?: StorageOptions) => Promise<PasswordGeneratorOptions>;
-  setPasswordGenerationOptions: (
-    value: PasswordGeneratorOptions,
-    options?: StorageOptions,
-  ) => Promise<void>;
-  getUsernameGenerationOptions: (options?: StorageOptions) => Promise<UsernameGeneratorOptions>;
-  setUsernameGenerationOptions: (
-    value: UsernameGeneratorOptions,
-    options?: StorageOptions,
-  ) => Promise<void>;
-  getGeneratorOptions: (options?: StorageOptions) => Promise<GeneratorOptions>;
-  setGeneratorOptions: (value: GeneratorOptions, options?: StorageOptions) => Promise<void>;
   getUserId: (options?: StorageOptions) => Promise<string>;
   // Cozy customization, clean profiles after X days
   //*

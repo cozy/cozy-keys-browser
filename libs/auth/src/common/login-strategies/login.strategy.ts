@@ -177,7 +177,7 @@ export abstract class LoginStrategy {
     await this.tokenService.setCozyTokens(
       tokenResponse.accessToken,
       tokenResponse.clientId,
-      tokenResponse.registrationAccessToken
+      tokenResponse.registrationAccessToken,
     );
     // Cozy customization end
 

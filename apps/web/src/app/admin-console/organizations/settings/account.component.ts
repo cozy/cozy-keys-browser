@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { combineLatest, from, lastValueFrom, of, Subject, switchMap, takeUntil } from "rxjs";
@@ -27,7 +27,7 @@ import { DeleteOrganizationDialogResult, openDeleteOrganizationDialog } from "./
   selector: "app-org-account",
   templateUrl: "account.component.html",
 })
-export class AccountComponent {
+export class AccountComponent implements OnInit, OnDestroy {
   @ViewChild("apiKeyTemplate", { read: ViewContainerRef, static: true })
   apiKeyModalRef: ViewContainerRef;
   @ViewChild("rotateApiKeyTemplate", { read: ViewContainerRef, static: true })
@@ -153,8 +153,17 @@ export class AccountComponent {
     }
 
     const request = new OrganizationUpdateRequest();
-    request.name = this.formGroup.value.orgName;
-    request.billingEmail = this.formGroup.value.billingEmail;
+
+    /*
+     * When you disable a FormControl, it is removed from formGroup.values, so we have to use
+     * the original value.
+     * */
+    request.name = this.formGroup.get("orgName").disabled
+      ? this.org.name
+      : this.formGroup.value.orgName;
+    request.billingEmail = this.formGroup.get("billingEmail").disabled
+      ? this.org.billingEmail
+      : this.formGroup.value.billingEmail;
 
     // Backfill pub/priv key if necessary
     if (!this.org.hasPublicAndPrivateKeys) {
@@ -216,31 +225,33 @@ export class AccountComponent {
   };
 
   async viewApiKey() {
-    await this.modalService.openViewRef(ApiKeyComponent, this.apiKeyModalRef, (comp) => {
-      comp.keyType = "organization";
-      comp.entityId = this.organizationId;
-      comp.postKey = this.organizationApiService.getOrCreateApiKey.bind(
-        this.organizationApiService,
-      );
-      comp.scope = "api.organization";
-      comp.grantType = "client_credentials";
-      comp.apiKeyTitle = "apiKey";
-      comp.apiKeyWarning = "apiKeyWarning";
-      comp.apiKeyDescription = "apiKeyDesc";
+    await ApiKeyComponent.open(this.dialogService, {
+      data: {
+        keyType: "organization",
+        entityId: this.organizationId,
+        postKey: this.organizationApiService.getOrCreateApiKey.bind(this.organizationApiService),
+        scope: "api.organization",
+        grantType: "client_credentials",
+        apiKeyTitle: "apiKey",
+        apiKeyWarning: "apiKeyWarning",
+        apiKeyDescription: "apiKeyDesc",
+      },
     });
   }
 
   async rotateApiKey() {
-    await this.modalService.openViewRef(ApiKeyComponent, this.rotateApiKeyModalRef, (comp) => {
-      comp.keyType = "organization";
-      comp.isRotation = true;
-      comp.entityId = this.organizationId;
-      comp.postKey = this.organizationApiService.rotateApiKey.bind(this.organizationApiService);
-      comp.scope = "api.organization";
-      comp.grantType = "client_credentials";
-      comp.apiKeyTitle = "apiKey";
-      comp.apiKeyWarning = "apiKeyWarning";
-      comp.apiKeyDescription = "apiKeyRotateDesc";
+    await ApiKeyComponent.open(this.dialogService, {
+      data: {
+        keyType: "organization",
+        isRotation: true,
+        entityId: this.organizationId,
+        postKey: this.organizationApiService.rotateApiKey.bind(this.organizationApiService),
+        scope: "api.organization",
+        grantType: "client_credentials",
+        apiKeyTitle: "apiKey",
+        apiKeyWarning: "apiKeyWarning",
+        apiKeyDescription: "apiKeyRotateDesc",
+      },
     });
   }
 }

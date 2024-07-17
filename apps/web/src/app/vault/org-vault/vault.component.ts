@@ -48,10 +48,10 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { SyncService } from "@bitwarden/common/platform/sync";
 import { OrganizationId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
-import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { TotpService } from "@bitwarden/common/vault/abstractions/totp.service";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { TreeNode } from "@bitwarden/common/vault/models/domain/tree-node";
@@ -59,12 +59,13 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { ServiceUtils } from "@bitwarden/common/vault/service-utils";
 import { DialogService, Icons, ToastService } from "@bitwarden/components";
-import { PasswordRepromptService } from "@bitwarden/vault";
+import { CollectionAssignmentResult, PasswordRepromptService } from "@bitwarden/vault";
 
 import { GroupService, GroupView } from "../../admin-console/organizations/core";
 import { openEntityEventsDialog } from "../../admin-console/organizations/manage/entity-events.component";
 import { VaultFilterService } from "../../vault/individual-vault/vault-filter/services/abstractions/vault-filter.service";
 import { VaultFilter } from "../../vault/individual-vault/vault-filter/shared/models/vault-filter.model";
+import { AssignCollectionsWebComponent } from "../components/assign-collections";
 import {
   CollectionDialogAction,
   CollectionDialogTabType,
@@ -90,10 +91,6 @@ import { getNestedCollectionTree } from "../utils/collection-utils";
 
 import { AddEditComponent } from "./add-edit.component";
 import { AttachmentsComponent } from "./attachments.component";
-import {
-  BulkCollectionAssignmentDialogComponent,
-  BulkCollectionAssignmentDialogResult,
-} from "./bulk-collection-assignment-dialog";
 import {
   BulkCollectionsDialogComponent,
   BulkCollectionsDialogResult,
@@ -156,7 +153,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   private _flexibleCollectionsV1FlagEnabled: boolean;
 
   protected get flexibleCollectionsV1Enabled(): boolean {
-    return this._flexibleCollectionsV1FlagEnabled && this.organization?.flexibleCollections;
+    return this._flexibleCollectionsV1FlagEnabled;
   }
   protected orgRevokedUsers: OrganizationUserUserDetailsResponse[];
 
@@ -166,7 +163,11 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   protected get hideVaultFilters(): boolean {
-    return this.restrictProviderAccessEnabled && this.organization?.isProviderUser;
+    return (
+      this.restrictProviderAccessEnabled &&
+      this.organization?.isProviderUser &&
+      !this.organization?.isMember
+    );
   }
 
   private searchText$ = new Subject<string>();
@@ -311,10 +312,6 @@ export class VaultComponent implements OnInit, OnDestroy {
 
     this.editableCollections$ = this.allCollectionsWithoutUnassigned$.pipe(
       map((collections) => {
-        // If restricted, providers can not add items to any collections or edit those items
-        if (this.organization.isProviderUser && this.restrictProviderAccessEnabled) {
-          return [];
-        }
         // Users that can edit all ciphers can implicitly add to / edit within any collection
         if (
           this.organization.canEditAllCiphers(
@@ -356,7 +353,13 @@ export class VaultComponent implements OnInit, OnDestroy {
         }
         let ciphers;
 
-        if (organization.isProviderUser && this.restrictProviderAccessEnabled) {
+        // Restricted providers (who are not members) do not have access org cipher endpoint below
+        // Return early to avoid 404 response
+        if (
+          this.restrictProviderAccessEnabled &&
+          !organization.isMember &&
+          organization.isProviderUser
+        ) {
           return [];
         }
 
@@ -488,10 +491,6 @@ export class VaultComponent implements OnInit, OnDestroy {
       organization$,
     ]).pipe(
       map(([filter, collection, organization]) => {
-        if (organization.isProviderUser && this.restrictProviderAccessEnabled) {
-          return collection != undefined || filter.collectionId === Unassigned;
-        }
-
         return (
           (filter.collectionId === Unassigned &&
             !organization.canEditUnassignedCiphers(this.restrictProviderAccessEnabled)) ||
@@ -1325,7 +1324,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       ).filter((c) => c.id != Unassigned);
     }
 
-    const dialog = BulkCollectionAssignmentDialogComponent.open(this.dialogService, {
+    const dialog = AssignCollectionsWebComponent.open(this.dialogService, {
       data: {
         ciphers: items,
         organizationId: this.organization?.id as OrganizationId,
@@ -1335,7 +1334,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     });
 
     const result = await lastValueFrom(dialog.closed);
-    if (result === BulkCollectionAssignmentDialogResult.Saved) {
+    if (result === CollectionAssignmentResult.Saved) {
       this.refresh();
     }
   }

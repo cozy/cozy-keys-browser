@@ -1,6 +1,5 @@
 import { Directive, Inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, NavigationExtras, Router } from "@angular/router";
-import * as DuoWebSDK from "duo_web_sdk";
 import { firstValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
 
@@ -33,6 +32,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { ToastService } from "@bitwarden/components";
 
 import { CaptchaProtectedComponent } from "./captcha-protected.component";
 
@@ -53,7 +53,6 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
   emailPromise: Promise<any>;
   orgIdentifier: string = null;
 
-  duoFrameless = false;
   duoFramelessUrl: string = null;
   duoResultListenerInitialized = false;
 
@@ -96,6 +95,7 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     protected configService: ConfigService,
     protected masterPasswordService: InternalMasterPasswordServiceAbstraction,
     protected accountService: AccountService,
+    protected toastService: ToastService,
   ) {
     super(environmentService, i18nService, platformUtilsService);
     this.webAuthnSupported = this.platformUtilsService.supportsWebAuthn(win);
@@ -177,42 +177,14 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
         break;
       case TwoFactorProviderType.Duo:
       case TwoFactorProviderType.OrganizationDuo:
-        // 2 Duo 2FA flows available
-        // 1. Duo Web SDK (iframe) - existing, to be deprecated
-        // 2. Duo Frameless (new tab) - new
-
-        // AuthUrl only exists for new Duo Frameless flow
-        if (providerData.AuthUrl) {
-          this.duoFrameless = true;
-          // Setup listener for duo-redirect.ts connector to send back the code
-
-          if (!this.duoResultListenerInitialized) {
-            // setup client specific duo result listener
-            this.setupDuoResultListener();
-            this.duoResultListenerInitialized = true;
-          }
-
-          // flow must be launched by user so they can choose to remember the device or not.
-          this.duoFramelessUrl = providerData.AuthUrl;
-        } else {
-          // Duo Web SDK (iframe) flow
-          // TODO: remove when we remove the "duo-redirect" feature flag
-          setTimeout(() => {
-            DuoWebSDK.init({
-              iframe: undefined,
-              host: providerData.Host,
-              sig_request: providerData.Signature,
-              submit_callback: async (f: HTMLFormElement) => {
-                const sig = f.querySelector('input[name="sig_response"]') as HTMLInputElement;
-                if (sig != null) {
-                  this.token = sig.value;
-                  await this.submit();
-                }
-              },
-            });
-          }, 0);
+        // Setup listener for duo-redirect.ts connector to send back the code
+        if (!this.duoResultListenerInitialized) {
+          // setup client specific duo result listener
+          this.setupDuoResultListener();
+          this.duoResultListenerInitialized = true;
         }
-
+        // flow must be launched by user so they can choose to remember the device or not.
+        this.duoFramelessUrl = providerData.AuthUrl;
         break;
       case TwoFactorProviderType.Email:
         this.twoFactorEmail = providerData.Email;
@@ -250,12 +222,9 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
       this.token = this.token.replace(" ", "").trim();
     }
 
-    try {
-      await this.doSubmit();
-    } catch {
-      if (this.selectedProviderType === TwoFactorProviderType.WebAuthn && this.webAuthn != null) {
-        this.webAuthn.start();
-      }
+    await this.doSubmit();
+    if (this.selectedProviderType === TwoFactorProviderType.WebAuthn && this.webAuthn != null) {
+      this.webAuthn.start();
     }
   }
 
@@ -506,6 +475,16 @@ export class TwoFactorComponent extends CaptchaProtectedComponent implements OnI
     return authType == AuthenticationType.Sso || authType == AuthenticationType.UserApiKey;
   }
 
-  // implemented in clients
-  async launchDuoFrameless() {}
+  async launchDuoFrameless() {
+    if (this.duoFramelessUrl === null) {
+      this.toastService.showToast({
+        variant: "error",
+        title: null,
+        message: this.i18nService.t("duoHealthCheckResultsInNullAuthUrlError"),
+      });
+      return;
+    }
+
+    this.platformUtilsService.launchUri(this.duoFramelessUrl);
+  }
 }

@@ -6,10 +6,7 @@
       queryParamsHandling="merge"
     >
       {{ organization.name }}
-      <span *ngIf="!organization.flexibleCollections">
-        {{ "vault" | i18n | lowercase }}
-      </span>
-      <span *ngIf="organization.flexibleCollections">
+      <span>
         {{ "collections" | i18n | lowercase }}
       </span>
     </bit-breadcrumb>
@@ -96,7 +93,7 @@
   </ng-container>
 
   <bit-search
-    *ngIf="organization?.isProviderUser"
+    *ngIf="restrictProviderAccessFlag && organization?.isProviderUser && !organization?.isMember"
     class="tw-grow"
     [ngModel]="searchText"
     (ngModelChange)="onSearchTextChanged($event)"

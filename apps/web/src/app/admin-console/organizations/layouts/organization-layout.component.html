@@ -1,17 +1,11 @@
-<bit-layout variant="secondary">
-  <nav
-    slot="sidebar"
-    *ngIf="organization$ | async as organization"
-    class="tw-flex tw-flex-col tw-h-full"
-  >
-    <a routerLink="." class="tw-m-5 tw-mt-7 tw-block" [appA11yTitle]="'adminConsole' | i18n">
-      <bit-icon [icon]="logo"></bit-icon>
-    </a>
+<app-layout>
+  <app-side-nav variant="secondary" *ngIf="organization$ | async as organization">
+    <bit-nav-logo [openIcon]="logo" route="." [label]="'adminConsole' | i18n"></bit-nav-logo>
     <org-switcher [filter]="orgFilter" [hideNewButton]="hideNewOrgButton$ | async"></org-switcher>
 
     <bit-nav-item
       icon="bwi-collection"
-      [text]="(organization.flexibleCollections ? 'collections' : 'vault') | i18n"
+      [text]="'collections' | i18n"
       route="vault"
       *ngIf="canShowVaultTab(organization)"
     >
@@ -109,11 +103,7 @@
         *ngIf="organization.canManageScim"
       ></bit-nav-item>
     </bit-nav-group>
-
-    <navigation-product-switcher class="tw-mt-auto"></navigation-product-switcher>
-
-    <app-toggle-width></app-toggle-width>
-  </nav>
+  </app-side-nav>
 
   <ng-container *ngIf="organization$ | async as organization">
     <bit-banner
@@ -123,10 +113,7 @@
     >
       {{ "accessingUsingProvider" | i18n: organization.providerName }}
     </bit-banner>
-    <app-payment-method-warnings
-      *ngIf="showPaymentMethodWarningBanners$ | async"
-    ></app-payment-method-warnings>
   </ng-container>
 
   <router-outlet></router-outlet>
-</bit-layout>
+</app-layout>

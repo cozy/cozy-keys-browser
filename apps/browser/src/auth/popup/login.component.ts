@@ -13,20 +13,24 @@ import {
   LoginStrategyServiceAbstraction,
   LoginEmailServiceAbstraction,
   PasswordLoginCredentials,
+  RegisterRouteService,
 } from "@bitwarden/auth/common";
 import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { WebAuthnLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-login.service.abstraction";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
-import { EnvironmentService, Region } from "@bitwarden/common/platform/abstractions/environment.service";
+import {
+  EnvironmentService,
+  Region,
+} from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { flagEnabled } from "../../platform/flags";
 
@@ -110,6 +114,7 @@ export class LoginComponent extends BaseLoginComponent {
     protected konnectorsService: KonnectorsService,
     protected themeStateService: ThemeStateService,
     protected apiService: ApiService,
+    registerRouteService: RegisterRouteService,
   ) {
     super(
       devicesApiService,
@@ -130,6 +135,7 @@ export class LoginComponent extends BaseLoginComponent {
       loginEmailService,
       ssoLoginService,
       webAuthnLoginService,
+      registerRouteService,
     );
     super.onSuccessfulLogin = async () => {
       // Cozy customization
@@ -137,7 +143,7 @@ export class LoginComponent extends BaseLoginComponent {
       const syncPromise = syncService.fullSync(true).then(() => {
         this.cozyClientService.saveCozyCredentials(
           sanitizeUrlInput(this.formGroup.value.email, this.cozySanitizeUrlService),
-          this.formGroup.value.masterPassword
+          this.formGroup.value.masterPassword,
         );
       });
       this.konnectorsService.getKonnectorsOrganization();
@@ -167,7 +173,7 @@ export class LoginComponent extends BaseLoginComponent {
   async launchSsoBrowser() {
     // Save off email for SSO
     await this.ssoLoginService.setSsoEmail(this.formGroup.value.email);
-    await this.loginEmailService.saveEmailSettings();
+
     // Generate necessary sso params
     const passwordOptions: any = {
       type: "password",
@@ -223,7 +229,7 @@ export class LoginComponent extends BaseLoginComponent {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("masterPassRequired")
+        this.i18nService.t("masterPassRequired"),
       );
       return;
     }
@@ -243,18 +249,17 @@ export class LoginComponent extends BaseLoginComponent {
         "me@" + hostname,
         data.masterPassword,
         null,
-        null
+        null,
       );
 
       this.formPromise = this.loginStrategyService.logIn(credentials);
       const response = await this.formPromise;
 
-      this.setLoginEmailValues();
-      await this.loginEmailService.saveEmailSettings();
+      await this.saveEmailSettings();
 
       if (this.handleCaptchaRequired(response)) {
         return;
-      } else if (this.handleMigrateEncryptionKey(response)) {
+      } else if (await this.handleMigrateEncryptionKey(response)) {
         return;
       } else if (response.requiresTwoFactor) {
         if (this.onSuccessfulLoginTwoFactorNavigate != null) {
@@ -305,7 +310,7 @@ export class LoginComponent extends BaseLoginComponent {
   //*
   async configureTheme() {
     const useContrastedThemeByDefault = await this.cozyClientService.getFlagValue(
-      "passwords.theme.default-contrasted"
+      "passwords.theme.default-contrasted",
     );
 
     const isUserSetTheme = await this.stateService.getIsUserSetTheme();
@@ -319,10 +324,11 @@ export class LoginComponent extends BaseLoginComponent {
   }
   //*/
 
-  togglePassword() {
-    this.showPassword = !this.showPassword;
-    document.getElementById("masterPassword").focus();
-  }
+  // TODOCOZY
+  // togglePassword() {
+  //   this.showPassword = !this.showPassword;
+  //   document.getElementById("masterPassword").focus();
+  // }
 
   async forgotPassword() {
     const cozyUrl = sanitizeUrlInput(this.formGroup.value.email, this.cozySanitizeUrlService);
@@ -330,7 +336,7 @@ export class LoginComponent extends BaseLoginComponent {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("cozyUrlRequired")
+        this.i18nService.t("cozyUrlRequired"),
       );
       return;
     }
@@ -344,7 +350,7 @@ export class LoginComponent extends BaseLoginComponent {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
-        this.i18nService.t("invalidCozyUrl")
+        this.i18nService.t("invalidCozyUrl"),
       );
       return;
     }
@@ -391,4 +397,9 @@ export class LoginComponent extends BaseLoginComponent {
     await this.loginEmailService.saveEmailSettings();
   };
   /* end custo */
+
+  async saveEmailSettings() {
+    // values should be saved on home component
+    return;
+  }
 }

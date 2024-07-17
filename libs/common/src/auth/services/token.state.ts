@@ -81,9 +81,12 @@ export const CLIENT_ID_DISK = new UserKeyDefinition<string>(TOKEN_DISK, "clientI
   clearOn: [], // Manually handled
 });
 
-
-export const REGISTRATION_ACCESS_TOKEN_DISK = new UserKeyDefinition<string>(TOKEN_DISK, "registrationAccessToken", {
-  deserializer: (registrationAccessToken) => registrationAccessToken,
-  clearOn: [], // Manually handled
-});
+export const REGISTRATION_ACCESS_TOKEN_DISK = new UserKeyDefinition<string>(
+  TOKEN_DISK,
+  "registrationAccessToken",
+  {
+    deserializer: (registrationAccessToken) => registrationAccessToken,
+    clearOn: [], // Manually handled
+  },
+);
 // Cozy customization end

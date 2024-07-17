@@ -135,7 +135,21 @@ const permissions = {
 };
 
 const webNavigation = {
+  getFrame: jest.fn(),
+  getAllFrames: jest.fn(),
   onCommitted: {
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+  },
+};
+
+const alarms = {
+  clear: jest.fn().mockImplementation((_name, callback) => callback(true)),
+  clearAll: jest.fn().mockImplementation((callback) => callback(true)),
+  create: jest.fn().mockImplementation((_name, _createInfo, callback) => callback()),
+  get: jest.fn().mockImplementation((_name, callback) => callback(null)),
+  getAll: jest.fn().mockImplementation((callback) => callback([])),
+  onAlarm: {
     addListener: jest.fn(),
     removeListener: jest.fn(),
   },
@@ -156,4 +170,5 @@ global.chrome = {
   offscreen,
   permissions,
   webNavigation,
+  alarms,
 } as any;

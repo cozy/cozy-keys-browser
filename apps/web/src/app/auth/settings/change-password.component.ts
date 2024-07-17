@@ -17,11 +17,11 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { MasterKey, UserKey } from "@bitwarden/common/types/key";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { DialogService } from "@bitwarden/components";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { UserKeyRotationService } from "../key-rotation/user-key-rotation.service";
 
@@ -220,6 +220,7 @@ export class ChangePasswordComponent extends BaseChangePasswordComponent {
   }
 
   private async updateKey() {
-    await this.keyRotationService.rotateUserKeyAndEncryptedData(this.masterPassword);
+    const user = await firstValueFrom(this.accountService.activeAccount$);
+    await this.keyRotationService.rotateUserKeyAndEncryptedData(this.masterPassword, user);
   }
 }

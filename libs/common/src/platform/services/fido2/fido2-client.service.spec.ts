@@ -4,6 +4,7 @@ import { of } from "rxjs";
 import { AuthService } from "../../../auth/abstractions/auth.service";
 import { AuthenticationStatus } from "../../../auth/enums/authentication-status";
 import { DomainSettingsService } from "../../../autofill/services/domain-settings.service";
+import { Utils } from "../../../platform/misc/utils";
 import { VaultSettingsService } from "../../../vault/abstractions/vault-settings/vault-settings.service";
 import { ConfigService } from "../../abstractions/config/config.service";
 import {
@@ -17,8 +18,9 @@ import {
   CreateCredentialParams,
   FallbackRequestedError,
 } from "../../abstractions/fido2/fido2-client.service.abstraction";
-import { Utils } from "../../misc/utils";
+import { TaskSchedulerService } from "../../scheduling/task-scheduler.service";
 
+import * as DomainUtils from "./domain-utils";
 import { Fido2AuthenticatorService } from "./fido2-authenticator.service";
 import { Fido2ClientService } from "./fido2-client.service";
 import { Fido2Utils } from "./fido2-utils";
@@ -34,8 +36,10 @@ describe("FidoAuthenticatorService", () => {
   let authService!: MockProxy<AuthService>;
   let vaultSettingsService: MockProxy<VaultSettingsService>;
   let domainSettingsService: MockProxy<DomainSettingsService>;
+  let taskSchedulerService: MockProxy<TaskSchedulerService>;
   let client!: Fido2ClientService;
   let tab!: chrome.tabs.Tab;
+  let isValidRpId!: jest.SpyInstance;
 
   beforeEach(async () => {
     authenticator = mock<Fido2AuthenticatorService>();
@@ -43,6 +47,9 @@ describe("FidoAuthenticatorService", () => {
     authService = mock<AuthService>();
     vaultSettingsService = mock<VaultSettingsService>();
     domainSettingsService = mock<DomainSettingsService>();
+    taskSchedulerService = mock<TaskSchedulerService>();
+
+    isValidRpId = jest.spyOn(DomainUtils, "isValidRpId");
 
     client = new Fido2ClientService(
       authenticator,
@@ -50,12 +57,17 @@ describe("FidoAuthenticatorService", () => {
       authService,
       vaultSettingsService,
       domainSettingsService,
+      taskSchedulerService,
     );
     configService.serverConfig$ = of({ environment: { vault: VaultUrl } } as any);
     vaultSettingsService.enablePasskeys$ = of(true);
     domainSettingsService.neverDomains$ = of({});
     authService.getAuthStatus.mockResolvedValue(AuthenticationStatus.Unlocked);
     tab = { id: 123, windowId: 456 } as chrome.tabs.Tab;
+  });
+
+  afterEach(() => {
+    isValidRpId.mockRestore();
   });
 
   describe("createCredential", () => {
@@ -113,11 +125,26 @@ describe("FidoAuthenticatorService", () => {
       });
 
       // Spec: If options.rp.id is not a registrable domain suffix of and is not equal to effectiveDomain, return a DOMException whose name is "SecurityError", and terminate this algorithm.
+      // This is actually checked by `isValidRpId` function, but we'll test it here as well
       it("should throw error if rp.id is not valid for this origin", async () => {
         const params = createParams({
           origin: "https://passwordless.dev",
           rp: { id: "bitwarden.com", name: "Bitwarden" },
         });
+
+        const result = async () => await client.createCredential(params, tab);
+
+        const rejects = expect(result).rejects;
+        await rejects.toMatchObject({ name: "SecurityError" });
+        await rejects.toBeInstanceOf(DOMException);
+      });
+
+      // Sanity check to make sure that we use `isValidRpId` to validate the rp.id
+      it("should throw if isValidRpId returns false", async () => {
+        const params = createParams();
+        authenticator.makeCredential.mockResolvedValue(createAuthenticatorMakeResult());
+        // `params` actually has a valid rp.id, but we're mocking the function to return false
+        isValidRpId.mockReturnValue(false);
 
         const result = async () => await client.createCredential(params, tab);
 
@@ -149,6 +176,16 @@ describe("FidoAuthenticatorService", () => {
         const rejects = expect(result).rejects;
         await rejects.toMatchObject({ name: "SecurityError" });
         await rejects.toBeInstanceOf(DOMException);
+      });
+
+      it("should not throw error if localhost is http", async () => {
+        const params = createParams({
+          origin: "http://localhost",
+          rp: { id: undefined, name: "localhost" },
+        });
+        authenticator.makeCredential.mockResolvedValue(createAuthenticatorMakeResult());
+
+        await client.createCredential(params, tab);
       });
 
       // Spec: If credTypesAndPubKeyAlgs is empty, return a DOMException whose name is "NotSupportedError", and terminate this algorithm.
@@ -360,11 +397,26 @@ describe("FidoAuthenticatorService", () => {
       });
 
       // Spec: If options.rp.id is not a registrable domain suffix of and is not equal to effectiveDomain, return a DOMException whose name is "SecurityError", and terminate this algorithm.
+      // This is actually checked by `isValidRpId` function, but we'll test it here as well
       it("should throw error if rp.id is not valid for this origin", async () => {
         const params = createParams({
           origin: "https://passwordless.dev",
           rpId: "bitwarden.com",
         });
+
+        const result = async () => await client.assertCredential(params, tab);
+
+        const rejects = expect(result).rejects;
+        await rejects.toMatchObject({ name: "SecurityError" });
+        await rejects.toBeInstanceOf(DOMException);
+      });
+
+      // Sanity check to make sure that we use `isValidRpId` to validate the rp.id
+      it("should throw if isValidRpId returns false", async () => {
+        const params = createParams();
+        authenticator.getAssertion.mockResolvedValue(createAuthenticatorAssertResult());
+        // `params` actually has a valid rp.id, but we're mocking the function to return false
+        isValidRpId.mockReturnValue(false);
 
         const result = async () => await client.assertCredential(params, tab);
 
@@ -505,6 +557,16 @@ describe("FidoAuthenticatorService", () => {
           tab,
           expect.anything(),
         );
+      });
+
+      it("should not throw error if localhost is http", async () => {
+        const params = createParams({
+          origin: "http://localhost",
+        });
+        params.rpId = undefined;
+        authenticator.getAssertion.mockResolvedValue(createAuthenticatorAssertResult());
+
+        await client.assertCredential(params, tab);
       });
     });
 

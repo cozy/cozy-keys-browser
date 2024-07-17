@@ -4,6 +4,7 @@ import { combineLatest, combineLatestWith, filter, Observable, startWith, switch
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
 
@@ -18,6 +19,10 @@ import {
   SecretDialogComponent,
   SecretOperation,
 } from "../../secrets/dialog/secret-dialog.component";
+import {
+  SecretViewDialogComponent,
+  SecretViewDialogParams,
+} from "../../secrets/dialog/secret-view-dialog.component";
 import { SecretService } from "../../secrets/secret.service";
 import { SecretsListComponent } from "../../shared/secrets-list.component";
 import { ProjectService } from "../project.service";
@@ -42,6 +47,7 @@ export class ProjectSecretsComponent {
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private organizationService: OrganizationService,
+    private logService: LogService,
   ) {}
 
   ngOnInit() {
@@ -86,6 +92,15 @@ export class ProjectSecretsComponent {
     });
   }
 
+  openViewSecret(secretId: string) {
+    this.dialogService.open<unknown, SecretViewDialogParams>(SecretViewDialogComponent, {
+      data: {
+        organizationId: this.organizationId,
+        secretId: secretId,
+      },
+    });
+  }
+
   openDeleteSecret(event: SecretListView[]) {
     this.dialogService.open<unknown, SecretDeleteOperation>(SecretDeleteDialogComponent, {
       data: {
@@ -109,12 +124,13 @@ export class ProjectSecretsComponent {
     SecretsListComponent.copySecretName(name, this.platformUtilsService, this.i18nService);
   }
 
-  copySecretValue(id: string) {
-    SecretsListComponent.copySecretValue(
+  async copySecretValue(id: string) {
+    await SecretsListComponent.copySecretValue(
       id,
       this.platformUtilsService,
       this.i18nService,
       this.secretService,
+      this.logService,
     );
   }
 

@@ -1,5 +1,7 @@
 import { Component } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { firstValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { SsoComponent as BaseSsoComponent } from "@bitwarden/angular/auth/components/sso.component";
@@ -23,7 +25,7 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 @Component({
   selector: "app-sso",
@@ -31,6 +33,14 @@ import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/ge
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
 export class SsoComponent extends BaseSsoComponent {
+  protected formGroup = new FormGroup({
+    identifier: new FormControl(null, [Validators.required]),
+  });
+
+  get identifierFormControl() {
+    return this.formGroup.controls.identifier;
+  }
+
   constructor(
     ssoLoginService: SsoLoginServiceAbstraction,
     loginStrategyService: LoginStrategyServiceAbstraction,
@@ -82,7 +92,9 @@ export class SsoComponent extends BaseSsoComponent {
     this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
       if (qParams.identifier != null) {
         // SSO Org Identifier in query params takes precedence over claimed domains
-        this.identifier = qParams.identifier;
+        this.identifierFormControl.setValue(qParams.identifier);
+        this.loggingIn = true;
+        await this.submit();
       } else {
         // Note: this flow is written for web but both browser and desktop
         // redirect here on SSO button click.
@@ -96,7 +108,7 @@ export class SsoComponent extends BaseSsoComponent {
               await this.orgDomainApiService.getClaimedOrgDomainByEmail(qParams.email);
 
             if (response?.ssoAvailable) {
-              this.identifier = response.organizationIdentifier;
+              this.identifierFormControl.setValue(response.organizationIdentifier);
               await this.submit();
               return;
             }
@@ -110,7 +122,7 @@ export class SsoComponent extends BaseSsoComponent {
         // Fallback to state svc if domain is unclaimed
         const storedIdentifier = await this.ssoLoginService.getOrganizationSsoIdentifier();
         if (storedIdentifier != null) {
-          this.identifier = storedIdentifier;
+          this.identifierFormControl.setValue(storedIdentifier);
         }
       }
     });
@@ -131,13 +143,26 @@ export class SsoComponent extends BaseSsoComponent {
     }
   }
 
-  async submit() {
+  submit = async () => {
+    if (this.formGroup.invalid) {
+      return;
+    }
+
+    const autoSubmit = (await firstValueFrom(this.route.queryParams)).identifier != null;
+
+    this.identifier = this.identifierFormControl.value;
     await this.ssoLoginService.setOrganizationSsoIdentifier(this.identifier);
     if (this.clientId === "browser") {
       document.cookie = `ssoHandOffMessage=${this.i18nService.t("ssoHandOff")};SameSite=strict`;
     }
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    super.submit();
-  }
+    try {
+      await Object.getPrototypeOf(this).submit.call(this);
+    } catch (error) {
+      if (autoSubmit) {
+        await this.router.navigate(["/login"]);
+      } else {
+        this.validationService.showError(error);
+      }
+    }
+  };
 }

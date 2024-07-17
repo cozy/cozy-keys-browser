@@ -73,6 +73,7 @@ export class AddGenericComponent implements OnInit, OnDestroy {
       // (the 1ms value doesn't really matter here)
       setTimeout(() => {
         const appUrl = this.cozyClientService.getAppURL("mespapiers", "paper/create");
+        // eslint-disable-next-line no-restricted-globals
         window.open(appUrl);
       }, 1);
       return;
@@ -87,6 +88,7 @@ export class AddGenericComponent implements OnInit, OnDestroy {
       // (the 1ms value doesn't really matter here)
       setTimeout(() => {
         const appUrl = this.cozyClientService.getAppURL("contacts", "new");
+        // eslint-disable-next-line no-restricted-globals
         window.open(appUrl);
       }, 1);
       return;

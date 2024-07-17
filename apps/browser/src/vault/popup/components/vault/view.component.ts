@@ -5,7 +5,7 @@ import { ChangeDetectorRef, Component, NgZone } from "@angular/core";
 import { ChangeDetectorRef, Component, NgZone, HostListener } from "@angular/core";
 /* end custo */
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subject, firstValueFrom, takeUntil } from "rxjs";
+import { Subject, firstValueFrom, takeUntil, Subscription } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { ViewComponent as BaseViewComponent } from "@bitwarden/angular/vault/components/view.component";
@@ -94,6 +94,7 @@ export class ViewComponent extends BaseViewComponent {
   CAN_SHARE_ORGANIZATION = CAN_SHARE_ORGANIZATION;
   // Cozy customization end
   private fido2PopoutSessionData$ = fido2PopoutSessionData$();
+  private collectPageDetailsSubscription: Subscription;
 
   private destroy$ = new Subject<void>();
 
@@ -196,15 +197,6 @@ export class ViewComponent extends BaseViewComponent {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.ngZone.run(async () => {
         switch (message.command) {
-          case "collectPageDetailsResponse":
-            if (message.sender === BroadcasterSubscriptionId) {
-              this.pageDetails.push({
-                frameId: message.webExtSender.frameId,
-                tab: message.tab,
-                details: message.details,
-              });
-            }
-            break;
           case "tabChanged":
           case "windowChanged":
             if (this.loadPageDetailsTimeout != null) {
@@ -258,7 +250,9 @@ export class ViewComponent extends BaseViewComponent {
 
     // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.router.navigate(["/edit-cipher"], { queryParams: { cipherId: this.cipher.id } });
+    this.router.navigate(["/edit-cipher"], {
+      queryParams: { cipherId: this.cipher.id, type: this.cipher.type, isNew: false },
+    });
     return true;
   }
 
@@ -468,6 +462,7 @@ export class ViewComponent extends BaseViewComponent {
   }
 
   private async loadPageDetails() {
+    this.collectPageDetailsSubscription?.unsubscribe();
     this.pageDetails = [];
     this.tab = this.senderTabId
       ? await BrowserApi.getTab(this.senderTabId)
@@ -477,13 +472,10 @@ export class ViewComponent extends BaseViewComponent {
       return;
     }
 
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    BrowserApi.tabSendMessage(this.tab, {
-      command: "collectPageDetails",
-      tab: this.tab,
-      sender: BroadcasterSubscriptionId,
-    });
+    this.collectPageDetailsSubscription = this.autofillService
+      .collectPageDetailsFromTab$(this.tab)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((pageDetails) => (this.pageDetails = pageDetails));
   }
 
   private async doAutofill() {

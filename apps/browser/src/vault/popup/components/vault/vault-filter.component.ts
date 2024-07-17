@@ -20,8 +20,8 @@ import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { SyncService } from "@bitwarden/common/platform/sync";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { TreeNode } from "@bitwarden/common/vault/models/domain/tree-node";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -33,7 +33,6 @@ import { BrowserApi } from "../../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
 import { VaultBrowserStateService } from "../../../services/vault-browser-state.service";
 import { VaultFilterService } from "../../../services/vault-filter.service";
-
 /** Start Cozy imports */
 /* eslint-disable */
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";

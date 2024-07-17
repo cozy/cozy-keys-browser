@@ -1,7 +1,9 @@
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+
 import MainBackground from "../../background/main.background";
 
+import { OverlayBackground } from "./abstractions/overlay.background";
 import NotificationBackground from "./notification.background";
-import OverlayBackground from "./overlay.background";
 
 export default class TabsBackground {
   constructor(
@@ -86,8 +88,11 @@ export default class TabsBackground {
     changeInfo: chrome.tabs.TabChangeInfo,
     tab: chrome.tabs.Tab,
   ) => {
+    const overlayImprovementsFlag = await this.main.configService.getFeatureFlag(
+      FeatureFlag.InlineMenuPositioningImprovements,
+    );
     const removePageDetailsStatus = new Set(["loading", "unloaded"]);
-    if (removePageDetailsStatus.has(changeInfo.status)) {
+    if (!!overlayImprovementsFlag && removePageDetailsStatus.has(changeInfo.status)) {
       this.overlayBackground.removePageDetails(tabId);
     }
 
@@ -99,7 +104,7 @@ export default class TabsBackground {
       return;
     }
 
-    await this.overlayBackground.updateOverlayCiphers();
+    await this.overlayBackground.updateOverlayCiphers(false);
 
     if (this.main.onUpdatedRan) {
       return;
@@ -129,7 +134,7 @@ export default class TabsBackground {
     await Promise.all([
       this.main.refreshBadge(),
       this.main.refreshMenu(),
-      this.overlayBackground.updateOverlayCiphers(),
+      this.overlayBackground.updateOverlayCiphers(false),
     ]);
   };
 }

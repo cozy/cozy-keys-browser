@@ -49,11 +49,19 @@ export class BadgeDirective implements FocusableElement {
     ]
       .concat(styles[this.variant])
       .concat(this.hasHoverEffects ? hoverStyles[this.variant] : [])
-      .concat(this.truncate ? ["tw-truncate", "tw-max-w-40"] : []);
+      .concat(this.truncate ? ["tw-truncate", this.maxWidthClass] : []);
   }
-  @HostBinding("attr.title") get title() {
+  @HostBinding("attr.title") get titleAttr() {
+    if (this.title !== undefined) {
+      return this.title;
+    }
     return this.truncate ? this.el.nativeElement.textContent.trim() : null;
   }
+
+  /**
+   * Optional override for the automatic badge title when truncating.
+   */
+  @Input() title?: string;
 
   /**
    * Variant, sets the background color of the badge.
@@ -64,6 +72,8 @@ export class BadgeDirective implements FocusableElement {
    * Truncate long text
    */
   @Input() truncate = true;
+
+  @Input() maxWidthClass: `tw-max-w-${string}` = "tw-max-w-40";
 
   getFocusTarget() {
     return this.el.nativeElement;

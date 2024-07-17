@@ -898,7 +898,9 @@ export class CryptoService implements CryptoServiceAbstraction {
       return;
     }
 
-    const encOrgKeys = await firstValueFrom(this.stateProvider.getUser(userId, USER_ENCRYPTED_ORGANIZATION_KEYS).state$);
+    const encOrgKeys = await firstValueFrom(
+      this.stateProvider.getUser(userId, USER_ENCRYPTED_ORGANIZATION_KEYS).state$,
+    );
 
     encOrgKeys[organizationId] = key as unknown as EncryptedOrganizationKeyData;
 
@@ -950,6 +952,10 @@ export class CryptoService implements CryptoServiceAbstraction {
 
   userPrivateKey$(userId: UserId): Observable<UserPrivateKey> {
     return this.userPrivateKeyHelper$(userId, false).pipe(map((keys) => keys?.userPrivateKey));
+  }
+
+  userPrivateKeyWithLegacySupport$(userId: UserId): Observable<UserPrivateKey> {
+    return this.userPrivateKeyHelper$(userId, true).pipe(map((keys) => keys?.userPrivateKey));
   }
 
   private userPrivateKeyHelper$(userId: UserId, legacySupport: boolean) {
@@ -1033,7 +1039,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   orgKeys$(userId: UserId) {
-    return this.cipherDecryptionKeys$(userId).pipe(map((keys) => keys?.orgKeys));
+    return this.cipherDecryptionKeys$(userId, true).pipe(map((keys) => keys?.orgKeys));
   }
 
   cipherDecryptionKeys$(

@@ -9,6 +9,7 @@ import { ModalService } from "@bitwarden/angular/services/modal.service";
 import {
   LoginStrategyServiceAbstraction,
   LoginEmailServiceAbstraction,
+  RegisterRouteService,
 } from "@bitwarden/auth/common";
 import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
@@ -22,8 +23,8 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { EnvironmentComponent } from "../environment.component";
 
@@ -71,6 +72,7 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
     loginEmailService: LoginEmailServiceAbstraction,
     ssoLoginService: SsoLoginServiceAbstraction,
     webAuthnLoginService: WebAuthnLoginServiceAbstraction,
+    registerRouteService: RegisterRouteService,
   ) {
     super(
       devicesApiService,
@@ -91,6 +93,7 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
       loginEmailService,
       ssoLoginService,
       webAuthnLoginService,
+      registerRouteService,
     );
     super.onSuccessfulLogin = () => {
       return syncService.fullSync(true);

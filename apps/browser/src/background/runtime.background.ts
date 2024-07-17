@@ -2,14 +2,12 @@ import { firstValueFrom, map, mergeMap } from "rxjs";
 
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
-import { AutofillOverlayVisibility } from "@bitwarden/common/autofill/constants";
 import { AutofillSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/autofill-settings.service";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { SystemService } from "@bitwarden/common/platform/abstractions/system.service";
-import { devFlagEnabled } from "@bitwarden/common/platform/misc/flags";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CipherType } from "@bitwarden/common/vault/enums";
 
@@ -20,11 +18,11 @@ import {
   openTwoFactorAuthPopout,
 } from "../auth/popup/utils/auth-popout-window";
 import { LockedVaultPendingNotificationsData } from "../autofill/background/abstractions/notification.background";
+import { Fido2Background } from "../autofill/fido2/background/abstractions/fido2.background";
 import { AutofillService } from "../autofill/services/abstractions/autofill.service";
 import { BrowserApi } from "../platform/browser/browser-api";
 import { BrowserEnvironmentService } from "../platform/services/browser-environment.service";
 import { BrowserPlatformUtilsService } from "../platform/services/platform-utils/browser-platform-utils.service";
-import { Fido2Background } from "../vault/fido2/background/abstractions/fido2.background";
 
 import MainBackground from "./main.background";
 
@@ -78,6 +76,7 @@ export default class RuntimeBackground {
       const messagesWithResponse = [
         "biometricUnlock",
         "getUseTreeWalkerApiForPageDetailsCollectionFeatureFlag",
+        "getInlineMenuFieldQualificationFeatureFlag",
       ];
 
       if (messagesWithResponse.includes(msg.command)) {
@@ -195,6 +194,9 @@ export default class RuntimeBackground {
           FeatureFlag.UseTreeWalkerApiForPageDetailsCollection,
         );
       }
+      case "getInlineMenuFieldQualificationFeatureFlag": {
+        return await this.configService.getFeatureFlag(FeatureFlag.InlineMenuFieldQualification);
+      }
     }
   }
 
@@ -248,6 +250,9 @@ export default class RuntimeBackground {
       }
       case "addToLockedVaultPendingNotifications":
         this.lockedVaultPendingNotifications.push(msg.data);
+        break;
+      case "lockVault":
+        await this.main.vaultTimeoutService.lock(msg.userId);
         break;
       case "logout":
         await this.main.logout(msg.expired, msg.userId);

@@ -65,6 +65,10 @@ import { StateFactory } from "@bitwarden/common/platform/factories/state-factory
 import { MessageSender } from "@bitwarden/common/platform/messaging";
 import { Account } from "@bitwarden/common/platform/models/domain/account";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
+import {
+  TaskSchedulerService,
+  DefaultTaskSchedulerService,
+} from "@bitwarden/common/platform/scheduling";
 import { AppIdService } from "@bitwarden/common/platform/services/app-id.service";
 import { ConfigApiService } from "@bitwarden/common/platform/services/config/config-api.service";
 import { DefaultConfigService } from "@bitwarden/common/platform/services/config/default-config.service";
@@ -97,14 +101,15 @@ import { DefaultStateProvider } from "@bitwarden/common/platform/state/implement
 import { StateEventRegistrarService } from "@bitwarden/common/platform/state/state-event-registrar.service";
 import { MemoryStorageService as MemoryStorageServiceForStateProviders } from "@bitwarden/common/platform/state/storage/memory-storage.service";
 /* eslint-enable import/no-restricted-paths */
+import { SyncService } from "@bitwarden/common/platform/sync";
+// eslint-disable-next-line no-restricted-imports -- Needed for service construction
+import { DefaultSyncService } from "@bitwarden/common/platform/sync/internal";
 import { AuditService } from "@bitwarden/common/services/audit.service";
 import { EventCollectionService } from "@bitwarden/common/services/event/event-collection.service";
 import { EventUploadService } from "@bitwarden/common/services/event/event-upload.service";
 import { SearchService } from "@bitwarden/common/services/search.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vault-timeout/vault-timeout-settings.service";
 import { VaultTimeoutService } from "@bitwarden/common/services/vault-timeout/vault-timeout.service";
-import { legacyPasswordGenerationServiceFactory } from "@bitwarden/common/tools/generator";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import {
   PasswordStrengthService,
   PasswordStrengthServiceAbstraction,
@@ -120,9 +125,11 @@ import { CollectionService } from "@bitwarden/common/vault/services/collection.s
 import { CipherFileUploadService } from "@bitwarden/common/vault/services/file-upload/cipher-file-upload.service";
 import { FolderApiService } from "@bitwarden/common/vault/services/folder/folder-api.service";
 import { FolderService } from "@bitwarden/common/vault/services/folder/folder.service";
-import { SyncNotifierService } from "@bitwarden/common/vault/services/sync/sync-notifier.service";
-import { SyncService } from "@bitwarden/common/vault/services/sync/sync.service";
 import { TotpService } from "@bitwarden/common/vault/services/totp.service";
+import {
+  legacyPasswordGenerationServiceFactory,
+  PasswordGenerationServiceAbstraction,
+} from "@bitwarden/generator-legacy";
 import {
   ImportApiService,
   ImportApiServiceAbstraction,
@@ -216,7 +223,6 @@ export class ServiceContainer {
   folderApiService: FolderApiService;
   userVerificationApiService: UserVerificationApiService;
   organizationApiService: OrganizationApiServiceAbstraction;
-  syncNotifierService: SyncNotifierService;
   sendApiService: SendApiService;
   devicesApiService: DevicesApiServiceAbstraction;
   deviceTrustService: DeviceTrustServiceAbstraction;
@@ -237,6 +243,7 @@ export class ServiceContainer {
   providerApiService: ProviderApiServiceAbstraction;
   userAutoUnlockKeyService: UserAutoUnlockKeyService;
   kdfConfigService: KdfConfigServiceAbstraction;
+  taskSchedulerService: TaskSchedulerService;
 
   constructor() {
     let p = null;
@@ -440,8 +447,6 @@ export class ServiceContainer {
       customUserAgent,
     );
 
-    this.syncNotifierService = new SyncNotifierService();
-
     this.organizationApiService = new OrganizationApiService(this.apiService, this.syncService);
 
     this.containerService = new ContainerService(this.cryptoService, this.encryptService);
@@ -543,6 +548,7 @@ export class ServiceContainer {
       this.stateProvider,
     );
 
+    this.taskSchedulerService = new DefaultTaskSchedulerService(this.logService);
     this.loginStrategyService = new LoginStrategyService(
       this.accountService,
       this.masterPasswordService,
@@ -568,6 +574,7 @@ export class ServiceContainer {
       this.billingAccountProfileStateService,
       this.vaultTimeoutSettingsService,
       this.kdfConfigService,
+      this.taskSchedulerService,
     );
 
     this.authService = new AuthService(
@@ -586,6 +593,7 @@ export class ServiceContainer {
       this.environmentService,
       this.logService,
       this.stateProvider,
+      this.authService,
     );
 
     this.cipherService = new CipherService(
@@ -615,7 +623,6 @@ export class ServiceContainer {
       await this.cryptoService.clearStoredUserKey(KeySuffixOptions.Auto);
 
     this.userVerificationService = new UserVerificationService(
-      this.stateService,
       this.cryptoService,
       this.accountService,
       this.masterPasswordService,
@@ -642,13 +649,15 @@ export class ServiceContainer {
       this.authService,
       this.vaultTimeoutSettingsService,
       this.stateEventRunnerService,
+      this.taskSchedulerService,
+      this.logService,
       lockedCallback,
       null,
     );
 
     this.avatarService = new AvatarService(this.apiService, this.stateProvider);
 
-    this.syncService = new SyncService(
+    this.syncService = new DefaultSyncService(
       this.masterPasswordService,
       this.accountService,
       this.apiService,
@@ -724,6 +733,7 @@ export class ServiceContainer {
       this.stateProvider,
       this.logService,
       this.authService,
+      this.taskSchedulerService,
     );
 
     this.eventCollectionService = new EventCollectionService(
@@ -732,6 +742,7 @@ export class ServiceContainer {
       this.organizationService,
       this.eventUploadService,
       this.authService,
+      this.accountService,
     );
 
     this.providerApiService = new ProviderApiService(this.apiService);
@@ -755,6 +766,7 @@ export class ServiceContainer {
 
     await this.stateService.clean();
     await this.accountService.clean(userId);
+    await this.accountService.switchAccount(null);
     process.env.BW_SESSION = null;
   }
 

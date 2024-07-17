@@ -1,4 +1,6 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { DIALOG_DATA, DialogConfig, DialogRef } from "@angular/cdk/dialog";
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from "@angular/core";
+import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { firstValueFrom, map } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -38,18 +40,25 @@ export class TwoFactorAuthenticatorComponent
   extends TwoFactorBaseComponent
   implements OnInit, OnDestroy
 {
+  @Output() onChangeStatus = new EventEmitter<boolean>();
   type = TwoFactorProviderType.Authenticator;
   key: string;
-  token: string;
-  formPromise: Promise<TwoFactorAuthenticatorResponse>;
 
   override componentName = "app-two-factor-authenticator";
+  qrScriptError = false;
   private qrScript: HTMLScriptElement;
 
+  formGroup = this.formBuilder.group({
+    token: new FormControl(null, [Validators.required, Validators.minLength(6)]),
+  });
+
   constructor(
+    @Inject(DIALOG_DATA) protected data: AuthResponse<TwoFactorAuthenticatorResponse>,
+    private dialogRef: DialogRef,
     apiService: ApiService,
     i18nService: I18nService,
     userVerificationService: UserVerificationService,
+    private formBuilder: FormBuilder,
     platformUtilsService: PlatformUtilsService,
     logService: LogService,
     private accountService: AccountService,
@@ -68,57 +77,121 @@ export class TwoFactorAuthenticatorComponent
     this.qrScript.async = true;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     window.document.body.appendChild(this.qrScript);
+    await this.auth(this.data);
   }
 
   ngOnDestroy() {
     window.document.body.removeChild(this.qrScript);
   }
 
-  auth(authResponse: AuthResponse<TwoFactorAuthenticatorResponse>) {
+  validateTokenControl() {
+    this.formGroup.controls.token.markAsTouched();
+  }
+
+  async auth(authResponse: AuthResponse<TwoFactorAuthenticatorResponse>) {
     super.auth(authResponse);
     return this.processResponse(authResponse.response);
   }
 
-  submit() {
-    if (this.enabled) {
-      return super.disable(this.formPromise);
-    } else {
-      return this.enable();
+  submit = async () => {
+    if (this.formGroup.invalid && !this.enabled) {
+      return;
     }
-  }
+    if (this.enabled) {
+      await this.disableMethod();
+      this.dialogRef.close(this.enabled);
+    } else {
+      await this.enable();
+    }
+    this.onChangeStatus.emit(this.enabled);
+  };
 
   protected async enable() {
     const request = await this.buildRequestModel(UpdateTwoFactorAuthenticatorRequest);
-    request.token = this.token;
+    request.token = this.formGroup.value.token;
     request.key = this.key;
 
-    return super.enable(async () => {
-      this.formPromise = this.apiService.putTwoFactorAuthenticator(request);
-      const response = await this.formPromise;
-      await this.processResponse(response);
-    });
+    const response = await this.apiService.putTwoFactorAuthenticator(request);
+    await this.processResponse(response);
+    this.onUpdated.emit(true);
   }
 
   private async processResponse(response: TwoFactorAuthenticatorResponse) {
-    this.token = null;
+    this.formGroup.get("token").setValue(null);
     this.enabled = response.enabled;
     this.key = response.key;
+
+    await this.waitForQRiousToLoadOrError().catch((error) => {
+      this.logService.error(error);
+      this.qrScriptError = true;
+    });
+
+    await this.createQRCode();
+  }
+
+  private async waitForQRiousToLoadOrError(): Promise<void> {
+    // Check if QRious is already loaded or if there was an error loading it either way don't wait for it to try and load again
+    if (typeof window.QRious !== "undefined" || this.qrScriptError) {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+      this.qrScript.onload = () => resolve();
+      this.qrScript.onerror = () =>
+        reject(new Error(this.i18nService.t("twoStepAuthenticatorQRCanvasError")));
+    });
+  }
+
+  private async createQRCode() {
+    if (this.qrScriptError) {
+      return;
+    }
     const email = await firstValueFrom(
       this.accountService.activeAccount$.pipe(map((a) => a?.email)),
     );
-    window.setTimeout(() => {
-      new window.QRious({
-        element: document.getElementById("qr"),
-        value:
-          "otpauth://totp/Bitwarden:" +
-          Utils.encodeRFC3986URIComponent(email) +
-          "?secret=" +
-          encodeURIComponent(this.key) +
-          "&issuer=Bitwarden",
-        size: 160,
-      });
-    }, 100);
+    new window.QRious({
+      element: document.getElementById("qr"),
+      value:
+        "otpauth://totp/Bitwarden:" +
+        Utils.encodeRFC3986URIComponent(email) +
+        "?secret=" +
+        encodeURIComponent(this.key) +
+        "&issuer=Bitwarden",
+      size: 160,
+    });
+  }
+
+  static open(
+    dialogService: DialogService,
+    config: DialogConfig<AuthResponse<TwoFactorAuthenticatorResponse>>,
+  ) {
+    return dialogService.open<boolean>(TwoFactorAuthenticatorComponent, config);
+  }
+
+  async launchExternalUrl(url: string) {
+    const hostname = new URL(url).hostname;
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: this.i18nService.t("continueToExternalUrlTitle", hostname),
+      content: this.i18nService.t("continueToExternalUrlDesc"),
+      type: "info",
+      acceptButtonText: { key: "continue" },
+    });
+    if (confirmed) {
+      this.platformUtilsService.launchUri(url);
+    }
+  }
+
+  async launchBitwardenUrl(url: string) {
+    const confirmed = await this.dialogService.openSimpleDialog({
+      title: this.i18nService.t("twoStepContinueToBitwardenUrlTitle"),
+      content: this.i18nService.t("twoStepContinueToBitwardenUrlDesc"),
+      type: "info",
+      acceptButtonText: { key: "continue" },
+    });
+    if (confirmed) {
+      this.platformUtilsService.launchUri(url);
+    }
   }
 }

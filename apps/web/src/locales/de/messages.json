@@ -173,6 +173,10 @@
     "message": "Kein Ordner",
     "description": "This is the folder for uncategorized items"
   },
+  "selfOwnershipLabel": {
+    "message": "Du",
+    "description": "Used as a label to indicate that the user is the owner of an item."
+  },
   "addFolder": {
     "message": "Ordner hinzufügen"
   },
@@ -401,6 +405,21 @@
   "item": {
     "message": "Eintrag"
   },
+  "itemDetails": {
+    "message": "Eintrag-Details"
+  },
+  "itemName": {
+    "message": "Eintrags-Name"
+  },
+  "cannotRemoveViewOnlyCollections": {
+    "message": "Du kannst Sammlungen mit Leseberechtigung nicht entfernen: $COLLECTIONS$",
+    "placeholders": {
+      "collections": {
+        "content": "$1",
+        "example": "Work, Personal"
+      }
+    }
+  },
   "ex": {
     "message": "Bsp.",
     "description": "Short abbreviation for 'example'."
@@ -582,10 +601,13 @@
     "message": "Zugriffsebene"
   },
   "accessing": {
-    "message": "Accessing"
+    "message": "Zugriff auf"
   },
   "loggedOut": {
     "message": "Ausgeloggt"
+  },
+  "loggedOutDesc": {
+    "message": "Du wurdest von deinem Konto abgemeldet."
   },
   "loginExpired": {
     "message": "Ihre Anmeldungsitzung ist abgelaufen."
@@ -710,6 +732,12 @@
   "createAccount": {
     "message": "Konto erstellen"
   },
+  "setAStrongPassword": {
+    "message": "Lege ein starkes Passwort fest"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Schließe die Erstellung deines Kontos ab, indem du ein Passwort festlegst"
+  },
   "newAroundHere": {
     "message": "Neu hier?"
   },
@@ -718,6 +746,9 @@
   },
   "logIn": {
     "message": "Anmelden"
+  },
+  "verifyIdentity": {
+    "message": "Verifiziere deine Identität"
   },
   "logInInitiated": {
     "message": "Anmeldung eingeleitet"
@@ -754,6 +785,19 @@
   },
   "masterPassHintLabel": {
     "message": "Master-Passwort-Hinweis"
+  },
+  "masterPassHintText": {
+    "message": "Wenn du dein Passwort vergessen hast, kann der Passwort-Hinweis an deine E-Mail-Adresse gesendet werden. Maximal $CURRENT$/$MAXIMUM$ Zeichen.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Einstellungen"
@@ -810,8 +854,8 @@
   "emailAddress": {
     "message": "E-Mail-Adresse"
   },
-  "yourVaultIsLocked": {
-    "message": "Dein Tresor ist gesperrt. Überprüfe dein Master-Passwort, um fortzufahren."
+  "yourVaultIsLockedV2": {
+    "message": "Dein Tresor ist gesperrt."
   },
   "uuid": {
     "message": "UUID"
@@ -937,18 +981,18 @@
   "authenticatorAppTitle": {
     "message": "Authenticator App"
   },
-  "authenticatorAppDesc": {
-    "message": "Verwenden Sie eine Authentifizierungs-App (wie zum Beispiel Authy oder Google Authenticator), um zeitbasierte Verifizierungscodes zu generieren.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Gib einen Code ein, der von einer Authentifizierungs-App wie dem Bitwarden Authenticator generiert wurde.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "YubiKey OTP Sicherheitsschlüssel"
+  "yubiKeyTitleV2": {
+    "message": "Yubico OTP-Sicherheitsschlüssel"
   },
   "yubiKeyDesc": {
-    "message": "Verwende einen YubiKey, um auf dein Konto zuzugreifen. Funtioniert mit YubiKey 4 Serie, 5 Serie und NEO Geräten."
+    "message": "Verwende einen YubiKey 4, 5 oder NEO."
   },
-  "duoDesc": {
-    "message": "Verifizieren Sie mit Duo Security, indem Sie die Duo Mobile App, SMS, Anrufe oder U2F Sicherheitsschlüssel benutzen.",
+  "duoDescV2": {
+    "message": "Gib einen von Duo Security generierten Code ein.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -962,10 +1006,10 @@
     "message": "FIDO U2F-Sicherheitsschlüssel"
   },
   "webAuthnTitle": {
-    "message": "FIDO2 WebAuthn"
+    "message": "Passkey"
   },
   "webAuthnDesc": {
-    "message": "Benutze einen WebAuthn-kompatiblen Sicherheitsschlüssel, um auf dein Konto zuzugreifen."
+    "message": "Verwende die Biometrie deines Gerätes oder einen FIDO2-kompatiblen Sicherheitsschlüssel."
   },
   "webAuthnMigrated": {
     "message": "(Von FIDO migriert)"
@@ -973,8 +1017,8 @@
   "emailTitle": {
     "message": "E-Mail"
   },
-  "emailDesc": {
-    "message": "Bestätigungscodes werden Ihnen per E-Mail zugesandt."
+  "emailDescV2": {
+    "message": "Gib einen an deine E-Mail-Adresse gesendeten Code ein."
   },
   "continue": {
     "message": "Fortsetzen"
@@ -1016,7 +1060,7 @@
     "message": "Bist du sicher, dass du fortfahren möchtest?"
   },
   "moveSelectedItemsDesc": {
-    "message": "Wählen Sie einen Ordner aus, in den Sie $COUNT$ ausgewählte(s) Objekt(e) verschieben möchten.",
+    "message": "Choose a folder that you would like to add the $COUNT$ selected item(s) to.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1049,6 +1093,12 @@
   },
   "copyUuid": {
     "message": "UUID kopieren"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Zugangs-Token Aktualisierungsfehler"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Kein Aktualisierungs-Token oder API-Schlüssel gefunden. Bitte versuche dich ab- und wieder anzumelden."
   },
   "warning": {
     "message": "Warnung"
@@ -1608,35 +1658,47 @@
   "twoStepLoginAuthDesc": {
     "message": "Geben Sie Ihr Master-Passwort ein, um die Zwei-Faktor-Anmeldeeinstellungen zu ändern."
   },
-  "twoStepAuthenticatorDesc": {
-    "message": "Führen Sie diese Schritte aus, um eine Zwei-Faktor-Anmeldung mit einer Authentifizierungs-App einzurichten:"
+  "twoStepAuthenticatorInstructionPrefix": {
+    "message": "Lade eine Authentifizierungs-App herunter, wie z.B."
   },
-  "twoStepAuthenticatorDownloadApp": {
-    "message": "Laden Sie sich eine Zwei-Faktor-Authentifizierungs-App herunter"
+  "twoStepAuthenticatorInstructionInfix1": {
+    "message": ","
   },
-  "twoStepAuthenticatorNeedApp": {
-    "message": "Brauchen Sie eine Zwei-Faktor-Authentifizierungs-App? Laden Sie eine der folgenden Apps herunter"
+  "twoStepAuthenticatorInstructionInfix2": {
+    "message": "oder"
   },
-  "iosDevices": {
-    "message": "iOS-Gerät"
+  "twoStepAuthenticatorInstructionSuffix": {
+    "message": "."
   },
-  "androidDevices": {
-    "message": "Android-Gerät"
+  "continueToExternalUrlTitle": {
+    "message": "Weiter zu $URL$?",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
   },
-  "windowsDevices": {
-    "message": "Windows-Gerät"
+  "continueToExternalUrlDesc": {
+    "message": "Du verlässt Bitwarden und öffnest eine externe Website in einem neuen Fenster."
   },
-  "twoStepAuthenticatorAppsRecommended": {
-    "message": "Diese Apps sind Empfehlungen. Andere Authentifizierungs-Apps funktionieren allerdings auch."
+  "twoStepContinueToBitwardenUrlTitle": {
+    "message": "Weiter zu bitwarden.com?"
   },
-  "twoStepAuthenticatorScanCode": {
-    "message": "Scannen Sie diesen QR-Code mit Ihrer Authentifizierungs-App"
+  "twoStepContinueToBitwardenUrlDesc": {
+    "message": "Mit dem Bitwarden Authenticator kannst du Authentifizierungsschlüssel speichern und TOTP-Codes für Zwei-Faktor-Authentifizierungsprozesse generieren. Erfahre mehr auf der bitwarden.com Website."
+  },
+  "twoStepAuthenticatorScanCodeV2": {
+    "message": "Scanne den QR-Code unten mit deiner Authentifizierungs-App oder gib den Schlüssel ein."
+  },
+  "twoStepAuthenticatorQRCanvasError": {
+    "message": "QR-Code konnte nicht geladen werden. Versuche es erneut oder verwende den Schlüssel unten."
   },
   "key": {
     "message": "Schlüssel"
   },
-  "twoStepAuthenticatorEnterCode": {
-    "message": "Geben Sie den 6-stelligen Bestätigungs-Code aus der App ein"
+  "twoStepAuthenticatorEnterCodeV2": {
+    "message": "Verifizierungscode"
   },
   "twoStepAuthenticatorReaddDesc": {
     "message": "Falls Sie es zu einem anderen Gerät hinzufügen müssen, finden Sie unten den QR-Code (oder Schlüssel), der von Ihrer Authentifizierungs-App benötigt wird."
@@ -2755,9 +2817,6 @@
   "invited": {
     "message": "Eingeladen"
   },
-  "accepted": {
-    "message": "Akzeptiert"
-  },
   "confirmed": {
     "message": "Bestätigt"
   },
@@ -2784,12 +2843,6 @@
   },
   "userDesc": {
     "message": "Kann auf Einträge zugewiesener Sammlungen zugreifen und neue hinzufügen"
-  },
-  "manager": {
-    "message": "Manager"
-  },
-  "managerDesc": {
-    "message": "Kann Einträge in zugewiesenen Sammlungen erstellen, löschen und Zugriff darauf verwalten"
   },
   "all": {
     "message": "Alle"
@@ -3349,6 +3402,9 @@
   "emailVerified": {
     "message": "Deine Konto-E-Mail-Adresse wurde verifiziert"
   },
+  "emailVerifiedV2": {
+    "message": "E-Mail-Adresse verifiziert"
+  },
   "emailVerifiedFailed": {
     "message": "Ihre E-Mail kann nicht verifiziert werden. Versuchen Sie eine neue Bestätigungs-E-Mail zu senden."
   },
@@ -3655,6 +3711,15 @@
       }
     }
   },
+  "subscriptionSeatMaxReached": {
+    "message": "Du kannst nicht mehr als $COUNT$ Mitglieder einladen, ohne deine Benutzerplätze zu erhöhen.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
   "seatsToAdd": {
     "message": "Plätze, die hinzugefügt werden sollen"
   },
@@ -3717,6 +3782,21 @@
   },
   "nothingSelected": {
     "message": "Sie haben keine Auswahl getroffen."
+  },
+  "receiveMarketingEmails": {
+    "message": "Erhalte E-Mails von Bitwarden für Ankündigungen, Ratschläge und Forschungsmöglichkeiten."
+  },
+  "unsubscribe": {
+    "message": "Deabonnieren"
+  },
+  "atAnyTime": {
+    "message": "jederzeit."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Indem du fortfährst, stimmst du den"
+  },
+  "and": {
+    "message": "und"
   },
   "acceptPolicies": {
     "message": "Durch Anwählen dieses Kästchens erklärst du dich mit Folgendem einverstanden:"
@@ -4110,6 +4190,9 @@
   },
   "thisWindowWillCloseIn5Seconds": {
     "message": "Dieses Fenster wird sich in 5 Sekunden automatisch schließen."
+  },
+  "youMayCloseThisWindow": {
+    "message": "Du kannst dieses Fenster schließen"
   },
   "includeAllTeamsFeatures": {
     "message": "Alle Teams-Funktionen, plus:"
@@ -4567,12 +4650,6 @@
   "permission": {
     "message": "Berechtigung"
   },
-  "managerPermissions": {
-    "message": "Manager-Berechtigungen"
-  },
-  "adminPermissions": {
-    "message": "Administrator-Berechtigungen"
-  },
   "accessEventLogs": {
     "message": "Zugriff auf Ereignisprotokolle"
   },
@@ -4596,9 +4673,6 @@
   },
   "deleteAnyCollection": {
     "message": "Jede Sammlung löschen"
-  },
-  "manageAssignedCollections": {
-    "message": "Zugewiesene Sammlungen verwalten"
   },
   "editAssignedCollections": {
     "message": "Zugewiesene Sammlungen bearbeiten"
@@ -5585,6 +5659,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Durch Erneuerung des Rechnungssynchronisierungs-Token wird der vorherige Token ungültig."
+  },
+  "selfHostedServer": {
+    "message": "selbst gehostet"
+  },
+  "customEnvironment": {
+    "message": "Benutzerdefinierte Umgebung"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Gib die Basis-URL deiner vor Ort gehosteten Bitwarden-Installation an. Beispiel: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Für eine erweiterte Konfiguration kannst du die Basis-URL jedes Dienstes unabhängig voneinander angeben."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Du musst entweder die Basis-Server-URL oder mindestens eine benutzerdefinierte Umgebung hinzufügen."
+  },
+  "apiUrl": {
+    "message": "API Server-URL"
+  },
+  "webVaultUrl": {
+    "message": "URL des Web-Tresor-Servers"
+  },
+  "identityUrl": {
+    "message": "URL des Identitätsservers"
+  },
+  "notificationsUrl": {
+    "message": "URL des Benachrichtigungsservers"
+  },
+  "iconsUrl": {
+    "message": "URL des Icons-Servers"
+  },
+  "environmentSaved": {
+    "message": "URLs der Umgebung gespeichert"
   },
   "selfHostingTitle": {
     "message": "Selbst gehostet"
@@ -6627,12 +6734,6 @@
   "restrictedCollectionAssignmentDesc": {
     "message": "Du kannst nur von dir verwaltete Sammlungen zuweisen."
   },
-  "accessAllCollectionsDesc": {
-    "message": "Gewähre Zugriff auf alle aktuellen und zukünftigen Sammlungen."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "Wenn aktiviert, ersetzt dies alle anderen Sammlungsberechtigungen."
-  },
   "selectMembers": {
     "message": "Mitglieder auswählen"
   },
@@ -6674,12 +6775,6 @@
   },
   "group": {
     "message": "Gruppe"
-  },
-  "groupAccessAll": {
-    "message": "Diese Gruppe darf auf alle Einträge zugreifen und diese ändern."
-  },
-  "memberAccessAll": {
-    "message": "Dieses Mitglied darf auf alle Einträge zugreifen und diese ändern."
   },
   "domainVerification": {
     "message": "Domain-Verifizierung"
@@ -7616,6 +7711,9 @@
   "alreadyHaveAccount": {
     "message": "Hast du bereits ein Konto?"
   },
+  "toggleSideNavigation": {
+    "message": "Seitennavigation umschalten"
+  },
   "skipToContent": {
     "message": "Zum Inhalt wechseln"
   },
@@ -8063,23 +8161,6 @@
   "restrictedGroupAccessDesc": {
     "message": "Du kannst dich nicht selbst zu einer Gruppe hinzufügen."
   },
-  "unassignedItemsBannerSelfHost": {
-    "message": "Hinweis: Ab dem 2. Mai 2024 werden nicht zugewiesene Organisationseinträge nicht mehr geräteübergreifend in der Ansicht aller Tresore sichtbar sein und sind nur über die Administrator-Konsole zugänglich. Weise diese Elemente einer Sammlung aus der Administrator-Konsole zu, um sie sichtbar zu machen."
-  },
-  "unassignedItemsBannerNotice": {
-    "message": "Hinweis: Nicht zugewiesene Organisationseinträge sind nicht mehr geräteübergreifend in der Ansicht aller Tresore sichtbar und nun nur über die Administrator-Konsole zugänglich."
-  },
-  "unassignedItemsBannerSelfHostNotice": {
-    "message": "Hinweis: Ab dem 16. Mai 2024 werden nicht zugewiesene Organisationseinträge nicht mehr geräteübergreifend in der Ansicht aller Tresore sichtbar sein und nur über die Administrator-Konsole zugänglich."
-  },
-  "unassignedItemsBannerCTAPartOne": {
-    "message": "Weise diese Einträge einer Sammlung aus der",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
-  "unassignedItemsBannerCTAPartTwo": {
-    "message": "zu, um sie sichtbar zu machen.",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
   "deleteProvider": {
     "message": "Anbieter löschen"
   },
@@ -8141,11 +8222,17 @@
   "setUpGithubActions": {
     "message": "GitHub Actions einrichten"
   },
+  "setUpKubernetes": {
+    "message": "Kubernetes einrichten"
+  },
   "setUpGitlabCICD": {
     "message": "GitLab CI/CD einrichten"
   },
   "setUpAnsible": {
     "message": "Ansible einrichten"
+  },
+  "rustSDKRepo": {
+    "message": "Rust-Repository anzeigen"
   },
   "cSharpSDKRepo": {
     "message": "C#-Repository anzeigen"
@@ -8297,5 +8384,179 @@
   },
   "allLoginRequestsApproved": {
     "message": "Alle Anmeldeanfragen genehmigt"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Steuerinformationen aktualisiert"
+  },
+  "unverified": {
+    "message": "Nicht verifiziert"
+  },
+  "verified": {
+    "message": "Verifiziert"
+  },
+  "viewSecret": {
+    "message": "Geheimnis anzeigen"
+  },
+  "noClients": {
+    "message": "There are no clients to list"
+  },
+  "providerBillingEmailHint": {
+    "message": "Diese E-Mail-Adresse wird alle Rechnungen erhalten, die diesen Anbieter betreffen",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
+  },
+  "upgradeOrganizationEnterprise": {
+    "message": "Sicherheitsrisiken durch Kontrolle des Mitgliederzugriffs identifizieren"
+  },
+  "onlyAvailableForEnterpriseOrganization": {
+    "message": "Mitgliederzugriffe schnell innerhalb der Organisation anzeigen durch ein Upgrade auf einen Enterprise-Tarif."
+  },
+  "date": {
+    "message": "Datum"
+  },
+  "exportClientReport": {
+    "message": "Kundenbericht exportieren"
+  },
+  "memberAccessReport": {
+    "message": "Mitgliederzugriff"
+  },
+  "memberAccessReportDesc": {
+    "message": "Stelle sicher, dass Mitglieder Zugriff auf die richtigen Zugangsdaten haben und ihre Konten sicher sind. Benutze diesen Bericht, um eine CSV-Datei mit Mitgliederzugriffen und Kontokonfigurationen zu erhalten."
+  },
+  "memberAccessReportPageDesc": {
+    "message": "Kontrolliere den Zugriff von Organisationsmitgliedern auf Gruppen, Sammlungen und Sammlungseinträgen. Der CSV-Export bietet eine detaillierte Aufschlüsselung pro Mitglied, einschließlich Informationen über Sammlungsberechtigungen und Kontenkonfigurationen."
+  },
+  "higherKDFIterations": {
+    "message": "Höhere KDF-Iterationen können helfen, dein Master-Passwort vor Brute-Force-Attacken durch einen Angreifer zu schützen."
+  },
+  "incrementsOf100,000": {
+    "message": "Schritten von 100.000"
+  },
+  "smallIncrements": {
+    "message": "kleinen Schritten"
+  },
+  "kdfIterationRecommends": {
+    "message": "Wir empfehlen 600.000 oder mehr"
+  },
+  "kdfToHighWarningIncreaseInIncrements": {
+    "message": "Auf älteren Geräten kann es durch zu hohe KDF-Iterationen zu Leistungsproblemen kommen. Erhöhe den Wert in $VALUE$ und teste es auf deinen Geräten.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "increments of 100,000"
+      }
+    }
+  },
+  "providerReinstate": {
+    "message": " Kontaktiere den Kundensupport, um dein Abonnement wiederherzustellen."
+  },
+  "secretPeopleDescription": {
+    "message": "Gewähre Gruppen oder Personen Zugriff auf dieses Geheimnis. Festgelegte Berechtigungen für Personen überschreiben die festgelegten Gruppen-Berechtigungen."
+  },
+  "secretPeopleEmptyMessage": {
+    "message": "Personen oder Gruppen hinzufügen, um den Zugriff auf dieses Geheimnis zu teilen"
+  },
+  "secretMachineAccountsDescription": {
+    "message": "Gewähre Gerätekonten Zugriff auf dieses Geheimnis."
+  },
+  "secretMachineAccountsEmptyMessage": {
+    "message": "Gerätekonten hinzufügen, um Zugriff auf dieses Geheimnis zu gewähren"
+  },
+  "smAccessRemovalWarningSecretTitle": {
+    "message": "Zugriff auf dieses Geheimnis entziehen"
+  },
+  "smAccessRemovalSecretMessage": {
+    "message": "Diese Aktion wird deinen Zugriff auf dieses Geheimnis entziehen."
+  },
+  "invoice": {
+    "message": "Rechnung"
+  },
+  "unassignedSeatsAvailable": {
+    "message": "Du hast $SEATS$ nicht zugewiesene Benutzerplätze zur Verfügung.",
+    "placeholders": {
+      "seats": {
+        "content": "$1",
+        "example": "10"
+      }
+    },
+    "description": "A message showing how many unassigned seats are available for a provider."
+  },
+  "contactYourProviderForAdditionalSeats": {
+    "message": "Kontaktiere deinen Anbieter-Administrator, um zusätzliche Benutzerplätze zu kaufen."
+  },
+  "open": {
+    "message": "Offen",
+    "description": "The status of an invoice."
+  },
+  "uncollectible": {
+    "message": "Uneinbringlich",
+    "description": "The status of an invoice."
+  },
+  "clientDetails": {
+    "message": "Client details"
+  },
+  "downloadCSV": {
+    "message": "CSV-Datei herunterladen"
+  },
+  "monthlySubscriptionUserSeatsMessage": {
+    "message": "Anpassungen an deinem Abonnement führen zu einer anteiligen Erhöhung deines Rechnungsbetrags im nächsten Abrechnungszeitraum. "
+  },
+  "annualSubscriptionUserSeatsMessage": {
+    "message": "Anpassungen an deinem Abonnement führen zu einer anteiligen Erhöhung in deinem monatlichen Abrechnungszeitraum. "
+  },
+  "billingHistoryDescription": {
+    "message": "Lade eine CSV-Datei herunter, um Kundendetails für jedes Rechnungsdatum zu erhalten. Anteilige Kosten sind nicht in der CSV-Datei enthalten und können von der zugehörigen Rechnung abweichen. Detaillierte Angaben zur Rechnungsstellung findest du in deinen monatlichen Abrechnungen.",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "noInvoicesToList": {
+    "message": "Es gibt keine Rechnungen zum Anzeigen",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "providerClientVaultPrivacyNotification": {
+    "message": "Hinweis: Später in diesem Monat wird die Kundentresor-Sicherheit verbessert und Mitglieder eines Anbieters haben dann keinen direkten Zugriff mehr auf Einträge des Kundentresors. Bei Fragen",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'."
+  },
+  "contactBitwardenSupport": {
+    "message": "kontaktiere den Bitwarden Support.",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'. 'Bitwarden' should not be translated"
+  },
+  "sponsored": {
+    "message": "Gesponsert"
+  },
+  "licenseAndBillingManagementDesc": {
+    "message": "Lade nach der Durchführung von Aktualisierungen im Bitwarden Cloud Server deine Lizenzdatei hoch, um die neuesten Änderungen anzuwenden."
+  },
+  "addToFolder": {
+    "message": "Zu Ordner hinzufügen"
+  },
+  "selectFolder": {
+    "message": "Ordner auswählen"
+  },
+  "personalItemsTransferWarning": {
+    "message": "$PERSONAL_ITEMS_COUNT$ werden dauerhaft an die ausgewählte Organisation übertragen. Du wirst diese Einträge nicht mehr besitzen.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2 items"
+      }
+    }
+  },
+  "personalItemsWithOrgTransferWarning": {
+    "message": "$PERSONAL_ITEMS_COUNT$ werden dauerhaft an $ORG$ übertragen. Du wirst diese Einträge nicht mehr besitzen.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2 items"
+      },
+      "org": {
+        "content": "$2",
+        "example": "Organization name"
+      }
+    }
   }
 }
