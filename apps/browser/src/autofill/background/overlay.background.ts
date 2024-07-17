@@ -59,7 +59,14 @@ import {
   SubFrameOffsetData,
   SubFrameOffsetsForTab,
   ToggleInlineMenuHiddenMessage,
+  InlineMenuCipherDataContact,
 } from "./abstractions/overlay.background";
+
+/* start Cozy imports */
+/* eslint-disable */
+import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
+/* eslint-enable */
+/* end Cozy imports */
 
 export class OverlayBackground implements OverlayBackgroundInterface {
   private readonly openUnlockPopout = openUnlockPopout;
@@ -488,19 +495,25 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   private getContactCipherData(
     cipher: CipherView,
     showLoginAccountCreation: boolean,
-  ): { fullName: string; username?: string } {
+  ): InlineMenuCipherDataContact {
+    const me = Boolean(cipher.contact.me);
     const fullName = cipher.contact.displayName;
+    const initials = cipher.contact.initials;
+    const initialsColor = nameToColor(initials);
 
     if (
       !showLoginAccountCreation ||
       !this.focusedFieldData?.accountCreationFieldType ||
       this.focusedFieldData.accountCreationFieldType === "password"
     ) {
-      return { fullName };
+      return { fullName, me, initials, initialsColor };
     }
 
     return {
       fullName,
+      me,
+      initials,
+      initialsColor,
       username: cipher.contact.primaryEmail,
     };
   }
@@ -1356,6 +1369,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         newIdentity: this.i18nService.translate("newIdentity"),
         addNewIdentityItem: this.i18nService.translate("addNewIdentityItem"),
         cardNumberEndsWith: this.i18nService.translate("cardNumberEndsWith"),
+        cipherContactMe: this.i18nService.translate("cipherContactMe"),
       };
     }
 

@@ -163,10 +163,25 @@ body {
   }
 }
 
+// Cozy customization; hide border in icon part
+.inline-menu-list-actions-item:before {
+  content: "";
+  position: absolute;
+  bottom: -0.1rem;
+  left: 0;
+  width: calc(3.2rem + 2rem);
+  height: 0.1rem;
+  @include themify($themes) {
+    background-color: themed("backgroundColor");
+  }
+}
+// Cozy customization end
+
 .inline-menu-list-actions-item {
   transition: background-color 0.2s ease-in-out;
   list-style: none;
   padding: 0.2rem;
+  position: relative; // Cozy customization; hide border in icon part
 
   &:not(:last-child) {
     border-bottom-width: 0.1rem;
@@ -309,7 +324,12 @@ body {
     display: block;
     width: 100%;
     line-height: 1.5;
+    // Cozy customization, replace font-family
+    //*
+    font-family: $font-family-lato;
+    /*/
     font-family: $font-family-sans-serif;
+    //*/
     font-weight: 400;
     text-overflow: ellipsis;
     white-space: nowrap;

@@ -3970,5 +3970,8 @@
   },
   "addAccount": {
     "message": "Add account"
+  },
+  "cipherContactMe": {
+    "message": "moi"
   }
 }
