@@ -569,6 +569,17 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     cipherIcon.classList.add("cipher-icon");
     cipherIcon.setAttribute("aria-hidden", "true");
 
+    // Cozy customization; add contact initials to autofill
+    if (cipher.contact) {
+      cipherIcon.style.backgroundColor = cipher.contact.initialsColor;
+      cipherIcon.style.padding = "8px";
+      cipherIcon.style.borderRadius = "50%";
+      cipherIcon.style.color = "white";
+      cipherIcon.textContent = cipher.contact.initials;
+      return cipherIcon;
+    }
+    // Cozy customization end
+
     if (cipher.icon?.image) {
       try {
         const url = new URL(cipher.icon.image);
@@ -632,7 +643,18 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     const cipherNameElement = globalThis.document.createElement("span");
     cipherNameElement.classList.add("cipher-name");
+
+    // Cozy customization, replace text of cipher name with contact name if available
+    //*
+    cipherNameElement.textContent = cipher.contact
+      ? cipher.contact.me
+        ? `${cipher.contact.fullName} (${this.getTranslation("cipherContactMe")})`
+        : cipher.contact.fullName
+      : cipher.name;
+    /*/
     cipherNameElement.textContent = cipher.name;
+    //*/
+
     cipherNameElement.setAttribute("title", cipher.name);
 
     return cipherNameElement;

@@ -145,12 +145,19 @@ export type InlineMenuCipherData = {
     username?: string;
   };
   // Cozy customization; add contact to autofill
-  contact?: {
-    fullName: string;
-    username?: string;
-  };
+  contact?: InlineMenuCipherDataContact;
   // Cozy customization end
 };
+
+// Cozy customization; add contact to autofill
+export type InlineMenuCipherDataContact = {
+  fullName: string;
+  me: boolean;
+  initials: string;
+  initialsColor: string;
+  username?: string;
+};
+// Cozy customization end
 
 export type BackgroundMessageParam = {
   message: OverlayBackgroundExtensionMessage;
