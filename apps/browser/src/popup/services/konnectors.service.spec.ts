@@ -61,8 +61,8 @@ export class TestStorageService implements StorageService {
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 /* @ts-ignore */
-export class TestStateService implements StateService {
-  async getDefaultUriMatch(): Promise<any> {
+export class TestAutofillService implements StateService {
+  async getDefaultUriMatchStrategy(): Promise<any> {
     return new Promise((resolve) => resolve(null));
   }
 }
@@ -70,18 +70,16 @@ export class TestStateService implements StateService {
 describe("Konnectors Service", () => {
   const settingsService: any = {
     settings$: of([]),
-    getEquivalentDomains: () => {
-      return Promise.resolve([]);
-    },
+    equivalentDomains$: of([]),
   };
   const konnectorsService = new KonnectorsService(
     null,
     settingsService,
     null,
+    null,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     /* @ts-ignore */
-    new TestStateService(),
-    null,
+    new TestAutofillService(),
   );
 
   it("should suggest konnectors by full url match", async () => {

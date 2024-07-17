@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 // Most of this file will be imported from cozy-client soon
 
 const gender = [

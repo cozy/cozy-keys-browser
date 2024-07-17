@@ -9,7 +9,7 @@ import { Organization } from "@bitwarden/common/admin-console/models/domain/orga
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 
-import { RouterService } from "../../../../../../../../clients/apps/web/src/app/core/router.service";
+import { RouterService } from "../../../../../../../apps/web/src/app/core/router.service";
 import { ServiceAccountView } from "../../models/view/service-account.view";
 import { ServiceAccountService } from "../service-account.service";
 
