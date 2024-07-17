@@ -412,7 +412,7 @@
     "message": "Kohteen nimi"
   },
   "cannotRemoveViewOnlyCollections": {
-    "message": "Et voi poistaa kokoelmia Vain katselu -oikeuksilla: $COLLECTIONS$",
+    "message": "Et voi poistaa kokoelmia, joihin sinulla on vain tarkasteluoikeus: $COLLECTIONS$",
     "placeholders": {
       "collections": {
         "content": "$1",
@@ -854,8 +854,8 @@
   "emailAddress": {
     "message": "Sähköpostiosoite"
   },
-  "yourVaultIsLocked": {
-    "message": "Holvi on lukittu. Jatka vahvistamalla pääsalasanasi."
+  "yourVaultIsLockedV2": {
+    "message": "Holvisi on lukittu"
   },
   "uuid": {
     "message": "UUID"
@@ -1060,7 +1060,7 @@
     "message": "Haluatko varmasti jatkaa?"
   },
   "moveSelectedItemsDesc": {
-    "message": "Valitse kansio, johon haluat siirtää $COUNT$ kohdetta.",
+    "message": "Valitse kansio, johon haluat lisätä $COUNT$ kohteen/kohdetta.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1690,6 +1690,9 @@
   },
   "twoStepAuthenticatorScanCodeV2": {
     "message": "Skannaa alla oleva QR-koodi todennussovelluksellasi tai syötä avain."
+  },
+  "twoStepAuthenticatorQRCanvasError": {
+    "message": "QR-koodin lataus ei onnistunut. Yritä uudelleen tai käytä alla olevaa avainta."
   },
   "key": {
     "message": "Avain"
@@ -3399,6 +3402,9 @@
   "emailVerified": {
     "message": "Tilin sähköpostiosoite on vahvistettu"
   },
+  "emailVerifiedV2": {
+    "message": "Sähköpostiosoite on vahvistettu"
+  },
   "emailVerifiedFailed": {
     "message": "Sähköpostiosoitettasi ei voitu vahvistaa. Yritä lähettää uusi vahvistussähköposti."
   },
@@ -3706,7 +3712,7 @@
     }
   },
   "subscriptionSeatMaxReached": {
-    "message": "You cannot invite more than $COUNT$ members without increasing your subscription seats.",
+    "message": "Voit kutsua enintään $COUNT$ jäsentä korottamatta tilauksesi käyttäjäpaikkojen määrää.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -7877,7 +7883,7 @@
     "message": "Määritä seuraaviin kokoelmiin"
   },
   "bulkCollectionAssignmentDialogDescription": {
-    "message": "Valitse kokoelmat, joihin kohteet sisällytetään. Kun kohdetta muokataan yhdessä kokoelmassa, päivittyy muutos kaikkiin kokoelmiin. Kohteet näkyvät vain niille organisaation jäsenille, joilla on näiden kokoelmien käyttöoikeus."
+    "message": "Vain näiden kokoelmien käyttöoikeuden omaavat organisaation jäsenet voivat nähdä kohteet."
   },
   "selectCollectionsToAssign": {
     "message": "Valitse määritettävät kokoelmat"
@@ -8155,23 +8161,6 @@
   "restrictedGroupAccessDesc": {
     "message": "Et voi lisätä itseäsi ryhmään."
   },
-  "unassignedItemsBannerSelfHost": {
-    "message": "Huomioi: Alkaen 2. toukokuuta 2024, määrittämättömät organisaatiokohteet eivät enää näy laitteidesi \"Kaikki holvit\" -näkymissä, vaan ne ovat käytettävissä vain Hallintapaneelista."
-  },
-  "unassignedItemsBannerNotice": {
-    "message": "Huomioi: Määrittämättömät organisaatiokohteet eivät enää näy laitteidesi \"Kaikki holvit\" -näkymissä, vaan ne ovat käytettävissä vain Hallintapaneelista."
-  },
-  "unassignedItemsBannerSelfHostNotice": {
-    "message": "Huomioi: Alkaen 16. toukokuuta 2024, määrittämättömät organisaatiokohteet eivät enää näy laitteidesi \"Kaikki holvit\" -näkymissä, vaan ne ovat käytettävissä vain Hallintapaneelista."
-  },
-  "unassignedItemsBannerCTAPartOne": {
-    "message": "Määritä nämä kohteet kokoelmaan",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
-  "unassignedItemsBannerCTAPartTwo": {
-    "message": "ista, jotta ne näkyvät.",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
   "deleteProvider": {
     "message": "Poista toimittaja"
   },
@@ -8343,10 +8332,10 @@
     }
   },
   "viewInfo": {
-    "message": "Tarkastele tietoja"
+    "message": "Näytä tiedot"
   },
   "viewAccess": {
-    "message": "Tarkastele oikeuksia"
+    "message": "Näytä oikeudet"
   },
   "noCollectionsSelected": {
     "message": "Et ole valinnut yhtään kokoelmaa."
@@ -8415,7 +8404,7 @@
     "message": "Näytä salaisuus"
   },
   "noClients": {
-    "message": "Näytettäviä päätteitä ei ole"
+    "message": "Näytettäviä asiakkaita ei ole"
   },
   "providerBillingEmailHint": {
     "message": "Tämä sähköpostiosoite vastaanottaa kaikki tätä toimittajaa koskevat laskut",
@@ -8438,6 +8427,9 @@
   },
   "memberAccessReportDesc": {
     "message": "Varmista, että jäsenillä on oikeiden käyttäjätietojen käyttöoikeus ja että heidän tilinsä on suojattu. Tämän raportin avulla saat CSV-tiedoston käyttäjien oikeuksista ja tiliasetuksista."
+  },
+  "memberAccessReportPageDesc": {
+    "message": "Tarkastele organisaation jäsenten käyttöoikeuksia ryhmiin, kokoelmiin ja kokoelmien kohteisiin. CSV-vienti tuottaa yksityiskohtaisen jäsenkohtaisen erittelyn, joka sisältää kokoelmaoikeudet ja tilimääritykset."
   },
   "higherKDFIterations": {
     "message": "Korkeampi KDF-toistojen määrä vahvistaa pääsalasanasi suojausta väsytyshyökkäyksien varalta."
@@ -8512,10 +8504,10 @@
     "message": "Lataa CSV"
   },
   "monthlySubscriptionUserSeatsMessage": {
-    "message": "Adjustments to your subscription will result in prorated charges to your billing totals on your next billing period. "
+    "message": "Tilausmuutoksista aiheutuvat laskutussumman muutokset huomioidaan suhteutetusti seuraavan laskutuskauden veloituksessa."
   },
   "annualSubscriptionUserSeatsMessage": {
-    "message": "Adjustments to your subscription will result in prorated charges on a monthly billing cycle. "
+    "message": "Tilausmuutoksista aiheutuvat laskutussumman muutokset huomioidaan suhteutetusti kuukausilaskutuksen seuraavassa veloituksessa."
   },
   "billingHistoryDescription": {
     "message": "Lataa CSV-tiedosto nähdäksesi jokaisen laskutuspäivän asiakastiedot. Korjattuja veloituksia ei sisällytetä CSV-teidostoon ja ne saattavat poiketa liitetystä laskusta. Tarkimmat laskutustiedot näet kuukausilaskuistasi.",
@@ -8524,5 +8516,47 @@
   "noInvoicesToList": {
     "message": "Näytettäviä laskuja ei ole",
     "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "providerClientVaultPrivacyNotification": {
+    "message": "Huomautus: Asiakasholvien yksityisyyttä parannetaan myöhemmin tässä kuussa, jonka jälkeen toimittajan jäsenillä ei ole enää käyttöoikeutta niiden sisältämiin kohteisiin. Lisätietoja saat",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'."
+  },
+  "contactBitwardenSupport": {
+    "message": "Bitwardenin asiakaspalvelusta.",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'. 'Bitwarden' should not be translated"
+  },
+  "sponsored": {
+    "message": "Sponsoroitu"
+  },
+  "licenseAndBillingManagementDesc": {
+    "message": "Ota uusimmat muutokset käyttöön lataamalla lisenssitiedostosi Bitwardenin pilvipalvelimen muutosten jälkeen."
+  },
+  "addToFolder": {
+    "message": "Lisää kansioon"
+  },
+  "selectFolder": {
+    "message": "Valitse kansio"
+  },
+  "personalItemsTransferWarning": {
+    "message": "$PERSONAL_ITEMS_COUNT$ siirretään pysyvästi valittulle organisaatiolle, etkä enää omista näitä kohteita.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2 items"
+      }
+    }
+  },
+  "personalItemsWithOrgTransferWarning": {
+    "message": "$PERSONAL_ITEMS_COUNT$ siirretään pysyvästi organisaatiolle $ORG$, etkä enää omista näitä kohteita.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2 items"
+      },
+      "org": {
+        "content": "$2",
+        "example": "Organization name"
+      }
+    }
   }
 }

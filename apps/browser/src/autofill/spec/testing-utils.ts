@@ -114,6 +114,13 @@ export function triggerTabOnRemovedEvent(tabId: number, removeInfo: chrome.tabs.
   });
 }
 
+export function triggerOnAlarmEvent(alarm: chrome.alarms.Alarm) {
+  (chrome.alarms.onAlarm.addListener as unknown as jest.SpyInstance).mock.calls.forEach((call) => {
+    const callback = call[0];
+    callback(alarm);
+  });
+}
+
 export function triggerWebNavigationOnCommittedEvent(
   details: chrome.webNavigation.WebNavigationFramedCallbackDetails,
 ) {

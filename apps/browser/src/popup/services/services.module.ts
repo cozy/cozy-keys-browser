@@ -20,18 +20,13 @@ import { JslibServicesModule } from "@bitwarden/angular/services/jslib-services.
 import { PinServiceAbstraction } from "@bitwarden/auth/common";
 import { EventCollectionService as EventCollectionServiceAbstraction } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
-import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { AccountService as AccountServiceAbstraction } from "@bitwarden/common/auth/abstractions/account.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
-import { DeviceTrustServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust.service.abstraction";
-import { DevicesServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices/devices.service.abstraction";
 import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
-import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-connector.service";
 import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
-import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
 import {
   AutofillSettingsService,
@@ -56,6 +51,7 @@ import { FileDownloadService } from "@bitwarden/common/platform/abstractions/fil
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { KeyGenerationService } from "@bitwarden/common/platform/abstractions/key-generation.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { MessagingService as MessagingServiceAbstraction } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import {
@@ -66,6 +62,7 @@ import { BiometricStateService } from "@bitwarden/common/platform/biometrics/bio
 import { Message, MessageListener, MessageSender } from "@bitwarden/common/platform/messaging";
 // eslint-disable-next-line no-restricted-imports -- Used for dependency injection
 import { SubjectMessageSender } from "@bitwarden/common/platform/messaging/internal";
+import { TaskSchedulerService } from "@bitwarden/common/platform/scheduling";
 import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { ContainerService } from "@bitwarden/common/platform/services/container.service";
 import { StorageServiceProvider } from "@bitwarden/common/platform/services/storage-service.provider";
@@ -107,9 +104,11 @@ import BrowserLocalStorageService from "../../platform/services/browser-local-st
 import { BrowserScriptInjectorService } from "../../platform/services/browser-script-injector.service";
 import I18nService from "../../platform/services/i18n.service";
 import { ForegroundPlatformUtilsService } from "../../platform/services/platform-utils/foreground-platform-utils.service";
+import { ForegroundTaskSchedulerService } from "../../platform/services/task-scheduler/foreground-task-scheduler.service";
 import { BrowserStorageServiceProvider } from "../../platform/storage/browser-storage-service.provider";
 import { ForegroundMemoryStorageService } from "../../platform/storage/foreground-memory-storage.service";
 import { fromChromeRuntimeMessaging } from "../../platform/utils/from-chrome-runtime-messaging";
+import { ForegroundVaultTimeoutService } from "../../services/vault-timeout/foreground-vault-timeout.service";
 import { BrowserSendStateService } from "../../tools/popup/services/browser-send-state.service";
 import { FilePopoutUtilsService } from "../../tools/popup/services/file-popout-utils.service";
 import { Fido2UserVerificationService } from "../../vault/services/fido2-user-verification.service";
@@ -188,11 +187,6 @@ const safeProviders: SafeProvider[] = [
     provide: BaseUnauthGuardService,
     useClass: UnauthGuardService,
     deps: [AuthService, Router],
-  }),
-  safeProvider({
-    provide: SsoLoginServiceAbstraction,
-    useFactory: getBgService<SsoLoginServiceAbstraction>("ssoLoginService"),
-    deps: [],
   }),
   safeProvider({
     provide: CryptoFunctionService,
@@ -277,16 +271,6 @@ const safeProviders: SafeProvider[] = [
     deps: [CryptoFunctionService, LogService],
   }),
   safeProvider({
-    provide: DeviceTrustServiceAbstraction,
-    useFactory: getBgService<DeviceTrustServiceAbstraction>("deviceTrustService"),
-    deps: [],
-  }),
-  safeProvider({
-    provide: DevicesServiceAbstraction,
-    useFactory: getBgService<DevicesServiceAbstraction>("devicesService"),
-    deps: [],
-  }),
-  safeProvider({
     provide: OffscreenDocumentService,
     useClass: DefaultOffscreenDocumentService,
     deps: [LogService],
@@ -361,24 +345,9 @@ const safeProviders: SafeProvider[] = [
     deps: [PlatformUtilsService, LogService],
   }),
   safeProvider({
-    provide: KeyConnectorService,
-    useFactory: getBgService<KeyConnectorService>("keyConnectorService"),
-    deps: [],
-  }),
-  safeProvider({
-    provide: UserVerificationService,
-    useFactory: getBgService<UserVerificationService>("userVerificationService"),
-    deps: [],
-  }),
-  safeProvider({
-    provide: VaultTimeoutSettingsService,
-    useFactory: getBgService<VaultTimeoutSettingsService>("vaultTimeoutSettingsService"),
-    deps: [],
-  }),
-  safeProvider({
     provide: VaultTimeoutService,
-    useFactory: getBgService<VaultTimeoutService>("vaultTimeoutService"),
-    deps: [],
+    useClass: ForegroundVaultTimeoutService,
+    deps: [MessagingServiceAbstraction],
   }),
   safeProvider({
     provide: NotificationsService,
@@ -570,6 +539,15 @@ const safeProviders: SafeProvider[] = [
     provide: Fido2UserVerificationService,
     useClass: Fido2UserVerificationService,
     deps: [PasswordRepromptService, UserVerificationService, DialogService],
+  }),
+  safeProvider({
+    provide: TaskSchedulerService,
+    useExisting: ForegroundTaskSchedulerService,
+  }),
+  safeProvider({
+    provide: ForegroundTaskSchedulerService,
+    useFactory: getBgService<ForegroundTaskSchedulerService>("taskSchedulerService"),
+    deps: [],
   }),
 ];
 

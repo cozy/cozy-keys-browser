@@ -95,10 +95,6 @@ export const NEW_WEB_LAYOUT_BANNER_DISK = new StateDefinition("newWebLayoutBanne
   web: "disk-local",
 });
 
-export const UNASSIGNED_ITEMS_BANNER_DISK = new StateDefinition("unassignedItemsBanner", "disk", {
-  web: "disk-local",
-});
-
 // Platform
 
 export const APPLICATION_ID_DISK = new StateDefinition("applicationId", "disk", {
@@ -116,6 +112,7 @@ export const ENVIRONMENT_DISK = new StateDefinition("environment", "disk");
 export const ENVIRONMENT_MEMORY = new StateDefinition("environment", "memory");
 export const THEMING_DISK = new StateDefinition("theming", "disk", { web: "disk-local" });
 export const TRANSLATION_DISK = new StateDefinition("translation", "disk", { web: "disk-local" });
+export const TASK_SCHEDULER_DISK = new StateDefinition("taskScheduler", "disk");
 
 // Secrets Manager
 

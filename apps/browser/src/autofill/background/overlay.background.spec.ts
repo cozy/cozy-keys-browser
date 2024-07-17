@@ -319,7 +319,8 @@ describe("OverlayBackground", () => {
   });
 
   describe("removing pageDetails", () => {
-    it("removes the page details and port key for a specific tab from the pageDetailsForTab object", () => {
+    it("removes the page details and port key for a specific tab from the pageDetailsForTab object", async () => {
+      await initOverlayElementPorts();
       const tabId = 1;
       portKeyForTabSpy[tabId] = "portKey";
       sendMockExtensionMessage(

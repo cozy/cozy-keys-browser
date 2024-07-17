@@ -539,6 +539,18 @@
       }
     }
   },
+  "masterPassword": {
+    "message": "Pääsalasana"
+  },
+  "masterPassImportant": {
+    "message": "Pääsalasanasi palauttaminen ei ole mahdollista, jos unohdat sen!"
+  },
+  "confirmMasterPassword": {
+    "message": "Vahvista pääsalasana"
+  },
+  "masterPassHintLabel": {
+    "message": "Pääsalasanan vihje"
+  },
   "settings": {
     "message": "Asetukset"
   },
@@ -1954,6 +1966,9 @@
   },
   "emailVerificationRequired": {
     "message": "Sähköpostiosoite on vahvistettava"
+  },
+  "emailVerifiedV2": {
+    "message": "Sähköpostiosoite on vahvistettu"
   },
   "emailVerificationRequiredDesc": {
     "message": "Sinun on vahvistettava sähköpostiosoitteesi käyttääksesi tätä ominaisuutta."

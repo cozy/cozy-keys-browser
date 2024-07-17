@@ -411,6 +411,7 @@ export class AutofillInlineMenuContentService implements AutofillInlineMenuConte
     }
 
     if (
+      !lastChild ||
       (lastChildIsInlineMenuList && secondToLastChildIsInlineMenuButton) ||
       (lastChildIsInlineMenuButton && !(await this.isInlineMenuListVisible()))
     ) {
