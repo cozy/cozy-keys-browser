@@ -175,13 +175,13 @@ export class DefaultSyncService extends CoreSyncService {
 
       if (papersPromise.status === "fulfilled") {
         // eslint-disable-next-line no-console
-        console.log(`${papersPromise.value.length} contacts ciphers will be added`);
+        console.log(`${papersPromise.value.length} papers ciphers will be added`);
         cozyCiphers = cozyCiphers.concat(papersPromise.value);
       }
 
       if (contactsPromise.status === "fulfilled") {
         // eslint-disable-next-line no-console
-        console.log(`${contactsPromise.value.length} papers ciphers will be added`);
+        console.log(`${contactsPromise.value.length} contacts ciphers will be added`);
         cozyCiphers = cozyCiphers.concat(contactsPromise.value);
       }
 
