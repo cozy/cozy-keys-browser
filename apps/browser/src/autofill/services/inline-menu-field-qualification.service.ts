@@ -10,6 +10,7 @@ import {
   AutoFillConstants,
   CreditCardAutoFillConstants,
   IdentityAutoFillConstants,
+  PaperAutoFillConstants,
 } from "./autofill-constants";
 
 export class InlineMenuFieldQualificationService
@@ -137,6 +138,9 @@ export class InlineMenuFieldQualificationService
       ...IdentityAutoFillConstants.PhoneFieldNames,
       ...IdentityAutoFillConstants.EmailFieldNames,
       ...IdentityAutoFillConstants.UserNameFieldNames,
+      // Cozy customization
+      ...PaperAutoFillConstants.IdentityCardNumberFieldNames,
+      // Cozy customization end
     ]),
   ];
   private inlineMenuFieldQualificationFlagSet = false;
@@ -813,6 +817,26 @@ export class InlineMenuFieldQualificationService
       false,
     );
   };
+
+  // Cozy customization
+
+  /**
+   * Validates the provided field as an identity username field.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForPaperIdentityCardNumber = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(
+        field,
+        PaperAutoFillConstants.IdentityCardNumberFieldNames,
+        false,
+      )
+    );
+  };
+
+  // Cozy customization end
 
   /**
    * Validates the provided field as a username field.

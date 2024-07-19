@@ -39,4 +39,7 @@ export interface InlineMenuFieldQualificationService {
   isFieldForIdentityPhone(field: AutofillField): boolean;
   isFieldForIdentityEmail(field: AutofillField): boolean;
   isFieldForIdentityUsername(field: AutofillField): boolean;
+  // Cozy customization
+  isFieldForPaperIdentityCardNumber(field: AutofillField): boolean;
+  // Cozy customization end
 }
