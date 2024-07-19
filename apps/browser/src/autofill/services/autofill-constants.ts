@@ -836,3 +836,53 @@ export class IdentityAutoFillConstants {
     saskatchewan: "SK",
   };
 }
+
+// Cozy customization
+
+export class PaperAutoFillConstants {
+  static readonly PaperAttributes: string[] = [
+    "autoCompleteType",
+    "data-stripe",
+    "htmlName",
+    "htmlID",
+    "label-tag",
+    "placeholder",
+    "label-left",
+    "label-top",
+    "data-recurly",
+  ];
+
+  static readonly IdentityCardNumberFieldNames: string[] = [
+    "cniNum",
+    "numCni",
+    "idcni",
+    "cniId",
+    "numeroCarteIdendite",
+    "carteIdenditeNumero",
+    "carteidentite ",
+    "Numéro de la carte d'identité",
+    "Numéro d'identification",
+    "Numéro d'identité",
+    "Numéro de pièce d'identité",
+    "Numéro de carte d'identité",
+    "Identifiant personnel",
+    "Identifiant d'identification",
+    "ID de carte d'identité",
+    "Code d'identification",
+    "Numéro d'identification officiel",
+    "Numéro d'enregistrement personnel",
+    "Identity card number",
+    "Identification number",
+    "Identity number",
+    "Identity document number",
+    "Identity card number",
+    "Personal identifier",
+    "Identification ID",
+    "ID card ",
+    "Identification code",
+    "Official identification number",
+    "Personal registration number",
+  ];
+}
+
+// Cozy customization end
