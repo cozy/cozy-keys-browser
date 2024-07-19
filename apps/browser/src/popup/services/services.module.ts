@@ -331,6 +331,7 @@ const safeProviders: SafeProvider[] = [
       AuthService,
       ConfigService,
       MessageListener,
+      CozyClientService,
     ],
   }),
   safeProvider({

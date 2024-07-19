@@ -53,6 +53,7 @@ import {
 
 /* start Cozy imports */
 /* eslint-disable */
+import { CozyClientService } from "src/popup/services/cozyClient.service";
 import { generateIdentityViewFromCipherView } from "../../../../../libs/cozy/contact.helper";
 /* eslint-enable */
 /* end Cozy imports */
@@ -78,6 +79,7 @@ export default class AutofillService implements AutofillServiceInterface {
     private authService: AuthService,
     private configService: ConfigService,
     private messageListener: MessageListener,
+    private cozyClientService: CozyClientService,
   ) {}
 
   /**
