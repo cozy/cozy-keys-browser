@@ -1040,10 +1040,21 @@ export class InlineMenuFieldQualificationService
     const parsedKeywords = keywords.map((keyword) => keyword.replace(/-/g, ""));
 
     if (typeof searchedValues === "string") {
+      // Cozy customization, compare lowercase keyword and lowercase searchedValue
+      //*
+      return parsedKeywords.some((keyword) => searchedValues.indexOf(keyword.toLowerCase()) > -1);
+
+      /*/
       return parsedKeywords.some((keyword) => searchedValues.indexOf(keyword) > -1);
+      //*/
     }
 
+    // Cozy customization, compare lowercase keyword and lowercase searchedValue
+    //*
+    return parsedKeywords.some((keyword) => searchedValues.has(keyword.toLowerCase()));
+    /*/
     return parsedKeywords.some((keyword) => searchedValues.has(keyword));
+    //*/
   }
 
   /**
