@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" media="screen" type="text/css" href="TXX.css"/>
+    </head>
+
+    <body>
+
+        <a href="./">Back to menu</a>
+        <hr>
+        <h2>Identity form with paper data</h2>
+        <p>autofill should insert data from io.cozy.files data if they exist for the autofilled io.cozy.contacts</p>
+
+        <form class="form autosave-enabled" id="dossier-edit-form" method="post">
+            <div class="editable-champ editable-champ-text">
+                <label for="name">Nom de famille
+                </label>
+                <input placeholder="Nom de famille" required="required" type="text" value="" id="name">
+            </div>
+
+            <div class="editable-champ editable-champ-text" >
+              <label for="numCni">Numéro de carte d'identité
+              </label>
+              <input placeholder="Numéro de carte d'identité" required="required" type="text" value="" id="numCni">
+            </div>
+
+        </form>
+
+    </body>
+</html>
