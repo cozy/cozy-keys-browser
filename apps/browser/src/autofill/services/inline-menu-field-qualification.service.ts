@@ -1049,10 +1049,21 @@ export class InlineMenuFieldQualificationService
   ) {
     const searchedValues = this.getAutofillFieldDataKeywords(autofillFieldData, fuzzyMatchKeywords);
     if (typeof searchedValues === "string") {
+      // Cozy customization, compare lowercase keyword and lowercase searchedValue
+      //*
+      return keywords.some((keyword) => searchedValues.indexOf(keyword.toLowerCase()) > -1);
+      /*/
       return keywords.some((keyword) => searchedValues.indexOf(keyword) > -1);
+      //*/
     }
 
+    // Cozy customization, compare lowercase keyword and lowercase searchedValue
+    //*
+    return keywords.some((keyword) => searchedValues.has(keyword.toLowerCase()));
+
+    /*/
     return keywords.some((keyword) => searchedValues.has(keyword));
+    //*/
   }
 
   /**
