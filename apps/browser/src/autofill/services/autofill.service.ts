@@ -48,6 +48,7 @@ import {
   AutoFillConstants,
   CreditCardAutoFillConstants,
   IdentityAutoFillConstants,
+  PaperAutoFillConstants,
 } from "./autofill-constants";
 
 /* start Cozy imports */
@@ -55,6 +56,7 @@ import {
 import { CozyClientService } from "src/popup/services/cozyClient.service";
 import { generateIdentityViewFromCipherView } from "../../../../../libs/cozy/contact.helper";
 import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view";
+import { getCozyValue } from "../../../../../libs/cozy/mapping";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -664,6 +666,13 @@ export default class AutofillService implements AutofillServiceInterface {
         }
 
         fillScript = this.generateIdentityFillScript(
+          fillScript,
+          pageDetails,
+          filledFields,
+          options,
+        );
+
+        fillScript = await this.generatePaperFillScript(
           fillScript,
           pageDetails,
           filledFields,
@@ -1487,6 +1496,72 @@ export default class AutofillService implements AutofillServiceInterface {
 
     return fillScript;
   }
+
+  // Cozy customization
+
+  /**
+   * Generates the autofill script for the specified page details and paper data.
+   * @param {AutofillScript} fillScript
+   * @param {AutofillPageDetails} pageDetails
+   * @param {{[p: string]: AutofillField}} filledFields
+   * @param {GenerateFillScriptOptions} options
+   * @returns {AutofillScript}
+   * @private
+   */
+  private async generatePaperFillScript(
+    fillScript: AutofillScript,
+    pageDetails: AutofillPageDetails,
+    filledFields: { [id: string]: AutofillField },
+    options: GenerateFillScriptOptions,
+  ): Promise<AutofillScript> {
+    const fillFields: { [id: string]: AutofillField } = {};
+
+    pageDetails.fields.forEach((f) => {
+      if (
+        AutofillService.isExcludedFieldType(f, AutoFillConstants.ExcludedAutofillTypes) ||
+        ["current-password", "new-password"].includes(f.autoCompleteType)
+      ) {
+        return;
+      }
+
+      for (let i = 0; i < PaperAutoFillConstants.PaperAttributes.length; i++) {
+        const attr = PaperAutoFillConstants.PaperAttributes[i];
+        // eslint-disable-next-line
+        if (!f.hasOwnProperty(attr) || !f[attr] || !f.viewable) {
+          continue;
+        }
+        // FIXME: Check if we will be able to factorize the code
+        if (
+          !fillFields.paperIdentityCardNumber &&
+          AutofillService.isFieldMatch(f[attr], PaperAutoFillConstants.IdentityCardNumberFieldNames)
+        ) {
+          fillFields.paperIdentityCardNumber = f;
+          break;
+        }
+      }
+    });
+
+    const client = await this.cozyClientService.getClientInstance();
+
+    // FIXME: Check if we will be able to factorize the code
+    if (fillFields.paperIdentityCardNumber) {
+      const paperIdentityCardNumber = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperIdentityCardNumber",
+      });
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperIdentityCardNumber,
+        fillFields.paperIdentityCardNumber,
+        filledFields,
+      );
+    }
+
+    return fillScript;
+  }
+
+  // Cozy customization end
 
   /**
    * Accepts an HTMLInputElement type value and a list of
