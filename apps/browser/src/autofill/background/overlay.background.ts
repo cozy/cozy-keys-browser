@@ -65,6 +65,7 @@ import {
 /* start Cozy imports */
 /* eslint-disable */
 import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
+import { CozyClientService } from "../../popup/services/cozyClient.service";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -167,6 +168,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private themeStateService: ThemeStateService,
+    private cozyClientService: CozyClientService,
   ) {
     this.initOverlayEventObservables();
   }
