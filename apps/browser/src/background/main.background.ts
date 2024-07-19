@@ -953,6 +953,7 @@ export default class MainBackground {
       this.authService,
       this.configService,
       messageListener,
+      this.cozyClientService,
     );
     this.auditService = new AuditService(this.cryptoFunctionService, this.apiService);
 
