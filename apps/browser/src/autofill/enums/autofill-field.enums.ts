@@ -23,6 +23,9 @@ export const AutofillFieldQualifier = {
   identityPhone: "identityPhone",
   identityEmail: "identityEmail",
   identityUsername: "identityUsername",
+  // Cozy customization
+  paperIdentityCardNumber: "paperIdentityCardNumber",
+  // Cozy customization end
 } as const;
 
 export type AutofillFieldQualifierType =
