@@ -127,6 +127,10 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
     [AutofillFieldQualifier.identityUsername]:
       this.inlineMenuFieldQualificationService.isFieldForIdentityUsername,
     [AutofillFieldQualifier.password]: this.inlineMenuFieldQualificationService.isNewPasswordField,
+    // Cozy customization
+    [AutofillFieldQualifier.paperIdentityCardNumber]:
+      this.inlineMenuFieldQualificationService.isFieldForPaperIdentityCardNumber,
+    // Cozy customization end
   };
 
   constructor(private inlineMenuFieldQualificationService: InlineMenuFieldQualificationService) {}
