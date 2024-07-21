@@ -577,10 +577,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     // Cozy customization; add contact initials to autofill
     if (cipher.contact) {
+      cipherIcon.classList.remove("cipher-icon");
+      cipherIcon.classList.add("contact-initials");
       cipherIcon.style.backgroundColor = cipher.contact.initialsColor;
-      cipherIcon.style.padding = "8px";
-      cipherIcon.style.borderRadius = "50%";
-      cipherIcon.style.color = "white";
       cipherIcon.textContent = cipher.contact.initials;
       return cipherIcon;
     }
