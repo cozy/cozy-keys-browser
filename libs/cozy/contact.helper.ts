@@ -89,5 +89,42 @@ export const generateIdentityViewFromContactId = async (client: CozyClient, cont
     fieldQualifier: AutofillFieldQualifier.identityCompany,
   });
 
+  identity.phone = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityPhone
+  });
+  identity.email = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityEmail
+  });
+
+  identity.address1 = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityAddress1
+  });
+  identity.city = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityCity
+  });
+  identity.state = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityState
+  });
+  identity.postalCode = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityPostalCode
+  });
+  identity.country = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityCountry
+  });
+
   return identity;
 };
