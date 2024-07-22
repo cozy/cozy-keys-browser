@@ -10,6 +10,7 @@ export type CozyAttributesModel = {
   doctype: string;
   path: string;
   isPathArray?: boolean;
+  pathAttributes?: string[]; // pathAttibutess are joined to form the final value
   selector?: {
     [key: string]: string;
   };
@@ -35,6 +36,48 @@ export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
   [AutofillFieldQualifier.identityCompany]: {
     doctype: "io.cozy.contacts",
     path: "company",
+  },
+  [AutofillFieldQualifier.identityPhone]: {
+    doctype: "io.cozy.contacts",
+    path: "phone",
+    isPathArray: true,
+    pathAttributes: ["number"],
+  },
+  [AutofillFieldQualifier.identityEmail]: {
+    doctype: "io.cozy.contacts",
+    path: "email",
+    isPathArray: true,
+    pathAttributes: ["address"],
+  },
+  [AutofillFieldQualifier.identityAddress1]: {
+    doctype: "io.cozy.contacts",
+    path: "address",
+    isPathArray: true,
+    pathAttributes: ["number", "street"],
+  },
+  [AutofillFieldQualifier.identityCity]: {
+    doctype: "io.cozy.contacts",
+    path: "address",
+    isPathArray: true,
+    pathAttributes: ["city"],
+  },
+  [AutofillFieldQualifier.identityState]: {
+    doctype: "io.cozy.contacts",
+    path: "address",
+    isPathArray: true,
+    pathAttributes: ["region"],
+  },
+  [AutofillFieldQualifier.identityPostalCode]: {
+    doctype: "io.cozy.contacts",
+    path: "address",
+    isPathArray: true,
+    pathAttributes: ["code"],
+  },
+  [AutofillFieldQualifier.identityCountry]: {
+    doctype: "io.cozy.contacts",
+    path: "address",
+    isPathArray: true,
+    pathAttributes: ["country"],
   },
   [AutofillFieldQualifier.paperIdentityCardNumber]: {
     doctype: "io.cozy.files",
@@ -92,7 +135,13 @@ const getCozyValueInContact = async ({
   );
 
  if(cozyAttributeModel.isPathArray) {
-  // TODO
+  const dataArray = _.get(contact, cozyAttributeModel.path);
+
+  // TODO: take into account the profile instead of selecting the first one
+  const selectedData = dataArray?.[0]
+  const selectedValue = cozyAttributeModel.pathAttributes.map((pathAttribute) => _.get(selectedData, pathAttribute)).join(' ')
+
+  return selectedValue;
  } else {
   return _.get(contact, cozyAttributeModel.path);
  }
