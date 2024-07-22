@@ -9,7 +9,8 @@ import {
 export type CozyAttributesModel = {
   doctype: string;
   path: string;
-  selector: {
+  isPathArray?: boolean;
+  selector?: {
     [key: string]: string;
   };
 };
@@ -19,6 +20,22 @@ export type CozyAttributesMapping = {
 };
 
 export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
+  [AutofillFieldQualifier.identityFirstName]: {
+    doctype: "io.cozy.contacts",
+    path: "name.givenName",
+  },
+  [AutofillFieldQualifier.identityMiddleName]: {
+    doctype: "io.cozy.contacts",
+    path: "name.additionalName",
+  },
+  [AutofillFieldQualifier.identityLastName]: {
+    doctype: "io.cozy.contacts",
+    path: "name.familyName",
+  },
+  [AutofillFieldQualifier.identityCompany]: {
+    doctype: "io.cozy.contacts",
+    path: "company",
+  },
   [AutofillFieldQualifier.paperIdentityCardNumber]: {
     doctype: "io.cozy.files",
     path: "metadata.number",
@@ -43,7 +60,13 @@ export const getCozyValue = async ({
     return;
   }
 
-  if (cozyAttributeModel.doctype === "io.cozy.files") {
+  if (cozyAttributeModel.doctype === "io.cozy.contacts") {
+    return await getCozyValueInContact({
+      client,
+      contactId,
+      cozyAttributeModel,
+    });
+  } else if (cozyAttributeModel.doctype === "io.cozy.files") {
     return await getCozyValueInPaper({
       client,
       contactId,
@@ -52,17 +75,35 @@ export const getCozyValue = async ({
   }
 };
 
-interface GetCozyValueInPaperType {
+interface GetCozyValueInDataType {
   client: CozyClient;
   contactId: string;
   cozyAttributeModel: CozyAttributesModel;
 }
 
+const getCozyValueInContact = async ({
+  client,
+  contactId,
+  cozyAttributeModel,
+}: GetCozyValueInDataType) => {
+  // FIXME: Temporary way to query data. We want to avoid online request.
+  const { data: contact } = await client.query(
+    Q("io.cozy.contacts").getById(contactId),
+  );
+
+ if(cozyAttributeModel.isPathArray) {
+  // TODO
+ } else {
+  return _.get(contact, cozyAttributeModel.path);
+ }
+};
+
+
 const getCozyValueInPaper = async ({
   client,
   contactId,
   cozyAttributeModel,
-}: GetCozyValueInPaperType) => {
+}: GetCozyValueInDataType) => {
   // FIXME: Temporary way to query data. We want to avoid online request.
   const { data: papers } = await client.query(
     Q("io.cozy.files").where({
