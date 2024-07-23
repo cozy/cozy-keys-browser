@@ -1,0 +1,4 @@
+{
+  "extends": "../shared/tsconfig.libs",
+  "exclude": ["node_modules", "dist"]
+}
