@@ -38,6 +38,8 @@ import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 import { CipherService } from "@bitwarden/common/vault/services/cipher.service";
 import { TotpService } from "@bitwarden/common/vault/services/totp.service";
 
+import { CozyClientService } from "src/popup/services/cozyClient.service";
+
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { BrowserScriptInjectorService } from "../../platform/services/browser-script-injector.service";
 import { AutofillMessageCommand, AutofillMessageSender } from "../enums/autofill-message.enums";
@@ -89,6 +91,7 @@ describe("AutofillService", () => {
   let authService: MockProxy<AuthService>;
   let configService: MockProxy<ConfigService>;
   let messageListener: MockProxy<MessageListener>;
+  let cozyClientService: MockProxy<CozyClientService>;
 
   beforeEach(() => {
     scriptInjectorService = new BrowserScriptInjectorService(platformUtilsService, logService);
@@ -100,6 +103,7 @@ describe("AutofillService", () => {
     authService.activeAccountStatus$ = activeAccountStatusMock$;
     configService = mock<ConfigService>();
     messageListener = mock<MessageListener>();
+    cozyClientService = mock<CozyClientService>();
     autofillService = new AutofillService(
       cipherService,
       autofillSettingsService,
@@ -114,6 +118,7 @@ describe("AutofillService", () => {
       authService,
       configService,
       messageListener,
+      cozyClientService,
     );
     domainSettingsService = new DefaultDomainSettingsService(fakeStateProvider);
     domainSettingsService.equivalentDomains$ = of(mockEquivalentDomains);

@@ -10,6 +10,7 @@ import {
   AutoFillConstants,
   CreditCardAutoFillConstants,
   IdentityAutoFillConstants,
+  PaperAutoFillConstants,
 } from "./autofill-constants";
 
 export class InlineMenuFieldQualificationService
@@ -137,6 +138,9 @@ export class InlineMenuFieldQualificationService
       ...IdentityAutoFillConstants.PhoneFieldNames,
       ...IdentityAutoFillConstants.EmailFieldNames,
       ...IdentityAutoFillConstants.UserNameFieldNames,
+      // Cozy customization
+      ...PaperAutoFillConstants.IdentityCardNumberFieldNames,
+      // Cozy customization end
     ]),
   ];
   private inlineMenuFieldQualificationFlagSet = false;
@@ -825,6 +829,26 @@ export class InlineMenuFieldQualificationService
     );
   };
 
+  // Cozy customization
+
+  /**
+   * Validates the provided field as an identity username field.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForPaperIdentityCardNumber = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(
+        field,
+        PaperAutoFillConstants.IdentityCardNumberFieldNames,
+        false,
+      )
+    );
+  };
+
+  // Cozy customization end
+
   /**
    * Validates the provided field as a username field.
    *
@@ -1025,10 +1049,21 @@ export class InlineMenuFieldQualificationService
   ) {
     const searchedValues = this.getAutofillFieldDataKeywords(autofillFieldData, fuzzyMatchKeywords);
     if (typeof searchedValues === "string") {
+      // Cozy customization, compare lowercase keyword and lowercase searchedValue
+      //*
+      return keywords.some((keyword) => searchedValues.indexOf(keyword.toLowerCase()) > -1);
+      /*/
       return keywords.some((keyword) => searchedValues.indexOf(keyword) > -1);
+      //*/
     }
 
+    // Cozy customization, compare lowercase keyword and lowercase searchedValue
+    //*
+    return keywords.some((keyword) => searchedValues.has(keyword.toLowerCase()));
+
+    /*/
     return keywords.some((keyword) => searchedValues.has(keyword));
+    //*/
   }
 
   /**
