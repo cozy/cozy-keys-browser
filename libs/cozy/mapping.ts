@@ -5,6 +5,7 @@ import {
   AutofillFieldQualifier,
   AutofillFieldQualifierType,
 } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
+import { CozyProfile } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 
 export type CozyAttributesModel = {
   doctype: string;
@@ -90,12 +91,14 @@ interface GetCozyValueType {
   client: CozyClient;
   contactId: string;
   fieldQualifier: AutofillFieldQualifierType;
+  cozyProfile?: CozyProfile;
 }
 
 export const getCozyValue = async ({
   client,
   contactId,
   fieldQualifier,
+  cozyProfile,
 }: GetCozyValueType): Promise<string | undefined> => {
   const cozyAttributeModel = COZY_ATTRIBUTES_MAPPING[fieldQualifier];
 
@@ -108,12 +111,14 @@ export const getCozyValue = async ({
       client,
       contactId,
       cozyAttributeModel,
+      cozyProfile,
     });
   } else if (cozyAttributeModel.doctype === "io.cozy.files") {
     return await getCozyValueInPaper({
       client,
       contactId,
       cozyAttributeModel,
+      cozyProfile,
     });
   }
 };
@@ -122,31 +127,31 @@ interface GetCozyValueInDataType {
   client: CozyClient;
   contactId: string;
   cozyAttributeModel: CozyAttributesModel;
+  cozyProfile?: CozyProfile;
 }
 
 const getCozyValueInContact = async ({
   client,
   contactId,
   cozyAttributeModel,
+  cozyProfile,
 }: GetCozyValueInDataType) => {
   // FIXME: Temporary way to query data. We want to avoid online request.
-  const { data: contact } = await client.query(
-    Q("io.cozy.contacts").getById(contactId),
-  );
+  const { data: contact } = await client.query(Q("io.cozy.contacts").getById(contactId));
 
- if(cozyAttributeModel.isPathArray) {
-  const dataArray = _.get(contact, cozyAttributeModel.path);
+  if (cozyAttributeModel.isPathArray) {
+    const dataArray = _.get(contact, cozyAttributeModel.path);
 
-  // TODO: take into account the profile instead of selecting the first one
-  const selectedData = dataArray?.[0]
-  const selectedValue = cozyAttributeModel.pathAttributes.map((pathAttribute) => _.get(selectedData, pathAttribute)).join(' ')
+    const selectedData = selectDataWithCozyProfile(dataArray, cozyProfile);
+    const selectedValue = cozyAttributeModel.pathAttributes
+      .map((pathAttribute) => _.get(selectedData, pathAttribute))
+      .join(" ");
 
-  return selectedValue;
- } else {
-  return _.get(contact, cozyAttributeModel.path);
- }
+    return selectedValue;
+  } else {
+    return _.get(contact, cozyAttributeModel.path);
+  }
 };
-
 
 const getCozyValueInPaper = async ({
   client,
@@ -163,6 +168,45 @@ const getCozyValueInPaper = async ({
   const papersFromContact = papers.filter((paper: any) => isReferencedByContact(paper, contactId));
 
   return _.get(papersFromContact[0], cozyAttributeModel.path);
+};
+
+export const selectDataWithCozyProfile = (data: any[] | undefined, cozyProfile?: CozyProfile) => {
+  if (!data || data.length === 0) {
+    return;
+  }
+
+  if (data.length === 1) {
+    return data[0];
+  }
+
+  const type = cozyProfile?.type;
+  const label = cozyProfile?.label;
+
+  const customLabelAndTypeAddress = data.find((d) => d.label === label && d.type === type);
+
+  if (customLabelAndTypeAddress) {
+    return customLabelAndTypeAddress;
+  }
+
+  const labelOnly = data.find((d) => d.label === label);
+
+  if (labelOnly) {
+    return labelOnly;
+  }
+
+  const randomLabelOnlyAddress = data.find((d) => d.label && !d.type);
+
+  if (randomLabelOnlyAddress) {
+    return randomLabelOnlyAddress;
+  }
+
+  const randomLabelAndTypeAddress = data.find((d) => d.label && d.type);
+
+  if (randomLabelAndTypeAddress) {
+    return randomLabelAndTypeAddress;
+  }
+
+  return data[0];
 };
 
 const isReferencedByContact = (paper: any, contactId: string) => {
