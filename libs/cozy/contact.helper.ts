@@ -13,6 +13,8 @@ import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view"
 const { getInitials } = models.contact;
 
 import { AutofillFieldQualifier } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
+import { CozyProfile } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
+
 import { buildFieldsFromContact } from "./fields.helper";
 import { getCozyValue } from "./mapping";
 
@@ -65,7 +67,11 @@ export const convertContactToCipherData = async (
   return cipherData;
 };
 
-export const generateIdentityViewFromContactId = async (client: CozyClient, contactId: string): Promise<IdentityView> => {
+export const generateIdentityViewFromContactId = async (
+  client: CozyClient,
+  contactId: string,
+  cozyProfile?: CozyProfile,
+): Promise<IdentityView> => {
   const identity = new IdentityView();
 
   identity.firstName = await getCozyValue({
@@ -92,38 +98,45 @@ export const generateIdentityViewFromContactId = async (client: CozyClient, cont
   identity.phone = await getCozyValue({
     client,
     contactId,
-    fieldQualifier: AutofillFieldQualifier.identityPhone
+    fieldQualifier: AutofillFieldQualifier.identityPhone,
+    cozyProfile,
   });
   identity.email = await getCozyValue({
     client,
     contactId,
-    fieldQualifier: AutofillFieldQualifier.identityEmail
+    fieldQualifier: AutofillFieldQualifier.identityEmail,
+    cozyProfile,
   });
 
   identity.address1 = await getCozyValue({
     client,
     contactId,
-    fieldQualifier: AutofillFieldQualifier.identityAddress1
+    fieldQualifier: AutofillFieldQualifier.identityAddress1,
+    cozyProfile,
   });
   identity.city = await getCozyValue({
     client,
     contactId,
-    fieldQualifier: AutofillFieldQualifier.identityCity
+    fieldQualifier: AutofillFieldQualifier.identityCity,
+    cozyProfile,
   });
   identity.state = await getCozyValue({
     client,
     contactId,
-    fieldQualifier: AutofillFieldQualifier.identityState
+    fieldQualifier: AutofillFieldQualifier.identityState,
+    cozyProfile,
   });
   identity.postalCode = await getCozyValue({
     client,
     contactId,
-    fieldQualifier: AutofillFieldQualifier.identityPostalCode
+    fieldQualifier: AutofillFieldQualifier.identityPostalCode,
+    cozyProfile,
   });
   identity.country = await getCozyValue({
     client,
     contactId,
-    fieldQualifier: AutofillFieldQualifier.identityCountry
+    fieldQualifier: AutofillFieldQualifier.identityCountry,
+    cozyProfile,
   });
 
   return identity;

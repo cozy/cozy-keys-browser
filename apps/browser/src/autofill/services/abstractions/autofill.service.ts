@@ -18,6 +18,13 @@ export interface PageDetail {
   sender?: any;
 }
 
+// Cozy customization
+export interface CozyProfile {
+  type?: string;
+  label?: "work" | "home";
+}
+// Cozy customization end
+
 export interface AutoFillOptions {
   cipher: CipherView;
   pageDetails: PageDetail[];
@@ -30,6 +37,9 @@ export interface AutoFillOptions {
   skipLastUsed?: boolean;
   allowUntrustedIframe?: boolean;
   allowTotpAutofill?: boolean;
+  // Cozy customization
+  cozyProfile?: CozyProfile;
+  // Cozy customization end
 }
 
 export interface FormData {
@@ -48,6 +58,9 @@ export interface GenerateFillScriptOptions {
   cipher: CipherView;
   tabUrl: string;
   defaultUriMatch: UriMatchStrategySetting;
+  // Cozy customization
+  cozyProfile?: CozyProfile;
+  // Cozy customization end
 }
 
 export type CollectPageDetailsResponseMessage = {

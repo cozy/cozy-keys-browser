@@ -359,6 +359,7 @@ export default class AutofillService implements AutofillServiceInterface {
           cipher: options.cipher,
           tabUrl: tab.url,
           defaultUriMatch: defaultUriMatch,
+          cozyProfile: options.cozyProfile, // Cozy customization
         });
 
         if (!fillScript || !fillScript.script || !fillScript.script.length) {
@@ -661,7 +662,11 @@ export default class AutofillService implements AutofillServiceInterface {
         try {
           const client = await this.cozyClientService.getClientInstance();
 
-          options.cipher.identity = await generateIdentityViewFromContactId(client, options.cipher.id);
+          options.cipher.identity = await generateIdentityViewFromContactId(
+            client,
+            options.cipher.id,
+            options.cozyProfile,
+          );
         } catch (e) {
           // eslint-disable-next-line no-console
           console.log("Failed to convert CipherView to IdentityView", e);
