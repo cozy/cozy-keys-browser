@@ -807,6 +807,7 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       filledByCipherType: autofillFieldData?.filledByCipherType,
       showInlineMenuAccountCreation: autofillFieldData?.showInlineMenuAccountCreation,
       fieldQualifier: autofillFieldData.fieldQualifier,
+      fieldHtmlID: autofillFieldData.htmlID,
       fieldValue: formFieldElement.value,
       accountCreationFieldType,
     };
