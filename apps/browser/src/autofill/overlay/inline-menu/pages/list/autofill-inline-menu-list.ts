@@ -66,6 +66,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     // Cozy customization
     lastFilledCipherId,
     fieldQualifier,
+    fieldHtmlID,
     fieldValue,
     // Cozy customization end
   }: InitAutofillInlineMenuListMessage) {

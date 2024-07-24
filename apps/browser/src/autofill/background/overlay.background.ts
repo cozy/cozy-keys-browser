@@ -1920,6 +1920,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       // Cozy customization
       lastFilledCipherId: this.lastFilledCipherId,
       fieldQualifier: this.focusedFieldData?.fieldQualifier,
+      fieldHtmlID: this.focusedFieldData?.fieldHtmlID,
       fieldValue: this.focusedFieldData?.fieldValue,
       // Cozy customization end
       portKey: this.portKeyForTab[port.sender.tab.id],

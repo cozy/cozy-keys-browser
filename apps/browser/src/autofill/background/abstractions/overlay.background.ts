@@ -47,6 +47,7 @@ export type FocusedFieldData = {
   showInlineMenuAccountCreation?: boolean;
   // Cozy customization
   fieldQualifier?: AutofillFieldQualifierType;
+  fieldHtmlID?: string;
   fieldValue?: string;
   // Cozy customization end
 };
