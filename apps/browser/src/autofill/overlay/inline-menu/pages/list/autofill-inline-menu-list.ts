@@ -63,6 +63,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     portKey,
     filledByCipherType,
     showInlineMenuAccountCreation,
+    // Cozy customization
+    lastFilledCipherId,
+    fieldQualifier,
+    fieldHtmlID,
+    fieldValue,
+    // Cozy customization end
   }: InitAutofillInlineMenuListMessage) {
     const linkElement = await this.initAutofillInlineMenuPage(
       "list",

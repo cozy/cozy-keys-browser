@@ -3,6 +3,12 @@ import { CipherType } from "@bitwarden/common/vault/enums";
 
 import { InlineMenuCipherData } from "../../../background/abstractions/overlay.background";
 
+/* start Cozy imports */
+/* eslint-disable */
+import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
+/* eslint-enable */
+/* end Cozy imports */
+
 type AutofillInlineMenuListMessage = { command: string };
 
 export type UpdateAutofillInlineMenuListCiphersMessage = AutofillInlineMenuListMessage & {
@@ -16,6 +22,12 @@ export type InitAutofillInlineMenuListMessage = AutofillInlineMenuListMessage & 
   theme: string;
   translations: Record<string, string>;
   ciphers?: InlineMenuCipherData[];
+  // Cozy customization
+  lastFilledCipherId?: string;
+  fieldQualifier?: AutofillFieldQualifierType;
+  fieldHtmlID?: string;
+  fieldValue?: string;
+  // Cozy customization end
   filledByCipherType?: CipherType;
   showInlineMenuAccountCreation?: boolean;
   portKey: string;
