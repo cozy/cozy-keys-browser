@@ -25,6 +25,7 @@ export type InitAutofillInlineMenuListMessage = AutofillInlineMenuListMessage & 
   // Cozy customization
   lastFilledCipherId?: string;
   fieldQualifier?: AutofillFieldQualifierType;
+  fieldHtmlID?: string;
   fieldValue?: string;
   // Cozy customization end
   filledByCipherType?: CipherType;
