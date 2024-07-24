@@ -1,4 +1,4 @@
-import { models } from "cozy-client";
+import CozyClient, { models } from "cozy-client";
 import { IOCozyContact } from "cozy-client/types/types";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -8,12 +8,15 @@ import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { ContactView } from "@bitwarden/common/vault/models/view/contact.view";
-import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view";
 
 const { getInitials } = models.contact;
 
+import { AutofillFieldQualifier } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
+import { CozyProfile } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
+
 import { buildFieldsFromContact } from "./fields.helper";
+import { getCozyValue } from "./mapping";
 
 const getPrimaryEmail = (contact: IOCozyContact): string | undefined => {
   return contact.email?.find((email) => email.primary)?.address;
@@ -64,76 +67,77 @@ export const convertContactToCipherData = async (
   return cipherData;
 };
 
-const chooseAddress = (cipher: CipherView): FieldView => {
-  const homeAddress = cipher.fields.find(
-    (f) => f.cozyType === "address" && f.label?.label === "home",
-  );
-
-  if (homeAddress) {
-    return homeAddress;
-  }
-
-  const workAddress = cipher.fields.find(
-    (f) => f.cozyType === "address" && f.label?.label === "work",
-  );
-
-  if (workAddress) {
-    return workAddress;
-  }
-
-  return cipher.fields.find((f) => f.cozyType === "address");
-};
-
-const formatAddress = (cipher: CipherView, chosenAddress: FieldView): string => {
-  const addressNumber = cipher.fields.find(
-    (f) => f.parentId === chosenAddress.id && f.cozyType === "number",
-  )?.value;
-  const addressStreet = cipher.fields.find(
-    (f) => f.parentId === chosenAddress.id && f.cozyType === "street",
-  )?.value;
-
-  if (addressNumber && addressStreet) {
-    return `${addressNumber} ${addressStreet}`;
-  } else if (addressNumber) {
-    return addressNumber;
-  } else if (addressStreet) {
-    return addressStreet;
-  } else if (chosenAddress.value) {
-    // Special case for adresses from cco2 that have no "number" or "street" field
-    // and everything is in the "address" field
-    return chosenAddress.value;
-  }
-
-  return "";
-};
-
-export const generateIdentityViewFromCipherView = (cipher: CipherView): IdentityView => {
+export const generateIdentityViewFromContactId = async (
+  client: CozyClient,
+  contactId: string,
+  cozyProfile?: CozyProfile,
+): Promise<IdentityView> => {
   const identity = new IdentityView();
 
-  identity.firstName = cipher.fields.find((f) => f.cozyType === "givenName")?.value;
-  identity.middleName = cipher.fields.find((f) => f.cozyType === "additionalName")?.value;
-  identity.lastName = cipher.fields.find((f) => f.cozyType === "familyName")?.value;
-  identity.company = cipher.fields.find((f) => f.cozyType === "company")?.value;
-  identity.phone = cipher.contact.primaryPhone;
-  identity.email = cipher.contact.primaryEmail;
+  identity.firstName = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityFirstName,
+  });
+  identity.middleName = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityMiddleName,
+  });
+  identity.lastName = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityLastName,
+  });
+  identity.company = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityCompany,
+  });
 
-  const chosenAddress = chooseAddress(cipher);
+  identity.phone = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityPhone,
+    cozyProfile,
+  });
+  identity.email = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityEmail,
+    cozyProfile,
+  });
 
-  if (chosenAddress) {
-    identity.address1 = formatAddress(cipher, chosenAddress);
-    identity.city = cipher.fields.find(
-      (f) => f.parentId === chosenAddress.id && f.cozyType === "city",
-    )?.value;
-    identity.state = cipher.fields.find(
-      (f) => f.parentId === chosenAddress.id && f.cozyType === "region",
-    )?.value;
-    identity.postalCode = cipher.fields.find(
-      (f) => f.parentId === chosenAddress.id && f.cozyType === "code",
-    )?.value;
-    identity.country = cipher.fields.find(
-      (f) => f.parentId === chosenAddress.id && f.cozyType === "country",
-    )?.value;
-  }
+  identity.address1 = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityAddress1,
+    cozyProfile,
+  });
+  identity.city = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityCity,
+    cozyProfile,
+  });
+  identity.state = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityState,
+    cozyProfile,
+  });
+  identity.postalCode = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityPostalCode,
+    cozyProfile,
+  });
+  identity.country = await getCozyValue({
+    client,
+    contactId,
+    fieldQualifier: AutofillFieldQualifier.identityCountry,
+    cozyProfile,
+  });
 
   return identity;
 };

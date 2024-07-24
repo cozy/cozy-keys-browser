@@ -54,7 +54,7 @@ import {
 /* start Cozy imports */
 /* eslint-disable */
 import { CozyClientService } from "src/popup/services/cozyClient.service";
-import { generateIdentityViewFromCipherView } from "../../../../../libs/cozy/contact.helper";
+import { generateIdentityViewFromContactId } from "../../../../../libs/cozy/contact.helper";
 import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view";
 import { getCozyValue } from "../../../../../libs/cozy/mapping";
 /* eslint-enable */
@@ -359,6 +359,7 @@ export default class AutofillService implements AutofillServiceInterface {
           cipher: options.cipher,
           tabUrl: tab.url,
           defaultUriMatch: defaultUriMatch,
+          cozyProfile: options.cozyProfile, // Cozy customization
         });
 
         if (!fillScript || !fillScript.script || !fillScript.script.length) {
@@ -659,7 +660,13 @@ export default class AutofillService implements AutofillServiceInterface {
       case CipherType.Contact:
         // For contacts, we create an IdentityView with the contact content to leverage the generateIdentityFillScript
         try {
-          options.cipher.identity = generateIdentityViewFromCipherView(options.cipher);
+          const client = await this.cozyClientService.getClientInstance();
+
+          options.cipher.identity = await generateIdentityViewFromContactId(
+            client,
+            options.cipher.id,
+            options.cozyProfile,
+          );
         } catch (e) {
           // eslint-disable-next-line no-console
           console.log("Failed to convert CipherView to IdentityView", e);
