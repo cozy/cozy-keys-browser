@@ -39,6 +39,7 @@ export interface AutoFillOptions {
   allowTotpAutofill?: boolean;
   // Cozy customization
   cozyProfile?: CozyProfile;
+  fillOnlyThisFieldHtmlID?: string;
   // Cozy customization end
 }
 
@@ -60,6 +61,7 @@ export interface GenerateFillScriptOptions {
   defaultUriMatch: UriMatchStrategySetting;
   // Cozy customization
   cozyProfile?: CozyProfile;
+  fillOnlyThisFieldHtmlID?: string;
   // Cozy customization end
 }
 
