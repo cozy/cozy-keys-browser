@@ -360,6 +360,7 @@ export default class AutofillService implements AutofillServiceInterface {
           tabUrl: tab.url,
           defaultUriMatch: defaultUriMatch,
           cozyProfile: options.cozyProfile, // Cozy customization
+          fillOnlyThisFieldHtmlID: options.fillOnlyThisFieldHtmlID, // Cozy customization
         });
 
         if (!fillScript || !fillScript.script || !fillScript.script.length) {
@@ -584,6 +585,18 @@ export default class AutofillService implements AutofillServiceInterface {
     if (!pageDetails || !options.cipher) {
       return null;
     }
+
+    // Cozy customization; autofill only one field
+    if (options.fillOnlyThisFieldHtmlID) {
+      pageDetails = {
+        ...pageDetails,
+        fields: pageDetails.fields.filter(
+          (field) => field.htmlID === options.fillOnlyThisFieldHtmlID,
+        ),
+      };
+    }
+
+    // Cozy customization end
 
     let fillScript = new AutofillScript();
     const filledFields: { [id: string]: AutofillField } = {};
