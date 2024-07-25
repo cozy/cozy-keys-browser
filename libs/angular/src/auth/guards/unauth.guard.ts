@@ -54,6 +54,8 @@ function unauthGuard(routes: UnauthRoutes): Observable<boolean | UrlTree> {
 
   return authService.activeAccountStatus$.pipe(
     map((status) => {
+      console.log('🐸 unauthGuard')
+
       if (status == null || status === AuthenticationStatus.LoggedOut) {
         return true;
       } else if (status === AuthenticationStatus.Locked) {
