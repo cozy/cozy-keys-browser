@@ -85,6 +85,66 @@ export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
     path: "metadata.number",
     selector: { "metadata.qualification.label": "national_id_card" },
   },
+  [AutofillFieldQualifier.paperPassportNumber]: {
+    doctype: "io.cozy.files",
+    path: "metadata.number",
+    selector: { "metadata.qualification.label": "passport" },
+  },
+  [AutofillFieldQualifier.paperSocialSecurityNumber]: {
+    doctype: "io.cozy.files",
+    path: "metadata.number",
+    selector: { "metadata.qualification.label": "national_health_insurance_card" },
+  },
+  [AutofillFieldQualifier.paperResidencePermitNumber]: {
+    doctype: "io.cozy.files",
+    path: "metadata.number",
+    selector: { "metadata.qualification.label": "residence_permit" },
+  },
+  [AutofillFieldQualifier.paperVehicleRegistrationNumber]: {
+    doctype: "io.cozy.files",
+    path: "metadata.number",
+    selector: { "metadata.qualification.label": "vehicle_registration" },
+  },
+  [AutofillFieldQualifier.paperVehicleRegistrationConfidentialCode]: {
+    doctype: "io.cozy.files",
+    path: "metadata.vehicle.confidentialNumber",
+    selector: { "metadata.qualification.label": "vehicle_registration" },
+  },
+  [AutofillFieldQualifier.paperVehicleRegistrationLicensePlateNumber]: {
+    doctype: "io.cozy.files",
+    path: "metadata.vehicle.licenseNumber",
+    selector: { "metadata.qualification.label": "vehicle_registration" },
+  },
+  [AutofillFieldQualifier.paperBankIbanNumber]: {
+    doctype: "io.cozy.files",
+    path: "metadata.number",
+    selector: { "metadata.qualification.label": "bank_details" },
+  },
+  [AutofillFieldQualifier.paperBankBicNumber]: {
+    doctype: "io.cozy.files",
+    path: "metadata.bicNumber",
+    selector: { "metadata.qualification.label": "bank_details" },
+  },
+  [AutofillFieldQualifier.paperGrossSalaryAmount]: {
+    doctype: "io.cozy.files",
+    path: "metadata.number",
+    selector: { "metadata.qualification.label": "pay_sheet" },
+  },
+  [AutofillFieldQualifier.paperNetSalaryAmount]: {
+    doctype: "io.cozy.files",
+    path: "metadata.netSocialAmount",
+    selector: { "metadata.qualification.label": "pay_sheet" },
+  },
+  [AutofillFieldQualifier.paperTaxNoticeNumber]: {
+    doctype: "io.cozy.files",
+    path: "metadata.number",
+    selector: { "metadata.qualification.label": "tax_notice" },
+  },
+  [AutofillFieldQualifier.paperTaxNoticeRefTaxIncome]: {
+    doctype: "io.cozy.files",
+    path: "metadata.refTaxIncome",
+    selector: { "metadata.qualification.label": "tax_notice" },
+  },
 };
 
 interface GetCozyValueType {

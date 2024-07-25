@@ -25,6 +25,18 @@ export const AutofillFieldQualifier = {
   identityUsername: "identityUsername",
   // Cozy customization
   paperIdentityCardNumber: "paperIdentityCardNumber",
+  paperPassportNumber: "paperPassportNumber",
+  paperSocialSecurityNumber: "paperSocialSecurityNumber",
+  paperResidencePermitNumber: "paperResidencePermitNumber",
+  paperVehicleRegistrationNumber: "paperVehicleRegistrationNumber",
+  paperVehicleRegistrationConfidentialCode: "paperVehicleRegistrationConfidentialCode",
+  paperVehicleRegistrationLicensePlateNumber: "paperVehicleRegistrationLicensePlateNumber",
+  paperBankIbanNumber: "paperBankIbanNumber",
+  paperBankBicNumber: "paperBankBicNumber",
+  paperGrossSalaryAmount: "paperGrossSalaryAmount",
+  paperNetSalaryAmount: "paperNetSalaryAmount",
+  paperTaxNoticeNumber: "paperTaxNoticeNumber",
+  paperTaxNoticeRefTaxIncome: "paperTaxNoticeRefTaxIncome",
   // Cozy customization end
 } as const;
 

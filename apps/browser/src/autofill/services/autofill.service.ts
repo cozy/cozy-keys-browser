@@ -1601,6 +1601,108 @@ export default class AutofillService implements AutofillServiceInterface {
           fillFields.paperIdentityCardNumber = f;
           break;
         }
+        if (
+          !fillFields.paperPassportNumber &&
+          AutofillService.isFieldMatch(f[attr], PaperAutoFillConstants.PassportNumberFieldNames)
+        ) {
+          fillFields.paperPassportNumber = f;
+          break;
+        }
+        if (
+          !fillFields.paperSocialSecurityNumber &&
+          AutofillService.isFieldMatch(
+            f[attr],
+            PaperAutoFillConstants.SocialSecurityNumberFieldNames,
+          )
+        ) {
+          fillFields.paperSocialSecurityNumber = f;
+          break;
+        }
+        if (
+          !fillFields.paperResidencePermitNumber &&
+          AutofillService.isFieldMatch(
+            f[attr],
+            PaperAutoFillConstants.ResidencePermitNumberFieldNames,
+          )
+        ) {
+          fillFields.paperResidencePermitNumber = f;
+          break;
+        }
+        if (
+          !fillFields.paperVehicleRegistrationNumber &&
+          AutofillService.isFieldMatch(
+            f[attr],
+            PaperAutoFillConstants.VehicleRegistrationNumberFieldNames,
+          )
+        ) {
+          fillFields.paperVehicleRegistrationNumber = f;
+          break;
+        }
+        if (
+          !fillFields.paperVehicleRegistrationConfidentialCode &&
+          AutofillService.isFieldMatch(
+            f[attr],
+            PaperAutoFillConstants.VehicleRegistrationConfidentialCodeFieldNames,
+          )
+        ) {
+          fillFields.paperVehicleRegistrationConfidentialCode = f;
+          break;
+        }
+        if (
+          !fillFields.paperVehicleRegistrationLicensePlateNumber &&
+          AutofillService.isFieldMatch(
+            f[attr],
+            PaperAutoFillConstants.VehicleRegistrationLicensePlateNumberFieldNames,
+          )
+        ) {
+          fillFields.paperVehicleRegistrationLicensePlateNumber = f;
+          break;
+        }
+        if (
+          !fillFields.paperBankIbanNumber &&
+          AutofillService.isFieldMatch(f[attr], PaperAutoFillConstants.BankIbanNumberFieldNames)
+        ) {
+          fillFields.paperBankIbanNumber = f;
+          break;
+        }
+        if (
+          !fillFields.paperBankBicNumber &&
+          AutofillService.isFieldMatch(f[attr], PaperAutoFillConstants.BankBicNumberFieldNames)
+        ) {
+          fillFields.paperBankBicNumber = f;
+          break;
+        }
+        if (
+          !fillFields.paperGrossSalaryAmount &&
+          AutofillService.isFieldMatch(f[attr], PaperAutoFillConstants.GrossSalaryAmountFieldNames)
+        ) {
+          fillFields.paperGrossSalaryAmount = f;
+          break;
+        }
+        if (
+          !fillFields.paperNetSalaryAmount &&
+          AutofillService.isFieldMatch(f[attr], PaperAutoFillConstants.NetSalaryAmountFieldNames)
+        ) {
+          fillFields.paperNetSalaryAmount = f;
+          break;
+        }
+        if (
+          !fillFields.paperTaxNoticeNumber &&
+          AutofillService.isFieldMatch(f[attr], PaperAutoFillConstants.TaxNoticeNumberFieldNames)
+        ) {
+          fillFields.paperTaxNoticeNumber = f;
+          break;
+        }
+        if (
+          !fillFields.paperTaxNoticeRefTaxIncome &&
+          AutofillService.isFieldMatch(
+            f[attr],
+            PaperAutoFillConstants.TaxNoticeRefTaxIncomeFieldNames,
+          )
+        ) {
+          fillFields.paperTaxNoticeRefTaxIncome = f;
+          break;
+        }
       }
     });
 
@@ -1617,6 +1719,174 @@ export default class AutofillService implements AutofillServiceInterface {
         fillScript,
         paperIdentityCardNumber,
         fillFields.paperIdentityCardNumber,
+        filledFields,
+      );
+    }
+
+    if (fillFields.paperPassportNumber) {
+      const paperPassportNumber = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperPassportNumber",
+      });
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperPassportNumber,
+        fillFields.paperPassportNumber,
+        filledFields,
+      );
+    }
+
+    if (fillFields.paperSocialSecurityNumber) {
+      const paperSocialSecurityNumber = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperSocialSecurityNumber",
+      });
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperSocialSecurityNumber,
+        fillFields.paperSocialSecurityNumber,
+        filledFields,
+      );
+    }
+
+    if (fillFields.paperResidencePermitNumber) {
+      const paperResidencePermitNumber = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperResidencePermitNumber",
+      });
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperResidencePermitNumber,
+        fillFields.paperResidencePermitNumber,
+        filledFields,
+      );
+    }
+
+    if (fillFields.paperVehicleRegistrationNumber) {
+      const paperVehicleRegistrationNumber = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperVehicleRegistrationNumber",
+      });
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperVehicleRegistrationNumber,
+        fillFields.paperVehicleRegistrationNumber,
+        filledFields,
+      );
+    }
+
+    if (fillFields.paperVehicleRegistrationConfidentialCode) {
+      const paperVehicleRegistrationConfidentialCode = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperVehicleRegistrationConfidentialCode",
+      });
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperVehicleRegistrationConfidentialCode,
+        fillFields.paperVehicleRegistrationConfidentialCode,
+        filledFields,
+      );
+    }
+
+    if (fillFields.paperVehicleRegistrationLicensePlateNumber) {
+      const paperVehicleRegistrationLicensePlateNumber = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperVehicleRegistrationLicensePlateNumber",
+      });
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperVehicleRegistrationLicensePlateNumber,
+        fillFields.paperVehicleRegistrationLicensePlateNumber,
+        filledFields,
+      );
+    }
+
+    if (fillFields.paperBankIbanNumber) {
+      const paperBankIbanNumber = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperBankIbanNumber",
+      });
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperBankIbanNumber,
+        fillFields.paperBankIbanNumber,
+        filledFields,
+      );
+    }
+
+    if (fillFields.paperBankBicNumber) {
+      const paperBankBicNumber = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperBankBicNumber",
+      });
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperBankBicNumber,
+        fillFields.paperBankBicNumber,
+        filledFields,
+      );
+    }
+
+    if (fillFields.paperGrossSalaryAmount) {
+      const paperGrossSalaryAmount = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperGrossSalaryAmount",
+      });
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperGrossSalaryAmount,
+        fillFields.paperGrossSalaryAmount,
+        filledFields,
+      );
+    }
+
+    if (fillFields.paperNetSalaryAmount) {
+      const paperNetSalaryAmount = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperNetSalaryAmount",
+      });
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperNetSalaryAmount,
+        fillFields.paperNetSalaryAmount,
+        filledFields,
+      );
+    }
+
+    if (fillFields.paperTaxNoticeNumber) {
+      const paperTaxNoticeNumber = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperTaxNoticeNumber",
+      });
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperTaxNoticeNumber,
+        fillFields.paperTaxNoticeNumber,
+        filledFields,
+      );
+    }
+
+    if (fillFields.paperTaxNoticeRefTaxIncome) {
+      const paperTaxNoticeRefTaxIncome = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperTaxNoticeRefTaxIncome",
+      });
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperTaxNoticeRefTaxIncome,
+        fillFields.paperTaxNoticeRefTaxIncome,
         filledFields,
       );
     }
