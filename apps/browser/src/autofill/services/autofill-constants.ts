@@ -876,6 +876,189 @@ export class PaperAutoFillConstants {
     "Official identification number",
     "Personal registration number",
   ];
+
+  static readonly PassportNumberFieldNames: string[] = [
+    "Numéro du passeport",
+    "Identifiant de passeport",
+    "passeport",
+    "numeropasseport",
+    "passeportnumero",
+    "numpasseport",
+    "passeportnum",
+    "Code de passeport",
+    "idpasseport",
+    "passeportid",
+    "Numéro d'identification de passeport",
+    "ID de passeport",
+    "Numéro d'enregistrement de passeport",
+    "Passport number",
+    "Passport identifier",
+    "Passport code",
+    "Passport identification number",
+    "Passport ID",
+    "Passport registration number",
+  ];
+
+  static readonly SocialSecurityNumberFieldNames: string[] = [
+    "nir",
+    "Numéro carte vitale",
+    "Identifiant carte vitale",
+    "Numéro sécurité sociale",
+    "Numéro carte assurance maladie",
+    "Carte vitale number",
+    "Carte vitale identifier",
+    "Social security number",
+    "Health insurance card number",
+  ];
+
+  static readonly ResidencePermitNumberFieldNames: string[] = [
+    "numCarteSejour",
+    "idCarteSejour",
+    "numeroTitreSejour",
+    "TitreSejourNum",
+    "TitreSejourId",
+    "IdSejour",
+    "Numéro du titre de séjour",
+    "Numéro de permis de séjour",
+    "Identifiant de titre de séjour",
+    "Numéro de carte de séjour",
+    "Identifiant de séjour",
+    "Numéro de séjour",
+    "Numéro d'autorisation de séjour",
+    "Code de séjour",
+    "Residence permit number",
+    "Residence permit number",
+    "Residence permit identifier",
+    "Residence permit number",
+    "Residence identifier",
+    "Residence permit number",
+    "Residence permit number",
+    "Residence code",
+  ];
+
+  static readonly VehicleRegistrationNumberFieldNames: string[] = [
+    "numCarteGrise",
+    "Numéro de la carte grise (VIN)",
+    "Numéro d'identification du véhicule",
+    "Numéro d'identification de la voiture",
+    "Numéro d'identification",
+    "Numéro d'identification",
+    "Numéro d'enregistrement du véhicule",
+    "Numéro d'enregistrement de la voiture",
+    "Numéro de série du véhicule",
+    "Numéro de série de la voiture",
+    "Numéro d'identification",
+    "Num carte grise",
+    "Numéro VIN",
+    "Vehicle registration number (VIN)",
+    "Vehicle identification number",
+    "Car identification number",
+    "Vehicle identification number",
+    "Vehicle identification number",
+    "Vehicle registration number",
+    "Car registration number",
+    "Vehicle serial number",
+    "Car serial number",
+    "Vehicle identification number",
+    "Vehicle registration number",
+    "VIN number",
+  ];
+
+  static readonly VehicleRegistrationConfidentialCodeFieldNames: string[] = [
+    "codeAnts",
+    "Code confidentiel",
+    "Code ANTS",
+    "Code de la carte grise",
+    "Confidential code",
+    "ANTS code",
+    "Grey card code",
+  ];
+
+  static readonly VehicleRegistrationLicensePlateNumberFieldNames: string[] = [
+    "Plaque d'immatriculation",
+    "Numéro d'immatriculation du véhicule",
+    "Numéro d'immatriculation de la voiture",
+    "Plaque d'immatriculation",
+    "Immatriculation",
+    "licensePlate",
+    "License plate",
+    "Vehicle registration number",
+    "Car registration number",
+    "License plate",
+    "License plate",
+  ];
+
+  static readonly BankIbanNumberFieldNames: string[] = [
+    "iban",
+    "Numéro d'IBAN",
+    "Identifiant IBAN",
+    "IBAN",
+    "Numéro de compte IBAN",
+    "Numéro d'identification bancaire",
+    "Numéro de compte IBAN",
+    "IBAN number",
+    "IBAN identifier",
+    "IBAN",
+    "IBAN account number",
+    "Bank identification number",
+    "IBAN account number",
+  ];
+
+  static readonly BankBicNumberFieldNames: string[] = [
+    "bic",
+    "Numéro BIC",
+    "Numéro de code banque BIC",
+    "Numéro d'identification bancaire BIC",
+    "BIC number    ",
+    "BIC bank code number",
+    "BIC bank identification number",
+  ];
+
+  static readonly GrossSalaryAmountFieldNames: string[] = [
+    "gross",
+    "Salaire",
+    "Revenu activité",
+    "Rémunération brute",
+    "Salaire brut",
+    "Montant brut rémunération",
+    "Salaire total",
+    "Montant brut versé",
+    "Gross compensation",
+    "Gross pay",
+    "Gross remuneration",
+    "Total salary",
+    "Gross payment",
+  ];
+
+  static readonly NetSalaryAmountFieldNames: string[] = [
+    "net",
+    "Montant net social",
+    "Montant social net",
+    "Paiement social net",
+    "Net social contribution",
+    "Net social security amount",
+    "Net social security payment",
+  ];
+
+  static readonly TaxNoticeNumberFieldNames: string[] = [
+    "taxNumber",
+    "Mon numéro fiscal",
+    "Numéro fiscal de référence",
+    "Identifiant fiscal de référence",
+    "Numéro d'identification fiscal",
+    "Numéro d'identification d'impôt",
+    "Tax reference number",
+    "Tax identification number",
+  ];
+
+  static readonly TaxNoticeRefTaxIncomeFieldNames: string[] = [
+    "RevenuFiscalRef",
+    "Revenu fiscal de référence de l'année",
+    "Revenu fiscal de référence",
+    "Revenu fiscal annuel",
+    "Reference taxable income",
+    "Annual tax income",
+  ];
 }
 
 // Cozy customization end
