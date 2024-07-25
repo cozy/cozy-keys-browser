@@ -40,5 +40,14 @@ export interface InlineMenuFieldQualificationService {
   isFieldForIdentityUsername(field: AutofillField): boolean;
   // Cozy customization
   isFieldForPaperIdentityCardNumber(field: AutofillField): boolean;
+  isFieldForPaperPassportNumber(field: AutofillField): boolean;
+  isFieldForPaperResidencePermitNumber(field: AutofillField): boolean;
+  isFieldForPaperVehiculeRegistrationNumber(field: AutofillField): boolean;
+  isFieldForPaperVehiculeRegistrationConfidentialCode(field: AutofillField): boolean;
+  isFieldForPaperVehiculeRegistrationLicensePlateNumber(field: AutofillField): boolean;
+  isFieldForPaperBankIbanNumber(field: AutofillField): boolean;
+  isFieldForPaperBankBicNumber(field: AutofillField): boolean;
+  isFieldForPaperTaxNoticeNumber(field: AutofillField): boolean;
+  isFieldForPaperTaxNoticeRefTaxIncome(field: AutofillField): boolean;
   // Cozy customization end
 }
