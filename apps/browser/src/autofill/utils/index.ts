@@ -1,5 +1,7 @@
+import { IOCozyContact } from "cozy-client/types/types";
+
 import { AutofillPort } from "../enums/autofill-port.enum";
-import { FillableFormFieldElement, FormElementWithAttribute, FormFieldElement } from "../types";
+import { AmbiguousContactFields, AmibuousContactFieldName, FillableFormFieldElement, FormElementWithAttribute, FormFieldElement } from "../types";
 
 /**
  * Generates a random string of characters.
@@ -352,3 +354,15 @@ export function throttle(callback: () => void, limit: number) {
     }
   };
 }
+
+/**
+ * @param ambiguousFields
+ * @param contact
+ */
+export const getAmbiguousFieldsContact = (
+  ambiguousFields: AmibuousContactFieldName[],
+  contact: IOCozyContact,
+): AmbiguousContactFields => {
+  return ambiguousFields
+    .reduce((acc, field) => (contact[field].length > 0 ? {...acc, [field]: contact[field]} : acc), {});
+};
