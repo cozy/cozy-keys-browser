@@ -167,7 +167,7 @@ describe("OverlayBackground", () => {
       i18nService,
       platformUtilsService,
       themeStateService,
-      cozyClientService
+      cozyClientService,
     );
     portKeyForTabSpy = overlayBackground["portKeyForTab"];
     pageDetailsForTabSpy = overlayBackground["pageDetailsForTab"];

@@ -184,7 +184,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
    */
   private updateListItems(
     ciphers: InlineMenuCipherData[],
-    showInlineMenuAccountCreation?: boolean
+    showInlineMenuAccountCreation?: boolean,
   ) {
     this.ciphers = ciphers;
     this.currentCipherIndex = 0;
@@ -220,7 +220,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         fieldQualifier: this.fieldQualifier,
         fieldValue: this.fieldValue,
         fieldHtmlIDToFill: this.fieldHtmlID,
-      })
+      });
     } else {
       this.loadPageOfCiphers();
     }
@@ -270,12 +270,16 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     fillButton.setAttribute("aria-label", contactName);
     fillButton.addEventListener(
       EVENTS.CLICK,
-      this.handleFillCipherAmbiguousClickEvent(inlineMenuCipherId, ambiguousValue, fieldHtmlIDToFill, uniqueId()),
+      this.handleFillCipherAmbiguousClickEvent(
+        inlineMenuCipherId,
+        ambiguousValue,
+        fieldHtmlIDToFill,
+        uniqueId(),
+      ),
     );
 
-    const isAlreadySelected = this.fieldValue && currentListItemValue
-      .toLowerCase()
-      .includes(this.fieldValue.toLowerCase());
+    const isAlreadySelected =
+      this.fieldValue && currentListItemValue.toLowerCase().includes(this.fieldValue.toLowerCase());
     const radio = document.createElement("input");
     radio.setAttribute("type", "radio");
     radio.setAttribute("name", "contact");
@@ -288,7 +292,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const detailsSpan = document.createElement("span");
     detailsSpan.classList.add("cipher-details");
 
-    const nameSpanText = makeAmbiguousValueLabel(ambiguousValue, isAmbiguousFieldFocused, this.getTranslation.bind(this));
+    const nameSpanText = makeAmbiguousValueLabel(
+      ambiguousValue,
+      isAmbiguousFieldFocused,
+      this.getTranslation.bind(this),
+    );
     const nameSpan = document.createElement("span");
     nameSpan.setAttribute("title", nameSpanText);
     nameSpan.textContent = nameSpanText;
@@ -331,7 +339,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.newItemButtonElement.setAttribute("aria-label", contactName);
 
     if (this.fieldValue) {
-      this.newItemButtonElement.classList.add("inline-menu-list-ambiguous-header--without-back-icon");
+      this.newItemButtonElement.classList.add(
+        "inline-menu-list-ambiguous-header--without-back-icon",
+      );
     } else {
       this.newItemButtonElement.append(buildSvgDomElement(backIcon));
       this.newItemButtonElement.addEventListener(EVENTS.CLICK, this.handleNewAmbiguousHeaderClick);
