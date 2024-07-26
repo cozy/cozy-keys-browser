@@ -23,6 +23,7 @@ export type UpdateAutofillInlineMenuListAmbiguousMessage = AutofillInlineMenuLis
   contactName: string;
   ambiguousFields: AmbiguousContactFields;
   isFocusedFieldAmbigous: boolean;
+  fieldHtmlIDToFill: string;
 };
 // Cozy customization end
 
