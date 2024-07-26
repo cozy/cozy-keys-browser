@@ -1234,7 +1234,7 @@ export default class MainBackground {
             this.i18nService,
             this.platformUtilsService,
             themeStateService,
-            this.cozyClientService
+            this.cozyClientService,
           );
         }
 
