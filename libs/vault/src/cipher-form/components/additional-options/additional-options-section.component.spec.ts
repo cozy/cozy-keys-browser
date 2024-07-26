@@ -1,14 +1,24 @@
+import { Component } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { mock, MockProxy } from "jest-mock-extended";
 import { BehaviorSubject } from "rxjs";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { CipherRepromptType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import { PasswordRepromptService } from "../../../services/password-reprompt.service";
 import { CipherFormContainer } from "../../cipher-form-container";
+import { CustomFieldsComponent } from "../custom-fields/custom-fields.component";
 
 import { AdditionalOptionsSectionComponent } from "./additional-options-section.component";
+
+@Component({
+  standalone: true,
+  selector: "vault-custom-fields",
+  template: "",
+})
+class MockCustomFieldsComponent {}
 
 describe("AdditionalOptionsSectionComponent", () => {
   let component: AdditionalOptionsSectionComponent;
@@ -31,7 +41,16 @@ describe("AdditionalOptionsSectionComponent", () => {
         { provide: PasswordRepromptService, useValue: passwordRepromptService },
         { provide: I18nService, useValue: mock<I18nService>() },
       ],
-    }).compileComponents();
+    })
+      .overrideComponent(AdditionalOptionsSectionComponent, {
+        remove: {
+          imports: [CustomFieldsComponent],
+        },
+        add: {
+          imports: [MockCustomFieldsComponent],
+        },
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(AdditionalOptionsSectionComponent);
     component = fixture.componentInstance;
@@ -55,10 +74,16 @@ describe("AdditionalOptionsSectionComponent", () => {
       reprompt: true,
     });
 
-    expect(cipherFormProvider.patchCipher).toHaveBeenCalledWith({
-      notes: "new notes",
-      reprompt: 1,
-    });
+    const expectedCipher = new CipherView();
+    expectedCipher.notes = "new notes";
+    expectedCipher.reprompt = CipherRepromptType.Password;
+
+    expect(cipherFormProvider.patchCipher).toHaveBeenCalled();
+    const patchFn = cipherFormProvider.patchCipher.mock.lastCall[0];
+
+    const updated = patchFn(new CipherView());
+
+    expect(updated).toEqual(expectedCipher);
   });
 
   it("disables 'additionalOptionsForm' when in partial-edit mode", () => {

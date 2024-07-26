@@ -109,10 +109,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       "inline-menu-list-action",
     );
     unlockButtonElement.textContent = this.getTranslation("unlockAccount");
-    unlockButtonElement.setAttribute(
-      "aria-label",
-      `${this.getTranslation("unlockAccount")}, ${this.getTranslation("opensInANewWindow")}`,
-    );
+    unlockButtonElement.setAttribute("aria-label", this.getTranslation("unlockAccountAria"));
     unlockButtonElement.prepend(buildSvgDomElement(lockIcon));
     unlockButtonElement.addEventListener(EVENTS.CLICK, this.handleUnlockButtonClick);
 
@@ -203,10 +200,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       "inline-menu-list-action",
     );
     this.newItemButtonElement.textContent = this.getNewItemButtonText();
-    this.newItemButtonElement.setAttribute(
-      "aria-label",
-      `${this.getNewItemAriaLabel()}, ${this.getTranslation("opensInANewWindow")}`,
-    );
+    this.newItemButtonElement.setAttribute("aria-label", this.getNewItemAriaLabel());
     this.newItemButtonElement.prepend(buildSvgDomElement(plusIcon));
     this.newItemButtonElement.addEventListener(EVENTS.CLICK, this.handeNewItemButtonClick);
 
@@ -393,7 +387,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     if (cipher.login) {
       fillCipherElement.setAttribute(
         "aria-description",
-        `${this.getTranslation("username")}, ${cipher.login.username}`,
+        `${this.getTranslation("username")}: ${cipher.login.username}`,
       );
       return;
     }
@@ -762,12 +756,32 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       }
 
       const { height } = entry.contentRect;
+      this.toggleScrollClass(height);
       this.postMessageToParent({
         command: "updateAutofillInlineMenuListHeight",
         styles: { height: `${height}px` },
       });
       break;
     }
+  };
+
+  /**
+   * Toggles the scrollbar class on the inline menu list actions container.
+   *
+   * @param height - The height of the inline menu list actions container.
+   */
+  private toggleScrollClass = (height: number) => {
+    if (!this.ciphersList) {
+      return;
+    }
+    const scrollbarClass = "inline-menu-list-actions--scrollbar";
+
+    if (height >= 170) {
+      this.ciphersList.classList.add(scrollbarClass);
+      return;
+    }
+
+    this.ciphersList.classList.remove(scrollbarClass);
   };
 
   /**

@@ -878,7 +878,7 @@ export class InlineMenuFieldQualificationService
    *
    * @param field - The field to validate
    */
-  private isNewPasswordField = (field: AutofillField): boolean => {
+  isNewPasswordField = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.currentPasswordAutocompleteValue)) {
       return false;
     }

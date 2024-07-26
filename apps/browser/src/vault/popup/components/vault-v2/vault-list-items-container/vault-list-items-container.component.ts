@@ -13,6 +13,7 @@ import {
   SectionHeaderComponent,
   TypographyModule,
 } from "@bitwarden/components";
+import { OrgIconDirective } from "@bitwarden/vault";
 
 import { VaultPopupAutofillService } from "../../../services/vault-popup-autofill.service";
 import { PopupCipherView } from "../../../views/popup-cipher.view";
@@ -33,6 +34,7 @@ import { ItemMoreOptionsComponent } from "../item-more-options/item-more-options
     RouterLink,
     ItemCopyActionsComponent,
     ItemMoreOptionsComponent,
+    OrgIconDirective,
   ],
   selector: "app-vault-list-items-container",
   templateUrl: "vault-list-items-container.component.html",
@@ -75,6 +77,13 @@ export class VaultListItemsContainerComponent {
    */
   @Input({ transform: booleanAttribute })
   showAutofillButton: boolean;
+
+  /**
+   * Remove the bottom margin from the bit-section in this component
+   * (used for containers at the end of the page where bottom margin is not needed)
+   */
+  @Input({ transform: booleanAttribute })
+  disableSectionMargin: boolean = false;
 
   /**
    * The tooltip text for the organization icon for ciphers that belong to an organization.

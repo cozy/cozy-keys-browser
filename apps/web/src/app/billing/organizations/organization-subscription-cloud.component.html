@@ -1,9 +1,9 @@
 <app-header></app-header>
 
-<bit-container *ngIf="!isProviderManaged">
+<bit-container *ngIf="!isManagedByConsolidatedBillingMSP">
   <ng-container *ngIf="!firstLoaded && loading">
     <i class="bwi bwi-spinner bwi-spin text-muted" title="{{ 'loading' | i18n }}"></i>
-    <span class="sr-only">{{ "loading" | i18n }}</span>
+    <span class="tw-sr-only">{{ "loading" | i18n }}</span>
   </ng-container>
 
   <app-org-subscription-hidden
@@ -75,7 +75,7 @@
               <tr bitRow *ngFor="let i of subscriptionLineItems">
                 <td bitCell [ngClass]="{ 'tw-pl-20': i.addonSubscriptionItem }">
                   <span *ngIf="!i.addonSubscriptionItem">{{ i.productName | i18n }} -</span>
-                  {{ i.name }} {{ i.quantity > 1 ? "&times;" + i.quantity : "" }} @
+                  {{ i.name }} {{ i.quantity > 1 ? "&times;" + i.quantity : "" }} &#64;
                   {{ i.amount | currency: "$" }}
                 </td>
                 <td bitCell class="tw-text-right">
@@ -122,6 +122,7 @@
         <app-change-plan
           [organizationId]="organizationId"
           [currentPlan]="sub.plan"
+          [preSelectedProductTier]="preSelectedProductTier"
           (onChanged)="closeChangePlan()"
           (onCanceled)="closeChangePlan()"
           *ngIf="showChangePlan"
@@ -273,7 +274,7 @@
     </ng-container>
   </ng-container>
 </bit-container>
-<bit-container *ngIf="isProviderManaged">
+<bit-container *ngIf="isManagedByConsolidatedBillingMSP">
   <div
     class="tw-mx-auto tw-flex tw-flex-col tw-items-center tw-justify-center tw-pt-24 tw-text-center tw-font-bold"
   >

@@ -21,6 +21,7 @@ import { LinkModule, TypographyModule, CheckboxModule, DialogService } from "@bi
 
 import { TwoFactorAuthAuthenticatorComponent } from "../../../../../libs/angular/src/auth/components/two-factor-auth/two-factor-auth-authenticator.component";
 import { TwoFactorAuthEmailComponent } from "../../../../../libs/angular/src/auth/components/two-factor-auth/two-factor-auth-email.component";
+import { TwoFactorAuthWebAuthnComponent } from "../../../../../libs/angular/src/auth/components/two-factor-auth/two-factor-auth-webauthn.component";
 import { TwoFactorAuthYubikeyComponent } from "../../../../../libs/angular/src/auth/components/two-factor-auth/two-factor-auth-yubikey.component";
 import { TwoFactorAuthComponent as BaseTwoFactorAuthComponent } from "../../../../../libs/angular/src/auth/components/two-factor-auth/two-factor-auth.component";
 import { TwoFactorOptionsComponent } from "../../../../../libs/angular/src/auth/components/two-factor-auth/two-factor-options.component";
@@ -32,6 +33,8 @@ import {
 import { AsyncActionsModule } from "../../../../../libs/components/src/async-actions";
 import { ButtonModule } from "../../../../../libs/components/src/button";
 import { FormFieldModule } from "../../../../../libs/components/src/form-field";
+
+import { TwoFactorAuthDuoComponent } from "./two-factor-auth-duo.component";
 
 @Component({
   standalone: true,
@@ -54,6 +57,8 @@ import { FormFieldModule } from "../../../../../libs/components/src/form-field";
     TwoFactorAuthEmailComponent,
     TwoFactorAuthAuthenticatorComponent,
     TwoFactorAuthYubikeyComponent,
+    TwoFactorAuthDuoComponent,
+    TwoFactorAuthWebAuthnComponent,
   ],
   providers: [I18nPipe],
 })

@@ -41,6 +41,9 @@ page looks nice when the extension is popped out.
 - `footer`
   - Use the `popup-footer` component.
   - Not every page will have a footer.
+- `above-scroll-area`
+  - When the page content overflows, this content will be "stuck" to the top of the page upon
+    scrolling.
 - default
   - Whatever content you want in `main`.
 
@@ -71,6 +74,9 @@ Basic usage example:
 - `showBackButton`: optional, defaults to `false`
   - Toggles the back button to appear. The back button uses `Location.back()` to navigate back one
     page in history.
+- `background`: optional
+  - `"default"` uses a white background
+  - `"alt"` uses a transparent background
 
 **Slots**
 
@@ -88,6 +94,12 @@ Usage example:
   </ng-container>
 </popup-header>
 ```
+
+### Transparent header
+
+<Canvas>
+  <Story of={stories.TransparentHeader} />
+</Canvas>
 
 Common interactive elements to insert into the `end` slot are:
 
