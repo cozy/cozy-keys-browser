@@ -143,6 +143,9 @@ export type OverlayPortMessage = {
   direction?: string;
   inlineMenuCipherId?: string;
   addNewCipherType?: CipherType;
+  // Cozy customization;
+  fieldQualifier?: AutofillFieldQualifierType;
+  // Cozy customization end
 };
 
 export type InlineMenuCipherData = {
@@ -247,6 +250,9 @@ export type InlineMenuListPortMessageHandlers = {
   autofillInlineMenuBlurred: () => void;
   unlockVault: ({ port }: PortConnectionParam) => void;
   fillAutofillInlineMenuCipher: ({ message, port }: PortOnMessageHandlerParams) => void;
+  // Cozy customization; fill ambiguous contact
+  handleContactClick: ({ message, port }: PortOnMessageHandlerParams) => void;
+  // Cozy customization end
   addNewVaultItem: ({ message, port }: PortOnMessageHandlerParams) => void;
   viewSelectedCipher: ({ message, port }: PortOnMessageHandlerParams) => void;
   redirectAutofillInlineMenuFocusOut: ({ message, port }: PortOnMessageHandlerParams) => void;
