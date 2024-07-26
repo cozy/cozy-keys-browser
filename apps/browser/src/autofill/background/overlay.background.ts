@@ -818,6 +818,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     { inlineMenuCipherId }: OverlayPortMessage,
     { sender }: chrome.runtime.Port,
     ambiguousValue?: AmbiguousContactFieldValue[0],
+    fieldHtmlIDToFill?: string,
   ) {
     const pageDetails = this.pageDetailsForTab[sender.tab.id];
     if (!inlineMenuCipherId || !pageDetails?.size) {
@@ -836,6 +837,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       fillNewPassword: true,
       allowTotpAutofill: true,
       ...(ambiguousValue ? { cozyProfile: ambiguousValue } : {}),
+      ...(fieldHtmlIDToFill ? { fillOnlyThisFieldHtmlID: fieldHtmlIDToFill } : {}),
     });
 
     // Cozy customization
@@ -853,8 +855,8 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     message: OverlayPortMessage,
     port: chrome.runtime.Port,
   ) {
-    const ambiguousValue = message.ambiguousValue;
-    this.fillInlineMenuCipher(message, port, ambiguousValue);
+    const { ambiguousValue, fieldHtmlIDToFill } = message;
+    this.fillInlineMenuCipher(message, port, ambiguousValue, fieldHtmlIDToFill);
   }
 
   /**
@@ -862,7 +864,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
    * @param sender - The sender of the port message
    */
   private async handleContactClick(message: OverlayPortMessage, port: chrome.runtime.Port) {
-    const { inlineMenuCipherId } = message;
+    const { inlineMenuCipherId, fieldHtmlIDToFill } = message;
     const client = await this.cozyClientService.getClientInstance();
     const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
 
@@ -919,6 +921,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
           ? ambiguousFormFieldsOfFocusedField
           : unambiguousFormFieldsOfFocusedField,
         isFocusedFieldAmbigous,
+        fieldHtmlIDToFill,
       });
     } else {
       this.fillInlineMenuCipher(message, port);

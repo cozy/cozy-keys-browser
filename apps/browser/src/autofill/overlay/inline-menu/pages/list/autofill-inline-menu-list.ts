@@ -50,6 +50,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private lastFilledCipherId: string;
   private fieldQualifier: AutofillFieldQualifierType;
   private fieldValue: string;
+  private fieldHtmlID: string;
   // Cozy customization end
   private showInlineMenuAccountCreation: boolean;
   private readonly showCiphersPerPage = 6;
@@ -66,6 +67,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
           message.contactName,
           message.ambiguousFields,
           message.isFocusedFieldAmbigous,
+          message.fieldHtmlIDToFill,
         ),
       focusAutofillInlineMenuList: () => this.focusInlineMenuList(),
     };
@@ -115,6 +117,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.lastFilledCipherId = lastFilledCipherId;
     this.fieldQualifier = fieldQualifier;
     this.fieldValue = fieldValue;
+    this.fieldHtmlID = fieldHtmlID;
     // Cozy customization end
 
     this.filledByCipherType = filledByCipherType;
@@ -205,7 +208,22 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       passive: true,
     });
 
-    this.loadPageOfCiphers();
+    // On the contact ambiguous fields, if the field has a value, the corresponding menu is displayed directly.
+    if (
+      this.fieldValue &&
+      ambiguousContactFieldNames.includes(bitwardenToCozy[this.fieldQualifier])
+    ) {
+      this.postMessageToParent({
+        command: "handleContactClick",
+        inlineMenuCipherId: this.lastFilledCipherId,
+        lastFilledCipherId: this.lastFilledCipherId,
+        fieldQualifier: this.fieldQualifier,
+        fieldValue: this.fieldValue,
+        fieldHtmlIDToFill: this.fieldHtmlID,
+      })
+    } else {
+      this.loadPageOfCiphers();
+    }
 
     this.inlineMenuListContainer.appendChild(this.ciphersList);
     this.toggleScrollClass();
@@ -233,6 +251,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     ambiguousKey: AmibuousContactFieldName,
     ambiguousValue: AmbiguousContactFieldValue[0],
     isAmbiguousFieldFocused: boolean,
+    fieldHtmlIDToFill: string,
   ) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -251,7 +270,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     fillButton.setAttribute("aria-label", contactName);
     fillButton.addEventListener(
       EVENTS.CLICK,
-      this.handleFillCipherAmbiguousClickEvent(inlineMenuCipherId, ambiguousValue, uniqueId()),
+      this.handleFillCipherAmbiguousClickEvent(inlineMenuCipherId, ambiguousValue, fieldHtmlIDToFill, uniqueId()),
     );
 
     const isAlreadySelected = this.fieldValue && currentListItemValue
@@ -427,6 +446,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     contactName: string,
     ambiguousFields: AmbiguousContactFields,
     isAmbiguousFieldFocused: boolean,
+    fieldHtmlIDToFill: string,
   ) {
     this.inlineMenuListContainer.innerHTML = "";
     this.inlineMenuListContainer.classList.remove(
@@ -453,6 +473,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
           firstAmbiguousFieldName,
           firstAmbiguousFieldValue,
           isAmbiguousFieldFocused,
+          fieldHtmlIDToFill,
         );
         ulElement.appendChild(li);
       }
@@ -480,6 +501,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private handleFillCipherAmbiguousClickEvent = (
     inlineMenuCipherId: string,
     ambiguousValue: AmbiguousContactFieldValue[0],
+    fieldHtmlIDToFill: string,
     UID: string,
   ) => {
     return this.useEventHandlersMemo(
@@ -488,6 +510,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
           command: "fillAutofillInlineMenuCipherWithAmbiguousField",
           inlineMenuCipherId,
           ambiguousValue,
+          fieldHtmlIDToFill,
         }),
       `${UID}-fill-cipher-button-click-handler`,
     );
