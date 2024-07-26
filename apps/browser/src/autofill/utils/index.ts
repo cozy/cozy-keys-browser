@@ -375,16 +375,24 @@ export const getAmbiguousFieldsContact = (
   ambiguousFields: AmibuousContactFieldName[],
   contact: IOCozyContact,
 ): AmbiguousContactFields => {
-  return ambiguousFields
-    .reduce((acc, field) => (contact[field].length > 0 ? {...acc, [field]: contact[field]} : acc), {});
+  return ambiguousFields.reduce(
+    (acc, field) => (contact[field].length > 0 ? { ...acc, [field]: contact[field] } : acc),
+    {},
+  );
 };
-export const bitwardenToCozy: Partial<Record<AutofillFieldQualifierType, AmibuousContactFieldName>> = {
+export const bitwardenToCozy: Partial<
+  Record<AutofillFieldQualifierType, AmibuousContactFieldName>
+> = {
   identityPhone: "phone",
   identityEmail: "email",
   identityAddress1: "address",
   identityState: "address",
 };
-export const ambiguousContactFieldNames: AmibuousContactFieldName[] = ["phone", "email", "address"];
+export const ambiguousContactFieldNames: AmbiguousContactFieldName[] = [
+  "phone",
+  "email",
+  "address",
+];
 
 export const getAmbiguousValueKey = (ambiguousKey: AmibuousContactFieldName) => {
   switch (ambiguousKey) {
@@ -404,8 +412,9 @@ export const makeAmbiguousValueLabel = (
   isAmbiguousFieldFocused: boolean,
   t: (key: string) => string,
 ) => {
-  const translatedType = ambiguousValue.type?.toLowerCase() === 'cell' ? t(ambiguousValue.type) : ambiguousValue.type
-  const translatedLabel = t(ambiguousValue.label)
+  const translatedType =
+    ambiguousValue.type?.toLowerCase() === "cell" ? t(ambiguousValue.type) : ambiguousValue.type;
+  const translatedLabel = t(ambiguousValue.label);
 
   if (isAmbiguousFieldFocused) {
     return ambiguousValue.label
