@@ -5,7 +5,14 @@ import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.en
 // Cozy customization end
 
 import { AutofillPort } from "../enums/autofill-port.enum";
-import { AmbiguousContactFields, AmibuousContactFieldName, FillableFormFieldElement, FormElementWithAttribute, FormFieldElement } from "../types";
+import {
+  AmbiguousContactFields,
+  AmbiguousContactFieldValue,
+  AmibuousContactFieldName,
+  FillableFormFieldElement,
+  FormElementWithAttribute,
+  FormFieldElement,
+} from "../types";
 
 /**
  * Generates a random string of characters.
@@ -378,4 +385,34 @@ export const bitwardenToCozy: Partial<Record<AutofillFieldQualifierType, Amibuou
   identityState: "address",
 };
 export const ambiguousContactFieldNames: AmibuousContactFieldName[] = ["phone", "email", "address"];
+
+export const getAmbiguousValueKey = (ambiguousKey: AmibuousContactFieldName) => {
+  switch (ambiguousKey) {
+    case "email":
+      return "address";
+    case "phone":
+      return "number";
+    case "address":
+      return "formattedAddress";
+    default:
+      return "";
+  }
+};
+
+export const makeAmbiguousValueLabel = (
+  ambiguousValue: AmbiguousContactFieldValue[0],
+  isAmbiguousFieldFocused: boolean,
+  t: (key: string) => string,
+) => {
+  const translatedType = ambiguousValue.type?.toLowerCase() === 'cell' ? t(ambiguousValue.type) : ambiguousValue.type
+  const translatedLabel = t(ambiguousValue.label)
+
+  if (isAmbiguousFieldFocused) {
+    return ambiguousValue.label
+      ? `${translatedType ? `${translatedType} (${translatedLabel})` : translatedLabel}`
+      : "";
+  } else {
+    return `${translatedLabel || ""}`;
+  }
+};
 // Cozy customization end
