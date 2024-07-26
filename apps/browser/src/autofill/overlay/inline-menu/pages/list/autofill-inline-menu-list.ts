@@ -13,6 +13,12 @@ import {
 } from "../../abstractions/autofill-inline-menu-list";
 import { AutofillInlineMenuPageElement } from "../shared/autofill-inline-menu-page-element";
 
+/* start Cozy imports */
+/* eslint-disable */
+import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
+/* eslint-enable */
+/* end Cozy imports */
+
 export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private inlineMenuListContainer: HTMLDivElement;
   private resizeObserver: ResizeObserver;
@@ -23,6 +29,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private cipherListScrollDebounceTimeout: number | NodeJS.Timeout;
   private currentCipherIndex = 0;
   private filledByCipherType: CipherType;
+  // Cozy customization
+  private lastFilledCipherId: string;
+  private fieldQualifier: AutofillFieldQualifierType;
+  private fieldValue: string;
+  // Cozy customization end
   private showInlineMenuAccountCreation: boolean;
   private readonly showCiphersPerPage = 6;
   private newItemButtonElement: HTMLButtonElement;
@@ -76,6 +87,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       translations,
       portKey,
     );
+    // Cozy customization
+    this.lastFilledCipherId = lastFilledCipherId;
+    this.fieldQualifier = fieldQualifier;
+    this.fieldValue = fieldValue;
+    // Cozy customization end
 
     this.filledByCipherType = filledByCipherType;
 
@@ -431,6 +447,20 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
    * @param cipher - The cipher to fill.
    */
   private handleFillCipherClickEvent = (cipher: InlineMenuCipherData) => {
+    if (cipher.contact) {
+      return this.useEventHandlersMemo(
+        () =>
+          this.postMessageToParent({
+            command: "handleContactClick",
+            inlineMenuCipherId: cipher.id,
+            lastFilledCipherId: this.lastFilledCipherId,
+            fieldQualifier: this.fieldQualifier,
+            fieldValue: this.fieldValue,
+          }),
+        `${cipher.id}-fill-cipher-button-click-handler`,
+      );
+    }
+
     return this.useEventHandlersMemo(
       () =>
         this.postMessageToParent({
