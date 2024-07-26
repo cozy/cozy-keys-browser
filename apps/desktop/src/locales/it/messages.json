@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "Master password hint"
   },
+  "joinOrganization": {
+    "message": "Join organization"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Finish joining this organization by setting a master password."
+  },
   "settings": {
     "message": "Impostazioni"
   },
@@ -626,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "Codice di verifica obbligatorio."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "The authentication was cancelled or took too long. Please try again."
   },
   "invalidVerificationCode": {
     "message": "Codice di verifica non valido"
@@ -788,6 +797,18 @@
   },
   "loginExpired": {
     "message": "La tua sessione è scaduta."
+  },
+  "restartRegistration": {
+    "message": "Restart registration"
+  },
+  "expiredLink": {
+    "message": "Expired link"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Please restart registration or try logging in."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "You may already have an account"
   },
   "logOutConfirmation": {
     "message": "Sei sicuro di voler uscire?"
@@ -1690,8 +1711,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "La tua nuova password principale non soddisfa i requisiti di sicurezza."
   },
-  "receiveMarketingEmails": {
-    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  "receiveMarketingEmailsV2": {
+    "message": "Get advice, announcements, and research opportunities from Bitwarden in your inbox."
   },
   "unsubscribe": {
     "message": "Unsubscribe"
@@ -2077,6 +2098,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Il timeout della tua cassaforte supera i limiti impostati dalla tua organizzazione."
+  },
+  "inviteAccepted": {
+    "message": "Invitation accepted"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Iscrizione automatica"
@@ -2778,6 +2802,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Avvia Duo e segui i passaggi per finire di accedere."
   },
@@ -2799,8 +2826,8 @@
   "invalidFilePassword": {
     "message": "Password errata, usa la password che hai inserito alla creazione del file di esportazione."
   },
-  "importDestination": {
-    "message": "Destinazione dell'importazione"
+  "destination": {
+    "message": "Destination"
   },
   "learnAboutImportOptions": {
     "message": "Ulteriori informazioni sulle tue opzioni di importazione"
@@ -2995,5 +3022,8 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Data"
   }
 }

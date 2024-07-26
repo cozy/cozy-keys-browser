@@ -3,8 +3,10 @@ import { CipherFormConfig } from "@bitwarden/vault";
 
 import { AdditionalOptionsSectionComponent } from "./components/additional-options/additional-options-section.component";
 import { CardDetailsSectionComponent } from "./components/card-details-section/card-details-section.component";
+import { CustomFieldsComponent } from "./components/custom-fields/custom-fields.component";
 import { IdentitySectionComponent } from "./components/identity/identity.component";
 import { ItemDetailsSectionComponent } from "./components/item-details/item-details-section.component";
+import { LoginDetailsSectionComponent } from "./components/login-details-section/login-details-section.component";
 
 /**
  * The complete form for a cipher. Includes all the sub-forms from their respective section components.
@@ -13,8 +15,10 @@ import { ItemDetailsSectionComponent } from "./components/item-details/item-deta
 export type CipherForm = {
   itemDetails?: ItemDetailsSectionComponent["itemDetailsForm"];
   additionalOptions?: AdditionalOptionsSectionComponent["additionalOptionsForm"];
+  loginDetails?: LoginDetailsSectionComponent["loginDetailsForm"];
   cardDetails?: CardDetailsSectionComponent["cardDetailsForm"];
   identityDetails?: IdentitySectionComponent["identityForm"];
+  customFields?: CustomFieldsComponent["customFieldsForm"];
 };
 
 /**
@@ -42,5 +46,9 @@ export abstract class CipherFormContainer {
     group: Exclude<CipherForm[K], undefined>,
   ): void;
 
-  abstract patchCipher(cipher: Partial<CipherView>): void;
+  /**
+   * Method to update the cipherView with the new values. This method should be called by the child form components
+   * @param updateFn - A function that takes the current cipherView and returns the updated cipherView
+   */
+  abstract patchCipher(updateFn: (current: CipherView) => CipherView): void;
 }

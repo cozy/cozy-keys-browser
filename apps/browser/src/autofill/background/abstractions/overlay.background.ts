@@ -220,7 +220,7 @@ export type PortOnMessageHandlerParams = PortMessageParam & PortConnectionParam;
 
 export type InlineMenuButtonPortMessageHandlers = {
   [key: string]: CallableFunction;
-  triggerDelayedAutofillInlineMenuClosure: ({ port }: PortConnectionParam) => void;
+  triggerDelayedAutofillInlineMenuClosure: () => void;
   autofillInlineMenuButtonClicked: ({ port }: PortConnectionParam) => void;
   autofillInlineMenuBlurred: () => void;
   redirectAutofillInlineMenuFocusOut: ({ message, port }: PortOnMessageHandlerParams) => void;

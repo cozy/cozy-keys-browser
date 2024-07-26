@@ -37,9 +37,10 @@ describe("AutofillOverlayContentService", () => {
     );
     autofillInit = new AutofillInit(autofillOverlayContentService);
     autofillInit.init();
-    sendExtensionMessageSpy = jest
-      .spyOn(autofillOverlayContentService as any, "sendExtensionMessage")
-      .mockResolvedValue(undefined);
+    sendExtensionMessageSpy = jest.spyOn(
+      autofillOverlayContentService as any,
+      "sendExtensionMessage",
+    );
     Object.defineProperty(document, "readyState", {
       value: defaultWindowReadyState,
       writable: true,
@@ -1412,7 +1413,7 @@ describe("AutofillOverlayContentService", () => {
             expect.any(Function),
           );
           expect(autofillFieldElement.removeEventListener).toHaveBeenCalled();
-          expect(inputAccountFieldData.filledByCipherType).toEqual(CipherType.Contact);
+          expect(inputAccountFieldData.filledByCipherType).toEqual(CipherType.Contact); // Cozy customization
           expect(inputAccountFieldData.showInlineMenuAccountCreation).toEqual(true);
         });
       });

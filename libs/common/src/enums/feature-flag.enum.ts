@@ -14,6 +14,7 @@ export enum FeatureFlag {
   EnableDeleteProvider = "AC-1218-delete-provider",
   ExtensionRefresh = "extension-refresh",
   RestrictProviderAccess = "restrict-provider-access",
+  PM4154_BulkEncryptionService = "PM-4154-bulk-encryption-service",
   UseTreeWalkerApiForPageDetailsCollection = "use-tree-walker-api-for-page-details-collection",
   EmailVerification = "email-verification",
   InlineMenuFieldQualification = "inline-menu-field-qualification",
@@ -21,10 +22,11 @@ export enum FeatureFlag {
   TwoFactorComponentRefactor = "two-factor-component-refactor",
   EnableTimeThreshold = "PM-5864-dollar-threshold",
   InlineMenuPositioningImprovements = "inline-menu-positioning-improvements",
-  GroupsComponentRefactor = "groups-component-refactor",
   ProviderClientVaultPrivacyBanner = "ac-2833-provider-client-vault-privacy-banner",
   VaultBulkManagementAction = "vault-bulk-management-action",
   AC2828_ProviderPortalMembersPage = "AC-2828_provider-portal-members-page",
+  DeviceTrustLogging = "pm-8285-device-trust-logging",
+  AuthenticatorTwoFactorToken = "authenticator-2fa-token",
 }
 
 export type AllowedFeatureFlagTypes = boolean | number | string;
@@ -49,6 +51,7 @@ export const DefaultFeatureFlagValue = {
   [FeatureFlag.EnableDeleteProvider]: FALSE,
   [FeatureFlag.ExtensionRefresh]: FALSE,
   [FeatureFlag.RestrictProviderAccess]: FALSE,
+  [FeatureFlag.PM4154_BulkEncryptionService]: FALSE,
   [FeatureFlag.UseTreeWalkerApiForPageDetailsCollection]: FALSE,
   [FeatureFlag.EmailVerification]: FALSE,
   [FeatureFlag.InlineMenuFieldQualification]: FALSE,
@@ -61,10 +64,11 @@ export const DefaultFeatureFlagValue = {
   /*/
   [FeatureFlag.InlineMenuPositioningImprovements]: FALSE,
   //*/
-  [FeatureFlag.GroupsComponentRefactor]: FALSE,
   [FeatureFlag.ProviderClientVaultPrivacyBanner]: FALSE,
   [FeatureFlag.VaultBulkManagementAction]: FALSE,
   [FeatureFlag.AC2828_ProviderPortalMembersPage]: FALSE,
+  [FeatureFlag.DeviceTrustLogging]: FALSE,
+  [FeatureFlag.AuthenticatorTwoFactorToken]: FALSE,
 } satisfies Record<FeatureFlag, AllowedFeatureFlagTypes>;
 
 export type DefaultFeatureFlagValueType = typeof DefaultFeatureFlagValue;

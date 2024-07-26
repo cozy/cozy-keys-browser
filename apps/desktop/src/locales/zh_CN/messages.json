@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "主密码提示"
   },
+  "joinOrganization": {
+    "message": "加入组织"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "通过设置主密码完成加入此组织。"
+  },
   "settings": {
     "message": "设置"
   },
@@ -626,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "必须填写验证码。"
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "身份验证被取消或耗时过长。请重试。"
   },
   "invalidVerificationCode": {
     "message": "无效的验证码"
@@ -789,6 +798,18 @@
   "loginExpired": {
     "message": "您的登录会话已过期。"
   },
+  "restartRegistration": {
+    "message": "重新开始注册"
+  },
+  "expiredLink": {
+    "message": "失效链接"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "请重新注册或尝试登录。"
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "您可能已经有一个账户了"
+  },
   "logOutConfirmation": {
     "message": "确定要注销吗？"
   },
@@ -811,7 +832,7 @@
     "message": "账户"
   },
   "loading": {
-    "message": "正在加载..."
+    "message": "加载中…"
   },
   "lockVault": {
     "message": "锁定密码库"
@@ -1690,8 +1711,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "您的新主密码不符合策略要求。"
   },
-  "receiveMarketingEmails": {
-    "message": "接收来自 Bitwarden 的电子邮件，以获取公告、建议和调研。"
+  "receiveMarketingEmailsV2": {
+    "message": "获取来自 Bitwarden 的建议、公告和调研电子邮件。"
   },
   "unsubscribe": {
     "message": "取消订阅"
@@ -1995,7 +2016,7 @@
     "message": "您的主密码不符合某一项或多项组织策略要求。要访问密码库，必须立即更新您的主密码。继续操作将使您退出当前会话，并要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。"
   },
   "tryAgain": {
-    "message": "再试一次"
+    "message": "请重试"
   },
   "verificationRequiredForActionSetPinToContinue": {
     "message": "此操作需要验证。设置一个 PIN 码以继续。"
@@ -2077,6 +2098,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "您的密码库超时时间超出了组织设置的限制。"
+  },
+  "inviteAccepted": {
+    "message": "邀请已接受"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "自动注册"
@@ -2497,7 +2521,7 @@
     "message": "已请求登录"
   },
   "creatingAccountOn": {
-    "message": "创建账户于"
+    "message": "正创建账户于"
   },
   "checkYourEmail": {
     "message": "检查您的电子邮箱"
@@ -2778,6 +2802,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "与 Duo 服务连接时出错。使用不同的两步登录方式或联系 Duo 寻求帮助。"
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "启动 Duo 然后按照步骤完成登录。"
   },
@@ -2799,8 +2826,8 @@
   "invalidFilePassword": {
     "message": "无效的文件密码，请使用您创建导出文件时输入的密码。"
   },
-  "importDestination": {
-    "message": "导入目的地"
+  "destination": {
+    "message": "Destination"
   },
   "learnAboutImportOptions": {
     "message": "了解您的导入选项"
@@ -2995,5 +3022,8 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Data"
   }
 }

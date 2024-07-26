@@ -134,7 +134,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     deletedCipher: () => this.updateOverlayCiphers(),
   };
   private readonly inlineMenuButtonPortMessageHandlers: InlineMenuButtonPortMessageHandlers = {
-    triggerDelayedAutofillInlineMenuClosure: ({ port }) => this.triggerDelayedInlineMenuClosure(),
+    triggerDelayedAutofillInlineMenuClosure: () => this.triggerDelayedInlineMenuClosure(),
     autofillInlineMenuButtonClicked: ({ port }) => this.handleInlineMenuButtonClicked(port),
     autofillInlineMenuBlurred: () => this.checkInlineMenuListFocused(),
     redirectAutofillInlineMenuFocusOut: ({ message, port }) =>
@@ -309,6 +309,10 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       ) {
         this.cardAndIdentityCiphers.add(cipherView);
       }
+    }
+
+    if (!this.cardAndIdentityCiphers.size) {
+      this.cardAndIdentityCiphers = null;
     }
 
     return cipherViews;
@@ -1356,6 +1360,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         listPageTitle: this.i18nService.translate("bitwardenVault"),
         unlockYourAccount: this.i18nService.translate("unlockYourAccountToViewAutofillSuggestions"),
         unlockAccount: this.i18nService.translate("unlockAccount"),
+        unlockAccountAria: this.i18nService.translate("unlockAccountAria"),
         fillCredentialsFor: this.i18nService.translate("fillCredentialsFor"),
         username: this.i18nService.translate("username")?.toLowerCase(),
         view: this.i18nService.translate("view"),
@@ -1363,11 +1368,11 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         newItem: this.i18nService.translate("newItem"),
         addNewVaultItem: this.i18nService.translate("addNewVaultItem"),
         newLogin: this.i18nService.translate("newLogin"),
-        addNewLoginItem: this.i18nService.translate("addNewLoginItem"),
+        addNewLoginItem: this.i18nService.translate("addNewLoginItemAria"),
         newCard: this.i18nService.translate("newCard"),
-        addNewCardItem: this.i18nService.translate("addNewCardItem"),
+        addNewCardItem: this.i18nService.translate("addNewCardItemAria"),
         newIdentity: this.i18nService.translate("newIdentity"),
-        addNewIdentityItem: this.i18nService.translate("addNewIdentityItem"),
+        addNewIdentityItem: this.i18nService.translate("addNewIdentityItemAria"),
         cardNumberEndsWith: this.i18nService.translate("cardNumberEndsWith"),
         cipherContactMe: this.i18nService.translate("cipherContactMe"),
       };
@@ -1840,7 +1845,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
 
     Promise.resolve(messageResponse)
       .then((response) => sendResponse(response))
-      .catch(this.logService.error);
+      .catch((error) => this.logService.error(error));
     return true;
   };
 
