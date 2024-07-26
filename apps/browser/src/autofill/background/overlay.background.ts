@@ -37,7 +37,7 @@ import {
   MAX_SUB_FRAME_DEPTH,
 } from "../enums/autofill-overlay.enum";
 import { AutofillService } from "../services/abstractions/autofill.service";
-import { generateRandomChars } from "../utils";
+import { ambiguousContactFieldNames, bitwardenToCozy, generateRandomChars, getAmbiguousFieldsContact } from "../utils";
 
 import { LockedVaultPendingNotificationsData } from "./abstractions/notification.background";
 import {
@@ -65,6 +65,10 @@ import {
 
 /* start Cozy imports */
 /* eslint-disable */
+import { Q } from "cozy-client";
+import { IOCozyContact } from "cozy-client/types/types";
+// @ts-ignore
+import { CONTACTS_DOCTYPE } from "cozy-client/dist/models/contact";
 import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
 /* eslint-enable */
@@ -153,6 +157,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     autofillInlineMenuBlurred: () => this.checkInlineMenuButtonFocused(),
     unlockVault: ({ port }) => this.unlockVault(port),
     fillAutofillInlineMenuCipher: ({ message, port }) => this.fillInlineMenuCipher(message, port),
+    handleContactClick: ({ message, port }) => this.handleContactClick(message, port),
     addNewVaultItem: ({ message, port }) => this.getNewVaultItemDetails(message, port),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port),
     redirectAutofillInlineMenuFocusOut: ({ message, port }) =>
@@ -830,6 +835,74 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     }
 
     this.inlineMenuCiphers = new Map([[inlineMenuCipherId, cipher], ...this.inlineMenuCiphers]);
+  }
+
+  /**
+ * @param inlineMenuCipherId - Cipher ID corresponding to the inlineMenuCiphers map. Does not correspond to the actual cipher's ID.
+ * @param sender - The sender of the port message
+ */
+  private async handleContactClick(message: OverlayPortMessage, port: chrome.runtime.Port) {
+    const { inlineMenuCipherId } = message;
+    const client = await this.cozyClientService.getClientInstance();
+    const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
+
+    // FIXME: Temporary way to query data. We want to avoid online request.
+    const { data: contact } = (await client.fetchQueryAndGetFromState({
+      definition: Q(CONTACTS_DOCTYPE).getById(cipher.id),
+      options: {
+        as: `${CONTACTS_DOCTYPE}/${cipher.id}`,
+        singleDocData: true,
+      },
+    })) as { data: IOCozyContact };
+
+    const ambiguousContactFields = getAmbiguousFieldsContact(ambiguousContactFieldNames, contact);
+
+    const isFocusedFieldAmbigous = ambiguousContactFieldNames.includes(
+      bitwardenToCozy[this.focusedFieldData?.fieldQualifier],
+    );
+    const hasMultipleAmbiguousValueInSameField = Object.values(ambiguousContactFields).some(
+      (item) => item.length > 1,
+    );
+    const currentAmbiguousFieldValue =
+      ambiguousContactFields[bitwardenToCozy[this.focusedFieldData?.fieldQualifier]];
+
+    // On an ambiguous form field, the associated contact values are kept.
+    const ambiguousFormFieldsOfFocusedField = Object.fromEntries(
+      Object.entries(ambiguousContactFields).filter(
+        ([fieldName]) => fieldName === bitwardenToCozy[this.focusedFieldData?.fieldQualifier],
+      ),
+    );
+    // On an unambiguous form field, we keep only the multiple values of an ambiguous contact field.
+    const unambiguousFormFieldsOfFocusedField = Object.fromEntries(
+      Object.entries(ambiguousContactFields).filter(
+        ([, fieldValue]) => Array.isArray(fieldValue) && fieldValue.length > 1,
+      ),
+    );
+
+    /*
+      On a form field other than ambiguous(phone/address/email):
+      - If the contact has one or less ambiguous value: autofill everything.
+      - If the contact has more than one ambiguous values: display a menu to choose which one.
+      On the ambiguous(phone/address/email) form field:
+      - If contact has one or less ambiguous value: display list with phone/address/email.
+      - If the contact has more than one ambiguous values: display list with the phone/address/email.
+    */
+    if (
+      (!isFocusedFieldAmbigous && hasMultipleAmbiguousValueInSameField) ||
+      isFocusedFieldAmbigous && currentAmbiguousFieldValue?.length > 0 // TODO Part_2 Remove "currentAmbiguousFieldValue?.length > 0" condition
+    ) {
+      this.inlineMenuListPort?.postMessage({
+        command: "ambiguousFieldList",
+        inlineMenuCipherId,
+        contactName: contact.displayName,
+        ambiguousFields: isFocusedFieldAmbigous
+          ? ambiguousFormFieldsOfFocusedField
+          : unambiguousFormFieldsOfFocusedField,
+        isFocusedFieldAmbigous,
+      });
+    } else {
+      this.fillInlineMenuCipher(message, port);
+    }
   }
 
   /**
