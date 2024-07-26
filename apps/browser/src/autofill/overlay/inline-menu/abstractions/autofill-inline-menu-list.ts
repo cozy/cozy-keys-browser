@@ -5,6 +5,7 @@ import { InlineMenuCipherData } from "../../../background/abstractions/overlay.b
 
 /* start Cozy imports */
 /* eslint-disable */
+import { AmbiguousContactFields } from "src/autofill/types";
 import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
 /* eslint-enable */
 /* end Cozy imports */
@@ -15,6 +16,15 @@ export type UpdateAutofillInlineMenuListCiphersMessage = AutofillInlineMenuListM
   ciphers: InlineMenuCipherData[];
   showInlineMenuAccountCreation?: boolean;
 };
+
+// Cozy customization
+export type UpdateAutofillInlineMenuListAmbiguousMessage = AutofillInlineMenuListMessage & {
+  inlineMenuCipherId: string;
+  contactName: string;
+  ambiguousFields: AmbiguousContactFields;
+  isFocusedFieldAmbigous: boolean;
+};
+// Cozy customization end
 
 export type InitAutofillInlineMenuListMessage = AutofillInlineMenuListMessage & {
   authStatus: AuthenticationStatus;
@@ -42,5 +52,12 @@ export type AutofillInlineMenuListWindowMessageHandlers = {
   }: {
     message: UpdateAutofillInlineMenuListCiphersMessage;
   }) => void;
+  // Cozy customization
+  ambiguousFieldList: ({
+    message,
+  }: {
+    message: UpdateAutofillInlineMenuListAmbiguousMessage;
+  }) => void;
+  // Cozy customization end
   focusAutofillInlineMenuList: () => void;
 };

@@ -3973,5 +3973,14 @@
   },
   "cipherContactMe": {
     "message": "moi"
+  },
+  "empty_ambiguous_email": {
+    "message": "Aucun email trouvé"
+  },
+  "empty_ambiguous_phone": {
+    "message": "Aucun téléphone trouvé"
+  },
+  "empty_ambiguous_address": {
+    "message": "Aucune adresse trouvée"
   }
 }
