@@ -37,7 +37,12 @@ import {
   MAX_SUB_FRAME_DEPTH,
 } from "../enums/autofill-overlay.enum";
 import { AutofillService } from "../services/abstractions/autofill.service";
-import { ambiguousContactFieldNames, bitwardenToCozy, generateRandomChars, getAmbiguousFieldsContact } from "../utils";
+import {
+  ambiguousContactFieldNames,
+  bitwardenToCozy,
+  generateRandomChars,
+  getAmbiguousFieldsContact,
+} from "../utils";
 
 import { LockedVaultPendingNotificationsData } from "./abstractions/notification.background";
 import {
@@ -71,6 +76,7 @@ import { IOCozyContact } from "cozy-client/types/types";
 import { CONTACTS_DOCTYPE } from "cozy-client/dist/models/contact";
 import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
+import { AmbiguousContactFieldValue } from "src/autofill/types";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -157,7 +163,11 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     autofillInlineMenuBlurred: () => this.checkInlineMenuButtonFocused(),
     unlockVault: ({ port }) => this.unlockVault(port),
     fillAutofillInlineMenuCipher: ({ message, port }) => this.fillInlineMenuCipher(message, port),
+    // Cozy customization
     handleContactClick: ({ message, port }) => this.handleContactClick(message, port),
+    fillAutofillInlineMenuCipherWithAmbiguousField: ({ message, port }) =>
+      this.fillAutofillInlineMenuCipherWithAmbiguousField(message, port),
+    // Cozy customization end
     addNewVaultItem: ({ message, port }) => this.getNewVaultItemDetails(message, port),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port),
     redirectAutofillInlineMenuFocusOut: ({ message, port }) =>
@@ -807,6 +817,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   private async fillInlineMenuCipher(
     { inlineMenuCipherId }: OverlayPortMessage,
     { sender }: chrome.runtime.Port,
+    ambiguousValue?: AmbiguousContactFieldValue[0],
   ) {
     const pageDetails = this.pageDetailsForTab[sender.tab.id];
     if (!inlineMenuCipherId || !pageDetails?.size) {
@@ -824,6 +835,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       pageDetails: Array.from(pageDetails.values()),
       fillNewPassword: true,
       allowTotpAutofill: true,
+      ...(ambiguousValue ? { cozyProfile: ambiguousValue } : {}),
     });
 
     // Cozy customization
@@ -837,10 +849,18 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     this.inlineMenuCiphers = new Map([[inlineMenuCipherId, cipher], ...this.inlineMenuCiphers]);
   }
 
+  private async fillAutofillInlineMenuCipherWithAmbiguousField(
+    message: OverlayPortMessage,
+    port: chrome.runtime.Port,
+  ) {
+    const ambiguousValue = message.ambiguousValue;
+    this.fillInlineMenuCipher(message, port, ambiguousValue);
+  }
+
   /**
- * @param inlineMenuCipherId - Cipher ID corresponding to the inlineMenuCiphers map. Does not correspond to the actual cipher's ID.
- * @param sender - The sender of the port message
- */
+   * @param inlineMenuCipherId - Cipher ID corresponding to the inlineMenuCiphers map. Does not correspond to the actual cipher's ID.
+   * @param sender - The sender of the port message
+   */
   private async handleContactClick(message: OverlayPortMessage, port: chrome.runtime.Port) {
     const { inlineMenuCipherId } = message;
     const client = await this.cozyClientService.getClientInstance();
@@ -889,7 +909,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     */
     if (
       (!isFocusedFieldAmbigous && hasMultipleAmbiguousValueInSameField) ||
-      isFocusedFieldAmbigous && currentAmbiguousFieldValue?.length > 0 // TODO Part_2 Remove "currentAmbiguousFieldValue?.length > 0" condition
+      (isFocusedFieldAmbigous && currentAmbiguousFieldValue?.length > 0) // TODO Part_2 Remove "currentAmbiguousFieldValue?.length > 0" condition
     ) {
       this.inlineMenuListPort?.postMessage({
         command: "ambiguousFieldList",
@@ -1493,6 +1513,12 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         addNewIdentityItem: this.i18nService.translate("addNewIdentityItemAria"),
         cardNumberEndsWith: this.i18nService.translate("cardNumberEndsWith"),
         cipherContactMe: this.i18nService.translate("cipherContactMe"),
+        home: this.i18nService.translate("home"),
+        work: this.i18nService.translate("work"),
+        cell: this.i18nService.translate("cell"),
+        empty_ambiguous_email: this.i18nService.translate("empty_ambiguous_email"),
+        empty_ambiguous_phone: this.i18nService.translate("empty_ambiguous_phone"),
+        empty_ambiguous_address: this.i18nService.translate("empty_ambiguous_address"),
       };
     }
 

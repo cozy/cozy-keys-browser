@@ -9,6 +9,7 @@ import { LockedVaultPendingNotificationsData } from "./notification.background";
 /* start Cozy imports */
 /* eslint-disable */
 import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
+import { AmbiguousContactFieldValue } from "src/autofill/types";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -145,6 +146,7 @@ export type OverlayPortMessage = {
   addNewCipherType?: CipherType;
   // Cozy customization;
   fieldQualifier?: AutofillFieldQualifierType;
+  ambiguousValue?: AmbiguousContactFieldValue[0];
   // Cozy customization end
 };
 
@@ -252,6 +254,10 @@ export type InlineMenuListPortMessageHandlers = {
   fillAutofillInlineMenuCipher: ({ message, port }: PortOnMessageHandlerParams) => void;
   // Cozy customization; fill ambiguous contact
   handleContactClick: ({ message, port }: PortOnMessageHandlerParams) => void;
+  fillAutofillInlineMenuCipherWithAmbiguousField: ({
+    message,
+    port,
+  }: PortOnMessageHandlerParams) => void;
   // Cozy customization end
   addNewVaultItem: ({ message, port }: PortOnMessageHandlerParams) => void;
   viewSelectedCipher: ({ message, port }: PortOnMessageHandlerParams) => void;
