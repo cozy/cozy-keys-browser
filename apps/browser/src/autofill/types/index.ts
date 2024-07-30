@@ -60,7 +60,7 @@ export type FormElementWithAttribute = FormFieldElement & Record<string, string 
 export type AutofillCipherTypeId = CipherType.Login | CipherType.Card | CipherType.Identity;
 
 // Cozy customization
-export type AmibuousContactFieldName = "phone" | "email" | "address";
+export type AmbiguousContactFieldName = "phone" | "email" | "address";
 
 export type AmbiguousContactFields = {
   phone?: ContactPhone[];

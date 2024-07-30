@@ -8,7 +8,7 @@ import { AutofillPort } from "../enums/autofill-port.enum";
 import {
   AmbiguousContactFields,
   AmbiguousContactFieldValue,
-  AmibuousContactFieldName,
+  AmbiguousContactFieldName,
   FillableFormFieldElement,
   FormElementWithAttribute,
   FormFieldElement,
@@ -372,7 +372,7 @@ export function throttle(callback: () => void, limit: number) {
  * @param contact
  */
 export const getAmbiguousFieldsContact = (
-  ambiguousFields: AmibuousContactFieldName[],
+  ambiguousFields: AmbiguousContactFieldName[],
   contact: IOCozyContact,
 ): AmbiguousContactFields => {
   return ambiguousFields.reduce(
@@ -381,7 +381,7 @@ export const getAmbiguousFieldsContact = (
   );
 };
 export const bitwardenToCozy: Partial<
-  Record<AutofillFieldQualifierType, AmibuousContactFieldName>
+  Record<AutofillFieldQualifierType, AmbiguousContactFieldName>
 > = {
   identityPhone: "phone",
   identityEmail: "email",
@@ -394,7 +394,7 @@ export const ambiguousContactFieldNames: AmbiguousContactFieldName[] = [
   "address",
 ];
 
-export const getAmbiguousValueKey = (ambiguousKey: AmibuousContactFieldName) => {
+export const getAmbiguousValueKey = (ambiguousKey: AmbiguousContactFieldName) => {
   switch (ambiguousKey) {
     case "email":
       return "address";
