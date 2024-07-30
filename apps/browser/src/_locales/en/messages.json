@@ -4012,6 +4012,9 @@
   "cipherContactMe": {
     "message": "me"
   },
+  "contactSearch": {
+    "message": "Search\u2026"
+  },
   "empty_ambiguous_email": {
     "message": "No email found"
   },
