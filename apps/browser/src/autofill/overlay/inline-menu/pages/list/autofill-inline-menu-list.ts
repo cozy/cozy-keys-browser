@@ -33,7 +33,7 @@ import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.en
 import {
   AmbiguousContactFields,
   AmbiguousContactFieldValue,
-  AmibuousContactFieldName,
+  AmbiguousContactFieldName,
 } from "src/autofill/types";
 /* eslint-enable */
 /* end Cozy imports */
@@ -285,7 +285,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private createAmbiguousListItem(
     inlineMenuCipherId: string,
     contactName: string,
-    ambiguousKey: AmibuousContactFieldName,
+    ambiguousKey: AmbiguousContactFieldName,
     ambiguousValue: AmbiguousContactFieldValue[0],
     isAmbiguousFieldFocused: boolean,
     fieldHtmlIDToFill: string,
@@ -404,7 +404,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   }
 
   // TODO Part_2 => Uncomment for next step
-  // private createNewAmbiguousButton(inlineMenuCipherId: string, ambiguousKey: AmibuousContactFieldName) {
+  // private createNewAmbiguousButton(inlineMenuCipherId: string, ambiguousKey: AmbiguousContactFieldName) {
   //   const listItem = document.createElement("li");
   //   listItem.setAttribute("role", "listitem");
   //   listItem.classList.add("inline-menu-list-actions-item");
@@ -445,7 +445,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   /**
    * @param ambiguousKey
    */
-  private createEmptyAmbiguousListItem(ambiguousKey: AmibuousContactFieldName) {
+  private createEmptyAmbiguousListItem(ambiguousKey: AmbiguousContactFieldName) {
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
     listItem.classList.add("inline-menu-list-actions-item", "disabled");
@@ -510,7 +510,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     });
 
     const firstAmbiguousFieldEntries = Object.entries(ambiguousFields)?.[0];
-    const firstAmbiguousFieldName = firstAmbiguousFieldEntries?.[0] as AmibuousContactFieldName; // || bitwardenToCozy[this.fieldQualifier]; // TODO Part_2 To add for next step, The contact has no value in an ambiguous focus form field
+    const firstAmbiguousFieldName = firstAmbiguousFieldEntries?.[0] as AmbiguousContactFieldName; // || bitwardenToCozy[this.fieldQualifier]; // TODO Part_2 To add for next step, The contact has no value in an ambiguous focus form field
 
     if (firstAmbiguousFieldEntries) {
       for (const firstAmbiguousFieldValue of firstAmbiguousFieldEntries[1]) {
