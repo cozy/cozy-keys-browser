@@ -1519,6 +1519,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         home: this.i18nService.translate("home"),
         work: this.i18nService.translate("work"),
         cell: this.i18nService.translate("cell"),
+        contactSearch: this.i18nService.translate("contactSearch"),
         empty_ambiguous_email: this.i18nService.translate("empty_ambiguous_email"),
         empty_ambiguous_phone: this.i18nService.translate("empty_ambiguous_phone"),
         empty_ambiguous_address: this.i18nService.translate("empty_ambiguous_address"),

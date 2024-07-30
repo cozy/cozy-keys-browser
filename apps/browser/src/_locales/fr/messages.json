@@ -4513,6 +4513,9 @@
   "systemDefault": {
     "message": "System default"
   },
+  "contactSearch": {
+    "message": "Recherche\u2026"
+  },
   "empty_ambiguous_email": {
     "message": "Aucun email trouvé"
   },
