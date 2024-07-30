@@ -6,6 +6,7 @@ import { CipherType } from "@bitwarden/common/vault/enums";
 
 import { InlineMenuCipherData } from "../../../../background/abstractions/overlay.background";
 import {
+  ambiguousContactFieldNames,
   bitwardenToCozy,
   buildSvgDomElement,
   getAmbiguousValueKey,
@@ -17,6 +18,7 @@ import {
   lockIcon,
   plusIcon,
   viewCipherIcon,
+  magnifier,
 } from "../../../../utils/svg-icons";
 import {
   AutofillInlineMenuListWindowMessageHandlers,
@@ -51,6 +53,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private fieldQualifier: AutofillFieldQualifierType;
   private fieldValue: string;
   private fieldHtmlID: string;
+  private newItemInputSearchElement: HTMLInputElement;
   // Cozy customization end
   private showInlineMenuAccountCreation: boolean;
   private readonly showCiphersPerPage = 6;
@@ -228,6 +231,14 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       this.loadPageOfCiphers();
     }
 
+    const isContactCipherList = ciphers.every((cipher) => cipher.contact);
+    if (isContactCipherList) {
+      this.inlineMenuListContainer.appendChild(this.buildContactSearch());
+      this.inlineMenuListContainer.classList.add(
+        "inline-menu-list-container--with-new-item-button",
+      );
+    }
+
     this.inlineMenuListContainer.appendChild(this.ciphersList);
 
     if (!this.showInlineMenuAccountCreation) {
@@ -239,6 +250,32 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.inlineMenuListContainer.classList.add("inline-menu-list-container--with-new-item-button");
     this.newItemButtonElement.addEventListener(EVENTS.KEYUP, this.handleNewItemButtonKeyUpEvent);
   }
+
+  private buildContactSearch() {
+    const inputContainer = globalThis.document.createElement("div");
+    inputContainer.classList.add("search-container");
+    this.newItemInputSearchElement = globalThis.document.createElement("input");
+    this.newItemInputSearchElement.type = "text";
+    this.newItemInputSearchElement.placeholder = this.getTranslation("contactSearch");
+    this.newItemInputSearchElement.tabIndex = -1;
+    this.newItemInputSearchElement.classList.add("contact-search-header");
+    const iconElement = buildSvgDomElement(magnifier);
+    iconElement.classList.add("search-icon");
+
+    inputContainer.append(iconElement);
+    inputContainer.append(this.newItemInputSearchElement);
+
+    this.newItemInputSearchElement.addEventListener(EVENTS.KEYUP, this.handleNewSearch);
+
+    return this.buildAmbiguousHeaderContainer(inputContainer);
+  }
+
+  private handleNewSearch = () => {
+    const filteredCiphers = this.ciphers.filter((c) =>
+      c.name.toLowerCase().includes(this.newItemInputSearchElement.value),
+    );
+    this.loadPageOfCiphers(filteredCiphers);
+  };
 
   /**
    * @param inlineMenuCipherId
@@ -636,17 +673,20 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   /**
    * Loads a page of ciphers into the inline menu list container.
    */
-  private loadPageOfCiphers() {
-    const lastIndex = Math.min(
-      this.currentCipherIndex + this.showCiphersPerPage,
-      this.ciphers.length,
-    );
+  private loadPageOfCiphers(filteredCiphers?: InlineMenuCipherData[]) {
+    const ciphers = filteredCiphers || this.ciphers;
+    if (filteredCiphers) {
+      this.currentCipherIndex = 0;
+      this.ciphersList.innerHTML = "";
+    }
+    const lastIndex = Math.min(this.currentCipherIndex + this.showCiphersPerPage, ciphers.length);
+
     for (let cipherIndex = this.currentCipherIndex; cipherIndex < lastIndex; cipherIndex++) {
-      this.ciphersList.appendChild(this.buildInlineMenuListActionsItem(this.ciphers[cipherIndex]));
+      this.ciphersList.appendChild(this.buildInlineMenuListActionsItem(ciphers[cipherIndex]));
       this.currentCipherIndex++;
     }
 
-    if (this.currentCipherIndex >= this.ciphers.length) {
+    if (this.currentCipherIndex >= ciphers.length) {
       this.ciphersList.removeEventListener(EVENTS.SCROLL, this.handleCiphersListScrollEvent);
     }
   }
