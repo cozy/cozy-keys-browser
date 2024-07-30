@@ -36,6 +36,18 @@ const viewCipherIcon =
 // Cozy customization, Add back icon
 const backIcon =
   '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.41421 7H14.9932C15.5492 7 16 7.44386 16 8C16 8.55229 15.5501 9 14.9932 9H3.41421L8.70711 14.2929C9.09763 14.6834 9.09763 15.3166 8.70711 15.7071C8.31658 16.0976 7.68342 16.0976 7.29289 15.7071L0.292893 8.70711C-0.0976311 8.31658 -0.0976311 7.68342 0.292893 7.29289L7.29289 0.292893C7.68342 -0.0976311 8.31658 -0.0976311 8.70711 0.292893C9.09763 0.683418 9.09763 1.31658 8.70711 1.70711L3.41421 7Z" fill="white"/></svg>';
+
+const magnifier =
+  '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.4722 10H11.5L14.7941 13.2941C15.1861 13.6861 15.1839 14.3161 14.7939 14.7061L14.7061 14.7939C14.3181 15.1819 13.684 15.184 13.2941 14.7941L10 11.5V10.4722C8.93849 11.4223 7.53671 12 6 12C2.68629 12 0 9.31371 0 6C0 2.68629 2.68629 0 6 0C9.31371 0 12 2.68629 12 6C12 7.53671 11.4223 8.93849 10.4722 10ZM6 10C8.20914 10 10 8.20914 10 6C10 3.79086 8.20914 2 6 2C3.79086 2 2 3.79086 2 6C2 8.20914 3.79086 10 6 10Z" fill="white"/></svg>';
 // Cozy customization end
 
-export { logoIcon, logoLockedIcon, globeIcon, lockIcon, plusIcon, viewCipherIcon, backIcon };
+export {
+  logoIcon,
+  logoLockedIcon,
+  globeIcon,
+  lockIcon,
+  plusIcon,
+  viewCipherIcon,
+  backIcon,
+  magnifier,
+};
