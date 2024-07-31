@@ -1,3 +1,5 @@
+import { ContactAddress, ContactEmail, ContactPhone } from "cozy-client/types/types";
+
 import { Region } from "@bitwarden/common/platform/abstractions/environment.service";
 import { VaultTimeoutAction } from "@bitwarden/common/src/enums/vault-timeout-action.enum";
 import { VaultTimeout } from "@bitwarden/common/types/vault-timeout.type";
@@ -56,3 +58,15 @@ export type FormFieldElement = FillableFormFieldElement | HTMLSpanElement;
 export type FormElementWithAttribute = FormFieldElement & Record<string, string | null | undefined>;
 
 export type AutofillCipherTypeId = CipherType.Login | CipherType.Card | CipherType.Identity;
+
+// Cozy customization
+export type AmbiguousContactFieldName = "phone" | "email" | "address";
+
+export type AmbiguousContactFields = {
+  phone?: ContactPhone[];
+  email?: ContactEmail[];
+  address?: ContactAddress[];
+};
+
+export type AmbiguousContactFieldValue = ContactPhone[] | ContactEmail[] | ContactAddress[];
+// Cozy customization end

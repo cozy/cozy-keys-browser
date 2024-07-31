@@ -5,13 +5,38 @@ import { EVENTS } from "@bitwarden/common/autofill/constants";
 import { CipherType } from "@bitwarden/common/vault/enums";
 
 import { InlineMenuCipherData } from "../../../../background/abstractions/overlay.background";
-import { buildSvgDomElement } from "../../../../utils";
-import { globeIcon, lockIcon, plusIcon, viewCipherIcon } from "../../../../utils/svg-icons";
+import {
+  ambiguousContactFieldNames,
+  bitwardenToCozy,
+  buildSvgDomElement,
+  getAmbiguousValueKey,
+  makeAmbiguousValueLabel,
+} from "../../../../utils";
+import {
+  backIcon,
+  globeIcon,
+  lockIcon,
+  plusIcon,
+  viewCipherIcon,
+  magnifier,
+} from "../../../../utils/svg-icons";
 import {
   AutofillInlineMenuListWindowMessageHandlers,
   InitAutofillInlineMenuListMessage,
 } from "../../abstractions/autofill-inline-menu-list";
 import { AutofillInlineMenuPageElement } from "../shared/autofill-inline-menu-page-element";
+
+/* start Cozy imports */
+/* eslint-disable */
+import uniqueId from "lodash/uniqueId";
+import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
+import {
+  AmbiguousContactFields,
+  AmbiguousContactFieldValue,
+  AmbiguousContactFieldName,
+} from "src/autofill/types";
+/* eslint-enable */
+/* end Cozy imports */
 
 export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private inlineMenuListContainer: HTMLDivElement;
@@ -23,6 +48,13 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private cipherListScrollDebounceTimeout: number | NodeJS.Timeout;
   private currentCipherIndex = 0;
   private filledByCipherType: CipherType;
+  // Cozy customization
+  private lastFilledCipherId: string;
+  private fieldQualifier: AutofillFieldQualifierType;
+  private fieldValue: string;
+  private fieldHtmlID: string;
+  private newItemInputSearchElement: HTMLInputElement;
+  // Cozy customization end
   private showInlineMenuAccountCreation: boolean;
   private readonly showCiphersPerPage = 6;
   private newItemButtonElement: HTMLButtonElement;
@@ -32,6 +64,14 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       checkAutofillInlineMenuListFocused: () => this.checkInlineMenuListFocused(),
       updateAutofillInlineMenuListCiphers: ({ message }) =>
         this.updateListItems(message.ciphers, message.showInlineMenuAccountCreation),
+      ambiguousFieldList: ({ message }) =>
+        this.ambiguousFieldList(
+          message.inlineMenuCipherId,
+          message.contactName,
+          message.ambiguousFields,
+          message.isFocusedFieldAmbigous,
+          message.fieldHtmlIDToFill,
+        ),
       focusAutofillInlineMenuList: () => this.focusInlineMenuList(),
     };
 
@@ -76,6 +116,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       translations,
       portKey,
     );
+    // Cozy customization
+    this.lastFilledCipherId = lastFilledCipherId;
+    this.fieldQualifier = fieldQualifier;
+    this.fieldValue = fieldValue;
+    this.fieldHtmlID = fieldHtmlID;
+    // Cozy customization end
 
     this.filledByCipherType = filledByCipherType;
 
@@ -168,7 +214,30 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       passive: true,
     });
 
-    this.loadPageOfCiphers();
+    // On the contact ambiguous fields, if the field has a value, the corresponding menu is displayed directly.
+    if (
+      this.fieldValue &&
+      ambiguousContactFieldNames.includes(bitwardenToCozy[this.fieldQualifier])
+    ) {
+      this.postMessageToParent({
+        command: "handleContactClick",
+        inlineMenuCipherId: this.lastFilledCipherId,
+        lastFilledCipherId: this.lastFilledCipherId,
+        fieldQualifier: this.fieldQualifier,
+        fieldValue: this.fieldValue,
+        fieldHtmlIDToFill: this.fieldHtmlID,
+      });
+    } else {
+      this.loadPageOfCiphers();
+    }
+
+    const isContactCipherList = ciphers.every((cipher) => cipher.contact);
+    if (isContactCipherList) {
+      this.inlineMenuListContainer.appendChild(this.buildContactSearch());
+      this.inlineMenuListContainer.classList.add(
+        "inline-menu-list-container--with-new-item-button",
+      );
+    }
 
     this.inlineMenuListContainer.appendChild(this.ciphersList);
 
@@ -181,6 +250,320 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.inlineMenuListContainer.classList.add("inline-menu-list-container--with-new-item-button");
     this.newItemButtonElement.addEventListener(EVENTS.KEYUP, this.handleNewItemButtonKeyUpEvent);
   }
+
+  private buildContactSearch() {
+    const inputContainer = globalThis.document.createElement("div");
+    inputContainer.classList.add("search-container");
+    this.newItemInputSearchElement = globalThis.document.createElement("input");
+    this.newItemInputSearchElement.type = "text";
+    this.newItemInputSearchElement.placeholder = this.getTranslation("contactSearch");
+    this.newItemInputSearchElement.tabIndex = -1;
+    this.newItemInputSearchElement.classList.add("contact-search-header");
+    const iconElement = buildSvgDomElement(magnifier);
+    iconElement.classList.add("search-icon");
+
+    inputContainer.append(iconElement);
+    inputContainer.append(this.newItemInputSearchElement);
+
+    this.newItemInputSearchElement.addEventListener(EVENTS.KEYUP, this.handleNewSearch);
+
+    return this.buildAmbiguousHeaderContainer(inputContainer);
+  }
+
+  private handleNewSearch = () => {
+    const filteredCiphers = this.ciphers.filter((c) =>
+      c.name.toLowerCase().includes(this.newItemInputSearchElement.value),
+    );
+    this.loadPageOfCiphers(filteredCiphers);
+  };
+
+  /**
+   * @param inlineMenuCipherId
+   * @param contactName
+   * @param ambiguousKey
+   * @param ambiguousValue
+   * @param isAmbiguousFieldFocused
+   */
+  private createAmbiguousListItem(
+    inlineMenuCipherId: string,
+    contactName: string,
+    ambiguousKey: AmbiguousContactFieldName,
+    ambiguousValue: AmbiguousContactFieldValue[0],
+    isAmbiguousFieldFocused: boolean,
+    fieldHtmlIDToFill: string,
+  ) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const currentListItemValue = ambiguousValue[getAmbiguousValueKey(ambiguousKey)];
+
+    const listItem = document.createElement("li");
+    listItem.setAttribute("role", "listitem");
+    listItem.classList.add("inline-menu-list-actions-item");
+
+    const div = document.createElement("div");
+    div.classList.add("cipher-container");
+
+    const fillButton = document.createElement("button");
+    fillButton.setAttribute("tabindex", "-1");
+    fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
+    fillButton.setAttribute("aria-label", contactName);
+    fillButton.addEventListener(
+      EVENTS.CLICK,
+      this.handleFillCipherAmbiguousClickEvent(
+        inlineMenuCipherId,
+        ambiguousValue,
+        fieldHtmlIDToFill,
+        uniqueId(),
+      ),
+    );
+
+    const isAlreadySelected =
+      this.fieldValue && currentListItemValue.toLowerCase().includes(this.fieldValue.toLowerCase());
+    const radio = document.createElement("input");
+    radio.setAttribute("type", "radio");
+    radio.setAttribute("name", "contact");
+    radio.setAttribute("id", "contact");
+    if (isAlreadySelected) {
+      radio.setAttribute("checked", "true");
+    }
+    radio.style.marginRight = "2rem";
+
+    const detailsSpan = document.createElement("span");
+    detailsSpan.classList.add("cipher-details");
+
+    const nameSpanText = makeAmbiguousValueLabel(
+      ambiguousValue,
+      isAmbiguousFieldFocused,
+      this.getTranslation.bind(this),
+    );
+    const nameSpan = document.createElement("span");
+    nameSpan.setAttribute("title", nameSpanText);
+    nameSpan.textContent = nameSpanText;
+    nameSpan.classList.add("cipher-name");
+
+    const subNameSpan = document.createElement("span");
+    subNameSpan.setAttribute("title", ambiguousKey);
+    subNameSpan.classList.add("cipher-subtitle");
+
+    // Reverse the class for the current ambiguous field
+    if (bitwardenToCozy[this.fieldQualifier] === ambiguousKey) {
+      subNameSpan.classList.replace("cipher-subtitle", "cipher-name");
+      nameSpan.classList.replace("cipher-name", "cipher-subtitle");
+    }
+    subNameSpan.textContent = currentListItemValue;
+
+    detailsSpan.appendChild(nameSpan);
+    detailsSpan.appendChild(subNameSpan);
+    fillButton.appendChild(radio);
+    fillButton.appendChild(detailsSpan);
+
+    div.appendChild(fillButton);
+    listItem.appendChild(div);
+
+    return listItem;
+  }
+
+  /**
+   * @param contactName
+   */
+  private buildNewAmbiguousHeader(contactName: string) {
+    this.newItemButtonElement = globalThis.document.createElement("button");
+    this.newItemButtonElement.tabIndex = -1;
+    this.newItemButtonElement.classList.add("inline-menu-list-ambiguous-header");
+
+    const span = globalThis.document.createElement("span");
+    span.textContent = contactName;
+    span.setAttribute("title", contactName);
+    span.classList.add("ambiguous-header-text");
+    this.newItemButtonElement.setAttribute("aria-label", contactName);
+
+    if (this.fieldValue) {
+      this.newItemButtonElement.classList.add(
+        "inline-menu-list-ambiguous-header--without-back-icon",
+      );
+    } else {
+      this.newItemButtonElement.append(buildSvgDomElement(backIcon));
+      this.newItemButtonElement.addEventListener(EVENTS.CLICK, this.handleNewAmbiguousHeaderClick);
+    }
+    this.newItemButtonElement.appendChild(span);
+
+    return this.buildAmbiguousHeaderContainer(this.newItemButtonElement);
+  }
+
+  private handleNewAmbiguousHeaderClick = () => {
+    this.updateListItems(this.ciphers);
+  };
+
+  /**
+   * @param element
+   */
+  private buildAmbiguousHeaderContainer(element: Element) {
+    const inlineMenuListButtonContainer = globalThis.document.createElement("div");
+    inlineMenuListButtonContainer.classList.add("inline-menu-list-ambiguous-header-container");
+    inlineMenuListButtonContainer.appendChild(element);
+
+    return inlineMenuListButtonContainer;
+  }
+
+  // TODO Part_2 => Uncomment for next step
+  // private createNewAmbiguousButton(inlineMenuCipherId: string, ambiguousKey: AmbiguousContactFieldName) {
+  //   const listItem = document.createElement("li");
+  //   listItem.setAttribute("role", "listitem");
+  //   listItem.classList.add("inline-menu-list-actions-item");
+
+  //   const div = document.createElement("div");
+  //   div.classList.add("cipher-container");
+
+  //   const fillButton = document.createElement("button");
+  //   fillButton.setAttribute("tabindex", "-1");
+  //   fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
+  //   fillButton.setAttribute("aria-label", ambiguousKey);
+  //   // TODO Part_2 => fillButton.addEventListener(EVENTS.CLICK, this.handleFillCipherAmbiguousClickEvent(inlineMenuCipherId, ambiguousValue, uniqueId()));
+
+  //   const radio = document.createElement("input");
+  //   radio.setAttribute("type", "radio");
+  //   radio.setAttribute("name", "contact");
+  //   radio.setAttribute("id", "contact");
+  //   radio.style.marginRight = "2rem";
+
+  //   const detailsSpan = document.createElement("span");
+  //   detailsSpan.classList.add("cipher-details");
+
+  //   const nameSpanText = `New ${ambiguousKey}`;
+  //   const nameSpan = document.createElement("span");
+  //   nameSpan.setAttribute("title", nameSpanText);
+  //   nameSpan.textContent = nameSpanText;
+  //   nameSpan.classList.add("cipher-name");
+
+  //   detailsSpan.appendChild(nameSpan);
+  //   fillButton.appendChild(radio);
+  //   fillButton.appendChild(detailsSpan);
+  //   div.appendChild(fillButton);
+  //   listItem.appendChild(div);
+
+  //   return listItem;
+  // }
+
+  /**
+   * @param ambiguousKey
+   */
+  private createEmptyAmbiguousListItem(ambiguousKey: AmbiguousContactFieldName) {
+    const listItem = document.createElement("li");
+    listItem.setAttribute("role", "listitem");
+    listItem.classList.add("inline-menu-list-actions-item", "disabled");
+
+    const div = document.createElement("div");
+    div.classList.add("cipher-container");
+
+    const fillButton = document.createElement("button");
+    fillButton.setAttribute("tabindex", "-1");
+    fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
+    fillButton.setAttribute("aria-label", this.getTranslation(`empty_ambiguous_${ambiguousKey}`));
+
+    const radio = document.createElement("input");
+    radio.setAttribute("type", "radio");
+    radio.setAttribute("name", "contact");
+    radio.setAttribute("id", "contact");
+    radio.style.marginRight = "2rem";
+
+    const detailsSpan = document.createElement("span");
+    detailsSpan.classList.add("cipher-details");
+
+    const nameSpanText = this.getTranslation(`empty_ambiguous_${ambiguousKey}`);
+    const nameSpan = document.createElement("span");
+    nameSpan.setAttribute("title", nameSpanText);
+    nameSpan.textContent = nameSpanText;
+    nameSpan.classList.add("cipher-name");
+
+    detailsSpan.appendChild(nameSpan);
+    fillButton.appendChild(radio);
+    fillButton.appendChild(detailsSpan);
+    div.appendChild(fillButton);
+    listItem.appendChild(div);
+
+    return listItem;
+  }
+
+  /**
+   * @param inlineMenuCipherId
+   * @param contactName
+   * @param ambiguousFields
+   * @param isAmbiguousFieldFocused
+   */
+  private ambiguousFieldList(
+    inlineMenuCipherId: string,
+    contactName: string,
+    ambiguousFields: AmbiguousContactFields,
+    isAmbiguousFieldFocused: boolean,
+    fieldHtmlIDToFill: string,
+  ) {
+    this.inlineMenuListContainer.innerHTML = "";
+    this.inlineMenuListContainer.classList.remove(
+      "inline-menu-list-container--with-new-item-button",
+    );
+
+    const addNewLoginButtonContainer = this.buildNewAmbiguousHeader(contactName);
+
+    const ulElement = globalThis.document.createElement("ul");
+    ulElement.classList.add("inline-menu-list-actions");
+    ulElement.setAttribute("role", "list");
+    ulElement.addEventListener(EVENTS.SCROLL, this.handleCiphersListScrollEvent, {
+      passive: true,
+    });
+
+    const firstAmbiguousFieldEntries = Object.entries(ambiguousFields)?.[0];
+    const firstAmbiguousFieldName = firstAmbiguousFieldEntries?.[0] as AmbiguousContactFieldName; // || bitwardenToCozy[this.fieldQualifier]; // TODO Part_2 To add for next step, The contact has no value in an ambiguous focus form field
+
+    if (firstAmbiguousFieldEntries) {
+      for (const firstAmbiguousFieldValue of firstAmbiguousFieldEntries[1]) {
+        const li = this.createAmbiguousListItem(
+          inlineMenuCipherId,
+          contactName,
+          firstAmbiguousFieldName,
+          firstAmbiguousFieldValue,
+          isAmbiguousFieldFocused,
+          fieldHtmlIDToFill,
+        );
+        ulElement.appendChild(li);
+      }
+    } else {
+      const emptyLi = this.createEmptyAmbiguousListItem(firstAmbiguousFieldName);
+      ulElement.appendChild(emptyLi);
+    }
+    // TODO Uncomment for next step, Add "New xxx" button for ambiguous field
+    // if (isAmbiguousFieldFocused) {
+    //   const newButton = this.createNewAmbiguousButton(inlineMenuCipherId, firstAmbiguousFieldName);
+    //   ulElement.appendChild(newButton);
+    // }
+
+    this.inlineMenuListContainer.appendChild(addNewLoginButtonContainer);
+    this.inlineMenuListContainer.appendChild(ulElement);
+
+    this.inlineMenuListContainer.classList.add("inline-menu-list-container--with-new-item-button");
+  }
+
+  /**
+   * @param inlineMenuCipherId
+   * @param ambiguousValue
+   * @param UID
+   */
+  private handleFillCipherAmbiguousClickEvent = (
+    inlineMenuCipherId: string,
+    ambiguousValue: AmbiguousContactFieldValue[0],
+    fieldHtmlIDToFill: string,
+    UID: string,
+  ) => {
+    return this.useEventHandlersMemo(
+      () =>
+        this.postMessageToParent({
+          command: "fillAutofillInlineMenuCipherWithAmbiguousField",
+          inlineMenuCipherId,
+          ambiguousValue,
+          fieldHtmlIDToFill,
+        }),
+      `${UID}-fill-cipher-button-click-handler`,
+    );
+  };
 
   /**
    * Inline menu view that is presented when no ciphers are found for a given page.
@@ -290,17 +673,20 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   /**
    * Loads a page of ciphers into the inline menu list container.
    */
-  private loadPageOfCiphers() {
-    const lastIndex = Math.min(
-      this.currentCipherIndex + this.showCiphersPerPage,
-      this.ciphers.length,
-    );
+  private loadPageOfCiphers(filteredCiphers?: InlineMenuCipherData[]) {
+    const ciphers = filteredCiphers || this.ciphers;
+    if (filteredCiphers) {
+      this.currentCipherIndex = 0;
+      this.ciphersList.innerHTML = "";
+    }
+    const lastIndex = Math.min(this.currentCipherIndex + this.showCiphersPerPage, ciphers.length);
+
     for (let cipherIndex = this.currentCipherIndex; cipherIndex < lastIndex; cipherIndex++) {
-      this.ciphersList.appendChild(this.buildInlineMenuListActionsItem(this.ciphers[cipherIndex]));
+      this.ciphersList.appendChild(this.buildInlineMenuListActionsItem(ciphers[cipherIndex]));
       this.currentCipherIndex++;
     }
 
-    if (this.currentCipherIndex >= this.ciphers.length) {
+    if (this.currentCipherIndex >= ciphers.length) {
       this.ciphersList.removeEventListener(EVENTS.SCROLL, this.handleCiphersListScrollEvent);
     }
   }
@@ -431,6 +817,20 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
    * @param cipher - The cipher to fill.
    */
   private handleFillCipherClickEvent = (cipher: InlineMenuCipherData) => {
+    if (cipher.contact) {
+      return this.useEventHandlersMemo(
+        () =>
+          this.postMessageToParent({
+            command: "handleContactClick",
+            inlineMenuCipherId: cipher.id,
+            lastFilledCipherId: this.lastFilledCipherId,
+            fieldQualifier: this.fieldQualifier,
+            fieldValue: this.fieldValue,
+          }),
+        `${cipher.id}-fill-cipher-button-click-handler`,
+      );
+    }
+
     return this.useEventHandlersMemo(
       () =>
         this.postMessageToParent({
@@ -577,10 +977,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     // Cozy customization; add contact initials to autofill
     if (cipher.contact) {
+      cipherIcon.classList.remove("cipher-icon");
+      cipherIcon.classList.add("contact-initials");
       cipherIcon.style.backgroundColor = cipher.contact.initialsColor;
-      cipherIcon.style.padding = "8px";
-      cipherIcon.style.borderRadius = "50%";
-      cipherIcon.style.color = "white";
       cipherIcon.textContent = cipher.contact.initials;
       return cipherIcon;
     }

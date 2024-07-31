@@ -37,7 +37,12 @@ import {
   MAX_SUB_FRAME_DEPTH,
 } from "../enums/autofill-overlay.enum";
 import { AutofillService } from "../services/abstractions/autofill.service";
-import { generateRandomChars } from "../utils";
+import {
+  ambiguousContactFieldNames,
+  bitwardenToCozy,
+  generateRandomChars,
+  getAmbiguousFieldsContact,
+} from "../utils";
 
 import { LockedVaultPendingNotificationsData } from "./abstractions/notification.background";
 import {
@@ -64,7 +69,13 @@ import {
 
 /* start Cozy imports */
 /* eslint-disable */
+import { Q } from "cozy-client";
+import { IOCozyContact } from "cozy-client/types/types";
+// @ts-ignore
+import { CONTACTS_DOCTYPE } from "cozy-client/dist/models/contact";
 import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
+import { CozyClientService } from "../../popup/services/cozyClient.service";
+import { AmbiguousContactFieldValue } from "src/autofill/types";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -149,6 +160,11 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     autofillInlineMenuBlurred: () => this.checkInlineMenuButtonFocused(),
     unlockVault: ({ port }) => this.unlockVault(port),
     fillAutofillInlineMenuCipher: ({ message, port }) => this.fillInlineMenuCipher(message, port),
+    // Cozy customization
+    handleContactClick: ({ message, port }) => this.handleContactClick(message, port),
+    fillAutofillInlineMenuCipherWithAmbiguousField: ({ message, port }) =>
+      this.fillAutofillInlineMenuCipherWithAmbiguousField(message, port),
+    // Cozy customization end
     addNewVaultItem: ({ message, port }) => this.getNewVaultItemDetails(message, port),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port),
     redirectAutofillInlineMenuFocusOut: ({ message, port }) =>
@@ -167,6 +183,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
     private themeStateService: ThemeStateService,
+    private cozyClientService: CozyClientService,
   ) {
     this.initOverlayEventObservables();
   }
@@ -775,6 +792,8 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   private async fillInlineMenuCipher(
     { inlineMenuCipherId }: OverlayPortMessage,
     { sender }: chrome.runtime.Port,
+    ambiguousValue?: AmbiguousContactFieldValue[0],
+    fieldHtmlIDToFill?: string,
   ) {
     const pageDetails = this.pageDetailsForTab[sender.tab.id];
     if (!inlineMenuCipherId || !pageDetails?.size) {
@@ -792,6 +811,8 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       pageDetails: Array.from(pageDetails.values()),
       fillNewPassword: true,
       allowTotpAutofill: true,
+      ...(ambiguousValue ? { cozyProfile: ambiguousValue } : {}),
+      ...(fieldHtmlIDToFill ? { fillOnlyThisFieldHtmlID: fieldHtmlIDToFill } : {}),
     });
 
     // Cozy customization
@@ -803,6 +824,83 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     }
 
     this.inlineMenuCiphers = new Map([[inlineMenuCipherId, cipher], ...this.inlineMenuCiphers]);
+  }
+
+  private async fillAutofillInlineMenuCipherWithAmbiguousField(
+    message: OverlayPortMessage,
+    port: chrome.runtime.Port,
+  ) {
+    const { ambiguousValue, fieldHtmlIDToFill } = message;
+    this.fillInlineMenuCipher(message, port, ambiguousValue, fieldHtmlIDToFill);
+  }
+
+  /**
+   * @param inlineMenuCipherId - Cipher ID corresponding to the inlineMenuCiphers map. Does not correspond to the actual cipher's ID.
+   * @param sender - The sender of the port message
+   */
+  private async handleContactClick(message: OverlayPortMessage, port: chrome.runtime.Port) {
+    const { inlineMenuCipherId, fieldHtmlIDToFill } = message;
+    const client = await this.cozyClientService.getClientInstance();
+    const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
+
+    // FIXME: Temporary way to query data. We want to avoid online request.
+    const { data: contact } = (await client.fetchQueryAndGetFromState({
+      definition: Q(CONTACTS_DOCTYPE).getById(cipher.id),
+      options: {
+        as: `${CONTACTS_DOCTYPE}/${cipher.id}`,
+        singleDocData: true,
+      },
+    })) as { data: IOCozyContact };
+
+    const ambiguousContactFields = getAmbiguousFieldsContact(ambiguousContactFieldNames, contact);
+
+    const isFocusedFieldAmbigous = ambiguousContactFieldNames.includes(
+      bitwardenToCozy[this.focusedFieldData?.fieldQualifier],
+    );
+    const hasMultipleAmbiguousValueInSameField = Object.values(ambiguousContactFields).some(
+      (item) => item.length > 1,
+    );
+    const currentAmbiguousFieldValue =
+      ambiguousContactFields[bitwardenToCozy[this.focusedFieldData?.fieldQualifier]];
+
+    // On an ambiguous form field, the associated contact values are kept.
+    const ambiguousFormFieldsOfFocusedField = Object.fromEntries(
+      Object.entries(ambiguousContactFields).filter(
+        ([fieldName]) => fieldName === bitwardenToCozy[this.focusedFieldData?.fieldQualifier],
+      ),
+    );
+    // On an unambiguous form field, we keep only the multiple values of an ambiguous contact field.
+    const unambiguousFormFieldsOfFocusedField = Object.fromEntries(
+      Object.entries(ambiguousContactFields).filter(
+        ([, fieldValue]) => Array.isArray(fieldValue) && fieldValue.length > 1,
+      ),
+    );
+
+    /*
+      On a form field other than ambiguous(phone/address/email):
+      - If the contact has one or less ambiguous value: autofill everything.
+      - If the contact has more than one ambiguous values: display a menu to choose which one.
+      On the ambiguous(phone/address/email) form field:
+      - If contact has one or less ambiguous value: display list with phone/address/email.
+      - If the contact has more than one ambiguous values: display list with the phone/address/email.
+    */
+    if (
+      (!isFocusedFieldAmbigous && hasMultipleAmbiguousValueInSameField) ||
+      (isFocusedFieldAmbigous && currentAmbiguousFieldValue?.length > 0) // TODO Part_2 Remove "currentAmbiguousFieldValue?.length > 0" condition
+    ) {
+      this.inlineMenuListPort?.postMessage({
+        command: "ambiguousFieldList",
+        inlineMenuCipherId,
+        contactName: contact.displayName,
+        ambiguousFields: isFocusedFieldAmbigous
+          ? ambiguousFormFieldsOfFocusedField
+          : unambiguousFormFieldsOfFocusedField,
+        isFocusedFieldAmbigous,
+        fieldHtmlIDToFill,
+      });
+    } else {
+      this.fillInlineMenuCipher(message, port);
+    }
   }
 
   /**
@@ -1377,6 +1475,13 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         addNewIdentityItem: this.i18nService.translate("addNewIdentityItem"),
         cardNumberEndsWith: this.i18nService.translate("cardNumberEndsWith"),
         cipherContactMe: this.i18nService.translate("cipherContactMe"),
+        home: this.i18nService.translate("home"),
+        work: this.i18nService.translate("work"),
+        cell: this.i18nService.translate("cell"),
+        contactSearch: this.i18nService.translate("contactSearch"),
+        empty_ambiguous_email: this.i18nService.translate("empty_ambiguous_email"),
+        empty_ambiguous_phone: this.i18nService.translate("empty_ambiguous_phone"),
+        empty_ambiguous_address: this.i18nService.translate("empty_ambiguous_address"),
       };
     }
 

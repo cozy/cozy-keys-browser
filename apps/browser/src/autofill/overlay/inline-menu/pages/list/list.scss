@@ -58,6 +58,110 @@ body {
   }
 }
 
+// Cozy customization
+.inline-menu-list-ambiguous-header-container {
+  width: 100%;
+  padding: 0.2rem;
+  border: 0;
+  background-color: #297ef2;
+}
+.ambiguous-header-text {
+  max-width: 16rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 1.8rem;
+  line-height: 23px;
+  font-weight: 700;
+  font-family: $font-family-sans-serif;
+  color: white;
+}
+.inline-menu-list-ambiguous-header {
+  display: flex;
+  align-content: center;
+  justify-content: flex-start;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 0.7rem 0;
+  margin: 0;
+  cursor: pointer;
+  border-radius: 0.4rem;
+
+  svg {
+    position: relative;
+    top: 0.25rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-left: 1rem;
+    margin-right: 2rem;
+
+    path {
+      fill: white;
+    }
+  }
+}
+.inline-menu-list-ambiguous-header--without-back-icon {
+  padding: 0.7rem 0 0.7rem 1.6rem;
+  cursor: default;
+}
+.search-container {
+  position: relative;
+  display: inline-block;
+
+  .search-icon {
+    position: absolute;
+    left: 1.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: rgb(170, 170, 170);
+  }
+
+  .contact-search-header {
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+    width: 100%;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.16);
+    border: none;
+    padding: 0.7rem 0.8rem 0.7rem 4rem;
+    margin: 0.4rem;
+    cursor: pointer;
+    border-radius: 1.6rem;
+    color: rgb(255, 255, 255);
+    outline: none;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.32);
+    }
+    &::-webkit-search-cancel-button {
+      fill: red;
+      color: blue;
+    }
+  }
+}
+// Cozy customization end
+
+// Cozy customization; replace .cipher-icon
+.contact-initials {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 3.2rem;
+  height: 3.2rem;
+  margin: 0 1.6rem 0 0.7rem;
+  line-height: 0;
+  background-size: 2.6rem;
+  border-radius: 50%;
+  color: white;
+}
+// Cozy customization end
+
 .inline-menu-list-button {
   display: flex;
   align-content: center;
@@ -169,7 +273,7 @@ body {
   position: absolute;
   bottom: -0.1rem;
   left: 0;
-  width: calc(3.2rem + 2rem);
+  width: 6.4rem;
   height: 0.1rem;
   @include themify($themes) {
     background-color: themed("backgroundColor");

@@ -35,6 +35,7 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { BrowserPlatformUtilsService } from "../../platform/services/platform-utils/browser-platform-utils.service";
+import { CozyClientService } from "../../popup/services/cozyClient.service";
 import {
   AutofillOverlayElement,
   AutofillOverlayPort,
@@ -87,6 +88,7 @@ describe("OverlayBackground", () => {
   let platformUtilsService: MockProxy<BrowserPlatformUtilsService>;
   let selectedThemeMock$: BehaviorSubject<ThemeType>;
   let themeStateService: MockProxy<ThemeStateService>;
+  let cozyClientService: MockProxy<CozyClientService>;
   let overlayBackground: OverlayBackground;
   let portKeyForTabSpy: Record<number, string>;
   let pageDetailsForTabSpy: PageDetailsForTab;
@@ -165,6 +167,7 @@ describe("OverlayBackground", () => {
       i18nService,
       platformUtilsService,
       themeStateService,
+      cozyClientService,
     );
     portKeyForTabSpy = overlayBackground["portKeyForTab"];
     pageDetailsForTabSpy = overlayBackground["pageDetailsForTab"];

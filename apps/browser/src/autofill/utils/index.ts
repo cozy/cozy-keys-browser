@@ -1,5 +1,18 @@
+import { IOCozyContact } from "cozy-client/types/types";
+
+// Cozy customization
+import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
+// Cozy customization end
+
 import { AutofillPort } from "../enums/autofill-port.enum";
-import { FillableFormFieldElement, FormElementWithAttribute, FormFieldElement } from "../types";
+import {
+  AmbiguousContactFields,
+  AmbiguousContactFieldValue,
+  AmbiguousContactFieldName,
+  FillableFormFieldElement,
+  FormElementWithAttribute,
+  FormFieldElement,
+} from "../types";
 
 /**
  * Generates a random string of characters.
@@ -352,3 +365,63 @@ export function throttle(callback: () => void, limit: number) {
     }
   };
 }
+
+// Cozy customization
+/**
+ * @param ambiguousFields
+ * @param contact
+ */
+export const getAmbiguousFieldsContact = (
+  ambiguousFields: AmbiguousContactFieldName[],
+  contact: IOCozyContact,
+): AmbiguousContactFields => {
+  return ambiguousFields.reduce(
+    (acc, field) => (contact[field].length > 0 ? { ...acc, [field]: contact[field] } : acc),
+    {},
+  );
+};
+export const bitwardenToCozy: Partial<
+  Record<AutofillFieldQualifierType, AmbiguousContactFieldName>
+> = {
+  identityPhone: "phone",
+  identityEmail: "email",
+  identityAddress1: "address",
+  identityState: "address",
+};
+export const ambiguousContactFieldNames: AmbiguousContactFieldName[] = [
+  "phone",
+  "email",
+  "address",
+];
+
+export const getAmbiguousValueKey = (ambiguousKey: AmbiguousContactFieldName) => {
+  switch (ambiguousKey) {
+    case "email":
+      return "address";
+    case "phone":
+      return "number";
+    case "address":
+      return "formattedAddress";
+    default:
+      return "";
+  }
+};
+
+export const makeAmbiguousValueLabel = (
+  ambiguousValue: AmbiguousContactFieldValue[0],
+  isAmbiguousFieldFocused: boolean,
+  t: (key: string) => string,
+) => {
+  const translatedType =
+    ambiguousValue.type?.toLowerCase() === "cell" ? t(ambiguousValue.type) : ambiguousValue.type;
+  const translatedLabel = ambiguousValue.label ? t(ambiguousValue.label) : null;
+
+  if (isAmbiguousFieldFocused) {
+    return translatedLabel
+      ? `${translatedType ? `${translatedType} (${translatedLabel})` : translatedLabel}`
+      : "";
+  } else {
+    return `${translatedLabel || ""}`;
+  }
+};
+// Cozy customization end

@@ -4011,5 +4011,17 @@
   },
   "cipherContactMe": {
     "message": "me"
+  },
+  "contactSearch": {
+    "message": "Search\u2026"
+  },
+  "empty_ambiguous_email": {
+    "message": "No email found"
+  },
+  "empty_ambiguous_phone": {
+    "message": "No phone found"
+  },
+  "empty_ambiguous_address": {
+    "message": "No address found"
   }
 }
