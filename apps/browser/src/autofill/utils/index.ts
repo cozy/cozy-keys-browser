@@ -418,10 +418,10 @@ export const makeAmbiguousValueLabel = (
 ) => {
   const translatedType =
     ambiguousValue.type?.toLowerCase() === "cell" ? t(ambiguousValue.type) : ambiguousValue.type;
-  const translatedLabel = t(ambiguousValue.label);
+  const translatedLabel = ambiguousValue.label ? t(ambiguousValue.label) : null;
 
   if (isAmbiguousFieldFocused) {
-    return ambiguousValue.label
+    return translatedLabel
       ? `${translatedType ? `${translatedType} (${translatedLabel})` : translatedLabel}`
       : "";
   } else {
