@@ -129,6 +129,25 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
     // Cozy customization
     [AutofillFieldQualifier.paperIdentityCardNumber]:
       this.inlineMenuFieldQualificationService.isFieldForPaperIdentityCardNumber,
+    [AutofillFieldQualifier.paperPassportNumber]:
+      this.inlineMenuFieldQualificationService.isFieldForPaperPassportNumber,
+    [AutofillFieldQualifier.paperResidencePermitNumber]:
+      this.inlineMenuFieldQualificationService.isFieldForPaperResidencePermitNumber,
+    [AutofillFieldQualifier.paperVehiculeRegistrationNumber]:
+      this.inlineMenuFieldQualificationService.isFieldForPaperVehiculeRegistrationNumber,
+    [AutofillFieldQualifier.paperVehiculeRegistrationConfidentialCode]:
+      this.inlineMenuFieldQualificationService.isFieldForPaperVehiculeRegistrationConfidentialCode,
+    [AutofillFieldQualifier.paperVehiculeRegistrationLicensePlateNumber]:
+      this.inlineMenuFieldQualificationService
+        .isFieldForPaperVehiculeRegistrationLicensePlateNumber,
+    [AutofillFieldQualifier.paperBankIbanNumber]:
+      this.inlineMenuFieldQualificationService.isFieldForPaperBankIbanNumber,
+    [AutofillFieldQualifier.paperBankBicNumber]:
+      this.inlineMenuFieldQualificationService.isFieldForPaperBankBicNumber,
+    [AutofillFieldQualifier.paperTaxNoticeNumber]:
+      this.inlineMenuFieldQualificationService.isFieldForPaperTaxNoticeNumber,
+    [AutofillFieldQualifier.paperTaxNoticeRefTaxIncome]:
+      this.inlineMenuFieldQualificationService.isFieldForPaperTaxNoticeRefTaxIncome,
     // Cozy customization end
   };
 

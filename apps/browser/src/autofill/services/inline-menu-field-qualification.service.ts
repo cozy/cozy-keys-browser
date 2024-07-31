@@ -140,6 +140,15 @@ export class InlineMenuFieldQualificationService
       ...IdentityAutoFillConstants.UserNameFieldNames,
       // Cozy customization
       ...PaperAutoFillConstants.IdentityCardNumberFieldNames,
+      ...PaperAutoFillConstants.PassportNumberFieldNames,
+      ...PaperAutoFillConstants.ResidencePermitNumberFieldNames,
+      ...PaperAutoFillConstants.VehiculeRegistrationNumberFieldNames,
+      ...PaperAutoFillConstants.VehiculeRegistrationConfidentialCodeFieldNames,
+      ...PaperAutoFillConstants.VehiculeRegistrationLicensePlateNumberFieldNames,
+      ...PaperAutoFillConstants.BankIbanNumberFieldNames,
+      ...PaperAutoFillConstants.BankBicNumberFieldNames,
+      ...PaperAutoFillConstants.TaxNoticeNumberFieldNames,
+      ...PaperAutoFillConstants.TaxNoticeRefTaxIncomeFieldNames,
       // Cozy customization end
     ]),
   ];
@@ -844,6 +853,130 @@ export class InlineMenuFieldQualificationService
         PaperAutoFillConstants.IdentityCardNumberFieldNames,
         false,
       )
+    );
+  };
+
+  /**
+   * Validates the provided field as an paper passport field.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForPaperPassportNumber = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(field, PaperAutoFillConstants.PassportNumberFieldNames, false)
+    );
+  };
+
+  /**
+   * Validates the provided field as an paper residence permit field.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForPaperResidencePermitNumber = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(
+        field,
+        PaperAutoFillConstants.ResidencePermitNumberFieldNames,
+        false,
+      )
+    );
+  };
+
+  /**
+   * Validates the provided field as an paper vehicule registration field.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForPaperVehiculeRegistrationNumber = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(
+        field,
+        PaperAutoFillConstants.VehiculeRegistrationNumberFieldNames,
+        false,
+      )
+    );
+  };
+
+  /**
+   * Validates the provided field as an paper vehicule registration confidential code field.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForPaperVehiculeRegistrationConfidentialCode = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(
+        field,
+        PaperAutoFillConstants.VehiculeRegistrationConfidentialCodeFieldNames,
+        false,
+      )
+    );
+  };
+
+  /**
+   * Validates the provided field as an paper vehicule registration license plate field.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForPaperVehiculeRegistrationLicensePlateNumber = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(
+        field,
+        PaperAutoFillConstants.VehiculeRegistrationLicensePlateNumberFieldNames,
+        false,
+      )
+    );
+  };
+
+  /**
+   * Validates the provided field as an paper bank IBAN field.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForPaperBankIbanNumber = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(field, PaperAutoFillConstants.BankIbanNumberFieldNames, false)
+    );
+  };
+
+  /**
+   * Validates the provided field as an paper bank BIC field.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForPaperBankBicNumber = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(field, PaperAutoFillConstants.BankBicNumberFieldNames, false)
+    );
+  };
+
+  /**
+   * Validates the provided field as an paper tax notice number field.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForPaperTaxNoticeNumber = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(field, PaperAutoFillConstants.BankIbanNumberFieldNames, false)
+    );
+  };
+
+  /**
+   * Validates the provided field as an paper tax notice income field.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForPaperTaxNoticeRefTaxIncome = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(field, PaperAutoFillConstants.BankBicNumberFieldNames, false)
     );
   };
 
