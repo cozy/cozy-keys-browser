@@ -63,11 +63,10 @@ export class CozyClientService {
   }
 
   getCozyURL(): string {
-    const vaultUrl = this.environmentService.getWebVaultUrlSync();
-    if (!vaultUrl) {
+    if (!this.instance.stackClient.uri) {
       return null;
     }
-    return new URL(vaultUrl).origin; // Remove the /bitwarden part
+    return new URL(this.instance.stackClient.uri).origin;
   }
 
   async getCozyUrlAsync(): Promise<string> {

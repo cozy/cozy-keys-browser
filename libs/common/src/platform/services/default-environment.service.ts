@@ -125,12 +125,6 @@ export class DefaultEnvironmentService implements EnvironmentService {
   private globalState: GlobalState<EnvironmentState | null>;
   private globalCloudRegionState: GlobalState<CloudRegion | null>;
 
-  protected webVaultUrlSync: string;
-
-  getWebVaultUrlSync() {
-    return this.webVaultUrlSync;
-  }
-
   // We intentionally don't want the helper on account service, we want the null back if there is no active user
   private activeAccountId$: Observable<UserId | null> = this.accountService.activeAccount$.pipe(
     map((a) => a?.id),
@@ -237,8 +231,6 @@ export class DefaultEnvironmentService implements EnvironmentService {
           keyConnector: urls.keyConnector,
         },
       }));
-
-      this.webVaultUrlSync = formatUrl(urls.webVault);
 
       return urls;
     }
