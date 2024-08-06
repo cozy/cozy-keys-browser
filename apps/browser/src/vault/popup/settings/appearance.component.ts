@@ -31,6 +31,7 @@ export class AppearanceComponent implements OnInit {
     this.themeOptions = [
       { name: i18nService.t("default"), value: ThemeType.System },
       { name: i18nService.t("light"), value: ThemeType.Light },
+      { name: i18nService.t("lightContrasted"), value: ThemeType.LightContrasted },
       { name: i18nService.t("dark"), value: ThemeType.Dark },
       { name: "Nord", value: ThemeType.Nord },
       { name: i18nService.t("solarizedDark"), value: ThemeType.SolarizedDark },
