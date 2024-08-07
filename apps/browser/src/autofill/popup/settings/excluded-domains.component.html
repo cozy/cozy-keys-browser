@@ -17,11 +17,24 @@
     <div class="box">
       <div class="box-content">
         <div class="box-footer" [ngStyle]="{ marginTop: '10px' }">
+          <!--
+          Cozy customisation: disable "pop-out" redirection
+          -->
+          <!--
           {{
             accountSwitcherEnabled
               ? ("excludedDomainsDescAlt" | i18n)
               : ("excludedDomainsDesc" | i18n)
           }}
+          -->
+          {{
+            accountSwitcherEnabled
+              ? ("excludedDomainsDescAltCozy" | i18n)
+              : ("excludedDomainsDescCozy" | i18n)
+          }}
+          <!--
+          Cozy customisation end
+          -->
         </div>
         <ng-container *ngIf="excludedDomains">
           <div

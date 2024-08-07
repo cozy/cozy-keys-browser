@@ -54,7 +54,8 @@
       <button
         type="button"
         class="box-content-row box-content-row-flex text-default"
-        routerLink="/more-from-bitwarden"
+        appStopClick
+        (click)="launchContactForm()"
       >
         <div class="icon">
           <i class="icon-cozy icon-email"></i>

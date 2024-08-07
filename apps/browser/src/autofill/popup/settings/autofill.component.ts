@@ -237,7 +237,12 @@ export class AutofillComponent implements OnInit {
     }
 
     await this.dialogService.openSimpleDialog({
+      // Cozy customization, replace "overrideDefaultBrowserAutofillTitle" key
+      //*
+      title: { key: "overrideCozyDefaultBrowserAutofillTitle" },
+      /*/
       title: { key: "overrideDefaultBrowserAutofillTitle" },
+      //*/
       content: { key: "overrideDefaultBrowserAutofillDescription" },
       acceptButtonText: { key: "makeDefault" },
       acceptAction: async () => await this.handleOverrideDialogAccept(),
