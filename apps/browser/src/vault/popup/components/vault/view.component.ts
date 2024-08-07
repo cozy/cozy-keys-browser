@@ -599,7 +599,8 @@ export class ViewComponent extends BaseViewComponent {
 
   editInWebApp() {
     if (this.cipher.type === CipherType.Paper) {
-      this.openWebApp();
+      const hash = `/paper/files/${this.cipher.paper.qualificationLabel}/edit/${this.cipher.id}`;
+      window.open(this.cozyClientService.getAppURL("mespapiers", hash));
       return;
     } else if (this.cipher.type === CipherType.Contact) {
       const hash = `${this.cipher.id}/edit`;
