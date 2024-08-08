@@ -407,6 +407,8 @@ header:not(bit-callout header, bit-dialog header, popup-page header) {
       &[type="search"]::-webkit-search-cancel-button {
         -webkit-appearance: none;
         appearance: none;
+        // Cozy customization, Hide the cancel button in the search input (already have a clear button)
+        /*
         height: 15px;
         width: 15px;
         background-repeat: no-repeat;
@@ -415,6 +417,7 @@ header:not(bit-callout header, bit-dialog header, popup-page header) {
         @include themify($themes) {
           background-color: themed("headerInputColor");
         }
+        */
       }
     }
     &.hideSearchTag {
