@@ -2,8 +2,12 @@
   <popup-header slot="header" [pageTitle]="'vault' | i18n">
     <ng-container slot="end">
       <app-new-item-dropdown [initialValues]="newItemItemValues$ | async"></app-new-item-dropdown>
-
-      <app-pop-out></app-pop-out>
+      <!--
+      Cozy customisation: Hide "pop-out" redirection
+      -->
+      <!--
+        <app-pop-out></app-pop-out>
+      -->
       <app-current-account></app-current-account>
     </ng-container>
   </popup-header>
