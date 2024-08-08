@@ -11,6 +11,10 @@
   <div class="right"></div>
 </header>
 <main tabindex="-1">
+  <!--
+  Cozy customisation: Hide "autofillShortcut help" option
+  -->
+  <!--
   <div class="box tw-mt-4">
     <div class="box-content">
       <button
@@ -26,6 +30,7 @@
       {{ autofillKeyboardHelperText }}
     </div>
   </div>
+  -->
   <!-- Cozy customization -->
   <div class="box">
     <div class="box-content">
@@ -66,7 +71,7 @@
     <div class="box-content" *ngIf="canOverrideBrowserAutofillSetting">
       <div class="box-content-row box-content-row-checkbox" appBoxRow>
         <!--
-        Cozy customisation: disable "pop-out" redirection
+        Cozy customisation: Replace "overrideDefaultBrowserAutoFillSettings" translation
         -->
         <!--
         <label for="overrideBrowserAutofill" class="!tw-mr-0">{{
@@ -90,6 +95,10 @@
     <div class="box-footer">
       <span *ngIf="accountSwitcherEnabled">{{ "showAutoFillMenuOnFormFieldsDescAlt" | i18n }}</span>
       {{ "turnOffBrowserBuiltInPasswordManagerSettings" | i18n }}
+      <!--
+      Cozy customisation: Hide "disablePasswordManagerLink" link
+      -->
+      <!--
       <a
         [attr.href]="disablePasswordManagerLink"
         (click)="openDisablePasswordManagerLink($event)"
@@ -98,6 +107,7 @@
       >
         {{ "turnOffBrowserBuiltInPasswordManagerSettingsLink" | i18n }}
       </a>
+      -->
     </div>
   </div>
   <div class="box tw-mt-4">
