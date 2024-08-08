@@ -177,7 +177,7 @@ export const deletePaperCipher = async (
   await cipherService.delete(cipher.id);
 
   const message = i18nService.t("deletedPaperItem");
-  toastService.showToast({ title: message, message, variant: "success" });
+  toastService.showToast({ title: message, message: "", variant: "success" });
 
   return true;
 };

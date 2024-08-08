@@ -55,7 +55,7 @@ export const deleteCipher = async (
       : cipherService.softDeleteWithServer(cipher.id);
     const message = i18nService.t(cipher.isDeleted ? "permanentlyDeletedItem" : "deletedItem");
     await deletePromise;
-    toastService.showToast({ title: message, message, variant: "success" });
+    toastService.showToast({ title: message, message: "", variant: "success" });
     const onDeletedCipher = new EventEmitter<CipherView>();
     onDeletedCipher.emit(cipher);
   } catch {
