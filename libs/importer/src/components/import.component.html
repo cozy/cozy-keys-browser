@@ -5,6 +5,10 @@
   <bit-form-field [hidden]="isFromAC">
     <bit-label
       >{{ "importDestination" | i18n }}
+      <!--
+      Cozy customisation: Hide "learnAboutImportOptions" link
+      -->
+      <!--
       <a
         target="_blank"
         rel="noreferrer"
@@ -13,6 +17,7 @@
       >
         <i class="bwi bwi-question-circle" aria-hidden="true"></i>
       </a>
+      -->
     </bit-label>
     <bit-select formControlName="vaultSelector">
       <bit-option
