@@ -478,9 +478,16 @@ export class CipherService implements CipherServiceAbstraction {
     url: string,
     includeOtherTypes?: CipherType[],
     defaultMatch: UriMatchStrategySetting = null,
+    searchValue?: string,
   ): Promise<CipherView[]> {
     const ciphers = await this.getAllDecrypted();
-    return await this.filterCiphersForUrl(ciphers, url, includeOtherTypes, defaultMatch);
+    return await this.filterCiphersForUrl(
+      ciphers,
+      url,
+      includeOtherTypes,
+      defaultMatch,
+      searchValue,
+    );
   }
 
   async filterCiphersForUrl(
@@ -488,6 +495,7 @@ export class CipherService implements CipherServiceAbstraction {
     url: string,
     includeOtherTypes?: CipherType[],
     defaultMatch: UriMatchStrategySetting = null,
+    searchValue?: string,
   ): Promise<CipherView[]> {
     if (url == null && includeOtherTypes == null) {
       return [];
@@ -512,6 +520,9 @@ export class CipherService implements CipherServiceAbstraction {
       ) {
         // Cozy customization
         if (cipher.type === CipherType.Contact) {
+          if (searchValue) {
+            return cipher.contact.displayName.toLowerCase().includes(searchValue.toLowerCase());
+          }
           return cipher.favorite || cipher.contact.me;
         }
         // Cozy customization end

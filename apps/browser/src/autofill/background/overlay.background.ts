@@ -164,6 +164,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     handleContactClick: ({ message, port }) => this.handleContactClick(message, port),
     fillAutofillInlineMenuCipherWithAmbiguousField: ({ message, port }) =>
       this.fillAutofillInlineMenuCipherWithAmbiguousField(message, port),
+    inlineMenuSearchContact: ({ message }) => this.searchContacts(message),
     // Cozy customization end
     addNewVaultItem: ({ message, port }) => this.getNewVaultItemDetails(message, port),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port),
@@ -187,6 +188,10 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   ) {
     this.initOverlayEventObservables();
   }
+
+  private searchContacts = (message: OverlayPortMessage) => {
+    this.updateOverlayCiphers(undefined, message.searchValue);
+  };
 
   /**
    * Sets up the extension message listeners and gets the settings for the
@@ -254,7 +259,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
    * Queries all ciphers for the given url, and sorts them by last used. Will not update the
    * list of ciphers if the extension is not unlocked.
    */
-  async updateOverlayCiphers(updateAllCipherTypes = true) {
+  async updateOverlayCiphers(updateAllCipherTypes = true, searchValue?: string) {
     const authStatus = await firstValueFrom(this.authService.activeAccountStatus$);
     if (authStatus !== AuthenticationStatus.Unlocked) {
       if (this.focusedFieldData) {
@@ -269,7 +274,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     }
 
     this.inlineMenuCiphers = new Map();
-    const ciphersViews = await this.getCipherViews(currentTab, updateAllCipherTypes);
+    const ciphersViews = await this.getCipherViews(currentTab, updateAllCipherTypes, searchValue);
     for (let cipherIndex = 0; cipherIndex < ciphersViews.length; cipherIndex++) {
       this.inlineMenuCiphers.set(`inline-menu-cipher-${cipherIndex}`, ciphersViews[cipherIndex]);
     }
@@ -279,6 +284,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       command: "updateAutofillInlineMenuListCiphers",
       ciphers,
       showInlineMenuAccountCreation: this.showInlineMenuAccountCreation(),
+      isSearching: !!searchValue,
     });
   }
 
@@ -291,9 +297,10 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   private async getCipherViews(
     currentTab: chrome.tabs.Tab,
     updateAllCipherTypes: boolean,
+    searchValue?: string,
   ): Promise<CipherView[]> {
     if (updateAllCipherTypes || !this.cardAndIdentityCiphers) {
-      return this.getAllCipherTypeViews(currentTab);
+      return this.getAllCipherTypeViews(currentTab, searchValue);
     }
 
     const cipherViews = (
@@ -308,18 +315,26 @@ export class OverlayBackground implements OverlayBackgroundInterface {
    *
    * @param currentTab - The current tab
    */
-  private async getAllCipherTypeViews(currentTab: chrome.tabs.Tab): Promise<CipherView[]> {
+  private async getAllCipherTypeViews(
+    currentTab: chrome.tabs.Tab,
+    searchValue?: string,
+  ): Promise<CipherView[]> {
     if (!this.cardAndIdentityCiphers) {
       this.cardAndIdentityCiphers = new Set([]);
     }
 
     this.cardAndIdentityCiphers.clear();
     const cipherViews = (
-      await this.cipherService.getAllDecryptedForUrl(currentTab.url, [
-        CipherType.Card,
-        CipherType.Identity,
-        CipherType.Contact, // Cozy customization; add contact to autofill
-      ])
+      await this.cipherService.getAllDecryptedForUrl(
+        currentTab.url,
+        [
+          CipherType.Card,
+          CipherType.Identity,
+          CipherType.Contact, // Cozy customization; add contact to autofill
+        ],
+        undefined,
+        searchValue,
+      )
     ).sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
     for (let cipherIndex = 0; cipherIndex < cipherViews.length; cipherIndex++) {
       const cipherView = cipherViews[cipherIndex];
