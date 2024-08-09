@@ -66,7 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
     await this.clearComponentStates();
 
     // Cozy customiszation
-    this.historyService.init();
+    await this.historyService.init();
 
     this.accountService.activeAccount$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
       this.activeUserId = account?.id;
