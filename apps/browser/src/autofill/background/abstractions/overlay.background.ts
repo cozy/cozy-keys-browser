@@ -255,6 +255,7 @@ export type InlineMenuListPortMessageHandlers = {
     message,
     port,
   }: PortOnMessageHandlerParams) => void;
+  inlineMenuSearchContact: ({ message, port }: PortOnMessageHandlerParams) => void;
   // Cozy customization end
   addNewVaultItem: ({ message, port }: PortOnMessageHandlerParams) => void;
   viewSelectedCipher: ({ message, port }: PortOnMessageHandlerParams) => void;
