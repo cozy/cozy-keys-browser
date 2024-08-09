@@ -63,7 +63,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       initAutofillInlineMenuList: ({ message }) => this.initAutofillInlineMenuList(message),
       checkAutofillInlineMenuListFocused: () => this.checkInlineMenuListFocused(),
       updateAutofillInlineMenuListCiphers: ({ message }) =>
-        this.updateListItems(message.ciphers, message.showInlineMenuAccountCreation),
+        this.updateListItems(
+          message.ciphers,
+          message.showInlineMenuAccountCreation,
+          message.isSearching,
+        ),
       ambiguousFieldList: ({ message }) =>
         this.ambiguousFieldList(
           message.inlineMenuCipherId,
@@ -191,15 +195,26 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private updateListItems(
     ciphers: InlineMenuCipherData[],
     showInlineMenuAccountCreation?: boolean,
+    isSearching?: boolean,
   ) {
     this.ciphers = ciphers;
     this.currentCipherIndex = 0;
     this.showInlineMenuAccountCreation = showInlineMenuAccountCreation;
     if (this.inlineMenuListContainer) {
-      this.inlineMenuListContainer.innerHTML = "";
-      this.inlineMenuListContainer.classList.remove(
-        "inline-menu-list-container--with-new-item-button",
-      );
+      if (isSearching) {
+        const children = Array.from(this.inlineMenuListContainer.childNodes);
+        for (let i = 0; i < children.length; i++) {
+          const child = children[i] as Element;
+          if (!child.classList.contains("inline-menu-list-search-container")) {
+            child.remove();
+          }
+        }
+      } else {
+        this.inlineMenuListContainer.innerHTML = "";
+        this.inlineMenuListContainer.classList.remove(
+          "inline-menu-list-container--with-new-item-button",
+        );
+      }
     }
 
     if (!ciphers?.length) {
@@ -232,7 +247,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     }
 
     const isContactCipherList = ciphers.every((cipher) => cipher.contact);
-    if (isContactCipherList) {
+    if (isContactCipherList && !isSearching) {
       this.inlineMenuListContainer.appendChild(this.buildContactSearch());
       this.inlineMenuListContainer.classList.add(
         "inline-menu-list-container--with-new-item-button",
@@ -265,7 +280,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     inputContainer.append(iconElement);
     inputContainer.append(this.newItemInputSearchElement);
 
-    this.newItemInputSearchElement.addEventListener(EVENTS.KEYUP, this.handleNewSearch);
+    this.newItemInputSearchElement.addEventListener(EVENTS.KEYUP, this.handleNewSearch(uniqueId()));
 
     return this.buildSearchContainer(inputContainer);
   }
@@ -278,11 +293,16 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return inlineMenuListButtonContainer;
   }
 
-  private handleNewSearch = () => {
-    const filteredCiphers = this.ciphers.filter((c) =>
-      c.name.toLowerCase().includes(this.newItemInputSearchElement.value),
+  private handleNewSearch = (UID: string) => {
+    return this.useEventHandlersMemo(
+      () =>
+        this.postMessageToParent({
+          command: "inlineMenuSearchContact",
+          inlineMenuCipherId: this.lastFilledCipherId,
+          searchValue: this.newItemInputSearchElement.value,
+        }),
+      `${UID}-inline-menu-search-contact-handler`,
     );
-    this.loadPageOfCiphers(filteredCiphers);
   };
 
   /**
