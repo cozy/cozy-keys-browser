@@ -197,7 +197,7 @@
     "zone.js": "0.13.3",
     "zxcvbn": "4.4.2",
     "@cozy/minilog": "1.0.0",
-    "cozy-client": "48.5.0",
+    "cozy-client": "48.13.1",
     "cozy-device-helper": "3.0.0",
     "cozy-flags": "3.2.2",
     "cozy-logger": "1.10.4",
