@@ -265,7 +265,15 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     this.newItemInputSearchElement.addEventListener(EVENTS.KEYUP, this.handleNewSearch);
 
-    return this.buildAmbiguousHeaderContainer(inputContainer);
+    return this.buildSearchContainer(inputContainer);
+  }
+
+  private buildSearchContainer(element: Element) {
+    const inlineMenuListButtonContainer = globalThis.document.createElement("div");
+    inlineMenuListButtonContainer.classList.add("inline-menu-list-search-container");
+    inlineMenuListButtonContainer.appendChild(element);
+
+    return inlineMenuListButtonContainer;
   }
 
   private handleNewSearch = () => {
