@@ -868,13 +868,8 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     const client = await this.cozyClientService.getClientInstance();
     const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
 
-    // FIXME: Temporary way to query data. We want to avoid online request.
-    const { data: contact } = (await client.fetchQueryAndGetFromState({
-      definition: Q(CONTACTS_DOCTYPE).getById(cipher.id),
-      options: {
-        as: `${CONTACTS_DOCTYPE}/${cipher.id}`,
-        singleDocData: true,
-      },
+    const { data: contact } = (await client.query(Q(CONTACTS_DOCTYPE).getById(cipher.id), {
+      executeFromStore: true,
     })) as { data: IOCozyContact };
 
     const ambiguousContactFields = getAmbiguousFieldsContact(ambiguousContactFieldNames, contact);
