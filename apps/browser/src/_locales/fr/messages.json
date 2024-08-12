@@ -2264,12 +2264,6 @@
   "delete": {
     "message": "Supprimer"
   },
-  "favorite": {
-    "message": "Favori"
-  },
-  "unfavorite": {
-    "message": "Retirer des favoris"
-  },
   "print": {
     "message": "Imprimer"
   },

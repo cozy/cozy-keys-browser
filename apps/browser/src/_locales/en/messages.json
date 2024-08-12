@@ -2258,12 +2258,6 @@
   "delete": {
     "message": "Delete"
   },
-  "favorite": {
-    "message": "Favorite"
-  },
-  "unfavorite": {
-    "message": "Unfavorite"
-  },
   "print": {
     "message": "Print"
   },
@@ -3919,12 +3913,6 @@
   },
   "contactYourOrgAdmin": {
     "message": "Items in deactivated organizations cannot be accessed. Contact your organization owner for assistance."
-  },
-  "itemDetails": {
-    "message": "Item details"
-  },
-  "itemName": {
-    "message": "Item name"
   },
   "additionalInformation": {
     "message": "Additional information"
