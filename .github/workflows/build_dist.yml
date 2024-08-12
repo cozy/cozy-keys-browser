@@ -39,6 +39,11 @@ jobs:
         cd apps/browser
         npm run dist:firefox
 
+    - name: Dist Sources
+      run: |
+        cd apps/browser
+        npm run dist:sources
+
     - name: Upload Chrome artifact to GitHub
       uses: actions/upload-artifact@v3
       with:
@@ -52,3 +57,10 @@ jobs:
         name: Firefox
         path: |
           apps/browser/dist/dist-firefox.zip
+
+    - name: Upload Sources artifact to GitHub
+      uses: actions/upload-artifact@v3
+      with:
+        name: Sources
+        path: |
+          apps/browser/dist/cozy-keys-sources.zip
