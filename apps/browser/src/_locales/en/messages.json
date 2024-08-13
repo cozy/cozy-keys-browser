@@ -2947,9 +2947,6 @@
   "TOTPCopiedInClipboard": {
     "message": "TOTP copied in your clipboard !"
   },
-  "TOTP": {
-    "message": "One Time PassWord"
-  },
   "sharingNotAcceptedYet": {
     "message": "File inaccessible - sharing to be finalized."
   },

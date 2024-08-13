@@ -2953,9 +2953,6 @@
   "TOTPCopiedInClipboard": {
     "message": "TOTP copié dans votre presse papier !"
   },
-  "TOTP": {
-    "message": "Mot de passe à usage unique"
-  },
   "sharingNotAcceptedYet": {
     "message": "Dossier inacessible - partage à finaliser."
   },
