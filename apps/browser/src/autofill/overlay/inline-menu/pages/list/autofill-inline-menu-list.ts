@@ -53,7 +53,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private fieldQualifier: AutofillFieldQualifierType;
   private fieldValue: string;
   private fieldHtmlID: string;
-  private newItemInputSearchElement: HTMLInputElement;
+  private contactSearchInputElement: HTMLInputElement;
   // Cozy customization end
   private showInlineMenuAccountCreation: boolean;
   private readonly showCiphersPerPage = 6;
@@ -63,7 +63,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       initAutofillInlineMenuList: ({ message }) => this.initAutofillInlineMenuList(message),
       checkAutofillInlineMenuListFocused: () => this.checkInlineMenuListFocused(),
       updateAutofillInlineMenuListCiphers: ({ message }) =>
-        this.updateListItems(message.ciphers, message.showInlineMenuAccountCreation),
+        this.updateListItems(
+          message.ciphers,
+          message.showInlineMenuAccountCreation,
+          message.searchValue,
+        ),
       ambiguousFieldList: ({ message }) =>
         this.ambiguousFieldList(
           message.inlineMenuCipherId,
@@ -188,18 +192,48 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private updateListItems(
     ciphers: InlineMenuCipherData[],
     showInlineMenuAccountCreation?: boolean,
+    searchValue?: string,
   ) {
-    this.ciphers = ciphers;
+    const isSearching = !!searchValue;
+    // Cozy customization - Filter the contact ciphers by the search value or display all the ciphers
+    const ciphersFiltered = isSearching
+      ? ciphers.filter(
+          (cipher) =>
+            cipher.type === CipherType.Contact &&
+            cipher.contact.fullName.toLowerCase().includes(searchValue.toLowerCase()),
+        )
+      : ciphers || [];
+
+    // Sorting only required for contact list
+    const isContactCipherList = ciphers?.every((cipher) => cipher.contact);
+    this.ciphers = isContactCipherList
+      ? ciphersFiltered.sort((a, b) => {
+          return (
+            Number(b.favorite) - Number(a.favorite) || Number(b.contact.me) - Number(a.contact.me)
+          );
+        })
+      : ciphersFiltered;
+    // Cozy customization end
     this.currentCipherIndex = 0;
     this.showInlineMenuAccountCreation = showInlineMenuAccountCreation;
     if (this.inlineMenuListContainer) {
-      this.inlineMenuListContainer.innerHTML = "";
-      this.inlineMenuListContainer.classList.remove(
-        "inline-menu-list-container--with-new-item-button",
-      );
+      if (isSearching) {
+        const children = Array.from(this.inlineMenuListContainer.childNodes);
+        for (let i = 0; i < children.length; i++) {
+          const child = children[i] as Element;
+          if (!child.classList.contains("inline-menu-list-search-container")) {
+            child.remove();
+          }
+        }
+      } else {
+        this.inlineMenuListContainer.innerHTML = "";
+        this.inlineMenuListContainer.classList.remove(
+          "inline-menu-list-container--with-new-item-button",
+        );
+      }
     }
 
-    if (!ciphers?.length) {
+    if (!this.ciphers?.length) {
       this.buildNoResultsInlineMenuList();
       return;
     }
@@ -228,8 +262,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       this.loadPageOfCiphers();
     }
 
-    const isContactCipherList = ciphers.every((cipher) => cipher.contact);
-    if (isContactCipherList) {
+    if (isContactCipherList && !isSearching) {
       this.inlineMenuListContainer.appendChild(this.buildContactSearch());
       this.inlineMenuListContainer.classList.add(
         "inline-menu-list-container--with-new-item-button",
@@ -252,18 +285,18 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private buildContactSearch() {
     const inputContainer = globalThis.document.createElement("div");
     inputContainer.classList.add("search-container");
-    this.newItemInputSearchElement = globalThis.document.createElement("input");
-    this.newItemInputSearchElement.type = "text";
-    this.newItemInputSearchElement.placeholder = this.getTranslation("contactSearch");
-    this.newItemInputSearchElement.tabIndex = -1;
-    this.newItemInputSearchElement.classList.add("contact-search-header");
+    this.contactSearchInputElement = globalThis.document.createElement("input");
+    this.contactSearchInputElement.type = "text";
+    this.contactSearchInputElement.placeholder = this.getTranslation("contactSearch");
+    this.contactSearchInputElement.tabIndex = -1;
+    this.contactSearchInputElement.classList.add("contact-search-header");
     const iconElement = buildSvgDomElement(magnifier);
     iconElement.classList.add("search-icon");
 
     inputContainer.append(iconElement);
-    inputContainer.append(this.newItemInputSearchElement);
+    inputContainer.append(this.contactSearchInputElement);
 
-    this.newItemInputSearchElement.addEventListener(EVENTS.KEYUP, this.handleNewSearch);
+    this.contactSearchInputElement.addEventListener(EVENTS.KEYUP, this.handleNewSearch());
 
     return this.buildSearchContainer(inputContainer);
   }
@@ -277,10 +310,14 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   }
 
   private handleNewSearch = () => {
-    const filteredCiphers = this.ciphers.filter((c) =>
-      c.name.toLowerCase().includes(this.newItemInputSearchElement.value),
+    return this.useEventHandlersMemo(
+      () =>
+        this.postMessageToParent({
+          command: "inlineMenuSearchContact",
+          searchValue: this.contactSearchInputElement.value,
+        }),
+      `inline-menu-search-contact-handler`,
     );
-    this.loadPageOfCiphers(filteredCiphers);
   };
 
   /**

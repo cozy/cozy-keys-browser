@@ -167,6 +167,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     handleContactClick: ({ message, port }) => this.handleContactClick(message, port),
     fillAutofillInlineMenuCipherWithAmbiguousField: ({ message, port }) =>
       this.fillAutofillInlineMenuCipherWithAmbiguousField(message, port),
+    inlineMenuSearchContact: ({ message }) => this.searchContacts(message),
     // Cozy customization end
     addNewVaultItem: ({ message, port }) => this.getNewVaultItemDetails(message, port),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port),
@@ -190,6 +191,10 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   ) {
     this.initOverlayEventObservables();
   }
+
+  private searchContacts = (message: OverlayPortMessage) => {
+    this.updateOverlayCiphers(undefined, message.searchValue);
+  };
 
   /**
    * Sets up the extension message listeners and gets the settings for the
@@ -265,7 +270,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
    * Queries all ciphers for the given url, and sorts them by last used. Will not update the
    * list of ciphers if the extension is not unlocked.
    */
-  async updateOverlayCiphers(updateAllCipherTypes = true) {
+  async updateOverlayCiphers(updateAllCipherTypes = true, searchValue?: string) {
     const authStatus = await firstValueFrom(this.authService.activeAccountStatus$);
     if (authStatus !== AuthenticationStatus.Unlocked) {
       if (this.focusedFieldData) {
@@ -290,6 +295,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       command: "updateAutofillInlineMenuListCiphers",
       ciphers,
       showInlineMenuAccountCreation: this.showInlineMenuAccountCreation(),
+      searchValue,
     });
   }
 
