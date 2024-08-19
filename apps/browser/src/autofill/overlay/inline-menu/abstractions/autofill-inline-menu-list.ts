@@ -7,6 +7,7 @@ import { InlineMenuCipherData } from "../../../background/abstractions/overlay.b
 /* eslint-disable */
 import { AmbiguousContactFields } from "src/autofill/types";
 import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
+import { IOCozyContact } from "cozy-client/types/types";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -15,6 +16,7 @@ type AutofillInlineMenuListMessage = { command: string };
 export type UpdateAutofillInlineMenuListCiphersMessage = AutofillInlineMenuListMessage & {
   ciphers: InlineMenuCipherData[];
   showInlineMenuAccountCreation?: boolean;
+  searchValue?: string;
 };
 
 // Cozy customization

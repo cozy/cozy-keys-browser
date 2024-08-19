@@ -510,12 +510,6 @@ export class CipherService implements CipherServiceAbstraction {
         includeOtherTypes.includes(cipher.type) &&
         !cipherIsLogin
       ) {
-        // Cozy customization
-        if (cipher.type === CipherType.Contact) {
-          return cipher.favorite || cipher.contact.me;
-        }
-        // Cozy customization end
-
         return true;
       }
 
