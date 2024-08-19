@@ -2202,10 +2202,10 @@
     "message": "Bitwarden will not ask to save login details for these domains for all logged in accounts. You must refresh the page for changes to take effect."
   },
   "excludedDomainsDescCozy": {
-    "message": "Cozy pass will not ask to save login details for these domains. You must refresh the page for changes to take effect."
+    "message": "Cozy Pass will not ask to save login details for these domains. You must refresh the page for changes to take effect."
   },
   "excludedDomainsDescAltCozy": {
-    "message": "Cozy pass will not ask to save login details for these domains for all logged in accounts. You must refresh the page for changes to take effect."
+    "message": "Cozy Pass will not ask to save login details for these domains for all logged in accounts. You must refresh the page for changes to take effect."
   },
   "excludedDomainsInvalidDomain": {
     "message": "$DOMAIN$ is not a valid domain",
@@ -3691,7 +3691,7 @@
     "description": "Dialog title facilitating the ability to override a chrome browser's default autofill behavior"
   },
   "overrideCozyDefaultBrowserAutofillTitle": {
-    "message": "Make Cozy pass your default password manager?",
+    "message": "Make Cozy Pass your default password manager?",
     "description": "Dialog title facilitating the ability to override a chrome browser's default autofill behavior"
   },
   "overrideDefaultBrowserAutofillDescription": {
@@ -3703,7 +3703,7 @@
     "description": "Label for the setting that allows overriding the default browser autofill settings"
   },
   "overrideCozyDefaultBrowserAutoFillSettings": {
-    "message": "Make Cozy pass your default password manager",
+    "message": "Make Cozy Pass your default password manager",
     "description": "Label for the setting that allows overriding the default browser autofill settings"
   },
   "privacyPermissionAdditionNotGrantedTitle": {
