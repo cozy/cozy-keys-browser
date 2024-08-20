@@ -168,6 +168,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     fillAutofillInlineMenuCipherWithAmbiguousField: ({ message, port }) =>
       this.fillAutofillInlineMenuCipherWithAmbiguousField(message, port),
     inlineMenuSearchContact: ({ message }) => this.searchContacts(message),
+    redirectToCozy: ({ message }) => this.redirectToCozy(message),
     // Cozy customization end
     addNewVaultItem: ({ message, port }) => this.getNewVaultItemDetails(message, port),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port),
@@ -191,6 +192,10 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   ) {
     this.initOverlayEventObservables();
   }
+
+  private redirectToCozy = (message: OverlayPortMessage) => {
+    BrowserApi.createNewTab(this.cozyClientService.getAppURL(message.to, message.hash), true);
+  };
 
   private searchContacts = (message: OverlayPortMessage) => {
     this.updateOverlayCiphers(undefined, message.searchValue);

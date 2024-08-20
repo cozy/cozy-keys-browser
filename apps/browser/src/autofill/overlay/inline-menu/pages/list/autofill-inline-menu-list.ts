@@ -703,6 +703,14 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     if (this.showInlineMenuAccountCreation) {
       addNewCipherType = CipherType.Login;
     }
+    if (this.isFilledByContactCipher()) {
+      this.postMessageToParent({
+        command: "redirectToCozy",
+        to: "contacts",
+        hash: "new",
+      });
+      return;
+    }
 
     this.postMessageToParent({
       command: "addNewVaultItem",
@@ -1334,5 +1342,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
    */
   private isFilledByIdentityCipher = () => {
     return this.filledByCipherType === CipherType.Identity;
+  };
+
+  /**
+   * Identifies if the current focused field is filled by an contact cipher.
+   */
+  private isFilledByContactCipher = () => {
+    return this.filledByCipherType === CipherType.Contact;
   };
 }
