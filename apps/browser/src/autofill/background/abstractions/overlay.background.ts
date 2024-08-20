@@ -147,6 +147,8 @@ export type OverlayPortMessage = {
   // Cozy customization;
   fieldQualifier?: AutofillFieldQualifierType;
   ambiguousValue?: AmbiguousContactFieldValue[0];
+  to?: string; // For "redirectToCozy" command
+  hash?: string; // For "redirectToCozy" command
   // Cozy customization end
 };
 
@@ -264,6 +266,7 @@ export type InlineMenuListPortMessageHandlers = {
   viewSelectedCipher: ({ message, port }: PortOnMessageHandlerParams) => void;
   redirectAutofillInlineMenuFocusOut: ({ message, port }: PortOnMessageHandlerParams) => void;
   updateAutofillInlineMenuListHeight: ({ message, port }: PortOnMessageHandlerParams) => void;
+  redirectToCozy: ({ message, port }: PortOnMessageHandlerParams) => void;
 };
 
 export interface OverlayBackground {
