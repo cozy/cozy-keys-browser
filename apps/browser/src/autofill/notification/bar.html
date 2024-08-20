@@ -1,54 +1,73 @@
 ﻿<!doctype html>
 <html>
   <head>
-    <title></title>
+    <title>Cozy</title>
     <meta charset="utf-8" />
   </head>
+
   <body>
-    <a href="https://cozy.io/" target="_blank" id="logo-link" aria-hidden="true" title="Cozy">
-      <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 56 56">
-        <g fill="none" fill-rule="evenodd">
-          <path
-            fill="#FFF"
-            d="M27.847 12.52c2.784 0 5.416 1.072 7.406 3.023a10.55 10.55 0 0 1 3.107 6.286c5.396.484 9.64 5.036 9.64 10.563 0 5.847-4.753 10.604-10.592 10.604H18.592C12.75 42.996 8 38.24 8 32.391c0-2.789 1.072-5.423 3.02-7.416a10.525 10.525 0 0 1 6.31-3.113 10.542 10.542 0 0 1 3.11-6.318 10.52 10.52 0 0 1 7.407-3.024zm4.757 17c-.51.009-.932.411-.922.919.008.143.014.21.04.353l.037.173.045.168-.159.122c-2.31 1.688-5.615 1.693-7.93.011l-.157-.119.045-.157c.056-.22.08-.415.08-.56.01-.496-.408-.897-.914-.909a.93.93 0 0 0-.948.768l-.01.106c0 .056-.024.192-.078.334-.07.184-.179.343-.334.468l-.124.087a.884.884 0 0 0-.277 1.276.962.962 0 0 0 1.268.256l.16-.104.084-.062.188.137c1.437 1.008 3.181 1.543 4.975 1.543l.337-.007a8.645 8.645 0 0 0 4.65-1.542l.186-.138.09.067c.053.037.108.072.164.106a.958.958 0 0 0 1.267-.255.881.881 0 0 0-.187-1.216l-.091-.062a1.049 1.049 0 0 1-.352-.345 1.206 1.206 0 0 1-.174-.456l-.01-.093c-.01-.493-.442-.876-.95-.869z"
-          />
-          <g transform="translate(34 29)">
-            <circle cx="10" cy="10" r="10" fill="#35CE68" />
-            <path
-              fill="#FFF"
-              d="M15.106 11.594a.75.75 0 0 1 .342 1.004C14.434 14.652 12.32 16 10 16c-1.774 0-3.408-.812-4.533-2.085a.74.74 0 0 1-.717.585.75.75 0 0 1-.75-.75v-3c0-.047.012-.09.02-.133.004-.02.003-.041.008-.06.023-.09.061-.17.111-.24.006-.008.014-.014.019-.02a.737.737 0 0 1 .224-.194.745.745 0 0 1 .518-.083l.059.015a.714.714 0 0 1 .185.087c.02.012.04.021.06.036l.026.016 2.25 1.875a.75.75 0 0 1 .096 1.056.74.74 0 0 1-.54.264C7.846 14.071 8.89 14.5 10 14.5a4.605 4.605 0 0 0 4.102-2.565.75.75 0 0 1 1.004-.341zm.87-2.184c-.002.015-.002.03-.005.044a.722.722 0 0 1-.117.237c-.01.013-.02.02-.03.032a.717.717 0 0 1-.16.145c-.019.013-.036.025-.056.036a.776.776 0 0 1-.25.087l-.005.002c-.007 0-.013-.002-.02-.001a.739.739 0 0 1-.495-.124c-.017-.011-.035-.019-.051-.032-.005-.004-.012-.005-.017-.01L12.52 7.95a.75.75 0 0 1-.096-1.056.737.737 0 0 1 .601-.257A4.593 4.593 0 0 0 10 5.5a4.576 4.576 0 0 0-4.125 2.583.75.75 0 0 1-1.354-.646A6.077 6.077 0 0 1 10 4c1.795 0 3.427.784 4.543 2.035a.74.74 0 0 1 .707-.535.75.75 0 0 1 .75.75v3c0 .057-.012.108-.023.16z"
-            />
-          </g>
-        </g>
-      </svg>
-    </a>
-
-    <div id="content"></div>
-
-    <div id="templates" style="display: none">
-      <div id="template-notif">
-        <div class="desc-text"></div>
-        <div class="submit-buttons">
-          <button type="button" class="dont-save link"></button>
-          <button type="button" class="add-or-change"></button>
-        </div>
+    <div id="notification-bar-outer-wrapper" class="outer-wrapper">
+      <div class="logo">
+        <a href="https://cozy.io" target="_blank" id="logo-link" rel="noreferrer">
+          <img id="logo" alt="Bitwarden" />
+        </a>
       </div>
-
-      <div id="template-totp-copied">
-        <div class="desc-text"></div>
-        <svg
-          class="dont-save"
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M8 6.586l5.293-5.293a1 1 0 0 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 1 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 1 1 1.414-1.414L8 6.586z"
-          ></path>
-        </svg>
+      <div id="content"></div>
+      <div>
+        <button type="button" class="neutral" id="close-button">
+          <svg
+            id="close"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
+            xmlns:v="https://vecta.io/nano"
+          >
+            <path
+              d="M497.72 429.63l-169-174.82L498.11 82.24c6.956-7.168 6.956-18.85 0-26.018L449.934 6.31C446.585 2.859 442.076 1 437.31 1s-9.275 1.991-12.624 5.31l-168.62 172.04L87.196 6.45c-3.349-3.451-7.858-5.31-12.624-5.31s-9.275 1.991-12.624 5.31L13.9 56.362c-6.956 7.168-6.956 18.85 0 26.018l169.39 172.57L14.42 429.64c-3.349 3.451-5.281 8.097-5.281 13.009s1.803 9.558 5.281 13.009l48.176 49.912c3.478 3.584 7.987 5.442 12.624 5.442 4.508 0 9.146-1.726 12.624-5.442l168.23-174.16 168.36 174.03c3.478 3.584 7.986 5.442 12.624 5.442 4.509 0 9.146-1.726 12.624-5.442l48.176-49.912c3.349-3.451 5.281-8.097 5.281-13.009a19.32 19.32 0 0 0-5.41-12.876z"
+            />
+          </svg>
+        </button>
       </div>
     </div>
   </body>
+
+  <template id="template-add">
+    <div class="inner-wrapper">
+      <div id="add-text"></div>
+      <div class="add-change-cipher-buttons">
+        <button type="button" id="never-save" class="link"></button>
+        <select id="select-folder"></select>
+        <button type="button" id="add-edit" class="secondary"></button>
+        <button type="button" id="add-save" class="primary"></button>
+      </div>
+    </div>
+  </template>
+
+  <template id="template-change">
+    <div class="inner-wrapper">
+      <div id="change-text"></div>
+      <div class="add-change-cipher-buttons">
+        <button type="button" id="change-edit" class="secondary"></button>
+        <button type="button" id="change-save" class="primary"></button>
+      </div>
+    </div>
+  </template>
+
+  <template id="template-unlock">
+    <div class="inner-wrapper">
+      <div id="unlock-text"></div>
+      <div>
+        <button type="button" id="unlock-vault" class="primary"></button>
+      </div>
+    </div>
+  </template>
+
+  <template id="template-fileless-import">
+    <div class="inner-wrapper">
+      <div id="fileless-import-text"></div>
+      <div id="fileless-import-buttons">
+        <button type="button" id="cancel-fileless-import" class="secondary"></button>
+        <button type="button" id="start-fileless-import" class="primary"></button>
+      </div>
+    </div>
+  </template>
 </html>
