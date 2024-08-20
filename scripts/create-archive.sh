@@ -7,6 +7,6 @@ cd ..
 # Create cozy-keys archive
 git archive HEAD -o apps/browser/dist/cozy-keys-sources.zip .
 cd apps/browser/dist/
-zip --delete cozy-keys.zip apps/web*
-zip --delete cozy-keys.zip apps/desktop*
-zip --delete cozy-keys.zip apps/cli*
+zip --delete cozy-keys-sources.zip apps/web*
+zip --delete cozy-keys-sources.zip apps/desktop*
+zip --delete cozy-keys-sources.zip apps/cli*

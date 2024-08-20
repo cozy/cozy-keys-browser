@@ -15,10 +15,26 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@bitwarden/common/*": ["./libs/common/src/*"],
+      "@bitwarden/admin-console": ["./libs/admin-console/src"],
       "@bitwarden/angular/*": ["./libs/angular/src/*"],
+      "@bitwarden/auth": ["./libs/auth/src"],
+      "@bitwarden/billing": ["./libs/billing/src"],
+      "@bitwarden/common/*": ["./libs/common/src/*"],
+      "@bitwarden/components": ["./libs/components/src"],
+      "@bitwarden/generator-components": ["./libs/tools/generator/components/src"],
+      "@bitwarden/generator-core": ["./libs/tools/generator/core/src"],
+      "@bitwarden/generator-history": ["./libs/tools/generator/extensions/history/src"],
+      "@bitwarden/generator-legacy": ["./libs/tools/generator/extensions/legacy/src"],
+      "@bitwarden/generator-navigation": ["./libs/tools/generator/extensions/navigation/src"],
+      "@bitwarden/vault-export-core": [".libs/tools/export/vault-export/vault-export-core/src"],
+      "@bitwarden/vault-export-ui": [".libs/tools/export/vault-export/vault-export-ui/src"],
+      "@bitwarden/importer/core": ["./libs/importer/src"],
+      "@bitwarden/importer/ui": ["./libs/importer/src/components"],
+      "@bitwarden/send-ui": [".libs/tools/send/send-ui/src"],
+      "@bitwarden/platform": ["./libs/platform/src"],
       "@bitwarden/node/*": ["./libs/node/src/*"],
-      "@bitwarden/components": ["./libs/components/src"]
+      "@bitwarden/vault": ["./libs/vault/src"],
+      "@bitwarden/bit-common/*": ["./bitwarden_license/bit-common/src/*"]
     },
     "plugins": [
       {
@@ -26,5 +42,6 @@
       }
     ]
   },
-  "include": ["apps/**/*", "libs/**/*", "bitwarden_license/**/*"]
+  "include": ["apps/**/*", "libs/**/*", "bitwarden_license/**/*"],
+  "exclude": ["**/build"]
 }

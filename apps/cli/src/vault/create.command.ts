@@ -1,22 +1,25 @@
 import * as fs from "fs";
 import * as path from "path";
 
+import { firstValueFrom } from "rxjs";
+
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { Utils } from "@bitwarden/common/misc/utils";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { SelectionReadOnlyRequest } from "@bitwarden/common/admin-console/models/request/selection-read-only.request";
+import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { CipherExport } from "@bitwarden/common/models/export/cipher.export";
 import { CollectionExport } from "@bitwarden/common/models/export/collection.export";
 import { FolderExport } from "@bitwarden/common/models/export/folder.export";
-import { CollectionRequest } from "@bitwarden/common/models/request/collection.request";
-import { SelectionReadOnlyRequest } from "@bitwarden/common/models/request/selection-read-only.request";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { FolderApiServiceAbstraction } from "@bitwarden/common/vault/abstractions/folder/folder-api.service.abstraction";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
+import { CollectionRequest } from "@bitwarden/common/vault/models/request/collection.request";
 
-import { OrganizationCollectionRequest } from "../models/request/organization-collection.request";
+import { OrganizationCollectionRequest } from "../admin-console/models/request/organization-collection.request";
+import { OrganizationCollectionResponse } from "../admin-console/models/response/organization-collection.response";
 import { Response } from "../models/response";
-import { OrganizationCollectionResponse } from "../models/response/organization-collection.response";
 import { CliUtils } from "../utils";
 
 import { CipherResponse } from "./models/cipher.response";
@@ -26,17 +29,18 @@ export class CreateCommand {
   constructor(
     private cipherService: CipherService,
     private folderService: FolderService,
-    private stateService: StateService,
     private cryptoService: CryptoService,
     private apiService: ApiService,
-    private folderApiService: FolderApiServiceAbstraction
+    private folderApiService: FolderApiServiceAbstraction,
+    private accountProfileService: BillingAccountProfileStateService,
+    private organizationService: OrganizationService,
   ) {}
 
   async run(
     object: string,
     requestJson: string,
     cmdOptions: Record<string, any>,
-    additionalData: any = null
+    additionalData: any = null,
   ): Promise<Response> {
     let req: any = null;
     if (object !== "attachment") {
@@ -78,9 +82,10 @@ export class CreateCommand {
   private async createCipher(req: CipherExport) {
     const cipher = await this.cipherService.encrypt(CipherExport.toView(req));
     try {
-      await this.cipherService.createWithServer(cipher);
-      const newCipher = await this.cipherService.get(cipher.id);
-      const decCipher = await newCipher.decrypt();
+      const newCipher = await this.cipherService.createWithServer(cipher);
+      const decCipher = await newCipher.decrypt(
+        await this.cipherService.getKeyForCipherKeyDecryption(newCipher),
+      );
       const res = new CipherResponse(decCipher);
       return Response.success(res);
     } catch (e) {
@@ -122,26 +127,30 @@ export class CreateCommand {
       return Response.notFound();
     }
 
-    if (cipher.organizationId == null && !(await this.stateService.getCanAccessPremium())) {
+    if (
+      cipher.organizationId == null &&
+      !(await firstValueFrom(this.accountProfileService.hasPremiumFromAnySource$))
+    ) {
       return Response.error("Premium status is required to use this feature.");
     }
 
-    const encKey = await this.cryptoService.getEncKey();
-    if (encKey == null) {
+    const userKey = await this.cryptoService.getUserKey();
+    if (userKey == null) {
       return Response.error(
         "You must update your encryption key before you can use this feature. " +
-          "See https://help.bitwarden.com/article/update-encryption-key/"
+          "See https://help.bitwarden.com/article/update-encryption-key/",
       );
     }
 
     try {
-      await this.cipherService.saveAttachmentRawWithServer(
+      const updatedCipher = await this.cipherService.saveAttachmentRawWithServer(
         cipher,
         fileName,
-        new Uint8Array(fileBuf).buffer
+        new Uint8Array(fileBuf).buffer,
       );
-      const updatedCipher = await this.cipherService.get(cipher.id);
-      const decCipher = await updatedCipher.decrypt();
+      const decCipher = await updatedCipher.decrypt(
+        await this.cipherService.getKeyForCipherKeyDecryption(updatedCipher),
+      );
       return Response.success(new CipherResponse(decCipher));
     } catch (e) {
       return Response.error(e);
@@ -176,15 +185,26 @@ export class CreateCommand {
       if (orgKey == null) {
         throw new Error("No encryption key for this organization.");
       }
+      const organization = await this.organizationService.get(req.organizationId);
+      const currentOrgUserId = organization.organizationUserId;
 
       const groups =
         req.groups == null
           ? null
-          : req.groups.map((g) => new SelectionReadOnlyRequest(g.id, g.readOnly, g.hidePasswords));
+          : req.groups.map(
+              (g) => new SelectionReadOnlyRequest(g.id, g.readOnly, g.hidePasswords, g.manage),
+            );
+      const users =
+        req.users == null
+          ? [new SelectionReadOnlyRequest(currentOrgUserId, false, false, true)]
+          : req.users.map(
+              (u) => new SelectionReadOnlyRequest(u.id, u.readOnly, u.hidePasswords, u.manage),
+            );
       const request = new CollectionRequest();
       request.name = (await this.cryptoService.encrypt(req.name, orgKey)).encryptedString;
       request.externalId = req.externalId;
       request.groups = groups;
+      request.users = users;
       const response = await this.apiService.postCollection(req.organizationId, request);
       const view = CollectionExport.toView(req);
       view.id = response.id;

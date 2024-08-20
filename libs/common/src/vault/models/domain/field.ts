@@ -1,11 +1,11 @@
 import { Jsonify } from "type-fest";
 
-import { FieldSubType } from "../../../enums/fieldSubType";
-import { FieldType } from "../../../enums/fieldType";
-import { LinkedIdType } from "../../../enums/linkedIdType";
-import Domain from "../../../models/domain/domain-base";
-import { EncString } from "../../../models/domain/enc-string";
-import { SymmetricCryptoKey } from "../../../models/domain/symmetric-crypto-key";
+import { FieldSubType } from "@bitwarden/common/enums/fieldSubType";
+
+import Domain from "../../../platform/models/domain/domain-base";
+import { EncString } from "../../../platform/models/domain/enc-string";
+import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
+import { FieldType, LinkedIdType } from "../../enums";
 import { ExpirationDateData } from "../data/expiration-date.data";
 import { FieldData } from "../data/field.data";
 import { LabelData } from "../data/label.data";
@@ -48,7 +48,7 @@ export class Field extends Domain {
         name: null,
         value: null,
       },
-      []
+      [],
     );
   }
 
@@ -60,7 +60,7 @@ export class Field extends Domain {
         value: null,
       },
       orgId,
-      encKey
+      encKey,
     );
   }
 
@@ -81,7 +81,7 @@ export class Field extends Domain {
         type: null,
         linkedId: null,
       },
-      ["type", "linkedId"]
+      ["type", "linkedId"],
     );
     return f;
   }

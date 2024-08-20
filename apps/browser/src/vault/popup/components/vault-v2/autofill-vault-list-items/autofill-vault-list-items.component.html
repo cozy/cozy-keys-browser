@@ -1,0 +1,9 @@
+<app-vault-list-items-container
+  *ngIf="autofillCiphers$ | async as ciphers"
+  [ciphers]="ciphers"
+  [title]="'autofillSuggestions' | i18n"
+  [showRefresh]="showRefresh"
+  (onRefresh)="refreshCurrentTab()"
+  [description]="(showEmptyAutofillTip$ | async) ? ('autofillSuggestionsTip' | i18n) : null"
+  showAutofillButton
+></app-vault-list-items-container>

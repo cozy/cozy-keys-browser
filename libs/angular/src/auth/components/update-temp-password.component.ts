@@ -1,19 +1,30 @@
 import { Directive } from "@angular/core";
+import { Router } from "@angular/router";
+import { firstValueFrom, map } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { PolicyService } from "@bitwarden/common/abstractions/policy/policy.service.abstraction";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
+import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
+import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
+import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
+import { PasswordRequest } from "@bitwarden/common/auth/models/request/password.request";
 import { UpdateTempPasswordRequest } from "@bitwarden/common/auth/models/request/update-temp-password.request";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { MasterPasswordPolicyOptions } from "@bitwarden/common/models/domain/master-password-policy-options";
-import { SymmetricCryptoKey } from "@bitwarden/common/models/domain/symmetric-crypto-key";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { MasterPasswordVerification } from "@bitwarden/common/auth/types/verification";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
+import { MasterKey, UserKey } from "@bitwarden/common/types/key";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { DialogService } from "@bitwarden/components";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { ChangePasswordComponent as BaseChangePasswordComponent } from "./change-password.component";
 
@@ -23,8 +34,17 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
   key: string;
   enforcedPolicyOptions: MasterPasswordPolicyOptions;
   showPassword = false;
+  reason: ForceSetPasswordReason = ForceSetPasswordReason.None;
+  verification: MasterPasswordVerification = {
+    type: VerificationType.MasterPassword,
+    secret: "",
+  };
 
   onSuccessfulChangePassword: () => Promise<any>;
+
+  get requireCurrentPassword(): boolean {
+    return this.reason === ForceSetPasswordReason.WeakMasterPassword;
+  }
 
   constructor(
     i18nService: I18nService,
@@ -36,7 +56,13 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
     private apiService: ApiService,
     stateService: StateService,
     private syncService: SyncService,
-    private logService: LogService
+    private logService: LogService,
+    private userVerificationService: UserVerificationService,
+    protected router: Router,
+    dialogService: DialogService,
+    kdfConfigService: KdfConfigService,
+    accountService: AccountService,
+    masterPasswordService: InternalMasterPasswordServiceAbstraction,
   ) {
     super(
       i18nService,
@@ -45,13 +71,35 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
       passwordGenerationService,
       platformUtilsService,
       policyService,
-      stateService
+      stateService,
+      dialogService,
+      kdfConfigService,
+      masterPasswordService,
+      accountService,
     );
   }
 
   async ngOnInit() {
     await this.syncService.fullSync(true);
-    super.ngOnInit();
+
+    const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+    this.reason = await firstValueFrom(this.masterPasswordService.forceSetPasswordReason$(userId));
+
+    // If we somehow end up here without a reason, go back to the home page
+    if (this.reason == ForceSetPasswordReason.None) {
+      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.router.navigate(["/"]);
+      return;
+    }
+
+    await super.ngOnInit();
+  }
+
+  get masterPasswordWarningText(): string {
+    return this.reason == ForceSetPasswordReason.WeakMasterPassword
+      ? this.i18nService.t("updateWeakMasterPasswordWarning")
+      : this.i18nService.t("updateMasterPasswordWarning");
   }
 
   togglePassword(confirmField: boolean) {
@@ -60,9 +108,10 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
   }
 
   async setupSubmitActions(): Promise<boolean> {
-    this.email = await this.stateService.getEmail();
-    this.kdf = await this.stateService.getKdfType();
-    this.kdfConfig = await this.stateService.getKdfConfig();
+    this.email = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.email)),
+    );
+    this.kdfConfig = await this.kdfConfigService.getKdfConfig();
     return true;
   }
 
@@ -78,21 +127,26 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
 
     try {
       // Create new key and hash new password
-      const newKey = await this.cryptoService.makeKey(
+      const newMasterKey = await this.cryptoService.makeMasterKey(
         this.masterPassword,
         this.email.trim().toLowerCase(),
-        this.kdf,
-        this.kdfConfig
+        this.kdfConfig,
       );
-      const newPasswordHash = await this.cryptoService.hashPassword(this.masterPassword, newKey);
+      const newPasswordHash = await this.cryptoService.hashMasterKey(
+        this.masterPassword,
+        newMasterKey,
+      );
 
-      // Grab user's current enc key
-      const userEncKey = await this.cryptoService.getEncKey();
+      // Grab user key
+      const userKey = await this.cryptoService.getUserKey();
 
-      // Create new encKey for the User
-      const newEncKey = await this.cryptoService.remakeEncKey(newKey, userEncKey);
+      // Encrypt user key with new master key
+      const newProtectedUserKey = await this.cryptoService.encryptUserKeyWithMasterKey(
+        newMasterKey,
+        userKey,
+      );
 
-      await this.performSubmitActions(newPasswordHash, newKey, newEncKey);
+      await this.performSubmitActions(newPasswordHash, newMasterKey, newProtectedUserKey);
     } catch (e) {
       this.logService.error(e);
     }
@@ -100,26 +154,35 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
 
   async performSubmitActions(
     masterPasswordHash: string,
-    key: SymmetricCryptoKey,
-    encKey: [SymmetricCryptoKey, EncString]
+    masterKey: MasterKey,
+    userKey: [UserKey, EncString],
   ) {
     try {
-      // Create request
-      const request = new UpdateTempPasswordRequest();
-      request.key = encKey[1].encryptedString;
-      request.newMasterPasswordHash = masterPasswordHash;
-      request.masterPasswordHint = this.hint;
+      switch (this.reason) {
+        case ForceSetPasswordReason.AdminForcePasswordReset:
+          this.formPromise = this.updateTempPassword(masterPasswordHash, userKey);
+          break;
+        case ForceSetPasswordReason.WeakMasterPassword:
+          this.formPromise = this.updatePassword(masterPasswordHash, userKey);
+          break;
+      }
 
-      // Update user's password
-      this.formPromise = this.apiService.putUpdateTempPassword(request);
       await this.formPromise;
       this.platformUtilsService.showToast(
         "success",
         null,
-        this.i18nService.t("updatedMasterPassword")
+        this.i18nService.t("updatedMasterPassword"),
+      );
+
+      const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+      await this.masterPasswordService.setForceSetPasswordReason(
+        ForceSetPasswordReason.None,
+        userId,
       );
 
       if (this.onSuccessfulChangePassword != null) {
+        // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.onSuccessfulChangePassword();
       } else {
         this.messagingService.send("logout");
@@ -127,5 +190,25 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
     } catch (e) {
       this.logService.error(e);
     }
+  }
+  private async updateTempPassword(masterPasswordHash: string, userKey: [UserKey, EncString]) {
+    const request = new UpdateTempPasswordRequest();
+    request.key = userKey[1].encryptedString;
+    request.newMasterPasswordHash = masterPasswordHash;
+    request.masterPasswordHint = this.hint;
+
+    return this.apiService.putUpdateTempPassword(request);
+  }
+
+  private async updatePassword(newMasterPasswordHash: string, userKey: [UserKey, EncString]) {
+    const request = await this.userVerificationService.buildRequest(
+      this.verification,
+      PasswordRequest,
+    );
+    request.masterPasswordHint = this.hint;
+    request.newMasterPasswordHash = newMasterPasswordHash;
+    request.key = userKey[1].encryptedString;
+
+    return this.apiService.postPassword(request);
   }
 }

@@ -3,7 +3,7 @@ import "module-alias/register";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
-import { NativeMessagingVersion } from "@bitwarden/common/enums/nativeMessagingVersion";
+import { NativeMessagingVersion } from "@bitwarden/common/enums";
 
 import { CredentialCreatePayload } from "../../../src/models/native-messaging/encrypted-message-payloads/credential-create-payload";
 import { LogUtils } from "../log-utils";
@@ -19,13 +19,15 @@ const argv: any = yargs(hideBin(process.argv)).option("name", {
 
 const { name } = argv;
 
+// FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const nativeMessageService = new NativeMessageService(NativeMessagingVersion.One);
   // Handshake
   LogUtils.logInfo("Sending Handshake");
   const handshakeResponse = await nativeMessageService.sendHandshake(
     config.testRsaPublicKey,
-    config.applicationName
+    config.applicationName,
   );
 
   if (!handshakeResponse.status) {
@@ -47,7 +49,7 @@ const { name } = argv;
   const response = await nativeMessageService.credentialCreation(handshakeResponse.sharedKey, {
     name: name,
     userName: "SuperAwesomeUser",
-    password: "dolhpin",
+    password: "dolphin",
     uri: "google.com",
     userId: activeUser.id,
   } as CredentialCreatePayload);

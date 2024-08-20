@@ -1,17 +1,11 @@
-export type PasswordGeneratorOptions = {
-  length?: number;
-  ambiguous?: boolean;
-  uppercase?: boolean;
-  minUppercase?: number;
-  lowercase?: boolean;
-  minLowercase?: number;
-  number?: boolean;
-  minNumber?: number;
-  special?: boolean;
-  minSpecial?: number;
-  numWords?: number;
-  wordSeparator?: string;
-  capitalize?: boolean;
-  includeNumber?: boolean;
-  type?: "password" | "passphrase";
-};
+import { GeneratorNavigation } from "../navigation/generator-navigation";
+import { PassphraseGenerationOptions } from "../passphrase/passphrase-generation-options";
+
+import { PasswordGenerationOptions } from "./password-generation-options";
+
+/** Request format for credential generation.
+ *  This type includes all properties suitable for reactive data binding.
+ */
+export type PasswordGeneratorOptions = PasswordGenerationOptions &
+  PassphraseGenerationOptions &
+  GeneratorNavigation & { policyUpdated?: boolean };

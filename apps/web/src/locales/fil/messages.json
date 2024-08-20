@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "Web Vault ng $APP_NAME$",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "Ano'ng uri ng item na ito?"
   },
@@ -182,6 +172,10 @@
   "noneFolder": {
     "message": "Walang folder",
     "description": "This is the folder for uncategorized items"
+  },
+  "selfOwnershipLabel": {
+    "message": "You",
+    "description": "Used as a label to indicate that the user is the owner of an item."
   },
   "addFolder": {
     "message": "Magdagdag ng folder"
@@ -411,6 +405,21 @@
   "item": {
     "message": "Item"
   },
+  "itemDetails": {
+    "message": "Item details"
+  },
+  "itemName": {
+    "message": "Item name"
+  },
+  "cannotRemoveViewOnlyCollections": {
+    "message": "You cannot remove collections with View only permissions: $COLLECTIONS$",
+    "placeholders": {
+      "collections": {
+        "content": "$1",
+        "example": "Work, Personal"
+      }
+    }
+  },
   "ex": {
     "message": "hal.",
     "description": "Short abbreviation for 'example'."
@@ -518,9 +527,6 @@
   "maxFileSize": {
     "message": "Hanggang sa 500 MB lang dapat ang mga file."
   },
-  "updateKey": {
-    "message": "Hindi mo magagamit ang feature na ito hanggang sa i-update mo ang encryption key mo."
-  },
   "addedItem": {
     "message": "Naidagdag ang item"
   },
@@ -591,8 +597,17 @@
   "access": {
     "message": "Access"
   },
+  "accessLevel": {
+    "message": "Access level"
+  },
+  "accessing": {
+    "message": "Accessing"
+  },
   "loggedOut": {
     "message": "Naka-log out"
+  },
+  "loggedOutDesc": {
+    "message": "You have been logged out of your account."
   },
   "loginExpired": {
     "message": "Nag-expire na ang login session mo."
@@ -618,14 +633,110 @@
   "loginWithDevice": {
     "message": "Mag-log in gamit ang device"
   },
-  "loginWithDeviceEnabledInfo": {
-    "message": "Dapat nakahanda ang pagla-log in gamit ang device sa mga setting ng mobile app ng Bitwarden. Kailangan ng higit pang opsyon?"
+  "loginWithDeviceEnabledNote": {
+    "message": "Log in with device must be set up in the settings of the Bitwarden app. Need another option?"
   },
   "loginWithMasterPassword": {
     "message": "Mag-log in gamit ang master password"
   },
+  "readingPasskeyLoading": {
+    "message": "Reading passkey..."
+  },
+  "readingPasskeyLoadingInfo": {
+    "message": "Keep this window open and follow prompts from your browser."
+  },
+  "useADifferentLogInMethod": {
+    "message": "Use a different log in method"
+  },
+  "loginWithPasskey": {
+    "message": "Log in with passkey"
+  },
+  "invalidPasskeyPleaseTryAgain": {
+    "message": "Invalid Passkey. Please try again."
+  },
+  "twoFactorForPasskeysNotSupportedOnClientUpdateToLogIn": {
+    "message": "2FA for passkeys is not supported. Update the app to log in."
+  },
+  "loginWithPasskeyInfo": {
+    "message": "Use a generated passkey that will automatically log you in without a password. Biometrics, like facial recognition or fingerprint, or another FIDO2 security method will verify your identity."
+  },
+  "newPasskey": {
+    "message": "New passkey"
+  },
+  "learnMoreAboutPasswordless": {
+    "message": "Learn more about passwordless"
+  },
+  "creatingPasskeyLoading": {
+    "message": "Creating passkey..."
+  },
+  "creatingPasskeyLoadingInfo": {
+    "message": "Keep this window open and follow prompts from your browser."
+  },
+  "errorCreatingPasskey": {
+    "message": "Error creating passkey"
+  },
+  "errorCreatingPasskeyInfo": {
+    "message": "There was a problem creating your passkey."
+  },
+  "passkeySuccessfullyCreated": {
+    "message": "Passkey successfully created!"
+  },
+  "customPasskeyNameInfo": {
+    "message": "Name your passkey to help you identify it."
+  },
+  "useForVaultEncryption": {
+    "message": "Use for vault encryption"
+  },
+  "useForVaultEncryptionInfo": {
+    "message": "Log in and unlock on supported devices without your master password. Follow the prompts from your browser to finalize setup."
+  },
+  "useForVaultEncryptionErrorReadingPasskey": {
+    "message": "Error reading passkey. Try again or uncheck this option."
+  },
+  "encryptionNotSupported": {
+    "message": "Encryption not supported"
+  },
+  "enablePasskeyEncryption": {
+    "message": "Set up encryption"
+  },
+  "usedForEncryption": {
+    "message": "Used for encryption"
+  },
+  "loginWithPasskeyEnabled": {
+    "message": "Log in with passkey turned on"
+  },
+  "passkeySaved": {
+    "message": "$NAME$ saved",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Personal yubikey"
+      }
+    }
+  },
+  "passkeyRemoved": {
+    "message": "Passkey removed"
+  },
+  "removePasskey": {
+    "message": "Remove passkey"
+  },
+  "removePasskeyInfo": {
+    "message": "If all passkeys are removed, you will be unable to log into new devices without your master password."
+  },
+  "passkeyLimitReachedInfo": {
+    "message": "Passkey limit reached. Remove a passkey to add another."
+  },
+  "tryAgain": {
+    "message": "Try again"
+  },
   "createAccount": {
     "message": "Gumawa ng account"
+  },
+  "setAStrongPassword": {
+    "message": "Set a strong password"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
   },
   "newAroundHere": {
     "message": "Bago rito?"
@@ -635,6 +746,9 @@
   },
   "logIn": {
     "message": "Mag-log in"
+  },
+  "verifyIdentity": {
+    "message": "Verify your Identity"
   },
   "logInInitiated": {
     "message": "Sinimulan ang pag-log in"
@@ -671,6 +785,19 @@
   },
   "masterPassHintLabel": {
     "message": "Palatandaan ng master password"
+  },
+  "masterPassHintText": {
+    "message": "If you forget your password, the password hint can be sent to your email. $CURRENT$/$MAXIMUM$ character maximum.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Mga Setting"
@@ -721,11 +848,17 @@
   "unexpectedError": {
     "message": "Nagkaroon ng hindi inaasahang problema."
   },
+  "expirationDateError": {
+    "message": "Please select an expiration date that is in the future."
+  },
   "emailAddress": {
     "message": "Email address"
   },
-  "yourVaultIsLocked": {
-    "message": "Naka-lock ang vault mo. Beripikahin ang master password mo para tumuloy."
+  "yourVaultIsLockedV2": {
+    "message": "Your vault is locked"
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "I-unlock"
@@ -837,55 +970,55 @@
     "message": "Mangyaring gumamit ng suportadong web browser (tulad ng Firefox) at/o karagdagang provider na may mas mainam na suporta sa iba't-ibang mga device (tulad ng isang authenticator app)."
   },
   "twoStepOptions": {
-    "message": "Mga pagpipilian para sa two-step login"
+    "message": "Mga opsyon para sa dalawang-hakbang na pag-log in"
   },
   "recoveryCodeDesc": {
-    "message": "Nawalan ka ng access sa lahat ng iyong mga two-factor provider? Gamitin ang iyong recovery code para i-off ang lahat ng two-factor providers mula sa iyong account."
+    "message": "Nawalan ng access sa lahat ng provider mo ng dalawang-hakbang na pag-log in? Gamitin ang code pang-recover mo para patayin ang lahat ng mga provider ng dalawang-hakbang na pag-log in sa account mo."
   },
   "recoveryCodeTitle": {
-    "message": "Recovery code"
+    "message": "Code pang-recover"
   },
   "authenticatorAppTitle": {
-    "message": "App ng Authenticator"
+    "message": "Authenticator app"
   },
-  "authenticatorAppDesc": {
-    "message": "Gamitin ang isang authenticator app (tulad ng Authy o Google Authenticator) upang lumikha ng time-based verification codes.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Enter a code generated by an authenticator app like Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "YubiKey OTP susi ng seguridad"
+  "yubiKeyTitleV2": {
+    "message": "Yubico OTP security key"
   },
   "yubiKeyDesc": {
-    "message": "Gamitin ang YubiKey upang ma-access ang iyong account. Gumagana sa mga YubiKey 4, 4 Nano, 4C, at NEO devices."
+    "message": "Gumamit ng YubiKey para ma-access ang account mo. Pwedeng gumamit ng YubiKey 4 series, 5 series, at NEO na mga device."
   },
-  "duoDesc": {
-    "message": "Patunayan sa pamamagitan ng Duo Security gamit ang Duo Mobile app, SMS, tawag sa telepono, o key ng seguridad ng U2F.",
+  "duoDescV2": {
+    "message": "Enter a code generated by Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
-    "message": "Patunayan sa Duo Security para sa iyong samahan gamit ang Duo Mobile app, SMS, tawag sa telepono, o key ng seguridad ng U2F.",
+    "message": "Magberipika sa Duo Security para sa organisasyon mo gamit ang Duo Mobile app, SMS, tawag, o U2F security key.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "u2fDesc": {
-    "message": "Gumamit ng anumang FIDO U2F compatible security key upang ma access ang iyong account."
+    "message": "Gumamit ng anumang security key na angkop sa FIDO U2F para ma-access ang account mo."
   },
   "u2fTitle": {
-    "message": "FIDO U2F susi sa seguridad"
+    "message": "FIDO U2F security key"
   },
   "webAuthnTitle": {
     "message": "FIDO2 WebAuthn"
   },
   "webAuthnDesc": {
-    "message": "Gamitin ang anumang WebAuthn compatible security key upang ma-access ang iyong account."
+    "message": "Gumamit ng anumang security key na angkop sa WebAuthn para ma-access ang account mo."
   },
   "webAuthnMigrated": {
     "message": "(Inilipat mula sa FIDO)"
   },
   "emailTitle": {
-    "message": "Mag-email"
+    "message": "Email"
   },
-  "emailDesc": {
-    "message": "Mga kodigong pang-pagpapatunay ang ipapadala sa iyo sa pamamagitan ng email."
+  "emailDescV2": {
+    "message": "Enter a code sent to your email."
   },
   "continue": {
     "message": "Magpatuloy"
@@ -897,16 +1030,16 @@
     "message": "Mga Organisasyon"
   },
   "moveToOrgDesc": {
-    "message": "Pumili ng isang organisasyon kung saan mo nais na ipalipat ang item na ito. Ang paglipat sa isang organisasyon ay nagpapalipat ng pagmamay-ari ng item sa organisasyon na iyon. Hindi ka na magiging direktang may-ari ng item na ito kapag naipadala na ito."
+    "message": "Piliin kung saang organisasyon mo ililipat ang item na ito. Magiging pag-aari ng organisasyon ang anumang item na ililipat mo rito. Hindi ka na ang direktang may-ari ng item na ito pagkalipat."
   },
   "moveManyToOrgDesc": {
-    "message": "Pumili ng isang organisasyon na nais mong ilipat ang mga item na ito. Ang paglipat sa isang organisasyon ay naglilipat ng pagmamay ari ng mga item sa organisasyong iyon. Hindi ka na magiging direktang may-ari ng mga bagay na ito kapag nailipat na ang mga ito."
+    "message": "Piliin kung saang organisasyon mo ililipat ang mga item na ito. Magiging pag-aari ng organisasyon ang mga item na ililipat mo rito. Hindi ka na ang direktang may-ari ng mga item na ito pagkalipat."
   },
   "collectionsDesc": {
-    "message": "I-edit ang mga koleksyon na ibinabahagi sa item na ito. Tanging ang mga gumagamit ng organisasyon na may access sa mga koleksyon na ito ang makakakita ng item na ito."
+    "message": "Baguhin kung saang mga koleksyon ibinabahagi ang item na ito. Ang mga user sa organisasyon na may access sa koleksyon na ito lang ang makakakita sa item."
   },
   "deleteSelectedItemsDesc": {
-    "message": "$COUNT$ item (mga) ipapadala sa basurahan.",
+    "message": "Itatapon sa basurahan ang $COUNT$ item.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -915,7 +1048,7 @@
     }
   },
   "deleteSelectedCollectionsDesc": {
-    "message": "Ang (mga) koleksyon ng $COUNT$ ay tuluyang mabubura.",
+    "message": "Permanenteng mabubura ang $COUNT$ koleksyon.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -924,10 +1057,10 @@
     }
   },
   "deleteSelectedConfirmation": {
-    "message": "Sigurado ka bang gusto mong magpatuloy?"
+    "message": "Sigurado ka bang gusto mong tumuloy?"
   },
   "moveSelectedItemsDesc": {
-    "message": "Pumili ng folder na gusto mong ilipat ang (mga) napiling item ng $COUNT$.",
+    "message": "Choose a folder that you would like to add the $COUNT$ selected item(s) to.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -936,7 +1069,7 @@
     }
   },
   "moveSelectedItemsCountDesc": {
-    "message": "Pumili ka ng $COUNT$ item (mga). $MOVEABLE_COUNT$ item ay maaaring ilipat sa isang organisasyon, $NONMOVEABLE_COUNT$ ay hindi.",
+    "message": "$COUNT$ item ang napili mo. Pwedeng mailipat sa isang organisasyon ang $MOVEABLE_COUNT$ item, habang $NONMOVEABLE_COUNT$ item ang hindi pwedeng mailipat.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -953,46 +1086,67 @@
     }
   },
   "verificationCodeTotp": {
-    "message": "Code ng Pag-verify (TOTP)"
+    "message": "Code pamberipika (TOTP)"
   },
   "copyVerificationCode": {
-    "message": "Paghahawak ng kodigo ng pagpapatunay"
+    "message": "Kopyahin ang code pamberipika"
+  },
+  "copyUuid": {
+    "message": "Copy UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
   },
   "warning": {
-    "message": "BABALA"
+    "message": "Babala"
   },
   "confirmVaultExport": {
-    "message": "Tanggapin ang pag-export ng vault"
+    "message": "Kumpirmahin ang pag-export ng vault"
+  },
+  "confirmSecretsExport": {
+    "message": "Confirm secrets export"
   },
   "exportWarningDesc": {
-    "message": "Ang export na ito ay naglalaman ng iyong data sa vault sa isang hindi naka-encrypt na format. Hindi mo dapat i-store o ipadala ang naka-export na file sa pamamagitan ng mga hindi secure na channel (gaya ng email). Tanggalin agad ito pagkatapos mong gamitin."
+    "message": "Naglalaman ng unencrypted vault data mo ang export na ito. Hindi mo dapat ilagay o ipadala ang file gamit ang hindi ligtas na mga paraan (tulad ng email). Burahin ito kaagad pagkagamit."
+  },
+  "exportSecretsWarningDesc": {
+    "message": "This export contains your secrets data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it."
   },
   "encExportKeyWarningDesc": {
-    "message": "Ang export na ito ay naka-encrypt ng iyong data gamit ang encryption key ng iyong account. Kung kailanman mo i-rotate ang encryption key ng iyong account, dapat mong i-export muli dahil hindi mo na mababawasan ang export file na ito."
+    "message": "Ine-encrypt ng export na ito ang data mo gamit ang encryption key ng iyong account. Kung iro-rotate mo man ang encryption key ng iyong account, kailangan mong mag-export ulit dahil hindi mo na made-decrypt ang file na ito."
   },
   "encExportAccountWarningDesc": {
-    "message": "Ang encryption keys ng account ay isa-isa lamang sa bawat user account ng Bitwarden, kaya hindi mo ma-import ang naka-encrypt na export sa ibang account."
+    "message": "Magkaiba ang encryption key ng bawat Bitwarden user account, kaya hindi ka makakapag-import ng encrypted export sa iba pang account."
   },
   "export": {
-    "message": "I-export ang"
+    "message": "I-export"
+  },
+  "exportFrom": {
+    "message": "Export from"
   },
   "exportVault": {
-    "message": "I-export vault"
+    "message": "I-export ang vault"
+  },
+  "exportSecrets": {
+    "message": "Export secrets"
   },
   "fileFormat": {
     "message": "Format ng file"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "Ang file export na ito ay magiging protektado ng password at nangangailangan ng password ng file upang i decrypt."
+    "message": "Poprotektahan ng password ang file export na ito at kakailanganin ang password para ma-decrypt ang file."
   },
   "exportPasswordDescription": {
-    "message": "Ang password na ito ay gagamitin upang i-export at i-import ang file na ito"
+    "message": "Gagamitin ang password na ito para i-export at i-import ang file"
   },
   "confirmMasterPassword": {
     "message": "Kumpirmahin ang master password"
   },
   "confirmFormat": {
-    "message": "Format ng kumpirmasyon"
+    "message": "Kumpirmahin ang pag-format"
   },
   "filePassword": {
     "message": "Password ng file"
@@ -1001,10 +1155,10 @@
     "message": "Kumpirmahin ang password ng file"
   },
   "accountRestrictedOptionDescription": {
-    "message": "Gamitin ang iyong account encryption key, na nagmula sa username ng iyong account at Master Password, upang i encrypt ang pag export at paghigpitan ang pag import sa kasalukuyang account lamang ng Bitwarden."
+    "message": "Gamitin ang encryption key ng account mo, mula sa username at master password mo, para i-encrypt ang export at paghigpitan ang pag-import sa kasalukuyang Bitwarden account lang."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Magtakda ng isang file password upang i encrypt ang pag export at i import ito sa anumang account sa Bitwarden gamit ang password para sa decryption."
+    "message": "Magtakda ng file password para i-encrypt ang export at i-import ito sa anumang Bitwarden account gamit ang password pang-decrypt."
   },
   "exportTypeHeading": {
     "message": "Uri ng pag-export"
@@ -1013,87 +1167,90 @@
     "message": "Pinaghihigpitan ang account"
   },
   "passwordProtected": {
-    "message": "Protektado ng Password"
+    "message": "Protektado ng password"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "Hindi magkatugma ang \"File password\" at \"Confirm file password\"."
+    "message": "Hindi magkatugma ang “Password ng file” at “Kumpirmahin ang password ng file“."
   },
   "confirmVaultImport": {
-    "message": "Kumpirmahin ang pag import ng vault"
+    "message": "Kumpirmahin ang pag-import sa vault"
   },
   "confirmVaultImportDesc": {
-    "message": "Ang file na ito ay protektado ng password. Ipasok lamang ang file password upang mag import ng data."
+    "message": "Protektado ng password ang file na ito. Pakilagay ang password ng file para ma-import ang data."
   },
   "exportSuccess": {
-    "message": "Nai export ang data ng vault"
+    "message": "Na-export ang data sa vault"
   },
   "passwordGenerator": {
-    "message": "Tagapaglikha ng Password"
+    "message": "Tagagawa ng password"
   },
   "minComplexityScore": {
-    "message": "Minimum na iskor ng pagiging kumplikado"
+    "message": "Pinakamababang antas ng pagkakomplikado"
   },
   "minNumbers": {
-    "message": "Pinakamababang mga numero"
+    "message": "Pinakamababang dami ng mga numero"
   },
   "minSpecial": {
-    "message": "Inakamababang espesyal",
+    "message": "Pinakamababang dami ng mga espesyal na karakter",
     "description": "Minimum special characters"
   },
   "ambiguous": {
-    "message": "Iwasan ang mga hindi malinaw na character"
+    "message": "Iwasang gumamit ng mga nakakalitong karakter"
   },
   "regeneratePassword": {
-    "message": "Muling I-generate ang Password"
+    "message": "Gumawa ng isa pang password"
   },
   "length": {
-    "message": "Kahabaan"
+    "message": "Haba"
+  },
+  "passwordMinLength": {
+    "message": "Minimum password length"
   },
   "uppercase": {
-    "message": "Uppercase (A-Z)",
+    "message": "Malaking letra (A-Z)",
     "description": "Include uppercase letters in the password generator."
   },
   "lowercase": {
-    "message": "Lowercase (a-t) sa Filipino ay mababang-letra (a-t)",
+    "message": "Maliit na letra (a-z)",
     "description": "Include lowercase letters in the password generator."
   },
   "numbers": {
-    "message": "Mga Bilang (0-9)"
+    "message": "Mga numero (0-9)"
   },
   "specialCharacters": {
-    "message": "Mga espesyal na character (!@#$%^&*) sa Filipino ay tinatawag na mga simbolong pambihira"
+    "message": "Mga espesyal na karakter (!@#$%^&*)"
   },
   "numWords": {
-    "message": "Ang bilang ng mga salita\n\nNumero ng mga salita"
+    "message": "Bilang ng mga salita"
   },
   "wordSeparator": {
-    "message": "Separador ng salita"
+    "message": "Panghiwalay sa mga salita"
   },
   "capitalize": {
-    "message": "Pagkapital",
+    "message": "Kapitalisasyon",
     "description": "Make the first letter of a word uppercase."
   },
   "includeNumber": {
-    "message": "Isama ang numero"
+    "message": "Magsama ng mga numero"
   },
   "passwordHistory": {
-    "message": "Kasaysayan ng Password"
+    "message": "Kasaysayan ng password"
   },
   "noPasswordsInList": {
-    "message": "Walang mga password na i-list."
+    "message": "Walang maililistang password."
   },
   "clear": {
-    "message": "Hilahin",
+    "message": "Burahin",
     "description": "To clear something out. Example: To clear browser history."
   },
   "accountUpdated": {
-    "message": "Nai-save ang account"
+    "message": "Na-save ang account"
   },
   "changeEmail": {
     "message": "Palitan ang email"
   },
   "changeEmailTwoFactorWarning": {
-    "message": "Ang pagpapatuloy ay magbabago sa email address ng iyong account. Hindi nito babaguhin ang email address na ginamit para sa dalawang hakbang na pagpapatunay sa pag login. Maaari mong baguhin ang email address na ito sa dalawang hakbang na setting ng pag login."
+    "message": "Magbabago ang email address ng account mo kapag nagpatuloy ka. Hindi nito papalitan ang email na ginagamit para sa dalawang-hakbang na pag-log in. Mababago mo ito sa mga setting ng dalawang-hakbang na pag-log in."
   },
   "newEmail": {
     "message": "Bagong email"
@@ -1102,7 +1259,7 @@
     "message": "Code"
   },
   "changeEmailDesc": {
-    "message": "Nag-email kami ng verification code sa $EMAIL$. Mangyaring suriin ang iyong email para sa code na ito at ipasok ito sa ibaba upang tapusin ang pagbabago ng email address.",
+    "message": "Nagpadala kami ng code pamberipika sa $EMAIL$. Tingnan kung natanggap mo na ba ang code sa email mo at ilagay ito sa ibaba para matapos ang pagbabago ng email address.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -1111,22 +1268,22 @@
     }
   },
   "loggedOutWarning": {
-    "message": "Ang proceeding ay mag-log out sa iyong kasalukuyang session, na nangangailangan na mag-log in muli. Ang mga aktibong sesyon sa iba pang mga aparato ay maaaring patuloy na manatiling aktibo hanggang sa isang oras."
+    "message": "Mala-log out ka sa kasalukuyan mong sesyon kung tutuloy ka, at kakailanganin mong mag-log in ulit. Maaaring manatiling aktibo ang mga sesyon sa iba pang device nang hanggang isang oras."
   },
   "emailChanged": {
     "message": "Na-save ang email"
   },
   "logBackIn": {
-    "message": "Mag log in ka na lang ulit."
+    "message": "Mangyaring mag-log in ulit."
   },
   "logBackInOthersToo": {
-    "message": "Mag log in ka na lang ulit. Kung gumagamit ka ng iba pang mga application ng Bitwarden mag log out at bumalik sa mga iyon din."
+    "message": "Mangyaring mag-log in ulit. Kung gumagamit ka ng iba pang mga aplikasyon pang-Bitwarden, mag-log out at log in rin ulit sa mga iyon."
   },
   "changeMasterPassword": {
-    "message": "Baguhin ang Master Password"
+    "message": "Palitan ang master password"
   },
   "masterPasswordChanged": {
-    "message": "Master password na save"
+    "message": "Na-save ang master password"
   },
   "currentMasterPass": {
     "message": "Kasalukuyang master password"
@@ -1135,19 +1292,19 @@
     "message": "Bagong master password"
   },
   "confirmNewMasterPass": {
-    "message": "Kumpirmahin ang bagong password ng master"
+    "message": "Kumpirmahin ang bagong master password"
   },
   "encKeySettings": {
-    "message": "Mga setting ng key ng pag encrypt"
+    "message": "Mga setting ng encryption key"
   },
   "kdfAlgorithm": {
-    "message": "algorithm ng KDF"
+    "message": "Algoritmo ng KDF"
   },
   "kdfIterations": {
-    "message": "Mga iterasyon ng KDF"
+    "message": "Iterasyon ng KDF"
   },
   "kdfIterationsDesc": {
-    "message": "Ang mas mataas na mga pag ulit ng KDF ay maaaring makatulong na maprotektahan ang iyong master password mula sa pagiging malupit na pinilit ng isang attacker. Inirerekumenda namin ang halaga ng $VALUE$ o higit pa.",
+    "message": "Makakatulong maprotektahan ng mataas na iterasyon ng KDF ang master password mo na ma-brute force ng masasamang-loob. Mainam na itakda ito sa $VALUE$ o mas mataas.",
     "placeholders": {
       "value": {
         "content": "$1",
@@ -1156,7 +1313,7 @@
     }
   },
   "kdfIterationsWarning": {
-    "message": "Ang pagtatakda ng iyong mga iterasyon ng KDF na masyadong mataas ay maaaring magresulta sa mahinang pagganap kapag nag log in (at nag unlock) Bitwarden sa mas mabagal o mas lumang mga aparato. Inirerekumenda namin na dagdagan mo ang halaga sa mga increment ng $INCREMENT$ at pagkatapos ay subukan ang lahat ng iyong mga aparato.",
+    "message": "Maaaring pumangit ang pagganap ng device na mabagal o luma habang nagla-log in (at nagbubukas) ng vault kung masyadong mataas ang iterasyon ng KDF. Mainam na dahan-dahan mong taasan nang $INCREMENT$ ang iterasyon at subukan ito sa lahat ng mga device mo.",
     "placeholders": {
       "increment": {
         "content": "$1",
@@ -1169,97 +1326,125 @@
     "description": "Memory refers to computer memory (RAM). MB is short for megabytes."
   },
   "argon2Warning": {
-    "message": "Ang pagtatakda ng iyong mga iterasyon ng KDF, memorya, at parallelism na masyadong mataas ay maaaring magresulta sa mahinang pagganap kapag nag log in (at nag unlock) Bitwarden sa mas mabagal o mas lumang mga aparato. Inirerekumenda namin ang pagbabago ng mga ito nang isa isa sa mga maliliit na increment at pagkatapos ay subukan ang lahat ng iyong mga aparato."
+    "message": "Maaaring pumangit ang pagganap ng device na mabagal o luma habang nagla-log in (at nagbubukas) ng vault kung masyadong mataas ang iterasyon ng KDF, memorya, o pararelismo. Mainam na dahan-dahan mong taasan ang mga iyon at subukan ito sa lahat ng mga device mo."
   },
   "kdfParallelism": {
-    "message": "Parallelism ng KDF"
+    "message": "Pararelismo ng KDF"
   },
   "argon2Desc": {
-    "message": "Ang mas mataas na mga pag ulit ng KDF, memorya, at parallelism ay maaaring makatulong na protektahan ang iyong master password mula sa pagiging malupit na pinilit ng isang attacker."
+    "message": "Makakatulong maprotektahan ng mataas na iterasyon ng KDF, memorya, at pararelismo ang master password mo na ma-brute force ng masasamang-loob."
   },
   "changeKdf": {
     "message": "Baguhin ang KDF"
   },
   "encKeySettingsChanged": {
-    "message": "Nai save ang mga setting ng key ng pag encrypt"
+    "message": "Na-save ang mga setting ng encryption key"
   },
   "dangerZone": {
-    "message": "Zona de peligro"
+    "message": "Mapanganib na lugar"
   },
   "dangerZoneDesc": {
-    "message": "Ingat, ang mga kilos na ito ay hindi mababaligtad!"
+    "message": "Mag-ingat, wala nang bawian sa mga gagawin mo rito!"
   },
   "deauthorizeSessions": {
-    "message": "Deauthorize ang mga session"
+    "message": "I-deauthorize ang mga sesyon"
   },
   "deauthorizeSessionsDesc": {
-    "message": "Nag-aalala ang iyong account ay naka-log in sa ibang device? Magpatuloy sa ibaba para ma-deauthorize ang lahat ng computer o device na dati mong ginamit. Inirerekomenda ang hakbang na ito sa seguridad kung dati kang gumamit ng pampublikong computer o aksidenteng nai-save ang iyong password sa isang device na hindi mo. Ang hakbang na ito ay i clear din ang lahat ng mga nakaraang naalala na dalawang hakbang na sesyon sa pag login."
+    "message": "Nag-aalalang na-log in sa ibang device ang account mo? Tumuloy pababa para i-deauthorize lahat ng mga kompyuter o device na nagamit mo dati. Inirerekomendang gawin ito kung gumamit ka dati ng pampublikong kompyuter o aksidenteng na-save ang password mo sa device na hindi sa iyo. Mawawala rin lahat ng mga inalalang sesyon sa dalawang-hakbang na pag-log in."
   },
   "deauthorizeSessionsWarning": {
-    "message": "Ang pagpapatuloy ay mag-log out ka rin sa iyong kasalukuyang session, na nangangailangan na mag-log in ka muli. Sasabihan ka rin para sa dalawang hakbang na pag login muli, kung naka set up. Ang mga aktibong sesyon sa iba pang mga aparato ay maaaring patuloy na manatiling aktibo hanggang sa isang oras."
+    "message": "Mala-log out ka rin sa kasalukuyan mong sesyon kung tutuloy ka, at kakailanganin mong mag-log in ulit. Kakailanganin mo ring ulitin ang dalawang-hakbang na pag-log in kung naka-set up ito. Maaaring manatiling aktibo ang mga sesyon sa iba pang device nang hanggang isang oras."
   },
   "sessionsDeauthorized": {
-    "message": "Lahat ng sesyon ay pinahintulutan"
+    "message": "Na-deauthorize lahat ng mga sesyon"
   },
   "purgeVault": {
-    "message": "Purge vault"
+    "message": "Burahin lahat sa vault"
   },
   "purgedOrganizationVault": {
-    "message": "Nilinis na organisasyon vault."
+    "message": "Binura ang vault ng organisasyon."
   },
   "vaultAccessedByProvider": {
-    "message": "Vault na access ng Provider."
+    "message": "In-access ng Provider ang vault."
   },
   "purgeVaultDesc": {
-    "message": "Magpatuloy sa ibaba para tanggalin ang lahat ng item at folder sa iyong vault. Ang mga item na kabilang sa isang organisasyon na ibinabahagi mo ay hindi mabubura."
+    "message": "Tumuloy pababa para burahin lahat ng mga item at folder sa vault mo. Hindi mabubura ang mga item na pagmamay-ari ng isang organisasyon na pinagbabahagian mo."
   },
   "purgeOrgVaultDesc": {
-    "message": "Magpatuloy sa ibaba para tanggalin ang lahat ng item sa vault ng organisasyon."
+    "message": "Tumuloy pababa para burahin lahat ng mga item sa vault ng organisasyon."
   },
   "purgeVaultWarning": {
-    "message": "Ang paglilinis ng iyong vault ay permanente. Hindi na ito mababawi."
+    "message": "Permanente ang pagbura sa vault mo. Wala nang bawian."
   },
   "vaultPurged": {
-    "message": "Purga ang vault."
+    "message": "Binura lahat sa vault."
   },
   "deleteAccount": {
-    "message": "Tanggalin ang account"
+    "message": "Burahin ang account"
   },
   "deleteAccountDesc": {
-    "message": "Magpatuloy sa ibaba upang tanggalin ang iyong account at lahat ng data ng vault."
+    "message": "Tumuloy pababa para burahin ang account mo at lahat ng data sa vault."
   },
   "deleteAccountWarning": {
-    "message": "Ang pagtanggal ng iyong account ay permanente. Hindi na ito mababawi."
+    "message": "Permanente ang pagbura sa account mo. Wala nang bawian."
   },
   "accountDeleted": {
-    "message": "Tinanggal ang account"
+    "message": "Binura ang account"
   },
   "accountDeletedDesc": {
-    "message": "Isinara na ang iyong account at natanggal na ang lahat ng kaugnay na data."
+    "message": "Binura ang account mo at winasak na lahat ng mga kaugnay na data."
+  },
+  "deleteOrganizationWarning": {
+    "message": "Deleting your organization is permanent. It cannot be undone."
   },
   "myAccount": {
-    "message": "Ang aking account"
+    "message": "Account ko"
   },
   "tools": {
     "message": "Mga Kagamitan"
   },
   "importData": {
-    "message": "Mag import ng data"
+    "message": "Mag-import ng data"
+  },
+  "onboardingImportDataDetailsPartOne": {
+    "message": "If you don't have any data to import, you can create a ",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLink": {
+    "message": "new item",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsPartTwoNoOrgs": {
+    "message": " instead.",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead."
+  },
+  "onboardingImportDataDetailsPartTwoWithOrgs": {
+    "message": " instead. You may need to wait until your administrator confirms your organization membership.",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. You may need to wait until your administrator confirms your organization membership."
   },
   "importError": {
-    "message": "Error sa pag-import"
+    "message": "Nagkaproblema sa pag-i-import"
   },
   "importErrorDesc": {
-    "message": "May problema sa data na sinubukan mong i import. Mangyaring malutas ang mga error na nakalista sa ibaba sa iyong source file at subukang muli."
+    "message": "May problema sa data na in-import mo. Pakiayos muna sa mga problema sa source file na nakalista sa ibaba at paksubukan ulit."
   },
   "importSuccess": {
-    "message": "Matagumpay na na import ang data"
+    "message": "Matagumpay na na-import ang data"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "A total of $AMOUNT$ items were imported.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "dataExportSuccess": {
-    "message": "Matagumpay na nai-export ang data"
+    "message": "Matagumpay na na-export ang data"
   },
   "importWarning": {
-    "message": "Nag-aangkat ka ng data sa $ORGANIZATION$. Ang iyong data ay maaaring ibahagi sa mga miyembro ng organisasyong ito. Gusto mo bang magpatuloy?",
+    "message": "Nag-i-import ka ng data sa $ORGANIZATION$. Maaaring maibahagi sa ibang mga miyembro ng organisasyong ito ang data mo. Gusto mo pa rin bang tumuloy?",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -1268,31 +1453,56 @@
     }
   },
   "importFormatError": {
-    "message": "Hindi tama ang format ng data. Mangyaring suriin ang iyong import file at subukang muli."
+    "message": "Hindi wasto ang pag-format ng data. Pakitingnan ang import file mo at pakisubukan ulit."
   },
   "importNothingError": {
-    "message": "Wala namang imported."
+    "message": "Walang na-import."
   },
   "importEncKeyError": {
-    "message": "Error sa pag decrypt ng na export na file. Ang iyong key ng pag encrypt ay hindi tumutugma sa key ng pag encrypt na ginamit i export ang data."
+    "message": "Nagkaproblema sa pagde-decrypt ng na-export na file. Hindi tumutugma ang encryption key mo sa ginamit pang-export sa data."
+  },
+  "importDestination": {
+    "message": "Import destination"
+  },
+  "learnAboutImportOptions": {
+    "message": "Learn about your import options"
+  },
+  "selectImportFolder": {
+    "message": "Select a folder"
+  },
+  "selectImportCollection": {
+    "message": "Select a collection"
+  },
+  "importTargetHint": {
+    "message": "Select this option if you want the imported file contents moved to a $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "File contains unassigned items."
   },
   "selectFormat": {
-    "message": "Piliin ang format ng file ng pag import"
+    "message": "Piliin ang format ng import file"
   },
   "selectImportFile": {
-    "message": "Piliin ang file ng pag import"
+    "message": "Piliin ang import file"
   },
   "chooseFile": {
     "message": "Pumili ng File"
   },
   "noFileChosen": {
-    "message": "Walng payl na napili"
+    "message": "Walang napiling file"
   },
   "orCopyPasteFileContents": {
-    "message": "o kopyahin / i paste ang mga nilalaman ng file ng pag import"
+    "message": "o kopyahin/i-paste ang nilalaman ng import file"
   },
   "instructionsFor": {
-    "message": "$NAME$ Mga Tagubilin",
+    "message": "Mga Hakbang para sa $NAME$",
     "description": "The title for the import tool instructions.",
     "placeholders": {
       "name": {
@@ -1302,16 +1512,16 @@
     }
   },
   "options": {
-    "message": "Mga Pagpipilian"
+    "message": "Mga Opsyon"
   },
   "preferences": {
     "message": "Mga Kagustuhan"
   },
   "preferencesDesc": {
-    "message": "Ipasadya ang iyong karanasan sa web vault."
+    "message": "Ipasadya ang karanasan mo sa web vault."
   },
   "preferencesUpdated": {
-    "message": "Nai-save ang mga kagustuhan"
+    "message": "Na-save ang mga kagustuhan"
   },
   "language": {
     "message": "Wika"
@@ -1320,50 +1530,43 @@
     "message": "Baguhin ang wikang ginagamit ng web vault."
   },
   "enableFavicon": {
-    "message": "Ipakita ang mga icon ng website"
+    "message": "Ipakita ang icon ng mga website"
   },
   "faviconDesc": {
-    "message": "Ipakita ang isang kilalang larawan sa tabi ng bawat login."
-  },
-  "enableFullWidth": {
-    "message": "Ipakita ang buong lapad ng layout",
-    "description": "Allows scaling the web vault UI's width"
-  },
-  "enableFullWidthDesc": {
-    "message": "Payagan ang web vault na palawakin ang buong lapad ng window ng browser."
+    "message": "Magpakita ng isang sikat na larawan sa tabi ng bawat login."
   },
   "default": {
-    "message": "Default na"
+    "message": "Default"
   },
   "domainRules": {
     "message": "Mga patakaran sa domain"
   },
   "domainRulesDesc": {
-    "message": "Kung mayroon kang parehong pag login sa maraming iba't ibang mga domain ng website, maaari mong markahan ang website bilang \"katumbas\". Ang mga \"Global\" domain ay mga nilikha na para sa iyo ng Bitwarden."
+    "message": "Kung may pareho kang login sa iba't ibang website domain, pwede mong markahan bilang \"magkapareho\" ang mga website. Ginawan ka na nito ng Bitwarden sa \"Pandaigdigan\"g mga domain."
   },
   "globalEqDomains": {
-    "message": "Global katumbas na mga domain"
+    "message": "Pandaigdigang magkaparehong mga domain"
   },
   "customEqDomains": {
-    "message": "Pasadyang katumbas na mga domain"
+    "message": "Pasadyang magkaparehong mga domain"
   },
   "exclude": {
-    "message": "Ibukod ang"
+    "message": "Ibukod"
   },
   "include": {
-    "message": "Isama ang"
+    "message": "Isama"
   },
   "customize": {
-    "message": "Ipasadya ang"
+    "message": "Ipasadya"
   },
   "newCustomDomain": {
-    "message": "Bagong pasadyang domain"
+    "message": "Bagong ipinasadyang domain"
   },
   "newCustomDomainDesc": {
-    "message": "Magpasok ng isang listahan ng mga domain na pinaghihiwalay ng mga kuwit. Pinapayagan lamang ang mga \"base\" domain. Huwag ipasok ang mga subdomain. Halimbawa, ipasok ang \"google.com\" sa halip na \"www.google.com\". Maaari mo ring ipasok ang \"androidapp://package.name\" upang iugnay ang isang android app sa iba pang mga domain ng website."
+    "message": "Magpasok ng mga domain na pinaghihiwalay ng kuwit. Mga \"base\" domain lang ang mailalagay. Huwag maglagay ng subdomain. Halimbawa, ilagay ang \"google.com\" imbes na \"www.google.com\". Pwede rin ang \"androidapp://package.name\" para maugnay ang isang Android app sa iba pang mga website domain."
   },
   "customDomainX": {
-    "message": "Pasadyang domain $INDEX$",
+    "message": "Ika-$INDEX$ pasadyang domain",
     "placeholders": {
       "index": {
         "content": "$1",
@@ -1372,145 +1575,163 @@
     }
   },
   "domainsUpdated": {
-    "message": "Nai-save ang mga domain"
+    "message": "Na-save ang mga domain"
   },
   "twoStepLogin": {
-    "message": "Dalawahang-hakbang na Pag-login"
+    "message": "Dalawang-hakbang na pag-log in"
   },
   "twoStepLoginEnforcement": {
-    "message": "Dalawang hakbang na Pagpapatupad ng Pag login"
+    "message": "Pagpapatupad sa Dalawang-hakbang na Pag-log In"
   },
   "twoStepLoginDesc": {
-    "message": "Secure ang iyong account sa pamamagitan ng nangangailangan ng isang karagdagang hakbang kapag nag log in."
+    "message": "Panatilihing ligtas ang account mo sa pamamagitan ng pangangailangan ng ikalawang hakbang kapag nagla-log in."
   },
-  "twoStepLoginOrganizationDescStart": {
-    "message": "Ipatupad ang Bitwarden Dalawang hakbang na pagpipilian sa Pag login para sa mga miyembro sa pamamagitan ng paggamit ng ",
+  "twoStepLoginTeamsDesc": {
+    "message": "Enable two-step login for your organization."
+  },
+  "twoStepLoginEnterpriseDescStart": {
+    "message": "Enforce Bitwarden Two-step Login options for members by using the ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
   "twoStepLoginPolicy": {
-    "message": "Dalawang hakbang na Patakaran sa Pag login"
+    "message": "Patakaran sa Dalawang-hakbang na Pag-log In"
   },
   "twoStepLoginOrganizationDuoDesc": {
-    "message": "Upang ipatupad ang Dalawang hakbang na Pag login sa pamamagitan ng Duo, gamitin ang mga pagpipilian sa ibaba."
+    "message": "Para maipatupad ang Dalawang-hakbang na Pag-log In gamit ang Duo, gamitin ang mga opsyon sa ibaba."
   },
   "twoStepLoginOrganizationSsoDesc": {
-    "message": "Kung mayroon kang pag setup ng SSO o plano, ang Dalawang hakbang na Pag login ay maaaring ipatupad na sa pamamagitan ng iyong Tagapagbigay ng Pagkakakilanlan."
+    "message": "Kung mayroon o nagpapalano kang magkaroon ng ISO, maaaring naipatutupad na ng Identity Provider mo ang Dalawang-hakbang na Pag-log In."
   },
   "twoStepLoginRecoveryWarning": {
-    "message": "Ang pag set up ng dalawang hakbang na pag login ay maaaring permanenteng i lock ka sa labas ng iyong account sa Bitwarden. Pinapayagan ka ng isang code sa pagbawi na ma access ang iyong account sa kaganapan na hindi mo na magagamit ang iyong normal na dalawang hakbang na provider ng pag login (halimbawa: nawala mo ang iyong aparato). Ang suporta ng Bitwarden ay hindi makakatulong sa iyo kung nawalan ka ng access sa iyong account. Inirerekumenda namin na isulat mo o i print ang recovery code at panatilihin ito sa isang ligtas na lugar."
+    "message": "Maaaring permanente kang ma-lock out sa account mo dahil sa dalawang-hakbang na pag-log in. Pwede kang gumamit ng code pang-recover sakaling hindi mo na magamit ang normal mong provider ng dalawang-hakbang na pag-log in (halimbawa: nawala ang device mo). Hindi ka matutulungan ng Bitwarden support kung mawalan ka ng access sa account mo. Mainam na isulat o i-print mo ang mga code pang-recover at itago ito sa ligtas na lugar."
   },
   "viewRecoveryCode": {
-    "message": "Tingnan ang recovery code"
+    "message": "Tingnan ang code pang-recover"
   },
   "providers": {
-    "message": "Mga Nagbibigay",
+    "message": "Mga Provider",
     "description": "Two-step login providers such as YubiKey, Duo, Authenticator apps, Email, etc."
   },
   "enable": {
-    "message": "Buksan ang"
+    "message": "Buksan"
   },
   "enabled": {
-    "message": "Naka-on"
+    "message": "Nakabukas"
   },
   "restoreAccess": {
-    "message": "Ibalik muli ang pag access"
+    "message": "Ibalik ang access"
   },
   "premium": {
     "message": "Premium",
     "description": "Premium membership"
   },
   "premiumMembership": {
-    "message": "Pagiging miyembro ng premium"
+    "message": "Premium membership"
   },
   "premiumRequired": {
-    "message": "Premium na kinakailangan"
+    "message": "Kinakailangan ang Premium"
   },
   "premiumRequiredDesc": {
-    "message": "Ang Premium na membership ay kinakailangan upang gamitin ang tampok na ito."
+    "message": "Kailangan mo ng Premium membership para magamit ang feature na ito."
   },
   "youHavePremiumAccess": {
-    "message": "Mayroon kang Premium access"
+    "message": "May Premium access ka"
   },
   "alreadyPremiumFromOrg": {
-    "message": "Mayroon ka nang access sa mga tampok ng Premium dahil sa isang organisasyon na miyembro ka."
+    "message": "May access ka na sa mga Premium feature dahil sa isang organisasyong kinabibilangan mo."
   },
   "manage": {
-    "message": "Mensahe"
+    "message": "Pamahalaan"
+  },
+  "canManage": {
+    "message": "Can manage"
   },
   "disable": {
-    "message": "Patayin ang"
+    "message": "Isara"
   },
   "revokeAccess": {
-    "message": "Bawiin ang access"
+    "message": "Tanggalin ang access"
   },
   "twoStepLoginProviderEnabled": {
-    "message": "Ang two step login provider na ito ay aktibo sa iyong account."
+    "message": "Aktibo ang provider na ito ng dalawang-hakbang na pag-log in sa account mo."
   },
   "twoStepLoginAuthDesc": {
-    "message": "Ipasok ang iyong master password upang baguhin ang mga setting ng dalawang hakbang na pag login."
+    "message": "Ipasok ang master password mo para baguhin ang mga setting ng dalawang-hakbang na pag-log in."
   },
-  "twoStepAuthenticatorDesc": {
-    "message": "Sundin ang mga hakbang na ito upang mai set up ang dalawang hakbang na pag login gamit ang isang authenticator app:"
+  "twoStepAuthenticatorInstructionPrefix": {
+    "message": "Download an authenticator app such as"
   },
-  "twoStepAuthenticatorDownloadApp": {
-    "message": "Mag download ng isang dalawang hakbang na authenticator app"
+  "twoStepAuthenticatorInstructionInfix1": {
+    "message": ","
   },
-  "twoStepAuthenticatorNeedApp": {
-    "message": "Kailangan mo ba ng dalawang-hakbang na authenticator app? Download ang isa sa mga sumusunod"
+  "twoStepAuthenticatorInstructionInfix2": {
+    "message": "or"
   },
-  "iosDevices": {
-    "message": "Mga aparatong iOS"
+  "twoStepAuthenticatorInstructionSuffix": {
+    "message": "."
   },
-  "androidDevices": {
-    "message": "Mga aparatong Android"
+  "continueToExternalUrlTitle": {
+    "message": "Continue to $URL$?",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
   },
-  "windowsDevices": {
-    "message": "Mga Windows device"
+  "continueToExternalUrlDesc": {
+    "message": "You are leaving Bitwarden and launching an external website in a new window."
   },
-  "twoStepAuthenticatorAppsRecommended": {
-    "message": "Ang mga app na ito ay inirerekomenda, gayunpaman, ang iba pang mga app ng authenticator ay gagana din."
+  "twoStepContinueToBitwardenUrlTitle": {
+    "message": "Continue to bitwarden.com?"
   },
-  "twoStepAuthenticatorScanCode": {
-    "message": "I-scan ang QR code na ito gamit ang iyong authenticator app"
+  "twoStepContinueToBitwardenUrlDesc": {
+    "message": "Bitwarden Authenticator allows you to store authenticator keys and generate TOTP codes for 2-step verification flows. Learn more on the bitwarden.com website."
+  },
+  "twoStepAuthenticatorScanCodeV2": {
+    "message": "Scan the QR code below with your authenticator app or enter the key."
+  },
+  "twoStepAuthenticatorQRCanvasError": {
+    "message": "Could not load QR code. Try again or use the key below."
   },
   "key": {
-    "message": "Susi"
+    "message": "Key"
   },
-  "twoStepAuthenticatorEnterCode": {
-    "message": "Ipasok ang nagresultang 6 digit verification code mula sa app"
+  "twoStepAuthenticatorEnterCodeV2": {
+    "message": "Verification code"
   },
   "twoStepAuthenticatorReaddDesc": {
-    "message": "Kung sakaling kailangan mong idagdag ito sa isa pang aparato, sa ibaba ay ang QR code (o key) na kinakailangan ng iyong authenticator app."
+    "message": "Kung kailangan mo itong idagdag sa iba pang device, nasa ibaba ang QR code (o key) na kailangan ng authenticator app mo."
   },
   "twoStepDisableDesc": {
-    "message": "Sigurado ka bang gusto mong patayin ang dalawang-hakbang na login provider na ito?"
+    "message": "Sigurado ka bang gusto mong isara ang provider ng dalawang-hakbang na pag-log in na ito?"
   },
   "twoStepDisabled": {
-    "message": "Naka off ang two step login provider."
+    "message": "Isinara ang provider ng dalawang-hakbang na pag-log in."
   },
   "twoFactorYubikeyAdd": {
-    "message": "Magdagdag ng bagong YubiKey sa iyong account"
+    "message": "Magdagdag ng bagong YubiKey sa account mo"
   },
   "twoFactorYubikeyPlugIn": {
-    "message": "I-plug ang YubiKey sa USB port ng iyong computer."
+    "message": "Isaksak ang YubiKey sa USB port ng kompyuter mo."
   },
   "twoFactorYubikeySelectKey": {
-    "message": "Piliin ang unang walang laman na YubiKey input field sa ibaba."
+    "message": "Piliin ang unang walang lamang YubiKey sa input field sa ibaba."
   },
   "twoFactorYubikeyTouchButton": {
-    "message": "Pindutin ang pindutan ng YubiKey ni."
+    "message": "Pindutin ang buton ng YubiKey."
   },
   "twoFactorYubikeySaveForm": {
     "message": "I-save ang form."
   },
   "twoFactorYubikeyWarning": {
-    "message": "Dahil sa mga limitasyon ng platform, ang YubiKeys ay hindi maaaring gamitin sa lahat ng mga aplikasyon ng Bitwarden. Dapat kang mag set up ng isa pang dalawang hakbang na tagapagbigay ng pag login upang ma access mo ang iyong account kapag hindi magamit ang YubiKey. Mga suportadong platform:"
+    "message": "Hindi magagamit sa lahat ng mga aplikasyon ng Bitwarden ang YubiKey dahil sa mga limitasyon ng platform. Dapat mag-set up ka ng isa pang provider ng dalawang-hakbang na pag-log in para ma-access mo ang account mo sakaling hindi magamit ang YubiKey. Mga suportadong platform:"
   },
   "twoFactorYubikeySupportUsb": {
-    "message": "Web vault, desktop application, CLI, at lahat ng mga extension ng browser sa isang aparato na may USB port na maaaring tanggapin ang iyong YubiKey."
+    "message": "Web vault, aplikasyon sa desktop, CLI, at lahat ng mga ekstensyon sa browser sa mga device na may USB port na masasaksakan ng YubiKey mo."
   },
   "twoFactorYubikeySupportMobile": {
-    "message": "Mga mobile app sa isang aparato na may mga kakayahan sa NFC o isang port ng data na maaaring tanggapin ang iyong YubiKey."
+    "message": "Mga mobile app sa isang device na may NFC o data port na masasaksakan ng YubiKey mo."
   },
   "yubikeyX": {
     "message": "YubiKey $INDEX$",
@@ -1543,181 +1764,193 @@
     "message": "Suporta sa NFC"
   },
   "twoFactorYubikeySupportsNfc": {
-    "message": "Ang isa sa aking mga susi ay sumusuporta sa NFC."
+    "message": "Sinusuportahan ng isa sa mga key ko ang NFC."
   },
   "twoFactorYubikeySupportsNfcDesc": {
-    "message": "Kung ang isa sa iyong YubiKey ay sumusuporta sa NFC (tulad ng isang YubiKey NEO), ikaw ay hinihimok sa mga mobile device tuwing natukoy ang availability ng NFC."
+    "message": "Kung sinusuportahan ng isa sa mga YubiKey mo ang NFC (halimbawa, YubiKey NEO), mapo-prompt ka sa mga mobile device kapag na-detect ang NFC availability."
   },
   "yubikeysUpdated": {
-    "message": "Na update ang YubiKeys"
+    "message": "Na-update ang mga YubiKey"
   },
   "disableAllKeys": {
-    "message": "I-deactivate ang lahat ng key"
+    "message": "I-deactivate lahat ng mga key"
   },
   "twoFactorDuoDesc": {
-    "message": "Ipasok ang impormasyon ng aplikasyon ng Bitwarden mula sa iyong panel ng Duo Admin."
+    "message": "Ipasok ang impormasyon ng aplikasyon ng Bitwarden sa Duo Admin panel mo."
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "Key ng pagsasama"
+  "twoFactorDuoClientId": {
+    "message": "Client Id"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "Lihim na susi"
+  "twoFactorDuoClientSecret": {
+    "message": "Client Secret"
   },
   "twoFactorDuoApiHostname": {
     "message": "Hostname ng API"
   },
   "twoFactorEmailDesc": {
-    "message": "Sundin ang mga hakbang na ito upang mai set up ang dalawang hakbang na pag login sa email:"
+    "message": "Sundin ito para ma-set up ang dalawang-hakbang na pag-log in gamit ang email:"
   },
   "twoFactorEmailEnterEmail": {
-    "message": "Ipasok ang email na nais mong makatanggap ng mga verification code"
+    "message": "Ilagay ang email kung saan mo gustong makatanggap ng mga code pamberipika"
   },
   "twoFactorEmailEnterCode": {
-    "message": "Ipasok ang nagresultang 6 digit verification code mula sa email"
+    "message": "Ipasok ang 6 na numerong code pamberipika galing sa email"
   },
   "sendEmail": {
-    "message": "Magpadala ng email"
+    "message": "Ipadala ang email"
   },
   "twoFactorU2fAdd": {
-    "message": "Magdagdag ng FIDO U2F security key sa iyong account"
+    "message": "Magdagdag ng FIDO U2F security key sa account mo"
   },
   "removeU2fConfirmation": {
-    "message": "Sigurado ka bang gusto mong alisin ang security key na ito?"
+    "message": "Sigurado ka bang gusto mong tanggalin ang security key na ito?"
   },
   "twoFactorWebAuthnAdd": {
-    "message": "Magdagdag ng isang key ng seguridad ng WebAuthn sa iyong account"
+    "message": "Magdagdag ng WebAuthn security key sa account mo"
   },
   "readKey": {
-    "message": "Basahin ang susi"
+    "message": "Basahin ang key"
   },
   "keyCompromised": {
-    "message": "Nakompromiso ang susi."
+    "message": "Nakompromiso ang key."
   },
   "twoFactorU2fGiveName": {
-    "message": "Bigyan ang security key ng isang friendly na pangalan upang matukoy ito."
+    "message": "Bigyan ng simpleng pangalan ang security key para madali itong matukoy."
   },
   "twoFactorU2fPlugInReadKey": {
-    "message": "I-plug ang security key sa USB port ng iyong computer at i-click ang \"Read Key\" button."
+    "message": "Isaksak ang security key sa USB port ng kompyuter mo at pindutin ang butong \"Basahin ang Key\"."
   },
   "twoFactorU2fTouchButton": {
-    "message": "Kung ang security key ay may isang pindutan, hawakan ito."
+    "message": "Kung may buton ang security key, pindutin ito."
   },
   "twoFactorU2fSaveForm": {
     "message": "I-save ang form."
   },
   "twoFactorU2fWarning": {
-    "message": "Dahil sa mga limitasyon ng platform, ang FIDO U2F ay hindi maaaring gamitin sa lahat ng mga aplikasyon ng Bitwarden. Dapat kang mag set up ng isa pang dalawang hakbang na tagapagbigay ng pag login upang ma access mo ang iyong account kapag hindi magamit ang FIDO U2F. Mga suportadong platform:"
+    "message": "Hindi magagamit sa lahat ng mga aplikasyon ng Bitwarden ang FIDO U2F dahil sa mga limitasyon ng platform. Dapat mag-set up ka ng isa pang provider ng dalawang-hakbang na pag-log in para ma-access mo ang account mo sakaling hindi magamit ang FIDO U2F. Mga suportadong platform:"
   },
   "twoFactorU2fSupportWeb": {
-    "message": "Web vault at mga extension ng browser sa isang desktop / laptop na may isang U2F suportado browser (Chrome, Opera, Vivaldi, o Firefox na may FIDO U2F nakabukas)."
+    "message": "Web vault at mga ekstensyon pang-browser sa desktop/laptop na may browser na sinusuportahan ang U2F (Chrome, Opera, Vivaldi, o Firefox na nakabukas ang FIDO U2F)."
   },
   "twoFactorU2fWaiting": {
-    "message": "Naghihintay para sa iyo na hawakan ang pindutan sa iyong key ng seguridad"
+    "message": "Naghihintay na mapindot ang buton sa security key mo"
   },
   "twoFactorU2fClickSave": {
-    "message": "Gamitin ang pindutan ng \"I-save\" sa ibaba para buhayin ang security key na ito para sa dalawang-hakbang na pag-login."
+    "message": "Pindutin ang \"I-save\" sa ibaba para ma-activate ang security key na ito para sa dalawang-hakbang na pag-log in."
   },
   "twoFactorU2fProblemReadingTryAgain": {
-    "message": "May problema sa pagbabasa ng security key. Try mo ulit."
+    "message": "Nagkaproblema sa pagbabasa ng security key. Pakisubukan ulit."
   },
   "twoFactorWebAuthnWarning": {
-    "message": "Dahil sa mga limitasyon ng platform, hindi maaaring gamitin ang WebAuthn sa lahat ng mga aplikasyon ng Bitwarden. Dapat kang mag set up ng isa pang dalawang hakbang na provider ng pag login upang ma access mo ang iyong account kapag hindi magamit ang WebAuthn. Mga suportadong platform:"
+    "message": "Hindi magagamit sa lahat ng mga aplikasyon ng Bitwarden ang WebAuthn dahil sa mga limitasyon ng platform. Dapat mag-set up ka ng isa pang provider ng dalawang-hakbang na pag-log in para ma-access mo ang account mo sakaling hindi magamit ang WebAuthn. Mga suportadong platform:"
   },
   "twoFactorWebAuthnSupportWeb": {
-    "message": "Web vault at mga extension ng browser sa isang desktop / laptop na may isang WebAuthn suportado browser (Chrome, Opera, Vivaldi, o Firefox na may FIDO U2F nakabukas)."
+    "message": "Web vault at mga ekstensyon pang-browser sa desktop/laptop na may browser na sinusuportahan ang WebAuthn (Chrome, Opera, Vivaldi, o Firefox na nakabukas ang FIDO U2F)."
   },
   "twoFactorRecoveryYourCode": {
-    "message": "Ang iyong Bitwarden dalawang hakbang na code sa pagbawi ng pag login"
+    "message": "Code pang-recover mo sa dalawang-hakbang na pag-log in sa Bitwarden"
   },
   "twoFactorRecoveryNoCode": {
-    "message": "Hindi ka pa nag set up ng anumang dalawang hakbang na mga tagapagbigay ng pag login. Pagkatapos mong mag set up ng isang dalawang hakbang na tagapagbigay ng pag login maaari mong suriin pabalik dito para sa iyong code sa pagbawi."
+    "message": "Hindi ka pa nakapag-set up ng anumang provider ng dalawang-hakbang na pag-log in. Pagkatapos mong makapag-set up nito, bumalik rito para makita ang mga code pang-recover mo."
   },
   "printCode": {
-    "message": "Mag-print ng code",
+    "message": "I-print ang code",
     "description": "Print 2FA recovery code"
   },
   "reports": {
-    "message": "Mga Ulat"
+    "message": "Mga ulat"
   },
   "reportsDesc": {
-    "message": "Kilalanin at isara ang mga puwang sa seguridad sa iyong mga online account sa pamamagitan ng pag click sa mga ulat sa ibaba.",
+    "message": "Tingnan ang mga ulat sa ibaba para kilalanin at tapalan ang mga butas sa seguridad sa mga account mo online.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "orgsReportsDesc": {
-    "message": "Tukuyin at isara ang mga puwang sa seguridad sa mga account ng iyong organisasyon sa pamamagitan ng pag-click sa mga ulat sa ibaba.",
+    "message": "Tingnan ang mga ulat sa ibaba para kilalanin at tapalan ang mga butas sa seguridad sa mga account ng organisasyon mo.",
     "description": "Vault health reports can be used to evaluate the security of your Bitwarden individual or organization vault."
   },
   "unsecuredWebsitesReport": {
-    "message": "Hindi ligtas na mga website"
+    "message": "Mga website na hindi ligtas"
   },
   "unsecuredWebsitesReportDesc": {
-    "message": "Ang mga URL na nagsisimula sa http:// ay hindi gumagamit ng pinakamahusay na magagamit na pag encrypt. Baguhin ang mga URI ng pag login para sa mga account na ito upang https:// para sa mas ligtas na pag browse."
+    "message": "Hindi gumagamit ng pinakamainam na encryption ang mga URL na nagsisimula sa http://. Gawing https:// ang mga URI ng login ng mga account na ito para sa mas ligtas na pagba-browse."
   },
   "unsecuredWebsitesFound": {
-    "message": "Natagpuan ang mga website na hindi secure"
+    "message": "May nakitang mga website na hindi ligtas"
   },
-  "unsecuredWebsitesFoundDesc": {
-    "message": "Nakita namin ang $COUNT$ na mga item sa iyong vault na may mga hindi secure na URI. Dapat mong baguhin ang kanilang scheme ng URI sa https:// kung pinapayagan ito ng website.",
+  "unsecuredWebsitesFoundReportDesc": {
+    "message": "We found $COUNT$ items in your $VAULT$ with unsecured URIs. You should change their URI scheme to https:// if the website allows it.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
   "noUnsecuredWebsites": {
-    "message": "Walang mga item sa iyong vault na may mga unsecured URI."
+    "message": "Walang item sa vault mo na may hindi ligtas na URI."
   },
   "inactive2faReport": {
-    "message": "Hindi aktibo ang dalawang hakbang na pag login"
+    "message": "Nakasarang dalawang-hakbang na pag-log in"
   },
   "inactive2faReportDesc": {
-    "message": "Ang dalawang hakbang na pag login ay nagdaragdag ng isang layer ng proteksyon sa iyong mga account. Mag set up ng dalawang hakbang na pag login gamit ang Bitwarden authenticator para sa mga account na ito o gumamit ng isang alternatibong paraan."
+    "message": "Nagdadagdag ng karagdagang proteksyon sa mga account mo ang dalawang-hakbang na pag-log in. I-set up ang dalawang-hakbang na pag-log in sa mga account na ito gamit ang Bitwarden o iba pang paraan."
   },
   "inactive2faFound": {
-    "message": "Natagpuan ang mga login na walang dalawang hakbang na pag login"
+    "message": "May mga login na nakasara ang dalawang-hakbang na pag-log in"
   },
-  "inactive2faFoundDesc": {
-    "message": "Natagpuan namin ang (mga) website ng $COUNT$ sa iyong vault na maaaring hindi naka-configure gamit ang dalawang-hakbang na pag-login (ayon sa 2fa.directory). Upang higit pang maprotektahan ang mga account na ito, dapat kang mag set up ng dalawang hakbang na pag login.",
+  "inactive2faFoundReportDesc": {
+    "message": "We found $COUNT$ website(s) in your $VAULT$ that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
   "noInactive2fa": {
-    "message": "Walang mga website na natagpuan sa iyong vault na may nawawalang dalawang hakbang na pagsasaayos ng pag login."
+    "message": "Walang website sa vault mo na hindi pa gumagamit ng dalawang-hakbang na pag-log in."
   },
   "instructions": {
-    "message": "Mga tagubilin"
+    "message": "Mga panuto"
   },
   "exposedPasswordsReport": {
-    "message": "Mga nakalantad na password"
+    "message": "Mga nakompromisong password"
   },
   "exposedPasswordsReportDesc": {
-    "message": "Ang mga password na nakalantad sa isang paglabag sa data ay madaling target para sa mga attacker. Baguhin ang mga password na ito upang maiwasan ang mga potensyal na break in."
+    "message": "Madaling maha-hack ang mga password na nakompromiso sa data breach. Palitan ang mga password na ito para maiwasan ang posibleng pagka-hack."
   },
   "exposedPasswordsFound": {
-    "message": "Natagpuan ang mga nakalantad na password"
+    "message": "May nakitang mga nakompromisong password"
   },
-  "exposedPasswordsFoundDesc": {
-    "message": "Natagpuan namin ang $COUNT$ item sa iyong vault na may mga password na nakalantad sa mga kilalang paglabag sa data. Dapat mong baguhin ang mga ito upang gumamit ng isang bagong password.",
+  "exposedPasswordsFoundReportDesc": {
+    "message": "We found $COUNT$ items in your $VAULT$ that have passwords that were exposed in known data breaches. You should change them to use a new password.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
   "noExposedPasswords": {
-    "message": "Walang mga item sa iyong vault ang may mga password na nalantad sa mga kilalang paglabag sa data."
+    "message": "Walang item sa vault mo na may password na nakompromiso sa mga naitalang data breach."
   },
   "checkExposedPasswords": {
-    "message": "Suriin ang mga nakalantad na password"
+    "message": "Tingnan ang mga nakompromisong password"
   },
   "exposedXTimes": {
-    "message": "Nakalantad $COUNT$ (mga) oras",
+    "message": "Nakompromiso $COUNT$ beses",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1726,49 +1959,57 @@
     }
   },
   "weakPasswordsReport": {
-    "message": "Mahina ang mga password"
+    "message": "Mga mahinang password"
   },
   "weakPasswordsReportDesc": {
-    "message": "Ang mga mahina na password ay madaling hulaan ng mga attacker. Palitan ang mga password na ito sa mga malakas na gamit ang password generator."
+    "message": "Madaling mahuhulaan ng mga hacker ang mahihinang password. Palakasin ang mga ito gamit ang tagagawa ng password."
   },
   "weakPasswordsFound": {
-    "message": "Mahina ang mga password na natagpuan"
+    "message": "May mga mahinang password"
   },
-  "weakPasswordsFoundDesc": {
-    "message": "Natagpuan namin ang $COUNT$ item sa iyong vault na may mga password na hindi malakas. Dapat mong i update ang mga ito upang magamit ang mas malakas na mga password.",
+  "weakPasswordsFoundReportDesc": {
+    "message": "We found $COUNT$ items in your $VAULT$ with passwords that are not strong. You should update them to use stronger passwords.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
   "noWeakPasswords": {
-    "message": "Walang mga item sa iyong vault na may mahinang mga password."
+    "message": "Walang item sa vault mo na may mahinang password."
   },
   "reusedPasswordsReport": {
-    "message": "Muling ginamit na mga password"
+    "message": "Mga naulit na password"
   },
   "reusedPasswordsReportDesc": {
-    "message": "Ang muling paggamit ng mga password ay ginagawang mas madali para sa mga attacker na masira sa maraming mga account. Baguhin ang mga password na ito upang ang bawat isa ay natatangi."
+    "message": "Mas madaling makakapasok sa maramihang mga account ang mga hacker kung uulit-ulitin mo ang mga password mo. Gawing unique ang mga password na ito."
   },
   "reusedPasswordsFound": {
-    "message": "Natagpuan ang mga ginamit na password"
+    "message": "May mga naulit na password"
   },
-  "reusedPasswordsFoundDesc": {
-    "message": "Natagpuan namin ang $COUNT$ password na muling ginagamit sa iyong vault. Dapat mong baguhin ang mga ito sa isang natatanging halaga.",
+  "reusedPasswordsFoundReportDesc": {
+    "message": "We found $COUNT$ passwords that are being reused in your $VAULT$. You should change them to a unique value.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
   "noReusedPasswords": {
-    "message": "Walang mga pag login sa iyong vault na may mga password na muling ginagamit."
+    "message": "Walang paulit-ulit na password sa mga login sa vault mo."
   },
   "reusedXTimes": {
-    "message": "Muling ginamit $COUNT$ beses",
+    "message": "Pinaulit-ulit $COUNT$ beses",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1777,19 +2018,19 @@
     }
   },
   "dataBreachReport": {
-    "message": "Paglabag sa data"
+    "message": "Pagkakompromiso sa datos"
   },
   "breachDesc": {
-    "message": "Maaaring ilantad ng mga nilabag na account ang iyong personal na impormasyon. Secure breached account sa pamamagitan ng pagpapagana ng 2FA o paglikha ng isang mas malakas na password."
+    "message": "Maaaring mailantad ang personal mong impormasyon dahil sa mga nakompromisong account. Gawing ligtas ang mga nakompromisong account gamit ang 2FA o mas malakas na password."
   },
   "breachCheckUsernameEmail": {
-    "message": "Suriin ang anumang mga username o email address na ginagamit mo."
+    "message": "Tingnan ang anumang username o email address na ginagamit mo."
   },
   "checkBreaches": {
-    "message": "Suriin ang mga paglabag"
+    "message": "Tingnan ang mga pagkakompromiso"
   },
   "breachUsernameNotFound": {
-    "message": "$USERNAME$ ay hindi natagpuan sa anumang kilalang paglabag sa data.",
+    "message": "Wala ang $USERNAME$ sa mga naitalang pagkakompromiso sa datos.",
     "placeholders": {
       "username": {
         "content": "$1",
@@ -1802,7 +2043,7 @@
     "description": "ex. Good News, No Breached Accounts Found!"
   },
   "breachUsernameFound": {
-    "message": "$USERNAME$ ay natagpuan sa $COUNT$ iba't ibang mga paglabag sa data online.",
+    "message": "Nakita ang $USERNAME$ sa $COUNT$ naitalang pagkakompromiso sa datos.",
     "placeholders": {
       "username": {
         "content": "$1",
@@ -1815,25 +2056,25 @@
     }
   },
   "breachFound": {
-    "message": "Natagpuan ang mga nabasag na account"
+    "message": "May mga na-breach na account"
   },
   "compromisedData": {
-    "message": "Nakompromiso ang data"
+    "message": "Nakompromisong datos"
   },
   "website": {
     "message": "Website"
   },
   "affectedUsers": {
-    "message": "Mga apektadong gumagamit"
+    "message": "Mga apektadong user"
   },
   "breachOccurred": {
-    "message": "Naganap ang paglabag"
+    "message": "Naganap ang breach"
   },
   "breachReported": {
-    "message": "Iniulat ang paglabag"
+    "message": "Naiulat ang breach"
   },
   "reportError": {
-    "message": "May nangyaring error sa pagsisikap na i-load ang report. Subukan mo ulit"
+    "message": "Nagkaproblema sa paglo-load ng ulat. Subukan ulit"
   },
   "billing": {
     "message": "Pagsingil"
@@ -1861,47 +2102,47 @@
     "description": "Dollar amount, or quantity."
   },
   "creditDelayed": {
-    "message": "Ang idinagdag na credit ay lilitaw sa iyong account pagkatapos na ganap na maproseso ang pagbabayad. Ang ilang mga paraan ng pagbabayad ay naantala at maaaring tumagal nang mas mahaba upang maproseso kaysa sa iba."
+    "message": "Lalabas sa account mo ang naidagdag na credit pagkatapos ng pagpoproseso sa bayad mo. Maaaring mas matagal ang ilang mga paraan sa pagbabayad."
   },
   "makeSureEnoughCredit": {
-    "message": "Mangyaring tiyakin na ang iyong account ay may sapat na kredito na magagamit para sa pagbili na ito. Kung ang iyong account ay walang sapat na credit na magagamit, ang iyong default na paraan ng pagbabayad sa file ay gagamitin para sa pagkakaiba. Maaari kang magdagdag ng credit sa iyong account mula sa pahina ng Pagsingil."
+    "message": "Siguraduhing may sapat na credit ang account mo para sa pagbiling ito. Kung walang sapat na credit ang account mo, gagamitin ang default na paraan sa pagbabayad ng account mo at gagamiting pantapal sa kulang. Makakapagdagdag ka ng credit sa account mo sa pahina ng Pagsingil."
   },
   "creditAppliedDesc": {
-    "message": "Ang credit ng iyong account ay maaaring gamitin upang gumawa ng mga pagbili. Anumang magagamit na credit ay awtomatikong ilalapat patungo sa mga invoice na nabuo para sa account na ito."
+    "message": "Magagamit ang credit ng account mo para mamili. Mailalapat sa anumang bayarin sa account na ito ang available na credit."
   },
   "goPremium": {
-    "message": "Pumunta sa Premium",
+    "message": "Magpa-Premium",
     "description": "Another way of saying \"Get a Premium membership\""
   },
   "premiumUpdated": {
-    "message": "Nag upgrade ka na sa Premium."
+    "message": "Naka-upgrade ka na sa Premium."
   },
   "premiumUpgradeUnlockFeatures": {
-    "message": "I upgrade ang iyong account sa isang pagiging miyembro ng Premium at i unlock ang ilang mga mahusay na karagdagang tampok."
+    "message": "Mag-upgrade sa Premium at makakuha ng magagandang mga karagdagang feature."
   },
   "premiumSignUpStorage": {
-    "message": "1 GB naka encrypt na imbakan para sa mga attachment ng file."
+    "message": "1GB na naka-encrypt na storage para sa mga file attachment."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Karagdagang dalawang hakbang na mga pagpipilian sa pag login tulad ng YubiKey, FIDO U2F, at Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
   "premiumSignUpEmergency": {
     "message": "Emergency access"
   },
   "premiumSignUpReports": {
-    "message": "Kalinisan ng password, kalusugan ng account, at mga ulat ng paglabag sa data upang mapanatiling ligtas ang iyong vault."
+    "message": "Kaligtasan sa password, kalusugan ng account, at mga ulat sa pagkakompromiso ng datos para panatilihing ligtas ang vault mo."
   },
   "premiumSignUpTotp": {
-    "message": "TOTP verification code (2FA) generator para sa mga pag login sa iyong vault."
+    "message": "Tagagawa ng TOTP verification code (2FA) para sa mga login sa vault mo."
   },
   "premiumSignUpSupport": {
-    "message": "Priority suporta sa customer."
+    "message": "Priyoridad sa suporta pang-customer."
   },
   "premiumSignUpFuture": {
-    "message": "Lahat ng mga tampok ng Premium sa hinaharap. Marami pang darating sa lalong madaling panahon!"
+    "message": "Lahat ng mga Premium feature sa hinaharap. Abangan!"
   },
   "premiumPrice": {
-    "message": "Lahat para lamang sa $PRICE$ /taon!",
+    "message": "Lahat para sa $PRICE$ lang kada taon!",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1910,7 +2151,7 @@
     }
   },
   "premiumPriceWithFamilyPlan": {
-    "message": "Pumunta sa premium para lamang $PRICE$ /taon, o makakuha ng mga premium account para sa mga gumagamit ng $FAMILYPLANUSERCOUNT$ at walang limitasyong pagbabahagi ng pamilya sa isang ",
+    "message": "Magpa-premium para sa $PRICE$ lang kada taon, o kumuha ng mga premium account para sa $FAMILYPLANUSERCOUNT$ user at walang limitasyong pagbabahaging pampamilya sa ",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1923,16 +2164,16 @@
     }
   },
   "bitwardenFamiliesPlan": {
-    "message": "Plano ng mga Pamilya ng Bitwarden."
+    "message": "Planong Pampamilya ng Bitwarden."
   },
   "addons": {
     "message": "Mga addon"
   },
   "premiumAccess": {
-    "message": "Pag access sa premium"
+    "message": "Premium access"
   },
   "premiumAccessDesc": {
-    "message": "Maaari kang magdagdag ng Premium access sa lahat ng miyembro ng iyong organisasyon para sa $PRICE$ /$INTERVAL$.",
+    "message": "Makakapagbigay ka ng Premium access sa lahat ng mga miyembro ng organisasyon mo para sa $PRICE$ kada $INTERVAL$.",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1945,13 +2186,13 @@
     }
   },
   "additionalStorageGb": {
-    "message": "Karagdagang imbakan (GB)"
+    "message": "Karagdagang storage (GB)"
   },
   "additionalStorageGbDesc": {
     "message": "# ng karagdagang GB"
   },
   "additionalStorageIntervalDesc": {
-    "message": "Ang iyong plano ay may $SIZE$ ng naka-encrypt na imbakan ng file. Maaari kang magdagdag ng karagdagang imbakan para sa $PRICE$ bawat GB /$INTERVAL$.",
+    "message": "May $SIZE$ na naka-encrypt na file storage ang plano mo. Makakapagdagdag ka pa para sa $PRICE$ kada GB kada $INTERVAL$.",
     "placeholders": {
       "size": {
         "content": "$1",
@@ -1971,26 +2212,26 @@
     "message": "Buod"
   },
   "total": {
-    "message": "Kabuuang"
+    "message": "Kabuuan"
   },
   "year": {
     "message": "taon"
   },
   "yr": {
-    "message": "yr"
+    "message": "tn"
   },
   "month": {
     "message": "buwan"
   },
   "monthAbbr": {
-    "message": "mo.",
+    "message": "bw.",
     "description": "Short abbreviation for 'month'"
   },
   "paymentChargedAnnually": {
-    "message": "Ang iyong paraan ng pagbabayad ay sisingilin kaagad at pagkatapos ay sa isang paulit ulit na batayan bawat taon. Maaari mong kanselahin anumang oras."
+    "message": "Agarang sisingilin ang paraan mo sa pagbabayad at paulit-ulit taun-taon. Makakapagkansela ka kailanman."
   },
   "paymentCharged": {
-    "message": "Ang iyong paraan ng pagbabayad ay sisingilin kaagad at pagkatapos ay paulit-ulit na batayan ang bawat $INTERVAL$. Maaari mong kanselahin anumang oras.",
+    "message": "Agarang sisingilin ang paraan mo sa pagbabayad at paulit-ulit bawat $INTERVAL$. Makakapagkansela ka kailanman.",
     "placeholders": {
       "interval": {
         "content": "$1",
@@ -1998,8 +2239,11 @@
       }
     }
   },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "Your payment method will be charged for any unpaid subscriptions."
+  },
   "paymentChargedWithTrial": {
-    "message": "Ang iyong plano ay may kasamang libreng 7 araw na pagsubok. Ang iyong paraan ng pagbabayad ay hindi sisingilin hanggang sa matapos ang pagsubok. Maaari mong kanselahin anumang oras."
+    "message": "May libreng 7 araw na trial ang plano mo. Hindi sisingilin ang paraan mo sa pagbabayad hanggang sa matapos ang libreng trial. Makakapagkansela ka kailanman."
   },
   "paymentInformation": {
     "message": "Impormasyon sa pagbabayad"
@@ -2018,6 +2262,9 @@
   },
   "cancelSubscription": {
     "message": "Kanselahin ang subscription"
+  },
+  "subscriptionExpiration": {
+    "message": "Subscription expiration"
   },
   "subscriptionCanceled": {
     "message": "Kinansela ang subscription."
@@ -2163,6 +2410,9 @@
   "contactSupport": {
     "message": "Makipag ugnay sa suporta sa customer"
   },
+  "contactSupportShort": {
+    "message": "Contact Support"
+  },
   "updatedPaymentMethod": {
     "message": "Na update na paraan ng pagbabayad."
   },
@@ -2263,6 +2513,9 @@
   },
   "planDescTeams": {
     "message": "Para sa mga negosyo at iba pang mga organisasyon ng koponan."
+  },
+  "planNameTeamsStarter": {
+    "message": "Teams Starter"
   },
   "planNameEnterprise": {
     "message": "Enterprise"
@@ -2368,6 +2621,15 @@
   },
   "trialThankYou": {
     "message": "Salamat sa pag-sign up sa Bitwarden para sa $PLAN$!",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "trialSecretsManagerThankYou": {
+    "message": "Thanks for signing up for Bitwarden Secrets Manager for $PLAN$!",
     "placeholders": {
       "plan": {
         "content": "$1",
@@ -2555,9 +2817,6 @@
   "invited": {
     "message": "Inanyayahan"
   },
-  "accepted": {
-    "message": "Tinanggap na"
-  },
   "confirmed": {
     "message": "Nakumpirma na"
   },
@@ -2585,14 +2844,14 @@
   "userDesc": {
     "message": "Access at magdagdag ng mga item sa mga nakatalagang koleksyon"
   },
-  "manager": {
-    "message": "Manager"
-  },
-  "managerDesc": {
-    "message": "Lumikha, magtanggal, at pamahalaan ang pag access sa mga nakatalagang koleksyon"
-  },
   "all": {
     "message": "Lahat"
+  },
+  "addAccess": {
+    "message": "Add Access"
+  },
+  "addAccessFilter": {
+    "message": "Add Access Filter"
   },
   "refresh": {
     "message": "I-refresh"
@@ -2624,6 +2883,15 @@
   "webVault": {
     "message": "Web vault"
   },
+  "cli": {
+    "message": "CLI"
+  },
+  "bitWebVault": {
+    "message": "Bitwarden Web vault"
+  },
+  "bitSecretsManager": {
+    "message": "Bitwarden Secrets Manager"
+  },
   "loggedIn": {
     "message": "Nag-log in"
   },
@@ -2644,6 +2912,15 @@
   },
   "failedLogin2fa": {
     "message": "Nabigo ang pagtatangka sa pag login na may maling dalawang hakbang na pag login."
+  },
+  "incorrectPassword": {
+    "message": "Incorrect password"
+  },
+  "incorrectCode": {
+    "message": "Incorrect code"
+  },
+  "incorrectPin": {
+    "message": "Incorrect PIN"
   },
   "exportedVault": {
     "message": "Vault na export"
@@ -2735,6 +3012,24 @@
       "id": {
         "content": "$1",
         "example": "Google"
+      }
+    }
+  },
+  "viewCollectionWithName": {
+    "message": "View collection - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "Edit item - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
       }
     }
   },
@@ -3005,6 +3300,27 @@
   "device": {
     "message": "Device"
   },
+  "creatingAccountOn": {
+    "message": "Creating account on"
+  },
+  "checkYourEmail": {
+    "message": "Check your email"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Follow the link in the email sent to"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "and continue creating your account."
+  },
+  "noEmail": {
+    "message": "No email?"
+  },
+  "goBack": {
+    "message": "Go back"
+  },
+  "toEditYourEmailAddress": {
+    "message": "to edit your email address."
+  },
   "view": {
     "message": "Tanaw"
   },
@@ -3086,6 +3402,9 @@
   "emailVerified": {
     "message": "Na verify ang email ng account"
   },
+  "emailVerifiedV2": {
+    "message": "Email verified"
+  },
   "emailVerifiedFailed": {
     "message": "Hindi ma verify ang iyong email. Subukan ang pagpapadala ng isang bagong email sa pag verify."
   },
@@ -3112,6 +3431,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "Maaari mong ma access ang organisasyong ito sa sandaling kumpirmahin ng isang administrator ang iyong pagiging miyembro. Ipapadala namin sa iyo ang isang email kapag nangyari iyon."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "You can now access this organization."
   },
   "inviteAcceptFailed": {
     "message": "Hindi makatanggap ng imbitasyon. Hilingin sa isang admin ng organisasyon na magpadala ng isang bagong imbitasyon."
@@ -3148,6 +3470,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "Humiling ka na tanggalin ang iyong account sa Bitwarden. Gamitin ang pindutan sa ibaba upang kumpirmahin."
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "You have requested to delete your Bitwarden organization."
   },
   "myOrganization": {
     "message": "Ang aking organisasyon"
@@ -3275,6 +3600,9 @@
   "limitSubscriptionDesc": {
     "message": "Magtakda ng limitasyon ng upuan para sa iyong subscription. Kapag naabot na ang limitasyong ito, hindi ka na makakapag imbita ng mga bagong miyembro."
   },
+  "limitSmSubscriptionDesc": {
+    "message": "Set a seat limit for your Secrets Manager subscription. Once this limit is reached, you will not be able to invite new members."
+  },
   "maxSeatLimit": {
     "message": "Limitasyon ng Upuan (opsyonal)",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3311,6 +3639,9 @@
   "subscriptionUpdated": {
     "message": "Na update ang subscription"
   },
+  "subscribedToSecretsManager": {
+    "message": "Subscription updated. You now have access to Secrets Manager."
+  },
   "additionalOptions": {
     "message": "Karagdagang mga pagpipilian"
   },
@@ -3320,12 +3651,27 @@
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "Ang mga pagsasaayos sa iyong subscription ay magreresulta sa mga prorated na pagbabago sa iyong mga kabuuan ng pagsingil. Kung ang mga bagong inimbitahang miyembro ay lumampas sa iyong mga upuan sa subscription, agad kang makakatanggap ng prorated na singil para sa mga karagdagang miyembro."
   },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "If you want to add additional"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "seats without the bundled offer, please contact"
+  },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "Ang mga pagsasaayos sa iyong subscription ay magreresulta sa mga prorated na pagbabago sa iyong mga kabuuan ng pagsingil. Kung ang mga bagong inimbitahang miyembro ay lumampas sa iyong mga upuan sa subscription, agad kang makakatanggap ng prorated charge para sa mga karagdagang miyembro hanggang sa maabot ang iyong $MAX$ seat limit.",
     "placeholders": {
       "max": {
         "content": "$1",
         "example": "50"
+      }
+    }
+  },
+  "subscriptionUserSeatsWithoutAdditionalSeatsOption": {
+    "message": "You can invite up to $COUNT$ members for no additional charge. Contact Customer Support to upgrade your plan and invite more members.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
       }
     }
   },
@@ -3338,12 +3684,12 @@
       }
     }
   },
-  "subscriptionFamiliesPlan": {
-    "message": "Hindi ka maaaring mag-imbita ng higit sa $COUNT$ na mga miyembro nang hindi nag-upgrade ng iyong plano. Mangyaring makipag ugnay sa Customer Support upang mag upgrade.",
+  "subscriptionUpgrade": {
+    "message": "You cannot invite more than $COUNT$ members without upgrading your plan.",
     "placeholders": {
       "count": {
         "content": "$1",
-        "example": "6"
+        "example": "2"
       }
     }
   },
@@ -3358,6 +3704,15 @@
   },
   "subscriptionMaxReached": {
     "message": "Ang mga pagsasaayos sa iyong subscription ay magreresulta sa mga prorated na pagbabago sa iyong mga kabuuan ng pagsingil. Hindi ka maaaring mag-imbita ng higit sa $COUNT$ na mga miyembro nang hindi pinatataas ang iyong mga upuan sa subscription.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "subscriptionSeatMaxReached": {
+    "message": "You cannot invite more than $COUNT$ members without increasing your subscription seats.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3389,17 +3744,11 @@
   "keyUpdated": {
     "message": "Na update ang Key"
   },
-  "updateKeyTitle": {
-    "message": "Update key"
-  },
   "updateEncryptionKey": {
     "message": "Na update ang encryption key"
   },
-  "updateEncryptionKeyShortDesc": {
-    "message": "Kasalukuyan kang gumagamit ng isang hindi napapanahong scheme ng pag encrypt."
-  },
-  "updateEncryptionKeyDesc": {
-    "message": "Lumipat kami sa mas malaking mga key ng pag encrypt na nagbibigay ng mas mahusay na seguridad at pag access sa mas bagong mga tampok. Ang pag update ng iyong key ng pag encrypt ay mabilis at madali. I type lamang ang iyong master password sa ibaba. Ang update na ito ay sa huli ay magiging sapilitan."
+  "updateEncryptionSchemeDesc": {
+    "message": "We've changed the encryption scheme to provide better security. Update your encryption key now by entering your master password below."
   },
   "updateEncryptionKeyWarning": {
     "message": "Matapos i update ang iyong key sa pag encrypt, kinakailangan kang mag log out at bumalik sa lahat ng mga application ng Bitwarden na kasalukuyang ginagamit mo (tulad ng mobile app o mga extension ng browser). Ang kabiguan na mag log out at bumalik sa (na nag download ng iyong bagong key ng pag encrypt) ay maaaring magresulta sa pagkasira ng data. Susubukan naming awtomatikong mag log out sa iyo, gayunpaman, maaari itong maantala."
@@ -3434,6 +3783,21 @@
   "nothingSelected": {
     "message": "Wala kang pinili."
   },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
+  },
   "acceptPolicies": {
     "message": "Sa pamamagitan ng pag-tsek sa kahon na ito ay sumasang-ayon ka sa sumusunod:"
   },
@@ -3454,6 +3818,9 @@
   },
   "vaultTimeoutDesc": {
     "message": "Piliin kung kailan gagawin ng iyong vault ang vault timeout action."
+  },
+  "vaultTimeoutLogoutDesc": {
+    "message": "Choose when your vault will be logged out."
   },
   "oneMinute": {
     "message": "1 minuto"
@@ -3490,6 +3857,18 @@
   },
   "organizationIsDisabled": {
     "message": "Organisasyon ay suspindido."
+  },
+  "secretsAccessSuspended": {
+    "message": "Suspended organizations cannot be accessed. Please contact your organization owner for assistance."
+  },
+  "secretsCannotCreate": {
+    "message": "Secrets cannot be created in suspended organizations. Please contact your organization owner for assistance."
+  },
+  "projectsCannotCreate": {
+    "message": "Projects cannot be created in suspended organizations. Please contact your organization owner for assistance."
+  },
+  "serviceAccountsCannotCreate": {
+    "message": "Service accounts cannot be created in suspended organizations. Please contact your organization owner for assistance."
   },
   "disabledOrganizationFilterError": {
     "message": "Mga item sa mga naka-suspindong Organisasyon ay hindi ma-access. Mangyaring makipag-ugnayan sa may-ari ng iyong Organisasyon para sa tulong."
@@ -3543,8 +3922,8 @@
   "attachmentsNeedFix": {
     "message": "Ang item na ito ay may mga lumang file attachment na kailangang ayusin."
   },
-  "attachmentFixDesc": {
-    "message": "Ito ay isang lumang file attachment ang mga pangangailangan upang ayusin. Mag-klik para malaman ang iba pa."
+  "attachmentFixDescription": {
+    "message": "This attachment uses outdated encryption. Select 'Fix' to download, re-encrypt, and re-upload the attachment."
   },
   "fix": {
     "message": "Ayusin ang",
@@ -3608,15 +3987,6 @@
   },
   "couldNotChargeCardPayInvoice": {
     "message": "Hindi namin nagawang singilin ang iyong card. Mangyaring tingnan at bayaran ang hindi bayad na invoice na nakalista sa ibaba."
-  },
-  "inAppPurchase": {
-    "message": "Pagbili sa in app"
-  },
-  "cannotPerformInAppPurchase": {
-    "message": "Hindi mo maaaring isagawa ang aksyong ito habang gumagamit ng isang in app na paraan ng pagbabayad ng pagbili."
-  },
-  "manageSubscriptionFromStore": {
-    "message": "Kailangan mong pamahalaan ang iyong subscription mula sa tindahan kung saan ginawa ang iyong in app na pagbili."
   },
   "minLength": {
     "message": "Minimum na haba"
@@ -3761,29 +4131,11 @@
   "restoreSelected": {
     "message": "Ibalik muli ang napiling"
   },
-  "restoreItem": {
-    "message": "Ibalik ang item"
-  },
   "restoredItem": {
     "message": "Item na nai-restore"
   },
   "restoredItems": {
     "message": "Naibalik ang mga item"
-  },
-  "restoreItemConfirmation": {
-    "message": "Sigurado ka bang nais mong ibalik ang item na ito?"
-  },
-  "restoreItems": {
-    "message": "Ibalik muli ang mga item"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "Pumili ka ng $COUNT$ (mga) item na ibabalik. Sigurado ka bang gusto mong ibalik ang mga item na ito?",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "Naibalik ang item $ID$",
@@ -3818,9 +4170,6 @@
   "setMasterPassword": {
     "message": "Itakda ang master password"
   },
-  "ssoCompleteRegistration": {
-    "message": "Upang matapos ang pag-log in sa SSO, mangyaring magtakda ng master password upang ma-access at maprotektahan ang iyong vault."
-  },
   "identifier": {
     "message": "Tagapagtukoy"
   },
@@ -3836,8 +4185,32 @@
   "ssoHandOff": {
     "message": "Maaari mo na ngayong isara ang tab na ito at magpatuloy sa extension."
   },
+  "youSuccessfullyLoggedIn": {
+    "message": "You successfully logged in"
+  },
+  "thisWindowWillCloseIn5Seconds": {
+    "message": "This window will automatically close in 5 seconds"
+  },
+  "youMayCloseThisWindow": {
+    "message": "You may close this window"
+  },
   "includeAllTeamsFeatures": {
     "message": "Lahat ng mga Koponan tampok, plus:"
+  },
+  "includeAllTeamsStarterFeatures": {
+    "message": "All Teams Starter features, plus:"
+  },
+  "chooseMonthlyOrAnnualBilling": {
+    "message": "Choose monthly or annual billing"
+  },
+  "abilityToAddMoreThanNMembers": {
+    "message": "Ability to add more than $COUNT$ members",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
   },
   "includeSsoAuthentication": {
     "message": "Pagpapatunay ng SSO sa pamamagitan ng SAML2.0 at OpenID Connect"
@@ -3854,8 +4227,9 @@
   "ssoIdentifier": {
     "message": "Tagatukoy ng SSO"
   },
-  "ssoIdentifierHint": {
-    "message": "Ibigay ang ID na ito sa iyong mga miyembro upang mag login sa SSO."
+  "ssoIdentifierHintPartOne": {
+    "message": "Provide this ID to your members to login with SSO. To bypass this step, set up ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Provide this ID to your members to login with SSO. To bypass this step, set up Domain verification'"
   },
   "unlinkSso": {
     "message": "I-unlink ang SSO"
@@ -4025,8 +4399,8 @@
     "message": "Ang Send na ito ay nakatago bilang default. Maaari mong i toggle ang visibility nito gamit ang pindutan sa ibaba.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
-  "downloadFile": {
-    "message": "Mag-download ng file"
+  "downloadAttachments": {
+    "message": "Download attachments"
   },
   "sendAccessUnavailable": {
     "message": "Ang Send na sinusubukan mong ma access ay hindi umiiral o hindi na magagamit.",
@@ -4276,12 +4650,6 @@
   "permission": {
     "message": "Pahintulot"
   },
-  "managerPermissions": {
-    "message": "Mga Pahintulot ng Manager"
-  },
-  "adminPermissions": {
-    "message": "Mga Pahintulot ng Admin"
-  },
   "accessEventLogs": {
     "message": "Access ang mga log ng kaganapan"
   },
@@ -4306,9 +4674,6 @@
   "deleteAnyCollection": {
     "message": "Tanggalin ang anumang koleksyon"
   },
-  "manageAssignedCollections": {
-    "message": "Pamahalaan ang mga nakatalagang koleksyon"
-  },
   "editAssignedCollections": {
     "message": "I-edit ang mga nakatalagang koleksyon"
   },
@@ -4327,8 +4692,8 @@
   "manageUsers": {
     "message": "Pamahalaan ang mga gumagamit"
   },
-  "manageResetPassword": {
-    "message": "Pamahalaan ang pag reset ng password"
+  "manageAccountRecovery": {
+    "message": "Manage account recovery"
   },
   "disableRequiredError": {
     "message": "Kailangan mong manu-manong i-off ang patakaran ng $POLICYNAME$ bago patayin ang patakaran na ito.",
@@ -4416,8 +4781,8 @@
     "message": "para masubukan ngayon.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more about Bitwarden Send or sign up to **try it today.**'"
   },
-  "sendCreatorIdentifier": {
-    "message": "Ibinahagi sa iyo ng Bitwarden user na si $USER_IDENTIFIER$ ang sumusunod",
+  "sendAccessCreatorIdentifier": {
+    "message": "Bitwarden member $USER_IDENTIFIER$ shared the following with you",
     "placeholders": {
       "user_identifier": {
         "content": "$1",
@@ -4459,14 +4824,14 @@
   "hintEqualsPassword": {
     "message": "Hindi pwedeng maging pareho ang password hint at password mo."
   },
-  "enrollPasswordReset": {
-    "message": "Mag enroll sa pag reset ng password"
+  "enrollAccountRecovery": {
+    "message": "Enroll in account recovery"
   },
-  "enrolledPasswordReset": {
-    "message": "Nakatala sa pag reset ng password"
+  "enrolledAccountRecovery": {
+    "message": "Enrolled in account recovery"
   },
-  "withdrawPasswordReset": {
-    "message": "Mag withdraw mula sa pag reset ng password"
+  "withdrawAccountRecovery": {
+    "message": "Withdraw from account recovery"
   },
   "enrollPasswordResetSuccess": {
     "message": "Tagumpay sa pagpapatala!"
@@ -4474,8 +4839,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "Tagumpay sa pag-withdraw!"
   },
-  "eventEnrollPasswordReset": {
-    "message": "User $ID$ naka-enroll sa password reset.",
+  "eventEnrollAccountRecovery": {
+    "message": "User $ID$ enrolled in account recovery.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4483,8 +4848,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "Nag-withdraw ang user $ID$ sa pag-reset ng password.",
+  "eventWithdrawAccountRecovery": {
+    "message": "User $ID$ withdrew from account recovery.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4543,23 +4908,20 @@
   "resetPasswordEnrollmentWarning": {
     "message": "Ang pagpapatala ay magpapahintulot sa mga administrator ng organisasyon na baguhin ang iyong master password"
   },
-  "resetPasswordPolicy": {
-    "message": "Master password reset"
+  "accountRecoveryPolicy": {
+    "message": "Account recovery administration"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "Payagan ang mga admin na i reset ang mga master password para sa mga miyembro."
+  "accountRecoveryPolicyDesc": {
+    "message": "Based on the encryption method, recover accounts when master passwords or trusted devices are forgotten or lost."
   },
-  "resetPasswordPolicyWarning": {
-    "message": "Ang mga miyembro sa samahan ay kailangang mag self enroll o awtomatikong magpatala bago mai reset ng mga administrator ang kanilang master password."
+  "accountRecoveryPolicyWarning": {
+    "message": "Existing accounts with master passwords will require members to self-enroll before administrators can recover their accounts. Automatic enrollment will turn on account recovery for new members."
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "The single organization Enterprise policy must be turned on before activating this policy."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Awtomatikong pagpapatala"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "Lahat ng miyembro ay awtomatikong ipapatala sa password reset kapag tinanggap na ang kanilang imbitasyon at hindi na papayagang mag withdraw."
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "Ang mga miyembro na nasa organisasyon ay hindi na retroactive enrolled sa password reset. Kakailanganin nilang mag self enroll bago mai reset ng mga administrator ang kanilang master password."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "Kailangan ng mga bagong miyembro na awtomatikong magpatala"
@@ -4660,8 +5022,8 @@
   "error": {
     "message": "Mali"
   },
-  "resetPasswordManageUsers": {
-    "message": "Pamahalaan ang mga gumagamit ay dapat ding ipagkaloob sa pamahalaan ang pahintulot sa pag reset ng password"
+  "accountRecoveryManageUsers": {
+    "message": "Manage users must also be granted with the manage account recovery permission"
   },
   "setupProvider": {
     "message": "Pag setup ng provider"
@@ -4724,8 +5086,14 @@
   "newClientOrganizationDesc": {
     "message": "Lumikha ng isang bagong organisasyon ng kliyente na maiuugnay sa iyo bilang Tagapagtustos. Magagawa mong ma access at pamahalaan ang organisasyong ito."
   },
+  "newClient": {
+    "message": "New client"
+  },
   "addExistingOrganization": {
     "message": "Magdagdag ng umiiral na organisasyon"
+  },
+  "addNewOrganization": {
+    "message": "Add new organization"
   },
   "myProvider": {
     "message": "Ang Aking Provider"
@@ -4797,6 +5165,9 @@
   "masterPasswordInvalidWarning": {
     "message": "Ang iyong master password ay hindi nakakatugon sa mga kinakailangan sa patakaran ng organisasyong ito. Upang sumali sa samahan, kailangan mong i update ang iyong master password ngayon. Ang proceeding ay mag-log out sa iyong kasalukuyang session, na nangangailangan na mag-log in muli. Ang mga aktibong sesyon sa iba pang mga aparato ay maaaring patuloy na manatiling aktibo hanggang sa isang oras."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
+  },
   "maximumVaultTimeout": {
     "message": "Vault timeout"
   },
@@ -4828,6 +5199,32 @@
       }
     }
   },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is $HOURS$ hour(s) and $MINUTES$ minute(s). Your vault timeout action is set to $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Your organization policies have set your vault timeout action to $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
+      }
+    }
+  },
   "customVaultTimeout": {
     "message": "Pasadyang timeout ng vault"
   },
@@ -4843,14 +5240,26 @@
   "disablePersonalVaultExport": {
     "message": "Alisin ang indibidwal na pag export ng vault"
   },
-  "disablePersonalVaultExportDesc": {
-    "message": "Huwag payagan ang mga miyembro na i export ang kanilang indibidwal na data ng vault."
+  "disablePersonalVaultExportDescription": {
+    "message": "Do not allow members to export data from their individual vault."
   },
   "vaultExportDisabled": {
     "message": "Hindi magagamit ang pag-export ng Vault"
   },
   "personalVaultExportPolicyInEffect": {
     "message": "Ang isa o higit pang mga patakaran ng organisasyon ay nagpipigil sa iyo mula sa pag-export ng iyong indibidwal na vault."
+  },
+  "activateAutofill": {
+    "message": "Buksan ang autofill"
+  },
+  "activateAutofillPolicyDesc": {
+    "message": "Activate the auto-fill on page load setting on the browser extension for all existing and new members."
+  },
+  "experimentalFeature": {
+    "message": "Maaaring pagsamantalahan ng mga nakompromisong website ang pag-autofill pagka-load ng pahina."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "Matuto pa tungkol sa autofill"
   },
   "selectType": {
     "message": "Pumili ng uri ng SSO"
@@ -4935,6 +5344,12 @@
   },
   "spValidateCertificates": {
     "message": "Patunayan ang mga sertipiko"
+  },
+  "spUniqueEntityId": {
+    "message": "Set a unique SP entity ID"
+  },
+  "spUniqueEntityIdDesc": {
+    "message": "Generate an identifier that is unique to your organization"
   },
   "idpEntityId": {
     "message": "Entity ID"
@@ -5135,16 +5550,13 @@
     "message": "Gamitin ang mga",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
-    "message": "Nangangailangan ng patakaran sa pagpapatunay ng single sign on",
+  "ssoPolicyHelpAnchor": {
+    "message": "require single sign-on authentication policy",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "para ma require lahat ng members na mag log in sa SSO.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
-  },
-  "ssoPolicyHelpKeyConnector": {
-    "message": "Ang kinakailangang pagpapatunay ng SSO at mga patakaran sa solong organisasyon ay kinakailangan upang i set up ang decryption ng Key Connector."
   },
   "memberDecryptionOption": {
     "message": "Mga pagpipilian sa decryption ng miyembro"
@@ -5155,8 +5567,17 @@
   "keyConnector": {
     "message": "Key Connector"
   },
-  "memberDecryptionKeyConnectorDesc": {
-    "message": "Ikonekta ang pag login sa SSO sa iyong self host na decryption key server. Gamit ang pagpipiliang ito, hindi na kailangang gamitin ng mga miyembro ang kanilang mga master password upang i decrypt ang data ng vault. Makipag ugnay sa Bitwarden Support para sa set up na tulong."
+  "memberDecryptionKeyConnectorDescStart": {
+    "message": "Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescLink": {
+    "message": "require SSO authentication and single organization policies",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescEnd": {
+    "message": "are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
     "message": "\"Pag login sa SSO at Key Connector Decryption\" ay isinaaktibo. Ang patakaran na ito ay ilalapat lamang sa mga may ari at admin."
@@ -5239,6 +5660,39 @@
   "rotateBillingSyncTokenTitle": {
     "message": "Ang pag ikot ng token ng pag sync ng pagsingil ay magpapawalang bisa sa nakaraang token."
   },
+  "selfHostedServer": {
+    "message": "self-hosted"
+  },
+  "customEnvironment": {
+    "message": "Custom environment"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
+  },
+  "apiUrl": {
+    "message": "API server URL"
+  },
+  "webVaultUrl": {
+    "message": "Web vault server URL"
+  },
+  "identityUrl": {
+    "message": "Identity server URL"
+  },
+  "notificationsUrl": {
+    "message": "Notifications server URL"
+  },
+  "iconsUrl": {
+    "message": "Icons server URL"
+  },
+  "environmentSaved": {
+    "message": "Environment URLs saved"
+  },
   "selfHostingTitle": {
     "message": "Pag host sa sarili"
   },
@@ -5299,6 +5753,19 @@
   "required": {
     "message": "kailangan"
   },
+  "charactersCurrentAndMaximum": {
+    "message": "$CURRENT$/$MAX$ character maximum",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "max": {
+        "content": "$2",
+        "example": "100"
+      }
+    }
+  },
   "characterMaximum": {
     "message": "$MAX$ character maximum",
     "placeholders": {
@@ -5329,8 +5796,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "Pag-export ng vault ng organisasyon"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Lamang ang mga item ng indibidwal na vault na nauugnay sa $EMAIL$ ang maie-export. Hindi kasama ang mga item ng vault ng organisasyon.",
+  "exportingIndividualVaultDescription": {
+    "message": "Only the individual vault items associated with $EMAIL$ will be exported. Organization vault items will not be included. Only vault item information will be exported and will not include associated attachments.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5338,8 +5805,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
-    "message": "Tanging ang vault ng organisasyon na nauugnay sa $ORGANIZATION$ ang i-export. Hindi isasama ang mga indibidwal na vault item at item mula sa ibang mga organisasyon.",
+  "exportingOrganizationVaultDesc": {
+    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -5371,6 +5838,15 @@
   "currentOrganization": {
     "message": "Kasalukuyang organisasyon",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
+  },
+  "accountLoggedInAsName": {
+    "message": "Account: Logged in as $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
   },
   "accountSettings": {
     "message": "Mga setting ng account"
@@ -5451,7 +5927,7 @@
   },
   "lastSync": {
     "message": "Huling sinkronisasyon:",
-    "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
+    "description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
     "message": "Ang mga self host na sponsorship ay naka sync."
@@ -5474,6 +5950,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Bumuo ng isang email alias na may isang panlabas na serbisyo sa pagpapasa."
+  },
+  "forwarderError": {
+    "message": "$SERVICENAME$ error: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Website: $WEBSITE$. Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Invalid $SERVICENAME$ API token",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Invalid $SERVICENAME$ domain.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Invalid $SERVICENAME$ url.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Unknown $SERVICENAME$ error occurred.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Pangalan ng Hostname",
@@ -5593,6 +6171,24 @@
       }
     }
   },
+  "inputMinValue": {
+    "message": "Input value must be at least $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "Input value must not exceed $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
+  },
   "multipleInputEmails": {
     "message": "1 o higit pang mga email ay hindi wasto"
   },
@@ -5614,20 +6210,29 @@
       }
     }
   },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "Launch Duo and follow the steps to finish logging in."
+  },
+  "duoRequiredByOrgForAccount": {
+    "message": "Duo two-step login is required for your account."
+  },
+  "launchDuo": {
+    "message": "Launch Duo"
+  },
   "turnOn": {
     "message": "Buksan ang"
   },
   "on": {
     "message": "I-on"
   },
+  "off": {
+    "message": "Off"
+  },
   "members": {
     "message": "Mga Miyembro"
   },
   "reporting": {
     "message": "Pag-uulat"
-  },
-  "cardBrandMir": {
-    "message": "Mir"
   },
   "numberOfUsers": {
     "message": "Bilang ng mga gumagamit"
@@ -5866,7 +6471,7 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "Na-delete na ang service account"
+    "message": "Service account deleted"
   },
   "deleteServiceAccountsToast": {
     "message": "Na-delete na ang mga service accounts"
@@ -6027,8 +6632,8 @@
     "message": "Mga token ng access",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "Lumikha ng access token",
+  "newAccessToken": {
+    "message": "New access token",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6075,10 +6680,6 @@
     "message": "Access token na nilikha at kinopya sa clipboard",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "Ang pamamahala ng mga pahintulot ay hindi magagamit para sa beta.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "Bawiin ang access token",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
@@ -6092,6 +6693,10 @@
   "accessTokenRevoked": {
     "message": "Na-revoke ang mga access token",
     "description": "Toast message after deleting one or multiple access tokens."
+  },
+  "noAccessTokenSelected": {
+    "message": "No access token selected to revoke",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
   },
   "submenu": {
     "message": "Submenu"
@@ -6126,11 +6731,8 @@
   "editGroupCollectionsDesc": {
     "message": "Magbigay ng access sa mga koleksyon sa pamamagitan ng pagdaragdag ng mga ito sa grupong ito."
   },
-  "accessAllCollectionsDesc": {
-    "message": "Magbigay ng access sa lahat ng kasalukuyan at hinaharap na mga koleksyon."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "Kung titingnan, papalitan nito ang lahat ng iba pang mga pahintulot sa koleksyon."
+  "restrictedCollectionAssignmentDesc": {
+    "message": "You can only assign collections you manage."
   },
   "selectMembers": {
     "message": "Pumili ng mga miyembro"
@@ -6173,12 +6775,6 @@
   },
   "group": {
     "message": "Grupo"
-  },
-  "groupAccessAll": {
-    "message": "Maaaring ma-access at baguhin ng grupong ito ang lahat ng item."
-  },
-  "memberAccessAll": {
-    "message": "Maaaring ma-access at baguhin ng miyembrong ito ang lahat ng item."
   },
   "domainVerification": {
     "message": "Pagpapatunay ng domain"
@@ -6312,11 +6908,44 @@
       }
     }
   },
-  "membersColumnHeader": {
-    "message": "Miyembro/Grupo"
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "Verification required for this action. Set a PIN to continue."
   },
-  "groupAndMemberColumnHeader": {
-    "message": "Miyembro"
+  "setPin": {
+    "message": "Set PIN"
+  },
+  "verifyWithBiometrics": {
+    "message": "Verify with biometrics"
+  },
+  "awaitingConfirmation": {
+    "message": "Awaiting confirmation"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "Could not complete biometrics."
+  },
+  "needADifferentMethod": {
+    "message": "Need a different method?"
+  },
+  "useMasterPassword": {
+    "message": "Use master password"
+  },
+  "usePin": {
+    "message": "Use PIN"
+  },
+  "useBiometrics": {
+    "message": "Use biometrics"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "Enter the verification code that was sent to your email."
+  },
+  "resendCode": {
+    "message": "Resend code"
+  },
+  "memberColumnHeader": {
+    "message": "Member"
+  },
+  "groupSlashMemberColumnHeader": {
+    "message": "Group/Member"
   },
   "selectGroupsAndMembers": {
     "message": "Pumili ng mga grupo at miyembro"
@@ -6324,8 +6953,8 @@
   "selectGroups": {
     "message": "Pumili ng mga grupo"
   },
-  "userPermissionOverrideHelper": {
-    "message": "Ang mga pahintulot na itinakda para sa isang miyembro ay papalitan ang mga pahintulot na itinakda ng grupo ng miyembrong iyon"
+  "userPermissionOverrideHelperDesc": {
+    "message": "Permissions set for a member will replace permissions set by that member's group."
   },
   "noMembersOrGroupsAdded": {
     "message": "Walang idinagdag na mga miyembro o grupo"
@@ -6366,6 +6995,24 @@
       "seatcount": {
         "content": "$1",
         "example": "2"
+      }
+    }
+  },
+  "teamsStarterPlanInvLimitReachedManageBilling": {
+    "message": "Teams Starter plans may have up to $SEATCOUNT$ members. Upgrade to your plan to invite more members.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
+  "teamsStarterPlanInvLimitReachedNoManageBilling": {
+    "message": "Teams Starter plans may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade your plan and invite more members.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "10"
       }
     }
   },
@@ -6444,6 +7091,18 @@
   "billingSyncHelp": {
     "message": "Tulong sa Pagsingil Sync"
   },
+  "licensePaidFeaturesHelp": {
+    "message": "License paid features help"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "After your subscription expires, you have 60 days to apply an updated license file to your organization. Grace period ends $GRACE_PERIOD_END_DATE$.",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
+  },
   "uploadLicense": {
     "message": "Mag-upload ng lisensya"
   },
@@ -6483,23 +7142,20 @@
   "lowKdfIterations": {
     "message": "Mababang KDF Iterations"
   },
-  "lowKdfIterationsDesc": {
-    "message": "Dagdagan ang iyong mga setting ng pag encrypt ng KDF upang mapabuti ang seguridad ng iyong account."
+  "updateLowKdfIterationsDesc": {
+    "message": "Update your encryption settings to meet new security recommendations and improve account protection."
   },
-  "changeKdfSettings": {
-    "message": "Baguhin ang mga setting ng KDF"
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login, if any. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "Ang proceeding ay mag-log out sa iyong kasalukuyang session, na nangangailangan na mag-log in muli. Ang mga aktibong sesyon sa iba pang mga aparato ay maaaring patuloy na manatiling aktibo hanggang sa isang oras. Inirerekumenda namin ang pag export ng iyong vault bago baguhin ang iyong mga setting ng pag encrypt upang maiwasan ang pagkawala ng data."
+  "secretsManager": {
+    "message": "Secrets Manager"
   },
-  "secretsManagerBeta": {
-    "message": "Secrets Manager Beta"
+  "secretsManagerAccessDescription": {
+    "message": "Activate user access to Secrets Manager."
   },
-  "secretsManagerBetaDesc": {
-    "message": "Paganahin ang pag access ng gumagamit sa Secrets Manager nang walang bayad sa panahon ng programa ng Beta."
-  },
-  "userAccessSecretsManager": {
-    "message": "Maaaring ma access ng gumagamit na ito ang Secrets Manager Beta"
+  "userAccessSecretsManagerGA": {
+    "message": "This user can access Secrets Manager"
   },
   "important": {
     "message": "Mahalaga:"
@@ -6541,6 +7197,9 @@
   "sdk": {
     "message": "SDK",
     "description": "Software Development Kit"
+  },
+  "createAnAccount": {
+    "message": "Create an account"
   },
   "createSecret": {
     "message": "Lumikha ng lihim"
@@ -6598,12 +7257,6 @@
   "selectionIsRequired": {
     "message": "Kinakailangan ang pagpili."
   },
-  "secretsManagerSubscriptionDesc": {
-    "message": "I-on ang access sa Organisasyon sa Secrets Manager nang walang bayad sa loob ng Beta program. Mga user ay maaaring granted access sa Beta sa Members."
-  },
-  "secretsManagerEnable": {
-    "message": "Paganahin ang Secrets Manager Beta"
-  },
   "saPeopleWarningTitle": {
     "message": "Mga access tokens pa rin ang magagamit"
   },
@@ -6658,7 +7311,1252 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "Input must not contain only whitespace.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
     "message": "Dismiss"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "This feature is not available for free organizations. Contact your organization owner to upgrade."
+  },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "Contact your organization's admin to manage secrets for this project.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
+  "enforceOnLoginDesc": {
+    "message": "Require existing members to change their passwords"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "You don't have permissions to delete this project",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "The following projects can not be deleted. Would you like to continue?",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "Update KDF settings"
+  },
+  "loginInitiated": {
+    "message": "Login initiated"
+  },
+  "deviceApprovalRequired": {
+    "message": "Device approval required. Select an approval option below:"
+  },
+  "rememberThisDevice": {
+    "message": "Remember this device"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "Uncheck if using a public device"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "Approve from your other device"
+  },
+  "requestAdminApproval": {
+    "message": "Request admin approval"
+  },
+  "approveWithMasterPassword": {
+    "message": "Approve with master password"
+  },
+  "trustedDeviceEncryption": {
+    "message": "Trusted device encryption"
+  },
+  "trustedDevices": {
+    "message": "Trusted devices"
+  },
+  "memberDecryptionOptionTdeDescriptionPartOne": {
+    "message": "Once authenticated, members will decrypt vault data using a key stored on their device. The",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO Required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkOne": {
+    "message": "single organization",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartTwo": {
+    "message": "policy,",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkTwo": {
+    "message": "SSO required",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartThree": {
+    "message": "policy, and",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkThree": {
+    "message": "account recovery administration",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartFour": {
+    "message": "policy with automatic enrollment will turn on when this option is used.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "Your organization permissions were updated, requiring you to set a master password.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "Your organization requires you to set a master password.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ not found",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
+  },
+  "verificationRequired": {
+    "message": "Verification required",
+    "description": "Default title for the user verification dialog."
+  },
+  "recoverAccount": {
+    "message": "Recover account"
+  },
+  "updatedTempPassword": {
+    "message": "User updated a password issued through account recovery."
+  },
+  "activatedAccessToSecretsManager": {
+    "message": "Activated access to Secrets Manager",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "activateAccess": {
+    "message": "Activate access"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "Grant the following members access to Secrets Manager. The role granted in the Password Manager will apply to Secrets Manager.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "activateSecretsManager": {
+    "message": "Activate Secrets Manager"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "Your organization's fingerprint phrase",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "Device approvals"
+  },
+  "deviceApprovalsDesc": {
+    "message": "Approve login requests below to allow the requesting member to finish logging in. Unapproved requests expire after 1 week. Verify the member’s information before approving."
+  },
+  "deviceInfo": {
+    "message": "Device info"
+  },
+  "time": {
+    "message": "Time"
+  },
+  "denyAllRequests": {
+    "message": "Deny all requests"
+  },
+  "denyRequest": {
+    "message": "Deny request"
+  },
+  "approveRequest": {
+    "message": "Approve request"
+  },
+  "noDeviceRequests": {
+    "message": "No device requests"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "Member device approval requests will appear here"
+  },
+  "loginRequestDenied": {
+    "message": "Login request denied"
+  },
+  "allLoginRequestsDenied": {
+    "message": "All login requests denied"
+  },
+  "loginRequestApproved": {
+    "message": "Login request approved"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "Account does not have master password"
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "Removing $USER$ without setting a master password for them may restrict access to their full account. Are you sure you want to continue?",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "No master password"
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "Removing members who do not have master passwords without setting one for them may restrict access to their full account."
+  },
+  "approvedAuthRequest": {
+    "message": "Approved device for $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "rejectedAuthRequest": {
+    "message": "Denied device for $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "requestedDeviceApproval": {
+    "message": "Requested device approval."
+  },
+  "startYour7DayFreeTrialOfBitwardenFor": {
+    "message": "Start your 7-Day free trial of Bitwarden for $ORG$",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerFor": {
+    "message": "Start your 7-Day free trial of Bitwarden Secrets Manager for $ORG$",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "next": {
+    "message": "Next"
+  },
+  "ssoLoginIsRequired": {
+    "message": "SSO login is required"
+  },
+  "selectedRegionFlag": {
+    "message": "Selected region flag"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "Account successfully created!"
+  },
+  "adminApprovalRequested": {
+    "message": "Admin approval requested"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "Your request has been sent to your admin."
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "You will be notified once approved."
+  },
+  "troubleLoggingIn": {
+    "message": "Trouble logging in?"
+  },
+  "loginApproved": {
+    "message": "Login approved"
+  },
+  "userEmailMissing": {
+    "message": "User email missing"
+  },
+  "deviceTrusted": {
+    "message": "Device trusted"
+  },
+  "sendsNoItemsTitle": {
+    "message": "No active Sends",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "Use Send to securely share encrypted information with anyone.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "Invite Users"
+  },
+  "secretsManagerForPlan": {
+    "message": "Secrets Manager for $PLAN$",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "For engineering and DevOps teams to manage secrets throughout the software development lifecycle."
+  },
+  "free2PersonOrganization": {
+    "message": "Free 2-person Organizations"
+  },
+  "unlimitedSecrets": {
+    "message": "Unlimited secrets"
+  },
+  "unlimitedProjects": {
+    "message": "Unlimited projects"
+  },
+  "projectsIncluded": {
+    "message": "$COUNT$ projects included",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "$COUNT$ service accounts included",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "$COST$ per month for additional service accounts",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "subscribeToSecretsManager": {
+    "message": "Subscribe to Secrets Manager"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "Add Secrets Manager to your upgraded plan to maintain access to any secrets created with your previous plan."
+  },
+  "additionalServiceAccounts": {
+    "message": "Additional service accounts"
+  },
+  "includedServiceAccounts": {
+    "message": "Your plan comes with $COUNT$ service accounts.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "You can add additional service accounts for $COST$ per month.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "collectionManagement": {
+    "message": "Collection management"
+  },
+  "collectionManagementDesc": {
+    "message": "Manage the collection behavior for the organization"
+  },
+  "limitCollectionCreationDeletionDesc": {
+    "message": "Limit collection creation and deletion to owners and admins"
+  },
+  "allowAdminAccessToAllCollectionItemsDesc": {
+    "message": "Owners and admins can manage all collections and items"
+  },
+  "updatedCollectionManagement": {
+    "message": "Updated collection management setting"
+  },
+  "passwordManagerPlanPrice": {
+    "message": "Password Manager plan price"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "Secrets Manager plan price"
+  },
+  "passwordManager": {
+    "message": "Password Manager"
+  },
+  "freeOrganization": {
+    "message": "Free Organization"
+  },
+  "limitServiceAccounts": {
+    "message": "Limit service accounts (optional)"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "Set a limit for your service accounts. Once this limit is reached, you will not be able to create new service accounts."
+  },
+  "serviceAccountLimit": {
+    "message": "Service account limit (optional)"
+  },
+  "maxServiceAccountCost": {
+    "message": "Max potential service account cost"
+  },
+  "loggedInExclamation": {
+    "message": "Logged in!"
+  },
+  "beta": {
+    "message": "Beta"
+  },
+  "assignCollectionAccess": {
+    "message": "Assign collection access"
+  },
+  "editedCollections": {
+    "message": "Edited collections"
+  },
+  "baseUrl": {
+    "message": "Server URL"
+  },
+  "aliasDomain": {
+    "message": "Alias domain"
+  },
+  "alreadyHaveAccount": {
+    "message": "Already have an account?"
+  },
+  "toggleSideNavigation": {
+    "message": "Toggle side navigation"
+  },
+  "skipToContent": {
+    "message": "Skip to content"
+  },
+  "managePermissionRequired": {
+    "message": "At least one member or group must have can manage permission."
+  },
+  "typePasskey": {
+    "message": "Passkey"
+  },
+  "passkeyNotCopied": {
+    "message": "Passkey will not be copied"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "The passkey will not be copied to the cloned item. Do you want to continue cloning this item?"
+  },
+  "modifiedCollectionManagement": {
+    "message": "Modified collection management setting $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
+  },
+  "seeDetailedInstructions": {
+    "message": "See detailed instructions on our help site at",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "installBrowserExtension": {
+    "message": "Install browser extension"
+  },
+  "installBrowserExtensionDetails": {
+    "message": "Use the extension to quickly save logins and auto-fill forms without opening the web app."
+  },
+  "projectAccessUpdated": {
+    "message": "Project access updated"
+  },
+  "unexpectedErrorSend": {
+    "message": "An unexpected error has occurred while loading this Send. Try again later."
+  },
+  "seatLimitReached": {
+    "message": "Seat limit has been reached"
+  },
+  "contactYourProvider": {
+    "message": "Contact your provider to purchase additional seats."
+  },
+  "seatLimitReachedContactYourProvider": {
+    "message": "Seat limit has been reached. Contact your provider to purchase additional seats."
+  },
+  "collectionAccessRestricted": {
+    "message": "Collection access is restricted"
+  },
+  "readOnlyCollectionAccess": {
+    "message": "You do not have access to manage this collection."
+  },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "Missing Can Manage Permissions"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Grant Can manage permissions to allow full collection management including deletion of collection."
+  },
+  "grantCollectionAccess": {
+    "message": "Grant groups or members access to this collection."
+  },
+  "grantCollectionAccessMembersOnly": {
+    "message": "Grant members access to this collection."
+  },
+  "adminCollectionAccess": {
+    "message": "Administrators can access and manage collections."
+  },
+  "serviceAccountAccessUpdated": {
+    "message": "Service account access updated"
+  },
+  "commonImportFormats": {
+    "message": "Common formats",
+    "description": "Label indicating the most common import formats"
+  },
+  "maintainYourSubscription": {
+    "message": "To maintain your subscription for $ORG$, ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Example Inc."
+      }
+    }
+  },
+  "addAPaymentMethod": {
+    "message": "add a payment method",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
+  },
+  "organizationInformation": {
+    "message": "Organization information"
+  },
+  "confirmationDetails": {
+    "message": "Confirmation details"
+  },
+  "smFreeTrialThankYou": {
+    "message": "Thank you for signing up for Bitwarden Secrets Manager!"
+  },
+  "smFreeTrialConfirmationEmail": {
+    "message": "We've sent a confirmation email to your email at "
+  },
+  "sorryToSeeYouGo": {
+    "message": "Sorry to see you go! Help improve Bitwarden by sharing why you're canceling.",
+    "description": "A message shown to users as part of an offboarding survey asking them to provide more information on their subscription cancelation."
+  },
+  "selectCancellationReason": {
+    "message": "Select a reason for canceling",
+    "description": "Used as a form field label for a select input on the offboarding survey."
+  },
+  "anyOtherFeedback": {
+    "message": "Is there any other feedback you'd like to share?",
+    "description": "Used as a form field label for a textarea input on the offboarding survey."
+  },
+  "missingFeatures": {
+    "message": "Missing features",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "movingToAnotherTool": {
+    "message": "Moving to another tool",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "tooDifficultToUse": {
+    "message": "Too difficult to use",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "notUsingEnough": {
+    "message": "Not using enough",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "tooExpensive": {
+    "message": "Too expensive",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "freeForOneYear": {
+    "message": "Free for 1 year"
+  },
+  "newWebApp": {
+    "message": "Welcome to the new and improved web app. Learn more about what’s changed."
+  },
+  "releaseBlog": {
+    "message": "Read release blog"
+  },
+  "adminConsole": {
+    "message": "Admin Console"
+  },
+  "providerPortal": {
+    "message": "Provider Portal"
+  },
+  "success": {
+    "message": "Success"
+  },
+  "restrictedGroupAccess": {
+    "message": "You cannot add yourself to groups."
+  },
+  "cannotAddYourselfToCollections": {
+    "message": "You cannot add yourself to collections."
+  },
+  "assign": {
+    "message": "Assign"
+  },
+  "assignToCollections": {
+    "message": "Assign to collections"
+  },
+  "assignToTheseCollections": {
+    "message": "Assign to these collections"
+  },
+  "bulkCollectionAssignmentDialogDescription": {
+    "message": "Only organization members with access to these collections will be able to see the items."
+  },
+  "selectCollectionsToAssign": {
+    "message": "Select collections to assign"
+  },
+  "noCollectionsAssigned": {
+    "message": "No collections have been assigned"
+  },
+  "successfullyAssignedCollections": {
+    "message": "Successfully assigned collections"
+  },
+  "bulkCollectionAssignmentWarning": {
+    "message": "You have selected $TOTAL_COUNT$ items. You cannot update $READONLY_COUNT$ of the items because you do not have edit permissions.",
+    "placeholders": {
+      "total_count": {
+        "content": "$1",
+        "example": "10"
+      },
+      "readonly_count": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "items": {
+    "message": "Items"
+  },
+  "assignedSeats": {
+    "message": "Assigned seats"
+  },
+  "assigned": {
+    "message": "Assigned"
+  },
+  "used": {
+    "message": "Used"
+  },
+  "remaining": {
+    "message": "Remaining"
+  },
+  "unlinkOrganization": {
+    "message": "Unlink organization"
+  },
+  "manageSeats": {
+    "message": "MANAGE SEATS"
+  },
+  "manageSeatsDescription": {
+    "message": "Adjustments to seats will be reflected in the next billing cycle."
+  },
+  "unassignedSeatsDescription": {
+    "message": "Unassigned seats"
+  },
+  "purchaseSeatDescription": {
+    "message": "Additional seats purchased"
+  },
+  "assignedSeatCannotUpdate": {
+    "message": "Assigned Seats can not be updated. Please contact your organization owner for assistance."
+  },
+  "subscriptionUpdateFailed": {
+    "message": "Subscription update failed"
+  },
+  "trial": {
+    "message": "Trial",
+    "description": "A subscription status label."
+  },
+  "pastDue": {
+    "message": "Past due",
+    "description": "A subscription status label"
+  },
+  "subscriptionExpired": {
+    "message": "Subscription expired",
+    "description": "The date header used when a subscription is past due."
+  },
+  "pastDueWarningForChargeAutomatically": {
+    "message": "You have a grace period of $DAYS$ days from your subscription expiration date to maintain your subscription. Please resolve the past due invoices by $SUSPENSION_DATE$.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "11"
+      },
+      "suspension_date": {
+        "content": "$2",
+        "example": "01/10/2024"
+      }
+    },
+    "description": "A warning shown to the user when their subscription is past due and they are charged automatically."
+  },
+  "pastDueWarningForSendInvoice": {
+    "message": "You have a grace period of $DAYS$ days from the date your first unpaid invoice is due to maintain your subscription. Please resolve the past due invoices by $SUSPENSION_DATE$.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "11"
+      },
+      "suspension_date": {
+        "content": "$2",
+        "example": "01/10/2024"
+      }
+    },
+    "description": "A warning shown to the user when their subscription is past due and they pay via invoice."
+  },
+  "unpaidInvoice": {
+    "message": "Unpaid invoice",
+    "description": "The header of a warning box shown to a user whose subscription is unpaid."
+  },
+  "toReactivateYourSubscription": {
+    "message": "To reactivate your subscription, please resolve the past due invoices.",
+    "description": "The body of a warning box shown to a user whose subscription is unpaid."
+  },
+  "cancellationDate": {
+    "message": "Cancellation date",
+    "description": "The date header used when a subscription is cancelled."
+  },
+  "machineAccountsCannotCreate": {
+    "message": "Machine accounts cannot be created in suspended organizations. Please contact your organization owner for assistance."
+  },
+  "machineAccount": {
+    "message": "Machine account",
+    "description": "A machine user which can be used to automate processes and access secrets in the system."
+  },
+  "machineAccounts": {
+    "message": "Machine accounts",
+    "description": "The title for the section that deals with machine accounts."
+  },
+  "newMachineAccount": {
+    "message": "New machine account",
+    "description": "Title for creating a new machine account."
+  },
+  "machineAccountsNoItemsMessage": {
+    "message": "Create a new machine account to get started automating secret access.",
+    "description": "Message to encourage the user to start creating machine accounts."
+  },
+  "machineAccountsNoItemsTitle": {
+    "message": "Nothing to show yet",
+    "description": "Title to indicate that there are no machine accounts to display."
+  },
+  "deleteMachineAccounts": {
+    "message": "Delete machine accounts",
+    "description": "Title for the action to delete one or multiple machine accounts."
+  },
+  "deleteMachineAccount": {
+    "message": "Delete machine account",
+    "description": "Title for the action to delete a single machine account."
+  },
+  "viewMachineAccount": {
+    "message": "View machine account",
+    "description": "Action to view the details of a machine account."
+  },
+  "deleteMachineAccountDialogMessage": {
+    "message": "Deleting machine account $MACHINE_ACCOUNT$ is permanent and irreversible.",
+    "placeholders": {
+      "machine_account": {
+        "content": "$1",
+        "example": "Machine account name"
+      }
+    }
+  },
+  "deleteMachineAccountsDialogMessage": {
+    "message": "Deleting machine accounts is permanent and irreversible."
+  },
+  "deleteMachineAccountsConfirmMessage": {
+    "message": "Delete $COUNT$ machine accounts",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteMachineAccountToast": {
+    "message": "Machine account deleted"
+  },
+  "deleteMachineAccountsToast": {
+    "message": "Machine accounts deleted"
+  },
+  "searchMachineAccounts": {
+    "message": "Search machine accounts",
+    "description": "Placeholder text for searching machine accounts."
+  },
+  "editMachineAccount": {
+    "message": "Edit machine account",
+    "description": "Title for editing a machine account."
+  },
+  "machineAccountName": {
+    "message": "Machine account name",
+    "description": "Label for the name of a machine account"
+  },
+  "machineAccountCreated": {
+    "message": "Machine account created",
+    "description": "Notifies that a new machine account has been created"
+  },
+  "machineAccountUpdated": {
+    "message": "Machine account updated",
+    "description": "Notifies that a machine account has been updated"
+  },
+  "projectMachineAccountsDescription": {
+    "message": "Grant machine accounts access to this project."
+  },
+  "projectMachineAccountsSelectHint": {
+    "message": "Type or select machine accounts"
+  },
+  "projectEmptyMachineAccountAccessPolicies": {
+    "message": "Add machine accounts to grant access"
+  },
+  "machineAccountPeopleDescription": {
+    "message": "Grant groups or people access to this machine account."
+  },
+  "machineAccountProjectsDescription": {
+    "message": "Assign projects to this machine account. "
+  },
+  "createMachineAccount": {
+    "message": "Create a machine account"
+  },
+  "maPeopleWarningMessage": {
+    "message": "Removing people from a machine account does not remove the access tokens they created. For security best practice, it is recommended to revoke access tokens created by people removed from a machine account."
+  },
+  "smAccessRemovalWarningMaTitle": {
+    "message": "Remove access to this machine account"
+  },
+  "smAccessRemovalWarningMaMessage": {
+    "message": "This action will remove your access to the machine account."
+  },
+  "machineAccountsIncluded": {
+    "message": "$COUNT$ machine accounts included",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalMachineAccountCost": {
+    "message": "$COST$ per month for additional machine accounts",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "additionalMachineAccounts": {
+    "message": "Additional machine accounts"
+  },
+  "includedMachineAccounts": {
+    "message": "Your plan comes with $COUNT$ machine accounts.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalMachineAccounts": {
+    "message": "You can add additional machine accounts for $COST$ per month.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "limitMachineAccounts": {
+    "message": "Limit machine accounts (optional)"
+  },
+  "limitMachineAccountsDesc": {
+    "message": "Set a limit for your machine accounts. Once this limit is reached, you will not be able to create new machine accounts."
+  },
+  "machineAccountLimit": {
+    "message": "Machine account limit (optional)"
+  },
+  "maxMachineAccountCost": {
+    "message": "Max potential machine account cost"
+  },
+  "machineAccountAccessUpdated": {
+    "message": "Machine account access updated"
+  },
+  "restrictedGroupAccessDesc": {
+    "message": "You cannot add yourself to a group."
+  },
+  "deleteProvider": {
+    "message": "Delete provider"
+  },
+  "deleteProviderConfirmation": {
+    "message": "Deleting a provider is permanent and irreversible. Enter your master password to confirm the deletion of the provider and all associated data."
+  },
+  "deleteProviderName": {
+    "message": "Cannot delete $ID$",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deleteProviderWarningDescription": {
+    "message": "You must unlink all clients before you can delete $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "providerDeleted": {
+    "message": "Provider deleted"
+  },
+  "providerDeletedDesc": {
+    "message": "The Provider and all associated data has been deleted."
+  },
+  "deleteProviderRecoverConfirmDesc": {
+    "message": "You have requested to delete this Provider. Use the button below to confirm."
+  },
+  "deleteProviderWarning": {
+    "message": "Deleting your provider is permanent. It cannot be undone."
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Error assigning target collection."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Error assigning target folder."
+  },
+  "integrationsAndSdks": {
+    "message": "Integrations & SDKs",
+    "description": "The title for the section that deals with integrations and SDKs."
+  },
+  "integrations": {
+    "message": "Integrations"
+  },
+  "integrationsDesc": {
+    "message": "Automatically sync secrets from Bitwarden Secrets Manager to a third-party service."
+  },
+  "sdks": {
+    "message": "SDKs"
+  },
+  "sdksDesc": {
+    "message": "Use Bitwarden Secrets Manager SDK in the following programming languages to build your own applications."
+  },
+  "setUpGithubActions": {
+    "message": "Set up Github Actions"
+  },
+  "setUpKubernetes": {
+    "message": "Set up Kubernetes"
+  },
+  "setUpGitlabCICD": {
+    "message": "Set up GitLab CI/CD"
+  },
+  "setUpAnsible": {
+    "message": "Set up Ansible"
+  },
+  "rustSDKRepo": {
+    "message": "View Rust repository"
+  },
+  "cSharpSDKRepo": {
+    "message": "View C# repository"
+  },
+  "cPlusPlusSDKRepo": {
+    "message": "View C++ repository"
+  },
+  "jsWebAssemblySDKRepo": {
+    "message": "View JS WebAssembly repository"
+  },
+  "javaSDKRepo": {
+    "message": "View Java repository"
+  },
+  "pythonSDKRepo": {
+    "message": "View Python repository"
+  },
+  "phpSDKRepo": {
+    "message": "View php repository"
+  },
+  "rubySDKRepo": {
+    "message": "View Ruby repository"
+  },
+  "goSDKRepo": {
+    "message": "View Go repository"
+  },
+  "createNewClientToManageAsProvider": {
+    "message": "Create a new client organization to manage as a Provider. Additional seats will be reflected in the next billing cycle."
+  },
+  "selectAPlan": {
+    "message": "Select a plan"
+  },
+  "thirtyFivePercentDiscount": {
+    "message": "35% Discount"
+  },
+  "monthPerMember": {
+    "message": "month per member"
+  },
+  "seats": {
+    "message": "Seats"
+  },
+  "addOrganization": {
+    "message": "Add organization"
+  },
+  "createdNewClient": {
+    "message": "Successfully created new client"
+  },
+  "noAccess": {
+    "message": "No access"
+  },
+  "collectionAdminConsoleManaged": {
+    "message": "This collection is only accessible from the admin console"
+  },
+  "organizationOptionsMenu": {
+    "message": "Toggle Organization Menu"
+  },
+  "vaultItemSelect": {
+    "message": "Select vault item"
+  },
+  "collectionItemSelect": {
+    "message": "Select collection item"
+  },
+  "manageBillingFromProviderPortalMessage": {
+    "message": "Manage billing from the Provider Portal"
+  },
+  "viewItemsIn": {
+    "message": "View items in $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Back to $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Back",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Remove $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "viewInfo": {
+    "message": "View info"
+  },
+  "viewAccess": {
+    "message": "View access"
+  },
+  "noCollectionsSelected": {
+    "message": "You have not selected any collections."
+  },
+  "updateName": {
+    "message": "Update name"
+  },
+  "updatedOrganizationName": {
+    "message": "Updated organization name"
+  },
+  "providerPlan": {
+    "message": "Managed Service Provider"
+  },
+  "orgSeats": {
+    "message": "Organization Seats"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$% Discount",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "lowKDFIterationsBanner": {
+    "message": "Low KDF iterations. Increase your iterations to improve the security of your account."
+  },
+  "changeKDFSettings": {
+    "message": "Change KDF settings"
+  },
+  "secureYourInfrastructure": {
+    "message": "Secure your infrastructure"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Protect your family or business"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Close security gaps with monitoring reports"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Stay ahead of security vulnerabilities by upgrading to a paid plan for enhanced monitoring."
+  },
+  "approveAllRequests": {
+    "message": "Approve all requests"
+  },
+  "allLoginRequestsApproved": {
+    "message": "All login requests approved"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Updated tax information"
+  },
+  "unverified": {
+    "message": "Unverified"
+  },
+  "verified": {
+    "message": "Verified"
+  },
+  "viewSecret": {
+    "message": "View secret"
+  },
+  "noClients": {
+    "message": "There are no clients to list"
+  },
+  "providerBillingEmailHint": {
+    "message": "This email address will receive all invoices pertaining to this provider",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
+  },
+  "upgradeOrganizationEnterprise": {
+    "message": "Identify security risks by auditing member access"
+  },
+  "onlyAvailableForEnterpriseOrganization": {
+    "message": "Quickly view member access across the organization by upgrading to an Enterprise plan."
+  },
+  "date": {
+    "message": "Date"
+  },
+  "exportClientReport": {
+    "message": "Export client report"
+  },
+  "memberAccessReport": {
+    "message": "Member access"
+  },
+  "memberAccessReportDesc": {
+    "message": "Ensure members have access to the right credentials and their accounts are secure. Use this report to obtain a CSV of member access and account configurations."
+  },
+  "memberAccessReportPageDesc": {
+    "message": "Audit organization member access across groups, collections, and collection items. The CSV export provides a detailed breakdown per member, including information on collection permissions and account configurations."
+  },
+  "higherKDFIterations": {
+    "message": "Higher KDF iterations can help protect your master password from being brute forced by an attacker."
+  },
+  "incrementsOf100,000": {
+    "message": "increments of 100,000"
+  },
+  "smallIncrements": {
+    "message": "small increments"
+  },
+  "kdfIterationRecommends": {
+    "message": "We recommend 600,000 or more"
+  },
+  "kdfToHighWarningIncreaseInIncrements": {
+    "message": "For older devices, setting your KDF too high may lead to performance issues. Increase the value in $VALUE$ and test your devices.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "increments of 100,000"
+      }
+    }
+  },
+  "providerReinstate": {
+    "message": " Contact Customer Support to reinstate your subscription."
+  },
+  "secretPeopleDescription": {
+    "message": "Grant groups or people access to this secret. Permissions set for people will override permissions set by groups."
+  },
+  "secretPeopleEmptyMessage": {
+    "message": "Add people or groups to share access to this secret"
+  },
+  "secretMachineAccountsDescription": {
+    "message": "Grant machine accounts access to this secret."
+  },
+  "secretMachineAccountsEmptyMessage": {
+    "message": "Add machine accounts to grant access to this secret"
+  },
+  "smAccessRemovalWarningSecretTitle": {
+    "message": "Remove access to this secret"
+  },
+  "smAccessRemovalSecretMessage": {
+    "message": "This action will remove your access to this secret."
+  },
+  "invoice": {
+    "message": "Invoice"
+  },
+  "unassignedSeatsAvailable": {
+    "message": "You have $SEATS$ unassigned seats available.",
+    "placeholders": {
+      "seats": {
+        "content": "$1",
+        "example": "10"
+      }
+    },
+    "description": "A message showing how many unassigned seats are available for a provider."
+  },
+  "contactYourProviderForAdditionalSeats": {
+    "message": "Contact your provider admin to purchase additional seats."
+  },
+  "open": {
+    "message": "Open",
+    "description": "The status of an invoice."
+  },
+  "uncollectible": {
+    "message": "Uncollectible",
+    "description": "The status of an invoice."
+  },
+  "clientDetails": {
+    "message": "Client details"
+  },
+  "downloadCSV": {
+    "message": "Download CSV"
+  },
+  "monthlySubscriptionUserSeatsMessage": {
+    "message": "Adjustments to your subscription will result in prorated charges to your billing totals on your next billing period. "
+  },
+  "annualSubscriptionUserSeatsMessage": {
+    "message": "Adjustments to your subscription will result in prorated charges on a monthly billing cycle. "
+  },
+  "billingHistoryDescription": {
+    "message": "Download a CSV to obtain client details for each billing date. Prorated charges are not included in the CSV and may vary from the linked invoice. For the most accurate billing details, refer to your monthly invoices.",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "noInvoicesToList": {
+    "message": "There are no invoices to list",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "providerClientVaultPrivacyNotification": {
+    "message": "Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions,",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'."
+  },
+  "contactBitwardenSupport": {
+    "message": "contact Bitwarden support.",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'. 'Bitwarden' should not be translated"
+  },
+  "sponsored": {
+    "message": "Sponsored"
+  },
+  "licenseAndBillingManagementDesc": {
+    "message": "After making updates in the Bitwarden cloud server, upload your license file to apply the most recent changes."
+  },
+  "addToFolder": {
+    "message": "Add to folder"
+  },
+  "selectFolder": {
+    "message": "Select folder"
+  },
+  "personalItemsTransferWarning": {
+    "message": "$PERSONAL_ITEMS_COUNT$ will be permanently transferred to the selected organization. You will no longer own these items.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2 items"
+      }
+    }
+  },
+  "personalItemsWithOrgTransferWarning": {
+    "message": "$PERSONAL_ITEMS_COUNT$ will be permanently transferred to $ORG$. You will no longer own these items.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2 items"
+      },
+      "org": {
+        "content": "$2",
+        "example": "Organization name"
+      }
+    }
   }
 }

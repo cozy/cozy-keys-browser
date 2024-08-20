@@ -8,10 +8,11 @@
 $ng-select-highlight: rgb(var(--color-primary-700)) !default;
 $ng-select-primary-text: rgb(var(--color-text-main)) !default;
 $ng-select-disabled-text: rgb(var(--color-secondary-100)) !default;
-$ng-select-border: rgb(var(--color-secondary-500)) !default;
+$ng-select-border: rgb(var(--color-secondary-600)) !default;
 $ng-select-border-radius: 4px !default;
 $ng-select-bg: rgb(var(--color-background-alt)) !default;
 $ng-select-selected: transparent !default;
+$ng-select-selected-alt: rgb(var(--color-text-main) / 0.06) !default;
 $ng-select-selected-text: $ng-select-primary-text !default;
 
 $ng-select-marked: rgb(var(--color-text-main) / 0.12) !default;
@@ -144,7 +145,7 @@ $ng-dropdown-shadow: rgb(var(--color-secondary-100)) !default;
     &.ng-select-disabled {
       > .ng-select-container .ng-value-container .ng-value {
         background-color: $ng-select-disabled-text;
-        border: 0px solid $ng-select-border; // Removing border on slected value when disabled
+        border: 0px solid $ng-select-border; // Removing border on selected value when disabled
         .ng-value-label {
           padding: 0 5px;
         }
@@ -258,6 +259,7 @@ $ng-dropdown-shadow: rgb(var(--color-secondary-100)) !default;
 }
 
 .ng-dropdown-panel {
+  z-index: 2050 !important;
   background-color: $ng-select-dropdown-bg;
   border: 1px solid $ng-select-dropdown-border;
   box-shadow: 0 1px 0 $ng-dropdown-shadow;
@@ -356,10 +358,15 @@ $ng-dropdown-shadow: rgb(var(--color-secondary-100)) !default;
       background-color: $ng-select-dropdown-option-bg;
       color: $ng-select-dropdown-option-text;
       padding: 8px 10px;
+      &.ng-option-selected {
+        background-color: $ng-select-selected-alt;
+      }
+      &.ng-option-selected.ng-option-marked {
+        background-color: $ng-select-marked;
+      }
       &.ng-option-selected,
       &.ng-option-selected.ng-option-marked {
         color: $ng-select-selected-text;
-        background-color: $ng-select-selected;
         .ng-option-label {
           font-weight: 600;
         }

@@ -19,11 +19,15 @@ jobs:
     - name: Setup Node
       uses: actions/setup-node@v3
       with:
-        node-version: '16.15.0'
+        node-version: '20.15.1'
         cache: 'npm'
 
+    - name: Install build dependencies
+      run : |
+        npm install -g node-pre-gyp jest
+
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --legacy-peer-deps
 
     - name: Dist Chrome
       run : |
@@ -34,6 +38,11 @@ jobs:
       run: |
         cd apps/browser
         npm run dist:firefox
+
+    - name: Dist Sources
+      run: |
+        cd apps/browser
+        npm run dist:sources
 
     - name: Upload Chrome artifact to GitHub
       uses: actions/upload-artifact@v3
@@ -48,3 +57,10 @@ jobs:
         name: Firefox
         path: |
           apps/browser/dist/dist-firefox.zip
+
+    - name: Upload Sources artifact to GitHub
+      uses: actions/upload-artifact@v3
+      with:
+        name: Sources
+        path: |
+          apps/browser/dist/cozy-keys-sources.zip

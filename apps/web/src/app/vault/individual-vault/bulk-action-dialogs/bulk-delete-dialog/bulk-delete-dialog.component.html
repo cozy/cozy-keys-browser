@@ -4,22 +4,22 @@
   </span>
   <span bitDialogContent>
     <ng-container *ngIf="!permanent">
-      <span *ngIf="cipherIds?.length">
-        {{ "deleteSelectedItemsDesc" | i18n: cipherIds.length }}
+      <span *ngIf="cipherIds?.length || unassignedCiphers?.length">
+        {{ "deleteSelectedItemsDesc" | i18n: cipherIds.length + unassignedCiphers.length }}
       </span>
-      <span *ngIf="collectionIds?.length">
-        {{ "deleteSelectedCollectionsDesc" | i18n: collectionIds.length }}
+      <span *ngIf="collections?.length">
+        {{ "deleteSelectedCollectionsDesc" | i18n: collections.length }}
       </span>
       {{ "deleteSelectedConfirmation" | i18n }}
     </ng-container>
     <ng-container *ngIf="permanent">
-      {{ "permanentlyDeleteSelectedItemsDesc" | i18n: cipherIds.length }}
+      {{ "permanentlyDeleteSelectedItemsDesc" | i18n: cipherIds.length + unassignedCiphers.length }}
     </ng-container>
   </span>
-  <div bitDialogFooter class="tw-flex tw-flex-row tw-gap-2">
+  <ng-container bitDialogFooter>
     <button bitButton type="submit" buttonType="danger" [bitAction]="submit">
       {{ (permanent ? "permanentlyDelete" : "delete") | i18n }}
     </button>
     <button bitButton type="button" (click)="cancel()">{{ "cancel" | i18n }}</button>
-  </div>
+  </ng-container>
 </bit-simple-dialog>

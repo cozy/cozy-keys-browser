@@ -1,11 +1,12 @@
-import { CardApi } from "../../../models/api/card.api";
-import { FieldApi } from "../../../models/api/field.api";
-import { IdentityApi } from "../../../models/api/identity.api";
-import { LoginUriApi } from "../../../models/api/login-uri.api";
-import { LoginApi } from "../../../models/api/login.api";
-import { SecureNoteApi } from "../../../models/api/secure-note.api";
 import { CipherRepromptType } from "../../enums/cipher-reprompt-type";
 import { CipherType } from "../../enums/cipher-type";
+import { CardApi } from "../api/card.api";
+import { Fido2CredentialApi } from "../api/fido2-credential.api";
+import { FieldApi } from "../api/field.api";
+import { IdentityApi } from "../api/identity.api";
+import { LoginUriApi } from "../api/login-uri.api";
+import { LoginApi } from "../api/login.api";
+import { SecureNoteApi } from "../api/secure-note.api";
 import { Cipher } from "../domain/cipher";
 
 import { AttachmentRequest } from "./attachment.request";
@@ -29,6 +30,7 @@ export class CipherRequest {
   attachments2: { [id: string]: AttachmentRequest };
   lastKnownRevisionDate: Date;
   reprompt: CipherRepromptType;
+  key: string;
 
   constructor(cipher: Cipher) {
     this.type = cipher.type;
@@ -39,11 +41,19 @@ export class CipherRequest {
     this.favorite = cipher.favorite;
     this.lastKnownRevisionDate = cipher.revisionDate;
     this.reprompt = cipher.reprompt;
+    this.key = cipher.key?.encryptedString;
 
     switch (this.type) {
       case CipherType.Login:
         this.login = new LoginApi();
-        this.login.uris = null;
+        this.login.uris =
+          cipher.login.uris?.map((u) => {
+            const uri = new LoginUriApi();
+            uri.uri = u.uri != null ? u.uri.encryptedString : null;
+            uri.match = u.match != null ? u.match : null;
+            uri.uriChecksum = u.uriChecksum != null ? u.uriChecksum.encryptedString : null;
+            return uri;
+          }) ?? [];
         this.login.username = cipher.login.username ? cipher.login.username.encryptedString : null;
         this.login.password = cipher.login.password ? cipher.login.password.encryptedString : null;
         this.login.passwordRevisionDate =
@@ -53,12 +63,29 @@ export class CipherRequest {
         this.login.totp = cipher.login.totp ? cipher.login.totp.encryptedString : null;
         this.login.autofillOnPageLoad = cipher.login.autofillOnPageLoad;
 
-        if (cipher.login.uris != null) {
-          this.login.uris = cipher.login.uris.map((u) => {
-            const uri = new LoginUriApi();
-            uri.uri = u.uri != null ? u.uri.encryptedString : null;
-            uri.match = u.match != null ? u.match : null;
-            return uri;
+        if (cipher.login.fido2Credentials != null) {
+          this.login.fido2Credentials = cipher.login.fido2Credentials.map((key) => {
+            const keyApi = new Fido2CredentialApi();
+            keyApi.credentialId =
+              key.credentialId != null ? key.credentialId.encryptedString : null;
+            keyApi.keyType =
+              key.keyType != null ? (key.keyType.encryptedString as "public-key") : null;
+            keyApi.keyAlgorithm =
+              key.keyAlgorithm != null ? (key.keyAlgorithm.encryptedString as "ECDSA") : null;
+            keyApi.keyCurve =
+              key.keyCurve != null ? (key.keyCurve.encryptedString as "P-256") : null;
+            keyApi.keyValue = key.keyValue != null ? key.keyValue.encryptedString : null;
+            keyApi.rpId = key.rpId != null ? key.rpId.encryptedString : null;
+            keyApi.rpName = key.rpName != null ? key.rpName.encryptedString : null;
+            keyApi.counter = key.counter != null ? key.counter.encryptedString : null;
+            keyApi.userHandle = key.userHandle != null ? key.userHandle.encryptedString : null;
+            keyApi.userName = key.userName != null ? key.userName.encryptedString : null;
+            keyApi.userDisplayName =
+              key.userDisplayName != null ? key.userDisplayName.encryptedString : null;
+            keyApi.discoverable =
+              key.discoverable != null ? key.discoverable.encryptedString : null;
+            keyApi.creationDate = key.creationDate != null ? key.creationDate.toISOString() : null;
+            return keyApi;
           });
         }
         break;

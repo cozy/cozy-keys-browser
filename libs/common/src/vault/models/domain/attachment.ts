@@ -1,9 +1,9 @@
 import { Jsonify } from "type-fest";
 
-import { Utils } from "../../../misc/utils";
-import Domain from "../../../models/domain/domain-base";
-import { EncString } from "../../../models/domain/enc-string";
-import { SymmetricCryptoKey } from "../../../models/domain/symmetric-crypto-key";
+import { Utils } from "../../../platform/misc/utils";
+import Domain from "../../../platform/models/domain/domain-base";
+import { EncString } from "../../../platform/models/domain/enc-string";
+import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
 import { AttachmentData } from "../data/attachment.data";
 import { AttachmentView } from "../view/attachment.view";
 
@@ -32,7 +32,7 @@ export class Attachment extends Domain {
         fileName: null,
         key: null,
       },
-      ["id", "url", "sizeName"]
+      ["id", "url", "sizeName"],
     );
   }
 
@@ -43,7 +43,7 @@ export class Attachment extends Domain {
         fileName: null,
       },
       orgId,
-      encKey
+      encKey,
     );
 
     if (this.key != null) {
@@ -71,7 +71,7 @@ export class Attachment extends Domain {
     const cryptoService = Utils.getContainerService().getCryptoService();
     return orgId != null
       ? await cryptoService.getOrgKey(orgId)
-      : await cryptoService.getKeyForUserEncryption();
+      : await cryptoService.getUserKeyWithLegacySupport();
   }
 
   toAttachmentData(): AttachmentData {
@@ -87,7 +87,7 @@ export class Attachment extends Domain {
         fileName: null,
         key: null,
       },
-      ["id", "url", "sizeName"]
+      ["id", "url", "sizeName"],
     );
     return a;
   }

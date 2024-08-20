@@ -1,13 +1,16 @@
-import { Component } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
 import { GeneratorComponent as BaseGeneratorComponent } from "@bitwarden/angular/tools/generator/components/generator.component";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
-import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { ToastService } from "@bitwarden/components";
+import {
+  PasswordGenerationServiceAbstraction,
+  UsernameGenerationServiceAbstraction,
+} from "@bitwarden/generator-legacy";
 
 @Component({
   selector: "app-generator",
@@ -17,21 +20,25 @@ export class GeneratorComponent extends BaseGeneratorComponent {
   constructor(
     passwordGenerationService: PasswordGenerationServiceAbstraction,
     usernameGenerationService: UsernameGenerationServiceAbstraction,
-    stateService: StateService,
+    accountService: AccountService,
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService,
     route: ActivatedRoute,
-    logService: LogService
+    ngZone: NgZone,
+    logService: LogService,
+    toastService: ToastService,
   ) {
     super(
       passwordGenerationService,
       usernameGenerationService,
       platformUtilsService,
-      stateService,
+      accountService,
       i18nService,
       logService,
       route,
-      window
+      ngZone,
+      window,
+      toastService,
     );
   }
 

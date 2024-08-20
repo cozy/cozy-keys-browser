@@ -1,6 +1,7 @@
-import LockedVaultPendingNotificationsItem from "../../background/models/lockedVaultPendingNotificationsItem";
-import { BrowserApi } from "../../browser/browserApi";
+import { BrowserApi } from "../../platform/browser/browser-api";
 import { ContextMenuClickedHandler } from "../browser/context-menu-clicked-handler";
+
+import { LockedVaultPendingNotificationsData } from "./abstractions/notification.background";
 
 export default class ContextMenusBackground {
   private contextMenus: typeof chrome.contextMenus;
@@ -15,23 +16,30 @@ export default class ContextMenusBackground {
     }
 
     this.contextMenus.onClicked.addListener((info, tab) =>
-      this.contextMenuClickedHandler.run(info, tab)
+      this.contextMenuClickedHandler.run(info, tab),
     );
 
     BrowserApi.messageListener(
       "contextmenus.background",
-      async (
-        msg: { command: string; data: LockedVaultPendingNotificationsItem },
+      (
+        msg: { command: string; data: LockedVaultPendingNotificationsData },
         sender: chrome.runtime.MessageSender,
-        sendResponse: any
       ) => {
         if (msg.command === "unlockCompleted" && msg.data.target === "contextmenus.background") {
-          await this.contextMenuClickedHandler.cipherAction(
-            msg.data.commandToRetry.msg.data,
-            msg.data.commandToRetry.sender.tab
-          );
+          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          this.contextMenuClickedHandler
+            .cipherAction(
+              msg.data.commandToRetry.message.contextMenuOnClickData,
+              msg.data.commandToRetry.sender.tab,
+            )
+            .then(() => {
+              // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+              // eslint-disable-next-line @typescript-eslint/no-floating-promises
+              BrowserApi.tabSendMessageData(sender.tab, "closeNotificationBar");
+            });
         }
-      }
+      },
     );
   }
 }

@@ -87,3 +87,57 @@
   src: url(webfonts/Open_Sans-normal-800.woff) format("woff");
   unicode-range: U+0-10FFFF;
 }
+
+@font-face {
+  font-family: "Lato";
+  font-style: italic;
+  font-weight: 300;
+  font-display: auto;
+  src: url(webfonts/Lato-italic-300.woff) format("woff");
+  unicode-range: U+0-10FFFF;
+}
+
+@font-face {
+  font-family: "Lato";
+  font-style: italic;
+  font-weight: 400;
+  font-display: auto;
+  src: url(webfonts/Lato-italic-400.woff) format("woff");
+  unicode-range: U+0-10FFFF;
+}
+
+@font-face {
+  font-family: "Lato";
+  font-style: italic;
+  font-weight: 700;
+  font-display: auto;
+  src: url(webfonts/Lato-italic-700.woff) format("woff");
+  unicode-range: U+0-10FFFF;
+}
+
+@font-face {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 300;
+  font-display: auto;
+  src: url(webfonts/Lato-normal-300.woff) format("woff");
+  unicode-range: U+0-10FFFF;
+}
+
+@font-face {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+  src: url(webfonts/Lato-normal-400.woff) format("woff");
+  unicode-range: U+0-10FFFF;
+}
+
+@font-face {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 700;
+  font-display: auto;
+  src: url(webfonts/Lato-normal-700.woff) format("woff");
+  unicode-range: U+0-10FFFF;
+}

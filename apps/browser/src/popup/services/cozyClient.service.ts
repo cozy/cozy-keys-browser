@@ -3,14 +3,16 @@
 import CozyClient, { HasMany, Q, QueryDefinition, generateWebLink } from "cozy-client";
 import flag from "cozy-flags";
 import { RealtimePlugin } from "cozy-realtime";
+import { firstValueFrom } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { SecureNoteType } from "@bitwarden/common/enums/secureNoteType";
-import { UriMatchType } from "@bitwarden/common/enums/uriMatchType";
+import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
+import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { SecureNoteType } from "@bitwarden/common/vault/enums";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CardView } from "@bitwarden/common/vault/models/view/card.view";
@@ -22,7 +24,6 @@ import { SecureNoteView } from "@bitwarden/common/vault/models/view/secure-note.
 
 import { RealTimeNotifications } from "../../cozy/realtime/RealtimeNotifications";
 import manifest from "../../manifest.json";
-import { BrowserStateService as StateService } from "../../services/abstractions/browser-state.service";
 
 interface QueryResult<T> {
   data: { attributes: T };
@@ -55,17 +56,26 @@ export class CozyClientService {
     protected apiService: ApiService,
     protected messagingService: MessagingService,
     protected cipherService: CipherService,
-    private stateService: StateService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private tokenService: TokenService,
   ) {
     this.flagChangedPointer = this.flagChanged.bind(this);
   }
 
   getCozyURL(): string {
-    const vaultUrl = this.environmentService.getWebVaultUrl();
+    if (!this.instance.stackClient.uri) {
+      return null;
+    }
+    return new URL(this.instance.stackClient.uri).origin;
+  }
+
+  async getCozyUrlAsync(): Promise<string> {
+    const env = await firstValueFrom(this.environmentService.environment$);
+    const vaultUrl = env.getWebVaultUrl();
     if (!vaultUrl) {
       return null;
     }
+
     return new URL(vaultUrl).origin; // Remove the /bitwarden part
   }
 
@@ -100,7 +110,7 @@ export class CozyClientService {
         const oauthToken = {
           tokenType: "bearer",
           accessToken: token,
-          refreshToken: await this.stateService.getRefreshToken(),
+          refreshToken: await this.tokenService.getRefreshToken(),
           scope: "*",
         };
 
@@ -118,13 +128,13 @@ export class CozyClientService {
       this.unregisterFlags();
       this.realTimeNotifications.unregister();
     }
-    const uri = this.getCozyURL();
+    const uri = await this.getCozyUrlAsync();
     const token = await this.apiService.getActiveBearerToken();
 
     const oauthToken = {
       tokenType: "bearer",
       accessToken: token,
-      refreshToken: await this.stateService.getRefreshToken(),
+      refreshToken: await this.tokenService.getRefreshToken(),
       scope: "*",
     };
 
@@ -166,7 +176,7 @@ export class CozyClientService {
       this.messagingService,
       this.cipherService,
       this.i18nService,
-      this.instance
+      this.instance,
     );
     this.realTimeNotifications.init();
 
@@ -242,7 +252,7 @@ export class CozyClientService {
   }
 
   async deleteOAuthClient() {
-    const { clientId, registrationAccessToken } = await this.stateService.getOauthTokens();
+    const { clientId, registrationAccessToken } = await this.tokenService.getCozyTokens();
     if (!clientId || !registrationAccessToken) {
       return;
     }
@@ -281,9 +291,9 @@ export class CozyClientService {
    * Returns true if appUrl points the currently connected cozy.
    * even if the appUrl points to a specific app (nested of flat urls)
    */
-  correspondsToConnectedCozyURL(appUrl: string): boolean {
+  async correspondsToConnectedCozyURL(appUrl: string): boolean {
     const appURL = new URL(appUrl);
-    const currentCozyURL = new URL(this.getCozyURL());
+    const currentCozyURL = new URL(await this.getCozyUrlAsync());
     if (this.subDomainType === "nested") {
       //remove first subdomain if there is one more than on the Cozy (would be an app nested domain)
       const currentCozyURLHosts = currentCozyURL.host.split(".");
@@ -325,7 +335,7 @@ export class CozyClientService {
     const ciphersUnfiltered = await this.cipherService.getAllDecryptedForUrl(
       uri,
       undefined,
-      UriMatchType.Domain
+      UriMatchStrategy.Domain,
     );
     const ciphers = [];
     for (const c of ciphersUnfiltered) {
@@ -334,7 +344,7 @@ export class CozyClientService {
       }
       // test that the cipher url realy matches the user's Cozy url
       for (const u of c.login.uris) {
-        if (this.correspondsToConnectedCozyURL(u.uri)) {
+        if (await this.correspondsToConnectedCozyURL(u.uri)) {
           ciphers.push(c);
           break;
         }

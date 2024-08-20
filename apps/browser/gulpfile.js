@@ -1,13 +1,11 @@
 const child = require("child_process");
 const fs = require("fs");
 
-const del = require("del");
+const { rimraf } = require("rimraf");
 const gulp = require("gulp");
-const filter = require("gulp-filter");
 const gulpif = require("gulp-if");
 const jeditor = require("gulp-json-editor");
 const replace = require("gulp-replace");
-const zip = require("gulp-zip");
 
 const manifest = require("./src/manifest.json");
 
@@ -32,10 +30,26 @@ const filters = {
   safari: ["!build/safari/**/*"],
 };
 
+/**
+ * Converts a number to a tuple containing two Uint16's
+ * @param num {number} This number is expected to be a integer style number with no decimals
+ *
+ * @returns {number[]} A tuple containing two elements that are both numbers.
+ */
+function numToUint16s(num) {
+  var arr = new ArrayBuffer(4);
+  var view = new DataView(arr);
+  view.setUint32(0, num, false);
+  return [view.getUint16(0), view.getUint16(2)];
+}
+
 function buildString() {
   var build = "";
   if (process.env.MANIFEST_VERSION) {
     build = `-mv${process.env.MANIFEST_VERSION}`;
+  }
+  if (process.env.BETA_BUILD === "1") {
+    build += "-beta";
   }
   if (process.env.BUILD_NUMBER && process.env.BUILD_NUMBER !== "") {
     build = `-${process.env.BUILD_NUMBER}`;
@@ -47,7 +61,10 @@ function distFileName(browserName, ext) {
   return `dist-${browserName}${buildString()}.${ext}`;
 }
 
-function dist(browserName, manifest) {
+async function dist(browserName, manifest) {
+  const { default: zip } = await import("gulp-zip");
+  const { default: filter } = await import("gulp-filter");
+
   return gulp
     .src(paths.build + "**/*")
     .pipe(filter(["**"].concat(filters.fonts).concat(filters.safari)))
@@ -60,6 +77,13 @@ function dist(browserName, manifest) {
 function distFirefox() {
   return dist("firefox", (manifest) => {
     delete manifest.storage;
+    delete manifest.sandbox;
+    manifest.optional_permissions = manifest.optional_permissions.filter(
+      (permission) => permission !== "privacy",
+    );
+    if (process.env.BETA_BUILD === "1") {
+      manifest = applyBetaLabels(manifest);
+    }
     return manifest;
   });
 }
@@ -67,6 +91,9 @@ function distFirefox() {
 function distOpera() {
   return dist("opera", (manifest) => {
     delete manifest.applications;
+    if (process.env.BETA_BUILD === "1") {
+      manifest = applyBetaLabels(manifest);
+    }
     return manifest;
   });
 }
@@ -76,6 +103,9 @@ function distChrome() {
     delete manifest.applications;
     delete manifest.sidebar_action;
     delete manifest.commands._execute_sidebar_action;
+    if (process.env.BETA_BUILD === "1") {
+      manifest = applyBetaLabels(manifest);
+    }
     return manifest;
   });
 }
@@ -85,6 +115,9 @@ function distEdge() {
     delete manifest.applications;
     delete manifest.sidebar_action;
     delete manifest.commands._execute_sidebar_action;
+    if (process.env.BETA_BUILD === "1") {
+      manifest = applyBetaLabels(manifest);
+    }
     return manifest;
   });
 }
@@ -129,7 +162,7 @@ function distSafariApp(cb, subBuildPath) {
     ];
   }
 
-  return del([buildPath + "**/*"])
+  return rimraf([buildPath + "**/*"], { glob: true })
     .then(() => safariCopyAssets(paths.safari + "**/*", buildPath))
     .then(() => safariCopyBuild(paths.build + "**/*", buildPath + "safari/app"))
     .then(() => {
@@ -144,7 +177,9 @@ function distSafariApp(cb, subBuildPath) {
       stdOutProc(proc);
       return new Promise((resolve) => proc.on("close", resolve));
     })
-    .then(() => {
+    .then(async () => {
+      const { default: filter } = await import("gulp-filter");
+
       const libs = fs
         .readdirSync(builtAppexFrameworkPath)
         .filter((p) => p.endsWith(".dylib"))
@@ -168,7 +203,7 @@ function distSafariApp(cb, subBuildPath) {
       },
       () => {
         return cb;
-      }
+      },
     );
 }
 
@@ -179,7 +214,7 @@ function safariCopyAssets(source, dest) {
       .on("error", reject)
       .pipe(gulpif("safari/Info.plist", replace("0.0.1", manifest.version)))
       .pipe(
-        gulpif("safari/Info.plist", replace("0.0.2", process.env.BUILD_NUMBER || manifest.version))
+        gulpif("safari/Info.plist", replace("0.0.2", process.env.BUILD_NUMBER || manifest.version)),
       )
       .pipe(gulpif("desktop.xcodeproj/project.pbxproj", replace("../../../build", "../safari/app")))
       .pipe(gulp.dest(dest))
@@ -187,7 +222,9 @@ function safariCopyAssets(source, dest) {
   });
 }
 
-function safariCopyBuild(source, dest) {
+async function safariCopyBuild(source, dest) {
+  const { default: filter } = await import("gulp-filter");
+
   return new Promise((resolve, reject) => {
     gulp
       .src(source)
@@ -202,9 +239,12 @@ function safariCopyBuild(source, dest) {
             delete manifest.commands._execute_sidebar_action;
             delete manifest.optional_permissions;
             manifest.permissions.push("nativeMessaging");
+            if (process.env.BETA_BUILD === "1") {
+              manifest = applyBetaLabels(manifest);
+            }
             return manifest;
-          })
-        )
+          }),
+        ),
       )
       .pipe(gulp.dest(dest))
       .on("end", resolve);
@@ -216,12 +256,39 @@ function stdOutProc(proc) {
   proc.stderr.on("data", (data) => console.error(data.toString()));
 }
 
-function ciCoverage(cb) {
+async function ciCoverage(cb) {
+  const { default: zip } = await import("gulp-zip");
+  const { default: filter } = await import("gulp-filter");
+
   return gulp
     .src(paths.coverage + "**/*")
     .pipe(filter(["**", "!coverage/coverage*.zip"]))
     .pipe(zip(`coverage${buildString()}.zip`))
     .pipe(gulp.dest(paths.coverage));
+}
+
+function applyBetaLabels(manifest) {
+  manifest.name = "Bitwarden Password Manager BETA";
+  manifest.short_name = "Bitwarden BETA";
+  manifest.description = "THIS EXTENSION IS FOR BETA TESTING BITWARDEN.";
+  if (process.env.GITHUB_RUN_ID) {
+    const existingVersionParts = manifest.version.split("."); // 3 parts expected 2024.4.0
+
+    // GITHUB_RUN_ID is a number like: 8853654662
+    // which will convert to [ 4024, 3206 ]
+    // and a single incremented id of 8853654663 will become  [ 4024, 3207 ]
+    const runIdParts = numToUint16s(parseInt(process.env.GITHUB_RUN_ID));
+
+    // Only use the first 2 parts from the given version number and base the other 2 numbers from the GITHUB_RUN_ID
+    // Example: 2024.4.4024.3206
+    const betaVersion = `${existingVersionParts[0]}.${existingVersionParts[1]}.${runIdParts[0]}.${runIdParts[1]}`;
+
+    manifest.version_name = `${betaVersion} beta - ${process.env.GITHUB_SHA.slice(0, 8)}`;
+    manifest.version = betaVersion;
+  } else {
+    manifest.version = `${manifest.version}.0`;
+  }
+  return manifest;
 }
 
 exports["dist:firefox"] = distFirefox;

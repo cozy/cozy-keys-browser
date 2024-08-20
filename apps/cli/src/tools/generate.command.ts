@@ -1,5 +1,12 @@
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import {
+  DefaultPasswordGenerationOptions,
+  DefaultPassphraseGenerationOptions,
+} from "@bitwarden/generator-core";
+import {
+  PasswordGeneratorOptions,
+  PasswordGenerationServiceAbstraction,
+} from "@bitwarden/generator-legacy";
 
 import { Response } from "../models/response";
 import { StringResponse } from "../models/response/string.response";
@@ -8,12 +15,12 @@ import { CliUtils } from "../utils";
 export class GenerateCommand {
   constructor(
     private passwordGenerationService: PasswordGenerationServiceAbstraction,
-    private stateService: StateService
+    private stateService: StateService,
   ) {}
 
   async run(cmdOptions: Record<string, any>): Promise<Response> {
     const normalizedOptions = new Options(cmdOptions);
-    const options = {
+    const options: PasswordGeneratorOptions = {
       uppercase: normalizedOptions.uppercase,
       lowercase: normalizedOptions.lowercase,
       number: normalizedOptions.number,
@@ -24,6 +31,9 @@ export class GenerateCommand {
       numWords: normalizedOptions.words,
       capitalize: normalizedOptions.capitalize,
       includeNumber: normalizedOptions.includeNumber,
+      minNumber: normalizedOptions.minNumber,
+      minSpecial: normalizedOptions.minSpecial,
+      ambiguous: normalizedOptions.ambiguous,
     };
 
     const enforcedOptions = (await this.stateService.getIsAuthenticated())
@@ -47,6 +57,9 @@ class Options {
   words: number;
   capitalize: boolean;
   includeNumber: boolean;
+  minNumber: number;
+  minSpecial: number;
+  ambiguous: boolean;
 
   constructor(passedOptions: Record<string, any>) {
     this.uppercase = CliUtils.convertBooleanOption(passedOptions?.uppercase);
@@ -55,10 +68,28 @@ class Options {
     this.special = CliUtils.convertBooleanOption(passedOptions?.special);
     this.capitalize = CliUtils.convertBooleanOption(passedOptions?.capitalize);
     this.includeNumber = CliUtils.convertBooleanOption(passedOptions?.includeNumber);
-    this.length = passedOptions?.length != null ? parseInt(passedOptions?.length, null) : 14;
+    this.ambiguous = CliUtils.convertBooleanOption(passedOptions?.ambiguous);
+    this.length = CliUtils.convertNumberOption(
+      passedOptions?.length,
+      DefaultPasswordGenerationOptions.length,
+    );
     this.type = passedOptions?.passphrase ? "passphrase" : "password";
-    this.separator = passedOptions?.separator == null ? "-" : passedOptions.separator + "";
-    this.words = passedOptions?.words != null ? parseInt(passedOptions.words, null) : 3;
+    this.separator = CliUtils.convertStringOption(
+      passedOptions?.separator,
+      DefaultPassphraseGenerationOptions.wordSeparator,
+    );
+    this.words = CliUtils.convertNumberOption(
+      passedOptions?.words,
+      DefaultPassphraseGenerationOptions.numWords,
+    );
+    this.minNumber = CliUtils.convertNumberOption(
+      passedOptions?.minNumber,
+      DefaultPasswordGenerationOptions.minNumber,
+    );
+    this.minSpecial = CliUtils.convertNumberOption(
+      passedOptions?.minSpecial,
+      DefaultPasswordGenerationOptions.minSpecial,
+    );
 
     if (!this.uppercase && !this.lowercase && !this.special && !this.number) {
       this.lowercase = true;
@@ -73,6 +104,8 @@ class Options {
     }
     if (this.separator === "space") {
       this.separator = " ";
+    } else if (this.separator === "empty") {
+      this.separator = "";
     } else if (this.separator != null && this.separator.length > 1) {
       this.separator = this.separator[0];
     }

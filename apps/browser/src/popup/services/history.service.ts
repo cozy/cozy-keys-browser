@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
 
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import { BrowserApi } from "../../browser/browserApi";
-import { BrowserStateService as StateService } from "../../services/browser-state.service";
+import { BrowserApi } from "../../platform/browser/browser-api";
 
 /*
 
@@ -31,38 +32,15 @@ export class HistoryService {
   private currentUrlInProgress = false;
   private previousUrlInProgress = false;
   private stateService: StateService;
+  private cipherService: CipherService;
+  private initPromiseRef: Promise<void> | undefined;
 
   constructor(private router: Router) {
     // retrieve the stateService (standard injection was not working ?)
     const page = BrowserApi.getBackgroundPage();
     this.stateService = page.bitwardenMain["stateService"];
+    this.cipherService = page.bitwardenMain["cipherService"];
 
-    // listen to router to feed the history
-    router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        // console.log("navigationEnd event on url", event.url);
-        if (this.currentUrlInProgress) {
-          this.currentUrlInProgress = false;
-        } else if (this.previousUrlInProgress) {
-          this.hist.shift();
-          this.hist[0] = event.url;
-          this.previousUrlInProgress = false;
-          this.saveHistoryState();
-        } else {
-          if (this.rootPaths.includes(event.url.split("?")[0])) {
-            // back to a root of a tab : delete history
-            this.hist = [event.url];
-          } else if (event.url === "/lock") {
-            this.hist = this.defaultHist.slice();
-          } else if (event.url === this.hist[0]) {
-            return;
-          } else {
-            this.hist.unshift(event.url);
-          }
-          this.saveHistoryState();
-        }
-      }
-    });
     /** for debug */
     // // @ts-ignore
     // window["hist"] = this;
@@ -70,6 +48,20 @@ export class HistoryService {
   }
 
   async init() {
+    if (this.initPromiseRef !== undefined) {
+      return this.initPromiseRef;
+    }
+    this.initPromiseRef = this.initPromise();
+
+    return this.initPromiseRef;
+  }
+
+  async initPromise() {
+    await this.initHist();
+    await this.initRouteListener();
+  }
+
+  async initHist() {
     // console.log("historyService.init()");
     const histStr: string = await this.stateService.getHistoryState();
     if (histStr === "/" || !histStr) {
@@ -89,11 +81,40 @@ export class HistoryService {
     // if in last url in history is a "/generator", then simulate an AddEditCipherInfo (it has been
     // deleted when closing the popup)
     if (this.hist[0].startsWith("/generator")) {
-      await this.stateService.setAddEditCipherInfo({
+      await this.cipherService.setAddEditCipherInfo({
         cipher: new CipherView(),
         collectionIds: [],
       });
     }
+  }
+
+  async initRouteListener() {
+    // listen to router to feed the history
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // console.log("navigationEnd event on url", event.url);
+        if (this.currentUrlInProgress) {
+          this.currentUrlInProgress = false;
+        } else if (this.previousUrlInProgress) {
+          this.hist.shift();
+          this.hist[0] = event.url;
+          this.previousUrlInProgress = false;
+          this.saveHistoryState();
+        } else {
+          if (this.rootPaths.includes(event.url.split("?")[0])) {
+            // back to a root of a tab : delete history
+            this.hist = [event.url];
+          } else if (event.url === "/lock") {
+            this.hist = this.defaultHist.slice();
+          } else if (event.url === this.hist[0] || event.url === "/restoreHistory") {
+            return;
+          } else {
+            this.hist.unshift(event.url);
+          }
+          this.saveHistoryState();
+        }
+      }
+    });
   }
 
   setLoggedOutHistory() {
@@ -147,7 +168,7 @@ export class HistoryService {
       JSON.stringify({
         hist: this.hist,
         timestamp: new Date().valueOf(),
-      })
+      }),
     );
   }
 

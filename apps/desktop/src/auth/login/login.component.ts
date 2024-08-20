@@ -1,24 +1,30 @@
 import { Component, NgZone, OnDestroy, ViewChild, ViewContainerRef } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Subject, takeUntil } from "rxjs";
 
 import { LoginComponent as BaseLoginComponent } from "@bitwarden/angular/auth/components/login.component";
+import { FormValidationErrorsService } from "@bitwarden/angular/platform/abstractions/form-validation-errors.service";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
-import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { AppIdService } from "@bitwarden/common/abstractions/appId.service";
-import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
-import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
-import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-import { FormValidationErrorsService } from "@bitwarden/common/abstractions/formValidationErrors.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
-import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
+import {
+  LoginStrategyServiceAbstraction,
+  LoginEmailServiceAbstraction,
+  RegisterRouteService,
+} from "@bitwarden/auth/common";
+import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
+import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
+import { WebAuthnLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/webauthn/webauthn-login.service.abstraction";
+import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
+import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
+import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { EnvironmentComponent } from "../environment.component";
 
@@ -32,6 +38,7 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
   @ViewChild("environment", { read: ViewContainerRef, static: true })
   environmentModal: ViewContainerRef;
 
+  protected componentDestroyed$: Subject<void> = new Subject();
   webVaultHostname = "";
 
   showingModal = false;
@@ -42,14 +49,10 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
     return this.formGroup.value.email;
   }
 
-  get selfHostedDomain() {
-    return this.environmentService.hasBaseUrl() ? this.environmentService.getWebVaultUrl() : null;
-  }
-
   constructor(
-    apiService: ApiService,
+    devicesApiService: DevicesApiServiceAbstraction,
     appIdService: AppIdService,
-    authService: AuthService,
+    loginStrategyService: LoginStrategyServiceAbstraction,
     router: Router,
     i18nService: I18nService,
     syncService: SyncService,
@@ -66,12 +69,15 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
     formBuilder: FormBuilder,
     formValidationErrorService: FormValidationErrorsService,
     route: ActivatedRoute,
-    loginService: LoginService
+    loginEmailService: LoginEmailServiceAbstraction,
+    ssoLoginService: SsoLoginServiceAbstraction,
+    webAuthnLoginService: WebAuthnLoginServiceAbstraction,
+    registerRouteService: RegisterRouteService,
   ) {
     super(
-      apiService,
+      devicesApiService,
       appIdService,
-      authService,
+      loginStrategyService,
       router,
       platformUtilsService,
       i18nService,
@@ -84,7 +90,10 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
       formBuilder,
       formValidationErrorService,
       route,
-      loginService
+      loginEmailService,
+      ssoLoginService,
+      webAuthnLoginService,
+      registerRouteService,
     );
     super.onSuccessfulLogin = () => {
       return syncService.fullSync(true);
@@ -93,7 +102,7 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
 
   async ngOnInit() {
     await super.ngOnInit();
-    await this.checkSelfHosted();
+    await this.getLoginWithDevice(this.loggedEmail);
     this.broadcasterService.subscribe(BroadcasterSubscriptionId, async (message: any) => {
       this.ngZone.run(() => {
         switch (message.command) {
@@ -120,27 +129,28 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
 
   ngOnDestroy() {
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
+    this.componentDestroyed$.next();
+    this.componentDestroyed$.complete();
   }
 
   async settings() {
     const [modal, childComponent] = await this.modalService.openViewRef(
       EnvironmentComponent,
-      this.environmentModal
+      this.environmentModal,
     );
 
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    modal.onShown.subscribe(() => {
+    modal.onShown.pipe(takeUntil(this.componentDestroyed$)).subscribe(() => {
       this.showingModal = true;
     });
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-    modal.onClosed.subscribe(() => {
+
+    modal.onClosed.pipe(takeUntil(this.componentDestroyed$)).subscribe(() => {
       this.showingModal = false;
     });
 
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    childComponent.onSaved.subscribe(async () => {
+    // eslint-disable-next-line rxjs/no-async-subscribe
+    childComponent.onSaved.pipe(takeUntil(this.componentDestroyed$)).subscribe(async () => {
       modal.close();
-      await this.checkSelfHosted();
+      await this.getLoginWithDevice(this.loggedEmail);
     });
   }
 
@@ -154,7 +164,7 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccured"),
-        this.i18nService.t("invalidEmail")
+        this.i18nService.t("invalidEmail"),
       );
       return;
     }
@@ -175,12 +185,6 @@ export class LoginComponent extends BaseLoginComponent implements OnDestroy {
 
   private focusInput() {
     const email = this.loggedEmail;
-    document.getElementById(email == null || email === "" ? "email" : "masterPassword").focus();
-  }
-
-  private async checkSelfHosted() {
-    this.selfHosted = this.environmentService.isSelfHosted();
-
-    await this.getLoginWithDevice(this.loggedEmail);
+    document.getElementById(email == null || email === "" ? "email" : "masterPassword")?.focus();
   }
 }

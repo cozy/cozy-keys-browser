@@ -11,12 +11,14 @@ import {
   distinctUntilChanged,
   take,
   share,
+  firstValueFrom,
+  concatMap,
 } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
 
 import { ProjectListView } from "../models/view/project-list.view";
@@ -39,6 +41,10 @@ import {
   SecretDialogComponent,
   SecretOperation,
 } from "../secrets/dialog/secret-dialog.component";
+import {
+  SecretViewDialogComponent,
+  SecretViewDialogParams,
+} from "../secrets/dialog/secret-view-dialog.component";
 import { SecretService } from "../secrets/secret.service";
 import {
   ServiceAccountDialogComponent,
@@ -46,6 +52,8 @@ import {
 } from "../service-accounts/dialog/service-account-dialog.component";
 import { ServiceAccountService } from "../service-accounts/service-account.service";
 import { SecretsListComponent } from "../shared/secrets-list.component";
+
+import { SMOnboardingTasks, SMOnboardingTasksService } from "./sm-onboarding-tasks.service";
 
 type Tasks = {
   [organizationId: string]: OrganizationTasks;
@@ -70,6 +78,8 @@ export class OverviewComponent implements OnInit, OnDestroy {
   protected userIsAdmin: boolean;
   protected showOnboarding = false;
   protected loading = true;
+  protected organizationEnabled = false;
+  protected onboardingTasks$: Observable<SMOnboardingTasks>;
 
   protected view$: Observable<{
     allProjects: ProjectListView[];
@@ -86,27 +96,31 @@ export class OverviewComponent implements OnInit, OnDestroy {
     private serviceAccountService: ServiceAccountService,
     private dialogService: DialogService,
     private organizationService: OrganizationService,
-    private stateService: StateService,
     private platformUtilsService: PlatformUtilsService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private smOnboardingTasksService: SMOnboardingTasksService,
+    private logService: LogService,
   ) {}
 
   ngOnInit() {
+    this.onboardingTasks$ = this.smOnboardingTasksService.smOnboardingTasks$;
+
     const orgId$ = this.route.params.pipe(
       map((p) => p.organizationId),
-      distinctUntilChanged()
+      distinctUntilChanged(),
     );
 
     orgId$
       .pipe(
-        map((orgId) => this.organizationService.get(orgId)),
-        takeUntil(this.destroy$)
+        concatMap(async (orgId) => await this.organizationService.get(orgId)),
+        takeUntil(this.destroy$),
       )
       .subscribe((org) => {
         this.organizationId = org.id;
         this.organizationName = org.name;
         this.userIsAdmin = org.isAdmin;
         this.loading = true;
+        this.organizationEnabled = org.enabled;
       });
 
     const projects$ = combineLatest([
@@ -114,7 +128,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
       this.projectService.project$.pipe(startWith(null)),
     ]).pipe(
       switchMap(([orgId]) => this.projectService.getProjects(orgId)),
-      share()
+      share(),
     );
 
     const secrets$ = combineLatest([
@@ -123,15 +137,15 @@ export class OverviewComponent implements OnInit, OnDestroy {
       this.projectService.project$.pipe(startWith(null)),
     ]).pipe(
       switchMap(([orgId]) => this.secretService.getSecrets(orgId)),
-      share()
+      share(),
     );
 
     const serviceAccounts$ = combineLatest([
       orgId$,
       this.serviceAccountService.serviceAccount$.pipe(startWith(null)),
     ]).pipe(
-      switchMap(([orgId]) => this.serviceAccountService.getServiceAccounts(orgId)),
-      share()
+      switchMap(([orgId]) => this.serviceAccountService.getServiceAccounts(orgId, false)),
+      share(),
     );
 
     this.view$ = orgId$.pipe(
@@ -148,16 +162,16 @@ export class OverviewComponent implements OnInit, OnDestroy {
               createProject: projects.length > 0,
               createServiceAccount: serviceAccounts.length > 0,
             }),
-          }))
-        )
-      )
+          })),
+        ),
+      ),
     );
 
     // Refresh onboarding status when orgId changes by fetching the first value from view$.
     orgId$
       .pipe(
         switchMap(() => this.view$.pipe(take(1))),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe((view) => {
         this.showOnboarding = Object.values(view.tasks).includes(false);
@@ -180,11 +194,11 @@ export class OverviewComponent implements OnInit, OnDestroy {
 
   private async saveCompletedTasks(
     organizationId: string,
-    orgTasks: OrganizationTasks
+    orgTasks: OrganizationTasks,
   ): Promise<OrganizationTasks> {
-    const prevTasks = ((await this.stateService.getSMOnboardingTasks()) || {}) as Tasks;
+    const prevTasks = (await firstValueFrom(this.onboardingTasks$)) as Tasks;
     const newlyCompletedOrgTasks = Object.fromEntries(
-      Object.entries(orgTasks).filter(([_k, v]) => v === true)
+      Object.entries(orgTasks).filter(([_k, v]) => v === true),
     );
     const nextOrgTasks = {
       importSecrets: false,
@@ -194,10 +208,12 @@ export class OverviewComponent implements OnInit, OnDestroy {
       ...prevTasks[organizationId],
       ...newlyCompletedOrgTasks,
     };
-    this.stateService.setSMOnboardingTasks({
+
+    await this.smOnboardingTasksService.setSmOnboardingTasks({
       ...prevTasks,
       [organizationId]: nextOrgTasks,
     });
+
     return nextOrgTasks as OrganizationTasks;
   }
 
@@ -208,6 +224,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Edit,
+        organizationEnabled: this.organizationEnabled,
         projectId: projectId,
       },
     });
@@ -218,6 +235,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -227,6 +245,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -246,6 +265,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -255,6 +275,16 @@ export class OverviewComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Edit,
+        secretId: secretId,
+        organizationEnabled: this.organizationEnabled,
+      },
+    });
+  }
+
+  openViewSecret(secretId: string) {
+    this.dialogService.open<unknown, SecretViewDialogParams>(SecretViewDialogComponent, {
+      data: {
+        organizationId: this.organizationId,
         secretId: secretId,
       },
     });
@@ -273,6 +303,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
       data: {
         organizationId: this.organizationId,
         operation: OperationType.Add,
+        organizationEnabled: this.organizationEnabled,
       },
     });
   }
@@ -281,18 +312,23 @@ export class OverviewComponent implements OnInit, OnDestroy {
     SecretsListComponent.copySecretName(name, this.platformUtilsService, this.i18nService);
   }
 
-  copySecretValue(id: string) {
-    SecretsListComponent.copySecretValue(
+  async copySecretValue(id: string) {
+    await SecretsListComponent.copySecretValue(
       id,
       this.platformUtilsService,
       this.i18nService,
-      this.secretService
+      this.secretService,
+      this.logService,
     );
   }
 
-  protected hideOnboarding() {
+  copySecretUuid(id: string) {
+    SecretsListComponent.copySecretUuid(id, this.platformUtilsService, this.i18nService);
+  }
+
+  protected async hideOnboarding() {
     this.showOnboarding = false;
-    this.saveCompletedTasks(this.organizationId, {
+    await this.saveCompletedTasks(this.organizationId, {
       importSecrets: true,
       createSecret: true,
       createProject: true,

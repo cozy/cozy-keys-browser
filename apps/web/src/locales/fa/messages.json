@@ -1,14 +1,4 @@
 {
-  "pageTitle": {
-    "message": "گاوصندوق وب $APP_NAME$",
-    "description": "The title of the website in the browser window.",
-    "placeholders": {
-      "app_name": {
-        "content": "$1",
-        "example": "Bitwarden"
-      }
-    }
-  },
   "whatTypeOfItem": {
     "message": "این چه نوع موردی است؟"
   },
@@ -182,6 +172,10 @@
   "noneFolder": {
     "message": "بدون پوشه",
     "description": "This is the folder for uncategorized items"
+  },
+  "selfOwnershipLabel": {
+    "message": "You",
+    "description": "Used as a label to indicate that the user is the owner of an item."
   },
   "addFolder": {
     "message": "افزودن پوشه"
@@ -411,6 +405,21 @@
   "item": {
     "message": "مورد"
   },
+  "itemDetails": {
+    "message": "Item details"
+  },
+  "itemName": {
+    "message": "Item name"
+  },
+  "cannotRemoveViewOnlyCollections": {
+    "message": "You cannot remove collections with View only permissions: $COLLECTIONS$",
+    "placeholders": {
+      "collections": {
+        "content": "$1",
+        "example": "Work, Personal"
+      }
+    }
+  },
   "ex": {
     "message": "مثال.",
     "description": "Short abbreviation for 'example'."
@@ -518,9 +527,6 @@
   "maxFileSize": {
     "message": "بیشترین حجم فایل ۵۰۰ مگابایت است."
   },
-  "updateKey": {
-    "message": "تا زمانی که کد رمزنگاری را به‌روز نکنید نمی‌توانید از این قابلیت استفاده کنید."
-  },
   "addedItem": {
     "message": "مورد اضافه شد"
   },
@@ -591,8 +597,17 @@
   "access": {
     "message": "دسترسی"
   },
+  "accessLevel": {
+    "message": "سطح دسترسی"
+  },
+  "accessing": {
+    "message": "در حال دسترسی"
+  },
   "loggedOut": {
     "message": "خارج شد"
+  },
+  "loggedOutDesc": {
+    "message": "شما از اکانت خود خارج شده‌اید."
   },
   "loginExpired": {
     "message": "نشست ورود شما منقضی شده است."
@@ -613,28 +628,127 @@
     "message": "خیر"
   },
   "loginOrCreateNewAccount": {
-    "message": "وارد شوید یا یک حساب کاربری بسازید تا به گاوصندوق امنتان دسترسی یابید."
+    "message": "وارد شوید یا یک حساب کاربری بسازید تا به گاوصندوق امن‌تان دسترسی یابید."
   },
   "loginWithDevice": {
     "message": "ورود با دستگاه"
   },
-  "loginWithDeviceEnabledInfo": {
-    "message": "ورود به سیستم با دستگاه باید در تنظیمات برنامه‌ی موبایل Bitwarden تنظیم شود. به گزینه دیگری نیاز دارید؟"
+  "loginWithDeviceEnabledNote": {
+    "message": "ورود به سیستم با دستگاه باید در تنظیمات برنامه‌ی Bitwarden تنظیم شود. به گزینه دیگری نیاز دارید؟"
   },
   "loginWithMasterPassword": {
     "message": "با کلمه عبور اصلی وارد شوید"
   },
+  "readingPasskeyLoading": {
+    "message": "Reading passkey..."
+  },
+  "readingPasskeyLoadingInfo": {
+    "message": "Keep this window open and follow prompts from your browser."
+  },
+  "useADifferentLogInMethod": {
+    "message": "Use a different log in method"
+  },
+  "loginWithPasskey": {
+    "message": "با کلید عبور وارد شوید"
+  },
+  "invalidPasskeyPleaseTryAgain": {
+    "message": "Invalid Passkey. Please try again."
+  },
+  "twoFactorForPasskeysNotSupportedOnClientUpdateToLogIn": {
+    "message": "2FA for passkeys is not supported. Update the app to log in."
+  },
+  "loginWithPasskeyInfo": {
+    "message": "از یک کلمه عبور ایجاد شده استفاده کنید که به طور خودکار بدون کلمه عبور شما را وارد می‌کند. بیومتریک‌ها، مانند تشخیص چهره یا اثر انگشت، یا سایر روش‌های امنیتی FIDO2 هویت شما را تأیید می‌کنند."
+  },
+  "newPasskey": {
+    "message": "کلمه عبور جدید"
+  },
+  "learnMoreAboutPasswordless": {
+    "message": "درباره بدون کلمه عبور بیشتر بدانید"
+  },
+  "creatingPasskeyLoading": {
+    "message": "ایجاد کلید عبور..."
+  },
+  "creatingPasskeyLoadingInfo": {
+    "message": "این پنجره را باز نگه دارید و دستورهای مرورگر خود را دنبال کنید."
+  },
+  "errorCreatingPasskey": {
+    "message": "خطا در ایجاد کلید عبور"
+  },
+  "errorCreatingPasskeyInfo": {
+    "message": "مشکلی در ایجاد کلید عبور شما وجود داشت."
+  },
+  "passkeySuccessfullyCreated": {
+    "message": "کلید عبور با موفقیت ایجاد شد!"
+  },
+  "customPasskeyNameInfo": {
+    "message": "کلید عبور خود را برای کمک به شناسایی آن نام ببرید."
+  },
+  "useForVaultEncryption": {
+    "message": "Use for vault encryption"
+  },
+  "useForVaultEncryptionInfo": {
+    "message": "Log in and unlock on supported devices without your master password. Follow the prompts from your browser to finalize setup."
+  },
+  "useForVaultEncryptionErrorReadingPasskey": {
+    "message": "Error reading passkey. Try again or uncheck this option."
+  },
+  "encryptionNotSupported": {
+    "message": "رمزگذاری پشتیبانی نمی‌شود"
+  },
+  "enablePasskeyEncryption": {
+    "message": "Set up encryption"
+  },
+  "usedForEncryption": {
+    "message": "Used for encryption"
+  },
+  "loginWithPasskeyEnabled": {
+    "message": "با فعال بودن کلید ورود وارد شوید"
+  },
+  "passkeySaved": {
+    "message": "$NAME$ ذخیره شد",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Personal yubikey"
+      }
+    }
+  },
+  "passkeyRemoved": {
+    "message": "کلید عبور حذف شد"
+  },
+  "removePasskey": {
+    "message": "حذف کلید عبور"
+  },
+  "removePasskeyInfo": {
+    "message": "اگر همه کلیدهای عبور حذف شوند، نمی‌توانید بدون کلمه عبور اصلی خود وارد دستگاه‌های جدید شوید."
+  },
+  "passkeyLimitReachedInfo": {
+    "message": "به حد مجاز کلید عبور رسیده است. برای افزودن کلید عبور دیگر، کلید عبور را حذف کنید."
+  },
+  "tryAgain": {
+    "message": "دوباره امتحان کن"
+  },
   "createAccount": {
     "message": "ایجاد حساب کاربری"
   },
+  "setAStrongPassword": {
+    "message": "Set a strong password"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Finish creating your account by setting a password"
+  },
   "newAroundHere": {
-    "message": "اینجا جدیده؟"
+    "message": "اینجا تازه واردی؟"
   },
   "startTrial": {
     "message": "شروع دوره آزمایشی"
   },
   "logIn": {
     "message": "ورود"
+  },
+  "verifyIdentity": {
+    "message": "Verify your Identity"
   },
   "logInInitiated": {
     "message": "ورود به سیستم آغاز شد"
@@ -671,6 +785,19 @@
   },
   "masterPassHintLabel": {
     "message": "یادآور کلمه عبور اصلی"
+  },
+  "masterPassHintText": {
+    "message": "If you forget your password, the password hint can be sent to your email. $CURRENT$/$MAXIMUM$ character maximum.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "تنظیمات"
@@ -721,11 +848,17 @@
   "unexpectedError": {
     "message": "یک خطای غیر منتظره رخ داده است."
   },
+  "expirationDateError": {
+    "message": "لطفاً تاریخ انقضایی را انتخاب کنید که در آینده است."
+  },
   "emailAddress": {
     "message": "نشانی ایمیل"
   },
-  "yourVaultIsLocked": {
-    "message": "گاوصندوق شما قفل است. برای ادامه کلمه عبور اصلی خود را وارد کنید."
+  "yourVaultIsLockedV2": {
+    "message": "Your vault is locked"
+  },
+  "uuid": {
+    "message": "UUID"
   },
   "unlock": {
     "message": "باز کردن قفل"
@@ -848,18 +981,18 @@
   "authenticatorAppTitle": {
     "message": "برنامه احراز هویت"
   },
-  "authenticatorAppDesc": {
-    "message": "از یک برنامه احراز هویت (مانند Authy یا Google Authenticator) استفاده کنید تا کدهای تأیید بر پایه زمان تولید کنید.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Enter a code generated by an authenticator app like Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "کلید امنیتی YubiKey OTP"
+  "yubiKeyTitleV2": {
+    "message": "Yubico OTP security key"
   },
   "yubiKeyDesc": {
     "message": "از یک YubiKey برای دسترسی به حسابتان استفاده کنید. با دستگاه های YubiKey سری 4، سری 5 و NEO کار می‌کند."
   },
-  "duoDesc": {
-    "message": "با Duo Security با استفاده از برنامه تلفن همراه، پیامک، تماس تلفنی، یا کلید امنیتی U2F تأیید کنید.",
+  "duoDescV2": {
+    "message": "Enter a code generated by Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -884,8 +1017,8 @@
   "emailTitle": {
     "message": "ایمیل"
   },
-  "emailDesc": {
-    "message": "کد تأیید برایتان ارسال می‌شود."
+  "emailDescV2": {
+    "message": "Enter a code sent to your email."
   },
   "continue": {
     "message": "ادامه"
@@ -927,7 +1060,7 @@
     "message": "آیا اطمینان دارید که می‌خواهید ادامه دهید؟"
   },
   "moveSelectedItemsDesc": {
-    "message": "پوشه ای را انتخاب کنید که می‌خواهید $COUNT$ مورد انتخاب شده را به آن منتقل کنید.",
+    "message": "Choose a folder that you would like to add the $COUNT$ selected item(s) to.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -958,14 +1091,29 @@
   "copyVerificationCode": {
     "message": "کپی کد تأیید"
   },
+  "copyUuid": {
+    "message": "کپی UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
+  },
   "warning": {
     "message": "هشدار"
   },
   "confirmVaultExport": {
     "message": "برون ریزی گاوصندوق را تأیید کنید"
   },
+  "confirmSecretsExport": {
+    "message": "برون ریزی رازها را تأیید کنید"
+  },
   "exportWarningDesc": {
     "message": "این برون ریزی شامل داده‌های گاوصندوق در یک قالب رمزنگاری نشده است. شما نباید آن را از طریق یک راه ارتباطی نا امن (مثل ایمیل) ذخیره یا ارسال کنید. به محض اینکه کارتان با آن تمام شد، آن را حذف کنید."
+  },
+  "exportSecretsWarningDesc": {
+    "message": "این برون ریزی شامل داده‌های رازها در یک قالب رمزنگاری نشده است. شما نباید آن را از طریق یک راه ارتباطی نا امن (مثل ایمیل) ذخیره یا ارسال کنید. به محض اینکه کارتان با آن تمام شد، آن را حذف کنید."
   },
   "encExportKeyWarningDesc": {
     "message": "این برون ریزی با استفاده از کلید رمزگذاری حساب شما، اطلاعاتتان را رمزگذاری می کند. اگر زمانی کلید رمزگذاری حساب خود را بچرخانید، باید دوباره خروجی بگیرید، چون قادر به رمزگشایی این پرونده برون ریزی نخواهید بود."
@@ -976,8 +1124,14 @@
   "export": {
     "message": "برون ریزی"
   },
+  "exportFrom": {
+    "message": "Export from"
+  },
   "exportVault": {
     "message": "برون ریزی گاوصندوق"
+  },
+  "exportSecrets": {
+    "message": "برون ریزی رازها"
   },
   "fileFormat": {
     "message": "فرمت پرونده"
@@ -1048,6 +1202,9 @@
   },
   "length": {
     "message": "طول"
+  },
+  "passwordMinLength": {
+    "message": "Minimum password length"
   },
   "uppercase": {
     "message": "حروف بزرگ (A-Z)",
@@ -1237,6 +1394,9 @@
   "accountDeletedDesc": {
     "message": "حساب شما بسته شد و تمام داده های مرتبط حذف شده است."
   },
+  "deleteOrganizationWarning": {
+    "message": "Deleting your organization is permanent. It cannot be undone."
+  },
   "myAccount": {
     "message": "حساب من"
   },
@@ -1246,6 +1406,22 @@
   "importData": {
     "message": "درون ریزی داده"
   },
+  "onboardingImportDataDetailsPartOne": {
+    "message": "If you don't have any data to import, you can create a ",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLink": {
+    "message": "new item",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsPartTwoNoOrgs": {
+    "message": " instead.",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead."
+  },
+  "onboardingImportDataDetailsPartTwoWithOrgs": {
+    "message": " instead. You may need to wait until your administrator confirms your organization membership.",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. You may need to wait until your administrator confirms your organization membership."
+  },
   "importError": {
     "message": "خطای درون ریزی"
   },
@@ -1254,6 +1430,15 @@
   },
   "importSuccess": {
     "message": "داده‌ها با موفقیت درون ریزی شد"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "تعداد $AMOUNT$ مورد وارد شده است.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
   },
   "dataExportSuccess": {
     "message": "داده‌ها با موفقیت برون ریزی شد"
@@ -1275,6 +1460,31 @@
   },
   "importEncKeyError": {
     "message": "خطا در رمزگشایی پرونده‌ی درون ریزی شده. کلید رمزگذاری شما با کلید رمزگذاری استفاده شده برای درون ریزی داده‌ها مطابقت ندارد."
+  },
+  "importDestination": {
+    "message": "مقصد برون ریزی"
+  },
+  "learnAboutImportOptions": {
+    "message": "درباره گزینه‌های برون ریزی خود بیاموزید"
+  },
+  "selectImportFolder": {
+    "message": "یک پوشه انتخاب کنید"
+  },
+  "selectImportCollection": {
+    "message": "انتخاب یک مجموعه"
+  },
+  "importTargetHint": {
+    "message": "اگر می‌خواهید محتوای فایل وارد شده به $DESTINATION$ منتقل شود، این گزینه را انتخاب کنید",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "فایل حاوی موارد اختصاص نیافته است."
   },
   "selectFormat": {
     "message": "فرمت پرونده‌ی درون ریزی را انتخاب کنید"
@@ -1324,13 +1534,6 @@
   },
   "faviconDesc": {
     "message": "یک تصویر قابل تشخیص در کنار هر ورود نشان دهید."
-  },
-  "enableFullWidth": {
-    "message": "نمایش طرح با عرض کامل",
-    "description": "Allows scaling the web vault UI's width"
-  },
-  "enableFullWidthDesc": {
-    "message": "به گاوصندوق وب اجازه دهید تا تمام عرض پنجره مرورگر را گسترش دهد."
   },
   "default": {
     "message": "پیش‌فرض"
@@ -1383,7 +1586,10 @@
   "twoStepLoginDesc": {
     "message": "با درخواست یک مرحله اضافی هنگام ورود، حساب خود را ایمن کنید."
   },
-  "twoStepLoginOrganizationDescStart": {
+  "twoStepLoginTeamsDesc": {
+    "message": "ورود دو مرحله ای را برای سازمان خود فعال کنید."
+  },
+  "twoStepLoginEnterpriseDescStart": {
     "message": "گزینه‌های ورود دو مرحله ای Bitwarden را برای اعضا اعمال کنید با استفاده از ",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Enforce Bitwarden Two-step Login options for members by using the Two-step Login Policy.'"
   },
@@ -1437,6 +1643,9 @@
   "manage": {
     "message": "مدیریت"
   },
+  "canManage": {
+    "message": "Can manage"
+  },
   "disable": {
     "message": "خاموش کردن"
   },
@@ -1449,35 +1658,47 @@
   "twoStepLoginAuthDesc": {
     "message": "کلمه عبور اصلی خود را برای تغییر تنظیمات ورود به سیستم دو مرحله ای وارد کنید."
   },
-  "twoStepAuthenticatorDesc": {
-    "message": "برای راه‌اندازی ورود دو مرحله‌ای با یک برنامه احراز هویت، این مراحل را دنبال کنید:"
+  "twoStepAuthenticatorInstructionPrefix": {
+    "message": "Download an authenticator app such as"
   },
-  "twoStepAuthenticatorDownloadApp": {
-    "message": "دانلود یک برنامه احراز هویت دو مرحله ای"
+  "twoStepAuthenticatorInstructionInfix1": {
+    "message": ","
   },
-  "twoStepAuthenticatorNeedApp": {
-    "message": "به یک برنامه احراز هویت دو مرحله ای نیاز دارید؟ یکی از موارد زیر را دانلود کنید"
+  "twoStepAuthenticatorInstructionInfix2": {
+    "message": "or"
   },
-  "iosDevices": {
-    "message": "دستگاه‌های iOS"
+  "twoStepAuthenticatorInstructionSuffix": {
+    "message": "."
   },
-  "androidDevices": {
-    "message": "دستگاه Android"
+  "continueToExternalUrlTitle": {
+    "message": "Continue to $URL$?",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
   },
-  "windowsDevices": {
-    "message": "دستگاه Windows"
+  "continueToExternalUrlDesc": {
+    "message": "You are leaving Bitwarden and launching an external website in a new window."
   },
-  "twoStepAuthenticatorAppsRecommended": {
-    "message": "این برنامه‌ها توصیه می‌شوند، با این حال، سایر برنامه‌های احراز هویت نیز کار خواهند کرد."
+  "twoStepContinueToBitwardenUrlTitle": {
+    "message": "Continue to bitwarden.com?"
   },
-  "twoStepAuthenticatorScanCode": {
-    "message": "این کد QR را با برنامه احراز هویت خود اسکن کنید"
+  "twoStepContinueToBitwardenUrlDesc": {
+    "message": "Bitwarden Authenticator allows you to store authenticator keys and generate TOTP codes for 2-step verification flows. Learn more on the bitwarden.com website."
+  },
+  "twoStepAuthenticatorScanCodeV2": {
+    "message": "Scan the QR code below with your authenticator app or enter the key."
+  },
+  "twoStepAuthenticatorQRCanvasError": {
+    "message": "Could not load QR code. Try again or use the key below."
   },
   "key": {
     "message": "کلید"
   },
-  "twoStepAuthenticatorEnterCode": {
-    "message": "کد تأیید 6 رقمی حاصل را از برنامه وارد کنید"
+  "twoStepAuthenticatorEnterCodeV2": {
+    "message": "Verification code"
   },
   "twoStepAuthenticatorReaddDesc": {
     "message": "در صورت نیاز به افزودن آن به دستگاه دیگر، کد QR (یا کلید) مورد نیاز برنامه احراز هویت شما در زیر آمده است."
@@ -1557,11 +1778,11 @@
   "twoFactorDuoDesc": {
     "message": "اطلاعات برنامه Bitwarden را از پنل مدیریت Duo خود وارد کنید."
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "کلید یکپارچه سازی"
+  "twoFactorDuoClientId": {
+    "message": "Client Id"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "کلید مخفی"
+  "twoFactorDuoClientSecret": {
+    "message": "Client Secret"
   },
   "twoFactorDuoApiHostname": {
     "message": "نام میزبان API"
@@ -1656,12 +1877,16 @@
   "unsecuredWebsitesFound": {
     "message": "وب‌سایت های نا امن پیدا شد"
   },
-  "unsecuredWebsitesFoundDesc": {
-    "message": "ما $COUNT$ مورد را با نشانی‌های اینترنتی نا امن در خزانه شما پیدا کردیم. اگر وب‌سایت اجازه می‌دهد، باید طرح نشانی اینترنتی آن‌ها را به //:https‌ تغییر دهید.",
+  "unsecuredWebsitesFoundReportDesc": {
+    "message": "We found $COUNT$ items in your $VAULT$ with unsecured URIs. You should change their URI scheme to https:// if the website allows it.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1677,12 +1902,16 @@
   "inactive2faFound": {
     "message": "ورود‌های بدون ورود دو مرحله ای یافت شد"
   },
-  "inactive2faFoundDesc": {
-    "message": "ما $COUNT$ وب‌سایت را در گاوصندوق شما پیدا کردیم که ممکن است با ورود دو مرحله‌ای پیکربندی نشده باشند (بر اساس 2fa.directory). برای محافظت بیشتر از این حساب‌ها، باید ورود دو مرحله ای را تنظیم کنید.",
+  "inactive2faFoundReportDesc": {
+    "message": "We found $COUNT$ website(s) in your $VAULT$ that may not be configured with two-step login (according to 2fa.directory). To further protect these accounts, you should set up two-step login.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1701,12 +1930,16 @@
   "exposedPasswordsFound": {
     "message": "کلمه‌های عبور افشا شده یافت شد"
   },
-  "exposedPasswordsFoundDesc": {
-    "message": "ما $COUNT$ موردی را در خزانه شما پیدا کردیم که دارای کلمه‌های عبوری هستند که در نقض‌های اطلاعاتی شناخته شده افشا شده‌اند. شما باید آن‌ها را تغییر دهید تا از یک کلمه عبور جدید استفاده کنید.",
+  "exposedPasswordsFoundReportDesc": {
+    "message": "We found $COUNT$ items in your $VAULT$ that have passwords that were exposed in known data breaches. You should change them to use a new password.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1734,12 +1967,16 @@
   "weakPasswordsFound": {
     "message": "کلمه‌های عبور ضعیف پیدا شد"
   },
-  "weakPasswordsFoundDesc": {
-    "message": "ما $COUNT$ مورد با کلمه‌های عبوری که قوی نیستند در گاوصندوق شما پیدا کردیم. شما باید آن‌ها را به‌روز کنید تا از کلمه‌های عبور قوی تر استفاده کنید.",
+  "weakPasswordsFoundReportDesc": {
+    "message": "We found $COUNT$ items in your $VAULT$ with passwords that are not strong. You should update them to use stronger passwords.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1755,12 +1992,16 @@
   "reusedPasswordsFound": {
     "message": "کلمه‌های عبور مجدد استفاده شده یافت شد"
   },
-  "reusedPasswordsFoundDesc": {
-    "message": "ما $COUNT$ کلمه عبور پیدا کردیم که در گاوضندوق شما دوباره استفاده می‌شود. شما باید آن‌ها را به یک مقدار منحصر به فرد تغییر دهید.",
+  "reusedPasswordsFoundReportDesc": {
+    "message": "We found $COUNT$ passwords that are being reused in your $VAULT$. You should change them to a unique value.",
     "placeholders": {
       "count": {
         "content": "$1",
         "example": "8"
+      },
+      "vault": {
+        "content": "$2",
+        "example": "this will be 'vault' or 'vaults'"
       }
     }
   },
@@ -1882,8 +2123,8 @@
   "premiumSignUpStorage": {
     "message": "۱ گیگابایت فضای ذخیره‌سازی رمزنگاری شده برای پرونده‌های پیوست."
   },
-  "premiumSignUpTwoStep": {
-    "message": "گزینه‌های ورود دو مرحله‌ای اضافی مانند YubiKey, FIDO U2F و Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "گزینه های ورود اضافی دو مرحله ای مانند YubiKey و Duo."
   },
   "premiumSignUpEmergency": {
     "message": "دسترسی اضطراری"
@@ -1998,6 +2239,9 @@
       }
     }
   },
+  "paymentChargedWithUnpaidSubscription": {
+    "message": "روش پرداخت شما برای هرگونه اشتراک پرداخت نشده شارژ خواهد شد."
+  },
   "paymentChargedWithTrial": {
     "message": "طرح شما با یک دوره آزمایشی رایگان ۷ روزه همراه است. تا پایان دوره آزمایشی از روش پرداخت شما هزینه ای کسر نمی‌شود. هر زمان که مایل بودید می‌توانید آن را لغو کنید."
   },
@@ -2018,6 +2262,9 @@
   },
   "cancelSubscription": {
     "message": "لغو اشتراک"
+  },
+  "subscriptionExpiration": {
+    "message": "انقضای اشتراک"
   },
   "subscriptionCanceled": {
     "message": "اشتراک شما لغو گردید."
@@ -2163,6 +2410,9 @@
   "contactSupport": {
     "message": "با پشتیبانی مشتری تماس بگیرید"
   },
+  "contactSupportShort": {
+    "message": "Contact Support"
+  },
   "updatedPaymentMethod": {
     "message": "روش پرداخت به‌روز شده."
   },
@@ -2263,6 +2513,9 @@
   },
   "planDescTeams": {
     "message": "برای مشاغل و سایر سازمان های تیمی."
+  },
+  "planNameTeamsStarter": {
+    "message": "Teams Starter"
   },
   "planNameEnterprise": {
     "message": "سازمانی"
@@ -2368,6 +2621,15 @@
   },
   "trialThankYou": {
     "message": "از ثبت نام در Bitwarden برای $PLAN$ سپاسگزاریم!",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "trialSecretsManagerThankYou": {
+    "message": "Thanks for signing up for Bitwarden Secrets Manager for $PLAN$!",
     "placeholders": {
       "plan": {
         "content": "$1",
@@ -2555,9 +2817,6 @@
   "invited": {
     "message": "دعوت شده"
   },
-  "accepted": {
-    "message": "پذیرفته شده"
-  },
   "confirmed": {
     "message": "تأیید شده"
   },
@@ -2585,14 +2844,14 @@
   "userDesc": {
     "message": "به مجموعه های اختصاص داده شده دسترسی داشته باشید و موارد را اضافه کنید"
   },
-  "manager": {
-    "message": "مدیر"
-  },
-  "managerDesc": {
-    "message": "ایجاد، حذف و مدیریت دسترسی در مجموعه های اختصاص داده شده"
-  },
   "all": {
     "message": "همه"
+  },
+  "addAccess": {
+    "message": "Add Access"
+  },
+  "addAccessFilter": {
+    "message": "Add Access Filter"
   },
   "refresh": {
     "message": "تازه کردن"
@@ -2624,6 +2883,15 @@
   "webVault": {
     "message": "گاوصندوق وب"
   },
+  "cli": {
+    "message": "CLI"
+  },
+  "bitWebVault": {
+    "message": "گاوصندوق وب Bitwarden"
+  },
+  "bitSecretsManager": {
+    "message": "مدیر اسرار Bitwarden"
+  },
   "loggedIn": {
     "message": "وارد شده"
   },
@@ -2644,6 +2912,15 @@
   },
   "failedLogin2fa": {
     "message": "تلاش ناموفق برای ورود با ورود دو مرحله ای اشتباه."
+  },
+  "incorrectPassword": {
+    "message": "کلمه عبور اشتباه"
+  },
+  "incorrectCode": {
+    "message": "کد اشتباه"
+  },
+  "incorrectPin": {
+    "message": "Incorrect PIN"
   },
   "exportedVault": {
     "message": "گاوصندوق برون ریزی شد"
@@ -2735,6 +3012,24 @@
       "id": {
         "content": "$1",
         "example": "Google"
+      }
+    }
+  },
+  "viewCollectionWithName": {
+    "message": "مشاهده مجموعه - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Collection1"
+      }
+    }
+  },
+  "editItemWithName": {
+    "message": "ویرایش مجموعه - $NAME$",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Google Login"
       }
     }
   },
@@ -3005,6 +3300,27 @@
   "device": {
     "message": "دستگاه"
   },
+  "creatingAccountOn": {
+    "message": "Creating account on"
+  },
+  "checkYourEmail": {
+    "message": "Check your email"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Follow the link in the email sent to"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "and continue creating your account."
+  },
+  "noEmail": {
+    "message": "No email?"
+  },
+  "goBack": {
+    "message": "Go back"
+  },
+  "toEditYourEmailAddress": {
+    "message": "to edit your email address."
+  },
   "view": {
     "message": "مشاهده"
   },
@@ -3086,6 +3402,9 @@
   "emailVerified": {
     "message": "ایمیل حساب تأیید شد"
   },
+  "emailVerifiedV2": {
+    "message": "Email verified"
+  },
   "emailVerifiedFailed": {
     "message": "تأیید ایمیل شما امکان پذیر نیست. سعی کنید یک ایمیل تأیید جدید ارسال کنید."
   },
@@ -3112,6 +3431,9 @@
   },
   "inviteAcceptedDesc": {
     "message": "زمانی که یک سرپرست عضویت شما را تأیید کرد، می‌توانید به این سازمان دسترسی داشته باشید. زمانی که این اتفاق بیفتد، یک ایمیل برای شما ارسال خواهیم کرد."
+  },
+  "inviteInitAcceptedDesc": {
+    "message": "اکنون می‌توانید به این سازمان دسترسی داشته باشید."
   },
   "inviteAcceptFailed": {
     "message": "قادر به پذیرش دعوت نیست. از مدیر سازمان بخواهید دعوتنامه جدیدی ارسال کند."
@@ -3148,6 +3470,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "شما درخواست کرده اید که حساب Bitwarden خود را حذف کنید. برای تأیید از دکمه زیر استفاده کنید."
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "You have requested to delete your Bitwarden organization."
   },
   "myOrganization": {
     "message": "سازمان من"
@@ -3275,6 +3600,9 @@
   "limitSubscriptionDesc": {
     "message": "برای اشتراک خود محدودیت جایگاه تعیین کنید. پس از رسیدن به این محدودیت، نمی‌توانید اعضای جدید را دعوت کنید."
   },
+  "limitSmSubscriptionDesc": {
+    "message": "برای اشتراک خود مدیر اسرار محدودیت جایگاه تعیین کنید. پس از رسیدن به این محدودیت، نمی‌توانید اعضای جدید را دعوت کنید."
+  },
   "maxSeatLimit": {
     "message": "محدودیت جایگاه (اختیاری)",
     "description": "Upper limit of seats to allow through autoscaling"
@@ -3311,6 +3639,9 @@
   "subscriptionUpdated": {
     "message": "اشتراک به‌روز شد"
   },
+  "subscribedToSecretsManager": {
+    "message": "Subscription updated. You now have access to Secrets Manager."
+  },
   "additionalOptions": {
     "message": "گزینه‌های اضافی"
   },
@@ -3320,12 +3651,27 @@
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "تنظیمات اشتراک شما منجر به تغییرات نسبتاً زیادی در مجموع صورتحساب شما می‌شود. اگر عضو‌هایی که به تازگی دعوت شده‌اند بیشتر از جایگاه‌های اشتراک شما باشند، بلافاصله هزینه‌ای متناسب برای عضو‌هایی اضافی دریافت خواهید کرد."
   },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "If you want to add additional"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "seats without the bundled offer, please contact"
+  },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "تنظیمات اشتراک شما منجر به تغییرات نسبتاً زیادی در مجموع صورتحساب شما می‌شود. اگر اعضای تازه دعوت شده از جایگاه‌های اشتراک شما بیشتر شوند، بلافاصله هزینه‌ای متناسب برای اعضای اضافی دریافت می‌کنید تا زمانی که به محدودیت جایگاه $MAX$ شما برسند.",
     "placeholders": {
       "max": {
         "content": "$1",
         "example": "50"
+      }
+    }
+  },
+  "subscriptionUserSeatsWithoutAdditionalSeatsOption": {
+    "message": "You can invite up to $COUNT$ members for no additional charge. Contact Customer Support to upgrade your plan and invite more members.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
       }
     }
   },
@@ -3338,12 +3684,12 @@
       }
     }
   },
-  "subscriptionFamiliesPlan": {
-    "message": "بدون ارتقای طرح خود نمی‌توانید بیش از $COUNT$ عضو دعوت کنید. لطفاً برای ارتقاء با پشتیبانی مشتری تماس بگیرید.",
+  "subscriptionUpgrade": {
+    "message": "You cannot invite more than $COUNT$ members without upgrading your plan.",
     "placeholders": {
       "count": {
         "content": "$1",
-        "example": "6"
+        "example": "2"
       }
     }
   },
@@ -3358,6 +3704,15 @@
   },
   "subscriptionMaxReached": {
     "message": "تنظیمات اشتراک شما منجر به تغییرات نسبتاً زیادی در مجموع صورتحساب شما می‌شود. شما نمی‌توانید بیش از $COUNT$ عضو را بدون افزایش جایگاه‌های اشتراک خود دعوت کنید.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "subscriptionSeatMaxReached": {
+    "message": "You cannot invite more than $COUNT$ members without increasing your subscription seats.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3389,17 +3744,11 @@
   "keyUpdated": {
     "message": "کلیدها به‌روز شد"
   },
-  "updateKeyTitle": {
-    "message": "کلید به‌روزرسانی"
-  },
   "updateEncryptionKey": {
     "message": "کلید رمزگذاری را به‌روز کنید"
   },
-  "updateEncryptionKeyShortDesc": {
-    "message": "شما در حال حاضر از یک طرح رمزگذاری قدیمی استفاده می‌کنید."
-  },
-  "updateEncryptionKeyDesc": {
-    "message": "ما به سمت کلیدهای رمزگذاری بزرگتر رفته ایم که امنیت بهتر و دسترسی به ویژگی های جدیدتر را فراهم می‌کند. به‌روزرسانی کلید رمزگذاری شما سریع و آسان است. فقط کلمه عبور اصلی خود را در زیر تایپ کنید. این به‌روزرسانی در نهایت اجباری خواهد شد."
+  "updateEncryptionSchemeDesc": {
+    "message": "ما طرح رمزگذاری را برای ارائه امنیت بهتر تغییر داده‌ایم. کلید رمزگذاری خود را اکنون با وارد کردن کلمه اصلی خود در زیر به روز کنید."
   },
   "updateEncryptionKeyWarning": {
     "message": "پس از به‌روزرسانی کلید رمزگذاری، باید از سیستم خارج شوید و دوباره به همه برنامه‌های Bitwarden که در حال حاضر استفاده می‌کنید (مانند برنامه تلفن همراه یا برنامه‌های افزودنی مرورگر) وارد شوید. عدم خروج و ورود مجدد (که کلید رمزگذاری جدید شما را دانلود می‌کند) ممکن است منجر به خراب شدن داده‌ها شود. ما سعی خواهیم کرد شما را به طور خودکار از سیستم خارج کنیم، اما ممکن است با تأخیر انجام شود."
@@ -3434,6 +3783,21 @@
   "nothingSelected": {
     "message": "شما چیزی را انتخاب نکرده اید."
   },
+  "receiveMarketingEmails": {
+    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  },
+  "unsubscribe": {
+    "message": "Unsubscribe"
+  },
+  "atAnyTime": {
+    "message": "at any time."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
+  },
   "acceptPolicies": {
     "message": "با علامت زدن این کادر با موارد زیر موافقت می‌کنید:"
   },
@@ -3454,6 +3818,9 @@
   },
   "vaultTimeoutDesc": {
     "message": "انتخاب کنید که گاو‌صندوق شما چه زمانی عمل توقف زمانی گاوصندوق را انجام دهد."
+  },
+  "vaultTimeoutLogoutDesc": {
+    "message": "انتخاب کنید که گاوصندوق شما چه زمانی از سیستم خارج می‌شود."
   },
   "oneMinute": {
     "message": "۱ دقیقه"
@@ -3490,6 +3857,18 @@
   },
   "organizationIsDisabled": {
     "message": "سازمان از کار افتاده است"
+  },
+  "secretsAccessSuspended": {
+    "message": "سازمان‌های تعلیق شده قابل دسترسی نیستند. لطفاً برای کمک با مالک سازمان خود تماس بگیرید."
+  },
+  "secretsCannotCreate": {
+    "message": "در سازمان‌های معلق نمی‌توان اسرار ایجاد کرد. لطفاً برای کمک با مالک سازمان خود تماس بگیرید."
+  },
+  "projectsCannotCreate": {
+    "message": "پروژه‌ها را نمی‌توان در سازمان‌های معلق ایجاد کرد. لطفاً برای کمک با مالک سازمان خود تماس بگیرید."
+  },
+  "serviceAccountsCannotCreate": {
+    "message": "حساب‌های خدماتی را نمی‌توان در سازمان‌های معلق ایجاد کرد. لطفاً برای کمک با مالک سازمان خود تماس بگیرید."
   },
   "disabledOrganizationFilterError": {
     "message": "موارد موجود در سازمان‌های غیرفعال، قابل دسترسی نیستند. برای دریافت کمک با مالک سازمان خود تماس بگیرید."
@@ -3543,8 +3922,8 @@
   "attachmentsNeedFix": {
     "message": "این مورد دارای پرونده های پیوست قدیمی است که باید اصلاح شوند."
   },
-  "attachmentFixDesc": {
-    "message": "این یک پرونده پیوست قدیمی است که باید اصلاح شود. برای کسب اطلاعات بیشتر کلیک کنید."
+  "attachmentFixDescription": {
+    "message": "این پیوست از رمزگذاری قدیمی استفاده می‌کند. برای دانلود، رمزگذاری مجدد، و بارگذاری مجدد پیوست، «اصلاح» را انتخاب کنید."
   },
   "fix": {
     "message": "اصلاح",
@@ -3608,15 +3987,6 @@
   },
   "couldNotChargeCardPayInvoice": {
     "message": "ما نتوانستیم کارت شما را شارژ کنیم. لطفاً فاکتور پرداخت نشده ذکر شده در زیر را مشاهده و پرداخت کنید."
-  },
-  "inAppPurchase": {
-    "message": "پرداخت درون برنامه ای"
-  },
-  "cannotPerformInAppPurchase": {
-    "message": "هنگام استفاده از روش پرداخت خرید درون برنامه ای، نمی‌توانید این عمل را انجام دهید."
-  },
-  "manageSubscriptionFromStore": {
-    "message": "باید اشتراک خود را از فروشگاهی که خرید درون برنامه ای شما انجام شده است مدیریت کنید."
   },
   "minLength": {
     "message": "حداقل طول"
@@ -3761,29 +4131,11 @@
   "restoreSelected": {
     "message": "بازیابی انتخاب شده"
   },
-  "restoreItem": {
-    "message": "بازیابی مورد"
-  },
   "restoredItem": {
     "message": "مورد بازیابی شد"
   },
   "restoredItems": {
     "message": "موارد بازیابی شد"
-  },
-  "restoreItemConfirmation": {
-    "message": "آیا مطمئن هستید که می‌خواهید این مورد را بازیابی کنید؟"
-  },
-  "restoreItems": {
-    "message": "بازیابی موارد"
-  },
-  "restoreSelectedItemsDesc": {
-    "message": "شما $COUNT$ مورد را برای بازیابی انتخاب کرده اید. آیا مطمئنید که می‌خواهید تمام این موارد را بازیابی کنید؟",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "150"
-      }
-    }
   },
   "restoredItemId": {
     "message": "مورد $ID$ بازیابی شد",
@@ -3818,9 +4170,6 @@
   "setMasterPassword": {
     "message": "تنظیم کلمه عبور اصلی"
   },
-  "ssoCompleteRegistration": {
-    "message": "برای پر کردن ورود به سیستم با SSO، لطفاً یک کلمه عبور اصلی برای دسترسی و محافظت از گاوصندوق خود تنظیم کنید."
-  },
   "identifier": {
     "message": "شناسه"
   },
@@ -3836,8 +4185,32 @@
   "ssoHandOff": {
     "message": "اکنون می‌توانید این برگه را ببندید و در افزونه ادامه دهید."
   },
+  "youSuccessfullyLoggedIn": {
+    "message": "You successfully logged in"
+  },
+  "thisWindowWillCloseIn5Seconds": {
+    "message": "This window will automatically close in 5 seconds"
+  },
+  "youMayCloseThisWindow": {
+    "message": "You may close this window"
+  },
   "includeAllTeamsFeatures": {
     "message": "همه ویژگی های تیم، به علاوه:"
+  },
+  "includeAllTeamsStarterFeatures": {
+    "message": "All Teams Starter features, plus:"
+  },
+  "chooseMonthlyOrAnnualBilling": {
+    "message": "Choose monthly or annual billing"
+  },
+  "abilityToAddMoreThanNMembers": {
+    "message": "Ability to add more than $COUNT$ members",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
   },
   "includeSsoAuthentication": {
     "message": "احراز هویت SSO از طریق SAML2.0 و OpenID Connect"
@@ -3854,8 +4227,9 @@
   "ssoIdentifier": {
     "message": "شناسه SSO"
   },
-  "ssoIdentifierHint": {
-    "message": "این شناسه را در اختیار اعضای خود قرار دهید تا با SSO وارد شوند."
+  "ssoIdentifierHintPartOne": {
+    "message": "این شناسه را در اختیار اعضای خود قرار دهید تا با SSO وارد شوند. برای دور زدن این مرحله، راه‌اندازی کنید ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Provide this ID to your members to login with SSO. To bypass this step, set up Domain verification'"
   },
   "unlinkSso": {
     "message": "لغو پیوند SSO"
@@ -4025,8 +4399,8 @@
     "message": "این ارسال به طور پیش‌فرض پنهان است. با استفاده از دکمه زیر می‌توانید نمایان بودن آن را تغییر دهید.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
-  "downloadFile": {
-    "message": "بارگیری پرونده"
+  "downloadAttachments": {
+    "message": "Download attachments"
   },
   "sendAccessUnavailable": {
     "message": "ارسالی که می‌خواهید به آن دسترسی پیدا کنید وجود ندارد یا دیگر در دسترس نیست.",
@@ -4276,12 +4650,6 @@
   "permission": {
     "message": "مجوز"
   },
-  "managerPermissions": {
-    "message": "مدیریت مجوزها"
-  },
-  "adminPermissions": {
-    "message": "مجوزهای مدیریت"
-  },
   "accessEventLogs": {
     "message": "به گزارش‌های رویداد دسترسی داشته باشید"
   },
@@ -4306,9 +4674,6 @@
   "deleteAnyCollection": {
     "message": "هر مجموعه ای را حذف کنید"
   },
-  "manageAssignedCollections": {
-    "message": "مدیریت مجموعه های اختصاص داده شده"
-  },
   "editAssignedCollections": {
     "message": "ویرایش مجموعه های اختصاص داده شده"
   },
@@ -4327,8 +4692,8 @@
   "manageUsers": {
     "message": "مدیریت کاربران"
   },
-  "manageResetPassword": {
-    "message": "مدیریت بازنشانی کلمه عبور"
+  "manageAccountRecovery": {
+    "message": "مدیریت بازیابی حساب"
   },
   "disableRequiredError": {
     "message": "قبل از اینکه این سیاست غیرفعال شود، باید سیاست $POLICYNAME$ را به صورت دستی تغییر دهید.",
@@ -4416,8 +4781,8 @@
     "message": "برای امتحان کردن امروز.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more about Bitwarden Send or sign up to **try it today.**'"
   },
-  "sendCreatorIdentifier": {
-    "message": "کاربر Bitwarden $USER_IDENTIFIER$ موارد زیر را با شما به اشتراک گذاشت",
+  "sendAccessCreatorIdentifier": {
+    "message": "Bitwarden member $USER_IDENTIFIER$ shared the following with you",
     "placeholders": {
       "user_identifier": {
         "content": "$1",
@@ -4459,14 +4824,14 @@
   "hintEqualsPassword": {
     "message": "اشاره به کلمه عبور شما نمی‌تواند همان کلمه عبور شما باشد."
   },
-  "enrollPasswordReset": {
-    "message": "در بازنشانی کلمه عبور ثبت نام کنید"
+  "enrollAccountRecovery": {
+    "message": "در بازیابی حساب کاربری ثبت نام کنید"
   },
-  "enrolledPasswordReset": {
-    "message": "در بازنشانی کلمه عبور ثبت نام کردید"
+  "enrolledAccountRecovery": {
+    "message": "در بازیابی حساب کاربری ثبت نام شد"
   },
-  "withdrawPasswordReset": {
-    "message": "از بازنشانی کلمه عبور خارج شوید"
+  "withdrawAccountRecovery": {
+    "message": "برداشت از بازیابی حساب"
   },
   "enrollPasswordResetSuccess": {
     "message": "ثبت‌نام موفقیت آمیز بود!"
@@ -4474,8 +4839,8 @@
   "withdrawPasswordResetSuccess": {
     "message": "خروج موفقیت آمیز بود!"
   },
-  "eventEnrollPasswordReset": {
-    "message": "کاربر $ID$ در بازنشانی کلمه عبور ثبت‌نام کرد.",
+  "eventEnrollAccountRecovery": {
+    "message": "کاربر $ID$ در بازیابی حساب کاربری ثبت نام کرد.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4483,8 +4848,8 @@
       }
     }
   },
-  "eventWithdrawPasswordReset": {
-    "message": "کاربر $ID$ از بازنشانی کلمه عبور خارج شد.",
+  "eventWithdrawAccountRecovery": {
+    "message": "کاربر $ID$ از بازیابی حساب کاربری خارج شد.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -4543,23 +4908,20 @@
   "resetPasswordEnrollmentWarning": {
     "message": "ثبت نام به مدیران سازمان امکان می‌دهد کلمه عبور اصلی شما را تغییر دهند"
   },
-  "resetPasswordPolicy": {
-    "message": "کلمه عبور اصلی بازنشانی شد"
+  "accountRecoveryPolicy": {
+    "message": "مدیریت بازیابی حساب کاربری"
   },
-  "resetPasswordPolicyDescription": {
-    "message": "به مدیران اجازه دهید تا کلمه‌های عبور اصلی اعضا را بازنشانی کنند."
+  "accountRecoveryPolicyDesc": {
+    "message": "بر اساس روش رمزگذاری، زمانی که کلمات عبور اصلی یا دستگاه‌های مورد اعتماد فراموش یا گم می‌شوند، حساب‌ها را بازیابی کنید."
   },
-  "resetPasswordPolicyWarning": {
-    "message": "قبل از اینکه مدیران بتوانند کلمه عبور اصلی خود را بازنشانی کنند، اعضای سازمان باید خودجوش ثبت نام کنند یا به صورت خودکار ثبت نام کنند."
+  "accountRecoveryPolicyWarning": {
+    "message": "حساب‌های موجود با کلمه عبور اصلی، اعضای خود را ملزم می‌کنند تا قبل از اینکه سرپرستان بتوانند حساب‌هایشان را بازیابی کنند، ثبت‌نام کنند. ثبت نام خودکار، بازیابی حساب را برای اعضای جدید فعال می‌کند."
+  },
+  "accountRecoverySingleOrgRequirementDesc": {
+    "message": "قبل از فعال کردن این سیاست، سیاست سازمانی واحد باید روشن باشد."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "ثبت نام خودکار"
-  },
-  "resetPasswordPolicyAutoEnrollDescription": {
-    "message": "پس از پذیرفته شدن دعوت، همه اعضا به‌طور خودکار در بازنشانی رمز عبور ثبت‌نام می‌شوند و اجازه انصراف نخواهند داشت."
-  },
-  "resetPasswordPolicyAutoEnrollWarning": {
-    "message": "اعضایی که از قبل در سازمان هستند در بازنشانی کلمه عبور ثبت نام نخواهند کرد. قبل از اینکه مدیران بتوانند کلمه عبور اصلی خود را بازنشانی کنند، باید خود ثبت نام کنند."
   },
   "resetPasswordPolicyAutoEnrollCheckbox": {
     "message": "لازم است اعضای جدید به طور خودکار ثبت‌نام شوند"
@@ -4660,8 +5022,8 @@
   "error": {
     "message": "خطا"
   },
-  "resetPasswordManageUsers": {
-    "message": "مدیر کاربران همچنین باید مجوز مدیریت بازنشانی کلمه عبور را داشته باشد"
+  "accountRecoveryManageUsers": {
+    "message": "مدیر کاربران همچنین باید مجوز مدیریت بازیابی حساب کاربری را داشته باشد"
   },
   "setupProvider": {
     "message": "راه اندازی ارائه دهنده"
@@ -4724,8 +5086,14 @@
   "newClientOrganizationDesc": {
     "message": "یک سازمان مشتری جدید ایجاد کنید که با شما به عنوان ارائه دهنده مرتبط باشد. شما می توانید به این سازمان دسترسی داشته باشید و آن را مدیریت کنید."
   },
+  "newClient": {
+    "message": "New client"
+  },
   "addExistingOrganization": {
     "message": "سازمان موجود را اضافه کنید"
+  },
+  "addNewOrganization": {
+    "message": "Add new organization"
   },
   "myProvider": {
     "message": "ارائه دهنده‌ی من"
@@ -4797,6 +5165,9 @@
   "masterPasswordInvalidWarning": {
     "message": "کلمه عبور اصلی شما الزامات سیاست این سازمان را برآورده نمی‌کند. برای پیوستن به سازمان، باید کلمه عبور اصلی خود را هم اکنون به‌روز کنید. ادامه، شما را از نشست فعلی خود خارج می‌کند و از شما می‌خواهد دوباره وارد سیستم شوید. نشست‌های فعال در دستگاه‌های دیگر ممکن است تا یک ساعت فعال بمانند."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "کلمه عبور اصلی شما با یک یا چند سیاست سازمان‌تان مطابقت ندارد. برای دسترسی به گاوصندوق، باید همین حالا کلمه عبور اصلی خود را به‌روز کنید. در صورت ادامه، شما از نشست فعلی خود خارج می‌شوید و باید دوباره وارد سیستم شوید. نشست فعال در دستگاه های دیگر ممکن است تا یک ساعت همچنان فعال باقی بمانند."
+  },
   "maximumVaultTimeout": {
     "message": "متوقف شدن گاو‌صندوق"
   },
@@ -4828,6 +5199,32 @@
       }
     }
   },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "سیاست‌های سازمانتان بر مهلت زمانی گاوصندوق شما تأثیر می‌گذارد. حداکثر زمان مجاز گاوصندوق $HOURS$ ساعت و $MINUTES$ دقیقه است. عملگر مهلت زمانی گاوصندوق شما روی $ACTION$ تنظیم شده است.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "سباست‌های سازمان شما، عملگر زمان‌بندی گاوصندوق شما را روی $ACTION$ تنظیم کرده است.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
+      }
+    }
+  },
   "customVaultTimeout": {
     "message": "پایان زمان گاوصندوق سفارشی"
   },
@@ -4843,7 +5240,7 @@
   "disablePersonalVaultExport": {
     "message": "حذف برون ریزی گاوصندوق شخصی"
   },
-  "disablePersonalVaultExportDesc": {
+  "disablePersonalVaultExportDescription": {
     "message": "به اعضا اجازه ندهید که داده‌های گاوصندوق شخصی خود را برون ریزی کنند."
   },
   "vaultExportDisabled": {
@@ -4851,6 +5248,18 @@
   },
   "personalVaultExportPolicyInEffect": {
     "message": "یک یا چند خط مشی سازمان از برون ریزی گاوصندوق شخصی شما جلوگیری می‌کند."
+  },
+  "activateAutofill": {
+    "message": "پر کردن خودکار را فعال کنید"
+  },
+  "activateAutofillPolicyDesc": {
+    "message": "تنظیم پر کردن خودکار در بارگذاری صفحه را در افزونه مرورگر برای همه اعضای موجود و جدید فعال کنید."
+  },
+  "experimentalFeature": {
+    "message": "وب‌سایت‌های در معرض خطر یا نامعتبر می‌توانند از پر کردن خودکار در بارگذاری صفحه سوء استفاده کنند."
+  },
+  "learnMoreAboutAutofill": {
+    "message": "درباره پر کردن خودکار بیشتر بدانید"
   },
   "selectType": {
     "message": "نوع SSO را انتخاب کنید"
@@ -4935,6 +5344,12 @@
   },
   "spValidateCertificates": {
     "message": "اعتبارسنجی گواهینامه‌ها"
+  },
+  "spUniqueEntityId": {
+    "message": "Set a unique SP entity ID"
+  },
+  "spUniqueEntityIdDesc": {
+    "message": "Generate an identifier that is unique to your organization"
   },
   "idpEntityId": {
     "message": "شناسه موجودیت"
@@ -5135,16 +5550,13 @@
     "message": "استفاده",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
-  "ssoPolicyHelpLink": {
+  "ssoPolicyHelpAnchor": {
     "message": "نیاز به سیاست احراز هویت با یک علامت وجود دارد",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
   },
   "ssoPolicyHelpEnd": {
     "message": "از همه اعضا بخواهد با SSO وارد شوند.",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Use the require single-sign-on authentication policy to require all members to log in with SSO.'"
-  },
-  "ssoPolicyHelpKeyConnector": {
-    "message": "برای راه‌اندازی رمزگشایی رابط کلید، نیاز به احراز هویت SSO و سیاست‌های سازمانی واحد مورد نیاز است."
   },
   "memberDecryptionOption": {
     "message": "گزینه‌های رمزگشایی اعضا"
@@ -5155,8 +5567,17 @@
   "keyConnector": {
     "message": "رابط کلید"
   },
-  "memberDecryptionKeyConnectorDesc": {
-    "message": "ورود به سیستم با SSO را به سرور کلید رمزگشایی خود میزبانی شده متصل کنید. با استفاده از این گزینه، اعضا نیازی به استفاده از کلمه عبور اصلی خود برای رمزگشایی داده‌های گاوصندوق ندارند. برای راهنمایی راه اندازی با پشتیبانی Bitwarden تماس بگیرید."
+  "memberDecryptionKeyConnectorDescStart": {
+    "message": "ورود به سیستم با SSO را به سرور کلید رمزگشایی خود میزبانی شده متصل کنید. با استفاده از این گزینه، اعضا نیازی به استفاده از کلمه عبور اصلی خود برای رمزگشایی داده‌های گاوصندوق ندارند. ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescLink": {
+    "message": "به احراز هویت SSO و سیاست‌های سازمانی واحد نیاز دارد",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
+  },
+  "memberDecryptionKeyConnectorDescEnd": {
+    "message": "برای راه اندازی رمزگشایی Key Connector مورد نیاز است. برای راهنمایی راه اندازی با پشتیبانی Bitwarden تماس بگیرید.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Connect login with SSO to your self-hosted decryption key server. Using this option, members won’t need to use their master passwords to decrypt vault data. The require SSO authentication and single organization policies are required to set up Key Connector decryption. Contact Bitwarden Support for set up assistance.'"
   },
   "keyConnectorPolicyRestriction": {
     "message": "\"ورود با SSO و رمزگشایی رابط کلید\" فعال شده است. این سیاست فقط برای مالکان و سرپرستان اعمال می‌شود."
@@ -5239,6 +5660,39 @@
   "rotateBillingSyncTokenTitle": {
     "message": "چرخاندن توکن همگام‌سازی صورتحساب، توکن قبلی را باطل می‌کند."
   },
+  "selfHostedServer": {
+    "message": "self-hosted"
+  },
+  "customEnvironment": {
+    "message": "Custom environment"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
+  },
+  "apiUrl": {
+    "message": "API server URL"
+  },
+  "webVaultUrl": {
+    "message": "Web vault server URL"
+  },
+  "identityUrl": {
+    "message": "Identity server URL"
+  },
+  "notificationsUrl": {
+    "message": "Notifications server URL"
+  },
+  "iconsUrl": {
+    "message": "Icons server URL"
+  },
+  "environmentSaved": {
+    "message": "Environment URLs saved"
+  },
   "selfHostingTitle": {
     "message": "خود میزبانی"
   },
@@ -5299,6 +5753,19 @@
   "required": {
     "message": "الزامی است"
   },
+  "charactersCurrentAndMaximum": {
+    "message": "حداکثر کاراکتر $CURRENT$/$MAX$",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "max": {
+        "content": "$2",
+        "example": "100"
+      }
+    }
+  },
   "characterMaximum": {
     "message": "حداکثر کاراکتر $MAX$",
     "placeholders": {
@@ -5329,8 +5796,8 @@
   "exportingOrganizationVaultTitle": {
     "message": "در حال برون ریزی گاوصندوق سازمان"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "فقط موارد شخصی گاوصندوق مرتبط با $EMAIL$ برو ریزی خواهند شد. موارد گاوصندوق سازمان شامل نخواهد شد. فقط اطلاعات مورد گاوصندوق برون ریزی خواهد شد و شامل تاریخچه کلمه عبور مرتبط یا پیوست نمی‌شود.",
+  "exportingIndividualVaultDescription": {
+    "message": "فقط موارد شخصی گاوصندوق مرتبط با $EMAIL$ برون ریزی خواهند شد. موارد گاوصندوق سازمان شامل نخواهد شد. فقط اطلاعات مورد گاوصندوق برون ریزی خواهد شد و شامل تاریخچه کلمه عبور مرتبط یا پیوست نمی‌شود.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -5338,8 +5805,8 @@
       }
     }
   },
-  "exportingOrganizationVaultDescription": {
-    "message": "فقط گاوصندوق سازمانی مرتبط با $ORGANIZATION$ برون ریزی خواهد شد. اقلام شخصی گاوصندوق و اقلام سایر سازمان‌ها شامل نمی‌شود.",
+  "exportingOrganizationVaultDesc": {
+    "message": "فقط گاوصدوق سازمان مرتبط با $ORGANIZATION$ برون ریزی خواهد شد. موارد موجود در گاوصندوق‌های فردی یا سایر سازمان‌ها شامل نمی‌شوند.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -5371,6 +5838,15 @@
   "currentOrganization": {
     "message": "سازمان فعلی",
     "description": "This is used by screen readers to indicate the organization that is currently being shown to the user."
+  },
+  "accountLoggedInAsName": {
+    "message": "حساب کاربری: با نام $NAME$ وارد شده‌اید",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
   },
   "accountSettings": {
     "message": "تنظیمات حساب کاربری"
@@ -5451,7 +5927,7 @@
   },
   "lastSync": {
     "message": "آخرین همگام‌سازی",
-    "Description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
+    "description": "Used as a prefix to indicate the last time a sync occured. Example \"Last sync 1968-11-16 00:00:00\""
   },
   "sponsorshipsSynced": {
     "message": "حمایت‌های مالی خود میزبان همگام‌سازی شد."
@@ -5474,6 +5950,108 @@
   },
   "forwardedEmailDesc": {
     "message": "یک نام مستعار ایمیل با یک سرویس ارسال خارجی ایجاد کنید."
+  },
+  "forwarderError": {
+    "message": "$SERVICENAME$ error: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Website: $WEBSITE$. Generated by Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Invalid $SERVICENAME$ API token",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Invalid $SERVICENAME$ domain.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Invalid $SERVICENAME$ url.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Unknown $SERVICENAME$ error occurred.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "نام میزبان",
@@ -5593,6 +6171,24 @@
       }
     }
   },
+  "inputMinValue": {
+    "message": "مقدار ورودی باید حداقل $MIN$ باشد.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "مقدار ورودی نباید از $MAX$ تجاوز کند.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
+  },
   "multipleInputEmails": {
     "message": "یک یا چند ایمیل نامعتبر است"
   },
@@ -5614,20 +6210,29 @@
       }
     }
   },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "Launch Duo and follow the steps to finish logging in."
+  },
+  "duoRequiredByOrgForAccount": {
+    "message": "Duo two-step login is required for your account."
+  },
+  "launchDuo": {
+    "message": "Launch Duo"
+  },
   "turnOn": {
     "message": "روشن"
   },
   "on": {
     "message": "روشن"
   },
+  "off": {
+    "message": "خاموش"
+  },
   "members": {
     "message": "اعضا"
   },
   "reporting": {
     "message": "گزارش نویسی"
-  },
-  "cardBrandMir": {
-    "message": "میر"
   },
   "numberOfUsers": {
     "message": "تعداد کاربران"
@@ -5736,10 +6341,10 @@
     "description": "The action to delete multiple secrets from the system."
   },
   "hardDeleteSecret": {
-    "message": "Permanently delete secret"
+    "message": "حذف دائمی راز"
   },
   "hardDeleteSecrets": {
-    "message": "Permanently delete secrets"
+    "message": "حذف دائمی رازها"
   },
   "secretProjectAssociationDescription": {
     "message": "پروژه هایی را انتخاب کنید که راز با آن‌ها مرتبط باشد. فقط کاربران سازمانی که به این پروژه ها دسترسی دارند می‌توانند این راز را ببینند.",
@@ -5818,7 +6423,7 @@
     "description": "Message to encourage the user to start adding secrets."
   },
   "secretsTrashNoItemsMessage": {
-    "message": "There are no secrets in the trash."
+    "message": "هیچ رازی در سطل زباله وجود ندارد."
   },
   "serviceAccountsNoItemsMessage": {
     "message": "برای شروع خودکارسازی دسترسی مخفی، یک حساب سرویس جدید ایجاد کنید.",
@@ -5845,7 +6450,7 @@
     "description": "Action to view the details of a service account."
   },
   "deleteServiceAccountDialogMessage": {
-    "message": "Deleting service account $SERVICE_ACCOUNT$ is permanent and irreversible.",
+    "message": "حذف حساب سرویس $SERVICE_ACCOUNT$ دائمی و غیرقابل برگشت است.",
     "placeholders": {
       "service_account": {
         "content": "$1",
@@ -5854,10 +6459,10 @@
     }
   },
   "deleteServiceAccountsDialogMessage": {
-    "message": "Deleting service accounts is permanent and irreversible."
+    "message": "حذف حساب‌های سرویس، دائمی و غیرقابل برگشت است."
   },
   "deleteServiceAccountsConfirmMessage": {
-    "message": "Delete $COUNT$ service accounts",
+    "message": "حساب‌های خدمات $COUNT$ را حذف کنید",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -5866,17 +6471,17 @@
     }
   },
   "deleteServiceAccountToast": {
-    "message": "The service account have been deleted"
+    "message": "حساب سرویس حذف شد"
   },
   "deleteServiceAccountsToast": {
-    "message": "Service accounts deleted"
+    "message": "حساب‌های سرویس حذف شد"
   },
   "searchServiceAccounts": {
     "message": "جستجوی حساب‌های سرویس",
     "description": "Placeholder text for searching service accounts."
   },
   "editServiceAccount": {
-    "message": "Edit service account",
+    "message": "حساب سرویس را ویرایش کنید",
     "description": "Title for editing a service account."
   },
   "addProject": {
@@ -5912,13 +6517,13 @@
     "description": "Notifies that the selected secrets have been moved to the trash"
   },
   "hardDeleteSecretConfirmation": {
-    "message": "Are you sure you want to permanently delete this secret?"
+    "message": "آیا مطمئنید که می‌خواهید این راز را برای همیشه حذف کنید؟"
   },
   "hardDeleteSecretsConfirmation": {
-    "message": "Are you sure you want to permanently delete these secrets?"
+    "message": "آیا مطمئنید که می‌خواهید این رازها را برای همیشه حذف کنید؟"
   },
   "hardDeletesSuccessToast": {
-    "message": "Secrets permanently deleted"
+    "message": "رازها برای همیشه حذف شد"
   },
   "smAccess": {
     "message": "دسترسی",
@@ -5937,7 +6542,7 @@
     "description": "Notifies that a new service account has been created"
   },
   "serviceAccountUpdated": {
-    "message": "Service account updated",
+    "message": "سرویس حساب به‌روز شد",
     "description": "Notifies that a service account has been updated"
   },
   "newSaSelectAccess": {
@@ -6021,14 +6626,14 @@
     "description": "Notification to be displayed when a secret is successfully sent to the trash."
   },
   "hardDeleteSuccessToast": {
-    "message": "Secret permanently deleted"
+    "message": "راز برای همیشه حذف شد"
   },
   "accessTokens": {
     "message": "دسترسی به توکن‌ها",
     "description": "Title for the section displaying access tokens."
   },
-  "createAccessToken": {
-    "message": "توکن دسترسی ایجاد کنید",
+  "newAccessToken": {
+    "message": "توکن دسترسی جدید",
     "description": "Button label for creating a new access token."
   },
   "expires": {
@@ -6075,23 +6680,23 @@
     "message": "توکن دسترسی ایجاد و در کلیپ بورد کپی شد",
     "description": "Notification to inform the user that the access token has been created and copied to the clipboard."
   },
-  "accessTokenPermissionsBetaNotification": {
-    "message": "مدیریت مجوزها برای نسخه بتا در دسترس نیست.",
-    "description": "Notification to inform the user that the feature for managing access token permissions is not available in the beta version."
-  },
   "revokeAccessToken": {
     "message": "لغو دسترسی به توکن",
     "description": "Invalidates / cancels an access token and as such removes access to secrets for the client application."
   },
   "revokeAccessTokens": {
-    "message": "Revoke access tokens"
+    "message": "لغو دسترسی به توکن‌ها"
   },
   "revokeAccessTokenDesc": {
-    "message": "Revoking access tokens is permanent and irreversible."
+    "message": "لغو دسترسی به توکن‌ها دائمی و غیر قابل برگشت است."
   },
   "accessTokenRevoked": {
-    "message": "Access tokens revoked",
+    "message": "توکن‌های دسترسی لغو شدند",
     "description": "Toast message after deleting one or multiple access tokens."
+  },
+  "noAccessTokenSelected": {
+    "message": "هیچ توکن دسترسی برای لغو انتخاب نشده است",
+    "description": "Toast error message after trying to delete access tokens but not selecting any access tokens."
   },
   "submenu": {
     "message": "زیرمنو"
@@ -6126,11 +6731,8 @@
   "editGroupCollectionsDesc": {
     "message": "با افزودن مجموعه‌ها به این گروه، اجازه دسترسی به مجموعه‌ها را بدهید."
   },
-  "accessAllCollectionsDesc": {
-    "message": "اجازه دسترسی به تمام مجموعه‌های فعلی و آینده."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "اگر علامت زده شود، این گزینه جایگزین سایر مجوزهای مجموعه می‌شود."
+  "restrictedCollectionAssignmentDesc": {
+    "message": "You can only assign collections you manage."
   },
   "selectMembers": {
     "message": "انتخاب اعضا"
@@ -6174,71 +6776,65 @@
   "group": {
     "message": "گروه"
   },
-  "groupAccessAll": {
-    "message": "این گروه می‌تواند به همه موارد دسترسی داشته باشد و آن‌ها را تغییر دهد."
-  },
-  "memberAccessAll": {
-    "message": "این عضو می‌تواند به همه موارد دسترسی داشته باشد و آن‌ها را تغییر دهد."
-  },
   "domainVerification": {
-    "message": "Domain verification"
+    "message": "تائید دامنه"
   },
   "newDomain": {
-    "message": "New domain"
+    "message": "دامنه جدید"
   },
   "noDomains": {
-    "message": "No domains"
+    "message": "بدون دامنه"
   },
   "noDomainsSubText": {
-    "message": "Connecting a domain allows members to skip the SSO identifier field during Login with SSO."
+    "message": "اتصال یک دامنه به اعضا اجازه می‌دهد تا در حین ورود با SSO از قسمت شناسه SSO رد شوند."
   },
   "verifyDomain": {
-    "message": "Verify domain"
+    "message": "تأیید دامنه"
   },
   "reverifyDomain": {
-    "message": "Reverify domain"
+    "message": "تأیید مجدد دامنه"
   },
   "copyDnsTxtRecord": {
-    "message": "Copy DNS TXT record"
+    "message": "رکورد DNS TXT را کپی کن"
   },
   "dnsTxtRecord": {
-    "message": "DNS TXT record"
+    "message": "رکورد DNS TXT"
   },
   "dnsTxtRecordInputHint": {
-    "message": "Copy and paste the TXT record into your DNS Provider."
+    "message": "رکورد TXT را کپی کرده و در ارائه دهنده DNS خود جایگذاری کن."
   },
   "domainNameInputHint": {
-    "message": "Example: mydomain.com. Subdomains require separate entries to be verified."
+    "message": "مثال: .mydomain.com زیر دامنه‌ها برای تأیید نیاز به ورودی‌های جداگانه دارند."
   },
   "automaticDomainVerification": {
-    "message": "Automatic Domain Verification"
+    "message": "تأیید خودکار دامنه"
   },
   "automaticDomainVerificationProcess": {
-    "message": "Bitwarden will attempt to verify the domain 3 times during the first 72 hours. If the domain can’t be verified, check the DNS record in your host and manually verify. The domain will be removed from your organization in 7 days if it is not verified"
+    "message": "Bitwarden در طول ۷۲ ساعت اول ۳ بار سعی خواهد کرد دامنه را تأیید کند. اگر دامنه قابل تأیید نیست، رکورد DNS در هاست خود را بررسی کرده و به صورت دستی تأیید کنید. در صورت تأیید نشدن دامنه طی ۷ روز از سازمان شما حذف خواهد شد"
   },
   "invalidDomainNameMessage": {
-    "message": "Input is not a valid format. Format: mydomain.com. Subdomains require separate entries to be verified."
+    "message": "ورودی یک قالب معتبر نیست. فرمت: .mydomain.com زیر دامنه ها برای تأیید نیاز به ورودی‌های جداگانه دارند."
   },
   "removeDomain": {
-    "message": "Remove domain"
+    "message": "حذف دامنه"
   },
   "removeDomainWarning": {
-    "message": "Removing a domain cannot be undone. Are you sure you want to continue?"
+    "message": "حذف دامنه قابل لغو نیست. آیا مطمئنید که می‌خواهید ادامه دهید؟"
   },
   "domainRemoved": {
-    "message": "Domain removed"
+    "message": "دامنه حذف شد"
   },
   "domainSaved": {
-    "message": "Domain saved"
+    "message": "دامنه ذخیره شدند"
   },
   "domainVerified": {
-    "message": "Domain verified"
+    "message": "دامنه تأیید شد"
   },
   "duplicateDomainError": {
-    "message": "You can't claim the same domain twice."
+    "message": "شما نمی‌توانید یک دامنه را دو بار مطالبه کنید."
   },
   "domainNotAvailable": {
-    "message": "Someone else is using $DOMAIN$. Use a different domain to continue.",
+    "message": "شخص دیگری از $DOMAIN$ استفاده می کند. برای ادامه از دامنه دیگری استفاده کنید.",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6247,7 +6843,7 @@
     }
   },
   "domainNotVerified": {
-    "message": "$DOMAIN$ not verified. Check your DNS record.",
+    "message": "$DOMAIN$ تأیید نشده است. رکورد DNS خود را بررسی کنید.",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6256,28 +6852,28 @@
     }
   },
   "domainStatusVerified": {
-    "message": "Verified"
+    "message": "تأیید شده"
   },
   "domainStatusUnverified": {
-    "message": "Unverified"
+    "message": "تأیید نشده"
   },
   "domainNameTh": {
-    "message": "Name"
+    "message": "نام"
   },
   "domainStatusTh": {
-    "message": "Status"
+    "message": "وضعیت"
   },
   "lastChecked": {
-    "message": "Last checked"
+    "message": "آخرین بررسی"
   },
   "editDomain": {
-    "message": "Edit domain"
+    "message": "ویرایش دامنه"
   },
   "domainFormInvalid": {
-    "message": "There are form errors that need your attention"
+    "message": "خطاهای فرمی وجود دارد که نیاز به توجه شما دارد"
   },
   "addedDomain": {
-    "message": "Added domain $DOMAIN$",
+    "message": "دامنه $DOMAIN$ اضافه شد",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6286,7 +6882,7 @@
     }
   },
   "removedDomain": {
-    "message": "Removed domain $DOMAIN$",
+    "message": "دامنه $DOMAIN$ حذف شد",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6295,7 +6891,7 @@
     }
   },
   "domainVerifiedEvent": {
-    "message": "$DOMAIN$ verified",
+    "message": "$DOMAIN$ تأیید شد",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6304,7 +6900,7 @@
     }
   },
   "domainNotVerifiedEvent": {
-    "message": "$DOMAIN$ not verified",
+    "message": "$DOMAIN$ تأیید نشد",
     "placeholders": {
       "DOMAIN": {
         "content": "$1",
@@ -6312,11 +6908,44 @@
       }
     }
   },
-  "membersColumnHeader": {
-    "message": "عضو/گروه"
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "Verification required for this action. Set a PIN to continue."
   },
-  "groupAndMemberColumnHeader": {
-    "message": "عضو"
+  "setPin": {
+    "message": "Set PIN"
+  },
+  "verifyWithBiometrics": {
+    "message": "Verify with biometrics"
+  },
+  "awaitingConfirmation": {
+    "message": "Awaiting confirmation"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "Could not complete biometrics."
+  },
+  "needADifferentMethod": {
+    "message": "Need a different method?"
+  },
+  "useMasterPassword": {
+    "message": "Use master password"
+  },
+  "usePin": {
+    "message": "Use PIN"
+  },
+  "useBiometrics": {
+    "message": "Use biometrics"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "Enter the verification code that was sent to your email."
+  },
+  "resendCode": {
+    "message": "Resend code"
+  },
+  "memberColumnHeader": {
+    "message": "Member"
+  },
+  "groupSlashMemberColumnHeader": {
+    "message": "Group/Member"
   },
   "selectGroupsAndMembers": {
     "message": "گروه‌ها و اعضا را انتخاب کنید"
@@ -6324,8 +6953,8 @@
   "selectGroups": {
     "message": "انتخاب گروه‌ها"
   },
-  "userPermissionOverrideHelper": {
-    "message": "مجوزهای تنظیم شده برای یک عضو، جایگزین مجوزهای تعیین شده توسط گروه آن عضو می‌شود"
+  "userPermissionOverrideHelperDesc": {
+    "message": "Permissions set for a member will replace permissions set by that member's group."
   },
   "noMembersOrGroupsAdded": {
     "message": "عضو یا گروهی اضافه نشد"
@@ -6369,6 +6998,24 @@
       }
     }
   },
+  "teamsStarterPlanInvLimitReachedManageBilling": {
+    "message": "Teams Starter plans may have up to $SEATCOUNT$ members. Upgrade to your plan to invite more members.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
+  "teamsStarterPlanInvLimitReachedNoManageBilling": {
+    "message": "Teams Starter plans may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade your plan and invite more members.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
   "freeOrgMaxCollectionReachedManageBilling": {
     "message": "سازمان‌های رایگان ممکن است تا $COLLECTIONCOUNT$ مجموعه داشته باشند. برای افزودن مجموعه‌های بیشتر، به یک طرح پولی ارتقا دهید.",
     "placeholders": {
@@ -6388,16 +7035,16 @@
     }
   },
   "server": {
-    "message": "Server"
+    "message": "سرور"
   },
   "exportData": {
-    "message": "Export data"
+    "message": "برون ریزی داده"
   },
   "exportingOrganizationSecretDataTitle": {
-    "message": "Exporting Organization Secret Data"
+    "message": "برون ریزی داده‌های مخفی سازمان"
   },
   "exportingOrganizationSecretDataDescription": {
-    "message": "Only the Secrets Manager data associated with $ORGANIZATION$ will be exported. Items in other products or from other organizations will not be included.",
+    "message": "فقط داده‌های مدیریت راز مرتبط با $ORGANIZATION$ برون ریزی خواهند شد. موارد موجود در محصولات دیگر یا سازمان های دیگر شامل نمی‌شود.",
     "placeholders": {
       "ORGANIZATION": {
         "content": "$1",
@@ -6406,16 +7053,16 @@
     }
   },
   "fileUpload": {
-    "message": "File upload"
+    "message": "بارگذاری فایل"
   },
   "acceptedFormats": {
-    "message": "Accepted Formats:"
+    "message": "فرمت های پذیرفته شده:"
   },
   "copyPasteImportContents": {
-    "message": "Copy & paste import contents:"
+    "message": "کپی و جایگذاری محتویات درون ریزی:"
   },
   "or": {
-    "message": "or"
+    "message": "یا"
   },
   "licenseAndBillingManagement": {
     "message": "مدیریت مجوز و صورتحساب"
@@ -6444,6 +7091,18 @@
   "billingSyncHelp": {
     "message": "راهنمای همگام‌سازی صورتحساب"
   },
+  "licensePaidFeaturesHelp": {
+    "message": "ویژگی‌های پولی مجوز کمک می‌کند"
+  },
+  "selfHostGracePeriodHelp": {
+    "message": "پس از انقضای اشتراک شما، 60 روز فرصت دارید تا فایل مجوز به روز شده را در سازمان خود اعمال کنید. پایان دوره مهلت $GRACE_PERIOD_END_DATE$.",
+    "placeholders": {
+      "GRACE_PERIOD_END_DATE": {
+        "content": "$1",
+        "example": "May 12, 2024"
+      }
+    }
+  },
   "uploadLicense": {
     "message": "بارگذاری مجوز"
   },
@@ -6466,13 +7125,13 @@
     "message": "برای اعطای دسترسی، حساب‌های سرویس اضافه کنید"
   },
   "serviceAccountPeopleDescription": {
-    "message": "Grant groups or people access to this service account."
+    "message": "به گروه‌ها یا افراد اجازه دسترسی به این حساب سرویس را بدهید."
   },
   "serviceAccountProjectsDescription": {
-    "message": "Assign projects to this service account. "
+    "message": "پروژه‌ها را به این حساب سرویس اختصاص دهید. "
   },
   "serviceAccountEmptyProjectAccesspolicies": {
-    "message": "Add projects to grant access"
+    "message": "پروژه‌ها را برای اعطای دسترسی اضافه کنید"
   },
   "canReadWrite": {
     "message": "می‌توان خواند، نوشت"
@@ -6483,32 +7142,29 @@
   "lowKdfIterations": {
     "message": "تکرار KDF کم"
   },
-  "lowKdfIterationsDesc": {
-    "message": "تنظیمات رمزگذاری KDF خود را برای بهبود امنیت حساب خود افزایش دهید."
+  "updateLowKdfIterationsDesc": {
+    "message": "تنظیمات رمزگذاری خود را برای رعایت توصیه‌های امنیتی جدید و بهبود حفاظت از حساب به‌روزرسانی کنید."
   },
-  "changeKdfSettings": {
-    "message": "تغییر تنظیمات KDF"
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login, if any. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "ادامه، شما را از نشست فعلی خارج می‌کند و باید دوباره وارد سیستم شوید. نشست‌های فعال در دستگاه‌های دیگر ممکن است تا یک ساعت فعال بمانند. توصیه می‌کنیم قبل از تغییر تنظیمات رمزگذاری برای جلوگیری از دست رفتن داده‌ها، گاوصندوق خود را برون ریزی کنید."
+  "secretsManager": {
+    "message": "مدیر رازها"
   },
-  "secretsManagerBeta": {
-    "message": "بتا مدیر اسرار"
+  "secretsManagerAccessDescription": {
+    "message": "دسترسی کاربر به مدیر رازها را فعال کنید."
   },
-  "secretsManagerBetaDesc": {
-    "message": "در طول برنامه بتا، دسترسی کاربر به مدیر اسرار را بدون هیچ هزینه ای فعال کنید."
-  },
-  "userAccessSecretsManager": {
-    "message": "این کاربر می‌تواند به بتای مدیر اسرار دسترسی داشته باشد"
+  "userAccessSecretsManagerGA": {
+    "message": "این کاربر می تواند به مدیر رازها دسترسی داشته باشد"
   },
   "important": {
-    "message": "Important:"
+    "message": "مهم:"
   },
   "viewAll": {
-    "message": "View all"
+    "message": "نمایش همه"
   },
   "showingPortionOfTotal": {
-    "message": "Showing $PORTION$ of $TOTAL$",
+    "message": "نمایش $PORTION$ از $TOTAL$",
     "placeholders": {
       "portion": {
         "content": "$1",
@@ -6521,16 +7177,16 @@
     }
   },
   "resolveTheErrorsBelowAndTryAgain": {
-    "message": "Resolve the errors below and try again."
+    "message": "خطاهای زیر را برطرف کرده و دوباره امتحان کنید."
   },
   "description": {
-    "message": "Description"
+    "message": "توضیحات"
   },
   "errorReadingImportFile": {
-    "message": "An error occurred when trying to read the import file"
+    "message": "هنگام تلاش برای خواندن فایل درون ریزی شده خطایی رخ داد"
   },
   "accessedSecret": {
-    "message": "Accessed secret $SECRET_ID$.",
+    "message": "به $SECRET_ID$ مخفی دسترسی پیدا کرد.",
     "placeholders": {
       "secret_id": {
         "content": "$1",
@@ -6542,30 +7198,33 @@
     "message": "SDK",
     "description": "Software Development Kit"
   },
+  "createAnAccount": {
+    "message": "Create an account"
+  },
   "createSecret": {
-    "message": "Create a secret"
+    "message": "ساختن یک راز"
   },
   "createProject": {
-    "message": "Create a project"
+    "message": "ساختن یک پروژه"
   },
   "createServiceAccount": {
-    "message": "Create a service account"
+    "message": "ساختن یک حساب کاربری"
   },
   "downloadThe": {
-    "message": "Download the",
+    "message": "بارگیری",
     "description": "Link to a downloadable resource. This will be used as part of a larger phrase. Example: Download the Secrets Manager CLI"
   },
   "smCLI": {
-    "message": "Secrets Manager CLI"
+    "message": "CLI مدیر رازها"
   },
   "importSecrets": {
-    "message": "Import secrets"
+    "message": "درون ریزی رازها"
   },
   "getStarted": {
-    "message": "Get started"
+    "message": "شروع کنید"
   },
   "complete": {
-    "message": "$COMPLETED$/$TOTAL$ Complete",
+    "message": "$COMPLETED$/$TOTAL$ کامل شد",
     "placeholders": {
       "COMPLETED": {
         "content": "$1",
@@ -6578,70 +7237,64 @@
     }
   },
   "restoreSecret": {
-    "message": "Restore secret"
+    "message": "بازیابی راز"
   },
   "restoreSecrets": {
-    "message": "Restore secrets"
+    "message": "بازیابی رازها"
   },
   "restoreSecretPrompt": {
-    "message": "Are you sure you want to restore this secret?"
+    "message": "آیا مطمئن هستید که می‌خواهید این راز را بازیابی کنید؟"
   },
   "restoreSecretsPrompt": {
-    "message": "Are you sure you want to restore these secrets?"
+    "message": "آیا مطمئن هستید که می‌خواهید این رازها را بازیابی کنید؟"
   },
   "secretRestoredSuccessToast": {
-    "message": "Secret restored"
+    "message": "راز بازیابی شد"
   },
   "secretsRestoredSuccessToast": {
-    "message": "Secrets restored"
+    "message": "رازها بازیابی شد"
   },
   "selectionIsRequired": {
-    "message": "Selection is required."
-  },
-  "secretsManagerSubscriptionDesc": {
-    "message": "Turn on organization access to the Secrets Manager at no charge during the Beta program. Users can be granted access to the Beta in Members."
-  },
-  "secretsManagerEnable": {
-    "message": "Enable Secrets Manager Beta"
+    "message": "انتخاب الزامی است."
   },
   "saPeopleWarningTitle": {
-    "message": "Access tokens still available"
+    "message": "توکن‌های دسترسی هنوز در دسترس هستند"
   },
   "saPeopleWarningMessage": {
-    "message": "Removing people from a service account does not remove the access tokens they created. For security best practice, it is recommended to revoke access tokens created by people removed from a service account."
+    "message": "حذف افراد از حساب سرویس، توکن‌های دسترسی ایجاد شده توسط آن‌ها را حذف نمی‌کند. برای بهترین عملکرد امنیتی، توصیه می‌شود توکن‌های دسترسی ایجاد شده توسط افرادی که از حساب سرویس حذف شده‌اند لغو شود."
   },
   "smAccessRemovalWarningProjectTitle": {
-    "message": "Remove access to this project"
+    "message": "دسترسی به این پروژه را حذف کنید"
   },
   "smAccessRemovalWarningProjectMessage": {
-    "message": "This action will remove your access to the project."
+    "message": "این عمل دسترسی شما به پروژه را حذف می‌کند."
   },
   "smAccessRemovalWarningSaTitle": {
-    "message": "Remove access to this service account"
+    "message": "دسترسی به این حساب سرویس را حذف کنید"
   },
   "smAccessRemovalWarningSaMessage": {
-    "message": "This action will remove your access to the service account."
+    "message": "این عمل دسترسی شما به حساب سرویس را حذف می‌کند."
   },
   "removeAccess": {
-    "message": "Remove access"
+    "message": "لغو دسترسی"
   },
   "checkForBreaches": {
-    "message": "Check known data breaches for this password"
+    "message": "نقض اطلاعات شناخته شده برای این کلمه عبور را بررسی کنید"
   },
   "exposedMasterPassword": {
-    "message": "Exposed Master Password"
+    "message": "کلمه عبور اصلی افشا شده"
   },
   "exposedMasterPasswordDesc": {
-    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+    "message": "کلمه عبور در نقض داده پیدا شد. از یک کلمه عبور منحصر به فرد برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از یک کلمه عبور افشا شده استفاده کنید؟"
   },
   "weakAndExposedMasterPassword": {
-    "message": "Weak and Exposed Master Password"
+    "message": "کلمه عبور اصلی ضعیف و افشا شده"
   },
   "weakAndBreachedMasterPasswordDesc": {
-    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+    "message": "کلمه عبور ضعیف شناسایی و در یک نقض داده پیدا شد. از یک کلمه عبور قوی و منحصر به فرد برای محافظت از حساب خود استفاده کنید. آیا مطمئنید که می‌خواهید از این کلمه عبور استفاده کنید؟"
   },
   "characterMinimum": {
-    "message": "$LENGTH$ character minimum",
+    "message": "حداقل کاراکتر $LENGTH$",
     "placeholders": {
       "length": {
         "content": "$1",
@@ -6650,7 +7303,7 @@
     }
   },
   "masterPasswordMinimumlength": {
-    "message": "Master password must be at least $LENGTH$ characters long.",
+    "message": "طول کلمه عبور اصلی باید حداقل $LENGTH$ کاراکتر باشد.",
     "placeholders": {
       "length": {
         "content": "$1",
@@ -6658,7 +7311,1252 @@
       }
     }
   },
+  "inputTrimValidator": {
+    "message": "ورودی نباید فقط حاوی فضای خالی باشد.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
   "dismiss": {
-    "message": "Dismiss"
+    "message": "نادیده گرفتن"
+  },
+  "notAvailableForFreeOrganization": {
+    "message": "این ویژگی برای سازمان‌های رایگان در دسترس نیست. برای ارتقا با مالک سازمان خود تماس بگیرید."
+  },
+  "smProjectSecretsNoItemsNoAccess": {
+    "message": "برای مدیریت اسرار این پروژه با سرپرست سازمان خود تماس بگیرید.",
+    "description": "The message shown to the user under a project's secrets tab when the user only has read access to the project."
+  },
+  "enforceOnLoginDesc": {
+    "message": "از اعضای موجود بخواهید کلمه‌های عبور خود را تغییر دهند"
+  },
+  "smProjectDeleteAccessRestricted": {
+    "message": "شما مجوز حذف این پروژه را ندارید",
+    "description": "The individual description shown to the user when the user doesn't have access to delete a project."
+  },
+  "smProjectsDeleteBulkConfirmation": {
+    "message": "پروژه‌های زیر قابل حذف نیستند. آیا می‌خواهید ادامه دهید؟",
+    "description": "The message shown to the user when bulk deleting projects and the user doesn't have access to some projects."
+  },
+  "updateKdfSettings": {
+    "message": "تنظیمات KDF را به‌روز کنید"
+  },
+  "loginInitiated": {
+    "message": "ورود به سیستم آغاز شد"
+  },
+  "deviceApprovalRequired": {
+    "message": "تأیید دستگاه لازم است. یک روش تأیید انتخاب کنید:"
+  },
+  "rememberThisDevice": {
+    "message": "این دستگاه را به خاطر بسپار"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "اگر از دستگاه عمومی استفاده می‌کنید علامت را بردارید"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "تأیید با دستگاه دیگرتان"
+  },
+  "requestAdminApproval": {
+    "message": "درخواست تأیید مدیر"
+  },
+  "approveWithMasterPassword": {
+    "message": "تأیید با کلمه عبور اصلی"
+  },
+  "trustedDeviceEncryption": {
+    "message": "رمزگذاری دستگاه مورد اعتماد"
+  },
+  "trustedDevices": {
+    "message": "دستگاه‌های مورد اعتماد"
+  },
+  "memberDecryptionOptionTdeDescriptionPartOne": {
+    "message": "پس از احراز هویت، اعضا با استفاده از کلید ذخیره شده در دستگاه خود، داده‌های گاوصندوق را رمزگشایی می‌کنند.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO Required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkOne": {
+    "message": "سازمان واحد",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartTwo": {
+    "message": "سیاست‌ها",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkTwo": {
+    "message": "SSO الزامی است",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartThree": {
+    "message": "سیاست‌ها و",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionLinkThree": {
+    "message": "مدیریت بازیابی حساب کاربری",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "memberDecryptionOptionTdeDescriptionPartFour": {
+    "message": "سیاست‌ها با ثبت نام خودکار زمانی که از این گزینه استفاده می‌شود روشن می‌شود.",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Once authenticated, members will decrypt vault data using a key stored on their device. The single organization policy, SSO required policy, and account recovery administration policy with automatic enrollment will turn on when this option is used.'"
+  },
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "Your organization permissions were updated, requiring you to set a master password.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "Your organization requires you to set a master password.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "notFound": {
+    "message": "$RESOURCE$ پیدا نشد",
+    "placeholders": {
+      "resource": {
+        "content": "$1",
+        "example": "Service Account"
+      }
+    }
+  },
+  "verificationRequired": {
+    "message": "Verification required",
+    "description": "Default title for the user verification dialog."
+  },
+  "recoverAccount": {
+    "message": "بازیابی حساب کاربری"
+  },
+  "updatedTempPassword": {
+    "message": "کاربر کلمه عبور برون ریزی شده از طریق بازیابی حساب کاربری را به‌روز کرد."
+  },
+  "activatedAccessToSecretsManager": {
+    "message": "دسترسی فعال به مدیر رازها",
+    "description": "Confirmation message that one or more users gained access to Secrets Manager"
+  },
+  "activateAccess": {
+    "message": "فعال کردن دسترسی"
+  },
+  "bulkEnableSecretsManagerDescription": {
+    "message": "به اعضای زیر اجازه دسترسی به مدیر رازها را بدهید. نقش اعطا شده در مدیر کلمه عبور برای مدیر رازها اعمال می‌شود.",
+    "description": "This description is shown to an admin when they are attempting to add more users to Secrets Manager."
+  },
+  "activateSecretsManager": {
+    "message": "فعال کردن مدیر رازها"
+  },
+  "yourOrganizationsFingerprint": {
+    "message": "عبارت اثر انگشت سازمان شما",
+    "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their organization's public key with another user, for the purposes of sharing."
+  },
+  "deviceApprovals": {
+    "message": "دستگاه تایید شد"
+  },
+  "deviceApprovalsDesc": {
+    "message": "درخواست‌های ورود به سیستم را در زیر تأیید کنید تا به عضو درخواست‌کننده اجازه دهید ورود به سیستم را تکمیل کند. درخواست‌های تأیید نشده پس از 1 هفته منقضی می‌شوند. قبل از تأیید، اطلاعات عضو را بررسی کنید."
+  },
+  "deviceInfo": {
+    "message": "اطلاعات دستگاه"
+  },
+  "time": {
+    "message": "زمان"
+  },
+  "denyAllRequests": {
+    "message": "رد کردن همه درخواست‌ها"
+  },
+  "denyRequest": {
+    "message": "رد کردن درخواست"
+  },
+  "approveRequest": {
+    "message": "درخواست تأیید"
+  },
+  "noDeviceRequests": {
+    "message": "بدون درخواست دستگاه"
+  },
+  "noDeviceRequestsDesc": {
+    "message": "درخواست‌های تأیید دستگاه عضو در اینجا ظاهر می‌شود"
+  },
+  "loginRequestDenied": {
+    "message": "درخواست ورود رد شد"
+  },
+  "allLoginRequestsDenied": {
+    "message": "همه درخواست‌های ورود رد شد"
+  },
+  "loginRequestApproved": {
+    "message": "درخواست ورود تأیید شد"
+  },
+  "removeOrgUserNoMasterPasswordTitle": {
+    "message": "حساب کاربری کلمه عبور اصلی ندارد"
+  },
+  "removeOrgUserNoMasterPasswordDesc": {
+    "message": "حذف $USER$ بدون تنظیم کلمه عبور اصلی برای آنها ممکن است دسترسی به حساب کامل آنها را محدود کند. آیا مطمئن هستید که می‌خواهید ادامه دهید؟",
+    "placeholders": {
+      "user": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "noMasterPassword": {
+    "message": "بدون کلمه عبور اصلی"
+  },
+  "removeMembersWithoutMasterPasswordWarning": {
+    "message": "حذف اعضایی که کلمه عبور اصلی ندارند بدون تعیین کلمه عبور برای آنها ممکن است دسترسی به حساب کامل آن‌ها را محدود کند."
+  },
+  "approvedAuthRequest": {
+    "message": "دستگاه تأیید شده برای $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "rejectedAuthRequest": {
+    "message": "دستگاه رد شده برای $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "First 8 Character of a GUID"
+      }
+    }
+  },
+  "requestedDeviceApproval": {
+    "message": "تأیید دستگاه درخواست."
+  },
+  "startYour7DayFreeTrialOfBitwardenFor": {
+    "message": "نسخه آزمایشی رایگان ۷ روزه Bitwarden را با $ORG$ شروع کنید",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerFor": {
+    "message": "Start your 7-Day free trial of Bitwarden Secrets Manager for $ORG$",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "next": {
+    "message": "بعدی"
+  },
+  "ssoLoginIsRequired": {
+    "message": "SSO login is required"
+  },
+  "selectedRegionFlag": {
+    "message": "پرچم منطقه انتخاب شد"
+  },
+  "accountSuccessfullyCreated": {
+    "message": "حساب کاربری با موفقیت ایجاد شد!"
+  },
+  "adminApprovalRequested": {
+    "message": "تأیید مدیر درخواست شد"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "درخواست شما به مدیرتان فرستاده شد."
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "به محض تأیید مطلع خواهید شد."
+  },
+  "troubleLoggingIn": {
+    "message": "در ورود مشکلی دارید؟"
+  },
+  "loginApproved": {
+    "message": "ورود تأیید شد"
+  },
+  "userEmailMissing": {
+    "message": "ایمیل کاربر وجود ندارد"
+  },
+  "deviceTrusted": {
+    "message": "دستگاه مورد اعتماد است"
+  },
+  "sendsNoItemsTitle": {
+    "message": "ارسال‌های فعالی نیست",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "از ارسال برای اشتراک‌گذاری امن اطلاعات رمزگذاری شده با هر کسی استفاده کنید.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "inviteUsers": {
+    "message": "دعوت کاربران"
+  },
+  "secretsManagerForPlan": {
+    "message": "مدیر اسرار برای $PLAN$",
+    "placeholders": {
+      "plan": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "secretsManagerForPlanDesc": {
+    "message": "برای تیم‌های مهندسی و DevOps برای مدیریت اسرار در طول چرخه عمر توسعه نرم افزار."
+  },
+  "free2PersonOrganization": {
+    "message": "سازمان‌های ۲ نفره رایگان"
+  },
+  "unlimitedSecrets": {
+    "message": "اسرار نامحدود"
+  },
+  "unlimitedProjects": {
+    "message": "پروژه‌های نامحدود"
+  },
+  "projectsIncluded": {
+    "message": "$COUNT$ پروژه گنجانده شده است",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "serviceAccountsIncluded": {
+    "message": "$COUNT$ حساب خدمات گنجانده شده است",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalServiceAccountCost": {
+    "message": "$COST$ در ماه برای حساب‌های خدمات اضافی",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "subscribeToSecretsManager": {
+    "message": "دنبال کردن مدیر اسرار"
+  },
+  "addSecretsManagerUpgradeDesc": {
+    "message": "مدیر رازها را به برنامه ارتقا یافته خود اضافه کنید تا دسترسی به رازهای ایجاد شده با برنامه قبلی خود را حفظ کنید."
+  },
+  "additionalServiceAccounts": {
+    "message": "حساب‌های خدمات اضافی"
+  },
+  "includedServiceAccounts": {
+    "message": "طرح شما با حساب خدمات $COUNT$ همراه است.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalServiceAccounts": {
+    "message": "می‌توانید سرویس اضافی حساب‌ها را با $COST$ در ماه اضافه کنید.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "collectionManagement": {
+    "message": "Collection management"
+  },
+  "collectionManagementDesc": {
+    "message": "Manage the collection behavior for the organization"
+  },
+  "limitCollectionCreationDeletionDesc": {
+    "message": "Limit collection creation and deletion to owners and admins"
+  },
+  "allowAdminAccessToAllCollectionItemsDesc": {
+    "message": "Owners and admins can manage all collections and items"
+  },
+  "updatedCollectionManagement": {
+    "message": "Updated collection management setting"
+  },
+  "passwordManagerPlanPrice": {
+    "message": "قیمت طرح مدیریت کلمه عبور"
+  },
+  "secretsManagerPlanPrice": {
+    "message": "قیمت طرح مدیریت رازها"
+  },
+  "passwordManager": {
+    "message": "مدیر کلمه عبور"
+  },
+  "freeOrganization": {
+    "message": "سازمان رایگان"
+  },
+  "limitServiceAccounts": {
+    "message": "محدود کردن حساب‌های خدمات (اختیاری)"
+  },
+  "limitServiceAccountsDesc": {
+    "message": "برای حساب‌های خدمات خود محدودیتی تعیین کنید. پس از رسیدن به این محدودیت، نمی‌توانید حساب‌های سرویس جدید ایجاد کنید."
+  },
+  "serviceAccountLimit": {
+    "message": "محدودیت حساب خدمات (اختیاری)"
+  },
+  "maxServiceAccountCost": {
+    "message": "حداکثر هزینه حساب خدمات بالقوه"
+  },
+  "loggedInExclamation": {
+    "message": "وارد شده!"
+  },
+  "beta": {
+    "message": "آزمایشی"
+  },
+  "assignCollectionAccess": {
+    "message": "Assign collection access"
+  },
+  "editedCollections": {
+    "message": "Edited collections"
+  },
+  "baseUrl": {
+    "message": "نشانی اینترنتی سرور"
+  },
+  "aliasDomain": {
+    "message": "دامنه مستعار"
+  },
+  "alreadyHaveAccount": {
+    "message": "پیشتر حساب کاربری داشته اید؟"
+  },
+  "toggleSideNavigation": {
+    "message": "Toggle side navigation"
+  },
+  "skipToContent": {
+    "message": "Skip to content"
+  },
+  "managePermissionRequired": {
+    "message": "At least one member or group must have can manage permission."
+  },
+  "typePasskey": {
+    "message": "کلید عبور"
+  },
+  "passkeyNotCopied": {
+    "message": "کلید عبور کپی نمی‌شود"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "کلید عبور در مورد شبیه سازی شده کپی نمی‌شود. آیا می‌خواهید به شبیه سازی این مورد ادامه دهید؟"
+  },
+  "modifiedCollectionManagement": {
+    "message": "Modified collection management setting $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "Unique ID"
+      }
+    }
+  },
+  "seeDetailedInstructions": {
+    "message": "See detailed instructions on our help site at",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "installBrowserExtension": {
+    "message": "Install browser extension"
+  },
+  "installBrowserExtensionDetails": {
+    "message": "Use the extension to quickly save logins and auto-fill forms without opening the web app."
+  },
+  "projectAccessUpdated": {
+    "message": "Project access updated"
+  },
+  "unexpectedErrorSend": {
+    "message": "An unexpected error has occurred while loading this Send. Try again later."
+  },
+  "seatLimitReached": {
+    "message": "Seat limit has been reached"
+  },
+  "contactYourProvider": {
+    "message": "Contact your provider to purchase additional seats."
+  },
+  "seatLimitReachedContactYourProvider": {
+    "message": "Seat limit has been reached. Contact your provider to purchase additional seats."
+  },
+  "collectionAccessRestricted": {
+    "message": "Collection access is restricted"
+  },
+  "readOnlyCollectionAccess": {
+    "message": "You do not have access to manage this collection."
+  },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "Missing Can Manage Permissions"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Grant Can manage permissions to allow full collection management including deletion of collection."
+  },
+  "grantCollectionAccess": {
+    "message": "Grant groups or members access to this collection."
+  },
+  "grantCollectionAccessMembersOnly": {
+    "message": "Grant members access to this collection."
+  },
+  "adminCollectionAccess": {
+    "message": "Administrators can access and manage collections."
+  },
+  "serviceAccountAccessUpdated": {
+    "message": "Service account access updated"
+  },
+  "commonImportFormats": {
+    "message": "Common formats",
+    "description": "Label indicating the most common import formats"
+  },
+  "maintainYourSubscription": {
+    "message": "To maintain your subscription for $ORG$, ",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Example Inc."
+      }
+    }
+  },
+  "addAPaymentMethod": {
+    "message": "add a payment method",
+    "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
+  },
+  "organizationInformation": {
+    "message": "Organization information"
+  },
+  "confirmationDetails": {
+    "message": "Confirmation details"
+  },
+  "smFreeTrialThankYou": {
+    "message": "Thank you for signing up for Bitwarden Secrets Manager!"
+  },
+  "smFreeTrialConfirmationEmail": {
+    "message": "We've sent a confirmation email to your email at "
+  },
+  "sorryToSeeYouGo": {
+    "message": "Sorry to see you go! Help improve Bitwarden by sharing why you're canceling.",
+    "description": "A message shown to users as part of an offboarding survey asking them to provide more information on their subscription cancelation."
+  },
+  "selectCancellationReason": {
+    "message": "Select a reason for canceling",
+    "description": "Used as a form field label for a select input on the offboarding survey."
+  },
+  "anyOtherFeedback": {
+    "message": "Is there any other feedback you'd like to share?",
+    "description": "Used as a form field label for a textarea input on the offboarding survey."
+  },
+  "missingFeatures": {
+    "message": "Missing features",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "movingToAnotherTool": {
+    "message": "Moving to another tool",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "tooDifficultToUse": {
+    "message": "Too difficult to use",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "notUsingEnough": {
+    "message": "Not using enough",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "tooExpensive": {
+    "message": "Too expensive",
+    "description": "An option for the offboarding survey shown when a user cancels their subscription."
+  },
+  "freeForOneYear": {
+    "message": "Free for 1 year"
+  },
+  "newWebApp": {
+    "message": "Welcome to the new and improved web app. Learn more about what’s changed."
+  },
+  "releaseBlog": {
+    "message": "Read release blog"
+  },
+  "adminConsole": {
+    "message": "Admin Console"
+  },
+  "providerPortal": {
+    "message": "Provider Portal"
+  },
+  "success": {
+    "message": "Success"
+  },
+  "restrictedGroupAccess": {
+    "message": "You cannot add yourself to groups."
+  },
+  "cannotAddYourselfToCollections": {
+    "message": "You cannot add yourself to collections."
+  },
+  "assign": {
+    "message": "Assign"
+  },
+  "assignToCollections": {
+    "message": "Assign to collections"
+  },
+  "assignToTheseCollections": {
+    "message": "Assign to these collections"
+  },
+  "bulkCollectionAssignmentDialogDescription": {
+    "message": "Only organization members with access to these collections will be able to see the items."
+  },
+  "selectCollectionsToAssign": {
+    "message": "Select collections to assign"
+  },
+  "noCollectionsAssigned": {
+    "message": "No collections have been assigned"
+  },
+  "successfullyAssignedCollections": {
+    "message": "Successfully assigned collections"
+  },
+  "bulkCollectionAssignmentWarning": {
+    "message": "You have selected $TOTAL_COUNT$ items. You cannot update $READONLY_COUNT$ of the items because you do not have edit permissions.",
+    "placeholders": {
+      "total_count": {
+        "content": "$1",
+        "example": "10"
+      },
+      "readonly_count": {
+        "content": "$2",
+        "example": "3"
+      }
+    }
+  },
+  "items": {
+    "message": "Items"
+  },
+  "assignedSeats": {
+    "message": "Assigned seats"
+  },
+  "assigned": {
+    "message": "Assigned"
+  },
+  "used": {
+    "message": "Used"
+  },
+  "remaining": {
+    "message": "Remaining"
+  },
+  "unlinkOrganization": {
+    "message": "Unlink organization"
+  },
+  "manageSeats": {
+    "message": "MANAGE SEATS"
+  },
+  "manageSeatsDescription": {
+    "message": "Adjustments to seats will be reflected in the next billing cycle."
+  },
+  "unassignedSeatsDescription": {
+    "message": "Unassigned seats"
+  },
+  "purchaseSeatDescription": {
+    "message": "Additional seats purchased"
+  },
+  "assignedSeatCannotUpdate": {
+    "message": "Assigned Seats can not be updated. Please contact your organization owner for assistance."
+  },
+  "subscriptionUpdateFailed": {
+    "message": "Subscription update failed"
+  },
+  "trial": {
+    "message": "Trial",
+    "description": "A subscription status label."
+  },
+  "pastDue": {
+    "message": "Past due",
+    "description": "A subscription status label"
+  },
+  "subscriptionExpired": {
+    "message": "Subscription expired",
+    "description": "The date header used when a subscription is past due."
+  },
+  "pastDueWarningForChargeAutomatically": {
+    "message": "You have a grace period of $DAYS$ days from your subscription expiration date to maintain your subscription. Please resolve the past due invoices by $SUSPENSION_DATE$.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "11"
+      },
+      "suspension_date": {
+        "content": "$2",
+        "example": "01/10/2024"
+      }
+    },
+    "description": "A warning shown to the user when their subscription is past due and they are charged automatically."
+  },
+  "pastDueWarningForSendInvoice": {
+    "message": "You have a grace period of $DAYS$ days from the date your first unpaid invoice is due to maintain your subscription. Please resolve the past due invoices by $SUSPENSION_DATE$.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "11"
+      },
+      "suspension_date": {
+        "content": "$2",
+        "example": "01/10/2024"
+      }
+    },
+    "description": "A warning shown to the user when their subscription is past due and they pay via invoice."
+  },
+  "unpaidInvoice": {
+    "message": "Unpaid invoice",
+    "description": "The header of a warning box shown to a user whose subscription is unpaid."
+  },
+  "toReactivateYourSubscription": {
+    "message": "To reactivate your subscription, please resolve the past due invoices.",
+    "description": "The body of a warning box shown to a user whose subscription is unpaid."
+  },
+  "cancellationDate": {
+    "message": "Cancellation date",
+    "description": "The date header used when a subscription is cancelled."
+  },
+  "machineAccountsCannotCreate": {
+    "message": "Machine accounts cannot be created in suspended organizations. Please contact your organization owner for assistance."
+  },
+  "machineAccount": {
+    "message": "Machine account",
+    "description": "A machine user which can be used to automate processes and access secrets in the system."
+  },
+  "machineAccounts": {
+    "message": "Machine accounts",
+    "description": "The title for the section that deals with machine accounts."
+  },
+  "newMachineAccount": {
+    "message": "New machine account",
+    "description": "Title for creating a new machine account."
+  },
+  "machineAccountsNoItemsMessage": {
+    "message": "Create a new machine account to get started automating secret access.",
+    "description": "Message to encourage the user to start creating machine accounts."
+  },
+  "machineAccountsNoItemsTitle": {
+    "message": "Nothing to show yet",
+    "description": "Title to indicate that there are no machine accounts to display."
+  },
+  "deleteMachineAccounts": {
+    "message": "Delete machine accounts",
+    "description": "Title for the action to delete one or multiple machine accounts."
+  },
+  "deleteMachineAccount": {
+    "message": "Delete machine account",
+    "description": "Title for the action to delete a single machine account."
+  },
+  "viewMachineAccount": {
+    "message": "View machine account",
+    "description": "Action to view the details of a machine account."
+  },
+  "deleteMachineAccountDialogMessage": {
+    "message": "Deleting machine account $MACHINE_ACCOUNT$ is permanent and irreversible.",
+    "placeholders": {
+      "machine_account": {
+        "content": "$1",
+        "example": "Machine account name"
+      }
+    }
+  },
+  "deleteMachineAccountsDialogMessage": {
+    "message": "Deleting machine accounts is permanent and irreversible."
+  },
+  "deleteMachineAccountsConfirmMessage": {
+    "message": "Delete $COUNT$ machine accounts",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "deleteMachineAccountToast": {
+    "message": "Machine account deleted"
+  },
+  "deleteMachineAccountsToast": {
+    "message": "Machine accounts deleted"
+  },
+  "searchMachineAccounts": {
+    "message": "Search machine accounts",
+    "description": "Placeholder text for searching machine accounts."
+  },
+  "editMachineAccount": {
+    "message": "Edit machine account",
+    "description": "Title for editing a machine account."
+  },
+  "machineAccountName": {
+    "message": "Machine account name",
+    "description": "Label for the name of a machine account"
+  },
+  "machineAccountCreated": {
+    "message": "Machine account created",
+    "description": "Notifies that a new machine account has been created"
+  },
+  "machineAccountUpdated": {
+    "message": "Machine account updated",
+    "description": "Notifies that a machine account has been updated"
+  },
+  "projectMachineAccountsDescription": {
+    "message": "Grant machine accounts access to this project."
+  },
+  "projectMachineAccountsSelectHint": {
+    "message": "Type or select machine accounts"
+  },
+  "projectEmptyMachineAccountAccessPolicies": {
+    "message": "Add machine accounts to grant access"
+  },
+  "machineAccountPeopleDescription": {
+    "message": "Grant groups or people access to this machine account."
+  },
+  "machineAccountProjectsDescription": {
+    "message": "Assign projects to this machine account. "
+  },
+  "createMachineAccount": {
+    "message": "Create a machine account"
+  },
+  "maPeopleWarningMessage": {
+    "message": "Removing people from a machine account does not remove the access tokens they created. For security best practice, it is recommended to revoke access tokens created by people removed from a machine account."
+  },
+  "smAccessRemovalWarningMaTitle": {
+    "message": "Remove access to this machine account"
+  },
+  "smAccessRemovalWarningMaMessage": {
+    "message": "This action will remove your access to the machine account."
+  },
+  "machineAccountsIncluded": {
+    "message": "$COUNT$ machine accounts included",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "additionalMachineAccountCost": {
+    "message": "$COST$ per month for additional machine accounts",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "additionalMachineAccounts": {
+    "message": "Additional machine accounts"
+  },
+  "includedMachineAccounts": {
+    "message": "Your plan comes with $COUNT$ machine accounts.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "addAdditionalMachineAccounts": {
+    "message": "You can add additional machine accounts for $COST$ per month.",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$0.50"
+      }
+    }
+  },
+  "limitMachineAccounts": {
+    "message": "Limit machine accounts (optional)"
+  },
+  "limitMachineAccountsDesc": {
+    "message": "Set a limit for your machine accounts. Once this limit is reached, you will not be able to create new machine accounts."
+  },
+  "machineAccountLimit": {
+    "message": "Machine account limit (optional)"
+  },
+  "maxMachineAccountCost": {
+    "message": "Max potential machine account cost"
+  },
+  "machineAccountAccessUpdated": {
+    "message": "Machine account access updated"
+  },
+  "restrictedGroupAccessDesc": {
+    "message": "You cannot add yourself to a group."
+  },
+  "deleteProvider": {
+    "message": "Delete provider"
+  },
+  "deleteProviderConfirmation": {
+    "message": "Deleting a provider is permanent and irreversible. Enter your master password to confirm the deletion of the provider and all associated data."
+  },
+  "deleteProviderName": {
+    "message": "Cannot delete $ID$",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "deleteProviderWarningDescription": {
+    "message": "You must unlink all clients before you can delete $ID$.",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "John Smith"
+      }
+    }
+  },
+  "providerDeleted": {
+    "message": "Provider deleted"
+  },
+  "providerDeletedDesc": {
+    "message": "The Provider and all associated data has been deleted."
+  },
+  "deleteProviderRecoverConfirmDesc": {
+    "message": "You have requested to delete this Provider. Use the button below to confirm."
+  },
+  "deleteProviderWarning": {
+    "message": "Deleting your provider is permanent. It cannot be undone."
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Error assigning target collection."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Error assigning target folder."
+  },
+  "integrationsAndSdks": {
+    "message": "Integrations & SDKs",
+    "description": "The title for the section that deals with integrations and SDKs."
+  },
+  "integrations": {
+    "message": "Integrations"
+  },
+  "integrationsDesc": {
+    "message": "Automatically sync secrets from Bitwarden Secrets Manager to a third-party service."
+  },
+  "sdks": {
+    "message": "SDKs"
+  },
+  "sdksDesc": {
+    "message": "Use Bitwarden Secrets Manager SDK in the following programming languages to build your own applications."
+  },
+  "setUpGithubActions": {
+    "message": "Set up Github Actions"
+  },
+  "setUpKubernetes": {
+    "message": "Set up Kubernetes"
+  },
+  "setUpGitlabCICD": {
+    "message": "Set up GitLab CI/CD"
+  },
+  "setUpAnsible": {
+    "message": "Set up Ansible"
+  },
+  "rustSDKRepo": {
+    "message": "View Rust repository"
+  },
+  "cSharpSDKRepo": {
+    "message": "View C# repository"
+  },
+  "cPlusPlusSDKRepo": {
+    "message": "View C++ repository"
+  },
+  "jsWebAssemblySDKRepo": {
+    "message": "View JS WebAssembly repository"
+  },
+  "javaSDKRepo": {
+    "message": "View Java repository"
+  },
+  "pythonSDKRepo": {
+    "message": "View Python repository"
+  },
+  "phpSDKRepo": {
+    "message": "View php repository"
+  },
+  "rubySDKRepo": {
+    "message": "View Ruby repository"
+  },
+  "goSDKRepo": {
+    "message": "View Go repository"
+  },
+  "createNewClientToManageAsProvider": {
+    "message": "Create a new client organization to manage as a Provider. Additional seats will be reflected in the next billing cycle."
+  },
+  "selectAPlan": {
+    "message": "Select a plan"
+  },
+  "thirtyFivePercentDiscount": {
+    "message": "35% Discount"
+  },
+  "monthPerMember": {
+    "message": "month per member"
+  },
+  "seats": {
+    "message": "Seats"
+  },
+  "addOrganization": {
+    "message": "Add organization"
+  },
+  "createdNewClient": {
+    "message": "Successfully created new client"
+  },
+  "noAccess": {
+    "message": "No access"
+  },
+  "collectionAdminConsoleManaged": {
+    "message": "This collection is only accessible from the admin console"
+  },
+  "organizationOptionsMenu": {
+    "message": "Toggle Organization Menu"
+  },
+  "vaultItemSelect": {
+    "message": "Select vault item"
+  },
+  "collectionItemSelect": {
+    "message": "Select collection item"
+  },
+  "manageBillingFromProviderPortalMessage": {
+    "message": "Manage billing from the Provider Portal"
+  },
+  "viewItemsIn": {
+    "message": "View items in $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Back to $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Back",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Remove $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "viewInfo": {
+    "message": "View info"
+  },
+  "viewAccess": {
+    "message": "View access"
+  },
+  "noCollectionsSelected": {
+    "message": "You have not selected any collections."
+  },
+  "updateName": {
+    "message": "Update name"
+  },
+  "updatedOrganizationName": {
+    "message": "Updated organization name"
+  },
+  "providerPlan": {
+    "message": "Managed Service Provider"
+  },
+  "orgSeats": {
+    "message": "Organization Seats"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$% Discount",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "lowKDFIterationsBanner": {
+    "message": "Low KDF iterations. Increase your iterations to improve the security of your account."
+  },
+  "changeKDFSettings": {
+    "message": "Change KDF settings"
+  },
+  "secureYourInfrastructure": {
+    "message": "Secure your infrastructure"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Protect your family or business"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Close security gaps with monitoring reports"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Stay ahead of security vulnerabilities by upgrading to a paid plan for enhanced monitoring."
+  },
+  "approveAllRequests": {
+    "message": "Approve all requests"
+  },
+  "allLoginRequestsApproved": {
+    "message": "All login requests approved"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Updated tax information"
+  },
+  "unverified": {
+    "message": "Unverified"
+  },
+  "verified": {
+    "message": "Verified"
+  },
+  "viewSecret": {
+    "message": "View secret"
+  },
+  "noClients": {
+    "message": "There are no clients to list"
+  },
+  "providerBillingEmailHint": {
+    "message": "This email address will receive all invoices pertaining to this provider",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
+  },
+  "upgradeOrganizationEnterprise": {
+    "message": "Identify security risks by auditing member access"
+  },
+  "onlyAvailableForEnterpriseOrganization": {
+    "message": "Quickly view member access across the organization by upgrading to an Enterprise plan."
+  },
+  "date": {
+    "message": "Date"
+  },
+  "exportClientReport": {
+    "message": "Export client report"
+  },
+  "memberAccessReport": {
+    "message": "Member access"
+  },
+  "memberAccessReportDesc": {
+    "message": "Ensure members have access to the right credentials and their accounts are secure. Use this report to obtain a CSV of member access and account configurations."
+  },
+  "memberAccessReportPageDesc": {
+    "message": "Audit organization member access across groups, collections, and collection items. The CSV export provides a detailed breakdown per member, including information on collection permissions and account configurations."
+  },
+  "higherKDFIterations": {
+    "message": "Higher KDF iterations can help protect your master password from being brute forced by an attacker."
+  },
+  "incrementsOf100,000": {
+    "message": "increments of 100,000"
+  },
+  "smallIncrements": {
+    "message": "small increments"
+  },
+  "kdfIterationRecommends": {
+    "message": "We recommend 600,000 or more"
+  },
+  "kdfToHighWarningIncreaseInIncrements": {
+    "message": "For older devices, setting your KDF too high may lead to performance issues. Increase the value in $VALUE$ and test your devices.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "increments of 100,000"
+      }
+    }
+  },
+  "providerReinstate": {
+    "message": " Contact Customer Support to reinstate your subscription."
+  },
+  "secretPeopleDescription": {
+    "message": "Grant groups or people access to this secret. Permissions set for people will override permissions set by groups."
+  },
+  "secretPeopleEmptyMessage": {
+    "message": "Add people or groups to share access to this secret"
+  },
+  "secretMachineAccountsDescription": {
+    "message": "Grant machine accounts access to this secret."
+  },
+  "secretMachineAccountsEmptyMessage": {
+    "message": "Add machine accounts to grant access to this secret"
+  },
+  "smAccessRemovalWarningSecretTitle": {
+    "message": "Remove access to this secret"
+  },
+  "smAccessRemovalSecretMessage": {
+    "message": "This action will remove your access to this secret."
+  },
+  "invoice": {
+    "message": "Invoice"
+  },
+  "unassignedSeatsAvailable": {
+    "message": "You have $SEATS$ unassigned seats available.",
+    "placeholders": {
+      "seats": {
+        "content": "$1",
+        "example": "10"
+      }
+    },
+    "description": "A message showing how many unassigned seats are available for a provider."
+  },
+  "contactYourProviderForAdditionalSeats": {
+    "message": "Contact your provider admin to purchase additional seats."
+  },
+  "open": {
+    "message": "Open",
+    "description": "The status of an invoice."
+  },
+  "uncollectible": {
+    "message": "Uncollectible",
+    "description": "The status of an invoice."
+  },
+  "clientDetails": {
+    "message": "Client details"
+  },
+  "downloadCSV": {
+    "message": "Download CSV"
+  },
+  "monthlySubscriptionUserSeatsMessage": {
+    "message": "Adjustments to your subscription will result in prorated charges to your billing totals on your next billing period. "
+  },
+  "annualSubscriptionUserSeatsMessage": {
+    "message": "Adjustments to your subscription will result in prorated charges on a monthly billing cycle. "
+  },
+  "billingHistoryDescription": {
+    "message": "Download a CSV to obtain client details for each billing date. Prorated charges are not included in the CSV and may vary from the linked invoice. For the most accurate billing details, refer to your monthly invoices.",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "noInvoicesToList": {
+    "message": "There are no invoices to list",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "providerClientVaultPrivacyNotification": {
+    "message": "Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions,",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'."
+  },
+  "contactBitwardenSupport": {
+    "message": "contact Bitwarden support.",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'. 'Bitwarden' should not be translated"
+  },
+  "sponsored": {
+    "message": "Sponsored"
+  },
+  "licenseAndBillingManagementDesc": {
+    "message": "After making updates in the Bitwarden cloud server, upload your license file to apply the most recent changes."
+  },
+  "addToFolder": {
+    "message": "Add to folder"
+  },
+  "selectFolder": {
+    "message": "Select folder"
+  },
+  "personalItemsTransferWarning": {
+    "message": "$PERSONAL_ITEMS_COUNT$ will be permanently transferred to the selected organization. You will no longer own these items.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2 items"
+      }
+    }
+  },
+  "personalItemsWithOrgTransferWarning": {
+    "message": "$PERSONAL_ITEMS_COUNT$ will be permanently transferred to $ORG$. You will no longer own these items.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2 items"
+      },
+      "org": {
+        "content": "$2",
+        "example": "Organization name"
+      }
+    }
   }
 }

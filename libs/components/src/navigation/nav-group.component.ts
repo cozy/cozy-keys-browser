@@ -4,27 +4,30 @@ import {
   ContentChildren,
   EventEmitter,
   Input,
+  Optional,
   Output,
   QueryList,
+  SkipSelf,
 } from "@angular/core";
 
 import { NavBaseComponent } from "./nav-base.component";
-import { NavItemComponent } from "./nav-item.component";
+import { SideNavService } from "./side-nav.service";
 
 @Component({
   selector: "bit-nav-group",
   templateUrl: "./nav-group.component.html",
+  providers: [{ provide: NavBaseComponent, useExisting: NavGroupComponent }],
 })
 export class NavGroupComponent extends NavBaseComponent implements AfterContentInit {
-  @ContentChildren(NavGroupComponent, {
+  @ContentChildren(NavBaseComponent, {
     descendants: true,
   })
-  nestedGroups!: QueryList<NavGroupComponent>;
+  nestedNavComponents!: QueryList<NavBaseComponent>;
 
-  @ContentChildren(NavItemComponent, {
-    descendants: true,
-  })
-  nestedItems!: QueryList<NavItemComponent>;
+  /** When the side nav is open, the parent nav item should not show active styles when open. */
+  protected get parentHideActiveStyles(): boolean {
+    return this.hideActiveStyles || (this.open && this.sideNavService.open);
+  }
 
   /**
    * UID for `[attr.aria-controls]`
@@ -37,18 +40,25 @@ export class NavGroupComponent extends NavBaseComponent implements AfterContentI
   @Input()
   open = false;
 
-  /**
-   * if `true`, use `exact` match for path instead of `subset`.
-   */
-  @Input() exactMatch: boolean;
-
   @Output()
   openChange = new EventEmitter<boolean>();
 
+  constructor(
+    protected sideNavService: SideNavService,
+    @Optional() @SkipSelf() private parentNavGroup: NavGroupComponent,
+  ) {
+    super();
+  }
+
+  setOpen(isOpen: boolean) {
+    this.open = isOpen;
+    this.openChange.emit(this.open);
+    this.open && this.parentNavGroup?.setOpen(this.open);
+  }
+
   protected toggle(event?: MouseEvent) {
     event?.stopPropagation();
-    this.open = !this.open;
-    this.openChange.emit(this.open);
+    this.setOpen(!this.open);
   }
 
   /**
@@ -58,9 +68,21 @@ export class NavGroupComponent extends NavBaseComponent implements AfterContentI
     if (this.variant !== "tree") {
       return;
     }
-    [...this.nestedGroups, ...this.nestedItems].forEach((navGroupOrItem) => {
+    [...this.nestedNavComponents].forEach((navGroupOrItem) => {
       navGroupOrItem.treeDepth += 1;
     });
+  }
+
+  protected handleMainContentClicked() {
+    if (!this.sideNavService.open) {
+      if (!this.route) {
+        this.sideNavService.setOpen();
+      }
+      this.open = true;
+    } else {
+      this.toggle();
+    }
+    this.mainContentClicked.emit();
   }
 
   ngAfterContentInit(): void {

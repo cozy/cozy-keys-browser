@@ -1,67 +1,47 @@
-import { Component, OnInit, OnDestroy, NgZone } from "@angular/core";
-/* Cozy custo
-import { takeUntil } from "rxjs";
-*/
-import { takeUntil, Subject } from "rxjs";
-/* end custo */
+// Cozy customization, file is heavily modified to manage premium banner
+//*
+import { Component, NgZone, OnInit } from "@angular/core";
 
-import { PopupUtilsService } from "./services/popup-utils.service"; // eslint-disable-line
-/* COZY IMPORTS */
-/* eslint-disable */
+import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+
+import { BrowserApi } from "../platform/browser/browser-api";
+import BrowserPopupUtils from "../platform/popup/browser-popup-utils";
+
 import { CozyClientService } from "./services/cozyClient.service";
-import { Router, NavigationEnd, Event as NavigationEvent, RouterOutlet } from "@angular/router";
-import { routerTransition } from "./app-routing.animations";
-import { BrowserStateService as StateService } from "../services/abstractions/browser-state.service";
-import { BrowserApi } from "../browser/browserApi";
-import { BroadcasterService } from "@bitwarden/common/abstractions/broadcaster.service";
+
 const BroadcasterSubscriptionId = "PremiumBanner";
-// @ts-ignore
-import flag from "cozy-flags";
-/* eslint-enable */
-/* END */
+/*/
+import { Component, OnInit } from "@angular/core";
+
+import BrowserPopupUtils from "../platform/popup/browser-popup-utils";
+//*/
 
 @Component({
   selector: "app-tabs",
   templateUrl: "tabs.component.html",
-  animations: [routerTransition],
 })
-export class TabsComponent implements OnInit, OnDestroy {
+export class TabsComponent implements OnInit {
   showCurrentTab = true;
+
+  // Cozy customization
   cozyUrl: string;
-  event$;
-  isVaultTabActive = true;
-
-  protected destroy$ = new Subject<void>();
-
-  /* cozy custo */
   static showBanner: boolean = undefined;
   static closedByUser: boolean = undefined;
   static isVaultTooOld: boolean = undefined;
-  /* end custo */
 
   constructor(
-    private popupUtilsService: PopupUtilsService,
-    private cozyClientService: CozyClientService,
-    private router: Router,
-    private stateService: StateService,
     private broadcasterService: BroadcasterService,
-    private ngZone: NgZone
-  ) {
-    this.event$ = this.router.events
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event: NavigationEvent) => {
-        if (event instanceof NavigationEnd) {
-          if (event.url === "/tabs/current") {
-            this.isVaultTabActive = true;
-          } else {
-            this.isVaultTabActive = false;
-          }
-        }
-      });
-  }
+    private stateService: StateService,
+    private ngZone: NgZone,
+    private cozyClientService: CozyClientService,
+  ) {}
+  // Cozy customization
 
   async ngOnInit() {
-    this.showCurrentTab = !this.popupUtilsService.inPopout(window);
+    this.showCurrentTab = !BrowserPopupUtils.inPopout(window);
+
+    // Cozy customization
     this.cozyUrl = this.cozyClientService.getCozyURL();
     this.broadcasterService.subscribe(BroadcasterSubscriptionId, (message: any) => {
       this.ngZone.run(async () => {
@@ -79,40 +59,19 @@ export class TabsComponent implements OnInit, OnDestroy {
       TabsComponent.closedByUser = await this.stateService.getBannerClosedByUser();
       this.refreshBanner();
     }
+    // Cozy customization end
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  getState(outlet: RouterOutlet) {
-    if (outlet.activatedRouteData.state === "ciphers") {
-      const routeDirection =
-        (window as any).routeDirection != null ? (window as any).routeDirection : "";
-      return (
-        "ciphers_direction=" +
-        routeDirection +
-        "_" +
-        (outlet.activatedRoute.queryParams as any).value.folderId +
-        "_" +
-        (outlet.activatedRoute.queryParams as any).value.collectionId
-      );
-    } else {
-      return outlet.activatedRouteData.state;
-    }
-  }
-
-  /* Cozy custo - premium banner code */
-
+  // Cozy customization
   async refreshBanner() {
     if (TabsComponent.isVaultTooOld === undefined) {
       const vaultCreationDate = await this.cozyClientService.getVaultCreationDate();
       const limitDate = new Date(Date.now() - 21 * (3600 * 1000 * 24));
       TabsComponent.isVaultTooOld = vaultCreationDate < limitDate;
     }
+
     TabsComponent.showBanner =
-      !flag("passwords.can-share-organizations") &&
+      !(await this.cozyClientService.getFlagValue("passwords.can-share-organizations")) &&
       TabsComponent.isVaultTooOld &&
       !TabsComponent.closedByUser;
   }
@@ -135,5 +94,5 @@ export class TabsComponent implements OnInit, OnDestroy {
       BrowserApi.createNewTab("https://cozy.io/fr/pricing/");
     }
   }
-  /* end custo */
+  // Cozy customization end
 }

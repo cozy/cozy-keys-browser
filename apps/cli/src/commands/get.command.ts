@@ -1,15 +1,13 @@
+import { firstValueFrom } from "rxjs";
+
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
-import { CollectionService } from "@bitwarden/common/abstractions/collection.service";
-import { CryptoService } from "@bitwarden/common/abstractions/crypto.service";
-import { OrganizationService } from "@bitwarden/common/abstractions/organization/organization.service.abstraction";
+import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { TotpService } from "@bitwarden/common/abstractions/totp.service";
-import { SendType } from "@bitwarden/common/enums/sendType";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { EncString } from "@bitwarden/common/models/domain/enc-string";
-import { Organization } from "@bitwarden/common/models/domain/organization";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
+import { EventType } from "@bitwarden/common/enums";
 import { CardExport } from "@bitwarden/common/models/export/card.export";
 import { CipherExport } from "@bitwarden/common/models/export/cipher.export";
 import { CollectionExport } from "@bitwarden/common/models/export/collection.export";
@@ -20,24 +18,32 @@ import { LoginUriExport } from "@bitwarden/common/models/export/login-uri.export
 import { LoginExport } from "@bitwarden/common/models/export/login.export";
 import { SecureNoteExport } from "@bitwarden/common/models/export/secure-note.export";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
-import { CollectionView } from "@bitwarden/common/models/view/collection.view";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
+import { SendType } from "@bitwarden/common/tools/send/enums/send-type";
+import { OrganizationId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
-import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
+import { TotpService } from "@bitwarden/common/vault/abstractions/totp.service";
+import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 
-import { OrganizationCollectionRequest } from "../models/request/organization-collection.request";
+import { OrganizationCollectionRequest } from "../admin-console/models/request/organization-collection.request";
+import { OrganizationCollectionResponse } from "../admin-console/models/response/organization-collection.response";
+import { OrganizationResponse } from "../admin-console/models/response/organization.response";
+import { SelectionReadOnly } from "../admin-console/models/selection-read-only";
 import { Response } from "../models/response";
-import { CollectionResponse } from "../models/response/collection.response";
-import { OrganizationCollectionResponse } from "../models/response/organization-collection.response";
-import { OrganizationResponse } from "../models/response/organization.response";
-import { SendResponse } from "../models/response/send.response";
 import { StringResponse } from "../models/response/string.response";
 import { TemplateResponse } from "../models/response/template.response";
-import { SelectionReadOnly } from "../models/selection-read-only";
+import { SendResponse } from "../tools/send/models/send.response";
 import { CliUtils } from "../utils";
 import { CipherResponse } from "../vault/models/cipher.response";
+import { CollectionResponse } from "../vault/models/collection.response";
 import { FolderResponse } from "../vault/models/folder.response";
 
 import { DownloadCommand } from "./download.command";
@@ -53,7 +59,9 @@ export class GetCommand extends DownloadCommand {
     private stateService: StateService,
     private searchService: SearchService,
     private apiService: ApiService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private eventCollectionService: EventCollectionService,
+    private accountProfileService: BillingAccountProfileStateService,
   ) {
     super(cryptoService);
   }
@@ -103,7 +111,9 @@ export class GetCommand extends DownloadCommand {
     if (Utils.isGuid(id)) {
       const cipher = await this.cipherService.get(id);
       if (cipher != null) {
-        decCipher = await cipher.decrypt();
+        decCipher = await cipher.decrypt(
+          await this.cipherService.getKeyForCipherKeyDecryption(cipher),
+        );
       }
     } else if (id.trim() !== "") {
       let ciphers = await this.cipherService.getAllDecrypted();
@@ -135,6 +145,16 @@ export class GetCommand extends DownloadCommand {
         return Response.multipleResults(decCipher.map((c) => c.id));
       }
     }
+
+    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this.eventCollectionService.collect(
+      EventType.Cipher_ClientViewed,
+      id,
+      true,
+      decCipher.organizationId,
+    );
+
     const res = new CipherResponse(decCipher);
     return Response.success(res);
   }
@@ -142,7 +162,7 @@ export class GetCommand extends DownloadCommand {
   private async getUsername(id: string) {
     const cipherResponse = await this.getCipher(
       id,
-      (c) => c.type === CipherType.Login && !Utils.isNullOrWhitespace(c.login.username)
+      (c) => c.type === CipherType.Login && !Utils.isNullOrWhitespace(c.login.username),
     );
     if (!cipherResponse.success) {
       return cipherResponse;
@@ -164,7 +184,7 @@ export class GetCommand extends DownloadCommand {
   private async getPassword(id: string) {
     const cipherResponse = await this.getCipher(
       id,
-      (c) => c.type === CipherType.Login && !Utils.isNullOrWhitespace(c.login.password)
+      (c) => c.type === CipherType.Login && !Utils.isNullOrWhitespace(c.login.password),
     );
     if (!cipherResponse.success) {
       return cipherResponse;
@@ -190,7 +210,7 @@ export class GetCommand extends DownloadCommand {
         c.type === CipherType.Login &&
         c.login.uris != null &&
         c.login.uris.length > 0 &&
-        c.login.uris[0].uri !== ""
+        c.login.uris[0].uri !== "",
     );
     if (!cipherResponse.success) {
       return cipherResponse;
@@ -216,7 +236,7 @@ export class GetCommand extends DownloadCommand {
   private async getTotp(id: string) {
     const cipherResponse = await this.getCipher(
       id,
-      (c) => c.type === CipherType.Login && !Utils.isNullOrWhitespace(c.login.totp)
+      (c) => c.type === CipherType.Login && !Utils.isNullOrWhitespace(c.login.totp),
     );
     if (!cipherResponse.success) {
       return cipherResponse;
@@ -236,7 +256,9 @@ export class GetCommand extends DownloadCommand {
       return Response.error("Couldn't generate TOTP code.");
     }
 
-    const canAccessPremium = await this.stateService.getCanAccessPremium();
+    const canAccessPremium = await firstValueFrom(
+      this.accountProfileService.hasPremiumFromAnySource$,
+    );
     if (!canAccessPremium) {
       const originalCipher = await this.cipherService.get(cipher.id);
       if (
@@ -274,7 +296,7 @@ export class GetCommand extends DownloadCommand {
     }
 
     const exposedNumber = await this.auditService.passwordLeaked(
-      (passwordResponse.data as StringResponse).data
+      (passwordResponse.data as StringResponse).data,
     );
     const res = new StringResponse(exposedNumber.toString());
     return Response.success(res);
@@ -304,7 +326,7 @@ export class GetCommand extends DownloadCommand {
     let attachments = cipher.attachments.filter(
       (a) =>
         a.id.toLowerCase() === id ||
-        (a.fileName != null && a.fileName.toLowerCase().indexOf(id) > -1)
+        (a.fileName != null && a.fileName.toLowerCase().indexOf(id) > -1),
     );
     if (attachments.length === 0) {
       return Response.error("Attachment `" + id + "` was not found.");
@@ -319,7 +341,10 @@ export class GetCommand extends DownloadCommand {
       return Response.multipleResults(attachments.map((a) => a.id));
     }
 
-    if (!(await this.stateService.getCanAccessPremium())) {
+    const canAccessPremium = await firstValueFrom(
+      this.accountProfileService.hasPremiumFromAnySource$,
+    );
+    if (!canAccessPremium) {
       const originalCipher = await this.cipherService.get(cipher.id);
       if (originalCipher == null || originalCipher.organizationId == null) {
         return Response.error("Premium status is required to use this feature.");
@@ -330,7 +355,7 @@ export class GetCommand extends DownloadCommand {
     try {
       const attachmentDownloadResponse = await this.apiService.getAttachmentData(
         cipher.id,
-        attachments[0].id
+        attachments[0].id,
       );
       url = attachmentDownloadResponse.url;
     } catch (e) {
@@ -380,7 +405,10 @@ export class GetCommand extends DownloadCommand {
     if (Utils.isGuid(id)) {
       const collection = await this.collectionService.get(id);
       if (collection != null) {
-        decCollection = await collection.decrypt();
+        const orgKeys = await firstValueFrom(this.cryptoService.activeUserOrgKeys$);
+        decCollection = await collection.decrypt(
+          orgKeys[collection.organizationId as OrganizationId],
+        );
       }
     } else if (id.trim() !== "") {
       let collections = await this.collectionService.getAllDecrypted();
@@ -420,12 +448,14 @@ export class GetCommand extends DownloadCommand {
       const decCollection = new CollectionView(response);
       decCollection.name = await this.cryptoService.decryptToUtf8(
         new EncString(response.name),
-        orgKey
+        orgKey,
       );
       const groups =
         response.groups == null
           ? null
-          : response.groups.map((g) => new SelectionReadOnly(g.id, g.readOnly, g.hidePasswords));
+          : response.groups.map(
+              (g) => new SelectionReadOnly(g.id, g.readOnly, g.hidePasswords, g.manage),
+            );
       const res = new OrganizationCollectionResponse(decCollection, groups);
       return Response.success(res);
     } catch (e) {
@@ -438,7 +468,7 @@ export class GetCommand extends DownloadCommand {
     if (Utils.isGuid(id)) {
       org = await this.organizationService.getFromState(id);
     } else if (id.trim() !== "") {
-      let orgs = await this.organizationService.getAll();
+      let orgs = await firstValueFrom(this.organizationService.organizations$);
       orgs = CliUtils.searchOrganizations(orgs, id);
       if (orgs.length > 1) {
         return Response.multipleResults(orgs.map((c) => c.id));
@@ -513,7 +543,7 @@ export class GetCommand extends DownloadCommand {
       try {
         const response = await this.apiService.getUserPublicKey(id);
         const pubKey = Utils.fromB64ToArray(response.publicKey);
-        fingerprint = await this.cryptoService.getFingerprint(id, pubKey.buffer);
+        fingerprint = await this.cryptoService.getFingerprint(id, pubKey);
       } catch {
         // eslint-disable-next-line
       }

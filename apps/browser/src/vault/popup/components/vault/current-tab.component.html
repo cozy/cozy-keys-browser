@@ -1,4 +1,4 @@
-<header>
+<app-header>
   <h1 class="sr-only">{{ "currentTab" | i18n }}</h1>
   <div class="left">
     <!-- Cozy custo
@@ -19,7 +19,7 @@
       ></span>
     </button>
   </div>
-  <div class="search" (click)="back()">
+  <div class="search center" (click)="back()">
     <i class="icon-cozy icon-search"></i>
     <div id="search-tag">
       <span id="search-tag-text">{{ "forThisWebSite" | i18n }}</span>
@@ -51,55 +51,16 @@
     </button>
     <!-- end custo -->
   </div>
-</header>
+</app-header>
 <main tabindex="-1">
   <div class="no-items" *ngIf="!loaded">
     <i class="bwi bwi-spinner bwi-spin bwi-3x" aria-hidden="true"></i>
   </div>
-  <div *ngIf="loaded">
-    <!-- Cozy custo
+  <ng-container *ngIf="loaded">
+    <!-- Cozy custo : commented
     <app-vault-select (onVaultSelectionChanged)="load()"></app-vault-select>
-    <app-callout *ngIf="showHowToAutofill" type="info" title="{{ 'howToAutofill' | i18n }}">
-      <p>{{ autofillCalloutText }}</p>
     -->
-    <app-callout *ngIf="showHowToAutofill" type="info" title="{{ 'howToAutofill' | i18n }}">
-      <div class="icon-cozy-inline">
-        <p>
-          {{ autofillCalloutText[0] }}
-          <span>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M15.7847 9.63712C15.9175 9.70962 16 9.84884 16 10.0001C16 10.1513 15.9175 10.2903 15.7849 10.363L12.2798 12.2799L10.3631 15.7847C10.2905 15.9175 10.1513 16 10.0001 16C9.84863 16 9.70962 15.9175 9.63685 15.7849L7.72012 12.2799L4.21528 10.363C4.08247 10.2905 4 10.1513 4 10.0001C4 9.84884 4.08247 9.70962 4.21528 9.63712L7.72012 7.72007L9.63685 4.21523C9.70962 4.08263 9.84863 4 10.0001 4C10.1513 4 10.2904 4.08263 10.3631 4.21523L12.2798 7.72007L15.7847 9.63712ZM6.87442 3.28832C6.95189 3.33061 7 3.41182 7 3.50006C7 3.58827 6.95189 3.66936 6.87454 3.71178L4.8299 4.82993L3.71181 6.87442C3.66948 6.95189 3.58827 7 3.50006 7C3.4117 7 3.33061 6.95189 3.28816 6.87454L2.17007 4.82993L0.12558 3.71178C0.0481097 3.66948 0 3.58827 0 3.50006C0 3.41182 0.0481097 3.33061 0.12558 3.28832L2.17007 2.17004L3.28816 0.125549C3.33061 0.0482025 3.4117 0 3.50006 0C3.58827 0 3.66939 0.0482025 3.71181 0.125549L4.8299 2.17004L6.87442 3.28832Z"
-              />
-            </svg>
-          </span>
-          {{ autofillCalloutText[1] }}
-        </p>
-      </div>
-      <!-- end custo -->
-      <button
-        type="button"
-        class="btn primary callout-half"
-        appStopClick
-        (click)="dismissCallout()"
-      >
-        {{ "gotIt" | i18n }}
-      </button>
-      <!-- Cozy custo : commented
-      <button type="button" class="btn callout-half" appStopClick (click)="goToSettings()">
-        {{ "autofillSettings" | i18n }}
-      </button>
-      -->
-    </app-callout>
-    <div class="box list">
+    <div class="box list" *ngIf="loginCiphers">
       <h2 class="box-header">
         {{ "typeLogins" | i18n }}
         <!-- Cozy custo : commented
@@ -217,5 +178,5 @@
         <!-- end custo -->
       </div>
     </div>
-  </div>
+  </ng-container>
 </main>

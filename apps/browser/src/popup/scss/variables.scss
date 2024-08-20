@@ -25,6 +25,8 @@ $border-radius: 6px;
 $line-height-base: 1.42857143;
 $icon-hover-color: lighten($text-color, 50%);
 
+$mfaTypes: 0, 2, 3, 4, 6;
+
 $charcoal-grey: #32363f;
 $gray: #5d6165;
 $gray-light: #95999d;
@@ -70,6 +72,10 @@ $button-background-color-primary-active-contrasted: $brand-primary-active-contra
 $button-color: lighten($text-color, 40%);
 $button-color-primary: #ffffff;
 $button-color-danger: darken($brand-danger, 10%);
+
+$code-color: #c01176;
+$code-color-dark: #f08dc7;
+$code-color-nord: #dbb1d5;
 
 $solarizedDarkBase03: #002b36;
 $solarizedDarkBase02: #073642;
@@ -137,6 +143,7 @@ $themes: (
     infoColor: $brand-info,
     warningColor: $brand-warning,
     logoSuffix: "dark",
+    mfaLogoSuffix: ".png",
     passwordNumberColor: #007fde,
     passwordSpecialColor: #c40800,
     passwordCountText: #212529,
@@ -152,7 +159,7 @@ $themes: (
     // light has no hover so use same color
     webkitCalendarPickerHoverFilter: invert(46%) sepia(69%) saturate(6397%) hue-rotate(211deg)
       brightness(85%) contrast(103%),
-    codeColor: #e83e8c,
+    codeColor: $code-color,
   ),
   lightContrasted: (
     textColor: $text-color-contrasted,
@@ -265,6 +272,7 @@ $themes: (
     infoColor: #a4b0c6,
     warningColor: #ffeb66,
     logoSuffix: "white",
+    mfaLogoSuffix: "-w.png",
     passwordNumberColor: #6f9df1,
     passwordSpecialColor: #ff8d85,
     passwordCountText: #ffffff,
@@ -279,7 +287,7 @@ $themes: (
       hue-rotate(184deg) brightness(87%) contrast(93%),
     webkitCalendarPickerHoverFilter: brightness(0) saturate(100%) invert(100%) sepia(0%)
       saturate(0%) hue-rotate(93deg) brightness(103%) contrast(103%),
-    codeColor: #e83e8c,
+    codeColor: $code-color-dark,
   ),
   nord: (
     textColor: $nord5,
@@ -327,12 +335,13 @@ $themes: (
     infoColor: $nord9,
     warningColor: $nord12,
     logoSuffix: "white",
+    mfaLogoSuffix: "-w.png",
     passwordNumberColor: $nord8,
     passwordSpecialColor: $nord12,
     passwordCountText: $nord5,
     calloutBorderColor: $nord0,
     calloutBackgroundColor: $nord2,
-    toastTextColor: #ffffff,
+    toastTextColor: #000000,
     svgSuffix: "-dark.svg",
     transparentColor: rgba(0, 0, 0, 0),
     dateInputColorScheme: dark,
@@ -341,7 +350,7 @@ $themes: (
     // has no hover so use same color
     webkitCalendarPickerHoverFilter: brightness(0) saturate(100%) invert(94%) sepia(5%)
       saturate(454%) hue-rotate(185deg) brightness(93%) contrast(96%),
-    codeColor: #e83e8c,
+    codeColor: $code-color-nord,
   ),
   solarizedDark: (
     textColor: $solarizedDarkBase2,
@@ -361,10 +370,10 @@ $themes: (
     headerBackgroundColor: $solarizedDarkBase02,
     headerBackgroundHoverColor: $solarizedDarkBase01,
     headerBorderColor: $solarizedDarkBase03,
-    headerInputBackgroundColor: $solarizedDarkBase2,
+    headerInputBackgroundColor: darken($solarizedDarkBase0, 5%),
     headerInputBackgroundFocusColor: $solarizedDarkBase1,
-    headerInputColor: $solarizedDarkBase01,
-    headerInputPlaceholderColor: $solarizedDarkBase00,
+    headerInputColor: $solarizedDarkBase02,
+    headerInputPlaceholderColor: lighten($solarizedDarkBase02, 5%),
     listItemBackgroundHoverColor: lighten($solarizedDarkBase02, 5%),
     disabledIconColor: $solarizedDarkBase0,
     disabledBoxOpacity: 0.5,
@@ -389,12 +398,13 @@ $themes: (
     infoColor: $solarizedDarkGreen,
     warningColor: $solarizedDarkYellow,
     logoSuffix: "white",
+    mfaLogoSuffix: "-w.png",
     passwordNumberColor: $solarizedDarkCyan,
     passwordSpecialColor: $solarizedDarkYellow,
     passwordCountText: $solarizedDarkBase2,
     calloutBorderColor: $solarizedDarkBase03,
     calloutBackgroundColor: $solarizedDarkBase01,
-    toastTextColor: #ffffff,
+    toastTextColor: #000000,
     svgSuffix: "-solarized.svg",
     transparentColor: rgba(0, 0, 0, 0),
     dateInputColorScheme: dark,
@@ -402,7 +412,7 @@ $themes: (
       hue-rotate(138deg) brightness(92%) contrast(90%),
     webkitCalendarPickerHoverFilter: brightness(0) saturate(100%) invert(94%) sepia(10%)
       saturate(462%) hue-rotate(345deg) brightness(103%) contrast(87%),
-    codeColor: #e83e8c,
+    codeColor: $code-color-dark,
   ),
 );
 

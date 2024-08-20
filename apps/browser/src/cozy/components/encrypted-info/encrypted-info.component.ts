@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
 import { CozyClientService } from "../../../popup/services/cozyClient.service";
@@ -19,7 +19,7 @@ export class EncryptedInfoComponent implements OnInit {
     protected cipherService: CipherService,
     protected i18nService: I18nService,
     protected stateService: StateService,
-    protected cozyClientService: CozyClientService
+    protected cozyClientService: CozyClientService,
   ) {}
 
   async ngOnInit() {
@@ -31,6 +31,7 @@ export class EncryptedInfoComponent implements OnInit {
   async moreInfo() {
     const infoUrl =
       "https://support.cozy.io/394-comment-puis-je-parametrer-mon-gestionnaire-de-mot-de-passe/";
+    // eslint-disable-next-line no-restricted-globals
     window.open(infoUrl);
   }
 

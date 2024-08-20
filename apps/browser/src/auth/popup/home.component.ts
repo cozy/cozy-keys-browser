@@ -1,22 +1,18 @@
-import { Component, OnInit } from "@angular/core";
-/** Cozy custo
- import { FormBuilder, Validators } from "@angular/forms";
-*/
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-/** end custo */
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
+import { Subject, firstValueFrom } from "rxjs";
 
-import { EnvironmentService } from "@bitwarden/common/abstractions/environment.service";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { LoginService } from "@bitwarden/common/auth/abstractions/login.service";
+import { EnvironmentSelectorComponent } from "@bitwarden/angular/auth/components/environment-selector.component";
+import { LoginEmailServiceAbstraction, RegisterRouteService } from "@bitwarden/auth/common";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+
+import { AccountSwitcherService } from "./account-switching/services/account-switcher.service";
+
 /* start Cozy imports */
 /* eslint-disable */
-import { CryptoFunctionService } from "@bitwarden/common/abstractions/cryptoFunction.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password/password-generation.service.abstraction";
-import { Utils } from "@bitwarden/common/misc/utils";
-import { BrowserApi } from "../../browser/browserApi";
+import { BrowserApi } from "../../platform/browser/browser-api";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -24,9 +20,12 @@ import { BrowserApi } from "../../browser/browserApi";
   selector: "app-home",
   templateUrl: "home.component.html",
 })
-export class HomeComponent implements OnInit {
-  loginInitiated = false;
+export class HomeComponent implements OnInit, OnDestroy {
+  @ViewChild(EnvironmentSelectorComponent, { static: true })
+  environmentSelector!: EnvironmentSelectorComponent;
+  private destroyed$: Subject<void> = new Subject();
 
+  loginInitiated = false;
   formGroup = this.formBuilder.group({
     /** Cozy custo
     email: ["", [Validators.required, Validators.email]],
@@ -36,105 +35,80 @@ export class HomeComponent implements OnInit {
     rememberEmail: [false],
   });
 
+  // TODO: remove when email verification flag is removed
+  registerRoute$ = this.registerRouteService.registerRoute$();
+
   constructor(
     protected platformUtilsService: PlatformUtilsService,
-    private stateService: StateService,
     private formBuilder: FormBuilder,
     private router: Router,
     private i18nService: I18nService,
-    private environmentService: EnvironmentService,
-    private route: ActivatedRoute,
-    private loginService: LoginService,
-    private cryptoFunctionService: CryptoFunctionService,
-    private passwordGenerationService: PasswordGenerationServiceAbstraction
+    private loginEmailService: LoginEmailServiceAbstraction,
+    private accountSwitcherService: AccountSwitcherService,
+    private registerRouteService: RegisterRouteService,
   ) {}
-  async ngOnInit(): Promise<void> {
-    let savedEmail = this.loginService.getEmail();
-    const rememberEmail = this.loginService.getRememberEmail();
 
-    if (savedEmail != null) {
-      this.formGroup.patchValue({
-        email: savedEmail,
-        rememberEmail: rememberEmail,
-      });
+  async ngOnInit(): Promise<void> {
+    const email = this.loginEmailService.getEmail();
+    const rememberEmail = this.loginEmailService.getRememberEmail();
+
+    if (email != null) {
+      this.formGroup.patchValue({ email, rememberEmail });
     } else {
-      savedEmail = await this.stateService.getRememberedEmail();
-      if (savedEmail != null) {
-        this.formGroup.patchValue({
-          email: savedEmail,
-          rememberEmail: true,
-        });
+      const storedEmail = await firstValueFrom(this.loginEmailService.storedEmail$);
+
+      if (storedEmail != null) {
+        this.formGroup.patchValue({ email: storedEmail, rememberEmail: true });
       }
     }
+
+    // Cozy customization
+    /*
+    this.environmentSelector.onOpenSelfHostedSettings
+      .pipe(
+        switchMap(async () => {
+          await this.setLoginEmailValues();
+          await this.router.navigate(["environment"]);
+        }),
+        takeUntil(this.destroyed$),
+      )
+      .subscribe();
+    */
   }
 
-  submit() {
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+  }
+
+  get availableAccounts$() {
+    return this.accountSwitcherService.availableAccounts$;
+  }
+
+  async submit() {
     this.formGroup.markAllAsTouched();
+
     if (this.formGroup.invalid) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccured"),
-        this.i18nService.t("invalidEmail")
+        this.i18nService.t("invalidEmail"),
       );
       return;
     }
 
-    this.loginService.setEmail(this.formGroup.value.email);
-    this.loginService.setRememberEmail(this.formGroup.value.rememberEmail);
-    this.router.navigate(["login"], { queryParams: { email: this.formGroup.value.email } });
+    await this.setLoginEmailValues();
+    await this.router.navigate(["login"], { queryParams: { email: this.formGroup.value.email } });
   }
 
-  get selfHostedDomain() {
-    return this.environmentService.hasBaseUrl() ? this.environmentService.getWebVaultUrl() : null;
-  }
-
-  setFormValues() {
-    this.loginService.setEmail(this.formGroup.value.email);
-    this.loginService.setRememberEmail(this.formGroup.value.rememberEmail);
+  async setLoginEmailValues() {
+    // Note: Browser saves email settings here instead of the login component
+    this.loginEmailService.setRememberEmail(this.formGroup.value.rememberEmail);
+    this.loginEmailService.setEmail(this.formGroup.value.email);
+    await this.loginEmailService.saveEmailSettings();
   }
 
   /* Cozy custo */
-  async launchSsoBrowser() {
-    // Generate necessary sso params
-    const passwordOptions: any = {
-      type: "password",
-      length: 64,
-      uppercase: true,
-      lowercase: true,
-      numbers: true,
-      special: false,
-    };
-
-    const state =
-      (await this.passwordGenerationService.generatePassword(passwordOptions)) +
-      ":clientId=browser";
-    const codeVerifier = await this.passwordGenerationService.generatePassword(passwordOptions);
-    const codeVerifierHash = await this.cryptoFunctionService.hash(codeVerifier, "sha256");
-    const codeChallenge = Utils.fromBufferToUrlB64(codeVerifierHash);
-
-    await this.stateService.setSsoCodeVerifier(codeVerifier);
-    await this.stateService.setSsoState(state);
-
-    let url = this.environmentService.getWebVaultUrl();
-    if (url == null) {
-      url = "https://vault.bitwarden.com";
-    }
-
-    const redirectUri = url + "/sso-connector.html";
-
-    // Launch browser
-    this.platformUtilsService.launchUri(
-      url +
-        "/#/sso?clientId=browser" +
-        "&redirectUri=" +
-        encodeURIComponent(redirectUri) +
-        "&state=" +
-        state +
-        "&codeChallenge=" +
-        codeChallenge
-    );
-  }
-
   openCozyWebsite() {
     BrowserApi.createNewTab("https://manager.cozycloud.cc/cozy/create");
   }

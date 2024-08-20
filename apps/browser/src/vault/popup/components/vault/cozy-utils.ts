@@ -1,12 +1,14 @@
 import { EventEmitter } from "@angular/core";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import { CozyClientService } from "../../../../popup/services/cozyClient.service";
+import { CozyClientService } from "src/popup/services/cozyClient.service";
+
+import { DialogService } from "../../../../../../../libs/components/src/dialog";
+import { ToastService } from "../../../../../../../libs/components/src/toast";
 
 /**
  * Cozy custo
@@ -19,12 +21,13 @@ import { CozyClientService } from "../../../../popup/services/cozyClient.service
 export const deleteCipher = async (
   cipherService: CipherService,
   i18nService: I18nService,
-  platformUtilsService: PlatformUtilsService,
+  dialogService: DialogService,
+  toastService: ToastService,
   cipher: CipherView,
-  stateService: StateService,
-  cozyClientService: CozyClientService
+  cozyClientService: CozyClientService,
+  organizationService: OrganizationService,
 ): Promise<boolean> => {
-  const organizations = await stateService.getOrganizations();
+  const organizations = await organizationService.getAll();
   const [cozyOrganization] = Object.values(organizations).filter((org) => org.name === "Cozy");
   const isCozyOrganization = cipher.organizationId === cozyOrganization.id;
 
@@ -36,13 +39,11 @@ export const deleteCipher = async (
     ? i18nService.t("deleteSharedItem")
     : i18nService.t("deleteItem");
 
-  const confirmed = await platformUtilsService.showDialog(
-    confirmationMessage,
-    confirmationTitle,
-    i18nService.t("yes"),
-    i18nService.t("no"),
-    "warning"
-  );
+  const confirmed = await dialogService.openSimpleDialog({
+    title: confirmationTitle,
+    content: confirmationMessage,
+    type: "warning",
+  });
 
   if (!confirmed) {
     return false;
@@ -54,7 +55,7 @@ export const deleteCipher = async (
       : cipherService.softDeleteWithServer(cipher.id);
     const message = i18nService.t(cipher.isDeleted ? "permanentlyDeletedItem" : "deletedItem");
     await deletePromise;
-    platformUtilsService.showToast("success", null, message);
+    toastService.showToast({ title: message, message: "", variant: "success" });
     const onDeletedCipher = new EventEmitter<CipherView>();
     onDeletedCipher.emit(cipher);
   } catch {

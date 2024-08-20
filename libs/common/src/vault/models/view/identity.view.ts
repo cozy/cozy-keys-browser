@@ -1,8 +1,8 @@
 import { Jsonify } from "type-fest";
 
-import { IdentityLinkedId as LinkedId } from "../../../enums/linkedIdType";
-import { linkedFieldOption } from "../../../misc/linkedFieldOption.decorator";
-import { Utils } from "../../../misc/utils";
+import { Utils } from "../../../platform/misc/utils";
+import { IdentityLinkedId as LinkedId } from "../../enums";
+import { linkedFieldOption } from "../../linked-field-option.decorator";
 
 import { ItemView } from "./item.view";
 
@@ -140,6 +140,17 @@ export class IdentityView extends ItemView {
     }
     addressPart2 += ", " + postalCode;
     return addressPart2;
+  }
+
+  get fullAddressForCopy(): string {
+    let address = this.fullAddress;
+    if (this.city != null || this.state != null || this.postalCode != null) {
+      address += "\n" + this.fullAddressPart2;
+    }
+    if (this.country != null) {
+      address += "\n" + this.country;
+    }
+    return address;
   }
 
   static fromJSON(obj: Partial<Jsonify<IdentityView>>): IdentityView {

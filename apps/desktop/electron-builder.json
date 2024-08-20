@@ -5,7 +5,7 @@
   "productName": "Bitwarden",
   "appId": "com.bitwarden.desktop",
   "buildDependenciesFromSource": true,
-  "copyright": "Copyright © 2015-2023 Bitwarden Inc.",
+  "copyright": "Copyright © 2015-2024 Bitwarden Inc.",
   "directories": {
     "buildResources": "resources",
     "output": "dist",
@@ -15,11 +15,16 @@
   "asarUnpack": ["**/*.node"],
   "files": [
     "**/*",
-    "!**/node_modules/@bitwarden/desktop-native/**/*",
-    "**/node_modules/@bitwarden/desktop-native/index.js",
-    "**/node_modules/@bitwarden/desktop-native/desktop_native.${platform}-${arch}*.node"
+    "!**/node_modules/@bitwarden/desktop-napi/**/*",
+    "**/node_modules/@bitwarden/desktop-napi/index.js",
+    "**/node_modules/@bitwarden/desktop-napi/desktop_napi.${platform}-${arch}*.node",
+
+    "!**/node_modules/argon2/**/*",
+    "**/node_modules/argon2/argon2.cjs",
+    "**/node_modules/argon2/package.json",
+    "**/node_modules/argon2/build/Release/argon2.node"
   ],
-  "electronVersion": "21.3.1",
+  "electronVersion": "31.2.0",
   "generateUpdatesFilesForAllChannels": true,
   "publish": {
     "provider": "generic",
@@ -66,6 +71,7 @@
       ],
       "CFBundleDevelopmentRegion": "en"
     },
+    "singleArchFiles": "node_modules/@bitwarden/desktop-napi/desktop_napi.darwin-*.node",
     "target": ["dmg", "zip"]
   },
   "win": {
@@ -96,6 +102,7 @@
   },
   "dmg": {
     "icon": "dmg.icns",
+    "sign": false,
     "contents": [
       {
         "x": 150,
@@ -120,7 +127,8 @@
     "entitlementsLoginHelper": "resources/entitlements.mas.loginhelper.plist",
     "hardenedRuntime": false,
     "extendInfo": {
-      "LSMinimumSystemVersion": "10.14.0"
+      "LSMinimumSystemVersion": "12",
+      "ElectronTeamID": "LTZ2PFU5D6"
     }
   },
   "nsisWeb": {
@@ -142,7 +150,69 @@
     "identityName": "8bitSolutionsLLC.bitwardendesktop",
     "publisher": "CN=14D52771-DE3C-4886-B8BF-825BA7690418",
     "publisherDisplayName": "8bit Solutions LLC",
-    "languages": ["en-US"]
+    "languages": [
+      "en-US",
+      "af",
+      "ar",
+      "az-latn",
+      "be",
+      "bg",
+      "bn",
+      "bs",
+      "ca",
+      "cs",
+      "cy",
+      "da",
+      "de",
+      "el",
+      "en-gb",
+      "en-in",
+      "es",
+      "et",
+      "eu",
+      "fa",
+      "fi",
+      "fil",
+      "fr",
+      "gl",
+      "he",
+      "hi",
+      "hr",
+      "hu",
+      "id",
+      "it",
+      "ja",
+      "ka",
+      "km",
+      "kn",
+      "ko",
+      "lt",
+      "lv",
+      "ml",
+      "mr",
+      "nb",
+      "ne",
+      "nl",
+      "nn",
+      "or",
+      "pl",
+      "pt-br",
+      "pt-pt",
+      "ro",
+      "ru",
+      "si",
+      "sk",
+      "sl",
+      "sr-cyrl",
+      "sv",
+      "te",
+      "th",
+      "tr",
+      "uk",
+      "vi",
+      "zh-cn",
+      "zh-tw"
+    ]
   },
   "deb": {
     "artifactName": "${productName}-${version}-${arch}.${ext}",
@@ -158,7 +228,10 @@
     "artifactName": "${productName}-${version}-${arch}.${ext}"
   },
   "snap": {
+    "summary": "Bitwarden is a secure and free password manager for all of your devices.",
+    "description": "**Installation**\nBitwarden requires access to the `password-manager-service`. Please enable it through permissions or by running `sudo snap connect bitwarden:password-manager-service` after installation. See https://btwrdn.com/install-snap for details.",
     "autoStart": true,
+    "base": "core22",
     "confinement": "strict",
     "plugs": ["default", "password-manager-service"],
     "stagePackages": ["default"]

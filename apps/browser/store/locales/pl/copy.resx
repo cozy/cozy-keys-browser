@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -118,40 +118,58 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden - darmowy menedżer haseł</value>
+    <value>Menedżer Haseł Bitwarden</value>
   </data>
   <data name="Summary" xml:space="preserve">
-    <value>Bezpieczny i darmowy menedżer haseł dla wszystkich Twoich urządzeń</value>
+    <value>W domu, w pracy, lub w ruchu, Bitwarden z łatwością zabezpiecza wszystkie Twoje hasła, passkeys i poufne informacje.</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden, Inc. jest macierzystą firmą 8bit Solutions LLC.
+    <value>Uznany za najlepszego menedżera haseł przez PCMag, WIRED, The Verge, CNET, G2 i wielu innych!
 
-NAZWANY NAJLEPSZYM MENEDŻEREM HASEŁ PRZEZ THE VERGE, US NEWS &amp; WORLD REPORT, CNET I WIĘCEJ.
+ZABEZPIECZ SWOJE CYFROWE ŻYCIE
+Zabezpiecz swoje cyfrowe życie i chroń przed naruszeniami danych, generując i zapisując unikalne, silne hasła do każdego konta. Przechowuj wszystko w zaszyfrowanym end-to-end magazynie haseł, do którego tylko Ty masz dostęp.
 
-Zarządzaj, przechowuj, zabezpieczaj i udostępniaj nieograniczoną liczbę haseł na nieograniczonej liczbie urządzeń z każdego miejsca. Bitwarden dostarcza rozwiązania do zarządzania hasłami z otwartym kodem źródłowym każdemu, niezależnie od tego, czy jest w domu, w pracy, czy w podróży.
+DOSTĘP DO SWOICH DANYCH W KAŻDYM MIEJSCU, W DOWOLNYM CZASIE, NA KAŻDYM URZĄDZENIU
+Z łatwością zarządzaj, przechowuj, zabezpieczaj i udostępniaj nieograniczoną liczbę haseł na nieograniczonej liczbie urządzeń.
 
-Generuj silne, unikalne i losowe hasła w oparciu o wymagania bezpieczeństwa dla każdej odwiedzanej strony.
+KAŻDY POWINIEN POSIADAĆ NARZĘDZIA ABY ZACHOWAĆ BEZPIECZEŃSTWO W INTERNECIE
+Korzystaj z Bitwarden za darmo, bez reklam i sprzedawania Twoich danych. Bitwarden wierzy, że każdy powinien mieć możliwość zachowania bezpieczeństwa w Internecie. Plany premium oferują dostęp do zaawansowanych funkcji.
 
-Funkcja Bitwarden Send szybko przesyła zaszyfrowane informacje --- pliki i zwykły tekst -- bezpośrednio do każdego.
+WZMOCNIJ SWOJE ZESPOŁY DZIĘKI BITWARDEN
+Plany dla Zespołów i Enterprise oferują profesjonalne funkcje biznesowe. Na przykład obejmują integrację z SSO, własny hosting, integrację katalogów i udostępnianie SCIM, zasady globalne, dostęp do API, dzienniki zdarzeń i inne.
 
-Bitwarden oferuje plany dla zespołów i firm, dzięki czemu możesz bezpiecznie udostępniać hasła współpracownikom.
+Użyj Bitwarden, aby zabezpieczyć swoich pracowników i udostępniać poufne informacje współpracownikom.
 
-Dlaczego warto wybrać Bitwarden:
 
-Szyfrowanie światowej klasy
-Hasła są chronione za pomocą zaawansowanego szyfrowania typu end-to-end (AES-256 bitów, dodatkowy ciąg zaburzający i PBKDF2 SHA-256), dzięki czemu Twoje dane pozostają bezpieczne i prywatne.
+Więcej powodów, aby wybrać Bitwarden:
 
-Wbudowany generator haseł
-Generuj silne, unikalne i losowe hasła w oparciu o wymagania bezpieczeństwa dla każdej odwiedzanej strony.
+Szyfrowanie na światowym poziomie
+Hasła są chronione za pomocą zaawansowanego, kompleksowego szyfrowania (AES-256-bitowy, solony hashtag i PBKDF2 SHA-256), dzięki czemu Twoje dane pozostają bezpieczne i prywatne.
 
-Przetłumaczone aplikacje
-Tłumaczenia Bitwarden są dostępne w 40 językach i rosną dzięki naszej globalnej społeczności.
+Audyty stron trzecich
+Bitwarden regularnie przeprowadza kompleksowe audyty bezpieczeństwa stron trzecich we współpracy ze znanymi firmami security. Te coroczne audyty obejmują ocenę kodu źródłowego i testy penetracyjne adresów IP Bitwarden, serwerów i aplikacji internetowych.
+
+Zaawansowane 2FA
+Zabezpiecz swój login za pomocą zewnętrznego narzędzia uwierzytelniającego, kodów przesłanych pocztą elektroniczną lub poświadczeń FIDO2 WebAuthn, takich jak sprzętowy klucz bezpieczeństwa lub hasło.
+
+Bitwarden Wyślij
+Przesyłaj dane bezpośrednio do innych, zachowując kompleksowe szyfrowane bezpieczeństwo i ograniczając ryzyko.
+
+Wbudowany generator
+Twórz długie, złożone i różne hasła oraz unikalne nazwy użytkowników dla każdej odwiedzanej witryny. Zintegruj się z dostawcami aliasów e-mail, aby uzyskać dodatkową prywatność.
+
+Tłumaczenia globalne
+Istnieją tłumaczenia Bitwarden na ponad 60 języków, tłumaczone przez globalną społeczność za pośrednictwem Crowdin.
 
 Aplikacje wieloplatformowe
-Zabezpiecz i udostępniaj poufne dane w swoim sejfie Bitwarden z dowolnej przeglądarki, urządzenia mobilnego, systemu operacyjnego i nie tylko.</value>
+Zabezpiecz i udostępniaj poufne dane w swoim Sejfie Bitwarden z dowolnej przeglądarki, urządzenia mobilnego lub systemu operacyjnego na komputerze stacjonarnym i nie tylko.
+
+Bitwarden zabezpiecza nie tylko hasła
+Rozwiązania do zarządzania danymi zaszyfrownaymi end-to-end od firmy Bitwarden umożliwiają organizacjom zabezpieczanie wszystkiego, w tym tajemnic programistów i kluczy dostępu. Odwiedź Bitwarden.com, aby dowiedzieć się więcej o Mendżerze Sekretów Bitwarden i Bitwarden Passwordless.dev!
+</value>
   </data>
   <data name="AssetTitle" xml:space="preserve">
-    <value>Bezpieczny i darmowy menedżer haseł dla wszystkich Twoich urządzeń</value>
+    <value>W domu, w pracy, lub w ruchu, Bitwarden z łatwością zabezpiecza wszystkie Twoje hasła, passkeys i poufne informacje.</value>
   </data>
   <data name="ScreenshotSync" xml:space="preserve">
     <value>Synchronizacja i dostęp do sejfu z różnych urządzeń</value>

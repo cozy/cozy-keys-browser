@@ -1,14 +1,16 @@
-import { Component, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 
-import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { GeneratorComponent as BaseGeneratorComponent } from "@bitwarden/angular/tools/generator/components/generator.component";
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { LogService } from "@bitwarden/common/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/abstractions/platformUtils.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
-import { UsernameGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/username";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { DialogService, ToastService } from "@bitwarden/components";
+import {
+  PasswordGenerationServiceAbstraction,
+  UsernameGenerationServiceAbstraction,
+} from "@bitwarden/generator-legacy";
 
 import { PasswordGeneratorHistoryComponent } from "./password-generator-history.component";
 
@@ -17,28 +19,29 @@ import { PasswordGeneratorHistoryComponent } from "./password-generator-history.
   templateUrl: "generator.component.html",
 })
 export class GeneratorComponent extends BaseGeneratorComponent {
-  @ViewChild("historyTemplate", { read: ViewContainerRef, static: true })
-  historyModalRef: ViewContainerRef;
-
   constructor(
     passwordGenerationService: PasswordGenerationServiceAbstraction,
     usernameGenerationService: UsernameGenerationServiceAbstraction,
-    stateService: StateService,
+    accountService: AccountService,
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService,
     logService: LogService,
     route: ActivatedRoute,
-    private modalService: ModalService
+    ngZone: NgZone,
+    private dialogService: DialogService,
+    toastService: ToastService,
   ) {
     super(
       passwordGenerationService,
       usernameGenerationService,
       platformUtilsService,
-      stateService,
+      accountService,
       i18nService,
       logService,
       route,
-      window
+      ngZone,
+      window,
+      toastService,
     );
     if (platformUtilsService.isSelfHost()) {
       // Allow only valid email forwarders for self host
@@ -46,8 +49,12 @@ export class GeneratorComponent extends BaseGeneratorComponent {
     }
   }
 
+  get isSelfHosted(): boolean {
+    return this.platformUtilsService.isSelfHost();
+  }
+
   async history() {
-    await this.modalService.openViewRef(PasswordGeneratorHistoryComponent, this.historyModalRef);
+    this.dialogService.open(PasswordGeneratorHistoryComponent);
   }
 
   lengthChanged() {

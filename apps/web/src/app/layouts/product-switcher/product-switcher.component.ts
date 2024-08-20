@@ -2,15 +2,12 @@ import { AfterViewInit, ChangeDetectorRef, Component, Input } from "@angular/cor
 
 import { IconButtonType } from "@bitwarden/components/src/icon-button/icon-button.component";
 
-import { flagEnabled } from "../../../utils/flags";
-
+import { ProductSwitcherService } from "./shared/product-switcher.service";
 @Component({
   selector: "product-switcher",
   templateUrl: "./product-switcher.component.html",
 })
 export class ProductSwitcherComponent implements AfterViewInit {
-  protected isEnabled = flagEnabled("secretsManager");
-
   /**
    * Passed to the product switcher's `bitIconButton`
    */
@@ -26,5 +23,10 @@ export class ProductSwitcherComponent implements AfterViewInit {
     this.changeDetector.detectChanges();
   }
 
-  constructor(private changeDetector: ChangeDetectorRef) {}
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    private productSwitcherService: ProductSwitcherService,
+  ) {}
+
+  protected readonly products$ = this.productSwitcherService.products$;
 }

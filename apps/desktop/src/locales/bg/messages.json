@@ -15,7 +15,7 @@
     "message": "Видове"
   },
   "typeLogin": {
-    "message": "Запис"
+    "message": "Вход"
   },
   "typeCard": {
     "message": "Карта"
@@ -403,6 +403,9 @@
   "length": {
     "message": "Дължина"
   },
+  "passwordMinLength": {
+    "message": "Минимална дължина на паролата"
+  },
   "uppercase": {
     "message": "Главни букви (A-Z)"
   },
@@ -475,8 +478,8 @@
   "maxFileSize": {
     "message": "Големината на файла е най-много 500 MB."
   },
-  "updateKey": {
-    "message": "Трябва да обновите шифриращия си ключ, за да използвате тази възможност."
+  "encryptionKeyMigrationRequired": {
+    "message": "Необходима е промяна на шифриращия ключ. Впишете се в трезора си по уеб, за да обновите своя шифриращ ключ."
   },
   "editedFolder": {
     "message": "Редактирана папка"
@@ -495,6 +498,12 @@
   },
   "createAccount": {
     "message": "Създаване на абонамент"
+  },
+  "setAStrongPassword": {
+    "message": "Използвайте сложна парола"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завършете регистрацията си като зададете парола"
   },
   "logIn": {
     "message": "Вписване"
@@ -516,6 +525,31 @@
   },
   "masterPassHint": {
     "message": "Подсказване за главната парола (по избор)"
+  },
+  "masterPassHintText": {
+    "message": "Ако забравите паролата си, подсказката може да бъде изпратена на е-пощата Ви. $CURRENT$/$MAXIMUM$ максимален брой знаци.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
+  },
+  "masterPassword": {
+    "message": "Главна парола"
+  },
+  "masterPassImportant": {
+    "message": "Главната парола не може да бъде възстановена, ако я забравите!"
+  },
+  "confirmMasterPassword": {
+    "message": "Потвърждаване на главната парола"
+  },
+  "masterPassHintLabel": {
+    "message": "Подсказка за главната парола"
   },
   "settings": {
     "message": "Настройки"
@@ -542,7 +576,7 @@
     "message": "Повторното въвеждане на главната парола е задължително."
   },
   "masterPasswordMinlength": {
-    "message": "Master password must be at least $VALUE$ characters long.",
+    "message": "Главната парола трябва да е дълга поне $VALUE$ знака.",
     "description": "The Master Password must be at least a specific number of characters long.",
     "placeholders": {
       "value": {
@@ -550,6 +584,12 @@
         "example": "8"
       }
     }
+  },
+  "youSuccessfullyLoggedIn": {
+    "message": "Вписахте се успешно"
+  },
+  "youMayCloseThisWindow": {
+    "message": "Може да затворите този прозорец"
   },
   "masterPassDoesntMatch": {
     "message": "Главната парола и потвърждението ѝ не съвпадат."
@@ -638,18 +678,18 @@
   "authenticatorAppTitle": {
     "message": "Приложение за удостоверяване"
   },
-  "authenticatorAppDesc": {
-    "message": "Използвайте приложение за удостоверяване (като Authy или Google Authenticator) за генерирането на временни кодове за потвърждение.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Въведете код създаден чрез приложение за удостоверяване, като например това на Битуорден.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "Устройство YubiKey OTP"
+  "yubiKeyTitleV2": {
+    "message": "Ключ за сигурност YubiKey OTP"
   },
   "yubiKeyDesc": {
     "message": "Използвайте устройство на YubiKey, за да влезете в абонамента си. Поддържат се моделите YubiKey 4, 4 Nano, 4C и NEO."
   },
-  "duoDesc": {
-    "message": "Удостоверяване чрез Duo Security, с ползване на приложението Duo Mobile, SMS, телефонен разговор или устройство U2F.",
+  "duoDescV2": {
+    "message": "Въведете код създаден чрез Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -665,8 +705,8 @@
   "emailTitle": {
     "message": "Електронна поща"
   },
-  "emailDesc": {
-    "message": "Кодовете за потвърждение ще ви бъдат пратени по е-поща."
+  "emailDescV2": {
+    "message": "Въведете кода изпратен на е-пощата Ви."
   },
   "loginUnavailable": {
     "message": "Записът липсва"
@@ -685,6 +725,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Укажете базовия адрес за собствената ви инсталирана среда на Bitwarden."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Посочете базовия адрес на Вашата собствена инсталация на Битуорден. Пример: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "За по-детайлна настройка, може да укажете основния адрес на всяка услуга поотделно."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Трябва да добавите или основния адрес на сървъра, или поне една специална среда."
   },
   "customEnvironment": {
     "message": "Специална среда"
@@ -734,6 +783,9 @@
   "loggedOut": {
     "message": "Бяхте отписани"
   },
+  "loggedOutDesc": {
+    "message": "Бяхте отписан(а) от регистрацията си."
+  },
   "loginExpired": {
     "message": "Сесията ви изтече."
   },
@@ -770,6 +822,9 @@
   "contactUs": {
     "message": "Свържете се с нас"
   },
+  "helpAndFeedback": {
+    "message": "Помощ и обратна връзка"
+  },
   "getHelp": {
     "message": "Помощ"
   },
@@ -788,8 +843,11 @@
   "changeMasterPass": {
     "message": "Промяна на главната парола"
   },
-  "changeMasterPasswordConfirmation": {
-    "message": "Главната парола на трезор може да се промени чрез сайта bitwarden.com. Искате ли да го посетите?"
+  "continueToWebApp": {
+    "message": "Продължаване към уеб приложението?"
+  },
+  "changeMasterPasswordOnWebConfirmation": {
+    "message": "Може да промените главната си парола в уеб приложението на Битуорден."
   },
   "fingerprintPhrase": {
     "message": "Уникална фраза",
@@ -1074,8 +1132,8 @@
   "premiumSignUpStorage": {
     "message": "1 ГБ пространство за файлове, които се шифроват."
   },
-  "premiumSignUpTwoStep": {
-    "message": "Двустепенно удостоверяване чрез YubiKey, FIDO U2F и Duo."
+  "premiumSignUpTwoStepOptions": {
+    "message": "Частно двустепенно удостоверяване чрез YubiKey и Duo."
   },
   "premiumSignUpReports": {
     "message": "Проверки в списъците с публикувани пароли, проверка на регистрациите и доклади за пробивите в сигурността, което спомага трезорът ви да е допълнително защитен."
@@ -1197,6 +1255,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Грешка при опресняването на идентификатора за достъп"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Няма намерен идентификатор за опресняване или ключове за ППИ. Опитайте да се отпишете и да се впишете отново."
+  },
   "help": {
     "message": "Помощ"
   },
@@ -1284,11 +1348,41 @@
     "message": "Обновена парола",
     "description": "ex. Date this password was updated"
   },
+  "exportFrom": {
+    "message": "Изнасяне от"
+  },
   "exportVault": {
     "message": "Изнасяне на трезора"
   },
   "fileFormat": {
     "message": "Формат на файла"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Изнесеният файл ще бъде защитен с парола, която ще бъде необходима за дешифриране на файла."
+  },
+  "filePassword": {
+    "message": "Парола на файла"
+  },
+  "exportPasswordDescription": {
+    "message": "Парола ще се използва при изнасянето и при внасянето на този файл"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Използвайте ключа си за шифриране, който се получава чрез комбиниране на потребителското име на регистрацията Ви и главната парола. С него изнасянето ще се шифрира и внасянето ще бъда възможно само в текущата регистрация в Битуорден."
+  },
+  "passwordProtected": {
+    "message": "Защита с парола"
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Задайте парола за файла, за да шифровате изнесените данни. Ще можете да внесете данните във всяка регистрация в Битуорден използвайки паролата за дешифриране."
+  },
+  "exportTypeHeading": {
+    "message": "Вид изнасяне"
+  },
+  "accountRestricted": {
+    "message": "Регистрацията е ограничена"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "Дънните в полетата „Парола на файла“ и „Потвърждаване на паролата на файла“ не съвпадат."
   },
   "hCaptchaUrl": {
     "message": "Адрес за hCaptcha",
@@ -1386,14 +1480,23 @@
   "invalidPin": {
     "message": "Неправилен ПИН."
   },
+  "tooManyInvalidPinEntryAttemptsLoggingOut": {
+    "message": "Направили сте твърде много опити с неправилен ПИН код. Отписване…"
+  },
   "unlockWithWindowsHello": {
     "message": "Отключване с Windows Hello"
+  },
+  "additionalWindowsHelloSettings": {
+    "message": "Допълнителни настройки на Windows Hello"
   },
   "windowsHelloConsentMessage": {
     "message": "Потвърждаване за Битуорден."
   },
   "unlockWithTouchId": {
     "message": "Отключване с Touch ID"
+  },
+  "additionalTouchIdSettings": {
+    "message": "Допълнителни настройки на Touch ID"
   },
   "touchIdConsentMessage": {
     "message": "отключете трезора си"
@@ -1403,6 +1506,12 @@
   },
   "autoPromptTouchId": {
     "message": "Питане за Touch ID при пускане"
+  },
+  "requirePasswordOnStart": {
+    "message": "Изискване на парола или ПИН при стартиране на приложението"
+  },
+  "recommendedForSecurity": {
+    "message": "Препоръчително от гледна точка на сигурността."
   },
   "lockWithMasterPassOnRestart": {
     "message": "Заключване с главната парола при повторно пускане"
@@ -1477,6 +1586,9 @@
   "vaultTimeoutActionLogOutDesc": {
     "message": "При изход от трезора ще ви се наложи отново да се идентифицирате, за да го достъпите."
   },
+  "unlockMethodNeededToChangeTimeoutActionDesc": {
+    "message": "Задайте метод за отключване, за да може да промените действието при изтичане на времето за достъп до трезора."
+  },
   "lock": {
     "message": "Заключване",
     "description": "Verb form: to make secure or inaccesible by"
@@ -1497,12 +1609,6 @@
   "permanentlyDeletedItem": {
     "message": "Записът е изтрит окончателно"
   },
-  "restoreItem": {
-    "message": "Възстановяване на запис"
-  },
-  "restoreItemConfirmation": {
-    "message": "Сигурни ли сте, че искате да възстановите записа?"
-  },
   "restoredItem": {
     "message": "Записът е възстановен"
   },
@@ -1521,8 +1627,20 @@
   "setMasterPassword": {
     "message": "Задаване на главна парола"
   },
-  "ssoCompleteRegistration": {
-    "message": "За да завършите настройките за еднократна идентификация, трябва да зададете главна парола за трезора."
+  "orgPermissionsUpdatedMustSetPassword": {
+    "message": "Правата Ви в организацията бяха променени, необходимо е да зададете главна парола.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "orgRequiresYouToSetPassword": {
+    "message": "Организацията Ви изисква да зададете главна парола.",
+    "description": "Used as a card title description on the set password page to explain why the user is there"
+  },
+  "verificationRequired": {
+    "message": "Изисква се потвърждение",
+    "description": "Default title for the user verification dialog."
+  },
+  "currentMasterPass": {
+    "message": "Текуща главна парола"
   },
   "newMasterPass": {
     "message": "Нова главна парола"
@@ -1572,6 +1690,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Паролата ви не отговаря на политиките."
   },
+  "receiveMarketingEmails": {
+    "message": "Получавайте е-писма от Битоурден за новини, съвети и възможности за проучвания."
+  },
+  "unsubscribe": {
+    "message": "Отписване"
+  },
+  "atAnyTime": {
+    "message": "по всяко време."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ако продължите, Вие се съгласявате с"
+  },
+  "and": {
+    "message": "и"
+  },
   "acceptPolicies": {
     "message": "Чрез тази отметка вие се съгласявате със следното:"
   },
@@ -1593,6 +1726,12 @@
   "browserIntegrationUnsupportedTitle": {
     "message": "Интеграцията с браузър не се поддържа"
   },
+  "browserIntegrationErrorTitle": {
+    "message": "Грешка при включването на интеграцията с браузъра"
+  },
+  "browserIntegrationErrorDesc": {
+    "message": "Възникна грешка при включването на интеграцията с браузъра."
+  },
   "browserIntegrationMasOnlyDesc": {
     "message": "За жалост в момента интеграцията с браузър не се поддържа във версията за магазина на Mac."
   },
@@ -1607,6 +1746,12 @@
   },
   "enableBrowserIntegrationFingerprintDesc": {
     "message": "Допълнително ниво на сигурност, чрез изискване на потвърждаване на биометричните данни при създаване на връзка между самостоятелното приложение и браузъра. При включваното му потребителят трябва да потвърждава всяко установяване на връзка."
+  },
+  "enableHardwareAcceleration": {
+    "message": "Използване на хардуерно ускорение"
+  },
+  "enableHardwareAccelerationDesc": {
+    "message": "Тази настройка по подразбиране е включена. Изключете я, само ако изпитвате графични проблеми. Нужно е рестартиране."
   },
   "approve": {
     "message": "Одобряване"
@@ -1646,6 +1791,9 @@
   },
   "personalOwnershipPolicyInEffect": {
     "message": "Политика от някоя организация влияе на вариантите за собственост."
+  },
+  "personalOwnershipPolicyInEffectImports": {
+    "message": "Политика на организацията забранява да внасяте елементи в личния си трезор."
   },
   "allSends": {
     "message": "Всички изпращания",
@@ -1819,6 +1967,9 @@
   "emailVerificationRequired": {
     "message": "Изисква се потвърждение на е-пощата"
   },
+  "emailVerifiedV2": {
+    "message": "Е-пощата е потвърдена"
+  },
   "emailVerificationRequiredDesc": {
     "message": "Трябва да потвърдите е-пощата си, за да можете да използвате тази функционалност."
   },
@@ -1840,6 +1991,45 @@
   "updateMasterPasswordWarning": {
     "message": "Вашата главна парола наскоро е била сменена от администратор в организацията Ви. За да получите достъп до трезора, трябва първо да я промените. Това означава, че ще бъдете отписан(а) от текущата си сесия и ще трябва да се впишете отново. Активните сесии на други устройства може да продължат да бъдат активни още един час."
   },
+  "updateWeakMasterPasswordWarning": {
+    "message": "Вашата главна парола не отговаря на една или повече политики на организацията Ви. За да получите достъп до трезора, трябва да промените главната си парола сега. Това означава, че ще бъдете отписан(а) от текущата си сесия и ще трябва да се впишете отново. Активните сесии на други устройства може да продължат да бъдат активни още един час."
+  },
+  "tryAgain": {
+    "message": "Нов опит"
+  },
+  "verificationRequiredForActionSetPinToContinue": {
+    "message": "Това действие изисква потвърждаване. Задайте ПИН, за да продължите."
+  },
+  "setPin": {
+    "message": "Задаване на ПИН"
+  },
+  "verifyWithBiometrics": {
+    "message": "Потвърждаване с биометрични данни"
+  },
+  "awaitingConfirmation": {
+    "message": "Изчаква се потвърждение"
+  },
+  "couldNotCompleteBiometrics": {
+    "message": "Действието с биометрични данни не може да бъде завършено."
+  },
+  "needADifferentMethod": {
+    "message": "Искате ли да опитате друг метод?"
+  },
+  "useMasterPassword": {
+    "message": "Използване на главната парола"
+  },
+  "usePin": {
+    "message": "Използване на ПИН"
+  },
+  "useBiometrics": {
+    "message": "Използване на биометрични данни"
+  },
+  "enterVerificationCodeSentToEmail": {
+    "message": "Въведете кода за потвърждаване, който беше изпратен на Вашата е-поща."
+  },
+  "resendCode": {
+    "message": "Повторно изпращане на кода"
+  },
   "hours": {
     "message": "Часа"
   },
@@ -1856,6 +2046,32 @@
       "minutes": {
         "content": "$2",
         "example": "5"
+      }
+    }
+  },
+  "vaultTimeoutPolicyWithActionInEffect": {
+    "message": "Настройките на организацията Ви влияят върху времето за достъп до трезора Ви. Максималното разрешено време за достъп е $HOURS$ час(а) и $MINUTES$ минута/и. Зададеното действие при изтичане на това време е $ACTION$.",
+    "placeholders": {
+      "hours": {
+        "content": "$1",
+        "example": "5"
+      },
+      "minutes": {
+        "content": "$2",
+        "example": "5"
+      },
+      "action": {
+        "content": "$3",
+        "example": "Lock"
+      }
+    }
+  },
+  "vaultTimeoutActionPolicyInEffect": {
+    "message": "Настройките на организацията Ви задават следното действие при изтичане на времето за достъп до трезора: $ACTION$.",
+    "placeholders": {
+      "action": {
+        "content": "$1",
+        "example": "Lock"
       }
     }
   },
@@ -1931,6 +2147,9 @@
   "switchAccount": {
     "message": "Превключване на потребителя"
   },
+  "alreadyHaveAccount": {
+    "message": "Вече имате регистрация?"
+  },
   "options": {
     "message": "Настройки"
   },
@@ -1940,12 +2159,24 @@
   "exportingPersonalVaultTitle": {
     "message": "Изнасяне на личния трезор"
   },
-  "exportingPersonalVaultDescription": {
-    "message": "Ще бъдат изнесени само записите от личния трезор свързан с $EMAIL$. Записите в трезора на организацията няма да бъдат включени.",
+  "exportingIndividualVaultDescription": {
+    "message": "Ще бъдат изнесени само отделните записи в трезора, които са свързани с $EMAIL$. Записите от трезора на организацията няма да бъдат включени. Ще бъде изнесена само информацията за записите от трезора, а свързаните прикачени елементи няма да бъдат включени.",
     "placeholders": {
       "email": {
         "content": "$1",
         "example": "name@example.com"
+      }
+    }
+  },
+  "exportingOrganizationVaultTitle": {
+    "message": "Изнасяне на трезора на организацията"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Ще бъдат изнесени само записите от трезора свързан с $ORGANIZATION$. Записите в отделните лични трезори и тези в други организации няма да бъдат включени.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
       }
     }
   },
@@ -2013,6 +2244,108 @@
   "forwardedEmailDesc": {
     "message": "Създайте псевдоним на е-поща с външна услуга за препращане."
   },
+  "forwarderError": {
+    "message": "Грешка от $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Създадено от Битуорден.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Уебсайт: $WEBSITE$. Създадено от Битуорден.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Неправилен идентификатор за ППИ на $SERVICENAME$",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Неправилен идентификатор за ППИ на $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Не може да бъде получен идентификатор на маскиран чрез е-поща акаунт от $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Неправилен домейн за $SERVICENAME$.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Неправилен адрес на $SERVICENAME$.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Възникна неочаквана грешка свързана с $SERVICENAME$.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Неизвестна пренасочваща услуга: „$SERVICENAME$“.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
+  },
   "hostname": {
     "message": "Име на сървъра",
     "description": "Part of a URL."
@@ -2034,9 +2367,6 @@
   },
   "neverLockWarning": {
     "message": "Уверени ли сте, че искате да зададете стойност „Никога“? Това води до съхранение на шифриращия ключ за трезора във устройството ви. Ако използвате тази възможност, е много важно да имате надлежна защита на устройството си."
-  },
-  "cardBrandMir": {
-    "message": "Мир"
   },
   "vault": {
     "message": "Трезор"
@@ -2068,7 +2398,7 @@
   "logInWithAnotherDevice": {
     "message": "Вписване с друго устройство"
   },
-  "logInInitiated": {
+  "loginInitiated": {
     "message": "Вписването е стартирано"
   },
   "notificationSentDevice": {
@@ -2120,9 +2450,6 @@
   "denyLogIn": {
     "message": "Отказване на вписването"
   },
-  "approveLoginRequests": {
-    "message": "Одобряване на заявки за вписване"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Вписването за $EMAIL$ на $DEVICE$ е одобрено",
     "placeholders": {
@@ -2157,9 +2484,6 @@
   "thisRequestIsNoLongerValid": {
     "message": "Тази заявка вече не е активна."
   },
-  "approveLoginRequestDesc": {
-    "message": "Използвайте това устройство за одобряване на заявки за вписване направени от други устройства."
-  },
   "confirmLoginAtemptForMail": {
     "message": "Потвърждаване на заявката за вписване за $EMAIL$",
     "placeholders": {
@@ -2172,23 +2496,50 @@
   "logInRequested": {
     "message": "Направена е заявка за вписване"
   },
+  "creatingAccountOn": {
+    "message": "Създаване на регистрация в"
+  },
+  "checkYourEmail": {
+    "message": "Проверете е-пощата си"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Последвайте връзката в е-писмото изпратено до"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "и продължете със създаването на регистрацията си."
+  },
+  "noEmail": {
+    "message": "Не сте получили е-писмо?"
+  },
+  "goBack": {
+    "message": "Върнете се назад"
+  },
+  "toEditYourEmailAddress": {
+    "message": ", за да редактирате адреса на е-пощата си."
+  },
   "exposedMasterPassword": {
-    "message": "Exposed Master Password"
+    "message": "Разобличена главна парола"
   },
   "exposedMasterPasswordDesc": {
-    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+    "message": "Паролата е намерена в пробив на данни. Използвайте уникална парола, за да защитите вашия акаунт. Наистина ли искате да използвате слаба парола?"
   },
   "weakAndExposedMasterPassword": {
-    "message": "Weak and Exposed Master Password"
+    "message": "Слаба и разобличена главна парола"
   },
   "weakAndBreachedMasterPasswordDesc": {
-    "message": "Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?"
+    "message": "Разпозната е слаба парола. Използвайте силна парола, за да защитете данните си. Наистина ли искате да използвате слаба парола?"
   },
   "checkForBreaches": {
     "message": "Проверяване в известните случаи на изтекли данни за тази парола"
   },
   "important": {
     "message": "Важно:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Бяхте отписан(а), тъй като идентификаторът Ви за достъп не може да бъде дешифриран. Впишете се отново, за да отстраните проблема."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Бяхте отписан(а), тъй като идентификаторът Ви за опресняване не може да бъде получен. Впишете се отново, за да отстраните проблема."
   },
   "masterPasswordHint": {
     "message": "Главната парола не може да бъде възстановена, ако я забравите!"
@@ -2199,6 +2550,449 @@
       "length": {
         "content": "$1",
         "example": "14"
+      }
+    }
+  },
+  "windowsBiometricUpdateWarning": {
+    "message": "Битуорден препоръчва да промените настройките си за биометрични данни, така че главната парола (или ПИН) да се изисква при първото отключване. Искате ли да промените настройките сега?"
+  },
+  "windowsBiometricUpdateWarningTitle": {
+    "message": "Препоръчителна промяна на настройките"
+  },
+  "deviceApprovalRequired": {
+    "message": "Изисква се одобрение на устройството. Изберете начин за одобрение по-долу:"
+  },
+  "rememberThisDevice": {
+    "message": "Запомняне на това устройство"
+  },
+  "uncheckIfPublicDevice": {
+    "message": "Махнете отметката, ако използвате публично устройство"
+  },
+  "approveFromYourOtherDevice": {
+    "message": "Одобряване с другото Ви устройство"
+  },
+  "requestAdminApproval": {
+    "message": "Подаване на заявка за одобрение от администратор"
+  },
+  "approveWithMasterPassword": {
+    "message": "Одобряване с главната парола"
+  },
+  "region": {
+    "message": "Регион"
+  },
+  "ssoIdentifierRequired": {
+    "message": "Идентификаторът за еднократна идентификация на организация е задължителен."
+  },
+  "eu": {
+    "message": "ЕС",
+    "description": "European Union"
+  },
+  "loggingInOn": {
+    "message": "Вписване в"
+  },
+  "selfHostedServer": {
+    "message": "собствен хостинг"
+  },
+  "accessDenied": {
+    "message": "Достъпът е отказан. Нямате право за преглед на тази страница."
+  },
+  "accountSuccessfullyCreated": {
+    "message": "Регистрацията е създадена успешно!"
+  },
+  "adminApprovalRequested": {
+    "message": "Заявено е одобрение от администратор"
+  },
+  "adminApprovalRequestSentToAdmins": {
+    "message": "Вашата заявка беше изпратена до администратора Ви."
+  },
+  "youWillBeNotifiedOnceApproved": {
+    "message": "Ще получите известие, когато тя бъде одобрена."
+  },
+  "troubleLoggingIn": {
+    "message": "Имате проблем с вписването?"
+  },
+  "loginApproved": {
+    "message": "Вписването е одобрено"
+  },
+  "userEmailMissing": {
+    "message": "Липсва е-поща на потребителя"
+  },
+  "deviceTrusted": {
+    "message": "Устройството е доверено"
+  },
+  "inputRequired": {
+    "message": "Полето е задължително да бъде попълнено."
+  },
+  "required": {
+    "message": "задължително"
+  },
+  "search": {
+    "message": "Търсене"
+  },
+  "inputMinLength": {
+    "message": "Въведеният в полето текст трябва да бъде с дължина поне $COUNT$ знака.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxLength": {
+    "message": "Полето не може да съдържа повече от $COUNT$ знака.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "20"
+      }
+    }
+  },
+  "inputForbiddenCharacters": {
+    "message": "Следните знаци не са позволени: $CHARACTERS$",
+    "placeholders": {
+      "characters": {
+        "content": "$1",
+        "example": "@, #, $, %"
+      }
+    }
+  },
+  "inputMinValue": {
+    "message": "Въведената стойност трябва да бъде поне $MIN$.",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "8"
+      }
+    }
+  },
+  "inputMaxValue": {
+    "message": "Въведената стойност не трябва да бъде по-голяма от $MAX$.",
+    "placeholders": {
+      "max": {
+        "content": "$1",
+        "example": "100"
+      }
+    }
+  },
+  "multipleInputEmails": {
+    "message": "1 или повече е-пощи са неправилни"
+  },
+  "inputTrimValidator": {
+    "message": "Въведеното не може да съдържа само интервали.",
+    "description": "Notification to inform the user that a form's input can't contain only whitespace."
+  },
+  "inputEmail": {
+    "message": "Въведеният в полето текст не е адрес на е-поща."
+  },
+  "fieldsNeedAttention": {
+    "message": "$COUNT$ поле(та) по-горе се нуждае/ят от вниманието Ви.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "4"
+      }
+    }
+  },
+  "selectPlaceholder": {
+    "message": "-- Изберете --"
+  },
+  "multiSelectPlaceholder": {
+    "message": "-- Пишете тук за филтриране --"
+  },
+  "multiSelectLoading": {
+    "message": "Зареждане на опциите…"
+  },
+  "multiSelectNotFound": {
+    "message": "Няма намерени елементи"
+  },
+  "multiSelectClearAll": {
+    "message": "Изчистване на всичко"
+  },
+  "plusNMore": {
+    "message": "+ още $QUANTITY$",
+    "placeholders": {
+      "quantity": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "submenu": {
+    "message": "Подменю"
+  },
+  "toggleSideNavigation": {
+    "message": "Превключване на страничната навигация"
+  },
+  "skipToContent": {
+    "message": "Прескачане към съдържанието"
+  },
+  "typePasskey": {
+    "message": "Секретен ключ"
+  },
+  "passkeyNotCopied": {
+    "message": "Секретният ключ няма да бъде копиран"
+  },
+  "passkeyNotCopiedAlert": {
+    "message": "Секретният ключ няма да бъде копиран в клонирания елемент. Искате ли да продължите с клонирането на елемента?"
+  },
+  "aliasDomain": {
+    "message": "Псевдонимен домейн"
+  },
+  "importData": {
+    "message": "Внасяне на данни",
+    "description": "Used for the desktop menu item and the header of the import dialog"
+  },
+  "importError": {
+    "message": "Грешка при внасянето"
+  },
+  "importErrorDesc": {
+    "message": "Има проблем с данните, които внасяте. Поправете грешките посочени по-долу и пробвайте отново."
+  },
+  "resolveTheErrorsBelowAndTryAgain": {
+    "message": "Оправете грешките по-долу и опитайте отново."
+  },
+  "description": {
+    "message": "Описание"
+  },
+  "importSuccess": {
+    "message": "Данните са внесени успешно"
+  },
+  "importSuccessNumberOfItems": {
+    "message": "Общо внесени елементи: $AMOUNT$.",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "total": {
+    "message": "Общо"
+  },
+  "importWarning": {
+    "message": "Внасяте данни към организацията „$ORGANIZATION$“. Данните могат да бъдат споделени с членовете ѝ. Сигурни ли сте, че искате да продължите?",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "My Org Name"
+      }
+    }
+  },
+  "launchDuoAndFollowStepsToFinishLoggingIn": {
+    "message": "Стартирайте Duo и следвайте инструкциите, за да завършите вписването."
+  },
+  "duoRequiredByOrgForAccount": {
+    "message": "Вашата регистрация изисква двустепенно удостоверяване чрез Duo."
+  },
+  "launchDuo": {
+    "message": "Стартирайте Duo в браузъра"
+  },
+  "importFormatError": {
+    "message": "Данните са в неправилен формат. Проверете файла за внасяне и пробвайте отново."
+  },
+  "importNothingError": {
+    "message": "Нищо не бе внесено."
+  },
+  "importEncKeyError": {
+    "message": "Грешка при дешифрирането на изнесения файл. Ключът за шифриране не отговаря на този, който е използван за изнасянето на данните."
+  },
+  "invalidFilePassword": {
+    "message": "Неправилна парола за файла. Използвайте паролата, която сте въвели при създаването на изнесения файл."
+  },
+  "importDestination": {
+    "message": "Място на внасяне"
+  },
+  "learnAboutImportOptions": {
+    "message": "Научете повече относно възможностите за внасяне"
+  },
+  "selectImportFolder": {
+    "message": "Изберете папка"
+  },
+  "selectImportCollection": {
+    "message": "Изберете колекция"
+  },
+  "importTargetHint": {
+    "message": "Изберете тази опция, ако искате съдържанието на внесения файл да бъде преместено в $DESTINATION$",
+    "description": "Located as a hint under the import target. Will be appended by either folder or collection, depending if the user is importing into an individual or an organizational vault.",
+    "placeholders": {
+      "destination": {
+        "content": "$1",
+        "example": "folder or collection"
+      }
+    }
+  },
+  "importUnassignedItemsError": {
+    "message": "Файлът съдържа невъзложени елементи."
+  },
+  "selectFormat": {
+    "message": "Избор на форма̀та на файла за внасяне"
+  },
+  "selectImportFile": {
+    "message": "Изберете файла за внасяне"
+  },
+  "chooseFile": {
+    "message": "Изберете файл"
+  },
+  "noFileChosen": {
+    "message": "Не е избран файл"
+  },
+  "orCopyPasteFileContents": {
+    "message": "или поставете съдържанието му"
+  },
+  "instructionsFor": {
+    "message": "Инструкции за $NAME$",
+    "description": "The title for the import tool instructions.",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "LastPass (csv)"
+      }
+    }
+  },
+  "confirmVaultImport": {
+    "message": "Потвърждаване на внасянето на трезора"
+  },
+  "confirmVaultImportDesc": {
+    "message": "Този файл е защитен с парола. Трябва да въведете паролата, за да могат данните да бъдат внесени."
+  },
+  "confirmFilePassword": {
+    "message": "Потвърждаване на паролата на файла"
+  },
+  "exportSuccess": {
+    "message": "Данните от трезора са изнесени"
+  },
+  "multifactorAuthenticationCancelled": {
+    "message": "Многостъпковото удостоверяване е отменено"
+  },
+  "noLastPassDataFound": {
+    "message": "Няма намерени данни от LastPass"
+  },
+  "incorrectUsernameOrPassword": {
+    "message": "Неправилно потребителско име или парола"
+  },
+  "incorrectPassword": {
+    "message": "Неправилна парола"
+  },
+  "incorrectCode": {
+    "message": "Неправилен код"
+  },
+  "incorrectPin": {
+    "message": "Неправилен ПИН"
+  },
+  "multifactorAuthenticationFailed": {
+    "message": "Многостъпковото удостоверяване беше неуспешно"
+  },
+  "includeSharedFolders": {
+    "message": "Да се включат и споделените папки"
+  },
+  "lastPassEmail": {
+    "message": "Е-поща от LastPass"
+  },
+  "importingYourAccount": {
+    "message": "Внасяне на данните Ви…"
+  },
+  "lastPassMFARequired": {
+    "message": "Изисква се многостъпково удостоверяване за LastPass"
+  },
+  "lastPassMFADesc": {
+    "message": "Въведете еднократния код за достъп от приложението си за удостоверяване"
+  },
+  "lastPassOOBDesc": {
+    "message": "Одобрете заявката за вписване в приложението си за удостоверяване, или въведете еднократен код за достъп."
+  },
+  "passcode": {
+    "message": "Код за достъп"
+  },
+  "lastPassMasterPassword": {
+    "message": "Главна парола на LastPass"
+  },
+  "lastPassAuthRequired": {
+    "message": "Изисква се удостоверяване в LastPass"
+  },
+  "awaitingSSO": {
+    "message": "Изчакване на еднократното удостоверяване"
+  },
+  "awaitingSSODesc": {
+    "message": "Моля, продължете вписването с данните за удостоверяване на Вашата компания."
+  },
+  "seeDetailedInstructions": {
+    "message": "Може да намерите подробни инструкции в помощния ни уеб сайт на адрес",
+    "description": "This is followed a by a hyperlink to the help website."
+  },
+  "importDirectlyFromLastPass": {
+    "message": "Внасяне директно от LastPass"
+  },
+  "importFromCSV": {
+    "message": "Внасяне от CSV"
+  },
+  "lastPassTryAgainCheckEmail": {
+    "message": "Опитайте отново или вижте дали имате е-писмо от LastPass за потвърждаване на самоличността си."
+  },
+  "collection": {
+    "message": "Колекция"
+  },
+  "lastPassYubikeyDesc": {
+    "message": "Поставете устройството на YubiKey, което е свързано с регистрацията Ви в LastPass, в USB порт и натиснете бутона на устройството."
+  },
+  "commonImportFormats": {
+    "message": "Често използвани формати",
+    "description": "Label indicating the most common import formats"
+  },
+  "success": {
+    "message": "Успех"
+  },
+  "troubleshooting": {
+    "message": "Отстраняване на проблеми"
+  },
+  "disableHardwareAccelerationRestart": {
+    "message": "Изключете хардуерното ускорение и рестартирайте"
+  },
+  "enableHardwareAccelerationRestart": {
+    "message": "Включете хардуерното ускорение и рестартирайте"
+  },
+  "removePasskey": {
+    "message": "Премахване на секретния ключ"
+  },
+  "passkeyRemoved": {
+    "message": "Секретният ключ е премахнат"
+  },
+  "errorAssigningTargetCollection": {
+    "message": "Грешка при задаването на целева колекция."
+  },
+  "errorAssigningTargetFolder": {
+    "message": "Грешка при задаването на целева папка."
+  },
+  "viewItemsIn": {
+    "message": "Преглед на елементите в $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Назад към $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Назад",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Премахване на $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
       }
     }
   }

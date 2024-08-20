@@ -1,9 +1,11 @@
 import { app, Menu } from "electron";
+import { firstValueFrom } from "rxjs";
 
-import { I18nService } from "@bitwarden/common/abstractions/i18n.service";
-import { MessagingService } from "@bitwarden/common/abstractions/messaging.service";
-import { StateService } from "@bitwarden/common/abstractions/state.service";
+import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 
+import { DesktopSettingsService } from "../../platform/services/desktop-settings.service";
 import { UpdaterMain } from "../updater.main";
 import { WindowMain } from "../window.main";
 
@@ -16,9 +18,10 @@ export class MenuMain {
   constructor(
     private i18nService: I18nService,
     private messagingService: MessagingService,
-    private stateService: StateService,
+    private environmentService: EnvironmentService,
     private windowMain: WindowMain,
-    private updaterMain: UpdaterMain
+    private updaterMain: UpdaterMain,
+    private desktopSettingsService: DesktopSettingsService,
   ) {}
 
   async init() {
@@ -35,26 +38,20 @@ export class MenuMain {
       new Menubar(
         this.i18nService,
         this.messagingService,
+        this.desktopSettingsService,
         this.updaterMain,
         this.windowMain,
         await this.getWebVaultUrl(),
         app.getVersion(),
-        updateRequest
-      ).menu
+        await firstValueFrom(this.desktopSettingsService.hardwareAcceleration$),
+        updateRequest,
+      ).menu,
     );
   }
 
   private async getWebVaultUrl() {
-    let webVaultUrl = cloudWebVaultUrl;
-    const urlsObj = await this.stateService.getEnvironmentUrls();
-    if (urlsObj != null) {
-      if (urlsObj.base != null) {
-        webVaultUrl = urlsObj.base;
-      } else if (urlsObj.webVault != null) {
-        webVaultUrl = urlsObj.webVault;
-      }
-    }
-    return webVaultUrl;
+    const env = await firstValueFrom(this.environmentService.environment$);
+    return env.getWebVaultUrl() ?? cloudWebVaultUrl;
   }
 
   private initContextMenu() {

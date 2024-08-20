@@ -20,9 +20,9 @@
         </button>
       </div>
       <div class="modal-body" *ngIf="cipher">
-        <app-callout type="info" *ngIf="allowOwnershipAssignment() && !allowPersonal">
+        <bit-callout type="info" *ngIf="allowOwnershipAssignment() && !allowPersonal">
           {{ "personalOwnershipPolicyInEffect" | i18n }}
-        </app-callout>
+        </bit-callout>
         <div class="row" *ngIf="!editMode && !viewOnly">
           <div class="col-6 form-group">
             <label for="type">{{ "whatTypeOfItem" | i18n }}</label>
@@ -191,6 +191,40 @@
               </button>
             </div>
           </div>
+          <ng-container *ngIf="cipher.login.hasFido2Credentials">
+            <div class="tw-flex tw-flex-row">
+              <div class="tw-mb-4 tw-w-1/2">
+                <label for="loginFido2credential">{{ "typePasskey" | i18n }}</label>
+                <div
+                  class="tw-flex tw-flex-row"
+                  tabindex="0"
+                  attr.aria-label="{{ 'typePasskey' | i18n }} {{
+                    fido2CredentialCreationDateValue
+                  }}"
+                >
+                  <input
+                    id="loginFido2credential"
+                    class="form-control"
+                    type="text"
+                    name="Login.Fido2credential"
+                    [value]="fido2CredentialCreationDateValue"
+                    appInputVerbatim
+                    disabled
+                    readonly
+                  />
+                  <button
+                    type="button"
+                    class="tw-items-center tw-border-none tw-bg-transparent tw-text-danger tw-ml-3"
+                    appA11yTitle="{{ 'removePasskey' | i18n }}"
+                    (click)="removePasskey()"
+                    *ngIf="!cipher.isDeleted && !viewOnly"
+                  >
+                    <i class="bwi bwi-lg bwi-minus-circle"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-container>
           <div class="tw-flex tw-flex-row">
             <div class="tw-mb-4 tw-w-1/2">
               <label for="loginTotp">{{ "authenticatorKeyTotp" | i18n }}</label>
@@ -233,7 +267,7 @@
                   </svg>
                 </span>
                 <span
-                  class="totp-code tw-mr-3 tw-ml-2 tw-text-muted"
+                  class="totp-code tw-ml-2 tw-mr-3 tw-text-muted"
                   title="{{ 'verificationCodeTotp' | i18n }}"
                   >--- ---</span
                 >
@@ -248,7 +282,7 @@
                   href="#"
                   appStopClick
                   bitBadge
-                  badgeType="primary"
+                  variant="primary"
                   class="tw-ml-4"
                   (click)="upgradeOrganization()"
                   *ngIf="
@@ -288,7 +322,7 @@
                 >
                 <button
                   type="button"
-                  class="tw-items-center tw-border-none tw-bg-transparent tw-text-primary-500"
+                  class="tw-items-center tw-border-none tw-bg-transparent tw-text-primary-600"
                   appA11yTitle="{{ 'copyVerificationCode' | i18n }}"
                   (click)="copy(totpCode, 'verificationCodeTotp', 'TOTP')"
                 >
@@ -347,7 +381,7 @@
                     class="ml-auto"
                     href="https://bitwarden.com/help/uri-match-detection/"
                     target="_blank"
-                    rel="noopener"
+                    rel="noreferrer"
                     appA11yTitle="{{ 'learnMore' | i18n }}"
                   >
                     <i class="bwi bwi-question-circle" aria-hidden="true"></i>
@@ -440,6 +474,7 @@
                   class="form-control text-monospace"
                   type="{{ showCardNumber ? 'text' : 'password' }}"
                   name="Card.Number"
+                  (input)="onCardNumberChange()"
                   [(ngModel)]="cipher.card.number"
                   appInputVerbatim
                   autocomplete="new-password"
@@ -914,7 +949,7 @@
             }}</label>
             <a
               target="_blank"
-              rel="noopener"
+              rel="noreferrer"
               appA11yTitle="{{ 'learnMore' | i18n }}"
               href="https://bitwarden.com/help/managing-items/#protect-individual-items"
             >

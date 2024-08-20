@@ -1,11 +1,11 @@
-<header>
+<app-header>
   <div class="left">
     <!-- commented by Cozy
     <app-pop-out></app-pop-out>
     -->
   </div>
   <h1 class="sr-only">{{ "myVault" | i18n }}</h1>
-  <div class="search">
+  <div class="search center">
     <i class="icon-cozy icon-search"></i>
     <input
       type="{{ searchTypeSearch ? 'search' : 'text' }}"
@@ -31,7 +31,7 @@
       <i class="icon-cozy icon-plus" aria-hidden="true"></i>
     </button>
   </div>
-</header>
+</app-header>
 <main tabindex="-1" cdk-scrollable>
   <!-- Cozy customization, Profile migration -->
   <app-profiles-migration
@@ -120,7 +120,9 @@
               </span>
             </div>
           </div>
-          <span class="row-sub-label">{{ this.typeCounts.get(cipherType.Login) || 0 }}</span>
+          <span class="row-sub-label">
+            {{ typeCounts.get(cipherType.Login) || 0 }}
+          </span>
           <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
         </button>
         <button
