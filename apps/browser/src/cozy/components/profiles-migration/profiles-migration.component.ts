@@ -6,11 +6,10 @@ import formatDistanceToNowStrict from "date-fns/formatDistanceToNowStrict";
 import isAfter from "date-fns/isAfter";
 import fr from "date-fns/locale/fr";
 
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
-
-import I18nService from "../../../platform/services/i18n.service";
 
 const DELAY_IN_DAYS = 15;
 

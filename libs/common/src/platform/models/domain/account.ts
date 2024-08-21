@@ -136,6 +136,12 @@ export class Account {
         ...new AccountProfile(),
         ...init?.profile,
       },
+      // Cozy customization, clean profiles after X days
+      //*
+      settings: {
+        ...init?.settings,
+      },
+      //*/
     });
   }
 

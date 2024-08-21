@@ -1,81 +1,181 @@
 @import "../shared/styles/variables";
 
 body {
-  background-color: $brand-primary;
+  padding: 0;
   margin: 0;
-  margin-top: 6px;
-  padding: 8px 18px 8px 8px;
-  font-size: 16px;
+  height: 100%;
+  font-size: 14px;
   line-height: 16px;
   font-family: $font-family-sans-serif;
-  display: flex;
-  color: white;
+
+  @include themify($themes) {
+    color: themed("textColor");
+    background-color: themed("backgroundColor");
+  }
 }
 
-#logo-link {
-  margin-right: 18px;
+.outer-wrapper {
+  padding: 0 10px;
+  border-bottom: 2px solid transparent;
+  display: grid;
+  grid-template-columns: 24px auto 55px;
+  grid-column-gap: 10px;
+  box-sizing: border-box;
+  min-height: 42px;
+
+  @include themify($themes) {
+    border-bottom-color: themed("primaryColor");
+  }
+
+  &.success-event {
+    @include themify($themes) {
+      border-bottom-color: themed("successColor");
+    }
+  }
+
+  &.error-event {
+    @include themify($themes) {
+      border-bottom-color: themed("errorColor");
+    }
+  }
 }
 
-#content {
-  flex-grow: 1;
+.inner-wrapper {
+  display: grid;
+  grid-template-columns: auto max-content;
 }
 
-#template-totp-copied-clone {
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
+.outer-wrapper > *,
+.inner-wrapper > * {
+  align-self: center;
 }
 
-.desc-text {
-  color: #fff;
-  font-weight: 600;
-  margin-bottom: 15px;
+img {
+  border: 0;
+  margin: 0;
+  padding: 0;
 }
 
-svg.dont-save {
-  fill: white;
-  &:hover {
-    cursor: pointer;
+#logo {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+#close-button {
+  margin-right: 10px;
+}
+
+#close {
+  display: block;
+  width: 17px;
+  height: 17px;
+
+  > path {
+    @include themify($themes) {
+      fill: themed("textColor");
+    }
+  }
+}
+
+#close-button:hover {
+  @include themify($themes) {
+    border-color: rgba(themed("textColor"), 0.2);
+    background-color: rgba(themed("textColor"), 0.2);
   }
 }
 
 button {
-  border: 1px solid white;
-  font-weight: bold;
-  text-transform: uppercase;
-  padding: 10px 10px 10px 10px;
+  padding: 0.35rem 15px;
+  border-radius: $border-radius;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+button.primary:not(.neutral) {
+  @include themify($themes) {
+    background-color: themed("primaryColor");
+    color: themed("textContrast");
+    border-color: themed("primaryColor");
+  }
+
   &:hover {
-    cursor: pointer;
+    @include themify($themes) {
+      background-color: darken(themed("primaryColor"), 1.5%);
+      color: darken(themed("textContrast"), 6%);
+    }
   }
 }
 
-.submit-buttons {
-  display: flex;
-}
+button.secondary:not(.neutral) {
+  @include themify($themes) {
+    background-color: themed("backgroundColor");
+    color: themed("mutedTextColor");
+    border-color: themed("mutedTextColor");
+  }
 
-.add-or-change {
-  background-color: #ffffff;
-  color: $brand-primary;
-  margin-left: 5px;
-}
-
-.dont-save {
-  background-color: $brand-primary;
-  color: #ffffff;
-  margin-left: auto;
-}
-
-body[class*="lang-en"] .add-buttons {
-  width: 175px;
-}
-
-@media (min-width: 768px) {
-  body[class*="lang-en"] .add-buttons {
-    width: 320px;
+  &:hover {
+    @include themify($themes) {
+      background-color: themed("backgroundOffsetColor");
+      color: darken(themed("mutedTextColor"), 6%);
+    }
   }
 }
 
-@media (print) {
+button.link,
+button.neutral {
+  @include themify($themes) {
+    background-color: transparent;
+    color: themed("primaryColor");
+  }
+
+  &:hover {
+    text-decoration: underline;
+
+    @include themify($themes) {
+      background-color: transparent;
+      color: darken(themed("primaryColor"), 6%);
+    }
+  }
+}
+
+select {
+  padding: 0.35rem;
+  border: 1px solid #000000;
+  border-radius: $border-radius;
+
+  @include themify($themes) {
+    color: themed("textColor");
+    background-color: themed("inputBackgroundColor");
+    border-color: themed("inputBorderColor");
+  }
+}
+
+select,
+button {
+  font-size: $font-size-base;
+  font-family: $font-family-sans-serif;
+}
+
+.success-message {
+  @include themify($themes) {
+    color: themed("successColor");
+  }
+}
+
+.error-message {
+  @include themify($themes) {
+    color: themed("errorColor");
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #select-folder {
+    display: none;
+  }
+}
+
+@media print {
   body {
     display: none;
   }
