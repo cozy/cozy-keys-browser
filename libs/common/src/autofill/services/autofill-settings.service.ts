@@ -55,7 +55,14 @@ const INLINE_MENU_VISIBILITY = new KeyDefinition(
   AUTOFILL_SETTINGS_DISK_LOCAL,
   "inlineMenuVisibility",
   {
+    // Cozy customization, our inline menu was displayed by default on field focus so let's keep it that way
+    // when migrating to Bitwarden's inline menu
+    //*
+    deserializer: (value: InlineMenuVisibilitySetting) =>
+      value ?? AutofillOverlayVisibility.OnFieldFocus,
+    /*/
     deserializer: (value: InlineMenuVisibilitySetting) => value ?? AutofillOverlayVisibility.Off,
+    //*/
   },
 );
 
