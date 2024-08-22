@@ -169,11 +169,18 @@ button {
   }
 }
 
+// Cozy customization, hide totally select-folder because we do not support folders
+//*
+#select-folder {
+  display: none;
+}
+/*/
 @media screen and (max-width: 768px) {
   #select-folder {
     display: none;
   }
 }
+//*/
 
 @media print {
   body {
