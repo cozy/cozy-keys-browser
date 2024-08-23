@@ -5,8 +5,6 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import { BrowserApi } from "../../platform/browser/browser-api";
-
 /*
 
 This class is added by Cozy
@@ -31,16 +29,13 @@ export class HistoryService {
   private rootPaths: string[] = ["/tabs/vault", "/tabs/generator", "/tabs/settings"];
   private currentUrlInProgress = false;
   private previousUrlInProgress = false;
-  private stateService: StateService;
-  private cipherService: CipherService;
   private initPromiseRef: Promise<void> | undefined;
 
-  constructor(private router: Router) {
-    // retrieve the stateService (standard injection was not working ?)
-    const page = BrowserApi.getBackgroundPage();
-    this.stateService = page.bitwardenMain["stateService"];
-    this.cipherService = page.bitwardenMain["cipherService"];
-
+  constructor(
+    private router: Router,
+    private stateService: StateService,
+    private cipherService: CipherService,
+  ) {
     /** for debug */
     // // @ts-ignore
     // window["hist"] = this;
