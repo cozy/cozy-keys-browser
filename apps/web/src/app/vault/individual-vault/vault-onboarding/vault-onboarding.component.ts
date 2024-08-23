@@ -16,7 +16,10 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { VaultOnboardingMessages } from "@bitwarden/common/vault/enums/vault-onboarding.enum";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { LinkModule } from "@bitwarden/components";
@@ -24,18 +27,24 @@ import { LinkModule } from "@bitwarden/components";
 import { OnboardingModule } from "../../../shared/components/onboarding/onboarding.module";
 
 import { VaultOnboardingService as VaultOnboardingServiceAbstraction } from "./services/abstraction/vault-onboarding.service";
-import { VaultOnboardingTasks } from "./services/vault-onboarding.service";
+import { VaultOnboardingService, VaultOnboardingTasks } from "./services/vault-onboarding.service";
 
 @Component({
   standalone: true,
   imports: [OnboardingModule, CommonModule, JslibModule, LinkModule],
+  providers: [
+    {
+      provide: VaultOnboardingServiceAbstraction,
+      useClass: VaultOnboardingService,
+    },
+  ],
   selector: "app-vault-onboarding",
   templateUrl: "vault-onboarding.component.html",
 })
 export class VaultOnboardingComponent implements OnInit, OnChanges, OnDestroy {
   @Input() ciphers: CipherView[];
   @Input() orgs: Organization[];
-  @Output() onAddCipher = new EventEmitter<void>();
+  @Output() onAddCipher = new EventEmitter<CipherType>();
 
   extensionUrl: string;
   isIndividualPolicyVault: boolean;
@@ -47,12 +56,14 @@ export class VaultOnboardingComponent implements OnInit, OnChanges, OnDestroy {
 
   protected onboardingTasks$: Observable<VaultOnboardingTasks>;
   protected showOnboarding = false;
+  protected extensionRefreshEnabled = false;
 
   constructor(
     protected platformUtilsService: PlatformUtilsService,
     protected policyService: PolicyService,
     private apiService: ApiService,
     private vaultOnboardingService: VaultOnboardingServiceAbstraction,
+    private configService: ConfigService,
   ) {}
 
   async ngOnInit() {
@@ -61,6 +72,9 @@ export class VaultOnboardingComponent implements OnInit, OnChanges, OnDestroy {
     this.setInstallExtLink();
     this.individualVaultPolicyCheck();
     this.checkForBrowserExtension();
+    this.extensionRefreshEnabled = await this.configService.getFeatureFlag(
+      FeatureFlag.ExtensionRefresh,
+    );
   }
 
   async ngOnChanges(changes: SimpleChanges) {
@@ -156,7 +170,7 @@ export class VaultOnboardingComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   emitToAddCipher() {
-    this.onAddCipher.emit();
+    this.onAddCipher.emit(CipherType.Login);
   }
 
   setInstallExtLink() {

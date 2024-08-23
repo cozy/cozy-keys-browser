@@ -1,11 +1,12 @@
 import { PolicyType } from "@bitwarden/common/admin-console/enums";
 import { StateProvider } from "@bitwarden/common/platform/state";
 
-import { GeneratorStrategy, Randomizer } from "../abstractions";
+import { GeneratorStrategy } from "../abstractions";
 import { DefaultSubaddressOptions } from "../data";
+import { EmailCalculator, EmailRandomizer } from "../engine";
 import { newDefaultEvaluator } from "../rx";
 import { SubaddressGenerationOptions, NoPolicy } from "../types";
-import { clone$PerUserId, sharedStateByUserId } from "../util";
+import { observe$PerUserId, sharedStateByUserId } from "../util";
 
 import { SUBADDRESS_SETTINGS } from "./storage";
 
@@ -21,42 +22,28 @@ export class SubaddressGeneratorStrategy
    *  @param usernameService generates an email subaddress from an email address
    */
   constructor(
-    private random: Randomizer,
+    private emailCalculator: EmailCalculator,
+    private emailRandomizer: EmailRandomizer,
     private stateProvider: StateProvider,
     private defaultOptions: SubaddressGenerationOptions = DefaultSubaddressOptions,
   ) {}
 
   // configuration
   durableState = sharedStateByUserId(SUBADDRESS_SETTINGS, this.stateProvider);
-  defaults$ = clone$PerUserId(this.defaultOptions);
+  defaults$ = observe$PerUserId(() => this.defaultOptions);
   toEvaluator = newDefaultEvaluator<SubaddressGenerationOptions>();
   readonly policy = PolicyType.PasswordGenerator;
 
   // algorithm
   async generate(options: SubaddressGenerationOptions) {
-    const o = Object.assign({}, DefaultSubaddressOptions, options);
-
-    const subaddressEmail = o.subaddressEmail;
-    if (subaddressEmail == null || subaddressEmail.length < 3) {
-      return o.subaddressEmail;
-    }
-    const atIndex = subaddressEmail.indexOf("@");
-    if (atIndex < 1 || atIndex >= subaddressEmail.length - 1) {
-      return subaddressEmail;
-    }
-    if (o.subaddressType == null) {
-      o.subaddressType = "random";
+    if (options.subaddressType == null) {
+      options.subaddressType = "random";
     }
 
-    const emailBeginning = subaddressEmail.substr(0, atIndex);
-    const emailEnding = subaddressEmail.substr(atIndex + 1, subaddressEmail.length);
-
-    let subaddressString = "";
-    if (o.subaddressType === "random") {
-      subaddressString = await this.random.chars(8);
-    } else if (o.subaddressType === "website-name") {
-      subaddressString = o.website;
+    if (options.subaddressType === "website-name") {
+      return this.emailCalculator.appendToSubaddress(options.website, options.subaddressEmail);
     }
-    return emailBeginning + "+" + subaddressString + "@" + emailEnding;
+
+    return this.emailRandomizer.randomAsciiSubaddress(options.subaddressEmail);
   }
 }

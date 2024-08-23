@@ -78,6 +78,11 @@ export class AutoFillConstants {
     "textarea",
     ...AutoFillConstants.ExcludedAutofillTypes,
   ];
+
+  static readonly ExcludedIdentityAutocompleteTypes: Set<string> = new Set([
+    "current-password",
+    "new-password",
+  ]);
 }
 
 export class CreditCardAutoFillConstants {
@@ -406,6 +411,7 @@ export class IdentityAutoFillConstants {
     "address-line-2",
     "addr-2",
     "street-2",
+    "address-ext",
   ];
 
   static readonly Address3FieldNames: string[] = [
@@ -423,6 +429,7 @@ export class IdentityAutoFillConstants {
     "postal-code",
     "code-postal",
     "post-code",
+    "postcode",
     "address-zip",
     "address-postal",
     "address-code",

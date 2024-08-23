@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { booleanAttribute, Component, EventEmitter, Input, Output } from "@angular/core";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -13,6 +13,7 @@ import {
   SectionHeaderComponent,
   TypographyModule,
 } from "@bitwarden/components";
+import { OrgIconDirective, PasswordRepromptService } from "@bitwarden/vault";
 
 import { VaultPopupAutofillService } from "../../../services/vault-popup-autofill.service";
 import { PopupCipherView } from "../../../views/popup-cipher.view";
@@ -33,6 +34,7 @@ import { ItemMoreOptionsComponent } from "../item-more-options/item-more-options
     RouterLink,
     ItemCopyActionsComponent,
     ItemMoreOptionsComponent,
+    OrgIconDirective,
   ],
   selector: "app-vault-list-items-container",
   templateUrl: "vault-list-items-container.component.html",
@@ -77,6 +79,13 @@ export class VaultListItemsContainerComponent {
   showAutofillButton: boolean;
 
   /**
+   * Remove the bottom margin from the bit-section in this component
+   * (used for containers at the end of the page where bottom margin is not needed)
+   */
+  @Input({ transform: booleanAttribute })
+  disableSectionMargin: boolean = false;
+
+  /**
    * The tooltip text for the organization icon for ciphers that belong to an organization.
    * @param cipher
    */
@@ -91,9 +100,22 @@ export class VaultListItemsContainerComponent {
   constructor(
     private i18nService: I18nService,
     private vaultPopupAutofillService: VaultPopupAutofillService,
+    private passwordRepromptService: PasswordRepromptService,
+    private router: Router,
   ) {}
 
   async doAutofill(cipher: PopupCipherView) {
     await this.vaultPopupAutofillService.doAutofill(cipher);
+  }
+
+  async onViewCipher(cipher: PopupCipherView) {
+    const repromptPassed = await this.passwordRepromptService.passwordRepromptCheck(cipher);
+    if (!repromptPassed) {
+      return;
+    }
+
+    await this.router.navigate(["/view-cipher"], {
+      queryParams: { cipherId: cipher.id, type: cipher.type },
+    });
   }
 }

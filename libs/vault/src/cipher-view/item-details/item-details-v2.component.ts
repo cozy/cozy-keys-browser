@@ -8,10 +8,13 @@ import { CollectionView } from "@bitwarden/common/vault/models/view/collection.v
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 import {
   CardComponent,
+  FormFieldModule,
   SectionComponent,
   SectionHeaderComponent,
   TypographyModule,
 } from "@bitwarden/components";
+
+import { OrgIconDirective } from "../../components/org-icon.directive";
 
 @Component({
   selector: "app-item-details-v2",
@@ -24,6 +27,8 @@ import {
     SectionComponent,
     SectionHeaderComponent,
     TypographyModule,
+    OrgIconDirective,
+    FormFieldModule,
   ],
 })
 export class ItemDetailsV2Component {

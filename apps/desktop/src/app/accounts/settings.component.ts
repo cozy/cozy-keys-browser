@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { BehaviorSubject, Observable, Subject, firstValueFrom } from "rxjs";
 import { concatMap, debounceTime, filter, map, switchMap, takeUntil, tap } from "rxjs/operators";
@@ -41,12 +41,12 @@ import { NativeMessagingManifestService } from "../services/native-messaging-man
   templateUrl: "settings.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
   // For use in template
   protected readonly VaultTimeoutAction = VaultTimeoutAction;
 
   showMinToTray = false;
-  vaultTimeoutOptions: VaultTimeoutOption[];
+  vaultTimeoutOptions: VaultTimeoutOption[] = [];
   localeOptions: any[];
   themeOptions: any[];
   clearClipboardOptions: any[];
@@ -55,6 +55,7 @@ export class SettingsComponent implements OnInit {
   requireEnableTray = false;
   showDuckDuckGoIntegrationOption = false;
   isWindows: boolean;
+  isLinux: boolean;
 
   enableTrayText: string;
   enableTrayDescText: string;
@@ -161,29 +162,6 @@ export class SettingsComponent implements OnInit {
     // DuckDuckGo browser is only for macos initially
     this.showDuckDuckGoIntegrationOption = isMac;
 
-    this.vaultTimeoutOptions = [
-      { name: this.i18nService.t("oneMinute"), value: 1 },
-      { name: this.i18nService.t("fiveMinutes"), value: 5 },
-      { name: this.i18nService.t("fifteenMinutes"), value: 15 },
-      { name: this.i18nService.t("thirtyMinutes"), value: 30 },
-      { name: this.i18nService.t("oneHour"), value: 60 },
-      { name: this.i18nService.t("fourHours"), value: 240 },
-      { name: this.i18nService.t("onIdle"), value: VaultTimeoutStringType.OnIdle },
-      { name: this.i18nService.t("onSleep"), value: VaultTimeoutStringType.OnSleep },
-    ];
-
-    if (this.platformUtilsService.getDevice() !== DeviceType.LinuxDesktop) {
-      this.vaultTimeoutOptions.push({
-        name: this.i18nService.t("onLocked"),
-        value: VaultTimeoutStringType.OnLocked,
-      });
-    }
-
-    this.vaultTimeoutOptions = this.vaultTimeoutOptions.concat([
-      { name: this.i18nService.t("onRestart"), value: VaultTimeoutStringType.OnRestart },
-      { name: this.i18nService.t("never"), value: VaultTimeoutStringType.Never },
-    ]);
-
     const localeOptions: any[] = [];
     this.i18nService.supportedTranslationLocales.forEach((locale) => {
       let name = locale;
@@ -215,9 +193,12 @@ export class SettingsComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.vaultTimeoutOptions = await this.generateVaultTimeoutOptions();
+
     this.userHasMasterPassword = await this.userVerificationService.hasMasterPassword();
 
     this.isWindows = (await this.platformUtilsService.getDevice()) === DeviceType.WindowsDesktop;
+    this.isLinux = (await this.platformUtilsService.getDevice()) === DeviceType.LinuxDesktop;
 
     if ((await this.stateService.getUserId()) == null) {
       return;
@@ -485,9 +466,36 @@ export class SettingsComponent implements OnInit {
         return;
       }
 
+      const needsSetup = await this.platformUtilsService.biometricsNeedsSetup();
+      const supportsBiometricAutoSetup =
+        await this.platformUtilsService.biometricsSupportsAutoSetup();
+
+      if (needsSetup) {
+        if (supportsBiometricAutoSetup) {
+          await this.platformUtilsService.biometricsSetup();
+        } else {
+          const confirmed = await this.dialogService.openSimpleDialog({
+            title: { key: "biometricsManualSetupTitle" },
+            content: { key: "biometricsManualSetupDesc" },
+            type: "warning",
+          });
+          if (confirmed) {
+            this.platformUtilsService.launchUri("https://bitwarden.com/help/biometrics/");
+          }
+          return;
+        }
+      }
+
       await this.biometricStateService.setBiometricUnlockEnabled(true);
       if (this.isWindows) {
         // Recommended settings for Windows Hello
+        this.form.controls.requirePasswordOnStart.setValue(true);
+        this.form.controls.autoPromptBiometrics.setValue(false);
+        await this.biometricStateService.setPromptAutomatically(false);
+        await this.biometricStateService.setRequirePasswordOnStart(true);
+        await this.biometricStateService.setDismissedRequirePasswordOnStartCallout();
+      } else if (this.isLinux) {
+        // Similar to Windows
         this.form.controls.requirePasswordOnStart.setValue(true);
         this.form.controls.autoPromptBiometrics.setValue(false);
         await this.biometricStateService.setPromptAutomatically(false);
@@ -645,7 +653,7 @@ export class SettingsComponent implements OnInit {
 
       this.form.controls.enableBrowserIntegration.setValue(false);
       return;
-    } else if (ipc.platform.deviceType === DeviceType.LinuxDesktop) {
+    } else if (ipc.platform.isSnapStore || ipc.platform.isFlatpak) {
       await this.dialogService.openSimpleDialog({
         title: { key: "browserIntegrationUnsupportedTitle" },
         content: { key: "browserIntegrationLinuxDesc" },
@@ -718,6 +726,33 @@ export class SettingsComponent implements OnInit {
     );
   }
 
+  private async generateVaultTimeoutOptions(): Promise<VaultTimeoutOption[]> {
+    let vaultTimeoutOptions: VaultTimeoutOption[] = [
+      { name: this.i18nService.t("oneMinute"), value: 1 },
+      { name: this.i18nService.t("fiveMinutes"), value: 5 },
+      { name: this.i18nService.t("fifteenMinutes"), value: 15 },
+      { name: this.i18nService.t("thirtyMinutes"), value: 30 },
+      { name: this.i18nService.t("oneHour"), value: 60 },
+      { name: this.i18nService.t("fourHours"), value: 240 },
+      { name: this.i18nService.t("onIdle"), value: VaultTimeoutStringType.OnIdle },
+      { name: this.i18nService.t("onSleep"), value: VaultTimeoutStringType.OnSleep },
+    ];
+
+    if (await ipc.platform.powermonitor.isLockMonitorAvailable()) {
+      vaultTimeoutOptions.push({
+        name: this.i18nService.t("onLocked"),
+        value: VaultTimeoutStringType.OnLocked,
+      });
+    }
+
+    vaultTimeoutOptions = vaultTimeoutOptions.concat([
+      { name: this.i18nService.t("onRestart"), value: VaultTimeoutStringType.OnRestart },
+      { name: this.i18nService.t("never"), value: VaultTimeoutStringType.Never },
+    ]);
+
+    return vaultTimeoutOptions;
+  }
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -729,6 +764,8 @@ export class SettingsComponent implements OnInit {
         return "unlockWithTouchId";
       case DeviceType.WindowsDesktop:
         return "unlockWithWindowsHello";
+      case DeviceType.LinuxDesktop:
+        return "unlockWithPolkit";
       default:
         throw new Error("Unsupported platform");
     }
@@ -740,6 +777,8 @@ export class SettingsComponent implements OnInit {
         return "autoPromptTouchId";
       case DeviceType.WindowsDesktop:
         return "autoPromptWindowsHello";
+      case DeviceType.LinuxDesktop:
+        return "autoPromptPolkit";
       default:
         throw new Error("Unsupported platform");
     }

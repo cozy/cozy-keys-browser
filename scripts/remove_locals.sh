@@ -5,6 +5,6 @@ find -type f -path "./apps/browser/src/_locales/*" -not -path "*locales/en/*" -n
 # remove Husky
 git rm -r .husky/
 # remove .github
-git rm -rf .github/
-git rm -f ./CONTRIBUTING.md
+# git rm -rf .github/
+# git rm -f ./CONTRIBUTING.md
 

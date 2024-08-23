@@ -28,6 +28,7 @@ import {
 } from "../shared/offboarding-survey.component";
 
 import { BillingSyncApiKeyComponent } from "./billing-sync-api-key.component";
+import { ChangePlanDialogResultType, openChangePlanDialog } from "./change-plan-dialog.component";
 import { DownloadLicenceDialogComponent } from "./download-license.component";
 import { ManageBilling } from "./icons/manage-billing.icon";
 import { SecretsManagerSubscriptionOptions } from "./sm-adjust-subscription.component";
@@ -50,8 +51,9 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
   locale: string;
   showUpdatedSubscriptionStatusSection$: Observable<boolean>;
   manageBillingFromProviderPortal = ManageBilling;
-  isProviderManaged = false;
+  isManagedByConsolidatedBillingMSP = false;
   enableTimeThreshold: boolean;
+  preSelectedProductTier: ProductTierType = ProductTierType.Free;
 
   protected readonly teamsStarter = ProductTierType.TeamsStarter;
 
@@ -63,6 +65,10 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
 
   protected enableTimeThreshold$ = this.configService.getFeatureFlag$(
     FeatureFlag.EnableTimeThreshold,
+  );
+
+  protected EnableUpgradePasswordManagerSub$ = this.configService.getFeatureFlag$(
+    FeatureFlag.EnableUpgradePasswordManagerSub,
   );
 
   constructor(
@@ -83,6 +89,13 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.changePlan();
+      const productTierTypeStr = this.route.snapshot.queryParamMap.get("productTierType");
+      if (productTierTypeStr != null) {
+        const productTier = Number(productTierTypeStr);
+        if (Object.values(ProductTierType).includes(productTier as ProductTierType)) {
+          this.preSelectedProductTier = productTier;
+        }
+      }
     }
 
     this.route.params
@@ -118,10 +131,10 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     if (this.userOrg.canViewSubscription) {
       const enableConsolidatedBilling = await firstValueFrom(this.enableConsolidatedBilling$);
       const provider = await this.providerService.get(this.userOrg.providerId);
-      this.isProviderManaged =
+      this.isManagedByConsolidatedBillingMSP =
         enableConsolidatedBilling &&
         this.userOrg.hasProvider &&
-        provider.providerStatus == ProviderStatusType.Billable;
+        provider?.providerStatus == ProviderStatusType.Billable;
 
       this.sub = await this.organizationApiService.getSubscription(this.organizationId);
       this.lineItems = this.sub?.subscription?.items;
@@ -375,7 +388,26 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
   };
 
   async changePlan() {
-    this.showChangePlan = !this.showChangePlan;
+    const EnableUpgradePasswordManagerSub = await firstValueFrom(
+      this.EnableUpgradePasswordManagerSub$,
+    );
+    if (EnableUpgradePasswordManagerSub) {
+      const reference = openChangePlanDialog(this.dialogService, {
+        data: {
+          organizationId: this.organizationId,
+          subscription: this.sub,
+          productTierType: this.userOrg.productTierType,
+        },
+      });
+
+      const result = await lastValueFrom(reference.closed);
+
+      if (result === ChangePlanDialogResultType.Submitted) {
+        await this.load();
+      }
+    } else {
+      this.showChangePlan = !this.showChangePlan;
+    }
   }
 
   closeChangePlan() {

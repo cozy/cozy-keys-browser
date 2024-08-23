@@ -42,6 +42,58 @@
   "cardholderName": {
     "message": "カードの名義人名"
   },
+  "loginCredentials": {
+    "message": "ログイン情報"
+  },
+  "authenticatorKey": {
+    "message": "認証キー"
+  },
+  "autofillOptions": {
+    "message": "自動入力オプション"
+  },
+  "websiteUri": {
+    "message": "ウェブサイト (URI)"
+  },
+  "websiteAdded": {
+    "message": "ウェブサイトを追加しました"
+  },
+  "addWebsite": {
+    "message": "ウェブサイトを追加"
+  },
+  "deleteWebsite": {
+    "message": "ウェブサイトを削除"
+  },
+  "defaultLabel": {
+    "message": "デフォルト ($VALUE$)",
+    "description": "A label that indicates the default value for a field with the current default value in parentheses.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Base domain"
+      }
+    }
+  },
+  "showMatchDetection": {
+    "message": "一致検出 $WEBSITE$を表示",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "hideMatchDetection": {
+    "message": "一致検出 $WEBSITE$を非表示",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "autoFillOnPageLoad": {
+    "message": "ページ読み込み時に自動入力する"
+  },
   "number": {
     "message": "番号"
   },
@@ -137,6 +189,15 @@
   },
   "authenticatorKeyTotp": {
     "message": "認証キー (TOTP)"
+  },
+  "totpHelperTitle": {
+    "message": "2段階認証をシームレスにする"
+  },
+  "totpHelper": {
+    "message": "Bitwarden は2段階認証コードを保存・入力できます。この欄にキーをコピーして貼り付けてください。"
+  },
+  "totpHelperWithCapture": {
+    "message": "Bitwarden は2段階認証コードを保存・入力できます。 カメラアイコンを選択して、このウェブサイトの認証 QR コードのスクリーンショットを撮るか、キーをコピーしてこのフィールドに貼り付けてください。"
   },
   "folder": {
     "message": "フォルダー"
@@ -555,6 +616,24 @@
       }
     }
   },
+  "itemsMovedToOrg": {
+    "message": "アイテムを $ORGNAME$ に移動しました",
+    "placeholders": {
+      "orgname": {
+        "content": "$1",
+        "example": "Company Name"
+      }
+    }
+  },
+  "itemMovedToOrg": {
+    "message": "アイテムを $ORGNAME$ に移動しました",
+    "placeholders": {
+      "orgname": {
+        "content": "$1",
+        "example": "Company Name"
+      }
+    }
+  },
   "deleteItem": {
     "message": "アイテムの削除"
   },
@@ -611,6 +690,18 @@
   },
   "loginExpired": {
     "message": "ログインセッションの有効期限が切れています。"
+  },
+  "restartRegistration": {
+    "message": "登録を再度始める"
+  },
+  "expiredLink": {
+    "message": "期限切れのリンク"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "登録を再度始めるか、ログインしてください。"
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "すでにアカウントを持っている可能性があります"
   },
   "logOutConfirmation": {
     "message": "ログアウトしてもよろしいですか？"
@@ -1060,7 +1151,7 @@
     "message": "本当に続行しますか？"
   },
   "moveSelectedItemsDesc": {
-    "message": "Choose a folder that you would like to add the $COUNT$ selected item(s) to.",
+    "message": "$COUNT$個のアイテムを追加したいフォルダーを選択してください。",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1461,8 +1552,8 @@
   "importEncKeyError": {
     "message": "エクスポートされたファイルの復号でエラーが発生しました。暗号化キーが、データをエクスポートするために使用された暗号化キーと一致しません。"
   },
-  "importDestination": {
-    "message": "インポート先"
+  "destination": {
+    "message": "保存先"
   },
   "learnAboutImportOptions": {
     "message": "インポートオプションについて学ぶ"
@@ -2754,12 +2845,6 @@
   "accessControl": {
     "message": "アクセスコントロール"
   },
-  "groupAccessAllItems": {
-    "message": "全てのアイテムの読み取り・編集"
-  },
-  "groupAccessSelectedCollections": {
-    "message": "選択コレクション内のアクセス"
-  },
   "readOnly": {
     "message": "読み取り専用"
   },
@@ -2804,12 +2889,6 @@
   },
   "userUsingTwoStep": {
     "message": "このユーザーはアカウントを保護するため二段階認証を利用しています。"
-  },
-  "userAccessAllItems": {
-    "message": "全てのアイテムの読み取り・編集"
-  },
-  "userAccessSelectedCollections": {
-    "message": "選択コレクション内のアクセス"
   },
   "search": {
     "message": "検索"
@@ -3426,6 +3505,9 @@
   "joinOrganizationDesc": {
     "message": "あなたは上記の組織への参加の招待を受けています。招待を承諾するには、ログインするかBitwardenアカウントを作成してください。"
   },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "マスターパスワードを設定して、この組織への参加を完了します。"
+  },
   "inviteAccepted": {
     "message": "招待が承諾されました。"
   },
@@ -3783,8 +3865,8 @@
   "nothingSelected": {
     "message": "何も選択されていません。"
   },
-  "receiveMarketingEmails": {
-    "message": "Bitwarden からのお知らせ、アドバイス、アンケート調査等のメールを受信します。"
+  "receiveMarketingEmailsV2": {
+    "message": "Bitwarden からメールでアドバイスやお知らせ、リサーチの機会を受け取りましょう。"
   },
   "unsubscribe": {
     "message": "配信停止"
@@ -4063,8 +4145,9 @@
   "minimumNumberOfWords": {
     "message": "文字の最小数"
   },
-  "defaultType": {
-    "message": "デフォルトのタイプ"
+  "overridePasswordTypePolicy": {
+    "message": "パスワードの種類",
+    "description": "Name of the password generator policy that overrides the user's password/passphrase selection."
   },
   "userPreference": {
     "message": "ユーザー設定"
@@ -4349,6 +4432,9 @@
   "sendLink": {
     "message": "Send リンク",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "copyLink": {
+    "message": "リンクをコピー"
   },
   "copySendLink": {
     "message": "Send リンクをコピー",
@@ -4765,6 +4851,75 @@
     "message": "または",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more, see how it works, **or** try it now.'"
   },
+  "developmentDevOpsAndITTeamsChooseBWSecret": {
+    "message": "開発チーム、DevOps チームは、インフラストラクチャとマシンのシークレットを安全に管理および展開するために Bitwarden シークレットマネージャーを選択します。"
+  },
+  "centralizeSecretsManagement": {
+    "message": "シークレット管理を一元化します。"
+  },
+  "centralizeSecretsManagementDescription": {
+    "message": "組織全体のシークレットのスプロールを防ぐために、1つの場所にシークレットを安全に保管して管理します。"
+  },
+  "preventSecretLeaks": {
+    "message": "シークレットの漏洩を防ぎます。"
+  },
+  "preventSecretLeaksDescription": {
+    "message": "エンドツーエンド暗号化でシークレットを保護します。シークレットハードコーディングや .env ファイルでの共有はもう必要ありません。"
+  },
+  "enhanceDeveloperProductivity": {
+    "message": "開発者の生産性を高めます。"
+  },
+  "enhanceDeveloperProductivityDescription": {
+    "message": "開発者がコードの品質を向上させるなど最も重要なことに集中できるように、プログラム実行時にシークレットを取得およびデプロイします。"
+  },
+  "strengthenBusinessSecurity": {
+    "message": "ビジネスの安全を強化します。"
+  },
+  "strengthenBusinessSecurityDescription": {
+    "message": "SSO 統合、イベントログ、アクセスローテーションを使用して、マシンと人間のシークレットへのアクセスを厳密に制御します。"
+  },
+  "tryItNow": {
+    "message": "今すぐ試す"
+  },
+  "sendRequest": {
+    "message": "リクエストを送信"
+  },
+  "addANote": {
+    "message": "メモを追加"
+  },
+  "bitwardenSecretsManager": {
+    "message": "Bitwarden シークレットマネージャー"
+  },
+  "moreProductsFromBitwarden": {
+    "message": "Bitwarden の他の製品"
+  },
+  "requestAccessToSecretsManager": {
+    "message": "シークレットマネージャーへのアクセスを要求する"
+  },
+  "youNeedApprovalFromYourAdminToTrySecretsManager": {
+    "message": "シークレットマネージャーを試すには管理者からの承認が必要です。"
+  },
+  "smAccessRequestEmailSent": {
+    "message": "シークレットマネージャーのアクセスリクエストメールを管理者に送信しました。"
+  },
+  "requestAccessSMDefaultEmailContent": {
+    "message": "お疲れ様です。\n\nチームでの Bitwarden シークレットマネージャーのサブスクリプション契約を検討していただけないでしょうか。\n\nBitwarden シークレットマネージャーは、API キー、データベースパスワード、認証証明書などのマシン認証情報を安全に保管、共有、デプロイするためのエンドツーエンドの暗号化シークレット管理ソリューションです。\n\n・セキュリティ強化\n・操作の簡素化\n・シークレット流出防止\nといった観点で効果的だと考えております。\n\nBitwarden に連絡いただければ無料お試しも可能です。\n\nご検討よろしくお願いいたします。"
+  },
+  "giveMembersAccess": {
+    "message": "メンバーにアクセスを許可する:"
+  },
+  "viewAndSelectTheMembers": {
+    "message": "一覧を表示して、シークレットマネージャーへのアクセスを許可したいメンバーを選択してください。"
+  },
+  "openYourOrganizations": {
+    "message": "組織の"
+  },
+  "usingTheMenuSelect": {
+    "message": "メニューを使用して、"
+  },
+  "toGrantAccessToSelectedMembers": {
+    "message": "をクリックすると選択したメンバーへのアクセスを許可します。"
+  },
   "sendVaultCardTryItNow": {
     "message": "試してみてください",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more, see how it works, or **try it now**.'"
@@ -5168,6 +5323,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "マスターパスワードが組織のポリシーに適合していません。保管庫にアクセスするには、今すぐマスターパスワードを更新しなければなりません。続行すると現在のセッションからログアウトし、再度ログインする必要があります。 他のデバイス上のアクティブなセッションは、最大1時間アクティブであり続けることがあります。"
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "組織が復号オプションを更新しました。保管庫にアクセスするにはマスターパスワードを設定してください。"
+  },
   "maximumVaultTimeout": {
     "message": "保管庫のタイムアウト"
   },
@@ -5518,6 +5676,9 @@
   },
   "verificationCodeRequired": {
     "message": "認証コードが必要です。"
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "認証がキャンセルされたか、時間がかかりすぎました。もう一度やり直してください。"
   },
   "invalidVerificationCode": {
     "message": "認証コードが間違っています"
@@ -5889,6 +6050,26 @@
   "randomWord": {
     "message": "ランダムな単語"
   },
+  "usernameGenerator": {
+    "message": "ユーザー名生成"
+  },
+  "useThisPassword": {
+    "message": "このパスワードを使用する"
+  },
+  "useThisUsername": {
+    "message": "このユーザー名を使用する"
+  },
+  "securePasswordGenerated": {
+    "message": "安全なパスワードを生成しました! ウェブサイト上でパスワードを更新することを忘れないでください。"
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "生成機能",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "を使うと強力で一意なパスワードを作れます",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
   "service": {
     "message": "サービス"
   },
@@ -6209,6 +6390,9 @@
         "example": "4"
       }
     }
+  },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Duo サービスへの接続中にエラーが発生しました。異なる二段階ログイン方法を使用するか、Duo に連絡してください。"
   },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "ログインを完了するには DUO を起動し手順に従ってください。"
@@ -7514,6 +7698,9 @@
   "requestedDeviceApproval": {
     "message": "デバイスの承認を要求しました。"
   },
+  "tdeOffboardingPasswordSet": {
+    "message": "ユーザーは、TDE オフボーディング中にマスターパスワードを設定しました。"
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "$ORG$ 向けの Bitwarden 7日間無料トライアルを開始",
     "placeholders": {
@@ -7882,8 +8069,11 @@
   "assignToTheseCollections": {
     "message": "これらのコレクションに割り当てる"
   },
-  "bulkCollectionAssignmentDialogDescription": {
-    "message": "Only organization members with access to these collections will be able to see the items."
+  "bulkCollectionAssignmentDialogDescriptionSingular": {
+    "message": "これらのコレクションにアクセスできる組織メンバーのみがアイテムを見ることができます。"
+  },
+  "bulkCollectionAssignmentDialogDescriptionPlural": {
+    "message": "これらのコレクションにアクセスできる組織メンバーのみがアイテムを見ることができます。"
   },
   "selectCollectionsToAssign": {
     "message": "割り当てるコレクションを選択"
@@ -7906,6 +8096,9 @@
         "example": "3"
       }
     }
+  },
+  "addField": {
+    "message": "フィールドを追加"
   },
   "items": {
     "message": "アイテム"
@@ -8297,6 +8490,51 @@
   "manageBillingFromProviderPortalMessage": {
     "message": "プロバイダーポータルからの請求を管理"
   },
+  "startYour7DayFreeTrialOfBitwarden": {
+    "message": "Bitwarden の 7 日間無料トライアルを開始"
+  },
+  "startYour7DayFreeTrialOfBitwardenForTeams": {
+    "message": "Bitwarden チームの7日間無料トライアルを開始"
+  },
+  "startYour7DayFreeTrialOfBitwardenForFamilies": {
+    "message": "Bitwarden ファミリーの7日間無料トライアルを開始"
+  },
+  "startYour7DayFreeTrialOfBitwardenForEnterprise": {
+    "message": "Bitwarden エンタープライズの7日間無料トライアルを開始"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManager": {
+    "message": "Bitwarden シークレットマネージャーの7日間無料トライアルを開始"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForTeams": {
+    "message": "チーム向け Bitwarden シークレットマネージャーの7日間無料トライアルを開始"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForFamilies": {
+    "message": "ファミリー向け Bitwarden シークレットマネージャーの7日間無料トライアルを開始"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForEnterprise": {
+    "message": "エンタープライズ向け Bitwarden シークレットマネージャーの7日間無料トライアルを開始"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManager": {
+    "message": "Bitwarden パスワードマネージャーの7日間無料トライアルを開始"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForTeams": {
+    "message": "チーム向け Bitwarden パスワードマネージャーの7日間無料トライアルを開始"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForFamilies": {
+    "message": "ファミリー向け Bitwarden パスワードマネージャーの7日間無料トライアルを開始"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForEnterprise": {
+    "message": "エンタープライズ向け Bitwarden パスワードマネージャーの7日間無料トライアルを開始"
+  },
+  "enterTeamsOrgInfo": {
+    "message": "チームの組織情報を入力してください"
+  },
+  "enterFamiliesOrgInfo": {
+    "message": "ファミリーの組織情報を入力してください"
+  },
+  "enterEnterpriseOrgInfo": {
+    "message": "エンタープライズの組織情報を入力してください"
+  },
   "viewItemsIn": {
     "message": "$NAME$ のアイテムを表示",
     "description": "Button to view the contents of a folder or collection",
@@ -8526,7 +8764,7 @@
     "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'. 'Bitwarden' should not be translated"
   },
   "sponsored": {
-    "message": "Sponsored"
+    "message": "スポンサー提供"
   },
   "licenseAndBillingManagementDesc": {
     "message": "Bitwarden クラウドサーバーで更新を行った後、ライセンスファイルをアップロードして最新の変更を適用してください。"
@@ -8537,26 +8775,137 @@
   "selectFolder": {
     "message": "フォルダーを選択"
   },
-  "personalItemsTransferWarning": {
-    "message": "$PERSONAL_ITEMS_COUNT$ は選択した組織に恒久的に移行されます。これらのアイテムはあなたの所有ではなくなります。",
+  "personalItemTransferWarningSingular": {
+    "message": "1個のアイテムは選択した組織に恒久的に移行されます。このアイテムはあなたの所有ではなくなります。"
+  },
+  "personalItemsTransferWarningPlural": {
+    "message": "$PERSONAL_ITEMS_COUNT$ 個のアイテムは選択した組織に恒久的に移行されます。これらのアイテムはあなたの所有ではなくなります。",
     "placeholders": {
       "personal_items_count": {
         "content": "$1",
-        "example": "2 items"
+        "example": "2"
       }
     }
   },
-  "personalItemsWithOrgTransferWarning": {
-    "message": "$PERSONAL_ITEMS_COUNT$ は $ORG$ に恒久的に移行されます。これらのアイテムはあなたの所有ではなくなります。",
+  "personalItemWithOrgTransferWarningSingular": {
+    "message": "1個のアイテムは $ORG$ に恒久的に移行されます。このアイテムはあなたの所有ではなくなります。",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "personalItemsWithOrgTransferWarningPlural": {
+    "message": "$PERSONAL_ITEMS_COUNT$ 個のアイテムは $ORG$ に恒久的に移行されます。これらのアイテムはあなたの所有ではなくなります。",
     "placeholders": {
       "personal_items_count": {
         "content": "$1",
-        "example": "2 items"
+        "example": "2"
       },
       "org": {
         "content": "$2",
         "example": "Organization name"
       }
     }
+  },
+  "data": {
+    "message": "データ"
+  },
+  "purchasedSeatsRemoved": {
+    "message": "購入済みシートが削除されました"
+  },
+  "fileSends": {
+    "message": "ファイル Send"
+  },
+  "textSends": {
+    "message": "テキスト Send"
+  },
+  "includesXMembers": {
+    "message": "$COUNT$ メンバー向け",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "costPerMember": {
+    "message": "$COST$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$3"
+      }
+    }
+  },
+  "optionalOnPremHosting": {
+    "message": "オンプレミスホスティングのオプション"
+  },
+  "upgradeFreeOrganization": {
+    "message": "$NAME$ 組織をアップグレード ",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "includeSsoAuthenticationMessage": {
+    "message": "SSO 認証"
+  },
+  "familiesPlanInvLimitReachedManageBilling": {
+    "message": "ファミリーの組織では最大 $SEATCOUNT$ 人のメンバーまでです。より多くのメンバーを招待するには有料プランにアップグレードしてください。",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "familiesPlanInvLimitReachedNoManageBilling": {
+    "message": "ファミリーの組織では最大 $SEATCOUNT$ 人のメンバーまでです。アップグレードするには組織の所有者に連絡してください。",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "upgradePlan": {
+    "message": "より多くのメンバーを招待し、Bitwarden の追加機能にアクセスするには、プランをアップグレードしてください。"
+  },
+  "upgradeDiscount": {
+    "message": "$AMOUNT$ %割引",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "upgradeEnterpriseMessage": {
+    "message": "大企業向けの高度な機能"
+  },
+  "upgradeTeamsMessage": {
+    "message": "強力なセキュリティを求めている企業"
+  },
+  "teamsInviteMessage": {
+    "message": "無制限のメンバー招待"
+  },
+  "accessToCreateGroups": {
+    "message": "グループの作成"
+  },
+  "syncGroupsAndUsersFromDirectory": {
+    "message": "ディレクトリからグループとユーザーを同期"
+  },
+  "upgradeFamilyMessage": {
+    "message": "家族や友達と共有"
+  },
+  "accessToPremiumFeatures": {
+    "message": "プレミアム機能へのアクセス"
+  },
+  "additionalStorageGbMessage": {
+    "message": "GB の追加ストレージ"
   }
 }

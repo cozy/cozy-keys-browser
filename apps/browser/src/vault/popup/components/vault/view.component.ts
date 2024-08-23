@@ -1,9 +1,16 @@
 import { DatePipe, Location } from "@angular/common";
-/* Cozy custo
-import { ChangeDetectorRef, Component, NgZone } from "@angular/core";
+/* Cozy customization
+import { ChangeDetectorRef, Component, NgZone, OnInit, OnDestroy } from "@angular/core";
 */
-import { ChangeDetectorRef, Component, NgZone, HostListener } from "@angular/core";
-/* end custo */
+import {
+  ChangeDetectorRef,
+  Component,
+  NgZone,
+  OnInit,
+  OnDestroy,
+  HostListener,
+} from "@angular/core";
+/* Cozy customization end */
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject, firstValueFrom, takeUntil, Subscription } from "rxjs";
 import { first } from "rxjs/operators";
@@ -74,7 +81,7 @@ type LoadAction = typeof AUTOFILL_ID | typeof SHOW_AUTOFILL_BUTTON | CopyAction;
   selector: "app-vault-view",
   templateUrl: "view.component.html",
 })
-export class ViewComponent extends BaseViewComponent {
+export class ViewComponent extends BaseViewComponent implements OnInit, OnDestroy {
   showAttachments = true;
   pageDetails: any[] = [];
   tab: any;

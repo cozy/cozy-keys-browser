@@ -1,9 +1,9 @@
 import { DatePipe, Location } from "@angular/common";
-/* Cozy custo
-import { Component } from "@angular/core";
+/* Cozy customization
+import { Component, OnInit } from "@angular/core";
 */
-import { Component, HostListener } from "@angular/core";
-/* end custo */
+import { Component, OnInit, HostListener } from "@angular/core";
+/* Cozy customization end */
 import { ActivatedRoute, Router } from "@angular/router";
 import qrcodeParser from "qrcode-parser";
 import { firstValueFrom } from "rxjs";
@@ -58,7 +58,7 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
  * 7bfb8d91e3fcec00424d28410ef33401d582c3cc/src/popup/vault/add-edit.component.ts
  */
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class AddEditComponent extends BaseAddEditComponent {
+export class AddEditComponent extends BaseAddEditComponent implements OnInit {
   currentUris: string[];
   openAttachmentsInPopup: boolean;
   showAutoFillOnPageLoadOptions: boolean;
@@ -521,6 +521,7 @@ export class AddEditComponent extends BaseAddEditComponent {
   }
 
   // TODO: Remove and use fido2 user verification service once user verification for passkeys is approved for production.
+  // Be sure to make the same changes to add-edit-v2.component.ts if applicable
   private async handleFido2UserVerification(
     sessionId: string,
     userVerification: boolean,

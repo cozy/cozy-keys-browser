@@ -56,7 +56,6 @@ describe("sendExtensionMessage", () => {
     responseCallback("sendMessageResponse");
 
     const response = await extensionMessagePromise;
-
     expect(response).toEqual("sendMessageResponse");
   });
 });

@@ -1,3 +1,4 @@
+import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,14 +9,20 @@ import {
 } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 
+import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { CipherType } from "@bitwarden/common/vault/enums";
 import { TreeNode } from "@bitwarden/common/vault/models/domain/tree-node";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
+import { BreadcrumbsModule, MenuModule } from "@bitwarden/components";
 
+import { HeaderModule } from "../../../layouts/header/header.module";
+import { SharedModule } from "../../../shared";
 import { CollectionDialogTabType } from "../../components/collection-dialog";
+import { PipesModule } from "../pipes/pipes.module";
 import {
   All,
   RoutedVaultFilterModel,
@@ -23,14 +30,26 @@ import {
 } from "../vault-filter/shared/models/routed-vault-filter.model";
 
 @Component({
+  standalone: true,
   selector: "app-vault-header",
   templateUrl: "./vault-header.component.html",
+  imports: [
+    CommonModule,
+    MenuModule,
+    SharedModule,
+    BreadcrumbsModule,
+    HeaderModule,
+    PipesModule,
+    JslibModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VaultHeaderComponent implements OnInit {
   protected Unassigned = Unassigned;
   protected All = All;
   protected CollectionDialogTabType = CollectionDialogTabType;
+  protected CipherType = CipherType;
+  protected extensionRefreshEnabled = false;
 
   /**
    * Boolean to determine the loading state of the header.
@@ -51,7 +70,7 @@ export class VaultHeaderComponent implements OnInit {
   @Input() canCreateCollections: boolean;
 
   /** Emits an event when the new item button is clicked in the header */
-  @Output() onAddCipher = new EventEmitter<void>();
+  @Output() onAddCipher = new EventEmitter<CipherType | undefined>();
 
   /** Emits an event when the new collection button is clicked in the 'New' dropdown menu */
   @Output() onAddCollection = new EventEmitter<null>();
@@ -75,6 +94,9 @@ export class VaultHeaderComponent implements OnInit {
   async ngOnInit() {
     this.flexibleCollectionsV1Enabled = await firstValueFrom(
       this.configService.getFeatureFlag$(FeatureFlag.FlexibleCollectionsV1),
+    );
+    this.extensionRefreshEnabled = await firstValueFrom(
+      this.configService.getFeatureFlag$(FeatureFlag.ExtensionRefresh),
     );
   }
 
@@ -183,8 +205,8 @@ export class VaultHeaderComponent implements OnInit {
     this.onDeleteCollection.emit();
   }
 
-  protected addCipher() {
-    this.onAddCipher.emit();
+  protected addCipher(cipherType?: CipherType) {
+    this.onAddCipher.emit(cipherType);
   }
 
   async addFolder(): Promise<void> {

@@ -10,8 +10,17 @@ import { fromChromeEvent } from "../../browser/from-chrome-event";
 
 export const serializationIndicator = "__json__";
 
-type serializedObject = { [serializationIndicator]: true; value: string };
+export type SerializedValue = { [serializationIndicator]: true; value: string };
 
+/**
+ * Serializes the given object and decorates it to indicate it is serialized.
+ *
+ * We have the problem that it is difficult to tell when a value has been serialized, by always
+ * storing objects decorated with this method, we can easily tell when a value has been serialized and
+ * deserialize it appropriately.
+ * @param obj object to decorate and serialize
+ * @returns a serialized version of the object, decorated to indicate that it is serialized
+ */
 export const objToStore = (obj: any) => {
   if (obj == null) {
     return null;
@@ -22,7 +31,7 @@ export const objToStore = (obj: any) => {
   }
 
   return {
-    [serializationIndicator]: true,
+    [serializationIndicator]: true as const,
     value: JSON.stringify(obj),
   };
 };
@@ -65,8 +74,12 @@ export default abstract class AbstractChromeStorageService
   }
 
   async get<T>(key: string): Promise<T> {
-    return new Promise((resolve) => {
-      this.chromeStorageApi.get(key, (obj: any) => {
+    return new Promise((resolve, reject) => {
+      this.chromeStorageApi.get(key, (obj) => {
+        if (chrome.runtime.lastError) {
+          return reject(chrome.runtime.lastError);
+        }
+
         if (obj != null && obj[key] != null) {
           resolve(this.processGetObject(obj[key]));
           return;
@@ -89,23 +102,31 @@ export default abstract class AbstractChromeStorageService
     }
 
     const keyedObj = { [key]: obj };
-    return new Promise<void>((resolve) => {
+    return new Promise<void>((resolve, reject) => {
       this.chromeStorageApi.set(keyedObj, () => {
+        if (chrome.runtime.lastError) {
+          return reject(chrome.runtime.lastError);
+        }
+
         resolve();
       });
     });
   }
 
   async remove(key: string): Promise<void> {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>((resolve, reject) => {
       this.chromeStorageApi.remove(key, () => {
+        if (chrome.runtime.lastError) {
+          return reject(chrome.runtime.lastError);
+        }
+
         resolve();
       });
     });
   }
 
   /** Backwards compatible resolution of retrieved object with new serialized storage */
-  protected processGetObject<T>(obj: T | serializedObject): T | null {
+  protected processGetObject<T>(obj: T | SerializedValue): T | null {
     if (this.isSerialized(obj)) {
       obj = JSON.parse(obj.value);
     }
@@ -113,8 +134,8 @@ export default abstract class AbstractChromeStorageService
   }
 
   /** Type guard for whether an object is tagged as serialized */
-  protected isSerialized<T>(value: T | serializedObject): value is serializedObject {
-    const asSerialized = value as serializedObject;
+  protected isSerialized<T>(value: T | SerializedValue): value is SerializedValue {
+    const asSerialized = value as SerializedValue;
     return (
       asSerialized != null &&
       asSerialized[serializationIndicator] &&

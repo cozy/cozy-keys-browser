@@ -95,6 +95,10 @@ export type OverlayAddNewItemMessage = {
   identity?: NewIdentityCipherData;
 };
 
+export type CurrentAddNewItemData = OverlayAddNewItemMessage & {
+  sender: chrome.runtime.MessageSender;
+};
+
 export type CloseInlineMenuMessage = {
   forceCloseInlineMenu?: boolean;
   overlayElement?: string;
@@ -174,7 +178,7 @@ export type OverlayBackgroundExtensionMessageHandlers = {
   triggerAutofillOverlayReposition: ({ message, sender }: BackgroundOnMessageHandlerParams) => void;
   checkIsInlineMenuCiphersPopulated: ({ sender }: BackgroundSenderParam) => void;
   updateFocusedFieldData: ({ message, sender }: BackgroundOnMessageHandlerParams) => void;
-  updateIsFieldCurrentlyFocused: ({ message }: BackgroundMessageParam) => void;
+  updateIsFieldCurrentlyFocused: ({ message, sender }: BackgroundOnMessageHandlerParams) => void;
   checkIsFieldCurrentlyFocused: () => boolean;
   updateIsFieldCurrentlyFilling: ({ message }: BackgroundMessageParam) => void;
   checkIsFieldCurrentlyFilling: () => boolean;
@@ -203,7 +207,6 @@ export type OverlayBackgroundExtensionMessageHandlers = {
   }: BackgroundOnMessageHandlerParams) => void;
   collectPageDetailsResponse: ({ message, sender }: BackgroundOnMessageHandlerParams) => void;
   unlockCompleted: ({ message }: BackgroundMessageParam) => void;
-  doFullSync: () => void;
   addedCipher: () => void;
   addEditCipherSubmitted: () => void;
   editedCipher: () => void;
@@ -220,7 +223,7 @@ export type PortOnMessageHandlerParams = PortMessageParam & PortConnectionParam;
 
 export type InlineMenuButtonPortMessageHandlers = {
   [key: string]: CallableFunction;
-  triggerDelayedAutofillInlineMenuClosure: ({ port }: PortConnectionParam) => void;
+  triggerDelayedAutofillInlineMenuClosure: () => void;
   autofillInlineMenuButtonClicked: ({ port }: PortConnectionParam) => void;
   autofillInlineMenuBlurred: () => void;
   redirectAutofillInlineMenuFocusOut: ({ message, port }: PortOnMessageHandlerParams) => void;

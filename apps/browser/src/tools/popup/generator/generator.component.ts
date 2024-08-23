@@ -1,8 +1,8 @@
 import { Location } from "@angular/common";
 /* Cozy custo
-import { Component, NgZone } from "@angular/core";
+import { Component, NgZone, OnInit } from "@angular/core";
 */
-import { Component, NgZone, ElementRef, ViewChild, OnDestroy } from "@angular/core";
+import { Component, NgZone, OnInit, OnDestroy, ElementRef, ViewChild } from "@angular/core";
 /* end custo */
 import { ActivatedRoute } from "@angular/router";
 import { Subject, firstValueFrom } from "rxjs";
@@ -33,7 +33,7 @@ import { first } from "rxjs/operators";
   selector: "app-generator",
   templateUrl: "generator.component.html",
 })
-export class GeneratorComponent extends BaseGeneratorComponent implements OnDestroy {
+export class GeneratorComponent extends BaseGeneratorComponent implements OnInit, OnDestroy {
   private addEditCipherInfo: AddEditCipherInfo;
   private cipherState: CipherView;
   protected destroy$ = new Subject<void>();
