@@ -76,6 +76,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
           message.isFocusedFieldAmbigous,
           message.fieldHtmlIDToFill,
         ),
+      loadPageOfCiphers: () => this.loadPageOfCiphers(),
       focusAutofillInlineMenuList: () => this.focusInlineMenuList(),
     };
 
@@ -251,7 +252,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       ambiguousContactFieldNames.includes(bitwardenToCozy[this.fieldQualifier])
     ) {
       this.postMessageToParent({
-        command: "handleContactClick",
+        command: "handleMenuListUpdate",
         inlineMenuCipherId: this.lastFilledCipherId,
         lastFilledCipherId: this.lastFilledCipherId,
         fieldQualifier: this.fieldQualifier,

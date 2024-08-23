@@ -42,6 +42,7 @@ import {
   bitwardenToCozy,
   generateRandomChars,
   getAmbiguousFieldsContact,
+  getAmbiguousValueKey,
 } from "../utils";
 
 import { LockedVaultPendingNotificationsData } from "./abstractions/notification.background";
@@ -76,7 +77,7 @@ import { IOCozyContact } from "cozy-client/types/types";
 import { CONTACTS_DOCTYPE } from "cozy-client/dist/models/contact";
 import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
-import { AmbiguousContactFieldValue } from "src/autofill/types";
+import { AmbiguousContactFieldName, AmbiguousContactFieldValue } from "src/autofill/types";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -169,6 +170,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       this.fillAutofillInlineMenuCipherWithAmbiguousField(message, port),
     inlineMenuSearchContact: ({ message }) => this.searchContacts(message),
     redirectToCozy: ({ message }) => this.redirectToCozy(message),
+    handleMenuListUpdate: ({ message, port }) => this.handleMenuListUpdate(message, port),
     // Cozy customization end
     addNewVaultItem: ({ message, port }) => this.getNewVaultItemDetails(message, port),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port),
@@ -192,6 +194,43 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   ) {
     this.initOverlayEventObservables();
   }
+
+  private handleMenuListUpdate = async (message: OverlayPortMessage, port: chrome.runtime.Port) => {
+    const { inlineMenuCipherId, fieldValue } = message;
+    // If ambiguous field is manually filled, inlineMenuCipherId is undefined
+    if (inlineMenuCipherId) {
+      const client = await this.cozyClientService.getClientInstance();
+      const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
+
+      const { data: contact } = (await client.query(Q(CONTACTS_DOCTYPE).getById(cipher.id), {
+        executeFromStore: true,
+      })) as { data: IOCozyContact };
+
+      const ambiguousContactFields = getAmbiguousFieldsContact(ambiguousContactFieldNames, contact);
+      const currentAmbiguousFieldValues =
+        ambiguousContactFields[bitwardenToCozy[this.focusedFieldData?.fieldQualifier]];
+
+      if (currentAmbiguousFieldValues?.length > 0) {
+        const fieldName = bitwardenToCozy[
+          this.focusedFieldData?.fieldQualifier
+        ] as AmbiguousContactFieldName;
+        const contactHasValue = currentAmbiguousFieldValues.some((value) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const contactValue = value[getAmbiguousValueKey(fieldName)];
+          return contactValue === fieldValue;
+        });
+
+        if (contactHasValue) {
+          return this.handleContactClick(message, port);
+        }
+      }
+    }
+
+    this.inlineMenuListPort?.postMessage({
+      command: "loadPageOfCiphers",
+    });
+  };
 
   private redirectToCozy = (message: OverlayPortMessage) => {
     BrowserApi.createNewTab(this.cozyClientService.getAppURL(message.to, message.hash), true);
