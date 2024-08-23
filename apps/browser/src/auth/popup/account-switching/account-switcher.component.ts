@@ -106,7 +106,14 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
   );
 
   async ngOnInit() {
+    // Cozy customization, simulate account switching disabled
+    // - allows to hide everything related to account switching in account switcher in one line
+    // - we can not modify the flag directly because in this case we can not access the account switcher at all
+    //*
+    this.enableAccountSwitching = false;
+    /*/
     this.enableAccountSwitching = enableAccountSwitching();
+    //*/
     this.extensionRefreshFlag = await this.configService.getFeatureFlag(
       FeatureFlag.ExtensionRefresh,
     );

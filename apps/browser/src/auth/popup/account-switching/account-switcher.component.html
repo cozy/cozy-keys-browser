@@ -10,7 +10,6 @@
     <ng-container *ngIf="availableAccounts$ | async as availableAccounts">
       <bit-section [disableMargin]="!enableAccountSwitching">
         <ng-container *ngFor="let availableAccount of availableAccounts; first as isFirst">
-          <!-- Cozy customization; only display active account in account switcher when logged in-->
           <div *ngIf="availableAccount.isActive" [ngClass]="{ 'tw-mb-6': enableAccountSwitching }">
             <auth-account
               [account]="availableAccount"
@@ -18,7 +17,7 @@
               (loading)="loading = $event"
             ></auth-account>
           </div>
-          <!--
+
           <ng-container *ngIf="enableAccountSwitching">
             <bit-section-header *ngIf="isFirst">
               <h2 bitTypography="h6" class="tw-font-semibold">{{ "availableAccounts" | i18n }}</h2>
@@ -32,7 +31,6 @@
               ></auth-account>
             </div>
           </ng-container>
-          -->
         </ng-container>
 
         <!--
@@ -168,8 +166,6 @@
             <i class="bwi bwi-sign-out tw-text-2xl" aria-hidden="true"></i>
             {{ "logOut" | i18n }}
           </button>
-          <!-- Cozy customisation: Hide lock all option -->
-          <!--
           <button
             type="button"
             class="account-switcher-row tw-flex tw-w-full tw-items-center tw-gap-3 tw-rounded-md tw-p-3"
@@ -179,7 +175,6 @@
             <i class="bwi bwi-lock tw-text-2xl" aria-hidden="true"></i>
             {{ "lockAll" | i18n }}
           </button>
-          -->
         </div>
       </div>
     </div>
