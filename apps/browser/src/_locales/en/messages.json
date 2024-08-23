@@ -288,6 +288,9 @@
       }
     }
   },
+  "aboutBitwarden": {
+    "message": "About Cozy Pass"
+  },
   "about": {
     "message": "About"
   },

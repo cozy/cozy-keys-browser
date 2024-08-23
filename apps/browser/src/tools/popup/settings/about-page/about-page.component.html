@@ -24,6 +24,14 @@
         type="button"
         class="box-content-row box-content-row-flex text-default"
         appStopClick
+        (click)="about()"
+      >
+        <div class="row-main">{{ "aboutBitwarden" | i18n }}</div>
+      </button>
+      <button
+        type="button"
+        class="box-content-row box-content-row-flex text-default"
+        appStopClick
         (click)="launchHelpCozyPass()"
       >
         <div class="icon">
