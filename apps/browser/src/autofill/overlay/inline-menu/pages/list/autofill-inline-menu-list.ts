@@ -197,6 +197,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     ciphers: InlineMenuCipherData[],
     showInlineMenuAccountCreation?: boolean,
     searchValue?: string,
+    isBack?: boolean,
   ) {
     const isSearching = !!searchValue;
     // Cozy customization - Filter the contact ciphers by the search value or display all the ciphers
@@ -249,10 +250,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       passive: true,
     });
 
-    // On the contact ambiguous fields, if the field has a value, the corresponding menu is displayed directly.
+    // On the contact ambiguous fields, if the field has a value, the corresponding menu is displayed directly. Unless we wish to return to the contact cypher list.
     if (
       this.fieldValue &&
-      ambiguousContactFieldNames.includes(bitwardenToCozy[this.fieldQualifier])
+      ambiguousContactFieldNames.includes(bitwardenToCozy[this.fieldQualifier]) &&
+      !isBack
     ) {
       this.postMessageToParent({
         command: "handleMenuListUpdate",
@@ -423,21 +425,15 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     span.classList.add("ambiguous-header-text");
     this.newItemButtonElement.setAttribute("aria-label", contactName);
 
-    if (this.fieldValue) {
-      this.newItemButtonElement.classList.add(
-        "inline-menu-list-ambiguous-header--without-back-icon",
-      );
-    } else {
-      this.newItemButtonElement.append(buildSvgDomElement(backIcon));
-      this.newItemButtonElement.addEventListener(EVENTS.CLICK, this.handleNewAmbiguousHeaderClick);
-    }
+    this.newItemButtonElement.append(buildSvgDomElement(backIcon));
+    this.newItemButtonElement.addEventListener(EVENTS.CLICK, this.handleNewAmbiguousHeaderClick);
     this.newItemButtonElement.appendChild(span);
 
     return this.buildAmbiguousHeaderContainer(this.newItemButtonElement);
   }
 
   private handleNewAmbiguousHeaderClick = () => {
-    this.updateListItems(this.ciphers);
+    this.updateListItems(this.ciphers, undefined, undefined, true);
   };
 
   /**
