@@ -1,5 +1,14 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import {
   Observable,
@@ -13,7 +22,6 @@ import {
 } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
-import { PluralizePipe } from "@bitwarden/angular/pipes/pluralize.pipe";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { OrganizationUserStatusType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
@@ -28,6 +36,7 @@ import { CollectionView } from "@bitwarden/common/vault/models/view/collection.v
 import {
   AsyncActionsModule,
   BitSubmitDirective,
+  ButtonComponent,
   ButtonModule,
   DialogModule,
   FormFieldModule,
@@ -80,17 +89,16 @@ const MY_VAULT_ID = "MyVault";
     DialogModule,
   ],
 })
-export class AssignCollectionsComponent implements OnInit {
+export class AssignCollectionsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(BitSubmitDirective)
   private bitSubmit: BitSubmitDirective;
 
   @Input() params: CollectionAssignmentParams;
 
-  @Output()
-  formLoading = new EventEmitter<boolean>();
-
-  @Output()
-  formDisabled = new EventEmitter<boolean>();
+  /**
+   * Submit button instance that will be disabled or marked as loading when the form is submitting.
+   */
+  @Input() submitBtn?: ButtonComponent;
 
   @Output()
   editableItemCountChange = new EventEmitter<number>();
@@ -123,23 +131,36 @@ export class AssignCollectionsComponent implements OnInit {
           setTimeout(() => {
             this.formGroup.patchValue({ selectedOrg: orgs[0].id });
             this.setFormValidators();
+
+            // Disable the org selector if there is only one organization
+            if (orgs.length === 1) {
+              this.formGroup.controls.selectedOrg.disable();
+            }
           });
         }
       }),
     );
 
   protected transferWarningText = (orgName: string, itemsCount: number) => {
-    const pluralizedItems = this.pluralizePipe.transform(itemsCount, "item", "items");
-    return orgName
-      ? this.i18nService.t("personalItemsWithOrgTransferWarning", pluralizedItems, orgName)
-      : this.i18nService.t("personalItemsTransferWarning", pluralizedItems);
+    const haveOrgName = !!orgName;
+
+    if (itemsCount > 1 && haveOrgName) {
+      return this.i18nService.t("personalItemsWithOrgTransferWarningPlural", itemsCount, orgName);
+    }
+    if (itemsCount > 1 && !haveOrgName) {
+      return this.i18nService.t("personalItemsTransferWarningPlural", itemsCount);
+    }
+    if (itemsCount === 1 && haveOrgName) {
+      return this.i18nService.t("personalItemWithOrgTransferWarningSingular", orgName);
+    }
+    return this.i18nService.t("personalItemTransferWarningSingular");
   };
 
   private editableItems: CipherView[] = [];
   // Get the selected organization ID. If the user has not selected an organization from the form,
   // fallback to use the organization ID from the params.
   private get selectedOrgId(): OrganizationId {
-    return this.formGroup.value.selectedOrg || this.params.organizationId;
+    return this.formGroup.getRawValue().selectedOrg || this.params.organizationId;
   }
   private destroy$ = new Subject<void>();
 
@@ -150,7 +171,6 @@ export class AssignCollectionsComponent implements OnInit {
     private organizationService: OrganizationService,
     private collectionService: CollectionService,
     private formBuilder: FormBuilder,
-    private pluralizePipe: PluralizePipe,
     private toastService: ToastService,
   ) {}
 
@@ -177,11 +197,19 @@ export class AssignCollectionsComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.bitSubmit.loading$.pipe(takeUntil(this.destroy$)).subscribe((loading) => {
-      this.formLoading.emit(loading);
+      if (!this.submitBtn) {
+        return;
+      }
+
+      this.submitBtn.loading = loading;
     });
 
     this.bitSubmit.disabled$.pipe(takeUntil(this.destroy$)).subscribe((disabled) => {
-      this.formDisabled.emit(disabled);
+      if (!this.submitBtn) {
+        return;
+      }
+
+      this.submitBtn.disabled = disabled;
     });
   }
 
@@ -403,7 +431,7 @@ export class AssignCollectionsComponent implements OnInit {
       variant: "success",
       title: null,
       message: this.i18nService.t(
-        "movedItemsToOrg",
+        shareableCiphers.length === 1 ? "itemMovedToOrg" : "itemsMovedToOrg",
         this.orgName ?? this.i18nService.t("organization"),
       ),
     });

@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "Master password hint"
   },
+  "joinOrganization": {
+    "message": "Join organization"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Finish joining this organization by setting a master password."
+  },
   "settings": {
     "message": "ക്രമീകരണങ്ങള്‍"
   },
@@ -626,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "പരിശോധിച്ചുറപ്പിക്കൽ കോഡ് ആവശ്യമാണ്."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "The authentication was cancelled or took too long. Please try again."
   },
   "invalidVerificationCode": {
     "message": "Invalid verification code"
@@ -788,6 +797,18 @@
   },
   "loginExpired": {
     "message": "നിങ്ങളുടെ പ്രവർത്തന സമയം കഴിഞ്ഞിരിക്കുന്നു."
+  },
+  "restartRegistration": {
+    "message": "Restart registration"
+  },
+  "expiredLink": {
+    "message": "Expired link"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Please restart registration or try logging in."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "You may already have an account"
   },
   "logOutConfirmation": {
     "message": "നിങ്ങൾക്ക് ലോഗ് ഔട്ട് ചെയ്യണമെന്ന് ഉറപ്പാണോ?"
@@ -1489,8 +1510,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Additional Windows Hello settings"
   },
+  "unlockWithPolkit": {
+    "message": "Unlock with system authentication"
+  },
   "windowsHelloConsentMessage": {
     "message": "Bitwarden വേണ്ടി പരിശോധിച്ചുറപ്പിക്കുക."
+  },
+  "polkitConsentMessage": {
+    "message": "Authenticate to unlock Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Touch ID ഉപയോഗിച്ച് അൺലോക്കുചെയ്യുക"
@@ -1503,6 +1530,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Ask for Windows Hello on app start"
+  },
+  "autoPromptPolkit": {
+    "message": "Ask for system authentication on launch"
   },
   "autoPromptTouchId": {
     "message": "Ask for Touch ID on app start"
@@ -1690,8 +1720,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "നിങ്ങളുടെ പുതിയ മാസ്റ്റർ പാസ്‌വേഡ് നയ ആവശ്യകതകൾ നിറവേറ്റുന്നില്ല."
   },
-  "receiveMarketingEmails": {
-    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  "receiveMarketingEmailsV2": {
+    "message": "Get advice, announcements, and research opportunities from Bitwarden in your inbox."
   },
   "unsubscribe": {
     "message": "Unsubscribe"
@@ -1782,6 +1812,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Browser biometrics requires desktop biometrics to be set up in the settings first."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Autometic setup not available"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
   },
   "personalOwnershipSubmitError": {
     "message": "Due to an enterprise policy, you are restricted from saving items to your individual vault. Change the ownership option to an organization and choose from available collections."
@@ -1994,6 +2030,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Your organization has disabled trusted device encryption. Please set a master password to access your vault."
+  },
   "tryAgain": {
     "message": "Try again"
   },
@@ -2077,6 +2116,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Your vault timeout exceeds the restrictions set by your organization."
+  },
+  "inviteAccepted": {
+    "message": "Invitation accepted"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatic enrollment"
@@ -2778,6 +2820,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Launch Duo and follow the steps to finish logging in."
   },
@@ -2799,8 +2844,8 @@
   "invalidFilePassword": {
     "message": "Invalid file password, please use the password you entered when you created the export file."
   },
-  "importDestination": {
-    "message": "Import destination"
+  "destination": {
+    "message": "Destination"
   },
   "learnAboutImportOptions": {
     "message": "Learn about your import options"
@@ -2995,5 +3040,14 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Data"
+  },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
   }
 }

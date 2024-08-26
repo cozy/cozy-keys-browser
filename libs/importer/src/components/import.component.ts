@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Inject,
@@ -43,10 +44,14 @@ import {
   BitSubmitDirective,
   ButtonModule,
   CalloutModule,
+  CardComponent,
+  ContainerComponent,
   DialogService,
   FormFieldModule,
   IconButtonModule,
   RadioButtonModule,
+  SectionComponent,
+  SectionHeaderComponent,
   SelectModule,
   ToastService,
 } from "@bitwarden/components";
@@ -104,10 +109,14 @@ const safeProviders: SafeProvider[] = [
     ReactiveFormsModule,
     ImportLastPassComponent,
     RadioButtonModule,
+    CardComponent,
+    ContainerComponent,
+    SectionHeaderComponent,
+    SectionComponent,
   ],
   providers: safeProviders,
 })
-export class ImportComponent implements OnInit, OnDestroy {
+export class ImportComponent implements OnInit, OnDestroy, AfterViewInit {
   featuredImportOptions: ImportOption[];
   importOptions: ImportOption[];
   format: ImportType = null;

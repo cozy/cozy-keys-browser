@@ -7,19 +7,30 @@
       <span class="tw-font-bold">{{ "lastEdited" | i18n }}:</span>
       {{ cipher.revisionDate | date: "medium" }}
     </p>
-    <p class="tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
+    <p
+      class="tw-text-xs tw-text-muted tw-select-none"
+      [ngClass]="{
+        'tw-mb-1 ': cipher.hasPasswordHistory && isLogin,
+        'tw-mb-0': !cipher.hasPasswordHistory || !isLogin,
+      }"
+    >
       <span class="tw-font-bold">{{ "dateCreated" | i18n }}:</span>
       {{ cipher.creationDate | date: "medium" }}
     </p>
-    <p class="tw-mb-1 tw-text-xs tw-text-muted tw-select-none">
+    <p
+      *ngIf="cipher.hasPasswordHistory && isLogin"
+      class="tw-text-xs tw-text-muted tw-select-none"
+      [ngClass]="{ 'tw-mb-3': cipher.hasPasswordHistory }"
+    >
       <span class="tw-font-bold">{{ "datePasswordUpdated" | i18n }}:</span>
       {{ cipher.passwordRevisionDisplayDate | date: "medium" }}
     </p>
     <a
-      *ngIf="cipher.hasPasswordHistory"
+      *ngIf="cipher.hasPasswordHistory && isLogin"
       class="tw-font-bold tw-no-underline"
       routerLink="/cipher-password-history"
       [queryParams]="{ cipherId: cipher.id }"
+      bitTypography="body2"
     >
       {{ "passwordHistory" | i18n }}
     </a>

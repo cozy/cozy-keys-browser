@@ -1,8 +1,7 @@
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, map } from "rxjs";
 
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
-import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
@@ -15,7 +14,7 @@ import { BiometricStateService } from "@bitwarden/common/platform/biometrics/bio
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
-import { UserKey, MasterKey } from "@bitwarden/common/types/key";
+import { UserKey } from "@bitwarden/common/types/key";
 
 import { BrowserApi } from "../platform/browser/browser-api";
 
@@ -73,8 +72,6 @@ export class NativeMessagingBackground {
   private validatingFingerprint: boolean;
 
   constructor(
-    private accountService: AccountService,
-    private masterPasswordService: InternalMasterPasswordServiceAbstraction,
     private cryptoService: CryptoService,
     private cryptoFunctionService: CryptoFunctionService,
     private runtimeBackground: RuntimeBackground,
@@ -85,6 +82,7 @@ export class NativeMessagingBackground {
     private logService: LogService,
     private authService: AuthService,
     private biometricStateService: BiometricStateService,
+    private accountService: AccountService,
   ) {
     if (chrome?.permissions?.onAdded) {
       // Reload extension to activate nativeMessaging
@@ -227,6 +225,16 @@ export class NativeMessagingBackground {
     });
   }
 
+  showIncorrectUserKeyDialog() {
+    this.messagingService.send("showDialog", {
+      title: { key: "nativeMessagingWrongUserKeyTitle" },
+      content: { key: "nativeMessagingWrongUserKeyDesc" },
+      acceptButtonText: { key: "ok" },
+      cancelButtonText: null,
+      type: "danger",
+    });
+  }
+
   async send(message: Message) {
     if (!this.connected) {
       await this.connect();
@@ -354,28 +362,26 @@ export class NativeMessagingBackground {
               const userKey = new SymmetricCryptoKey(
                 Utils.fromB64ToArray(message.userKeyB64),
               ) as UserKey;
-              await this.cryptoService.setUserKey(userKey);
-            } else if (message.keyB64) {
-              const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
-              // Backwards compatibility to support cases in which the user hasn't updated their desktop app
-              // TODO: Remove after 2023.10 release (https://bitwarden.atlassian.net/browse/PM-3472)
-              const encUserKeyPrim = await this.stateService.getEncryptedCryptoSymmetricKey();
-              const encUserKey =
-                encUserKeyPrim != null
-                  ? new EncString(encUserKeyPrim)
-                  : await this.masterPasswordService.getMasterKeyEncryptedUserKey(userId);
-              if (!encUserKey) {
-                throw new Error("No encrypted user key found");
-              }
-              const masterKey = new SymmetricCryptoKey(
-                Utils.fromB64ToArray(message.keyB64),
-              ) as MasterKey;
-              const userKey = await this.masterPasswordService.decryptUserKeyWithMasterKey(
-                masterKey,
-                encUserKey,
+              const activeUserId = await firstValueFrom(
+                this.accountService.activeAccount$.pipe(map((a) => a?.id)),
               );
-              await this.masterPasswordService.setMasterKey(masterKey, userId);
-              await this.cryptoService.setUserKey(userKey);
+              const isUserKeyValid = await this.cryptoService.validateUserKey(
+                userKey,
+                activeUserId,
+              );
+              if (isUserKeyValid) {
+                await this.cryptoService.setUserKey(userKey, activeUserId);
+              } else {
+                this.logService.error("Unable to verify biometric unlocked userkey");
+                await this.cryptoService.clearKeys(activeUserId);
+                this.showIncorrectUserKeyDialog();
+
+                // Exit early
+                if (this.resolver) {
+                  this.resolver(message);
+                }
+                return;
+              }
             } else {
               throw new Error("No key received");
             }
@@ -388,21 +394,6 @@ export class NativeMessagingBackground {
               cancelButtonText: null,
               type: "danger",
             });
-
-            // Exit early
-            if (this.resolver) {
-              this.resolver(message);
-            }
-            return;
-          }
-
-          // Verify key is correct by attempting to decrypt a secret
-          try {
-            await this.cryptoService.getFingerprint(await this.stateService.getUserId());
-          } catch (e) {
-            this.logService.error("Unable to verify key: " + e);
-            await this.cryptoService.clearKeys();
-            this.showWrongUserDialog();
 
             // Exit early
             if (this.resolver) {

@@ -1,9 +1,9 @@
 import { Location } from "@angular/common";
-/*
-import { Component } from "@angular/core";
+/* Cozy customization
+import { Component, OnInit } from "@angular/core";
 */
-import { Component, HostListener } from "@angular/core";
-/* end custo */
+import { Component, OnInit, HostListener } from "@angular/core";
+/* Cozy customization end */
 import { ActivatedRoute } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -23,7 +23,7 @@ import { HistoryService } from "../../../../popup/services/history.service";
   templateUrl: "password-history.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class PasswordHistoryComponent extends BasePasswordHistoryComponent {
+export class PasswordHistoryComponent extends BasePasswordHistoryComponent implements OnInit {
   constructor(
     cipherService: CipherService,
     platformUtilsService: PlatformUtilsService,

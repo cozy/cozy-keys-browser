@@ -500,7 +500,7 @@
     "message": "Opprett en konto"
   },
   "setAStrongPassword": {
-    "message": "Set a strong password"
+    "message": "Velg et sterkt passord"
   },
   "finishCreatingYourAccountBySettingAPassword": {
     "message": "Finish creating your account by setting a password"
@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "Master password hint"
   },
+  "joinOrganization": {
+    "message": "Bli med i organisasjon"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Finish joining this organization by setting a master password."
+  },
   "settings": {
     "message": "Innstillinger"
   },
@@ -589,7 +595,7 @@
     "message": "You successfully logged in"
   },
   "youMayCloseThisWindow": {
-    "message": "You may close this window"
+    "message": "Du kan lukke dette vinduet"
   },
   "masterPassDoesntMatch": {
     "message": "Superpassord-bekreftelsen er ikke samsvarende."
@@ -626,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "En verifiseringskode er påkrevd."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Autentiseringen ble avbrutt eller tok for lang tid. Prøv igjen."
   },
   "invalidVerificationCode": {
     "message": "Ugyldig verifiseringskode"
@@ -788,6 +797,18 @@
   },
   "loginExpired": {
     "message": "Din innloggingsøkt har utløpt."
+  },
+  "restartRegistration": {
+    "message": "Start registrering på nytt"
+  },
+  "expiredLink": {
+    "message": "Utløpt lenke"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Please restart registration or try logging in."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "You may already have an account"
   },
   "logOutConfirmation": {
     "message": "Er du sikker på at du vil logge av?"
@@ -1361,7 +1382,7 @@
     "message": "This file export will be password protected and require the file password to decrypt."
   },
   "filePassword": {
-    "message": "File password"
+    "message": "Filpassord"
   },
   "exportPasswordDescription": {
     "message": "This password will be used to export and import this file"
@@ -1379,7 +1400,7 @@
     "message": "Export type"
   },
   "accountRestricted": {
-    "message": "Account restricted"
+    "message": "Konto begrenset"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
     "message": "“File password”  and “Confirm file password“ do not match."
@@ -1489,8 +1510,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Ytterligere Windows Hello-innstillinger"
   },
+  "unlockWithPolkit": {
+    "message": "Unlock with system authentication"
+  },
   "windowsHelloConsentMessage": {
     "message": "Bekreft for Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Authenticate to unlock Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Lås opp med Touch ID"
@@ -1503,6 +1530,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Spør etter Windows Hello ved oppstart"
+  },
+  "autoPromptPolkit": {
+    "message": "Ask for system authentication on launch"
   },
   "autoPromptTouchId": {
     "message": "Spør om Touch ID ved oppstart"
@@ -1690,8 +1720,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Det nye hovedpassordet ditt oppfyller ikke vilkårene."
   },
-  "receiveMarketingEmails": {
-    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  "receiveMarketingEmailsV2": {
+    "message": "Get advice, announcements, and research opportunities from Bitwarden in your inbox."
   },
   "unsubscribe": {
     "message": "Unsubscribe"
@@ -1782,6 +1812,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Biometri i nettleserutvidelsen krever først aktivering i innstillinger i skrivebordsprogrammet."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Autometic setup not available"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
   },
   "personalOwnershipSubmitError": {
     "message": "På grunn av bedrifsretningslinjer er du begrenset fra å lagre objekter til ditt personlige hvelv. Endre alternativ for eierskap til en organisasjon og velg blant tilgjengelige samlinger."
@@ -1994,6 +2030,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Your organization has disabled trusted device encryption. Please set a master password to access your vault."
+  },
   "tryAgain": {
     "message": "Prøv igjen"
   },
@@ -2077,6 +2116,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Tidsavbruddet ditt for hvelvet overstiger begrensningene som er satt av organisasjonen din."
+  },
+  "inviteAccepted": {
+    "message": "Invitation accepted"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatisk registrering"
@@ -2778,6 +2820,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Launch Duo and follow the steps to finish logging in."
   },
@@ -2799,8 +2844,8 @@
   "invalidFilePassword": {
     "message": "Invalid file password, please use the password you entered when you created the export file."
   },
-  "importDestination": {
-    "message": "Import destination"
+  "destination": {
+    "message": "Destination"
   },
   "learnAboutImportOptions": {
     "message": "Lær mer om importalternativene dine"
@@ -2995,5 +3040,14 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Data"
+  },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
   }
 }

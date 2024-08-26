@@ -1,4 +1,4 @@
-import { Directive } from "@angular/core";
+import { Directive, OnInit } from "@angular/core";
 import { ActivatedRoute, NavigationExtras, Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
@@ -17,6 +17,7 @@ import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/
 import { AuthResult } from "@bitwarden/common/auth/models/domain/auth-result";
 import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
 import { SsoPreValidateResponse } from "@bitwarden/common/auth/models/response/sso-pre-validate.response";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
@@ -28,7 +29,7 @@ import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 @Directive()
-export class SsoComponent {
+export class SsoComponent implements OnInit {
   identifier: string;
   loggingIn = false;
 
@@ -286,8 +287,18 @@ export class SsoComponent {
     orgIdentifier: string,
     userDecryptionOpts: UserDecryptionOptions,
   ): Promise<void> {
-    // If user doesn't have a MP, but has reset password permission, they must set a MP
+    // Tde offboarding takes precedence
     if (
+      !userDecryptionOpts.hasMasterPassword &&
+      userDecryptionOpts.trustedDeviceOption.isTdeOffboarding
+    ) {
+      const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+      await this.masterPasswordService.setForceSetPasswordReason(
+        ForceSetPasswordReason.TdeOffboarding,
+        userId,
+      );
+    } else if (
+      // If user doesn't have a MP, but has reset password permission, they must set a MP
       !userDecryptionOpts.hasMasterPassword &&
       userDecryptionOpts.trustedDeviceOption.hasManageResetPasswordPermission
     ) {
@@ -319,6 +330,14 @@ export class SsoComponent {
   }
 
   private async handleChangePasswordRequired(orgIdentifier: string) {
+    const emailVerification = await this.configService.getFeatureFlag(
+      FeatureFlag.EmailVerification,
+    );
+
+    if (emailVerification) {
+      this.changePasswordRoute = "set-password-jit";
+    }
+
     await this.navigateViaCallbackOrRoute(
       this.onSuccessfulLoginChangePasswordNavigate,
       [this.changePasswordRoute],

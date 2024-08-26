@@ -1,12 +1,14 @@
 <popup-page>
-  <popup-header slot="header" [pageTitle]="headerText" showBackButton> </popup-header>
+  <popup-header slot="header" [pageTitle]="headerText" showBackButton>
+    <app-pop-out slot="end" />
+  </popup-header>
 
   <app-cipher-view *ngIf="cipher" [cipher]="cipher"></app-cipher-view>
 
   <popup-footer slot="footer">
-    <a bitButton type="button" buttonType="primary" (click)="editCipher()">
+    <button buttonType="primary" type="button" bitButton (click)="editCipher()">
       {{ "edit" | i18n }}
-    </a>
+    </button>
     <button
       slot="end"
       *ngIf="cipher && cipher.edit"

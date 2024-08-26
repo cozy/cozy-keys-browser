@@ -2,7 +2,9 @@ import { firstValueFrom, map, Observable } from "rxjs";
 
 import { UserDecryptionOptionsServiceAbstraction } from "@bitwarden/auth/common";
 
+import { FeatureFlag } from "../../enums/feature-flag.enum";
 import { AppIdService } from "../../platform/abstractions/app-id.service";
+import { ConfigService } from "../../platform/abstractions/config/config.service";
 import { CryptoFunctionService } from "../../platform/abstractions/crypto-function.service";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { EncryptService } from "../../platform/abstractions/encrypt.service";
@@ -35,6 +37,11 @@ export const DEVICE_KEY = new UserKeyDefinition<DeviceKey | null>(
     deserializer: (deviceKey) =>
       deviceKey ? (SymmetricCryptoKey.fromJSON(deviceKey) as DeviceKey) : null,
     clearOn: [], // Device key is needed to log back into device, so we can't clear it automatically during lock or logout
+    cleanupDelayMs: 0,
+    debug: {
+      enableRetrievalLogging: true,
+      enableUpdateLogging: true,
+    },
   },
 );
 
@@ -68,6 +75,7 @@ export class DeviceTrustService implements DeviceTrustServiceAbstraction {
     private secureStorageService: AbstractStorageService,
     private userDecryptionOptionsService: UserDecryptionOptionsServiceAbstraction,
     private logService: LogService,
+    private configService: ConfigService,
   ) {
     this.supportsDeviceTrust$ = this.userDecryptionOptionsService.userDecryptionOptions$.pipe(
       map((options) => options?.trustedDeviceOption != null ?? false),
@@ -287,6 +295,16 @@ export class DeviceTrustService implements DeviceTrustServiceAbstraction {
       throw new Error("UserId is required. Cannot decrypt user key with device key.");
     }
 
+    if (!encryptedDevicePrivateKey) {
+      throw new Error(
+        "Encrypted device private key is required. Cannot decrypt user key with device key.",
+      );
+    }
+
+    if (!encryptedUserKey) {
+      throw new Error("Encrypted user key is required. Cannot decrypt user key with device key.");
+    }
+
     if (!deviceKey) {
       // User doesn't have a device key anymore so device is untrusted
       return null;
@@ -313,6 +331,14 @@ export class DeviceTrustService implements DeviceTrustServiceAbstraction {
 
       return null;
     }
+  }
+
+  async recordDeviceTrustLoss(): Promise<void> {
+    if (!(await this.configService.getFeatureFlag(FeatureFlag.DeviceTrustLogging))) {
+      return;
+    }
+    const deviceIdentifier = await this.appIdService.getAppId();
+    await this.devicesApiService.postDeviceTrustLoss(deviceIdentifier);
   }
 
   private getSecureStorageOptions(userId: UserId): StorageOptions {

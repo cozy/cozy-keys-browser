@@ -1,8 +1,8 @@
-/* Cozy custo
-import { Component } from "@angular/core";
+/* Cozy customization
+import { Component, OnInit } from "@angular/core";
 */
-import { Component, HostListener } from "@angular/core";
-/* end custo */
+import { Component, OnInit, HostListener } from "@angular/core";
+/* Cozy customization end */
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -27,7 +27,7 @@ import { BrowserApi } from "../../../../platform/browser/browser-api";
   templateUrl: "share.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class ShareComponent extends BaseShareComponent {
+export class ShareComponent extends BaseShareComponent implements OnInit {
   constructor(
     collectionService: CollectionService,
     platformUtilsService: PlatformUtilsService,

@@ -1,7 +1,7 @@
 <form [formGroup]="identityForm">
   <bit-section>
     <bit-section-header>
-      <h2 bitTypography="h5">{{ "personalDetails" | i18n }}</h2>
+      <h2 bitTypography="h6">{{ "personalDetails" | i18n }}</h2>
     </bit-section-header>
     <bit-card>
       <bit-form-field>
@@ -25,6 +25,12 @@
       </bit-form-field>
       <bit-form-field>
         <bit-label>
+          {{ "middleName" | i18n }}
+        </bit-label>
+        <input bitInput formControlName="middleName" />
+      </bit-form-field>
+      <bit-form-field>
+        <bit-label>
           {{ "lastName" | i18n }}
         </bit-label>
         <input bitInput formControlName="lastName" />
@@ -35,7 +41,7 @@
         </bit-label>
         <input bitInput formControlName="username" />
       </bit-form-field>
-      <bit-form-field>
+      <bit-form-field disableMargin>
         <bit-label>
           {{ "company" | i18n }}
         </bit-label>
@@ -45,7 +51,7 @@
   </bit-section>
   <bit-section>
     <bit-section-header>
-      <h2 bitTypography="h5">{{ "identification" | i18n }}</h2>
+      <h2 bitTypography="h6">{{ "identification" | i18n }}</h2>
     </bit-section-header>
     <bit-card>
       <bit-form-field>
@@ -74,7 +80,7 @@
           data-testid="visibility-for-passport-number"
         ></button>
       </bit-form-field>
-      <bit-form-field>
+      <bit-form-field disableMargin>
         <bit-label>
           {{ "licenseNumber" | i18n }}
         </bit-label>
@@ -84,7 +90,7 @@
   </bit-section>
   <bit-section>
     <bit-section-header>
-      <h2 bitTypography="h5">{{ "contactInfo" | i18n }}</h2>
+      <h2 bitTypography="h6">{{ "contactInfo" | i18n }}</h2>
     </bit-section-header>
     <bit-card>
       <bit-form-field>
@@ -93,7 +99,7 @@
         </bit-label>
         <input bitInput formControlName="email" />
       </bit-form-field>
-      <bit-form-field>
+      <bit-form-field disableMargin>
         <bit-label>
           {{ "phone" | i18n }}
         </bit-label>
@@ -103,7 +109,7 @@
   </bit-section>
   <bit-section>
     <bit-section-header>
-      <h2 bitTypography="h5">{{ "address" | i18n }}</h2>
+      <h2 bitTypography="h6">{{ "address" | i18n }}</h2>
     </bit-section-header>
     <bit-card>
       <bit-form-field>
@@ -142,7 +148,7 @@
         </bit-label>
         <input bitInput formControlName="postalCode" />
       </bit-form-field>
-      <bit-form-field>
+      <bit-form-field disableMargin>
         <bit-label>
           {{ "country" | i18n }}
         </bit-label>

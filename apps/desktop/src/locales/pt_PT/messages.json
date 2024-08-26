@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "Dica da palavra-passe mestra"
   },
+  "joinOrganization": {
+    "message": "Aderir à organização"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Conclua a adesão a esta organização ao definir uma palavra-passe mestra."
+  },
   "settings": {
     "message": "Definições"
   },
@@ -626,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "É necessário o código de verificação."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "A autenticação foi cancelada ou demorou demasiado tempo. Por favor, tente novamente."
   },
   "invalidVerificationCode": {
     "message": "Código de verificação inválido"
@@ -789,6 +798,18 @@
   "loginExpired": {
     "message": "A sua sessão expirou."
   },
+  "restartRegistration": {
+    "message": "Reiniciar registo"
+  },
+  "expiredLink": {
+    "message": "Link expirado"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Por favor, reinicie o registo ou tente iniciar sessão."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "É possível que já tenha uma conta"
+  },
   "logOutConfirmation": {
     "message": "Tem a certeza de que pretende terminar sessão?"
   },
@@ -858,7 +879,7 @@
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "goToWebVault": {
-    "message": "Ir para o cofre web"
+    "message": "Ir para o cofre Web"
   },
   "getMobileApp": {
     "message": "Obter a aplicação móvel"
@@ -1041,7 +1062,7 @@
     "message": "Tema"
   },
   "themeDesc": {
-    "message": "Alterar o tema de cores da aplicação."
+    "message": "Altere o tema de cores da aplicação."
   },
   "dark": {
     "message": "Escuro",
@@ -1489,8 +1510,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Definições adicionais do Windows Hello"
   },
+  "unlockWithPolkit": {
+    "message": "Desbloqueio com autenticação do sistema"
+  },
   "windowsHelloConsentMessage": {
     "message": "Verificar para o Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Autenticar para desbloquear o Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Desbloquear com Touch ID"
@@ -1503,6 +1530,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Pedir o Windows Hello ao iniciar a aplicação"
+  },
+  "autoPromptPolkit": {
+    "message": "Pedir a autenticação do sistema no arranque"
   },
   "autoPromptTouchId": {
     "message": "Pedir o Touch ID ao iniciar a aplicação"
@@ -1690,8 +1720,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "A sua nova palavra-passe mestra não cumpre os requisitos da política."
   },
-  "receiveMarketingEmails": {
-    "message": "Receba e-mails do Bitwarden com anúncios, conselhos e oportunidades de investigação."
+  "receiveMarketingEmailsV2": {
+    "message": "Receba conselhos, anúncios e oportunidades de investigação do Bitwarden na sua caixa de entrada."
   },
   "unsubscribe": {
     "message": "Anular subscrição"
@@ -1782,6 +1812,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "A biometria do navegador requer que a biometria do computador seja primeiro configurada nas definições."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Configuração automática não disponível"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Devido ao método de instalação, não foi possível ativar automaticamente o suporte biométrico. Gostaria de abrir a documentação sobre como o fazer manualmente?"
   },
   "personalOwnershipSubmitError": {
     "message": "Devido a uma política empresarial, está impedido de guardar itens no seu cofre pessoal. Altere a opção Propriedade para uma organização e escolha entre as coleções disponíveis."
@@ -1994,6 +2030,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "A sua palavra-passe mestra não cumpre uma ou mais políticas da sua organização. Para aceder ao cofre, tem de atualizar a sua palavra-passe mestra agora. Ao prosseguir, terminará a sua sessão atual e terá de iniciar sessão novamente. As sessões ativas noutros dispositivos poderão continuar ativas até uma hora."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "A sua organização desativou a encriptação de dispositivos fiáveis. Por favor, defina uma palavra-passe mestra para aceder ao seu cofre."
+  },
   "tryAgain": {
     "message": "Tentar novamente"
   },
@@ -2077,6 +2116,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "O tempo limite do seu cofre excede as restrições definidas pela sua organização."
+  },
+  "inviteAccepted": {
+    "message": "Convite aceite"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Inscrição automática"
@@ -2778,6 +2820,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Erro ao ligar ao serviço Duo. Utilize um método de verificação de dois passos diferente ou contacte o Duo para obter assistência."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Inicie o Duo e siga os passos para concluir o início de sessão."
   },
@@ -2799,8 +2844,8 @@
   "invalidFilePassword": {
     "message": "Palavra-passe de ficheiro inválida, utilize a palavra-passe que introduziu quando criou o ficheiro de exportação."
   },
-  "importDestination": {
-    "message": "Destino da importação"
+  "destination": {
+    "message": "Destino"
   },
   "learnAboutImportOptions": {
     "message": "Saiba mais sobre as suas opções de importação"
@@ -2995,5 +3040,14 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Dados"
+  },
+  "fileSends": {
+    "message": "Sends de ficheiros"
+  },
+  "textSends": {
+    "message": "Sends de texto"
   }
 }

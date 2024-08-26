@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "Подсказка за главната парола"
   },
+  "joinOrganization": {
+    "message": "Присъединяване към организацията"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Завършете присъединяването си към тази организация като зададете главна парола."
+  },
   "settings": {
     "message": "Настройки"
   },
@@ -626,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "Кодът за потвърждение е задължителен."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Удостоверяването беше отменено или отне твърде много време. Моля, опитайте отново."
   },
   "invalidVerificationCode": {
     "message": "Грешен код за потвърждаване"
@@ -788,6 +797,18 @@
   },
   "loginExpired": {
     "message": "Сесията ви изтече."
+  },
+  "restartRegistration": {
+    "message": "Рестартиране на регистрацията"
+  },
+  "expiredLink": {
+    "message": "Връзка с изтекла давност"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Рестартирайте регистрацията или опитайте да се впишете."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Може вече да имате регистрация"
   },
   "logOutConfirmation": {
     "message": "Сигурни ли сте, че искате да се отпишете?"
@@ -1489,8 +1510,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Допълнителни настройки на Windows Hello"
   },
+  "unlockWithPolkit": {
+    "message": "Отключване чрез системно удостоверяване"
+  },
   "windowsHelloConsentMessage": {
     "message": "Потвърждаване за Битуорден."
+  },
+  "polkitConsentMessage": {
+    "message": "Идентифицирайте се, за да отключите Битуорден."
   },
   "unlockWithTouchId": {
     "message": "Отключване с Touch ID"
@@ -1503,6 +1530,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Питане за Windows Hello при пускане"
+  },
+  "autoPromptPolkit": {
+    "message": "Питане за системно удостоверяване при стартиране"
   },
   "autoPromptTouchId": {
     "message": "Питане за Touch ID при пускане"
@@ -1690,8 +1720,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Паролата ви не отговаря на политиките."
   },
-  "receiveMarketingEmails": {
-    "message": "Получавайте е-писма от Битоурден за новини, съвети и възможности за проучвания."
+  "receiveMarketingEmailsV2": {
+    "message": "Получавайте съвети, обявления и предложения за участие в проучвания от Битуорден в пощенската си кутия."
   },
   "unsubscribe": {
     "message": "Отписване"
@@ -1782,6 +1812,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Потвърждаването с биометрични данни в браузъра изисква включването включването им в настройките за самостоятелното приложение."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Автоматичното настройване не е налично"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Поради начина на инсталиране, поддръжката на биометрични данни не може да бъде включена автоматично. Искате ли да отворите документацията, за да видите как да го направите ръчно?"
   },
   "personalOwnershipSubmitError": {
     "message": "Заради някоя политика за голяма организация не може да запазвате елементи в собствения си трезор. Променете собствеността да е на организация и изберете от наличните колекции."
@@ -1994,6 +2030,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Вашата главна парола не отговаря на една или повече политики на организацията Ви. За да получите достъп до трезора, трябва да промените главната си парола сега. Това означава, че ще бъдете отписан(а) от текущата си сесия и ще трябва да се впишете отново. Активните сесии на други устройства може да продължат да бъдат активни още един час."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Вашата организация е деактивирала шифроването чрез доверени устройства. Задайте главна парола, за да получите достъп до трезора си."
+  },
   "tryAgain": {
     "message": "Нов опит"
   },
@@ -2077,6 +2116,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Времето за достъп до трезора Ви превишава ограничението, определено от организацията Ви."
+  },
+  "inviteAccepted": {
+    "message": "Поканата е приета"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Автоматично включване"
@@ -2778,6 +2820,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Грешка при свързването с услугата на Duo. Използвайте друг метод за двустепенно удостоверяване или се свържете с Duo за съдействие."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Стартирайте Duo и следвайте инструкциите, за да завършите вписването."
   },
@@ -2799,8 +2844,8 @@
   "invalidFilePassword": {
     "message": "Неправилна парола за файла. Използвайте паролата, която сте въвели при създаването на изнесения файл."
   },
-  "importDestination": {
-    "message": "Място на внасяне"
+  "destination": {
+    "message": "Destination"
   },
   "learnAboutImportOptions": {
     "message": "Научете повече относно възможностите за внасяне"
@@ -2995,5 +3040,14 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Данни"
+  },
+  "fileSends": {
+    "message": "Файлови изпращания"
+  },
+  "textSends": {
+    "message": "Текстови изпращания"
   }
 }

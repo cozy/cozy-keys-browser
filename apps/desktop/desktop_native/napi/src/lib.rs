@@ -1,6 +1,5 @@
 #[macro_use]
 extern crate napi_derive;
-
 #[napi]
 pub mod passwords {
     /// Fetch the stored password from the keychain.
@@ -34,6 +33,12 @@ pub mod passwords {
         desktop_core::password::delete_password(&service, &account)
             .map_err(|e| napi::Error::from_reason(e.to_string()))
     }
+
+    // Checks if the os secure storage is available
+    #[napi]
+    pub async fn is_available() -> napi::Result<bool> {
+        desktop_core::password::is_available().map_err(|e| napi::Error::from_reason(e.to_string()))
+    }
 }
 
 #[napi]
@@ -46,12 +51,12 @@ pub mod biometrics {
         hwnd: napi::bindgen_prelude::Buffer,
         message: String,
     ) -> napi::Result<bool> {
-        Biometric::prompt(hwnd.into(), message).map_err(|e| napi::Error::from_reason(e.to_string()))
+        Biometric::prompt(hwnd.into(), message).await.map_err(|e| napi::Error::from_reason(e.to_string()))
     }
 
     #[napi]
     pub async fn available() -> napi::Result<bool> {
-        Biometric::available().map_err(|e| napi::Error::from_reason(e.to_string()))
+        Biometric::available().await.map_err(|e| napi::Error::from_reason(e.to_string()))
     }
 
     #[napi]
@@ -141,4 +146,46 @@ pub mod clipboards {
         desktop_core::clipboard::write(&text, password)
             .map_err(|e| napi::Error::from_reason(e.to_string()))
     }
+}
+
+#[napi]
+pub mod processisolations {
+    #[napi]
+    pub async fn disable_coredumps() -> napi::Result<()> {
+        desktop_core::process_isolation::disable_coredumps()
+            .map_err(|e| napi::Error::from_reason(e.to_string()))
+    }
+    #[napi]
+    pub async fn is_core_dumping_disabled() -> napi::Result<bool> {
+        desktop_core::process_isolation::is_core_dumping_disabled()
+            .map_err(|e| napi::Error::from_reason(e.to_string()))
+    }
+    #[napi]
+    pub async fn disable_memory_access() -> napi::Result<()> {
+        desktop_core::process_isolation::disable_memory_access()
+            .map_err(|e| napi::Error::from_reason(e.to_string()))
+    }
+}
+
+#[napi]
+pub mod powermonitors {
+    use napi::{threadsafe_function::{ErrorStrategy::CalleeHandled, ThreadsafeFunction, ThreadsafeFunctionCallMode}, tokio};
+
+    #[napi]
+    pub async fn on_lock(callback: ThreadsafeFunction<(), CalleeHandled>) -> napi::Result<()> {
+        let (tx, mut rx) = tokio::sync::mpsc::channel::<()>(32);
+        desktop_core::powermonitor::on_lock(tx).await.map_err(|e| napi::Error::from_reason(e.to_string()))?;
+        tokio::spawn(async move {
+            while let Some(message) = rx.recv().await {
+                callback.call(Ok(message.into()), ThreadsafeFunctionCallMode::NonBlocking);
+            }
+        });
+        Ok(())
+    }
+
+    #[napi]
+    pub async fn is_lock_monitor_available() -> napi::Result<bool> {
+        Ok(desktop_core::powermonitor::is_lock_monitor_available().await)
+    }
+
 }

@@ -1,42 +1,9 @@
-import { Injectable, inject } from "@angular/core";
-import { CanActivate, CanActivateFn, Router, UrlTree } from "@angular/router";
+import { inject } from "@angular/core";
+import { CanActivateFn, Router, UrlTree } from "@angular/router";
 import { Observable, map } from "rxjs";
 
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
-
-/**
- * @deprecated use unauthGuardFn function instead
- */
-@Injectable()
-export class UnauthGuard implements CanActivate {
-  protected homepage = "vault";
-  /* Cozy custo : move properties to protected
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-  ) {}
-  */
-  constructor(
-    protected authService: AuthService,
-    protected router: Router,
-  ) {}
-  /* end custo */
-
-  async canActivate() {
-    const authStatus = await this.authService.getAuthStatus();
-
-    if (authStatus === AuthenticationStatus.LoggedOut) {
-      return true;
-    }
-
-    if (authStatus === AuthenticationStatus.Locked) {
-      return this.router.createUrlTree(["lock"]);
-    }
-
-    return this.router.createUrlTree([this.homepage]);
-  }
-}
 
 type UnauthRoutes = {
   homepage: () => string;

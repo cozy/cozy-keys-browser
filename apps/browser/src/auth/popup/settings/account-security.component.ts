@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import {
   BehaviorSubject,
@@ -64,7 +64,7 @@ import { CozyClientService } from "../../../popup/services/cozyClient.service";
  * 60f6863e4f96fbf8d012e5691e4e2cc5f18ac7a8/src/popup/settings/settings.component.ts
  */
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class AccountSecurityComponent implements OnInit {
+export class AccountSecurityComponent implements OnInit, OnDestroy {
   protected readonly VaultTimeoutAction = VaultTimeoutAction;
   availableVaultTimeoutActions: VaultTimeoutAction[] = [];
   vaultTimeoutOptions: VaultTimeoutOption[];

@@ -624,7 +624,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   // ---HELPERS---
-  protected async validateUserKey(key: UserKey, userId: UserId): Promise<boolean> {
+  async validateUserKey(key: UserKey, userId: UserId): Promise<boolean> {
     if (!key) {
       return false;
     }
@@ -913,7 +913,7 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
   // Cozy cuztomization end
 
-  userKey$(userId: UserId) {
+  userKey$(userId: UserId): Observable<UserKey> {
     return this.stateProvider.getUser(userId, USER_KEY).state$;
   }
 
@@ -1038,7 +1038,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     );
   }
 
-  orgKeys$(userId: UserId) {
+  orgKeys$(userId: UserId): Observable<Record<OrganizationId, OrgKey> | null> {
     return this.cipherDecryptionKeys$(userId, true).pipe(map((keys) => keys?.orgKeys));
   }
 

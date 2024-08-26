@@ -9,17 +9,27 @@ import {
 } from "@storybook/angular";
 import { BehaviorSubject } from "rxjs";
 
+import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { AutofillSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/autofill-settings.service";
+import { DomainSettingsService } from "@bitwarden/common/autofill/services/domain-settings.service";
+import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
+import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 import { AsyncActionsModule, ButtonModule, ToastService } from "@bitwarden/components";
-import { CipherFormConfig, PasswordRepromptService } from "@bitwarden/vault";
+import {
+  CipherFormConfig,
+  CipherFormGenerationService,
+  PasswordRepromptService,
+} from "@bitwarden/vault";
 import { PreloadedEnglishI18nModule } from "@bitwarden/web-vault/src/app/core/tests";
 
 import { CipherFormService } from "./abstractions/cipher-form.service";
+import { TotpCaptureService } from "./abstractions/totp-capture.service";
 import { CipherFormModule } from "./cipher-form.module";
 import { CipherFormComponent } from "./components/cipher-form.component";
 
@@ -73,12 +83,23 @@ const defaultConfig: CipherFormConfig = {
     collectionIds: ["col1"],
     favorite: false,
     notes: "Example notes",
+    viewPassword: true,
+    login: Object.assign(new LoginView(), {
+      username: "testuser",
+      password: "testpassword",
+      fido2Credentials: [
+        {
+          creationDate: new Date(2024, 6, 18),
+        },
+      ],
+      totp: "123456",
+    }) as LoginView,
   } as unknown as Cipher,
 };
 
 class TestAddEditFormService implements CipherFormService {
   decryptCipher(): Promise<CipherView> {
-    return Promise.resolve(defaultConfig.originalCipher as any);
+    return Promise.resolve({ ...defaultConfig.originalCipher } as any);
   }
   async saveCipher(cipher: CipherView): Promise<CipherView> {
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -111,6 +132,38 @@ export default {
           provide: PasswordRepromptService,
           useValue: {
             enabled$: new BehaviorSubject(true),
+          },
+        },
+        {
+          provide: CipherFormGenerationService,
+          useValue: {
+            generateInitialPassword: () => Promise.resolve("initial-password"),
+            generatePassword: () => Promise.resolve("random-password"),
+            generateUsername: () => Promise.resolve("random-username"),
+          },
+        },
+        {
+          provide: TotpCaptureService,
+          useValue: {
+            captureTotpSecret: () => Promise.resolve("some-value"),
+          },
+        },
+        {
+          provide: AuditService,
+          useValue: {
+            passwordLeaked: () => Promise.resolve(0),
+          },
+        },
+        {
+          provide: DomainSettingsService,
+          useValue: {
+            defaultUriMatchStrategy$: new BehaviorSubject(UriMatchStrategy.StartsWith),
+          },
+        },
+        {
+          provide: AutofillSettingsServiceAbstraction,
+          useValue: {
+            autofillOnPageLoadDefault$: new BehaviorSubject(true),
           },
         },
       ],

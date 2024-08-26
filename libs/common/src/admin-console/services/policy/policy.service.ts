@@ -32,7 +32,7 @@ export class PolicyService implements InternalPolicyServiceAbstraction {
     private organizationService: OrganizationService,
   ) {}
 
-  get$(policyType: PolicyType) {
+  get$(policyType: PolicyType): Observable<Policy> {
     const filteredPolicies$ = this.activeUserPolicies$.pipe(
       map((policies) => policies.filter((p) => p.type === policyType)),
     );
@@ -235,6 +235,9 @@ export class PolicyService implements InternalPolicyServiceAbstraction {
       case PolicyType.PasswordGenerator:
         // password generation policy applies to everyone
         return false;
+      case PolicyType.PersonalOwnership:
+        // individual vault policy applies to everyone except admins and owners
+        return organization.isAdmin;
       default:
         return organization.canManagePolicies;
     }

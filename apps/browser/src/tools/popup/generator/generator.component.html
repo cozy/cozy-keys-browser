@@ -1,9 +1,9 @@
 <app-header [hideAccountSwitcher]="comingFromAddEdit">
   <div class="left">
-    <!--
+    <!-- Cozy customization; remove username generation from "Generator" tab
     <app-pop-out [show]="!comingFromAddEdit"></app-pop-out>
     -->
-    <button type="button" appBlurClick (click)="close()" *ngIf="comingFromAddEdit">
+    <button type="button" (click)="close()" *ngIf="comingFromAddEdit">
       {{ "cancel" | i18n }}
     </button>
   </div>
@@ -11,7 +11,7 @@
     <span class="title">{{ "generator" | i18n }}</span>
   </h1>
   <div class="right">
-    <button type="button" appBlurClick (click)="select()" *ngIf="comingFromAddEdit">
+    <button type="button" (click)="select()" *ngIf="comingFromAddEdit">
       {{ "select" | i18n }}
     </button>
   </div>
@@ -39,7 +39,6 @@
       <button
         type="button"
         appStopClick
-        appBlurClick
         appA11yTitle="{{ 'regeneratePassword' | i18n }}"
         (click)="regenerate()"
       >
@@ -66,7 +65,6 @@
       <button
         type="button"
         appStopClick
-        appBlurClick
         appA11yTitle="{{ 'regenerateUsername' | i18n }}"
         (click)="$any(form).loading ? false : regenerate()"
         [attr.aria-disabled]="$any(form).loading ? 'true' : null"
@@ -79,7 +77,7 @@
       </button>
     </div>
   </div>
-  <!-- Cozy commented
+  <!-- Cozy customization; remove username generation from "Generator" tab
   <div class="box" *ngIf="!comingFromAddEdit">
     <div class="box-content">
       <div class="box-content-row" role="radiogroup" aria-labelledby="typeHeading">
@@ -103,37 +101,79 @@
       </div>
     </div>
   </div>
-   -->
+  -->
   <ng-container *ngIf="type === 'password'">
-    <!-- Cozy custo -->
-    <div class="box list">
-      <div class="box-content single-line">
-        <a class="box-content-row box-content-row-flex" routerLink="/generator-history">
-          <div class="row-main">{{ "passwordHistory" | i18n }}</div>
-          <i class="bwi bwi-angle-right bwi-lg row-sub-icon" aria-hidden="true"></i>
-        </a>
-        <button class="box-content-row" type="button" (click)="toggleOptions($event)">
-          <i
-            class="row-icon icon-cozy icon-arrow-right"
-            aria-hidden="true"
-            *ngIf="showOptions === false"
-          ></i>
-          <i
-            class="row-icon icon-cozy icon-arrow-down"
-            aria-hidden="true"
-            *ngIf="showOptions === true"
-          ></i>
-          {{ "advancedOptions" | i18n }}
-        </button>
+    <div class="box">
+      <h2 class="box-header">
+        {{ "options" | i18n }}
+      </h2>
+      <div class="box-content">
+        <div class="box-content-row" role="radiogroup" aria-labelledby="passwordTypeHeading">
+          <label id="passwordTypeHeading" class="radio-header">{{ "passwordType" | i18n }}</label>
+          <div class="radio-group text-default" appBoxRow *ngFor="let o of passTypeOptions">
+            <input
+              type="radio"
+              [(ngModel)]="passwordOptions.type"
+              name="PasswordType"
+              id="passwordtype_{{ o.value }}"
+              [value]="o.value"
+              (change)="savePasswordOptions()"
+              [checked]="passwordOptions.type === o.value"
+            />
+            <label for="passwordtype_{{ o.value }}">
+              {{ o.name }}
+            </label>
+          </div>
+        </div>
       </div>
     </div>
-    <div *ngIf="showOptions === true">
-      <!-- end custo -->
-
+    <div class="box" *ngIf="passwordOptions.type === 'passphrase'">
+      <div class="box-content">
+        <div class="box-content-row box-content-row-input" appBoxRow>
+          <label for="num-words">{{ "numWords" | i18n }}</label>
+          <input
+            id="num-words"
+            type="number"
+            min="3"
+            max="20"
+            (change)="savePasswordOptions()"
+            [(ngModel)]="passwordOptions.numWords"
+          />
+        </div>
+        <div class="box-content-row box-content-row-input" appBoxRow>
+          <label for="word-separator">{{ "wordSeparator" | i18n }}</label>
+          <input
+            id="word-separator"
+            type="text"
+            maxlength="1"
+            (input)="savePasswordOptions()"
+            [(ngModel)]="passwordOptions.wordSeparator"
+          />
+        </div>
+        <div class="box-content-row box-content-row-checkbox" appBoxRow>
+          <label for="capitalize">{{ "capitalize" | i18n }}</label>
+          <input
+            id="capitalize"
+            type="checkbox"
+            (change)="savePasswordOptions()"
+            [(ngModel)]="passwordOptions.capitalize"
+            [disabled]="enforcedPasswordPolicyOptions?.capitalize"
+          />
+        </div>
+        <div class="box-content-row box-content-row-checkbox" appBoxRow>
+          <label for="include-number">{{ "includeNumber" | i18n }}</label>
+          <input
+            id="include-number"
+            type="checkbox"
+            (change)="savePasswordOptions()"
+            [(ngModel)]="passwordOptions.includeNumber"
+            [disabled]="enforcedPasswordPolicyOptions?.includeNumber"
+          />
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="passwordOptions.type === 'password'">
       <div class="box">
-        <h2 class="box-header">
-          {{ "options" | i18n }}
-        </h2>
         <div class="box-content">
           <div class="box-content-row box-content-row-slider" appBoxRow>
             <label for="length">{{ "length" | i18n }}</label>
@@ -204,7 +244,7 @@
             />
           </div>
           <div class="box-content-row box-content-row-checkbox" appBoxRow>
-            <label for="special">!@#$%^&*</label>
+            <label for="special">!&#64;#$%^&*</label>
             <input
               id="special"
               type="checkbox"
@@ -216,160 +256,42 @@
           </div>
         </div>
       </div>
-      <div class="box" *ngIf="passwordOptions.type === 'passphrase'">
+      <div class="box">
         <div class="box-content">
           <div class="box-content-row box-content-row-input" appBoxRow>
-            <label for="num-words">{{ "numWords" | i18n }}</label>
+            <label for="min-number">{{ "minNumbers" | i18n }}</label>
             <input
-              id="num-words"
+              id="min-number"
               type="number"
-              min="3"
-              max="20"
-              (change)="savePasswordOptions()"
-              [(ngModel)]="passwordOptions.numWords"
+              min="0"
+              max="9"
+              [(ngModel)]="passwordOptions.minNumber"
+              (input)="onPasswordOptionsMinNumberInput($event)"
             />
           </div>
           <div class="box-content-row box-content-row-input" appBoxRow>
-            <label for="word-separator">{{ "wordSeparator" | i18n }}</label>
+            <label for="min-special">{{ "minSpecial" | i18n }}</label>
             <input
-              id="word-separator"
-              type="text"
-              maxlength="1"
-              (input)="savePasswordOptions()"
-              [(ngModel)]="passwordOptions.wordSeparator"
+              id="min-special"
+              type="number"
+              min="0"
+              max="9"
+              [(ngModel)]="passwordOptions.minSpecial"
+              (input)="onPasswordOptionsMinSpecialInput($event)"
             />
           </div>
           <div class="box-content-row box-content-row-checkbox" appBoxRow>
-            <label for="capitalize">{{ "capitalize" | i18n }}</label>
+            <label for="ambiguous">{{ "avoidAmbChar" | i18n }}</label>
             <input
-              id="capitalize"
+              id="ambiguous"
               type="checkbox"
               (change)="savePasswordOptions()"
-              [(ngModel)]="passwordOptions.capitalize"
-              [disabled]="enforcedPasswordPolicyOptions?.capitalize"
-            />
-          </div>
-          <div class="box-content-row box-content-row-checkbox" appBoxRow>
-            <label for="include-number">{{ "includeNumber" | i18n }}</label>
-            <input
-              id="include-number"
-              type="checkbox"
-              (change)="savePasswordOptions()"
-              [(ngModel)]="passwordOptions.includeNumber"
-              [disabled]="enforcedPasswordPolicyOptions?.includeNumber"
+              [(ngModel)]="avoidAmbiguous"
             />
           </div>
         </div>
       </div>
-      <ng-container *ngIf="passwordOptions.type === 'password'">
-        <div class="box">
-          <div class="box-content">
-            <div class="box-content-row box-content-row-slider" appBoxRow>
-              <label for="length">{{ "length" | i18n }}</label>
-              <input
-                id="length"
-                type="number"
-                min="5"
-                max="128"
-                [(ngModel)]="passwordOptions.length"
-                (change)="savePasswordOptions()"
-              />
-              <input
-                id="lengthRange"
-                type="range"
-                min="5"
-                max="128"
-                step="1"
-                [(ngModel)]="passwordOptions.length"
-                (change)="sliderChanged()"
-                (input)="sliderInput()"
-                attr.aria-label="{{ 'length' | i18n }}"
-                tabindex="-1"
-              />
-            </div>
-            <div class="box-content-row box-content-row-checkbox" appBoxRow>
-              <label for="uppercase">A-Z</label>
-              <input
-                id="uppercase"
-                type="checkbox"
-                (change)="savePasswordOptions()"
-                attr.aria-label="{{ 'uppercase' | i18n }}"
-                [disabled]="enforcedPasswordPolicyOptions.useUppercase"
-                [(ngModel)]="passwordOptions.uppercase"
-              />
-            </div>
-            <div class="box-content-row box-content-row-checkbox" appBoxRow>
-              <label for="lowercase">a-z</label>
-              <input
-                id="lowercase"
-                type="checkbox"
-                (change)="savePasswordOptions()"
-                attr.aria-label="{{ 'lowercase' | i18n }}"
-                [disabled]="enforcedPasswordPolicyOptions.useLowercase"
-                [(ngModel)]="passwordOptions.lowercase"
-              />
-            </div>
-            <div class="box-content-row box-content-row-checkbox" appBoxRow>
-              <label for="numbers">0-9</label>
-              <input
-                id="numbers"
-                type="checkbox"
-                (change)="savePasswordOptions()"
-                attr.aria-label="{{ 'numbers' | i18n }}"
-                [disabled]="enforcedPasswordPolicyOptions.useNumbers"
-                [(ngModel)]="passwordOptions.number"
-              />
-            </div>
-            <div class="box-content-row box-content-row-checkbox" appBoxRow>
-              <label for="special">!@#$%^&*</label>
-              <input
-                id="special"
-                type="checkbox"
-                (change)="savePasswordOptions()"
-                attr.aria-label="{{ 'specialCharacters' | i18n }}"
-                [disabled]="enforcedPasswordPolicyOptions.useSpecial"
-                [(ngModel)]="passwordOptions.special"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="box">
-          <div class="box-content">
-            <div class="box-content-row box-content-row-input" appBoxRow>
-              <label for="min-number">{{ "minNumbers" | i18n }}</label>
-              <input
-                id="min-number"
-                type="number"
-                min="0"
-                max="9"
-                (change)="savePasswordOptions()"
-                [(ngModel)]="passwordOptions.minNumber"
-              />
-            </div>
-            <div class="box-content-row box-content-row-input" appBoxRow>
-              <label for="min-special">{{ "minSpecial" | i18n }}</label>
-              <input
-                id="min-special"
-                type="number"
-                min="0"
-                max="9"
-                (change)="savePasswordOptions()"
-                [(ngModel)]="passwordOptions.minSpecial"
-              />
-            </div>
-            <div class="box-content-row box-content-row-checkbox" appBoxRow>
-              <label for="ambiguous">{{ "avoidAmbChar" | i18n }}</label>
-              <input
-                id="ambiguous"
-                type="checkbox"
-                (change)="savePasswordOptions()"
-                [(ngModel)]="avoidAmbiguous"
-              />
-            </div>
-          </div>
-        </div>
-      </ng-container>
-      <!-- Cozy custo
+    </ng-container>
     <div class="box list">
       <div class="box-content single-line">
         <a class="box-content-row box-content-row-flex" routerLink="/generator-history">
@@ -378,8 +300,6 @@
         </a>
       </div>
     </div>
-    --></div>
-    <!-- end custo -->
   </ng-container>
   <ng-container *ngIf="type === 'username'">
     <div class="box">
@@ -390,16 +310,16 @@
         <div class="box-content-row" role="radiogroup" aria-labelledby="usernameTypeHeading">
           <label id="usernameTypeHeading" class="radio-header">
             {{ "usernameType" | i18n }}
+            <!-- Cozy customization; remove Bitwarden help
             <a
               href="https://bitwarden.com/help/generator/#username-types"
               target="_blank"
               rel="noreferrer"
               appA11yTitle="{{ 'learnMore' | i18n }}"
             >
-              <!-- Cozy custo
               <i class="bwi bwi-question-circle" aria-hidden="true"></i>
-              -->
             </a>
+            -->
           </label>
           <div
             class="radio-group align-start text-default"

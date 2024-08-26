@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "Master-Passwort-Hinweis"
   },
+  "joinOrganization": {
+    "message": "Organisation beitreten"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Schließe den Beitritt zu dieser Organisation ab, indem du ein Master-Passwort festlegst."
+  },
   "settings": {
     "message": "Einstellungen"
   },
@@ -626,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "Verifizierungscode wird benötigt."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Die Authentifizierung wurde abgebrochen oder hat zu lange gedauert. Bitte versuche es erneut."
   },
   "invalidVerificationCode": {
     "message": "Ungültiger Verifizierungscode"
@@ -788,6 +797,18 @@
   },
   "loginExpired": {
     "message": "Deine Sitzung ist abgelaufen."
+  },
+  "restartRegistration": {
+    "message": "Registrierung neu starten"
+  },
+  "expiredLink": {
+    "message": "Abgelaufener Link"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Bitte starte die Registrierung erneut oder versuche dich anzumelden."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Du hast möglicherweise bereits ein Konto"
   },
   "logOutConfirmation": {
     "message": "Bist du sicher, dass du dich abmelden willst?"
@@ -1489,8 +1510,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Zusätzliche Einstellungen für Windows Hello"
   },
+  "unlockWithPolkit": {
+    "message": "Mit Systemauthentifizierung entsperren"
+  },
   "windowsHelloConsentMessage": {
     "message": "Für Bitwarden verifizieren."
+  },
+  "polkitConsentMessage": {
+    "message": "Authentifizieren, um Bitwarden zu entsperren."
   },
   "unlockWithTouchId": {
     "message": "Mit Touch ID entsperren"
@@ -1503,6 +1530,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Beim Start nach Windows Hello fragen"
+  },
+  "autoPromptPolkit": {
+    "message": "Beim Start nach Systemauthentifizierung fragen"
   },
   "autoPromptTouchId": {
     "message": "Beim Start nach Touch ID fragen"
@@ -1690,8 +1720,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Dein neues Masterpasswort entspricht nicht den Anforderungen der Richtlinie."
   },
-  "receiveMarketingEmails": {
-    "message": "Erhalte E-Mails von Bitwarden für Ankündigungen, Ratschläge und Forschungsmöglichkeiten."
+  "receiveMarketingEmailsV2": {
+    "message": "Erhalte Ratschläge, Ankündigungen und Marktforschungsumfragen von Bitwarden in deinem Posteingang."
   },
   "unsubscribe": {
     "message": "Deabonnieren"
@@ -1782,6 +1812,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Biometrie im Browser setzt voraus, dass Biometrie zuerst in den Einstellungen der Desktop-Anwendung eingerichtet wird."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Automatische Einrichtung nicht verfügbar"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Aufgrund der Installationsmethode konnte die Biometrie-Unterstützung nicht automatisch aktiviert werden. Möchtest du die Dokumentation für die manuelle Aktivierung öffnen?"
   },
   "personalOwnershipSubmitError": {
     "message": "Aufgrund einer Unternehmensrichtlinie darfst du keine Einträge in deinem persönlichen Tresor speichern. Ändere die Eigentümer-Option in eine Organisation und wähle aus den verfügbaren Sammlungen."
@@ -1994,6 +2030,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Dein Master-Passwort entspricht nicht einer oder mehreren Richtlinien deiner Organisation. Um auf den Tresor zugreifen zu können, musst du dein Master-Passwort jetzt aktualisieren. Wenn du fortfährst, wirst du von deiner aktuellen Sitzung abgemeldet und musst dich erneut anmelden. Aktive Sitzungen auf anderen Geräten können noch bis zu einer Stunde lang aktiv bleiben."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Deine Organisation hat die vertrauenswürdige Geräteverschlüsselung deaktiviert. Bitte lege ein Master-Passwort fest, um auf deinen Tresor zuzugreifen."
+  },
   "tryAgain": {
     "message": "Erneut versuchen"
   },
@@ -2077,6 +2116,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Dein Tresor-Timeout überschreitet die von deinem Unternehmen festgelegten Beschränkungen."
+  },
+  "inviteAccepted": {
+    "message": "Einladung angenommen"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatische Registrierung"
@@ -2778,6 +2820,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Fehler beim Verbinden mit dem Duo-Dienst. Verwende eine andere Zwei-Faktor-Authentifizierungsmethode oder kontaktiere Duo für Hilfe."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Starte DUO und folge den Schritten, um die Anmeldung abzuschließen."
   },
@@ -2799,8 +2844,8 @@
   "invalidFilePassword": {
     "message": "Ungültiges Dateipasswort. Bitte verwende das Passwort, das du beim Erstellen der Exportdatei eingegeben hast."
   },
-  "importDestination": {
-    "message": "Import-Ziel"
+  "destination": {
+    "message": "Ziel"
   },
   "learnAboutImportOptions": {
     "message": "Erfahre mehr über deine Importoptionen"
@@ -2995,5 +3040,14 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Daten"
+  },
+  "fileSends": {
+    "message": "Datei-Sends"
+  },
+  "textSends": {
+    "message": "Text-Sends"
   }
 }

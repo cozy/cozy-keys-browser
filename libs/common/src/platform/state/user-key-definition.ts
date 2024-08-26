@@ -3,7 +3,7 @@ import { StorageKey } from "../../types/state";
 import { Utils } from "../misc/utils";
 
 import { array, record } from "./deserialization-helpers";
-import { KeyDefinitionOptions } from "./key-definition";
+import { DebugOptions, KeyDefinitionOptions } from "./key-definition";
 import { StateDefinition } from "./state-definition";
 
 export type ClearEvent = "lock" | "logout";
@@ -21,6 +21,11 @@ export class UserKeyDefinition<T> {
    */
   readonly clearOn: ClearEvent[];
 
+  /**
+   * Normalized options used for debugging purposes.
+   */
+  readonly debug: Required<DebugOptions>;
+
   constructor(
     readonly stateDefinition: StateDefinition,
     readonly key: string,
@@ -30,14 +35,21 @@ export class UserKeyDefinition<T> {
       throw new Error(`'deserializer' is a required property on key ${this.errorKeyName}`);
     }
 
-    if (options.cleanupDelayMs <= 0) {
+    if (options.cleanupDelayMs < 0) {
       throw new Error(
-        `'cleanupDelayMs' must be greater than 0. Value of ${options.cleanupDelayMs} passed to key ${this.errorKeyName} `,
+        `'cleanupDelayMs' must be greater than or equal to 0. Value of ${options.cleanupDelayMs} passed to key ${this.errorKeyName} `,
       );
     }
 
     // Filter out repeat values
     this.clearOn = Array.from(new Set(options.clearOn));
+
+    // Normalize optional debug options
+    const { enableUpdateLogging = false, enableRetrievalLogging = false } = options.debug ?? {};
+    this.debug = {
+      enableUpdateLogging,
+      enableRetrievalLogging,
+    };
   }
 
   /**
@@ -51,7 +63,7 @@ export class UserKeyDefinition<T> {
    * Gets the number of milliseconds to wait before cleaning up the state after the last subscriber has unsubscribed.
    */
   get cleanupDelayMs() {
-    return this.options.cleanupDelayMs < 0 ? 0 : this.options.cleanupDelayMs ?? 1000;
+    return this.options.cleanupDelayMs < 0 ? 0 : (this.options.cleanupDelayMs ?? 1000);
   }
 
   /**

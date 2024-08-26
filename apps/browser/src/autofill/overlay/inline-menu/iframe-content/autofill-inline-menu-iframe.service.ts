@@ -80,10 +80,11 @@ export class AutofillInlineMenuIframeService implements AutofillInlineMenuIframe
     this.defaultIframeAttributes.title = this.iframeTitle;
 
     this.iframe = globalThis.document.createElement("iframe");
-    this.updateElementStyles(this.iframe, { ...this.iframeStyles, ...this.initStyles });
     for (const [attribute, value] of Object.entries(this.defaultIframeAttributes)) {
       this.iframe.setAttribute(attribute, value);
     }
+    this.iframeStyles = { ...this.iframeStyles, ...this.initStyles };
+    this.setElementStyles(this.iframe, this.iframeStyles, true);
     this.iframe.addEventListener(EVENTS.LOAD, this.setupPortMessageListener);
 
     if (this.ariaAlert) {
@@ -91,6 +92,7 @@ export class AutofillInlineMenuIframeService implements AutofillInlineMenuIframe
     }
 
     this.shadow.appendChild(this.iframe);
+    this.observeIframe();
   }
 
   /**
@@ -143,7 +145,10 @@ export class AutofillInlineMenuIframeService implements AutofillInlineMenuIframe
       clearTimeout(this.ariaAlertTimeout);
     }
 
-    this.ariaAlertTimeout = setTimeout(() => this.shadow.appendChild(this.ariaAlertElement), 2000);
+    this.ariaAlertTimeout = globalThis.setTimeout(
+      () => this.shadow.appendChild(this.ariaAlertElement),
+      2000,
+    );
   }
 
   /**
@@ -255,8 +260,13 @@ export class AutofillInlineMenuIframeService implements AutofillInlineMenuIframe
       return;
     }
 
-    this.clearFadeInTimeout();
-    this.updateElementStyles(this.iframe, position);
+    const styles = this.fadeInTimeout ? Object.assign(position, { opacity: "0" }) : position;
+    this.updateElementStyles(this.iframe, styles);
+
+    if (this.fadeInTimeout) {
+      this.handleFadeInInlineMenuIframe();
+    }
+
     this.announceAriaAlert();
   }
 
@@ -313,10 +323,10 @@ export class AutofillInlineMenuIframeService implements AutofillInlineMenuIframe
    */
   private handleFadeInInlineMenuIframe() {
     this.clearFadeInTimeout();
-    this.fadeInTimeout = globalThis.setTimeout(
-      () => this.updateElementStyles(this.iframe, { display: "block", opacity: "1" }),
-      10,
-    );
+    this.fadeInTimeout = globalThis.setTimeout(() => {
+      this.updateElementStyles(this.iframe, { display: "block", opacity: "1" });
+      this.clearFadeInTimeout();
+    }, 10);
   }
 
   /**
@@ -325,6 +335,7 @@ export class AutofillInlineMenuIframeService implements AutofillInlineMenuIframe
   private clearFadeInTimeout() {
     if (this.fadeInTimeout) {
       clearTimeout(this.fadeInTimeout);
+      this.fadeInTimeout = null;
     }
   }
 
@@ -442,7 +453,10 @@ export class AutofillInlineMenuIframeService implements AutofillInlineMenuIframe
     }
 
     this.mutationObserverIterations++;
-    this.mutationObserverIterationsResetTimeout = setTimeout(() => resetCounters(), 2000);
+    this.mutationObserverIterationsResetTimeout = globalThis.setTimeout(
+      () => resetCounters(),
+      2000,
+    );
 
     if (this.mutationObserverIterations > 20) {
       clearTimeout(this.mutationObserverIterationsResetTimeout);

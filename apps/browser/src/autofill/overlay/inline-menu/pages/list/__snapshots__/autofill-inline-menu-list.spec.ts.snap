@@ -13,7 +13,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the inline menu with 
     class="inline-menu-list-button-container"
   >
     <button
-      aria-label=", opensInANewWindow"
+      aria-label=""
       class="add-new-item-button inline-menu-list-button inline-menu-list-action"
       id="new-item-button"
       tabindex="-1"
@@ -64,7 +64,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the inline menu with 
     class="inline-menu-list-button-container"
   >
     <button
-      aria-label=", opensInANewWindow"
+      aria-label=""
       class="add-new-item-button inline-menu-list-button inline-menu-list-action"
       id="new-item-button"
       tabindex="-1"
@@ -115,7 +115,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the inline menu with 
     class="inline-menu-list-button-container"
   >
     <button
-      aria-label=", opensInANewWindow"
+      aria-label=""
       class="add-new-item-button inline-menu-list-button inline-menu-list-action"
       id="new-item-button"
       tabindex="-1"
@@ -166,7 +166,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the inline menu with 
     class="inline-menu-list-button-container"
   >
     <button
-      aria-label=", opensInANewWindow"
+      aria-label=""
       class="add-new-item-button inline-menu-list-button inline-menu-list-action"
       id="new-item-button"
       tabindex="-1"
@@ -274,7 +274,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
     class="inline-menu-list-button-container"
   >
     <button
-      aria-label=", opensInANewWindow"
+      aria-label=""
       class="add-new-item-button inline-menu-list-button inline-menu-list-action"
       id="new-item-button"
       tabindex="-1"
@@ -328,7 +328,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username1"
+          aria-description="username: username1"
           aria-label="fillCredentialsFor website login 1"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -387,7 +387,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username2"
+          aria-description="username: username2"
           aria-label="fillCredentialsFor website login 2"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -445,7 +445,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, "
+          aria-description="username: "
           aria-label="fillCredentialsFor "
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -490,7 +490,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username4"
+          aria-description="username: username4"
           aria-label="fillCredentialsFor website login 4"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -564,7 +564,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username5"
+          aria-description="username: username5"
           aria-label="fillCredentialsFor website login 5"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -623,7 +623,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username6"
+          aria-description="username: username6"
           aria-label="fillCredentialsFor website login 6"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -694,7 +694,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username1"
+          aria-description="username: username1"
           aria-label="fillCredentialsFor website login 1"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -753,7 +753,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username2"
+          aria-description="username: username2"
           aria-label="fillCredentialsFor website login 2"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -811,7 +811,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, "
+          aria-description="username: "
           aria-label="fillCredentialsFor "
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -856,7 +856,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username4"
+          aria-description="username: username4"
           aria-label="fillCredentialsFor website login 4"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -930,7 +930,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username5"
+          aria-description="username: username5"
           aria-label="fillCredentialsFor website login 5"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -989,7 +989,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username6"
+          aria-description="username: username6"
           aria-label="fillCredentialsFor website login 6"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -1060,7 +1060,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username1"
+          aria-description="username: username1"
           aria-label="fillCredentialsFor website login 1"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -1119,7 +1119,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username2"
+          aria-description="username: username2"
           aria-label="fillCredentialsFor website login 2"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -1177,7 +1177,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, "
+          aria-description="username: "
           aria-label="fillCredentialsFor "
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -1222,7 +1222,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username4"
+          aria-description="username: username4"
           aria-label="fillCredentialsFor website login 4"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -1296,7 +1296,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username5"
+          aria-description="username: username5"
           aria-label="fillCredentialsFor website login 5"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -1355,7 +1355,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
         class="cipher-container"
       >
         <button
-          aria-description="username, username6"
+          aria-description="username: username6"
           aria-label="fillCredentialsFor website login 6"
           class="fill-cipher-button inline-menu-list-action"
           tabindex="-1"
@@ -1424,7 +1424,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the locked inline men
     class="inline-menu-list-button-container"
   >
     <button
-      aria-label="unlockAccount, opensInANewWindow"
+      aria-label=""
       class="unlock-button inline-menu-list-button inline-menu-list-action"
       id="unlock-button"
       tabindex="-1"

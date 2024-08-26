@@ -49,12 +49,12 @@ export const testData: ProtonPassJsonFile = {
             ],
             type: "login",
             content: {
-              itemEmail: "Username",
+              itemEmail: "Email",
               password: "Password",
               urls: ["https://example.com/", "https://example2.com/"],
               totpUri:
                 "otpauth://totp/Test%20Login%20-%20Personal%20Vault:Username?issuer=Test%20Login%20-%20Personal%20Vault&secret=TOTPCODE&algorithm=SHA1&digits=6&period=30",
-              itemUsername: "someOtherUsername",
+              itemUsername: "Username",
             },
           },
           state: 1,
@@ -102,7 +102,7 @@ export const testData: ProtonPassJsonFile = {
               cardType: 0,
               number: "1234222233334444",
               verificationNumber: "333",
-              expirationDate: "012025",
+              expirationDate: "2025-01",
               pin: "1234",
             },
           },

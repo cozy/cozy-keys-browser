@@ -9,11 +9,11 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view";
 import {
   ButtonModule,
-  SectionComponent,
-  SectionHeaderComponent,
   CardComponent,
   FormFieldModule,
   IconButtonModule,
+  SectionComponent,
+  SectionHeaderComponent,
   SelectModule,
   TypographyModule,
 } from "@bitwarden/components";
@@ -53,6 +53,7 @@ export class IdentitySectionComponent implements OnInit {
   protected identityForm = this.formBuilder.group({
     title: [null],
     firstName: [""],
+    middleName: [""],
     lastName: [""],
     username: [""],
     company: [""],
@@ -80,6 +81,7 @@ export class IdentitySectionComponent implements OnInit {
       const data = new IdentityView();
       data.title = value.title;
       data.firstName = value.firstName;
+      data.middleName = value.middleName;
       data.lastName = value.lastName;
       data.username = value.username;
       data.company = value.company;
@@ -96,8 +98,9 @@ export class IdentitySectionComponent implements OnInit {
       data.postalCode = value.postalCode;
       data.country = value.country;
 
-      this.cipherFormContainer.patchCipher({
-        identity: data,
+      this.cipherFormContainer.patchCipher((cipher) => {
+        cipher.identity = data;
+        return cipher;
       });
     });
   }
@@ -110,6 +113,10 @@ export class IdentitySectionComponent implements OnInit {
 
     if (this.originalCipherView && this.originalCipherView.id) {
       this.populateFormData();
+    } else {
+      this.identityForm.patchValue({
+        username: this.cipherFormContainer.config.initialValues?.username || "",
+      });
     }
   }
 
@@ -118,6 +125,7 @@ export class IdentitySectionComponent implements OnInit {
     this.identityForm.setValue({
       title: identity.title,
       firstName: identity.firstName,
+      middleName: identity.middleName,
       lastName: identity.lastName,
       username: identity.username,
       company: identity.company,

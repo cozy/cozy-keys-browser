@@ -1,13 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ReactiveFormsModule, FormBuilder, Validators } from "@angular/forms";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import {
+  PasswordStrengthScore,
+  PasswordStrengthV2Component,
+} from "@bitwarden/angular/tools/password-strength/password-strength-v2.component";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
 import { DEFAULT_KDF_CONFIG } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { HashPurpose } from "@bitwarden/common/platform/enums";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import {
   AsyncActionsModule,
@@ -40,23 +45,24 @@ import { PasswordInputResult } from "./password-input-result";
     ReactiveFormsModule,
     SharedModule,
     PasswordCalloutComponent,
+    PasswordStrengthV2Component,
     JslibModule,
   ],
 })
-export class InputPasswordComponent implements OnInit {
+export class InputPasswordComponent {
   @Output() onPasswordFormSubmit = new EventEmitter<PasswordInputResult>();
 
   @Input({ required: true }) email: string;
-  @Input() protected buttonText: string;
+  @Input() buttonText: string;
   @Input() masterPasswordPolicyOptions: MasterPasswordPolicyOptions | null = null;
   @Input() loading: boolean = false;
+  @Input() btnBlock: boolean = true;
 
   private minHintLength = 0;
   protected maxHintLength = 50;
-
   protected minPasswordLength = Utils.minimumPasswordLength;
   protected minPasswordMsg = "";
-  protected passwordStrengthResult: any;
+  protected passwordStrengthScore: PasswordStrengthScore;
   protected showErrorSummary = false;
   protected showPassword = false;
 
@@ -98,22 +104,19 @@ export class InputPasswordComponent implements OnInit {
     private toastService: ToastService,
   ) {}
 
-  async ngOnInit() {
+  get minPasswordLengthMsg() {
     if (
       this.masterPasswordPolicyOptions != null &&
       this.masterPasswordPolicyOptions.minLength > 0
     ) {
-      this.minPasswordMsg = this.i18nService.t(
-        "characterMinimum",
-        this.masterPasswordPolicyOptions.minLength,
-      );
+      return this.i18nService.t("characterMinimum", this.masterPasswordPolicyOptions.minLength);
     } else {
-      this.minPasswordMsg = this.i18nService.t("characterMinimum", this.minPasswordLength);
+      return this.i18nService.t("characterMinimum", this.minPasswordLength);
     }
   }
 
-  getPasswordStrengthResult(result: any) {
-    this.passwordStrengthResult = result;
+  getPasswordStrengthScore(score: PasswordStrengthScore) {
+    this.passwordStrengthScore = score;
   }
 
   protected submit = async () => {
@@ -147,7 +150,7 @@ export class InputPasswordComponent implements OnInit {
     if (
       this.masterPasswordPolicyOptions != null &&
       !this.policyService.evaluateMasterPassword(
-        this.passwordStrengthResult.score,
+        this.passwordStrengthScore,
         password,
         this.masterPasswordPolicyOptions,
       )
@@ -176,11 +179,19 @@ export class InputPasswordComponent implements OnInit {
 
     const masterKeyHash = await this.cryptoService.hashMasterKey(password, masterKey);
 
+    const localMasterKeyHash = await this.cryptoService.hashMasterKey(
+      password,
+      masterKey,
+      HashPurpose.LocalAuthorization,
+    );
+
     this.onPasswordFormSubmit.emit({
       masterKey,
       masterKeyHash,
+      localMasterKeyHash,
       kdfConfig,
       hint: this.formGroup.controls.hint.value,
+      password,
     });
   };
 }

@@ -42,6 +42,58 @@
   "cardholderName": {
     "message": "نام صاحب کارت"
   },
+  "loginCredentials": {
+    "message": "Login credentials"
+  },
+  "authenticatorKey": {
+    "message": "Authenticator key"
+  },
+  "autofillOptions": {
+    "message": "Auto-fill options"
+  },
+  "websiteUri": {
+    "message": "Website (URI)"
+  },
+  "websiteAdded": {
+    "message": "Website added"
+  },
+  "addWebsite": {
+    "message": "Add website"
+  },
+  "deleteWebsite": {
+    "message": "Delete website"
+  },
+  "defaultLabel": {
+    "message": "Default ($VALUE$)",
+    "description": "A label that indicates the default value for a field with the current default value in parentheses.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Base domain"
+      }
+    }
+  },
+  "showMatchDetection": {
+    "message": "Show match detection $WEBSITE$",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "hideMatchDetection": {
+    "message": "Hide match detection $WEBSITE$",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "autoFillOnPageLoad": {
+    "message": "Autofill on page load?"
+  },
   "number": {
     "message": "شماره"
   },
@@ -137,6 +189,15 @@
   },
   "authenticatorKeyTotp": {
     "message": "کلید احراز هویت (TOTP)"
+  },
+  "totpHelperTitle": {
+    "message": "Make 2-step verification seamless"
+  },
+  "totpHelper": {
+    "message": "Bitwarden can store and fill 2-step verification codes. Copy and paste the key into this field."
+  },
+  "totpHelperWithCapture": {
+    "message": "Bitwarden can store and fill 2-step verification codes. Select the camera icon to take a screenshot of this website's authenticator QR code, or copy and paste the key into this field."
   },
   "folder": {
     "message": "پوشه"
@@ -555,6 +616,24 @@
       }
     }
   },
+  "itemsMovedToOrg": {
+    "message": "Items moved to $ORGNAME$",
+    "placeholders": {
+      "orgname": {
+        "content": "$1",
+        "example": "Company Name"
+      }
+    }
+  },
+  "itemMovedToOrg": {
+    "message": "Item moved to $ORGNAME$",
+    "placeholders": {
+      "orgname": {
+        "content": "$1",
+        "example": "Company Name"
+      }
+    }
+  },
   "deleteItem": {
     "message": "حذف مورد"
   },
@@ -611,6 +690,18 @@
   },
   "loginExpired": {
     "message": "نشست ورود شما منقضی شده است."
+  },
+  "restartRegistration": {
+    "message": "Restart registration"
+  },
+  "expiredLink": {
+    "message": "Expired link"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Please restart registration or try logging in."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "You may already have an account"
   },
   "logOutConfirmation": {
     "message": "آیا مطمئنید که می‌خواهید خارج شوید؟"
@@ -1461,8 +1552,8 @@
   "importEncKeyError": {
     "message": "خطا در رمزگشایی پرونده‌ی درون ریزی شده. کلید رمزگذاری شما با کلید رمزگذاری استفاده شده برای درون ریزی داده‌ها مطابقت ندارد."
   },
-  "importDestination": {
-    "message": "مقصد برون ریزی"
+  "destination": {
+    "message": "Destination"
   },
   "learnAboutImportOptions": {
     "message": "درباره گزینه‌های برون ریزی خود بیاموزید"
@@ -2754,12 +2845,6 @@
   "accessControl": {
     "message": "کنترل دسترسی"
   },
-  "groupAccessAllItems": {
-    "message": "این گروه می‌تواند به همه موارد دسترسی داشته باشد و آن‌ها را تغییر دهد."
-  },
-  "groupAccessSelectedCollections": {
-    "message": "این گروه فقط می‌تواند به مجموعه های انتخاب شده دسترسی داشته باشد."
-  },
   "readOnly": {
     "message": "فقط خواندنی"
   },
@@ -2804,12 +2889,6 @@
   },
   "userUsingTwoStep": {
     "message": "این کاربر از ورود دو مرحله ای برای محافظت از حساب خود استفاده می‌کند."
-  },
-  "userAccessAllItems": {
-    "message": "این کاربر می‌تواند به همه موارد دسترسی داشته باشد و آن‌ها را تغییر دهد."
-  },
-  "userAccessSelectedCollections": {
-    "message": "این کاربر فقط می‌تواند به مجموعه های انتخاب شده دسترسی داشته باشد."
   },
   "search": {
     "message": "جستجو"
@@ -3426,6 +3505,9 @@
   "joinOrganizationDesc": {
     "message": "شما برای پیوستن به سازمان فهرست شده در بالا دعوت شده اید. برای پذیرش دعوت، باید وارد شوید یا یک حساب کاربری جدید در Bitwarden ایجاد کنید."
   },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Finish joining this organization by setting a master password."
+  },
   "inviteAccepted": {
     "message": "دعوتنامه پذیرفته شد"
   },
@@ -3783,8 +3865,8 @@
   "nothingSelected": {
     "message": "شما چیزی را انتخاب نکرده اید."
   },
-  "receiveMarketingEmails": {
-    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  "receiveMarketingEmailsV2": {
+    "message": "Get advice, announcements, and research opportunities from Bitwarden in your inbox."
   },
   "unsubscribe": {
     "message": "Unsubscribe"
@@ -4063,8 +4145,9 @@
   "minimumNumberOfWords": {
     "message": "حداقل تعداد کلمات"
   },
-  "defaultType": {
-    "message": "نوع پیش‌فرض"
+  "overridePasswordTypePolicy": {
+    "message": "Password Type",
+    "description": "Name of the password generator policy that overrides the user's password/passphrase selection."
   },
   "userPreference": {
     "message": "تنظیمات کاربر"
@@ -4349,6 +4432,9 @@
   "sendLink": {
     "message": "ارسال پیوند",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "copyLink": {
+    "message": "Copy link"
   },
   "copySendLink": {
     "message": "پیوند ارسال را کپی کن",
@@ -4765,6 +4851,75 @@
     "message": "یا",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more, see how it works, **or** try it now.'"
   },
+  "developmentDevOpsAndITTeamsChooseBWSecret": {
+    "message": "Development, DevOps, and IT teams choose Bitwarden Secrets Manager to securely manage and deploy their infrastructure and machine secrets."
+  },
+  "centralizeSecretsManagement": {
+    "message": "Centralize secrets management."
+  },
+  "centralizeSecretsManagementDescription": {
+    "message": "Securely store and manage secrets in one location to prevent secret sprawl across your organization."
+  },
+  "preventSecretLeaks": {
+    "message": "Prevent secret leaks."
+  },
+  "preventSecretLeaksDescription": {
+    "message": "Protect secrets with end-to-end encryption. No more hard coding secrets or sharing through .env files."
+  },
+  "enhanceDeveloperProductivity": {
+    "message": "Enhance developer productivity."
+  },
+  "enhanceDeveloperProductivityDescription": {
+    "message": "Programmatically retrieve and deploy secrets at runtime so developers can focus on what matters most, like improving code quality."
+  },
+  "strengthenBusinessSecurity": {
+    "message": "Strengthen business security."
+  },
+  "strengthenBusinessSecurityDescription": {
+    "message": "Maintain tight control over machine and human access to secrets with SSO integrations, event logs, and access rotation."
+  },
+  "tryItNow": {
+    "message": "Try it now"
+  },
+  "sendRequest": {
+    "message": "Send request"
+  },
+  "addANote": {
+    "message": "Add a note"
+  },
+  "bitwardenSecretsManager": {
+    "message": "Bitwarden Secrets Manager"
+  },
+  "moreProductsFromBitwarden": {
+    "message": "More products from Bitwarden"
+  },
+  "requestAccessToSecretsManager": {
+    "message": "Request access to Secrets Manager"
+  },
+  "youNeedApprovalFromYourAdminToTrySecretsManager": {
+    "message": "You need approval from your administrator to try Secrets Manager."
+  },
+  "smAccessRequestEmailSent": {
+    "message": "Access request for secrets manager email sent to admins."
+  },
+  "requestAccessSMDefaultEmailContent": {
+    "message": "Hi,\n\nI am requesting a subscription to Bitwarden Secrets Manager for our team. Your support would mean a great deal!\n\nBitwarden Secrets Manager is an end-to-end encrypted secrets management solution for securely storing, sharing, and deploying machine credentials like API keys, database passwords, and authentication certificates.\n\nSecrets Manager will help us to:\n\n- Improve security\n- Streamline operations\n- Prevent costly secret leaks\n\nTo request a free trial for our team, please reach out to Bitwarden.\n\nThank you for your help!"
+  },
+  "giveMembersAccess": {
+    "message": "Give members access:"
+  },
+  "viewAndSelectTheMembers": {
+    "message": "view and select the members you want to give access to Secrets Manager."
+  },
+  "openYourOrganizations": {
+    "message": "Open your organization's"
+  },
+  "usingTheMenuSelect": {
+    "message": "Using the menu, select"
+  },
+  "toGrantAccessToSelectedMembers": {
+    "message": "to grant access to selected members."
+  },
   "sendVaultCardTryItNow": {
     "message": "الان امتحان کنید",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more, see how it works, or **try it now**.'"
@@ -5168,6 +5323,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "کلمه عبور اصلی شما با یک یا چند سیاست سازمان‌تان مطابقت ندارد. برای دسترسی به گاوصندوق، باید همین حالا کلمه عبور اصلی خود را به‌روز کنید. در صورت ادامه، شما از نشست فعلی خود خارج می‌شوید و باید دوباره وارد سیستم شوید. نشست فعال در دستگاه های دیگر ممکن است تا یک ساعت همچنان فعال باقی بمانند."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Your organization has updated your decryption options. Please set a master password to access your vault."
+  },
   "maximumVaultTimeout": {
     "message": "متوقف شدن گاو‌صندوق"
   },
@@ -5518,6 +5676,9 @@
   },
   "verificationCodeRequired": {
     "message": "کد تأیید مورد نیاز است."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "The authentication was cancelled or took too long. Please try again."
   },
   "invalidVerificationCode": {
     "message": "کد تأیید نامعتبر است"
@@ -5889,6 +6050,26 @@
   "randomWord": {
     "message": "کلمه تصادفی"
   },
+  "usernameGenerator": {
+    "message": "Username generator"
+  },
+  "useThisPassword": {
+    "message": "Use this password"
+  },
+  "useThisUsername": {
+    "message": "Use this username"
+  },
+  "securePasswordGenerated": {
+    "message": "Secure password generated! Don't forget to also update your password on the website."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Use the generator",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "to create a strong unique password",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
   "service": {
     "message": "سرویس"
   },
@@ -6209,6 +6390,9 @@
         "example": "4"
       }
     }
+  },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance."
   },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Launch Duo and follow the steps to finish logging in."
@@ -7514,6 +7698,9 @@
   "requestedDeviceApproval": {
     "message": "تأیید دستگاه درخواست."
   },
+  "tdeOffboardingPasswordSet": {
+    "message": "User set a master password during TDE offboarding."
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "نسخه آزمایشی رایگان ۷ روزه Bitwarden را با $ORG$ شروع کنید",
     "placeholders": {
@@ -7882,7 +8069,10 @@
   "assignToTheseCollections": {
     "message": "Assign to these collections"
   },
-  "bulkCollectionAssignmentDialogDescription": {
+  "bulkCollectionAssignmentDialogDescriptionSingular": {
+    "message": "Only organization members with access to these collections will be able to see the item."
+  },
+  "bulkCollectionAssignmentDialogDescriptionPlural": {
     "message": "Only organization members with access to these collections will be able to see the items."
   },
   "selectCollectionsToAssign": {
@@ -7906,6 +8096,9 @@
         "example": "3"
       }
     }
+  },
+  "addField": {
+    "message": "Add field"
   },
   "items": {
     "message": "Items"
@@ -8297,6 +8490,51 @@
   "manageBillingFromProviderPortalMessage": {
     "message": "Manage billing from the Provider Portal"
   },
+  "startYour7DayFreeTrialOfBitwarden": {
+    "message": "Start your 7-Day free trial of Bitwarden"
+  },
+  "startYour7DayFreeTrialOfBitwardenForTeams": {
+    "message": "Start your 7-Day free trial of Bitwarden for Teams"
+  },
+  "startYour7DayFreeTrialOfBitwardenForFamilies": {
+    "message": "Start your 7-Day free trial of Bitwarden for Families"
+  },
+  "startYour7DayFreeTrialOfBitwardenForEnterprise": {
+    "message": "Start your 7-Day free trial of Bitwarden for Enterprise"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManager": {
+    "message": "Start your 7-Day free trial of Bitwarden Secrets Manager"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForTeams": {
+    "message": "Start your 7-Day free trial of Bitwarden Secrets Manager for Teams"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForFamilies": {
+    "message": "Start your 7-Day free trial of Bitwarden Secrets Manager for Families"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForEnterprise": {
+    "message": "Start your 7-Day free trial of Bitwarden Secrets Manager for Enterprise"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManager": {
+    "message": "Start your 7-Day free trial of Bitwarden Password Manager"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForTeams": {
+    "message": "Start your 7-Day free trial of Bitwarden Password Manager for Teams"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForFamilies": {
+    "message": "Start your 7-Day free trial of Bitwarden Password Manager for Families"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForEnterprise": {
+    "message": "Start your 7-Day free trial of Bitwarden Password Manager for Enterprise"
+  },
+  "enterTeamsOrgInfo": {
+    "message": "Enter your Teams organization information"
+  },
+  "enterFamiliesOrgInfo": {
+    "message": "Enter your Families organization information"
+  },
+  "enterEnterpriseOrgInfo": {
+    "message": "Enter your Enterprise organization information"
+  },
   "viewItemsIn": {
     "message": "View items in $NAME$",
     "description": "Button to view the contents of a folder or collection",
@@ -8537,26 +8775,137 @@
   "selectFolder": {
     "message": "Select folder"
   },
-  "personalItemsTransferWarning": {
-    "message": "$PERSONAL_ITEMS_COUNT$ will be permanently transferred to the selected organization. You will no longer own these items.",
+  "personalItemTransferWarningSingular": {
+    "message": "1 item will be permanently transferred to the selected organization. You will no longer own this item."
+  },
+  "personalItemsTransferWarningPlural": {
+    "message": "$PERSONAL_ITEMS_COUNT$ items will be permanently transferred to the selected organization. You will no longer own these items.",
     "placeholders": {
       "personal_items_count": {
         "content": "$1",
-        "example": "2 items"
+        "example": "2"
       }
     }
   },
-  "personalItemsWithOrgTransferWarning": {
-    "message": "$PERSONAL_ITEMS_COUNT$ will be permanently transferred to $ORG$. You will no longer own these items.",
+  "personalItemWithOrgTransferWarningSingular": {
+    "message": "1 item will be permanently transferred to $ORG$. You will no longer own this item.",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "personalItemsWithOrgTransferWarningPlural": {
+    "message": "$PERSONAL_ITEMS_COUNT$ items will be permanently transferred to $ORG$. You will no longer own these items.",
     "placeholders": {
       "personal_items_count": {
         "content": "$1",
-        "example": "2 items"
+        "example": "2"
       },
       "org": {
         "content": "$2",
         "example": "Organization name"
       }
     }
+  },
+  "data": {
+    "message": "Data"
+  },
+  "purchasedSeatsRemoved": {
+    "message": "purchased seats removed"
+  },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
+  },
+  "includesXMembers": {
+    "message": "for $COUNT$ member",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "costPerMember": {
+    "message": "$COST$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$3"
+      }
+    }
+  },
+  "optionalOnPremHosting": {
+    "message": "Optional on-premises hosting"
+  },
+  "upgradeFreeOrganization": {
+    "message": "Upgrade your $NAME$ organization ",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "includeSsoAuthenticationMessage": {
+    "message": "SSO Authentication"
+  },
+  "familiesPlanInvLimitReachedManageBilling": {
+    "message": "Families organizations may have up to $SEATCOUNT$ members. Upgrade to a paid plan to invite more members.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "familiesPlanInvLimitReachedNoManageBilling": {
+    "message": "Families organizations may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "upgradePlan": {
+    "message": "Upgrade your plan to invite more members and gain access to additional Bitwarden features"
+  },
+  "upgradeDiscount": {
+    "message": "Save $AMOUNT$%",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "upgradeEnterpriseMessage": {
+    "message": "Advanced capabilities for larger businesses"
+  },
+  "upgradeTeamsMessage": {
+    "message": "Businesses looking for powerful security"
+  },
+  "teamsInviteMessage": {
+    "message": "Invite unlimited members"
+  },
+  "accessToCreateGroups": {
+    "message": "Access to create groups"
+  },
+  "syncGroupsAndUsersFromDirectory": {
+    "message": "Sync groups and users from a directory"
+  },
+  "upgradeFamilyMessage": {
+    "message": "Share with families and friends"
+  },
+  "accessToPremiumFeatures": {
+    "message": "Access to Premium features"
+  },
+  "additionalStorageGbMessage": {
+    "message": "GB additional storage"
   }
 }

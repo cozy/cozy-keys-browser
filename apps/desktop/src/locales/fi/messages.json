@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "Pääsalasanan vihje"
   },
+  "joinOrganization": {
+    "message": "Liity organisaatioon"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Viimeistele organisaatioon liittyminen asettamalla pääsalasana."
+  },
   "settings": {
     "message": "Asetukset"
   },
@@ -627,6 +633,9 @@
   "verificationCodeRequired": {
     "message": "Todennuskoodi vaaditaan."
   },
+  "webauthnCancelOrTimeout": {
+    "message": "Tunnistautuminen peruttiin tai se kesti liian kauan. Yritä uudelleen."
+  },
   "invalidVerificationCode": {
     "message": "Virheellinen todennuskoodi"
   },
@@ -661,7 +670,7 @@
     "message": "Lähetä todennuskoodi sähköpostitse uudelleen"
   },
   "useAnotherTwoStepMethod": {
-    "message": "Käytä eri kaksivaiheisen kirjautumisen todennusmenetelmää"
+    "message": "Käytä vaihtoehtoista todennustapaa"
   },
   "insertYubiKey": {
     "message": "Kytke YubiKey-todennuslaitteesi tietokoneen USB-porttiin ja paina sen painiketta."
@@ -788,6 +797,18 @@
   },
   "loginExpired": {
     "message": "Kirjautumisistuntosi on erääntynyt."
+  },
+  "restartRegistration": {
+    "message": "Aloita rekisteröityminen alusta"
+  },
+  "expiredLink": {
+    "message": "Vanhentunut linkki"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Aloita rekisteröityminen alusta tai yritä kirjautua sisään uudelleen."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Sinulla saattaa olla jo tili"
   },
   "logOutConfirmation": {
     "message": "Haluatko varmasti kirjautua ulos?"
@@ -1489,8 +1510,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Windows Hello -lisäasetukset."
   },
+  "unlockWithPolkit": {
+    "message": "Avaa järjestelmän tunnistautumisella"
+  },
   "windowsHelloConsentMessage": {
     "message": "Vahvista Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Todenna avataksesi Bitwardenin lukitus."
   },
   "unlockWithTouchId": {
     "message": "Avaa Touch ID:llä"
@@ -1503,6 +1530,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Pyydä Windows Hello -todennusta käynnistettäessä"
+  },
+  "autoPromptPolkit": {
+    "message": "Pyydä järjestelmän tunnistautumista käynnistettäessä"
   },
   "autoPromptTouchId": {
     "message": "Pyydä Touch ID -todennusta käynnistettäessä"
@@ -1690,8 +1720,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Uusi pääsalasanasi ei täytä käytännön määrittämiä vaatimuksia."
   },
-  "receiveMarketingEmails": {
-    "message": "Vastaanota Bitwardenilta uutiskirjeitä julkaisuista, tukiresursseista ja tutkimusmahdollisuuksista."
+  "receiveMarketingEmailsV2": {
+    "message": "Vastaanota Bitwardenilta postilaatikkoosi vinkkejä, uutisia ja tutkimusmahdollisuuksia."
   },
   "unsubscribe": {
     "message": "Lopeta tilaus"
@@ -1782,6 +1812,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Biometria selaimissa edellyttää sen määritystä työpöytäsovelluksen asetuksista."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Automaattinen määritys ei ole käytettävissä"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Biometriatukea ei voitu ottaa automaattisesti käyttöön asennustavan vuoksi. Haluatko avata ohjeet tämän tekemiseksi manuaalisesti?"
   },
   "personalOwnershipSubmitError": {
     "message": "Yrityskäytännön johdosta kohteiden tallennus henkilökohtaiseen holviin ei ole mahdollista. Muuta omistusasetus organisaatiolle ja valitse käytettävissä olevista kokoelmista."
@@ -1994,6 +2030,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Pääsalasanasi ei täytä yhden tai useamman organisaatiokäytännön vaatimuksia ja holvin käyttämiseksi sinun on vaihdettava se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Organisaatiosi on estänyt luotettavan laitesalauksen. Käytä holviasi asettamalla pääsalasana."
+  },
   "tryAgain": {
     "message": "Yritä uudelleen"
   },
@@ -2077,6 +2116,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Holvisi aikakatkaisu ylittää organisaatiosi asettamat rajoitukset."
+  },
+  "inviteAccepted": {
+    "message": "Kutsu hyväksyttiin"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automaattinen liitos"
@@ -2405,7 +2447,7 @@
     "message": "Laitteellesi on lähetetty ilmoitus."
   },
   "fingerprintMatchInfo": {
-    "message": "Varmista, että holvisi on avattu ja tunnistelauseke täsmää toisella laitteella."
+    "message": "Varmista, että vahvistavan laitteen holvi on avattu ja että se näyttää saman tunnistelausekkeen."
   },
   "fingerprintPhraseHeader": {
     "message": "Tunnistelauseke"
@@ -2778,6 +2820,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Virhe yhdistettäessä Duo-palveluun. Käytä vaihtoehtoista todennustapaa tai ole yhteydessä Duon asiakaspalveluun saadaksesi apua."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Avaa Duo ja viimeistele kirjautuminen seuraamalla ohjeita."
   },
@@ -2799,8 +2844,8 @@
   "invalidFilePassword": {
     "message": "Tiedoston salasana on virheellinen. Käytä vientitiedoston luonnin yhteydessä syötettyä salasanaa."
   },
-  "importDestination": {
-    "message": "Tuontikohde"
+  "destination": {
+    "message": "Määränpää"
   },
   "learnAboutImportOptions": {
     "message": "Lue lisää tuontivaihtoehdoista"
@@ -2995,5 +3040,14 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Tiedot"
+  },
+  "fileSends": {
+    "message": "Tiedosto-Sendit"
+  },
+  "textSends": {
+    "message": "Teksti-Sendit"
   }
 }
