@@ -357,9 +357,9 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       return this.getAllCipherTypeViews(currentTab);
     }
 
-    const cipherViews = (
-      await this.cipherService.getAllDecryptedForUrl(currentTab?.url || "")
-    ).sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
+    // Cozy customization; This sorting changes the cipher IDs and raises a problem for the ambiguous contact fields functionality, which needs immutable IDs.
+    const cipherViews = await this.cipherService.getAllDecryptedForUrl(currentTab?.url || ""); //.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
+    // Cozy customization end
 
     return this.cardAndIdentityCiphers
       ? cipherViews.concat(...this.cardAndIdentityCiphers)
@@ -377,13 +377,14 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     }
 
     this.cardAndIdentityCiphers.clear();
-    const cipherViews = (
-      await this.cipherService.getAllDecryptedForUrl(currentTab.url, [
-        CipherType.Card,
-        CipherType.Identity,
-        CipherType.Contact, // Cozy customization; add contact to autofill
-      ])
-    ).sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
+
+    // Cozy customization; This sorting changes the cipher IDs and raises a problem for the ambiguous contact fields functionality, which needs immutable IDs.
+    const cipherViews = await this.cipherService.getAllDecryptedForUrl(currentTab.url, [
+      CipherType.Card,
+      CipherType.Identity,
+      CipherType.Contact, // Cozy customization; add contact to autofill
+    ]); //.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
+    // Cozy customization end
     for (let cipherIndex = 0; cipherIndex < cipherViews.length; cipherIndex++) {
       const cipherView = cipherViews[cipherIndex];
       if (
