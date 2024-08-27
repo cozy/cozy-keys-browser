@@ -14,7 +14,6 @@ export interface PageDetail {
   frameId: number;
   tab: chrome.tabs.Tab;
   details: AutofillPageDetails;
-  fieldsForInPageMenuScripts?: any;
   sender?: any;
 }
 
