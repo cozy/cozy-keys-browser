@@ -385,21 +385,6 @@ export default class MainBackground {
   constructor(public popupOnlyContext: boolean = false) {
     // Services
     const lockedCallback = async (userId?: string) => {
-      /* Cozy customization
-        This callback is the lockedCallback of the VaultTimeoutService
-        (see jslib/src/services/vaultTimeout.service.ts )
-        When CB is fired, ask all tabs to activate login-in-page-menu
-      */
-      const allTabs = await BrowserApi.getAllTabs();
-      for (const tab of allTabs) {
-        BrowserApi.tabSendMessage(tab, {
-          command: "autofillAnswerRequest",
-          subcommand: "loginIPMenuActivate",
-          tab: tab,
-        });
-      }
-      /* Cozy customization end */
-
       if (this.notificationsService != null) {
         // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -1548,22 +1533,6 @@ export default class MainBackground {
     if (tab == null || !tab.id) {
       return;
     }
-
-    // Cozy customization INPAGEMENU
-    const authStatus = await this.authService.getAuthStatus();
-    if (authStatus !== AuthenticationStatus.Unlocked) {
-      BrowserApi.tabSendMessage(
-        tab,
-        {
-          command: "autofillAnswerRequest",
-          subcommand: "loginIPMenuActivate",
-          tab: tab,
-        },
-        { frameId: frameId },
-      );
-      return;
-    }
-    // Cozy customization end
 
     const options: any = {};
     if (frameId != null) {
