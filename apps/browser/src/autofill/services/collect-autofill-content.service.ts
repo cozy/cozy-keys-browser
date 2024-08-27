@@ -1390,6 +1390,13 @@ class CollectAutofillContentService implements CollectAutofillContentServiceInte
       }
 
       cachedAutofillFieldElement.viewable = true;
+
+      // Cozy customization; update page details when element visibility changes to take it into account in inline menu autofill
+      if (this.autofillOverlayContentService) {
+        this.autofillOverlayContentService.pageDetailsUpdateRequired = true;
+      }
+      // Cozy customization end
+
       this.setupInlineMenu(formFieldElement, cachedAutofillFieldElement);
 
       this.intersectionObserver?.unobserve(entry.target);
