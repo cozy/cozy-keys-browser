@@ -1049,6 +1049,7 @@ export class PaperAutoFillConstants {
   ];
 
   static readonly TaxNoticeRefTaxIncomeFieldNames: string[] = [
+    "revenu",
     "RevenuFiscalRef",
     "Revenu fiscal référence l'année",
     "Revenu fiscal référence",

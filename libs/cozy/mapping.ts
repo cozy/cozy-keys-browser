@@ -5,7 +5,9 @@ import {
   AutofillFieldQualifier,
   AutofillFieldQualifierType,
 } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
+import AutofillField from "../../apps/browser/src/autofill/models/autofill-field";
 import { CozyProfile } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
+import { PaperAutoFillConstants } from "../../apps/browser/src/autofill/services/autofill-constants";
 
 export type CozyAttributesModel = {
   doctype: string;
@@ -13,7 +15,7 @@ export type CozyAttributesModel = {
   isPathArray?: boolean;
   pathAttributes?: string[]; // pathAttibutess are joined to form the final value
   selector?: {
-    [key: string]: string;
+    [key: string]: string | object;
   };
 };
 
@@ -143,22 +145,42 @@ export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
   [AutofillFieldQualifier.paperTaxNoticeRefTaxIncome]: {
     doctype: "io.cozy.files",
     path: "metadata.refTaxIncome",
-    selector: { "metadata.qualification.label": "tax_notice" },
+    selector: {
+      "metadata.qualification.label": "tax_notice",
+      "metadata.refTaxIncome": { $gt: null }, // some tax notice do not have ref tax income set
+    },
+  },
+};
+
+// When a contact has multiple papers matching the mapping, it will by default return the first one
+// Otherwise, we can now use filters to select a paper among other
+export const FILTERS = {
+  yearFilter: {
+    regex: "20[0-9][0-9]", // the value we match in the autofill field
+    attributePath: ["metadata.referencedDate", "metadata.issueDate"], // where we look for the value matched in "regex" attribute
   },
 };
 
 interface GetCozyValueType {
   client: CozyClient;
   contactId: string;
+  contactEmail?: string;
+  me?: boolean;
+  field?: AutofillField;
   fieldQualifier: AutofillFieldQualifierType;
   cozyProfile?: CozyProfile;
+  filterName?: string;
 }
 
 export const getCozyValue = async ({
   client,
   contactId,
+  contactEmail,
+  me,
+  field,
   fieldQualifier,
   cozyProfile,
+  filterName,
 }: GetCozyValueType): Promise<string | undefined> => {
   const cozyAttributeModel = COZY_ATTRIBUTES_MAPPING[fieldQualifier];
 
@@ -177,8 +199,12 @@ export const getCozyValue = async ({
     return await getCozyValueInPaper({
       client,
       contactId,
+      contactEmail,
+      me,
       cozyAttributeModel,
       cozyProfile,
+      field,
+      filterName,
     });
   }
 };
@@ -186,8 +212,12 @@ export const getCozyValue = async ({
 interface GetCozyValueInDataType {
   client: CozyClient;
   contactId: string;
+  contactEmail?: string;
+  me?: boolean;
   cozyAttributeModel: CozyAttributesModel;
   cozyProfile?: CozyProfile;
+  field?: AutofillField;
+  filterName?: string;
 }
 
 const getCozyValueInContact = async ({
@@ -216,7 +246,11 @@ const getCozyValueInContact = async ({
 const getCozyValueInPaper = async ({
   client,
   contactId,
+  contactEmail,
+  me,
   cozyAttributeModel,
+  field,
+  filterName,
 }: GetCozyValueInDataType) => {
   // FIXME: Temporary way to query data. We want to avoid online request.
   const { data: papers } = await client.query(
@@ -225,9 +259,23 @@ const getCozyValueInPaper = async ({
     }),
   );
 
-  const papersFromContact = papers.filter((paper: any) => isReferencedByContact(paper, contactId));
+  const papersFromContact = papers.filter(
+    (paper: any) =>
+      isReferencedByContact(paper, contactId) || // papers is from the contact asked
+      // papers from konnectors do not have any contact relationship so we need something else
+      paper.cozyMetadata?.sourceAccountIdentifier === contactEmail || // konnector id is equal to contact email
+      (paper.cozyMetadata?.sourceAccount && me), // else we assign papers from konnectors to myself
+  );
 
-  return _.get(papersFromContact[0], cozyAttributeModel.path);
+  let filteredPapers = papersFromContact;
+
+  if (filterName === "yearFilter") {
+    const yearFilterFunction = makeYearFilterFunction(field);
+
+    filteredPapers = filteredPapers.filter(yearFilterFunction);
+  }
+
+  return _.get(filteredPapers[0], cozyAttributeModel.path);
 };
 
 export const selectDataWithCozyProfile = (data: any[] | undefined, cozyProfile?: CozyProfile) => {
@@ -273,4 +321,34 @@ const isReferencedByContact = (paper: any, contactId: string) => {
   return paper?.relationships?.referenced_by?.data?.find(
     (reference: any) => reference.id === contactId && reference.type === "io.cozy.contacts",
   );
+};
+
+const makeYearFilterFunction = (field: AutofillField) => {
+  const filter = FILTERS.yearFilter;
+
+  const filterValue = getValueInField(field, filter.regex);
+
+  return (data: any) =>
+    filter.attributePath.some((path) => {
+      let updatedFilterValue = filterValue;
+
+      // Special case because tax_notice papers, for an "Avis d'imposition 2024 sur les revenus 2023" can be found by checking
+      // - "issueDate": "2024-07-08T00:00:00.000Z"
+      // - "referencedDate": "2023-01-01T23:00:00.000Z"
+      if (path === "metadata.issueDate") {
+        updatedFilterValue = (parseInt(updatedFilterValue, 10) + 1).toString();
+      }
+
+      return _.get(data, path)?.toString().indexOf(updatedFilterValue) >= 0;
+    });
+};
+
+const getValueInField = (field: AutofillField, regex: string): any => {
+  for (const paperAttribute of PaperAutoFillConstants.PaperAttributes) {
+    const matches = field[paperAttribute]?.match(regex);
+
+    if (matches) {
+      return matches[0];
+    }
+  }
 };
