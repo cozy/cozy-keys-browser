@@ -226,8 +226,9 @@ const getCozyValueInContact = async ({
   cozyAttributeModel,
   cozyProfile,
 }: GetCozyValueInDataType) => {
-  // FIXME: Temporary way to query data. We want to avoid online request.
-  const { data: contact } = await client.query(Q("io.cozy.contacts").getById(contactId));
+  const { data: contact } = await client.query(Q("io.cozy.contacts").getById(contactId), {
+    executeFromStore: true,
+  });
 
   if (cozyAttributeModel.isPathArray) {
     const dataArray = _.get(contact, cozyAttributeModel.path);
@@ -252,11 +253,11 @@ const getCozyValueInPaper = async ({
   field,
   filterName,
 }: GetCozyValueInDataType) => {
-  // FIXME: Temporary way to query data. We want to avoid online request.
   const { data: papers } = await client.query(
     Q("io.cozy.files").where({
       ...cozyAttributeModel.selector,
     }),
+    { executeFromStore: true },
   );
 
   const papersFromContact = papers.filter(
