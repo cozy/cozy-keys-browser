@@ -1012,7 +1012,7 @@ export class PaperAutoFillConstants {
   ];
 
   static readonly GrossSalaryAmountFieldNames: string[] = [
-    "gross",
+    "grossSalary",
     "Salaire",
     "Revenu activité",
     "Rémunération brute",
@@ -1028,7 +1028,7 @@ export class PaperAutoFillConstants {
   ];
 
   static readonly NetSalaryAmountFieldNames: string[] = [
-    "net",
+    "netSalary",
     "Montant net social",
     "Montant social net",
     "Paiement social net",
