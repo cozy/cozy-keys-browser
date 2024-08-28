@@ -1000,7 +1000,7 @@ export class InlineMenuFieldQualificationService
   isFieldForPaperTaxNoticeNumber = (field: AutofillField): boolean => {
     return (
       !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
-      this.keywordsFoundInFieldData(field, PaperAutoFillConstants.BankIbanNumberFieldNames, false)
+      this.keywordsFoundInFieldData(field, PaperAutoFillConstants.TaxNoticeNumberFieldNames, false)
     );
   };
 
@@ -1012,7 +1012,11 @@ export class InlineMenuFieldQualificationService
   isFieldForPaperTaxNoticeRefTaxIncome = (field: AutofillField): boolean => {
     return (
       !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
-      this.keywordsFoundInFieldData(field, PaperAutoFillConstants.BankBicNumberFieldNames, false)
+      this.keywordsFoundInFieldData(
+        field,
+        PaperAutoFillConstants.TaxNoticeRefTaxIncomeFieldNames,
+        false,
+      )
     );
   };
 
