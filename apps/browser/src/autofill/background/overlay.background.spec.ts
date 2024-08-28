@@ -795,11 +795,11 @@ describe("OverlayBackground", () => {
         CipherType.Identity,
         CipherType.Contact,
       ]);
-      expect(cipherService.sortCiphersByLastUsedThenName).toHaveBeenCalled();
+      // expect(cipherService.sortCiphersByLastUsedThenName).toHaveBeenCalled(); // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
       expect(overlayBackground["inlineMenuCiphers"]).toStrictEqual(
         new Map([
-          ["inline-menu-cipher-0", cipher2],
-          ["inline-menu-cipher-1", cipher1],
+          ["inline-menu-cipher-0", cipher1], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
+          ["inline-menu-cipher-1", cipher2], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
         ]),
       );
     });
@@ -814,11 +814,11 @@ describe("OverlayBackground", () => {
 
       expect(BrowserApi.getTabFromCurrentWindowId).toHaveBeenCalled();
       expect(cipherService.getAllDecryptedForUrl).toHaveBeenCalledWith(url);
-      expect(cipherService.sortCiphersByLastUsedThenName).toHaveBeenCalled();
+      // expect(cipherService.sortCiphersByLastUsedThenName).toHaveBeenCalled(); // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
       expect(overlayBackground["inlineMenuCiphers"]).toStrictEqual(
         new Map([
-          ["inline-menu-cipher-0", cipher1],
-          ["inline-menu-cipher-1", cipher3],
+          ["inline-menu-cipher-0", cipher3], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
+          ["inline-menu-cipher-1", cipher1], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
         ]),
       );
     });
@@ -836,11 +836,11 @@ describe("OverlayBackground", () => {
         CipherType.Identity,
         CipherType.Contact,
       ]);
-      expect(cipherService.sortCiphersByLastUsedThenName).toHaveBeenCalled();
+      // expect(cipherService.sortCiphersByLastUsedThenName).toHaveBeenCalled(); // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
       expect(overlayBackground["inlineMenuCiphers"]).toStrictEqual(
         new Map([
-          ["inline-menu-cipher-0", cipher2],
-          ["inline-menu-cipher-1", cipher1],
+          ["inline-menu-cipher-0", cipher1], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
+          ["inline-menu-cipher-1", cipher2], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
         ]),
       );
     });
@@ -902,7 +902,7 @@ describe("OverlayBackground", () => {
               image: undefined,
               imageEnabled: true,
             },
-            id: "inline-menu-cipher-0",
+            id: "inline-menu-cipher-1", // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
             card: cipher2.card.subTitle,
             name: cipher2.name,
             reprompt: cipher2.reprompt,
@@ -938,7 +938,7 @@ describe("OverlayBackground", () => {
                 image: undefined,
                 imageEnabled: true,
               },
-              id: "inline-menu-cipher-1",
+              id: "inline-menu-cipher-0", // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
               name: cipher4.name,
               reprompt: cipher4.reprompt,
               type: CipherType.Identity,
@@ -976,7 +976,7 @@ describe("OverlayBackground", () => {
                 image: undefined,
                 imageEnabled: true,
               },
-              id: "inline-menu-cipher-0",
+              id: "inline-menu-cipher-1", // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
               name: cipher4.name,
               reprompt: cipher4.reprompt,
               type: CipherType.Identity,
@@ -994,7 +994,7 @@ describe("OverlayBackground", () => {
                 image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
                 imageEnabled: true,
               },
-              id: "inline-menu-cipher-1",
+              id: "inline-menu-cipher-0", // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
               login: {
                 username: cipher1.login.username,
               },
@@ -1044,7 +1044,7 @@ describe("OverlayBackground", () => {
                 image: undefined,
                 imageEnabled: true,
               },
-              id: "inline-menu-cipher-1",
+              id: "inline-menu-cipher-0", // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
               name: cipher4.name,
               reprompt: cipher4.reprompt,
               type: CipherType.Identity,
