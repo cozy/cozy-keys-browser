@@ -32,7 +32,7 @@ jobs:
     - name: Dist Chrome
       run : |
         cd apps/browser
-        npm run dist:chrome
+        npm run dist:chrome:mv3
 
     - name: Dist Firefox
       run: |
@@ -49,7 +49,7 @@ jobs:
       with:
         name: Chrome
         path: |
-          apps/browser/dist/dist-chrome.zip
+          apps/browser/dist/dist-chrome-mv3.zip
 
     - name: Upload Firefox artifact to GitHub
       uses: actions/upload-artifact@v3
