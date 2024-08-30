@@ -833,6 +833,7 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       fieldQualifier: autofillFieldData.fieldQualifier,
       fieldHtmlID: autofillFieldData.htmlID,
       fieldValue: formFieldElement.value,
+      isFieldCurrentlyReallyFocused: this.recentlyFocusedFieldIsCurrentlyFocused(),
       accountCreationFieldType,
     };
 
@@ -1371,7 +1372,7 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
    */
   private setOverlayRepositionEventListeners() {
     const handler = this.useEventHandlersMemo(
-      throttle(this.handleOverlayRepositionEvent, 250),
+      throttle(this.handleOverlayRepositionEvent, 10), // Cozy customization; change if you want to speed up the inline menu positioning
       AUTOFILL_OVERLAY_HANDLE_REPOSITION,
     );
     globalThis.addEventListener(EVENTS.SCROLL, handler, {

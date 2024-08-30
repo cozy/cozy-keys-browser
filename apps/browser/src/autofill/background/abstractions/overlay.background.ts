@@ -50,6 +50,7 @@ export type FocusedFieldData = {
   fieldQualifier?: AutofillFieldQualifierType;
   fieldHtmlID?: string;
   fieldValue?: string;
+  isFieldCurrentlyReallyFocused?: boolean;
   // Cozy customization end
 };
 

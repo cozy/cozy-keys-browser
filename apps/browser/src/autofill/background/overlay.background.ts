@@ -87,6 +87,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   private readonly openAddEditVaultItemPopout = openAddEditVaultItemPopout;
   // Cozy customization
   private lastFilledCipherId: string;
+  private isFieldCurrentlyReallyFocused: boolean;
   // Cozy customization end
   private pageDetailsForTab: PageDetailsForTab = {};
   private subFrameOffsetsForTab: SubFrameOffsetsForTab = {};
@@ -256,7 +257,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   private initOverlayEventObservables() {
     this.repositionInlineMenuSubject
       .pipe(
-        debounceTime(1000),
+        debounceTime(40), // Cozy customization; change if you want to speed up the inline menu positioning
         switchMap((sender) => this.repositionInlineMenu(sender)),
       )
       .subscribe();
@@ -835,23 +836,25 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       (error) => this.logService.error(error),
     );
 
-    const mostRecentlyFocusedFieldHasValue = await BrowserApi.tabSendMessage(
-      sender.tab,
-      { command: "checkMostRecentlyFocusedFieldHasValue" },
-      { frameId: this.focusedFieldData?.frameId },
-    );
+    // Cozy customization; we want to reposition the inline menu after a scroll even if the most recent focused field has a value
+    // const mostRecentlyFocusedFieldHasValue = await BrowserApi.tabSendMessage(
+    //   sender.tab,
+    //   { command: "checkMostRecentlyFocusedFieldHasValue" },
+    //   { frameId: this.focusedFieldData?.frameId },
+    // );
 
     if ((await this.getInlineMenuVisibility()) === AutofillOverlayVisibility.OnButtonClick) {
       return;
     }
 
-    if (
-      mostRecentlyFocusedFieldHasValue &&
-      (this.checkIsInlineMenuCiphersPopulated(sender) ||
-        (await this.getAuthStatus()) !== AuthenticationStatus.Unlocked)
-    ) {
-      return;
-    }
+    // Cozy customization; we want to reposition the inline menu after a scroll even if the most recent focused field has a value
+    // if (
+    //   mostRecentlyFocusedFieldHasValue &&
+    //   (this.checkIsInlineMenuCiphersPopulated(sender) ||
+    //     (await this.getAuthStatus()) !== AuthenticationStatus.Unlocked)
+    // ) {
+    //   return;
+    // }
 
     this.updateInlineMenuPosition({ overlayElement: AutofillOverlayElement.List }, sender).catch(
       (error) => this.logService.error(error),
@@ -1066,9 +1069,18 @@ export class OverlayBackground implements OverlayBackgroundInterface {
    * that some on page programmatic method attempts to force focus redirection.
    */
   private triggerDelayedInlineMenuClosure() {
+    // Cozy customization; double check if field is currently focused here because when trying
+    // to not close the inline menu on scroll, we broke the assumption "not focused = closed".
+    // So sometimes the "isFieldCurrentlyFocused" is true where as it is false in the DOM.
+    //*
+    if (this.isFieldCurrentlyFocused && this.isFieldCurrentlyReallyFocused) {
+      return;
+    }
+    /*/
     if (this.isFieldCurrentlyFocused) {
       return;
     }
+    //*/
 
     this.clearDelayedInlineMenuClosure();
     this.delayedCloseTimeout = globalThis.setTimeout(() => {
@@ -1308,6 +1320,10 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     { focusedFieldData }: OverlayBackgroundExtensionMessage,
     sender: chrome.runtime.MessageSender,
   ) {
+    // Cozy customization
+    this.isFieldCurrentlyReallyFocused = focusedFieldData.isFieldCurrentlyReallyFocused
+    // Cozy customization end
+
     if (this.focusedFieldData && !this.senderFrameHasFocusedField(sender)) {
       BrowserApi.tabSendMessage(
         sender.tab,
@@ -2148,10 +2164,28 @@ export class OverlayBackground implements OverlayBackgroundInterface {
    */
   private repositionInlineMenu = async (sender: chrome.runtime.MessageSender) => {
     this.cancelInlineMenuFadeInAndPositionUpdate();
+
+
+    // Cozy customization
+
+    // Bitwarden inline menu is closed when scroll reposition the inline menu and the inline menu field is not focused.
+    // We do not want this behavior because we want to be able to set the focus in a field in the inline menu and scroll
+    // without loosing the inline menu and its content.
+
+    // We change the condition to "this.isFieldCurrentlyFilling" because otherwise the inline menu is opened automatically
+    // in the last autofill field after an antofill.
+
+    //*
+    if (this.isFieldCurrentlyFilling) {
+      await this.closeInlineMenuAfterReposition(sender);
+      return;
+    }
+    /*/
     if (!this.isFieldCurrentlyFocused && !this.isInlineMenuButtonVisible) {
       await this.closeInlineMenuAfterReposition(sender);
       return;
     }
+    //*/
 
     const isFieldWithinViewport = await BrowserApi.tabSendMessage(
       sender.tab,
