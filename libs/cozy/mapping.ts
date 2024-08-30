@@ -254,9 +254,11 @@ const getCozyValueInPaper = async ({
   filterName,
 }: GetCozyValueInDataType) => {
   const { data: papers } = await client.query(
-    Q("io.cozy.files").where({
-      ...cozyAttributeModel.selector,
-    }),
+    Q("io.cozy.files")
+      .where({
+        ...cozyAttributeModel.selector,
+      })
+      .sortBy([{ created_at: "desc" }]),
     { executeFromStore: true },
   );
 
