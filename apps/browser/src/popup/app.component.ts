@@ -25,6 +25,7 @@ import { VaultBrowserStateService } from "../vault/services/vault-browser-state.
 
 import { routerTransition } from "./app-routing.animations";
 import { DesktopSyncVerificationDialogComponent } from "./components/desktop-sync-verification-dialog.component";
+import { CozyClientService } from "./services/cozyClient.service";
 import { HistoryService } from "./services/history.service";
 
 @Component({
@@ -58,6 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private toastService: ToastService,
     private accountService: AccountService,
     private historyService: HistoryService,
+    private cozyClientService: CozyClientService,
   ) {}
 
   async ngOnInit() {
@@ -67,6 +69,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     // Cozy customiszation
     await this.historyService.init();
+    await this.cozyClientService.getClientInstance();
 
     this.accountService.activeAccount$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
       this.activeUserId = account?.id;

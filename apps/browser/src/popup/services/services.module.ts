@@ -150,9 +150,8 @@ function getBgService<T>(service: keyof MainBackground) {
   };
 }
 
-/* Cozy custo */
+/* Cozy customization */
 const cozyClientService = getBgService<CozyClientService>("cozyClientService")();
-export const cozySanitizeUrlService = new CozySanitizeUrlService();
 export const konnectorsService = new KonnectorsService(
   getBgService<CipherService>("cipherService")(),
   getBgService<DomainSettingsService>("domainSettingsService")(),
@@ -160,7 +159,7 @@ export const konnectorsService = new KonnectorsService(
   getBgService<StateService>("stateService")(),
   getBgService<AutofillServiceAbstraction>("autofillService")(),
 );
-/* end custo */
+/* Cozy customization end */
 
 /**
  * Provider definitions used in the ngModule.
@@ -558,8 +557,8 @@ const safeProviders: SafeProvider[] = [
   providers: [
     ...safeProviders,
     { provide: CozyClientService, useValue: cozyClientService },
-    { provide: CozySanitizeUrlService, useValue: cozySanitizeUrlService },
     { provide: KonnectorsService, useValue: konnectorsService },
+    { provide: CozySanitizeUrlService },
     { provide: HistoryService },
   ],
 })
