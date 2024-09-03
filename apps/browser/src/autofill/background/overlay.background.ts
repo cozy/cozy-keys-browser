@@ -210,7 +210,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       inlineMenuCipherId,
       contactName: contact.displayName,
     });
-  }
+  };
 
   private handleMenuListUpdate = async (message: OverlayPortMessage, port: chrome.runtime.Port) => {
     const { inlineMenuCipherId, fieldValue } = message;

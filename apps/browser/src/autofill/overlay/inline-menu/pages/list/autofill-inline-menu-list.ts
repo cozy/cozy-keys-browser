@@ -78,7 +78,8 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         ),
       loadPageOfCiphers: () => this.loadPageOfCiphers(),
       focusAutofillInlineMenuList: () => this.focusInlineMenuList(),
-      editContactFields: ({ message }) => this.editContactFields(message.inlineMenuCipherId, message.contactName),
+      editContactFields: ({ message }) =>
+        this.editContactFields(message.inlineMenuCipherId, message.contactName),
     };
 
   constructor() {
@@ -107,10 +108,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     inputText.classList.add("contact-edit-input");
     inputText.addEventListener(EVENTS.KEYDOWN, (evt) => {
       if (
-        evt.key === 'Backspace' ||
-        evt.key === 'Delete' ||
-        evt.key === 'ArrowLeft' ||
-        evt.key === 'ArrowRight'
+        evt.key === "Backspace" ||
+        evt.key === "Delete" ||
+        evt.key === "ArrowLeft" ||
+        evt.key === "ArrowRight"
       ) {
         return;
       }
@@ -142,23 +143,23 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       {
         value: "fixe-work",
         text: "Fixe (pro)",
-      }
-    ]
+      },
+    ];
 
     const labelGroupContainer = document.createElement("div");
-    const labelGroup = document.createElement('div');
+    const labelGroup = document.createElement("div");
     labelGroup.classList.add("input-group-select");
 
-    const labelElement = document.createElement('label');
-    labelElement.htmlFor = 'label';
-    labelElement.textContent = 'Libellé';
+    const labelElement = document.createElement("label");
+    labelElement.htmlFor = "label";
+    labelElement.textContent = "Libellé";
     labelGroup.appendChild(labelElement);
 
-    const selectElement = document.createElement('select');
-    selectElement.id = 'label';
+    const selectElement = document.createElement("select");
+    selectElement.id = "label";
 
     for (const option of selectOptions) {
-      const optionElement = document.createElement('option');
+      const optionElement = document.createElement("option");
       optionElement.value = option.value;
       optionElement.textContent = option.text;
       selectElement.appendChild(optionElement);
@@ -167,7 +168,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     labelGroup.appendChild(selectElement);
     labelGroupContainer.appendChild(labelGroup);
     editContainer.appendChild(labelGroupContainer);
-
 
     const divider = document.createElement("div");
     divider.classList.add("contact-edit-divider");
@@ -577,7 +577,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   }
 
   // TODO Part_2 => Uncomment for next step
-  private createNewAmbiguousButton(inlineMenuCipherId: string, ambiguousKey: AmbiguousContactFieldName) {
+  private createNewAmbiguousButton(
+    inlineMenuCipherId: string,
+    ambiguousKey: AmbiguousContactFieldName,
+  ) {
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
     listItem.classList.add("inline-menu-list-actions-item");
@@ -589,7 +592,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     fillButton.setAttribute("tabindex", "-1");
     fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
     fillButton.setAttribute("aria-label", ambiguousKey);
-    fillButton.addEventListener(EVENTS.CLICK, this.handleEditCipherAmbiguousClickEvent(inlineMenuCipherId, uniqueId()));
+    fillButton.addEventListener(
+      EVENTS.CLICK,
+      this.handleEditCipherAmbiguousClickEvent(inlineMenuCipherId, uniqueId()),
+    );
 
     const radio = document.createElement("input");
     radio.setAttribute("type", "radio");
@@ -624,7 +630,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         }),
       `${UID}-edit-cipher-button-click-handler`,
     );
-  }
+  };
 
   /**
    * @param ambiguousKey
@@ -694,7 +700,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     });
 
     const firstAmbiguousFieldEntries = Object.entries(ambiguousFields)?.[0];
-    const firstAmbiguousFieldName = firstAmbiguousFieldEntries?.[0] as AmbiguousContactFieldName || bitwardenToCozy[this.fieldQualifier];
+    const firstAmbiguousFieldName =
+      (firstAmbiguousFieldEntries?.[0] as AmbiguousContactFieldName) ||
+      bitwardenToCozy[this.fieldQualifier];
 
     if (firstAmbiguousFieldEntries) {
       for (const firstAmbiguousFieldValue of firstAmbiguousFieldEntries[1]) {
@@ -722,7 +730,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.inlineMenuListContainer.appendChild(ulElement);
 
     this.inlineMenuListContainer.classList.add("inline-menu-list-container--with-new-item-button");
-    ulElement.classList.add("inline-menu-list-actions--scrollbar-auto")
+    ulElement.classList.add("inline-menu-list-actions--scrollbar-auto");
   }
 
   /**
