@@ -228,6 +228,9 @@ body {
   &--scrollbar {
     overflow-y: scroll;
   }
+  &--scrollbar-auto {
+    overflow-y: auto;
+  }
 
   @include themify($themes) {
     scrollbar-color: themed("inputBorderColor") darken(themed("backgroundColor"), 1%);
@@ -235,6 +238,96 @@ body {
   }
 }
 
+.contact-edit-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin: 1rem;
+}
+.contact-edit-input {
+  padding: 0.5rem;
+  width: 100%;
+  border: 1px solid #297ef2;
+  outline: none;
+  border-radius: 4px;
+}
+.input-group-select {
+  width: 100%;
+}
+.input-group-select select {
+  appearance: none;
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #fff;
+  border: 1px solid #297ef2;
+  border-radius: 0.25rem;
+  color: #000;
+  cursor: pointer;
+}
+.contact-edit-divider {
+  border-top: 1px solid;
+  @include themify($themes) {
+    border-top-color: themed("borderColor");
+  }
+}
+.contact-edit-buttons {
+  padding-top: 1rem;
+  margin: 0 1rem 1rem;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 1rem;
+
+  @include themify($themes) {
+    background-color: themed("backgroundColor");
+  }
+}
+.contact-edit-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+.contact-edit-button-cancel {
+  background-color: #f0f0f0;
+}
+.contact-edit-button-save {
+  background-color: #297ef2;
+  color: #fff;
+}
+
+.inline-menu-list-actions::-webkit-scrollbar {
+  width: 0.5rem;
+  background-color: transparent;
+}
+
+.inline-menu-list-actions::-webkit-scrollbar-button {
+  display: none;
+}
+
+.inline-menu-list-actions::-webkit-scrollbar-track {
+  background-color: transparent;
+  border: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border-radius: 1rem;
+}
+
+.inline-menu-list-actions::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+  border: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.inline-menu-list-actions::-webkit-scrollbar-thumb {
+  border-radius: 1rem;
+
+  @include themify($themes) {
+    background-color: themed("borderColor");
+  }
+}
+
 .inline-menu-list-actions::-webkit-scrollbar {
   width: 0.5rem;
   background-color: transparent;
@@ -269,45 +362,7 @@ body {
 
 .inline-menu-list-container--with-new-item-button {
   .inline-menu-list-actions {
-    max-height: 13.8rem;
-  }
-}
-
-.inline-menu-list-actions::-webkit-scrollbar {
-  width: 0.5rem;
-  background-color: transparent;
-}
-
-.inline-menu-list-actions::-webkit-scrollbar-button {
-  display: none;
-}
-
-.inline-menu-list-actions::-webkit-scrollbar-track {
-  background-color: transparent;
-  border: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  border-radius: 1rem;
-}
-
-.inline-menu-list-actions::-webkit-scrollbar-track-piece {
-  background-color: transparent;
-  border: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-.inline-menu-list-actions::-webkit-scrollbar-thumb {
-  border-radius: 1rem;
-
-  @include themify($themes) {
-    background-color: themed("borderColor");
-  }
-}
-
-.inline-menu-list-container--with-new-item-button {
-  .inline-menu-list-actions {
-    max-height: 13.8rem;
+    max-height: 15.8rem;
   }
 }
 

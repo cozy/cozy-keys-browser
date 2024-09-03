@@ -78,12 +78,143 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         ),
       loadPageOfCiphers: () => this.loadPageOfCiphers(),
       focusAutofillInlineMenuList: () => this.focusInlineMenuList(),
+      editContactFields: ({ message }) => this.editContactFields(message.inlineMenuCipherId, message.contactName),
     };
 
   constructor() {
     super();
 
     this.setupInlineMenuListGlobalListeners();
+  }
+
+  private editContactFields(inlineMenuCipherId: string, contactName: string) {
+    this.inlineMenuListContainer.innerHTML = "";
+    this.inlineMenuListContainer.classList.remove(
+      "inline-menu-list-container--with-new-item-button",
+    );
+
+    const editContainer = globalThis.document.createElement("div");
+    editContainer.classList.add("contact-edit-container");
+
+    const addNewAmbiguousHeader = this.buildNewAmbiguousHeader(contactName);
+
+    const inputTextContainer = document.createElement("div");
+    const inputText = document.createElement("input");
+    inputText.type = "text";
+    inputText.maxLength = 10;
+    inputText.inputMode = "numeric";
+    inputText.placeholder = "Téléphone";
+    inputText.classList.add("contact-edit-input");
+    inputText.addEventListener(EVENTS.KEYDOWN, (evt) => {
+      if (
+        evt.key === 'Backspace' ||
+        evt.key === 'Delete' ||
+        evt.key === 'ArrowLeft' ||
+        evt.key === 'ArrowRight'
+      ) {
+        return;
+      }
+
+      if (!/^[0-9]$/.test(evt.key)) {
+        evt.preventDefault();
+      }
+    });
+    inputTextContainer.appendChild(inputText);
+    editContainer.appendChild(inputTextContainer);
+
+    const selectOptions = [
+      {
+        value: "aucun",
+        text: "Aucun",
+      },
+      {
+        value: "mobile-person",
+        text: "Mobile (perso)",
+      },
+      {
+        value: "mobile-work",
+        text: "Mobile (pro)",
+      },
+      {
+        value: "fixe-perso",
+        text: "Fixe (perso)",
+      },
+      {
+        value: "fixe-work",
+        text: "Fixe (pro)",
+      }
+    ]
+
+    const labelGroupContainer = document.createElement("div");
+    const labelGroup = document.createElement('div');
+    labelGroup.classList.add("input-group-select");
+
+    const labelElement = document.createElement('label');
+    labelElement.htmlFor = 'label';
+    labelElement.textContent = 'Libellé';
+    labelGroup.appendChild(labelElement);
+
+    const selectElement = document.createElement('select');
+    selectElement.id = 'label';
+
+    for (const option of selectOptions) {
+      const optionElement = document.createElement('option');
+      optionElement.value = option.value;
+      optionElement.textContent = option.text;
+      selectElement.appendChild(optionElement);
+    }
+
+    labelGroup.appendChild(selectElement);
+    labelGroupContainer.appendChild(labelGroup);
+    editContainer.appendChild(labelGroupContainer);
+
+
+    const divider = document.createElement("div");
+    divider.classList.add("contact-edit-divider");
+
+    const buttons = this.editContactButtons(inlineMenuCipherId);
+
+    // Necessary for the bottom margin of “buttons” to be interpreted
+    const necessaryStyleElement = document.createElement("div");
+    necessaryStyleElement.style.height = "1px";
+
+    this.inlineMenuListContainer.appendChild(addNewAmbiguousHeader);
+    this.inlineMenuListContainer.appendChild(editContainer);
+    this.inlineMenuListContainer.appendChild(divider);
+    this.inlineMenuListContainer.appendChild(buttons);
+    this.inlineMenuListContainer.appendChild(necessaryStyleElement);
+
+    // this.inlineMenuListContainer.classList.add("inline-menu-list-container--with-new-item-button");
+  }
+
+  private editContactButtons(inlineMenuCipherId: string) {
+    const buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("contact-edit-buttons");
+
+    const cancelButton = document.createElement("button");
+    cancelButton.textContent = "Annuler";
+    cancelButton.classList.add("contact-edit-button", "contact-edit-button-cancel");
+    cancelButton.addEventListener(EVENTS.CLICK, () => {
+      this.updateListItems(this.ciphers);
+    });
+
+    const saveButton = document.createElement("button");
+    saveButton.textContent = "Enregistrer";
+    saveButton.classList.add("contact-edit-button", "contact-edit-button-save");
+    saveButton.addEventListener(
+      EVENTS.CLICK,
+      this.handleFillCipherAmbiguousClickEvent(
+        inlineMenuCipherId,
+        undefined,
+        undefined,
+        uniqueId(),
+      ),
+    );
+
+    buttonContainer.appendChild(cancelButton);
+    buttonContainer.appendChild(saveButton);
+
+    return buttonContainer;
   }
 
   /**
@@ -446,43 +577,54 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   }
 
   // TODO Part_2 => Uncomment for next step
-  // private createNewAmbiguousButton(inlineMenuCipherId: string, ambiguousKey: AmbiguousContactFieldName) {
-  //   const listItem = document.createElement("li");
-  //   listItem.setAttribute("role", "listitem");
-  //   listItem.classList.add("inline-menu-list-actions-item");
+  private createNewAmbiguousButton(inlineMenuCipherId: string, ambiguousKey: AmbiguousContactFieldName) {
+    const listItem = document.createElement("li");
+    listItem.setAttribute("role", "listitem");
+    listItem.classList.add("inline-menu-list-actions-item");
 
-  //   const div = document.createElement("div");
-  //   div.classList.add("cipher-container");
+    const div = document.createElement("div");
+    div.classList.add("cipher-container");
 
-  //   const fillButton = document.createElement("button");
-  //   fillButton.setAttribute("tabindex", "-1");
-  //   fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
-  //   fillButton.setAttribute("aria-label", ambiguousKey);
-  //   // TODO Part_2 => fillButton.addEventListener(EVENTS.CLICK, this.handleFillCipherAmbiguousClickEvent(inlineMenuCipherId, ambiguousValue, uniqueId()));
+    const fillButton = document.createElement("button");
+    fillButton.setAttribute("tabindex", "-1");
+    fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
+    fillButton.setAttribute("aria-label", ambiguousKey);
+    fillButton.addEventListener(EVENTS.CLICK, this.handleEditCipherAmbiguousClickEvent(inlineMenuCipherId, uniqueId()));
 
-  //   const radio = document.createElement("input");
-  //   radio.setAttribute("type", "radio");
-  //   radio.setAttribute("name", "contact");
-  //   radio.setAttribute("id", "contact");
-  //   radio.style.marginRight = "2rem";
+    const radio = document.createElement("input");
+    radio.setAttribute("type", "radio");
+    radio.setAttribute("name", "contact");
+    radio.setAttribute("id", "contact");
+    radio.style.marginRight = "2rem";
 
-  //   const detailsSpan = document.createElement("span");
-  //   detailsSpan.classList.add("cipher-details");
+    const detailsSpan = document.createElement("span");
+    detailsSpan.classList.add("cipher-details");
 
-  //   const nameSpanText = `New ${ambiguousKey}`;
-  //   const nameSpan = document.createElement("span");
-  //   nameSpan.setAttribute("title", nameSpanText);
-  //   nameSpan.textContent = nameSpanText;
-  //   nameSpan.classList.add("cipher-name");
+    const nameSpanText = `Nouveau téléphone`;
+    const nameSpan = document.createElement("span");
+    nameSpan.setAttribute("title", nameSpanText);
+    nameSpan.textContent = nameSpanText;
+    nameSpan.classList.add("cipher-name");
 
-  //   detailsSpan.appendChild(nameSpan);
-  //   fillButton.appendChild(radio);
-  //   fillButton.appendChild(detailsSpan);
-  //   div.appendChild(fillButton);
-  //   listItem.appendChild(div);
+    detailsSpan.appendChild(nameSpan);
+    fillButton.appendChild(radio);
+    fillButton.appendChild(detailsSpan);
+    div.appendChild(fillButton);
+    listItem.appendChild(div);
 
-  //   return listItem;
-  // }
+    return listItem;
+  }
+
+  private handleEditCipherAmbiguousClickEvent = (inlineMenuCipherId: string, UID: string) => {
+    return this.useEventHandlersMemo(
+      () =>
+        this.postMessageToParent({
+          command: "editInlineMenuCipher",
+          inlineMenuCipherId,
+        }),
+      `${UID}-edit-cipher-button-click-handler`,
+    );
+  }
 
   /**
    * @param ambiguousKey
@@ -552,7 +694,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     });
 
     const firstAmbiguousFieldEntries = Object.entries(ambiguousFields)?.[0];
-    const firstAmbiguousFieldName = firstAmbiguousFieldEntries?.[0] as AmbiguousContactFieldName; // || bitwardenToCozy[this.fieldQualifier]; // TODO Part_2 To add for next step, The contact has no value in an ambiguous focus form field
+    const firstAmbiguousFieldName = firstAmbiguousFieldEntries?.[0] as AmbiguousContactFieldName || bitwardenToCozy[this.fieldQualifier];
 
     if (firstAmbiguousFieldEntries) {
       for (const firstAmbiguousFieldValue of firstAmbiguousFieldEntries[1]) {
@@ -570,16 +712,17 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       const emptyLi = this.createEmptyAmbiguousListItem(firstAmbiguousFieldName);
       ulElement.appendChild(emptyLi);
     }
-    // TODO Uncomment for next step, Add "New xxx" button for ambiguous field
-    // if (isAmbiguousFieldFocused) {
-    //   const newButton = this.createNewAmbiguousButton(inlineMenuCipherId, firstAmbiguousFieldName);
-    //   ulElement.appendChild(newButton);
-    // }
+
+    if (isAmbiguousFieldFocused && firstAmbiguousFieldName === "phone") {
+      const newButton = this.createNewAmbiguousButton(inlineMenuCipherId, firstAmbiguousFieldName);
+      ulElement.appendChild(newButton);
+    }
 
     this.inlineMenuListContainer.appendChild(addNewLoginButtonContainer);
     this.inlineMenuListContainer.appendChild(ulElement);
 
     this.inlineMenuListContainer.classList.add("inline-menu-list-container--with-new-item-button");
+    ulElement.classList.add("inline-menu-list-actions--scrollbar-auto")
   }
 
   /**
@@ -1159,6 +1302,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
    * If not focused, will check if the button element is focused.
    */
   private checkInlineMenuListFocused() {
+    // return
     if (globalThis.document.hasFocus() || this.inlineMenuListContainer.matches(":hover")) {
       return;
     }

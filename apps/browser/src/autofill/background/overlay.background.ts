@@ -171,6 +171,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     inlineMenuSearchContact: ({ message }) => this.searchContacts(message),
     redirectToCozy: ({ message }) => this.redirectToCozy(message),
     handleMenuListUpdate: ({ message, port }) => this.handleMenuListUpdate(message, port),
+    editInlineMenuCipher: ({ message, port }) => this.editInlineMenuCipher(message, port),
     // Cozy customization end
     addNewVaultItem: ({ message, port }) => this.getNewVaultItemDetails(message, port),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port),
@@ -193,6 +194,22 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     private cozyClientService: CozyClientService,
   ) {
     this.initOverlayEventObservables();
+  }
+
+  private editInlineMenuCipher = async (message: OverlayPortMessage, port: chrome.runtime.Port) => {
+    const { inlineMenuCipherId } = message;
+    const client = await this.cozyClientService.getClientInstance();
+    const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
+
+    const { data: contact } = (await client.query(Q(CONTACTS_DOCTYPE).getById(cipher.id), {
+      executeFromStore: true,
+    })) as { data: IOCozyContact };
+
+    this.inlineMenuListPort?.postMessage({
+      command: "editContactFields",
+      inlineMenuCipherId,
+      contactName: contact.displayName,
+    });
   }
 
   private handleMenuListUpdate = async (message: OverlayPortMessage, port: chrome.runtime.Port) => {
