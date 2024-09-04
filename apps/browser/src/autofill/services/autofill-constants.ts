@@ -943,6 +943,19 @@ export class PaperAutoFillConstants {
     "Residence code",
   ];
 
+  static readonly DrivingLicenseFieldNames: string[] = [
+    "numPermisConduire",
+    "Numéro permis",
+    "Identifiant permis conduire",
+    "Numéro licence conduite",
+    "Numéro enregistrement permis conduire",
+    "Numéro permis conduire",
+    "License number",
+    "Driver license identifier",
+    "Driver license number",
+    "Driver license registration number",
+  ];
+
   static readonly VehicleRegistrationNumberFieldNames: string[] = [
     "numCarteGrise",
     "Numéro carte grise",

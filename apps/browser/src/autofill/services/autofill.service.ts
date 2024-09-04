@@ -1634,6 +1634,13 @@ export default class AutofillService implements AutofillServiceInterface {
           break;
         }
         if (
+          !fillFields.paperDrivingLicenseNumber &&
+          AutofillService.isFieldMatch(f[attr], PaperAutoFillConstants.DrivingLicenseFieldNames)
+        ) {
+          fillFields.paperDrivingLicenseNumber = f;
+          break;
+        }
+        if (
           !fillFields.paperVehicleRegistrationNumber &&
           AutofillService.isFieldMatch(
             f[attr],
@@ -1765,6 +1772,20 @@ export default class AutofillService implements AutofillServiceInterface {
         fillScript,
         paperResidencePermitNumber,
         fillFields.paperResidencePermitNumber,
+        filledFields,
+      );
+    }
+
+    if (fillFields.paperDrivingLicenseNumber) {
+      const paperDrivingLicenseNumber = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperDrivingLicenseNumber",
+      });
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperDrivingLicenseNumber,
+        fillFields.paperDrivingLicenseNumber,
         filledFields,
       );
     }

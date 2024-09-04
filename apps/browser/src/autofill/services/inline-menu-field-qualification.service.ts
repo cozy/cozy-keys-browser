@@ -143,6 +143,7 @@ export class InlineMenuFieldQualificationService
       ...PaperAutoFillConstants.PassportNumberFieldNames,
       ...PaperAutoFillConstants.SocialSecurityNumberFieldNames,
       ...PaperAutoFillConstants.ResidencePermitNumberFieldNames,
+      ...PaperAutoFillConstants.DrivingLicenseFieldNames,
       ...PaperAutoFillConstants.VehicleRegistrationNumberFieldNames,
       ...PaperAutoFillConstants.VehicleRegistrationConfidentialCodeFieldNames,
       ...PaperAutoFillConstants.VehicleRegistrationLicensePlateNumberFieldNames,
@@ -889,6 +890,18 @@ export class InlineMenuFieldQualificationService
         PaperAutoFillConstants.ResidencePermitNumberFieldNames,
         false,
       )
+    );
+  };
+
+  /**
+   * Validates the provided field as an paper driving license field.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForPaperDrivingLicenseNumber = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(field, PaperAutoFillConstants.DrivingLicenseFieldNames, false)
     );
   };
 

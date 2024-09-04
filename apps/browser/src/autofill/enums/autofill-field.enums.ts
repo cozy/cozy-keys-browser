@@ -28,6 +28,7 @@ export const AutofillFieldQualifier = {
   paperPassportNumber: "paperPassportNumber",
   paperSocialSecurityNumber: "paperSocialSecurityNumber",
   paperResidencePermitNumber: "paperResidencePermitNumber",
+  paperDrivingLicenseNumber: "paperDrivingLicenseNumber",
   paperVehicleRegistrationNumber: "paperVehicleRegistrationNumber",
   paperVehicleRegistrationConfidentialCode: "paperVehicleRegistrationConfidentialCode",
   paperVehicleRegistrationLicensePlateNumber: "paperVehicleRegistrationLicensePlateNumber",

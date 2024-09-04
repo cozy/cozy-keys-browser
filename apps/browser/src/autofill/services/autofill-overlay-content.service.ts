@@ -136,6 +136,8 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       this.inlineMenuFieldQualificationService.isFieldForPaperSocialSecurityNumber,
     [AutofillFieldQualifier.paperResidencePermitNumber]:
       this.inlineMenuFieldQualificationService.isFieldForPaperResidencePermitNumber,
+    [AutofillFieldQualifier.paperDrivingLicenseNumber]:
+      this.inlineMenuFieldQualificationService.isFieldForPaperDrivingLicenseNumber,
     [AutofillFieldQualifier.paperVehicleRegistrationNumber]:
       this.inlineMenuFieldQualificationService.isFieldForPaperVehicleRegistrationNumber,
     [AutofillFieldQualifier.paperVehicleRegistrationConfidentialCode]:
