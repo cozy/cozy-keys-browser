@@ -102,6 +102,11 @@ export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
     path: "metadata.number",
     selector: { "metadata.qualification.label": "residence_permit" },
   },
+  [AutofillFieldQualifier.paperDrivingLicenseNumber]: {
+    doctype: "io.cozy.files",
+    path: "metadata.number",
+    selector: { "metadata.qualification.label": "driver_license" },
+  },
   [AutofillFieldQualifier.paperVehicleRegistrationNumber]: {
     doctype: "io.cozy.files",
     path: "metadata.number",

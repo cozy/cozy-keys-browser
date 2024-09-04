@@ -44,6 +44,7 @@ export interface InlineMenuFieldQualificationService {
   isFieldForPaperPassportNumber(field: AutofillField): boolean;
   isFieldForPaperSocialSecurityNumber(field: AutofillField): boolean;
   isFieldForPaperResidencePermitNumber(field: AutofillField): boolean;
+  isFieldForPaperDrivingLicenseNumber(field: AutofillField): boolean;
   isFieldForPaperVehicleRegistrationNumber(field: AutofillField): boolean;
   isFieldForPaperVehicleRegistrationConfidentialCode(field: AutofillField): boolean;
   isFieldForPaperVehicleRegistrationLicensePlateNumber(field: AutofillField): boolean;
