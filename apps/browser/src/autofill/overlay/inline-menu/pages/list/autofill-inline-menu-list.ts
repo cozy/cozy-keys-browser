@@ -580,6 +580,8 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.inlineMenuListContainer.appendChild(ulElement);
 
     this.inlineMenuListContainer.classList.add("inline-menu-list-container--with-new-item-button");
+
+    this.toggleScrollClass(undefined, ulElement);
   }
 
   /**
@@ -1226,8 +1228,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
    *
    * @param height - The height of the inline menu list actions container.
    */
-  private toggleScrollClass = (height?: number) => {
-    if (!this.ciphersList) {
+  private toggleScrollClass = (height?: number, container?: Element) => {
+    const localContainer = container || this.ciphersList;
+    if (!localContainer) {
       return;
     }
     const scrollbarClass = "inline-menu-list-actions--scrollbar";
@@ -1239,11 +1242,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     }
 
     if (containerHeight >= 170) {
-      this.ciphersList.classList.add(scrollbarClass);
+      localContainer.classList.add(scrollbarClass);
       return;
     }
 
-    this.ciphersList.classList.remove(scrollbarClass);
+    localContainer.classList.remove(scrollbarClass);
   };
 
   /**
