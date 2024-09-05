@@ -298,6 +298,20 @@ export const selectDataWithCozyProfile = (data: any[] | undefined, cozyProfile?:
   const type = cozyProfile?.type;
   const label = cozyProfile?.label;
 
+  // If we clicked on a phone number with no type and label,
+  // we want to autofill with this phone number and not evaluate the select data logic
+  // that will finish by return the first phone number and not the phone number we clicked
+  const matchingValueData = data.find(
+    (d) =>
+      (cozyProfile.number && cozyProfile.number === d.number) ||
+      (cozyProfile.formattedAddress && cozyProfile.formattedAddress === d.formattedAddress) ||
+      (cozyProfile.address && cozyProfile.address === d.address),
+  );
+
+  if (!type && !label && matchingValueData) {
+    return matchingValueData;
+  }
+
   const customLabelAndTypeAddress = data.find(
     (d) => d.label && d.label === label && d.type && d.type === type,
   );
