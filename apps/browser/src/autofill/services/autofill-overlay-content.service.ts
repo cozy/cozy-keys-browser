@@ -729,10 +729,13 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       });
     }
 
+    // Cozy customization, open inline menu on focus even if field is filled
+    /*
     if (hideInlineMenuListOnFilledField) {
       this.updateInlineMenuButtonPosition();
       return;
     }
+    //*/
 
     void this.sendExtensionMessage("openAutofillInlineMenu");
   }

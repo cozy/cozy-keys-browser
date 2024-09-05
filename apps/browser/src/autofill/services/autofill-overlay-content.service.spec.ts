@@ -1207,9 +1207,12 @@ describe("AutofillOverlayContentService", () => {
           autofillFieldElement.dispatchEvent(new Event("focus"));
           await flushPromises();
 
+          // Cozy customization, open inline menu on focus even if field is filled
+          /*
           expect(sendExtensionMessageSpy).toHaveBeenCalledWith("updateAutofillInlineMenuPosition", {
             overlayElement: AutofillOverlayElement.Button,
           });
+          //*/
         });
       });
 
