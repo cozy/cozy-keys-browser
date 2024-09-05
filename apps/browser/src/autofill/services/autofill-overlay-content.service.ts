@@ -44,6 +44,48 @@ import {
 import { InlineMenuFieldQualificationService } from "./abstractions/inline-menu-field-qualifications.service";
 import { AutoFillConstants } from "./autofill-constants";
 
+// Cozy customization; do not open inline menu for some custom urls
+function getAppURLCozy(cozyUrl: string, appName: string, hash: string, nested: boolean) {
+  if (!appName) {
+    return new URL(cozyUrl).toString();
+  }
+  const url = new URL(cozyUrl);
+  const hostParts = url.host.split(".");
+  url.host = nested
+    ? [`${appName}.${hostParts[0]}`, ...hostParts.slice(1)].join(".")
+    : [`${hostParts[0]}-${appName}`, ...hostParts.slice(1)].join(".");
+  if (hash) {
+    url.hash = hash;
+  }
+  return url.toString();
+}
+
+let cozyPasswordsHostnames: string[] = [];
+let cozyContactsHostnames: string[] = [];
+let cozyMespapiersHostnames: string[] = [];
+
+chrome.storage.local.get("global_environment_environment", (response) => {
+  const storedValue = response?.global_environment_environment?.value;
+
+  if (storedValue) {
+    const parsedValue = JSON.parse(storedValue);
+    // we do not know a lot about the user's Cozy here so we calculate both nested and flat urls
+    cozyPasswordsHostnames = [
+      new URL(getAppURLCozy(parsedValue.urls.base, "passwords", "", true)).hostname,
+      new URL(getAppURLCozy(parsedValue.urls.base, "passwords", "", false)).hostname,
+    ];
+    cozyContactsHostnames = [
+      new URL(getAppURLCozy(parsedValue.urls.base, "contacts", "", true)).hostname,
+      new URL(getAppURLCozy(parsedValue.urls.base, "contacts", "", false)).hostname,
+    ];
+    cozyMespapiersHostnames = [
+      new URL(getAppURLCozy(parsedValue.urls.base, "mespapiers", "", true)).hostname,
+      new URL(getAppURLCozy(parsedValue.urls.base, "mespapiers", "", false)).hostname,
+    ];
+  }
+});
+// Cozy customization end
+
 export class AutofillOverlayContentService implements AutofillOverlayContentServiceInterface {
   pageDetailsUpdateRequired = false;
   inlineMenuVisibility: number;
@@ -900,6 +942,38 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
     });
   }
 
+  // Cozy customization; do not open inline menu for some custom urls
+  /**
+   * Identifies if we should ignore the autofill inline menu for some custom urls
+   *
+   * @param pageDetails - The collected page details from the tab.
+   */
+  private isIgnoredUrls(pageDetails: AutofillPageDetails): boolean {
+    try {
+      const url = new URL(pageDetails.documentUrl);
+
+      if (
+        cozyPasswordsHostnames.find((hostname) => hostname === url.hostname) &&
+        url.hash !== "#/login"
+      ) {
+        return true;
+      }
+
+      if (cozyContactsHostnames.find((hostname) => hostname === url.hostname)) {
+        return true;
+      }
+
+      if (cozyMespapiersHostnames.find((hostname) => hostname === url.hostname)) {
+        return true;
+      }
+
+      return false;
+    } catch {
+      // do nothing is new URL is invalid
+    }
+  }
+  // Cozy customization end
+
   /**
    * Identifies if the field should have the autofill inline menu setup on it. Currently, this is mainly
    * determined by whether the field correlates with a login cipher. This method will need to be
@@ -915,6 +989,12 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
     if (this.ignoredFieldTypes.has(autofillFieldData.type)) {
       return true;
     }
+
+    // Cozy customization; do not open inline menu for some custom urls
+    if (this.isIgnoredUrls(pageDetails)) {
+      return true;
+    }
+    // Cozy customization end
 
     if (
       this.inlineMenuFieldQualificationService.isFieldForLoginForm(autofillFieldData, pageDetails)
