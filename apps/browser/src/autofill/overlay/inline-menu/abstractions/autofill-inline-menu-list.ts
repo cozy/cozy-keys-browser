@@ -36,7 +36,7 @@ export type InitAutofillInlineMenuListMessage = AutofillInlineMenuListMessage & 
   translations: Record<string, string>;
   ciphers?: InlineMenuCipherData[];
   // Cozy customization
-  lastFilledCipherId?: string;
+  lastFilledContactCipherId?: string;
   fieldQualifier?: AutofillFieldQualifierType;
   fieldHtmlID?: string;
   fieldValue?: string;

@@ -86,7 +86,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   private readonly openViewVaultItemPopout = openViewVaultItemPopout;
   private readonly openAddEditVaultItemPopout = openAddEditVaultItemPopout;
   // Cozy customization
-  private lastFilledCipherId: string;
+  private lastFilledContactCipherId: string;
   // Cozy customization end
   private pageDetailsForTab: PageDetailsForTab = {};
   private subFrameOffsetsForTab: SubFrameOffsetsForTab = {};
@@ -891,8 +891,10 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       ...(fieldHtmlIDToFill ? { fillOnlyThisFieldHtmlID: fieldHtmlIDToFill } : {}),
     });
 
-    // Cozy customization
-    this.lastFilledCipherId = inlineMenuCipherId;
+    // Cozy customization - Remembering the last filled cipher ID allows to open a custom UI in the inline menu but it works only for contacts.
+    if (cipher.type === CipherType.Contact) {
+      this.lastFilledContactCipherId = inlineMenuCipherId;
+    }
     // Cozy customization end
 
     if (totpCode) {
@@ -2295,7 +2297,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       translations: this.getInlineMenuTranslations(),
       ciphers: isInlineMenuListPort ? await this.getInlineMenuCipherData() : null,
       // Cozy customization
-      lastFilledCipherId: this.lastFilledCipherId,
+      lastFilledContactCipherId: this.lastFilledContactCipherId,
       fieldQualifier: this.focusedFieldData?.fieldQualifier,
       fieldHtmlID: this.focusedFieldData?.fieldHtmlID,
       fieldValue: this.focusedFieldData?.fieldValue,

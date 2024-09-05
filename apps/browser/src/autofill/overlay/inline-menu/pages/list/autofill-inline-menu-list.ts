@@ -49,7 +49,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private currentCipherIndex = 0;
   private filledByCipherType: CipherType;
   // Cozy customization
-  private lastFilledCipherId: string;
+  private lastFilledContactCipherId: string;
   private fieldQualifier: AutofillFieldQualifierType;
   private fieldValue: string;
   private fieldHtmlID: string;
@@ -109,7 +109,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     filledByCipherType,
     showInlineMenuAccountCreation,
     // Cozy customization
-    lastFilledCipherId,
+    lastFilledContactCipherId,
     fieldQualifier,
     fieldHtmlID,
     fieldValue,
@@ -122,7 +122,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       portKey,
     );
     // Cozy customization
-    this.lastFilledCipherId = lastFilledCipherId;
+    this.lastFilledContactCipherId = lastFilledContactCipherId;
     this.fieldQualifier = fieldQualifier;
     this.fieldValue = fieldValue;
     this.fieldHtmlID = fieldHtmlID;
@@ -247,7 +247,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       passive: true,
     });
 
-    // On the contact ambiguous fields, if the field has a value, the corresponding menu is displayed directly. Unless we wish to return to the contact cypher list.
+    // Cozy customization - On the contact ambiguous fields, if the field has a value, the corresponding menu is displayed directly. Unless we wish to return to the contact cypher list.
     if (
       this.fieldValue &&
       ambiguousContactFieldNames.includes(bitwardenToCozy[this.fieldQualifier]) &&
@@ -255,8 +255,8 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     ) {
       this.postMessageToParent({
         command: "handleMenuListUpdate",
-        inlineMenuCipherId: this.lastFilledCipherId,
-        lastFilledCipherId: this.lastFilledCipherId,
+        inlineMenuCipherId: this.lastFilledContactCipherId,
+        lastFilledContactCipherId: this.lastFilledContactCipherId,
         fieldQualifier: this.fieldQualifier,
         fieldValue: this.fieldValue,
         fieldHtmlIDToFill: this.fieldHtmlID,
@@ -264,6 +264,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     } else {
       this.loadPageOfCiphers();
     }
+    // Cozy customization end
 
     if (isContactCipherList && !isSearching) {
       this.inlineMenuListContainer.appendChild(this.buildContactSearch());
@@ -870,7 +871,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
           this.postMessageToParent({
             command: "handleContactClick",
             inlineMenuCipherId: cipher.id,
-            lastFilledCipherId: this.lastFilledCipherId,
+            lastFilledContactCipherId: this.lastFilledContactCipherId,
             fieldQualifier: this.fieldQualifier,
             fieldValue: this.fieldValue,
           }),
