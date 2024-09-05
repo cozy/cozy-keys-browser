@@ -267,12 +267,6 @@ body {
   }
 }
 
-.inline-menu-list-container--with-new-item-button {
-  .inline-menu-list-actions {
-    max-height: 13.8rem;
-  }
-}
-
 .inline-menu-list-actions::-webkit-scrollbar {
   width: 0.5rem;
   background-color: transparent;
@@ -307,7 +301,7 @@ body {
 
 .inline-menu-list-container--with-new-item-button {
   .inline-menu-list-actions {
-    max-height: 13.8rem;
+    max-height: 23.8rem;
   }
 }
 
