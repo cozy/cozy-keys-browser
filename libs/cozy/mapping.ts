@@ -291,13 +291,15 @@ export const selectDataWithCozyProfile = (data: any[] | undefined, cozyProfile?:
   const type = cozyProfile?.type;
   const label = cozyProfile?.label;
 
-  const customLabelAndTypeAddress = data.find((d) => d.label === label && d.type === type);
+  const customLabelAndTypeAddress = data.find(
+    (d) => d.label && d.label === label && d.type && d.type === type,
+  );
 
   if (customLabelAndTypeAddress) {
     return customLabelAndTypeAddress;
   }
 
-  const labelOnly = data.find((d) => d.label === label);
+  const labelOnly = data.find((d) => d.label && d.label === label);
 
   if (labelOnly) {
     return labelOnly;
