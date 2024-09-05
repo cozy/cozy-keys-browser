@@ -106,6 +106,12 @@ describe("mapping", () => {
 
         expect(selectDataWithCozyProfile(dataArray, EMPTY_PROFILE)).toEqual(WORK_ONLY_ELEMENT);
       });
+
+      it("should not match element empty profile with empty element", () => {
+        const dataArray = [WORK_AND_TYPE_ELEMENT, VALUE_ONLY_PHONE_ELEMENT];
+
+        expect(selectDataWithCozyProfile(dataArray, EMPTY_PROFILE)).toEqual(WORK_AND_TYPE_ELEMENT);
+      });
     });
   });
 });
