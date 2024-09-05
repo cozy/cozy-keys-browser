@@ -24,7 +24,13 @@ const WORK_AND_TYPE_PROFILE: CozyProfile = {
   type: "Cozy Cloud",
 };
 
+const EMPTY_PROFILE_WITH_PHONE: CozyProfile = {
+  number: "0",
+};
+
 // ELEMENTS
+
+const VALUE_ONLY_PHONE_ELEMENT = { number: "0" };
 
 const HOME_ONLY_ELEMENT = { phone: "0", label: "home" };
 
@@ -105,6 +111,14 @@ describe("mapping", () => {
         const dataArray = [WORK_ONLY_ELEMENT, WORK_AND_TYPE_ELEMENT];
 
         expect(selectDataWithCozyProfile(dataArray, EMPTY_PROFILE)).toEqual(WORK_ONLY_ELEMENT);
+      });
+
+      it("should return correct data if selecting an element without profile", () => {
+        const dataArray = [WORK_AND_TYPE_ELEMENT, VALUE_ONLY_PHONE_ELEMENT];
+
+        expect(selectDataWithCozyProfile(dataArray, EMPTY_PROFILE_WITH_PHONE)).toEqual(
+          VALUE_ONLY_PHONE_ELEMENT,
+        );
       });
 
       it("should not match element empty profile with empty element", () => {

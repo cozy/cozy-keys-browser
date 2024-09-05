@@ -21,6 +21,9 @@ export interface PageDetail {
 export interface CozyProfile {
   type?: string;
   label?: "work" | "home";
+  number?: string; // the phone value we want to enforce if it has no type and label
+  address?: string; // the email value we want to enforce if it has no type and label
+  formattedAddress?: string; // the address value we want to enforce if it has no type and label
 }
 // Cozy customization end
 
