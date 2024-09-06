@@ -195,42 +195,20 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     this.initOverlayEventObservables();
   }
 
+  // Cozy customization
   private handleMenuListUpdate = async (message: OverlayPortMessage, port: chrome.runtime.Port) => {
-    const { inlineMenuCipherId, fieldValue } = message;
+    const { inlineMenuCipherId } = message;
     // If ambiguous field is manually filled, inlineMenuCipherId is undefined
     if (inlineMenuCipherId) {
-      const client = await this.cozyClientService.getClientInstance();
-      const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
-
-      const { data: contact } = (await client.query(Q(CONTACTS_DOCTYPE).getById(cipher.id), {
-        executeFromStore: true,
-      })) as { data: IOCozyContact };
-
-      const ambiguousContactFields = getAmbiguousFieldsContact(ambiguousContactFieldNames, contact);
-      const currentAmbiguousFieldValues =
-        ambiguousContactFields[bitwardenToCozy[this.focusedFieldData?.fieldQualifier]];
-
-      if (currentAmbiguousFieldValues?.length > 0) {
-        const fieldName = bitwardenToCozy[
-          this.focusedFieldData?.fieldQualifier
-        ] as AmbiguousContactFieldName;
-        const contactHasValue = currentAmbiguousFieldValues.some((value) => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          const contactValue = value[getAmbiguousValueKey(fieldName)];
-          return contactValue === fieldValue;
-        });
-
-        if (contactHasValue) {
-          return this.handleContactClick(message, port);
-        }
-      }
+      // Display ambiguous menu
+      return this.handleContactClick(message, port);
     }
 
     this.inlineMenuListPort?.postMessage({
       command: "loadPageOfCiphers",
     });
   };
+  // Cozy customization end
 
   private redirectToCozy = (message: OverlayPortMessage) => {
     BrowserApi.createNewTab(this.cozyClientService.getAppURL(message.to, message.hash), true);
@@ -956,12 +934,11 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       - If the contact has one or less ambiguous value: autofill everything.
       - If the contact has more than one ambiguous values: display a menu to choose which one.
       On the ambiguous(phone/address/email) form field:
-      - If contact has one or less ambiguous value: display list with phone/address/email.
-      - If the contact has more than one ambiguous values: display list with the phone/address/email.
+      - Display a menu to select value.
     */
     if (
       (!isFocusedFieldAmbigous && hasMultipleAmbiguousValueInSameField) ||
-      (isFocusedFieldAmbigous && currentAmbiguousFieldValue?.length > 0) // TODO Part_2 Remove "currentAmbiguousFieldValue?.length > 0" condition
+      isFocusedFieldAmbigous
     ) {
       this.inlineMenuListPort?.postMessage({
         command: "ambiguousFieldList",
@@ -1573,6 +1550,10 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         empty_ambiguous_email: this.i18nService.translate("empty_ambiguous_email"),
         empty_ambiguous_phone: this.i18nService.translate("empty_ambiguous_phone"),
         empty_ambiguous_address: this.i18nService.translate("empty_ambiguous_address"),
+        new: this.i18nService.translate("new"),
+        address: this.i18nService.translate("address"),
+        phone: this.i18nService.translate("phone"),
+        email: this.i18nService.translate("email"),
       };
     }
 
