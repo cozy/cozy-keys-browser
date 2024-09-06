@@ -9,8 +9,8 @@ export class AutofillInlineMenuListIframe extends AutofillInlineMenuIframeElemen
       AutofillOverlayPort.List,
       {
         height: "0px",
-        minWidth: "250px",
-        maxHeight: "180px",
+        minWidth: "320px",
+        maxHeight: "280px",
         boxShadow: "rgba(0, 0, 0, 0.1) 2px 4px 6px 0px",
         borderRadius: "4px",
         borderWidth: "1px",
