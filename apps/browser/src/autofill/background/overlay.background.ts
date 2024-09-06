@@ -361,9 +361,11 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     const cipherViews = await this.cipherService.getAllDecryptedForUrl(currentTab?.url || ""); //.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
     // Cozy customization end
 
+    // Cozy customization; Add contacts first in the list for fixes a bug when opening the iniline menu on an ambiguous field after the first autofill
     return this.cardAndIdentityCiphers
-      ? cipherViews.concat(...this.cardAndIdentityCiphers)
+      ? Array.from(this.cardAndIdentityCiphers).concat(...cipherViews)
       : cipherViews;
+    // Cozy customization end
   }
 
   /**
