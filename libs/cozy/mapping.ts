@@ -24,6 +24,10 @@ export type CozyAttributesMapping = {
 };
 
 export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
+  [AutofillFieldQualifier.identityFullName]: {
+    doctype: "io.cozy.contacts",
+    path: "displayName",
+  },
   [AutofillFieldQualifier.identityFirstName]: {
     doctype: "io.cozy.contacts",
     path: "name.givenName",
