@@ -4517,12 +4517,12 @@
     "message": "Recherche\u2026"
   },
   "empty_ambiguous_email": {
-    "message": "Aucun email trouvé"
+    "message": "Aucun email enregistré"
   },
   "empty_ambiguous_phone": {
-    "message": "Aucun téléphone trouvé"
+    "message": "Aucun téléphone enregistré"
   },
   "empty_ambiguous_address": {
-    "message": "Aucune adresse trouvée"
+    "message": "Aucune adresse enregistrée"
   }
 }
