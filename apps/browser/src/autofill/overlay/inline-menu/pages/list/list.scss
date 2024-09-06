@@ -485,6 +485,14 @@ body {
     @include themify($themes) {
       color: themed("textColor");
     }
+
+    &--empty {
+      cursor: default;
+
+      @include themify($themes) {
+        color: themed("mutedTextColor");
+      }
+    }
   }
 
   .cipher-subtitle {
