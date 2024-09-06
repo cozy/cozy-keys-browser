@@ -860,10 +860,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private handleFillCipherClickEvent = (cipher: InlineMenuCipherData) => {
     if (cipher.contact) {
       return this.useEventHandlersMemo(
-        () =>
-          {
-            console.log('this.fieldQualifier', this.fieldQualifier)
-            return this.postMessageToParent({
+        () => this.postMessageToParent({
             command: "handleContactClick",
             inlineMenuCipherId: cipher.id,
             lastFilledContactCipherId: this.lastFilledContactCipherId,

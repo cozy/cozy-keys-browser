@@ -42,7 +42,6 @@ import {
   bitwardenToCozy,
   generateRandomChars,
   getAmbiguousFieldsContact,
-  getAmbiguousValueKey,
 } from "../utils";
 
 import { LockedVaultPendingNotificationsData } from "./abstractions/notification.background";
@@ -200,7 +199,6 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     const { inlineMenuCipherId } = message;
     // If ambiguous field is manually filled, inlineMenuCipherId is undefined
     if (inlineMenuCipherId) {
-      // Display ambiguous menu
       return this.handleContactClick(message, port);
     }
 
@@ -913,8 +911,6 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     const hasMultipleAmbiguousValueInSameField = Object.values(ambiguousContactFields).some(
       (item) => item.length > 1,
     );
-    const currentAmbiguousFieldValue =
-      ambiguousContactFields[bitwardenToCozy[this.focusedFieldData?.fieldQualifier]];
 
     // On an ambiguous form field, the associated contact values are kept.
     const ambiguousFormFieldsOfFocusedField = Object.fromEntries(
