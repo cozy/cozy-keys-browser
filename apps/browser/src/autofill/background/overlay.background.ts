@@ -39,7 +39,6 @@ import {
 import { AutofillService } from "../services/abstractions/autofill.service";
 import {
   ambiguousContactFieldNames,
-  bitwardenToCozy,
   generateRandomChars,
   getAmbiguousFieldsContact,
 } from "../utils";
@@ -77,6 +76,7 @@ import { CONTACTS_DOCTYPE } from "cozy-client/dist/models/contact";
 import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
 import { AmbiguousContactFieldName, AmbiguousContactFieldValue } from "src/autofill/types";
+import { COZY_ATTRIBUTES_MAPPING } from "../../../../../libs/cozy/mapping";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -906,7 +906,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     const ambiguousContactFields = getAmbiguousFieldsContact(ambiguousContactFieldNames, contact);
 
     const isFocusedFieldAmbigous = ambiguousContactFieldNames.includes(
-      bitwardenToCozy[this.focusedFieldData?.fieldQualifier],
+      COZY_ATTRIBUTES_MAPPING[this.focusedFieldData?.fieldQualifier].name as AmbiguousContactFieldName,
     );
     const hasMultipleAmbiguousValueInSameField = Object.values(ambiguousContactFields).some(
       (item) => item.length > 1,
@@ -915,7 +915,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     // On an ambiguous form field, the associated contact values are kept.
     const ambiguousFormFieldsOfFocusedField = Object.fromEntries(
       Object.entries(ambiguousContactFields).filter(
-        ([fieldName]) => fieldName === bitwardenToCozy[this.focusedFieldData?.fieldQualifier],
+        ([fieldName]) => fieldName === COZY_ATTRIBUTES_MAPPING[this.focusedFieldData?.fieldQualifier].name,
       ),
     );
     // On an unambiguous form field, we keep only the multiple values of an ambiguous contact field.
