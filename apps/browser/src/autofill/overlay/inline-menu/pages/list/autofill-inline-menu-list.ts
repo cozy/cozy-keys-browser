@@ -7,7 +7,6 @@ import { CipherType } from "@bitwarden/common/vault/enums";
 import { InlineMenuCipherData } from "../../../../background/abstractions/overlay.background";
 import {
   ambiguousContactFieldNames,
-  bitwardenToCozy,
   buildSvgDomElement,
   getAmbiguousValueKey,
   makeAmbiguousValueLabel,
@@ -36,6 +35,7 @@ import {
   AmbiguousContactFieldValue,
   AmbiguousContactFieldName,
 } from "src/autofill/types";
+import { COZY_ATTRIBUTES_MAPPING } from "../../../../../../../../libs/cozy/mapping";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -251,7 +251,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     // Cozy customization - On the contact ambiguous fields, if the field has a value, the corresponding menu is displayed directly. Unless we wish to return to the contact cypher list.
     if (
       this.fieldValue &&
-      ambiguousContactFieldNames.includes(bitwardenToCozy[this.fieldQualifier]) &&
+      ambiguousContactFieldNames.includes(COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AmbiguousContactFieldName) &&
       !isBack
     ) {
       this.postMessageToParent({
@@ -396,7 +396,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     subNameSpan.classList.add("cipher-subtitle");
 
     // Reverse the class for the current ambiguous field
-    if (bitwardenToCozy[this.fieldQualifier] === ambiguousKey) {
+    if (COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name === ambiguousKey) {
       subNameSpan.classList.replace("cipher-subtitle", "cipher-name");
       nameSpan.classList.replace("cipher-name", "cipher-subtitle");
     }
@@ -546,7 +546,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     });
 
     const firstAmbiguousFieldEntries = Object.entries(ambiguousFields)?.[0];
-    const firstAmbiguousFieldName = firstAmbiguousFieldEntries?.[0] as AmbiguousContactFieldName || bitwardenToCozy[this.fieldQualifier];
+    const firstAmbiguousFieldName = firstAmbiguousFieldEntries?.[0] as AmbiguousContactFieldName || COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AmbiguousContactFieldName;
 
     if (firstAmbiguousFieldEntries) {
       for (const firstAmbiguousFieldValue of firstAmbiguousFieldEntries[1]) {
