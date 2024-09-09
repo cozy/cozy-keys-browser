@@ -1,9 +1,5 @@
 import { IOCozyContact } from "cozy-client/types/types";
 
-// Cozy customization
-import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
-// Cozy customization end
-
 import { AutofillPort } from "../enums/autofill-port.enum";
 import {
   AmbiguousContactFields,
@@ -383,14 +379,6 @@ export const getAmbiguousFieldsContact = (
     (acc, field) => (contact[field].length > 0 ? { ...acc, [field]: contact[field] } : acc),
     {},
   );
-};
-export const bitwardenToCozy: Partial<
-  Record<AutofillFieldQualifierType, AmbiguousContactFieldName>
-> = {
-  identityPhone: "phone",
-  identityEmail: "email",
-  identityAddress1: "address",
-  identityState: "address",
 };
 export const ambiguousContactFieldNames: AmbiguousContactFieldName[] = [
   "phone",
