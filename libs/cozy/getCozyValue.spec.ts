@@ -1,6 +1,6 @@
 import { CozyProfile } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 
-import { selectDataWithCozyProfile } from "./mapping";
+import { selectDataWithCozyProfile } from "./getCozyValue";
 
 // PROFILES
 
@@ -40,7 +40,7 @@ const WORK_ONLY_ELEMENT = { phone: "2", label: "work" };
 
 const WORK_AND_TYPE_ELEMENT = { phone: "3", label: "work", type: "Cozy Cloud" };
 
-describe("mapping", () => {
+describe("getCozyValue", () => {
   describe("selectDataWithCozyProfile", () => {
     describe("with no element", () => {
       it("should handle undefined array", () => {
