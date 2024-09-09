@@ -56,7 +56,7 @@ import {
 /* eslint-disable */
 import { CozyClientService } from "src/popup/services/cozyClient.service";
 import { generateIdentityViewFromContactId } from "../../../../../libs/cozy/contact.helper";
-import { getCozyValue } from "../../../../../libs/cozy/mapping";
+import { getCozyValue } from "../../../../../libs/cozy/getCozyValue";
 /* eslint-enable */
 /* end Cozy imports */
 

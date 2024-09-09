@@ -16,7 +16,7 @@ import { AutofillFieldQualifier } from "../../apps/browser/src/autofill/enums/au
 import { CozyProfile } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 
 import { buildFieldsFromContact } from "./fields.helper";
-import { getCozyValue } from "./mapping";
+import { getCozyValue } from "./getCozyValue";
 
 const getPrimaryEmail = (contact: IOCozyContact): string | undefined => {
   return contact.email?.find((email) => email.primary)?.address;

@@ -1,6 +1,6 @@
 import { CozyProfile } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 
-import { isPaperFromContact, selectDataWithCozyProfile } from "./mapping";
+import { isPaperFromContact, selectDataWithCozyProfile } from "./getCozyValue";
 
 // PROFILES
 
