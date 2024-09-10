@@ -10,6 +10,8 @@ import {
   buildSvgDomElement,
   getAmbiguousValueKey,
   makeAmbiguousValueLabel,
+  makeEditContactField,
+  makeEditContactSelectElement,
 } from "../../../../utils";
 import {
   backIcon,
@@ -79,12 +81,110 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         ),
       loadPageOfCiphers: () => this.loadPageOfCiphers(),
       focusAutofillInlineMenuList: () => this.focusInlineMenuList(),
+      editContactFields: ({ message }) =>
+        this.editContactFields(message.inlineMenuCipherId, message.contactName),
+      createEmptyNameList: ({ message }) =>
+        this.createEmptyNameList(message.inlineMenuCipherId, message.contactName),
     };
 
   constructor() {
     super();
 
     this.setupInlineMenuListGlobalListeners();
+  }
+
+  private editContactFields(inlineMenuCipherId: string, contactName: string) {
+    this.inlineMenuListContainer.innerHTML = "";
+    this.inlineMenuListContainer.classList.remove(
+      "inline-menu-list-container--with-new-item-button",
+    );
+
+    const editContainer = globalThis.document.createElement("div");
+    editContainer.classList.add("contact-edit-container");
+
+    const addNewAmbiguousHeader = this.buildNewAmbiguousHeader(contactName);
+
+    const { inputTextContainer, inputText } = makeEditContactField(
+      this.fieldQualifier,
+      this.getTranslation.bind(this),
+    );
+    editContainer.appendChild(inputTextContainer);
+
+    let selectElement: HTMLSelectElement | null = null;
+    if (
+      ambiguousContactFieldNames.includes(
+        COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AmbiguousContactFieldName,
+      )
+    ) {
+      const labelGroup = document.createElement("div");
+      labelGroup.classList.add("input-group-select");
+
+      const labelElement = document.createElement("label");
+      labelElement.htmlFor = "label";
+      labelElement.textContent = this.getTranslation("label");
+      labelGroup.appendChild(labelElement);
+
+      selectElement = makeEditContactSelectElement(
+        this.fieldQualifier,
+        this.getTranslation.bind(this),
+      );
+
+      labelGroup.appendChild(selectElement);
+      editContainer.appendChild(labelGroup);
+    }
+
+    const divider = document.createElement("div");
+    divider.classList.add("contact-edit-divider");
+
+    const buttons = this.editContactButtons(inlineMenuCipherId, inputText, selectElement);
+
+    // Necessary for the bottom margin of “buttons” to be interpreted
+    const necessaryStyleElement = document.createElement("div");
+    necessaryStyleElement.style.height = "1px";
+
+    this.inlineMenuListContainer.appendChild(addNewAmbiguousHeader);
+    this.inlineMenuListContainer.appendChild(editContainer);
+    this.inlineMenuListContainer.appendChild(divider);
+    this.inlineMenuListContainer.appendChild(buttons);
+    this.inlineMenuListContainer.appendChild(necessaryStyleElement);
+
+    // Focus the input text and select the text if there is a value
+    inputText.focus();
+    if (this.fieldValue) {
+      inputText.value = this.fieldValue;
+      inputText.select();
+    }
+  }
+
+  private editContactButtons(
+    inlineMenuCipherId: string,
+    inputText: HTMLInputElement,
+    selectElement: HTMLSelectElement | null,
+  ) {
+    const buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("contact-edit-buttons");
+
+    const cancelButton = document.createElement("button");
+    cancelButton.textContent = this.getTranslation("cancel");
+    cancelButton.classList.add("contact-edit-button", "contact-edit-button-cancel");
+    cancelButton.addEventListener(EVENTS.CLICK, () => {
+      this.updateListItems(this.ciphers);
+    });
+
+    const saveButton = document.createElement("button");
+    saveButton.textContent = this.getTranslation("save");
+    saveButton.classList.add("contact-edit-button", "contact-edit-button-save");
+    saveButton.addEventListener(EVENTS.CLICK, () => {
+      if (!inputText?.value) {
+        return;
+      }
+      // TODO Save the contact
+    });
+
+    buttonContainer.appendChild(cancelButton);
+    buttonContainer.appendChild(saveButton);
+
+    return buttonContainer;
   }
 
   /**
@@ -251,7 +351,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     // Cozy customization - On the contact ambiguous fields, if the field has a value, the corresponding menu is displayed directly. Unless we wish to return to the contact cypher list.
     if (
       this.fieldValue &&
-      ambiguousContactFieldNames.includes(COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AmbiguousContactFieldName) &&
+      ambiguousContactFieldNames.includes(
+        COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AmbiguousContactFieldName,
+      ) &&
       !isBack
     ) {
       this.postMessageToParent({
@@ -274,7 +376,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       );
     }
     // Cozy customization end
-
 
     this.inlineMenuListContainer.appendChild(this.ciphersList);
     this.toggleScrollClass();
@@ -449,7 +550,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return inlineMenuListButtonContainer;
   }
 
-  private createNewAmbiguousButton(ambiguousKey: AmbiguousContactFieldName) {
+  private createNewContactButtonByName(
+    inlineMenuCipherId: string,
+    name: AmbiguousContactFieldName | string,
+  ) {
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
     listItem.classList.add("inline-menu-list-actions-item");
@@ -460,8 +564,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const fillButton = document.createElement("button");
     fillButton.setAttribute("tabindex", "-1");
     fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
-    fillButton.setAttribute("aria-label", ambiguousKey);
-  //   // TODO Part_2 => fillButton.addEventListener(EVENTS.CLICK, this.handleFillCipherAmbiguousClickEvent(inlineMenuCipherId, ambiguousValue, uniqueId()));
+    fillButton.setAttribute("aria-label", name);
+    fillButton.addEventListener(
+      EVENTS.CLICK,
+      this.handleEditCipherClickEvent(inlineMenuCipherId, uniqueId()),
+    );
 
     const radio = document.createElement("input");
     radio.setAttribute("type", "radio");
@@ -472,7 +579,22 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const detailsSpan = document.createElement("span");
     detailsSpan.classList.add("cipher-details");
 
-    const nameSpanText = `${this.getTranslation("new")} ${this.getTranslation(ambiguousKey).toLowerCase()}`;
+    let nameSpanText;
+    switch (name) {
+      case "phone":
+        nameSpanText = this.getTranslation("newPhone");
+        break;
+      case "email":
+        nameSpanText = this.getTranslation("newEmail");
+        break;
+      case "address":
+        nameSpanText = this.getTranslation("newAddress");
+        break;
+      default:
+        nameSpanText = this.getTranslation("newName");
+        break;
+    }
+
     const nameSpan = document.createElement("span");
     nameSpan.setAttribute("title", nameSpanText);
     nameSpan.textContent = nameSpanText;
@@ -486,6 +608,17 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     return listItem;
   }
+
+  private handleEditCipherClickEvent = (inlineMenuCipherId: string, UID: string) => {
+    return this.useEventHandlersMemo(
+      () =>
+        this.postMessageToParent({
+          command: "editInlineMenuCipher",
+          inlineMenuCipherId,
+        }),
+      `${UID}-edit-cipher-button-click-handler`,
+    );
+  };
 
   /**
    * @param ambiguousKey
@@ -518,6 +651,57 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return listItem;
   }
 
+  private createEmptyNameListItem() {
+    const listItem = document.createElement("li");
+    listItem.setAttribute("role", "listitem");
+    listItem.classList.add("inline-menu-list-actions-item", "disabled");
+
+    const div = document.createElement("div");
+    div.classList.add("cipher-container");
+
+    const iconElement = buildSvgDomElement(contact);
+    iconElement.style.margin = "0 2rem 0 0.5rem";
+
+    const detailsSpan = document.createElement("span");
+    detailsSpan.classList.add("cipher-details");
+
+    const nameSpanText = this.getTranslation(`empty_name`);
+    const nameSpan = document.createElement("span");
+    nameSpan.setAttribute("title", nameSpanText);
+    nameSpan.textContent = nameSpanText;
+    nameSpan.classList.add("cipher-name", "cipher-name--empty");
+
+    detailsSpan.appendChild(nameSpan);
+    div.appendChild(iconElement);
+    div.appendChild(detailsSpan);
+    listItem.appendChild(div);
+
+    return listItem;
+  }
+
+  private createEmptyNameList(inlineMenuCipherId: string, contactName: string) {
+    this.inlineMenuListContainer.innerHTML = "";
+    this.inlineMenuListContainer.classList.remove(
+      "inline-menu-list-container--with-new-item-button",
+    );
+
+    const addNewLoginButtonContainer = this.buildNewAmbiguousHeader(contactName);
+
+    const ulElement = globalThis.document.createElement("ul");
+    ulElement.classList.add("inline-menu-list-actions");
+    ulElement.setAttribute("role", "list");
+
+    const emptyLi = this.createEmptyNameListItem();
+    ulElement.appendChild(emptyLi);
+
+    const newButton = this.createNewContactButtonByName(inlineMenuCipherId, "newName");
+    ulElement.appendChild(newButton);
+
+    this.inlineMenuListContainer.appendChild(addNewLoginButtonContainer);
+    this.inlineMenuListContainer.appendChild(ulElement);
+    this.inlineMenuListContainer.classList.add("inline-menu-list-container--with-new-item-button");
+  }
+
   /**
    * @param inlineMenuCipherId
    * @param contactName
@@ -546,7 +730,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     });
 
     const firstAmbiguousFieldEntries = Object.entries(ambiguousFields)?.[0];
-    const firstAmbiguousFieldName = firstAmbiguousFieldEntries?.[0] as AmbiguousContactFieldName || COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AmbiguousContactFieldName;
+    const firstAmbiguousFieldName =
+      (firstAmbiguousFieldEntries?.[0] as AmbiguousContactFieldName) ||
+      (COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AmbiguousContactFieldName);
 
     if (firstAmbiguousFieldEntries) {
       for (const firstAmbiguousFieldValue of firstAmbiguousFieldEntries[1]) {
@@ -566,7 +752,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     }
 
     if (isAmbiguousFieldFocused) {
-      const newButton = this.createNewAmbiguousButton(firstAmbiguousFieldName);
+      const newButton = this.createNewContactButtonByName(
+        inlineMenuCipherId,
+        firstAmbiguousFieldName,
+      );
       ulElement.appendChild(newButton);
     }
 
@@ -860,13 +1049,14 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private handleFillCipherClickEvent = (cipher: InlineMenuCipherData) => {
     if (cipher.contact) {
       return this.useEventHandlersMemo(
-        () => this.postMessageToParent({
+        () =>
+          this.postMessageToParent({
             command: "handleContactClick",
             inlineMenuCipherId: cipher.id,
             lastFilledContactCipherId: this.lastFilledContactCipherId,
             fieldQualifier: this.fieldQualifier,
             fieldValue: this.fieldValue,
-          })},
+          }),
         `${cipher.id}-fill-cipher-button-click-handler`,
       );
     }
@@ -1154,7 +1344,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
    * If not focused, will check if the button element is focused.
    */
   private checkInlineMenuListFocused() {
-    return
     if (globalThis.document.hasFocus() || this.inlineMenuListContainer.matches(":hover")) {
       return;
     }

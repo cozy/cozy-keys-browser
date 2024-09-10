@@ -77,6 +77,7 @@ import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
 import { AmbiguousContactFieldName, AmbiguousContactFieldValue } from "src/autofill/types";
 import { COZY_ATTRIBUTES_MAPPING } from "../../../../../libs/cozy/mapping";
+import { getCozyValue } from "../../../../../libs/cozy/getCozyValue";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -170,6 +171,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     inlineMenuSearchContact: ({ message }) => this.searchContacts(message),
     redirectToCozy: ({ message }) => this.redirectToCozy(message),
     handleMenuListUpdate: ({ message, port }) => this.handleMenuListUpdate(message, port),
+    editInlineMenuCipher: ({ message }) => this.editInlineMenuCipher(message),
     // Cozy customization end
     addNewVaultItem: ({ message, port }) => this.getNewVaultItemDetails(message, port),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port),
@@ -193,6 +195,24 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   ) {
     this.initOverlayEventObservables();
   }
+
+  // Cozy customization
+  private editInlineMenuCipher = async (message: OverlayPortMessage) => {
+    const { inlineMenuCipherId } = message;
+    const client = await this.cozyClientService.getClientInstance();
+    const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
+
+    const { data: contact } = (await client.query(Q(CONTACTS_DOCTYPE).getById(cipher.id), {
+      executeFromStore: true,
+    })) as { data: IOCozyContact };
+
+    this.inlineMenuListPort?.postMessage({
+      command: "editContactFields",
+      inlineMenuCipherId,
+      contactName: contact.displayName,
+    });
+  };
+  // Cozy customization end
 
   // Cozy customization
   private handleMenuListUpdate = async (message: OverlayPortMessage, port: chrome.runtime.Port) => {
@@ -338,7 +358,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     // Cozy customization end
 
     // Cozy customization; Add contacts first in the list for fixes a bug when opening the iniline menu on an ambiguous field after the first autofill
-    return this.cardAndIdentityCiphers
+    return this.cardAndIdentityCiphers.size > 0
       ? Array.from(this.cardAndIdentityCiphers).concat(...cipherViews)
       : cipherViews;
     // Cozy customization end
@@ -886,7 +906,29 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     message: OverlayPortMessage,
     port: chrome.runtime.Port,
   ) {
-    const { ambiguousValue, fieldHtmlIDToFill } = message;
+    const { ambiguousValue, fieldHtmlIDToFill, inlineMenuCipherId } = message;
+    const client = await this.cozyClientService.getClientInstance();
+    const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
+
+    const { data: contact } = (await client.query(Q(CONTACTS_DOCTYPE).getById(cipher.id), {
+      executeFromStore: true,
+    })) as { data: IOCozyContact };
+
+    const value = await getCozyValue({
+      client,
+      contactId: cipher.id,
+      fieldQualifier: this.focusedFieldData?.fieldQualifier,
+    });
+
+    if (!value) {
+      this.inlineMenuListPort?.postMessage({
+        command: "createEmptyNameList",
+        inlineMenuCipherId,
+        contactName: contact.displayName,
+      });
+      return;
+    }
+
     this.fillInlineMenuCipher(message, port, ambiguousValue, fieldHtmlIDToFill);
   }
 
@@ -906,7 +948,8 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     const ambiguousContactFields = getAmbiguousFieldsContact(ambiguousContactFieldNames, contact);
 
     const isFocusedFieldAmbigous = ambiguousContactFieldNames.includes(
-      COZY_ATTRIBUTES_MAPPING[this.focusedFieldData?.fieldQualifier].name as AmbiguousContactFieldName,
+      COZY_ATTRIBUTES_MAPPING[this.focusedFieldData?.fieldQualifier]
+        .name as AmbiguousContactFieldName,
     );
     const hasMultipleAmbiguousValueInSameField = Object.values(ambiguousContactFields).some(
       (item) => item.length > 1,
@@ -915,7 +958,8 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     // On an ambiguous form field, the associated contact values are kept.
     const ambiguousFormFieldsOfFocusedField = Object.fromEntries(
       Object.entries(ambiguousContactFields).filter(
-        ([fieldName]) => fieldName === COZY_ATTRIBUTES_MAPPING[this.focusedFieldData?.fieldQualifier].name,
+        ([fieldName]) =>
+          fieldName === COZY_ATTRIBUTES_MAPPING[this.focusedFieldData?.fieldQualifier].name,
       ),
     );
     // On an unambiguous form field, we keep only the multiple values of an ambiguous contact field.
@@ -947,6 +991,20 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         fieldHtmlIDToFill,
       });
     } else {
+      const value = await getCozyValue({
+        client,
+        contactId: cipher.id,
+        fieldQualifier: this.focusedFieldData?.fieldQualifier,
+      });
+
+      if (!value) {
+        this.inlineMenuListPort?.postMessage({
+          command: "editContactFields",
+          inlineMenuCipherId,
+          contactName: contact.displayName,
+        });
+        return;
+      }
       this.fillInlineMenuCipher(message, port);
     }
   }
@@ -1546,10 +1604,30 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         empty_ambiguous_email: this.i18nService.translate("empty_ambiguous_email"),
         empty_ambiguous_phone: this.i18nService.translate("empty_ambiguous_phone"),
         empty_ambiguous_address: this.i18nService.translate("empty_ambiguous_address"),
+        empty_name: this.i18nService.translate("empty_name"),
         new: this.i18nService.translate("new"),
         address: this.i18nService.translate("address"),
         phone: this.i18nService.translate("phone"),
         email: this.i18nService.translate("email"),
+        cellHome: this.i18nService.translate("cellHome"),
+        cellWork: this.i18nService.translate("cellWork"),
+        voiceHome: this.i18nService.translate("voiceHome"),
+        voiceWork: this.i18nService.translate("voiceWork"),
+        faxHome: this.i18nService.translate("faxHome"),
+        faxWork: this.i18nService.translate("faxWork"),
+        none: this.i18nService.translate("none"),
+        name: this.i18nService.translate("name"),
+        newAddress: this.i18nService.translate("newAddress"),
+        newPhone: this.i18nService.translate("newPhone"),
+        newEmail: this.i18nService.translate("newEmail"),
+        newName: this.i18nService.translate("newName"),
+        givenName: this.i18nService.translate("givenName"),
+        additionalName: this.i18nService.translate("additionalName"),
+        familyName: this.i18nService.translate("familyName"),
+        displayName: this.i18nService.translate("displayName"),
+        label: this.i18nService.translate("label"),
+        save: this.i18nService.translate("save"),
+        cancel: this.i18nService.translate("cancel"),
       };
     }
 
