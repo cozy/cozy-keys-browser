@@ -1,5 +1,5 @@
-import type CozyClient from "cozy-client";
-import { Q } from "cozy-client";
+import CozyClient, { Q } from "cozy-client";
+import { IOCozyFile } from "cozy-client/types/types";
 import _ from "lodash";
 
 import { AutofillFieldQualifierType } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
@@ -101,6 +101,36 @@ const getCozyValueInPaper = async ({
   field,
   filterName,
 }: GetCozyValueInDataType) => {
+  let filteredPapers = await getAllPapersFromContact({
+    client,
+    contactId,
+    contactEmail,
+    me,
+    cozyAttributeModel,
+  });
+
+  if (filterName === "yearFilter") {
+    const yearFilterFunction = makeYearFilterFunction(field);
+
+    filteredPapers = filteredPapers.filter(yearFilterFunction);
+  }
+
+  return _.get(filteredPapers[0], cozyAttributeModel.path);
+};
+
+export const getAllPapersFromContact = async ({
+  client,
+  contactId,
+  contactEmail,
+  me,
+  cozyAttributeModel,
+}: {
+  client: CozyClient;
+  contactId: string;
+  contactEmail?: string;
+  me?: boolean;
+  cozyAttributeModel: CozyAttributesModel;
+}): Promise<IOCozyFile[]> => {
   const { data: papers } = await client.query(
     Q("io.cozy.files")
       .where({
@@ -114,15 +144,7 @@ const getCozyValueInPaper = async ({
     isPaperFromContact(paper, contactId, contactEmail, me),
   );
 
-  let filteredPapers = papersFromContact;
-
-  if (filterName === "yearFilter") {
-    const yearFilterFunction = makeYearFilterFunction(field);
-
-    filteredPapers = filteredPapers.filter(yearFilterFunction);
-  }
-
-  return _.get(filteredPapers[0], cozyAttributeModel.path);
+  return papersFromContact;
 };
 
 export const selectDataWithCozyProfile = (data: any[] | undefined, cozyProfile?: CozyProfile) => {
