@@ -205,7 +205,8 @@
     "cozy-ui": "110.3.0",
     "prosemirror-model": "1.21.3",
     "prosemirror-state": "1.4.3",
-    "lodash": "4.17.21"
+    "lodash": "4.17.21",
+    "pdf-lib": "1.17.1"
   },
   "overrides": {
     "tailwindcss": "$tailwindcss",
