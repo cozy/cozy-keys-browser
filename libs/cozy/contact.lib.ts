@@ -13,6 +13,65 @@ const gender = [
   },
 ];
 
+export const phoneFieldOptions = [
+  {
+    value: "",
+    label: "none",
+  },
+  {
+    value: { type: "cell", label: "home" },
+    label: "cellHome",
+  },
+  {
+    value: { type: "cell", label: "work" },
+    label: "cellWork",
+  },
+  {
+    value: { type: "voice", label: "home" },
+    label: "voiceHome",
+  },
+  {
+    value: { type: "voice", label: "work" },
+    label: "voiceWork",
+  },
+  {
+    value: { type: "fax", label: "home" },
+    label: "faxHome",
+  },
+  {
+    value: { type: "fax", label: "work" },
+    label: "faxWork",
+  },
+];
+export const emailFieldOptions = [
+  {
+    value: "",
+    label: "none",
+  },
+  {
+    value: { label: "home" },
+    label: "home",
+  },
+  {
+    value: { label: "work" },
+    label: "work",
+  },
+];
+export const addressFieldOptions = [
+  {
+    value: "",
+    label: "none",
+  },
+  {
+    value: { label: "home" },
+    label: "home",
+  },
+  {
+    value: { label: "work" },
+    label: "work",
+  },
+];
+
 export const fields = [
   {
     name: "gender",

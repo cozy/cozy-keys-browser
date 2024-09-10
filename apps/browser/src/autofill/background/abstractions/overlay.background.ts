@@ -268,6 +268,7 @@ export type InlineMenuListPortMessageHandlers = {
   updateAutofillInlineMenuListHeight: ({ message, port }: PortOnMessageHandlerParams) => void;
   redirectToCozy: ({ message, port }: PortOnMessageHandlerParams) => void;
   handleMenuListUpdate: ({ message, port }: PortOnMessageHandlerParams) => void;
+  editInlineMenuCipher: ({ message, port }: PortOnMessageHandlerParams) => void;
 };
 
 export interface OverlayBackground {
