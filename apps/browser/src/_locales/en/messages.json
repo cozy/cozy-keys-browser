@@ -1707,13 +1707,25 @@
   "firstName": {
     "message": "First name"
   },
+  "givenName": {
+    "message": "First name"
+  },
   "middleName": {
+    "message": "Middle name"
+  },
+  "additionalName": {
     "message": "Middle name"
   },
   "lastName": {
     "message": "Last name"
   },
+  "familyName": {
+    "message": "Last name"
+  },
   "fullName": {
+    "message": "Full name"
+  },
+  "displayName": {
     "message": "Full name"
   },
   "identityName": {
@@ -3184,6 +3196,30 @@
   "fax": {
     "message": "Fax"
   },
+  "cellHome": {
+    "message": "Cell (perso)"
+  },
+  "cellWork": {
+    "message": "Cell (pro)"
+  },
+  "voiceHome": {
+    "message": "Voice (perso)"
+  },
+  "voiceWork": {
+    "message": "Voice (pro)"
+  },
+  "faxHome": {
+    "message": "Fax (perso)"
+  },
+  "faxWork": {
+    "message": "Fax (pro)"
+  },
+  "none": {
+    "message": "Aucun"
+  },
+  "empty_name": {
+    "message": "Aucun nom"
+  },
   "loggingInOn": {
     "message": "Logging in on"
   },
@@ -4512,5 +4548,17 @@
   },
   "empty_ambiguous_address": {
     "message": "No address found"
+  },
+  "newAddress": {
+    "message": "New address"
+  },
+  "newPhone": {
+    "message": "New phone"
+  },
+  "newEmail": {
+    "message": "New email"
+  },
+  "newName": {
+    "message": "New name"
   }
 }
