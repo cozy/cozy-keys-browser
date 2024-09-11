@@ -354,13 +354,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       ambiguousContactFieldNames.includes(
         COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AmbiguousContactFieldName,
       ) &&
-      !isBack
+      !isBack && // case where we are already on the ambiguous list and wish to return to the contacts list.
+      this.lastFilledContactCipherId // If ambiguous field is manually filled, inlineMenuCipherId is undefined.
     ) {
       this.postMessageToParent({
-        command: "handleMenuListUpdate",
+        command: "handleContactClick",
         inlineMenuCipherId: this.lastFilledContactCipherId,
-        lastFilledContactCipherId: this.lastFilledContactCipherId,
-        fieldQualifier: this.fieldQualifier,
         fieldHtmlIDToFill: this.fieldHtmlID,
       });
     } else {
