@@ -1,9 +1,15 @@
 import { IOCozyContact } from "cozy-client/types/types";
 
-// Cozy customization
-import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
-// Cozy customization end
+import { EVENTS } from "@bitwarden/common/autofill/constants";
 
+import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
+
+import {
+  addressFieldOptions,
+  emailFieldOptions,
+  phoneFieldOptions,
+} from "../../../../../libs/cozy/contact.lib";
+import { COZY_ATTRIBUTES_MAPPING } from "../../../../../libs/cozy/mapping";
 import { AutofillPort } from "../enums/autofill-port.enum";
 import {
   AmbiguousContactFields,
@@ -13,6 +19,8 @@ import {
   FormElementWithAttribute,
   FormFieldElement,
 } from "../types";
+
+import { contact, email, magnifier, phone } from "./svg-icons";
 
 /**
  * Generates a random string of characters.
@@ -384,14 +392,6 @@ export const getAmbiguousFieldsContact = (
     {},
   );
 };
-export const bitwardenToCozy: Partial<
-  Record<AutofillFieldQualifierType, AmbiguousContactFieldName>
-> = {
-  identityPhone: "phone",
-  identityEmail: "email",
-  identityAddress1: "address",
-  identityState: "address",
-};
 export const ambiguousContactFieldNames: AmbiguousContactFieldName[] = [
   "phone",
   "email",
@@ -426,6 +426,91 @@ export const makeAmbiguousValueLabel = (
       : "";
   } else {
     return `${translatedLabel || ""}`;
+  }
+};
+
+export const makeEditContactField = (
+  fieldQualifier: AutofillFieldQualifierType,
+  t: (key: string) => string,
+) => {
+  const inputTextContainer = document.createElement("div");
+  inputTextContainer.classList.add("contact-edit-input-container");
+
+  const inputText = document.createElement("input");
+  inputText.classList.add("contact-edit-input");
+  inputText.type = "text";
+
+  let iconElement: HTMLElement;
+  switch (COZY_ATTRIBUTES_MAPPING[fieldQualifier].name) {
+    case "phone":
+      iconElement = buildSvgDomElement(phone);
+      break;
+    case "email":
+      iconElement = buildSvgDomElement(email);
+      break;
+    case "address":
+      iconElement = buildSvgDomElement(magnifier);
+      break;
+    default:
+      iconElement = buildSvgDomElement(contact);
+      break;
+  }
+  iconElement.classList.add("contact-edit-icon");
+
+  const isPhoneField = COZY_ATTRIBUTES_MAPPING[fieldQualifier].name === "phone";
+  if (isPhoneField) {
+    inputText.inputMode = "numeric";
+    inputText.maxLength = 10;
+    inputText.addEventListener(EVENTS.KEYDOWN, (evt) => {
+      if (
+        evt.key === "Backspace" ||
+        evt.key === "Delete" ||
+        evt.key === "ArrowLeft" ||
+        evt.key === "ArrowRight"
+      ) {
+        return;
+      }
+
+      if (!/^[0-9]$/.test(evt.key)) {
+        evt.preventDefault();
+      }
+    });
+  }
+
+  inputText.placeholder = t(COZY_ATTRIBUTES_MAPPING[fieldQualifier].name);
+  inputTextContainer.appendChild(iconElement);
+  inputTextContainer.appendChild(inputText);
+
+  return { inputTextContainer, inputText };
+};
+
+export const makeEditContactSelectElement = (
+  fieldQualifier: AutofillFieldQualifierType,
+  t: (key: string) => string,
+) => {
+  const selectElement = document.createElement("select");
+  selectElement.id = "label";
+
+  const selectOptions = getEditContactFieldOptions(fieldQualifier);
+  for (const option of selectOptions) {
+    const optionElement = document.createElement("option");
+    optionElement.value = JSON.stringify(option.value);
+    optionElement.textContent = t(option.label);
+    selectElement.appendChild(optionElement);
+  }
+  return selectElement;
+};
+
+export const getEditContactFieldOptions = (fieldQualifier: AutofillFieldQualifierType) => {
+  switch (fieldQualifier) {
+    case "identityPhone":
+      return phoneFieldOptions;
+    case "identityEmail":
+      return emailFieldOptions;
+    case "identityAddress1":
+      return addressFieldOptions;
+    default:
+      return null;
   }
 };
 // Cozy customization end

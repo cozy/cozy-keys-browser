@@ -2718,7 +2718,7 @@ describe("OverlayBackground", () => {
 
         sendPortMessage(listMessageConnectorSpy, {
           command: "fillAutofillInlineMenuCipher",
-          inlineMenuCipherId: "inline-menu-cipher-2",
+          inlineMenuCipherId: "inline-menu-cipher-1",
           portKey,
         });
         await flushPromises();

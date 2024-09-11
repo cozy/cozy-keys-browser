@@ -1710,13 +1710,25 @@
   "firstName": {
     "message": "Prénom"
   },
+  "givenName": {
+    "message": "Prénom"
+  },
   "middleName": {
+    "message": "Deuxième prénom"
+  },
+  "additionalName": {
     "message": "Deuxième prénom"
   },
   "lastName": {
     "message": "Nom de famille"
   },
+  "familyName": {
+    "message": "Nom de famille"
+  },
   "fullName": {
+    "message": "Nom et prénom"
+  },
+  "displayName": {
     "message": "Nom et prénom"
   },
   "identityName": {
@@ -3187,6 +3199,33 @@
   "fax": {
     "message": "Fax"
   },
+  "cellHome": {
+    "message": "Mobile (perso)"
+  },
+  "cellWork": {
+    "message": "Mobile (pro)"
+  },
+  "voiceHome": {
+    "message": "Fixe (perso)"
+  },
+  "voiceWork": {
+    "message": "Fixe (pro)"
+  },
+  "faxHome": {
+    "message": "Fax (perso)"
+  },
+  "faxWork": {
+    "message": "Fax (pro)"
+  },
+  "none": {
+    "message": "Aucun"
+  },
+  "empty_name": {
+    "message": "Aucun nom"
+  },
+  "label": {
+    "message": "Libellé"
+  },
   "loggingInOn": {
     "message": "Connexion sur"
   },
@@ -4524,5 +4563,17 @@
   },
   "empty_ambiguous_address": {
     "message": "Aucune adresse enregistrée"
+  },
+  "newAddress": {
+    "message": "Nouvelle adresse"
+  },
+  "newPhone": {
+    "message": "Nouveau téléphone"
+  },
+  "newEmail": {
+    "message": "Nouvel email"
+  },
+  "newName": {
+    "message": "Nouveau nom"
   }
 }
