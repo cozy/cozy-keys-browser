@@ -629,9 +629,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   }
 
   /**
-   * @param ambiguousKey
+   * @param title
    */
-  private createEmptyAmbiguousListItem(ambiguousKey: AmbiguousContactFieldName) {
+  private createEmptyListItem(title: string) {
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
     listItem.classList.add("inline-menu-list-actions-item", "disabled");
@@ -645,35 +645,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const detailsSpan = document.createElement("span");
     detailsSpan.classList.add("cipher-details");
 
-    const nameSpanText = this.getTranslation(`empty_ambiguous_${ambiguousKey}`);
-    const nameSpan = document.createElement("span");
-    nameSpan.setAttribute("title", nameSpanText);
-    nameSpan.textContent = nameSpanText;
-    nameSpan.classList.add("cipher-name", "cipher-name--empty");
-
-    detailsSpan.appendChild(nameSpan);
-    div.appendChild(iconElement);
-    div.appendChild(detailsSpan);
-    listItem.appendChild(div);
-
-    return listItem;
-  }
-
-  private createEmptyNameListItem() {
-    const listItem = document.createElement("li");
-    listItem.setAttribute("role", "listitem");
-    listItem.classList.add("inline-menu-list-actions-item", "disabled");
-
-    const div = document.createElement("div");
-    div.classList.add("cipher-container");
-
-    const iconElement = buildSvgDomElement(contact);
-    iconElement.style.margin = "0 2rem 0 0.5rem";
-
-    const detailsSpan = document.createElement("span");
-    detailsSpan.classList.add("cipher-details");
-
-    const nameSpanText = this.getTranslation(`empty_name`);
+    const nameSpanText = title;
     const nameSpan = document.createElement("span");
     nameSpan.setAttribute("title", nameSpanText);
     nameSpan.textContent = nameSpanText;
@@ -699,7 +671,8 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     ulElement.classList.add("inline-menu-list-actions");
     ulElement.setAttribute("role", "list");
 
-    const emptyLi = this.createEmptyNameListItem();
+    const emptyLiTitle = this.getTranslation(`empty_name`);
+    const emptyLi = this.createEmptyListItem(emptyLiTitle);
     ulElement.appendChild(emptyLi);
 
     const newButton = this.createNewContactButtonByName(inlineMenuCipherId, contactName, "newName");
@@ -757,7 +730,8 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         ulElement.appendChild(li);
       }
     } else {
-      const emptyLi = this.createEmptyAmbiguousListItem(firstAmbiguousFieldName);
+      const emptyLiTitle = this.getTranslation(`empty_ambiguous_${firstAmbiguousFieldName}`);
+      const emptyLi = this.createEmptyListItem(emptyLiTitle);
       ulElement.appendChild(emptyLi);
     }
 
