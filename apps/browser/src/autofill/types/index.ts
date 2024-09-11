@@ -69,4 +69,9 @@ export type AmbiguousContactFields = {
 };
 
 export type AmbiguousContactFieldValue = ContactPhone[] | ContactEmail[] | ContactAddress[];
+
+export type AvailablePapers = {
+  name?: string; // the file name
+  value?: string; // we are interested in only one value in the file metadata
+};
 // Cozy customization end

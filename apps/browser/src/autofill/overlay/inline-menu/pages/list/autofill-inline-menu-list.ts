@@ -36,6 +36,7 @@ import {
   AmbiguousContactFields,
   AmbiguousContactFieldValue,
   AmbiguousContactFieldName,
+  AvailablePapers,
 } from "src/autofill/types";
 import type { AutofillValue } from "../../../../../../../../libs/cozy/createOrUpdateCozyDoctype";
 import { COZY_ATTRIBUTES_MAPPING } from "../../../../../../../../libs/cozy/mapping";
@@ -80,6 +81,8 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
           message.isFocusedFieldAmbigous,
           message.fieldHtmlIDToFill,
         ),
+      paperList: ({ message }) =>
+        this.paperList(message.inlineMenuCipherId, message.contactName, message.availablePapers),
       loadPageOfCiphers: () => this.loadPageOfCiphers(),
       focusAutofillInlineMenuList: () => this.focusInlineMenuList(),
       createEmptyNameList: ({ message }) =>
@@ -530,6 +533,66 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   }
 
   /**
+   * @param inlineMenuCipherId
+   * @param contactName
+   * @param ambiguousKey
+   * @param ambiguousValue
+   * @param isAmbiguousFieldFocused
+   */
+  private createPaperListItem(
+    inlineMenuCipherId: string,
+    contactName: string,
+    name: string,
+    value: string,
+  ) {
+    const listItem = document.createElement("li");
+    listItem.setAttribute("role", "listitem");
+    listItem.classList.add("inline-menu-list-actions-item");
+
+    const div = document.createElement("div");
+    div.classList.add("cipher-container");
+
+    const fillButton = document.createElement("button");
+    fillButton.setAttribute("tabindex", "-1");
+    fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
+    fillButton.setAttribute("aria-label", contactName);
+    fillButton.addEventListener(
+      EVENTS.CLICK,
+      () => {}, // TODO
+    );
+
+    const radio = document.createElement("input");
+    radio.setAttribute("type", "radio");
+    radio.setAttribute("name", "contact");
+    radio.setAttribute("id", "contact");
+    radio.style.marginRight = "2rem";
+
+    const detailsSpan = document.createElement("span");
+    detailsSpan.classList.add("cipher-details");
+
+    const nameSpanText = name;
+    const nameSpan = document.createElement("span");
+    nameSpan.setAttribute("title", nameSpanText);
+    nameSpan.textContent = nameSpanText;
+    nameSpan.classList.add("cipher-name");
+
+    const subNameSpan = document.createElement("span");
+    subNameSpan.setAttribute("title", value);
+    subNameSpan.classList.add("cipher-subtitle");
+    subNameSpan.textContent = value;
+
+    detailsSpan.appendChild(nameSpan);
+    detailsSpan.appendChild(subNameSpan);
+    fillButton.appendChild(radio);
+    fillButton.appendChild(detailsSpan);
+
+    div.appendChild(fillButton);
+    listItem.appendChild(div);
+
+    return listItem;
+  }
+
+  /**
    * @param contactName
    */
   private buildNewListHeader(contactName: string) {
@@ -737,6 +800,60 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         }
       }
     }
+
+    this.inlineMenuListContainer.appendChild(addNewLoginButtonContainer);
+    this.inlineMenuListContainer.appendChild(ulElement);
+
+    this.inlineMenuListContainer.classList.add("inline-menu-list-container--with-new-item-button");
+
+    this.toggleScrollClass(undefined, ulElement);
+  }
+
+  /**
+   * @param inlineMenuCipherId
+   * @param papers
+   */
+  private paperList(
+    inlineMenuCipherId: string,
+    contactName: string,
+    availablePapers: AvailablePapers[],
+  ) {
+    this.inlineMenuListContainer.innerHTML = "";
+    this.inlineMenuListContainer.classList.remove(
+      "inline-menu-list-container--with-new-item-button",
+    );
+
+    const addNewLoginButtonContainer = this.buildNewListHeader(contactName);
+
+    const ulElement = globalThis.document.createElement("ul");
+    ulElement.classList.add("inline-menu-list-actions");
+    ulElement.setAttribute("role", "list");
+    ulElement.addEventListener(EVENTS.SCROLL, this.handleCiphersListScrollEvent, {
+      passive: true,
+    });
+
+    if (availablePapers.length > 0) {
+      for (const paper of availablePapers) {
+        const li = this.createPaperListItem(
+          inlineMenuCipherId,
+          contactName,
+          paper.name,
+          paper.value,
+        );
+        ulElement.appendChild(li);
+      }
+    } else {
+      const emptyLiText = "No data (translation incoming)";
+      const emptyLi = this.createEmptyListItem(emptyLiText);
+      ulElement.appendChild(emptyLi);
+    }
+
+    const newButton = this.createNewButton(
+      inlineMenuCipherId,
+      contactName,
+      "New (translation incoming)",
+    );
+    ulElement.appendChild(newButton);
 
     this.inlineMenuListContainer.appendChild(addNewLoginButtonContainer);
     this.inlineMenuListContainer.appendChild(ulElement);
