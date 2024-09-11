@@ -101,7 +101,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const editContainer = globalThis.document.createElement("div");
     editContainer.classList.add("contact-edit-container");
 
-    const addNewAmbiguousHeader = this.buildNewAmbiguousHeader(contactName);
+    const addNewAmbiguousHeader = this.buildNewListHeader(contactName);
 
     const { inputTextContainer, inputText } = makeEditContactField(
       this.fieldQualifier,
@@ -532,22 +532,22 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   /**
    * @param contactName
    */
-  private buildNewAmbiguousHeader(contactName: string) {
+  private buildNewListHeader(contactName: string) {
     this.newItemButtonElement = globalThis.document.createElement("button");
     this.newItemButtonElement.tabIndex = -1;
-    this.newItemButtonElement.classList.add("inline-menu-list-ambiguous-header");
+    this.newItemButtonElement.classList.add("inline-menu-list-header");
 
     const span = globalThis.document.createElement("span");
     span.textContent = contactName;
     span.setAttribute("title", contactName);
-    span.classList.add("ambiguous-header-text");
+    span.classList.add("list-header-text");
     this.newItemButtonElement.setAttribute("aria-label", contactName);
 
     this.newItemButtonElement.append(buildSvgDomElement(backIcon));
     this.newItemButtonElement.addEventListener(EVENTS.CLICK, this.handleNewAmbiguousHeaderClick);
     this.newItemButtonElement.appendChild(span);
 
-    return this.buildAmbiguousHeaderContainer(this.newItemButtonElement);
+    return this.buildListHeaderContainer(this.newItemButtonElement);
   }
 
   private handleNewAmbiguousHeaderClick = () => {
@@ -557,9 +557,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   /**
    * @param element
    */
-  private buildAmbiguousHeaderContainer(element: Element) {
+  private buildListHeaderContainer(element: Element) {
     const inlineMenuListButtonContainer = globalThis.document.createElement("div");
-    inlineMenuListButtonContainer.classList.add("inline-menu-list-ambiguous-header-container");
+    inlineMenuListButtonContainer.classList.add("inline-menu-list-header-container");
     inlineMenuListButtonContainer.appendChild(element);
 
     return inlineMenuListButtonContainer;
@@ -641,7 +641,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       "inline-menu-list-container--with-new-item-button",
     );
 
-    const addNewLoginButtonContainer = this.buildNewAmbiguousHeader(contactName);
+    const addNewLoginButtonContainer = this.buildNewListHeader(contactName);
 
     const ulElement = globalThis.document.createElement("ul");
     ulElement.classList.add("inline-menu-list-actions");
@@ -680,7 +680,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       "inline-menu-list-container--with-new-item-button",
     );
 
-    const addNewLoginButtonContainer = this.buildNewAmbiguousHeader(contactName);
+    const addNewLoginButtonContainer = this.buildNewListHeader(contactName);
 
     const ulElement = globalThis.document.createElement("ul");
     ulElement.classList.add("inline-menu-list-actions");
