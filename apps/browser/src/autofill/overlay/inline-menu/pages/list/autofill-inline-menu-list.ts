@@ -565,15 +565,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return inlineMenuListButtonContainer;
   }
 
-  private createNewContactButtonByName(
-    inlineMenuCipherId: string,
-    contactName: string,
-    attributName: AmbiguousContactFieldName | string,
-  ) {
-    // TODO - Add the possibility to update a contact with an address
-    if (attributName === "address") {
-      return null;
-    }
+  private createNewButton(inlineMenuCipherId: string, contactName: string, title: string) {
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
     listItem.classList.add("inline-menu-list-actions-item");
@@ -584,7 +576,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const fillButton = document.createElement("button");
     fillButton.setAttribute("tabindex", "-1");
     fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
-    fillButton.setAttribute("aria-label", attributName);
+    fillButton.setAttribute("aria-label", title);
     fillButton.addEventListener(EVENTS.CLICK, () =>
       this.editContactFields(inlineMenuCipherId, contactName),
     );
@@ -598,25 +590,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const detailsSpan = document.createElement("span");
     detailsSpan.classList.add("cipher-details");
 
-    let nameSpanText;
-    switch (attributName) {
-      case "phone":
-        nameSpanText = this.getTranslation("newPhone");
-        break;
-      case "email":
-        nameSpanText = this.getTranslation("newEmail");
-        break;
-      case "address":
-        nameSpanText = this.getTranslation("newAddress");
-        break;
-      default:
-        nameSpanText = this.getTranslation("newName");
-        break;
-    }
-
     const nameSpan = document.createElement("span");
-    nameSpan.setAttribute("title", nameSpanText);
-    nameSpan.textContent = nameSpanText;
+    nameSpan.setAttribute("title", title);
+    nameSpan.textContent = title;
     nameSpan.classList.add("cipher-name");
 
     detailsSpan.appendChild(nameSpan);
@@ -675,7 +651,8 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const emptyLi = this.createEmptyListItem(emptyLiTitle);
     ulElement.appendChild(emptyLi);
 
-    const newButton = this.createNewContactButtonByName(inlineMenuCipherId, contactName, "newName");
+    const newButtonTitle = this.getTranslation("newName");
+    const newButton = this.createNewButton(inlineMenuCipherId, contactName, newButtonTitle);
     if (newButton) {
       ulElement.appendChild(newButton);
     }
@@ -736,13 +713,28 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     }
 
     if (isAmbiguousFieldFocused) {
-      const newButton = this.createNewContactButtonByName(
-        inlineMenuCipherId,
-        contactName,
-        firstAmbiguousFieldName,
-      );
-      if (newButton) {
-        ulElement.appendChild(newButton);
+      let newButtonTitle;
+      switch (firstAmbiguousFieldName) {
+        case "phone":
+          newButtonTitle = this.getTranslation("newPhone");
+          break;
+        case "email":
+          newButtonTitle = this.getTranslation("newEmail");
+          break;
+        case "address":
+          newButtonTitle = this.getTranslation("newAddress");
+          break;
+        default:
+          newButtonTitle = this.getTranslation("newName");
+          break;
+      }
+
+      // TODO - Add the possibility to update a contact with an address
+      if (firstAmbiguousFieldName !== "address") {
+        const newButton = this.createNewButton(inlineMenuCipherId, contactName, newButtonTitle);
+        if (newButton) {
+          ulElement.appendChild(newButton);
+        }
       }
     }
 
