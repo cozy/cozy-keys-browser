@@ -172,7 +172,6 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       this.fillAutofillInlineMenuCipherWithAmbiguousField(message, port),
     inlineMenuSearchContact: ({ message }) => this.searchContacts(message),
     redirectToCozy: ({ message }) => this.redirectToCozy(message),
-    handleMenuListUpdate: ({ message, port }) => this.handleMenuListUpdate(message, port),
     editInlineMenuCipher: ({ message }) => this.editInlineMenuCipher(message),
     // Cozy customization end
     addNewVaultItem: ({ message, port }) => this.getNewVaultItemDetails(message, port),
@@ -212,20 +211,6 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       command: "editContactFields",
       inlineMenuCipherId,
       contactName: contact.displayName,
-    });
-  };
-  // Cozy customization end
-
-  // Cozy customization
-  private handleMenuListUpdate = async (message: OverlayPortMessage, port: chrome.runtime.Port) => {
-    const { inlineMenuCipherId } = message;
-    // If ambiguous field is manually filled, inlineMenuCipherId is undefined
-    if (inlineMenuCipherId) {
-      return this.handleContactClick(message, port);
-    }
-
-    this.inlineMenuListPort?.postMessage({
-      command: "loadPageOfCiphers",
     });
   };
   // Cozy customization end
