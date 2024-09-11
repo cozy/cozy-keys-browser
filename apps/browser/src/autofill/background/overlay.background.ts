@@ -77,8 +77,9 @@ import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
 import { AmbiguousContactFieldName, AmbiguousContactFieldValue } from "src/autofill/types";
 import { COZY_ATTRIBUTES_MAPPING } from "../../../../../libs/cozy/mapping";
-import { getCozyValue } from "../../../../../libs/cozy/getCozyValue";
 import { createOrUpdateCozyDoctype } from "../../../../../libs/cozy/createOrUpdateCozyDoctype";
+import { getCozyValue, getAllPapersFromContact } from "../../../../../libs/cozy/getCozyValue";
+import _ from "lodash";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -938,13 +939,31 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     );
 
     /*
+      On a form field with data coming from a paper :
+      - Display a menu to select or create a paper
       On a form field other than ambiguous(phone/address/email):
       - If the contact has one or less ambiguous value: autofill everything.
       - If the contact has more than one ambiguous values: display a menu to choose which one.
       On the ambiguous(phone/address/email) form field:
       - Display a menu to select value.
     */
-    if (
+    if (focusedFieldModel.doctype === "io.cozy.files") {
+      const availablePapers = (
+        await getAllPapersFromContact({
+          client,
+          contactId: contact.id,
+          contactEmail: cipher.contact.primaryEmail,
+          me: cipher.contact.me,
+          cozyAttributeModel: focusedFieldModel,
+        })
+      ).map((paper: any) => ({ name: paper.name, value: _.get(paper, focusedFieldModel.path) }));
+      this.inlineMenuListPort?.postMessage({
+        command: "paperList",
+        inlineMenuCipherId,
+        contactName: contact.displayName,
+        availablePapers,
+      });
+    } else if (
       (!isFocusedFieldAmbigous && hasMultipleAmbiguousValueInSameField) ||
       isFocusedFieldAmbigous
     ) {
