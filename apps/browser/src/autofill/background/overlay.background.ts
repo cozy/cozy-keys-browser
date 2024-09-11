@@ -78,6 +78,7 @@ import { CozyClientService } from "../../popup/services/cozyClient.service";
 import { AmbiguousContactFieldName, AmbiguousContactFieldValue } from "src/autofill/types";
 import { COZY_ATTRIBUTES_MAPPING } from "../../../../../libs/cozy/mapping";
 import { getCozyValue } from "../../../../../libs/cozy/getCozyValue";
+import { createOrUpdateCozyDoctype } from "../../../../../libs/cozy/createOrUpdateCozyDoctype";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -166,6 +167,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     fillAutofillInlineMenuCipher: ({ message, port }) => this.fillInlineMenuCipher(message, port),
     // Cozy customization
     handleContactClick: ({ message, port }) => this.handleContactClick(message, port),
+    saveFieldToCozyDoctype: ({ message, port }) => this.saveFieldToCozyDoctype(message, port),
     fillAutofillInlineMenuCipherWithAmbiguousField: ({ message, port }) =>
       this.fillAutofillInlineMenuCipherWithAmbiguousField(message, port),
     inlineMenuSearchContact: ({ message }) => this.searchContacts(message),
@@ -1006,6 +1008,17 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         return;
       }
       this.fillInlineMenuCipher(message, port);
+    }
+  }
+
+  private async saveFieldToCozyDoctype(message: OverlayPortMessage, port: chrome.runtime.Port) {
+    const { inlineMenuCipherId, fieldQualifier, newAutofillValue } = message;
+
+    if (inlineMenuCipherId) {
+      const client = await this.cozyClientService.getClientInstance();
+      const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
+
+      await createOrUpdateCozyDoctype({ client, cipher, fieldQualifier, newAutofillValue });
     }
   }
 
