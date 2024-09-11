@@ -913,11 +913,12 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       executeFromStore: true,
     })) as { data: IOCozyContact };
 
+    const focusedFieldModel = COZY_ATTRIBUTES_MAPPING[this.focusedFieldData?.fieldQualifier];
+
     const ambiguousContactFields = getAmbiguousFieldsContact(ambiguousContactFieldNames, contact);
 
     const isFocusedFieldAmbigous = ambiguousContactFieldNames.includes(
-      COZY_ATTRIBUTES_MAPPING[this.focusedFieldData?.fieldQualifier]
-        .name as AmbiguousContactFieldName,
+      focusedFieldModel.name as AmbiguousContactFieldName,
     );
     const hasMultipleAmbiguousValueInSameField = Object.values(ambiguousContactFields).some(
       (item) => item.length > 1,
@@ -926,8 +927,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     // On an ambiguous form field, the associated contact values are kept.
     const ambiguousFormFieldsOfFocusedField = Object.fromEntries(
       Object.entries(ambiguousContactFields).filter(
-        ([fieldName]) =>
-          fieldName === COZY_ATTRIBUTES_MAPPING[this.focusedFieldData?.fieldQualifier].name,
+        ([fieldName]) => fieldName === focusedFieldModel.name,
       ),
     );
     // On an unambiguous form field, we keep only the multiple values of an ambiguous contact field.
