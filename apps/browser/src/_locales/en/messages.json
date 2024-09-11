@@ -1120,6 +1120,12 @@
   "sharedWithKonnector": {
     "message": "Shared with Cozy Connector"
   },
+  "administrativeFolder": {
+    "message": "Administrative"
+  },
+  "papersFolder": {
+    "message": "My papers"
+  },
   "movedItemToFolder": {
     "message": "Element moved"
   },

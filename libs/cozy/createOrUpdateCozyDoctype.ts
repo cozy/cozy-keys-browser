@@ -1,12 +1,20 @@
-import CozyClient, { Q } from "cozy-client";
+import CozyClient, { Q, models } from "cozy-client";
 import { IOCozyContact } from "cozy-client/types/types";
 import * as _ from "lodash";
 
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import { AutofillFieldQualifierType } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
 
+import { getOrCreateAppFolderWithReference } from "./helpers/folder";
+import { createPDFWithText } from "./helpers/pdf";
 import { COZY_ATTRIBUTES_MAPPING, CozyAttributesModel } from "./mapping";
+
+const {
+  document: { Qualification, locales },
+  file: { uploadFileWithConflictStrategy },
+} = models;
 
 interface AutofillValue {
   value: string;
@@ -19,6 +27,7 @@ interface CreateOrUpdateCozyDoctypeType {
   cipher: CipherView;
   fieldQualifier: AutofillFieldQualifierType;
   newAutofillValue: AutofillValue;
+  i18nService: I18nService;
 }
 
 export const createOrUpdateCozyDoctype = async ({
@@ -26,6 +35,7 @@ export const createOrUpdateCozyDoctype = async ({
   cipher,
   fieldQualifier,
   newAutofillValue,
+  i18nService,
 }: CreateOrUpdateCozyDoctypeType) => {
   const cozyAttributeModel = COZY_ATTRIBUTES_MAPPING[fieldQualifier];
 
@@ -46,6 +56,16 @@ export const createOrUpdateCozyDoctype = async ({
     });
 
     await client.save(updatedContact);
+  } else if (cozyAttributeModel.doctype === "io.cozy.files") {
+    // only create for the moment
+    const createdPaper = await createOrUpdateCozyPaper({
+      client,
+      cozyAttributeModel,
+      newAutofillValue,
+      i18nService,
+    });
+
+    await client.save(createdPaper);
   }
 };
 
@@ -91,4 +111,63 @@ export const createOrUpdateCozyContact = async ({
   }
 
   return contact;
+};
+
+interface CreateOrUpdateCozyPaperType {
+  client: CozyClient;
+  cozyAttributeModel: CozyAttributesModel;
+  newAutofillValue: AutofillValue;
+  i18nService: I18nService;
+}
+
+export const createOrUpdateCozyPaper = async ({
+  client,
+  cozyAttributeModel,
+  newAutofillValue,
+  i18nService,
+}: CreateOrUpdateCozyPaperType): Promise<any> => {
+  const [, qualificationLabelValue] = Object.entries(cozyAttributeModel.selector)[0];
+
+  const qualification = Qualification.getByLabel(qualificationLabelValue as string);
+
+  // Create the PDF
+  const pdfText = `${qualificationLabelValue} ${newAutofillValue.value}`;
+  const pdfBytes = await createPDFWithText(pdfText);
+
+  // Build the io.cozy.files document
+  const dir = await getOrCreateAppFolderWithReference(client, i18nService);
+
+  const t = locales.getBoundT(i18nService.translationLocale || "en");
+
+  const paperOptions = {
+    name: t(`Scan.items.${qualification.label}`) + ".pdf",
+    contentType: "application/pdf",
+    metadata: {
+      qualification,
+      paperProps: {
+        isBlank: true,
+      },
+    },
+    dirId: dir._id,
+    conflictStrategy: "rename",
+  };
+
+  _.set(paperOptions, cozyAttributeModel.path, newAutofillValue.value);
+
+  const { data: fileCreated } = await uploadFileWithConflictStrategy(
+    client,
+    pdfBytes,
+    paperOptions,
+  );
+
+  // Add contact
+  // const fileCollection = client.collection('io.cozy.files')
+  // const references = [{
+  //   _id: contact._id,
+  //   _type: 'io.cozy.contacts'
+  // }]
+
+  // await fileCollection.addReferencedBy(fileCreated, references)
+
+  return fileCreated;
 };

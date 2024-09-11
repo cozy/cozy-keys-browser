@@ -1018,7 +1018,13 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       const client = await this.cozyClientService.getClientInstance();
       const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
 
-      await createOrUpdateCozyDoctype({ client, cipher, fieldQualifier, newAutofillValue });
+      await createOrUpdateCozyDoctype({
+        client,
+        cipher,
+        fieldQualifier,
+        newAutofillValue,
+        i18nService: this.i18nService,
+      });
     }
   }
 
