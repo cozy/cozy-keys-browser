@@ -60,14 +60,14 @@ body {
 }
 
 // Cozy customization
-.inline-menu-list-ambiguous-header-container,
+.inline-menu-list-header-container,
 .inline-menu-list-search-container {
   width: 100%;
   padding: 0.2rem;
   border: 0;
   background-color: #297ef2;
 }
-.ambiguous-header-text {
+.list-header-text {
   max-width: 16rem;
   overflow: hidden;
   white-space: nowrap;
@@ -78,7 +78,7 @@ body {
   font-family: $font-family-sans-serif;
   color: white;
 }
-.inline-menu-list-ambiguous-header {
+.inline-menu-list-header {
   display: flex;
   align-content: center;
   justify-content: flex-start;
