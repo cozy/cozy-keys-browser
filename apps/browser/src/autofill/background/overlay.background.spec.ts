@@ -2694,6 +2694,7 @@ describe("OverlayBackground", () => {
           pageDetails: [pageDetailsForTab],
           fillNewPassword: true,
           allowTotpAutofill: true,
+          cozyAutofillOptions: {},
         });
         expect(overlayBackground["inlineMenuCiphers"].entries()).toStrictEqual(
           new Map([

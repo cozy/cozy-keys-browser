@@ -40,6 +40,7 @@ import {
 } from "src/autofill/types";
 import type { AutofillValue } from "../../../../../../../../libs/cozy/createOrUpdateCozyDoctype";
 import { COZY_ATTRIBUTES_MAPPING } from "../../../../../../../../libs/cozy/mapping";
+import { CozyAutofillOptions } from "src/autofill/services/abstractions/autofill.service";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -465,6 +466,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     // @ts-ignore
     const currentListItemValue = ambiguousValue[getAmbiguousValueKey(ambiguousKey)];
 
+    const cozyAutofillOptions = {
+      value: currentListItemValue,
+      label: ambiguousValue.label,
+      type: ambiguousValue.type,
+    };
+
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
     listItem.classList.add("inline-menu-list-actions-item");
@@ -480,7 +487,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       EVENTS.CLICK,
       this.handleFillCipherAmbiguousClickEvent(
         inlineMenuCipherId,
-        ambiguousValue,
+        cozyAutofillOptions,
         fieldHtmlIDToFill,
         uniqueId(),
       ),
@@ -865,12 +872,13 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
   /**
    * @param inlineMenuCipherId
-   * @param ambiguousValue
+   * @param cozyAutofillOptions
+   * @param fieldHtmlIDToFill
    * @param UID
    */
   private handleFillCipherAmbiguousClickEvent = (
     inlineMenuCipherId: string,
-    ambiguousValue: AmbiguousContactFieldValue[0],
+    cozyAutofillOptions: CozyAutofillOptions,
     fieldHtmlIDToFill: string,
     UID: string,
   ) => {
@@ -879,7 +887,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         this.postMessageToParent({
           command: "fillAutofillInlineMenuCipherWithAmbiguousField",
           inlineMenuCipherId,
-          ambiguousValue,
+          cozyAutofillOptions,
           fieldHtmlIDToFill,
         }),
       `${UID}-fill-cipher-button-click-handler`,

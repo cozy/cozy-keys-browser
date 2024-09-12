@@ -13,7 +13,7 @@ import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view"
 const { getInitials } = models.contact;
 
 import { AutofillFieldQualifier } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
-import { CozyProfile } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
+import { CozyAutofillOptions } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 
 import { buildFieldsFromContact } from "./fields.helper";
 import { getCozyValue } from "./getCozyValue";
@@ -70,7 +70,7 @@ export const convertContactToCipherData = async (
 export const generateIdentityViewFromContactId = async (
   client: CozyClient,
   contactId: string,
-  cozyProfile?: CozyProfile,
+  cozyAutofillOptions?: CozyAutofillOptions,
 ): Promise<IdentityView> => {
   const identity = new IdentityView();
 
@@ -99,44 +99,44 @@ export const generateIdentityViewFromContactId = async (
     client,
     contactId,
     fieldQualifier: AutofillFieldQualifier.identityPhone,
-    cozyProfile,
+    cozyAutofillOptions,
   });
   identity.email = await getCozyValue({
     client,
     contactId,
     fieldQualifier: AutofillFieldQualifier.identityEmail,
-    cozyProfile,
+    cozyAutofillOptions,
   });
 
   identity.address1 = await getCozyValue({
     client,
     contactId,
     fieldQualifier: AutofillFieldQualifier.identityAddress1,
-    cozyProfile,
+    cozyAutofillOptions,
   });
   identity.city = await getCozyValue({
     client,
     contactId,
     fieldQualifier: AutofillFieldQualifier.identityCity,
-    cozyProfile,
+    cozyAutofillOptions,
   });
   identity.state = await getCozyValue({
     client,
     contactId,
     fieldQualifier: AutofillFieldQualifier.identityState,
-    cozyProfile,
+    cozyAutofillOptions,
   });
   identity.postalCode = await getCozyValue({
     client,
     contactId,
     fieldQualifier: AutofillFieldQualifier.identityPostalCode,
-    cozyProfile,
+    cozyAutofillOptions,
   });
   identity.country = await getCozyValue({
     client,
     contactId,
     fieldQualifier: AutofillFieldQualifier.identityCountry,
-    cozyProfile,
+    cozyAutofillOptions,
   });
 
   return identity;
