@@ -559,13 +559,17 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const div = document.createElement("div");
     div.classList.add("cipher-container");
 
+    const cozyAutofillOptions = {
+      value,
+    };
+
     const fillButton = document.createElement("button");
     fillButton.setAttribute("tabindex", "-1");
     fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
     fillButton.setAttribute("aria-label", contactName);
     fillButton.addEventListener(
       EVENTS.CLICK,
-      () => {}, // TODO
+      this.handleFillCipherPaperClickEvent(inlineMenuCipherId, cozyAutofillOptions, uniqueId()),
     );
 
     const radio = document.createElement("input");
@@ -889,6 +893,27 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
           inlineMenuCipherId,
           cozyAutofillOptions,
           fieldHtmlIDToFill,
+        }),
+      `${UID}-fill-cipher-button-click-handler`,
+    );
+  };
+
+  /**
+   * @param inlineMenuCipherId
+   * @param cozyAutofillOptions
+   * @param UID
+   */
+  private handleFillCipherPaperClickEvent = (
+    inlineMenuCipherId: string,
+    cozyAutofillOptions: CozyAutofillOptions,
+    UID: string,
+  ) => {
+    return this.useEventHandlersMemo(
+      () =>
+        this.postMessageToParent({
+          command: "fillAutofillInlineMenuCipherWithPaperField",
+          inlineMenuCipherId,
+          cozyAutofillOptions,
         }),
       `${UID}-fill-cipher-button-click-handler`,
     );

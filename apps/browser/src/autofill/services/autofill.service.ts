@@ -1725,6 +1725,7 @@ export default class AutofillService implements AutofillServiceInterface {
         client,
         contactId: options.cipher.id,
         fieldQualifier: "paperIdentityCardNumber",
+        cozyAutofillOptions: options.cozyAutofillOptions,
       });
       this.makeScriptActionWithValue(
         fillScript,
@@ -1739,6 +1740,7 @@ export default class AutofillService implements AutofillServiceInterface {
         client,
         contactId: options.cipher.id,
         fieldQualifier: "paperPassportNumber",
+        cozyAutofillOptions: options.cozyAutofillOptions,
       });
       this.makeScriptActionWithValue(
         fillScript,
@@ -1753,6 +1755,7 @@ export default class AutofillService implements AutofillServiceInterface {
         client,
         contactId: options.cipher.id,
         fieldQualifier: "paperSocialSecurityNumber",
+        cozyAutofillOptions: options.cozyAutofillOptions,
       });
       this.makeScriptActionWithValue(
         fillScript,
@@ -1767,6 +1770,7 @@ export default class AutofillService implements AutofillServiceInterface {
         client,
         contactId: options.cipher.id,
         fieldQualifier: "paperResidencePermitNumber",
+        cozyAutofillOptions: options.cozyAutofillOptions,
       });
       this.makeScriptActionWithValue(
         fillScript,
@@ -1781,6 +1785,7 @@ export default class AutofillService implements AutofillServiceInterface {
         client,
         contactId: options.cipher.id,
         fieldQualifier: "paperDrivingLicenseNumber",
+        cozyAutofillOptions: options.cozyAutofillOptions,
       });
       this.makeScriptActionWithValue(
         fillScript,
@@ -1795,6 +1800,7 @@ export default class AutofillService implements AutofillServiceInterface {
         client,
         contactId: options.cipher.id,
         fieldQualifier: "paperVehicleRegistrationNumber",
+        cozyAutofillOptions: options.cozyAutofillOptions,
       });
       this.makeScriptActionWithValue(
         fillScript,
@@ -1809,6 +1815,7 @@ export default class AutofillService implements AutofillServiceInterface {
         client,
         contactId: options.cipher.id,
         fieldQualifier: "paperVehicleRegistrationConfidentialCode",
+        cozyAutofillOptions: options.cozyAutofillOptions,
       });
       this.makeScriptActionWithValue(
         fillScript,
@@ -1823,6 +1830,7 @@ export default class AutofillService implements AutofillServiceInterface {
         client,
         contactId: options.cipher.id,
         fieldQualifier: "paperVehicleRegistrationLicensePlateNumber",
+        cozyAutofillOptions: options.cozyAutofillOptions,
       });
       this.makeScriptActionWithValue(
         fillScript,
@@ -1837,6 +1845,7 @@ export default class AutofillService implements AutofillServiceInterface {
         client,
         contactId: options.cipher.id,
         fieldQualifier: "paperBankIbanNumber",
+        cozyAutofillOptions: options.cozyAutofillOptions,
       });
       this.makeScriptActionWithValue(
         fillScript,
@@ -1851,6 +1860,7 @@ export default class AutofillService implements AutofillServiceInterface {
         client,
         contactId: options.cipher.id,
         fieldQualifier: "paperBankBicNumber",
+        cozyAutofillOptions: options.cozyAutofillOptions,
       });
       this.makeScriptActionWithValue(
         fillScript,
@@ -1865,6 +1875,7 @@ export default class AutofillService implements AutofillServiceInterface {
         client,
         contactId: options.cipher.id,
         fieldQualifier: "paperGrossSalaryAmount",
+        cozyAutofillOptions: options.cozyAutofillOptions,
       });
       this.makeScriptActionWithValue(
         fillScript,
@@ -1879,6 +1890,7 @@ export default class AutofillService implements AutofillServiceInterface {
         client,
         contactId: options.cipher.id,
         fieldQualifier: "paperNetSalaryAmount",
+        cozyAutofillOptions: options.cozyAutofillOptions,
       });
       this.makeScriptActionWithValue(
         fillScript,
@@ -1893,6 +1905,7 @@ export default class AutofillService implements AutofillServiceInterface {
         client,
         contactId: options.cipher.id,
         fieldQualifier: "paperTaxNoticeNumber",
+        cozyAutofillOptions: options.cozyAutofillOptions,
       });
       this.makeScriptActionWithValue(
         fillScript,
@@ -1911,6 +1924,7 @@ export default class AutofillService implements AutofillServiceInterface {
           me: options.cipher.contact.me,
           field: paperTaxNoticeRefTaxIncomeFillField,
           fieldQualifier: "paperTaxNoticeRefTaxIncome",
+          cozyAutofillOptions: options.cozyAutofillOptions,
           filterName: "yearFilter",
         });
         this.makeScriptActionWithValue(
