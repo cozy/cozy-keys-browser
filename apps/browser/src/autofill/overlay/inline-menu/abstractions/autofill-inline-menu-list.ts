@@ -32,6 +32,7 @@ export type UpdateAutofillInlineMenuListPaperMessage = AutofillInlineMenuListMes
   inlineMenuCipherId: string;
   contactName: string;
   availablePapers: AvailablePapers[];
+  fieldHtmlIDToFill: string;
 };
 // Cozy customization end
 
