@@ -4581,5 +4581,47 @@
   },
   "newName": {
     "message": "Nouveau nom"
+  },
+  "new_paperIdentityCardNumber": {
+    "message": "Nouveau numéro de carte d'identité"
+  },
+  "new_paperPassportNumber": {
+    "message": "Nouveau numéro de passeport"
+  },
+  "new_paperSocialSecurityNumber": {
+    "message": "Nouveau numéro de sécurité sociale"
+  },
+  "new_paperResidencePermitNumber": {
+    "message": "Nouveau numéro de permis de résidence"
+  },
+  "new_paperDrivingLicenseNumber": {
+    "message": "Nouveau numéro de permis de conduire"
+  },
+  "new_paperVehicleRegistrationNumber": {
+    "message": "Nouveau numéro de carte grise"
+  },
+  "new_paperVehicleRegistrationConfidentialCode": {
+    "message": "Nouveau code confidentiel de carte grise"
+  },
+  "new_paperVehicleRegistrationLicensePlateNumber": {
+    "message": "Nouveau numéro d'immatriculation"
+  },
+  "new_paperBankIbanNumber": {
+    "message": "Nouveau numéro d'IBAN"
+  },
+  "new_paperBankBicNumber": {
+    "message": "Nouveau numéro BIC"
+  },
+  "new_paperGrossSalaryAmount": {
+    "message": "Nouvelle rémunération brute"
+  },
+  "new_paperNetSalaryAmount": {
+    "message": "Nouvelle rémunération nette"
+  },
+  "new_paperTaxNoticeNumber": {
+    "message": "Nouveau numéro fiscal de référence"
+  },
+  "new_paperTaxNoticeRefTaxIncome": {
+    "message": "Nouveau revenu fiscal de référence"
   }
 }
