@@ -16,7 +16,7 @@ const {
   file: { uploadFileWithConflictStrategy },
 } = models;
 
-interface AutofillValue {
+export interface AutofillValue {
   value: string;
   type?: string;
   label?: string;
