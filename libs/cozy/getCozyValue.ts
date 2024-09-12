@@ -1,6 +1,6 @@
 import CozyClient, { Q } from "cozy-client";
 import { IOCozyFile } from "cozy-client/types/types";
-import _ from "lodash";
+import * as _ from "lodash";
 
 import { AutofillFieldQualifierType } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
 import AutofillField from "../../apps/browser/src/autofill/models/autofill-field";
@@ -98,6 +98,7 @@ const getCozyValueInPaper = async ({
   contactEmail,
   me,
   cozyAttributeModel,
+  cozyAutofillOptions,
   field,
   filterName,
 }: GetCozyValueInDataType) => {
@@ -115,7 +116,40 @@ const getCozyValueInPaper = async ({
     filteredPapers = filteredPapers.filter(yearFilterFunction);
   }
 
-  return _.get(filteredPapers[0], cozyAttributeModel.path);
+  // Select the paper corresponding to the cozyAutofillOptions or the first one
+  const selectedPaper = selectPaper({
+    papers: filteredPapers,
+    cozyAutofillOptions,
+  });
+
+  return _.get(selectedPaper, cozyAttributeModel.path);
+};
+
+export const selectPaper = ({
+  papers,
+  cozyAutofillOptions,
+}: {
+  papers: IOCozyFile[];
+  cozyAutofillOptions?: CozyAutofillOptions;
+}) => {
+  const papersModels = Object.values(COZY_ATTRIBUTES_MAPPING).filter(
+    (model) => model.doctype === "io.cozy.files",
+  );
+
+  // Example: If we click on a BIC of value "BIC111111", we look in the papers
+  // for the paper that have "BIC111111" as a value so that we can also
+  // find the IBAN corresponding to the BIC
+  const correspondingPaper = papers.find((paper) => {
+    for (const paperModel of papersModels) {
+      if (_.get(paper, paperModel.path) === cozyAutofillOptions?.value) {
+        return true;
+      }
+    }
+
+    return false;
+  });
+
+  return correspondingPaper || papers[0];
 };
 
 export const getAllPapersFromContact = async ({

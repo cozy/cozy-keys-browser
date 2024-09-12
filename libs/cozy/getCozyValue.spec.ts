@@ -1,6 +1,8 @@
+import { IOCozyFile } from "cozy-client/types/types";
+
 import { CozyAutofillOptions } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 
-import { selectDataWithCozyProfile } from "./getCozyValue";
+import { selectPaper, selectDataWithCozyProfile } from "./getCozyValue";
 
 // PROFILES
 
@@ -126,6 +128,69 @@ describe("getCozyValue", () => {
 
         expect(selectDataWithCozyProfile(dataArray, EMPTY_PROFILE)).toEqual(WORK_AND_TYPE_ELEMENT);
       });
+    });
+  });
+});
+
+const RIB1 = {
+  _id: "b4698ba56c7d0ae2faeb9571d4e0ce60",
+  _type: "io.cozy.files",
+  name: "RIB 1 - Bob John Doe.pdf",
+  metadata: {
+    bicNumber: "BIC99999999",
+    datetime: "2024-09-12T09:24:59.000Z",
+    datetimeLabel: "datetime",
+    number: "FR9999999999999999999999999",
+    qualification: {
+      icon: "bank-check",
+      label: "bank_details",
+      purpose: "attestation",
+      sourceCategory: "bank",
+      subjects: ["bank_account"],
+    },
+  },
+} as unknown as IOCozyFile;
+
+const RIB2 = {
+  _id: "6bfca732cd8f258cde5b012f3b48dd67",
+  _type: "io.cozy.files",
+  name: "RIB 2 - Bob John Doe.pdf",
+  metadata: {
+    bicNumber: "BIC11111111",
+    datetime: "2024-07-25T10:13:17.000Z",
+    datetimeLabel: "datetime",
+    number: "FR1111111111111111111111111",
+    qualification: {
+      icon: "bank-check",
+      label: "bank_details",
+      purpose: "attestation",
+      sourceCategory: "bank",
+      subjects: ["bank_account"],
+    },
+  },
+} as unknown as IOCozyFile;
+
+describe("getCozyValue", () => {
+  describe("selectPaper", () => {
+    it("should return the corresponding paper if it exists", () => {
+      const selectedPaper = selectPaper({
+        papers: [RIB1, RIB2],
+        cozyAutofillOptions: {
+          value: "FR1111111111111111111111111",
+        },
+      });
+
+      // Add your assertions here
+      expect(selectedPaper).toEqual(RIB2);
+    });
+
+    it("should return the first paper if no corresponding paper exists", () => {
+      const selectedPaper = selectPaper({
+        papers: [RIB1, RIB2],
+        cozyAutofillOptions: { value: "non-existing-value" },
+      });
+
+      expect(selectedPaper).toEqual(RIB1);
     });
   });
 });
