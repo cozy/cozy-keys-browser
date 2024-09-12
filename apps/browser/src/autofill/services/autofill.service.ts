@@ -359,7 +359,7 @@ export default class AutofillService implements AutofillServiceInterface {
           cipher: options.cipher,
           tabUrl: tab.url,
           defaultUriMatch: defaultUriMatch,
-          cozyProfile: options.cozyProfile, // Cozy customization
+          cozyAutofillOptions: options.cozyAutofillOptions, // Cozy customization
           fillOnlyThisFieldHtmlID: options.fillOnlyThisFieldHtmlID, // Cozy customization
         });
 
@@ -717,7 +717,7 @@ export default class AutofillService implements AutofillServiceInterface {
           options.cipher.identity = await generateIdentityViewFromContactId(
             client,
             options.cipher.id,
-            options.cozyProfile,
+            options.cozyAutofillOptions,
           );
         } catch (e) {
           // eslint-disable-next-line no-console
