@@ -18,12 +18,10 @@ export interface PageDetail {
 }
 
 // Cozy customization
-export interface CozyProfile {
+export interface CozyAutofillOptions {
   type?: string;
   label?: "work" | "home";
-  number?: string; // the phone value we want to enforce if it has no type and label
-  address?: string; // the email value we want to enforce if it has no type and label
-  formattedAddress?: string; // the address value we want to enforce if it has no type and label
+  value?: string;
 }
 // Cozy customization end
 
@@ -40,7 +38,7 @@ export interface AutoFillOptions {
   allowUntrustedIframe?: boolean;
   allowTotpAutofill?: boolean;
   // Cozy customization
-  cozyProfile?: CozyProfile;
+  cozyAutofillOptions?: CozyAutofillOptions;
   fillOnlyThisFieldHtmlID?: string;
   // Cozy customization end
 }
@@ -62,7 +60,7 @@ export interface GenerateFillScriptOptions {
   tabUrl: string;
   defaultUriMatch: UriMatchStrategySetting;
   // Cozy customization
-  cozyProfile?: CozyProfile;
+  cozyAutofillOptions?: CozyAutofillOptions;
   fillOnlyThisFieldHtmlID?: string;
   // Cozy customization end
 }

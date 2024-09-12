@@ -1,31 +1,31 @@
-import { CozyProfile } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
+import { CozyAutofillOptions } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 
 import { isPaperFromContact, selectDataWithCozyProfile } from "./getCozyValue";
 
 // PROFILES
 
-const EMPTY_PROFILE: CozyProfile = {};
+const EMPTY_PROFILE: CozyAutofillOptions = {};
 
-const HOME_ONLY_PROFILE: CozyProfile = {
+const HOME_ONLY_PROFILE: CozyAutofillOptions = {
   label: "home",
 };
 
-const HOME_AND_TYPE_PROFILE: CozyProfile = {
+const HOME_AND_TYPE_PROFILE: CozyAutofillOptions = {
   label: "home",
   type: "iPhone",
 };
 
-const WORK_ONLY_PROFILE: CozyProfile = {
+const WORK_ONLY_PROFILE: CozyAutofillOptions = {
   label: "work",
 };
 
-const WORK_AND_TYPE_PROFILE: CozyProfile = {
+const WORK_AND_TYPE_PROFILE: CozyAutofillOptions = {
   label: "work",
   type: "Cozy Cloud",
 };
 
-const EMPTY_PROFILE_WITH_PHONE: CozyProfile = {
-  number: "0",
+const EMPTY_PROFILE_WITH_PHONE: CozyAutofillOptions = {
+  value: "0",
 };
 
 // ELEMENTS
