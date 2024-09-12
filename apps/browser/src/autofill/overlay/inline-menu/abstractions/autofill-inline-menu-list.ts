@@ -61,11 +61,6 @@ export type AutofillInlineMenuListWindowMessageHandlers = {
   }: {
     message: UpdateAutofillInlineMenuListAmbiguousMessage;
   }) => void;
-  editContactFields: ({
-    message,
-  }: {
-    message: UpdateAutofillInlineMenuListAmbiguousMessage;
-  }) => void;
   createEmptyNameList: ({
     message,
   }: {
