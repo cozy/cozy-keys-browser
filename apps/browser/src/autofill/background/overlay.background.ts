@@ -998,7 +998,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
 
       if (!value) {
         this.inlineMenuListPort?.postMessage({
-          command: "editContactFields",
+          command: "createEmptyNameList",
           inlineMenuCipherId,
           contactName: contact.displayName,
         });
