@@ -172,7 +172,6 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       this.fillAutofillInlineMenuCipherWithAmbiguousField(message, port),
     inlineMenuSearchContact: ({ message }) => this.searchContacts(message),
     redirectToCozy: ({ message }) => this.redirectToCozy(message),
-    editInlineMenuCipher: ({ message }) => this.editInlineMenuCipher(message),
     // Cozy customization end
     addNewVaultItem: ({ message, port }) => this.getNewVaultItemDetails(message, port),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port),
@@ -196,24 +195,6 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   ) {
     this.initOverlayEventObservables();
   }
-
-  // Cozy customization
-  private editInlineMenuCipher = async (message: OverlayPortMessage) => {
-    const { inlineMenuCipherId } = message;
-    const client = await this.cozyClientService.getClientInstance();
-    const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
-
-    const { data: contact } = (await client.query(Q(CONTACTS_DOCTYPE).getById(cipher.id), {
-      executeFromStore: true,
-    })) as { data: IOCozyContact };
-
-    this.inlineMenuListPort?.postMessage({
-      command: "editContactFields",
-      inlineMenuCipherId,
-      contactName: contact.displayName,
-    });
-  };
-  // Cozy customization end
 
   private redirectToCozy = (message: OverlayPortMessage) => {
     BrowserApi.createNewTab(this.cozyClientService.getAppURL(message.to, message.hash), true);

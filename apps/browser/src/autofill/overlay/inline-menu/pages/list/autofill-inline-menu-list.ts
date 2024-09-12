@@ -81,8 +81,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         ),
       loadPageOfCiphers: () => this.loadPageOfCiphers(),
       focusAutofillInlineMenuList: () => this.focusInlineMenuList(),
-      editContactFields: ({ message }) =>
-        this.editContactFields(message.inlineMenuCipherId, message.contactName),
       createEmptyNameList: ({ message }) =>
         this.createEmptyNameList(message.inlineMenuCipherId, message.contactName),
     };
@@ -551,7 +549,8 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
   private createNewContactButtonByName(
     inlineMenuCipherId: string,
-    name: AmbiguousContactFieldName | string,
+    contactName: string,
+    attributName: AmbiguousContactFieldName | string,
   ) {
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
@@ -563,10 +562,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const fillButton = document.createElement("button");
     fillButton.setAttribute("tabindex", "-1");
     fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
-    fillButton.setAttribute("aria-label", name);
+    fillButton.setAttribute("aria-label", attributName);
     fillButton.addEventListener(
       EVENTS.CLICK,
-      this.handleEditCipherClickEvent(inlineMenuCipherId, uniqueId()),
+      () => this.editContactFields(inlineMenuCipherId, contactName),
     );
 
     const radio = document.createElement("input");
@@ -579,7 +578,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     detailsSpan.classList.add("cipher-details");
 
     let nameSpanText;
-    switch (name) {
+    switch (attributName) {
       case "phone":
         nameSpanText = this.getTranslation("newPhone");
         break;
@@ -607,17 +606,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     return listItem;
   }
-
-  private handleEditCipherClickEvent = (inlineMenuCipherId: string, UID: string) => {
-    return this.useEventHandlersMemo(
-      () =>
-        this.postMessageToParent({
-          command: "editInlineMenuCipher",
-          inlineMenuCipherId,
-        }),
-      `${UID}-edit-cipher-button-click-handler`,
-    );
-  };
 
   /**
    * @param ambiguousKey
@@ -693,7 +681,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const emptyLi = this.createEmptyNameListItem();
     ulElement.appendChild(emptyLi);
 
-    const newButton = this.createNewContactButtonByName(inlineMenuCipherId, "newName");
+    const newButton = this.createNewContactButtonByName(inlineMenuCipherId, contactName, "newName");
     ulElement.appendChild(newButton);
 
     this.inlineMenuListContainer.appendChild(addNewLoginButtonContainer);
@@ -753,6 +741,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     if (isAmbiguousFieldFocused) {
       const newButton = this.createNewContactButtonByName(
         inlineMenuCipherId,
+        contactName,
         firstAmbiguousFieldName,
       );
       ulElement.appendChild(newButton);
