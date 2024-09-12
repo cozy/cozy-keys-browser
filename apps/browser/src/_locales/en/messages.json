@@ -4566,5 +4566,47 @@
   },
   "newName": {
     "message": "New name"
+  },
+  "new_paperIdentityCardNumber": {
+    "message": "New national ID card number"
+  },
+  "new_paperPassportNumber": {
+    "message": "New passport number"
+  },
+  "new_paperSocialSecurityNumber": {
+    "message": "New social security number"
+  },
+  "new_paperResidencePermitNumber": {
+    "message": "New residence permit number"
+  },
+  "new_paperDrivingLicenseNumber": {
+    "message": "New driving license number"
+  },
+  "new_paperVehicleRegistrationNumber": {
+    "message": "New vehicule registration number"
+  },
+  "new_paperVehicleRegistrationConfidentialCode": {
+    "message": "New confidential vehicle registration code"
+  },
+  "new_paperVehicleRegistrationLicensePlateNumber": {
+    "message": "New license plate number"
+  },
+  "new_paperBankIbanNumber": {
+    "message": "New IBAN number"
+  },
+  "new_paperBankBicNumber": {
+    "message": "New BIC number"
+  },
+  "new_paperGrossSalaryAmount": {
+    "message": "New gross salary"
+  },
+  "new_paperNetSalaryAmount": {
+    "message": "New net salary"
+  },
+  "new_paperTaxNoticeNumber": {
+    "message": "New tax notice number"
+  },
+  "new_paperTaxNoticeRefTaxIncome": {
+    "message": "New tax notice income"
   }
 }

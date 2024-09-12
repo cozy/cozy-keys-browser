@@ -1637,6 +1637,30 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         newPhone: this.i18nService.translate("newPhone"),
         newEmail: this.i18nService.translate("newEmail"),
         newName: this.i18nService.translate("newName"),
+        new_paperIdentityCardNumber: this.i18nService.translate("new_paperIdentityCardNumber"),
+        new_paperPassportNumber: this.i18nService.translate("new_paperPassportNumber"),
+        new_paperSocialSecurityNumber: this.i18nService.translate("new_paperSocialSecurityNumber"),
+        new_paperResidencePermitNumber: this.i18nService.translate(
+          "new_paperResidencePermitNumber",
+        ),
+        new_paperDrivingLicenseNumber: this.i18nService.translate("new_paperDrivingLicenseNumber"),
+        new_paperVehicleRegistrationNumber: this.i18nService.translate(
+          "new_paperVehicleRegistrationNumber",
+        ),
+        new_paperVehicleRegistrationConfidentialCode: this.i18nService.translate(
+          "new_paperVehicleRegistrationConfidentialCode",
+        ),
+        new_paperVehicleRegistrationLicensePlateNumber: this.i18nService.translate(
+          "new_paperVehicleRegistrationLicensePlateNumber",
+        ),
+        new_paperBankIbanNumber: this.i18nService.translate("new_paperBankIbanNumber"),
+        new_paperBankBicNumber: this.i18nService.translate("new_paperBankBicNumber"),
+        new_paperGrossSalaryAmount: this.i18nService.translate("new_paperGrossSalaryAmount"),
+        new_paperNetSalaryAmount: this.i18nService.translate("new_paperNetSalaryAmount"),
+        new_paperTaxNoticeNumber: this.i18nService.translate("new_paperTaxNoticeNumber"),
+        new_paperTaxNoticeRefTaxIncome: this.i18nService.translate(
+          "new_paperTaxNoticeRefTaxIncome",
+        ),
         givenName: this.i18nService.translate("givenName"),
         additionalName: this.i18nService.translate("additionalName"),
         familyName: this.i18nService.translate("familyName"),
