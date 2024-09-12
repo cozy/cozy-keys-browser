@@ -854,7 +854,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         ulElement.appendChild(li);
       }
     } else {
-      const emptyLiText = "No data (translation incoming)";
+      const emptyLiText = this.getTranslation("noItemsToShow");
       const emptyLi = this.createEmptyListItem(emptyLiText);
       ulElement.appendChild(emptyLi);
     }
@@ -862,7 +862,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const newButton = this.createNewButton(
       inlineMenuCipherId,
       contactName,
-      "New (translation incoming)",
+      this.getTranslation(`new_${this.fieldQualifier}`),
     );
     ulElement.appendChild(newButton);
 
