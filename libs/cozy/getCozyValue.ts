@@ -4,7 +4,7 @@ import _ from "lodash";
 
 import { AutofillFieldQualifierType } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
 import AutofillField from "../../apps/browser/src/autofill/models/autofill-field";
-import { CozyProfile } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
+import { CozyAutofillOptions } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 import { PaperAutoFillConstants } from "../../apps/browser/src/autofill/services/autofill-constants";
 
 import { COZY_ATTRIBUTES_MAPPING, CozyAttributesModel, FILTERS } from "./mapping";
@@ -16,7 +16,7 @@ interface GetCozyValueType {
   me?: boolean;
   field?: AutofillField;
   fieldQualifier: AutofillFieldQualifierType;
-  cozyProfile?: CozyProfile;
+  cozyAutofillOptions?: CozyAutofillOptions;
   filterName?: string;
 }
 
@@ -27,7 +27,7 @@ export const getCozyValue = async ({
   me,
   field,
   fieldQualifier,
-  cozyProfile,
+  cozyAutofillOptions,
   filterName,
 }: GetCozyValueType): Promise<string | undefined> => {
   const cozyAttributeModel = COZY_ATTRIBUTES_MAPPING[fieldQualifier];
@@ -41,7 +41,7 @@ export const getCozyValue = async ({
       client,
       contactId,
       cozyAttributeModel,
-      cozyProfile,
+      cozyAutofillOptions,
     });
   } else if (cozyAttributeModel.doctype === "io.cozy.files") {
     return await getCozyValueInPaper({
@@ -50,7 +50,7 @@ export const getCozyValue = async ({
       contactEmail,
       me,
       cozyAttributeModel,
-      cozyProfile,
+      cozyAutofillOptions,
       field,
       filterName,
     });
@@ -63,7 +63,7 @@ interface GetCozyValueInDataType {
   contactEmail?: string;
   me?: boolean;
   cozyAttributeModel: CozyAttributesModel;
-  cozyProfile?: CozyProfile;
+  cozyAutofillOptions?: CozyAutofillOptions;
   field?: AutofillField;
   filterName?: string;
 }
@@ -72,7 +72,7 @@ const getCozyValueInContact = async ({
   client,
   contactId,
   cozyAttributeModel,
-  cozyProfile,
+  cozyAutofillOptions,
 }: GetCozyValueInDataType) => {
   const { data: contact } = await client.query(Q("io.cozy.contacts").getById(contactId), {
     executeFromStore: true,
@@ -81,7 +81,7 @@ const getCozyValueInContact = async ({
   if (cozyAttributeModel.isPathArray) {
     const dataArray = _.get(contact, cozyAttributeModel.path);
 
-    const selectedData = selectDataWithCozyProfile(dataArray, cozyProfile);
+    const selectedData = selectDataWithCozyProfile(dataArray, cozyAutofillOptions);
     const selectedValue = cozyAttributeModel.pathAttributes
       .map((pathAttribute) => _.get(selectedData, pathAttribute))
       .join(" ");
@@ -151,7 +151,10 @@ export const getAllPapersFromContact = async ({
   return papersFromContact;
 };
 
-export const selectDataWithCozyProfile = (data: any[] | undefined, cozyProfile?: CozyProfile) => {
+export const selectDataWithCozyProfile = (
+  data: any[] | undefined,
+  cozyAutofillOptions?: CozyAutofillOptions,
+) => {
   if (!data || data.length === 0) {
     return;
   }
@@ -160,17 +163,18 @@ export const selectDataWithCozyProfile = (data: any[] | undefined, cozyProfile?:
     return data[0];
   }
 
-  const type = cozyProfile?.type;
-  const label = cozyProfile?.label;
+  const type = cozyAutofillOptions?.type;
+  const label = cozyAutofillOptions?.label;
 
   // If we clicked on a phone number with no type and label,
   // we want to autofill with this phone number and not evaluate the select data logic
   // that will finish by return the first phone number and not the phone number we clicked
   const matchingValueData = data.find(
     (d) =>
-      (cozyProfile?.number && cozyProfile.number === d.number) ||
-      (cozyProfile?.formattedAddress && cozyProfile.formattedAddress === d.formattedAddress) ||
-      (cozyProfile?.address && cozyProfile.address === d.address),
+      cozyAutofillOptions?.value &&
+      (cozyAutofillOptions.value === d.number ||
+        cozyAutofillOptions.value === d.formattedAddress ||
+        cozyAutofillOptions.value === d.address),
   );
 
   if (!type && !label && matchingValueData) {

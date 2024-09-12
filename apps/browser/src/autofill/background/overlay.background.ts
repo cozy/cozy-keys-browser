@@ -36,7 +36,7 @@ import {
   AutofillOverlayPort,
   MAX_SUB_FRAME_DEPTH,
 } from "../enums/autofill-overlay.enum";
-import { AutofillService } from "../services/abstractions/autofill.service";
+import { AutofillService, CozyAutofillOptions } from "../services/abstractions/autofill.service";
 import {
   ambiguousContactFieldNames,
   generateRandomChars,
@@ -835,7 +835,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   private async fillInlineMenuCipher(
     { inlineMenuCipherId }: OverlayPortMessage,
     { sender }: chrome.runtime.Port,
-    ambiguousValue?: AmbiguousContactFieldValue[0],
+    cozyAutofillOptions: CozyAutofillOptions = {},
     fieldHtmlIDToFill?: string,
   ) {
     const pageDetails = this.pageDetailsForTab[sender.tab.id];
@@ -854,7 +854,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       pageDetails: Array.from(pageDetails.values()),
       fillNewPassword: true,
       allowTotpAutofill: true,
-      ...(ambiguousValue ? { cozyProfile: ambiguousValue } : {}),
+      cozyAutofillOptions,
       ...(fieldHtmlIDToFill ? { fillOnlyThisFieldHtmlID: fieldHtmlIDToFill } : {}),
     });
 
@@ -875,7 +875,8 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     message: OverlayPortMessage,
     port: chrome.runtime.Port,
   ) {
-    const { ambiguousValue, fieldHtmlIDToFill, inlineMenuCipherId } = message;
+    const { cozyAutofillOptions, fieldHtmlIDToFill, inlineMenuCipherId } = message;
+
     const client = await this.cozyClientService.getClientInstance();
     const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
 
@@ -898,7 +899,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       return;
     }
 
-    this.fillInlineMenuCipher(message, port, ambiguousValue, fieldHtmlIDToFill);
+    this.fillInlineMenuCipher(message, port, cozyAutofillOptions, fieldHtmlIDToFill);
   }
 
   /**
