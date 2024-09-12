@@ -167,13 +167,11 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     fillAutofillInlineMenuCipher: ({ message, port }) => this.fillInlineMenuCipher(message, port),
     // Cozy customization
     handleContactClick: ({ message, port }) => this.handleContactClick(message, port),
-    saveFieldToCozyDoctype: ({ message, port }) => this.saveFieldToCozyDoctype(message, port),
+    saveFieldToCozyDoctype: ({ message }) => this.saveFieldToCozyDoctype(message),
     fillAutofillInlineMenuCipherWithAmbiguousField: ({ message, port }) =>
       this.fillAutofillInlineMenuCipherWithAmbiguousField(message, port),
     inlineMenuSearchContact: ({ message }) => this.searchContacts(message),
     redirectToCozy: ({ message }) => this.redirectToCozy(message),
-    handleMenuListUpdate: ({ message, port }) => this.handleMenuListUpdate(message, port),
-    editInlineMenuCipher: ({ message }) => this.editInlineMenuCipher(message),
     // Cozy customization end
     addNewVaultItem: ({ message, port }) => this.getNewVaultItemDetails(message, port),
     viewSelectedCipher: ({ message, port }) => this.viewSelectedCipher(message, port),
@@ -197,38 +195,6 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   ) {
     this.initOverlayEventObservables();
   }
-
-  // Cozy customization
-  private editInlineMenuCipher = async (message: OverlayPortMessage) => {
-    const { inlineMenuCipherId } = message;
-    const client = await this.cozyClientService.getClientInstance();
-    const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
-
-    const { data: contact } = (await client.query(Q(CONTACTS_DOCTYPE).getById(cipher.id), {
-      executeFromStore: true,
-    })) as { data: IOCozyContact };
-
-    this.inlineMenuListPort?.postMessage({
-      command: "editContactFields",
-      inlineMenuCipherId,
-      contactName: contact.displayName,
-    });
-  };
-  // Cozy customization end
-
-  // Cozy customization
-  private handleMenuListUpdate = async (message: OverlayPortMessage, port: chrome.runtime.Port) => {
-    const { inlineMenuCipherId } = message;
-    // If ambiguous field is manually filled, inlineMenuCipherId is undefined
-    if (inlineMenuCipherId) {
-      return this.handleContactClick(message, port);
-    }
-
-    this.inlineMenuListPort?.postMessage({
-      command: "loadPageOfCiphers",
-    });
-  };
-  // Cozy customization end
 
   private redirectToCozy = (message: OverlayPortMessage) => {
     BrowserApi.createNewTab(this.cozyClientService.getAppURL(message.to, message.hash), true);
@@ -1011,7 +977,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     }
   }
 
-  private async saveFieldToCozyDoctype(message: OverlayPortMessage, port: chrome.runtime.Port) {
+  private async saveFieldToCozyDoctype(message: OverlayPortMessage) {
     const { inlineMenuCipherId, fieldQualifier, newAutofillValue } = message;
 
     if (inlineMenuCipherId) {

@@ -37,6 +37,7 @@ import {
   AmbiguousContactFieldValue,
   AmbiguousContactFieldName,
 } from "src/autofill/types";
+import type { AutofillValue } from "../../../../../../../../libs/cozy/createOrUpdateCozyDoctype";
 import { COZY_ATTRIBUTES_MAPPING } from "../../../../../../../../libs/cozy/mapping";
 /* eslint-enable */
 /* end Cozy imports */
@@ -81,8 +82,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         ),
       loadPageOfCiphers: () => this.loadPageOfCiphers(),
       focusAutofillInlineMenuList: () => this.focusInlineMenuList(),
-      editContactFields: ({ message }) =>
-        this.editContactFields(message.inlineMenuCipherId, message.contactName),
       createEmptyNameList: ({ message }) =>
         this.createEmptyNameList(message.inlineMenuCipherId, message.contactName),
     };
@@ -178,7 +177,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       if (!inputText?.value) {
         return;
       }
-      // TODO Save the contact
+      const newAutofillValue: AutofillValue = {
+        value: inputText.value,
+        ...(selectElement && JSON.parse(selectElement.value)),
+      };
+      this.handleSaveContactCipherEvent(inlineMenuCipherId, this.fieldQualifier, newAutofillValue);
     });
 
     buttonContainer.appendChild(cancelButton);
@@ -186,6 +189,19 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     return buttonContainer;
   }
+
+  private handleSaveContactCipherEvent = (
+    inlineMenuCipherId: string,
+    fieldQualifier: string,
+    newAutofillValue: AutofillValue,
+  ) => {
+    return this.postMessageToParent({
+      command: "saveFieldToCozyDoctype",
+      inlineMenuCipherId,
+      fieldQualifier,
+      newAutofillValue,
+    });
+  };
 
   /**
    * Initializes the inline menu list and updates the list items with the passed ciphers.
@@ -354,13 +370,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       ambiguousContactFieldNames.includes(
         COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AmbiguousContactFieldName,
       ) &&
-      !isBack
+      !isBack && // case where we are already on the ambiguous list and wish to return to the contacts list.
+      this.lastFilledContactCipherId // If ambiguous field is manually filled, inlineMenuCipherId is undefined.
     ) {
       this.postMessageToParent({
-        command: "handleMenuListUpdate",
+        command: "handleContactClick",
         inlineMenuCipherId: this.lastFilledContactCipherId,
-        lastFilledContactCipherId: this.lastFilledContactCipherId,
-        fieldQualifier: this.fieldQualifier,
         fieldHtmlIDToFill: this.fieldHtmlID,
       });
     } else {
@@ -552,8 +567,13 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
   private createNewContactButtonByName(
     inlineMenuCipherId: string,
-    name: AmbiguousContactFieldName | string,
+    contactName: string,
+    attributName: AmbiguousContactFieldName | string,
   ) {
+    // TODO - Add the possibility to update a contact with an address
+    if (attributName === "address") {
+      return null;
+    }
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
     listItem.classList.add("inline-menu-list-actions-item");
@@ -564,10 +584,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const fillButton = document.createElement("button");
     fillButton.setAttribute("tabindex", "-1");
     fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
-    fillButton.setAttribute("aria-label", name);
-    fillButton.addEventListener(
-      EVENTS.CLICK,
-      this.handleEditCipherClickEvent(inlineMenuCipherId, uniqueId()),
+    fillButton.setAttribute("aria-label", attributName);
+    fillButton.addEventListener(EVENTS.CLICK, () =>
+      this.editContactFields(inlineMenuCipherId, contactName),
     );
 
     const radio = document.createElement("input");
@@ -580,7 +599,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     detailsSpan.classList.add("cipher-details");
 
     let nameSpanText;
-    switch (name) {
+    switch (attributName) {
       case "phone":
         nameSpanText = this.getTranslation("newPhone");
         break;
@@ -608,17 +627,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     return listItem;
   }
-
-  private handleEditCipherClickEvent = (inlineMenuCipherId: string, UID: string) => {
-    return this.useEventHandlersMemo(
-      () =>
-        this.postMessageToParent({
-          command: "editInlineMenuCipher",
-          inlineMenuCipherId,
-        }),
-      `${UID}-edit-cipher-button-click-handler`,
-    );
-  };
 
   /**
    * @param ambiguousKey
@@ -694,8 +702,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const emptyLi = this.createEmptyNameListItem();
     ulElement.appendChild(emptyLi);
 
-    const newButton = this.createNewContactButtonByName(inlineMenuCipherId, "newName");
-    ulElement.appendChild(newButton);
+    const newButton = this.createNewContactButtonByName(inlineMenuCipherId, contactName, "newName");
+    if (newButton) {
+      ulElement.appendChild(newButton);
+    }
 
     this.inlineMenuListContainer.appendChild(addNewLoginButtonContainer);
     this.inlineMenuListContainer.appendChild(ulElement);
@@ -754,9 +764,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     if (isAmbiguousFieldFocused) {
       const newButton = this.createNewContactButtonByName(
         inlineMenuCipherId,
+        contactName,
         firstAmbiguousFieldName,
       );
-      ulElement.appendChild(newButton);
+      if (newButton) {
+        ulElement.appendChild(newButton);
+      }
     }
 
     this.inlineMenuListContainer.appendChild(addNewLoginButtonContainer);

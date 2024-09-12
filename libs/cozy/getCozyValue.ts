@@ -146,9 +146,9 @@ export const selectDataWithCozyProfile = (data: any[] | undefined, cozyProfile?:
   // that will finish by return the first phone number and not the phone number we clicked
   const matchingValueData = data.find(
     (d) =>
-      (cozyProfile.number && cozyProfile.number === d.number) ||
-      (cozyProfile.formattedAddress && cozyProfile.formattedAddress === d.formattedAddress) ||
-      (cozyProfile.address && cozyProfile.address === d.address),
+      (cozyProfile?.number && cozyProfile.number === d.number) ||
+      (cozyProfile?.formattedAddress && cozyProfile.formattedAddress === d.formattedAddress) ||
+      (cozyProfile?.address && cozyProfile.address === d.address),
   );
 
   if (!type && !label && matchingValueData) {
