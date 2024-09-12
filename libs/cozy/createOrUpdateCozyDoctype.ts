@@ -43,11 +43,11 @@ export const createOrUpdateCozyDoctype = async ({
     return;
   }
 
-  if (cozyAttributeModel.doctype === "io.cozy.contacts") {
-    const { data: contact } = (await client.query(Q("io.cozy.contacts").getById(cipher.id))) as {
-      data: IOCozyContact;
-    };
+  const { data: contact } = (await client.query(Q("io.cozy.contacts").getById(cipher.id))) as {
+    data: IOCozyContact;
+  };
 
+  if (cozyAttributeModel.doctype === "io.cozy.contacts") {
     // only update for the moment
     const updatedContact = await createOrUpdateCozyContact({
       contact,
@@ -63,6 +63,7 @@ export const createOrUpdateCozyDoctype = async ({
       cozyAttributeModel,
       newAutofillValue,
       i18nService,
+      contact,
     });
 
     await client.save(createdPaper);
@@ -118,6 +119,7 @@ interface CreateOrUpdateCozyPaperType {
   cozyAttributeModel: CozyAttributesModel;
   newAutofillValue: AutofillValue;
   i18nService: I18nService;
+  contact: IOCozyContact,
 }
 
 export const createOrUpdateCozyPaper = async ({
@@ -125,6 +127,7 @@ export const createOrUpdateCozyPaper = async ({
   cozyAttributeModel,
   newAutofillValue,
   i18nService,
+  contact,
 }: CreateOrUpdateCozyPaperType): Promise<any> => {
   const [, qualificationLabelValue] = Object.entries(cozyAttributeModel.selector)[0];
 
@@ -161,13 +164,13 @@ export const createOrUpdateCozyPaper = async ({
   );
 
   // Add contact
-  // const fileCollection = client.collection('io.cozy.files')
-  // const references = [{
-  //   _id: contact._id,
-  //   _type: 'io.cozy.contacts'
-  // }]
+  const fileCollection = client.collection('io.cozy.files')
+  const references = [{
+    _id: contact._id,
+    _type: 'io.cozy.contacts'
+  }]
 
-  // await fileCollection.addReferencedBy(fileCreated, references)
+  await fileCollection.addReferencedBy(fileCreated, references)
 
   return fileCreated;
 };
