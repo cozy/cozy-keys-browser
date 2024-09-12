@@ -83,11 +83,20 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
           message.fieldHtmlIDToFill,
         ),
       paperList: ({ message }) =>
-        this.paperList(message.inlineMenuCipherId, message.contactName, message.availablePapers),
+        this.paperList(
+          message.inlineMenuCipherId,
+          message.contactName,
+          message.availablePapers,
+          message.fieldHtmlIDToFill,
+        ),
       loadPageOfCiphers: () => this.loadPageOfCiphers(),
       focusAutofillInlineMenuList: () => this.focusInlineMenuList(),
       createEmptyNameList: ({ message }) =>
-        this.createEmptyNameList(message.inlineMenuCipherId, message.contactName),
+        this.createEmptyNameList(
+          message.inlineMenuCipherId,
+          message.contactName,
+          message.fieldHtmlIDToFill,
+        ),
     };
 
   constructor() {
@@ -96,7 +105,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.setupInlineMenuListGlobalListeners();
   }
 
-  private editContactFields(inlineMenuCipherId: string, contactName: string) {
+  private editContactFields(
+    inlineMenuCipherId: string,
+    contactName: string,
+    fieldHtmlIDToFill?: string,
+  ) {
     this.inlineMenuListContainer.innerHTML = "";
     this.inlineMenuListContainer.classList.remove(
       "inline-menu-list-container--with-new-item-button",
@@ -139,7 +152,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const divider = document.createElement("div");
     divider.classList.add("contact-edit-divider");
 
-    const buttons = this.editContactButtons(inlineMenuCipherId, inputText, selectElement);
+    const buttons = this.editContactButtons(
+      inlineMenuCipherId,
+      fieldHtmlIDToFill,
+      inputText,
+      selectElement,
+    );
 
     // Necessary for the bottom margin of “buttons” to be interpreted
     const necessaryStyleElement = document.createElement("div");
@@ -161,6 +179,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
   private editContactButtons(
     inlineMenuCipherId: string,
+    fieldHtmlIDToFill: string,
     inputText: HTMLInputElement,
     selectElement: HTMLSelectElement | null,
   ) {
@@ -185,7 +204,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         value: inputText.value,
         ...(selectElement && JSON.parse(selectElement.value)),
       };
-      this.handleSaveContactCipherEvent(inlineMenuCipherId, this.fieldQualifier, newAutofillValue);
+      this.handleSaveContactCipherEvent(
+        inlineMenuCipherId,
+        fieldHtmlIDToFill,
+        this.fieldQualifier,
+        newAutofillValue,
+      );
     });
 
     buttonContainer.appendChild(cancelButton);
@@ -196,6 +220,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
   private handleSaveContactCipherEvent = (
     inlineMenuCipherId: string,
+    fieldHtmlIDToFill: string,
     fieldQualifier: string,
     newAutofillValue: AutofillValue,
   ) => {
@@ -204,6 +229,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       inlineMenuCipherId,
       fieldQualifier,
       newAutofillValue,
+      fieldHtmlIDToFill,
     });
   };
 
@@ -639,7 +665,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return inlineMenuListButtonContainer;
   }
 
-  private createNewButton(inlineMenuCipherId: string, contactName: string, title: string) {
+  private createNewButton(
+    inlineMenuCipherId: string,
+    fieldHtmlIDToFill: string,
+    contactName: string,
+    title: string,
+  ) {
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
     listItem.classList.add("inline-menu-list-actions-item");
@@ -652,7 +683,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
     fillButton.setAttribute("aria-label", title);
     fillButton.addEventListener(EVENTS.CLICK, () =>
-      this.editContactFields(inlineMenuCipherId, contactName),
+      this.editContactFields(inlineMenuCipherId, contactName, fieldHtmlIDToFill),
     );
 
     const radio = document.createElement("input");
@@ -709,7 +740,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return listItem;
   }
 
-  private createEmptyNameList(inlineMenuCipherId: string, contactName: string) {
+  private createEmptyNameList(
+    inlineMenuCipherId: string,
+    contactName: string,
+    fieldHtmlIDToFill: string,
+  ) {
     this.inlineMenuListContainer.innerHTML = "";
     this.inlineMenuListContainer.classList.remove(
       "inline-menu-list-container--with-new-item-button",
@@ -726,7 +761,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     ulElement.appendChild(emptyLi);
 
     const newButtonTitle = this.getTranslation("newName");
-    const newButton = this.createNewButton(inlineMenuCipherId, contactName, newButtonTitle);
+    const newButton = this.createNewButton(
+      inlineMenuCipherId,
+      fieldHtmlIDToFill,
+      contactName,
+      newButtonTitle,
+    );
     if (newButton) {
       ulElement.appendChild(newButton);
     }
@@ -805,7 +845,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
       // TODO - Add the possibility to update a contact with an address
       if (firstAmbiguousFieldName !== "address") {
-        const newButton = this.createNewButton(inlineMenuCipherId, contactName, newButtonTitle);
+        const newButton = this.createNewButton(
+          inlineMenuCipherId,
+          fieldHtmlIDToFill,
+          contactName,
+          newButtonTitle,
+        );
         if (newButton) {
           ulElement.appendChild(newButton);
         }
@@ -828,6 +873,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     inlineMenuCipherId: string,
     contactName: string,
     availablePapers: AvailablePapers[],
+    fieldHtmlIDToFill: string,
   ) {
     this.inlineMenuListContainer.innerHTML = "";
     this.inlineMenuListContainer.classList.remove(
@@ -861,6 +907,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     const newButton = this.createNewButton(
       inlineMenuCipherId,
+      fieldHtmlIDToFill,
       contactName,
       this.getTranslation(`new_${this.fieldQualifier}`),
     );
