@@ -168,7 +168,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     fillAutofillInlineMenuCipher: ({ message, port }) => this.fillInlineMenuCipher(message, port),
     // Cozy customization
     handleContactClick: ({ message, port }) => this.handleContactClick(message, port),
-    saveFieldToCozyDoctype: ({ message }) => this.saveFieldToCozyDoctype(message),
+    saveFieldToCozyDoctype: ({ message, port }) => this.saveFieldToCozyDoctype(message, port),
     fillAutofillInlineMenuCipherWithAmbiguousField: ({ message, port }) =>
       this.fillAutofillInlineMenuCipherWithAmbiguousField(message, port),
     fillAutofillInlineMenuCipherWithPaperField: ({ message, port }) =>
@@ -897,6 +897,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         command: "createEmptyNameList",
         inlineMenuCipherId,
         contactName: contact.displayName,
+        fieldHtmlIDToFill,
       });
       return;
     }
@@ -974,6 +975,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         inlineMenuCipherId,
         contactName: contact.displayName,
         availablePapers,
+        fieldHtmlIDToFill,
       });
     } else if (
       (!isFocusedFieldAmbigous && hasMultipleAmbiguousValueInSameField) ||
@@ -998,9 +1000,10 @@ export class OverlayBackground implements OverlayBackgroundInterface {
 
       if (!value) {
         this.inlineMenuListPort?.postMessage({
-          command: "editContactFields",
+          command: "createEmptyNameList",
           inlineMenuCipherId,
           contactName: contact.displayName,
+          fieldHtmlIDToFill,
         });
         return;
       }
@@ -1008,8 +1011,8 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     }
   }
 
-  private async saveFieldToCozyDoctype(message: OverlayPortMessage) {
-    const { inlineMenuCipherId, fieldQualifier, newAutofillValue } = message;
+  private async saveFieldToCozyDoctype(message: OverlayPortMessage, port: chrome.runtime.Port) {
+    const { inlineMenuCipherId, fieldQualifier, newAutofillValue, fieldHtmlIDToFill } = message;
 
     if (inlineMenuCipherId) {
       const client = await this.cozyClientService.getClientInstance();
@@ -1022,6 +1025,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         newAutofillValue,
         i18nService: this.i18nService,
       });
+      this.fillInlineMenuCipher(message, port, newAutofillValue, fieldHtmlIDToFill);
     }
   }
 
