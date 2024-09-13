@@ -22,6 +22,7 @@ import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 import { SecureNoteView } from "@bitwarden/common/vault/models/view/secure-note.view";
 
+import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "../../../../../libs/cozy/constants";
 import { RealTimeNotifications } from "../../cozy/realtime/RealtimeNotifications";
 import manifest from "../../manifest.json";
 
@@ -151,11 +152,11 @@ export class CozyClientService {
       oauthOptions,
       schema: {
         files: {
-          doctype: "io.cozy.files",
+          doctype: FILES_DOCTYPE,
           relationships: {
             contacts: {
               type: HasManyContacts,
-              doctype: "io.cozy.contacts",
+              doctype: CONTACTS_DOCTYPE,
             },
           },
         },

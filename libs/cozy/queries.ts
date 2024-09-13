@@ -2,6 +2,8 @@ import { Q } from "cozy-client";
 import CozyClient from "cozy-client/types/CozyClient";
 import { IOCozyContact } from "cozy-client/types/types";
 
+import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "./constants";
+
 const buildFilesQueryWithQualificationLabel = () => {
   const select = [
     "name",
@@ -23,7 +25,7 @@ const buildFilesQueryWithQualificationLabel = () => {
 
   return {
     definition: () =>
-      Q("io.cozy.files")
+      Q(FILES_DOCTYPE)
         .where({
           type: "file",
           trashed: false,
@@ -39,16 +41,16 @@ const buildFilesQueryWithQualificationLabel = () => {
         .include(["contacts"])
         .indexFields(["type", "trashed"]),
     options: {
-      as: `io.cozy.files/metadata_qualification_label`,
+      as: `${FILES_DOCTYPE}/metadata_qualification_label`,
     },
   };
 };
 
 const buildFileQueryById = (_id: string) => {
   return {
-    definition: () => Q("io.cozy.files").getById(_id),
+    definition: () => Q(FILES_DOCTYPE).getById(_id),
     options: {
-      as: `io.cozy.files/byId`,
+      as: `${FILES_DOCTYPE}/byId`,
       singleDocData: true,
     },
   };
@@ -59,7 +61,7 @@ export const fetchPapers = async (client: CozyClient) => {
 
   const data = await client.queryAll(filesQueryByLabels.definition(), filesQueryByLabels.options);
 
-  const hydratedData = client.hydrateDocuments("io.cozy.files", data);
+  const hydratedData = client.hydrateDocuments(FILES_DOCTYPE, data);
 
   return hydratedData;
 };
@@ -78,7 +80,7 @@ export const fetchPaper = async (client: CozyClient, _id: string) => {
 // Contacts
 
 export const buildContactsQuery = () => ({
-  definition: Q("io.cozy.contacts")
+  definition: Q(CONTACTS_DOCTYPE)
     .where({
       "indexes.byFamilyNameGivenNameEmailCozyUrl": {
         $gt: null,
@@ -103,7 +105,7 @@ export const buildContactsQuery = () => ({
     .sortBy([{ "indexes.byFamilyNameGivenNameEmailCozyUrl": "asc" }])
     .limitBy(1000),
   options: {
-    as: "io.cozy.contacts/indexedByFamilyNameGivenNameEmailCozyUrl",
+    as: `${CONTACTS_DOCTYPE}/indexedByFamilyNameGivenNameEmailCozyUrl`,
   },
 });
 
@@ -119,7 +121,7 @@ export const fetchContacts = async (client: CozyClient): Promise<IOCozyContact[]
 };
 
 export const fetchContact = async (client: CozyClient, _id: string): Promise<IOCozyContact> => {
-  const { data }: { data: IOCozyContact } = await client.query(Q("io.cozy.contacts").getById(_id));
+  const { data }: { data: IOCozyContact } = await client.query(Q(CONTACTS_DOCTYPE).getById(_id));
 
   return data;
 };

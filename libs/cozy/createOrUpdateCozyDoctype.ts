@@ -7,6 +7,7 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import { AutofillFieldQualifierType } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
 
+import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "./constants";
 import { getOrCreateAppFolderWithReference } from "./helpers/folder";
 import { createPDFWithText } from "./helpers/pdf";
 import { COZY_ATTRIBUTES_MAPPING, CozyAttributesModel } from "./mapping";
@@ -43,11 +44,11 @@ export const createOrUpdateCozyDoctype = async ({
     return;
   }
 
-  const { data: contact } = (await client.query(Q("io.cozy.contacts").getById(cipher.id))) as {
+  const { data: contact } = (await client.query(Q(CONTACTS_DOCTYPE).getById(cipher.id))) as {
     data: IOCozyContact;
   };
 
-  if (cozyAttributeModel.doctype === "io.cozy.contacts") {
+  if (cozyAttributeModel.doctype === CONTACTS_DOCTYPE) {
     // only update for the moment
     const updatedContact = await createOrUpdateCozyContact({
       contact,
@@ -56,7 +57,7 @@ export const createOrUpdateCozyDoctype = async ({
     });
 
     await client.save(updatedContact);
-  } else if (cozyAttributeModel.doctype === "io.cozy.files") {
+  } else if (cozyAttributeModel.doctype === FILES_DOCTYPE) {
     // only create for the moment
     const createdPaper = await createOrUpdateCozyPaper({
       client,
@@ -164,10 +165,10 @@ export const createOrUpdateCozyPaper = async ({
   );
 
   // Add contact
-  const fileCollection = client.collection('io.cozy.files')
+  const fileCollection = client.collection(FILES_DOCTYPE)
   const references = [{
     _id: contact._id,
-    _type: 'io.cozy.contacts'
+    _type: CONTACTS_DOCTYPE
   }]
 
   await fileCollection.addReferencedBy(fileCreated, references)

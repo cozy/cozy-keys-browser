@@ -4,6 +4,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
+import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "../../../../../libs/cozy/constants";
 import { convertContactToCipherData } from "../../../../../libs/cozy/contact.helper";
 import {
   convertNoteToCipherData,
@@ -26,15 +27,21 @@ export class RealTimeNotifications {
     // @ts-expect-error reatime item is not typed as it is dynamically injected at runtime
     const realtime = this.client.plugins.realtime;
 
-    const doctypeContact = "io.cozy.contacts";
-    await realtime.subscribe("created", doctypeContact, this.dispatchCreateContact.bind(this));
-    await realtime.subscribe("updated", doctypeContact, this.dispatchUpdateContact.bind(this));
-    await realtime.subscribe("deleted", doctypeContact, this.dispatchDeleteContact.bind(this));
+    await realtime.subscribe(
+      "created",
+      CONTACTS_DOCTYPE,
+      this.dispatchCreateContact.bind(this),
+    );
+    await realtime.subscribe(
+      "updated",
+      CONTACTS_DOCTYPE,
+      this.dispatchUpdateContact.bind(this),
+    );
+    await realtime.subscribe("deleted", CONTACTS_DOCTYPE, this.dispatchDeleteContact.bind(this));
 
-    const doctypePaper = "io.cozy.files";
     // We don't want to listen Creation as it is always followed by an Update notification with more data
-    await realtime.subscribe("updated", doctypePaper, this.dispatchUpdatePaper.bind(this));
-    await realtime.subscribe("deleted", doctypePaper, this.dispatchDeletePaper.bind(this));
+    await realtime.subscribe("updated", FILES_DOCTYPE, this.dispatchUpdatePaper.bind(this));
+    await realtime.subscribe("deleted", FILES_DOCTYPE, this.dispatchDeletePaper.bind(this));
 
     const doctypeThumbnail = "io.cozy.files.thumbnails";
     await realtime.subscribe("created", doctypeThumbnail, this.dispatchCreateThumbnail.bind(this));
@@ -46,13 +53,13 @@ export class RealTimeNotifications {
     const realtime = this.client.plugins.realtime;
 
     const doctypeContact = "io.cozy.contacts";
-    await realtime.unsubscribe("created", doctypeContact, this.dispatchCreateContact);
-    await realtime.unsubscribe("updated", doctypeContact, this.dispatchUpdateContact);
-    await realtime.unsubscribe("deleted", doctypeContact, this.dispatchDeleteContact);
+    await realtime.unsubscribe("created", CONTACTS_DOCTYPE, this.dispatchCreateContact);
+    await realtime.unsubscribe("updated", CONTACTS_DOCTYPE, this.dispatchUpdateContact);
+    await realtime.unsubscribe("deleted", CONTACTS_DOCTYPE, this.dispatchDeleteContact);
 
     const doctypePaper = "io.cozy.files";
-    await realtime.unsubscribe("updated", doctypePaper, this.dispatchUpdatePaper);
-    await realtime.unsubscribe("deleted", doctypePaper, this.dispatchDeletePaper);
+    await realtime.unsubscribe("updated", FILES_DOCTYPE, this.dispatchUpdatePaper);
+    await realtime.unsubscribe("deleted", FILES_DOCTYPE, this.dispatchDeletePaper);
 
     const doctypeThumbnail = "io.cozy.files.thumbnails";
     await realtime.unsubscribe("created", doctypeThumbnail, this.dispatchCreateThumbnail);
@@ -127,7 +134,7 @@ export class RealTimeNotifications {
 
   async upsertPaperFromId(paperId: string) {
     const itemFromDb = await fetchPaper(this.client, paperId);
-    const hydratedData = this.client.hydrateDocuments("io.cozy.files", [itemFromDb])[0];
+    const hydratedData = this.client.hydrateDocuments(FILES_DOCTYPE, [itemFromDb])[0];
 
     let cipherData;
     if (isNote(itemFromDb)) {

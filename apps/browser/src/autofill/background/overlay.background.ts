@@ -80,6 +80,7 @@ import { COZY_ATTRIBUTES_MAPPING } from "../../../../../libs/cozy/mapping";
 import { createOrUpdateCozyDoctype } from "../../../../../libs/cozy/createOrUpdateCozyDoctype";
 import { getCozyValue, getAllPapersFromContact } from "../../../../../libs/cozy/getCozyValue";
 import _ from "lodash";
+import { FILES_DOCTYPE } from "../../../../../libs/cozy/constants";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -960,7 +961,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       On the ambiguous(phone/address/email) form field:
       - Display a menu to select value.
     */
-    if (focusedFieldModel.doctype === "io.cozy.files") {
+    if (focusedFieldModel.doctype === FILES_DOCTYPE) {
       const availablePapers = (
         await getAllPapersFromContact({
           client,
