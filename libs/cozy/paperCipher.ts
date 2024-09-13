@@ -14,6 +14,7 @@ import { DialogService, ToastService } from "@bitwarden/components";
 
 import { CozyClientService } from "../../apps/browser/src/popup/services/cozyClient.service";
 
+import { FILES_DOCTYPE } from "./constants";
 import { convertNoteToCipherData, isNote, fetchNoteIllustrationUrl } from "./note.helper";
 import { convertPaperToCipherData } from "./paper.helper";
 import { fetchPapers, fetchPaper } from "./queries";
@@ -121,7 +122,7 @@ export const favoritePaperCipher = async (
     },
   });
 
-  const [updatePaperWithContacts] = client.hydrateDocuments("io.cozy.files", [updatedPaper]);
+  const [updatePaperWithContacts] = client.hydrateDocuments(FILES_DOCTYPE, [updatedPaper]);
 
   let cipherData;
 
@@ -172,7 +173,7 @@ export const deletePaperCipher = async (
   const client = await cozyClientService.getClientInstance();
   await client.destroy({
     _id: cipher.id,
-    _type: "io.cozy.files",
+    _type: FILES_DOCTYPE,
   });
   await cipherService.delete(cipher.id);
 
