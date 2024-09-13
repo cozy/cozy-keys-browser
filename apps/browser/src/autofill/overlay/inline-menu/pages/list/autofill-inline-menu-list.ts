@@ -715,7 +715,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private createEmptyListItem(title: string) {
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
-    listItem.classList.add("inline-menu-list-actions-item", "disabled");
+    listItem.classList.add("inline-menu-list-actions-item", "inline-menu-list-actions-item--empty", "disabled");
 
     const div = document.createElement("div");
     div.classList.add("cipher-container");
