@@ -429,9 +429,11 @@ body {
     }
   }
 
-  &:hover {
-    @include themify($themes) {
-      background: themed("backgroundOffsetColor");
+  &:not(.inline-menu-list-actions-item--empty) {
+    &:hover {
+      @include themify($themes) {
+        background: themed("backgroundOffsetColor");
+      }
     }
   }
 
