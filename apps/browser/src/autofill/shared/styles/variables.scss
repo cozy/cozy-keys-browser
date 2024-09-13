@@ -7,6 +7,7 @@ $font-family-lato: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
 // Cozy customization end
 $font-family-sans-serif: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $font-size-base: 14px;
+$icon-color: rgba(29, 33, 42, 0.72);
 $text-color: #212529;
 $muted-text-color: #6c747c;
 $border-color: #ced4dc;
@@ -35,6 +36,7 @@ $error-color-dark: #ee9792;
 
 $themes: (
   light: (
+    iconColor: $icon-color,
     textColor: $text-color,
     mutedTextColor: $muted-text-color,
     backgroundColor: $background-color,
@@ -50,6 +52,7 @@ $themes: (
     errorColor: $error-color-light,
   ),
   lightContrasted: (
+    iconColor: $icon-color,
     textColor: $text-color,
     mutedTextColor: $muted-text-color,
     backgroundColor: $background-color,
@@ -65,6 +68,7 @@ $themes: (
     errorColor: $error-color-light,
   ),
   dark: (
+    iconColor: #ffffff,
     textColor: #ffffff,
     mutedTextColor: #bac0ce,
     backgroundColor: #2f343d,
@@ -80,6 +84,7 @@ $themes: (
     errorColor: $error-color-dark,
   ),
   nord: (
+    iconColor: $nord5,
     textColor: $nord5,
     mutedTextColor: $nord4,
     backgroundColor: $nord1,
@@ -94,6 +99,7 @@ $themes: (
     successColor: $success-color-dark,
   ),
   solarizedDark: (
+    iconColor: $solarizedDarkBase2,
     textColor: $solarizedDarkBase2,
     // Muted uses main text color to avoid contrast issues
     mutedTextColor: $solarizedDarkBase2,

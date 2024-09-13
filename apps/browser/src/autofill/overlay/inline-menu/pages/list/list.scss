@@ -181,6 +181,12 @@ body {
 .contact-edit-icon {
   position: absolute;
   left: 0.7rem;
+
+  path {
+    @include themify($themes) {
+      fill: themed("iconColor") !important;
+    }
+  }
 }
 .input-group-select {
   margin-left: 4rem;
@@ -424,6 +430,14 @@ body {
         outline-color: themed("focusOutlineColor");
       }
     }
+
+    svg {
+      path {
+        @include themify($themes) {
+          fill: themed("iconColor") !important;
+        }
+      }
+    }
   }
 
   .fill-cipher-button,
@@ -466,7 +480,7 @@ body {
     svg {
       path {
         @include themify($themes) {
-          fill: themed("primaryColor") !important;
+          fill: themed("iconColor") !important;
         }
       }
     }
