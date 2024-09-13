@@ -3,6 +3,7 @@ import { IOCozyFile } from "cozy-client/types/types";
 import { CozyAutofillOptions } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 
 import { isPaperFromContact, selectPaper, selectDataWithCozyProfile } from "./getCozyValue";
+import { FILES_DOCTYPE } from "./constants";
 
 // PROFILES
 
@@ -239,7 +240,7 @@ describe("mapping", () => {
 
 const RIB1 = {
   _id: "b4698ba56c7d0ae2faeb9571d4e0ce60",
-  _type: "io.cozy.files",
+  _type: FILES_DOCTYPE,
   name: "RIB 1 - Bob John Doe.pdf",
   metadata: {
     bicNumber: "BIC99999999",
@@ -258,7 +259,7 @@ const RIB1 = {
 
 const RIB2 = {
   _id: "6bfca732cd8f258cde5b012f3b48dd67",
-  _type: "io.cozy.files",
+  _type: FILES_DOCTYPE,
   name: "RIB 2 - Bob John Doe.pdf",
   metadata: {
     bicNumber: "BIC11111111",

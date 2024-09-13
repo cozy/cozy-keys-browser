@@ -62,6 +62,7 @@ import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.serv
 import { PaperType } from "@bitwarden/common/enums/paperType";
 import { DomSanitizer } from "@angular/platform-browser";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { FILES_DOCTYPE } from "../../../../../../../libs/cozy/constants";
 
 /* eslint-enable */
 /* end Cozy imports */
@@ -620,7 +621,7 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
     const client = await this.cozyClientService.getClientInstance();
 
     const printUrl = await client
-      .collection("io.cozy.files")
+      .collection(FILES_DOCTYPE)
       .getDownloadLinkById(this.cipher.id, this.cipher.name);
 
     window.open(printUrl);
@@ -632,10 +633,10 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
     const client = await this.cozyClientService.getClientInstance();
 
     const downloadUrl = await client
-      .collection("io.cozy.files")
+      .collection(FILES_DOCTYPE)
       .getDownloadLinkById(this.cipher.id, this.cipher.name);
 
-    client.collection("io.cozy.files").forceFileDownload(`${downloadUrl}?Dl=1`, this.cipher.name);
+    client.collection(FILES_DOCTYPE).forceFileDownload(`${downloadUrl}?Dl=1`, this.cipher.name);
   }
   // Cozy customization end
 

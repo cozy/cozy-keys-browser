@@ -7,6 +7,7 @@ import AutofillField from "../../apps/browser/src/autofill/models/autofill-field
 import { CozyAutofillOptions } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 import { PaperAutoFillConstants } from "../../apps/browser/src/autofill/services/autofill-constants";
 
+import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "./constants";
 import { COZY_ATTRIBUTES_MAPPING, CozyAttributesModel, FILTERS } from "./mapping";
 
 interface GetCozyValueType {
@@ -36,14 +37,14 @@ export const getCozyValue = async ({
     return;
   }
 
-  if (cozyAttributeModel.doctype === "io.cozy.contacts") {
+  if (cozyAttributeModel.doctype === CONTACTS_DOCTYPE) {
     return await getCozyValueInContact({
       client,
       contactId,
       cozyAttributeModel,
       cozyAutofillOptions,
     });
-  } else if (cozyAttributeModel.doctype === "io.cozy.files") {
+  } else if (cozyAttributeModel.doctype === FILES_DOCTYPE) {
     return await getCozyValueInPaper({
       client,
       contactId,
@@ -74,7 +75,7 @@ const getCozyValueInContact = async ({
   cozyAttributeModel,
   cozyAutofillOptions,
 }: GetCozyValueInDataType) => {
-  const { data: contact } = await client.query(Q("io.cozy.contacts").getById(contactId), {
+  const { data: contact } = await client.query(Q(CONTACTS_DOCTYPE).getById(contactId), {
     executeFromStore: true,
   });
 
@@ -133,7 +134,7 @@ export const selectPaper = ({
   cozyAutofillOptions?: CozyAutofillOptions;
 }) => {
   const papersModels = Object.values(COZY_ATTRIBUTES_MAPPING).filter(
-    (model) => model.doctype === "io.cozy.files",
+    (model) => model.doctype === FILES_DOCTYPE,
   );
 
   // Example: If we click on a BIC of value "BIC111111", we look in the papers
@@ -166,7 +167,7 @@ export const getAllPapersFromContact = async ({
   cozyAttributeModel: CozyAttributesModel;
 }): Promise<IOCozyFile[]> => {
   const { data: papers } = await client.query(
-    Q("io.cozy.files")
+    Q(FILES_DOCTYPE)
       .where({
         ...cozyAttributeModel.selector,
       })
@@ -242,7 +243,7 @@ export const selectDataWithCozyProfile = (
 
 const isReferencedByContact = (paper: any, contactId: string) => {
   return paper?.relationships?.referenced_by?.data?.some(
-    (reference: any) => reference.id === contactId && reference.type === "io.cozy.contacts",
+    (reference: any) => reference.id === contactId && reference.type === CONTACTS_DOCTYPE,
   );
 };
 
