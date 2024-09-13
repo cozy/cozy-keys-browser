@@ -175,7 +175,10 @@ body {
   gap: 1rem;
   margin: 1rem;
 
-  label, input, select, option {
+  label,
+  input,
+  select,
+  option {
     font-family: $font-family-lato;
     font-size: 1.2rem;
   }
