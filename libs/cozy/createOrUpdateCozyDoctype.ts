@@ -120,7 +120,7 @@ interface CreateOrUpdateCozyPaperType {
   cozyAttributeModel: CozyAttributesModel;
   newAutofillValue: AutofillValue;
   i18nService: I18nService;
-  contact: IOCozyContact,
+  contact: IOCozyContact;
 }
 
 export const createOrUpdateCozyPaper = async ({
@@ -165,13 +165,15 @@ export const createOrUpdateCozyPaper = async ({
   );
 
   // Add contact
-  const fileCollection = client.collection(FILES_DOCTYPE)
-  const references = [{
-    _id: contact._id,
-    _type: CONTACTS_DOCTYPE
-  }]
+  const fileCollection = client.collection(FILES_DOCTYPE);
+  const references = [
+    {
+      _id: contact._id,
+      _type: CONTACTS_DOCTYPE,
+    },
+  ];
 
-  await fileCollection.addReferencedBy(fileCreated, references)
+  await fileCollection.addReferencedBy(fileCreated, references);
 
   return fileCreated;
 };

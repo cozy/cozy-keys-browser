@@ -27,16 +27,8 @@ export class RealTimeNotifications {
     // @ts-expect-error reatime item is not typed as it is dynamically injected at runtime
     const realtime = this.client.plugins.realtime;
 
-    await realtime.subscribe(
-      "created",
-      CONTACTS_DOCTYPE,
-      this.dispatchCreateContact.bind(this),
-    );
-    await realtime.subscribe(
-      "updated",
-      CONTACTS_DOCTYPE,
-      this.dispatchUpdateContact.bind(this),
-    );
+    await realtime.subscribe("created", CONTACTS_DOCTYPE, this.dispatchCreateContact.bind(this));
+    await realtime.subscribe("updated", CONTACTS_DOCTYPE, this.dispatchUpdateContact.bind(this));
     await realtime.subscribe("deleted", CONTACTS_DOCTYPE, this.dispatchDeleteContact.bind(this));
 
     // We don't want to listen Creation as it is always followed by an Update notification with more data
@@ -52,12 +44,10 @@ export class RealTimeNotifications {
     // @ts-expect-error reatime item is not typed as it is dynamically injected at runtime
     const realtime = this.client.plugins.realtime;
 
-    const doctypeContact = "io.cozy.contacts";
     await realtime.unsubscribe("created", CONTACTS_DOCTYPE, this.dispatchCreateContact);
     await realtime.unsubscribe("updated", CONTACTS_DOCTYPE, this.dispatchUpdateContact);
     await realtime.unsubscribe("deleted", CONTACTS_DOCTYPE, this.dispatchDeleteContact);
 
-    const doctypePaper = "io.cozy.files";
     await realtime.unsubscribe("updated", FILES_DOCTYPE, this.dispatchUpdatePaper);
     await realtime.unsubscribe("deleted", FILES_DOCTYPE, this.dispatchDeletePaper);
 

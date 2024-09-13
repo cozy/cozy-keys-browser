@@ -2,8 +2,8 @@ import { IOCozyFile } from "cozy-client/types/types";
 
 import { CozyAutofillOptions } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 
-import { isPaperFromContact, selectPaper, selectDataWithCozyProfile } from "./getCozyValue";
 import { FILES_DOCTYPE } from "./constants";
+import { isPaperFromContact, selectPaper, selectDataWithCozyProfile } from "./getCozyValue";
 
 // PROFILES
 
