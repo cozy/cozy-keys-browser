@@ -24,7 +24,12 @@ body {
 }
 
 .inline-menu-list-message {
+  // Cozy customization, replace font-family
+  //*
+  font-family: $font-family-lato;
+  /*/
   font-family: $font-family-sans-serif;
+  //*/
   font-weight: 400;
   font-size: 1.4rem;
   line-height: 1.5;
@@ -75,7 +80,12 @@ body {
   font-size: 1.8rem;
   line-height: 23px;
   font-weight: 700;
+  // Cozy customization, replace font-family
+  //*
+  font-family: $font-family-lato;
+  /*/
   font-family: $font-family-sans-serif;
+  //*/
   color: white;
 }
 .inline-menu-list-header {
@@ -162,8 +172,13 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   margin: 1rem;
+
+  label, input, select, option {
+    font-family: $font-family-lato;
+    font-size: 1.2rem;
+  }
 }
 .contact-edit-input-container {
   display: flex;
@@ -224,6 +239,7 @@ body {
   border-radius: 2px;
   cursor: pointer;
   width: 100%;
+  font-family: $font-family-lato;
 }
 .contact-edit-button-cancel {
   background-color: #f0f0f0;
@@ -239,7 +255,12 @@ body {
   align-content: center;
   justify-content: flex-start;
   width: 100%;
+  // Cozy customization, replace font-family
+  //*
+  font-family: $font-family-lato;
+  /*/
   font-family: $font-family-sans-serif;
+  //*/
   font-size: 1.6rem;
   font-weight: 700;
   text-align: left;
