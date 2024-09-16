@@ -3444,7 +3444,7 @@
     "description": "Message appearing below the autofill on load message when master password reprompt is set for a vault item."
   },
   "toggleSideNavigation": {
-    "message": "Toggle side navigation"
+    "message": "Basculer la navigation latérale"
   },
   "skipToContent": {
     "message": "Accéder directement au contenu"
@@ -3466,7 +3466,7 @@
     "description": "Text to display in overlay when the account is locked."
   },
   "unlockYourAccountToViewAutofillSuggestions": {
-    "message": "Unlock your account to view autofill suggestions",
+    "message": "Déverrouillez votre compte pour afficher les suggestions de saisie automatique",
     "description": "Text to display in overlay when the account is locked."
   },
   "unlockAccount": {
@@ -3474,7 +3474,7 @@
     "description": "Button text to display in overlay when the account is locked."
   },
   "unlockAccountAria": {
-    "message": "Unlock your account, opens in a new window",
+    "message": "Déverrouiller votre compte, s'ouvre dans une nouvelle fenêtre",
     "description": "Screen reader text (aria-label) for unlock account button in overlay"
   },
   "fillCredentialsFor": {
@@ -3498,27 +3498,27 @@
     "description": "Screen reader text (aria-label) for new item button in overlay"
   },
   "newLogin": {
-    "message": "New login",
+    "message": "Nouvel identifiant",
     "description": "Button text to display within inline menu when there are no matching items on a login field"
   },
   "addNewLoginItemAria": {
-    "message": "Add new vault login item, opens in a new window",
+    "message": "Ajouter un nouvel élément de connexion au coffre, s'ouvre dans une nouvelle fenêtre",
     "description": "Screen reader text (aria-label) for new login button within inline menu"
   },
   "newCard": {
-    "message": "New card",
+    "message": "Nouvelle carte de paiement",
     "description": "Button text to display within inline menu when there are no matching items on a credit card field"
   },
   "addNewCardItemAria": {
-    "message": "Add new vault card item, opens in a new window",
+    "message": "Ajouter un nouvel élément de carte au coffre, s'ouvre dans une nouvelle fenêtre",
     "description": "Screen reader text (aria-label) for new card button within inline menu"
   },
   "newIdentity": {
-    "message": "New identity",
+    "message": "Nouvelle identité",
     "description": "Button text to display within inline menu when there are no matching items on an identity field"
   },
   "addNewIdentityItemAria": {
-    "message": "Add new vault identity item, opens in a new window",
+    "message": "Ajouter un nouvel élément d'identité au coffre, s'ouvre dans une nouvelle fenêtre",
     "description": "Screen reader text (aria-label) for new identity button within inline menu"
   },
   "bitwardenOverlayMenuAvailable": {
@@ -3608,7 +3608,7 @@
     }
   },
   "duoHealthCheckResultsInNullAuthUrlError": {
-    "message": "Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance."
+    "message": "Erreur de connexion avec le service Duo. Utilisez une autre méthode de connexion en deux étapes ou contactez Duo pour obtenir de l'aide."
   },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Lancez DUO et suivez les étapes pour terminer la connexion."
@@ -3697,7 +3697,7 @@
     "message": "Confirmez le mot de passe du fichier"
   },
   "exportSuccess": {
-    "message": "Vault data exported"
+    "message": "Données du coffre exportées"
   },
   "typePasskey": {
     "message": "Clé d'identification (passkey)"
@@ -3879,27 +3879,27 @@
     "description": "Label indicating the most common import formats"
   },
   "confirmContinueToBrowserSettingsTitle": {
-    "message": "Continue to browser settings?",
+    "message": "Continuer vers les paramètres du navigateur ?",
     "description": "Title for dialog which asks if the user wants to proceed to a relevant browser settings page"
   },
   "confirmContinueToHelpCenter": {
-    "message": "Continue to Help Center?",
+    "message": "Continuer vers le centre d'aide ?",
     "description": "Title for dialog which asks if the user wants to proceed to a relevant Help Center page"
   },
   "confirmContinueToHelpCenterPasswordManagementContent": {
-    "message": "Change your browser's autofill and password management settings.",
+    "message": "Modifiez les paramètres de saisie automatique et de gestion des mots de passe de votre navigateur.",
     "description": "Body content for dialog which asks if the user wants to proceed to the Help Center's page about browser password management settings"
   },
   "confirmContinueToHelpCenterKeyboardShortcutsContent": {
-    "message": "You can view and set extension shortcuts in your browser's settings.",
+    "message": "Vous pouvez afficher et définir les raccourcis d'extension dans les paramètres de votre navigateur.",
     "description": "Body content for dialog which asks if the user wants to proceed to the Help Center's page about browser keyboard shortcut settings"
   },
   "confirmContinueToBrowserPasswordManagementSettingsContent": {
-    "message": "Change your browser's autofill and password management settings.",
+    "message": "Modifiez les paramètres de saisie automatique et de gestion des mots de passe de votre navigateur.",
     "description": "Body content for dialog which asks if the user wants to proceed to the browser's password management settings page"
   },
   "confirmContinueToBrowserKeyboardShortcutSettingsContent": {
-    "message": "You can view and set extension shortcuts in your browser's settings.",
+    "message": "Vous pouvez afficher et définir les raccourcis d'extension dans les paramètres de votre navigateur.",
     "description": "Body content for dialog which asks if the user wants to proceed to the browser's keyboard shortcut settings page"
   },
   "overrideDefaultBrowserAutofillTitle": {
@@ -4110,7 +4110,7 @@
     "message": "Item name"
   },
   "cannotRemoveViewOnlyCollections": {
-    "message": "You cannot remove collections with View only permissions: $COLLECTIONS$",
+    "message": "Vous ne pouvez pas supprimer des collections avec les autorisations d'affichage uniquement : $COLLECTIONS$",
     "placeholders": {
       "collections": {
         "content": "$1",
@@ -4122,44 +4122,44 @@
     "message": "L'organisation est désactivée"
   },
   "owner": {
-    "message": "Owner"
+    "message": "Propriétaire"
   },
   "selfOwnershipLabel": {
-    "message": "You",
+    "message": "Vous",
     "description": "Used as a label to indicate that the user is the owner of an item."
   },
   "contactYourOrgAdmin": {
     "message": "Les éléments des Organisations désactivées ne sont pas accessibles. Contactez le propriétaire de votre Organisation pour obtenir de l'aide."
   },
   "additionalInformation": {
-    "message": "Additional information"
+    "message": "Informations supplémentaires"
   },
   "itemHistory": {
-    "message": "Item history"
+    "message": "Historique de l'élément"
   },
   "lastEdited": {
-    "message": "Last edited"
+    "message": "Dernière modification"
   },
   "ownerYou": {
-    "message": "Owner: You"
+    "message": "Propriétaire : Vous"
   },
   "linked": {
-    "message": "Linked"
+    "message": "Lié"
   },
   "copySuccessful": {
-    "message": "Copy Successful"
+    "message": "Copié avec succès"
   },
   "upload": {
-    "message": "Upload"
+    "message": "Téléverser"
   },
   "addAttachment": {
-    "message": "Add attachment"
+    "message": "Ajouter une pièce jointe"
   },
   "maxFileSizeSansPunctuation": {
-    "message": "Maximum file size is 500 MB"
+    "message": "La taille maximale du fichier est de 500 Mo"
   },
   "deleteAttachmentName": {
-    "message": "Delete attachment $NAME$",
+    "message": "Supprimer la pièce jointe $NAME$",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -4168,7 +4168,7 @@
     }
   },
   "downloadAttachmentName": {
-    "message": "Download $NAME$",
+    "message": "Télécharger $NAME$",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -4177,19 +4177,19 @@
     }
   },
   "permanentlyDeleteAttachmentConfirmation": {
-    "message": "Are you sure you want to permanently delete this attachment?"
+    "message": "Êtes-vous sûr de vouloir supprimer définitivement cette pièce jointe ?"
   },
   "premium": {
     "message": "Premium"
   },
   "freeOrgsCannotUseAttachments": {
-    "message": "Free organizations cannot use attachments"
+    "message": "Les organisations gratuites ne peuvent pas utiliser de pièces jointes"
   },
   "filters": {
     "message": "Filtres"
   },
   "personalDetails": {
-    "message": "Personal details"
+    "message": "Données personnelles"
   },
   "identification": {
     "message": "Identification"
@@ -4198,7 +4198,7 @@
     "message": "Contact info"
   },
   "downloadAttachment": {
-    "message": "Download - $ITEMNAME$",
+    "message": "Télécharger - $ITEMNAME$",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -4207,32 +4207,32 @@
     }
   },
   "cardNumberEndsWith": {
-    "message": "card number ends with",
+    "message": "numéro de la carte se termine par",
     "description": "Used within the inline menu to provide an aria description when users are attempting to fill a card cipher."
   },
   "loginCredentials": {
-    "message": "Login credentials"
+    "message": "Identifiants de connexion"
   },
   "authenticatorKey": {
-    "message": "Authenticator key"
+    "message": "Clé d'authentification"
   },
   "autofillOptions": {
-    "message": "Auto-fill options"
+    "message": "Options de saisie automatique"
   },
   "websiteUri": {
-    "message": "Website (URI)"
+    "message": "Site web (URI)"
   },
   "websiteAdded": {
-    "message": "Website added"
+    "message": "Site web ajouté"
   },
   "addWebsite": {
-    "message": "Add website"
+    "message": "Ajouter le site web"
   },
   "deleteWebsite": {
-    "message": "Delete website"
+    "message": "Supprimer le site web"
   },
   "defaultLabel": {
-    "message": "Default ($VALUE$)",
+    "message": "Par défaut ($VALUE$)",
     "description": "A label that indicates the default value for a field with the current default value in parentheses.",
     "placeholders": {
       "value": {
@@ -4260,10 +4260,10 @@
     }
   },
   "autoFillOnPageLoad": {
-    "message": "Autofill on page load?"
+    "message": "Saisir automatiquement lors du chargement de la page ?"
   },
   "cardDetails": {
-    "message": "Card details"
+    "message": "Détails de la carte de paiement"
   },
   "cardBrandDetails": {
     "message": "$BRAND$ details",
@@ -4275,23 +4275,23 @@
     }
   },
   "addAccount": {
-    "message": "Add account"
+    "message": "Ajouter un compte"
   },
   "cipherContactMe": {
     "message": "moi"
   },
   "loading": {
-    "message": "Loading"
+    "message": "Chargement"
   },
   "data": {
-    "message": "Data"
+    "message": "Données"
   },
   "passkeys": {
-    "message": "Passkeys",
+    "message": "Clés d'accès",
     "description": "A section header for a list of passkeys."
   },
   "passwords": {
-    "message": "Passwords",
+    "message": "Mots de passe",
     "description": "A section header for a list of passwords."
   },
   "logInWithPasskeyAriaLabel": {
@@ -4299,16 +4299,16 @@
     "description": "ARIA label for the inline menu button that logs in with a passkey."
   },
   "assign": {
-    "message": "Assign"
+    "message": "Assigner"
   },
   "bulkCollectionAssignmentDialogDescriptionSingular": {
-    "message": "Only organization members with access to these collections will be able to see the item."
+    "message": "Seuls les membres de l'organisation ayant accès à ces collections pourront voir l'élément."
   },
   "bulkCollectionAssignmentDialogDescriptionPlural": {
-    "message": "Only organization members with access to these collections will be able to see the items."
+    "message": "Seuls les membres de l'organisation ayant accès à ces collections pourront voir les éléments."
   },
   "bulkCollectionAssignmentWarning": {
-    "message": "You have selected $TOTAL_COUNT$ items. You cannot update $READONLY_COUNT$ of the items because you do not have edit permissions.",
+    "message": "Vous avez sélectionné $TOTAL_COUNT$ éléments. Vous ne pouvez pas mettre à jour $READONLY_COUNT$ de ces éléments parce que vous n'avez pas les autorisations pour les éditer.",
     "placeholders": {
       "total_count": {
         "content": "$1",
@@ -4320,37 +4320,37 @@
     }
   },
   "addField": {
-    "message": "Add field"
+    "message": "Ajouter un champ"
   },
   "add": {
-    "message": "Add"
+    "message": "Ajouter"
   },
   "fieldType": {
-    "message": "Field type"
+    "message": "Type du champ"
   },
   "fieldLabel": {
-    "message": "Field label"
+    "message": "Intitulé du champ"
   },
   "textHelpText": {
-    "message": "Use text fields for data like security questions"
+    "message": "Utiliser des champs de texte pour les données telles que les questions de sécurité"
   },
   "hiddenHelpText": {
-    "message": "Use hidden fields for sensitive data like a password"
+    "message": "Utiliser des champs cachés pour des données sensibles telles qu'un mot de passe"
   },
   "checkBoxHelpText": {
-    "message": "Use checkboxes if you'd like to autofill a form's checkbox, like a remember email"
+    "message": "Utilisez les cases à cocher si vous souhaitez saisir automatiquement la case à cocher d'un formulaire, tel qu'un courriel de rappel"
   },
   "linkedHelpText": {
-    "message": "Use a linked field when you are experiencing autofill issues for a specific website."
+    "message": "Utilisez un champ lié lorsque vous rencontrez des problèmes de saisie automatique pour un site Web spécifique."
   },
   "linkedLabelHelpText": {
-    "message": "Enter the the field's html id, name, aria-label, or placeholder."
+    "message": "Entrez l'identifiant html, le nom, l'étiquette aria ou l'espace réservé du champ."
   },
   "editField": {
-    "message": "Edit field"
+    "message": "Éditer le champ"
   },
   "editFieldLabel": {
-    "message": "Edit $LABEL$",
+    "message": "Éditer $LABEL$",
     "placeholders": {
       "label": {
         "content": "$1",
@@ -4359,7 +4359,7 @@
     }
   },
   "deleteCustomField": {
-    "message": "Delete $LABEL$",
+    "message": "Supprimer $LABEL$",
     "placeholders": {
       "label": {
         "content": "$1",
@@ -4368,7 +4368,7 @@
     }
   },
   "fieldAdded": {
-    "message": "$LABEL$ added",
+    "message": "$LABEL$ ajouté",
     "placeholders": {
       "label": {
         "content": "$1",
@@ -4377,7 +4377,7 @@
     }
   },
   "reorderToggleButton": {
-    "message": "Reorder $LABEL$. Use arrow key to move item up or down.",
+    "message": "Réorganiser $LABEL$. Utilisez les flèches de votre clavier pour déplacer l'élément vers le haut ou vers le bas.",
     "placeholders": {
       "label": {
         "content": "$1",
@@ -4403,13 +4403,13 @@
     }
   },
   "selectCollectionsToAssign": {
-    "message": "Select collections to assign"
+    "message": "Sélectionnez les collections à assigner"
   },
   "personalItemTransferWarningSingular": {
-    "message": "1 item will be permanently transferred to the selected organization. You will no longer own this item."
+    "message": "1 élément sera transféré définitivement à l'organisation sélectionnée. Vous ne serez plus le propriétaire de cet élément."
   },
   "personalItemsTransferWarningPlural": {
-    "message": "$PERSONAL_ITEMS_COUNT$ items will be permanently transferred to the selected organization. You will no longer own these items.",
+    "message": "Les éléments $PERSONAL_ITEMS_COUNT$ seront transférés de façon permanente à l'organisation sélectionnée. Vous ne serez plus le propriétaire de ces éléments.",
     "placeholders": {
       "personal_items_count": {
         "content": "$1",
@@ -4418,7 +4418,7 @@
     }
   },
   "personalItemWithOrgTransferWarningSingular": {
-    "message": "1 item will be permanently transferred to $ORG$. You will no longer own this item.",
+    "message": "1 élément sera transféré définitivement à $ORG$. Vous ne serez plus le propriétaire de cet élément.",
     "placeholders": {
       "org": {
         "content": "$1",
@@ -4427,7 +4427,7 @@
     }
   },
   "personalItemsWithOrgTransferWarningPlural": {
-    "message": "$PERSONAL_ITEMS_COUNT$ items will be permanently transferred to $ORG$. You will no longer own these items.",
+    "message": "Les éléments $PERSONAL_ITEMS_COUNT$ seront transférés à $ORG$ de façon permanente. Vous ne serez plus propriétaire de ces éléments.",
     "placeholders": {
       "personal_items_count": {
         "content": "$1",
@@ -4440,13 +4440,13 @@
     }
   },
   "successfullyAssignedCollections": {
-    "message": "Successfully assigned collections"
+    "message": "Collections assignées avec succès"
   },
   "nothingSelected": {
-    "message": "You have not selected anything."
+    "message": "Vous n'avez rien sélectionné."
   },
   "movedItemsToOrg": {
-    "message": "Selected items moved to $ORGNAME$",
+    "message": "Les éléments sélectionnés ont été déplacés vers $ORGNAME$",
     "placeholders": {
       "orgname": {
         "content": "$1",
@@ -4455,7 +4455,7 @@
     }
   },
   "itemsMovedToOrg": {
-    "message": "Items moved to $ORGNAME$",
+    "message": "Éléments déplacés vers $ORGNAME$",
     "placeholders": {
       "orgname": {
         "content": "$1",
@@ -4464,7 +4464,7 @@
     }
   },
   "itemMovedToOrg": {
-    "message": "Item moved to $ORGNAME$",
+    "message": "Élément déplacé vers $ORGNAME$",
     "placeholders": {
       "orgname": {
         "content": "$1",
@@ -4490,7 +4490,7 @@
     }
   },
   "itemLocation": {
-    "message": "Item Location"
+    "message": "Emplacement de l'élément"
   },
   "fileSends": {
     "message": "File Sends"
@@ -4499,19 +4499,19 @@
     "message": "Text Sends"
   },
   "bitwardenNewLook": {
-    "message": "Cozy has a new look!"
+    "message": "Cozy a un nouveau look !"
   },
   "bitwardenNewLookDesc": {
-    "message": "It's easier and more intuitive than ever to autofill and search from the Vault tab. Take a look around!"
+    "message": "Il est plus facile et plus intuitif que jamais de remplir automatiquement les champs et d'effectuer des recherches à partir de l'onglet \"Coffre\". Jetez un coup d'œil !"
   },
   "accountActions": {
-    "message": "Account actions"
+    "message": "Actions du compte"
   },
   "showNumberOfAutofillSuggestions": {
-    "message": "Show number of login autofill suggestions on extension icon"
+    "message": "Afficher le nombre de suggestions de saisie automatique d'identifiant sur l'icône d'extension"
   },
   "systemDefault": {
-    "message": "System default"
+    "message": "Par défaut"
   },
   "contactSearch": {
     "message": "Recherche\u2026"
