@@ -446,7 +446,9 @@ export class IdentityAutoFillConstants {
     "address-level-2",
     "address-city",
     "address-town",
+    // French
     "ville",
+    "commune",
     // German
     "ort",
     "stadt",
