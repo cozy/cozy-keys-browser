@@ -390,6 +390,14 @@ const makeYearFilterFunction = (field: AutofillField) => {
 
 const getValueInField = (field: AutofillField, regex: string): any => {
   for (const paperAttribute of PaperAutoFillConstants.PaperAttributes) {
+    // Special case for demande-logement-social.gouv.fr
+    if (field.htmlID.includes("montantMoins1")) {
+      return 2023;
+    }
+    if (field.htmlID.includes("montantMoins2")) {
+      return 2022;
+    }
+
     const matches = field[paperAttribute]?.match(regex);
 
     if (matches) {
