@@ -267,12 +267,8 @@ const getCozyValueInPaper = async ({
     { executeFromStore: true },
   );
 
-  const papersFromContact = papers.filter(
-    (paper: any) =>
-      isReferencedByContact(paper, contactId) || // papers is from the contact asked
-      // papers from konnectors do not have any contact relationship so we need something else
-      paper.cozyMetadata?.sourceAccountIdentifier === contactEmail || // konnector id is equal to contact email
-      (paper.cozyMetadata?.sourceAccount && me), // else we assign papers from konnectors to myself
+  const papersFromContact = papers.filter((paper: any) =>
+    isPaperFromContact(paper, contactId, contactEmail, me),
   );
 
   let filteredPapers = papersFromContact;
@@ -346,6 +342,23 @@ const isReferencedByContact = (paper: any, contactId: string) => {
     (reference: any) => reference.id === contactId && reference.type === "io.cozy.contacts",
   );
 };
+
+/**
+ * Checks if a given paper belongs to a specified contact.
+ *
+ * Papers from konnectors do not have any contact relationship so we try to infere the paper owner with other data.
+ *
+ * @param {any} paper - The paper to check.
+ * @param {string|undefined} contactId - The ID of the contact to check against.
+ * @param {string|undefined} contactEmail - The email of the contact to check against.
+ * @param {boolean} me - A flag indicating whether to check the contact is "me".
+ * @returns {boolean} Returns true if the paper is from the specified contact.
+ */
+const isPaperFromContact = (paper: any, contactId: string | undefined, contactEmail: string | undefined, me: boolean) => {
+  return isReferencedByContact(paper, contactId) ||
+    paper.cozyMetadata?.sourceAccountIdentifier === contactEmail || // konnector login is equal to contact primary email
+    (paper.cozyMetadata?.sourceAccount && me) // by default, we assign papers to "me"
+}
 
 const makeYearFilterFunction = (field: AutofillField) => {
   const filter = FILTERS.yearFilter;
