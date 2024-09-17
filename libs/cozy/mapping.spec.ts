@@ -1,6 +1,6 @@
 import { CozyProfile } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 
-import { selectDataWithCozyProfile } from "./mapping";
+import { isPaperFromContact, selectDataWithCozyProfile } from "./mapping";
 
 // PROFILES
 
@@ -41,6 +41,111 @@ const WORK_ONLY_ELEMENT = { phone: "2", label: "work" };
 const WORK_AND_TYPE_ELEMENT = { phone: "3", label: "work", type: "Cozy Cloud" };
 
 describe("mapping", () => {
+  describe("isPaperFromContact", () => {
+    it("should return true if referenced by same contact", () => {
+      const paper = {
+        relationships: {
+          referenced_by: {
+            data: [
+              {
+                id: "7a4a4166175d8bb5e69033669702390d",
+                type: "io.cozy.contacts",
+              },
+            ],
+          },
+        },
+        cozyMetadata: {},
+      };
+
+      expect(
+        isPaperFromContact(paper, "7a4a4166175d8bb5e69033669702390d", "john@example.com", false),
+      ).toEqual(true);
+    });
+
+    it("should return false if referenced by different contact", () => {
+      const paper = {
+        relationships: {
+          referenced_by: {
+            data: [
+              {
+                id: "9b2a1982738d8bb5e69033669700988a",
+                type: "io.cozy.contacts",
+              },
+            ],
+          },
+        },
+        cozyMetadata: {},
+      };
+
+      expect(
+        isPaperFromContact(paper, "7a4a4166175d8bb5e69033669702390d", "john@example.com", false),
+      ).toEqual(false);
+    });
+
+    it("should return true if source account id corresponds to email", () => {
+      const paper = {
+        relationships: {},
+        cozyMetadata: {
+          sourceAccountIdentifier: "john@example.com",
+        },
+      };
+
+      expect(
+        isPaperFromContact(paper, "7a4a4166175d8bb5e69033669702390d", "john@example.com", false),
+      ).toEqual(true);
+    });
+
+    it("should return false if source account id does not correspond email", () => {
+      const paper = {
+        relationships: {},
+        cozyMetadata: {
+          sourceAccountIdentifier: "john123",
+        },
+      };
+
+      expect(
+        isPaperFromContact(paper, "7a4a4166175d8bb5e69033669702390d", "john@example.com", false),
+      ).toEqual(false);
+    });
+
+    it("should return false if source account id is undefined and email is undefined", () => {
+      const paper = {
+        relationships: {},
+        cozyMetadata: {},
+      };
+
+      expect(
+        isPaperFromContact(paper, "7a4a4166175d8bb5e69033669702390d", undefined, false),
+      ).toEqual(false);
+    });
+
+    it("should return true if paper from konnector and contact is 'me'", () => {
+      const paper = {
+        relationships: {},
+        cozyMetadata: {
+          sourceAccount: "123",
+        },
+      };
+
+      expect(
+        isPaperFromContact(paper, "7a4a4166175d8bb5e69033669702390d", "john@example.com", true),
+      ).toEqual(true);
+    });
+
+    it("should return false if paper from konnector and contact is not 'me'", () => {
+      const paper = {
+        relationships: {},
+        cozyMetadata: {
+          sourceAccount: "123",
+        },
+      };
+
+      expect(
+        isPaperFromContact(paper, "7a4a4166175d8bb5e69033669702390d", "john@example.com", false),
+      ).toEqual(false);
+    });
+  });
+
   describe("selectDataWithCozyProfile", () => {
     describe("with no element", () => {
       it("should handle undefined array", () => {
