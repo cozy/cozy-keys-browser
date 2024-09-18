@@ -1,4 +1,4 @@
-import CozyClient from "cozy-client";
+import CozyClient, { dispatchCreate, dispatchUpdate, dispatchDelete } from "cozy-client";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
@@ -27,22 +27,14 @@ export class RealTimeNotifications {
     const realtime = this.client.plugins.realtime;
 
     const doctypeContact = "io.cozy.contacts";
-    await realtime.subscribe(
-      "created",
-      doctypeContact,
-      this.dispatchCreateOrUpdateContact.bind(this),
-    );
-    await realtime.subscribe(
-      "updated",
-      doctypeContact,
-      this.dispatchCreateOrUpdateContact.bind(this),
-    );
-    await realtime.subscribe("deleted", doctypeContact, this.dispatchDeleteCipher.bind(this));
+    await realtime.subscribe("created", doctypeContact, this.dispatchCreateContact.bind(this));
+    await realtime.subscribe("updated", doctypeContact, this.dispatchUpdateContact.bind(this));
+    await realtime.subscribe("deleted", doctypeContact, this.dispatchDeleteContact.bind(this));
 
     const doctypePaper = "io.cozy.files";
     // We don't want to listen Creation as it is always followed by an Update notification with more data
     await realtime.subscribe("updated", doctypePaper, this.dispatchUpdatePaper.bind(this));
-    await realtime.subscribe("deleted", doctypePaper, this.dispatchDeleteCipher.bind(this));
+    await realtime.subscribe("deleted", doctypePaper, this.dispatchDeletePaper.bind(this));
 
     const doctypeThumbnail = "io.cozy.files.thumbnails";
     await realtime.subscribe("created", doctypeThumbnail, this.dispatchCreateThumbnail.bind(this));
@@ -54,19 +46,19 @@ export class RealTimeNotifications {
     const realtime = this.client.plugins.realtime;
 
     const doctypeContact = "io.cozy.contacts";
-    await realtime.unsubscribe("created", doctypeContact, this.dispatchCreateOrUpdateContact);
-    await realtime.unsubscribe("updated", doctypeContact, this.dispatchCreateOrUpdateContact);
-    await realtime.unsubscribe("deleted", doctypeContact, this.dispatchDeleteCipher);
+    await realtime.unsubscribe("created", doctypeContact, this.dispatchCreateContact);
+    await realtime.unsubscribe("updated", doctypeContact, this.dispatchUpdateContact);
+    await realtime.unsubscribe("deleted", doctypeContact, this.dispatchDeleteContact);
 
     const doctypePaper = "io.cozy.files";
     await realtime.unsubscribe("updated", doctypePaper, this.dispatchUpdatePaper);
-    await realtime.unsubscribe("deleted", doctypePaper, this.dispatchDeleteCipher);
+    await realtime.unsubscribe("deleted", doctypePaper, this.dispatchDeletePaper);
 
     const doctypeThumbnail = "io.cozy.files.thumbnails";
     await realtime.unsubscribe("created", doctypeThumbnail, this.dispatchCreateThumbnail);
   }
 
-  async dispatchCreateOrUpdateContact(data: any) {
+  async dispatchCreateContact(data: any) {
     const cipherData = await convertContactToCipherData(
       this.cipherService,
       this.i18nService,
@@ -76,12 +68,30 @@ export class RealTimeNotifications {
     await this.cipherService.upsert(cipherData);
     this.messagingService.send("syncedUpsertedCipher", { cipherId: data._id });
     this.messagingService.send("syncCompleted", { successfully: true });
+
+    await dispatchCreate(this.client, "io.cozy.contacts", data);
   }
 
-  async dispatchDeleteCipher(data: any) {
+  async dispatchUpdateContact(data: any) {
+    const cipherData = await convertContactToCipherData(
+      this.cipherService,
+      this.i18nService,
+      data,
+      null,
+    );
+    await this.cipherService.upsert(cipherData);
+    this.messagingService.send("syncedUpsertedCipher", { cipherId: data._id });
+    this.messagingService.send("syncCompleted", { successfully: true });
+
+    await dispatchUpdate(this.client, "io.cozy.contacts", data);
+  }
+
+  async dispatchDeleteContact(data: any) {
     await this.cipherService.delete(data._id);
     this.messagingService.send("syncedDeletedCipher", { cipherId: data._id });
     this.messagingService.send("syncCompleted", { successfully: true });
+
+    await dispatchDelete(this.client, "io.cozy.contacts", data);
   }
 
   async dispatchUpdatePaper(data: any) {
@@ -93,10 +103,26 @@ export class RealTimeNotifications {
     }
     if (data.dir_id === "io.cozy.files.trash-dir") {
       // We don't want to display trashed papers in the extension's bin so we remove them from the vault
-      return this.dispatchDeleteCipher(data);
+      return this.dispatchDeletePaper(data);
+    }
+
+    const isCreate = !(await this.cipherService.get(data._id));
+
+    if (isCreate) {
+      await dispatchCreate(this.client, "io.cozy.files", data);
+    } else {
+      await dispatchUpdate(this.client, "io.cozy.files", data);
     }
 
     await this.upsertPaperFromId(data._id);
+  }
+
+  async dispatchDeletePaper(data: any) {
+    await this.cipherService.delete(data._id);
+    this.messagingService.send("syncedDeletedCipher", { cipherId: data._id });
+    this.messagingService.send("syncCompleted", { successfully: true });
+
+    await dispatchDelete(this.client, "io.cozy.files", data);
   }
 
   async upsertPaperFromId(paperId: string) {
