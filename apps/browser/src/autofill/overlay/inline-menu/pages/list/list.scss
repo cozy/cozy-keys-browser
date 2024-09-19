@@ -298,6 +298,43 @@ body {
       }
     }
   }
+
+  &--bottom {
+    position: absolute;
+    bottom: 0;
+    z-index: 999;
+    border-top-width: 0.1rem;
+    border-top-style: solid;
+    border-radius: 0;
+    height: 4.8rem;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+
+    &:hover {
+      @include themify($themes) {
+        background: themed("backgroundOffsetColor");
+      }
+    }
+
+    svg {
+      position: static;
+      margin-left: 1.2rem;
+      margin-right: 2.5rem;
+
+      path {
+        @include themify($themes) {
+          fill: themed("textColor") !important;
+        }
+      }
+    }
+
+    @include themify($themes) {
+      color: themed("textColor");
+      background: themed("backgroundColor");
+      border-top-color: themed("borderColor");
+    }
+  }
 }
 
 .unlock-button {
