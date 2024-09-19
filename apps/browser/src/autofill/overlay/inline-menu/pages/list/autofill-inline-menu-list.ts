@@ -421,6 +421,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       );
     }
     // Cozy customization end
+    // Cozy customization - Add the new contact button to the contact list.
+    if (this.isFilledByContactCipher()) {
+      this.inlineMenuListContainer.appendChild(this.buildNewItemButton());
+      this.newItemButtonElement.classList.add("inline-menu-list-actions--bottom");
+    }
+    // Cozy customization end
 
     this.inlineMenuListContainer.appendChild(this.ciphersList);
     this.toggleScrollClass();
@@ -996,6 +1002,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       "inline-menu-list-button",
       "inline-menu-list-action",
     );
+    // Cozy customization - Add the bottom class to the new item button if the form is filled by a contact cipher
+    if (this.isFilledByContactCipher()) {
+      this.newItemButtonElement.classList.add("inline-menu-list-button--bottom");
+    }
+    // Cozy customization end
     this.newItemButtonElement.textContent = this.getNewItemButtonText();
     this.newItemButtonElement.setAttribute("aria-label", this.getNewItemAriaLabel());
     this.newItemButtonElement.prepend(buildSvgDomElement(plusIcon));
@@ -1008,6 +1019,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
    * Gets the new item text for the button based on the cipher type the focused field is filled by.
    */
   private getNewItemButtonText() {
+    // Cozy customization - Add the translation for the new item button when the form is filled by a contact cipher
+    if (this.isFilledByContactCipher()) {
+      return this.getTranslation("newContact");
+    }
+    // Cozy customization end
     if (this.isFilledByLoginCipher() || this.showInlineMenuAccountCreation) {
       return this.getTranslation("newLogin");
     }
