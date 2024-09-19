@@ -212,6 +212,9 @@
   "addContact": {
     "message": "Add a contact"
   },
+  "newContact": {
+    "message": "New contact"
+  },
   "addItem": {
     "message": "Add item"
   },
