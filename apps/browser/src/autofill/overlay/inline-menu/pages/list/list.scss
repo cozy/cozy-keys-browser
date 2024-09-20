@@ -153,6 +153,18 @@ body {
     }
   }
 }
+
+.inline-menu-action-menu-container {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 1000; // more than the new contact button
+
+  @include themify($themes) {
+    background-color: themed("backgroundColor");
+  }
+}
 // Cozy customization end
 
 // Cozy customization; replace .cipher-icon
