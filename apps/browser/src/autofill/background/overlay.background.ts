@@ -201,6 +201,13 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   }
 
   private redirectToCozy = (message: OverlayPortMessage) => {
+    // Interpolate "<id>" in the hash by the id correspond to the inline menu cipher id
+    // Useful to open alice.contacts.mycozy.cloud/#/127950390436f45accdf242cac55a2e4/edit for example
+    if (message.inlineMenuCipherId) {
+      const cipher = this.inlineMenuCiphers.get(message.inlineMenuCipherId);
+      message.hash = message.hash.replace('<id>', cipher.id)
+    }
+
     BrowserApi.createNewTab(this.cozyClientService.getAppURL(message.to, message.hash), true);
   };
 
@@ -1607,6 +1614,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         fillCredentialsFor: this.i18nService.translate("fillCredentialsFor"),
         username: this.i18nService.translate("username")?.toLowerCase(),
         view: this.i18nService.translate("view"),
+        edit: this.i18nService.translate("edit"),
         noItemsToShow: this.i18nService.translate("noItemsToShow"),
         newItem: this.i18nService.translate("newItem"),
         addNewVaultItem: this.i18nService.translate("addNewVaultItem"),
