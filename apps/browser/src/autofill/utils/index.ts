@@ -20,7 +20,7 @@ import {
   FormFieldElement,
 } from "../types";
 
-import { contact, email, magnifier, phone } from "./svg-icons";
+import { contact, email, address, phone } from "./svg-icons";
 
 /**
  * Generates a random string of characters.
@@ -449,7 +449,7 @@ export const makeEditContactField = (
       iconElement = buildSvgDomElement(email);
       break;
     case "address":
-      iconElement = buildSvgDomElement(magnifier);
+      iconElement = buildSvgDomElement(address);
       break;
     default:
       iconElement = buildSvgDomElement(contact);
