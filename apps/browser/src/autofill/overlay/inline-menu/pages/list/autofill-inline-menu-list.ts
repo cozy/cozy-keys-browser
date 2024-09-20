@@ -1775,6 +1775,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
       const modifyCipherActionElement = this.createModifyCipherAction(cipher);
       ulElement.appendChild(modifyCipherActionElement);
+
+      const autofillAllElement = this.createAutofillAllAction(cipher);
+      ulElement.appendChild(autofillAllElement);
     }
 
     this.actionMenuContainer.appendChild(actionMenuHeader)
@@ -1799,6 +1802,18 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         command: "redirectToCozy",
         to: "contacts",
         hash: "<id>/edit",
+        inlineMenuCipherId: cipher.id,
+      })
+    );
+
+    return li;
+  }
+
+  private createAutofillAllAction(cipher: InlineMenuCipherData) {
+    const li = this.createActionMenuItem(
+      this.getTranslation('autofillAll'),
+      () => this.postMessageToParent({
+        command: "fillAutofillInlineMenuCipher",
         inlineMenuCipherId: cipher.id,
       })
     );
