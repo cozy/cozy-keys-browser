@@ -4325,6 +4325,9 @@
   "addAccount": {
     "message": "Ajouter un compte"
   },
+  "autofillAll": {
+    "message": "Saisir toutes les informations"
+  },
   "cipherContactMe": {
     "message": "moi"
   },
