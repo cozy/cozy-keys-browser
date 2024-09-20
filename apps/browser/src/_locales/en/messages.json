@@ -4322,6 +4322,9 @@
   "loading": {
     "message": "Loading"
   },
+  "autofillAll": {
+    "message": "Autofill all information"
+  },
   "cipherContactMe": {
     "message": "me"
   },

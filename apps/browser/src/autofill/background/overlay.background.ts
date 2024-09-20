@@ -1625,6 +1625,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         newIdentity: this.i18nService.translate("newIdentity"),
         addNewIdentityItem: this.i18nService.translate("addNewIdentityItemAria"),
         cardNumberEndsWith: this.i18nService.translate("cardNumberEndsWith"),
+        autofillAll: this.i18nService.translate("autofillAll"),
         cipherContactMe: this.i18nService.translate("cipherContactMe"),
         home: this.i18nService.translate("home"),
         work: this.i18nService.translate("work"),
