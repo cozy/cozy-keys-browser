@@ -118,7 +118,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const editContainer = globalThis.document.createElement("div");
     editContainer.classList.add("contact-edit-container");
 
-    const addNewAmbiguousHeader = this.buildNewListHeader(contactName);
+    const addNewAmbiguousHeader = this.buildNewListHeader(contactName, this.handleNewAmbiguousHeaderClick);
 
     const { inputTextContainer, inputText } = makeEditContactField(
       this.fieldQualifier,
@@ -637,8 +637,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
   /**
    * @param contactName
+   * @param onClick
    */
-  private buildNewListHeader(contactName: string) {
+  private buildNewListHeader(contactName: string, onClick: () => void) {
     this.newItemButtonElement = globalThis.document.createElement("button");
     this.newItemButtonElement.tabIndex = -1;
     this.newItemButtonElement.classList.add("inline-menu-list-header");
@@ -650,7 +651,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.newItemButtonElement.setAttribute("aria-label", contactName);
 
     this.newItemButtonElement.append(buildSvgDomElement(backIcon));
-    this.newItemButtonElement.addEventListener(EVENTS.CLICK, this.handleNewAmbiguousHeaderClick);
+    this.newItemButtonElement.addEventListener(EVENTS.CLICK, onClick);
     this.newItemButtonElement.appendChild(span);
 
     return this.buildListHeaderContainer(this.newItemButtonElement);
@@ -760,7 +761,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       "inline-menu-list-container--with-new-item-button",
     );
 
-    const addNewLoginButtonContainer = this.buildNewListHeader(contactName);
+    const addNewLoginButtonContainer = this.buildNewListHeader(contactName, this.handleNewAmbiguousHeaderClick);
 
     const ulElement = globalThis.document.createElement("ul");
     ulElement.classList.add("inline-menu-list-actions");
@@ -804,7 +805,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       "inline-menu-list-container--with-new-item-button",
     );
 
-    const addNewLoginButtonContainer = this.buildNewListHeader(contactName);
+    const addNewLoginButtonContainer = this.buildNewListHeader(contactName, this.handleNewAmbiguousHeaderClick);
 
     const ulElement = globalThis.document.createElement("ul");
     ulElement.classList.add("inline-menu-list-actions");
@@ -890,7 +891,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       "inline-menu-list-container--with-new-item-button",
     );
 
-    const addNewLoginButtonContainer = this.buildNewListHeader(contactName);
+    const addNewLoginButtonContainer = this.buildNewListHeader(contactName, this.handleNewAmbiguousHeaderClick);
 
     const ulElement = globalThis.document.createElement("ul");
     ulElement.classList.add("inline-menu-list-actions");
