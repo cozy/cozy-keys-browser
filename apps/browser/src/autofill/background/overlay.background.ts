@@ -329,9 +329,12 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     const cipherViews = await this.cipherService.getAllDecryptedForUrl(currentTab?.url || ""); //.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
     // Cozy customization end
 
-    // Cozy customization; Add contacts first in the list for fixes a bug when opening the iniline menu on an ambiguous field after the first autofill
+    // Cozy customization; Add contacts first in the list for fixes a bug when opening the iniline menu on an ambiguous field before the first autofill
     return this.cardAndIdentityCiphers.size > 0
-      ? Array.from(this.cardAndIdentityCiphers).concat(...cipherViews)
+      ? _.sortBy(
+          Array.from(this.cardAndIdentityCiphers),
+          (c) => c.type !== CipherType.Contact,
+        ).concat(...cipherViews)
       : cipherViews;
     // Cozy customization end
   }
@@ -369,7 +372,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       this.cardAndIdentityCiphers = null;
     }
 
-    return cipherViews;
+    return _.sortBy(cipherViews, (c) => c.type !== CipherType.Contact); // Cozy customization; add contact to autofill (sort contacts first in the list for fixes a bug when opening the iniline menu on an ambiguous field after the first autofill)
   }
 
   /**
