@@ -46,6 +46,7 @@ import { CozyAutofillOptions } from "src/autofill/services/abstractions/autofill
 
 export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private inlineMenuListContainer: HTMLDivElement;
+  private actionMenuContainer: HTMLDivElement;
   private resizeObserver: ResizeObserver;
   private eventHandlersMemo: { [key: string]: EventListener } = {};
   private ciphers: InlineMenuCipherData[] = [];
@@ -1337,7 +1338,16 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       `${this.getTranslation("view")} ${cipher.name}, ${this.getTranslation("opensInANewWindow")}`,
     );
     viewCipherElement.append(buildSvgDomElement(viewCipherIcon));
+    // Cozy customization, open the action menu if it is a contact
+    //*
+    if (this.isFilledByContactCipher()) {
+      viewCipherElement.addEventListener(EVENTS.CLICK, () => this.showActionMenu(cipher));
+    } else {
+      viewCipherElement.addEventListener(EVENTS.CLICK, this.handleViewCipherClickEvent(cipher));
+    }
+    /*/
     viewCipherElement.addEventListener(EVENTS.CLICK, this.handleViewCipherClickEvent(cipher));
+    //*/
     viewCipherElement.addEventListener(EVENTS.KEYUP, this.handleViewCipherKeyUpEvent);
 
     return viewCipherElement;
@@ -1730,4 +1740,94 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private isFilledByContactCipher = () => {
     return this.filledByCipherType === CipherType.Contact;
   };
+
+  /* Cozy customization */
+
+  /* * * * * * * * * * * */
+  /* *   Action menu   * */
+  /* * * * * * * * * * * */
+
+  private showActionMenu(cipher: InlineMenuCipherData) {
+    this.buildActionMenu(cipher);
+    this.inlineMenuListContainer.appendChild(this.actionMenuContainer);
+  }
+
+  private hideActionMenu() {
+    this.inlineMenuListContainer.removeChild(this.actionMenuContainer);
+  }
+
+  private buildActionMenu(cipher: InlineMenuCipherData) {
+    this.actionMenuContainer = globalThis.document.createElement("div");
+    this.actionMenuContainer.classList.add("inline-menu-action-menu-container");
+
+    const actionMenuHeader = this.buildNewListHeader('Menu', () => this.hideActionMenu());
+
+    const ulElement = globalThis.document.createElement("ul");
+    ulElement.classList.add("inline-menu-list-actions");
+    ulElement.setAttribute("role", "list");
+    ulElement.addEventListener(EVENTS.SCROLL, this.handleCiphersListScrollEvent, {
+      passive: true,
+    });
+
+    if (cipher) {
+      const viewCipherActionElement = this.createViewCipherAction(cipher);
+      ulElement.appendChild(viewCipherActionElement);
+    }
+
+    this.actionMenuContainer.appendChild(actionMenuHeader)
+    this.actionMenuContainer.appendChild(ulElement)
+
+    return this.actionMenuContainer;
+  }
+
+  private createViewCipherAction(cipher: InlineMenuCipherData) {
+    const li = this.createActionMenuItem(
+      this.getTranslation('view'),
+      this.handleViewCipherClickEvent(cipher)
+    );
+
+    return li;
+  }
+
+   /**
+    * @param title
+    * @param onClick - Callback executed when clicking on the item
+   */
+    private createActionMenuItem(
+      title: string,
+      onClick: any
+    ) {
+      const listItem = document.createElement("li");
+      listItem.setAttribute("role", "listitem");
+      listItem.classList.add("inline-menu-list-actions-item");
+
+      const div = document.createElement("div");
+      div.classList.add("cipher-container");
+
+      const fillButton = document.createElement("button");
+      fillButton.setAttribute("tabindex", "-1");
+      fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
+      fillButton.setAttribute("aria-label", title);
+      fillButton.addEventListener(
+        EVENTS.CLICK,
+        onClick,
+      );
+
+      const detailsSpan = document.createElement("span");
+      detailsSpan.classList.add("cipher-details");
+
+      const nameSpan = document.createElement("span");
+      nameSpan.setAttribute("title", title);
+      nameSpan.textContent = title;
+      nameSpan.classList.add("cipher-name");
+
+      detailsSpan.appendChild(nameSpan);
+      fillButton.appendChild(detailsSpan);
+
+      div.appendChild(fillButton);
+      listItem.appendChild(div);
+
+      return listItem;
+    }
+  /* Cozy customization end; action menu */
 }
