@@ -624,7 +624,9 @@ export default class AutofillService implements AutofillServiceInterface {
       return null;
     }
 
-    // Cozy customization; autofill only one field
+    // Cozy customization; filter fields to autofill
+
+    // Autofill only field by ID
     if (options.cozyAutofillOptions.fillOnlyThisFieldHtmlID) {
       pageDetails = {
         ...pageDetails,
@@ -634,6 +636,15 @@ export default class AutofillService implements AutofillServiceInterface {
       };
     }
 
+    // Autofill only fields by type
+    if (options.cozyAutofillOptions.fillOnlyTheseFieldQualifiers) {
+      pageDetails = {
+        ...pageDetails,
+        fields: pageDetails.fields.filter(
+          (field) => options.cozyAutofillOptions.fillOnlyTheseFieldQualifiers.includes(field.fieldQualifier),
+        ),
+      };
+    }
     // Cozy customization end
 
     let fillScript = new AutofillScript();

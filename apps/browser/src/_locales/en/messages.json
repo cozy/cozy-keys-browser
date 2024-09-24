@@ -4614,5 +4614,95 @@
   },
   "new_paperTaxNoticeRefTaxIncome": {
     "message": "New tax notice income"
+  },
+  "autofill_identityTitle": {
+    "message": "Autofill title"
+  },
+  "autofill_identityFirstName": {
+    "message": "Autofill first name"
+  },
+  "autofill_identityMiddleName": {
+    "message": "Autofill middle name"
+  },
+  "autofill_identityLastName": {
+    "message": "Autofill last name"
+  },
+  "autofill_identityFullName": {
+    "message": "Autofill full name"
+  },
+  "autofill_identityAddress1": {
+    "message": "Autofill address"
+  },
+  "autofill_identityAddress2": {
+    "message": "Autofill address"
+  },
+  "autofill_identityAddress3": {
+    "message": "Autofill address"
+  },
+  "autofill_identityCity": {
+    "message": "Autofill city"
+  },
+  "autofill_identityState": {
+    "message": "Autofill state"
+  },
+  "autofill_identityPostalCode": {
+    "message": "Autofill postal code"
+  },
+  "autofill_identityCountry": {
+    "message": "Autofill country"
+  },
+  "autofill_identityCompany": {
+    "message": "Autofill company"
+  },
+  "autofill_identityPhone": {
+    "message": "Autofill phone"
+  },
+  "autofill_identityEmail": {
+    "message": "Autofill email"
+  },
+  "autofill_identityUsername": {
+    "message": "Autofill username"
+  },
+  "autofill_paperIdentityCardNumber": {
+    "message": "Autofill national ID card number"
+  },
+  "autofill_paperPassportNumber": {
+    "message": "Autofill passport number"
+  },
+  "autofill_paperSocialSecurityNumber": {
+    "message": "Autofill social security number"
+  },
+  "autofill_paperResidencePermitNumber": {
+    "message": "Autofill residence permit number"
+  },
+  "autofill_paperDrivingLicenseNumber": {
+    "message": "Autofill driving license number"
+  },
+  "autofill_paperVehicleRegistrationNumber": {
+    "message": "Autofill vehicule registration number"
+  },
+  "autofill_paperVehicleRegistrationConfidentialCode": {
+    "message": "Autofill confidential vehicle registration code"
+  },
+  "autofill_paperVehicleRegistrationLicensePlateNumber": {
+    "message": "Autofill license plate number"
+  },
+  "autofill_paperBankIbanNumber": {
+    "message": "Autofill IBAN number"
+  },
+  "autofill_paperBankBicNumber": {
+    "message": "Autofill BIC number"
+  },
+  "autofill_paperGrossSalaryAmount": {
+    "message": "Autofill gross salary"
+  },
+  "autofill_paperNetSalaryAmount": {
+    "message": "Autofill net salary"
+  },
+  "autofill_paperTaxNoticeNumber": {
+    "message": "Autofill tax notice number"
+  },
+  "autofill_paperTaxNoticeRefTaxIncome": {
+    "message": "Autofill tax notice income"
   }
 }
