@@ -260,7 +260,7 @@ export type InlineMenuListPortMessageHandlers = {
     message,
     port,
   }: PortOnMessageHandlerParams) => void;
-  fillAutofillInlineMenuCipherWithPaperField: ({
+  fillAutofillInlineMenuCipherWithCozyData: ({
     message,
     port,
   }: PortOnMessageHandlerParams) => void;
