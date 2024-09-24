@@ -172,8 +172,8 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     saveFieldToCozyDoctype: ({ message, port }) => this.saveFieldToCozyDoctype(message, port),
     fillAutofillInlineMenuCipherWithAmbiguousField: ({ message, port }) =>
       this.fillAutofillInlineMenuCipherWithAmbiguousField(message, port),
-    fillAutofillInlineMenuCipherWithPaperField: ({ message, port }) =>
-      this.fillAutofillInlineMenuCipherWithPaperField(message, port),
+    fillAutofillInlineMenuCipherWithCozyData: ({ message, port }) =>
+      this.fillAutofillInlineMenuCipherWithCozyData(message, port),
     inlineMenuSearchContact: ({ message }) => this.searchContacts(message),
     redirectToCozy: ({ message }) => this.redirectToCozy(message),
     // Cozy customization end
@@ -913,7 +913,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     this.fillInlineMenuCipher(message, port, cozyAutofillOptions, fieldHtmlIDToFill);
   }
 
-  private async fillAutofillInlineMenuCipherWithPaperField(
+  private async fillAutofillInlineMenuCipherWithCozyData(
     message: OverlayPortMessage,
     port: chrome.runtime.Port,
   ) {
