@@ -627,7 +627,7 @@ export default class AutofillService implements AutofillServiceInterface {
     // Cozy customization; filter fields to autofill
 
     // Autofill only field by ID
-    if (options.cozyAutofillOptions.fillOnlyThisFieldHtmlID) {
+    if (options.cozyAutofillOptions?.fillOnlyThisFieldHtmlID) {
       pageDetails = {
         ...pageDetails,
         fields: pageDetails.fields.filter(
@@ -637,7 +637,7 @@ export default class AutofillService implements AutofillServiceInterface {
     }
 
     // Autofill only fields by type
-    if (options.cozyAutofillOptions.fillOnlyTheseFieldQualifiers) {
+    if (options.cozyAutofillOptions?.fillOnlyTheseFieldQualifiers) {
       pageDetails = {
         ...pageDetails,
         fields: pageDetails.fields.filter((field) =>
