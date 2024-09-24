@@ -175,7 +175,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin: 1rem;
+  margin: 1rem 0 0rem 1rem;
+  padding-right: 1.6rem;
+  max-height: 340px;
+  overflow-y: auto;
 
   label,
   input,
@@ -187,9 +190,33 @@ body {
 }
 .contact-edit-input-container {
   display: flex;
-  align-items: center;
   margin-left: 4rem;
   gap: 1rem;
+  flex-direction: column;
+
+  &--hidden {
+    display: none;
+  }
+
+  .contact-edit-input-label-group {
+    position: relative;
+    padding-top: 0.8rem;
+
+    &--subfield:last-child {
+      margin-bottom: 2rem;
+    }
+
+    label {
+      position: absolute;
+      top: 0;
+      left: 0.6rem;
+      padding: 0 0.4rem;
+
+      @include themify($themes) {
+        background-color: themed("backgroundColor") !important;
+      }
+    }
+  }
 }
 .contact-edit-input {
   padding: 0.8rem;
@@ -201,6 +228,7 @@ body {
 .contact-edit-icon {
   position: absolute;
   left: 0.7rem;
+  top: 1.6rem;
 
   path {
     @include themify($themes) {
@@ -209,17 +237,31 @@ body {
   }
 }
 .input-group-select {
-  margin-left: 4rem;
-}
-.input-group-select select {
-  appearance: none;
-  width: 100%;
-  padding: 0.8rem;
-  background-color: #fff;
-  border: 1px solid #297ef2;
-  border-radius: 0.25rem;
-  color: #000;
-  cursor: pointer;
+  position: relative;
+  padding-top: 0.8rem;
+  margin: 0 0 1rem 4rem;
+
+  label {
+    position: absolute;
+    top: 0;
+    left: 0.6rem;
+    padding: 0 0.4rem;
+
+    @include themify($themes) {
+      background-color: themed("backgroundColor") !important;
+    }
+  }
+
+  select {
+    appearance: none;
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #fff;
+    border: 1px solid #297ef2;
+    border-radius: 0.25rem;
+    color: #000;
+    cursor: pointer;
+  }
 }
 .contact-edit-divider {
   border-top: 1px solid;
@@ -252,6 +294,22 @@ body {
 .contact-edit-button-save {
   background-color: #297ef2;
   color: #fff;
+}
+.contact-address-details-button {
+  background: transparent;
+  color: #297ef2;
+  text-transform: uppercase;
+  border: none;
+  text-align: left;
+  margin: 0 0 1rem 4rem;
+  width: fit-content;
+  padding: 0 0 0.8rem 0;
+  cursor: pointer;
+  font-family: $font-family-lato;
+
+  &--hidden {
+    display: none;
+  }
 }
 // Cozy customization end
 
