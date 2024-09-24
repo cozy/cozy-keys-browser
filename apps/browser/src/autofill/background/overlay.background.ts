@@ -205,7 +205,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     // Useful to open alice.contacts.mycozy.cloud/#/127950390436f45accdf242cac55a2e4/edit for example
     if (message.inlineMenuCipherId) {
       const cipher = this.inlineMenuCiphers.get(message.inlineMenuCipherId);
-      message.hash = message.hash.replace('<id>', cipher.id)
+      message.hash = message.hash.replace("<id>", cipher.id);
     }
 
     BrowserApi.createNewTab(this.cozyClientService.getAppURL(message.to, message.hash), true);
@@ -1034,7 +1034,10 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         newAutofillValue,
         i18nService: this.i18nService,
       });
-      this.fillInlineMenuCipher(message, port, { ...newAutofillValue, fillOnlyThisFieldHtmlID: fieldHtmlIDToFill } );
+      this.fillInlineMenuCipher(message, port, {
+        ...newAutofillValue,
+        fillOnlyThisFieldHtmlID: fieldHtmlIDToFill,
+      });
     }
   }
 
@@ -1694,20 +1697,38 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         autofill_identityPhone: this.i18nService.translate("autofill_identityPhone"),
         autofill_identityEmail: this.i18nService.translate("autofill_identityEmail"),
         autofill_identityUsername: this.i18nService.translate("autofill_identityUsername"),
-        autofill_paperIdentityCardNumber: this.i18nService.translate("autofill_paperIdentityCardNumber"),
+        autofill_paperIdentityCardNumber: this.i18nService.translate(
+          "autofill_paperIdentityCardNumber",
+        ),
         autofill_paperPassportNumber: this.i18nService.translate("autofill_paperPassportNumber"),
-        autofill_paperSocialSecurityNumber: this.i18nService.translate("autofill_paperSocialSecurityNumber"),
-        autofill_paperResidencePermitNumber: this.i18nService.translate("autofill_paperResidencePermitNumber"),
-        autofill_paperDrivingLicenseNumber: this.i18nService.translate("autofill_paperDrivingLicenseNumber"),
-        autofill_paperVehicleRegistrationNumber: this.i18nService.translate("autofill_paperVehicleRegistrationNumber"),
-        autofill_paperVehicleRegistrationConfidentialCode: this.i18nService.translate("autofill_paperVehicleRegistrationConfidentialCode"),
-        autofill_paperVehicleRegistrationLicensePlateNumber: this.i18nService.translate("autofill_paperVehicleRegistrationLicensePlateNumber"),
+        autofill_paperSocialSecurityNumber: this.i18nService.translate(
+          "autofill_paperSocialSecurityNumber",
+        ),
+        autofill_paperResidencePermitNumber: this.i18nService.translate(
+          "autofill_paperResidencePermitNumber",
+        ),
+        autofill_paperDrivingLicenseNumber: this.i18nService.translate(
+          "autofill_paperDrivingLicenseNumber",
+        ),
+        autofill_paperVehicleRegistrationNumber: this.i18nService.translate(
+          "autofill_paperVehicleRegistrationNumber",
+        ),
+        autofill_paperVehicleRegistrationConfidentialCode: this.i18nService.translate(
+          "autofill_paperVehicleRegistrationConfidentialCode",
+        ),
+        autofill_paperVehicleRegistrationLicensePlateNumber: this.i18nService.translate(
+          "autofill_paperVehicleRegistrationLicensePlateNumber",
+        ),
         autofill_paperBankIbanNumber: this.i18nService.translate("autofill_paperBankIbanNumber"),
         autofill_paperBankBicNumber: this.i18nService.translate("autofill_paperBankBicNumber"),
-        autofill_paperGrossSalaryAmount: this.i18nService.translate("autofill_paperGrossSalaryAmount"),
+        autofill_paperGrossSalaryAmount: this.i18nService.translate(
+          "autofill_paperGrossSalaryAmount",
+        ),
         autofill_paperNetSalaryAmount: this.i18nService.translate("autofill_paperNetSalaryAmount"),
         autofill_paperTaxNoticeNumber: this.i18nService.translate("autofill_paperTaxNoticeNumber"),
-        autofill_paperTaxNoticeRefTaxIncome: this.i18nService.translate("autofill_paperTaxNoticeRefTaxIncome"),
+        autofill_paperTaxNoticeRefTaxIncome: this.i18nService.translate(
+          "autofill_paperTaxNoticeRefTaxIncome",
+        ),
         givenName: this.i18nService.translate("givenName"),
         additionalName: this.i18nService.translate("additionalName"),
         familyName: this.i18nService.translate("familyName"),
