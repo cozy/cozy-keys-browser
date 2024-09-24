@@ -849,7 +849,6 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     { inlineMenuCipherId }: OverlayPortMessage,
     { sender }: chrome.runtime.Port,
     cozyAutofillOptions: CozyAutofillOptions = {},
-    fieldHtmlIDToFill?: string,
   ) {
     const pageDetails = this.pageDetailsForTab[sender.tab.id];
     if (!inlineMenuCipherId || !pageDetails?.size) {
@@ -868,7 +867,6 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       fillNewPassword: true,
       allowTotpAutofill: true,
       cozyAutofillOptions,
-      ...(fieldHtmlIDToFill ? { fillOnlyThisFieldHtmlID: fieldHtmlIDToFill } : {}),
     });
 
     // Cozy customization - Remembering the last filled cipher ID allows to open a custom UI in the inline menu but it works only for contacts.
@@ -888,7 +886,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     message: OverlayPortMessage,
     port: chrome.runtime.Port,
   ) {
-    const { cozyAutofillOptions, fieldHtmlIDToFill, inlineMenuCipherId } = message;
+    const { cozyAutofillOptions, inlineMenuCipherId } = message;
 
     const client = await this.cozyClientService.getClientInstance();
     const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
@@ -908,12 +906,12 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         command: "createEmptyNameList",
         inlineMenuCipherId,
         contactName: contact.displayName,
-        fieldHtmlIDToFill,
+        fieldHtmlIDToFill: cozyAutofillOptions.fieldHtmlIDToFill,
       });
       return;
     }
 
-    this.fillInlineMenuCipher(message, port, cozyAutofillOptions, fieldHtmlIDToFill);
+    this.fillInlineMenuCipher(message, port, cozyAutofillOptions);
   }
 
   private async fillAutofillInlineMenuCipherWithCozyData(
@@ -1036,7 +1034,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         newAutofillValue,
         i18nService: this.i18nService,
       });
-      this.fillInlineMenuCipher(message, port, newAutofillValue, fieldHtmlIDToFill);
+      this.fillInlineMenuCipher(message, port, { ...newAutofillValue, fillOnlyThisFieldHtmlID: fieldHtmlIDToFill } );
     }
   }
 
