@@ -6,6 +6,7 @@ import { CipherType } from "@bitwarden/common/vault/enums";
 
 import { InlineMenuCipherData } from "../../../../background/abstractions/overlay.background";
 import {
+  addressFieldNames,
   ambiguousContactFieldNames,
   buildSvgDomElement,
   getAmbiguousValueKey,
@@ -37,6 +38,7 @@ import {
   AmbiguousContactFieldValue,
   AmbiguousContactFieldName,
   AvailablePapers,
+  AddressContactSubFieldName,
 } from "src/autofill/types";
 import type { AutofillValue } from "../../../../../../../../libs/cozy/createOrUpdateCozyDoctype";
 import { COZY_ATTRIBUTES_MAPPING } from "../../../../../../../../libs/cozy/mapping";
@@ -111,6 +113,16 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     contactName: string,
     fieldHtmlIDToFill?: string,
   ) {
+    // if the field is an address or an address subfield
+    if (
+      COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name === "address" ||
+      addressFieldNames.includes(
+        COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AddressContactSubFieldName,
+      )
+    ) {
+      return this.editContactAddressFields(inlineMenuCipherId, contactName, fieldHtmlIDToFill);
+    }
+
     this.inlineMenuListContainer.innerHTML = "";
     this.inlineMenuListContainer.classList.remove(
       "inline-menu-list-container--with-new-item-button",
@@ -401,7 +413,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     // Cozy customization - On the contact ambiguous fields, if the field has a value, the corresponding menu is displayed directly. Unless we wish to return to the contact cypher list.
     if (
       this.fieldValue &&
-      ambiguousContactFieldNames.includes(
+      [...ambiguousContactFieldNames, ...addressFieldNames].includes(
         COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AmbiguousContactFieldName,
       ) &&
       !isBack && // case where we are already on the ambiguous list and wish to return to the contacts list.
@@ -864,17 +876,14 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
           break;
       }
 
-      // TODO - Add the possibility to update a contact with an address
-      if (firstAmbiguousFieldName !== "address") {
-        const newButton = this.createNewButton(
-          inlineMenuCipherId,
-          fieldHtmlIDToFill,
-          contactName,
-          newButtonTitle,
-        );
-        if (newButton) {
-          ulElement.appendChild(newButton);
-        }
+      const newButton = this.createNewButton(
+        inlineMenuCipherId,
+        fieldHtmlIDToFill,
+        contactName,
+        newButtonTitle,
+      );
+      if (newButton) {
+        ulElement.appendChild(newButton);
       }
     }
 

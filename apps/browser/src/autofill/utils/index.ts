@@ -18,6 +18,7 @@ import {
   FillableFormFieldElement,
   FormElementWithAttribute,
   FormFieldElement,
+  AddressContactSubFieldName,
 } from "../types";
 
 import { contact, email, address, phone } from "./svg-icons";
@@ -392,6 +393,12 @@ export const getAmbiguousFieldsContact = (
     {},
   );
 };
+export const addressFieldNames: AddressContactSubFieldName[] = [
+  "city",
+  "state",
+  "country",
+  "postalCode",
+];
 export const ambiguousContactFieldNames: AmbiguousContactFieldName[] = [
   "phone",
   "email",
