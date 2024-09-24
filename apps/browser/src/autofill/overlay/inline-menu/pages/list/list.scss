@@ -556,6 +556,7 @@ body {
     justify-content: flex-start;
     padding: 0.7rem 0.3rem 0.7rem 0.7rem;
     border-radius: 0.4rem;
+    height: 48px; // Cozy customization; force height to Cozy list item height
 
     &:focus-within:not(.remove-outline) {
       outline-width: 0.2rem;
