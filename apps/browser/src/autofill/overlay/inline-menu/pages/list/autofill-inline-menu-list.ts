@@ -22,6 +22,7 @@ import {
   viewCipherIcon,
   magnifier,
   contact,
+  address,
 } from "../../../../utils/svg-icons";
 import {
   AutofillInlineMenuListWindowMessageHandlers,
@@ -43,6 +44,7 @@ import {
 import type { AutofillValue } from "../../../../../../../../libs/cozy/createOrUpdateCozyDoctype";
 import { COZY_ATTRIBUTES_MAPPING } from "../../../../../../../../libs/cozy/mapping";
 import { CozyAutofillOptions } from "src/autofill/services/abstractions/autofill.service";
+import { fields } from "../../../../../../../../libs/cozy/contact.lib";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -106,6 +108,122 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     super();
 
     this.setupInlineMenuListGlobalListeners();
+  }
+
+  private editContactAddressFields(
+    inlineMenuCipherId: string,
+    contactName: string,
+    fieldHtmlIDToFill?: string,
+  ) {
+    const contactAddressFields = fields.filter((field) => field.name === "address")[0].subFields;
+    const addressFieldsPrimary = ["number", "street", "code", "city"];
+    const hiddenContactAddressFields = contactAddressFields.reduce((acc, field) => {
+      if (!addressFieldsPrimary.includes(field.name)) {
+        acc.push(field.name);
+      }
+      return acc;
+    }, []);
+
+    this.inlineMenuListContainer.innerHTML = "";
+    this.inlineMenuListContainer.classList.remove(
+      "inline-menu-list-container--with-new-item-button",
+    );
+    const editContainer = globalThis.document.createElement("div");
+    editContainer.classList.add("contact-edit-container");
+
+    const addNewAmbiguousHeader = this.buildNewListHeader(contactName);
+
+    const inputTextContainer = document.createElement("div");
+    inputTextContainer.classList.add("contact-edit-input-container");
+
+    const iconElement = buildSvgDomElement(address);
+    iconElement.classList.add("contact-edit-icon");
+    inputTextContainer.appendChild(iconElement);
+
+    for (const field of addressFieldsPrimary) {
+      const labelGroup = document.createElement("div");
+      labelGroup.classList.add("contact-edit-input-label-group");
+      const labelElement = document.createElement("label");
+      labelElement.htmlFor = field;
+      labelElement.textContent = this.getTranslation(`address_${field}`);
+      labelGroup.appendChild(labelElement);
+
+      const inputText = document.createElement("input");
+      inputText.classList.add("contact-edit-input");
+      inputText.type = "text";
+      inputText.id = field;
+
+      labelGroup.appendChild(inputText);
+      inputTextContainer.appendChild(labelGroup);
+    }
+    editContainer.appendChild(inputTextContainer);
+
+    const labelGroup = document.createElement("div");
+    labelGroup.classList.add("input-group-select");
+
+    const labelElement = document.createElement("label");
+    labelElement.textContent = this.getTranslation("label");
+    labelGroup.appendChild(labelElement);
+
+    const selectElement = makeEditContactSelectElement(
+      this.fieldQualifier,
+      this.getTranslation.bind(this),
+    );
+
+    labelGroup.appendChild(selectElement);
+    editContainer.appendChild(labelGroup);
+
+    const inputTextContainer2 = document.createElement("div");
+    inputTextContainer2.classList.add(
+      "contact-edit-input-container",
+      "contact-edit-input-container--hidden",
+    );
+    for (const subField of hiddenContactAddressFields) {
+      const labelGroup = document.createElement("div");
+      labelGroup.classList.add(
+        "contact-edit-input-label-group",
+        "contact-edit-input-label-group--subfield",
+      );
+      const labelElement = document.createElement("label");
+      labelElement.htmlFor = subField;
+      labelElement.textContent = this.getTranslation(`address_${subField}`);
+      labelGroup.appendChild(labelElement);
+
+      const inputText = document.createElement("input");
+      inputText.classList.add("contact-edit-input");
+      inputText.type = "text";
+      inputText.id = subField;
+
+      labelGroup.appendChild(inputText);
+      inputTextContainer2.appendChild(labelGroup);
+    }
+    editContainer.appendChild(inputTextContainer2);
+
+    const addressDetailsButton = document.createElement("button");
+    addressDetailsButton.textContent = this.getTranslation("addressDetails");
+    addressDetailsButton.classList.add("contact-address-details-button");
+    addressDetailsButton.addEventListener(EVENTS.CLICK, () => {
+      addressDetailsButton.classList.add("contact-address-details-button--hidden");
+      inputTextContainer2.classList.remove("contact-edit-input-container--hidden");
+    });
+    editContainer.appendChild(addressDetailsButton);
+
+    const divider = document.createElement("div");
+    divider.classList.add("contact-edit-divider");
+
+    // TODO - Add the buttons
+    // const buttons = this.editContactButtons(inlineMenuCipherId);
+
+    // Necessary for the bottom margin of “buttons” to be interpreted
+    const necessaryStyleElement = document.createElement("div");
+    necessaryStyleElement.style.height = "1px";
+
+    this.inlineMenuListContainer.appendChild(addNewAmbiguousHeader);
+    this.inlineMenuListContainer.appendChild(editContainer);
+    this.inlineMenuListContainer.appendChild(divider);
+    // TODO - Add the buttons
+    // this.inlineMenuListContainer.appendChild(buttons);
+    this.inlineMenuListContainer.appendChild(necessaryStyleElement);
   }
 
   private editContactFields(
@@ -196,8 +314,8 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private editContactButtons(
     inlineMenuCipherId: string,
     fieldHtmlIDToFill: string,
-    inputText: HTMLInputElement,
-    selectElement: HTMLSelectElement | null,
+    inputText?: HTMLInputElement,
+    selectElement?: HTMLSelectElement | null,
   ) {
     const buttonContainer = document.createElement("div");
     buttonContainer.classList.add("contact-edit-buttons");
