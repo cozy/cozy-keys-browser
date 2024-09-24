@@ -503,6 +503,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       value: currentListItemValue,
       label: ambiguousValue.label,
       type: ambiguousValue.type,
+      fillOnlyThisFieldHtmlID: fieldHtmlIDToFill,
     };
 
     const listItem = document.createElement("li");
@@ -521,7 +522,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       this.handleFillCipherAmbiguousClickEvent(
         inlineMenuCipherId,
         cozyAutofillOptions,
-        fieldHtmlIDToFill,
         uniqueId(),
       ),
     );
@@ -942,7 +942,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private handleFillCipherAmbiguousClickEvent = (
     inlineMenuCipherId: string,
     cozyAutofillOptions: CozyAutofillOptions,
-    fieldHtmlIDToFill: string,
     UID: string,
   ) => {
     return this.useEventHandlersMemo(
@@ -951,7 +950,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
           command: "fillAutofillInlineMenuCipherWithAmbiguousField",
           inlineMenuCipherId,
           cozyAutofillOptions,
-          fieldHtmlIDToFill,
         }),
       `${UID}-fill-cipher-button-click-handler`,
     );

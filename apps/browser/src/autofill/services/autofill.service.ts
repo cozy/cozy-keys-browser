@@ -360,7 +360,6 @@ export default class AutofillService implements AutofillServiceInterface {
           tabUrl: tab.url,
           defaultUriMatch: defaultUriMatch,
           cozyAutofillOptions: options.cozyAutofillOptions, // Cozy customization
-          fillOnlyThisFieldHtmlID: options.fillOnlyThisFieldHtmlID, // Cozy customization
         });
 
         if (!fillScript || !fillScript.script || !fillScript.script.length) {
@@ -626,11 +625,11 @@ export default class AutofillService implements AutofillServiceInterface {
     }
 
     // Cozy customization; autofill only one field
-    if (options.fillOnlyThisFieldHtmlID) {
+    if (options.cozyAutofillOptions.fillOnlyThisFieldHtmlID) {
       pageDetails = {
         ...pageDetails,
         fields: pageDetails.fields.filter(
-          (field) => field.htmlID === options.fillOnlyThisFieldHtmlID,
+          (field) => field.htmlID === options.cozyAutofillOptions.fillOnlyThisFieldHtmlID,
         ),
       };
     }
