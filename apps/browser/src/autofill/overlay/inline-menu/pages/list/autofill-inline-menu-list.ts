@@ -1774,6 +1774,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       const modifyCipherActionElement = this.createModifyCipherAction(cipher);
       ulElement.appendChild(modifyCipherActionElement);
 
+      const autofillCurrentElement = this.createAutofillCurrentAction(cipher, {
+        fillOnlyTheseFieldQualifiers: [this.fieldQualifier]
+      });
+      ulElement.appendChild(autofillCurrentElement);
+
       const autofillAllElement = this.createAutofillAllAction(cipher);
       ulElement.appendChild(autofillAllElement);
     }
@@ -1814,6 +1819,15 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         command: "fillAutofillInlineMenuCipher",
         inlineMenuCipherId: cipher.id,
       })
+    );
+
+    return li;
+  }
+
+  private createAutofillCurrentAction(cipher: InlineMenuCipherData, cozyAutofillOptions: CozyAutofillOptions) {
+    const li = this.createActionMenuItem(
+      this.getTranslation(`autofill_${cozyAutofillOptions.fillOnlyTheseFieldQualifiers[0]}`),
+      this.handleFillCipherWithCozyDataClickEvent(cipher.id, cozyAutofillOptions, uniqueId()),
     );
 
     return li;

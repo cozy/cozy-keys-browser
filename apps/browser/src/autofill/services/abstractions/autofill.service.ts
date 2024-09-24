@@ -5,6 +5,8 @@ import { CommandDefinition } from "@bitwarden/common/platform/messaging";
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
+import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
+
 import { AutofillMessageCommand } from "../../enums/autofill-message.enums";
 import AutofillField from "../../models/autofill-field";
 import AutofillForm from "../../models/autofill-form";
@@ -23,6 +25,7 @@ export interface CozyAutofillOptions {
   label?: "work" | "home";
   value?: string;
   fillOnlyThisFieldHtmlID?: string;
+  fillOnlyTheseFieldQualifiers?: AutofillFieldQualifierType[];
 }
 // Cozy customization end
 
