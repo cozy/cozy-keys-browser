@@ -4629,5 +4629,95 @@
   },
   "new_paperTaxNoticeRefTaxIncome": {
     "message": "Nouveau revenu fiscal de référence"
+  },
+  "autofill_identityTitle": {
+    "message": "Saisir le titre"
+  },
+  "autofill_identityFirstName": {
+    "message": "Saisir le prénom"
+  },
+  "autofill_identityMiddleName": {
+    "message": "Saisir le deuxième prénom"
+  },
+  "autofill_identityLastName": {
+    "message": "Saisir le nom"
+  },
+  "autofill_identityFullName": {
+    "message": "Saisir le nom complet"
+  },
+  "autofill_identityAddress1": {
+    "message": "Saisir l'adresse"
+  },
+  "autofill_identityAddress2": {
+    "message": "Saisir l'adresse"
+  },
+  "autofill_identityAddress3": {
+    "message": "Saisir l'adresse"
+  },
+  "autofill_identityCity": {
+    "message": "Saisir la ville"
+  },
+  "autofill_identityState": {
+    "message": "Saisir la région"
+  },
+  "autofill_identityPostalCode": {
+    "message": "Saisir le code postal"
+  },
+  "autofill_identityCountry": {
+    "message": "Saisir le pays"
+  },
+  "autofill_identityCompany": {
+    "message": "Saisir l'entreprise"
+  },
+  "autofill_identityPhone": {
+    "message": "Saisir le téléphone"
+  },
+  "autofill_identityEmail": {
+    "message": "Saisir l'email"
+  },
+  "autofill_identityUsername": {
+    "message": "Saisir l'identifiant"
+  },
+  "autofill_paperIdentityCardNumber": {
+    "message": "Saisir le numéro de carte d'identité"
+  },
+  "autofill_paperPassportNumber": {
+    "message": "Saisir le numéro de passeport"
+  },
+  "autofill_paperSocialSecurityNumber": {
+    "message": "Saisir le numéro de sécurité sociale"
+  },
+  "autofill_paperResidencePermitNumber": {
+    "message": "Saisir le numéro de permis de résidence"
+  },
+  "autofill_paperDrivingLicenseNumber": {
+    "message": "Saisir le numéro de permis de conduire"
+  },
+  "autofill_paperVehicleRegistrationNumber": {
+    "message": "Saisir le numéro de carte grise"
+  },
+  "autofill_paperVehicleRegistrationConfidentialCode": {
+    "message": "Saisir le code confidentiel de carte grise"
+  },
+  "autofill_paperVehicleRegistrationLicensePlateNumber": {
+    "message": "Saisir le numéro d'immatriculation"
+  },
+  "autofill_paperBankIbanNumber": {
+    "message": "Saisir le numéro d'IBAN"
+  },
+  "autofill_paperBankBicNumber": {
+    "message": "Saisir le numéro BIC"
+  },
+  "autofill_paperGrossSalaryAmount": {
+    "message": "Saisir la rémunération brute"
+  },
+  "autofill_paperNetSalaryAmount": {
+    "message": "Saisir la rémunération nette"
+  },
+  "autofill_paperTaxNoticeNumber": {
+    "message": "Saisir le numéro fiscal de référence"
+  },
+  "autofill_paperTaxNoticeRefTaxIncome": {
+    "message": "Saisir le revenu fiscal de référence"
   }
 }
