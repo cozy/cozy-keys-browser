@@ -1630,11 +1630,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     // Cozy customization, replace text of cipher name with contact name if available
     //*
-    cipherNameElement.textContent = cipher.contact
-      ? cipher.contact.me
-        ? `${cipher.contact.fullName} (${this.getTranslation("cipherContactMe")})`
-        : cipher.contact.fullName
-      : cipher.name;
+    cipherNameElement.textContent = this.buildCipherName(cipher);
     /*/
     cipherNameElement.textContent = cipher.name;
     //*/
@@ -1643,6 +1639,14 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     return cipherNameElement;
   }
+
+  private buildCipherName = (cipher: InlineMenuCipherData) => {
+    return cipher.contact
+      ? cipher.contact.me
+        ? `${cipher.contact.fullName} (${this.getTranslation("cipherContactMe")})`
+        : cipher.contact.fullName
+      : cipher.name;
+  };
 
   /**
    * Builds the subtitle element for a given cipher.
