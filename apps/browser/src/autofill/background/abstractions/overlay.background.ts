@@ -260,10 +260,7 @@ export type InlineMenuListPortMessageHandlers = {
     message,
     port,
   }: PortOnMessageHandlerParams) => void;
-  fillAutofillInlineMenuCipherWithCozyData: ({
-    message,
-    port,
-  }: PortOnMessageHandlerParams) => void;
+  fillAutofillInlineMenuCipherWithCozyData: ({ message, port }: PortOnMessageHandlerParams) => void;
   inlineMenuSearchContact: ({ message, port }: PortOnMessageHandlerParams) => void;
   saveFieldToCozyDoctype: ({ message, port }: PortOnMessageHandlerParams) => void;
   // Cozy customization end

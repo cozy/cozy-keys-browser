@@ -640,8 +640,8 @@ export default class AutofillService implements AutofillServiceInterface {
     if (options.cozyAutofillOptions.fillOnlyTheseFieldQualifiers) {
       pageDetails = {
         ...pageDetails,
-        fields: pageDetails.fields.filter(
-          (field) => options.cozyAutofillOptions.fillOnlyTheseFieldQualifiers.includes(field.fieldQualifier),
+        fields: pageDetails.fields.filter((field) =>
+          options.cozyAutofillOptions.fillOnlyTheseFieldQualifiers.includes(field.fieldQualifier),
         ),
       };
     }

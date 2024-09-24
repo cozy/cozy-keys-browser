@@ -119,7 +119,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const editContainer = globalThis.document.createElement("div");
     editContainer.classList.add("contact-edit-container");
 
-    const addNewAmbiguousHeader = this.buildNewListHeader(contactName, this.handleNewAmbiguousHeaderClick);
+    const addNewAmbiguousHeader = this.buildNewListHeader(
+      contactName,
+      this.handleNewAmbiguousHeaderClick,
+    );
 
     const { inputTextContainer, inputText } = makeEditContactField(
       this.fieldQualifier,
@@ -519,11 +522,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     fillButton.setAttribute("aria-label", contactName);
     fillButton.addEventListener(
       EVENTS.CLICK,
-      this.handleFillCipherAmbiguousClickEvent(
-        inlineMenuCipherId,
-        cozyAutofillOptions,
-        uniqueId(),
-      ),
+      this.handleFillCipherAmbiguousClickEvent(inlineMenuCipherId, cozyAutofillOptions, uniqueId()),
     );
 
     const isAlreadySelected =
@@ -602,7 +601,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     fillButton.setAttribute("aria-label", contactName);
     fillButton.addEventListener(
       EVENTS.CLICK,
-      this.handleFillCipherWithCozyDataClickEvent(inlineMenuCipherId, cozyAutofillOptions, uniqueId()),
+      this.handleFillCipherWithCozyDataClickEvent(
+        inlineMenuCipherId,
+        cozyAutofillOptions,
+        uniqueId(),
+      ),
     );
 
     const radio = document.createElement("input");
@@ -762,7 +765,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       "inline-menu-list-container--with-new-item-button",
     );
 
-    const addNewLoginButtonContainer = this.buildNewListHeader(contactName, this.handleNewAmbiguousHeaderClick);
+    const addNewLoginButtonContainer = this.buildNewListHeader(
+      contactName,
+      this.handleNewAmbiguousHeaderClick,
+    );
 
     const ulElement = globalThis.document.createElement("ul");
     ulElement.classList.add("inline-menu-list-actions");
@@ -806,7 +812,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       "inline-menu-list-container--with-new-item-button",
     );
 
-    const addNewLoginButtonContainer = this.buildNewListHeader(contactName, this.handleNewAmbiguousHeaderClick);
+    const addNewLoginButtonContainer = this.buildNewListHeader(
+      contactName,
+      this.handleNewAmbiguousHeaderClick,
+    );
 
     const ulElement = globalThis.document.createElement("ul");
     ulElement.classList.add("inline-menu-list-actions");
@@ -892,7 +901,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       "inline-menu-list-container--with-new-item-button",
     );
 
-    const addNewLoginButtonContainer = this.buildNewListHeader(contactName, this.handleNewAmbiguousHeaderClick);
+    const addNewLoginButtonContainer = this.buildNewListHeader(
+      contactName,
+      this.handleNewAmbiguousHeaderClick,
+    );
 
     const ulElement = globalThis.document.createElement("ul");
     ulElement.classList.add("inline-menu-list-actions");
@@ -1758,7 +1770,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.actionMenuContainer = globalThis.document.createElement("div");
     this.actionMenuContainer.classList.add("inline-menu-action-menu-container");
 
-    const actionMenuHeader = this.buildNewListHeader('Menu', () => this.hideActionMenu());
+    const actionMenuHeader = this.buildNewListHeader("Menu", () => this.hideActionMenu());
 
     const ulElement = globalThis.document.createElement("ul");
     ulElement.classList.add("inline-menu-list-actions");
@@ -1775,7 +1787,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       ulElement.appendChild(modifyCipherActionElement);
 
       const autofillCurrentElement = this.createAutofillCurrentAction(cipher, {
-        fillOnlyTheseFieldQualifiers: [this.fieldQualifier]
+        fillOnlyTheseFieldQualifiers: [this.fieldQualifier],
       });
       ulElement.appendChild(autofillCurrentElement);
 
@@ -1783,48 +1795,49 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       ulElement.appendChild(autofillAllElement);
     }
 
-    this.actionMenuContainer.appendChild(actionMenuHeader)
-    this.actionMenuContainer.appendChild(ulElement)
+    this.actionMenuContainer.appendChild(actionMenuHeader);
+    this.actionMenuContainer.appendChild(ulElement);
 
     return this.actionMenuContainer;
   }
 
   private createViewCipherAction(cipher: InlineMenuCipherData) {
     const li = this.createActionMenuItem(
-      this.getTranslation('view'),
-      this.handleViewCipherClickEvent(cipher)
+      this.getTranslation("view"),
+      this.handleViewCipherClickEvent(cipher),
     );
 
     return li;
   }
 
   private createModifyCipherAction(cipher: InlineMenuCipherData) {
-    const li = this.createActionMenuItem(
-      this.getTranslation('edit'),
-      () => this.postMessageToParent({
+    const li = this.createActionMenuItem(this.getTranslation("edit"), () =>
+      this.postMessageToParent({
         command: "redirectToCozy",
         to: "contacts",
         hash: "<id>/edit",
         inlineMenuCipherId: cipher.id,
-      })
+      }),
     );
 
     return li;
   }
 
   private createAutofillAllAction(cipher: InlineMenuCipherData) {
-    const li = this.createActionMenuItem(
-      this.getTranslation('autofillAll'),
-      () => this.postMessageToParent({
+    const li = this.createActionMenuItem(this.getTranslation("autofillAll"), () =>
+      this.postMessageToParent({
         command: "fillAutofillInlineMenuCipher",
         inlineMenuCipherId: cipher.id,
-      })
+      }),
     );
 
     return li;
   }
 
-  private createAutofillCurrentAction(cipher: InlineMenuCipherData, cozyAutofillOptions: CozyAutofillOptions) {
+  private createAutofillCurrentAction(
+    cipher: InlineMenuCipherData,
+    cozyAutofillOptions: CozyAutofillOptions,
+  ) {
     const li = this.createActionMenuItem(
       this.getTranslation(`autofill_${cozyAutofillOptions.fillOnlyTheseFieldQualifiers[0]}`),
       this.handleFillCipherWithCozyDataClickEvent(cipher.id, cozyAutofillOptions, uniqueId()),
@@ -1833,45 +1846,39 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return li;
   }
 
-   /**
-    * @param title
-    * @param onClick - Callback executed when clicking on the item
+  /**
+   * @param title
+   * @param onClick - Callback executed when clicking on the item
    */
-    private createActionMenuItem(
-      title: string,
-      onClick: any
-    ) {
-      const listItem = document.createElement("li");
-      listItem.setAttribute("role", "listitem");
-      listItem.classList.add("inline-menu-list-actions-item");
+  private createActionMenuItem(title: string, onClick: any) {
+    const listItem = document.createElement("li");
+    listItem.setAttribute("role", "listitem");
+    listItem.classList.add("inline-menu-list-actions-item");
 
-      const div = document.createElement("div");
-      div.classList.add("cipher-container");
+    const div = document.createElement("div");
+    div.classList.add("cipher-container");
 
-      const fillButton = document.createElement("button");
-      fillButton.setAttribute("tabindex", "-1");
-      fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
-      fillButton.setAttribute("aria-label", title);
-      fillButton.addEventListener(
-        EVENTS.CLICK,
-        onClick,
-      );
+    const fillButton = document.createElement("button");
+    fillButton.setAttribute("tabindex", "-1");
+    fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
+    fillButton.setAttribute("aria-label", title);
+    fillButton.addEventListener(EVENTS.CLICK, onClick);
 
-      const detailsSpan = document.createElement("span");
-      detailsSpan.classList.add("cipher-details");
+    const detailsSpan = document.createElement("span");
+    detailsSpan.classList.add("cipher-details");
 
-      const nameSpan = document.createElement("span");
-      nameSpan.setAttribute("title", title);
-      nameSpan.textContent = title;
-      nameSpan.classList.add("cipher-name");
+    const nameSpan = document.createElement("span");
+    nameSpan.setAttribute("title", title);
+    nameSpan.textContent = title;
+    nameSpan.classList.add("cipher-name");
 
-      detailsSpan.appendChild(nameSpan);
-      fillButton.appendChild(detailsSpan);
+    detailsSpan.appendChild(nameSpan);
+    fillButton.appendChild(detailsSpan);
 
-      div.appendChild(fillButton);
-      listItem.appendChild(div);
+    div.appendChild(fillButton);
+    listItem.appendChild(div);
 
-      return listItem;
-    }
+    return listItem;
+  }
   /* Cozy customization end; action menu */
 }
