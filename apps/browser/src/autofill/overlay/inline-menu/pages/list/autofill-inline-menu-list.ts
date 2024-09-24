@@ -602,7 +602,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     fillButton.setAttribute("aria-label", contactName);
     fillButton.addEventListener(
       EVENTS.CLICK,
-      this.handleFillCipherPaperClickEvent(inlineMenuCipherId, cozyAutofillOptions, uniqueId()),
+      this.handleFillCipherWithCozyDataClickEvent(inlineMenuCipherId, cozyAutofillOptions, uniqueId()),
     );
 
     const radio = document.createElement("input");
@@ -960,7 +960,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
    * @param cozyAutofillOptions
    * @param UID
    */
-  private handleFillCipherPaperClickEvent = (
+  private handleFillCipherWithCozyDataClickEvent = (
     inlineMenuCipherId: string,
     cozyAutofillOptions: CozyAutofillOptions,
     UID: string,
