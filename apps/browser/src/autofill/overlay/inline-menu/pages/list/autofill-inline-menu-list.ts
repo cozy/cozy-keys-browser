@@ -1906,7 +1906,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.actionMenuContainer = globalThis.document.createElement("div");
     this.actionMenuContainer.classList.add("inline-menu-action-menu-container");
 
-    const actionMenuHeader = this.buildNewListHeader("Menu", () => this.hideActionMenu());
+    const actionMenuHeader = this.buildNewListHeader(this.buildCipherName(cipher), () =>
+      this.hideActionMenu(),
+    );
 
     const ulElement = globalThis.document.createElement("ul");
     ulElement.classList.add("inline-menu-list-actions");
