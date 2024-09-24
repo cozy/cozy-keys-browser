@@ -23,6 +23,9 @@ import {
   magnifier,
   contact,
   address,
+  penIcon,
+  fillFieldIcon,
+  fillMultipleFieldsIcon,
 } from "../../../../utils/svg-icons";
 import {
   AutofillInlineMenuListWindowMessageHandlers,
@@ -1930,6 +1933,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private createViewCipherAction(cipher: InlineMenuCipherData) {
     const li = this.createActionMenuItem(
       this.getTranslation("view"),
+      viewCipherIcon,
       this.handleViewCipherClickEvent(cipher),
     );
 
@@ -1937,7 +1941,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   }
 
   private createModifyCipherAction(cipher: InlineMenuCipherData) {
-    const li = this.createActionMenuItem(this.getTranslation("edit"), () =>
+    const li = this.createActionMenuItem(this.getTranslation("edit"), penIcon, () =>
       this.postMessageToParent({
         command: "redirectToCozy",
         to: "contacts",
@@ -1950,11 +1954,14 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   }
 
   private createAutofillAllAction(cipher: InlineMenuCipherData) {
-    const li = this.createActionMenuItem(this.getTranslation("autofillAll"), () =>
-      this.postMessageToParent({
-        command: "fillAutofillInlineMenuCipher",
-        inlineMenuCipherId: cipher.id,
-      }),
+    const li = this.createActionMenuItem(
+      this.getTranslation("autofillAll"),
+      fillMultipleFieldsIcon,
+      () =>
+        this.postMessageToParent({
+          command: "fillAutofillInlineMenuCipher",
+          inlineMenuCipherId: cipher.id,
+        }),
     );
 
     return li;
@@ -1966,6 +1973,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   ) {
     const li = this.createActionMenuItem(
       this.getTranslation(`autofill_${cozyAutofillOptions.fillOnlyTheseFieldQualifiers[0]}`),
+      fillFieldIcon,
       this.handleFillCipherWithCozyDataClickEvent(cipher.id, cozyAutofillOptions, uniqueId()),
     );
 
@@ -1976,10 +1984,13 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
    * @param title
    * @param onClick - Callback executed when clicking on the item
    */
-  private createActionMenuItem(title: string, onClick: any) {
+  private createActionMenuItem(title: string, icon: string, onClick: any) {
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
     listItem.classList.add("inline-menu-list-actions-item");
+
+    // Border is not wanted in action menu item
+    listItem.style.borderBottomWidth = "0px";
 
     const div = document.createElement("div");
     div.classList.add("cipher-container");
@@ -2001,6 +2012,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     detailsSpan.appendChild(nameSpan);
     fillButton.appendChild(detailsSpan);
 
+    const iconElement = buildSvgDomElement(icon);
+    iconElement.style.margin = "0 2rem 0 1.3rem";
+
+    div.appendChild(iconElement);
     div.appendChild(fillButton);
     listItem.appendChild(div);
 
