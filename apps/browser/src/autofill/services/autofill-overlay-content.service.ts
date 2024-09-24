@@ -1020,8 +1020,12 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       )
     ) {
       // Cozy customization; replace Identity by Contact in autofill
+      // Also add field qualifier to be able to autofill
+      // only some fields based on their type
       //*
       autofillFieldData.filledByCipherType = CipherType.Contact;
+
+      this.qualifyUserFilledIdentityField(autofillFieldData);
       /*/
       autofillFieldData.filledByCipherType = CipherType.Identity;
       //*/
@@ -1036,8 +1040,12 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       )
     ) {
       // Cozy customization; replace Identity by Contact in autofill
+      // Also add field qualifier to be able to autofill
+      // only some fields based on their type
       //*
       autofillFieldData.filledByCipherType = CipherType.Contact;
+
+      this.qualifyUserFilledIdentityField(autofillFieldData);
       /*/
       autofillFieldData.filledByCipherType = CipherType.Identity;
       //*/
