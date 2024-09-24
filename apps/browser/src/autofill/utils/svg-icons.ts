@@ -51,6 +51,18 @@ const email =
 
 const address =
   '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 0C11.9907 0 15 2.866 15 6.66667C15 11.4493 8.49221 15.756 8.21589 15.9373C8.15105 15.9793 8.07516 16 8 16C7.92411 16 7.84821 15.9793 7.78411 15.9373C7.50705 15.756 1 11.4493 1 6.66667C1 2.866 4.00926 0 8 0ZM8 9C9.38071 9 10.5 7.88071 10.5 6.5C10.5 5.11929 9.38071 4 8 4C6.61929 4 5.5 5.11929 5.5 6.5C5.5 7.88071 6.61929 9 8 9Z" fill="white" /></svg>';
+
+const ellipsisIcon =
+  '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="icons/16/icon-ellipsis"><path id="Shape" fill-rule="evenodd" clip-rule="evenodd" d="M2 10C0.89543 10 0 9.10457 0 8C0 6.89543 0.89543 6 2 6C3.10457 6 4 6.89543 4 8C4 9.10457 3.10457 10 2 10ZM14 10C12.8954 10 12 9.10457 12 8C12 6.89543 12.8954 6 14 6C15.1046 6 16 6.89543 16 8C16 9.10457 15.1046 10 14 10ZM8 10C6.89543 10 6 9.10457 6 8C6 6.89543 6.89543 6 8 6C9.10457 6 10 6.89543 10 8C10 9.10457 9.10457 10 8 10Z" fill="#1D212A" fill-opacity="0.72"/></g></svg>';
+
+const penIcon =
+  '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="icons/16/icon-pen"><path id="Shape" fill-rule="evenodd" clip-rule="evenodd" d="M9.5 3.17348L12.5 6.17348L3.03772 15.6735H0V12.6989L9.5 3.17348ZM14.9122 0.585631L15.0878 0.761323C15.8638 1.53725 15.8697 2.81159 15.0923 3.59874L14.0308 4.67348L11 1.67348L12.0893 0.584213C12.8691 -0.195667 14.1322 -0.19428 14.9122 0.585631ZM7 13.6735H12.9971C13.551 13.6735 14 14.1173 14 14.6735C14 15.2258 13.5537 15.6735 13.0025 15.6735H5L7 13.6735Z" fill="#1D212A" fill-opacity="0.72"/></g></svg>';
+
+const fillFieldIcon =
+  '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 7C4.44772 7 4 7.44772 4 8C4 8.55229 4.44772 9 5 9C5.55228 9 6 8.55229 6 8C6 7.44772 5.55228 7 5 7Z" fill="#1D212A" fill-opacity="0.72"/><path d="M7 8C7 7.44772 7.44772 7 8 7C8.55229 7 9 7.44772 9 8C9 8.55229 8.55229 9 8 9C7.44772 9 7 8.55229 7 8Z" fill="#1D212A" fill-opacity="0.72"/><path d="M11 7C10.4477 7 10 7.44772 10 8C10 8.55229 10.4477 9 11 9C11.5523 9 12 8.55229 12 8C12 7.44772 11.5523 7 11 7Z" fill="#1D212A" fill-opacity="0.72"/><path fill-rule="evenodd" clip-rule="evenodd" d="M0 5C0 3.89543 0.895431 3 2 3H14C15.1046 3 16 3.89543 16 5V11C16 12.1046 15.1046 13 14 13H2C0.895431 13 0 12.1046 0 11V5ZM2 5H14V11H2V5Z" fill="#1D212A" fill-opacity="0.72"/></svg>';
+
+const fillMultipleFieldsIcon =
+  '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_7965_378)"><path d="M5 10C4.44772 10 4 10.4477 4 11C4 11.5523 4.44772 12 5 12C5.55228 12 6 11.5523 6 11C6 10.4477 5.55228 10 5 10Z" fill="#1D212A" fill-opacity="0.72"/><path d="M7 11C7 10.4477 7.44772 10 8 10C8.55229 10 9 10.4477 9 11C9 11.5523 8.55229 12 8 12C7.44772 12 7 11.5523 7 11Z" fill="#1D212A" fill-opacity="0.72"/><path d="M11 10C10.4477 10 10 10.4477 10 11C10 11.5523 10.4477 12 11 12C11.5523 12 12 11.5523 12 11C12 10.4477 11.5523 10 11 10Z" fill="#1D212A" fill-opacity="0.72"/><path fill-rule="evenodd" clip-rule="evenodd" d="M0 8C0 6.89543 0.895431 6 2 6H14C15.1046 6 16 6.89543 16 8V14C16 15.1046 15.1046 16 14 16H2C0.895431 16 0 15.1046 0 14V8ZM2 8H14V14H2V8Z" fill="#1D212A" fill-opacity="0.72"/><path d="M1 5C1 3.89543 1.89543 3 3 3H13C14.1046 3 15 3.89543 15 5H1Z" fill="#1D212A" fill-opacity="0.72"/><path d="M2 2C2 0.895431 2.89543 0 4 0H12C13.1046 0 14 0.895431 14 2H2Z" fill="#1D212A" fill-opacity="0.72"/></g><defs><clipPath id="clip0_7965_378"><rect width="16" height="16" fill="white"/></clipPath></defs></svg>';
 // Cozy customization end
 
 export {
@@ -66,4 +78,8 @@ export {
   phone,
   email,
   address,
+  ellipsisIcon,
+  penIcon,
+  fillFieldIcon,
+  fillMultipleFieldsIcon,
 };
