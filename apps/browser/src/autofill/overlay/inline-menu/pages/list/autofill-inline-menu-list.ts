@@ -26,6 +26,7 @@ import {
   penIcon,
   fillFieldIcon,
   fillMultipleFieldsIcon,
+  ellipsisIcon,
 } from "../../../../utils/svg-icons";
 import {
   AutofillInlineMenuListWindowMessageHandlers,
@@ -1476,15 +1477,17 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       "aria-label",
       `${this.getTranslation("view")} ${cipher.name}, ${this.getTranslation("opensInANewWindow")}`,
     );
-    viewCipherElement.append(buildSvgDomElement(viewCipherIcon));
     // Cozy customization, open the action menu if it is a contact
     //*
     if (this.isFilledByContactCipher()) {
+      viewCipherElement.append(buildSvgDomElement(ellipsisIcon));
       viewCipherElement.addEventListener(EVENTS.CLICK, () => this.showActionMenu(cipher));
     } else {
+      viewCipherElement.append(buildSvgDomElement(viewCipherIcon));
       viewCipherElement.addEventListener(EVENTS.CLICK, this.handleViewCipherClickEvent(cipher));
     }
     /*/
+    viewCipherElement.append(buildSvgDomElement(viewCipherIcon));
     viewCipherElement.addEventListener(EVENTS.CLICK, this.handleViewCipherClickEvent(cipher));
     //*/
     viewCipherElement.addEventListener(EVENTS.KEYUP, this.handleViewCipherKeyUpEvent);
