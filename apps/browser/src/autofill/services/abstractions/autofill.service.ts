@@ -22,6 +22,7 @@ export interface CozyAutofillOptions {
   type?: string;
   label?: "work" | "home";
   value?: string;
+  fillOnlyThisFieldHtmlID?: string;
 }
 // Cozy customization end
 
@@ -39,7 +40,6 @@ export interface AutoFillOptions {
   allowTotpAutofill?: boolean;
   // Cozy customization
   cozyAutofillOptions?: CozyAutofillOptions;
-  fillOnlyThisFieldHtmlID?: string;
   // Cozy customization end
 }
 
@@ -61,7 +61,6 @@ export interface GenerateFillScriptOptions {
   defaultUriMatch: UriMatchStrategySetting;
   // Cozy customization
   cozyAutofillOptions?: CozyAutofillOptions;
-  fillOnlyThisFieldHtmlID?: string;
   // Cozy customization end
 }
 
