@@ -44,6 +44,7 @@ import {
   AmbiguousContactFieldName,
   AvailablePapers,
   AddressContactSubFieldName,
+  ActionMenuData,
 } from "src/autofill/types";
 import type { AutofillValue } from "../../../../../../../../libs/cozy/createOrUpdateCozyDoctype";
 import { COZY_ATTRIBUTES_MAPPING } from "../../../../../../../../libs/cozy/mapping";
@@ -1484,7 +1485,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     //*
     if (this.isFilledByContactCipher()) {
       viewCipherElement.append(buildSvgDomElement(ellipsisIcon));
-      viewCipherElement.addEventListener(EVENTS.CLICK, () => this.showActionMenu(cipher));
+      viewCipherElement.addEventListener(EVENTS.CLICK, () =>
+        this.showActionMenu({ type: "contact", cipher }),
+      );
     } else {
       viewCipherElement.append(buildSvgDomElement(viewCipherIcon));
       viewCipherElement.addEventListener(EVENTS.CLICK, this.handleViewCipherClickEvent(cipher));
@@ -1896,8 +1899,8 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   /* *   Action menu   * */
   /* * * * * * * * * * * */
 
-  private showActionMenu = (cipher: InlineMenuCipherData) => {
-    this.buildActionMenu(cipher);
+  private showActionMenu = (actionMenuData: ActionMenuData) => {
+    this.buildActionMenu(actionMenuData);
     this.inlineMenuListContainer.appendChild(this.actionMenuContainer);
   };
 
@@ -1905,14 +1908,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.inlineMenuListContainer.removeChild(this.actionMenuContainer);
   };
 
-  private buildActionMenu(cipher: InlineMenuCipherData) {
+  private buildActionMenu(actionMenuData: ActionMenuData) {
     this.actionMenuContainer = globalThis.document.createElement("div");
     this.actionMenuContainer.classList.add("inline-menu-action-menu-container");
 
-    const actionMenuHeader = this.buildNewListHeader(
-      this.buildCipherName(cipher),
-      this.hideActionMenu,
-    );
+    let actionMenuHeader;
 
     const ulElement = globalThis.document.createElement("ul");
     ulElement.classList.add("inline-menu-list-actions");
@@ -1921,7 +1921,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       passive: true,
     });
 
-    if (cipher) {
+    if (actionMenuData.type === "contact") {
+      const { cipher } = actionMenuData;
+
+      actionMenuHeader = this.buildNewListHeader(this.buildCipherName(cipher), this.hideActionMenu);
+
       const viewCipherActionElement = this.createViewCipherAction(cipher);
       ulElement.appendChild(viewCipherActionElement);
 
