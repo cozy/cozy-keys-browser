@@ -135,7 +135,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const editContainer = globalThis.document.createElement("div");
     editContainer.classList.add("contact-edit-container");
 
-    const addNewAmbiguousHeader = this.buildNewListHeader(contactName);
+    const addNewAmbiguousHeader = this.buildNewListHeader(
+      contactName,
+      this.handleNewAmbiguousHeaderClick,
+    );
 
     const inputTextContainer = document.createElement("div");
     inputTextContainer.classList.add("contact-edit-input-container");
