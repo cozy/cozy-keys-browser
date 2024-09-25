@@ -4,7 +4,7 @@
       <!-- Cozy customization
       <button type="button" (click)="cancel()">{{ "cancel" | i18n }}</button>
       -->
-      <button type="button" appBlurClick (click)="cancel()" title="{{ 'cancel_shortcut' | i18n }}">
+      <button type="button" (click)="cancel()" title="{{ 'cancel_shortcut' | i18n }}">
         <i class="icon-cozy icon-cross" aria-hidden="true"></i>
       </button>
       <!-- end Cozy -->
@@ -13,12 +13,7 @@
       <span class="title">{{ title }}</span>
     </h1>
     <div class="right">
-      <button
-        type="submit"
-        [disabled]="form.loading"
-        appBlurClick
-        title="{{ 'save_shorcut' | i18n }}"
-      >
+      <button type="submit" [disabled]="form.loading" title="{{ 'save_shorcut' | i18n }}">
         <span [hidden]="form.loading">{{ "save" | i18n }}</span>
         <i class="bwi bwi-spinner bwi-lg bwi-spin" [hidden]="!form.loading" aria-hidden="true"></i>
       </button>
@@ -75,7 +70,6 @@
                 type="button"
                 class="row-btn"
                 appStopClick
-                appBlurClick
                 appA11yTitle="{{ 'generateUsername' | i18n }}"
                 (click)="generateUsername()"
                 *ngIf="!(!cipher.edit && editMode)"
@@ -103,7 +97,6 @@
                 type="button"
                 #checkPasswordBtn
                 class="row-btn btn"
-                appBlurClick
                 appA11yTitle="{{ 'checkPassword' | i18n }}"
                 (click)="checkPassword()"
                 [appApiAction]="checkPasswordPromise"
@@ -125,7 +118,6 @@
                 type="button"
                 class="row-btn"
                 appStopClick
-                appBlurClick
                 appA11yTitle="{{ 'toggleVisibility' | i18n }}"
                 (click)="togglePassword()"
                 *ngIf="cipher.viewPassword && cipher.login.password"
@@ -141,7 +133,6 @@
                 type="button"
                 class="row-btn"
                 appStopClick
-                appBlurClick
                 appA11yTitle="{{ 'generatePassword' | i18n }}"
                 (click)="generatePassword()"
                 *ngIf="cipher.viewPassword && !(!cipher.edit && editMode)"
@@ -263,7 +254,6 @@
                 type="button"
                 class="row-btn"
                 appStopClick
-                appBlurClick
                 appA11yTitle="{{ 'toggleVisibility' | i18n }}"
                 (click)="toggleCardNumber()"
                 [attr.aria-pressed]="showCardNumber"
@@ -341,7 +331,6 @@
                 type="button"
                 class="row-btn"
                 appStopClick
-                appBlurClick
                 appA11yTitle="{{ 'toggleVisibility' | i18n }}"
                 (click)="toggleCardCode()"
                 [attr.aria-pressed]="showCardCode"
@@ -554,7 +543,7 @@
         </div>
       </div>
     </div>
-    <div class="box box-uri" *ngIf="cipher.type === cipherType.Login">
+    <div class="box" *ngIf="cipher.type === cipherType.Login">
       <div class="box-content">
         <ng-container *ngIf="cipher.login.hasUris">
           <div
@@ -643,7 +632,6 @@
         <button
           type="button"
           appStopClick
-          appBlurClick
           (click)="addUri()"
           class="box-content-row box-content-row-newmulti single-line"
           *ngIf="!(!cipher.edit && editMode)"
@@ -823,7 +811,6 @@
           type="button"
           class="box-content-row"
           appStopClick
-          appBlurClick
           (click)="delete()"
           [appApiAction]="deletePromise"
           #deleteBtn
