@@ -532,7 +532,7 @@ body {
   padding: 0.2rem;
   position: relative; // Cozy customization; hide border in icon part
 
-  &:not(:last-child) {
+  &:not(:last-child):not(.inline-menu-list-actions-item--no-border) {
     border-bottom-width: 0.1rem;
     border-bottom-style: solid;
 
