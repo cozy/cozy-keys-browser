@@ -1896,21 +1896,22 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   /* *   Action menu   * */
   /* * * * * * * * * * * */
 
-  private showActionMenu(cipher: InlineMenuCipherData) {
+  private showActionMenu = (cipher: InlineMenuCipherData) => {
     this.buildActionMenu(cipher);
     this.inlineMenuListContainer.appendChild(this.actionMenuContainer);
-  }
+  };
 
-  private hideActionMenu() {
+  private hideActionMenu = () => {
     this.inlineMenuListContainer.removeChild(this.actionMenuContainer);
-  }
+  };
 
   private buildActionMenu(cipher: InlineMenuCipherData) {
     this.actionMenuContainer = globalThis.document.createElement("div");
     this.actionMenuContainer.classList.add("inline-menu-action-menu-container");
 
-    const actionMenuHeader = this.buildNewListHeader(this.buildCipherName(cipher), () =>
-      this.hideActionMenu(),
+    const actionMenuHeader = this.buildNewListHeader(
+      this.buildCipherName(cipher),
+      this.hideActionMenu,
     );
 
     const ulElement = globalThis.document.createElement("ul");
