@@ -215,6 +215,9 @@
   "newContact": {
     "message": "New contact"
   },
+  "addressDetails": {
+    "message": "Address details"
+  },
   "addItem": {
     "message": "Add item"
   },
@@ -1760,6 +1763,42 @@
   },
   "address": {
     "message": "Address"
+  },
+  "address_street": {
+    "message": "Postal address"
+  },
+  "address_number": {
+    "message": "Number"
+  },
+  "address_code": {
+    "message": "Postal code"
+  },
+  "address_city": {
+    "message": "City"
+  },
+  "address_building": {
+    "message": "Building"
+  },
+  "address_stairs": {
+    "message": "Stairs"
+  },
+  "address_floor": {
+    "message": "Floor"
+  },
+  "address_apartment": {
+    "message": "Apartement"
+  },
+  "address_locality": {
+    "message": "Locality"
+  },
+  "address_region": {
+    "message": "Region"
+  },
+  "address_country": {
+    "message": "Country"
+  },
+  "address_entrycode": {
+    "message": "Entry code"
   },
   "address1": {
     "message": "Address 1"

@@ -18,9 +18,10 @@ import {
   FillableFormFieldElement,
   FormElementWithAttribute,
   FormFieldElement,
+  AddressContactSubFieldName,
 } from "../types";
 
-import { contact, email, magnifier, phone } from "./svg-icons";
+import { contact, email, address, phone } from "./svg-icons";
 
 /**
  * Generates a random string of characters.
@@ -392,6 +393,12 @@ export const getAmbiguousFieldsContact = (
     {},
   );
 };
+export const addressFieldNames: AddressContactSubFieldName[] = [
+  "city",
+  "state",
+  "country",
+  "postalCode",
+];
 export const ambiguousContactFieldNames: AmbiguousContactFieldName[] = [
   "phone",
   "email",
@@ -436,9 +443,17 @@ export const makeEditContactField = (
   const inputTextContainer = document.createElement("div");
   inputTextContainer.classList.add("contact-edit-input-container");
 
+  const labelGroup = document.createElement("div");
+  labelGroup.classList.add("contact-edit-input-label-group");
+  const labelElement = document.createElement("label");
+  labelElement.htmlFor = COZY_ATTRIBUTES_MAPPING[fieldQualifier].name;
+  labelElement.textContent = t(COZY_ATTRIBUTES_MAPPING[fieldQualifier].name);
+  labelGroup.appendChild(labelElement);
+
   const inputText = document.createElement("input");
   inputText.classList.add("contact-edit-input");
   inputText.type = "text";
+  inputText.id = COZY_ATTRIBUTES_MAPPING[fieldQualifier].name;
 
   let iconElement: HTMLElement;
   switch (COZY_ATTRIBUTES_MAPPING[fieldQualifier].name) {
@@ -449,7 +464,7 @@ export const makeEditContactField = (
       iconElement = buildSvgDomElement(email);
       break;
     case "address":
-      iconElement = buildSvgDomElement(magnifier);
+      iconElement = buildSvgDomElement(address);
       break;
     default:
       iconElement = buildSvgDomElement(contact);
@@ -476,10 +491,10 @@ export const makeEditContactField = (
       }
     });
   }
+  labelGroup.appendChild(inputText);
 
-  inputText.placeholder = t(COZY_ATTRIBUTES_MAPPING[fieldQualifier].name);
   inputTextContainer.appendChild(iconElement);
-  inputTextContainer.appendChild(inputText);
+  inputTextContainer.appendChild(labelGroup);
 
   return { inputTextContainer, inputText };
 };

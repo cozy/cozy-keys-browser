@@ -336,9 +336,12 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     const cipherViews = await this.cipherService.getAllDecryptedForUrl(currentTab?.url || ""); //.sort((a, b) => this.cipherService.sortCiphersByLastUsedThenName(a, b));
     // Cozy customization end
 
-    // Cozy customization; Add contacts first in the list for fixes a bug when opening the iniline menu on an ambiguous field after the first autofill
+    // Cozy customization; Add contacts first in the list for fixes a bug when opening the iniline menu on an ambiguous field before the first autofill
     return this.cardAndIdentityCiphers.size > 0
-      ? Array.from(this.cardAndIdentityCiphers).concat(...cipherViews)
+      ? _.sortBy(
+          Array.from(this.cardAndIdentityCiphers),
+          (c) => c.type !== CipherType.Contact,
+        ).concat(...cipherViews)
       : cipherViews;
     // Cozy customization end
   }
@@ -376,7 +379,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       this.cardAndIdentityCiphers = null;
     }
 
-    return cipherViews;
+    return _.sortBy(cipherViews, (c) => c.type !== CipherType.Contact); // Cozy customization; add contact to autofill (sort contacts first in the list for fixes a bug when opening the iniline menu on an ambiguous field after the first autofill)
   }
 
   /**
@@ -1639,6 +1642,18 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         empty_name: this.i18nService.translate("empty_name"),
         new: this.i18nService.translate("new"),
         address: this.i18nService.translate("address"),
+        address_street: this.i18nService.translate("address_street"),
+        address_code: this.i18nService.translate("address_code"),
+        address_number: this.i18nService.translate("address_number"),
+        address_city: this.i18nService.translate("address_city"),
+        address_building: this.i18nService.translate("address_building"),
+        address_stairs: this.i18nService.translate("address_stairs"),
+        address_floor: this.i18nService.translate("address_floor"),
+        address_apartment: this.i18nService.translate("address_apartment"),
+        address_locality: this.i18nService.translate("address_locality"),
+        address_country: this.i18nService.translate("address_country"),
+        address_entrycode: this.i18nService.translate("address_entrycode"),
+        address_region: this.i18nService.translate("address_region"),
         phone: this.i18nService.translate("phone"),
         email: this.i18nService.translate("email"),
         cellHome: this.i18nService.translate("cellHome"),
@@ -1654,6 +1669,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         newEmail: this.i18nService.translate("newEmail"),
         newName: this.i18nService.translate("newName"),
         newContact: this.i18nService.translate("newContact"),
+        addressDetails: this.i18nService.translate("addressDetails"),
         new_paperIdentityCardNumber: this.i18nService.translate("new_paperIdentityCardNumber"),
         new_paperPassportNumber: this.i18nService.translate("new_paperPassportNumber"),
         new_paperSocialSecurityNumber: this.i18nService.translate("new_paperSocialSecurityNumber"),

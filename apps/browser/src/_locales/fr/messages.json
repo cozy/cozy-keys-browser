@@ -215,6 +215,9 @@
   "newContact": {
     "message": "Nouveau contact"
   },
+  "addressDetails": {
+    "message": "Adresse détaillée"
+  },
   "addItem": {
     "message": "Ajouter un élément"
   },
@@ -1763,6 +1766,42 @@
   },
   "address": {
     "message": "Adresse"
+  },
+  "address_street": {
+    "message": "Adresse postale"
+  },
+  "address_number": {
+    "message": "Numéro"
+  },
+  "address_code": {
+    "message": "Code postal"
+  },
+  "address_city": {
+    "message": "Ville"
+  },
+  "address_building": {
+    "message": "Bâtiment"
+  },
+  "address_stairs": {
+    "message": "Escalier"
+  },
+  "address_floor": {
+    "message": "Etage"
+  },
+  "address_apartment": {
+    "message": "Appartement"
+  },
+  "address_locality": {
+    "message": "lieu-dit"
+  },
+  "address_region": {
+    "message": "Région"
+  },
+  "address_country": {
+    "message": "Pays"
+  },
+  "address_entrycode": {
+    "message": "Code d'entrée"
   },
   "address1": {
     "message": "Adresse 1"

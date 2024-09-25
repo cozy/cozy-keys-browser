@@ -48,6 +48,9 @@ const phone =
 
 const email =
   '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 2.99896C0 2.44725 0.444631 2 1.00087 2H14.9991C15.5519 2 16 2.44266 16 2.99896V5L8 8L0 5V2.99896ZM0 7L8 10L16 7V14.003C16 14.5536 15.5554 15 14.9991 15H1.00087C0.448106 15 0 14.547 0 14.003V7Z" fill="white"/></svg>';
+
+const address =
+  '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 0C11.9907 0 15 2.866 15 6.66667C15 11.4493 8.49221 15.756 8.21589 15.9373C8.15105 15.9793 8.07516 16 8 16C7.92411 16 7.84821 15.9793 7.78411 15.9373C7.50705 15.756 1 11.4493 1 6.66667C1 2.866 4.00926 0 8 0ZM8 9C9.38071 9 10.5 7.88071 10.5 6.5C10.5 5.11929 9.38071 4 8 4C6.61929 4 5.5 5.11929 5.5 6.5C5.5 7.88071 6.61929 9 8 9Z" fill="white" /></svg>';
 // Cozy customization end
 
 export {
@@ -62,4 +65,5 @@ export {
   contact,
   phone,
   email,
+  address,
 };
