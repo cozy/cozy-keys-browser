@@ -651,7 +651,13 @@ export default class AutofillService implements AutofillServiceInterface {
     const filledFields: { [id: string]: AutofillField } = {};
     const fields = options.cipher.fields;
 
+    // Cozy customization, skip cipher fields autofill to avoid autofilling two times the same HTML field
+    // It can happens because we added every contact data in cipher fields
+    //*
+    if (fields && fields.length && options.cipher.type !== CipherType.Contact) {
+      /*/
     if (fields && fields.length) {
+    //*/
       const fieldNames: string[] = [];
 
       fields.forEach((f) => {
