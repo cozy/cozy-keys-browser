@@ -2000,10 +2000,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private createActionMenuItem(title: string, icon: string, onClick: any) {
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
-    listItem.classList.add("inline-menu-list-actions-item");
-
-    // Border is not wanted in action menu item
-    listItem.style.borderBottomWidth = "0px";
+    listItem.classList.add(
+      "inline-menu-list-actions-item",
+      "inline-menu-list-actions-item--no-border",
+    );
 
     const div = document.createElement("div");
     div.classList.add("cipher-container");
