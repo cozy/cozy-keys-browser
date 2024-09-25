@@ -266,7 +266,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       labelGroup.classList.add("input-group-select");
 
       const labelElement = document.createElement("label");
-      labelElement.htmlFor = "label";
       labelElement.textContent = this.getTranslation("label");
       labelGroup.appendChild(labelElement);
 

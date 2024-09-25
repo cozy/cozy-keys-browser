@@ -175,7 +175,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin: 1rem 0 0rem 1rem;
+  margin: 1rem 0 1rem 1rem;
   padding-right: 1.6rem;
   max-height: 340px;
   overflow-y: auto;
@@ -239,7 +239,7 @@ body {
 .input-group-select {
   position: relative;
   padding-top: 0.8rem;
-  margin: 0 0 1rem 4rem;
+  margin: 0 0 0 4rem;
 
   label {
     position: absolute;

@@ -443,9 +443,17 @@ export const makeEditContactField = (
   const inputTextContainer = document.createElement("div");
   inputTextContainer.classList.add("contact-edit-input-container");
 
+  const labelGroup = document.createElement("div");
+  labelGroup.classList.add("contact-edit-input-label-group");
+  const labelElement = document.createElement("label");
+  labelElement.htmlFor = COZY_ATTRIBUTES_MAPPING[fieldQualifier].name;
+  labelElement.textContent = t(COZY_ATTRIBUTES_MAPPING[fieldQualifier].name);
+  labelGroup.appendChild(labelElement);
+
   const inputText = document.createElement("input");
   inputText.classList.add("contact-edit-input");
   inputText.type = "text";
+  inputText.id = COZY_ATTRIBUTES_MAPPING[fieldQualifier].name;
 
   let iconElement: HTMLElement;
   switch (COZY_ATTRIBUTES_MAPPING[fieldQualifier].name) {
@@ -483,10 +491,10 @@ export const makeEditContactField = (
       }
     });
   }
+  labelGroup.appendChild(inputText);
 
-  inputText.placeholder = t(COZY_ATTRIBUTES_MAPPING[fieldQualifier].name);
   inputTextContainer.appendChild(iconElement);
-  inputTextContainer.appendChild(inputText);
+  inputTextContainer.appendChild(labelGroup);
 
   return { inputTextContainer, inputText };
 };
