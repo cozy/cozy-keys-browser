@@ -5,6 +5,8 @@ import { VaultTimeoutAction } from "@bitwarden/common/src/enums/vault-timeout-ac
 import { VaultTimeout } from "@bitwarden/common/types/vault-timeout.type";
 import { CipherType } from "@bitwarden/common/vault/enums";
 
+import { InlineMenuCipherData } from "../background/abstractions/overlay.background";
+
 export type UserSettings = {
   avatarColor: string | null;
   environmentUrls: {
@@ -75,4 +77,11 @@ export type AvailablePapers = {
   name?: string; // the file name
   value?: string; // we are interested in only one value in the file metadata
 };
+
+type ContactActionMenuData = {
+  type: "contact";
+  cipher: InlineMenuCipherData;
+};
+
+export type ActionMenuData = ContactActionMenuData;
 // Cozy customization end
