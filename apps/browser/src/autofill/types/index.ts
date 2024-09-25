@@ -92,5 +92,13 @@ type FieldActionMenuData = {
   cozyAutofillOptions: CozyAutofillOptions;
 };
 
-export type ActionMenuData = ContactActionMenuData | FieldActionMenuData;
+type FieldHeaderActionMenuData = {
+  type: "fieldHeader";
+  inlineMenuCipherId: string;
+};
+
+export type ActionMenuData =
+  | ContactActionMenuData
+  | FieldActionMenuData
+  | FieldHeaderActionMenuData;
 // Cozy customization end

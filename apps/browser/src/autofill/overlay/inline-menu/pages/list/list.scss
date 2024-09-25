@@ -71,6 +71,7 @@ body {
   padding: 0.2rem;
   border: 0;
   background-color: #297ef2;
+  display: flex;
 }
 .inline-menu-list-search-container {
   padding: 0.2rem 1rem;
@@ -111,6 +112,31 @@ body {
     height: 1.6rem;
     margin-left: 1rem;
     margin-right: 2rem;
+
+    path {
+      fill: white;
+    }
+  }
+}
+.inline-menu-list-header-three-dots-button {
+  display: flex;
+  align-content: center;
+  justify-content: flex-start;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 0.7rem 0;
+  margin: 0;
+  cursor: pointer;
+  border-radius: 0.4rem;
+
+  svg {
+    position: relative;
+    top: 0.25rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-left: 1rem;
+    margin-right: 1.5rem;
 
     path {
       fill: white;
