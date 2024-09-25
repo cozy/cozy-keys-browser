@@ -2022,13 +2022,13 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     nameSpan.textContent = title;
     nameSpan.classList.add("cipher-name");
 
-    detailsSpan.appendChild(nameSpan);
-    fillButton.appendChild(detailsSpan);
-
     const iconElement = buildSvgDomElement(icon);
     iconElement.style.margin = "0 2rem 0 1.3rem";
 
-    div.appendChild(iconElement);
+    detailsSpan.appendChild(nameSpan);
+    fillButton.appendChild(iconElement);
+    fillButton.appendChild(detailsSpan);
+
     div.appendChild(fillButton);
     listItem.appendChild(div);
 

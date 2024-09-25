@@ -529,7 +529,7 @@ body {
 .inline-menu-list-actions-item {
   transition: background-color 0.2s ease-in-out;
   list-style: none;
-  padding: 0.2rem;
+  padding: 0 0.2rem;
   position: relative; // Cozy customization; hide border in icon part
 
   &:not(:last-child):not(.inline-menu-list-actions-item--no-border) {
@@ -541,20 +541,11 @@ body {
     }
   }
 
-  &:not(.inline-menu-list-actions-item--empty) {
-    &:hover {
-      @include themify($themes) {
-        background: themed("backgroundOffsetColor");
-      }
-    }
-  }
-
   .cipher-container {
     display: flex;
     align-content: flex-start;
     align-items: center;
     justify-content: flex-start;
-    padding: 0.7rem 0.3rem 0.7rem 0.7rem;
     border-radius: 0.4rem;
     height: 48px; // Cozy customization; force height to Cozy list item height
 
@@ -584,6 +575,12 @@ body {
     background-color: transparent;
     border: none;
     cursor: pointer;
+
+    &:hover {
+      @include themify($themes) {
+        background: themed("backgroundOffsetColor");
+      }
+    }
   }
 
   .fill-cipher-button {
@@ -591,8 +588,9 @@ body {
     align-items: center;
     align-content: center;
     justify-content: flex-start;
-    width: calc(100% - 4rem);
+    width: 100%;
     outline: none;
+    padding: 1rem 0.3rem 1rem 0.7rem;
   }
 
   .view-cipher-button {
@@ -603,6 +601,9 @@ body {
     align-items: center;
     justify-content: center;
     border-radius: 0.4rem;
+    position: absolute;
+    right: 0.3rem;
+    border-radius: 50%;
 
     &:focus:focus-visible {
       outline-width: 0.2rem;
