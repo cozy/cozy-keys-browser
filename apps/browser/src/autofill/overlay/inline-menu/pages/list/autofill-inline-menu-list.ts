@@ -646,6 +646,18 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       fillOnlyThisFieldHtmlID: fieldHtmlIDToFill,
     };
 
+    // We need to get back the field qualifier for the action menu
+    const fieldQualifier = Object.keys(COZY_ATTRIBUTES_MAPPING).find(
+      (key: AutofillFieldQualifierType) => COZY_ATTRIBUTES_MAPPING[key].name === ambiguousKey,
+    ) as AutofillFieldQualifierType;
+
+    const actionMenuButtonElement = this.buildActionMenuButton({
+      type: "field",
+      inlineMenuCipherId,
+      fieldQualifier,
+      cozyAutofillOptions,
+    });
+
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
     listItem.classList.add("inline-menu-list-actions-item");
@@ -703,6 +715,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     fillButton.appendChild(detailsSpan);
 
     div.appendChild(fillButton);
+    div.appendChild(actionMenuButtonElement);
     listItem.appendChild(div);
 
     return listItem;
@@ -1939,12 +1952,41 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
       const autofillAllElement = this.createAutofillAllAction(cipher);
       ulElement.appendChild(autofillAllElement);
+    } else if (actionMenuData.type === "field") {
+      const { inlineMenuCipherId, fieldQualifier, cozyAutofillOptions } = actionMenuData;
+
+      const cipher = this.ciphers.find(({ id }) => id === inlineMenuCipherId);
+
+      actionMenuHeader = this.buildNewListHeader(cozyAutofillOptions.value, this.hideActionMenu);
+
+      const autofillCurrentElement = this.createAutofillCurrentAction(cipher, {
+        ...cozyAutofillOptions,
+        fillOnlyTheseFieldQualifiers: [fieldQualifier],
+      });
+      ulElement.appendChild(autofillCurrentElement);
+
+      const autofillAllElement = this.createAutofillAllAction(cipher);
+      ulElement.appendChild(autofillAllElement);
     }
 
     this.actionMenuContainer.appendChild(actionMenuHeader);
     this.actionMenuContainer.appendChild(ulElement);
 
     return this.actionMenuContainer;
+  }
+
+  private buildActionMenuButton(actionMenuData: ActionMenuData) {
+    const actionMenuButtonElement = document.createElement("button");
+    actionMenuButtonElement.tabIndex = -1;
+    actionMenuButtonElement.classList.add("view-cipher-button");
+    actionMenuButtonElement.setAttribute("aria-label", 'Action menu');
+
+    actionMenuButtonElement.append(buildSvgDomElement(ellipsisIcon));
+    actionMenuButtonElement.addEventListener(EVENTS.CLICK, () =>
+      this.showActionMenu(actionMenuData),
+    );
+
+    return actionMenuButtonElement;
   }
 
   private createViewCipherAction(cipher: InlineMenuCipherData) {
