@@ -6,6 +6,8 @@ import { VaultTimeout } from "@bitwarden/common/types/vault-timeout.type";
 import { CipherType } from "@bitwarden/common/vault/enums";
 
 import { InlineMenuCipherData } from "../background/abstractions/overlay.background";
+import { AutofillFieldQualifierType } from "../enums/autofill-field.enums";
+import { CozyAutofillOptions } from "../services/abstractions/autofill.service";
 
 export type UserSettings = {
   avatarColor: string | null;
@@ -83,5 +85,12 @@ type ContactActionMenuData = {
   cipher: InlineMenuCipherData;
 };
 
-export type ActionMenuData = ContactActionMenuData;
+type FieldActionMenuData = {
+  type: "field";
+  inlineMenuCipherId: string;
+  fieldQualifier: AutofillFieldQualifierType;
+  cozyAutofillOptions: CozyAutofillOptions;
+};
+
+export type ActionMenuData = ContactActionMenuData | FieldActionMenuData;
 // Cozy customization end
