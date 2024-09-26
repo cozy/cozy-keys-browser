@@ -12,6 +12,7 @@ import {
   fields as fieldsModels,
   getTranslatedNameForContactField,
   getFormattedValueForContactField,
+  extendedAddressFields,
 } from "./contact.lib";
 
 const {
@@ -168,7 +169,10 @@ const buildFieldsFromContactByBrowsingModels = ({
 }: any) => {
   models.forEach((fieldModel: any) => {
     const fieldName = fieldModel.name;
-    const fieldValue = data[fieldModel.name];
+    // Small hack to support extended fields inside extended address
+    const fieldValue = extendedAddressFields.includes(fieldModel.name)
+      ? data?.extendedAddress[fieldModel.name]
+      : data[fieldModel.name];
 
     if (!fieldValue) {
       return;
