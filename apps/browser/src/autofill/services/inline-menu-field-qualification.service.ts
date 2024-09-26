@@ -8,6 +8,7 @@ import {
 } from "./abstractions/inline-menu-field-qualifications.service";
 import {
   AutoFillConstants,
+  ContactAutoFillConstants,
   CreditCardAutoFillConstants,
   IdentityAutoFillConstants,
   PaperAutoFillConstants,
@@ -139,6 +140,12 @@ export class InlineMenuFieldQualificationService
       ...IdentityAutoFillConstants.EmailFieldNames,
       ...IdentityAutoFillConstants.UserNameFieldNames,
       // Cozy customization
+      ...ContactAutoFillConstants.AddressLocalityFieldNames,
+      ...ContactAutoFillConstants.AddressFloorFieldNames,
+      ...ContactAutoFillConstants.AddressBuildingFieldNames,
+      ...ContactAutoFillConstants.AddressStairsFieldNames,
+      ...ContactAutoFillConstants.AddressApartmentFieldNames,
+      ...ContactAutoFillConstants.AddressEntrycodeFieldNames,
       ...PaperAutoFillConstants.IdentityCardNumberFieldNames,
       ...PaperAutoFillConstants.PassportNumberFieldNames,
       ...PaperAutoFillConstants.SocialSecurityNumberFieldNames,
@@ -832,6 +839,94 @@ export class InlineMenuFieldQualificationService
   };
 
   // Cozy customization
+
+  /**
+   * Validates the provided field as an Cozy extended address locality.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForAddressLocality = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(
+        field,
+        ContactAutoFillConstants.AddressLocalityFieldNames,
+        false,
+      )
+    );
+  };
+
+  /**
+   * Validates the provided field as an Cozy extended address floor.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForAddressFloor = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(field, ContactAutoFillConstants.AddressFloorFieldNames, false)
+    );
+  };
+
+  /**
+   * Validates the provided field as an Cozy extended address building.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForAddressBuilding = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(
+        field,
+        ContactAutoFillConstants.AddressBuildingFieldNames,
+        false,
+      )
+    );
+  };
+
+  /**
+   * Validates the provided field as an Cozy extended address stairs.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForAddressStairs = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(field, ContactAutoFillConstants.AddressStairsFieldNames, false)
+    );
+  };
+
+  /**
+   * Validates the provided field as an Cozy extended address apartment.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForAddressApartment = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(
+        field,
+        ContactAutoFillConstants.AddressApartmentFieldNames,
+        false,
+      )
+    );
+  };
+
+  /**
+   * Validates the provided field as an Cozy extended address entrycode.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForAddressEntrycode = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(
+        field,
+        ContactAutoFillConstants.AddressEntrycodeFieldNames,
+        false,
+      )
+    );
+  };
 
   /**
    * Validates the provided field as an identity username field.

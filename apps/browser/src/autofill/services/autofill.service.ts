@@ -47,6 +47,7 @@ import {
 } from "./abstractions/autofill.service";
 import {
   AutoFillConstants,
+  ContactAutoFillConstants,
   CreditCardAutoFillConstants,
   IdentityAutoFillConstants,
   PaperAutoFillConstants,
@@ -741,6 +742,13 @@ export default class AutofillService implements AutofillServiceInterface {
         }
 
         fillScript = await this.generateIdentityFillScript(
+          fillScript,
+          pageDetails,
+          filledFields,
+          options,
+        );
+
+        fillScript = await this.generateContactAddressFillScript(
           fillScript,
           pageDetails,
           filledFields,
@@ -1577,6 +1585,188 @@ export default class AutofillService implements AutofillServiceInterface {
   }
 
   // Cozy customization
+
+  /**
+   * Generates the autofill script for the specified page details and contact data that is not already generated in the generateIdentityFillScript method.
+   * We decided to add a new generateFillScript method because :
+   * - we prefer to keep the generateIdentityFillScript from Bitwarden untouched
+   * - it makes no sense in our generatePaperFillScript
+   * @param {AutofillScript} fillScript
+   * @param {AutofillPageDetails} pageDetails
+   * @param {{[p: string]: AutofillField}} filledFields
+   * @param {GenerateFillScriptOptions} options
+   * @returns {AutofillScript}
+   * @private
+   */
+  private async generateContactAddressFillScript(
+    fillScript: AutofillScript,
+    pageDetails: AutofillPageDetails,
+    filledFields: { [id: string]: AutofillField },
+    options: GenerateFillScriptOptions,
+  ): Promise<AutofillScript> {
+    const fillFields: { [id: string]: AutofillField } = {};
+
+    pageDetails.fields.forEach((f) => {
+      if (
+        AutofillService.isExcludedFieldType(f, AutoFillConstants.ExcludedAutofillTypes) ||
+        ["current-password", "new-password"].includes(f.autoCompleteType)
+      ) {
+        return;
+      }
+
+      for (let i = 0; i < ContactAutoFillConstants.ContactAttributes.length; i++) {
+        const attr = ContactAutoFillConstants.ContactAttributes[i];
+        // eslint-disable-next-line
+        if (!f.hasOwnProperty(attr) || !f[attr] || !f.viewable) {
+          continue;
+        }
+        if (
+          !fillFields.contactAddressLocality &&
+          AutofillService.isFieldMatch(f[attr], ContactAutoFillConstants.AddressLocalityFieldNames)
+        ) {
+          fillFields.contactAddressLocality = f;
+          break;
+        }
+        if (
+          !fillFields.contactAddressFloor &&
+          AutofillService.isFieldMatch(f[attr], ContactAutoFillConstants.AddressFloorFieldNames)
+        ) {
+          fillFields.contactAddressFloor = f;
+          break;
+        }
+        if (
+          !fillFields.contactAddressBuilding &&
+          AutofillService.isFieldMatch(f[attr], ContactAutoFillConstants.AddressBuildingFieldNames)
+        ) {
+          fillFields.contactAddressBuilding = f;
+          break;
+        }
+        if (
+          !fillFields.contactAddressStairs &&
+          AutofillService.isFieldMatch(f[attr], ContactAutoFillConstants.AddressStairsFieldNames)
+        ) {
+          fillFields.contactAddressStairs = f;
+          break;
+        }
+        if (
+          !fillFields.contactAddressApartment &&
+          AutofillService.isFieldMatch(f[attr], ContactAutoFillConstants.AddressApartmentFieldNames)
+        ) {
+          fillFields.contactAddressApartment = f;
+          break;
+        }
+        if (
+          !fillFields.contactAddressEntrycode &&
+          AutofillService.isFieldMatch(f[attr], ContactAutoFillConstants.AddressEntrycodeFieldNames)
+        ) {
+          fillFields.contactAddressEntrycode = f;
+          break;
+        }
+      }
+    });
+
+    const client = await this.cozyClientService.getClientInstance();
+
+    if (fillFields.contactAddressLocality) {
+      const addressLocality = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "addressLocality",
+        cozyAutofillOptions: options.cozyAutofillOptions,
+      });
+
+      this.makeScriptActionWithValue(
+        fillScript,
+        addressLocality,
+        fillFields.contactAddressLocality,
+        filledFields,
+      );
+    }
+
+    if (fillFields.contactAddressFloor) {
+      const addressFloor = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "addressFloor",
+        cozyAutofillOptions: options.cozyAutofillOptions,
+      });
+
+      this.makeScriptActionWithValue(
+        fillScript,
+        addressFloor,
+        fillFields.contactAddressFloor,
+        filledFields,
+      );
+    }
+
+    if (fillFields.contactAddressBuilding) {
+      const addressBuilding = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "addressBuilding",
+        cozyAutofillOptions: options.cozyAutofillOptions,
+      });
+
+      this.makeScriptActionWithValue(
+        fillScript,
+        addressBuilding,
+        fillFields.contactAddressBuilding,
+        filledFields,
+      );
+    }
+
+    if (fillFields.contactAddressStairs) {
+      const addressStairs = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "addressStairs",
+        cozyAutofillOptions: options.cozyAutofillOptions,
+      });
+
+      this.makeScriptActionWithValue(
+        fillScript,
+        addressStairs,
+        fillFields.contactAddressStairs,
+        filledFields,
+      );
+    }
+
+    if (fillFields.contactAddressApartment) {
+      const addressApartment = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "addressApartment",
+        cozyAutofillOptions: options.cozyAutofillOptions,
+      });
+
+      this.makeScriptActionWithValue(
+        fillScript,
+        addressApartment,
+        fillFields.contactAddressApartment,
+        filledFields,
+      );
+    }
+
+    if (fillFields.contactAddressEntrycode) {
+      const addressEntrycode = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "addressEntrycode",
+        cozyAutofillOptions: options.cozyAutofillOptions,
+      });
+
+      this.makeScriptActionWithValue(
+        fillScript,
+        addressEntrycode,
+        fillFields.contactAddressEntrycode,
+        filledFields,
+      );
+    }
+
+    return fillScript;
+  }
+
+  // Cozy customization end
 
   /**
    * Generates the autofill script for the specified page details and paper data.
