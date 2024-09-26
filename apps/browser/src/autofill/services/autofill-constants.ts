@@ -841,6 +841,32 @@ export class IdentityAutoFillConstants {
 
 // Cozy customization
 
+export class ContactAutoFillConstants {
+  static readonly ContactAttributes: string[] = [
+    "autoCompleteType",
+    "data-stripe",
+    "htmlName",
+    "htmlID",
+    "label-tag",
+    "placeholder",
+    "label-left",
+    "label-top",
+    "data-recurly",
+  ];
+
+  static readonly AddressLocalityFieldNames: string[] = ["locality", "lieu-dit"];
+
+  static readonly AddressFloorFieldNames: string[] = ["floor", "etage"];
+
+  static readonly AddressBuildingFieldNames: string[] = ["building", "batiment"];
+
+  static readonly AddressStairsFieldNames: string[] = ["stairs", "escalier"];
+
+  static readonly AddressApartmentFieldNames: string[] = ["apartment", "appartement"];
+
+  static readonly AddressEntrycodeFieldNames: string[] = ["entrycode", "code entrée"];
+}
+
 export class PaperAutoFillConstants {
   static readonly PaperAttributes: string[] = [
     "autoCompleteType",
