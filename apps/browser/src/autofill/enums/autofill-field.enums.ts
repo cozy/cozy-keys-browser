@@ -24,6 +24,12 @@ export const AutofillFieldQualifier = {
   identityEmail: "identityEmail",
   identityUsername: "identityUsername",
   // Cozy customization
+  addressLocality: "addressLocality",
+  addressFloor: "addressFloor",
+  addressBuilding: "addressBuilding",
+  addressStairs: "addressStairs",
+  addressApartment: "addressApartment",
+  addressEntrycode: "addressEntrycode",
   paperIdentityCardNumber: "paperIdentityCardNumber",
   paperPassportNumber: "paperPassportNumber",
   paperSocialSecurityNumber: "paperSocialSecurityNumber",

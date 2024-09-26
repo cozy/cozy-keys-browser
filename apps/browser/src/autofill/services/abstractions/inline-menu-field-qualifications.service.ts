@@ -40,6 +40,12 @@ export interface InlineMenuFieldQualificationService {
   isFieldForIdentityEmail(field: AutofillField): boolean;
   isFieldForIdentityUsername(field: AutofillField): boolean;
   // Cozy customization
+  isFieldForAddressLocality(field: AutofillField): boolean;
+  isFieldForAddressFloor(field: AutofillField): boolean;
+  isFieldForAddressBuilding(field: AutofillField): boolean;
+  isFieldForAddressStairs(field: AutofillField): boolean;
+  isFieldForAddressApartment(field: AutofillField): boolean;
+  isFieldForAddressEntrycode(field: AutofillField): boolean;
   isFieldForPaperIdentityCardNumber(field: AutofillField): boolean;
   isFieldForPaperPassportNumber(field: AutofillField): boolean;
   isFieldForPaperSocialSecurityNumber(field: AutofillField): boolean;

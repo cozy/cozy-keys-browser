@@ -170,6 +170,18 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       this.inlineMenuFieldQualificationService.isFieldForIdentityUsername,
     [AutofillFieldQualifier.password]: this.inlineMenuFieldQualificationService.isNewPasswordField,
     // Cozy customization
+    [AutofillFieldQualifier.addressLocality]:
+      this.inlineMenuFieldQualificationService.isFieldForAddressLocality,
+    [AutofillFieldQualifier.addressFloor]:
+      this.inlineMenuFieldQualificationService.isFieldForAddressFloor,
+    [AutofillFieldQualifier.addressBuilding]:
+      this.inlineMenuFieldQualificationService.isFieldForAddressBuilding,
+    [AutofillFieldQualifier.addressStairs]:
+      this.inlineMenuFieldQualificationService.isFieldForAddressStairs,
+    [AutofillFieldQualifier.addressApartment]:
+      this.inlineMenuFieldQualificationService.isFieldForAddressApartment,
+    [AutofillFieldQualifier.addressEntrycode]:
+      this.inlineMenuFieldQualificationService.isFieldForAddressEntrycode,
     [AutofillFieldQualifier.paperIdentityCardNumber]:
       this.inlineMenuFieldQualificationService.isFieldForPaperIdentityCardNumber,
     [AutofillFieldQualifier.paperPassportNumber]:
