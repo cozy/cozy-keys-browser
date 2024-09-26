@@ -72,6 +72,15 @@ export const addressFieldOptions = [
   },
 ];
 
+export const extendedAddressFields = [
+  "locality",
+  "floor",
+  "building",
+  "stairs",
+  "apartment",
+  "entrycode",
+];
+
 export const fields = [
   {
     name: "gender",
@@ -242,7 +251,7 @@ const CONTACT_FIELDS_FR = {
   note: "Notes",
   label: "Libellé",
   number: "Numéro de voie",
-  street: "Adresse postal",
+  street: "Adresse postale",
   code: "Code postal",
   city: "Ville",
   country: "Pays",
