@@ -171,7 +171,7 @@ const buildFieldsFromContactByBrowsingModels = ({
     const fieldName = fieldModel.name;
     // Small hack to support extended fields inside extended address
     const fieldValue = extendedAddressFields.includes(fieldModel.name)
-      ? data?.extendedAddress[fieldModel.name]
+      ? data?.extendedAddress?.[fieldModel.name]
       : data[fieldModel.name];
 
     if (!fieldValue) {
