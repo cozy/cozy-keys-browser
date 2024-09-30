@@ -63,6 +63,7 @@ import { PaperType } from "@bitwarden/common/enums/paperType";
 import { DomSanitizer } from "@angular/platform-browser";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { FILES_DOCTYPE } from "../../../../../../../libs/cozy/constants";
+import { MessageSender } from "@bitwarden/common/platform/messaging";
 
 /* eslint-enable */
 /* end Cozy imports */
@@ -129,6 +130,7 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
     fileDownloadService: FileDownloadService,
+    private messageSender: MessageSender,
     private cozyClientService: CozyClientService,
     private historyService: HistoryService,
     private syncService: SyncService,
@@ -507,6 +509,25 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
     }
 
     try {
+      // Cozy customization; send doAutoFill to background because
+      // doAutoFill needs a Cozy Client store with all the contacts
+      // and only the background Cozy Client store has them
+      if (this.cipher.type === CipherType.Contact) {
+        this.messageSender.send("doAutoFill", {
+          autofillOptions: {
+            tab: this.tab,
+            cipher: this.cipher,
+            pageDetails: this.pageDetails,
+            doc: window.document,
+            fillNewPassword: true,
+            allowTotpAutofill: true,
+          },
+        });
+
+        return;
+      }
+      // Cozy customization end
+
       this.totpCode = await this.autofillService.doAutoFill({
         tab: this.tab,
         cipher: this.cipher,

@@ -264,6 +264,11 @@ export default class RuntimeBackground {
       case "lockVault":
         await this.main.vaultTimeoutService.lock(msg.userId);
         break;
+      // Cozy customization
+      case "doAutoFill":
+        this.autofillService.doAutoFill(msg.autofillOptions);
+        break;
+      // Cozy customization end
       case "logout":
         await this.main.logout(msg.expired, msg.userId);
         break;
