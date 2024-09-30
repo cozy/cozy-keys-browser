@@ -41,6 +41,7 @@ import { CozyClientService } from "../../../../popup/services/cozyClient.service
 import { KonnectorsService } from "../../../../popup/services/konnectors.service";
 import { HistoryService } from "../../../../popup/services/history.service";
 import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
+import { MessageSender } from "@bitwarden/common/platform/messaging";
 /* eslint-enable */
 /** End Cozy imports */
 
@@ -85,6 +86,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     private i18nService: I18nService,
     private collectionService: CollectionService,
     private platformUtilsService: PlatformUtilsService,
+    private messageSender: MessageSender,
     private cozyClientService: CozyClientService,
     private konnectorsService: KonnectorsService,
     private autofillService: AutofillService,
@@ -456,6 +458,24 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     }
 
     try {
+      // Cozy customization; send doAutoFill to background because
+      // doAutoFill needs a Cozy Client store with all the contacts
+      // and only the background Cozy Client store has them
+      if (cipher.type === CipherType.Contact) {
+        this.messageSender.send("doAutoFill", {
+          autofillOptions: {
+            cipher: cipher,
+            pageDetails: this.pageDetails,
+            doc: window.document,
+            tab: null,
+            fillNewPassword: true,
+          },
+        });
+
+        return;
+      }
+      // Cozy customization end
+
       totpCode = await this.autofillService.doAutoFill({
         cipher: cipher,
         pageDetails: this.pageDetails,

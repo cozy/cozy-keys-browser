@@ -38,7 +38,7 @@ import { VaultFilterService } from "../../../services/vault-filter.service";
 /* eslint-disable */
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { HistoryService } from "../../../../popup/services/history.service";
-import { Location } from "@angular/common";
+import { MessageSender } from "@bitwarden/common/platform/messaging";
 /* eslint-enable */
 /** End Cozy imports */
 
@@ -92,6 +92,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     private organizationService: OrganizationService,
     private vaultFilterService: VaultFilterService,
     private vaultSettingsService: VaultSettingsService,
+    private messageSender: MessageSender,
     private cozyClientService: CozyClientService,
     private historyService: HistoryService,
   ) {}
@@ -258,6 +259,25 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     }
 
     try {
+      // Cozy customization; send doAutoFill to background because
+      // doAutoFill needs a Cozy Client store with all the contacts
+      // and only the background Cozy Client store has them
+      if (cipher.type === CipherType.Contact) {
+        this.messageSender.send("doAutoFill", {
+          autofillOptions: {
+            tab: this.tab,
+            cipher: cipher,
+            pageDetails: this.pageDetails,
+            doc: window.document,
+            fillNewPassword: true,
+            allowTotpAutofill: true,
+          },
+        });
+
+        return;
+      }
+      // Cozy customization end
+
       this.totpCode = await this.autofillService.doAutoFill({
         tab: this.tab,
         cipher: cipher,
