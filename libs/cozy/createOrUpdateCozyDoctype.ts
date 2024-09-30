@@ -15,6 +15,8 @@ import { COZY_ATTRIBUTES_MAPPING, CozyAttributesModel } from "./mapping";
 const {
   document: { Qualification, locales },
   file: { uploadFileWithConflictStrategy },
+  paper: { getTranslatedNameForInformationMetadata },
+  contact: { getDisplayName },
 } = models;
 
 export interface AutofillValue {
@@ -130,21 +132,41 @@ export const createOrUpdateCozyPaper = async ({
   i18nService,
   contact,
 }: CreateOrUpdateCozyPaperType): Promise<any> => {
+  const locale = i18nService.translationLocale || "en";
+  const t = locales.getBoundT(locale);
+
   const [, qualificationLabelValue] = Object.entries(cozyAttributeModel.selector)[0];
 
   const qualification = Qualification.getByLabel(qualificationLabelValue as string);
 
   // Create the PDF
-  const pdfText = `${qualificationLabelValue} ${newAutofillValue.value}`;
+
+  // Example: "RIB - John Doe"
+  const pdfTitle = `${t(`Scan.items.${qualification.label}`)} - ${getDisplayName(contact)}`;
+
+  // Example: "Numéro d'IBAN"
+  const label = getTranslatedNameForInformationMetadata(cozyAttributeModel.name, {
+    lang: locale,
+    qualificationLabel: qualification.label,
+  });
+
+  // Example: "FR00 0000 0000 0000 0000 0000 000"
+  const value = newAutofillValue.value;
+
+  const pdfText = `
+    ${pdfTitle}
+
+    ${new Date().toLocaleDateString()}
+
+    ${label}: ${value}
+  `;
   const pdfBytes = await createPDFWithText(pdfText);
 
   // Build the io.cozy.files document
   const dir = await getOrCreateAppFolderWithReference(client, i18nService);
 
-  const t = locales.getBoundT(i18nService.translationLocale || "en");
-
   const paperOptions = {
-    name: t(`Scan.items.${qualification.label}`) + ".pdf",
+    name: `${pdfTitle}.pdf`,
     contentType: "application/pdf",
     metadata: {
       qualification,
