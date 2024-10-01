@@ -969,7 +969,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       On the ambiguous(phone/address/email) form field:
       - Display a menu to select value.
     */
-    if (focusedFieldModel.doctype === FILES_DOCTYPE) {
+    if (isPaperAttributesModel(focusedFieldModel)) {
       const availablePapers = (
         await getAllPapersFromContact({
           client,

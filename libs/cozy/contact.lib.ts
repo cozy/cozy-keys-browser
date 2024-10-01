@@ -2,6 +2,8 @@
 // @ts-nocheck
 // Most of this file will be imported from cozy-client soon
 
+import { CozyContactFieldNames } from "./mapping";
+
 const gender = [
   {
     value: "male",
@@ -72,6 +74,14 @@ export const addressFieldOptions = [
   },
 ];
 
+export type ExtendedAddressFields =
+  | "locality"
+  | "floor"
+  | "building"
+  | "stairs"
+  | "apartment"
+  | "entrycode";
+
 export const extendedAddressFields = [
   "locality",
   "floor",
@@ -81,7 +91,28 @@ export const extendedAddressFields = [
   "entrycode",
 ];
 
-export const fields = [
+export type SubField = {
+  name: ExtendedAddressFields;
+  icon: string | null;
+  type: string;
+};
+
+export type Field = {
+  name: CozyContactFieldNames;
+  icon: string | null;
+  type: string;
+  select?: boolean;
+  selectValue?: any;
+  isObject?: boolean;
+  subFields?: SubField[];
+  hasLabel?: boolean;
+  value?: string;
+  isArray?: boolean;
+  isMultiline?: boolean;
+  labelProps?: Record<string, any>;
+};
+
+export const fields: Field[] = [
   {
     name: "gender",
     icon: "people",
