@@ -8,6 +8,8 @@ import { InlineMenuCipherData } from "../../../background/abstractions/overlay.b
 import { AmbiguousContactFields, AvailablePapers } from "src/autofill/types";
 import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
 import { IOCozyContact } from "cozy-client/types/types";
+import { CozyContactFieldNames, CozyPaperFieldNames } from "../../../../../../../libs/cozy/mapping";
+import { CozyAutofillOptions } from "src/autofill/services/abstractions/autofill.service";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -76,4 +78,23 @@ export type AutofillInlineMenuListWindowMessageHandlers = {
   }) => void;
   // Cozy customization end
   focusAutofillInlineMenuList: () => void;
+};
+
+export type InputRef = {
+  [key in CozyContactFieldNames]: HTMLInputElement;
+};
+
+export type InputRefValue = {
+  [key in CozyContactFieldNames | CozyPaperFieldNames]: string;
+} & {
+  label: CozyAutofillOptions["label"];
+  type: CozyAutofillOptions["type"];
+};
+
+export type EditContactButtonsParams = {
+  inlineMenuCipherId: string;
+  fieldHtmlIDToFill?: string;
+  fieldQualifier?: string;
+  selectElement?: HTMLSelectElement | null;
+  inputRefs?: InputRef[];
 };

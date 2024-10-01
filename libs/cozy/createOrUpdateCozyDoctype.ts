@@ -1,19 +1,22 @@
 import CozyClient, { Q, models } from "cozy-client";
-import { IOCozyContact } from "cozy-client/types/types";
+import type { IOCozyContact } from "cozy-client/types/types";
 import * as _ from "lodash";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import { AutofillFieldQualifierType } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
+import type { InputRefValue } from "../../apps/browser/src/autofill/overlay/inline-menu/abstractions/autofill-inline-menu-list";
 
 import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "./constants";
+import { createOrUpdateCozyContactAddress } from "./contact.helper";
 import { getOrCreateAppFolderWithReference } from "./helpers/folder";
 import { createPDFWithText } from "./helpers/pdf";
 import {
   areContactAttributesModels,
   arePaperAttributesModels,
   COZY_ATTRIBUTES_MAPPING,
+  COZY_FIELDS_NAMES_MAPPING,
 } from "./mapping";
 import type {
   ContactAttributesModel,
@@ -35,21 +38,33 @@ export interface AutofillValue {
 interface CreateOrUpdateCozyDoctypeType {
   client: CozyClient;
   cipher: CipherView;
-  fieldQualifier: AutofillFieldQualifierType;
-  newAutofillValue: AutofillValue;
+  inputValues: InputRefValue;
   i18nService: I18nService;
+  logService: LogService;
 }
 
 export const createOrUpdateCozyDoctype = async ({
   client,
   cipher,
-  fieldQualifier,
-  newAutofillValue,
+  inputValues,
   i18nService,
+  logService,
 }: CreateOrUpdateCozyDoctypeType) => {
-  const cozyAttributeModel = COZY_ATTRIBUTES_MAPPING[fieldQualifier];
+  const cozyAttributeModels = (Object.keys(inputValues) as CozyContactFieldNames[])
+    .map((key) => COZY_ATTRIBUTES_MAPPING[COZY_FIELDS_NAMES_MAPPING[key]])
+    .filter(Boolean);
 
-  if (!cozyAttributeModel) {
+  if (cozyAttributeModels.length === 0) {
+    logService.error("No Cozy attribute model found for the given inputValues", inputValues);
+    return;
+  }
+
+  const firstCozyAttributeModel = cozyAttributeModels[0];
+  const isSameDoctype = cozyAttributeModels.every(
+    (cozyAttributeModel) => cozyAttributeModel.doctype === firstCozyAttributeModel.doctype,
+  );
+  if (!isSameDoctype) {
+    logService.error("All fields must be of the same doctype", inputValues);
     return;
   }
 
@@ -61,8 +76,8 @@ export const createOrUpdateCozyDoctype = async ({
     // only update for the moment
     const updatedContact = await createOrUpdateCozyContact({
       contact,
-      cozyAttributeModel,
-      newAutofillValue,
+      cozyAttributeModels,
+      inputValues,
     });
 
     await client.save(updatedContact);
@@ -70,8 +85,8 @@ export const createOrUpdateCozyDoctype = async ({
     // only create for the moment
     const createdPaper = await createOrUpdateCozyPaper({
       client,
-      cozyAttributeModel,
-      newAutofillValue,
+      cozyAttributeModel: cozyAttributeModels[0],
+      newAutofillValue: Object.values(inputValues)[0],
       i18nService,
       contact,
     });
@@ -83,42 +98,36 @@ export const createOrUpdateCozyDoctype = async ({
 interface CreateOrUpdateCozyContactType {
   contact: IOCozyContact;
   cozyAttributeModels: ContactAttributesModel[];
-  newAutofillValue: AutofillValue;
+  inputValues: InputRefValue;
 }
 
 export const createOrUpdateCozyContact = async ({
   contact,
-  cozyAttributeModel,
-  newAutofillValue,
+  cozyAttributeModels,
+  inputValues,
 }: CreateOrUpdateCozyContactType): Promise<IOCozyContact> => {
-  // Address is not supported for the moment (it makes little sense to create an address with only one attribute like "rue principale")
-  if (cozyAttributeModel.path === "address") {
-    return;
+  if (cozyAttributeModels[0].path === "address") {
+    return createOrUpdateCozyContactAddress(contact, cozyAttributeModels[0].path, inputValues);
   }
 
-  if (cozyAttributeModel.isPathArray) {
-    const arrayData = _.get(contact, cozyAttributeModel.path) || [];
+  for (const cozyAttributeModel of cozyAttributeModels) {
+    if (cozyAttributeModel.isPathArray) {
+      const arrayData = _.get(contact, cozyAttributeModel.path) || [];
+      const newValueLabel = cozyAttributeModel.pathAttributes[0];
 
-    const newValueLabel = cozyAttributeModel.pathAttributes[0];
+      const newValue = {
+        [newValueLabel]: inputValues[cozyAttributeModel.name],
+        ...(inputValues.label && { label: inputValues.label }),
+        ...(inputValues.type && { type: inputValues.type }),
+        primary: !arrayData.length,
+      };
 
-    const newValue = {
-      [newValueLabel]: newAutofillValue.value,
-      primary: !arrayData.length,
-    };
+      arrayData.push(newValue);
 
-    if (newAutofillValue.label) {
-      newValue.label = newAutofillValue.label;
+      _.set(contact, cozyAttributeModel.path, arrayData);
+    } else {
+      _.set(contact, cozyAttributeModel.path, Object.values(inputValues)[0]);
     }
-
-    if (newAutofillValue.type) {
-      newValue.type = newAutofillValue.type;
-    }
-
-    arrayData.push(newValue);
-
-    _.set(contact, cozyAttributeModel.path, arrayData);
-  } else {
-    _.set(contact, cozyAttributeModel.path, newAutofillValue.value);
   }
 
   return contact;
@@ -127,7 +136,7 @@ export const createOrUpdateCozyContact = async ({
 interface CreateOrUpdateCozyPaperType {
   client: CozyClient;
   cozyAttributeModel: PaperAttributesModel;
-  newAutofillValue: AutofillValue;
+  newAutofillValue: any;
   i18nService: I18nService;
   contact: IOCozyContact;
 }
