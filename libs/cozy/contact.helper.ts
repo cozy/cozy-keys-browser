@@ -15,6 +15,7 @@ import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view"
 const { getInitials } = models.contact;
 
 import { AutofillFieldQualifier } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
+import AutofillPageDetails from "../../apps/browser/src/autofill/models/autofill-page-details";
 import { InputRefValue } from "../../apps/browser/src/autofill/overlay/inline-menu/abstractions/autofill-inline-menu-list";
 import { CozyAutofillOptions } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 
@@ -74,9 +75,14 @@ export const convertContactToCipherData = async (
 export const generateIdentityViewFromContactId = async (
   client: CozyClient,
   contactId: string,
+  pageDetails: AutofillPageDetails,
   cozyAutofillOptions?: CozyAutofillOptions,
 ): Promise<IdentityView> => {
   const identity = new IdentityView();
+
+  const hasStandaloneAddressNumberField = pageDetails.fields.some(
+    (field) => field.fieldQualifier === AutofillFieldQualifier.addressNumber,
+  );
 
   identity.firstName = await getCozyValue({
     client,
@@ -111,13 +117,26 @@ export const generateIdentityViewFromContactId = async (
     fieldQualifier: AutofillFieldQualifier.identityEmail,
     cozyAutofillOptions,
   });
-
-  identity.address1 = await getCozyValue({
-    client,
-    contactId,
-    fieldQualifier: AutofillFieldQualifier.identityAddress1,
-    cozyAutofillOptions,
-  });
+  identity.address1 = hasStandaloneAddressNumberField
+    ? await getCozyValue({
+        client,
+        contactId,
+        fieldQualifier: AutofillFieldQualifier.identityAddress1,
+        cozyAutofillOptions,
+      })
+    : (await getCozyValue({
+        client,
+        contactId,
+        fieldQualifier: AutofillFieldQualifier.addressNumber,
+        cozyAutofillOptions,
+      })) +
+      " " +
+      (await getCozyValue({
+        client,
+        contactId,
+        fieldQualifier: AutofillFieldQualifier.identityAddress1,
+        cozyAutofillOptions,
+      }));
   identity.city = await getCozyValue({
     client,
     contactId,

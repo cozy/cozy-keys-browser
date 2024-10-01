@@ -95,9 +95,7 @@ const getCozyValueInContact = async ({
     const dataArray = _.get(contact, cozyAttributeModel.path);
 
     const selectedData = selectDataWithCozyProfile(dataArray, cozyAutofillOptions);
-    const selectedValue = cozyAttributeModel.pathAttributes
-      .map((pathAttribute) => _.get(selectedData, pathAttribute))
-      .join(" ");
+    const selectedValue = _.get(selectedData, cozyAttributeModel.pathAttribute);
 
     return selectedValue;
   } else {

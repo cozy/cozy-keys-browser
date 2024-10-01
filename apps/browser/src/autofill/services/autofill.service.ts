@@ -734,6 +734,7 @@ export default class AutofillService implements AutofillServiceInterface {
           options.cipher.identity = await generateIdentityViewFromContactId(
             client,
             options.cipher.id,
+            pageDetails,
             options.cozyAutofillOptions,
           );
         } catch (e) {
