@@ -555,7 +555,7 @@ body {
 .inline-menu-list-actions-item {
   transition: background-color 0.2s ease-in-out;
   list-style: none;
-  padding: 0 0.2rem;
+  padding: 0;
   position: relative; // Cozy customization; hide border in icon part
 
   &:not(:last-child):not(.inline-menu-list-actions-item--no-border) {
@@ -565,6 +565,9 @@ body {
     @include themify($themes) {
       border-bottom-color: themed("borderColor");
     }
+  }
+  &:first-child {
+    margin-top: 0.3rem;
   }
 
   .cipher-container {
@@ -582,6 +585,10 @@ body {
       @include themify($themes) {
         outline-color: themed("focusOutlineColor");
       }
+    }
+
+    &--empty {
+      padding: 0 0.3rem 0 0.7rem;
     }
 
     svg {
@@ -612,11 +619,11 @@ body {
   .fill-cipher-button {
     display: flex;
     align-items: center;
-    align-content: center;
     justify-content: flex-start;
     width: 100%;
     outline: none;
-    padding: 1rem 0.3rem 1rem 0.7rem;
+    padding: 0 0.3rem 0 0.7rem;
+    height: 100%;
   }
 
   .view-cipher-button {
@@ -699,11 +706,14 @@ body {
   }
 
   .cipher-details {
-    display: block;
     width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
     text-align: left;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .cipher-name,
