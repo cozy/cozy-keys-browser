@@ -115,7 +115,7 @@ export const createOrUpdateCozyContact = async ({
   for (const cozyAttributeModel of cozyAttributeModels) {
     if (cozyAttributeModel.isPathArray) {
       const arrayData = _.get(contact, cozyAttributeModel.path) || [];
-      const newValueLabel = cozyAttributeModel.pathAttributes[0];
+      const newValueLabel = cozyAttributeModel.pathAttribute;
 
       const newValue = {
         [newValueLabel]: inputValues[cozyAttributeModel.name],

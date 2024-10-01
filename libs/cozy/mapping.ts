@@ -9,7 +9,7 @@ type CozyAttributesModel = {
   doctype: string;
   path: string;
   isPathArray?: boolean;
-  pathAttributes?: string[]; // pathAttibutess are joined to form the final value
+  pathAttribute?: string;
   selector?: {
     [key: string]: string | object;
   };
@@ -137,98 +137,98 @@ export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
     path: "phone",
     name: "phone",
     isPathArray: true,
-    pathAttributes: ["number"],
+    pathAttribute: "number",
   },
   [AutofillFieldQualifier.identityEmail]: {
     doctype: CONTACTS_DOCTYPE,
     path: "email",
     name: "email",
     isPathArray: true,
-    pathAttributes: ["address"],
+    pathAttribute: "address",
   },
   [AutofillFieldQualifier.identityAddress1]: {
     doctype: CONTACTS_DOCTYPE,
     path: "address",
     name: "address",
     isPathArray: true,
-    pathAttributes: ["number", "street"],
+    pathAttribute: "street",
   },
   [AutofillFieldQualifier.identityCity]: {
     doctype: CONTACTS_DOCTYPE,
     path: "address",
     name: "city",
     isPathArray: true,
-    pathAttributes: ["city"],
+    pathAttribute: "city",
   },
   [AutofillFieldQualifier.identityState]: {
     doctype: CONTACTS_DOCTYPE,
     path: "address",
     name: "state",
     isPathArray: true,
-    pathAttributes: ["region"],
+    pathAttribute: "region",
   },
   [AutofillFieldQualifier.identityPostalCode]: {
     doctype: CONTACTS_DOCTYPE,
     path: "address",
     name: "postalCode",
     isPathArray: true,
-    pathAttributes: ["code"],
+    pathAttribute: "code",
   },
   [AutofillFieldQualifier.identityCountry]: {
     doctype: CONTACTS_DOCTYPE,
     path: "address",
     name: "country",
     isPathArray: true,
-    pathAttributes: ["country"],
+    pathAttribute: "country",
   },
   [AutofillFieldQualifier.addressNumber]: {
     doctype: CONTACTS_DOCTYPE,
     path: "address",
     name: "number",
     isPathArray: true,
-    pathAttributes: ["number"],
+    pathAttribute: "number",
   },
   [AutofillFieldQualifier.addressLocality]: {
     doctype: CONTACTS_DOCTYPE,
     path: "address",
     name: "locality",
     isPathArray: true,
-    pathAttributes: ["extendedAddress.locality"],
+    pathAttribute: "extendedAddress.locality",
   },
   [AutofillFieldQualifier.addressFloor]: {
     doctype: CONTACTS_DOCTYPE,
     path: "address",
     name: "floor",
     isPathArray: true,
-    pathAttributes: ["extendedAddress.floor"],
+    pathAttribute: "extendedAddress.floor",
   },
   [AutofillFieldQualifier.addressBuilding]: {
     doctype: CONTACTS_DOCTYPE,
     path: "address",
     name: "building",
     isPathArray: true,
-    pathAttributes: ["extendedAddress.building"],
+    pathAttribute: "extendedAddress.building",
   },
   [AutofillFieldQualifier.addressStairs]: {
     doctype: CONTACTS_DOCTYPE,
     path: "address",
     name: "stairs",
     isPathArray: true,
-    pathAttributes: ["extendedAddress.stairs"],
+    pathAttribute: "extendedAddress.stairs",
   },
   [AutofillFieldQualifier.addressApartment]: {
     doctype: CONTACTS_DOCTYPE,
     path: "address",
     name: "apartment",
     isPathArray: true,
-    pathAttributes: ["extendedAddress.apartment"],
+    pathAttribute: "extendedAddress.apartment",
   },
   [AutofillFieldQualifier.addressEntrycode]: {
     doctype: CONTACTS_DOCTYPE,
     path: "address",
     name: "entrycode",
     isPathArray: true,
-    pathAttributes: ["extendedAddress.entrycode"],
+    pathAttribute: "extendedAddress.entrycode",
   },
   [AutofillFieldQualifier.paperIdentityCardNumber]: {
     doctype: FILES_DOCTYPE,
