@@ -724,9 +724,13 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       this.getTranslation.bind(this),
     );
     const nameSpan = document.createElement("span");
-    nameSpan.setAttribute("title", nameSpanText);
-    nameSpan.textContent = nameSpanText;
-    nameSpan.classList.add("cipher-name");
+    if (nameSpanText) {
+      nameSpan.setAttribute("title", nameSpanText);
+      nameSpan.textContent = nameSpanText;
+      nameSpan.classList.add("cipher-name");
+
+      detailsSpan.appendChild(nameSpan);
+    }
 
     const subNameSpan = document.createElement("span");
     subNameSpan.setAttribute("title", ambiguousKey);
@@ -739,7 +743,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     }
     subNameSpan.textContent = currentListItemValue;
 
-    detailsSpan.appendChild(nameSpan);
     detailsSpan.appendChild(subNameSpan);
     fillButton.appendChild(radio);
     fillButton.appendChild(detailsSpan);
@@ -929,7 +932,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     );
 
     const div = document.createElement("div");
-    div.classList.add("cipher-container");
+    div.classList.add("cipher-container", "cipher-container--empty");
 
     const iconElement = buildSvgDomElement(contact);
     iconElement.style.margin = "0 2rem 0 0.5rem";
