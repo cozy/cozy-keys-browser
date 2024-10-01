@@ -24,6 +24,9 @@ export const AutofillFieldQualifier = {
   identityEmail: "identityEmail",
   identityUsername: "identityUsername",
   // Cozy customization
+  contactBirthDay: "contactBirthDay",
+  contactBirthMonth: "contactBirthMonth",
+  contactBirthYear: "contactBirthYear",
   addressNumber: "addressNumber",
   addressLocality: "addressLocality",
   addressFloor: "addressFloor",

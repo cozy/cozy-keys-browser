@@ -854,6 +854,18 @@ export class ContactAutoFillConstants {
     "data-recurly",
   ];
 
+  static readonly ContactBirthDayFieldNames: string[] = [
+    "dateNaissanceJour", // for demande-logement-social.gouv.fr
+  ];
+
+  static readonly ContactBirthMonthFieldNames: string[] = [
+    "dateNaissanceMois", // for demande-logement-social.gouv.fr
+  ];
+
+  static readonly ContactBirthYearFieldNames: string[] = [
+    "dateNaissanceAnnee", // for demande-logement-social.gouv.fr
+  ];
+
   static readonly AddressNumberFieldNames: string[] = [
     "numeroLogementActuel", // for demande-logement-social.gouv.fr, we can not just use "numero" because it conflicts with credit card numero
   ];

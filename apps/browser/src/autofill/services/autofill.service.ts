@@ -1622,6 +1622,30 @@ export default class AutofillService implements AutofillServiceInterface {
           continue;
         }
         if (
+          !fillFields.contactBirthDay &&
+          AutofillService.isFieldMatch(f[attr], ContactAutoFillConstants.ContactBirthDayFieldNames)
+        ) {
+          fillFields.contactBirthDay = f;
+          break;
+        }
+        if (
+          !fillFields.contactBirthMonth &&
+          AutofillService.isFieldMatch(
+            f[attr],
+            ContactAutoFillConstants.ContactBirthMonthFieldNames,
+          )
+        ) {
+          fillFields.contactBirthMonth = f;
+          break;
+        }
+        if (
+          !fillFields.contactBirthYear &&
+          AutofillService.isFieldMatch(f[attr], ContactAutoFillConstants.ContactBirthYearFieldNames)
+        ) {
+          fillFields.contactBirthYear = f;
+          break;
+        }
+        if (
           !fillFields.contactAddressNumber &&
           AutofillService.isFieldMatch(f[attr], ContactAutoFillConstants.AddressNumberFieldNames)
         ) {
@@ -1674,6 +1698,54 @@ export default class AutofillService implements AutofillServiceInterface {
     });
 
     const client = await this.cozyClientService.getClientInstance();
+
+    if (fillFields.contactBirthDay) {
+      const contactBirthDay = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "contactBirthDay",
+        cozyAutofillOptions: options.cozyAutofillOptions,
+      });
+
+      this.makeScriptActionWithValue(
+        fillScript,
+        contactBirthDay,
+        fillFields.contactBirthDay,
+        filledFields,
+      );
+    }
+
+    if (fillFields.contactBirthMonth) {
+      const contactBirthMonth = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "contactBirthMonth",
+        cozyAutofillOptions: options.cozyAutofillOptions,
+      });
+
+      this.makeScriptActionWithValue(
+        fillScript,
+        contactBirthMonth,
+        fillFields.contactBirthMonth,
+        filledFields,
+      );
+    }
+
+    if (fillFields.contactBirthYear) {
+      const contactBirthYear = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "contactBirthYear",
+        cozyAutofillOptions: options.cozyAutofillOptions,
+      });
+
+      this.makeScriptActionWithValue(
+        fillScript,
+        contactBirthYear,
+        fillFields.contactBirthYear,
+        filledFields,
+      );
+    }
 
     if (fillFields.contactAddressNumber) {
       const addressNumber = await getCozyValue({

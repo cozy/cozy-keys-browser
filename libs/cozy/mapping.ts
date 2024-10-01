@@ -17,6 +17,7 @@ type CozyAttributesModel = {
 
 export type ContactAttributesModel = CozyAttributesModel & {
   name: CozyContactFieldNames;
+  postProcess?: (data: string | undefined) => string | undefined;
 };
 export type PaperAttributesModel = CozyAttributesModel & {
   name: CozyPaperFieldNames;
@@ -75,7 +76,8 @@ export type CozyContactFieldNames =
   | "additionalName"
   | "familyName"
   | "company"
-  | "email";
+  | "email"
+  | "birthday";
 
 export type CozyFieldsNamesMapping = {
   [key in CozyContactFieldNames]: AutofillFieldQualifierType;
@@ -180,6 +182,24 @@ export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
     name: "country",
     isPathArray: true,
     pathAttribute: "country",
+  },
+  [AutofillFieldQualifier.contactBirthDay]: {
+    doctype: CONTACTS_DOCTYPE,
+    name: "birthday",
+    path: "birthday",
+    postProcess: (data) => (data ? new Date(data).getDate().toString() : undefined),
+  },
+  [AutofillFieldQualifier.contactBirthMonth]: {
+    doctype: CONTACTS_DOCTYPE,
+    name: "birthday",
+    path: "birthday",
+    postProcess: (data) => (data ? new Date(data).getMonth().toString() : undefined),
+  },
+  [AutofillFieldQualifier.contactBirthYear]: {
+    doctype: CONTACTS_DOCTYPE,
+    name: "birthday",
+    path: "birthday",
+    postProcess: (data) => (data ? new Date(data).getFullYear().toString() : undefined),
   },
   [AutofillFieldQualifier.addressNumber]: {
     doctype: CONTACTS_DOCTYPE,
