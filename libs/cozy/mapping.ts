@@ -181,6 +181,13 @@ export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
     isPathArray: true,
     pathAttributes: ["country"],
   },
+  [AutofillFieldQualifier.addressNumber]: {
+    doctype: CONTACTS_DOCTYPE,
+    path: "address",
+    name: "number",
+    isPathArray: true,
+    pathAttributes: ["number"],
+  },
   [AutofillFieldQualifier.addressLocality]: {
     doctype: CONTACTS_DOCTYPE,
     path: "address",

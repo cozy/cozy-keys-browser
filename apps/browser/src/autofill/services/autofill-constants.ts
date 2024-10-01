@@ -854,6 +854,10 @@ export class ContactAutoFillConstants {
     "data-recurly",
   ];
 
+  static readonly AddressNumberFieldNames: string[] = [
+    "numeroLogementActuel", // for demande-logement-social.gouv.fr, we can not just use "numero" because it conflicts with credit card numero
+  ];
+
   static readonly AddressLocalityFieldNames: string[] = ["locality", "lieu-dit"];
 
   static readonly AddressFloorFieldNames: string[] = ["floor", "etage"];
