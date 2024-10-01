@@ -91,16 +91,19 @@ const getCozyValueInContact = async ({
     executeFromStore: true,
   });
 
+  let cozyValue;
+
   if (cozyAttributeModel.isPathArray) {
     const dataArray = _.get(contact, cozyAttributeModel.path);
 
     const selectedData = selectDataWithCozyProfile(dataArray, cozyAutofillOptions);
-    const selectedValue = _.get(selectedData, cozyAttributeModel.pathAttribute);
 
-    return selectedValue;
+    cozyValue = _.get(selectedData, cozyAttributeModel.pathAttribute);
   } else {
-    return _.get(contact, cozyAttributeModel.path);
+    cozyValue = _.get(contact, cozyAttributeModel.path);
   }
+
+  return cozyAttributeModel.postProcess ? cozyAttributeModel.postProcess(cozyValue) : cozyValue;
 };
 
 const getCozyValueInPaper = async ({

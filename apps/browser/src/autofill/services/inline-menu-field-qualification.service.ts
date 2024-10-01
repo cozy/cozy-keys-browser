@@ -140,6 +140,9 @@ export class InlineMenuFieldQualificationService
       ...IdentityAutoFillConstants.EmailFieldNames,
       ...IdentityAutoFillConstants.UserNameFieldNames,
       // Cozy customization
+      ...ContactAutoFillConstants.ContactBirthDayFieldNames,
+      ...ContactAutoFillConstants.ContactBirthMonthFieldNames,
+      ...ContactAutoFillConstants.ContactBirthYearFieldNames,
       ...ContactAutoFillConstants.AddressNumberFieldNames,
       ...ContactAutoFillConstants.AddressLocalityFieldNames,
       ...ContactAutoFillConstants.AddressFloorFieldNames,
@@ -840,6 +843,54 @@ export class InlineMenuFieldQualificationService
   };
 
   // Cozy customization
+
+  /**
+   * Validates the provided field as a Cozy contact birth day.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForContactBirthDay = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(
+        field,
+        ContactAutoFillConstants.ContactBirthDayFieldNames,
+        false,
+      )
+    );
+  };
+
+  /**
+   * Validates the provided field as a Cozy contact birth month.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForContactBirthMonth = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(
+        field,
+        ContactAutoFillConstants.ContactBirthMonthFieldNames,
+        false,
+      )
+    );
+  };
+
+  /**
+   * Validates the provided field as a Cozy contact birth year.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForContactBirthYear = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(
+        field,
+        ContactAutoFillConstants.ContactBirthYearFieldNames,
+        false,
+      )
+    );
+  };
 
   /**
    * Validates the provided field as an Cozy address number.
