@@ -122,7 +122,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.setupInlineMenuListGlobalListeners();
   }
 
-  private editContactAddressFields(inlineMenuCipherId: string, contactName: string) {
+  private editCozyContactAddressFields(inlineMenuCipherId: string, contactName: string) {
     const contactAddressFields = fields.filter((field) => field.name === "address")[0].subFields;
     const addressFieldsPrimary: CozyContactFieldNames[] = ["number", "street", "code", "city"];
     const hiddenContactAddressFields = contactAddressFields.reduce((acc, field) => {
@@ -229,7 +229,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const divider = document.createElement("div");
     divider.classList.add("contact-edit-divider");
 
-    const buttons = this.editContactButtons({
+    const buttons = this.editCozyDoctypeButtons({
       inlineMenuCipherId,
       selectElement,
       inputRefs,
@@ -246,7 +246,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.inlineMenuListContainer.appendChild(necessaryStyleElement);
   }
 
-  private editContactFields(
+  private editCozyDoctypeFields(
     inlineMenuCipherId: string,
     contactName: string,
     fieldHtmlIDToFill?: string,
@@ -258,7 +258,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AddressContactSubFieldName,
       )
     ) {
-      return this.editContactAddressFields(inlineMenuCipherId, contactName);
+      return this.editCozyContactAddressFields(inlineMenuCipherId, contactName);
     }
 
     this.inlineMenuListContainer.innerHTML = "";
@@ -308,7 +308,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const inputRefs = [
       { [COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name]: inputText },
     ] as InputRef[];
-    const buttons = this.editContactButtons({
+    const buttons = this.editCozyDoctypeButtons({
       inlineMenuCipherId,
       fieldHtmlIDToFill,
       fieldQualifier: this.fieldQualifier,
@@ -334,7 +334,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     }
   }
 
-  private editContactButtons({
+  private editCozyDoctypeButtons({
     inlineMenuCipherId,
     fieldHtmlIDToFill,
     fieldQualifier,
@@ -375,7 +375,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         };
       }
 
-      this.handleSaveContactCipherEvent(
+      this.handleSaveCozyDoctypeCipherEvent(
         inlineMenuCipherId,
         fieldHtmlIDToFill,
         fieldQualifier,
@@ -389,7 +389,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return buttonContainer;
   }
 
-  private handleSaveContactCipherEvent = (
+  private handleSaveCozyDoctypeCipherEvent = (
     inlineMenuCipherId: string,
     fieldHtmlIDToFill: string,
     fieldQualifier: string,
@@ -893,7 +893,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
     fillButton.setAttribute("aria-label", title);
     fillButton.addEventListener(EVENTS.CLICK, () =>
-      this.editContactFields(inlineMenuCipherId, contactName, fieldHtmlIDToFill),
+      this.editCozyDoctypeFields(inlineMenuCipherId, contactName, fieldHtmlIDToFill),
     );
 
     const radio = document.createElement("input");
