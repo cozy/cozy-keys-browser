@@ -5,10 +5,9 @@ import {
 
 import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "./constants";
 
-export type CozyAttributesModel = {
+type CozyAttributesModel = {
   doctype: string;
   path: string;
-  name: string;
   isPathArray?: boolean;
   pathAttributes?: string[]; // pathAttibutess are joined to form the final value
   selector?: {
@@ -16,8 +15,95 @@ export type CozyAttributesModel = {
   };
 };
 
+export type ContactAttributesModel = CozyAttributesModel & {
+  name: CozyContactFieldNames;
+};
+export type PaperAttributesModel = CozyAttributesModel & {
+  name: CozyPaperFieldNames;
+};
+
+export const isContactAttributesModel = (
+  model: CozyAttributesModel,
+): model is ContactAttributesModel => {
+  return model.doctype === CONTACTS_DOCTYPE;
+};
+export const isPaperAttributesModel = (
+  model: CozyAttributesModel,
+): model is PaperAttributesModel => {
+  return model.doctype === FILES_DOCTYPE;
+};
+export const areContactAttributesModels = (
+  model: CozyAttributesModel[],
+): model is ContactAttributesModel[] => {
+  return model[0].doctype === CONTACTS_DOCTYPE;
+};
+export const arePaperAttributesModels = (
+  model: CozyAttributesModel[],
+): model is PaperAttributesModel[] => {
+  return model[0].doctype === FILES_DOCTYPE;
+};
+
 export type CozyAttributesMapping = {
-  [key in AutofillFieldQualifierType]?: CozyAttributesModel;
+  [key in AutofillFieldQualifierType]?: ContactAttributesModel | PaperAttributesModel;
+};
+export type CozyPaperFieldNames =
+  | "number"
+  | "confidentialNumber"
+  | "licenseNumber"
+  | "bicNumber"
+  | "netSocialAmount"
+  | "refTaxIncome";
+export type CozyContactFieldNames =
+  | "number"
+  | "address"
+  | "street"
+  | "code"
+  | "city"
+  | "region"
+  | "locality"
+  | "floor"
+  | "stairs"
+  | "apartment"
+  | "building"
+  | "entrycode"
+  | "state"
+  | "postalCode"
+  | "country"
+  | "phone"
+  | "displayName"
+  | "givenName"
+  | "additionalName"
+  | "familyName"
+  | "company"
+  | "email";
+
+export type CozyFieldsNamesMapping = {
+  [key in CozyContactFieldNames]: AutofillFieldQualifierType;
+};
+
+export const COZY_FIELDS_NAMES_MAPPING: Partial<CozyFieldsNamesMapping> = {
+  number: AutofillFieldQualifier.identityAddress1,
+  address: AutofillFieldQualifier.identityAddress1,
+  street: AutofillFieldQualifier.identityAddress1,
+  code: AutofillFieldQualifier.identityPostalCode,
+  city: AutofillFieldQualifier.identityCity,
+  region: AutofillFieldQualifier.identityAddress1,
+  locality: AutofillFieldQualifier.addressLocality,
+  floor: AutofillFieldQualifier.addressFloor,
+  stairs: AutofillFieldQualifier.addressStairs,
+  apartment: AutofillFieldQualifier.addressApartment,
+  building: AutofillFieldQualifier.addressBuilding,
+  entrycode: AutofillFieldQualifier.addressEntrycode,
+  state: AutofillFieldQualifier.identityState,
+  postalCode: AutofillFieldQualifier.identityPostalCode,
+  country: AutofillFieldQualifier.identityCountry,
+  phone: AutofillFieldQualifier.identityPhone,
+  displayName: AutofillFieldQualifier.identityFullName,
+  givenName: AutofillFieldQualifier.identityFirstName,
+  additionalName: AutofillFieldQualifier.identityMiddleName,
+  familyName: AutofillFieldQualifier.identityLastName,
+  company: AutofillFieldQualifier.identityCompany,
+  email: AutofillFieldQualifier.identityEmail,
 };
 
 export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {

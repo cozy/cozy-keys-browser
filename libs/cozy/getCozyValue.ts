@@ -8,7 +8,14 @@ import { CozyAutofillOptions } from "../../apps/browser/src/autofill/services/ab
 import { PaperAutoFillConstants } from "../../apps/browser/src/autofill/services/autofill-constants";
 
 import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "./constants";
-import { COZY_ATTRIBUTES_MAPPING, CozyAttributesModel, FILTERS } from "./mapping";
+import {
+  ContactAttributesModel,
+  COZY_ATTRIBUTES_MAPPING,
+  FILTERS,
+  isContactAttributesModel,
+  isPaperAttributesModel,
+  PaperAttributesModel,
+} from "./mapping";
 
 interface GetCozyValueType {
   client: CozyClient;
@@ -37,14 +44,14 @@ export const getCozyValue = async ({
     return;
   }
 
-  if (cozyAttributeModel.doctype === CONTACTS_DOCTYPE) {
+  if (isContactAttributesModel(cozyAttributeModel)) {
     return await getCozyValueInContact({
       client,
       contactId,
       cozyAttributeModel,
       cozyAutofillOptions,
     });
-  } else if (cozyAttributeModel.doctype === FILES_DOCTYPE) {
+  } else if (isPaperAttributesModel(cozyAttributeModel)) {
     return await getCozyValueInPaper({
       client,
       contactId,
@@ -58,23 +65,28 @@ export const getCozyValue = async ({
   }
 };
 
-interface GetCozyValueInDataType {
+type GetCozyValueInDataType = {
   client: CozyClient;
   contactId: string;
   contactEmail?: string;
   me?: boolean;
-  cozyAttributeModel: CozyAttributesModel;
   cozyAutofillOptions?: CozyAutofillOptions;
   field?: AutofillField;
   filterName?: string;
-}
+};
+type GetPaperValueInDataType = GetCozyValueInDataType & {
+  cozyAttributeModel: PaperAttributesModel;
+};
+type GetContactValueInDataType = GetCozyValueInDataType & {
+  cozyAttributeModel: ContactAttributesModel;
+};
 
 const getCozyValueInContact = async ({
   client,
   contactId,
   cozyAttributeModel,
   cozyAutofillOptions,
-}: GetCozyValueInDataType) => {
+}: GetContactValueInDataType) => {
   const { data: contact } = await client.query(Q(CONTACTS_DOCTYPE).getById(contactId), {
     executeFromStore: true,
   });
@@ -102,7 +114,7 @@ const getCozyValueInPaper = async ({
   cozyAutofillOptions,
   field,
   filterName,
-}: GetCozyValueInDataType) => {
+}: GetPaperValueInDataType) => {
   let filteredPapers = await getAllPapersFromContact({
     client,
     contactId,
@@ -164,7 +176,7 @@ export const getAllPapersFromContact = async ({
   contactId: string;
   contactEmail?: string;
   me?: boolean;
-  cozyAttributeModel: CozyAttributesModel;
+  cozyAttributeModel: PaperAttributesModel;
 }): Promise<IOCozyFile[]> => {
   const { data: papers } = await client.query(
     Q(FILES_DOCTYPE)

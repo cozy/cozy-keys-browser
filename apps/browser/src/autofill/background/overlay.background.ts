@@ -76,11 +76,16 @@ import { CONTACTS_DOCTYPE } from "cozy-client/dist/models/contact";
 import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
 import { AmbiguousContactFieldName, AmbiguousContactFieldValue } from "src/autofill/types";
-import { COZY_ATTRIBUTES_MAPPING } from "../../../../../libs/cozy/mapping";
+import {
+  COZY_ATTRIBUTES_MAPPING,
+  CozyContactFieldNames,
+  isPaperAttributesModel,
+} from "../../../../../libs/cozy/mapping";
 import { createOrUpdateCozyDoctype } from "../../../../../libs/cozy/createOrUpdateCozyDoctype";
 import { getCozyValue, getAllPapersFromContact } from "../../../../../libs/cozy/getCozyValue";
 import _ from "lodash";
 import { FILES_DOCTYPE } from "../../../../../libs/cozy/constants";
+import { cleanFormattedAddress } from "../../../../../libs/cozy/contact.helper";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -969,7 +974,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       On the ambiguous(phone/address/email) form field:
       - Display a menu to select value.
     */
-    if (focusedFieldModel.doctype === FILES_DOCTYPE) {
+    if (isPaperAttributesModel(focusedFieldModel)) {
       const availablePapers = (
         await getAllPapersFromContact({
           client,
@@ -1021,7 +1026,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   }
 
   private async saveFieldToCozyDoctype(message: OverlayPortMessage, port: chrome.runtime.Port) {
-    const { inlineMenuCipherId, fieldQualifier, newAutofillValue, fieldHtmlIDToFill } = message;
+    const { inlineMenuCipherId, fieldQualifier, inputValues, fieldHtmlIDToFill } = message;
 
     if (inlineMenuCipherId) {
       const client = await this.cozyClientService.getClientInstance();
@@ -1030,13 +1035,32 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       await createOrUpdateCozyDoctype({
         client,
         cipher,
-        fieldQualifier,
-        newAutofillValue,
+        inputValues,
         i18nService: this.i18nService,
+        logService: this.logService,
       });
+
+      const isAddress = Object.keys(inputValues).includes("street");
+      // If is an address, we need set the value of the field to the formatted address, because getCozyValue refers to `formattedAddress` to return values corresponding to the postal address.
+      const value = isAddress
+        ? cleanFormattedAddress(inputValues)
+        : inputValues[COZY_ATTRIBUTES_MAPPING[fieldQualifier].name];
       this.fillInlineMenuCipher(message, port, {
-        ...newAutofillValue,
-        fillOnlyThisFieldHtmlID: fieldHtmlIDToFill,
+        value,
+        type: inputValues.type,
+        label: inputValues.label,
+        ...(fieldQualifier
+          ? inputValues
+          : {
+              fillOnlyTheseFieldQualifiers: [
+                "identityAddress1",
+                "identityCity",
+                "identityCountry",
+                "identityPostalCode",
+                "identityState",
+              ],
+            }),
+        ...(fieldHtmlIDToFill ? { fillOnlyThisFieldHtmlID: fieldHtmlIDToFill } : {}),
       });
     }
   }
