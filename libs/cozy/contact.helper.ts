@@ -1,5 +1,7 @@
 import CozyClient, { models } from "cozy-client";
 import { IOCozyContact } from "cozy-client/types/types";
+import get from "lodash/get";
+import set from "lodash/set";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
@@ -13,8 +15,10 @@ import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view"
 const { getInitials } = models.contact;
 
 import { AutofillFieldQualifier } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
+import { InputRefValue } from "../../apps/browser/src/autofill/overlay/inline-menu/abstractions/autofill-inline-menu-list";
 import { CozyAutofillOptions } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 
+import { extendedAddressFields } from "./contact.lib";
 import { buildFieldsFromContact } from "./fields.helper";
 import { getCozyValue } from "./getCozyValue";
 
@@ -140,4 +144,68 @@ export const generateIdentityViewFromContactId = async (
   });
 
   return identity;
+};
+
+export const cleanFormattedAddress = (address: { [key: string]: string }) => {
+  const formattedAddress = `${address.number} ${address.street}, ${address.code} ${address.city}, ${address.country}`;
+  // Replace all spaces by one space, to fix cases where there are multiple spaces
+  // Replace commas that have a space before
+  // And remove all spaces before & after the string
+  let formattedAddressClean = formattedAddress.replace(/\s+/g, " ").replace(/\s,/g, "").trim();
+
+  // Case where a comma is the last character
+  if (formattedAddressClean.lastIndexOf(",") === formattedAddressClean.length - 1) {
+    formattedAddressClean = formattedAddressClean.slice(0, formattedAddressClean.length - 1);
+  }
+
+  // Case where a comma is the first character
+  if (formattedAddressClean.indexOf(",") === 0) {
+    formattedAddressClean = formattedAddressClean.slice(1);
+  }
+
+  return formattedAddressClean;
+};
+
+export const hasExtendedAddress = (addressField: InputRefValue) => {
+  if (!addressField) {
+    return false;
+  }
+  return Object.keys(addressField).some((ext) => extendedAddressFields.includes(ext));
+};
+
+export const createOrUpdateCozyContactAddress = (
+  contact: IOCozyContact,
+  path: string,
+  inputValues: InputRefValue,
+) => {
+  const arrayData = get(contact, path) || [];
+  const formattedAddress = cleanFormattedAddress(inputValues);
+
+  const cozyAddress = {
+    primary: !arrayData.length,
+    formattedAddress,
+    ...(inputValues.number && { number: inputValues.number }),
+    ...(inputValues.street && { street: inputValues.street }),
+    ...(inputValues.code && { code: inputValues.code }),
+    ...(inputValues.city && { city: inputValues.city }),
+    ...(inputValues.region && { region: inputValues.region }),
+    ...(inputValues.country && { country: inputValues.country }),
+    ...(inputValues.label && { label: inputValues.label }),
+    ...(inputValues.type && { type: inputValues.type }),
+    ...(hasExtendedAddress(inputValues) && {
+      extendedAddress: {
+        ...(inputValues.locality && { locality: inputValues.locality }),
+        ...(inputValues.building && { building: inputValues.building }),
+        ...(inputValues.stairs && { stairs: inputValues.stairs }),
+        ...(inputValues.floor && { floor: inputValues.floor }),
+        ...(inputValues.apartment && { apartment: inputValues.apartment }),
+        ...(inputValues.entrycode && { entrycode: inputValues.entrycode }),
+      },
+    }),
+  };
+  arrayData.push(cozyAddress);
+
+  set(contact, path, arrayData);
+
+  return contact;
 };

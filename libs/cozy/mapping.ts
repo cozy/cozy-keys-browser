@@ -79,7 +79,31 @@ export type CozyContactFieldNames =
 
 export type CozyFieldsNamesMapping = {
   [key in CozyContactFieldNames]: AutofillFieldQualifierType;
+};
 
+export const COZY_FIELDS_NAMES_MAPPING: Partial<CozyFieldsNamesMapping> = {
+  number: AutofillFieldQualifier.identityAddress1,
+  address: AutofillFieldQualifier.identityAddress1,
+  street: AutofillFieldQualifier.identityAddress1,
+  code: AutofillFieldQualifier.identityPostalCode,
+  city: AutofillFieldQualifier.identityCity,
+  region: AutofillFieldQualifier.identityAddress1,
+  locality: AutofillFieldQualifier.addressLocality,
+  floor: AutofillFieldQualifier.addressFloor,
+  stairs: AutofillFieldQualifier.addressStairs,
+  apartment: AutofillFieldQualifier.addressApartment,
+  building: AutofillFieldQualifier.addressBuilding,
+  entrycode: AutofillFieldQualifier.addressEntrycode,
+  state: AutofillFieldQualifier.identityState,
+  postalCode: AutofillFieldQualifier.identityPostalCode,
+  country: AutofillFieldQualifier.identityCountry,
+  phone: AutofillFieldQualifier.identityPhone,
+  displayName: AutofillFieldQualifier.identityFullName,
+  givenName: AutofillFieldQualifier.identityFirstName,
+  additionalName: AutofillFieldQualifier.identityMiddleName,
+  familyName: AutofillFieldQualifier.identityLastName,
+  company: AutofillFieldQualifier.identityCompany,
+  email: AutofillFieldQualifier.identityEmail,
 };
 
 export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {

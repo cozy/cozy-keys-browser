@@ -30,13 +30,17 @@ import {
 } from "../../../../utils/svg-icons";
 import {
   AutofillInlineMenuListWindowMessageHandlers,
+  EditContactButtonsParams,
   InitAutofillInlineMenuListMessage,
+  InputRef,
+  InputRefValue,
 } from "../../abstractions/autofill-inline-menu-list";
 import { AutofillInlineMenuPageElement } from "../shared/autofill-inline-menu-page-element";
 
 /* start Cozy imports */
 /* eslint-disable */
 import uniqueId from "lodash/uniqueId";
+import set from "lodash/set";
 import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
 import {
   AmbiguousContactFields,
@@ -47,7 +51,10 @@ import {
   ActionMenuData,
 } from "src/autofill/types";
 import type { AutofillValue } from "../../../../../../../../libs/cozy/createOrUpdateCozyDoctype";
-import { COZY_ATTRIBUTES_MAPPING } from "../../../../../../../../libs/cozy/mapping";
+import {
+  COZY_ATTRIBUTES_MAPPING,
+  CozyContactFieldNames,
+} from "../../../../../../../../libs/cozy/mapping";
 import { CozyAutofillOptions } from "src/autofill/services/abstractions/autofill.service";
 import { fields } from "../../../../../../../../libs/cozy/contact.lib";
 /* eslint-enable */
@@ -115,13 +122,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.setupInlineMenuListGlobalListeners();
   }
 
-  private editContactAddressFields(
-    inlineMenuCipherId: string,
-    contactName: string,
-    fieldHtmlIDToFill?: string,
-  ) {
+  private editContactAddressFields(inlineMenuCipherId: string, contactName: string) {
     const contactAddressFields = fields.filter((field) => field.name === "address")[0].subFields;
-    const addressFieldsPrimary = ["number", "street", "code", "city"];
+    const addressFieldsPrimary: CozyContactFieldNames[] = ["number", "street", "code", "city"];
     const hiddenContactAddressFields = contactAddressFields.reduce((acc, field) => {
       if (!addressFieldsPrimary.includes(field.name)) {
         acc.push(field.name);
@@ -148,6 +151,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     iconElement.classList.add("contact-edit-icon");
     inputTextContainer.appendChild(iconElement);
 
+    const inputRefs: InputRef[] = [];
     for (const field of addressFieldsPrimary) {
       const labelGroup = document.createElement("div");
       labelGroup.classList.add("contact-edit-input-label-group");
@@ -163,6 +167,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
       labelGroup.appendChild(inputText);
       inputTextContainer.appendChild(labelGroup);
+
+      const inputRef = { [field]: inputText } as InputRef;
+      inputRefs.push(inputRef);
     }
     editContainer.appendChild(inputTextContainer);
 
@@ -204,6 +211,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
       labelGroup.appendChild(inputText);
       inputTextContainer2.appendChild(labelGroup);
+
+      const inputRef = { [subField]: inputText } as InputRef;
+      inputRefs.push(inputRef);
     }
     editContainer.appendChild(inputTextContainer2);
 
@@ -219,8 +229,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const divider = document.createElement("div");
     divider.classList.add("contact-edit-divider");
 
-    // TODO - Add the buttons
-    // const buttons = this.editContactButtons(inlineMenuCipherId);
+    const buttons = this.editContactButtons({
+      inlineMenuCipherId,
+      selectElement,
+      inputRefs,
+    });
 
     // Necessary for the bottom margin of “buttons” to be interpreted
     const necessaryStyleElement = document.createElement("div");
@@ -229,8 +242,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.inlineMenuListContainer.appendChild(addNewAmbiguousHeader);
     this.inlineMenuListContainer.appendChild(editContainer);
     this.inlineMenuListContainer.appendChild(divider);
-    // TODO - Add the buttons
-    // this.inlineMenuListContainer.appendChild(buttons);
+    this.inlineMenuListContainer.appendChild(buttons);
     this.inlineMenuListContainer.appendChild(necessaryStyleElement);
   }
 
@@ -246,7 +258,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AddressContactSubFieldName,
       )
     ) {
-      return this.editContactAddressFields(inlineMenuCipherId, contactName, fieldHtmlIDToFill);
+      return this.editContactAddressFields(inlineMenuCipherId, contactName);
     }
 
     this.inlineMenuListContainer.innerHTML = "";
@@ -293,12 +305,16 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const divider = document.createElement("div");
     divider.classList.add("contact-edit-divider");
 
-    const buttons = this.editContactButtons(
+    const inputRefs = [
+      { [COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name]: inputText },
+    ] as InputRef[];
+    const buttons = this.editContactButtons({
       inlineMenuCipherId,
       fieldHtmlIDToFill,
-      inputText,
+      fieldQualifier: this.fieldQualifier,
       selectElement,
-    );
+      inputRefs,
+    });
 
     // Necessary for the bottom margin of “buttons” to be interpreted
     const necessaryStyleElement = document.createElement("div");
@@ -318,12 +334,13 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     }
   }
 
-  private editContactButtons(
-    inlineMenuCipherId: string,
-    fieldHtmlIDToFill: string,
-    inputText?: HTMLInputElement,
-    selectElement?: HTMLSelectElement | null,
-  ) {
+  private editContactButtons({
+    inlineMenuCipherId,
+    fieldHtmlIDToFill,
+    fieldQualifier,
+    selectElement,
+    inputRefs,
+  }: EditContactButtonsParams) {
     const buttonContainer = document.createElement("div");
     buttonContainer.classList.add("contact-edit-buttons");
 
@@ -338,18 +355,31 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     saveButton.textContent = this.getTranslation("save");
     saveButton.classList.add("contact-edit-button", "contact-edit-button-save");
     saveButton.addEventListener(EVENTS.CLICK, () => {
-      if (!inputText?.value) {
+      const hasValue = inputRefs?.some((data) => Object.values(data).some((d) => d?.value));
+      if (!hasValue) {
         return;
       }
-      const newAutofillValue: AutofillValue = {
-        value: inputText.value,
-        ...(selectElement && JSON.parse(selectElement.value)),
-      };
+
+      // Get the values from the inputs
+      let inputValues = {} as InputRefValue;
+      for (const input of inputRefs) {
+        const key = Object.keys(input)[0] as CozyContactFieldNames;
+        inputValues[key] = input[key].value;
+      }
+
+      if (selectElement) {
+        inputValues = {
+          ...inputValues,
+          // Get type & label from the select element
+          ...(selectElement && JSON.parse(selectElement.value)),
+        };
+      }
+
       this.handleSaveContactCipherEvent(
         inlineMenuCipherId,
         fieldHtmlIDToFill,
-        this.fieldQualifier,
-        newAutofillValue,
+        fieldQualifier,
+        inputValues,
       );
     });
 
@@ -363,13 +393,13 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     inlineMenuCipherId: string,
     fieldHtmlIDToFill: string,
     fieldQualifier: string,
-    newAutofillValue: AutofillValue,
+    inputValues: InputRefValue,
   ) => {
     return this.postMessageToParent({
       command: "saveFieldToCozyDoctype",
       inlineMenuCipherId,
       fieldQualifier,
-      newAutofillValue,
+      inputValues,
       fieldHtmlIDToFill,
     });
   };
