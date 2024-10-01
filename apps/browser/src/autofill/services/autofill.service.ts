@@ -1621,6 +1621,13 @@ export default class AutofillService implements AutofillServiceInterface {
           continue;
         }
         if (
+          !fillFields.contactAddressNumber &&
+          AutofillService.isFieldMatch(f[attr], ContactAutoFillConstants.AddressNumberFieldNames)
+        ) {
+          fillFields.contactAddressNumber = f;
+          break;
+        }
+        if (
           !fillFields.contactAddressLocality &&
           AutofillService.isFieldMatch(f[attr], ContactAutoFillConstants.AddressLocalityFieldNames)
         ) {
@@ -1666,6 +1673,22 @@ export default class AutofillService implements AutofillServiceInterface {
     });
 
     const client = await this.cozyClientService.getClientInstance();
+
+    if (fillFields.contactAddressNumber) {
+      const addressNumber = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "addressNumber",
+        cozyAutofillOptions: options.cozyAutofillOptions,
+      });
+
+      this.makeScriptActionWithValue(
+        fillScript,
+        addressNumber,
+        fillFields.contactAddressNumber,
+        filledFields,
+      );
+    }
 
     if (fillFields.contactAddressLocality) {
       const addressLocality = await getCozyValue({

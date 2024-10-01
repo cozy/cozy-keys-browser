@@ -140,6 +140,7 @@ export class InlineMenuFieldQualificationService
       ...IdentityAutoFillConstants.EmailFieldNames,
       ...IdentityAutoFillConstants.UserNameFieldNames,
       // Cozy customization
+      ...ContactAutoFillConstants.AddressNumberFieldNames,
       ...ContactAutoFillConstants.AddressLocalityFieldNames,
       ...ContactAutoFillConstants.AddressFloorFieldNames,
       ...ContactAutoFillConstants.AddressBuildingFieldNames,
@@ -839,6 +840,18 @@ export class InlineMenuFieldQualificationService
   };
 
   // Cozy customization
+
+  /**
+   * Validates the provided field as an Cozy address number.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForAddressNumber = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(field, ContactAutoFillConstants.AddressNumberFieldNames, false)
+    );
+  };
 
   /**
    * Validates the provided field as an Cozy extended address locality.
