@@ -10,7 +10,16 @@ import { AutofillFieldQualifierType } from "../../apps/browser/src/autofill/enum
 import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "./constants";
 import { getOrCreateAppFolderWithReference } from "./helpers/folder";
 import { createPDFWithText } from "./helpers/pdf";
-import { COZY_ATTRIBUTES_MAPPING, CozyAttributesModel } from "./mapping";
+import {
+  areContactAttributesModels,
+  arePaperAttributesModels,
+  COZY_ATTRIBUTES_MAPPING,
+} from "./mapping";
+import type {
+  ContactAttributesModel,
+  CozyContactFieldNames,
+  PaperAttributesModel,
+} from "./mapping";
 
 const {
   document: { Qualification, locales },
@@ -48,7 +57,7 @@ export const createOrUpdateCozyDoctype = async ({
     data: IOCozyContact;
   };
 
-  if (cozyAttributeModel.doctype === CONTACTS_DOCTYPE) {
+  if (areContactAttributesModels(cozyAttributeModels)) {
     // only update for the moment
     const updatedContact = await createOrUpdateCozyContact({
       contact,
@@ -57,7 +66,7 @@ export const createOrUpdateCozyDoctype = async ({
     });
 
     await client.save(updatedContact);
-  } else if (cozyAttributeModel.doctype === FILES_DOCTYPE) {
+  } else if (arePaperAttributesModels(cozyAttributeModels)) {
     // only create for the moment
     const createdPaper = await createOrUpdateCozyPaper({
       client,
@@ -73,7 +82,7 @@ export const createOrUpdateCozyDoctype = async ({
 
 interface CreateOrUpdateCozyContactType {
   contact: IOCozyContact;
-  cozyAttributeModel: CozyAttributesModel;
+  cozyAttributeModels: ContactAttributesModel[];
   newAutofillValue: AutofillValue;
 }
 
@@ -117,7 +126,7 @@ export const createOrUpdateCozyContact = async ({
 
 interface CreateOrUpdateCozyPaperType {
   client: CozyClient;
-  cozyAttributeModel: CozyAttributesModel;
+  cozyAttributeModel: PaperAttributesModel;
   newAutofillValue: AutofillValue;
   i18nService: I18nService;
   contact: IOCozyContact;
