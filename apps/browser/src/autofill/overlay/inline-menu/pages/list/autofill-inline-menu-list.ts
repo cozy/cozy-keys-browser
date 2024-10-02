@@ -844,10 +844,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     let actionMenuButtonElement;
 
     if (actionMenuData) {
-      const cipherId = isContactActionMenuData(actionMenuData) ? actionMenuData.cipher.id : actionMenuData.inlineMenuCipherId;
-      actionMenuButtonElement = this.buildActionMenuButton(actionMenuData, () => this.backToParent(cipherId));
-      actionMenuButtonElement.classList.remove("view-cipher-button");
-      actionMenuButtonElement.classList.add("inline-menu-list-header-three-dots-button");
+      const cipherId = isContactActionMenuData(actionMenuData)
+        ? actionMenuData.cipher.id
+        : actionMenuData.inlineMenuCipherId;
+      actionMenuButtonElement = this.buildActionButton(penIcon, () =>
+        this.editContactMessage(cipherId),
+      );
     }
 
     return this.buildListHeaderContainer(this.newItemButtonElement, actionMenuButtonElement);
@@ -1962,7 +1964,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   /* *   Action menu   * */
   /* * * * * * * * * * * */
 
-  private buildActionMenu(actionMenuData: ActionMenuData, onBack: (cipher: InlineMenuCipherData) => void) {
+  private buildActionMenu(
+    actionMenuData: ActionMenuData,
+    onBack: (cipher: InlineMenuCipherData) => void,
+  ) {
     this.inlineMenuListContainer.innerHTML = "";
     this.inlineMenuListContainer.classList.remove("inline-menu-list-container");
 
@@ -2010,20 +2015,29 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
       const autofillAllElement = this.createAutofillAllAction(cipher);
       ulElement.appendChild(autofillAllElement);
-    } else if (actionMenuData.type === "fieldHeader") {
-      const { inlineMenuCipherId } = actionMenuData;
-
-      const cipher = this.ciphers.find(({ id }) => id === inlineMenuCipherId);
-
-      actionMenuHeader = this.buildNewListHeader(this.buildCipherName(cipher), () =>
-        onBack(cipher),
-      );
-
-      const modifyCipherActionElement = this.createModifyCipherAction(cipher);
-      ulElement.appendChild(modifyCipherActionElement);
+      // Add action menu for header here
+      // } else if (actionMenuData.type === "fieldHeader") {
+      //   const { inlineMenuCipherId } = actionMenuData;
+      //   const cipher = this.ciphers.find(({ id }) => id === inlineMenuCipherId);
+      //   actionMenuHeader = this.buildNewListHeader(this.buildCipherName(cipher), () =>
+      //     onBack(cipher),
+      //   );
+      //   const modifyCipherActionElement = this.createModifyCipherAction(cipher);
+      //   ulElement.appendChild(modifyCipherActionElement);
     }
     this.inlineMenuListContainer.appendChild(actionMenuHeader);
     this.inlineMenuListContainer.appendChild(ulElement);
+  }
+
+  private buildActionButton(icon: string, onClick: () => void) {
+    const actionMenuButtonElement = document.createElement("button");
+    actionMenuButtonElement.tabIndex = -1;
+    actionMenuButtonElement.classList.add("action-button-header");
+
+    actionMenuButtonElement.append(buildSvgDomElement(icon));
+    actionMenuButtonElement.addEventListener(EVENTS.CLICK, onClick);
+
+    return actionMenuButtonElement;
   }
 
   private buildActionMenuButton(actionMenuData: ActionMenuData, onBack: () => void) {
@@ -2040,6 +2054,15 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return actionMenuButtonElement;
   }
 
+  private editContactMessage = (cipherId: string) => {
+    this.postMessageToParent({
+      command: "redirectToCozy",
+      to: "contacts",
+      hash: "<id>/edit",
+      inlineMenuCipherId: cipherId,
+    });
+  };
+
   private createViewCipherAction(cipher: InlineMenuCipherData) {
     const li = this.createActionMenuItem(
       this.getTranslation("view"),
@@ -2052,12 +2075,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
   private createModifyCipherAction(cipher: InlineMenuCipherData) {
     const li = this.createActionMenuItem(this.getTranslation("edit"), penIcon, () =>
-      this.postMessageToParent({
-        command: "redirectToCozy",
-        to: "contacts",
-        hash: "<id>/edit",
-        inlineMenuCipherId: cipher.id,
-      }),
+      this.editContactMessage(cipher.id),
     );
 
     return li;
