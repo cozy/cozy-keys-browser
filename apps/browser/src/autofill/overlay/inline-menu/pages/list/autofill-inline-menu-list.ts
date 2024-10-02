@@ -763,16 +763,23 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     name: string,
     value: string,
   ) {
+    const cozyAutofillOptions = { value };
+    const actionMenuButtonElement = this.buildActionMenuButton(
+      {
+        type: "field",
+        inlineMenuCipherId,
+        fieldQualifier: this.fieldQualifier,
+        cozyAutofillOptions,
+      },
+      () => this.backToParent(inlineMenuCipherId),
+    );
+
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
     listItem.classList.add("inline-menu-list-actions-item");
 
     const div = document.createElement("div");
     div.classList.add("cipher-container");
-
-    const cozyAutofillOptions = {
-      value,
-    };
 
     const fillButton = document.createElement("button");
     fillButton.setAttribute("tabindex", "-1");
@@ -813,6 +820,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     fillButton.appendChild(detailsSpan);
 
     div.appendChild(fillButton);
+    div.appendChild(actionMenuButtonElement);
     listItem.appendChild(div);
 
     return listItem;
