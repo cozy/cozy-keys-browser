@@ -95,6 +95,10 @@ body {
   font-family: $font-family-sans-serif;
   //*/
   color: white;
+
+  &--full-width {
+    max-width: 100%;
+  }
 }
 .inline-menu-list-header {
   display: flex;
@@ -563,9 +567,6 @@ body {
       border-bottom-color: themed("borderColor");
     }
   }
-  &:first-child {
-    margin-top: 0.3rem;
-  }
 
   .cipher-container {
     display: flex;
@@ -703,7 +704,7 @@ body {
   }
 
   .cipher-details {
-    width: 100%;
+    width: 75%;
     text-overflow: ellipsis;
     overflow: hidden;
     text-align: left;

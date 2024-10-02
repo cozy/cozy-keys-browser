@@ -834,7 +834,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const span = globalThis.document.createElement("span");
     span.textContent = contactName;
     span.setAttribute("title", contactName);
-    span.classList.add("list-header-text");
+    span.classList.add("list-header-text", "list-header-text--full-width");
     this.newItemButtonElement.setAttribute("aria-label", contactName);
 
     this.newItemButtonElement.append(buildSvgDomElement(backIcon));
