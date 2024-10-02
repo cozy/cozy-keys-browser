@@ -97,6 +97,13 @@ type FieldHeaderActionMenuData = {
   inlineMenuCipherId: string;
 };
 
+export const isContactActionMenuData = (data: ActionMenuData): data is ContactActionMenuData => {
+  if (!data) {
+    return false;
+  }
+  return data.type === "contact";
+};
+
 export type ActionMenuData =
   | ContactActionMenuData
   | FieldActionMenuData
