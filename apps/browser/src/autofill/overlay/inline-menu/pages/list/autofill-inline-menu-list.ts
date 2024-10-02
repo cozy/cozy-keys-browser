@@ -141,7 +141,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     const addNewAmbiguousHeader = this.buildNewListHeader(
       contactName,
-      this.handleNewAmbiguousHeaderClick,
+      this.backToCipherList,
     );
 
     const inputTextContainer = document.createElement("div");
@@ -271,7 +271,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     const addNewAmbiguousHeader = this.buildNewListHeader(
       contactName,
-      this.handleNewAmbiguousHeaderClick,
+      this.backToCipherList,
     );
 
     const { inputTextContainer, inputText } = makeEditContactField(
@@ -856,7 +856,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return this.buildListHeaderContainer(this.newItemButtonElement, actionMenuButtonElement);
   }
 
-  private handleNewAmbiguousHeaderClick = () => {
+  private backToCipherList = () => {
     this.updateListItems(this.ciphers, undefined, undefined, true);
   };
 
@@ -966,7 +966,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     const addNewLoginButtonContainer = this.buildNewListHeader(
       contactName,
-      this.handleNewAmbiguousHeaderClick,
+      this.backToCipherList,
     );
 
     const ulElement = globalThis.document.createElement("ul");
@@ -1013,7 +1013,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     const addNewLoginButtonContainer = this.buildNewListHeader(
       contactName,
-      this.handleNewAmbiguousHeaderClick,
+      this.backToCipherList,
       {
         type: "fieldHeader",
         inlineMenuCipherId,
@@ -1103,7 +1103,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     const addNewLoginButtonContainer = this.buildNewListHeader(
       contactName,
-      this.handleNewAmbiguousHeaderClick,
+      this.backToCipherList,
     );
 
     const ulElement = globalThis.document.createElement("ul");
