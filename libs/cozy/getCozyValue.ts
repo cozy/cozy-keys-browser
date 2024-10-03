@@ -210,9 +210,8 @@ export const selectDataWithCozyProfile = (
   const type = cozyAutofillOptions?.type;
   const label = cozyAutofillOptions?.label;
 
-  // If we clicked on a phone number with no type and label,
-  // we want to autofill with this phone number and not evaluate the select data logic
-  // that will finish by return the first phone number and not the phone number we clicked
+  // If we clicked on a phone number and we are selecting the phone number field,
+  // we want this phone number whatever the type and label
   const matchingValueData = data.find(
     (d) =>
       cozyAutofillOptions?.value &&
@@ -221,7 +220,7 @@ export const selectDataWithCozyProfile = (
         cozyAutofillOptions.value === d.address),
   );
 
-  if (!type && !label && matchingValueData) {
+  if (matchingValueData) {
     return matchingValueData;
   }
 

@@ -35,13 +35,15 @@ const EMPTY_PROFILE_WITH_PHONE: CozyAutofillOptions = {
 
 const VALUE_ONLY_PHONE_ELEMENT = { number: "0" };
 
-const HOME_ONLY_ELEMENT = { phone: "0", label: "home" };
+const HOME_ONLY_ELEMENT = { number: "0", label: "home" };
 
-const HOME_AND_TYPE_ELEMENT = { phone: "1", label: "home", type: "iPhone" };
+const HOME_AND_TYPE_ELEMENT = { number: "1", label: "home", type: "iPhone" };
 
-const WORK_ONLY_ELEMENT = { phone: "2", label: "work" };
+const WORK_ONLY_ELEMENT = { number: "2", label: "work" };
 
-const WORK_AND_TYPE_ELEMENT = { phone: "3", label: "work", type: "Cozy Cloud" };
+const WORK_AND_TYPE_ELEMENT = { number: "3", label: "work", type: "Cozy Cloud" };
+
+const OTHER_WORK_ONLY_ELEMENT = { number: "4", label: "work" };
 
 describe("mapping", () => {
   describe("isPaperFromContact", () => {
@@ -189,6 +191,17 @@ describe("mapping", () => {
         const dataArray = [HOME_ONLY_ELEMENT, WORK_ONLY_ELEMENT];
 
         expect(selectDataWithCozyProfile(dataArray, WORK_ONLY_PROFILE)).toEqual(WORK_ONLY_ELEMENT);
+      });
+
+      it("should return return corresponding value and same label element if value and label only", () => {
+        const dataArray = [WORK_ONLY_ELEMENT, OTHER_WORK_ONLY_ELEMENT];
+
+        expect(
+          selectDataWithCozyProfile(dataArray, {
+            value: "4",
+            label: "work",
+          }),
+        ).toEqual(OTHER_WORK_ONLY_ELEMENT);
       });
 
       it("should return return first same label and type element if correct label and type", () => {
