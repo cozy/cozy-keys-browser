@@ -390,6 +390,8 @@ export class IdentityAutoFillConstants {
     // German
     "strasse",
     "adresse",
+    // French
+    "voie",
   ];
 
   static readonly AddressFieldNameValues: string[] = [
@@ -397,6 +399,8 @@ export class IdentityAutoFillConstants {
     "billing-addr",
     "mail-addr",
     "bill-addr",
+    // French
+    "voie",
   ];
 
   static readonly Address1FieldNames: string[] = [
