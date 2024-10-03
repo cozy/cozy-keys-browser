@@ -83,6 +83,15 @@ export type CozyFieldsNamesMapping = {
   [key in CozyContactFieldNames]: AutofillFieldQualifierType;
 };
 
+export const cozypaperFieldNames: CozyPaperFieldNames[] = [
+  "number",
+  "confidentialNumber",
+  "licenseNumber",
+  "bicNumber",
+  "netSocialAmount",
+  "refTaxIncome",
+];
+
 export const COZY_FIELDS_NAMES_MAPPING: Partial<CozyFieldsNamesMapping> = {
   number: AutofillFieldQualifier.identityAddress1,
   address: AutofillFieldQualifier.identityAddress1,

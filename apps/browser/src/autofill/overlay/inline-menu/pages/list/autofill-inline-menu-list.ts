@@ -53,6 +53,7 @@ import {
 import {
   COZY_ATTRIBUTES_MAPPING,
   CozyContactFieldNames,
+  cozypaperFieldNames,
 } from "../../../../../../../../libs/cozy/mapping";
 import { CozyAutofillOptions } from "src/autofill/services/abstractions/autofill.service";
 import { fields } from "../../../../../../../../libs/cozy/contact.lib";
@@ -561,7 +562,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     // Cozy customization - On the contact ambiguous fields, if the field has a value, the corresponding menu is displayed directly. Unless we wish to return to the contact cypher list.
     if (
       this.fieldValue &&
-      [...ambiguousContactFieldNames, ...addressFieldNames].includes(
+      [...ambiguousContactFieldNames, ...addressFieldNames, ...cozypaperFieldNames].includes(
         COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AmbiguousContactFieldName,
       ) &&
       !isBack && // case where we are already on the ambiguous list and wish to return to the contacts list.
