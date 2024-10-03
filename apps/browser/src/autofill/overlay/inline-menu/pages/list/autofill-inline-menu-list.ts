@@ -34,6 +34,7 @@ import {
   InitAutofillInlineMenuListMessage,
   InputRef,
   InputRefValue,
+  InputValues,
 } from "../../abstractions/autofill-inline-menu-list";
 import { AutofillInlineMenuPageElement } from "../shared/autofill-inline-menu-page-element";
 
@@ -123,14 +124,55 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   }
 
   private editCozyContactAddressFields(inlineMenuCipherId: string, contactName: string) {
-    const contactAddressFields = fields.filter((field) => field.name === "address")[0].subFields;
-    const addressFieldsPrimary: CozyContactFieldNames[] = ["number", "street", "code", "city"];
-    const hiddenContactAddressFields = contactAddressFields.reduce((acc, field) => {
-      if (!addressFieldsPrimary.includes(field.name)) {
-        acc.push(field.name);
-      }
-      return acc;
-    }, []);
+    const addressFieldsPrimary = [
+      {
+        key: "number",
+        fieldQualifier: "addressNumber",
+      },
+      {
+        key: "street",
+        fieldQualifier: "identityAddress1",
+      },
+      {
+        key: "code",
+        fieldQualifier: "identityPostalCode",
+      },
+      {
+        key: "city",
+        fieldQualifier: "identityCity",
+      },
+    ];
+
+    const hiddenContactAddressFields = [
+      {
+        key: "locality",
+        fieldQualifier: "addressLocality",
+      },
+      {
+        key: "floor",
+        fieldQualifier: "addressFloor",
+      },
+      {
+        key: "building",
+        fieldQualifier: "addressBuilding",
+      },
+      {
+        key: "stairs",
+        fieldQualifier: "addressStairs",
+      },
+      {
+        key: "apartment",
+        fieldQualifier: "addressApartment",
+      },
+      {
+        key: "entrycode",
+        fieldQualifier: "addressEntrycode",
+      },
+      {
+        key: "country",
+        fieldQualifier: "identityCountry",
+      },
+    ];
 
     this.inlineMenuListContainer.innerHTML = "";
     this.inlineMenuListContainer.classList.remove(
@@ -153,19 +195,23 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       const labelGroup = document.createElement("div");
       labelGroup.classList.add("contact-edit-input-label-group");
       const labelElement = document.createElement("label");
-      labelElement.htmlFor = field;
-      labelElement.textContent = this.getTranslation(`address_${field}`);
+      labelElement.htmlFor = field.key;
+      labelElement.textContent = this.getTranslation(`address_${field.key}`);
       labelGroup.appendChild(labelElement);
 
       const inputText = document.createElement("input");
       inputText.classList.add("contact-edit-input");
       inputText.type = "text";
-      inputText.id = field;
+      inputText.id = field.key;
 
       labelGroup.appendChild(inputText);
       inputTextContainer.appendChild(labelGroup);
 
-      const inputRef = { [field]: inputText } as InputRef;
+      const inputRef = {
+        key: field.key,
+        element: inputText,
+        fieldQualifier: field.fieldQualifier,
+      } as InputRef;
       inputRefs.push(inputRef);
     }
     editContainer.appendChild(inputTextContainer);
@@ -197,19 +243,23 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         "contact-edit-input-label-group--subfield",
       );
       const labelElement = document.createElement("label");
-      labelElement.htmlFor = subField;
-      labelElement.textContent = this.getTranslation(`address_${subField}`);
+      labelElement.htmlFor = subField.key;
+      labelElement.textContent = this.getTranslation(`address_${subField.key}`);
       labelGroup.appendChild(labelElement);
 
       const inputText = document.createElement("input");
       inputText.classList.add("contact-edit-input");
       inputText.type = "text";
-      inputText.id = subField;
+      inputText.id = subField.key;
 
       labelGroup.appendChild(inputText);
       inputTextContainer2.appendChild(labelGroup);
 
-      const inputRef = { [subField]: inputText } as InputRef;
+      const inputRef = {
+        key: subField.key,
+        element: inputText,
+        fieldQualifier: subField.fieldQualifier,
+      } as InputRef;
       inputRefs.push(inputRef);
     }
     editContainer.appendChild(inputTextContainer2);
@@ -300,8 +350,13 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     divider.classList.add("contact-edit-divider");
 
     const inputRefs = [
-      { [COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name]: inputText },
+      {
+        key: COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name,
+        element: inputText,
+        fieldQualifier: this.fieldQualifier,
+      },
     ] as InputRef[];
+
     const buttons = this.editCozyDoctypeButtons({
       inlineMenuCipherId,
       fieldHtmlIDToFill,
@@ -349,16 +404,21 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     saveButton.textContent = this.getTranslation("save");
     saveButton.classList.add("contact-edit-button", "contact-edit-button-save");
     saveButton.addEventListener(EVENTS.CLICK, () => {
-      const hasValue = inputRefs?.some((data) => Object.values(data).some((d) => d?.value));
+      const hasValue = inputRefs?.some((data) => data.element.value);
       if (!hasValue) {
         return;
       }
 
       // Get the values from the inputs
-      let inputValues = {} as InputRefValue;
+      let inputValues = {
+        values: [] as InputRefValue[],
+      };
       for (const input of inputRefs) {
-        const key = Object.keys(input)[0] as CozyContactFieldNames;
-        inputValues[key] = input[key].value;
+        inputValues.values.push({
+          key: input.key,
+          value: input.element.value,
+          fieldQualifier: input.fieldQualifier,
+        });
       }
 
       if (selectElement) {
@@ -387,7 +447,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     inlineMenuCipherId: string,
     fieldHtmlIDToFill: string,
     fieldQualifier: string,
-    inputValues: InputRefValue,
+    inputValues: InputValues,
   ) => {
     return this.postMessageToParent({
       command: "saveFieldToCozyDoctype",

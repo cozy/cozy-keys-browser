@@ -16,12 +16,13 @@ const { getInitials } = models.contact;
 
 import { AutofillFieldQualifier } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
 import AutofillPageDetails from "../../apps/browser/src/autofill/models/autofill-page-details";
-import { InputRefValue } from "../../apps/browser/src/autofill/overlay/inline-menu/abstractions/autofill-inline-menu-list";
+import { InputValues } from "../../apps/browser/src/autofill/overlay/inline-menu/abstractions/autofill-inline-menu-list";
 import { CozyAutofillOptions } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
 
 import { extendedAddressFields } from "./contact.lib";
 import { buildFieldsFromContact } from "./fields.helper";
 import { getCozyValue } from "./getCozyValue";
+import { COZY_ATTRIBUTES_MAPPING, CozyAttributesMapping } from "./mapping";
 
 const getPrimaryEmail = (contact: IOCozyContact): string | undefined => {
   return contact.email?.find((email) => email.primary)?.address;
@@ -165,6 +166,24 @@ export const generateIdentityViewFromContactId = async (
   return identity;
 };
 
+export const buildAddressObjectFromInputValues = (
+  inputValues: InputValues,
+): { [key: string]: string } => {
+  const addressValues = inputValues.values.filter(
+    (inputValue) =>
+      COZY_ATTRIBUTES_MAPPING[inputValue.fieldQualifier as keyof CozyAttributesMapping].path ===
+      "address",
+  );
+
+  const addressObject: { [key: string]: string } = {};
+
+  addressValues.forEach((inputValue) => {
+    addressObject[inputValue.key] = inputValue.value;
+  });
+
+  return addressObject;
+};
+
 export const cleanFormattedAddress = (address: { [key: string]: string }) => {
   const formattedAddress = `${address.number} ${address.street}, ${address.code} ${address.city}, ${address.country}`;
   // Replace all spaces by one space, to fix cases where there are multiple spaces
@@ -185,40 +204,42 @@ export const cleanFormattedAddress = (address: { [key: string]: string }) => {
   return formattedAddressClean;
 };
 
-export const hasExtendedAddress = (addressField: InputRefValue) => {
-  if (!addressField) {
+export const hasExtendedAddress = (inputValues: InputValues) => {
+  if (!inputValues) {
     return false;
   }
-  return Object.keys(addressField).some((ext) => extendedAddressFields.includes(ext));
+
+  return inputValues.values.some((inputValue) => extendedAddressFields.includes(inputValue.key));
 };
 
 export const createOrUpdateCozyContactAddress = (
   contact: IOCozyContact,
   path: string,
-  inputValues: InputRefValue,
+  inputValues: InputValues,
 ) => {
   const arrayData = get(contact, path) || [];
-  const formattedAddress = cleanFormattedAddress(inputValues);
+  const addressObject = buildAddressObjectFromInputValues(inputValues);
+  const formattedAddress = cleanFormattedAddress(addressObject);
 
   const cozyAddress = {
     primary: !arrayData.length,
     formattedAddress,
-    ...(inputValues.number && { number: inputValues.number }),
-    ...(inputValues.street && { street: inputValues.street }),
-    ...(inputValues.code && { code: inputValues.code }),
-    ...(inputValues.city && { city: inputValues.city }),
-    ...(inputValues.region && { region: inputValues.region }),
-    ...(inputValues.country && { country: inputValues.country }),
-    ...(inputValues.label && { label: inputValues.label }),
-    ...(inputValues.type && { type: inputValues.type }),
+    ...(addressObject.number && { number: addressObject.number }),
+    ...(addressObject.street && { street: addressObject.street }),
+    ...(addressObject.code && { code: addressObject.code }),
+    ...(addressObject.city && { city: addressObject.city }),
+    ...(addressObject.region && { region: addressObject.region }),
+    ...(addressObject.country && { country: addressObject.country }),
+    ...(addressObject.label && { label: addressObject.label }),
+    ...(addressObject.type && { type: addressObject.type }),
     ...(hasExtendedAddress(inputValues) && {
       extendedAddress: {
-        ...(inputValues.locality && { locality: inputValues.locality }),
-        ...(inputValues.building && { building: inputValues.building }),
-        ...(inputValues.stairs && { stairs: inputValues.stairs }),
-        ...(inputValues.floor && { floor: inputValues.floor }),
-        ...(inputValues.apartment && { apartment: inputValues.apartment }),
-        ...(inputValues.entrycode && { entrycode: inputValues.entrycode }),
+        ...(addressObject.locality && { locality: addressObject.locality }),
+        ...(addressObject.building && { building: addressObject.building }),
+        ...(addressObject.stairs && { stairs: addressObject.stairs }),
+        ...(addressObject.floor && { floor: addressObject.floor }),
+        ...(addressObject.apartment && { apartment: addressObject.apartment }),
+        ...(addressObject.entrycode && { entrycode: addressObject.entrycode }),
       },
     }),
   };

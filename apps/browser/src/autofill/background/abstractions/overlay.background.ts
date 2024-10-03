@@ -10,7 +10,7 @@ import { LockedVaultPendingNotificationsData } from "./notification.background";
 /* eslint-disable */
 import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
 import { AmbiguousContactFieldValue } from "src/autofill/types";
-import { InputRefValue } from "src/autofill/overlay/inline-menu/abstractions/autofill-inline-menu-list";
+import { InputValues } from "src/autofill/overlay/inline-menu/abstractions/autofill-inline-menu-list";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -150,7 +150,7 @@ export type OverlayPortMessage = {
   ambiguousValue?: AmbiguousContactFieldValue[0];
   to?: string; // For "redirectToCozy" command
   hash?: string; // For "redirectToCozy" command
-  inputValues?: InputRefValue; // For "saveFieldToCozyDoctype" command
+  inputValues?: InputValues; // For "saveFieldToCozyDoctype" command
   // Cozy customization end
 };
 

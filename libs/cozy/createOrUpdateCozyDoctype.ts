@@ -6,7 +6,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
-import type { InputRefValue } from "../../apps/browser/src/autofill/overlay/inline-menu/abstractions/autofill-inline-menu-list";
+import type { InputValues } from "../../apps/browser/src/autofill/overlay/inline-menu/abstractions/autofill-inline-menu-list";
 
 import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "./constants";
 import { createOrUpdateCozyContactAddress } from "./contact.helper";
@@ -16,13 +16,8 @@ import {
   areContactAttributesModels,
   arePaperAttributesModels,
   COZY_ATTRIBUTES_MAPPING,
-  COZY_FIELDS_NAMES_MAPPING,
 } from "./mapping";
-import type {
-  ContactAttributesModel,
-  CozyContactFieldNames,
-  PaperAttributesModel,
-} from "./mapping";
+import type { ContactAttributesModel, PaperAttributesModel } from "./mapping";
 
 const {
   document: { Qualification, locales },
@@ -40,7 +35,7 @@ export interface AutofillValue {
 interface CreateOrUpdateCozyDoctypeType {
   client: CozyClient;
   cipher: CipherView;
-  inputValues: InputRefValue;
+  inputValues: InputValues;
   i18nService: I18nService;
   logService: LogService;
 }
@@ -52,9 +47,9 @@ export const createOrUpdateCozyDoctype = async ({
   i18nService,
   logService,
 }: CreateOrUpdateCozyDoctypeType) => {
-  const cozyAttributeModels = (Object.keys(inputValues) as CozyContactFieldNames[])
-    .map((key) => COZY_ATTRIBUTES_MAPPING[COZY_FIELDS_NAMES_MAPPING[key]])
-    .filter(Boolean);
+  const cozyAttributeModels = inputValues.values.map(
+    ({ fieldQualifier }) => COZY_ATTRIBUTES_MAPPING[fieldQualifier],
+  );
 
   if (cozyAttributeModels.length === 0) {
     logService.error("No Cozy attribute model found for the given inputValues", inputValues);
@@ -88,7 +83,7 @@ export const createOrUpdateCozyDoctype = async ({
     const createdPaper = await createOrUpdateCozyPaper({
       client,
       cozyAttributeModel: cozyAttributeModels[0],
-      newAutofillValue: Object.values(inputValues)[0],
+      inputValue: inputValues.values[0],
       i18nService,
       contact,
     });
@@ -100,7 +95,7 @@ export const createOrUpdateCozyDoctype = async ({
 interface CreateOrUpdateCozyContactType {
   contact: IOCozyContact;
   cozyAttributeModels: ContactAttributesModel[];
-  inputValues: InputRefValue;
+  inputValues: InputValues;
 }
 
 export const createOrUpdateCozyContact = async ({
@@ -112,13 +107,15 @@ export const createOrUpdateCozyContact = async ({
     return createOrUpdateCozyContactAddress(contact, cozyAttributeModels[0].path, inputValues);
   }
 
-  for (const cozyAttributeModel of cozyAttributeModels) {
+  for (const inputValue of inputValues.values) {
+    const cozyAttributeModel = COZY_ATTRIBUTES_MAPPING[inputValue.fieldQualifier];
+
     if (cozyAttributeModel.isPathArray) {
       const arrayData = _.get(contact, cozyAttributeModel.path) || [];
       const newValueLabel = cozyAttributeModel.pathAttribute;
 
       const newValue = {
-        [newValueLabel]: inputValues[cozyAttributeModel.name],
+        [newValueLabel]: inputValue.value,
         ...(inputValues.label && { label: inputValues.label }),
         ...(inputValues.type && { type: inputValues.type }),
         primary: !arrayData.length,
@@ -138,7 +135,7 @@ export const createOrUpdateCozyContact = async ({
 interface CreateOrUpdateCozyPaperType {
   client: CozyClient;
   cozyAttributeModel: PaperAttributesModel;
-  newAutofillValue: any;
+  inputValue: any;
   i18nService: I18nService;
   contact: IOCozyContact;
 }
@@ -146,7 +143,7 @@ interface CreateOrUpdateCozyPaperType {
 export const createOrUpdateCozyPaper = async ({
   client,
   cozyAttributeModel,
-  newAutofillValue,
+  inputValue,
   i18nService,
   contact,
 }: CreateOrUpdateCozyPaperType): Promise<any> => {
@@ -169,7 +166,7 @@ export const createOrUpdateCozyPaper = async ({
   });
 
   // Example: "FR00 0000 0000 0000 0000 0000 000"
-  const value = newAutofillValue.value;
+  const value = inputValue.value;
 
   const pdfText = `
     ${pdfTitle}
@@ -196,7 +193,7 @@ export const createOrUpdateCozyPaper = async ({
     conflictStrategy: "rename",
   };
 
-  _.set(paperOptions, cozyAttributeModel.path, newAutofillValue.value);
+  _.set(paperOptions, cozyAttributeModel.path, inputValue.value);
 
   const { data: fileCreated } = await uploadFileWithConflictStrategy(
     client,
