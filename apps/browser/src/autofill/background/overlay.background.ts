@@ -76,16 +76,15 @@ import { CONTACTS_DOCTYPE } from "cozy-client/dist/models/contact";
 import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
 import { AmbiguousContactFieldName, AmbiguousContactFieldValue } from "src/autofill/types";
-import {
-  COZY_ATTRIBUTES_MAPPING,
-  CozyContactFieldNames,
-  isPaperAttributesModel,
-} from "../../../../../libs/cozy/mapping";
+import { COZY_ATTRIBUTES_MAPPING, isPaperAttributesModel } from "../../../../../libs/cozy/mapping";
 import { createOrUpdateCozyDoctype } from "../../../../../libs/cozy/createOrUpdateCozyDoctype";
 import { getCozyValue, getAllPapersFromContact } from "../../../../../libs/cozy/getCozyValue";
 import _ from "lodash";
 import { FILES_DOCTYPE } from "../../../../../libs/cozy/constants";
-import { cleanFormattedAddress } from "../../../../../libs/cozy/contact.helper";
+import {
+  buildAddressObjectFromInputValues,
+  cleanFormattedAddress,
+} from "../../../../../libs/cozy/contact.helper";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -1040,11 +1039,11 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         logService: this.logService,
       });
 
-      const isAddress = Object.keys(inputValues).includes("street");
+      const isAddress = inputValues.values.some((inputValue) => inputValue.key === "street");
       // If is an address, we need set the value of the field to the formatted address, because getCozyValue refers to `formattedAddress` to return values corresponding to the postal address.
       const value = isAddress
-        ? cleanFormattedAddress(inputValues)
-        : inputValues[COZY_ATTRIBUTES_MAPPING[fieldQualifier].name];
+        ? cleanFormattedAddress(buildAddressObjectFromInputValues(inputValues))
+        : inputValues.values[0].value;
       this.fillInlineMenuCipher(message, port, {
         value,
         type: inputValues.type,

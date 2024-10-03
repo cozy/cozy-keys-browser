@@ -81,14 +81,21 @@ export type AutofillInlineMenuListWindowMessageHandlers = {
 };
 
 export type InputRef = {
-  [key in CozyContactFieldNames]: HTMLInputElement;
+  key: CozyContactFieldNames | CozyPaperFieldNames;
+  element: HTMLInputElement;
+  fieldQualifier: AutofillFieldQualifierType;
 };
 
 export type InputRefValue = {
-  [key in CozyContactFieldNames | CozyPaperFieldNames]: string;
-} & {
-  label: CozyAutofillOptions["label"];
-  type: CozyAutofillOptions["type"];
+  key: CozyContactFieldNames | CozyPaperFieldNames;
+  value: string;
+  fieldQualifier: AutofillFieldQualifierType;
+};
+
+export type InputValues = {
+  values: InputRefValue[];
+  label?: CozyAutofillOptions["label"];
+  type?: CozyAutofillOptions["type"];
 };
 
 export type EditContactButtonsParams = {

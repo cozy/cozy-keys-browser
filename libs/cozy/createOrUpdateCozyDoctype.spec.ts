@@ -3,7 +3,7 @@ import { IOCozyContact } from "cozy-client/types/types";
 import { AutofillFieldQualifier } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
 
 import { createOrUpdateCozyContact } from "./createOrUpdateCozyDoctype";
-import { COZY_ATTRIBUTES_MAPPING } from "./mapping";
+import { ContactAttributesModel, COZY_ATTRIBUTES_MAPPING, CozyContactFieldNames } from "./mapping";
 
 describe("createOrUpdateCozyContact", () => {
   it("should add a new value to an array field with existing data", async () => {
@@ -22,9 +22,17 @@ describe("createOrUpdateCozyContact", () => {
       ],
     } as unknown as IOCozyContact;
     const fieldQualifier = AutofillFieldQualifier.identityEmail;
-    const cozyAttributeModel = COZY_ATTRIBUTES_MAPPING[fieldQualifier];
-    const newAutofillValue = {
-      value: "jdoe@test.com",
+    const cozyAttributeModels = [
+      COZY_ATTRIBUTES_MAPPING[fieldQualifier],
+    ] as ContactAttributesModel[];
+    const inputValues = {
+      values: [
+        {
+          key: "email" as CozyContactFieldNames,
+          fieldQualifier: "identityEmail",
+          value: "jdoe@test.com",
+        },
+      ],
       type: "work",
       label: "Work",
     };
@@ -50,8 +58,8 @@ describe("createOrUpdateCozyContact", () => {
     };
     const result = await createOrUpdateCozyContact({
       contact,
-      cozyAttributeModel,
-      newAutofillValue,
+      cozyAttributeModels,
+      inputValues,
     });
     expect(result).toEqual(expectedContact);
   });
@@ -64,9 +72,11 @@ describe("createOrUpdateCozyContact", () => {
       },
     } as unknown as IOCozyContact;
     const fieldQualifier = AutofillFieldQualifier.identityEmail;
-    const cozyAttributeModel = COZY_ATTRIBUTES_MAPPING[fieldQualifier];
-    const newAutofillValue = {
-      value: "jdoe@test.com",
+    const cozyAttributeModels = [
+      COZY_ATTRIBUTES_MAPPING[fieldQualifier],
+    ] as ContactAttributesModel[];
+    const inputValues = {
+      values: [{ key: "email" as CozyContactFieldNames, fieldQualifier, value: "jdoe@test.com" }],
       type: "work",
       label: "Work",
     };
@@ -86,8 +96,8 @@ describe("createOrUpdateCozyContact", () => {
     };
     const result = await createOrUpdateCozyContact({
       contact,
-      cozyAttributeModel,
-      newAutofillValue,
+      cozyAttributeModels,
+      inputValues,
     });
     expect(result).toEqual(expectedContact);
   });
@@ -100,9 +110,11 @@ describe("createOrUpdateCozyContact", () => {
       },
     } as unknown as IOCozyContact;
     const fieldQualifier = AutofillFieldQualifier.identityFirstName;
-    const cozyAttributeModel = COZY_ATTRIBUTES_MAPPING[fieldQualifier];
-    const newAutofillValue = {
-      value: "Jane",
+    const cozyAttributeModels = [
+      COZY_ATTRIBUTES_MAPPING[fieldQualifier],
+    ] as ContactAttributesModel[];
+    const inputValues = {
+      values: [{ key: "givenName" as CozyContactFieldNames, fieldQualifier, value: "Jane" }],
     };
     const expectedContact = {
       name: {
@@ -112,8 +124,8 @@ describe("createOrUpdateCozyContact", () => {
     };
     const result = await createOrUpdateCozyContact({
       contact,
-      cozyAttributeModel,
-      newAutofillValue,
+      cozyAttributeModels,
+      inputValues,
     });
     expect(result).toEqual(expectedContact);
   });
@@ -121,9 +133,11 @@ describe("createOrUpdateCozyContact", () => {
   it("should set a new value to an empty non-array field", async () => {
     const contact = {} as unknown as IOCozyContact;
     const fieldQualifier = AutofillFieldQualifier.identityFirstName;
-    const cozyAttributeModel = COZY_ATTRIBUTES_MAPPING[fieldQualifier];
-    const newAutofillValue = {
-      value: "Jane",
+    const cozyAttributeModels = [
+      COZY_ATTRIBUTES_MAPPING[fieldQualifier],
+    ] as ContactAttributesModel[];
+    const inputValues = {
+      values: [{ key: "givenName" as CozyContactFieldNames, fieldQualifier, value: "Jane" }],
     };
     const expectedContact = {
       name: {
@@ -132,8 +146,8 @@ describe("createOrUpdateCozyContact", () => {
     };
     const result = await createOrUpdateCozyContact({
       contact,
-      cozyAttributeModel,
-      newAutofillValue,
+      cozyAttributeModels,
+      inputValues,
     });
     expect(result).toEqual(expectedContact);
   });
