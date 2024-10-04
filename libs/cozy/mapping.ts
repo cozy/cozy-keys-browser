@@ -316,9 +316,6 @@ export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
     doctype: FILES_DOCTYPE,
     path: "metadata.refTaxIncome",
     name: "refTaxIncome",
-    selector: {
-      "metadata.qualification.label": "tax_notice",
-      "metadata.refTaxIncome": { $gt: null }, // some tax notice do not have ref tax income set
-    },
+    selector: { "metadata.qualification.label": "tax_notice" },
   },
 };

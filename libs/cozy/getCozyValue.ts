@@ -172,7 +172,9 @@ export const getAllPapersFromContact = async ({
     { executeFromStore: true },
   );
 
-  const papersFromContact = papers.filter((paper: any) =>
+  const papersWithData = papers.filter((paper: any) => !!_.get(paper, cozyAttributeModel.path));
+
+  const papersFromContact = papersWithData.filter((paper: any) =>
     isPaperFromContact(paper, contactId, contactEmail, me),
   );
 
