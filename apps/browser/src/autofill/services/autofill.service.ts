@@ -1894,11 +1894,6 @@ export default class AutofillService implements AutofillServiceInterface {
   ): Promise<AutofillScript> {
     const fillFields: { [id: string]: AutofillField } = {};
 
-    // Special case because we can have multiple tax notice ref tax income with different dates for a form
-    // like "Revenu fiscal de référence 2022" and "Revenu fiscal de référence 2023" so we need to be able to
-    // fill multiple fields of this type
-    const paperTaxNoticeRefTaxIncomeFillFields: AutofillField[] = [];
-
     pageDetails.fields.forEach((f) => {
       if (
         AutofillService.isExcludedFieldType(f, AutoFillConstants.ExcludedAutofillTypes) ||
@@ -2021,12 +2016,13 @@ export default class AutofillService implements AutofillServiceInterface {
           break;
         }
         if (
+          !fillFields.paperTaxNoticeRefTaxIncome &&
           AutofillService.isFieldMatch(
             f[attr],
             PaperAutoFillConstants.TaxNoticeRefTaxIncomeFieldNames,
           )
         ) {
-          paperTaxNoticeRefTaxIncomeFillFields.push(f);
+          fillFields.paperTaxNoticeRefTaxIncome = f;
           break;
         }
       }
@@ -2230,25 +2226,20 @@ export default class AutofillService implements AutofillServiceInterface {
       );
     }
 
-    if (paperTaxNoticeRefTaxIncomeFillFields.length > 0) {
-      for (const paperTaxNoticeRefTaxIncomeFillField of paperTaxNoticeRefTaxIncomeFillFields) {
-        const paperTaxNoticeRefTaxIncome = await getCozyValue({
-          client,
-          contactId: options.cipher.id,
-          contactEmail: options.cipher.contact.primaryEmail,
-          me: options.cipher.contact.me,
-          field: paperTaxNoticeRefTaxIncomeFillField,
-          fieldQualifier: "paperTaxNoticeRefTaxIncome",
-          cozyAutofillOptions: options.cozyAutofillOptions,
-          filterName: "yearFilter",
-        });
-        this.makeScriptActionWithValue(
-          fillScript,
-          paperTaxNoticeRefTaxIncome,
-          paperTaxNoticeRefTaxIncomeFillField,
-          filledFields,
-        );
-      }
+    if (fillFields.paperTaxNoticeRefTaxIncome) {
+      const paperTaxNoticeRefTaxIncome = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "paperTaxNoticeRefTaxIncome",
+        cozyAutofillOptions: options.cozyAutofillOptions,
+      });
+
+      this.makeScriptActionWithValue(
+        fillScript,
+        paperTaxNoticeRefTaxIncome,
+        fillFields.paperTaxNoticeRefTaxIncome,
+        filledFields,
+      );
     }
 
     return fillScript;

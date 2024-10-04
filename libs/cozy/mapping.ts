@@ -322,12 +322,3 @@ export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
     },
   },
 };
-
-// When a contact has multiple papers matching the mapping, it will by default return the first one
-// Otherwise, we can now use filters to select a paper among other
-export const FILTERS = {
-  yearFilter: {
-    regex: "20[0-9][0-9]", // the value we match in the autofill field
-    attributePath: ["metadata.referencedDate", "metadata.issueDate"], // where we look for the value matched in "regex" attribute
-  },
-};

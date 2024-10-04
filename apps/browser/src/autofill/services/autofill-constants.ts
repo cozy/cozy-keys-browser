@@ -1110,13 +1110,9 @@ export class PaperAutoFillConstants {
   ];
 
   static readonly TaxNoticeRefTaxIncomeFieldNames: string[] = [
-    "revenu",
     "RevenuFiscalRef",
-    "Revenu fiscal référence l'année",
-    "Revenu fiscal référence",
-    "Revenu fiscal annuel",
-    "Reference taxable income",
-    "Annual tax income",
+    "montantMoins1", // for demande-logement-social.gouv.fr
+    "montantMoins2", // for demande-logement-social.gouv.fr
   ];
 }
 
