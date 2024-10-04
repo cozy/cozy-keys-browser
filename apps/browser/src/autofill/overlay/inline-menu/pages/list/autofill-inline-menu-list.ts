@@ -770,7 +770,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     if (isAlreadySelected) {
       radio.setAttribute("checked", "true");
     }
-    radio.style.marginRight = "2rem";
+    radio.classList.add("fill-cipher-contact-radio");
 
     const detailsSpan = document.createElement("span");
     detailsSpan.classList.add("cipher-details");

@@ -201,10 +201,10 @@ body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 3.2rem;
-  height: 3.2rem;
-  margin: 0 1.6rem 0 0.7rem;
-  line-height: 0;
+  width: 2.7rem;
+  height: 2.7rem;
+  margin: 0 1.4rem 0 0.7rem;
+  line-height: 1px;
   background-size: 2.6rem;
   border-radius: 50%;
   color: white;
@@ -545,7 +545,7 @@ body {
   position: absolute;
   bottom: -0.1rem;
   left: 0;
-  width: 6.4rem;
+  width: 5.4rem;
   height: 0.1rem;
   @include themify($themes) {
     background-color: themed("backgroundColor");
@@ -612,6 +612,11 @@ body {
         background: themed("backgroundOffsetColor");
       }
     }
+  }
+
+  .fill-cipher-contact-radio {
+    width: 4rem;
+    margin: 0 0.8rem 0 0;
   }
 
   .fill-cipher-button {
