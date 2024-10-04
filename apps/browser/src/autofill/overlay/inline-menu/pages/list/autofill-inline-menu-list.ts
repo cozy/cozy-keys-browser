@@ -1385,6 +1385,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       this.currentCipherIndex = 0;
       this.ciphersList.innerHTML = "";
     }
+
+    // Extra padding for the "new contact" button
+    if (ciphers[0].type === CipherType.Contact) {
+      this.ciphersList.style.paddingBottom = "48px";
+    }
+
     const lastIndex = Math.min(this.currentCipherIndex + this.showCiphersPerPage, ciphers.length);
 
     for (let cipherIndex = this.currentCipherIndex; cipherIndex < lastIndex; cipherIndex++) {
