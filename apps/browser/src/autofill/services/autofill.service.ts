@@ -762,7 +762,7 @@ export default class AutofillService implements AutofillServiceInterface {
           options,
         );
 
-        fillScript = await this.generateContactAddressFillScript(
+        fillScript = await this.generateContactFillScript(
           fillScript,
           pageDetails,
           filledFields,
@@ -1612,7 +1612,7 @@ export default class AutofillService implements AutofillServiceInterface {
    * @returns {AutofillScript}
    * @private
    */
-  private async generateContactAddressFillScript(
+  private async generateContactFillScript(
     fillScript: AutofillScript,
     pageDetails: AutofillPageDetails,
     filledFields: { [id: string]: AutofillField },
