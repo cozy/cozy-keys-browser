@@ -5,13 +5,11 @@ import * as _ from "lodash";
 import { AutofillFieldQualifierType } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
 import AutofillField from "../../apps/browser/src/autofill/models/autofill-field";
 import { CozyAutofillOptions } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
-import { PaperAutoFillConstants } from "../../apps/browser/src/autofill/services/autofill-constants";
 
 import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "./constants";
 import {
   ContactAttributesModel,
   COZY_ATTRIBUTES_MAPPING,
-  FILTERS,
   isContactAttributesModel,
   isPaperAttributesModel,
   PaperAttributesModel,
@@ -33,10 +31,8 @@ export const getCozyValue = async ({
   contactId,
   contactEmail,
   me,
-  field,
   fieldQualifier,
   cozyAutofillOptions,
-  filterName,
 }: GetCozyValueType): Promise<string | undefined> => {
   const cozyAttributeModel = COZY_ATTRIBUTES_MAPPING[fieldQualifier];
 
@@ -59,8 +55,6 @@ export const getCozyValue = async ({
       me,
       cozyAttributeModel,
       cozyAutofillOptions,
-      field,
-      filterName,
     });
   }
 };
@@ -71,8 +65,6 @@ type GetCozyValueInDataType = {
   contactEmail?: string;
   me?: boolean;
   cozyAutofillOptions?: CozyAutofillOptions;
-  field?: AutofillField;
-  filterName?: string;
 };
 type GetPaperValueInDataType = GetCozyValueInDataType & {
   cozyAttributeModel: PaperAttributesModel;
@@ -113,22 +105,14 @@ const getCozyValueInPaper = async ({
   me,
   cozyAttributeModel,
   cozyAutofillOptions,
-  field,
-  filterName,
 }: GetPaperValueInDataType) => {
-  let filteredPapers = await getAllPapersFromContact({
+  const filteredPapers = await getAllPapersFromContact({
     client,
     contactId,
     contactEmail,
     me,
     cozyAttributeModel,
   });
-
-  if (filterName === "yearFilter") {
-    const yearFilterFunction = makeYearFilterFunction(field);
-
-    filteredPapers = filteredPapers.filter(yearFilterFunction);
-  }
 
   // Select the paper corresponding to the cozyAutofillOptions or the first one
   const selectedPaper = selectPaper({
@@ -282,42 +266,4 @@ export const isPaperFromContact = (
       paper.cozyMetadata.sourceAccountIdentifier === contactEmail) || // konnector login is equal to contact primary email
     !!(paper.cozyMetadata?.sourceAccount && me) // by default, we assign papers to "me"
   );
-};
-
-const makeYearFilterFunction = (field: AutofillField) => {
-  const filter = FILTERS.yearFilter;
-
-  const filterValue = getValueInField(field, filter.regex);
-
-  return (data: any) =>
-    filter.attributePath.some((path) => {
-      let updatedFilterValue = filterValue;
-
-      // Special case because tax_notice papers, for an "Avis d'imposition 2024 sur les revenus 2023" can be found by checking
-      // - "issueDate": "2024-07-08T00:00:00.000Z"
-      // - "referencedDate": "2023-01-01T23:00:00.000Z"
-      if (path === "metadata.issueDate") {
-        updatedFilterValue = (parseInt(updatedFilterValue, 10) + 1).toString();
-      }
-
-      return _.get(data, path)?.toString().indexOf(updatedFilterValue) >= 0;
-    });
-};
-
-const getValueInField = (field: AutofillField, regex: string): any => {
-  for (const paperAttribute of PaperAutoFillConstants.PaperAttributes) {
-    // Special case for demande-logement-social.gouv.fr
-    if (field.htmlID.includes("montantMoins1")) {
-      return 2023;
-    }
-    if (field.htmlID.includes("montantMoins2")) {
-      return 2022;
-    }
-
-    const matches = field[paperAttribute]?.match(regex);
-
-    if (matches) {
-      return matches[0];
-    }
-  }
 };
