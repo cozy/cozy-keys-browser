@@ -511,8 +511,8 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
     try {
       // Cozy customization; send doAutoFill to background because
       // doAutoFill needs a Cozy Client store with all the contacts
-      // and only the background Cozy Client store has them
-      if (this.cipher.type === CipherType.Contact) {
+      // and only the background Cozy Client store has them on Manifest V3
+      if (this.cipher.type === CipherType.Contact && BrowserApi.isManifestVersion(3)) {
         this.messageSender.send("doAutoFill", {
           autofillOptions: {
             tab: this.tab,
