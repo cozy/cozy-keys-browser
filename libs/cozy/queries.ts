@@ -15,6 +15,7 @@ const buildFilesQueryWithQualificationLabel = () => {
     "cozyMetadata.updatedAt",
     "cozyMetadata.createdByApp",
     "cozyMetadata.sourceAccountIdentifier",
+    "cozyMetadata.sourceAccount",
     "cozyMetadata.favorite",
     "created_at",
     "dir_id",

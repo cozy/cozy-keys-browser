@@ -2058,6 +2058,8 @@ export default class AutofillService implements AutofillServiceInterface {
       const paperIdentityCardNumber = await getCozyValue({
         client,
         contactId: options.cipher.id,
+        contactEmail: options.cipher.contact.primaryEmail,
+        me: options.cipher.contact.me,
         fieldQualifier: "paperIdentityCardNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2073,6 +2075,8 @@ export default class AutofillService implements AutofillServiceInterface {
       const paperPassportNumber = await getCozyValue({
         client,
         contactId: options.cipher.id,
+        contactEmail: options.cipher.contact.primaryEmail,
+        me: options.cipher.contact.me,
         fieldQualifier: "paperPassportNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2088,6 +2092,8 @@ export default class AutofillService implements AutofillServiceInterface {
       const paperSocialSecurityNumber = await getCozyValue({
         client,
         contactId: options.cipher.id,
+        contactEmail: options.cipher.contact.primaryEmail,
+        me: options.cipher.contact.me,
         fieldQualifier: "paperSocialSecurityNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2103,6 +2109,8 @@ export default class AutofillService implements AutofillServiceInterface {
       const paperResidencePermitNumber = await getCozyValue({
         client,
         contactId: options.cipher.id,
+        contactEmail: options.cipher.contact.primaryEmail,
+        me: options.cipher.contact.me,
         fieldQualifier: "paperResidencePermitNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2118,6 +2126,8 @@ export default class AutofillService implements AutofillServiceInterface {
       const paperDrivingLicenseNumber = await getCozyValue({
         client,
         contactId: options.cipher.id,
+        contactEmail: options.cipher.contact.primaryEmail,
+        me: options.cipher.contact.me,
         fieldQualifier: "paperDrivingLicenseNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2133,6 +2143,8 @@ export default class AutofillService implements AutofillServiceInterface {
       const paperVehicleRegistrationNumber = await getCozyValue({
         client,
         contactId: options.cipher.id,
+        contactEmail: options.cipher.contact.primaryEmail,
+        me: options.cipher.contact.me,
         fieldQualifier: "paperVehicleRegistrationNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2148,6 +2160,8 @@ export default class AutofillService implements AutofillServiceInterface {
       const paperVehicleRegistrationConfidentialCode = await getCozyValue({
         client,
         contactId: options.cipher.id,
+        contactEmail: options.cipher.contact.primaryEmail,
+        me: options.cipher.contact.me,
         fieldQualifier: "paperVehicleRegistrationConfidentialCode",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2163,6 +2177,8 @@ export default class AutofillService implements AutofillServiceInterface {
       const paperVehicleRegistrationLicensePlateNumber = await getCozyValue({
         client,
         contactId: options.cipher.id,
+        contactEmail: options.cipher.contact.primaryEmail,
+        me: options.cipher.contact.me,
         fieldQualifier: "paperVehicleRegistrationLicensePlateNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2178,6 +2194,8 @@ export default class AutofillService implements AutofillServiceInterface {
       const paperBankIbanNumber = await getCozyValue({
         client,
         contactId: options.cipher.id,
+        contactEmail: options.cipher.contact.primaryEmail,
+        me: options.cipher.contact.me,
         fieldQualifier: "paperBankIbanNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2193,6 +2211,8 @@ export default class AutofillService implements AutofillServiceInterface {
       const paperBankBicNumber = await getCozyValue({
         client,
         contactId: options.cipher.id,
+        contactEmail: options.cipher.contact.primaryEmail,
+        me: options.cipher.contact.me,
         fieldQualifier: "paperBankBicNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2208,6 +2228,8 @@ export default class AutofillService implements AutofillServiceInterface {
       const paperGrossSalaryAmount = await getCozyValue({
         client,
         contactId: options.cipher.id,
+        contactEmail: options.cipher.contact.primaryEmail,
+        me: options.cipher.contact.me,
         fieldQualifier: "paperGrossSalaryAmount",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2223,6 +2245,8 @@ export default class AutofillService implements AutofillServiceInterface {
       const paperNetSalaryAmount = await getCozyValue({
         client,
         contactId: options.cipher.id,
+        contactEmail: options.cipher.contact.primaryEmail,
+        me: options.cipher.contact.me,
         fieldQualifier: "paperNetSalaryAmount",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2238,6 +2262,8 @@ export default class AutofillService implements AutofillServiceInterface {
       const paperTaxNoticeNumber = await getCozyValue({
         client,
         contactId: options.cipher.id,
+        contactEmail: options.cipher.contact.primaryEmail,
+        me: options.cipher.contact.me,
         fieldQualifier: "paperTaxNoticeNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2253,6 +2279,8 @@ export default class AutofillService implements AutofillServiceInterface {
       const paperTaxNoticeRefTaxIncome = await getCozyValue({
         client,
         contactId: options.cipher.id,
+        contactEmail: options.cipher.contact.primaryEmail,
+        me: options.cipher.contact.me,
         fieldQualifier: "paperTaxNoticeRefTaxIncome",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
