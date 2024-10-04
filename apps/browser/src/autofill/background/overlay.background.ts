@@ -80,7 +80,6 @@ import { COZY_ATTRIBUTES_MAPPING, isPaperAttributesModel } from "../../../../../
 import { createOrUpdateCozyDoctype } from "../../../../../libs/cozy/createOrUpdateCozyDoctype";
 import { getCozyValue, getAllPapersFromContact } from "../../../../../libs/cozy/getCozyValue";
 import _ from "lodash";
-import { FILES_DOCTYPE } from "../../../../../libs/cozy/constants";
 import {
   buildAddressObjectFromInputValues,
   cleanFormattedAddress,
