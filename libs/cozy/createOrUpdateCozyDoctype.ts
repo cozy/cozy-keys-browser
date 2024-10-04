@@ -6,6 +6,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
+import { AutofillFieldQualifierType } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
 import type { InputValues } from "../../apps/browser/src/autofill/overlay/inline-menu/abstractions/autofill-inline-menu-list";
 
 import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "./constants";
@@ -48,7 +49,7 @@ export const createOrUpdateCozyDoctype = async ({
   logService,
 }: CreateOrUpdateCozyDoctypeType) => {
   const cozyAttributeModels = inputValues.values.map(
-    ({ fieldQualifier }) => COZY_ATTRIBUTES_MAPPING[fieldQualifier],
+    ({ fieldQualifier }) => COZY_ATTRIBUTES_MAPPING[fieldQualifier as AutofillFieldQualifierType],
   );
 
   if (cozyAttributeModels.length === 0) {
@@ -108,7 +109,8 @@ export const createOrUpdateCozyContact = async ({
   }
 
   for (const inputValue of inputValues.values) {
-    const cozyAttributeModel = COZY_ATTRIBUTES_MAPPING[inputValue.fieldQualifier];
+    const cozyAttributeModel =
+      COZY_ATTRIBUTES_MAPPING[inputValue.fieldQualifier as AutofillFieldQualifierType];
 
     if (cozyAttributeModel.isPathArray) {
       const arrayData = _.get(contact, cozyAttributeModel.path) || [];
