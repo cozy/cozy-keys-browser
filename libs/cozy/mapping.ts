@@ -76,6 +76,7 @@ export type CozyContactFieldNames =
   | "additionalName"
   | "familyName"
   | "company"
+  | "jobTitle"
   | "email"
   | "birthday";
 
@@ -166,6 +167,11 @@ export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
     name: "country",
     isPathArray: true,
     pathAttribute: "country",
+  },
+  [AutofillFieldQualifier.contactJobTitle]: {
+    doctype: CONTACTS_DOCTYPE,
+    name: "jobTitle",
+    path: "jobTitle",
   },
   [AutofillFieldQualifier.contactBirthDay]: {
     doctype: CONTACTS_DOCTYPE,

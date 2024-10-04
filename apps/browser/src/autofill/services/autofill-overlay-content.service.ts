@@ -170,6 +170,8 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       this.inlineMenuFieldQualificationService.isFieldForIdentityUsername,
     [AutofillFieldQualifier.password]: this.inlineMenuFieldQualificationService.isNewPasswordField,
     // Cozy customization
+    [AutofillFieldQualifier.contactJobTitle]:
+      this.inlineMenuFieldQualificationService.isFieldForContactJobTitle,
     [AutofillFieldQualifier.contactBirthDay]:
       this.inlineMenuFieldQualificationService.isFieldForContactBirthDay,
     [AutofillFieldQualifier.contactBirthMonth]:

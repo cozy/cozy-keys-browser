@@ -762,7 +762,7 @@ export default class AutofillService implements AutofillServiceInterface {
           options,
         );
 
-        fillScript = await this.generateContactAddressFillScript(
+        fillScript = await this.generateContactFillScript(
           fillScript,
           pageDetails,
           filledFields,
@@ -1612,7 +1612,7 @@ export default class AutofillService implements AutofillServiceInterface {
    * @returns {AutofillScript}
    * @private
    */
-  private async generateContactAddressFillScript(
+  private async generateContactFillScript(
     fillScript: AutofillScript,
     pageDetails: AutofillPageDetails,
     filledFields: { [id: string]: AutofillField },
@@ -1633,6 +1633,13 @@ export default class AutofillService implements AutofillServiceInterface {
         // eslint-disable-next-line
         if (!f.hasOwnProperty(attr) || !f[attr] || !f.viewable) {
           continue;
+        }
+        if (
+          !fillFields.contactJobTitle &&
+          AutofillService.isFieldMatch(f[attr], ContactAutoFillConstants.ContactJobTitleFieldNames)
+        ) {
+          fillFields.contactJobTitle = f;
+          break;
         }
         if (
           !fillFields.contactBirthDay &&
@@ -1711,6 +1718,22 @@ export default class AutofillService implements AutofillServiceInterface {
     });
 
     const client = await this.cozyClientService.getClientInstance();
+
+    if (fillFields.contactJobTitle) {
+      const contactJobTitle = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "contactJobTitle",
+        cozyAutofillOptions: options.cozyAutofillOptions,
+      });
+
+      this.makeScriptActionWithValue(
+        fillScript,
+        contactJobTitle,
+        fillFields.contactJobTitle,
+        filledFields,
+      );
+    }
 
     if (fillFields.contactBirthDay) {
       const contactBirthDay = await getCozyValue({
