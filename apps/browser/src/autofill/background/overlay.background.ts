@@ -870,7 +870,11 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       pageDetails: Array.from(pageDetails.values()),
       fillNewPassword: true,
       allowTotpAutofill: true,
-      cozyAutofillOptions,
+      cozyAutofillOptions: {
+        ...cozyAutofillOptions,
+        // Useful for Contacts CypherType
+        focusedFieldData: this.focusedFieldData,
+      },
     });
 
     // Cozy customization - Remembering the last filled cipher ID allows to open a custom UI in the inline menu but it works only for contacts.

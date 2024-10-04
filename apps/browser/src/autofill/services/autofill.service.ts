@@ -727,6 +727,19 @@ export default class AutofillService implements AutofillServiceInterface {
         //  For papers, we only use the custom fields matching
         break;
       case CipherType.Contact:
+        // If we have two fields of the same type, for example tel1 and tel2.
+        // If we focus on tel2, we ignore tel1 and autofill tel2 and the rest of the form.
+        if (options.cozyAutofillOptions?.focusedFieldData) {
+          pageDetails = {
+            ...pageDetails,
+            fields: pageDetails.fields.filter(
+              (field) =>
+                field.fieldQualifier !==
+                  options.cozyAutofillOptions?.focusedFieldData.fieldQualifier || // on garde tous les champs d'un type autre que le champ focus
+                field.htmlID === options.cozyAutofillOptions?.focusedFieldData.fieldHtmlID, // par contre pour les champs du meme type que le champ focus, on garde que celui focus
+            ),
+          };
+        }
         // For contacts, we create an IdentityView with the contact content to leverage the generateIdentityFillScript
         try {
           const client = await this.cozyClientService.getClientInstance();
