@@ -858,6 +858,10 @@ export class ContactAutoFillConstants {
     "data-recurly",
   ];
 
+  static readonly ContactJobTitleFieldNames: string[] = [
+    "situationProfessionnelles", // for demande-logement-social.gouv.fr
+  ];
+
   static readonly ContactBirthDayFieldNames: string[] = [
     "dateNaissanceJour", // for demande-logement-social.gouv.fr
   ];

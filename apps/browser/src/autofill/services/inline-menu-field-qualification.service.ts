@@ -140,6 +140,7 @@ export class InlineMenuFieldQualificationService
       ...IdentityAutoFillConstants.EmailFieldNames,
       ...IdentityAutoFillConstants.UserNameFieldNames,
       // Cozy customization
+      ...ContactAutoFillConstants.ContactJobTitleFieldNames,
       ...ContactAutoFillConstants.ContactBirthDayFieldNames,
       ...ContactAutoFillConstants.ContactBirthMonthFieldNames,
       ...ContactAutoFillConstants.ContactBirthYearFieldNames,
@@ -843,6 +844,22 @@ export class InlineMenuFieldQualificationService
   };
 
   // Cozy customization
+
+  /**
+   * Validates the provided field as a Cozy contact job title.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForContactJobTitle = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(
+        field,
+        ContactAutoFillConstants.ContactJobTitleFieldNames,
+        false,
+      )
+    );
+  };
 
   /**
    * Validates the provided field as a Cozy contact birth day.

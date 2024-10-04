@@ -1635,6 +1635,13 @@ export default class AutofillService implements AutofillServiceInterface {
           continue;
         }
         if (
+          !fillFields.contactJobTitle &&
+          AutofillService.isFieldMatch(f[attr], ContactAutoFillConstants.ContactJobTitleFieldNames)
+        ) {
+          fillFields.contactJobTitle = f;
+          break;
+        }
+        if (
           !fillFields.contactBirthDay &&
           AutofillService.isFieldMatch(f[attr], ContactAutoFillConstants.ContactBirthDayFieldNames)
         ) {
@@ -1711,6 +1718,22 @@ export default class AutofillService implements AutofillServiceInterface {
     });
 
     const client = await this.cozyClientService.getClientInstance();
+
+    if (fillFields.contactJobTitle) {
+      const contactJobTitle = await getCozyValue({
+        client,
+        contactId: options.cipher.id,
+        fieldQualifier: "contactJobTitle",
+        cozyAutofillOptions: options.cozyAutofillOptions,
+      });
+
+      this.makeScriptActionWithValue(
+        fillScript,
+        contactJobTitle,
+        fillFields.contactJobTitle,
+        filledFields,
+      );
+    }
 
     if (fillFields.contactBirthDay) {
       const contactBirthDay = await getCozyValue({
