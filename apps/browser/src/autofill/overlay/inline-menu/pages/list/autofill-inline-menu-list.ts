@@ -53,17 +53,14 @@ import {
 } from "../../../../../autofill/types";
 import {
   COZY_ATTRIBUTES_MAPPING,
-  CozyContactFieldNames,
   cozypaperFieldNames,
 } from "../../../../../../../../libs/cozy/mapping";
 import { CozyAutofillOptions } from "src/autofill/services/abstractions/autofill.service";
-import { fields } from "../../../../../../../../libs/cozy/contact.lib";
 /* eslint-enable */
 /* end Cozy imports */
 
 export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private inlineMenuListContainer: HTMLDivElement;
-  private actionMenuContainer: HTMLDivElement;
   private resizeObserver: ResizeObserver;
   private eventHandlersMemo: { [key: string]: EventListener } = {};
   private ciphers: InlineMenuCipherData[] = [];
