@@ -177,13 +177,29 @@ export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
     doctype: CONTACTS_DOCTYPE,
     name: "birthday",
     path: "birthday",
-    postProcess: (data) => (data ? new Date(data).getDate().toString() : undefined),
+    postProcess: (data) => {
+      if (data) {
+        const day = new Date(data).getDate().toString();
+
+        return day.length === 1 ? `0${day}` : day;
+      }
+
+      return undefined;
+    },
   },
   [AutofillFieldQualifier.contactBirthMonth]: {
     doctype: CONTACTS_DOCTYPE,
     name: "birthday",
     path: "birthday",
-    postProcess: (data) => (data ? new Date(data).getMonth().toString() : undefined),
+    postProcess: (data) => {
+      if (data) {
+        const month = (new Date(data).getMonth() + 1).toString();
+
+        return month.length === 1 ? `0${month}` : month;
+      }
+
+      return undefined;
+    },
   },
   [AutofillFieldQualifier.contactBirthYear]: {
     doctype: CONTACTS_DOCTYPE,
