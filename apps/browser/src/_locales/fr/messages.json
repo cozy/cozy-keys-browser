@@ -4681,6 +4681,9 @@
   "autofill_identityLastName": {
     "message": "Saisir le nom"
   },
+  "autofill_contactSurname": {
+    "message": "Saisir le nom d'usage"
+  },
   "autofill_identityFullName": {
     "message": "Saisir le nom complet"
   },

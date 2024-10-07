@@ -136,6 +136,8 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
     [AutofillFieldQualifier.cardCvv]: this.inlineMenuFieldQualificationService.isFieldForCardCvv,
   };
   private readonly identityFieldQualifiers: Record<string, CallableFunction> = {
+    [AutofillFieldQualifier.contactSurname]:
+      this.inlineMenuFieldQualificationService.isFieldForContactSurname,
     [AutofillFieldQualifier.identityTitle]:
       this.inlineMenuFieldQualificationService.isFieldForIdentityTitle,
     [AutofillFieldQualifier.identityFirstName]:

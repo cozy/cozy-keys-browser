@@ -856,6 +856,11 @@ export class ContactAutoFillConstants {
     "data-recurly",
   ];
 
+  static readonly ContactSurnameFieldNames: string[] = [
+    "surname",
+    "usage", // for demande-logement-social.gouv.fr
+  ];
+
   static readonly ContactJobTitleFieldNames: string[] = [
     "situationProfessionnelles", // for demande-logement-social.gouv.fr
   ];

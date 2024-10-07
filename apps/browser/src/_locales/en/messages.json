@@ -4666,6 +4666,9 @@
   "autofill_identityLastName": {
     "message": "Autofill last name"
   },
+  "autofill_contactSurname": {
+    "message": "Autofill surname"
+  },
   "autofill_identityFullName": {
     "message": "Autofill full name"
   },

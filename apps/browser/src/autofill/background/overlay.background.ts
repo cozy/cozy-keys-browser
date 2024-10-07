@@ -1724,6 +1724,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         autofill_identityFirstName: this.i18nService.translate("autofill_identityFirstName"),
         autofill_identityMiddleName: this.i18nService.translate("autofill_identityMiddleName"),
         autofill_identityLastName: this.i18nService.translate("autofill_identityLastName"),
+        autofill_contactSurname: this.i18nService.translate("autofill_contactSurname"),
         autofill_identityFullName: this.i18nService.translate("autofill_identityFullName"),
         autofill_identityAddress1: this.i18nService.translate("autofill_identityAddress1"),
         autofill_identityAddress2: this.i18nService.translate("autofill_identityAddress2"),
