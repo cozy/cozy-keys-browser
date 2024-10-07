@@ -347,6 +347,7 @@ export class IdentityAutoFillConstants {
     "vorname",
     // French
     "prenom",
+    "prenoms", // for demande-logement-social.gouv.fr
   ];
 
   static readonly MiddlenameFieldNames: string[] = [
