@@ -75,6 +75,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private fieldValue: string;
   private fieldHtmlID: string;
   private contactSearchInputElement: HTMLInputElement;
+  private isSearchFocused = false;
   // Cozy customization end
   private showInlineMenuAccountCreation: boolean;
   private readonly showCiphersPerPage = 6;
@@ -647,6 +648,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     if (this.isFilledByContactCipher()) {
       this.inlineMenuListContainer.appendChild(this.buildNewItemButton());
       this.newItemButtonElement.classList.add("inline-menu-list-actions--bottom");
+      if (this.isSearchFocused) {
+        this.contactSearchInputElement.focus();
+      }
     }
     // Cozy customization end
 
@@ -691,14 +695,13 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   }
 
   private handleNewSearch = () => {
-    return this.useEventHandlersMemo(
-      () =>
-        this.postMessageToParent({
-          command: "inlineMenuSearchContact",
-          searchValue: this.contactSearchInputElement.value,
-        }),
-      `inline-menu-search-contact-handler`,
-    );
+    return this.useEventHandlersMemo(() => {
+      this.isSearchFocused = true;
+      this.postMessageToParent({
+        command: "inlineMenuSearchContact",
+        searchValue: this.contactSearchInputElement.value,
+      });
+    }, `inline-menu-search-contact-handler`);
   };
 
   /**
