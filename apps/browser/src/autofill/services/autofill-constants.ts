@@ -512,8 +512,6 @@ export class IdentityAutoFillConstants {
     "organization",
     "organization-name",
     "entreprise",
-    // German
-    "firma",
   ];
 
   static readonly IsoCountries: { [id: string]: string } = {
