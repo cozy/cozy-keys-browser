@@ -11,13 +11,17 @@ No reconciliation is possible
 -->
   <header>
     <div class="left">
-      <a routerLink="/home">{{ "cancel" | i18n }}</a>
+      <button type="button" routerLink="/home">
+        <span>{{ "cancel" | i18n }}</span>
+      </button>
     </div>
     <h1 class="center">
       <span class="title">{{ "appName" | i18n }}</span>
     </h1>
-    <div class="right" style="visibility: hidden">
-      <a routerLink="/home">{{ "cancel" | i18n }}</a>
+    <div class="right">
+      <button type="button" routerLink="/home" style="visibility: hidden">
+        <span>{{ "cancel" | i18n }}</span>
+      </button>
     </div>
   </header>
   <main tabindex="-1">
