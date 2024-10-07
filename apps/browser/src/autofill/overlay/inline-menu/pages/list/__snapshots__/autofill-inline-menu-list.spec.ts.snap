@@ -217,7 +217,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-4"
       >
         <button
           aria-label="fillCredentialsFor website login 1"
@@ -325,7 +325,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username1"
@@ -384,7 +384,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username2"
@@ -442,7 +442,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: "
@@ -487,7 +487,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username4"
@@ -561,7 +561,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username5"
@@ -620,7 +620,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username6"
@@ -691,7 +691,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username1"
@@ -750,7 +750,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username2"
@@ -808,7 +808,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: "
@@ -853,7 +853,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username4"
@@ -927,7 +927,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username5"
@@ -986,7 +986,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username6"
@@ -1057,7 +1057,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username1"
@@ -1116,7 +1116,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username2"
@@ -1174,7 +1174,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: "
@@ -1219,7 +1219,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username4"
@@ -1293,7 +1293,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username5"
@@ -1352,7 +1352,7 @@ exports[`AutofillInlineMenuList initAutofillInlineMenuList the list of ciphers f
       role="listitem"
     >
       <div
-        class="cipher-container"
+        class="cipher-container cipher-container--type-1"
       >
         <button
           aria-description="username: username6"

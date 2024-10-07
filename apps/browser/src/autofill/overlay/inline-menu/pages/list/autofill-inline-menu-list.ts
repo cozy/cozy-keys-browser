@@ -1448,7 +1448,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const viewCipherElement = this.buildViewCipherElement(cipher);
 
     const cipherContainerElement = globalThis.document.createElement("div");
-    cipherContainerElement.classList.add("cipher-container");
+    cipherContainerElement.classList.add(
+      "cipher-container",
+      `cipher-container--type-${cipher.type}`,
+    );
     cipherContainerElement.append(fillCipherElement, viewCipherElement);
 
     const inlineMenuListActionsItem = globalThis.document.createElement("li");
