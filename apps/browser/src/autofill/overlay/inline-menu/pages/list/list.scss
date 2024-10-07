@@ -585,6 +585,10 @@ body {
       }
     }
 
+    &--type-1 {
+      height: 54px; // Cozy customization; force height to cipher type Login
+    }
+
     &--empty {
       padding: 0 0.3rem 0 0.7rem;
     }
