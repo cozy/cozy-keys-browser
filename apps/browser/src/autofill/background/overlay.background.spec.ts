@@ -66,6 +66,7 @@ import {
   SubFrameOffsetData,
   SubFrameOffsetsForTab,
 } from "./abstractions/overlay.background";
+import NotificationBackground from "./notification.background";
 import { OverlayBackground } from "./overlay.background";
 
 describe("OverlayBackground", () => {
@@ -89,6 +90,7 @@ describe("OverlayBackground", () => {
   let selectedThemeMock$: BehaviorSubject<ThemeType>;
   let themeStateService: MockProxy<ThemeStateService>;
   let cozyClientService: MockProxy<CozyClientService>;
+  let notificationBackgroundService: MockProxy<NotificationBackground>;
   let overlayBackground: OverlayBackground;
   let portKeyForTabSpy: Record<number, string>;
   let pageDetailsForTabSpy: PageDetailsForTab;
@@ -168,6 +170,7 @@ describe("OverlayBackground", () => {
       platformUtilsService,
       themeStateService,
       cozyClientService,
+      notificationBackgroundService,
     );
     portKeyForTabSpy = overlayBackground["portKeyForTab"];
     pageDetailsForTabSpy = overlayBackground["pageDetailsForTab"];

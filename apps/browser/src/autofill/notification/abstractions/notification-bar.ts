@@ -4,6 +4,8 @@ type NotificationBarIframeInitData = {
   theme?: string;
   removeIndividualVault?: boolean;
   importType?: string;
+  paperSavedId?: string;
+  paperSavedQualification?: string;
 };
 
 type NotificationBarWindowMessage = {

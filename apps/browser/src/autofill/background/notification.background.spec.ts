@@ -17,6 +17,7 @@ import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 import { CipherService } from "@bitwarden/common/vault/services/cipher.service";
 import { FolderService } from "@bitwarden/common/vault/services/folder/folder.service";
 
+import { CozyClientService } from "src/popup/services/cozyClient.service";
 import { KonnectorsService } from "src/popup/services/konnectors.service";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
@@ -52,6 +53,7 @@ describe("NotificationBackground", () => {
   const policyService = mock<PolicyService>();
   const folderService = mock<FolderService>();
   const konnectorsService = mock<KonnectorsService>();
+  const cozyClientService = mock<CozyClientService>();
   const userNotificationSettingsService = mock<UserNotificationSettingsService>();
   const domainSettingsService = mock<DomainSettingsService>();
   const environmentService = mock<EnvironmentService>();
@@ -67,6 +69,7 @@ describe("NotificationBackground", () => {
       policyService,
       folderService,
       konnectorsService,
+      cozyClientService,
       userNotificationSettingsService,
       domainSettingsService,
       environmentService,

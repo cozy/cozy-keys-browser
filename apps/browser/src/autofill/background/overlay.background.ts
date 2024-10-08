@@ -84,6 +84,7 @@ import {
   buildAddressObjectFromInputValues,
   cleanFormattedAddress,
 } from "../../../../../libs/cozy/contact.helper";
+import NotificationBackground from "./notification.background";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -199,6 +200,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     private platformUtilsService: PlatformUtilsService,
     private themeStateService: ThemeStateService,
     private cozyClientService: CozyClientService,
+    private notificationBackground: NotificationBackground,
   ) {
     this.initOverlayEventObservables();
   }
@@ -1042,12 +1044,17 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       const client = await this.cozyClientService.getClientInstance();
       const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
 
-      await createOrUpdateCozyDoctype({
+      const createdOrUpdatedCozyDoctype = await createOrUpdateCozyDoctype({
         client,
         cipher,
         inputValues,
         i18nService: this.i18nService,
         logService: this.logService,
+      });
+
+      await this.notificationBackground.paperSaved(port.sender.tab, {
+        paperSavedId: createdOrUpdatedCozyDoctype._id,
+        paperSavedQualification: createdOrUpdatedCozyDoctype.metadata.qualification.label,
       });
 
       const isAddress = inputValues.values.some((inputValue) => inputValue.key === "street");

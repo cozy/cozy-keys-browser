@@ -979,6 +979,15 @@
     "message": "Efface automatiquement les valeurs copiées de votre presse-papiers.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
+  "notificationPaperSavedDesc": {
+    "message": "Un nouveau document avec l'information saisie vient d'être ajouté dans l'application Mes Papiers de votre Cozy."
+  },
+  "notificationPaperSavedUnderstood": {
+    "message": "J'ai compris"
+  },
+  "notificationPaperSavedSee": {
+    "message": "Voir le document"
+  },
   "notificationAddDesc": {
     "message": "Enregistrer le mot de passe dans mon Cozy ?"
   },

@@ -32,6 +32,7 @@ import { NotificationQueueMessageType } from "../enums/notification-queue-messag
 import { AutofillService } from "../services/abstractions/autofill.service";
 
 import {
+  AddPaperSavedQueueMessage,
   AddChangePasswordQueueMessage,
   AddLoginQueueMessage,
   AddRequestFilelessImportQueueMessage,
@@ -48,6 +49,7 @@ import { OverlayBackgroundExtensionMessage } from "./abstractions/overlay.backgr
 // Cozy Imports
 /* eslint-disable */
 import { KonnectorsService } from "src/popup/services/konnectors.service";
+import { CozyClientService } from "src/popup/services/cozyClient.service";
 /* eslint-enable */
 // End Cozy imports
 
@@ -66,6 +68,7 @@ export default class NotificationBackground {
     bgCloseNotificationBar: ({ sender }) => this.handleCloseNotificationBarMessage(sender),
     bgAdjustNotificationBar: ({ message, sender }) =>
       this.handleAdjustNotificationBarMessage(message, sender),
+    bgRedirectToCozy: ({ message, sender }) => this.redirectToCozy(message, sender),
     bgAddLogin: ({ message, sender }) => this.addLogin(message, sender),
     bgChangedPassword: ({ message, sender }) => this.changedPassword(message, sender),
     bgRemoveTabFromNotificationQueue: ({ sender }) =>
@@ -91,6 +94,7 @@ export default class NotificationBackground {
     private policyService: PolicyService,
     private folderService: FolderService,
     private konnectorsService: KonnectorsService,
+    private cozyClientService: CozyClientService,
     private userNotificationSettingsService: UserNotificationSettingsServiceAbstraction,
     private domainSettingsService: DomainSettingsService,
     private environmentService: EnvironmentService,
@@ -197,6 +201,12 @@ export default class NotificationBackground {
     };
 
     switch (notificationType) {
+      // Cozy customization; paper saved notification
+      case NotificationQueueMessageType.PaperSaved:
+        typeData.paperSavedId = notificationQueueMessage.paperSavedId;
+        typeData.paperSavedQualification = notificationQueueMessage.paperSavedQualification;
+        break;
+      // Cozy customization end;
       case NotificationQueueMessageType.AddLogin:
         typeData.removeIndividualVault = await this.removeIndividualVault();
         break;
@@ -372,6 +382,65 @@ export default class NotificationBackground {
       forms: forms,
     });
   }
+
+  // Cozy customization; paper saved notification
+  /**
+   * Sets up a notification to inform the user a paper has been saved.
+   *
+   * @param tab - The tab that the message was sent from
+   */
+  async paperSaved(tab: chrome.tabs.Tab, options: any) {
+    const currentAuthStatus = await this.authService.getAuthStatus();
+
+    if (currentAuthStatus !== AuthenticationStatus.Unlocked || this.notificationQueue.length) {
+      return;
+    }
+
+    const loginDomain = Utils.getDomain(tab.url);
+
+    if (loginDomain) {
+      await this.pushPaperSavedToQueue(loginDomain, options, tab);
+    }
+  }
+
+  private async pushPaperSavedToQueue(loginDomain: string, options: any, tab: chrome.tabs.Tab) {
+    this.removeTabFromNotificationQueue(tab);
+    const message: AddPaperSavedQueueMessage = {
+      type: NotificationQueueMessageType.PaperSaved,
+      domain: loginDomain,
+      tab: tab,
+      expires: new Date(new Date().getTime() + 0.5 * 60000), // 30 seconds
+      wasVaultLocked: false,
+      paperSavedId: options.paperSavedId,
+      paperSavedQualification: options.paperSavedQualification,
+    };
+    await this.sendNotificationQueueMessage(tab, message);
+  }
+
+  /**
+   * Adds a login message to the notification queue, prompting the user to save
+   * the login if it does not already exist in the vault. If the cipher exists
+   * but the password has changed, the user will be prompted to update the password.
+   *
+   * @param message - The message to add to the queue
+   */
+  private async redirectToCozy(
+    message: NotificationBackgroundExtensionMessage,
+    sender: chrome.runtime.MessageSender,
+  ) {
+    const authStatus = await this.authService.getAuthStatus();
+    if (authStatus === AuthenticationStatus.LoggedOut) {
+      return;
+    }
+
+    const tabDomain = Utils.getDomain(sender.tab.url);
+    if (tabDomain == null) {
+      return;
+    }
+
+    BrowserApi.createNewTab(this.cozyClientService.getAppURL(message.to, message.hash), true);
+  }
+  // Cozy customization end;
 
   /**
    * Sets up a notification to unlock the vault when the user

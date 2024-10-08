@@ -1111,6 +1111,7 @@ export default class MainBackground {
         this.policyService,
         this.folderService,
         this.konnectorsService,
+        this.cozyClientService,
         this.userNotificationSettingsService,
         this.domainSettingsService,
         this.environmentService,
@@ -1658,6 +1659,7 @@ export default class MainBackground {
         this.platformUtilsService,
         this.themeStateService,
         this.cozyClientService,
+        this.notificationBackground,
       );
     }
 
