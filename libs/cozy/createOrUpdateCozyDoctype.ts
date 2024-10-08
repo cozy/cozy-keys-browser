@@ -47,7 +47,7 @@ export const createOrUpdateCozyDoctype = async ({
   inputValues,
   i18nService,
   logService,
-}: CreateOrUpdateCozyDoctypeType) => {
+}: CreateOrUpdateCozyDoctypeType): Promise<any> => {
   const cozyAttributeModels = inputValues.values.map(
     ({ fieldQualifier }) => COZY_ATTRIBUTES_MAPPING[fieldQualifier as AutofillFieldQualifierType],
   );
@@ -78,7 +78,9 @@ export const createOrUpdateCozyDoctype = async ({
       inputValues,
     });
 
-    await client.save(updatedContact);
+    const { data: res } = await client.save(updatedContact);
+
+    return res;
   } else if (arePaperAttributesModels(cozyAttributeModels)) {
     // only create for the moment
     const createdPaper = await createOrUpdateCozyPaper({
@@ -89,7 +91,9 @@ export const createOrUpdateCozyDoctype = async ({
       contact,
     });
 
-    await client.save(createdPaper);
+    const { data: res } = await client.save(createdPaper);
+
+    return res;
   }
 };
 
