@@ -513,8 +513,6 @@ export class IdentityAutoFillConstants {
     "organization",
     "organization-name",
     "entreprise",
-    // German
-    "firma",
   ];
 
   static readonly IsoCountries: { [id: string]: string } = {
@@ -857,6 +855,11 @@ export class ContactAutoFillConstants {
     "label-left",
     "label-top",
     "data-recurly",
+  ];
+
+  static readonly ContactSurnameFieldNames: string[] = [
+    "surname",
+    "usage", // for demande-logement-social.gouv.fr
   ];
 
   static readonly ContactJobTitleFieldNames: string[] = [

@@ -72,6 +72,7 @@ export class InlineMenuFieldQualificationService
   private identityFullNameAutocompleteValue = "name";
   private identityFirstNameAutocompleteValue = "given-name";
   private identityMiddleNameAutocompleteValue = "additional-name";
+  private identitySurnameAutocompleteValue = "surname";
   private identityLastNameAutocompleteValue = "family-name";
   private identityNameAutocompleteValues = new Set([
     this.identityFullNameAutocompleteValue,
@@ -79,6 +80,7 @@ export class InlineMenuFieldQualificationService
     this.identityFirstNameAutocompleteValue,
     this.identityMiddleNameAutocompleteValue,
     this.identityLastNameAutocompleteValue,
+    this.identitySurnameAutocompleteValue,
     "honorific-suffix",
     "nickname",
   ]);
@@ -140,6 +142,7 @@ export class InlineMenuFieldQualificationService
       ...IdentityAutoFillConstants.EmailFieldNames,
       ...IdentityAutoFillConstants.UserNameFieldNames,
       // Cozy customization
+      ...ContactAutoFillConstants.ContactSurnameFieldNames,
       ...ContactAutoFillConstants.ContactJobTitleFieldNames,
       ...ContactAutoFillConstants.ContactBirthDayFieldNames,
       ...ContactAutoFillConstants.ContactBirthMonthFieldNames,
@@ -844,6 +847,18 @@ export class InlineMenuFieldQualificationService
   };
 
   // Cozy customization
+
+  /**
+   * Validates the provided field as a Cozy contact surname.
+   *
+   * @param field - The field to validate
+   */
+  isFieldForContactSurname = (field: AutofillField): boolean => {
+    return (
+      !this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues) &&
+      this.keywordsFoundInFieldData(field, ContactAutoFillConstants.ContactSurnameFieldNames, false)
+    );
+  };
 
   /**
    * Validates the provided field as a Cozy contact job title.

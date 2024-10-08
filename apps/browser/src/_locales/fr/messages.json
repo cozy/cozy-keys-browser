@@ -4681,6 +4681,24 @@
   "autofill_identityLastName": {
     "message": "Saisir le nom"
   },
+  "autofill_contactSurname": {
+    "message": "Saisir le nom d'usage"
+  },
+  "autofill_contactJobTitle": {
+    "message": "Saisir la profession"
+  },
+  "autofill_contactBirthDay": {
+    "message": "Saisir le jour de naissance"
+  },
+  "autofill_contactBirthMonth": {
+    "message": "Saisir le mois de naissance"
+  },
+  "autofill_contactBirthYear": {
+    "message": "Saisir l'année de naissance"
+  },
+  "autofill_addressNumber": {
+    "message": "Saisir le numéro de voie"
+  },
   "autofill_identityFullName": {
     "message": "Saisir le nom complet"
   },

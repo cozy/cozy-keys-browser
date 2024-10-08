@@ -4666,6 +4666,24 @@
   "autofill_identityLastName": {
     "message": "Autofill last name"
   },
+  "autofill_contactSurname": {
+    "message": "Autofill surname"
+  },
+  "autofill_contactJobTitle": {
+    "message": "Autofill job title"
+  },
+  "autofill_contactBirthDay": {
+    "message": "Autofill birth day"
+  },
+  "autofill_contactBirthMonth": {
+    "message": "Autofill birth month"
+  },
+  "autofill_contactBirthYear": {
+    "message": "Autofill birth year"
+  },
+  "autofill_addressNumber": {
+    "message": "Autofill address number"
+  },
   "autofill_identityFullName": {
     "message": "Autofill full name"
   },

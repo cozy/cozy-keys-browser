@@ -75,6 +75,7 @@ export type CozyContactFieldNames =
   | "givenName"
   | "additionalName"
   | "familyName"
+  | "surname"
   | "company"
   | "jobTitle"
   | "email"
@@ -113,6 +114,11 @@ export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
     doctype: CONTACTS_DOCTYPE,
     name: "familyName",
     path: "name.familyName",
+  },
+  [AutofillFieldQualifier.contactSurname]: {
+    doctype: CONTACTS_DOCTYPE,
+    name: "surname",
+    path: "name.surname",
   },
   [AutofillFieldQualifier.identityCompany]: {
     doctype: CONTACTS_DOCTYPE,
