@@ -1425,6 +1425,11 @@ export default class MainBackground {
   }
 
   async logout(logoutReason: LogoutReason, userId?: UserId) {
+    // Cozy customization, logout OAuth client
+    //*
+    await this.cozyClientService.logout();
+    //*/
+
     const activeUserId = await firstValueFrom(
       this.accountService.activeAccount$.pipe(
         map((a) => a?.id),
@@ -1468,11 +1473,6 @@ export default class MainBackground {
     if (!isUserSetTheme) {
       await this.themeStateService.setSelectedTheme(ThemeType.LightContrasted);
     }
-    //*/
-
-    // Cozy customization, logout OAuth client
-    //*
-    await this.cozyClientService.logout();
     //*/
 
     await Promise.all([
