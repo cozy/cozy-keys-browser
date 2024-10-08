@@ -212,7 +212,7 @@
   "addContact": {
     "message": "Ajouter un contact"
   },
-  "newContact": {
+  "new_contact": {
     "message": "Nouveau contact"
   },
   "addressDetails": {
@@ -4606,25 +4606,25 @@
   "contactSearch": {
     "message": "Recherche\u2026"
   },
-  "empty_ambiguous_email": {
+  "empty_email": {
     "message": "Aucun email enregistré"
   },
-  "empty_ambiguous_phone": {
+  "empty_phone": {
     "message": "Aucun téléphone enregistré"
   },
-  "empty_ambiguous_address": {
+  "empty_address": {
     "message": "Aucune adresse enregistrée"
   },
-  "newAddress": {
+  "new_address": {
     "message": "Nouvelle adresse"
   },
-  "newPhone": {
+  "new_phone": {
     "message": "Nouveau téléphone"
   },
-  "newEmail": {
+  "new_email": {
     "message": "Nouvel email"
   },
-  "newName": {
+  "new_name": {
     "message": "Nouveau nom"
   },
   "new_paperIdentityCardNumber": {

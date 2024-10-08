@@ -710,6 +710,11 @@ body {
         }
       }
     }
+
+    &--empty {
+      width: 4rem;
+      margin: 0 0.8rem 0 0;
+    }
   }
 
   .cipher-details {
