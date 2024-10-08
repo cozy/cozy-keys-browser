@@ -112,6 +112,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
           message.inlineMenuCipherId,
           message.contactName,
           message.fieldHtmlIDToFill,
+          message.focusedFieldName,
         ),
     };
 
@@ -298,9 +299,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   ) {
     // if the field is an address or an address subfield
     if (
-      COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name === "address" ||
+      COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].path === "address" ||
       addressFieldNames.includes(
-        COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AddressContactSubFieldName,
+        // Compare with "path" for "address" fields
+        COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].path as AddressContactSubFieldName,
       )
     ) {
       return this.editCozyContactAddressFields(inlineMenuCipherId, contactName);
@@ -325,7 +327,8 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     let selectElement: HTMLSelectElement | null = null;
     if (
       ambiguousContactFieldNames.includes(
-        COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AmbiguousContactFieldName,
+        // Compare with "path" for "address" fields
+        COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].path as AmbiguousContactFieldName,
       )
     ) {
       const labelGroup = document.createElement("div");
@@ -347,9 +350,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     const divider = document.createElement("div");
     divider.classList.add("contact-edit-divider");
 
+    // Compare with "path" for "address" fields
     const inputRefs = [
       {
-        key: COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name,
+        key: COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].path,
         element: inputText,
         fieldQualifier: this.fieldQualifier,
       },
@@ -794,7 +798,8 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     subNameSpan.classList.add("cipher-subtitle");
 
     // Reverse the class for the current ambiguous field
-    if (COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name === ambiguousKey) {
+    // Compare with "path" for "address" fields
+    if (COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].path === ambiguousKey) {
       subNameSpan.classList.replace("cipher-subtitle", "cipher-name");
       nameSpan.classList.replace("cipher-name", "cipher-subtitle");
     }
@@ -957,8 +962,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     inlineMenuCipherId: string,
     fieldHtmlIDToFill: string,
     contactName: string,
-    title: string,
+    focusedFieldName: string,
   ) {
+    const title = this.getTranslation(`new_${focusedFieldName}`);
+
     const listItem = document.createElement("li");
     listItem.setAttribute("role", "listitem");
     listItem.classList.add("inline-menu-list-actions-item");
@@ -1013,7 +1020,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     div.classList.add("cipher-container", "cipher-container--empty");
 
     const iconElement = buildSvgDomElement(contact);
-    iconElement.style.margin = "0 2rem 0 0.5rem";
+    iconElement.classList.add("cipher-icon--empty");
 
     const detailsSpan = document.createElement("span");
     detailsSpan.classList.add("cipher-details");
@@ -1036,6 +1043,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     inlineMenuCipherId: string,
     contactName: string,
     fieldHtmlIDToFill: string,
+    focusedFieldName: string,
   ) {
     this.inlineMenuListContainer.innerHTML = "";
     this.inlineMenuListContainer.classList.remove(
@@ -1048,16 +1056,15 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     ulElement.classList.add("inline-menu-list-actions");
     ulElement.setAttribute("role", "list");
 
-    const emptyLiTitle = this.getTranslation(`empty_name`);
+    const emptyLiTitle = this.getTranslation(`empty_${focusedFieldName}`);
     const emptyLi = this.createEmptyListItem(emptyLiTitle);
     ulElement.appendChild(emptyLi);
 
-    const newButtonTitle = this.getTranslation("newName");
     const newButton = this.createNewButton(
       inlineMenuCipherId,
       fieldHtmlIDToFill,
       contactName,
-      newButtonTitle,
+      focusedFieldName,
     );
     if (newButton) {
       ulElement.appendChild(newButton);
@@ -1098,51 +1105,29 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       passive: true,
     });
 
-    const firstAmbiguousFieldEntries = Object.entries(ambiguousFields)?.[0];
+    const firstAmbiguousFieldEntries = Object.entries(ambiguousFields)[0];
     const firstAmbiguousFieldName =
       (firstAmbiguousFieldEntries?.[0] as AmbiguousContactFieldName) ||
       (COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AmbiguousContactFieldName);
 
-    if (firstAmbiguousFieldEntries) {
-      for (const firstAmbiguousFieldValue of firstAmbiguousFieldEntries[1]) {
-        const li = this.createAmbiguousListItem(
-          inlineMenuCipherId,
-          contactName,
-          firstAmbiguousFieldName,
-          firstAmbiguousFieldValue,
-          isAmbiguousFieldFocused,
-          fieldHtmlIDToFill,
-        );
-        ulElement.appendChild(li);
-      }
-    } else {
-      const emptyLiTitle = this.getTranslation(`empty_ambiguous_${firstAmbiguousFieldName}`);
-      const emptyLi = this.createEmptyListItem(emptyLiTitle);
-      ulElement.appendChild(emptyLi);
+    for (const firstAmbiguousFieldValue of firstAmbiguousFieldEntries[1]) {
+      const li = this.createAmbiguousListItem(
+        inlineMenuCipherId,
+        contactName,
+        firstAmbiguousFieldName,
+        firstAmbiguousFieldValue,
+        isAmbiguousFieldFocused,
+        fieldHtmlIDToFill,
+      );
+      ulElement.appendChild(li);
     }
 
     if (isAmbiguousFieldFocused) {
-      let newButtonTitle;
-      switch (firstAmbiguousFieldName) {
-        case "phone":
-          newButtonTitle = this.getTranslation("newPhone");
-          break;
-        case "email":
-          newButtonTitle = this.getTranslation("newEmail");
-          break;
-        case "address":
-          newButtonTitle = this.getTranslation("newAddress");
-          break;
-        default:
-          newButtonTitle = this.getTranslation("newName");
-          break;
-      }
-
       const newButton = this.createNewButton(
         inlineMenuCipherId,
         fieldHtmlIDToFill,
         contactName,
-        newButtonTitle,
+        firstAmbiguousFieldName,
       );
       if (newButton) {
         ulElement.appendChild(newButton);
@@ -1201,7 +1186,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       inlineMenuCipherId,
       fieldHtmlIDToFill,
       contactName,
-      this.getTranslation(`new_${this.fieldQualifier}`),
+      this.fieldQualifier,
     );
     ulElement.appendChild(newButton);
 
@@ -1301,7 +1286,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private getNewItemButtonText() {
     // Cozy customization - Add the translation for the new item button when the form is filled by a contact cipher
     if (this.isFilledByContactCipher()) {
-      return this.getTranslation("newContact");
+      return this.getTranslation("new_contact");
     }
     // Cozy customization end
     if (this.isFilledByLoginCipher() || this.showInlineMenuAccountCreation) {

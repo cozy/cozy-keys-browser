@@ -28,6 +28,7 @@ export type UpdateAutofillInlineMenuListAmbiguousMessage = AutofillInlineMenuLis
   ambiguousFields: AmbiguousContactFields;
   isFocusedFieldAmbigous: boolean;
   fieldHtmlIDToFill: string;
+  focusedFieldName: string;
 };
 
 export type UpdateAutofillInlineMenuListPaperMessage = AutofillInlineMenuListMessage & {

@@ -889,6 +889,9 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     this.inlineMenuCiphers = new Map([[inlineMenuCipherId, cipher], ...this.inlineMenuCiphers]);
   }
 
+  /**
+   * If the contact doesn't have a Name AND has several ambiguity(tel|email|address), we call `emptyNameList` after selecting the ambiguity.
+   */
   private async fillAutofillInlineMenuCipherWithAmbiguousField(
     message: OverlayPortMessage,
     port: chrome.runtime.Port,
@@ -914,6 +917,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         inlineMenuCipherId,
         contactName: contact.displayName,
         fieldHtmlIDToFill: cozyAutofillOptions.fieldHtmlIDToFill,
+        focusedFieldName: "name",
       });
       return;
     }
@@ -948,16 +952,16 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     const ambiguousContactFields = getAmbiguousFieldsContact(ambiguousContactFieldNames, contact);
 
     const isFocusedFieldAmbigous = ambiguousContactFieldNames.includes(
-      focusedFieldModel.name as AmbiguousContactFieldName,
+      focusedFieldModel.path as AmbiguousContactFieldName,
     );
     const hasMultipleAmbiguousValueInSameField = Object.values(ambiguousContactFields).some(
       (item) => item.length > 1,
     );
 
-    // On an ambiguous form field, the associated contact values are kept.
+    // On an ambiguous form field, the associated contact values are kept (compare with "path" for "address" fields).
     const ambiguousFormFieldsOfFocusedField = Object.fromEntries(
       Object.entries(ambiguousContactFields).filter(
-        ([fieldName]) => fieldName === focusedFieldModel.name,
+        ([fieldName]) => fieldName === focusedFieldModel.path,
       ),
     );
     // On an unambiguous form field, we keep only the multiple values of an ambiguous contact field.
@@ -966,6 +970,8 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         ([, fieldValue]) => Array.isArray(fieldValue) && fieldValue.length > 1,
       ),
     );
+    const hasAtLeastOneFocusFieldValue =
+      Object.values(ambiguousFormFieldsOfFocusedField).length > 0;
 
     /*
       On a form field with data coming from a paper :
@@ -995,7 +1001,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       });
     } else if (
       (!isFocusedFieldAmbigous && hasMultipleAmbiguousValueInSameField) ||
-      isFocusedFieldAmbigous
+      (isFocusedFieldAmbigous && hasAtLeastOneFocusFieldValue)
     ) {
       this.inlineMenuListPort?.postMessage({
         command: "ambiguousFieldList",
@@ -1020,6 +1026,8 @@ export class OverlayBackground implements OverlayBackgroundInterface {
           inlineMenuCipherId,
           contactName: contact.displayName,
           fieldHtmlIDToFill,
+          // Compare with "path" for "address" fields
+          focusedFieldName: focusedFieldModel.path,
         });
         return;
       }
@@ -1662,9 +1670,9 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         work: this.i18nService.translate("work"),
         cell: this.i18nService.translate("cell"),
         contactSearch: this.i18nService.translate("contactSearch"),
-        empty_ambiguous_email: this.i18nService.translate("empty_ambiguous_email"),
-        empty_ambiguous_phone: this.i18nService.translate("empty_ambiguous_phone"),
-        empty_ambiguous_address: this.i18nService.translate("empty_ambiguous_address"),
+        empty_email: this.i18nService.translate("empty_email"),
+        empty_phone: this.i18nService.translate("empty_phone"),
+        empty_address: this.i18nService.translate("empty_address"),
         empty_name: this.i18nService.translate("empty_name"),
         new: this.i18nService.translate("new"),
         address: this.i18nService.translate("address"),
@@ -1690,11 +1698,11 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         faxWork: this.i18nService.translate("faxWork"),
         none: this.i18nService.translate("none"),
         name: this.i18nService.translate("name"),
-        newAddress: this.i18nService.translate("newAddress"),
-        newPhone: this.i18nService.translate("newPhone"),
-        newEmail: this.i18nService.translate("newEmail"),
-        newName: this.i18nService.translate("newName"),
-        newContact: this.i18nService.translate("newContact"),
+        new_address: this.i18nService.translate("new_address"),
+        new_phone: this.i18nService.translate("new_phone"),
+        new_email: this.i18nService.translate("new_email"),
+        new_name: this.i18nService.translate("new_name"),
+        new_contact: this.i18nService.translate("new_contact"),
         addressDetails: this.i18nService.translate("addressDetails"),
         new_paperIdentityCardNumber: this.i18nService.translate("new_paperIdentityCardNumber"),
         new_paperPassportNumber: this.i18nService.translate("new_paperPassportNumber"),

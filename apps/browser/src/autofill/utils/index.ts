@@ -516,16 +516,19 @@ export const makeEditContactSelectElement = (
   return selectElement;
 };
 
+const addressFields = Object.values(COZY_ATTRIBUTES_MAPPING)
+  .filter((item) => item.path === "address")
+  .map((item) => item.name);
+
 export const getEditContactFieldOptions = (fieldQualifier: AutofillFieldQualifierType) => {
-  switch (fieldQualifier) {
-    case "identityPhone":
-      return phoneFieldOptions;
-    case "identityEmail":
-      return emailFieldOptions;
-    case "identityAddress1":
-      return addressFieldOptions;
-    default:
-      return null;
+  const fieldName = COZY_ATTRIBUTES_MAPPING[fieldQualifier].name;
+  if (addressFields.includes(fieldName)) {
+    return addressFieldOptions;
+  } else if (fieldName === "phone") {
+    return phoneFieldOptions;
+  } else if (fieldName === "email") {
+    return emailFieldOptions;
   }
+  return [];
 };
 // Cozy customization end

@@ -212,7 +212,7 @@
   "addContact": {
     "message": "Add a contact"
   },
-  "newContact": {
+  "new_contact": {
     "message": "New contact"
   },
   "addressDetails": {
@@ -4591,25 +4591,25 @@
   "contactSearch": {
     "message": "Search\u2026"
   },
-  "empty_ambiguous_email": {
+  "empty_email": {
     "message": "No email found"
   },
-  "empty_ambiguous_phone": {
+  "empty_phone": {
     "message": "No phone found"
   },
-  "empty_ambiguous_address": {
+  "empty_address": {
     "message": "No address found"
   },
-  "newAddress": {
+  "new_address": {
     "message": "New address"
   },
-  "newPhone": {
+  "new_phone": {
     "message": "New phone"
   },
-  "newEmail": {
+  "new_email": {
     "message": "New email"
   },
-  "newName": {
+  "new_name": {
     "message": "New name"
   },
   "new_paperIdentityCardNumber": {
