@@ -13,6 +13,14 @@ interface NotificationQueueMessage {
   wasVaultLocked: boolean;
 }
 
+// Cozy customization; paper saved notification
+interface AddPaperSavedQueueMessage extends NotificationQueueMessage {
+  type: "paper-saved";
+  paperSavedId: string;
+  paperSavedQualification: string;
+}
+// Cozy customization end;
+
 interface AddChangePasswordQueueMessage extends NotificationQueueMessage {
   type: "change";
   cipherId: string;
@@ -36,6 +44,7 @@ interface AddRequestFilelessImportQueueMessage extends NotificationQueueMessage 
 }
 
 type NotificationQueueMessageItem =
+  | AddPaperSavedQueueMessage
   | AddLoginQueueMessage
   | AddChangePasswordQueueMessage
   | AddUnlockVaultQueueMessage
@@ -102,6 +111,7 @@ type NotificationBackgroundExtensionMessageHandlers = {
   bgGetFolderData: ({ message, sender }: BackgroundOnMessageHandlerParams) => Promise<FolderView[]>;
   bgCloseNotificationBar: ({ sender }: BackgroundSenderParam) => Promise<void>;
   bgAdjustNotificationBar: ({ message, sender }: BackgroundOnMessageHandlerParams) => Promise<void>;
+  bgRedirectToCozy: ({ message, sender }: BackgroundOnMessageHandlerParams) => Promise<void>;
   bgAddLogin: ({ message, sender }: BackgroundOnMessageHandlerParams) => Promise<void>;
   bgChangedPassword: ({ message, sender }: BackgroundOnMessageHandlerParams) => Promise<void>;
   bgRemoveTabFromNotificationQueue: ({ sender }: BackgroundSenderParam) => void;
@@ -119,6 +129,7 @@ type NotificationBackgroundExtensionMessageHandlers = {
 };
 
 export {
+  AddPaperSavedQueueMessage,
   AddChangePasswordQueueMessage,
   AddLoginQueueMessage,
   AddUnlockVaultQueueMessage,

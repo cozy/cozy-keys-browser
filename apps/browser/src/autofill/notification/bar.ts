@@ -46,6 +46,11 @@ function initNotificationBar(message: NotificationBarWindowMessage) {
     close: chrome.i18n.getMessage("close"),
     never: chrome.i18n.getMessage("never"),
     folder: chrome.i18n.getMessage("folder"),
+    // Cozy customization; paper saved notification
+    notificationPaperSavedDesc: chrome.i18n.getMessage("notificationPaperSavedDesc"),
+    notificationPaperSavedUnderstood: chrome.i18n.getMessage("notificationPaperSavedUnderstood"),
+    notificationPaperSavedSee: chrome.i18n.getMessage("notificationPaperSavedSee"),
+    // Cozy customization end;
     notificationAddSave: chrome.i18n.getMessage("notificationAddSave"),
     notificationAddDesc: chrome.i18n.getMessage("notificationAddDesc"),
     notificationEdit: chrome.i18n.getMessage("edit"),
@@ -61,6 +66,21 @@ function initNotificationBar(message: NotificationBarWindowMessage) {
   };
 
   setupLogoLink(i18n);
+
+  // Cozy customization; paper saved notification
+  // i18n for "Paper Saved" template
+  const paperSavedTemplate = document.getElementById("template-paper-saved") as HTMLTemplateElement;
+
+  const paperSavedUnderstoodButton =
+    paperSavedTemplate.content.getElementById("paper-saved-understood");
+  paperSavedUnderstoodButton.textContent = i18n.notificationPaperSavedUnderstood;
+
+  const paperSavedSeeButton = paperSavedTemplate.content.getElementById("paper-saved-see");
+  paperSavedSeeButton.textContent = i18n.notificationPaperSavedSee;
+
+  paperSavedTemplate.content.getElementById("paper-saved-text").textContent =
+    i18n.notificationPaperSavedDesc;
+  // Cozy customization end;
 
   // i18n for "Add" template
   const addTemplate = document.getElementById("template-add") as HTMLTemplateElement;
@@ -122,6 +142,13 @@ function initNotificationBar(message: NotificationBarWindowMessage) {
   closeButton.title = i18n.close;
 
   const notificationType = initData.type;
+
+  // Cozy customization; paper saved notification
+  if (initData.type === "paper-saved") {
+    handleTypePaperSaved();
+  }
+  // Cozy customization end;
+
   if (initData.type === "add") {
     handleTypeAdd();
   } else if (notificationType === "change") {
@@ -142,6 +169,28 @@ function initNotificationBar(message: NotificationBarWindowMessage) {
   globalThis.addEventListener("resize", adjustHeight);
   adjustHeight();
 }
+
+// Cozy customization; paper saved notification
+function handleTypePaperSaved() {
+  setContent(document.getElementById("template-paper-saved") as HTMLTemplateElement);
+
+  const paperSavedUnderstoodButton = document.getElementById("paper-saved-understood");
+  paperSavedUnderstoodButton.addEventListener("click", (e) => {
+    sendPlatformMessage({
+      command: "bgCloseNotificationBar",
+    });
+  });
+
+  const paperSavedSeeButton = document.getElementById("paper-saved-see");
+  paperSavedSeeButton.addEventListener("click", (e) => {
+    sendPlatformMessage({
+      command: "bgRedirectToCozy",
+      to: "mespapiers",
+      hash: `paper/files/${notificationBarIframeInitData.paperSavedQualification}/${notificationBarIframeInitData.paperSavedId}`,
+    });
+  });
+}
+// Cozy customization end;
 
 function handleTypeAdd() {
   setContent(document.getElementById("template-add") as HTMLTemplateElement);

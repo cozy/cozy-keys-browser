@@ -1,4 +1,5 @@
 const NotificationQueueMessageType = {
+  PaperSaved: "paper-saved",
   AddLogin: "add",
   ChangePassword: "change",
   UnlockVault: "unlock",

@@ -979,6 +979,15 @@
     "message": "Automatically clear copied values from your clipboard.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
+  "notificationPaperSavedDesc": {
+    "message": "A new document with the information entered has just been added to your Cozy's My Papers application."
+  },
+  "notificationPaperSavedUnderstood": {
+    "message": "Understood"
+  },
+  "notificationPaperSavedSee": {
+    "message": "See the document"
+  },
   "notificationAddDesc": {
     "message": "Save the password in my Cozy?"
   },
