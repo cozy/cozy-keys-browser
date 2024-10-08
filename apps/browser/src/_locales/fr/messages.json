@@ -3911,10 +3911,10 @@
     "message": "Insérez la YubiKey associée à votre compte LastPass dans le port USB de votre ordinateur, puis appuyez sur son bouton."
   },
   "switchAccount": {
-    "message": "Basculer le compte"
+    "message": "Compte"
   },
   "switchAccounts": {
-    "message": "Basculer les comptes"
+    "message": "Compte"
   },
   "switchToAccount": {
     "message": "Basculer vers le compte"
