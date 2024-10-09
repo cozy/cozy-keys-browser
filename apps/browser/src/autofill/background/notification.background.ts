@@ -205,6 +205,8 @@ export default class NotificationBackground {
       case NotificationQueueMessageType.PaperSaved:
         typeData.paperSavedId = notificationQueueMessage.paperSavedId;
         typeData.paperSavedQualification = notificationQueueMessage.paperSavedQualification;
+        typeData.paperSavedQualificationLabel =
+          notificationQueueMessage.paperSavedQualificationLabel;
         break;
       // Cozy customization end;
       case NotificationQueueMessageType.AddLogin:
@@ -413,6 +415,7 @@ export default class NotificationBackground {
       wasVaultLocked: false,
       paperSavedId: options.paperSavedId,
       paperSavedQualification: options.paperSavedQualification,
+      paperSavedQualificationLabel: options.paperSavedQualificationLabel,
     };
     await this.sendNotificationQueueMessage(tab, message);
   }

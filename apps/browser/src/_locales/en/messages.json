@@ -980,7 +980,13 @@
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "notificationPaperSavedDesc": {
-    "message": "A new document with the information entered has just been added to your Cozy's My Papers application."
+    "message": "A new $VALUE$ document with the information entered has just been added to your Cozy's My Papers application.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Identity card"
+      }
+    }
   },
   "notificationPaperSavedUnderstood": {
     "message": "Understood"

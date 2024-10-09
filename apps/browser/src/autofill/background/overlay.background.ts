@@ -69,7 +69,7 @@ import {
 
 /* start Cozy imports */
 /* eslint-disable */
-import { Q } from "cozy-client";
+import { Q, models } from "cozy-client";
 import { IOCozyContact } from "cozy-client/types/types";
 // @ts-ignore
 import { CONTACTS_DOCTYPE } from "cozy-client/dist/models/contact";
@@ -85,6 +85,10 @@ import {
   cleanFormattedAddress,
 } from "../../../../../libs/cozy/contact.helper";
 import NotificationBackground from "./notification.background";
+
+const {
+  document: { locales },
+} = models;
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -1052,9 +1056,13 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         logService: this.logService,
       });
 
+      const locale = this.i18nService.translationLocale || "en";
+      const t = locales.getBoundT(locale);
+
       await this.notificationBackground.paperSaved(port.sender.tab, {
         paperSavedId: createdOrUpdatedCozyDoctype._id,
         paperSavedQualification: createdOrUpdatedCozyDoctype.metadata.qualification.label,
+        paperSavedQualificationLabel: t(`Scan.items.${createdOrUpdatedCozyDoctype.metadata.qualification.label}`),
       });
 
       const isAddress = inputValues.values.some((inputValue) => inputValue.key === "street");
