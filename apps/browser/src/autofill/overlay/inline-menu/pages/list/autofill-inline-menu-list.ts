@@ -864,7 +864,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     radio.setAttribute("type", "radio");
     radio.setAttribute("name", "contact");
     radio.setAttribute("id", "contact");
-    radio.style.marginRight = "2rem";
+    radio.classList.add("fill-cipher-contact-radio");
 
     const detailsSpan = document.createElement("span");
     detailsSpan.classList.add("cipher-details");
