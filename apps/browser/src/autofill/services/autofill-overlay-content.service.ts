@@ -1010,6 +1010,11 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
     autofillFieldData: AutofillField,
     pageDetails: AutofillPageDetails,
   ): boolean {
+    // Cozy customization; do not open inline menu for TOTP fields
+    if (autofillFieldData.autoCompleteType === "one-time-code") {
+      return true;
+    }
+    // Cozy customization end
     if (this.ignoredFieldTypes.has(autofillFieldData.type)) {
       return true;
     }
