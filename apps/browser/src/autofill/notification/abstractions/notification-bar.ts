@@ -6,6 +6,7 @@ type NotificationBarIframeInitData = {
   importType?: string;
   paperSavedId?: string;
   paperSavedQualification?: string;
+  paperSavedQualificationLabel?: string;
 };
 
 type NotificationBarWindowMessage = {

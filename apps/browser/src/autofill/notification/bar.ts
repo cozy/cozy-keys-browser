@@ -47,7 +47,10 @@ function initNotificationBar(message: NotificationBarWindowMessage) {
     never: chrome.i18n.getMessage("never"),
     folder: chrome.i18n.getMessage("folder"),
     // Cozy customization; paper saved notification
-    notificationPaperSavedDesc: chrome.i18n.getMessage("notificationPaperSavedDesc"),
+    notificationPaperSavedDesc: chrome.i18n.getMessage(
+      "notificationPaperSavedDesc",
+      notificationBarIframeInitData.paperSavedQualificationLabel,
+    ),
     notificationPaperSavedUnderstood: chrome.i18n.getMessage("notificationPaperSavedUnderstood"),
     notificationPaperSavedSee: chrome.i18n.getMessage("notificationPaperSavedSee"),
     // Cozy customization end;

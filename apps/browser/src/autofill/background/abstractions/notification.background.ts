@@ -18,6 +18,7 @@ interface AddPaperSavedQueueMessage extends NotificationQueueMessage {
   type: "paper-saved";
   paperSavedId: string;
   paperSavedQualification: string;
+  paperSavedQualificationLabel: string;
 }
 // Cozy customization end;
 

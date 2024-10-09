@@ -841,6 +841,7 @@ async function loadNotificationBar() {
       importType: typeData.importType,
       paperSavedId: typeData.paperSavedId,
       paperSavedQualification: typeData.paperSavedQualification,
+      paperSavedQualificationLabel: typeData.paperSavedQualificationLabel,
     };
     const notificationBarUrl = "notification/bar.html";
 
