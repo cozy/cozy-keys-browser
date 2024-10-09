@@ -461,7 +461,10 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
       // Cozy customization; send doAutoFill to background because
       // doAutoFill needs a Cozy Client store with all the contacts
       // and only the background Cozy Client store has them on Manifest V3
-      if (cipher.type === CipherType.Contact && BrowserApi.isManifestVersion(3)) {
+      if (
+        (cipher.type === CipherType.Contact || cipher.type === CipherType.Paper) &&
+        BrowserApi.isManifestVersion(3)
+      ) {
         this.messageSender.send("doAutoFill", {
           autofillOptions: {
             cipher: cipher,
