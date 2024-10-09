@@ -72,7 +72,6 @@ import {
 import { Q, models } from "cozy-client";
 import { IOCozyContact } from "cozy-client/types/types";
 // @ts-ignore
-import { CONTACTS_DOCTYPE } from "cozy-client/dist/models/contact";
 import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
 import { AmbiguousContactFieldName, AmbiguousContactFieldValue } from "src/autofill/types";
@@ -85,6 +84,7 @@ import {
   cleanFormattedAddress,
 } from "../../../../../libs/cozy/contact.helper";
 import NotificationBackground from "./notification.background";
+import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "../../../../../libs/cozy/constants";
 
 const {
   document: { locales },
@@ -1056,14 +1056,18 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         logService: this.logService,
       });
 
-      const locale = this.i18nService.translationLocale || "en";
-      const t = locales.getBoundT(locale);
+      if (createdOrUpdatedCozyDoctype._type === FILES_DOCTYPE) {
+        const locale = this.i18nService.translationLocale || "en";
+        const t = locales.getBoundT(locale);
 
-      await this.notificationBackground.paperSaved(port.sender.tab, {
-        paperSavedId: createdOrUpdatedCozyDoctype._id,
-        paperSavedQualification: createdOrUpdatedCozyDoctype.metadata.qualification.label,
-        paperSavedQualificationLabel: t(`Scan.items.${createdOrUpdatedCozyDoctype.metadata.qualification.label}`),
-      });
+        await this.notificationBackground.paperSaved(port.sender.tab, {
+          paperSavedId: createdOrUpdatedCozyDoctype._id,
+          paperSavedQualification: createdOrUpdatedCozyDoctype.metadata.qualification.label,
+          paperSavedQualificationLabel: t(
+            `Scan.items.${createdOrUpdatedCozyDoctype.metadata.qualification.label}`,
+          ),
+        });
+      }
 
       const isAddress = inputValues.values.some((inputValue) => inputValue.key === "street");
       // If is an address, we need set the value of the field to the formatted address, because getCozyValue refers to `formattedAddress` to return values corresponding to the postal address.
