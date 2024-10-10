@@ -389,7 +389,7 @@ export const getAmbiguousFieldsContact = (
   contact: IOCozyContact,
 ): AmbiguousContactFields => {
   return ambiguousFields.reduce(
-    (acc, field) => (contact[field].length > 0 ? { ...acc, [field]: contact[field] } : acc),
+    (acc, field) => (contact[field]?.length > 0 ? { ...acc, [field]: contact[field] } : acc),
     {},
   );
 };
