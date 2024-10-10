@@ -118,26 +118,33 @@ export const generateIdentityViewFromContactId = async (
     fieldQualifier: AutofillFieldQualifier.identityEmail,
     cozyAutofillOptions,
   });
-  identity.address1 = hasStandaloneAddressNumberField
-    ? await getCozyValue({
-        client,
-        contactId,
-        fieldQualifier: AutofillFieldQualifier.identityAddress1,
-        cozyAutofillOptions,
-      })
-    : (await getCozyValue({
-        client,
-        contactId,
-        fieldQualifier: AutofillFieldQualifier.addressNumber,
-        cozyAutofillOptions,
-      })) +
-      " " +
-      (await getCozyValue({
-        client,
-        contactId,
-        fieldQualifier: AutofillFieldQualifier.identityAddress1,
-        cozyAutofillOptions,
-      }));
+
+  if (hasStandaloneAddressNumberField) {
+    identity.address1 = await getCozyValue({
+      client,
+      contactId,
+      fieldQualifier: AutofillFieldQualifier.identityAddress1,
+      cozyAutofillOptions,
+    });
+  } else {
+    const addressNumber = await getCozyValue({
+      client,
+      contactId,
+      fieldQualifier: AutofillFieldQualifier.addressNumber,
+      cozyAutofillOptions,
+    });
+
+    const addressStreet = await getCozyValue({
+      client,
+      contactId,
+      fieldQualifier: AutofillFieldQualifier.identityAddress1,
+      cozyAutofillOptions,
+    });
+
+    // To avoid returning addresses like "undefined undefined" or "undefined rue Pasteur"
+    identity.address1 = [addressNumber, addressStreet].filter(Boolean).join(" ");
+  }
+
   identity.city = await getCozyValue({
     client,
     contactId,
