@@ -455,7 +455,6 @@ export class IdentityAutoFillConstants {
     "ville",
     "commune",
     // German
-    "ort",
     "stadt",
     "wohnort",
   ];
