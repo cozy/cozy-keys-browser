@@ -917,7 +917,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
 
     const value = await getCozyValue({
       client,
-      contactId: cipher.id,
+      cipher,
       fieldQualifier: this.focusedFieldData?.fieldQualifier,
     });
 
@@ -1030,7 +1030,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     } else {
       const value = await getCozyValue({
         client,
-        contactId: cipher.id,
+        cipher,
         fieldQualifier: this.focusedFieldData?.fieldQualifier,
       });
 
