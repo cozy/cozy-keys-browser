@@ -724,7 +724,12 @@ export default class AutofillService implements AutofillServiceInterface {
         break;
       // Cozy customization
       case CipherType.Paper:
-        //  For papers, we only use the custom fields matching
+        fillScript = await this.generatePaperFillScript(
+          fillScript,
+          pageDetails,
+          filledFields,
+          options,
+        );
         break;
       case CipherType.Contact:
         // If we have two fields of the same type, for example tel1 and tel2.
@@ -746,7 +751,7 @@ export default class AutofillService implements AutofillServiceInterface {
 
           options.cipher.identity = await generateIdentityViewFromContactId(
             client,
-            options.cipher.id,
+            options.cipher,
             pageDetails,
             options.cozyAutofillOptions,
           );
@@ -1729,7 +1734,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.contactSurname) {
       const contactSurname = await getCozyValue({
         client,
-        contactId: options.cipher.id,
+        cipher: options.cipher,
         fieldQualifier: "contactSurname",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -1745,7 +1750,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.contactJobTitle) {
       const contactJobTitle = await getCozyValue({
         client,
-        contactId: options.cipher.id,
+        cipher: options.cipher,
         fieldQualifier: "contactJobTitle",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -1761,7 +1766,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.contactBirthDay) {
       const contactBirthDay = await getCozyValue({
         client,
-        contactId: options.cipher.id,
+        cipher: options.cipher,
         fieldQualifier: "contactBirthDay",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -1777,7 +1782,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.contactBirthMonth) {
       const contactBirthMonth = await getCozyValue({
         client,
-        contactId: options.cipher.id,
+        cipher: options.cipher,
         fieldQualifier: "contactBirthMonth",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -1793,7 +1798,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.contactBirthYear) {
       const contactBirthYear = await getCozyValue({
         client,
-        contactId: options.cipher.id,
+        cipher: options.cipher,
         fieldQualifier: "contactBirthYear",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -1809,7 +1814,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.contactAddressNumber) {
       const addressNumber = await getCozyValue({
         client,
-        contactId: options.cipher.id,
+        cipher: options.cipher,
         fieldQualifier: "addressNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -1825,7 +1830,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.contactAddressLocality) {
       const addressLocality = await getCozyValue({
         client,
-        contactId: options.cipher.id,
+        cipher: options.cipher,
         fieldQualifier: "addressLocality",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -1841,7 +1846,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.contactAddressFloor) {
       const addressFloor = await getCozyValue({
         client,
-        contactId: options.cipher.id,
+        cipher: options.cipher,
         fieldQualifier: "addressFloor",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -1857,7 +1862,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.contactAddressBuilding) {
       const addressBuilding = await getCozyValue({
         client,
-        contactId: options.cipher.id,
+        cipher: options.cipher,
         fieldQualifier: "addressBuilding",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -1873,7 +1878,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.contactAddressStairs) {
       const addressStairs = await getCozyValue({
         client,
-        contactId: options.cipher.id,
+        cipher: options.cipher,
         fieldQualifier: "addressStairs",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -1889,7 +1894,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.contactAddressApartment) {
       const addressApartment = await getCozyValue({
         client,
-        contactId: options.cipher.id,
+        cipher: options.cipher,
         fieldQualifier: "addressApartment",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -1905,7 +1910,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.contactAddressEntrycode) {
       const addressEntrycode = await getCozyValue({
         client,
-        contactId: options.cipher.id,
+        cipher: options.cipher,
         fieldQualifier: "addressEntrycode",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2080,9 +2085,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.paperIdentityCardNumber) {
       const paperIdentityCardNumber = await getCozyValue({
         client,
-        contactId: options.cipher.id,
-        contactEmail: options.cipher.contact.primaryEmail,
-        me: options.cipher.contact.me,
+        cipher: options.cipher,
         fieldQualifier: "paperIdentityCardNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2097,9 +2100,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.paperPassportNumber) {
       const paperPassportNumber = await getCozyValue({
         client,
-        contactId: options.cipher.id,
-        contactEmail: options.cipher.contact.primaryEmail,
-        me: options.cipher.contact.me,
+        cipher: options.cipher,
         fieldQualifier: "paperPassportNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2114,9 +2115,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.paperSocialSecurityNumber) {
       const paperSocialSecurityNumber = await getCozyValue({
         client,
-        contactId: options.cipher.id,
-        contactEmail: options.cipher.contact.primaryEmail,
-        me: options.cipher.contact.me,
+        cipher: options.cipher,
         fieldQualifier: "paperSocialSecurityNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2131,9 +2130,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.paperResidencePermitNumber) {
       const paperResidencePermitNumber = await getCozyValue({
         client,
-        contactId: options.cipher.id,
-        contactEmail: options.cipher.contact.primaryEmail,
-        me: options.cipher.contact.me,
+        cipher: options.cipher,
         fieldQualifier: "paperResidencePermitNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2148,9 +2145,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.paperDrivingLicenseNumber) {
       const paperDrivingLicenseNumber = await getCozyValue({
         client,
-        contactId: options.cipher.id,
-        contactEmail: options.cipher.contact.primaryEmail,
-        me: options.cipher.contact.me,
+        cipher: options.cipher,
         fieldQualifier: "paperDrivingLicenseNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2165,9 +2160,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.paperVehicleRegistrationNumber) {
       const paperVehicleRegistrationNumber = await getCozyValue({
         client,
-        contactId: options.cipher.id,
-        contactEmail: options.cipher.contact.primaryEmail,
-        me: options.cipher.contact.me,
+        cipher: options.cipher,
         fieldQualifier: "paperVehicleRegistrationNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2182,9 +2175,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.paperVehicleRegistrationConfidentialCode) {
       const paperVehicleRegistrationConfidentialCode = await getCozyValue({
         client,
-        contactId: options.cipher.id,
-        contactEmail: options.cipher.contact.primaryEmail,
-        me: options.cipher.contact.me,
+        cipher: options.cipher,
         fieldQualifier: "paperVehicleRegistrationConfidentialCode",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2199,9 +2190,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.paperVehicleRegistrationLicensePlateNumber) {
       const paperVehicleRegistrationLicensePlateNumber = await getCozyValue({
         client,
-        contactId: options.cipher.id,
-        contactEmail: options.cipher.contact.primaryEmail,
-        me: options.cipher.contact.me,
+        cipher: options.cipher,
         fieldQualifier: "paperVehicleRegistrationLicensePlateNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2216,9 +2205,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.paperBankIbanNumber) {
       const paperBankIbanNumber = await getCozyValue({
         client,
-        contactId: options.cipher.id,
-        contactEmail: options.cipher.contact.primaryEmail,
-        me: options.cipher.contact.me,
+        cipher: options.cipher,
         fieldQualifier: "paperBankIbanNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2233,9 +2220,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.paperBankBicNumber) {
       const paperBankBicNumber = await getCozyValue({
         client,
-        contactId: options.cipher.id,
-        contactEmail: options.cipher.contact.primaryEmail,
-        me: options.cipher.contact.me,
+        cipher: options.cipher,
         fieldQualifier: "paperBankBicNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2250,9 +2235,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.paperGrossSalaryAmount) {
       const paperGrossSalaryAmount = await getCozyValue({
         client,
-        contactId: options.cipher.id,
-        contactEmail: options.cipher.contact.primaryEmail,
-        me: options.cipher.contact.me,
+        cipher: options.cipher,
         fieldQualifier: "paperGrossSalaryAmount",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2267,9 +2250,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.paperNetSalaryAmount) {
       const paperNetSalaryAmount = await getCozyValue({
         client,
-        contactId: options.cipher.id,
-        contactEmail: options.cipher.contact.primaryEmail,
-        me: options.cipher.contact.me,
+        cipher: options.cipher,
         fieldQualifier: "paperNetSalaryAmount",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2284,9 +2265,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.paperTaxNoticeNumber) {
       const paperTaxNoticeNumber = await getCozyValue({
         client,
-        contactId: options.cipher.id,
-        contactEmail: options.cipher.contact.primaryEmail,
-        me: options.cipher.contact.me,
+        cipher: options.cipher,
         fieldQualifier: "paperTaxNoticeNumber",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
@@ -2301,9 +2280,7 @@ export default class AutofillService implements AutofillServiceInterface {
     if (fillFields.paperTaxNoticeRefTaxIncome) {
       const paperTaxNoticeRefTaxIncome = await getCozyValue({
         client,
-        contactId: options.cipher.id,
-        contactEmail: options.cipher.contact.primaryEmail,
-        me: options.cipher.contact.me,
+        cipher: options.cipher,
         fieldQualifier: "paperTaxNoticeRefTaxIncome",
         cozyAutofillOptions: options.cozyAutofillOptions,
       });
