@@ -2,6 +2,8 @@ import CozyClient, { Q } from "cozy-client";
 import { IOCozyFile } from "cozy-client/types/types";
 import * as _ from "lodash";
 
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+
 import { AutofillFieldQualifierType } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
 import AutofillField from "../../apps/browser/src/autofill/models/autofill-field";
 import { CozyAutofillOptions } from "../../apps/browser/src/autofill/services/abstractions/autofill.service";
@@ -17,9 +19,7 @@ import {
 
 interface GetCozyValueType {
   client: CozyClient;
-  contactId: string;
-  contactEmail?: string;
-  me?: boolean;
+  cipher: CipherView;
   field?: AutofillField;
   fieldQualifier: AutofillFieldQualifierType;
   cozyAutofillOptions?: CozyAutofillOptions;
@@ -28,9 +28,7 @@ interface GetCozyValueType {
 
 export const getCozyValue = async ({
   client,
-  contactId,
-  contactEmail,
-  me,
+  cipher,
   fieldQualifier,
   cozyAutofillOptions,
 }: GetCozyValueType): Promise<string | undefined> => {
@@ -43,16 +41,14 @@ export const getCozyValue = async ({
   if (isContactAttributesModel(cozyAttributeModel)) {
     return await getCozyValueInContact({
       client,
-      contactId,
+      cipher,
       cozyAttributeModel,
       cozyAutofillOptions,
     });
   } else if (isPaperAttributesModel(cozyAttributeModel)) {
     return await getCozyValueInPaper({
       client,
-      contactId,
-      contactEmail,
-      me,
+      cipher,
       cozyAttributeModel,
       cozyAutofillOptions,
     });
@@ -61,9 +57,7 @@ export const getCozyValue = async ({
 
 type GetCozyValueInDataType = {
   client: CozyClient;
-  contactId: string;
-  contactEmail?: string;
-  me?: boolean;
+  cipher: CipherView;
   cozyAutofillOptions?: CozyAutofillOptions;
 };
 type GetPaperValueInDataType = GetCozyValueInDataType & {
@@ -75,11 +69,11 @@ type GetContactValueInDataType = GetCozyValueInDataType & {
 
 const getCozyValueInContact = async ({
   client,
-  contactId,
+  cipher,
   cozyAttributeModel,
   cozyAutofillOptions,
 }: GetContactValueInDataType) => {
-  const { data: contact } = await client.query(Q(CONTACTS_DOCTYPE).getById(contactId), {
+  const { data: contact } = await client.query(Q(CONTACTS_DOCTYPE).getById(cipher.id), {
     executeFromStore: true,
   });
 
@@ -100,17 +94,15 @@ const getCozyValueInContact = async ({
 
 const getCozyValueInPaper = async ({
   client,
-  contactId,
-  contactEmail,
-  me,
+  cipher,
   cozyAttributeModel,
   cozyAutofillOptions,
 }: GetPaperValueInDataType) => {
   const filteredPapers = await getAllPapersFromContact({
     client,
-    contactId,
-    contactEmail,
-    me,
+    contactId: cipher.id,
+    contactEmail: cipher.contact.primaryEmail,
+    me: cipher.contact.me,
     cozyAttributeModel,
   });
 

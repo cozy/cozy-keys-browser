@@ -75,7 +75,7 @@ export const convertContactToCipherData = async (
 
 export const generateIdentityViewFromContactId = async (
   client: CozyClient,
-  contactId: string,
+  cipher: CipherView,
   pageDetails: AutofillPageDetails,
   cozyAutofillOptions?: CozyAutofillOptions,
 ): Promise<IdentityView> => {
@@ -87,34 +87,34 @@ export const generateIdentityViewFromContactId = async (
 
   identity.firstName = await getCozyValue({
     client,
-    contactId,
+    cipher,
     fieldQualifier: AutofillFieldQualifier.identityFirstName,
   });
   identity.middleName = await getCozyValue({
     client,
-    contactId,
+    cipher,
     fieldQualifier: AutofillFieldQualifier.identityMiddleName,
   });
   identity.lastName = await getCozyValue({
     client,
-    contactId,
+    cipher,
     fieldQualifier: AutofillFieldQualifier.identityLastName,
   });
   identity.company = await getCozyValue({
     client,
-    contactId,
+    cipher,
     fieldQualifier: AutofillFieldQualifier.identityCompany,
   });
 
   identity.phone = await getCozyValue({
     client,
-    contactId,
+    cipher,
     fieldQualifier: AutofillFieldQualifier.identityPhone,
     cozyAutofillOptions,
   });
   identity.email = await getCozyValue({
     client,
-    contactId,
+    cipher,
     fieldQualifier: AutofillFieldQualifier.identityEmail,
     cozyAutofillOptions,
   });
@@ -122,21 +122,21 @@ export const generateIdentityViewFromContactId = async (
   if (hasStandaloneAddressNumberField) {
     identity.address1 = await getCozyValue({
       client,
-      contactId,
+      cipher,
       fieldQualifier: AutofillFieldQualifier.identityAddress1,
       cozyAutofillOptions,
     });
   } else {
     const addressNumber = await getCozyValue({
       client,
-      contactId,
+      cipher,
       fieldQualifier: AutofillFieldQualifier.addressNumber,
       cozyAutofillOptions,
     });
 
     const addressStreet = await getCozyValue({
       client,
-      contactId,
+      cipher,
       fieldQualifier: AutofillFieldQualifier.identityAddress1,
       cozyAutofillOptions,
     });
@@ -147,25 +147,25 @@ export const generateIdentityViewFromContactId = async (
 
   identity.city = await getCozyValue({
     client,
-    contactId,
+    cipher,
     fieldQualifier: AutofillFieldQualifier.identityCity,
     cozyAutofillOptions,
   });
   identity.state = await getCozyValue({
     client,
-    contactId,
+    cipher,
     fieldQualifier: AutofillFieldQualifier.identityState,
     cozyAutofillOptions,
   });
   identity.postalCode = await getCozyValue({
     client,
-    contactId,
+    cipher,
     fieldQualifier: AutofillFieldQualifier.identityPostalCode,
     cozyAutofillOptions,
   });
   identity.country = await getCozyValue({
     client,
-    contactId,
+    cipher,
     fieldQualifier: AutofillFieldQualifier.identityCountry,
     cozyAutofillOptions,
   });
