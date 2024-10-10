@@ -724,7 +724,12 @@ export default class AutofillService implements AutofillServiceInterface {
         break;
       // Cozy customization
       case CipherType.Paper:
-        //  For papers, we only use the custom fields matching
+        fillScript = await this.generatePaperFillScript(
+          fillScript,
+          pageDetails,
+          filledFields,
+          options,
+        );
         break;
       case CipherType.Contact:
         // If we have two fields of the same type, for example tel1 and tel2.
