@@ -2,6 +2,7 @@ import CozyClient, { Q } from "cozy-client";
 import { IOCozyFile } from "cozy-client/types/types";
 import * as _ from "lodash";
 
+import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import { AutofillFieldQualifierType } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
@@ -98,21 +99,35 @@ const getCozyValueInPaper = async ({
   cozyAttributeModel,
   cozyAutofillOptions,
 }: GetPaperValueInDataType) => {
-  const filteredPapers = await getAllPapersFromContact({
-    client,
-    contactId: cipher.id,
-    contactEmail: cipher.contact.primaryEmail,
-    me: cipher.contact.me,
-    cozyAttributeModel,
-  });
+  if (cipher.type === CipherType.Contact) {
+    // If the cipher is a contact, we want to get the paper associated to the contact
+    const filteredPapers = await getAllPapersFromContact({
+      client,
+      contactId: cipher.id,
+      contactEmail: cipher.contact.primaryEmail,
+      me: cipher.contact.me,
+      cozyAttributeModel,
+    });
 
-  // Select the paper corresponding to the cozyAutofillOptions or the first one
-  const selectedPaper = selectPaper({
-    papers: filteredPapers,
-    cozyAutofillOptions,
-  });
+    // Select the paper corresponding to the cozyAutofillOptions or the first one
+    const selectedPaper = selectPaper({
+      papers: filteredPapers,
+      cozyAutofillOptions,
+    });
 
-  return _.get(selectedPaper, cozyAttributeModel.path);
+    return _.get(selectedPaper, cozyAttributeModel.path);
+  } else if (cipher.type === CipherType.Paper) {
+    // If the cipher is a paper, we just want to get it and return the data
+    const { data: paper } = await client.query(
+      Q(FILES_DOCTYPE).where({
+        _id: cipher.id,
+        ...cozyAttributeModel.selector,
+      }),
+      { executeFromStore: true },
+    );
+
+    return paper.length > 0 && _.get(paper[0], cozyAttributeModel.path);
+  }
 };
 
 export const selectPaper = ({
