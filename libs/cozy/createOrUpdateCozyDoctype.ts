@@ -131,7 +131,7 @@ export const createOrUpdateCozyContact = async ({
 
       _.set(contact, cozyAttributeModel.path, arrayData);
     } else {
-      _.set(contact, cozyAttributeModel.path, Object.values(inputValues)[0]);
+      _.set(contact, cozyAttributeModel.path, inputValue.value);
     }
   }
 

@@ -1033,7 +1033,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
           contactName: contact.displayName,
           fieldHtmlIDToFill,
           // Compare with "path" for "address" fields
-          focusedFieldName: focusedFieldModel.path,
+          focusedFieldName: focusedFieldModel.path.split(".")[0],
         });
         return;
       }
