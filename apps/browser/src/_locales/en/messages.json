@@ -4615,6 +4615,9 @@
   "empty_address": {
     "message": "No address found"
   },
+  "empty_jobTitle": {
+    "message": "No job title"
+  },
   "new_address": {
     "message": "New address"
   },
@@ -4626,6 +4629,9 @@
   },
   "new_name": {
     "message": "New name"
+  },
+  "new_jobTitle": {
+    "message": "New job title"
   },
   "new_paperIdentityCardNumber": {
     "message": "New national ID card number"

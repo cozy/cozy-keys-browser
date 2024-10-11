@@ -4630,6 +4630,9 @@
   "empty_address": {
     "message": "Aucune adresse enregistrée"
   },
+  "empty_jobTitle": {
+    "message": "Aucune profession"
+  },
   "new_address": {
     "message": "Nouvelle adresse"
   },
@@ -4641,6 +4644,9 @@
   },
   "new_name": {
     "message": "Nouveau nom"
+  },
+  "new_jobTitle": {
+    "message": "Nouvelle profession"
   },
   "new_paperIdentityCardNumber": {
     "message": "Nouveau numéro de carte d'identité"
