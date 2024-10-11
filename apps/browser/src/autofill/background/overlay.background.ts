@@ -1028,6 +1028,13 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         fieldHtmlIDToFill,
       });
     } else {
+      // Special case: if we are a paper and there are no ambiguous fields, we arrive here
+      // and we do not want to show the empty list
+      if (isPaperAttributesModel(focusedFieldModel) && shouldHideHealthPaper) {
+        this.fillInlineMenuCipher(message, port);
+        return;
+      }
+
       const value = await getCozyValue({
         client,
         cipher,
