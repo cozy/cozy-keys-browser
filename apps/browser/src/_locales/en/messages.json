@@ -25,9 +25,6 @@
   "finishCreatingYourAccountBySettingAPassword": {
     "message": "Finish creating your account by setting a password"
   },
-  "login": {
-    "message": "Log in"
-  },
   "forgotPassword": {
     "message": "I forgot my password"
   },

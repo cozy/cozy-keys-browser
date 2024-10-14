@@ -25,9 +25,6 @@
   "finishCreatingYourAccountBySettingAPassword": {
     "message": "Terminer la création de votre compte en définissant un mot de passe"
   },
-  "login": {
-    "message": "Me connecter"
-  },
   "forgotPassword": {
     "message": "J'ai oublié mon mot de passe"
   },
