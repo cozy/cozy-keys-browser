@@ -325,7 +325,14 @@ export class InlineMenuFieldQualificationService
       return false;
     }
 
+    // Cozy customization, do not use only autocomplete field for identity
+    // Bitwarden decided to use only autocomplete field for identity but it is too strict
+    // for us for the moment. Let's keep it like it was before until we think about it.
+    //*
+    return this.keywordsFoundInFieldData(field, this.identityFieldKeywords);
+    /*/
     return this.fieldContainsAutocompleteValues(field, this.identityAutocompleteValues);
+    //*/
   }
 
   /**
