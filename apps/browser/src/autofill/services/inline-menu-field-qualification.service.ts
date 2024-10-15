@@ -1373,7 +1373,7 @@ export class InlineMenuFieldQualificationService
    *
    * @param field - The field to validate
    */
-  private isTotpField = (field: AutofillField): boolean => {
+  isTotpField = (field: AutofillField): boolean => {
     if (this.fieldContainsAutocompleteValues(field, this.totpFieldAutocompleteValue)) {
       return true;
     }

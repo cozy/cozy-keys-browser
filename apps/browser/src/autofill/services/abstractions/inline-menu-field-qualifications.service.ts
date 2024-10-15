@@ -43,6 +43,7 @@ export interface InlineMenuFieldQualificationService {
   isFieldForIdentityEmail(field: AutofillField): boolean;
   isFieldForIdentityUsername(field: AutofillField): boolean;
   // Cozy customization
+  isTotpField(field: AutofillField): boolean; // Changed from private to public
   isFieldForContactSurname(field: AutofillField): boolean;
   isFieldForContactJobTitle(field: AutofillField): boolean;
   isFieldForContactBirthDay(field: AutofillField): boolean;
