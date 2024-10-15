@@ -142,6 +142,7 @@ export interface AssertCredentialParams {
   userVerification?: UserVerification;
   timeout: number;
   sameOriginWithAncestors: boolean;
+  mediation?: "silent" | "optional" | "required" | "conditional";
   fallbackSupported: boolean;
 }
 

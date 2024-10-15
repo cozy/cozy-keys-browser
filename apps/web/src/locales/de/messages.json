@@ -36,6 +36,9 @@
   "notes": {
     "message": "Notizen"
   },
+  "note": {
+    "message": "Notiz"
+  },
   "customFields": {
     "message": "Benutzerdefinierte Felder"
   },
@@ -45,6 +48,30 @@
   "loginCredentials": {
     "message": "Zugangsdaten"
   },
+  "personalDetails": {
+    "message": "Persönliche Details"
+  },
+  "identification": {
+    "message": "Identifikation"
+  },
+  "contactInfo": {
+    "message": "Kontaktinformation"
+  },
+  "cardDetails": {
+    "message": "Kartendetails"
+  },
+  "cardBrandDetails": {
+    "message": "$BRAND$-Details",
+    "placeholders": {
+      "brand": {
+        "content": "$1",
+        "example": "Visa"
+      }
+    }
+  },
+  "itemHistory": {
+    "message": "Eintragsverlauf"
+  },
   "authenticatorKey": {
     "message": "Authenticator-Schlüssel"
   },
@@ -53,6 +80,16 @@
   },
   "websiteUri": {
     "message": "Website (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Website (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
     "message": "Website hinzugefügt"
@@ -181,6 +218,12 @@
   "dr": {
     "message": "Dr."
   },
+  "cardExpiredTitle": {
+    "message": "Abgelaufene Karte"
+  },
+  "cardExpiredMessage": {
+    "message": "Wenn du die Karte erneuert hast, aktualisiere die Angaben zur Karte"
+  },
   "expirationMonth": {
     "message": "Ablaufmonat"
   },
@@ -198,6 +241,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden kann Zwei-Faktor-Authentifizierungsscodes speichern und ausfüllen. Wähle das Kamerasymbol aus, um einen Screenshot des Authenticator-QR-Codes dieser Website zu machen oder kopiere und füge den Schlüssel in dieses Feld ein."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Erfahre mehr über Authenticator-Apps"
   },
   "folder": {
     "message": "Ordner"
@@ -417,6 +463,9 @@
   "fullName": {
     "message": "Vollständiger Name"
   },
+  "address": {
+    "message": "Adresse"
+  },
   "address1": {
     "message": "Adresse 1"
   },
@@ -458,6 +507,15 @@
   },
   "viewItem": {
     "message": "Eintrag anzeigen"
+  },
+  "viewItemType": {
+    "message": "$ITEMTYPE$ anzeigen",
+    "placeholders": {
+      "itemtype": {
+        "content": "$1",
+        "example": "login"
+      }
+    }
   },
   "new": {
     "message": "Neu",
@@ -874,6 +932,9 @@
   "masterPassHint": {
     "message": "Master-Passwort-Hinweis (optional)"
   },
+  "newMasterPassHint": {
+    "message": "Neuer Master-Passwort-Hinweis (optional)"
+  },
   "masterPassHintLabel": {
     "message": "Master-Passwort-Hinweis"
   },
@@ -929,6 +990,12 @@
   },
   "newAccountCreated": {
     "message": "Ihr neues Konto wurde erstellt! Sie können sich jetzt anmelden."
+  },
+  "newAccountCreated2": {
+    "message": "Dein neues Konto wurde erstellt!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Du wurdest angemeldet!"
   },
   "trialAccountCreated": {
     "message": "Konto erfolgreich erstellt."
@@ -1151,7 +1218,7 @@
     "message": "Bist du sicher, dass du fortfahren möchtest?"
   },
   "moveSelectedItemsDesc": {
-    "message": "Choose a folder that you would like to add the $COUNT$ selected item(s) to.",
+    "message": "Wähle einen Ordner aus, in dem du $COUNT$ ausgewählte(s) Objekt(e) verschieben möchtest.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1498,12 +1565,16 @@
     "message": "Daten importieren"
   },
   "onboardingImportDataDetailsPartOne": {
-    "message": "Wenn du keine Daten zu importieren hast, kannst du stattdessen einen ",
+    "message": "Wenn du keine Daten zu importieren hast, kannst du stattdessen ",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsLink": {
-    "message": "neuen Eintrag",
+    "message": "einen neuen Eintrag",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "neue Zugangsdaten",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": " erstellen.",
@@ -4909,7 +4980,7 @@
     "message": "Mitgliedern Zugriff geben:"
   },
   "viewAndSelectTheMembers": {
-    "message": "view and select the members you want to give access to Secrets Manager."
+    "message": "Die Mitglieder anzeigen und auswählen, denen du Zugriff auf den Secrets Manager gewähren möchtest."
   },
   "openYourOrganizations": {
     "message": "Open your organization's"
@@ -4944,6 +5015,10 @@
         "example": "An email address"
       }
     }
+  },
+  "viewSend": {
+    "message": "Sends anzeigen",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "viewSendHiddenEmailWarning": {
     "message": "Der Bitwarden Benutzer, der dieses Send erstellt hat, hat sich entschieden, seine E-Mail-Adresse zu verstecken. Du solltest sicherstellen, dass du der Quelle dieses Links vertraust, bevor du dessen Inhalt verwendest oder herunterlädst.",
@@ -5322,6 +5397,18 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Dein Master-Passwort entspricht nicht einer oder mehreren Richtlinien deiner Organisation. Um auf den Tresor zugreifen zu können, musst du dein Master-Passwort jetzt aktualisieren. Wenn du fortfährst, wirst du von deiner aktuellen Sitzung abgemeldet und musst dich erneut anmelden. Aktive Sitzungen auf anderen Geräten können noch bis zu einer Stunde lang aktiv bleiben."
+  },
+  "automaticAppLogin": {
+    "message": "Benutzer automatisch bei erlaubten Anwendungen anmelden"
+  },
+  "automaticAppLoginDesc": {
+    "message": "Anmeldeformulare von Apps, die über deinen konfigurierten Identitätsanbieter gestartet wurden, werden automatisch ausgefüllt und abgesendet."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Identitätsanbieter Host"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Gib die Host-URL deines Identitätsanbieters ein. Trenne mehrere URLs durch ein Komma."
   },
   "tdeDisabledMasterPasswordRequired": {
     "message": "Deine Organisation hat deine Entschlüsselungsoptionen aktualisiert. Bitte lege ein Master-Passwort fest, um auf deinen Tresor zuzugreifen."
@@ -8907,5 +8994,69 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB zusätzlicher Speicher"
+  },
+  "premiumAccounts": {
+    "message": "6 Premium-Konten"
+  },
+  "unlimitedSharing": {
+    "message": "Unbegrenztes Teilen"
+  },
+  "unlimitedCollections": {
+    "message": "Unbegrenzte Sammlungen"
+  },
+  "secureDataSharing": {
+    "message": "Sicherer Datenaustausch"
+  },
+  "eventLogMonitoring": {
+    "message": "Ereignisprotokoll-Überwachung"
+  },
+  "directoryIntegration": {
+    "message": "Directory-Integration"
+  },
+  "passwordLessSso": {
+    "message": "Passwortloses SSO"
+  },
+  "accountRecovery": {
+    "message": "Konto-Wiederherstellung"
+  },
+  "customRoles": {
+    "message": "Benutzerdefinierte Rollen"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Unbegrenzter Geheimnis-Speicher"
+  },
+  "unlimitedUsers": {
+    "message": "Unbegrenzte Benutzeranzahl"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "Bis zu 50 Gerätekonten"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "Bis zu 20 Gerätekonten"
+  },
+  "current": {
+    "message": "Aktuell"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Dein Secrets Manager Abonnement wird sich auf Grundlage des ausgewählten Plan upgraden"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden Passwortmanager"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Dein kostenloses einjähriges Passwortmanager-Abonnement wird auf den ausgewählten Tarif umgestellt. Dir wird nichts berechnet, bis der kostenlose Zeitraum abgelaufen ist."
+  },
+  "publicApi": {
+    "message": "Öffentliche API",
+    "description": "The text, 'API', is an acronymn and should not be translated."
+  },
+  "showCharacterCount": {
+    "message": "Zeichenanzahl anzeigen"
+  },
+  "hideCharacterCount": {
+    "message": "Zeichenanzahl ausblenden"
+  },
+  "editAccess": {
+    "message": "Zugriff bearbeiten"
   }
 }

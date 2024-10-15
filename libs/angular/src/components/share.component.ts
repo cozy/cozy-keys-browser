@@ -1,13 +1,10 @@
 import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
-/** Cozy custo
 import { firstValueFrom, map, Observable, Subject, takeUntil } from "rxjs";
-*/
-import { map, Observable, Subject, takeUntil } from "rxjs";
-/** end custo */
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { OrganizationUserStatusType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
@@ -41,6 +38,7 @@ export class ShareComponent implements OnInit, OnDestroy {
     protected cipherService: CipherService,
     private logService: LogService,
     protected organizationService: OrganizationService,
+    protected accountService: AccountService,
   ) {}
 
   async ngOnInit() {
@@ -72,8 +70,11 @@ export class ShareComponent implements OnInit, OnDestroy {
     });
 
     const cipherDomain = await this.cipherService.get(this.cipherId);
+    const activeUserId = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+    );
     this.cipher = await cipherDomain.decrypt(
-      await this.cipherService.getKeyForCipherKeyDecryption(cipherDomain),
+      await this.cipherService.getKeyForCipherKeyDecryption(cipherDomain, activeUserId),
     );
 
     this.filterCollections();
@@ -135,8 +136,11 @@ export class ShareComponent implements OnInit, OnDestroy {
     /** end custo */
 
     const cipherDomain = await this.cipherService.get(this.cipherId);
+    const activeUserId = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+    );
     const cipherView = await cipherDomain.decrypt(
-      await this.cipherService.getKeyForCipherKeyDecryption(cipherDomain),
+      await this.cipherService.getKeyForCipherKeyDecryption(cipherDomain, activeUserId),
     );
     /** Cozy custo
     const orgs = await firstValueFrom(this.organizations$);
@@ -146,7 +150,7 @@ export class ShareComponent implements OnInit, OnDestroy {
 
     try {
       this.formPromise = this.cipherService
-        .shareWithServer(cipherView, organizationId, selectedCollectionIds)
+        .shareWithServer(cipherView, organizationId, selectedCollectionIds, activeUserId)
         .then(async () => {
           this.onSharedCipher.emit();
           this.platformUtilsService.showToast(

@@ -10,6 +10,7 @@ import { ProductTierType } from "@bitwarden/common/billing/enums";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { CipherType } from "@bitwarden/common/vault/enums";
 import { TreeNode } from "@bitwarden/common/vault/models/domain/tree-node";
 import {
   DialogService,
@@ -67,7 +68,7 @@ export class VaultHeaderComponent implements OnInit {
   @Input() searchText: string;
 
   /** Emits an event when the new item button is clicked in the header */
-  @Output() onAddCipher = new EventEmitter<void>();
+  @Output() onAddCipher = new EventEmitter<CipherType | undefined>();
 
   /** Emits an event when the new collection button is clicked in the header */
   @Output() onAddCollection = new EventEmitter<void>();
@@ -87,8 +88,15 @@ export class VaultHeaderComponent implements OnInit {
   protected CollectionDialogTabType = CollectionDialogTabType;
   protected organizations$ = this.organizationService.organizations$;
 
-  protected flexibleCollectionsV1Enabled = false;
   protected restrictProviderAccessFlag = false;
+
+  /**
+   * Whether the extension refresh feature flag is enabled.
+   */
+  protected extensionRefreshEnabled = false;
+
+  /** The cipher type enum. */
+  protected CipherType = CipherType;
 
   constructor(
     private organizationService: OrganizationService,
@@ -100,11 +108,11 @@ export class VaultHeaderComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.flexibleCollectionsV1Enabled = await firstValueFrom(
-      this.configService.getFeatureFlag$(FeatureFlag.FlexibleCollectionsV1),
-    );
     this.restrictProviderAccessFlag = await this.configService.getFeatureFlag(
       FeatureFlag.RestrictProviderAccess,
+    );
+    this.extensionRefreshEnabled = await this.configService.getFeatureFlag(
+      FeatureFlag.ExtensionRefresh,
     );
   }
 
@@ -195,11 +203,11 @@ export class VaultHeaderComponent implements OnInit {
     }
 
     // Otherwise, check if we can edit the specified collection
-    return this.collection.node.canEdit(this.organization, this.flexibleCollectionsV1Enabled);
+    return this.collection.node.canEdit(this.organization);
   }
 
-  addCipher() {
-    this.onAddCipher.emit();
+  addCipher(cipherType?: CipherType) {
+    this.onAddCipher.emit(cipherType);
   }
 
   async addCollection() {
@@ -225,14 +233,11 @@ export class VaultHeaderComponent implements OnInit {
     }
 
     // Otherwise, check if we can delete the specified collection
-    return this.collection.node.canDelete(this.organization, this.flexibleCollectionsV1Enabled);
+    return this.collection.node.canDelete(this.organization);
   }
 
   get canViewCollectionInfo(): boolean {
-    return this.collection.node.canViewCollectionInfo(
-      this.organization,
-      this.flexibleCollectionsV1Enabled,
-    );
+    return this.collection.node.canViewCollectionInfo(this.organization);
   }
 
   get canCreateCollection(): boolean {

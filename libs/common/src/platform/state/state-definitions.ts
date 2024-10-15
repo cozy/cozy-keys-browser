@@ -46,12 +46,14 @@ export const AUTH_REQUEST_DISK_LOCAL = new StateDefinition("authRequestLocal", "
 export const AVATAR_DISK = new StateDefinition("avatar", "disk", { web: "disk-local" });
 export const DEVICE_TRUST_DISK_LOCAL = new StateDefinition("deviceTrust", "disk", {
   web: "disk-local",
+  browser: "disk-backup-local-storage",
 });
 export const KDF_CONFIG_DISK = new StateDefinition("kdfConfig", "disk");
 export const KEY_CONNECTOR_DISK = new StateDefinition("keyConnector", "disk");
 export const LOGIN_EMAIL_DISK = new StateDefinition("loginEmail", "disk", {
   web: "disk-local",
 });
+export const LOGIN_EMAIL_MEMORY = new StateDefinition("loginEmail", "memory");
 export const LOGIN_STRATEGY_MEMORY = new StateDefinition("loginStrategy", "memory");
 export const MASTER_PASSWORD_DISK = new StateDefinition("masterPassword", "disk");
 export const MASTER_PASSWORD_MEMORY = new StateDefinition("masterPassword", "memory");
@@ -110,9 +112,13 @@ export const CRYPTO_MEMORY = new StateDefinition("crypto", "memory");
 export const DESKTOP_SETTINGS_DISK = new StateDefinition("desktopSettings", "disk");
 export const ENVIRONMENT_DISK = new StateDefinition("environment", "disk");
 export const ENVIRONMENT_MEMORY = new StateDefinition("environment", "memory");
+export const POPUP_VIEW_MEMORY = new StateDefinition("popupView", "memory", {
+  browser: "memory-large-object",
+});
 export const SYNC_DISK = new StateDefinition("sync", "disk", { web: "memory" });
 export const THEMING_DISK = new StateDefinition("theming", "disk", { web: "disk-local" });
 export const TRANSLATION_DISK = new StateDefinition("translation", "disk", { web: "disk-local" });
+export const ANIMATION_DISK = new StateDefinition("animation", "disk");
 export const TASK_SCHEDULER_DISK = new StateDefinition("taskScheduler", "disk");
 
 // Secrets Manager

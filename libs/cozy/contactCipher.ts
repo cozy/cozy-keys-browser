@@ -3,6 +3,7 @@
 import { IOCozyContact } from "cozy-client/types/types";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -20,6 +21,7 @@ const convertContactsAsCiphers = async (
   cipherService: CipherService,
   cryptoService: CryptoService,
   i18nService: I18nService,
+  accountService: AccountService,
   contacts: IOCozyContact[],
 ): Promise<CipherData[]> => {
   const contactsCiphers = [];
@@ -28,7 +30,13 @@ const convertContactsAsCiphers = async (
 
   for (const contact of contacts) {
     try {
-      const cipherData = await convertContactToCipherData(cipherService, i18nService, contact, key);
+      const cipherData = await convertContactToCipherData(
+        cipherService,
+        i18nService,
+        accountService,
+        contact,
+        key,
+      );
 
       contactsCiphers.push(cipherData);
     } catch (e) {
@@ -48,6 +56,7 @@ export const fetchContactsAndConvertAsCiphers = async (
   cryptoService: CryptoService,
   cozyClientService: CozyClientService,
   i18nService: I18nService,
+  accountService: AccountService,
 ): Promise<CipherData[]> => {
   const client = await cozyClientService.getClientInstance();
 
@@ -58,6 +67,7 @@ export const fetchContactsAndConvertAsCiphers = async (
       cipherService,
       cryptoService,
       i18nService,
+      accountService,
       contacts,
     );
 
@@ -77,6 +87,7 @@ export const fetchContactsAndConvertAsCiphers = async (
 export const favoriteContactCipher = async (
   cipherService: CipherService,
   i18nService: I18nService,
+  accountService: AccountService,
   cipher: CipherView,
   cozyClientService: CozyClientService,
 ): Promise<boolean> => {
@@ -92,7 +103,12 @@ export const favoriteContactCipher = async (
     },
   });
 
-  const cipherData = await convertContactToCipherData(cipherService, i18nService, updatedContact);
+  const cipherData = await convertContactToCipherData(
+    cipherService,
+    i18nService,
+    accountService,
+    updatedContact,
+  );
 
   await cipherService.upsert(cipherData);
 

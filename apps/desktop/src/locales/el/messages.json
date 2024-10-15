@@ -603,6 +603,12 @@
   "newAccountCreated": {
     "message": "Ο λογαριασμός σας έχει δημιουργηθεί! Τώρα μπορείτε να συνδεθείτε."
   },
+  "newAccountCreated2": {
+    "message": "Ο νέος σας λογαριασμός έχει δημιουργηθεί!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Έχετε συνδεθεί!"
+  },
   "masterPassSent": {
     "message": "Σας στείλαμε ένα email με την υπόδειξη του κύριου κωδικού."
   },
@@ -1173,6 +1179,9 @@
   },
   "premiumPurchaseAlert": {
     "message": "Μπορείτε να αγοράσετε συνδρομή premium στο bitwarden.com web vault. Θέλετε να επισκεφθείτε την ιστοσελίδα τώρα;"
+  },
+  "premiumPurchaseAlertV2": {
+    "message": "Μπορείτε να αγοράσετε το Premium από τις ρυθμίσεις λογαριασμού σας στη διαδικτυακή εφαρμογή του Bitwarden."
   },
   "premiumCurrentMember": {
     "message": "Είστε ένα premium μέλος!"
@@ -3045,9 +3054,12 @@
     "message": "Δεδομένα"
   },
   "fileSends": {
-    "message": "File Sends"
+    "message": "Send αρχείων"
   },
   "textSends": {
-    "message": "Text Sends"
+    "message": "Send κειμένων"
+  },
+  "ssoError": {
+    "message": "Δεν βρέθηκαν ελεύθερες θύρες για τη σύνδεση sso."
   }
 }

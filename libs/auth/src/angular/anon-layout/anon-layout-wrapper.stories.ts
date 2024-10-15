@@ -15,10 +15,10 @@ import {
   Environment,
 } from "@bitwarden/common/platform/abstractions/environment.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { ThemeType } from "@bitwarden/common/platform/enums";
-import { ThemeStateService } from "@bitwarden/common/platform/theming/theme-state.service";
 import { ButtonModule } from "@bitwarden/components";
 
+// FIXME: remove `/apps` import from `/libs`
+// eslint-disable-next-line import/no-restricted-paths
 import { PreloadedEnglishI18nModule } from "../../../../../apps/web/src/app/core/tests";
 import { LockIcon } from "../icons";
 import { RegistrationCheckEmailIcon } from "../icons/registration-check-email.icon";
@@ -38,7 +38,6 @@ const decorators = (options: {
   applicationVersion?: string;
   clientType?: ClientType;
   hostName?: string;
-  themeType?: ThemeType;
 }) => {
   return [
     componentWrapperDecorator(
@@ -81,12 +80,6 @@ const decorators = (options: {
               Promise.resolve(options.applicationVersion || "FAKE_APP_VERSION"),
             getClientType: () => options.clientType || ClientType.Web,
           } as Partial<PlatformUtilsService>,
-        },
-        {
-          provide: ThemeStateService,
-          useValue: {
-            selectedTheme$: of(options.themeType || ThemeType.Light),
-          } as Partial<ThemeStateService>,
         },
       ],
     }),

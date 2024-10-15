@@ -53,8 +53,11 @@
           <dt [ngClass]="{ 'tw-text-danger': isExpired }">
             {{ "subscriptionExpiration" | i18n }}
           </dt>
-          <dd [ngClass]="{ 'tw-text-danger': isExpired }">
+          <dd [ngClass]="{ 'tw-text-danger': isExpired }" *ngIf="!enableTimeThreshold">
             {{ nextInvoice ? (nextInvoice.date | date: "mediumDate") : "-" }}
+          </dd>
+          <dd [ngClass]="{ 'tw-text-danger': isExpired }" *ngIf="enableTimeThreshold">
+            {{ nextInvoice ? (sub.subscription.periodEndDate | date: "mediumDate") : "-" }}
           </dd>
         </ng-container>
       </dl>
@@ -222,8 +225,10 @@
       </ng-container>
     </ng-container>
 
-    <h2 bitTypography="h2" class="tw-mt-7">{{ "selfHostingTitle" | i18n }}</h2>
-    <p bitTypography="body1">
+    <h2 bitTypography="h2" *ngIf="shownSelfHost()" class="tw-mt-7">
+      {{ "selfHostingTitle" | i18n }}
+    </h2>
+    <p bitTypography="body1" *ngIf="shownSelfHost()">
       {{ "selfHostingEnterpriseOrganizationSectionCopy" | i18n }}
       <a
         href="https://bitwarden.com/help/licensing-on-premise/#retrieve-organization-license"
@@ -240,7 +245,7 @@
         buttonType="secondary"
         type="button"
         (click)="downloadLicense()"
-        *ngIf="canDownloadLicense"
+        *ngIf="canDownloadLicense && shownSelfHost()"
         [disabled]="showDownloadLicense"
       >
         {{ "downloadLicense" | i18n }}

@@ -603,6 +603,12 @@
   "newAccountCreated": {
     "message": "Noul dvs. cont a fost creat! Acum vă puteți autentifica."
   },
+  "newAccountCreated2": {
+    "message": "Your new account has been created!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "You have been logged in!"
+  },
   "masterPassSent": {
     "message": "V-am trimis un e-mail cu indiciul parolei principale."
   },
@@ -1173,6 +1179,9 @@
   },
   "premiumPurchaseAlert": {
     "message": "Puteți achiziționa un abonament premium pe saitul web bitwarden.com. Doriți să vizitați saitul acum?"
+  },
+  "premiumPurchaseAlertV2": {
+    "message": "You can purchase Premium from your account settings on the Bitwarden web app."
   },
   "premiumCurrentMember": {
     "message": "Sunteți un membru premium!"
@@ -1814,7 +1823,7 @@
     "message": "Biometria browserului necesită ca mai întâi să fie configurată biometria desktopului în setări."
   },
   "biometricsManualSetupTitle": {
-    "message": "Autometic setup not available"
+    "message": "Automatic setup not available"
   },
   "biometricsManualSetupDesc": {
     "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
@@ -3049,5 +3058,8 @@
   },
   "textSends": {
     "message": "Text Sends"
+  },
+  "ssoError": {
+    "message": "No free ports could be found for the sso login."
   }
 }

@@ -603,6 +603,12 @@
   "newAccountCreated": {
     "message": "Yeni hesabınız oluşturuldu! Şimdi giriş yapabilirsiniz."
   },
+  "newAccountCreated2": {
+    "message": "Yeni hesabınız oluşturuldu."
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Oturum açtınız."
+  },
   "masterPassSent": {
     "message": "Size ana parolanızın ipucunu içeren bir e-posta gönderdik."
   },
@@ -1173,6 +1179,9 @@
   },
   "premiumPurchaseAlert": {
     "message": "Premium üyeliği bitwarden.com web kasası üzerinden satın alabilirsiniz. Şimdi siteye gitmek ister misiniz?"
+  },
+  "premiumPurchaseAlertV2": {
+    "message": "Bitwarden web uygulamasındaki hesap ayarlarınızdan Premium abonelik satın alabilirsiniz."
   },
   "premiumCurrentMember": {
     "message": "Premium üyesiniz!"
@@ -1814,7 +1823,7 @@
     "message": "Tarayıcıda biyometriyi kullanmak için önce ayarlardan masaüstü biyometrisini ayarlamanız gerekir."
   },
   "biometricsManualSetupTitle": {
-    "message": "Autometic setup not available"
+    "message": "Automatic setup not available"
   },
   "biometricsManualSetupDesc": {
     "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
@@ -2824,13 +2833,13 @@
     "message": "Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance."
   },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
-    "message": "Duo'yu başlatın ve oturum açmayı tamamlamak için adımları izleyin."
+    "message": "Duo'yu açın ve girişi tamamlamak için adımları izleyin."
   },
   "duoRequiredByOrgForAccount": {
     "message": "Hesabınız için Duo iki adımlı giriş gereklidir."
   },
   "launchDuo": {
-    "message": "Duo'yu tarayıcıda başlat"
+    "message": "Duo'yu tarayıcıda aç"
   },
   "importFormatError": {
     "message": "Veriler doğru biçimlendirilmemiş. Lütfen içe aktarma dosyanızı kontrol edin ve tekrar deneyin."
@@ -3049,5 +3058,8 @@
   },
   "textSends": {
     "message": "Metin Send'leri"
+  },
+  "ssoError": {
+    "message": "SSO girişi için açık port bulunamadı."
   }
 }

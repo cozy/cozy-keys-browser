@@ -603,6 +603,12 @@
   "newAccountCreated": {
     "message": "Zure kontua egina dago. Orain saioa has dezakezu."
   },
+  "newAccountCreated2": {
+    "message": "Your new account has been created!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "You have been logged in!"
+  },
   "masterPassSent": {
     "message": "Mezu elektroniko bat bidali dizugu zure pasahitz nagusiaren pistarekin."
   },
@@ -1173,6 +1179,9 @@
   },
   "premiumPurchaseAlert": {
     "message": "Zure premium bazkidetza bitwarden.com webguneko kutxa gotorrean ordaindu dezakezu. Orain bisitatu nahi duzu webgunea?"
+  },
+  "premiumPurchaseAlertV2": {
+    "message": "You can purchase Premium from your account settings on the Bitwarden web app."
   },
   "premiumCurrentMember": {
     "message": "Premium bazkide zara!"
@@ -1814,7 +1823,7 @@
     "message": "Nabigatzailearen biometriak lehenik mahaigainaren biometria gaitzeko eskatzen du."
   },
   "biometricsManualSetupTitle": {
-    "message": "Autometic setup not available"
+    "message": "Automatic setup not available"
   },
   "biometricsManualSetupDesc": {
     "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
@@ -3049,5 +3058,8 @@
   },
   "textSends": {
     "message": "Text Sends"
+  },
+  "ssoError": {
+    "message": "No free ports could be found for the sso login."
   }
 }

@@ -603,6 +603,12 @@
   "newAccountCreated": {
     "message": "A sua nova conta foi criada! Pode agora iniciar sessão."
   },
+  "newAccountCreated2": {
+    "message": "A sua nova conta foi criada!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Iniciou sessão!"
+  },
   "masterPassSent": {
     "message": "Enviámos-lhe um e-mail com a dica da sua palavra-passe mestra."
   },
@@ -1173,6 +1179,9 @@
   },
   "premiumPurchaseAlert": {
     "message": "Pode adquirir uma subscrição Premium no cofre web em bitwarden.com. Pretende visitar o site agora?"
+  },
+  "premiumPurchaseAlertV2": {
+    "message": "Pode adquirir o Premium a partir das definições da sua conta na aplicação Web do Bitwarden."
   },
   "premiumCurrentMember": {
     "message": "É um membro Premium!"
@@ -3049,5 +3058,8 @@
   },
   "textSends": {
     "message": "Sends de texto"
+  },
+  "ssoError": {
+    "message": "Não foi possível encontrar portas livres para o início de sessão sso."
   }
 }

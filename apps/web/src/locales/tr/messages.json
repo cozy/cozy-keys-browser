@@ -36,6 +36,9 @@
   "notes": {
     "message": "Notlar"
   },
+  "note": {
+    "message": "Not"
+  },
   "customFields": {
     "message": "Özel Alanlar"
   },
@@ -45,6 +48,30 @@
   "loginCredentials": {
     "message": "Hesap bilgileri"
   },
+  "personalDetails": {
+    "message": "Kişisel bilgiler"
+  },
+  "identification": {
+    "message": "Kimlik"
+  },
+  "contactInfo": {
+    "message": "İletişim bilgileri"
+  },
+  "cardDetails": {
+    "message": "Kart bilgileri"
+  },
+  "cardBrandDetails": {
+    "message": "$BRAND$ bilgileri",
+    "placeholders": {
+      "brand": {
+        "content": "$1",
+        "example": "Visa"
+      }
+    }
+  },
+  "itemHistory": {
+    "message": "Kayıt geçmişi"
+  },
   "authenticatorKey": {
     "message": "Kimlik doğrulama anahtarı"
   },
@@ -53,6 +80,16 @@
   },
   "websiteUri": {
     "message": "Web sitesi (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Web sitesi (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
     "message": "Web sitesi eklendi"
@@ -181,6 +218,12 @@
   "dr": {
     "message": "Dr"
   },
+  "cardExpiredTitle": {
+    "message": "Kartın süresi dolmuş"
+  },
+  "cardExpiredMessage": {
+    "message": "Kartı yenilediyseniz kart bilgilerini güncelleyin"
+  },
   "expirationMonth": {
     "message": "Son kullanma ayı"
   },
@@ -198,6 +241,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden can store and fill 2-step verification codes. Select the camera icon to take a screenshot of this website's authenticator QR code, or copy and paste the key into this field."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Learn more about authenticators"
   },
   "folder": {
     "message": "Klasör"
@@ -417,6 +463,9 @@
   "fullName": {
     "message": "Ad, Soyad"
   },
+  "address": {
+    "message": "Adres"
+  },
   "address1": {
     "message": "Adres 1"
   },
@@ -458,6 +507,15 @@
   },
   "viewItem": {
     "message": "Kaydı göster"
+  },
+  "viewItemType": {
+    "message": "$ITEMTYPE$ bilgileri",
+    "placeholders": {
+      "itemtype": {
+        "content": "$1",
+        "example": "login"
+      }
+    }
   },
   "new": {
     "message": "Yeni",
@@ -874,6 +932,9 @@
   "masterPassHint": {
     "message": "Ana parola ipucu (isteğe bağlı)"
   },
+  "newMasterPassHint": {
+    "message": "Yeni ana parola ipucu (isteğe bağlı)"
+  },
   "masterPassHintLabel": {
     "message": "Ana parola ipucu"
   },
@@ -929,6 +990,12 @@
   },
   "newAccountCreated": {
     "message": "Yeni hesabınız oluşturuldu! Şimdi giriş yapabilirsiniz."
+  },
+  "newAccountCreated2": {
+    "message": "Yeni hesabınız oluşturuldu."
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Oturum açtınız."
   },
   "trialAccountCreated": {
     "message": "Hesap başarıyla oluşturuldu."
@@ -1505,6 +1572,10 @@
     "message": "yeni bir kayıt",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "yeni hesap",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": " oluşturabilirsiniz.",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead."
@@ -1969,7 +2040,7 @@
     "message": "Güvensiz web siteleri bulundu"
   },
   "unsecuredWebsitesFoundReportDesc": {
-    "message": "We found $COUNT$ items in your $VAULT$ with unsecured URIs. You should change their URI scheme to https:// if the website allows it.",
+    "message": "$VAULT$nızda güvenli olmayan URI'ye sahip $COUNT$ kayıt bulduk. Web sitesi izin veriyorsa URI şemasını https:// olarak değiştirmelisiniz.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -4945,6 +5016,10 @@
       }
     }
   },
+  "viewSend": {
+    "message": "Send'i görüntüle",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "viewSendHiddenEmailWarning": {
     "message": "Bu Send'i oluşturan Bitwarden kullanıcısı e-posta adresini gizlemeyi seçti. Kullanmadan veya içeriğini indirmeden önce bu bağlantının kaynağının güvenilir olduğundan emin olun.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -5322,6 +5397,18 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Ana parolanız kuruluş ilkelerinizi karşılamıyor. Kasanıza erişmek için ana parolanızı güncellemelisiniz. Devam ettiğinizde oturumunuz kapanacak ve yeniden oturum açmanız gerekecektir. Diğer cihazlardaki aktif oturumlar bir saate kadar aktif kalabilir."
+  },
+  "automaticAppLogin": {
+    "message": "Automatically log in users for allowed applications"
+  },
+  "automaticAppLoginDesc": {
+    "message": "Login forms will automatically be filled and submitted for apps launched from your configured identity provider."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Identity provider host"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Enter your identity provider host URL. Enter multiple URLs by separating with a comma."
   },
   "tdeDisabledMasterPasswordRequired": {
     "message": "Your organization has updated your decryption options. Please set a master password to access your vault."
@@ -6063,11 +6150,11 @@
     "message": "Secure password generated! Don't forget to also update your password on the website."
   },
   "useGeneratorHelpTextPartOne": {
-    "message": "Use the generator",
+    "message": "Üreteci kullanarak",
     "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
   },
   "useGeneratorHelpTextPartTwo": {
-    "message": "to create a strong unique password",
+    "message": "güçlü ve benzersiz parola üretebilirsiniz",
     "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
   },
   "service": {
@@ -8907,5 +8994,69 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB additional storage"
+  },
+  "premiumAccounts": {
+    "message": "6 premium hesap"
+  },
+  "unlimitedSharing": {
+    "message": "Sınırsız paylaşım"
+  },
+  "unlimitedCollections": {
+    "message": "Sınırsız koleksiyon"
+  },
+  "secureDataSharing": {
+    "message": "Güvenli veri paylaşımı"
+  },
+  "eventLogMonitoring": {
+    "message": "Olay günlüğü takibi"
+  },
+  "directoryIntegration": {
+    "message": "Dizin entegrasyonu"
+  },
+  "passwordLessSso": {
+    "message": "Parolasız SSO"
+  },
+  "accountRecovery": {
+    "message": "Hesap kurtarma"
+  },
+  "customRoles": {
+    "message": "Özel roller"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Sınırsız sız depolama"
+  },
+  "unlimitedUsers": {
+    "message": "Sınırsız kullanıcı"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "50 makine hesabı"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "20 makine hesabı"
+  },
+  "current": {
+    "message": "Current"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Your Secrets Manager subscription will upgrade base on the plan selected"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden Parola Yöneticisi"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Your complementary one year Password Manager subscription will upgrade to the selected plan. You will not be charged until the complimentary period is over."
+  },
+  "publicApi": {
+    "message": "Genel API",
+    "description": "The text, 'API', is an acronymn and should not be translated."
+  },
+  "showCharacterCount": {
+    "message": "Karakter sayacını göster"
+  },
+  "hideCharacterCount": {
+    "message": "Karakter sayacını gizle"
+  },
+  "editAccess": {
+    "message": "Edit access"
   }
 }

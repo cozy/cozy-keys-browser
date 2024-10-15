@@ -38,6 +38,7 @@ import { CryptoFunctionService } from "../abstractions/crypto-function.service";
 import {
   CipherDecryptionKeys,
   CryptoService as CryptoServiceAbstraction,
+  UserPrivateKeyDecryptionFailedError,
 } from "../abstractions/crypto.service";
 import { EncryptService } from "../abstractions/encrypt.service";
 import { KeyGenerationService } from "../abstractions/key-generation.service";
@@ -89,15 +90,43 @@ export class CryptoService implements CryptoServiceAbstraction {
     );
   }
 
-  async setUserKey(key: UserKey, userId?: UserId): Promise<void> {
+  async setUserKey(key: UserKey, userId: UserId): Promise<void> {
     if (key == null) {
       throw new Error("No key provided. Lock the user to clear the key");
     }
+    if (userId == null) {
+      throw new Error("No userId provided.");
+    }
+
     // Set userId to ensure we have one for the account status update
-    [userId, key] = await this.stateProvider.setUserState(USER_KEY, key, userId);
+    await this.stateProvider.setUserState(USER_KEY, key, userId);
     await this.stateProvider.setUserState(USER_EVER_HAD_USER_KEY, true, userId);
 
     await this.storeAdditionalKeys(key, userId);
+  }
+
+  async setUserKeys(
+    userKey: UserKey,
+    encPrivateKey: EncryptedString,
+    userId: UserId,
+  ): Promise<void> {
+    if (userKey == null) {
+      throw new Error("No userKey provided. Lock the user to clear the key");
+    }
+    if (encPrivateKey == null) {
+      throw new Error("No encPrivateKey provided.");
+    }
+    if (userId == null) {
+      throw new Error("No userId provided.");
+    }
+
+    const decryptedPrivateKey = await this.decryptPrivateKey(encPrivateKey, userKey);
+    if (decryptedPrivateKey == null) {
+      throw new UserPrivateKeyDecryptionFailedError();
+    }
+
+    await this.setUserKey(userKey, userId);
+    await this.setPrivateKey(encPrivateKey, userId);
   }
 
   async refreshAdditionalKeys(): Promise<void> {
@@ -221,7 +250,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     }
   }
 
-  async setMasterKeyEncryptedUserKey(userKeyMasterKey: string, userId?: UserId): Promise<void> {
+  async setMasterKeyEncryptedUserKey(userKeyMasterKey: string, userId: UserId): Promise<void> {
     userId ??= await firstValueFrom(this.stateProvider.activeUserId$);
     await this.masterPasswordService.setMasterKeyEncryptedUserKey(
       new EncString(userKeyMasterKey),
@@ -705,13 +734,7 @@ export class CryptoService implements CryptoServiceAbstraction {
    * @param key The user key
    * @param userId The desired user
    */
-  protected async storeAdditionalKeys(key: UserKey, userId?: UserId) {
-    userId ??= await firstValueFrom(this.stateProvider.activeUserId$);
-
-    if (userId == null) {
-      throw new Error("Cannot store additional keys, no user Id resolved.");
-    }
-
+  protected async storeAdditionalKeys(key: UserKey, userId: UserId) {
     const storeAuto = await this.shouldStoreKey(KeySuffixOptions.Auto, userId);
     if (storeAuto) {
       await this.stateService.setUserKeyAutoUnlock(key.keyB64, { userId: userId });
@@ -947,6 +970,10 @@ export class CryptoService implements CryptoServiceAbstraction {
   }
 
   private async derivePublicKey(privateKey: UserPrivateKey) {
+    if (privateKey == null) {
+      return null;
+    }
+
     return (await this.cryptoFunctionService.rsaExtractPublicKey(privateKey)) as UserPublicKey;
   }
 

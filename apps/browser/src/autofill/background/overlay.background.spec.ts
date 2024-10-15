@@ -13,6 +13,7 @@ import {
   DomainSettingsService,
 } from "@bitwarden/common/autofill/services/domain-settings.service";
 import { InlineMenuVisibilitySetting } from "@bitwarden/common/autofill/types";
+import { NeverDomains } from "@bitwarden/common/models/domain/domain-service";
 import {
   EnvironmentService,
   Region,
@@ -22,6 +23,7 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { ThemeType } from "@bitwarden/common/platform/enums";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CloudEnvironment } from "@bitwarden/common/platform/services/default-environment.service";
+import { Fido2ActiveRequestManager } from "@bitwarden/common/platform/services/fido2/fido2-active-request-manager";
 import { ThemeStateService } from "@bitwarden/common/platform/theming/theme-state.service";
 import {
   FakeAccountService,
@@ -30,8 +32,10 @@ import {
 } from "@bitwarden/common/spec";
 import { UserId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { VaultSettingsService } from "@bitwarden/common/vault/abstractions/vault-settings/vault-settings.service";
 import { CipherRepromptType, CipherType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { Fido2CredentialView } from "@bitwarden/common/vault/models/view/fido2-credential.view";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { BrowserPlatformUtilsService } from "../../platform/services/platform-utils/browser-platform-utils.service";
@@ -75,6 +79,7 @@ describe("OverlayBackground", () => {
   let accountService: FakeAccountService;
   let fakeStateProvider: FakeStateProvider;
   let showFaviconsMock$: BehaviorSubject<boolean>;
+  let neverDomainsMock$: BehaviorSubject<NeverDomains>;
   let domainSettingsService: DomainSettingsService;
   let logService: MockProxy<LogService>;
   let cipherService: MockProxy<CipherService>;
@@ -87,6 +92,9 @@ describe("OverlayBackground", () => {
   let autofillSettingsService: MockProxy<AutofillSettingsService>;
   let i18nService: MockProxy<I18nService>;
   let platformUtilsService: MockProxy<BrowserPlatformUtilsService>;
+  let enablePasskeysMock$: BehaviorSubject<boolean>;
+  let vaultSettingsServiceMock: MockProxy<VaultSettingsService>;
+  let fido2ActiveRequestManager: Fido2ActiveRequestManager;
   let selectedThemeMock$: BehaviorSubject<ThemeType>;
   let themeStateService: MockProxy<ThemeStateService>;
   let cozyClientService: MockProxy<CozyClientService>;
@@ -133,8 +141,10 @@ describe("OverlayBackground", () => {
     accountService = mockAccountServiceWith(mockUserId);
     fakeStateProvider = new FakeStateProvider(accountService);
     showFaviconsMock$ = new BehaviorSubject(true);
+    neverDomainsMock$ = new BehaviorSubject({});
     domainSettingsService = new DefaultDomainSettingsService(fakeStateProvider);
     domainSettingsService.showFavicons$ = showFaviconsMock$;
+    domainSettingsService.neverDomains$ = neverDomainsMock$;
     logService = mock<LogService>();
     cipherService = mock<CipherService>();
     autofillService = mock<AutofillService>();
@@ -155,6 +165,10 @@ describe("OverlayBackground", () => {
     autofillSettingsService.inlineMenuVisibility$ = inlineMenuVisibilityMock$;
     i18nService = mock<I18nService>();
     platformUtilsService = mock<BrowserPlatformUtilsService>();
+    enablePasskeysMock$ = new BehaviorSubject(true);
+    vaultSettingsServiceMock = mock<VaultSettingsService>();
+    vaultSettingsServiceMock.enablePasskeys$ = enablePasskeysMock$;
+    fido2ActiveRequestManager = new Fido2ActiveRequestManager();
     selectedThemeMock$ = new BehaviorSubject(ThemeType.Light);
     themeStateService = mock<ThemeStateService>();
     themeStateService.selectedTheme$ = selectedThemeMock$;
@@ -168,6 +182,8 @@ describe("OverlayBackground", () => {
       autofillSettingsService,
       i18nService,
       platformUtilsService,
+      vaultSettingsServiceMock,
+      fido2ActiveRequestManager,
       themeStateService,
       cozyClientService,
       notificationBackgroundService,
@@ -705,28 +721,28 @@ describe("OverlayBackground", () => {
   describe("updating the overlay ciphers", () => {
     const url = "https://jest-testing-website.com";
     const tab = createChromeTabMock({ url });
-    const cipher1 = mock<CipherView>({
+    const loginCipher1 = mock<CipherView>({
       id: "id-1",
       localData: { lastUsedDate: 222 },
       name: "name-1",
       type: CipherType.Login,
-      login: { username: "username-1", uri: url },
+      login: { username: "username-1", password: "password", uri: url },
     });
-    const cipher2 = mock<CipherView>({
+    const cardCipher = mock<CipherView>({
       id: "id-2",
       localData: { lastUsedDate: 222 },
       name: "name-2",
       type: CipherType.Card,
       card: { subTitle: "subtitle-2" },
     });
-    const cipher3 = mock<CipherView>({
+    const loginCipher2 = mock<CipherView>({
       id: "id-3",
       localData: { lastUsedDate: 222 },
       name: "name-3",
       type: CipherType.Login,
       login: { username: "username-3", uri: url },
     });
-    const cipher4 = mock<CipherView>({
+    const identityCipher = mock<CipherView>({
       id: "id-4",
       localData: { lastUsedDate: 222 },
       name: "name-4",
@@ -736,6 +752,25 @@ describe("OverlayBackground", () => {
         firstName: "Test",
         lastName: "User",
         email: "email@example.com",
+      },
+    });
+    const passkeyCipher = mock<CipherView>({
+      id: "id-5",
+      localData: { lastUsedDate: 222 },
+      name: "name-5",
+      type: CipherType.Login,
+      login: {
+        username: "username-5",
+        password: "password",
+        uri: url,
+        fido2Credentials: [
+          mock<Fido2CredentialView>({
+            credentialId: "credential-id",
+            rpName: "credential-name",
+            userName: "credential-username",
+            rpId: "jest-testing-website.com",
+          }),
+        ],
       },
     });
 
@@ -750,6 +785,15 @@ describe("OverlayBackground", () => {
       await overlayBackground.updateOverlayCiphers();
 
       expect(getTabFromCurrentWindowIdSpy).not.toHaveBeenCalled();
+      expect(cipherService.getAllDecryptedForUrl).not.toHaveBeenCalled();
+    });
+
+    it("skips updating the inline menu ciphers if the current tab url has non-http protocol", async () => {
+      const nonHttpTab = createChromeTabMock({ url: "chrome-extension://id/route" });
+      getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(nonHttpTab);
+
+      await overlayBackground.updateOverlayCiphers();
+
       expect(cipherService.getAllDecryptedForUrl).not.toHaveBeenCalled();
     });
 
@@ -770,7 +814,7 @@ describe("OverlayBackground", () => {
 
     it("closes the inline menu on the focused field's tab if current tab is different", async () => {
       getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
-      cipherService.getAllDecryptedForUrl.mockResolvedValue([cipher1, cipher2]);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, cardCipher]);
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
       const previousTab = mock<chrome.tabs.Tab>({ id: 15 });
       overlayBackground["focusedFieldData"] = createFocusedFieldDataMock({ tabId: 15 });
@@ -787,7 +831,7 @@ describe("OverlayBackground", () => {
 
     it("queries all cipher types, sorts them by last used, and formats them for usage in the overlay", async () => {
       getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
-      cipherService.getAllDecryptedForUrl.mockResolvedValue([cipher1, cipher2]);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, cardCipher]);
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
 
       await overlayBackground.updateOverlayCiphers();
@@ -801,8 +845,8 @@ describe("OverlayBackground", () => {
       // expect(cipherService.sortCiphersByLastUsedThenName).toHaveBeenCalled(); // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
       expect(overlayBackground["inlineMenuCiphers"]).toStrictEqual(
         new Map([
-          ["inline-menu-cipher-0", cipher1], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
-          ["inline-menu-cipher-1", cipher2], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
+          ["inline-menu-cipher-0", loginCipher1], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
+          ["inline-menu-cipher-1", cardCipher], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
         ]),
       );
     });
@@ -810,7 +854,7 @@ describe("OverlayBackground", () => {
     it("queries only login ciphers when not updating all cipher types", async () => {
       overlayBackground["cardAndIdentityCiphers"] = new Set([]);
       getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
-      cipherService.getAllDecryptedForUrl.mockResolvedValue([cipher3, cipher1]);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher2, loginCipher1]);
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
 
       await overlayBackground.updateOverlayCiphers(false);
@@ -820,15 +864,15 @@ describe("OverlayBackground", () => {
       // expect(cipherService.sortCiphersByLastUsedThenName).toHaveBeenCalled(); // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
       expect(overlayBackground["inlineMenuCiphers"]).toStrictEqual(
         new Map([
-          ["inline-menu-cipher-0", cipher3], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
-          ["inline-menu-cipher-1", cipher1], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
+          ["inline-menu-cipher-0", loginCipher2], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
+          ["inline-menu-cipher-1", loginCipher1], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
         ]),
       );
     });
 
     it("queries all cipher types when the card and identity ciphers set is not built when only updating login ciphers", async () => {
       getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
-      cipherService.getAllDecryptedForUrl.mockResolvedValue([cipher1, cipher2]);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, cardCipher]);
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
 
       await overlayBackground.updateOverlayCiphers(false);
@@ -842,15 +886,15 @@ describe("OverlayBackground", () => {
       // expect(cipherService.sortCiphersByLastUsedThenName).toHaveBeenCalled(); // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
       expect(overlayBackground["inlineMenuCiphers"]).toStrictEqual(
         new Map([
-          ["inline-menu-cipher-0", cipher1], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
-          ["inline-menu-cipher-1", cipher2], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
+          ["inline-menu-cipher-0", cardCipher], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
+          ["inline-menu-cipher-1", loginCipher1], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
         ]),
       );
     });
 
     it("posts an `updateOverlayListCiphers` message to the overlay list port, and send a `updateAutofillInlineMenuListCiphers` message to the tab indicating that the list of ciphers is populated", async () => {
       overlayBackground["focusedFieldData"] = createFocusedFieldDataMock({ tabId: tab.id });
-      cipherService.getAllDecryptedForUrl.mockResolvedValue([cipher1]);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1]);
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
       getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
 
@@ -859,10 +903,11 @@ describe("OverlayBackground", () => {
       expect(listPortSpy.postMessage).toHaveBeenCalledWith({
         command: "updateAutofillInlineMenuListCiphers",
         showInlineMenuAccountCreation: false,
+        showPasskeysLabels: false,
         ciphers: [
           {
             accountCreationFieldType: undefined,
-            favorite: cipher1.favorite,
+            favorite: loginCipher1.favorite,
             icon: {
               fallbackImage: "images/bwi-globe.png",
               icon: "bwi-globe",
@@ -872,9 +917,10 @@ describe("OverlayBackground", () => {
             id: "inline-menu-cipher-0",
             login: {
               username: "username-1",
+              passkey: null,
             },
             name: "name-1",
-            reprompt: cipher1.reprompt,
+            reprompt: loginCipher1.reprompt,
             type: CipherType.Login,
           },
         ],
@@ -886,7 +932,7 @@ describe("OverlayBackground", () => {
         tabId: tab.id,
         filledByCipherType: CipherType.Card,
       });
-      cipherService.getAllDecryptedForUrl.mockResolvedValue([cipher1, cipher2]);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, cardCipher]);
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
       getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
 
@@ -895,20 +941,21 @@ describe("OverlayBackground", () => {
       expect(listPortSpy.postMessage).toHaveBeenCalledWith({
         command: "updateAutofillInlineMenuListCiphers",
         showInlineMenuAccountCreation: false,
+        showPasskeysLabels: false,
         ciphers: [
           {
             accountCreationFieldType: undefined,
-            favorite: cipher2.favorite,
+            favorite: cardCipher.favorite,
             icon: {
               fallbackImage: "",
               icon: "bwi-credit-card",
               image: undefined,
               imageEnabled: true,
             },
-            id: "inline-menu-cipher-1", // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
-            card: cipher2.card.subTitle,
-            name: cipher2.name,
-            reprompt: cipher2.reprompt,
+            id: "inline-menu-cipher-0", // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
+            card: cardCipher.card.subTitle,
+            name: cardCipher.name,
+            reprompt: cardCipher.reprompt,
             type: CipherType.Card,
           },
         ],
@@ -922,7 +969,7 @@ describe("OverlayBackground", () => {
           accountCreationFieldType: "text",
           showInlineMenuAccountCreation: true,
         });
-        cipherService.getAllDecryptedForUrl.mockResolvedValue([cipher4, cipher2]);
+        cipherService.getAllDecryptedForUrl.mockResolvedValue([identityCipher, cardCipher]);
         cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
         getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
 
@@ -931,10 +978,11 @@ describe("OverlayBackground", () => {
         expect(listPortSpy.postMessage).toHaveBeenCalledWith({
           command: "updateAutofillInlineMenuListCiphers",
           showInlineMenuAccountCreation: true,
+          showPasskeysLabels: false,
           ciphers: [
             {
               accountCreationFieldType: "text",
-              favorite: cipher4.favorite,
+              favorite: identityCipher.favorite,
               icon: {
                 fallbackImage: "",
                 icon: "bwi-id-card",
@@ -942,12 +990,12 @@ describe("OverlayBackground", () => {
                 imageEnabled: true,
               },
               id: "inline-menu-cipher-0", // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
-              name: cipher4.name,
-              reprompt: cipher4.reprompt,
+              name: identityCipher.name,
+              reprompt: identityCipher.reprompt,
               type: CipherType.Identity,
               identity: {
-                fullName: `${cipher4.identity.firstName} ${cipher4.identity.lastName}`,
-                username: cipher4.identity.username,
+                fullName: `${identityCipher.identity.firstName} ${identityCipher.identity.lastName}`,
+                username: identityCipher.identity.username,
               },
             },
           ],
@@ -960,7 +1008,7 @@ describe("OverlayBackground", () => {
           accountCreationFieldType: "text",
           showInlineMenuAccountCreation: true,
         });
-        cipherService.getAllDecryptedForUrl.mockResolvedValue([cipher1, cipher4]);
+        cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, identityCipher]);
         cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
         getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
 
@@ -969,10 +1017,11 @@ describe("OverlayBackground", () => {
         expect(listPortSpy.postMessage).toHaveBeenCalledWith({
           command: "updateAutofillInlineMenuListCiphers",
           showInlineMenuAccountCreation: true,
+          showPasskeysLabels: false,
           ciphers: [
             {
               accountCreationFieldType: "text",
-              favorite: cipher4.favorite,
+              favorite: identityCipher.favorite,
               icon: {
                 fallbackImage: "",
                 icon: "bwi-id-card",
@@ -980,17 +1029,17 @@ describe("OverlayBackground", () => {
                 imageEnabled: true,
               },
               id: "inline-menu-cipher-1", // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
-              name: cipher4.name,
-              reprompt: cipher4.reprompt,
+              name: identityCipher.name,
+              reprompt: identityCipher.reprompt,
               type: CipherType.Identity,
               identity: {
-                fullName: `${cipher4.identity.firstName} ${cipher4.identity.lastName}`,
-                username: cipher4.identity.username,
+                fullName: `${identityCipher.identity.firstName} ${identityCipher.identity.lastName}`,
+                username: identityCipher.identity.username,
               },
             },
             {
               accountCreationFieldType: "text",
-              favorite: cipher1.favorite,
+              favorite: loginCipher1.favorite,
               icon: {
                 fallbackImage: "images/bwi-globe.png",
                 icon: "bwi-globe",
@@ -999,10 +1048,11 @@ describe("OverlayBackground", () => {
               },
               id: "inline-menu-cipher-0", // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
               login: {
-                username: cipher1.login.username,
+                username: loginCipher1.login.username,
+                passkey: null,
               },
-              name: cipher1.name,
-              reprompt: cipher1.reprompt,
+              name: loginCipher1.name,
+              reprompt: loginCipher1.reprompt,
               type: CipherType.Login,
             },
           ],
@@ -1026,7 +1076,7 @@ describe("OverlayBackground", () => {
           },
         });
         cipherService.getAllDecryptedForUrl.mockResolvedValue([
-          cipher4,
+          identityCipher,
           identityCipherWithoutUsername,
         ]);
         cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
@@ -1037,10 +1087,11 @@ describe("OverlayBackground", () => {
         expect(listPortSpy.postMessage).toHaveBeenCalledWith({
           command: "updateAutofillInlineMenuListCiphers",
           showInlineMenuAccountCreation: true,
+          showPasskeysLabels: false,
           ciphers: [
             {
               accountCreationFieldType: "email",
-              favorite: cipher4.favorite,
+              favorite: identityCipher.favorite,
               icon: {
                 fallbackImage: "",
                 icon: "bwi-id-card",
@@ -1048,12 +1099,12 @@ describe("OverlayBackground", () => {
                 imageEnabled: true,
               },
               id: "inline-menu-cipher-0", // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
-              name: cipher4.name,
-              reprompt: cipher4.reprompt,
+              name: identityCipher.name,
+              reprompt: identityCipher.reprompt,
               type: CipherType.Identity,
               identity: {
-                fullName: `${cipher4.identity.firstName} ${cipher4.identity.lastName}`,
-                username: cipher4.identity.email,
+                fullName: `${identityCipher.identity.firstName} ${identityCipher.identity.lastName}`,
+                username: identityCipher.identity.email,
               },
             },
           ],
@@ -1066,7 +1117,7 @@ describe("OverlayBackground", () => {
           accountCreationFieldType: "password",
           showInlineMenuAccountCreation: true,
         });
-        cipherService.getAllDecryptedForUrl.mockResolvedValue([cipher4]);
+        cipherService.getAllDecryptedForUrl.mockResolvedValue([identityCipher]);
         cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
         getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
 
@@ -1075,8 +1126,218 @@ describe("OverlayBackground", () => {
         expect(listPortSpy.postMessage).toHaveBeenCalledWith({
           command: "updateAutofillInlineMenuListCiphers",
           showInlineMenuAccountCreation: true,
+          showPasskeysLabels: false,
           ciphers: [],
         });
+      });
+    });
+
+    it("adds available passkey ciphers to the inline menu", async () => {
+      void fido2ActiveRequestManager.newActiveRequest(
+        tab.id,
+        passkeyCipher.login.fido2Credentials,
+        new AbortController(),
+      );
+      overlayBackground["focusedFieldData"] = createFocusedFieldDataMock({
+        tabId: tab.id,
+        filledByCipherType: CipherType.Login,
+        showPasskeys: true,
+      });
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, passkeyCipher]);
+      cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
+      getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
+
+      await overlayBackground.updateOverlayCiphers();
+
+      expect(listPortSpy.postMessage).toHaveBeenCalledWith({
+        command: "updateAutofillInlineMenuListCiphers",
+        ciphers: [
+          {
+            id: "inline-menu-cipher-0",
+            name: passkeyCipher.name,
+            type: CipherType.Login,
+            reprompt: passkeyCipher.reprompt,
+            favorite: passkeyCipher.favorite,
+            icon: {
+              fallbackImage: "images/bwi-globe.png",
+              icon: "bwi-globe",
+              image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
+              imageEnabled: true,
+            },
+            accountCreationFieldType: undefined,
+            login: {
+              username: passkeyCipher.login.username,
+              passkey: {
+                rpName: passkeyCipher.login.fido2Credentials[0].rpName,
+                userName: passkeyCipher.login.fido2Credentials[0].userName,
+              },
+            },
+          },
+          {
+            id: "inline-menu-cipher-0",
+            name: passkeyCipher.name,
+            type: CipherType.Login,
+            reprompt: passkeyCipher.reprompt,
+            favorite: passkeyCipher.favorite,
+            icon: {
+              fallbackImage: "images/bwi-globe.png",
+              icon: "bwi-globe",
+              image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
+              imageEnabled: true,
+            },
+            accountCreationFieldType: undefined,
+            login: {
+              username: passkeyCipher.login.username,
+              passkey: null,
+            },
+          },
+          {
+            id: "inline-menu-cipher-1",
+            name: loginCipher1.name,
+            type: CipherType.Login,
+            reprompt: loginCipher1.reprompt,
+            favorite: loginCipher1.favorite,
+            icon: {
+              fallbackImage: "images/bwi-globe.png",
+              icon: "bwi-globe",
+              image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
+              imageEnabled: true,
+            },
+            accountCreationFieldType: undefined,
+            login: {
+              username: loginCipher1.login.username,
+              passkey: null,
+            },
+          },
+        ],
+        showInlineMenuAccountCreation: false,
+        showPasskeysLabels: true,
+      });
+    });
+
+    it("does not add a passkey to the inline menu when its rpId is part of the neverDomains exclusion list", async () => {
+      void fido2ActiveRequestManager.newActiveRequest(
+        tab.id,
+        passkeyCipher.login.fido2Credentials,
+        new AbortController(),
+      );
+      overlayBackground["focusedFieldData"] = createFocusedFieldDataMock({
+        tabId: tab.id,
+        filledByCipherType: CipherType.Login,
+        showPasskeys: true,
+      });
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, passkeyCipher]);
+      cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
+      getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
+      neverDomainsMock$.next({ "jest-testing-website.com": null });
+
+      await overlayBackground.updateOverlayCiphers();
+
+      expect(listPortSpy.postMessage).toHaveBeenCalledWith({
+        command: "updateAutofillInlineMenuListCiphers",
+        ciphers: [
+          {
+            id: "inline-menu-cipher-0",
+            name: passkeyCipher.name,
+            type: CipherType.Login,
+            reprompt: passkeyCipher.reprompt,
+            favorite: passkeyCipher.favorite,
+            icon: {
+              fallbackImage: "images/bwi-globe.png",
+              icon: "bwi-globe",
+              image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
+              imageEnabled: true,
+            },
+            accountCreationFieldType: undefined,
+            login: {
+              username: passkeyCipher.login.username,
+              passkey: null,
+            },
+          },
+          {
+            id: "inline-menu-cipher-1",
+            name: loginCipher1.name,
+            type: CipherType.Login,
+            reprompt: loginCipher1.reprompt,
+            favorite: loginCipher1.favorite,
+            icon: {
+              fallbackImage: "images/bwi-globe.png",
+              icon: "bwi-globe",
+              image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
+              imageEnabled: true,
+            },
+            accountCreationFieldType: undefined,
+            login: {
+              username: loginCipher1.login.username,
+              passkey: null,
+            },
+          },
+        ],
+        showInlineMenuAccountCreation: false,
+        showPasskeysLabels: false,
+      });
+    });
+
+    it("does not add passkeys to the inline menu if the passkey setting is disabled", async () => {
+      enablePasskeysMock$.next(false);
+      void fido2ActiveRequestManager.newActiveRequest(
+        tab.id,
+        passkeyCipher.login.fido2Credentials,
+        new AbortController(),
+      );
+      overlayBackground["focusedFieldData"] = createFocusedFieldDataMock({
+        tabId: tab.id,
+        filledByCipherType: CipherType.Login,
+        showPasskeys: true,
+      });
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, passkeyCipher]);
+      cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
+      getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
+
+      await overlayBackground.updateOverlayCiphers();
+
+      expect(listPortSpy.postMessage).toHaveBeenCalledWith({
+        command: "updateAutofillInlineMenuListCiphers",
+        ciphers: [
+          {
+            id: "inline-menu-cipher-0",
+            name: passkeyCipher.name,
+            type: CipherType.Login,
+            reprompt: passkeyCipher.reprompt,
+            favorite: passkeyCipher.favorite,
+            icon: {
+              fallbackImage: "images/bwi-globe.png",
+              icon: "bwi-globe",
+              image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
+              imageEnabled: true,
+            },
+            accountCreationFieldType: undefined,
+            login: {
+              username: passkeyCipher.login.username,
+              passkey: null,
+            },
+          },
+          {
+            id: "inline-menu-cipher-1",
+            name: loginCipher1.name,
+            type: CipherType.Login,
+            reprompt: loginCipher1.reprompt,
+            favorite: loginCipher1.favorite,
+            icon: {
+              fallbackImage: "images/bwi-globe.png",
+              icon: "bwi-globe",
+              image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
+              imageEnabled: true,
+            },
+            accountCreationFieldType: undefined,
+            login: {
+              username: loginCipher1.login.username,
+              passkey: null,
+            },
+          },
+        ],
+        showInlineMenuAccountCreation: false,
+        showPasskeysLabels: false,
       });
     });
   });
@@ -2349,6 +2610,7 @@ describe("OverlayBackground", () => {
 
     describe("extension messages that trigger an update of the inline menu ciphers", () => {
       const extensionMessages = [
+        "doFullSync",
         "addedCipher",
         "addEditCipherSubmitted",
         "editedCipher",
@@ -2364,6 +2626,25 @@ describe("OverlayBackground", () => {
           sendMockExtensionMessage({ command: message });
           expect(overlayBackground.updateOverlayCiphers).toHaveBeenCalled();
         });
+      });
+    });
+
+    describe("fido2AbortRequest", () => {
+      const sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+      it("removes an active request associated with the sender tab", () => {
+        const removeActiveRequestSpy = jest.spyOn(fido2ActiveRequestManager, "removeActiveRequest");
+
+        sendMockExtensionMessage({ command: "fido2AbortRequest" }, sender);
+
+        expect(removeActiveRequestSpy).toHaveBeenCalledWith(sender.tab.id);
+      });
+
+      it("updates the overlay ciphers after removing the active request", () => {
+        const updateOverlayCiphersSpy = jest.spyOn(overlayBackground, "updateOverlayCiphers");
+
+        sendMockExtensionMessage({ command: "fido2AbortRequest" }, sender);
+
+        expect(updateOverlayCiphersSpy).toHaveBeenCalledWith(false);
       });
     });
   });
@@ -2728,6 +3009,39 @@ describe("OverlayBackground", () => {
         await flushPromises();
 
         expect(copyToClipboardSpy).toHaveBeenCalledWith("totp-code");
+      });
+
+      it("triggers passkey authentication through mediated conditional UI", async () => {
+        const fido2Credential = mock<Fido2CredentialView>({ credentialId: "credential-id" });
+        const cipher1 = mock<CipherView>({
+          id: "inline-menu-cipher-1",
+          login: {
+            username: "username1",
+            password: "password1",
+            fido2Credentials: [fido2Credential],
+          },
+        });
+        overlayBackground["inlineMenuCiphers"] = new Map([["inline-menu-cipher-1", cipher1]]);
+        const pageDetailsForTab = {
+          frameId: sender.frameId,
+          tab: sender.tab,
+          details: pageDetails,
+        };
+        overlayBackground["pageDetailsForTab"][sender.tab.id] = new Map([
+          [sender.frameId, pageDetailsForTab],
+        ]);
+        autofillService.isPasswordRepromptRequired.mockResolvedValue(false);
+        jest.spyOn(fido2ActiveRequestManager, "getActiveRequest");
+
+        sendPortMessage(listMessageConnectorSpy, {
+          command: "fillAutofillInlineMenuCipher",
+          inlineMenuCipherId: "inline-menu-cipher-1",
+          usePasskey: true,
+          portKey,
+        });
+        await flushPromises();
+
+        expect(fido2ActiveRequestManager.getActiveRequest).toHaveBeenCalledWith(sender.tab.id);
       });
     });
 

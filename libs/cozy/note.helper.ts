@@ -1,7 +1,9 @@
 import CozyClient from "cozy-client/types/CozyClient";
 import { Node, Schema } from "prosemirror-model";
 import { EditorState } from "prosemirror-state";
+import { firstValueFrom, map } from "rxjs";
 
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { PaperType } from "@bitwarden/common/enums/paperType";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
@@ -56,10 +58,13 @@ export const noteToText = (note: any): string => {
 export const convertNoteToCipherData = async (
   cipherService: CipherService,
   i18nService: I18nService,
+  accountService: AccountService,
   paper: any,
   options: NoteConversionOptions,
   key?: SymmetricCryptoKey,
 ): Promise<CipherData> => {
+  const activeUserId = await firstValueFrom(accountService.activeAccount$.pipe(map((a) => a?.id)));
+
   const { noteIllustrationUrl } = options;
 
   const cozyMetadata = paper.cozyMetadata;
@@ -86,7 +91,7 @@ export const convertNoteToCipherData = async (
     cipherView.revisionDate = new Date(cozyMetadata.updatedAt);
   }
 
-  const cipherEncrypted = await cipherService.encrypt(cipherView, key);
+  const cipherEncrypted = await cipherService.encrypt(cipherView, activeUserId, key);
 
   const cipherData = cipherEncrypted.toCipherData();
 

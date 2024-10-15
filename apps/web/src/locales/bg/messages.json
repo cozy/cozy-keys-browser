@@ -36,6 +36,9 @@
   "notes": {
     "message": "Бележки"
   },
+  "note": {
+    "message": "Бележка"
+  },
   "customFields": {
     "message": "Допълнителни полета"
   },
@@ -45,6 +48,30 @@
   "loginCredentials": {
     "message": "Данни за вписване"
   },
+  "personalDetails": {
+    "message": "Лични данни"
+  },
+  "identification": {
+    "message": "Идентификация"
+  },
+  "contactInfo": {
+    "message": "Информация за връзка"
+  },
+  "cardDetails": {
+    "message": "Данни за картата"
+  },
+  "cardBrandDetails": {
+    "message": "Подробности за $BRAND$",
+    "placeholders": {
+      "brand": {
+        "content": "$1",
+        "example": "Visa"
+      }
+    }
+  },
+  "itemHistory": {
+    "message": "История на елемента"
+  },
   "authenticatorKey": {
     "message": "Ключ за удостоверяване"
   },
@@ -53,6 +80,16 @@
   },
   "websiteUri": {
     "message": "Уеб сайт (адрес)"
+  },
+  "websiteUriCount": {
+    "message": "Уеб сайт (адрес) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
     "message": "Уеб сайтът е добавен"
@@ -74,7 +111,7 @@
     }
   },
   "showMatchDetection": {
-    "message": "Show match detection $WEBSITE$",
+    "message": "Показване на откритото съвпадение $WEBSITE$",
     "placeholders": {
       "website": {
         "content": "$1",
@@ -83,7 +120,7 @@
     }
   },
   "hideMatchDetection": {
-    "message": "Hide match detection $WEBSITE$",
+    "message": "Скриване на откритото съвпадение $WEBSITE$",
     "placeholders": {
       "website": {
         "content": "$1",
@@ -176,10 +213,16 @@
     "message": "Г-жа"
   },
   "mx": {
-    "message": "Mx"
+    "message": "Предпочитам да не посочвам"
   },
   "dr": {
     "message": "Д-р"
+  },
+  "cardExpiredTitle": {
+    "message": "Изтекла карта"
+  },
+  "cardExpiredMessage": {
+    "message": "Ако сте я подновили, актуализирайте информацията за картата"
   },
   "expirationMonth": {
     "message": "Месец на изтичане"
@@ -198,6 +241,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Битуорден може да съхранява и попълва кодовете за 2-стъпково потвърждаване. Изберете иконката с камера, за да направите екранна снимка на QR-кода от този уеб сайт или копирайте ключа в това поле."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Научете повече за средствата за удостоверяване"
   },
   "folder": {
     "message": "Папка"
@@ -417,6 +463,9 @@
   "fullName": {
     "message": "Пълно име"
   },
+  "address": {
+    "message": "Адрес"
+  },
   "address1": {
     "message": "Адрес 1"
   },
@@ -458,6 +507,15 @@
   },
   "viewItem": {
     "message": "Преглед на елемента"
+  },
+  "viewItemType": {
+    "message": "Преглед на $ITEMTYPE$",
+    "placeholders": {
+      "itemtype": {
+        "content": "$1",
+        "example": "login"
+      }
+    }
   },
   "new": {
     "message": "Ново",
@@ -874,6 +932,9 @@
   "masterPassHint": {
     "message": "Подсказка за главната парола (по избор)"
   },
+  "newMasterPassHint": {
+    "message": "Подсказка за новата главна парола (по избор)"
+  },
   "masterPassHintLabel": {
     "message": "Подсказка за главната парола"
   },
@@ -930,6 +991,12 @@
   "newAccountCreated": {
     "message": "Абонаментът ви бе създаден. Вече можете да се впишете."
   },
+  "newAccountCreated2": {
+    "message": "Новата Ви регистрация беше създадена!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Вече сте вписан(а)!"
+  },
   "trialAccountCreated": {
     "message": "Регистрацията е създадена успешно."
   },
@@ -949,7 +1016,7 @@
     "message": "Трезорът Ви е заключен."
   },
   "uuid": {
-    "message": "UUID"
+    "message": "ИН на универсален потребител - UUID"
   },
   "unlock": {
     "message": "Отключване"
@@ -1183,7 +1250,7 @@
     "message": "Копиране на кода за потвърждаване"
   },
   "copyUuid": {
-    "message": "Copy UUID"
+    "message": "Копиране на UUID"
   },
   "errorRefreshingAccessToken": {
     "message": "Грешка при опресняването на идентификатора за достъп"
@@ -1504,6 +1571,10 @@
   "onboardingImportDataDetailsLink": {
     "message": "нов елемент",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "нов елемент за вписване",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": ".",
@@ -4945,6 +5016,10 @@
       }
     }
   },
+  "viewSend": {
+    "message": "Преглед на изпращането",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "viewSendHiddenEmailWarning": {
     "message": "Потребителят, който е създал това изпращане, е избрал да скрие адреса на своята е-поща. Уверете се, че източникът на тази връзка е достоверен, преди да я последвате или да свалите съдържание чрез нея.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -5323,6 +5398,18 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Вашата главна парола не отговаря на една или повече политики на организацията Ви. За да получите достъп до трезора, трябва да промените главната си парола сега. Това означава, че ще бъдете отписан(а) от текущата си сесия и ще трябва да се впишете отново. Активните сесии на други устройства може да продължат да бъдат активни още един час."
   },
+  "automaticAppLogin": {
+    "message": "Автоматично вписване на потребителите за разрешените приложения"
+  },
+  "automaticAppLoginDesc": {
+    "message": "Формулярите за вписване ще бъдат попълвани и изпращани автоматично за приложенията, стартирани от настроения Ви доставчик на самоличност."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Сървър на доставчика на самоличност"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Въведете адреса на сървъра на своя доставчик на самоличност. Можете да въведете повече от един адрес, като ги разделите със запетаи."
+  },
   "tdeDisabledMasterPasswordRequired": {
     "message": "Вашата организация е променила настройките за шифроване. Задайте главна парола, за да получите достъп до трезора си."
   },
@@ -5603,10 +5690,10 @@
     "message": "Free Bitwarden Families offer successfully redeemed"
   },
   "redeemed": {
-    "message": "Redeemed"
+    "message": "Използван"
   },
   "redeemedAccount": {
-    "message": "Account redeemed"
+    "message": "Регистрацията е присвоена"
   },
   "revokeAccount": {
     "message": "Revoke account $NAME$",
@@ -5630,7 +5717,7 @@
     "message": "Безплатен семеен план"
   },
   "redeemNow": {
-    "message": "Redeem now"
+    "message": "Осребрете сега"
   },
   "recipient": {
     "message": "Получател"
@@ -6539,7 +6626,7 @@
     "description": "A label for a type-to-filter input field to choose projects."
   },
   "searchProjects": {
-    "message": "Search projects",
+    "message": "Търсене на проекти",
     "description": "Label for the search bar used to search projects."
   },
   "project": {
@@ -6825,7 +6912,7 @@
     "description": "Label for the expiration date of an access token."
   },
   "canRead": {
-    "message": "Can read",
+    "message": "Може да чете",
     "description": "Label for the access level of an access token (Read only)."
   },
   "accessTokensNoItemsTitle": {
@@ -7144,13 +7231,13 @@
     "message": "Няма добавени членове или групи"
   },
   "deleted": {
-    "message": "Deleted"
+    "message": "Изтрито"
   },
   "memberStatusFilter": {
     "message": "Member status filter"
   },
   "inviteMember": {
-    "message": "Invite member"
+    "message": "Покана на член"
   },
   "needsConfirmation": {
     "message": "Изисква потвърждение"
@@ -7405,7 +7492,7 @@
     "message": "Внасяне на тайни"
   },
   "getStarted": {
-    "message": "Get started"
+    "message": "Първи стъпки"
   },
   "complete": {
     "message": "Завършено: $COMPLETED$/$TOTAL$",
@@ -7466,13 +7553,13 @@
     "message": "Проверяване в известните случаи на изтекли данни за тази парола"
   },
   "exposedMasterPassword": {
-    "message": "Exposed Master Password"
+    "message": "Разобличена главна парола"
   },
   "exposedMasterPasswordDesc": {
-    "message": "Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?"
+    "message": "Паролата е намерена в пробив на данни. Използвайте уникална парола, за да защитите Вашия акаунт. Наистина ли искате да използвате слаба парола?"
   },
   "weakAndExposedMasterPassword": {
-    "message": "Weak and Exposed Master Password"
+    "message": "Слаба и разобличена главна парола"
   },
   "weakAndBreachedMasterPasswordDesc": {
     "message": "Разпозната е слаба парола, която присъства в известен случай на изтекли данни. Използвайте силна и уникална парола, за да защитите данните си. Наистина ли искате да използвате тази парола?"
@@ -7500,7 +7587,7 @@
     "description": "Notification to inform the user that a form's input can't contain only whitespace."
   },
   "dismiss": {
-    "message": "Dismiss"
+    "message": "Отхвърляне"
   },
   "notAvailableForFreeOrganization": {
     "message": "Тази функционалност не е налична за организациите използващи безплатния план. Свържете се със собственика на организацията си, за да преминете към платен абонамент."
@@ -7720,7 +7807,7 @@
     }
   },
   "next": {
-    "message": "Next"
+    "message": "Следващ"
   },
   "ssoLoginIsRequired": {
     "message": "Необходимо е вписване чрез еднократно удостоверяване"
@@ -8907,5 +8994,69 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB допълнително място за съхранение"
+  },
+  "premiumAccounts": {
+    "message": "6 платени регистрации"
+  },
+  "unlimitedSharing": {
+    "message": "Неограничено споделяне"
+  },
+  "unlimitedCollections": {
+    "message": "Неограничен брой колекции"
+  },
+  "secureDataSharing": {
+    "message": "Сигурно споделяне на данни"
+  },
+  "eventLogMonitoring": {
+    "message": "Следене на журнала на събитията"
+  },
+  "directoryIntegration": {
+    "message": "Интеграция на активна директория"
+  },
+  "passwordLessSso": {
+    "message": "Еднократно удостоверяване без парола"
+  },
+  "accountRecovery": {
+    "message": "Възстановяване на регистрацията"
+  },
+  "customRoles": {
+    "message": "Персонализирани роли"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Неограничено място за съхранение на тайни"
+  },
+  "unlimitedUsers": {
+    "message": "Неограничен брой потребители"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "До 50 машинни акаунти"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "До 20 машинни акаунти"
+  },
+  "current": {
+    "message": "Текущо"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Вашият абонамент за Управлението на тайни ще бъде надграден според избрания план"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden — управител на пароли"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Your complementary one year Password Manager subscription will upgrade to the selected plan. You will not be charged until the complimentary period is over."
+  },
+  "publicApi": {
+    "message": "Публичен ППИ",
+    "description": "The text, 'API', is an acronymn and should not be translated."
+  },
+  "showCharacterCount": {
+    "message": "Показване на броя знаци"
+  },
+  "hideCharacterCount": {
+    "message": "Скриване на броя знаци"
+  },
+  "editAccess": {
+    "message": "Редактиране на достъпа"
   }
 }

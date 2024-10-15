@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, inject } from "@angular/core";
 import { NavigationEnd, Router, RouterOutlet } from "@angular/router";
 import { Subject, takeUntil, firstValueFrom, concatMap, filter, tap } from "rxjs";
 
@@ -6,6 +6,7 @@ import { LogoutReason } from "@bitwarden/auth/common";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { AuthService } from "@bitwarden/common/auth/abstractions/auth.service";
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { AnimationControlService } from "@bitwarden/common/platform/abstractions/animation-control.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
@@ -19,7 +20,8 @@ import {
   ToastService,
 } from "@bitwarden/components";
 
-import { BrowserApi } from "../platform/browser/browser-api";
+import { PopupViewCacheService } from "../platform/popup/view-cache/popup-view-cache.service";
+import { initPopupClosedListener } from "../platform/services/popup-view-cache-background.service";
 import { BrowserSendStateService } from "../tools/popup/services/browser-send-state.service";
 import { VaultBrowserStateService } from "../vault/services/vault-browser-state.service";
 
@@ -37,9 +39,12 @@ import { HistoryService } from "./services/history.service";
   </div>`,
 })
 export class AppComponent implements OnInit, OnDestroy {
+  private viewCacheService = inject(PopupViewCacheService);
+
   private lastActivity: Date;
   private activeUserId: UserId;
   private recordActivitySubject = new Subject<void>();
+  private routerAnimations = false;
 
   private destroy$ = new Subject<void>();
 
@@ -60,9 +65,13 @@ export class AppComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private historyService: HistoryService,
     private cozyClientService: CozyClientService,
+    private animationControlService: AnimationControlService,
   ) {}
 
   async ngOnInit() {
+    initPopupClosedListener();
+    await this.viewCacheService.init();
+
     // Component states must not persist between closing and reopening the popup, otherwise they become dead objects
     // Clear them aggressively to make sure this doesn't occur
     await this.clearComponentStates();
@@ -127,15 +136,11 @@ export class AppComponent implements OnInit, OnDestroy {
           } else if (msg.command === "showToast") {
             this.toastService._showToast(msg);
           } else if (msg.command === "reloadProcess") {
-            const forceWindowReload =
-              this.platformUtilsService.isSafari() ||
-              this.platformUtilsService.isFirefox() ||
-              this.platformUtilsService.isOpera();
-            // Wait to make sure background has reloaded first.
-            window.setTimeout(
-              () => BrowserApi.reloadExtension(forceWindowReload ? window : null),
-              2000,
-            );
+            if (this.platformUtilsService.isSafari()) {
+              window.setTimeout(() => {
+                window.location.reload();
+              }, 2000);
+            }
           } else if (msg.command === "reloadPopup") {
             // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -178,6 +183,12 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    this.animationControlService.enableRoutingAnimation$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((state) => {
+        this.routerAnimations = state;
+      });
   }
 
   ngOnDestroy(): void {
@@ -186,7 +197,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   getState(outlet: RouterOutlet) {
-    if (outlet.activatedRouteData.state === "ciphers") {
+    if (!this.routerAnimations) {
+      return;
+    } else if (outlet.activatedRouteData.state === "ciphers") {
       const routeDirection =
         (window as any).routeDirection != null ? (window as any).routeDirection : "";
       return (
@@ -248,7 +261,7 @@ export class AppComponent implements OnInit, OnDestroy {
   // Displaying toasts isn't super useful on the popup due to the reloads we do.
   // However, it is visible for a moment on the FF sidebar logout.
   private async displayLogoutReason(logoutReason: LogoutReason) {
-    let toastOptions: ToastOptions;
+    let toastOptions: ToastOptions | null = null;
     switch (logoutReason) {
       case "invalidSecurityStamp":
       case "sessionExpired": {
@@ -259,6 +272,11 @@ export class AppComponent implements OnInit, OnDestroy {
         };
         break;
       }
+    }
+
+    if (toastOptions == null) {
+      // We don't have anything to show for this particular reason
+      return;
     }
 
     this.toastService.showToast(toastOptions);

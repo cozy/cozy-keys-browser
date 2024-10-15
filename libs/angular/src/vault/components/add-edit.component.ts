@@ -1,6 +1,6 @@
 import { DatePipe } from "@angular/common";
 import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from "@angular/core";
-import { concatMap, firstValueFrom, Observable, Subject, takeUntil } from "rxjs";
+import { concatMap, firstValueFrom, map, Observable, Subject, takeUntil } from "rxjs";
 
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
@@ -22,6 +22,7 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
+import { UserId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
@@ -36,6 +37,7 @@ import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view"
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
 import { SecureNoteView } from "@bitwarden/common/vault/models/view/secure-note.view";
+import { normalizeExpiryYearFormat } from "@bitwarden/common/vault/utils";
 import { DialogService, ToastService } from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
@@ -90,7 +92,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
   private personalOwnershipPolicyAppliesToActiveUser: boolean;
   private previousCipherId: string;
 
-  protected flexibleCollectionsV1Enabled = false;
   protected restrictProviderAccess = false;
 
   get fido2CredentialCreationDateValue(): string {
@@ -182,9 +183,6 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.flexibleCollectionsV1Enabled = await this.configService.getFeatureFlag(
-      FeatureFlag.FlexibleCollectionsV1,
-    );
     this.restrictProviderAccess = await this.configService.getFeatureFlag(
       FeatureFlag.RestrictProviderAccess,
     );
@@ -257,8 +255,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
     if (this.cipher == null) {
       if (this.editMode) {
         const cipher = await this.loadCipher();
+        const activeUserId = await firstValueFrom(
+          this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+        );
         this.cipher = await cipher.decrypt(
-          await this.cipherService.getKeyForCipherKeyDecryption(cipher),
+          await this.cipherService.getKeyForCipherKeyDecryption(cipher, activeUserId),
         );
 
         // Adjust Cipher Name if Cloning
@@ -333,6 +334,11 @@ export class AddEditComponent implements OnInit, OnDestroy {
       return this.restore();
     }
 
+    // normalize card expiry year on save
+    if (this.cipher.type === this.cipherType.Card) {
+      this.cipher.card.expYear = normalizeExpiryYearFormat(this.cipher.card.expYear);
+    }
+
     if (this.cipher.name == null || this.cipher.name === "") {
       this.platformUtilsService.showToast(
         "error",
@@ -378,7 +384,10 @@ export class AddEditComponent implements OnInit, OnDestroy {
       this.cipher.id = null;
     }
 
-    const cipher = await this.encryptCipher();
+    const activeUserId = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+    );
+    const cipher = await this.encryptCipher(activeUserId);
     try {
       this.formPromise = this.saveCipher(cipher);
       await this.formPromise;
@@ -671,16 +680,13 @@ export class AddEditComponent implements OnInit, OnDestroy {
     return this.cipherService.get(this.cipherId);
   }
 
-  protected encryptCipher() {
-    return this.cipherService.encrypt(this.cipher);
+  protected encryptCipher(userId: UserId) {
+    return this.cipherService.encrypt(this.cipher, userId);
   }
 
   protected saveCipher(cipher: Cipher) {
     const isNotClone = this.editMode && !this.cloneMode;
-    let orgAdmin = this.organization?.canEditAllCiphers(
-      this.flexibleCollectionsV1Enabled,
-      this.restrictProviderAccess,
-    );
+    let orgAdmin = this.organization?.canEditAllCiphers(this.restrictProviderAccess);
 
     // if a cipher is unassigned we want to check if they are an admin or have permission to edit any collection
     if (!cipher.collectionIds) {
@@ -693,20 +699,14 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   protected deleteCipher() {
-    const asAdmin = this.organization?.canEditAllCiphers(
-      this.flexibleCollectionsV1Enabled,
-      this.restrictProviderAccess,
-    );
+    const asAdmin = this.organization?.canEditAllCiphers(this.restrictProviderAccess);
     return this.cipher.isDeleted
       ? this.cipherService.deleteWithServer(this.cipher.id, asAdmin)
       : this.cipherService.softDeleteWithServer(this.cipher.id, asAdmin);
   }
 
   protected restoreCipher() {
-    const asAdmin = this.organization?.canEditAllCiphers(
-      this.flexibleCollectionsV1Enabled,
-      this.restrictProviderAccess,
-    );
+    const asAdmin = this.organization?.canEditAllCiphers(this.restrictProviderAccess);
     return this.cipherService.restoreWithServer(this.cipher.id, asAdmin);
   }
 

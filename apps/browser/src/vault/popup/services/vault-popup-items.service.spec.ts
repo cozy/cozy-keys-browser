@@ -30,6 +30,7 @@ describe("VaultPopupItemsService", () => {
 
   let mockOrg: Organization;
   let mockCollections: CollectionView[];
+  let activeUserLastSync$: BehaviorSubject<Date>;
 
   const cipherServiceMock = mock<CipherService>();
   const vaultSettingsServiceMock = mock<VaultSettingsService>();
@@ -92,7 +93,8 @@ describe("VaultPopupItemsService", () => {
     organizationServiceMock.organizations$ = new BehaviorSubject([mockOrg]);
     collectionService.decryptedCollections$ = new BehaviorSubject(mockCollections);
 
-    syncServiceMock.getLastSync.mockResolvedValue(new Date());
+    activeUserLastSync$ = new BehaviorSubject(new Date());
+    syncServiceMock.activeUserLastSync$.mockReturnValue(activeUserLastSync$);
 
     testBed = TestBed.configureTestingModule({
       providers: [
@@ -161,7 +163,7 @@ describe("VaultPopupItemsService", () => {
   });
 
   it("should not emit cipher list if syncService.getLastSync returns null", async () => {
-    syncServiceMock.getLastSync.mockResolvedValue(null);
+    activeUserLastSync$.next(null);
 
     const obs$ = service.autoFillCiphers$.pipe(timeout(50));
 
@@ -353,6 +355,24 @@ describe("VaultPopupItemsService", () => {
       searchService.searchCiphers.mockImplementation(async () => []);
       service.noFilteredResults$.subscribe((noResults) => {
         expect(noResults).toBe(true);
+        done();
+      });
+    });
+  });
+
+  describe("deletedCiphers$", () => {
+    it("should return deleted ciphers", (done) => {
+      const ciphers = [
+        { id: "1", type: CipherType.Login, name: "Login 1", isDeleted: true },
+        { id: "2", type: CipherType.Login, name: "Login 2", isDeleted: true },
+        { id: "3", type: CipherType.Login, name: "Login 3", isDeleted: true },
+        { id: "4", type: CipherType.Login, name: "Login 4", isDeleted: false },
+      ] as CipherView[];
+
+      cipherServiceMock.getAllDecrypted.mockResolvedValue(ciphers);
+
+      service.deletedCiphers$.subscribe((deletedCiphers) => {
+        expect(deletedCiphers.length).toBe(3);
         done();
       });
     });

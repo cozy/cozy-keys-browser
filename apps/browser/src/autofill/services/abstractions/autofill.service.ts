@@ -46,6 +46,7 @@ export interface AutoFillOptions {
   // Cozy customization
   cozyAutofillOptions?: CozyAutofillOptions;
   // Cozy customization end
+  autoSubmitLogin?: boolean;
 }
 
 export interface FormData {
@@ -61,6 +62,7 @@ export interface GenerateFillScriptOptions {
   onlyVisibleFields: boolean;
   fillNewPassword: boolean;
   allowTotpAutofill: boolean;
+  autoSubmitLogin: boolean;
   cipher: CipherView;
   tabUrl: string;
   defaultUriMatch: UriMatchStrategySetting;
@@ -96,6 +98,7 @@ export abstract class AutofillService {
     pageDetails: PageDetail[],
     tab: chrome.tabs.Tab,
     fromCommand: boolean,
+    autoSubmitLogin?: boolean,
   ) => Promise<string | null>;
   doAutoFillActiveTab: (
     pageDetails: PageDetail[],

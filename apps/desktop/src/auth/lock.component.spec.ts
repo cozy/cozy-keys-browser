@@ -28,12 +28,15 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
+import { BiometricsService as AbstractBiometricService } from "@bitwarden/common/platform/biometrics/biometric.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { FakeAccountService, mockAccountServiceWith } from "@bitwarden/common/spec";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { UserId } from "@bitwarden/common/types/guid";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
+
+import { BiometricsService } from "src/platform/main/biometric";
 
 import { LockComponent } from "./lock.component";
 
@@ -53,11 +56,13 @@ describe("LockComponent", () => {
   let fixture: ComponentFixture<LockComponent>;
   let stateServiceMock: MockProxy<StateService>;
   let biometricStateService: MockProxy<BiometricStateService>;
+  let biometricsService: MockProxy<BiometricsService>;
   let messagingServiceMock: MockProxy<MessagingService>;
   let broadcasterServiceMock: MockProxy<BroadcasterService>;
   let platformUtilsServiceMock: MockProxy<PlatformUtilsService>;
   let activatedRouteMock: MockProxy<ActivatedRoute>;
   let mockMasterPasswordService: FakeMasterPasswordService;
+  let mockToastService: MockProxy<ToastService>;
 
   const mockUserId = Utils.newGuid() as UserId;
   const accountService: FakeAccountService = mockAccountServiceWith(mockUserId);
@@ -68,6 +73,7 @@ describe("LockComponent", () => {
     messagingServiceMock = mock<MessagingService>();
     broadcasterServiceMock = mock<BroadcasterService>();
     platformUtilsServiceMock = mock<PlatformUtilsService>();
+    mockToastService = mock<ToastService>();
 
     activatedRouteMock = mock<ActivatedRoute>();
     activatedRouteMock.queryParams = mock<ActivatedRoute["queryParams"]>();
@@ -164,6 +170,10 @@ describe("LockComponent", () => {
           useValue: biometricStateService,
         },
         {
+          provide: AbstractBiometricService,
+          useValue: biometricsService,
+        },
+        {
           provide: AccountService,
           useValue: accountService,
         },
@@ -178,6 +188,10 @@ describe("LockComponent", () => {
         {
           provide: SyncService,
           useValue: mock<SyncService>(),
+        },
+        {
+          provide: ToastService,
+          useValue: mockToastService,
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],

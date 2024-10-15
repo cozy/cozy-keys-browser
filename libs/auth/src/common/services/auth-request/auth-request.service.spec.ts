@@ -27,6 +27,7 @@ describe("AuthRequestService", () => {
   const apiService = mock<ApiService>();
 
   let mockPrivateKey: Uint8Array;
+  let mockPublicKey: Uint8Array;
   const mockUserId = Utils.newGuid() as UserId;
 
   beforeEach(() => {
@@ -44,6 +45,7 @@ describe("AuthRequestService", () => {
     );
 
     mockPrivateKey = new Uint8Array(64);
+    mockPublicKey = new Uint8Array(64);
   });
 
   describe("authRequestPushNotification$", () => {
@@ -133,14 +135,18 @@ describe("AuthRequestService", () => {
       cryptoService.setUserKey.mockResolvedValueOnce(undefined);
 
       // Act
-      await sut.setUserKeyAfterDecryptingSharedUserKey(mockAuthReqResponse, mockPrivateKey);
+      await sut.setUserKeyAfterDecryptingSharedUserKey(
+        mockAuthReqResponse,
+        mockPrivateKey,
+        mockUserId,
+      );
 
       // Assert
       expect(sut.decryptPubKeyEncryptedUserKey).toBeCalledWith(
         mockAuthReqResponse.key,
         mockPrivateKey,
       );
-      expect(cryptoService.setUserKey).toBeCalledWith(mockDecryptedUserKey);
+      expect(cryptoService.setUserKey).toBeCalledWith(mockDecryptedUserKey, mockUserId);
     });
   });
 
@@ -169,7 +175,11 @@ describe("AuthRequestService", () => {
       cryptoService.setUserKey.mockResolvedValueOnce(undefined);
 
       // Act
-      await sut.setKeysAfterDecryptingSharedMasterKeyAndHash(mockAuthReqResponse, mockPrivateKey);
+      await sut.setKeysAfterDecryptingSharedMasterKeyAndHash(
+        mockAuthReqResponse,
+        mockPrivateKey,
+        mockUserId,
+      );
 
       // Assert
       expect(sut.decryptPubKeyEncryptedMasterKeyAndHash).toBeCalledWith(
@@ -190,7 +200,7 @@ describe("AuthRequestService", () => {
         undefined,
         undefined,
       );
-      expect(cryptoService.setUserKey).toHaveBeenCalledWith(mockDecryptedUserKey);
+      expect(cryptoService.setUserKey).toHaveBeenCalledWith(mockDecryptedUserKey, mockUserId);
     });
   });
 
@@ -252,6 +262,16 @@ describe("AuthRequestService", () => {
       );
       expect(result.masterKey).toEqual(mockDecryptedMasterKey);
       expect(result.masterKeyHash).toEqual(mockDecryptedMasterKeyHash);
+    });
+  });
+
+  describe("getFingerprintPhrase", () => {
+    it("returns the same fingerprint regardless of email casing", () => {
+      const email = "test@email.com";
+      const emailUpperCase = email.toUpperCase();
+      const phrase = sut.getFingerprintPhrase(email, mockPublicKey);
+      const phraseUpperCase = sut.getFingerprintPhrase(emailUpperCase, mockPublicKey);
+      expect(phrase).toEqual(phraseUpperCase);
     });
   });
 });

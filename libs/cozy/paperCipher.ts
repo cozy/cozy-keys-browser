@@ -3,6 +3,7 @@
 import CozyClient from "cozy-client/types/CozyClient";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { PaperType } from "@bitwarden/common/enums/paperType";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -23,6 +24,7 @@ export const convertPapersAsCiphers = async (
   cipherService: CipherService,
   cryptoService: CryptoService,
   i18nService: I18nService,
+  accountService: AccountService,
   client: CozyClient,
   papers: any,
 ): Promise<CipherData[]> => {
@@ -41,6 +43,7 @@ export const convertPapersAsCiphers = async (
         cipherData = await convertNoteToCipherData(
           cipherService,
           i18nService,
+          accountService,
           paper,
           {
             noteIllustrationUrl,
@@ -51,6 +54,7 @@ export const convertPapersAsCiphers = async (
         cipherData = await convertPaperToCipherData(
           cipherService,
           i18nService,
+          accountService,
           paper,
           {
             baseUrl,
@@ -77,6 +81,7 @@ export const fetchPapersAndConvertAsCiphers = async (
   cryptoService: CryptoService,
   cozyClientService: CozyClientService,
   i18nService: I18nService,
+  accountService: AccountService,
 ): Promise<CipherData[]> => {
   const client = await cozyClientService.getClientInstance();
 
@@ -87,6 +92,7 @@ export const fetchPapersAndConvertAsCiphers = async (
       cipherService,
       cryptoService,
       i18nService,
+      accountService,
       client,
       papers,
     );
@@ -107,6 +113,7 @@ export const fetchPapersAndConvertAsCiphers = async (
 export const favoritePaperCipher = async (
   cipherService: CipherService,
   i18nService: I18nService,
+  accountService: AccountService,
   cipher: CipherView,
   cozyClientService: CozyClientService,
 ): Promise<boolean> => {
@@ -130,6 +137,7 @@ export const favoritePaperCipher = async (
     cipherData = await convertPaperToCipherData(
       cipherService,
       i18nService,
+      accountService,
       updatePaperWithContacts,
       {
         baseUrl: client.getStackClient().uri,
@@ -139,6 +147,7 @@ export const favoritePaperCipher = async (
     cipherData = await convertNoteToCipherData(
       cipherService,
       i18nService,
+      accountService,
       updatePaperWithContacts,
       {
         noteIllustrationUrl: await fetchNoteIllustrationUrl(client),

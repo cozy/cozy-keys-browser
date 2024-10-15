@@ -603,6 +603,12 @@
   "newAccountCreated": {
     "message": "Den nye konto er oprettet! Der kan nu logges ind."
   },
+  "newAccountCreated2": {
+    "message": "Din nye konto er oprettet!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Du er blevet logget ind!"
+  },
   "masterPassSent": {
     "message": "Der er sendt en e-mail til dig med dit hovedadgangskodetip."
   },
@@ -1173,6 +1179,9 @@
   },
   "premiumPurchaseAlert": {
     "message": "Premium-medlemskab kan købes via bitwarden.com web-boksen. Besøg webstedet nu?"
+  },
+  "premiumPurchaseAlertV2": {
+    "message": "Der kan købes Premium fra kontoindstillingerne via Bitwarden web-appen."
   },
   "premiumCurrentMember": {
     "message": "Du er Premium-medlem!"
@@ -3049,5 +3058,8 @@
   },
   "textSends": {
     "message": "Tekst-Sends"
+  },
+  "ssoError": {
+    "message": "Ingen ledige porte fundet til SSO-login."
   }
 }

@@ -1,6 +1,6 @@
 <bit-section *ngIf="sends?.length > 0">
   <bit-section-header>
-    <h2 class="tw-font-bold" bitTypography="h5">
+    <h2 class="tw-font-bold" bitTypography="h6">
       {{ headerText }}
     </h2>
     <span bitTypography="body1" slot="end">{{ sends.length }}</span>
@@ -10,6 +10,8 @@
       <button
         bit-item-content
         appA11yTitle="{{ 'edit' | i18n }} - {{ send.name }}"
+        routerLink="/edit-send"
+        [queryParams]="{ sendId: send.id, type: send.type }"
         appStopClick
         type="button"
         class="tw-pb-1"

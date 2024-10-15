@@ -603,6 +603,12 @@
   "newAccountCreated": {
     "message": "Dein neues Konto wurde erstellt! Du kannst dich jetzt anmelden."
   },
+  "newAccountCreated2": {
+    "message": "Dein neues Konto wurde erstellt!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Du wurdest angemeldet!"
+  },
   "masterPassSent": {
     "message": "Wir haben dir eine E-Mail mit dem Master-Passwort-Hinweis gesendet."
   },
@@ -1173,6 +1179,9 @@
   },
   "premiumPurchaseAlert": {
     "message": "Du kannst deine Premium-Mitgliedschaft im bitwarden.com Web-Tresor kaufen. Möchtest du die Webseite jetzt besuchen?"
+  },
+  "premiumPurchaseAlertV2": {
+    "message": "Du kannst Premium über deine Kontoeinstellungen in der Bitwarden Web-App kaufen."
   },
   "premiumCurrentMember": {
     "message": "Du bist ein Premium-Mitglied!"
@@ -3049,5 +3058,8 @@
   },
   "textSends": {
     "message": "Text-Sends"
+  },
+  "ssoError": {
+    "message": "Es konnten keine freien Ports für die SSO-Anmeldung gefunden werden."
   }
 }

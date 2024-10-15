@@ -7,6 +7,8 @@ type NotificationBarIframeInitData = {
   paperSavedId?: string;
   paperSavedQualification?: string;
   paperSavedQualificationLabel?: string;
+  applyRedesign?: boolean;
+  launchTimestamp?: number;
 };
 
 type NotificationBarWindowMessage = {

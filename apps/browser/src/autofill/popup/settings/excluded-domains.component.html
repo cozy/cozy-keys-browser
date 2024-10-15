@@ -40,6 +40,7 @@
             }}</bit-label>
             <input
               *ngIf="i >= fieldsEditThreshold"
+              #uriInput
               appInputVerbatim
               bitInput
               id="excludedDomain{{ i }}"
@@ -49,7 +50,7 @@
               (change)="fieldChange()"
               [(ngModel)]="excludedDomainsState[i]"
             />
-            <div *ngIf="i < fieldsEditThreshold">{{ domain }}</div>
+            <div id="excludedDomain{{ i }}" *ngIf="i < fieldsEditThreshold">{{ domain }}</div>
           </bit-item-content>
           <button
             *ngIf="i < fieldsEditThreshold"

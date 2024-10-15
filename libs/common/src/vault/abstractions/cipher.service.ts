@@ -27,6 +27,7 @@ export abstract class CipherService implements UserKeyRotationDataProvider<Ciphe
   clearCache: (userId?: string) => Promise<void>;
   encrypt: (
     model: CipherView,
+    userId: UserId,
     keyForEncryption?: SymmetricCryptoKey,
     keyForCipherKeyDecryption?: SymmetricCryptoKey,
     originalCipher?: Cipher,
@@ -84,21 +85,25 @@ export abstract class CipherService implements UserKeyRotationDataProvider<Ciphe
     cipher: CipherView,
     organizationId: string,
     collectionIds: string[],
+    userId: UserId,
   ) => Promise<any>;
   shareManyWithServer: (
     ciphers: CipherView[],
     organizationId: string,
     collectionIds: string[],
+    userId: UserId,
   ) => Promise<any>;
   saveAttachmentWithServer: (
     cipher: Cipher,
     unencryptedFile: any,
+    userId: UserId,
     admin?: boolean,
   ) => Promise<Cipher>;
   saveAttachmentRawWithServer: (
     cipher: Cipher,
     filename: string,
     data: ArrayBuffer,
+    userId: UserId,
     admin?: boolean,
   ) => Promise<Cipher>;
   /**
@@ -129,7 +134,7 @@ export abstract class CipherService implements UserKeyRotationDataProvider<Ciphe
    * @returns A promise that resolves to a record of updated cipher store, keyed by their cipher ID. Returns all ciphers, not just those updated
    */
   upsert: (cipher: CipherData | CipherData[]) => Promise<Record<CipherId, CipherData>>;
-  replace: (ciphers: { [id: string]: CipherData }) => Promise<any>;
+  replace: (ciphers: { [id: string]: CipherData }, userId: UserId) => Promise<any>;
   clear: (userId?: string) => Promise<void>;
   moveManyWithServer: (ids: string[], folderId: string) => Promise<any>;
   delete: (id: string | string[]) => Promise<any>;
@@ -148,7 +153,7 @@ export abstract class CipherService implements UserKeyRotationDataProvider<Ciphe
   ) => Promise<any>;
   restoreWithServer: (id: string, asAdmin?: boolean) => Promise<any>;
   restoreManyWithServer: (ids: string[], orgId?: string) => Promise<void>;
-  getKeyForCipherKeyDecryption: (cipher: Cipher) => Promise<any>;
+  getKeyForCipherKeyDecryption: (cipher: Cipher, userId: UserId) => Promise<any>;
   setAddEditCipherInfo: (value: AddEditCipherInfo) => Promise<void>;
   /**
    * Returns user ciphers re-encrypted with the new user key.

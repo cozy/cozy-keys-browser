@@ -23,7 +23,9 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { ToastService } from "@bitwarden/components";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { EnvironmentComponent } from "../environment.component";
@@ -73,6 +75,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
     ssoLoginService: SsoLoginServiceAbstraction,
     webAuthnLoginService: WebAuthnLoginServiceAbstraction,
     registerRouteService: RegisterRouteService,
+    toastService: ToastService,
   ) {
     super(
       devicesApiService,
@@ -94,6 +97,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
       ssoLoginService,
       webAuthnLoginService,
       registerRouteService,
+      toastService,
     );
     super.onSuccessfulLogin = () => {
       return syncService.fullSync(true);
@@ -161,11 +165,11 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
   async continue() {
     await super.validateEmail();
     if (!this.formGroup.controls.email.valid) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccured"),
-        this.i18nService.t("invalidEmail"),
-      );
+      this.toastService.showToast({
+        variant: "error",
+        title: this.i18nService.t("errorOccured"),
+        message: this.i18nService.t("invalidEmail"),
+      });
       return;
     }
     this.focusInput();
@@ -186,5 +190,41 @@ export class LoginComponent extends BaseLoginComponent implements OnInit, OnDest
   private focusInput() {
     const email = this.loggedEmail;
     document.getElementById(email == null || email === "" ? "email" : "masterPassword")?.focus();
+  }
+
+  async launchSsoBrowser(clientId: string, ssoRedirectUri: string) {
+    if (!ipc.platform.isAppImage && !ipc.platform.isSnapStore && !ipc.platform.isDev) {
+      return super.launchSsoBrowser(clientId, ssoRedirectUri);
+    }
+
+    // Save off email for SSO
+    await this.ssoLoginService.setSsoEmail(this.formGroup.value.email);
+
+    // Generate necessary sso params
+    const passwordOptions: any = {
+      type: "password",
+      length: 64,
+      uppercase: true,
+      lowercase: true,
+      numbers: true,
+      special: false,
+    };
+    const state = await this.passwordGenerationService.generatePassword(passwordOptions);
+    const ssoCodeVerifier = await this.passwordGenerationService.generatePassword(passwordOptions);
+    const codeVerifierHash = await this.cryptoFunctionService.hash(ssoCodeVerifier, "sha256");
+    const codeChallenge = Utils.fromBufferToUrlB64(codeVerifierHash);
+
+    // Save sso params
+    await this.ssoLoginService.setSsoState(state);
+    await this.ssoLoginService.setCodeVerifier(ssoCodeVerifier);
+    try {
+      await ipc.platform.localhostCallbackService.openSsoPrompt(codeChallenge, state);
+    } catch (err) {
+      this.platformUtilsService.showToast(
+        "error",
+        this.i18nService.t("errorOccured"),
+        this.i18nService.t("ssoError"),
+      );
+    }
   }
 }

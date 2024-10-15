@@ -24,7 +24,7 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { MasterKey, UserKey } from "@bitwarden/common/types/key";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { ChangePasswordComponent as BaseChangePasswordComponent } from "./change-password.component";
@@ -64,6 +64,7 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent imp
     kdfConfigService: KdfConfigService,
     accountService: AccountService,
     masterPasswordService: InternalMasterPasswordServiceAbstraction,
+    toastService: ToastService,
   ) {
     super(
       i18nService,
@@ -77,6 +78,7 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent imp
       kdfConfigService,
       masterPasswordService,
       accountService,
+      toastService,
     );
   }
 
@@ -99,11 +101,11 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent imp
 
   get masterPasswordWarningText(): string {
     if (this.reason == ForceSetPasswordReason.WeakMasterPassword) {
-      return this.i18nService.t("weakMasterPasswordWarning");
+      return this.i18nService.t("updateWeakMasterPasswordWarning");
     } else if (this.reason == ForceSetPasswordReason.TdeOffboarding) {
       return this.i18nService.t("tdeDisabledMasterPasswordRequired");
     } else {
-      return this.i18nService.t("masterPasswordWarning");
+      return this.i18nService.t("updateMasterPasswordWarning");
     }
   }
 
@@ -176,11 +178,11 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent imp
       }
 
       await this.formPromise;
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("updatedMasterPassword"),
-      );
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t("updatedMasterPassword"),
+      });
 
       const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
       await this.masterPasswordService.setForceSetPasswordReason(

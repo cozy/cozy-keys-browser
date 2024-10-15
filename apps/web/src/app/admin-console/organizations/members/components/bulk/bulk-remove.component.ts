@@ -1,8 +1,8 @@
 import { DIALOG_DATA, DialogConfig } from "@angular/cdk/dialog";
 import { Component, Inject } from "@angular/core";
 
+import { OrganizationUserApiService } from "@bitwarden/admin-console/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
-import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
 import { OrganizationUserStatusType } from "@bitwarden/common/admin-console/enums";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { DialogService } from "@bitwarden/components";
@@ -33,7 +33,7 @@ export class BulkRemoveComponent {
     @Inject(DIALOG_DATA) protected data: BulkRemoveDialogData,
     protected apiService: ApiService,
     protected i18nService: I18nService,
-    private organizationUserService: OrganizationUserService,
+    private organizationUserApiService: OrganizationUserApiService,
   ) {
     this.organizationId = data.organizationId;
     this.users = data.users;
@@ -45,7 +45,7 @@ export class BulkRemoveComponent {
   submit = async () => {
     this.loading = true;
     try {
-      const response = await this.deleteUsers();
+      const response = await this.removeUsers();
 
       response.data.forEach((entry) => {
         const error = entry.error !== "" ? entry.error : this.i18nService.t("bulkRemovedMessage");
@@ -59,8 +59,8 @@ export class BulkRemoveComponent {
     this.loading = false;
   };
 
-  protected async deleteUsers() {
-    return await this.organizationUserService.deleteManyOrganizationUsers(
+  protected async removeUsers() {
+    return await this.organizationUserApiService.removeManyOrganizationUsers(
       this.organizationId,
       this.users.map((user) => user.id),
     );

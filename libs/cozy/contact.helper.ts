@@ -2,7 +2,9 @@ import CozyClient, { models } from "cozy-client";
 import { IOCozyContact } from "cozy-client/types/types";
 import get from "lodash/get";
 import set from "lodash/set";
+import { firstValueFrom, map } from "rxjs";
 
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -35,9 +37,12 @@ const getPrimaryPhone = (contact: IOCozyContact): string | undefined => {
 export const convertContactToCipherData = async (
   cipherService: CipherService,
   i18nService: I18nService,
+  accountService: AccountService,
   contact: IOCozyContact,
   key?: SymmetricCryptoKey,
 ): Promise<CipherData> => {
+  const activeUserId = await firstValueFrom(accountService.activeAccount$.pipe(map((a) => a?.id)));
+
   // Temporary type fix because contact.cozyMetadata is not properly typed
   const cozyMetadata = contact.cozyMetadata as any;
 
@@ -66,7 +71,7 @@ export const convertContactToCipherData = async (
     cipherView.revisionDate = new Date(cozyMetadata.updatedAt);
   }
 
-  const cipherEncrypted = await cipherService.encrypt(cipherView, key);
+  const cipherEncrypted = await cipherService.encrypt(cipherView, activeUserId, key);
 
   const cipherData = cipherEncrypted.toCipherData();
 

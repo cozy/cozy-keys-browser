@@ -440,16 +440,56 @@
     "message": "Minimum password length"
   },
   "uppercase": {
-    "message": "Uppercase (A-Z)"
+    "message": "Uppercase (A-Z)",
+    "description": "deprecated. Use uppercaseLabel instead."
   },
   "lowercase": {
-    "message": "Lowercase (a-z)"
+    "message": "Lowercase (a-z)",
+    "description": "deprecated. Use lowercaseLabel instead."
   },
   "numbers": {
-    "message": "Numbers (0-9)"
+    "message": "Numbers (0-9)",
+    "description": "deprecated. Use numbersLabel instead."
   },
   "specialCharacters": {
-    "message": "Special characters (!@#$%^&*)"
+    "message": "Special characters (!@#$%^&*)",
+    "description": "deprecated. Use specialCharactersLabel instead."
+  },
+  "include": {
+    "message": "Include",
+    "description": "Card header for password generator include block"
+  },
+  "uppercaseDescription": {
+    "message": "Include uppercase characters",
+    "description": "Tooltip for the password generator uppercase character checkbox"
+  },
+  "uppercaseLabel": {
+    "message": "A-Z",
+    "description": "Label for the password generator uppercase character checkbox"
+  },
+  "lowercaseDescription": {
+    "message": "Include lowercase characters",
+    "description": "Full description for the password generator lowercase character checkbox"
+  },
+  "lowercaseLabel": {
+    "message": "a-z",
+    "description": "Label for the password generator lowercase character checkbox"
+  },
+  "numbersDescription": {
+    "message": "Include numbers",
+    "description": "Full description for the password generator numbers checkbox"
+  },
+  "numbersLabel": {
+    "message": "0-9",
+    "description": "Label for the password generator numbers checkbox"
+  },
+  "specialCharactersDescription": {
+    "message": "Include special characters",
+    "description": "Full description for the password generator special characters checkbox"
+  },
+  "specialCharactersLabel": {
+    "message": "!@#$%^&*",
+    "description": "Label for the password generator special characters checkbox"
   },
   "numWords": {
     "message": "Number of words"
@@ -471,7 +511,12 @@
     "message": "Minimum special"
   },
   "avoidAmbChar": {
-    "message": "Avoid ambiguous characters"
+    "message": "Avoid ambiguous characters",
+    "description": "deprecated. Use avoidAmbiguous instead."
+  },
+  "avoidAmbiguous": {
+    "message": "Avoid ambiguous characters",
+    "description": "Label for the avoid ambiguous characters checkbox."
   },
   "searchVault": {
     "message": "Search vault"
@@ -735,6 +780,12 @@
   "newAccountCreated": {
     "message": "Your new account has been created! You may now log in."
   },
+  "newAccountCreated2": {
+    "message": "Your new account has been created!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "You have been logged in!"
+  },
   "youSuccessfullyLoggedIn": {
     "message": "You successfully logged in"
   },
@@ -793,6 +844,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden can store and fill 2-step verification codes. Select the camera icon to take a screenshot of this website's authenticator QR code, or copy and paste the key into this field."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Learn more about authenticators"
   },
   "copyTOTP": {
     "message": "Copy Authenticator key (TOTP)"
@@ -1268,6 +1322,9 @@
   "ppremiumSignUpStorage": {
     "message": "1 GB encrypted storage for file attachments."
   },
+  "premiumSignUpEmergency": {
+    "message": "Emergency access."
+  },
   "premiumSignUpTwoStepOptions": {
     "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
@@ -1289,11 +1346,35 @@
   "premiumPurchaseAlert": {
     "message": "You can purchase Premium membership on the bitwarden.com web vault. Do you want to visit the website now?"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "You can purchase Premium from your account settings on the Bitwarden web app."
+  },
   "premiumCurrentMember": {
     "message": "You are a Premium member!"
   },
   "premiumCurrentMemberThanks": {
     "message": "Thank you for supporting Cozy."
+  },
+  "premiumFeatures": {
+    "message": "Upgrade to Premium and receive:"
+  },
+  "premiumPrice": {
+    "message": "All for just $PRICE$ /year!",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      }
+    }
+  },
+  "premiumPriceV2": {
+    "message": "All for just $PRICE$ per year!",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      }
+    }
   },
   "refreshComplete": {
     "message": "Refresh complete"
@@ -2021,6 +2102,15 @@
   "noPasswordsInList": {
     "message": "There are no passwords to list."
   },
+  "clearHistory": {
+    "message": "Clear history"
+  },
+  "noPasswordsToShow": {
+    "message": "No passwords to show"
+  },
+  "noRecentlyGeneratedPassword": {
+    "message": "You haven't generated a password recently"
+  },
   "remove": {
     "message": "Remove"
   },
@@ -2371,6 +2461,12 @@
   "biometricsNotUnlockedDesc": {
     "message": "Please unlock this user in the desktop application and try again."
   },
+  "biometricsNotAvailableTitle": {
+    "message": "Biometric unlock unavailable"
+  },
+  "biometricsNotAvailableDesc": {
+    "message": "Biometric unlock is currently unavailable. Please try again later."
+  },
   "biometricsFailedTitle": {
     "message": "Biometrics failed"
   },
@@ -2614,6 +2710,24 @@
   },
   "createdSend": {
     "message": "Send created",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "createdSendSuccessfully": {
+    "message": "Send created successfully!",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendAvailability": {
+    "message": "The Send will be available to anyone with the link for the next $DAYS$ days.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "sendLinkCopied": {
+    "message": "Send link copied",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
@@ -3804,7 +3918,7 @@
   "passkeyFeatureIsNotImplementedForAccountsWithoutMasterPassword": {
     "message": "Verification required by the initiating site. This feature is not yet implemented for accounts without master password."
   },
-  "logInWithPasskey": {
+  "logInWithPasskeyQuestion": {
     "message": "Log in with passkey?"
   },
   "passkeyAlreadyExists": {
@@ -3816,6 +3930,9 @@
   "noMatchingPasskeyLogin": {
     "message": "You do not have a matching login for this site."
   },
+  "noMatchingLoginsForSite": {
+    "message": "No matching logins for this site"
+  },
   "confirm": {
     "message": "Confirm"
   },
@@ -3825,8 +3942,11 @@
   "savePasskeyNewLogin": {
     "message": "Save passkey as new login"
   },
-  "choosePasskey": {
+  "chooseCipherForPasskeySave": {
     "message": "Choose a login to save this passkey to"
+  },
+  "chooseCipherForPasskeyAuth": {
+    "message": "Choose a passkey to log in with"
   },
   "passkeyItem": {
     "message": "Passkey Item"
@@ -4035,8 +4155,16 @@
     "message": "Credentials saved successfully!",
     "description": "Notification message for when saving credentials has succeeded."
   },
+  "passwordSaved": {
+    "message": "Password saved!",
+    "description": "Notification message for when saving credentials has succeeded."
+  },
   "updateCipherAttemptSuccess": {
     "message": "Credentials updated successfully!",
+    "description": "Notification message for when updating credentials has succeeded."
+  },
+  "passwordUpdated": {
+    "message": "Password updated!",
     "description": "Notification message for when updating credentials has succeeded."
   },
   "saveCipherAttemptFailed": {
@@ -4310,10 +4438,20 @@
     "message": "Authenticator key"
   },
   "autofillOptions": {
-    "message": "Auto-fill options"
+    "message": "Autofill options"
   },
   "websiteUri": {
     "message": "Website (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Website (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
     "message": "Website added"
@@ -4355,6 +4493,12 @@
   "autoFillOnPageLoad": {
     "message": "Autofill on page load?"
   },
+  "cardExpiredTitle": {
+    "message": "Expired card"
+  },
+  "cardExpiredMessage": {
+    "message": "If you've renewed it, update the card's information"
+  },
   "cardDetails": {
     "message": "Card details"
   },
@@ -4366,6 +4510,9 @@
         "example": "Visa"
       }
     }
+  },
+  "enableAnimations": {
+    "message": "Enable animations"
   },
   "addAccount": {
     "message": "Add account"
@@ -4779,5 +4926,32 @@
   },
   "autofill_paperTaxNoticeRefTaxIncome": {
     "message": "Autofill tax notice income"
+  },
+  "showCharacterCount": {
+    "message": "Show character count"
+  },
+  "hideCharacterCount": {
+    "message": "Hide character count"
+  },
+  "itemsInTrash": {
+    "message": "Items in trash"
+  },
+  "noItemsInTrash": {
+    "message": "No items in trash"
+  },
+  "noItemsInTrashDesc": {
+    "message": "Items you delete will appear here and be permanently deleted after 30 days"
+  },
+  "trashWarning": {
+    "message": "Items that have been in trash more than 30 days will automatically be deleted"
+  },
+  "restore": {
+    "message": "Restore"
+  },
+  "deleteForever": {
+    "message": "Delete forever"
+  },
+  "noEditPermissions": {
+    "message": "You don't have permission to edit this item"
   }
 }

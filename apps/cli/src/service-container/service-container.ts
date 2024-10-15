@@ -5,6 +5,10 @@ import * as jsdom from "jsdom";
 import { firstValueFrom } from "rxjs";
 
 import {
+  OrganizationUserApiService,
+  DefaultOrganizationUserApiService,
+} from "@bitwarden/admin-console/common";
+import {
   InternalUserDecryptionOptionsServiceAbstraction,
   AuthRequestService,
   LoginStrategyService,
@@ -16,12 +20,10 @@ import {
 import { EventCollectionService as EventCollectionServiceAbstraction } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { EventUploadService as EventUploadServiceAbstraction } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
-import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { ProviderApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/provider/provider-api.service.abstraction";
 import { OrganizationApiService } from "@bitwarden/common/admin-console/services/organization/organization-api.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/services/organization/organization.service";
-import { OrganizationUserServiceImplementation } from "@bitwarden/common/admin-console/services/organization-user/organization-user.service.implementation";
 import { PolicyApiService } from "@bitwarden/common/admin-console/services/policy/policy-api.service";
 import { PolicyService } from "@bitwarden/common/admin-console/services/policy/policy.service";
 import { ProviderApiService } from "@bitwarden/common/admin-console/services/provider/provider-api.service";
@@ -184,7 +186,7 @@ export class ServiceContainer {
   environmentService: EnvironmentService;
   cipherService: CipherService;
   folderService: InternalFolderService;
-  organizationUserService: OrganizationUserService;
+  organizationUserApiService: OrganizationUserApiService;
   collectionService: CollectionService;
   vaultTimeoutService: VaultTimeoutService;
   masterPasswordService: InternalMasterPasswordServiceAbstraction;
@@ -283,7 +285,13 @@ export class ServiceContainer {
     this.secureStorageService = new NodeEnvSecureStorageService(
       this.storageService,
       this.logService,
-      this.encryptService,
+      // MAC failures for secure storage are being logged for customers today and
+      // they occur when users unlock / login and refresh a session key but don't
+      // export it into their environment (e.g. BW_SESSION_KEY). This leaves a stale
+      // BW_SESSION key in the env which is attempted to be used to decrypt the auto
+      // unlock user key which obviously fails. So, to resolve this, we will not log
+      // MAC failures for secure storage.
+      new EncryptServiceImplementation(this.cryptoFunctionService, this.logService, false),
     );
 
     this.memoryStorageService = new MemoryStorageService();
@@ -411,7 +419,7 @@ export class ServiceContainer {
       this.kdfConfigService,
     );
 
-    this.appIdService = new AppIdService(this.globalStateProvider);
+    this.appIdService = new AppIdService(this.storageService, this.logService);
 
     const customUserAgent =
       "Bitwarden_CLI/" +
@@ -492,7 +500,7 @@ export class ServiceContainer {
 
     this.providerService = new ProviderService(this.stateProvider);
 
-    this.organizationUserService = new OrganizationUserServiceImplementation(this.apiService);
+    this.organizationUserApiService = new DefaultOrganizationUserApiService(this.apiService);
 
     this.policyApiService = new PolicyApiService(this.policyService, this.apiService);
 
@@ -714,6 +722,7 @@ export class ServiceContainer {
       this.collectionService,
       this.cryptoService,
       this.pinService,
+      this.accountService,
     );
 
     this.individualExportService = new IndividualVaultExportService(
@@ -733,6 +742,7 @@ export class ServiceContainer {
       this.cryptoFunctionService,
       this.collectionService,
       this.kdfConfigService,
+      this.accountService,
     );
 
     this.exportService = new VaultExportService(
@@ -799,6 +809,10 @@ export class ServiceContainer {
     await this.i18nService.init();
     this.twoFactorService.init();
 
+    // If a user has a BW_SESSION key stored in their env (not process.env.BW_SESSION),
+    // this should set the user key to unlock the vault on init.
+    // TODO: ideally, we wouldn't want to do this here but instead only for commands that require the vault to be unlocked
+    // as this runs on every command and could be a performance hit
     const activeAccount = await firstValueFrom(this.accountService.activeAccount$);
     if (activeAccount?.id) {
       await this.userAutoUnlockKeyService.setUserKeyInMemoryIfAutoUserKeySet(activeAccount.id);

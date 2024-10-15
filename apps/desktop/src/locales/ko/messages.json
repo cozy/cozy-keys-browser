@@ -603,6 +603,12 @@
   "newAccountCreated": {
     "message": "계정 생성이 완료되었습니다! 이제 로그인하실 수 있습니다."
   },
+  "newAccountCreated2": {
+    "message": "Your new account has been created!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "You have been logged in!"
+  },
   "masterPassSent": {
     "message": "마스터 비밀번호 힌트가 담긴 이메일을 보냈습니다."
   },
@@ -1173,6 +1179,9 @@
   },
   "premiumPurchaseAlert": {
     "message": "bitwarden.com 웹 보관함에서 프리미엄 멤버십을 구입할 수 있습니다. 지금 웹 사이트를 방문하시겠습니까?"
+  },
+  "premiumPurchaseAlertV2": {
+    "message": "You can purchase Premium from your account settings on the Bitwarden web app."
   },
   "premiumCurrentMember": {
     "message": "프리미엄 사용자입니다!"
@@ -1814,7 +1823,7 @@
     "message": "브라우저에서 생체 인식을 사용하기 위해서는 설정에서 데스크톱 생체 인식을 먼저 활성화해야 합니다."
   },
   "biometricsManualSetupTitle": {
-    "message": "Autometic setup not available"
+    "message": "Automatic setup not available"
   },
   "biometricsManualSetupDesc": {
     "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
@@ -3049,5 +3058,8 @@
   },
   "textSends": {
     "message": "Text Sends"
+  },
+  "ssoError": {
+    "message": "No free ports could be found for the sso login."
   }
 }

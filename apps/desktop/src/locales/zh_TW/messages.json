@@ -603,6 +603,12 @@
   "newAccountCreated": {
     "message": "帳戶已建立！現在可以登入了。"
   },
+  "newAccountCreated2": {
+    "message": "Your new account has been created!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "You have been logged in!"
+  },
   "masterPassSent": {
     "message": "已寄出包含您主密碼提示的電子郵件。"
   },
@@ -1173,6 +1179,9 @@
   },
   "premiumPurchaseAlert": {
     "message": "您可以在 bitwarden.com 網頁版密碼庫購買進階會員資格。現在要前往嗎？"
+  },
+  "premiumPurchaseAlertV2": {
+    "message": "You can purchase Premium from your account settings on the Bitwarden web app."
   },
   "premiumCurrentMember": {
     "message": "您目前是進階會員！"
@@ -1814,7 +1823,7 @@
     "message": "需先在桌面應用程式的設定中啟用生物特徵辨識，才能使用瀏覽器的生物特徵辨識。"
   },
   "biometricsManualSetupTitle": {
-    "message": "Autometic setup not available"
+    "message": "Automatic setup not available"
   },
   "biometricsManualSetupDesc": {
     "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
@@ -3049,5 +3058,8 @@
   },
   "textSends": {
     "message": "Text Sends"
+  },
+  "ssoError": {
+    "message": "No free ports could be found for the sso login."
   }
 }

@@ -10,13 +10,11 @@ import { OrganizationCollectionManagementUpdateRequest } from "@bitwarden/common
 import { OrganizationKeysRequest } from "@bitwarden/common/admin-console/models/request/organization-keys.request";
 import { OrganizationUpdateRequest } from "@bitwarden/common/admin-console/models/request/organization-update.request";
 import { OrganizationResponse } from "@bitwarden/common/admin-console/models/response/organization.response";
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
-import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 import { ApiKeyComponent } from "../../../auth/settings/security/api-key.component";
 import { PurgeVaultComponent } from "../../../vault/settings/purge-vault.component";
@@ -39,10 +37,6 @@ export class AccountComponent implements OnInit, OnDestroy {
   canUseApi = false;
   org: OrganizationResponse;
   taxFormPromise: Promise<unknown>;
-
-  flexibleCollectionsV1Enabled$ = this.configService.getFeatureFlag$(
-    FeatureFlag.FlexibleCollectionsV1,
-  );
 
   // FormGroup validators taken from server Organization domain object
   protected formGroup = this.formBuilder.group({
@@ -83,7 +77,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     private organizationApiService: OrganizationApiServiceAbstraction,
     private dialogService: DialogService,
     private formBuilder: FormBuilder,
-    private configService: ConfigService,
+    private toastService: ToastService,
   ) {}
 
   async ngOnInit() {
@@ -174,7 +168,11 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     await this.organizationApiService.save(this.organizationId, request);
 
-    this.platformUtilsService.showToast("success", null, this.i18nService.t("organizationUpdated"));
+    this.toastService.showToast({
+      variant: "success",
+      title: null,
+      message: this.i18nService.t("organizationUpdated"),
+    });
   };
 
   submitCollectionManagement = async () => {
@@ -191,11 +189,11 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     await this.organizationApiService.updateCollectionManagement(this.organizationId, request);
 
-    this.platformUtilsService.showToast(
-      "success",
-      null,
-      this.i18nService.t("updatedCollectionManagement"),
-    );
+    this.toastService.showToast({
+      variant: "success",
+      title: null,
+      message: this.i18nService.t("updatedCollectionManagement"),
+    });
   };
 
   async deleteOrganization() {

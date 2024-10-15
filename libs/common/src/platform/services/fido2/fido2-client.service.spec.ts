@@ -1,5 +1,5 @@
 import { mock, MockProxy } from "jest-mock-extended";
-import { of } from "rxjs";
+import { BehaviorSubject, of } from "rxjs";
 
 import { AuthService } from "../../../auth/abstractions/auth.service";
 import { AuthenticationStatus } from "../../../auth/enums/authentication-status";
@@ -7,6 +7,12 @@ import { DomainSettingsService } from "../../../autofill/services/domain-setting
 import { Utils } from "../../../platform/misc/utils";
 import { VaultSettingsService } from "../../../vault/abstractions/vault-settings/vault-settings.service";
 import { ConfigService } from "../../abstractions/config/config.service";
+import {
+  ActiveRequest,
+  Fido2ActiveRequestEvents,
+  Fido2ActiveRequestManager,
+  RequestResult,
+} from "../../abstractions/fido2/fido2-active-request-manager.abstraction";
 import {
   Fido2AuthenticatorError,
   Fido2AuthenticatorErrorCode,
@@ -37,6 +43,8 @@ describe("FidoAuthenticatorService", () => {
   let vaultSettingsService: MockProxy<VaultSettingsService>;
   let domainSettingsService: MockProxy<DomainSettingsService>;
   let taskSchedulerService: MockProxy<TaskSchedulerService>;
+  let activeRequest!: MockProxy<ActiveRequest>;
+  let requestManager!: MockProxy<Fido2ActiveRequestManager>;
   let client!: Fido2ClientService;
   let tab!: chrome.tabs.Tab;
   let isValidRpId!: jest.SpyInstance;
@@ -48,6 +56,16 @@ describe("FidoAuthenticatorService", () => {
     vaultSettingsService = mock<VaultSettingsService>();
     domainSettingsService = mock<DomainSettingsService>();
     taskSchedulerService = mock<TaskSchedulerService>();
+    activeRequest = mock<ActiveRequest>({
+      subject: new BehaviorSubject<RequestResult>({
+        type: Fido2ActiveRequestEvents.Continue,
+        credentialId: "",
+      }),
+    });
+    requestManager = mock<Fido2ActiveRequestManager>({
+      getActiveRequest$: (tabId: number) => new BehaviorSubject(activeRequest),
+      getActiveRequest: (tabId: number) => activeRequest,
+    });
 
     isValidRpId = jest.spyOn(DomainUtils, "isValidRpId");
 
@@ -58,11 +76,12 @@ describe("FidoAuthenticatorService", () => {
       vaultSettingsService,
       domainSettingsService,
       taskSchedulerService,
+      requestManager,
     );
     configService.serverConfig$ = of({ environment: { vault: VaultUrl } } as any);
     vaultSettingsService.enablePasskeys$ = of(true);
     domainSettingsService.neverDomains$ = of({});
-    authService.getAuthStatus.mockResolvedValue(AuthenticationStatus.Unlocked);
+    authService.activeAccountStatus$ = of(AuthenticationStatus.Unlocked);
     tab = { id: 123, windowId: 456 } as chrome.tabs.Tab;
   });
 
@@ -592,6 +611,53 @@ describe("FidoAuthenticatorService", () => {
       });
     });
 
+    describe("assert mediated conditional ui credential", () => {
+      const params = createParams({
+        userVerification: "required",
+        mediation: "conditional",
+        allowedCredentialIds: [],
+      });
+
+      beforeEach(() => {
+        requestManager.newActiveRequest.mockResolvedValue({
+          type: Fido2ActiveRequestEvents.Continue,
+          credentialId: crypto.randomUUID(),
+        });
+        authenticator.getAssertion.mockResolvedValue(createAuthenticatorAssertResult());
+      });
+
+      it("creates an active mediated conditional request", async () => {
+        await client.assertCredential(params, tab);
+
+        expect(requestManager.newActiveRequest).toHaveBeenCalled();
+        expect(authenticator.getAssertion).toHaveBeenCalledWith(
+          expect.objectContaining({
+            assumeUserPresence: true,
+            rpId: RpId,
+          }),
+          tab,
+        );
+      });
+
+      it("restarts the mediated conditional request if a user aborts the request", async () => {
+        authenticator.getAssertion.mockRejectedValueOnce(new Error());
+
+        await client.assertCredential(params, tab);
+
+        expect(authenticator.getAssertion).toHaveBeenCalledTimes(2);
+      });
+
+      it("restarts the mediated conditional request if a the abort controller aborts the request", async () => {
+        const abortController = new AbortController();
+        abortController.abort();
+        authenticator.getAssertion.mockRejectedValueOnce(new DOMException("AbortError"));
+
+        await client.assertCredential(params, tab);
+
+        expect(authenticator.getAssertion).toHaveBeenCalledTimes(2);
+      });
+    });
+
     function createParams(params: Partial<AssertCredentialParams> = {}): AssertCredentialParams {
       return {
         allowedCredentialIds: params.allowedCredentialIds ?? [],
@@ -602,6 +668,7 @@ describe("FidoAuthenticatorService", () => {
         userVerification: params.userVerification,
         sameOriginWithAncestors: true,
         fallbackSupported: params.fallbackSupported ?? false,
+        mediation: params.mediation,
       };
     }
 

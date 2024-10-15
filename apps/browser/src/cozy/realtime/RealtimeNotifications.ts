@@ -1,5 +1,6 @@
 import CozyClient, { dispatchCreate, dispatchUpdate, dispatchDelete } from "cozy-client";
 
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -19,6 +20,7 @@ export class RealTimeNotifications {
     private messagingService: MessagingService,
     private cipherService: CipherService,
     private i18nService: I18nService,
+    private accountService: AccountService,
     private client: CozyClient,
   ) {}
 
@@ -133,6 +135,7 @@ export class RealTimeNotifications {
       cipherData = await convertNoteToCipherData(
         this.cipherService,
         this.i18nService,
+        this.accountService,
         hydratedData,
         {
           noteIllustrationUrl,
@@ -144,6 +147,7 @@ export class RealTimeNotifications {
       cipherData = await convertPaperToCipherData(
         this.cipherService,
         this.i18nService,
+        this.accountService,
         hydratedData,
         {
           baseUrl,

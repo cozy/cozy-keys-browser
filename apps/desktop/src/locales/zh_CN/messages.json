@@ -494,7 +494,7 @@
     "message": "文件夹已删除"
   },
   "loginOrCreateNewAccount": {
-    "message": "登录或者创建一个账户来访问您的安全密码库。"
+    "message": "登录或创建一个新账户以访问您的安全密码库。"
   },
   "createAccount": {
     "message": "创建账户"
@@ -602,6 +602,12 @@
   },
   "newAccountCreated": {
     "message": "您的新账户已创建！您现在可以登录了。"
+  },
+  "newAccountCreated2": {
+    "message": "您的新账户已成功创建！"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "您已登录！"
   },
   "masterPassSent": {
     "message": "我们已经为您发送了包含主密码提示的邮件。"
@@ -1174,6 +1180,9 @@
   "premiumPurchaseAlert": {
     "message": "您可以在 bitwarden.com 网页版密码库购买高级会员。现在要访问吗？"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "您可以在 Bitwarden 网页 App 的账户设置中购买高级版。"
+  },
   "premiumCurrentMember": {
     "message": "您目前是高级会员！"
   },
@@ -1181,7 +1190,7 @@
     "message": "感谢您支持 Bitwarden。"
   },
   "premiumPrice": {
-    "message": "只需 $PRICE$ /年！",
+    "message": "全部仅需 $PRICE$ /年！",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -2453,7 +2462,7 @@
     "message": "指纹短语"
   },
   "needAnotherOption": {
-    "message": "设备登录必须在 Bitwarden 应用程序的设置中启用。需要其他登录选项吗？"
+    "message": "必须在 Bitwarden App 的设置中启用设备登录。需要其他登录选项吗？"
   },
   "viewAllLoginOptions": {
     "message": "查看所有登录选项"
@@ -2745,7 +2754,7 @@
     "message": "正在获取选项..."
   },
   "multiSelectNotFound": {
-    "message": "未找到任何条目"
+    "message": "未找到任何项目"
   },
   "multiSelectClearAll": {
     "message": "清除全部"
@@ -3049,5 +3058,8 @@
   },
   "textSends": {
     "message": "文本 Send"
+  },
+  "ssoError": {
+    "message": "找不到用于 SSO 登录的可用端口。"
   }
 }

@@ -1,7 +1,7 @@
 /* Cozy customization
-import { Component, NgZone } from "@angular/core";
+import { Component, NgZone, OnInit } from "@angular/core";
 */
-import { Component, NgZone, Input } from "@angular/core";
+import { Component, NgZone, OnInit, Input } from "@angular/core";
 /* Cozy customization end */
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -30,6 +30,7 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { ToastService } from "@bitwarden/components";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { flagEnabled } from "../../platform/flags";
@@ -84,7 +85,7 @@ const shouldRedirectToOIDCPasswordPage = (cozyConfiguration: CozyConfiguration) 
   selector: "app-login",
   templateUrl: "login.component.html",
 })
-export class LoginComponent extends BaseLoginComponent {
+export class LoginComponent extends BaseLoginComponent implements OnInit {
   /* Cozy customization */
   @Input() cozyUrl = "";
   /* Cozy customization end */
@@ -115,6 +116,7 @@ export class LoginComponent extends BaseLoginComponent {
     protected themeStateService: ThemeStateService,
     protected apiService: ApiService,
     registerRouteService: RegisterRouteService,
+    toastService: ToastService,
   ) {
     super(
       devicesApiService,
@@ -136,6 +138,7 @@ export class LoginComponent extends BaseLoginComponent {
       ssoLoginService,
       webAuthnLoginService,
       registerRouteService,
+      toastService,
     );
     super.onSuccessfulLogin = async () => {
       // Cozy customization
@@ -154,13 +157,12 @@ export class LoginComponent extends BaseLoginComponent {
     };
     super.successRoute = "/tabs/vault";
     this.showPasswordless = flagEnabled("showPasswordless");
+  }
 
+  async ngOnInit(): Promise<void> {
+    await super.ngOnInit();
     if (this.showPasswordless) {
-      this.formGroup.controls.email.setValue(this.loginEmailService.getEmail());
-      this.formGroup.controls.rememberEmail.setValue(this.loginEmailService.getRememberEmail());
-      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.validateEmail();
+      await this.validateEmail();
     }
   }
 
@@ -294,7 +296,7 @@ export class LoginComponent extends BaseLoginComponent {
         if (this.onSuccessfulLoginNavigate != null) {
           // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this.onSuccessfulLoginNavigate();
+          this.onSuccessfulLoginNavigate(response.userId);
         } else {
           // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -392,7 +394,7 @@ export class LoginComponent extends BaseLoginComponent {
       base: cozyUrl + "/bitwarden",
     });
 
-    this.loginEmailService.setEmail(cozyUrl);
+    this.loginEmailService.setLoginEmail(cozyUrl);
     this.loginEmailService.setRememberEmail(true);
     await this.loginEmailService.saveEmailSettings();
   };
