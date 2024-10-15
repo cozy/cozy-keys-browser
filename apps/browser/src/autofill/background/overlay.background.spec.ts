@@ -886,8 +886,8 @@ describe("OverlayBackground", () => {
       // expect(cipherService.sortCiphersByLastUsedThenName).toHaveBeenCalled(); // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
       expect(overlayBackground["inlineMenuCiphers"]).toStrictEqual(
         new Map([
-          ["inline-menu-cipher-0", cardCipher], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
-          ["inline-menu-cipher-1", loginCipher1], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
+          ["inline-menu-cipher-0", loginCipher1], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
+          ["inline-menu-cipher-1", cardCipher], // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
         ]),
       );
     });
@@ -932,7 +932,7 @@ describe("OverlayBackground", () => {
         tabId: tab.id,
         filledByCipherType: CipherType.Card,
       });
-      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, cardCipher]);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([cardCipher, loginCipher1]); // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
       getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
 
@@ -1143,7 +1143,7 @@ describe("OverlayBackground", () => {
         filledByCipherType: CipherType.Login,
         showPasskeys: true,
       });
-      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, passkeyCipher]);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([passkeyCipher, loginCipher1]); // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
       getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
 
@@ -1226,7 +1226,7 @@ describe("OverlayBackground", () => {
         filledByCipherType: CipherType.Login,
         showPasskeys: true,
       });
-      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, passkeyCipher]);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([passkeyCipher, loginCipher1]); // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
       getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
       neverDomainsMock$.next({ "jest-testing-website.com": null });
@@ -1290,7 +1290,7 @@ describe("OverlayBackground", () => {
         filledByCipherType: CipherType.Login,
         showPasskeys: true,
       });
-      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, passkeyCipher]);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([passkeyCipher, loginCipher1]); // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
       getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
 
@@ -1891,6 +1891,7 @@ describe("OverlayBackground", () => {
           command: "updateAutofillInlineMenuListCiphers",
           ciphers: [],
           showInlineMenuAccountCreation: true,
+          showPasskeysLabels: false,
         });
       });
 
