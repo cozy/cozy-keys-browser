@@ -715,13 +715,7 @@ export class AddEditComponent implements OnInit, OnDestroy {
   }
 
   async loadAddEditCipherInfo(): Promise<boolean> {
-    /*
-    // commented by Cozy : addEdit cipher info is persisted in history.service (url)
-    // because inmemory state service is lost when popup is closed.
     const addEditCipherInfo: any = await firstValueFrom(this.cipherService.addEditCipherInfo$);
-    */
-    const addEditCipherInfo: any = null;
-    /* end custo */
     const loadedSavedInfo = addEditCipherInfo != null;
 
     if (loadedSavedInfo) {
