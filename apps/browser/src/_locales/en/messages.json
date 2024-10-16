@@ -4762,6 +4762,9 @@
   "empty_jobTitle": {
     "message": "No job title"
   },
+  "empty_company": {
+    "message": "No company"
+  },
   "new_address": {
     "message": "New address"
   },
@@ -4776,6 +4779,9 @@
   },
   "new_jobTitle": {
     "message": "New job title"
+  },
+  "new_company": {
+    "message": "New company"
   },
   "new_paperIdentityCardNumber": {
     "message": "New national ID card number"
