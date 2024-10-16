@@ -831,6 +831,7 @@ export default class MainBackground {
       this.apiService,
       this.messagingService,
       this.cipherService,
+      this.accountService,
       this.i18nService,
       this.tokenService,
     );

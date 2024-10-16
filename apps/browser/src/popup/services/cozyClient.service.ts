@@ -6,6 +6,7 @@ import { RealtimePlugin } from "cozy-realtime";
 import { firstValueFrom } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
@@ -57,6 +58,7 @@ export class CozyClientService {
     protected apiService: ApiService,
     protected messagingService: MessagingService,
     protected cipherService: CipherService,
+    protected accountService: AccountService,
     private i18nService: I18nService,
     private tokenService: TokenService,
   ) {
@@ -177,6 +179,7 @@ export class CozyClientService {
       this.messagingService,
       this.cipherService,
       this.i18nService,
+      this.accountService,
       this.instance,
     );
     this.realTimeNotifications.init();
