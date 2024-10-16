@@ -36,6 +36,9 @@
   "notes": {
     "message": "Нотатки"
   },
+  "note": {
+    "message": "Нотатка"
+  },
   "customFields": {
     "message": "Власні поля"
   },
@@ -45,6 +48,30 @@
   "loginCredentials": {
     "message": "Облікові дані для входу"
   },
+  "personalDetails": {
+    "message": "Особисті дані"
+  },
+  "identification": {
+    "message": "Ідентифікація"
+  },
+  "contactInfo": {
+    "message": "Контактні дані"
+  },
+  "cardDetails": {
+    "message": "Подробиці картки"
+  },
+  "cardBrandDetails": {
+    "message": "Подробиці $BRAND$",
+    "placeholders": {
+      "brand": {
+        "content": "$1",
+        "example": "Visa"
+      }
+    }
+  },
+  "itemHistory": {
+    "message": "Історія запису"
+  },
   "authenticatorKey": {
     "message": "Ключ автентифікації"
   },
@@ -53,6 +80,16 @@
   },
   "websiteUri": {
     "message": "Вебсайт (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Вебсайт (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
     "message": "Вебсайт додано"
@@ -181,6 +218,12 @@
   "dr": {
     "message": "Доктор"
   },
+  "cardExpiredTitle": {
+    "message": "Протермінована картка"
+  },
+  "cardExpiredMessage": {
+    "message": "Якщо ви її поновили, оновіть інформацію"
+  },
   "expirationMonth": {
     "message": "Місяць завершення"
   },
@@ -198,6 +241,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden може автоматично заповнювати одноразові коди двоетапної перевірки. Відкрийте камеру, щоб сканувати QR-код на цьому вебсайті, або скопіюйте і вставте ключ у це поле."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Докладніше про програми автентифікації"
   },
   "folder": {
     "message": "Тека"
@@ -417,6 +463,9 @@
   "fullName": {
     "message": "Повне ім'я"
   },
+  "address": {
+    "message": "Адреса"
+  },
   "address1": {
     "message": "Адреса 1"
   },
@@ -458,6 +507,15 @@
   },
   "viewItem": {
     "message": "Переглянути запис"
+  },
+  "viewItemType": {
+    "message": "Переглянути $ITEMTYPE$",
+    "placeholders": {
+      "itemtype": {
+        "content": "$1",
+        "example": "login"
+      }
+    }
   },
   "new": {
     "message": "Новий",
@@ -874,6 +932,9 @@
   "masterPassHint": {
     "message": "Підказка для головного пароля (необов'язково)"
   },
+  "newMasterPassHint": {
+    "message": "Підказка для нового головного пароля (необов'язково)"
+  },
   "masterPassHintLabel": {
     "message": "Підказка для головного пароля"
   },
@@ -929,6 +990,12 @@
   },
   "newAccountCreated": {
     "message": "Ваш обліковий запис створений! Тепер ви можете увійти."
+  },
+  "newAccountCreated2": {
+    "message": "Ваш обліковий запис створено!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Ви увійшли!"
   },
   "trialAccountCreated": {
     "message": "Обліковий запис успішно створено."
@@ -1087,7 +1154,7 @@
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
-    "message": "Авторизуйтесь за допомогою Duo Security для вашої організації з використанням мобільного додатку Duo Mobile, SMS, телефонного виклику, або ключа безпеки U2F.",
+    "message": "Авторизуйтесь за допомогою Duo Security для вашої організації з використанням програми Duo Mobile, SMS, телефонного виклику, або ключа безпеки U2F.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "u2fDesc": {
@@ -1368,7 +1435,7 @@
     "message": "Повторно виконайте вхід."
   },
   "logBackInOthersToo": {
-    "message": "Будь ласка, повторно виконайте вхід. Якщо ви користуєтесь іншими додатками Bitwarden, також вийдіть із них, і знову увійдіть."
+    "message": "Будь ласка, повторно виконайте вхід. Якщо ви користуєтесь іншими програмами Bitwarden, також вийдіть із них, і знову увійдіть."
   },
   "changeMasterPassword": {
     "message": "Змінити головний пароль"
@@ -1504,6 +1571,10 @@
   "onboardingImportDataDetailsLink": {
     "message": "новий запис",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "новий запис",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": " натомість.",
@@ -2777,7 +2848,7 @@
     "message": "Отримати допомогу"
   },
   "getApps": {
-    "message": "Отримати додатки"
+    "message": "Отримати програми"
   },
   "loggedInAs": {
     "message": "Вхід виконано"
@@ -4945,6 +5016,10 @@
       }
     }
   },
+  "viewSend": {
+    "message": "Переглянути відправлення",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "viewSendHiddenEmailWarning": {
     "message": "Користувач Bitwarden, який створив це відправлення, вирішив приховати свою адресу електронної пошти. Вам слід упевнитися в надійності джерела цього посилання перед його використанням чи завантаженням вмісту.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -5322,6 +5397,18 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Ваш головний пароль не відповідає одній або більше політикам вашої організації. Щоб отримати доступ до сховища, вам необхідно оновити свій головний пароль зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години."
+  },
+  "automaticAppLogin": {
+    "message": "Автоматичний вхід користувачів для дозволених програм"
+  },
+  "automaticAppLoginDesc": {
+    "message": "Форми входу автоматично заповнюватимуться і надсилатимуться для програм, запущених від налаштованого провайдера ідентифікації."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Вузол провайдера ідентифікації"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Введіть URL-адресу вузла вашого провайдера ідентифікації. Можна ввести декілька URL-адрес, розділивши їх комою."
   },
   "tdeDisabledMasterPasswordRequired": {
     "message": "Ваша організація оновила параметри дешифрування. Встановіть головний пароль для доступу до сховища."
@@ -8907,5 +8994,69 @@
   },
   "additionalStorageGbMessage": {
     "message": "ГБ додаткового сховища"
+  },
+  "premiumAccounts": {
+    "message": "6 облікових записів Преміум"
+  },
+  "unlimitedSharing": {
+    "message": "Необмежений спільний доступ"
+  },
+  "unlimitedCollections": {
+    "message": "Необмежена кількість збірок"
+  },
+  "secureDataSharing": {
+    "message": "Безпечний обмін даними"
+  },
+  "eventLogMonitoring": {
+    "message": "Моніторинг подій"
+  },
+  "directoryIntegration": {
+    "message": "Інтеграція з каталогом"
+  },
+  "passwordLessSso": {
+    "message": "Безпарольний вхід за допомогою SSO"
+  },
+  "accountRecovery": {
+    "message": "Відновлення облікового запису"
+  },
+  "customRoles": {
+    "message": "Користувацькі ролі"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Необмежене сховище для секретів"
+  },
+  "unlimitedUsers": {
+    "message": "Необмежена кількість користувачів"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "До 50 машинних облікових записів"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "До 20 машинних облікових записів"
+  },
+  "current": {
+    "message": "Поточний"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Ваша передплата менеджера секретів поновиться на основі вибраного плану"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden – менеджер паролів"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Ваша додаткова річна передплата менеджера паролів поновиться до вибраного плану. З вас не стягуватиметься платіж доки не завершиться додатковий період."
+  },
+  "publicApi": {
+    "message": "Відкритий API",
+    "description": "The text, 'API', is an acronymn and should not be translated."
+  },
+  "showCharacterCount": {
+    "message": "Показати кількість символів"
+  },
+  "hideCharacterCount": {
+    "message": "Приховати кількість символів"
+  },
+  "editAccess": {
+    "message": "Редагувати доступ"
   }
 }

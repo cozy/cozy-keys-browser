@@ -418,18 +418,9 @@ export class BrowserApi {
   }
 
   /**
-   * Handles reloading the extension, either by calling the window location
-   * to reload or by calling the extension's runtime to reload.
-   *
-   * @param globalContext - The global context to use for the reload.
+   * Handles reloading the extension using the underlying functionality exposed by the browser API.
    */
-  static reloadExtension(globalContext: (Window & typeof globalThis) | null) {
-    // The passed globalContext might be a ServiceWorkerGlobalScope, as a result
-    // we need to check if the location object exists before calling reload on it.
-    if (typeof globalContext?.location?.reload === "function") {
-      return (globalContext as any).location.reload(true);
-    }
-
+  static reloadExtension() {
     return chrome.runtime.reload();
   }
 
@@ -528,12 +519,20 @@ export class BrowserApi {
     },
   ): Promise<unknown> {
     if (BrowserApi.isManifestVersion(3)) {
+      const target: chrome.scripting.InjectionTarget = {
+        tabId,
+      };
+
+      if (typeof details.frameId === "number") {
+        target.frameIds = [details.frameId];
+      }
+
+      if (!target.frameIds?.length && details.allFrames) {
+        target.allFrames = details.allFrames;
+      }
+
       return chrome.scripting.executeScript({
-        target: {
-          tabId: tabId,
-          allFrames: details.allFrames,
-          frameIds: details.frameId ? [details.frameId] : null,
-        },
+        target,
         files: details.file ? [details.file] : null,
         injectImmediately: details.runAt === "document_start",
         world: scriptingApiDetails?.world || "ISOLATED",

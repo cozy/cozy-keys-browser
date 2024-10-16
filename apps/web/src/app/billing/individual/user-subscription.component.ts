@@ -5,17 +5,23 @@ import { firstValueFrom, lastValueFrom } from "rxjs";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { SubscriptionResponse } from "@bitwarden/common/billing/models/response/subscription.response";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
+import {
+  AdjustStorageDialogV2Component,
+  AdjustStorageDialogV2ResultType,
+} from "../shared/adjust-storage-dialog/adjust-storage-dialog-v2.component";
 import {
   AdjustStorageDialogResult,
   openAdjustStorageDialog,
-} from "../shared/adjust-storage.component";
+} from "../shared/adjust-storage-dialog/adjust-storage-dialog.component";
 import {
   OffboardingSurveyDialogResultType,
   openOffboardingSurvey,
@@ -34,9 +40,17 @@ export class UserSubscriptionComponent implements OnInit {
   sub: SubscriptionResponse;
   selfHosted = false;
   cloudWebVaultUrl: string;
+  enableTimeThreshold: boolean;
 
   cancelPromise: Promise<any>;
   reinstatePromise: Promise<any>;
+  protected enableTimeThreshold$ = this.configService.getFeatureFlag$(
+    FeatureFlag.EnableTimeThreshold,
+  );
+
+  protected deprecateStripeSourcesAPI$ = this.configService.getFeatureFlag$(
+    FeatureFlag.AC2476_DeprecateStripeSourcesAPI,
+  );
 
   constructor(
     private apiService: ApiService,
@@ -48,6 +62,8 @@ export class UserSubscriptionComponent implements OnInit {
     private dialogService: DialogService,
     private environmentService: EnvironmentService,
     private billingAccountProfileStateService: BillingAccountProfileStateService,
+    private toastService: ToastService,
+    private configService: ConfigService,
   ) {
     this.selfHosted = platformUtilsService.isSelfHost();
   }
@@ -55,6 +71,7 @@ export class UserSubscriptionComponent implements OnInit {
   async ngOnInit() {
     this.cloudWebVaultUrl = await firstValueFrom(this.environmentService.cloudWebVaultUrl$);
     await this.load();
+    this.enableTimeThreshold = await firstValueFrom(this.enableTimeThreshold$);
     this.firstLoaded = true;
   }
 
@@ -94,7 +111,11 @@ export class UserSubscriptionComponent implements OnInit {
     try {
       this.reinstatePromise = this.apiService.postReinstatePremium();
       await this.reinstatePromise;
-      this.platformUtilsService.showToast("success", null, this.i18nService.t("reinstated"));
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t("reinstated"),
+      });
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.load();
@@ -145,15 +166,33 @@ export class UserSubscriptionComponent implements OnInit {
   };
 
   adjustStorage = async (add: boolean) => {
-    const dialogRef = openAdjustStorageDialog(this.dialogService, {
-      data: {
-        storageGbPrice: 4,
-        add: add,
-      },
-    });
-    const result = await lastValueFrom(dialogRef.closed);
-    if (result === AdjustStorageDialogResult.Adjusted) {
-      await this.load();
+    const deprecateStripeSourcesAPI = await firstValueFrom(this.deprecateStripeSourcesAPI$);
+
+    if (deprecateStripeSourcesAPI) {
+      const dialogRef = AdjustStorageDialogV2Component.open(this.dialogService, {
+        data: {
+          price: 4,
+          cadence: "year",
+          type: add ? "Add" : "Remove",
+        },
+      });
+
+      const result = await lastValueFrom(dialogRef.closed);
+
+      if (result === AdjustStorageDialogV2ResultType.Submitted) {
+        await this.load();
+      }
+    } else {
+      const dialogRef = openAdjustStorageDialog(this.dialogService, {
+        data: {
+          storageGbPrice: 4,
+          add: add,
+        },
+      });
+      const result = await lastValueFrom(dialogRef.closed);
+      if (result === AdjustStorageDialogResult.Adjusted) {
+        await this.load();
+      }
     }
   };
 

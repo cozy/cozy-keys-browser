@@ -3,6 +3,7 @@ import { Component, Inject, OnDestroy } from "@angular/core";
 
 import { CollectionsComponent as BaseCollectionsComponent } from "@bitwarden/angular/admin-console/components/collections.component";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
@@ -10,7 +11,7 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 @Component({
   selector: "app-vault-collections",
@@ -25,8 +26,10 @@ export class CollectionsComponent extends BaseCollectionsComponent implements On
     organizationSerivce: OrganizationService,
     logService: LogService,
     configService: ConfigService,
+    accountService: AccountService,
     protected dialogRef: DialogRef,
     @Inject(DIALOG_DATA) params: CollectionsDialogParams,
+    toastService: ToastService,
   ) {
     super(
       collectionService,
@@ -36,6 +39,8 @@ export class CollectionsComponent extends BaseCollectionsComponent implements On
       organizationSerivce,
       logService,
       configService,
+      accountService,
+      toastService,
     );
     this.cipherId = params?.cipherId;
   }
@@ -50,13 +55,7 @@ export class CollectionsComponent extends BaseCollectionsComponent implements On
   }
 
   check(c: CollectionView, select?: boolean) {
-    if (
-      !c.canEditItems(
-        this.organization,
-        this.flexibleCollectionsV1Enabled,
-        this.restrictProviderAccess,
-      )
-    ) {
+    if (!c.canEditItems(this.organization, this.restrictProviderAccess)) {
       return;
     }
     (c as any).checked = select == null ? !(c as any).checked : select;

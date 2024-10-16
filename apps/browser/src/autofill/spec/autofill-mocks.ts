@@ -114,6 +114,7 @@ export function createGenerateFillScriptOptionsMock(customFields = {}): Generate
     onlyVisibleFields: false,
     fillNewPassword: false,
     allowTotpAutofill: false,
+    autoSubmitLogin: false,
     cipher: mock<CipherView>(),
     tabUrl: "https://jest-testing-website.com",
     defaultUriMatch: UriMatchStrategy.Domain,
@@ -187,7 +188,10 @@ export function createAutofillOverlayCipherDataMock(
   return {
     id: String(index),
     name: `website login ${index}`,
-    login: { username: `username${index}` },
+    login: {
+      username: `username${index}`,
+      passkey: null,
+    },
     type: CipherType.Login,
     reprompt: CipherRepromptType.None,
     favorite: false,

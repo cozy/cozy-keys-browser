@@ -32,6 +32,7 @@ describe("AutofillOptionsComponent", () => {
 
     autofillSettingsService = mock<AutofillSettingsServiceAbstraction>();
     autofillSettingsService.autofillOnPageLoadDefault$ = new BehaviorSubject(false);
+    autofillSettingsService.autofillOnPageLoad$ = new BehaviorSubject(true);
 
     await TestBed.configureTestingModule({
       imports: [AutofillOptionsComponent],
@@ -127,6 +128,47 @@ describe("AutofillOptionsComponent", () => {
     expect(component.autofillOptionsForm.value.autofillOnPageLoad).toEqual(null);
   });
 
+  it("initializes 'autoFillOptionsForm' with initialValues when editing an existing cipher", () => {
+    cipherFormContainer.config.initialValues = { loginUri: "https://new-website.com" };
+    const existingLogin = new LoginUriView();
+    existingLogin.uri = "https://example.com";
+    existingLogin.match = UriMatchStrategy.Exact;
+
+    (cipherFormContainer.originalCipherView as CipherView) = new CipherView();
+    cipherFormContainer.originalCipherView.login = {
+      autofillOnPageLoad: true,
+      uris: [existingLogin],
+    } as LoginView;
+
+    fixture.detectChanges();
+
+    expect(component.autofillOptionsForm.value.uris).toEqual([
+      { uri: "https://example.com", matchDetection: UriMatchStrategy.Exact },
+      { uri: "https://new-website.com", matchDetection: null },
+    ]);
+    expect(component.autofillOptionsForm.value.autofillOnPageLoad).toEqual(true);
+  });
+
+  it("initializes 'autoFillOptionsForm' with initialValues without duplicating an existing URI", () => {
+    cipherFormContainer.config.initialValues = { loginUri: "https://example.com" };
+    const existingLogin = new LoginUriView();
+    existingLogin.uri = "https://example.com";
+    existingLogin.match = UriMatchStrategy.Exact;
+
+    (cipherFormContainer.originalCipherView as CipherView) = new CipherView();
+    cipherFormContainer.originalCipherView.login = {
+      autofillOnPageLoad: true,
+      uris: [existingLogin],
+    } as LoginView;
+
+    fixture.detectChanges();
+
+    expect(component.autofillOptionsForm.value.uris).toEqual([
+      { uri: "https://example.com", matchDetection: UriMatchStrategy.Exact },
+    ]);
+    expect(component.autofillOptionsForm.value.autofillOnPageLoad).toEqual(true);
+  });
+
   it("initializes 'autoFillOptionsForm' with an empty URI when creating a new cipher", () => {
     cipherFormContainer.config.initialValues = null;
 
@@ -143,6 +185,22 @@ describe("AutofillOptionsComponent", () => {
     fixture.detectChanges();
 
     expect(component["autofillOptions"][0].label).toEqual("defaultLabel yes");
+  });
+
+  it("hides the autofill on page load field when the setting is disabled", () => {
+    fixture.detectChanges();
+    let control = fixture.nativeElement.querySelector(
+      "bit-select[formControlName='autofillOnPageLoad']",
+    );
+    expect(control).toBeTruthy();
+
+    (autofillSettingsService.autofillOnPageLoad$ as BehaviorSubject<boolean>).next(false);
+
+    fixture.detectChanges();
+    control = fixture.nativeElement.querySelector(
+      "bit-select[formControlName='autofillOnPageLoad']",
+    );
+    expect(control).toBeFalsy();
   });
 
   it("announces the addition of a new URI input", fakeAsync(() => {

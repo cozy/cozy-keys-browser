@@ -1,6 +1,7 @@
 import { APP_INITIALIZER, NgModule, NgZone } from "@angular/core";
 import { Subject, merge, of } from "rxjs";
 
+import { ViewCacheService } from "@bitwarden/angular/platform/abstractions/view-cache.service";
 import { AngularThemingService } from "@bitwarden/angular/platform/services/theming/angular-theming.service";
 import { SafeProvider, safeProvider } from "@bitwarden/angular/platform/utils/safe-provider";
 import {
@@ -16,7 +17,7 @@ import {
 } from "@bitwarden/angular/services/injection-tokens";
 import { JslibServicesModule } from "@bitwarden/angular/services/jslib-services.module";
 import { AnonLayoutWrapperDataService } from "@bitwarden/auth/angular";
-import { PinServiceAbstraction } from "@bitwarden/auth/common";
+import { LockService, PinServiceAbstraction } from "@bitwarden/auth/common";
 import { EventCollectionService as EventCollectionServiceAbstraction } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
@@ -41,6 +42,10 @@ import {
 } from "@bitwarden/common/autofill/services/user-notification-settings.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { ClientType } from "@bitwarden/common/enums";
+import {
+  AnimationControlService,
+  DefaultAnimationControlService,
+} from "@bitwarden/common/platform/abstractions/animation-control.service";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -58,6 +63,7 @@ import {
   ObservableStorageService,
 } from "@bitwarden/common/platform/abstractions/storage.service";
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
+import { BiometricsService } from "@bitwarden/common/platform/biometrics/biometric.service";
 import { Message, MessageListener, MessageSender } from "@bitwarden/common/platform/messaging";
 // eslint-disable-next-line no-restricted-imports -- Used for dependency injection
 import { SubjectMessageSender } from "@bitwarden/common/platform/messaging/internal";
@@ -73,6 +79,8 @@ import {
 } from "@bitwarden/common/platform/state";
 // eslint-disable-next-line import/no-restricted-paths -- Used for dependency injection
 import { InlineDerivedStateProvider } from "@bitwarden/common/platform/state/implementations/inline-derived-state";
+import { PrimarySecondaryStorageService } from "@bitwarden/common/platform/storage/primary-secondary-storage.service";
+import { WindowStorageService } from "@bitwarden/common/platform/storage/window-storage.service";
 import { SyncService } from "@bitwarden/common/platform/sync";
 import { VaultTimeoutStringType } from "@bitwarden/common/types/vault-timeout.type";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -83,6 +91,7 @@ import { TotpService } from "@bitwarden/common/vault/services/totp.service";
 import { DialogService, ToastService } from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
+import { ForegroundLockService } from "../../auth/popup/accounts/foreground-lock.service";
 import { ExtensionAnonLayoutWrapperDataService } from "../../auth/popup/extension-anon-layout-wrapper/extension-anon-layout-wrapper-data.service";
 import { AutofillService as AutofillServiceAbstraction } from "../../autofill/services/abstractions/autofill.service";
 import AutofillService from "../../autofill/services/autofill.service";
@@ -96,11 +105,13 @@ import { OffscreenDocumentService } from "../../platform/offscreen-document/abst
 import { DefaultOffscreenDocumentService } from "../../platform/offscreen-document/offscreen-document.service";
 import BrowserPopupUtils from "../../platform/popup/browser-popup-utils";
 import { BrowserFileDownloadService } from "../../platform/popup/services/browser-file-download.service";
+import { PopupViewCacheService } from "../../platform/popup/view-cache/popup-view-cache.service";
 import { ScriptInjectorService } from "../../platform/services/abstractions/script-injector.service";
 import { BrowserCryptoService } from "../../platform/services/browser-crypto.service";
 import { BrowserEnvironmentService } from "../../platform/services/browser-environment.service";
 import BrowserLocalStorageService from "../../platform/services/browser-local-storage.service";
 import { BrowserScriptInjectorService } from "../../platform/services/browser-script-injector.service";
+import { ForegroundBrowserBiometricsService } from "../../platform/services/foreground-browser-biometrics";
 import I18nService from "../../platform/services/i18n.service";
 import { ForegroundPlatformUtilsService } from "../../platform/services/platform-utils/foreground-platform-utils.service";
 import { ForegroundTaskSchedulerService } from "../../platform/services/task-scheduler/foreground-task-scheduler.service";
@@ -129,6 +140,10 @@ import { HistoryService } from "./history.service";
 const OBSERVABLE_LARGE_OBJECT_MEMORY_STORAGE = new SafeInjectionToken<
   AbstractStorageService & ObservableStorageService
 >("OBSERVABLE_LARGE_OBJECT_MEMORY_STORAGE");
+
+const DISK_BACKUP_LOCAL_STORAGE = new SafeInjectionToken<
+  AbstractStorageService & ObservableStorageService
+>("DISK_BACKUP_LOCAL_STORAGE");
 
 const needsBackgroundInit = BrowserPopupUtils.backgroundInitializationRequired();
 const mainBackground: MainBackground = needsBackgroundInit
@@ -224,6 +239,7 @@ const safeProviders: SafeProvider[] = [
       accountService: AccountServiceAbstraction,
       stateProvider: StateProvider,
       biometricStateService: BiometricStateService,
+      biometricsService: BiometricsService,
       kdfConfigService: KdfConfigService,
     ) => {
       const cryptoService = new BrowserCryptoService(
@@ -238,6 +254,7 @@ const safeProviders: SafeProvider[] = [
         accountService,
         stateProvider,
         biometricStateService,
+        biometricsService,
         kdfConfigService,
       );
       new ContainerService(cryptoService, encryptService).attachToGlobal(self);
@@ -255,6 +272,7 @@ const safeProviders: SafeProvider[] = [
       AccountServiceAbstraction,
       StateProvider,
       BiometricStateService,
+      BiometricsService,
       KdfConfigService,
     ],
   }),
@@ -279,21 +297,18 @@ const safeProviders: SafeProvider[] = [
         (clipboardValue: string, clearMs: number) => {
           void BrowserApi.sendMessage("clearClipboard", { clipboardValue, clearMs });
         },
-        async () => {
-          const response = await BrowserApi.sendMessageWithResponse<{
-            result: boolean;
-            error: string;
-          }>("biometricUnlock");
-          if (!response.result) {
-            throw response.error;
-          }
-          return response.result;
-        },
         window,
         offscreenDocumentService,
       );
     },
     deps: [ToastService, OffscreenDocumentService],
+  }),
+  safeProvider({
+    provide: BiometricsService,
+    useFactory: () => {
+      return new ForegroundBrowserBiometricsService();
+    },
+    deps: [],
   }),
   safeProvider({
     provide: SyncService,
@@ -315,6 +330,11 @@ const safeProviders: SafeProvider[] = [
     useExisting: AutofillService,
   }),
   safeProvider({
+    provide: ViewCacheService,
+    useExisting: PopupViewCacheService,
+    deps: [],
+  }),
+  safeProvider({
     provide: AutofillService,
     deps: [
       CipherService,
@@ -329,6 +349,7 @@ const safeProviders: SafeProvider[] = [
       AccountServiceAbstraction,
       AuthService,
       ConfigService,
+      UserNotificationSettingsServiceAbstraction,
       MessageListener,
       CozyClientService,
     ],
@@ -517,12 +538,19 @@ const safeProviders: SafeProvider[] = [
     deps: [],
   }),
   safeProvider({
+    provide: DISK_BACKUP_LOCAL_STORAGE,
+    useFactory: (diskStorage: AbstractStorageService & ObservableStorageService) =>
+      new PrimarySecondaryStorageService(diskStorage, new WindowStorageService(self.localStorage)),
+    deps: [OBSERVABLE_DISK_STORAGE],
+  }),
+  safeProvider({
     provide: StorageServiceProvider,
     useClass: BrowserStorageServiceProvider,
     deps: [
       OBSERVABLE_DISK_STORAGE,
       OBSERVABLE_MEMORY_STORAGE,
       OBSERVABLE_LARGE_OBJECT_MEMORY_STORAGE,
+      DISK_BACKUP_LOCAL_STORAGE,
     ],
   }),
   safeProvider({
@@ -533,6 +561,11 @@ const safeProviders: SafeProvider[] = [
     provide: Fido2UserVerificationService,
     useClass: Fido2UserVerificationService,
     deps: [PasswordRepromptService, UserVerificationService, DialogService],
+  }),
+  safeProvider({
+    provide: AnimationControlService,
+    useClass: DefaultAnimationControlService,
+    deps: [GlobalStateProvider],
   }),
   safeProvider({
     provide: TaskSchedulerService,
@@ -547,6 +580,11 @@ const safeProviders: SafeProvider[] = [
     provide: AnonLayoutWrapperDataService,
     useClass: ExtensionAnonLayoutWrapperDataService,
     deps: [],
+  }),
+  safeProvider({
+    provide: LockService,
+    useClass: ForegroundLockService,
+    deps: [MessageSender, MessageListener],
   }),
 ];
 

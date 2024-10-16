@@ -25,9 +25,10 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
+import { BiometricsService } from "@bitwarden/common/platform/biometrics/biometric.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 const BroadcasterSubscriptionId = "LockComponent";
 
@@ -66,10 +67,12 @@ export class LockComponent extends BaseLockComponent implements OnInit, OnDestro
     userVerificationService: UserVerificationService,
     pinService: PinServiceAbstraction,
     biometricStateService: BiometricStateService,
+    biometricsService: BiometricsService,
     accountService: AccountService,
     authService: AuthService,
     kdfConfigService: KdfConfigService,
     syncService: SyncService,
+    toastService: ToastService,
   ) {
     super(
       masterPasswordService,
@@ -93,10 +96,12 @@ export class LockComponent extends BaseLockComponent implements OnInit, OnDestro
       userVerificationService,
       pinService,
       biometricStateService,
+      biometricsService,
       accountService,
       authService,
       kdfConfigService,
       syncService,
+      toastService,
     );
   }
 
@@ -139,7 +144,7 @@ export class LockComponent extends BaseLockComponent implements OnInit, OnDestro
 
     // start background listener until destroyed on interval
     this.timerId = setInterval(async () => {
-      this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
+      this.supportsBiometric = await this.biometricsService.supportsBiometric();
       this.biometricReady = await this.canUseBiometric();
     }, 1000);
   }

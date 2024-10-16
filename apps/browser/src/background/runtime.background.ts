@@ -1,5 +1,6 @@
 import { firstValueFrom, map, mergeMap } from "rxjs";
 
+import { LockService } from "@bitwarden/auth/common";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { AutofillOverlayVisibility, ExtensionCommand } from "@bitwarden/common/autofill/constants";
@@ -39,7 +40,6 @@ export default class RuntimeBackground {
   private pageDetailsToAutoFill: any[] = [];
   private onInstalledReason: string = null;
   private lockedVaultPendingNotifications: LockedVaultPendingNotificationsData[] = [];
-  private extensionRefreshIsActive: boolean = false;
 
   constructor(
     private main: MainBackground,
@@ -57,6 +57,7 @@ export default class RuntimeBackground {
     private accountService: AccountService,
     private syncService: SyncService,
     private cozyClientService: CozyClientService,
+    private readonly lockService: LockService,
   ) {
     // onInstalled listener must be wired up before anything else, so we do it in the ctor
     chrome.runtime.onInstalled.addListener((details: any) => {
@@ -77,6 +78,7 @@ export default class RuntimeBackground {
     ) => {
       const messagesWithResponse = [
         "biometricUnlock",
+        "biometricUnlockAvailable",
         "getUseTreeWalkerApiForPageDetailsCollectionFeatureFlag",
         "getInlineMenuFieldQualificationFeatureFlag",
       ];
@@ -97,10 +99,6 @@ export default class RuntimeBackground {
       );
       return false;
     };
-
-    this.extensionRefreshIsActive = await this.configService.getFeatureFlag(
-      FeatureFlag.ExtensionRefresh,
-    );
 
     this.messageListener.allMessages$
       .pipe(
@@ -192,7 +190,11 @@ export default class RuntimeBackground {
         }
         break;
       case "biometricUnlock": {
-        const result = await this.main.biometricUnlock();
+        const result = await this.main.biometricsService.authenticateBiometric();
+        return result;
+      }
+      case "biometricUnlockAvailable": {
+        const result = await this.main.biometricsService.isBiometricUnlockAvailable();
         return result;
       }
       case "getUseTreeWalkerApiForPageDetailsCollectionFeatureFlag": {
@@ -253,7 +255,7 @@ export default class RuntimeBackground {
         await this.main.refreshBadge();
         await this.main.refreshMenu(false);
 
-        if (this.extensionRefreshIsActive) {
+        if (await this.configService.getFeatureFlag(FeatureFlag.ExtensionRefresh)) {
           await this.autofillService.setAutoFillOnPageLoadOrgPolicy();
         }
         break;
@@ -269,6 +271,12 @@ export default class RuntimeBackground {
         this.autofillService.doAutoFill(msg.autofillOptions);
         break;
       // Cozy customization end
+      case "lockAll":
+        {
+          await this.lockService.lockAll();
+          this.messagingService.send("lockAllFinished", { requestId: msg.requestId });
+        }
+        break;
       case "logout":
         await this.main.logout(msg.expired, msg.userId);
         break;
@@ -281,7 +289,7 @@ export default class RuntimeBackground {
           await this.configService.ensureConfigFetched();
           await this.main.updateOverlayCiphers();
 
-          if (this.extensionRefreshIsActive) {
+          if (await this.configService.getFeatureFlag(FeatureFlag.ExtensionRefresh)) {
             await this.autofillService.setAutoFillOnPageLoadOrgPolicy();
           }
         }
@@ -301,9 +309,10 @@ export default class RuntimeBackground {
         await this.main.refreshBadge();
         await this.main.refreshMenu();
         break;
-      case "bgReseedStorage":
+      case "bgReseedStorage": {
         await this.main.reseedStorage();
         break;
+      }
       case "authResult": {
         const env = await firstValueFrom(this.environmentService.environment$);
         const vaultUrl = env.getWebVaultUrl();

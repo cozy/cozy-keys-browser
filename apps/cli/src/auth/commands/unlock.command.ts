@@ -69,10 +69,11 @@ export class UnlockCommand {
     }
 
     const userKey = await this.masterPasswordService.decryptUserKeyWithMasterKey(masterKey);
-    await this.cryptoService.setUserKey(userKey);
+    await this.cryptoService.setUserKey(userKey, userId);
 
     if (await this.keyConnectorService.getConvertAccountRequired()) {
       const convertToKeyConnectorCommand = new ConvertToKeyConnectorCommand(
+        userId,
         this.keyConnectorService,
         this.environmentService,
         this.syncService,

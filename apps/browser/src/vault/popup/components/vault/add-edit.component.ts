@@ -27,13 +27,14 @@ import { CollectionService } from "@bitwarden/common/vault/abstractions/collecti
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view";
+import { normalizeExpiryYearFormat } from "@bitwarden/common/vault/utils";
 import { DialogService, ToastService } from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
+import { BrowserFido2UserInterfaceSession } from "../../../../autofill/fido2/services/browser-fido2-user-interface.service";
 import { BrowserApi } from "../../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
 import { PopupCloseWarningService } from "../../../../popup/services/popup-close-warning.service";
-import { BrowserFido2UserInterfaceSession } from "../../../fido2/browser-fido2-user-interface.service";
 import { Fido2UserVerificationService } from "../../../services/fido2-user-verification.service";
 import { fido2PopoutSessionData$ } from "../../utils/fido2-popout-session-data";
 import { closeAddEditVaultItemPopout, VaultPopoutType } from "../../utils/vault-popout-window";
@@ -264,6 +265,11 @@ export class AddEditComponent extends BaseAddEditComponent implements OnInit {
     const fido2SessionData = await firstValueFrom(this.fido2PopoutSessionData$);
     const { isFido2Session, sessionId, userVerification } = fido2SessionData;
     const inFido2PopoutWindow = BrowserPopupUtils.inPopout(window) && isFido2Session;
+
+    // normalize card expiry year on save
+    if (this.cipher.type === this.cipherType.Card) {
+      this.cipher.card.expYear = normalizeExpiryYearFormat(this.cipher.card.expYear);
+    }
 
     // TODO: Revert to use fido2 user verification service once user verification for passkeys is approved for production.
     // PM-4577 - https://github.com/bitwarden/clients/pull/8746

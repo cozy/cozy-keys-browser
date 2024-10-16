@@ -36,6 +36,9 @@
   "notes": {
     "message": "Notas"
   },
+  "note": {
+    "message": "Nota"
+  },
   "customFields": {
     "message": "Campos Personalizados"
   },
@@ -45,6 +48,30 @@
   "loginCredentials": {
     "message": "Credenciais de login"
   },
+  "personalDetails": {
+    "message": "Personal details"
+  },
+  "identification": {
+    "message": "Identification"
+  },
+  "contactInfo": {
+    "message": "Contact info"
+  },
+  "cardDetails": {
+    "message": "Card details"
+  },
+  "cardBrandDetails": {
+    "message": "$BRAND$ details",
+    "placeholders": {
+      "brand": {
+        "content": "$1",
+        "example": "Visa"
+      }
+    }
+  },
+  "itemHistory": {
+    "message": "Item history"
+  },
   "authenticatorKey": {
     "message": "Chave do autenticador"
   },
@@ -53,6 +80,16 @@
   },
   "websiteUri": {
     "message": "Site (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Site (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
     "message": "Site adicionado"
@@ -181,6 +218,12 @@
   "dr": {
     "message": "Dr"
   },
+  "cardExpiredTitle": {
+    "message": "Cartão expirado"
+  },
+  "cardExpiredMessage": {
+    "message": "Se você o renovou, atualize as informações do cartão"
+  },
   "expirationMonth": {
     "message": "Mês de Vencimento"
   },
@@ -198,6 +241,9 @@
   },
   "totpHelperWithCapture": {
     "message": "O Bitwarden pode armazenar e preencher códigos de verificação de duas etapas. Selecione o ícone de câmera para tirar uma captura da tela do código QR de autenticador deste site, ou copie e cole a chave neste campo."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Saiba mais sobre os autenticadores"
   },
   "folder": {
     "message": "Pasta"
@@ -417,6 +463,9 @@
   "fullName": {
     "message": "Nome Completo"
   },
+  "address": {
+    "message": "Address"
+  },
   "address1": {
     "message": "Endereço 1"
   },
@@ -458,6 +507,15 @@
   },
   "viewItem": {
     "message": "Visualizar Item"
+  },
+  "viewItemType": {
+    "message": "Visualizar $ITEMTYPE$",
+    "placeholders": {
+      "itemtype": {
+        "content": "$1",
+        "example": "login"
+      }
+    }
   },
   "new": {
     "message": "Novo",
@@ -874,6 +932,9 @@
   "masterPassHint": {
     "message": "Dica da senha mestra (opcional)"
   },
+  "newMasterPassHint": {
+    "message": "Nova dica de senha mestra (opcional)"
+  },
   "masterPassHintLabel": {
     "message": "Dica da senha mestra"
   },
@@ -929,6 +990,12 @@
   },
   "newAccountCreated": {
     "message": "A sua nova conta foi criada! Agora você pode iniciar a sessão."
+  },
+  "newAccountCreated2": {
+    "message": "Your new account has been created!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "You have been logged in!"
   },
   "trialAccountCreated": {
     "message": "Conta criada com sucesso."
@@ -1504,6 +1571,10 @@
   "onboardingImportDataDetailsLink": {
     "message": "Novo item",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "novo login",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": " em vez disso.",
@@ -4945,6 +5016,10 @@
       }
     }
   },
+  "viewSend": {
+    "message": "View Send",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "viewSendHiddenEmailWarning": {
     "message": "O usuário Bitwarden que criou este Send optou por ocultar seu endereço de e-mail. Você deve certificar-se de que confia na fonte deste link antes de usar ou baixar seu conteúdo.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -5322,6 +5397,18 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "A sua senha mestra não atende a uma ou mais das políticas da sua organização. Para acessar o cofre, você deve atualizar a sua senha mestra agora. O processo desconectará você da sessão atual, exigindo que você inicie a sessão novamente. Sessões ativas em outros dispositivos podem continuar ativas por até uma hora."
+  },
+  "automaticAppLogin": {
+    "message": "Fazer login automaticamente em usuários para aplicativos permitidos"
+  },
+  "automaticAppLoginDesc": {
+    "message": "Os formulários de login serão automaticamente preenchidos e enviados para aplicativos iniciados por seu provedor de identidade configurado."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Provedor de identidade"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Digite a URL do seu provedor de identidade. Insira vários URLs, separando com uma vírgula."
   },
   "tdeDisabledMasterPasswordRequired": {
     "message": "Sua organização atualizou suas opções de descriptografia. Por favor, defina uma senha mestra para acessar seu cofre."
@@ -8907,5 +8994,69 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB de armazenamento adicional"
+  },
+  "premiumAccounts": {
+    "message": "6 contas premium"
+  },
+  "unlimitedSharing": {
+    "message": "Compartilhamento ilimitado"
+  },
+  "unlimitedCollections": {
+    "message": "Coleções ilimitadas"
+  },
+  "secureDataSharing": {
+    "message": "Compartilhamento de dados seguro"
+  },
+  "eventLogMonitoring": {
+    "message": "Monitoramento do registro de eventos"
+  },
+  "directoryIntegration": {
+    "message": "Integração de diretório"
+  },
+  "passwordLessSso": {
+    "message": "SSO Senha-Chaves"
+  },
+  "accountRecovery": {
+    "message": "Recuperação de conta"
+  },
+  "customRoles": {
+    "message": "Funções personalizadas"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Armazenamento ilimitado de segredos"
+  },
+  "unlimitedUsers": {
+    "message": "Usuários ilimitados"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "Até 50 contas de máquina"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "Até 20 contas de máquina"
+  },
+  "current": {
+    "message": "Atual"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Sua assinatura do Gerenciador de Segredos irá atualizar a base do plano selecionado"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Gerenciador de Senhas Bitwarden"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Sua assinatura complementar de um ano gerente de senha vai atualizar para o plano selecionado. Você não será cobrado até que o período complementar termine."
+  },
+  "publicApi": {
+    "message": "Public API",
+    "description": "The text, 'API', is an acronymn and should not be translated."
+  },
+  "showCharacterCount": {
+    "message": "Show character count"
+  },
+  "hideCharacterCount": {
+    "message": "Hide character count"
+  },
+  "editAccess": {
+    "message": "Edit access"
   }
 }

@@ -11,6 +11,7 @@ import { AccountService } from "@bitwarden/common/auth/abstractions/account.serv
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { ProductTierType } from "@bitwarden/common/billing/enums";
 import { EventType } from "@bitwarden/common/enums";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
@@ -23,6 +24,7 @@ import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folde
 import { TotpService } from "@bitwarden/common/vault/abstractions/totp.service";
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { Launchable } from "@bitwarden/common/vault/interfaces/launchable";
+import { isCardExpired } from "@bitwarden/common/vault/utils";
 import { DialogService } from "@bitwarden/components";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 import { PasswordRepromptService } from "@bitwarden/vault";
@@ -43,6 +45,7 @@ export class AddEditComponent extends BaseAddEditComponent implements OnInit, On
   viewingPasswordHistory = false;
   viewOnly = false;
   showPasswordCount = false;
+  cardIsExpired: boolean = false;
 
   protected totpInterval: number;
   protected override componentName = "app-vault-add-edit";
@@ -115,6 +118,12 @@ export class AddEditComponent extends BaseAddEditComponent implements OnInit, On
         await this.totpTick(interval);
       }, 1000);
     }
+
+    const extensionRefreshEnabled = await firstValueFrom(
+      this.configService.getFeatureFlag$(FeatureFlag.ExtensionRefresh),
+    );
+
+    this.cardIsExpired = extensionRefreshEnabled && isCardExpired(this.cipher.card);
   }
 
   ngOnDestroy() {

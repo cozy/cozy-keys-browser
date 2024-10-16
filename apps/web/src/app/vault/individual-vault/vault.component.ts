@@ -35,6 +35,7 @@ import { EventCollectionService } from "@bitwarden/common/abstractions/event/eve
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { EventType } from "@bitwarden/common/enums";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
@@ -109,6 +110,11 @@ import { FolderFilter, OrganizationFilter } from "./vault-filter/shared/models/v
 import { VaultFilterModule } from "./vault-filter/vault-filter.module";
 import { VaultHeaderComponent } from "./vault-header/vault-header.component";
 import { VaultOnboardingComponent } from "./vault-onboarding/vault-onboarding.component";
+import {
+  openViewCipherDialog,
+  ViewCipherDialogCloseResult,
+  ViewCipherDialogResult,
+} from "./view.component";
 
 const BroadcasterSubscriptionId = "VaultComponent";
 const SearchTextDebounceInterval = 200;
@@ -158,9 +164,6 @@ export class VaultComponent implements OnInit, OnDestroy {
   protected selectedCollection: TreeNode<CollectionView> | undefined;
   protected canCreateCollections = false;
   protected currentSearchText$: Observable<string>;
-  protected flexibleCollectionsV1Enabled$ = this.configService.getFeatureFlag$(
-    FeatureFlag.FlexibleCollectionsV1,
-  );
   protected vaultBulkManagementActionEnabled$ = this.configService.getFeatureFlag$(
     FeatureFlag.VaultBulkManagementAction,
   );
@@ -196,6 +199,7 @@ export class VaultComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private billingAccountProfileStateService: BillingAccountProfileStateService,
     private toastService: ToastService,
+    private accountService: AccountService,
   ) {}
 
   async ngOnInit() {
@@ -218,6 +222,8 @@ export class VaultComponent implements OnInit, OnDestroy {
         cipherView.id = cipherId;
         if (params.action === "clone") {
           await this.cloneCipher(cipherView);
+        } else if (params.action === "view") {
+          await this.viewCipher(cipherView);
         } else if (params.action === "edit") {
           await this.editCipher(cipherView);
         }
@@ -339,9 +345,14 @@ export class VaultComponent implements OnInit, OnDestroy {
         switchMap(() => this.route.queryParams),
         switchMap(async (params) => {
           const cipherId = getCipherIdFromParams(params);
+
           if (cipherId) {
-            if ((await this.cipherService.get(cipherId)) != null) {
-              await this.editCipherId(cipherId);
+            if (await this.cipherService.get(cipherId)) {
+              if (params.action === "view") {
+                await this.viewCipherById(cipherId);
+              } else {
+                await this.editCipherId(cipherId);
+              }
             } else {
               this.toastService.showToast({
                 variant: "error",
@@ -552,7 +563,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async shareCipher(cipher: CipherView) {
-    if ((await this.flexibleCollectionsV1Enabled()) && cipher.organizationId != null) {
+    if (cipher.organizationId != null) {
       // You cannot move ciphers between organizations
       this.showMissingPermissionsError();
       return;
@@ -589,18 +600,24 @@ export class VaultComponent implements OnInit, OnDestroy {
   async addCipher(cipherType?: CipherType) {
     const component = await this.editCipher(null);
     component.type = cipherType || this.activeFilter.cipherType;
-    if (this.activeFilter.organizationId !== "MyVault") {
+    if (
+      this.activeFilter.organizationId !== "MyVault" &&
+      this.activeFilter.organizationId != null
+    ) {
       component.organizationId = this.activeFilter.organizationId;
       component.collections = (
         await firstValueFrom(this.vaultFilterService.filteredCollections$)
       ).filter((c) => !c.readOnly && c.id != null);
     }
     const selectedColId = this.activeFilter.collectionId;
-    if (selectedColId !== "AllCollections") {
-      component.organizationId = component.collections.find(
-        (collection) => collection.id === selectedColId,
-      )?.organizationId;
-      component.collectionIds = [selectedColId];
+    if (selectedColId !== "AllCollections" && selectedColId != null) {
+      const selectedCollection = (
+        await firstValueFrom(this.vaultFilterService.filteredCollections$)
+      ).find((c) => c.id === selectedColId);
+      component.organizationId = selectedCollection?.organizationId;
+      if (!selectedCollection.readOnly) {
+        component.collectionIds = [selectedColId];
+      }
     }
     component.folderId = this.activeFilter.folderId;
   }
@@ -623,7 +640,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       !(await this.passwordRepromptService.showPasswordPrompt())
     ) {
       // didn't pass password prompt, so don't open add / edit modal
-      this.go({ cipherId: null, itemId: null });
+      this.go({ cipherId: null, itemId: null, action: null });
       return;
     }
 
@@ -650,10 +667,65 @@ export class VaultComponent implements OnInit, OnDestroy {
     // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     modal.onClosedPromise().then(() => {
-      this.go({ cipherId: null, itemId: null });
+      this.go({ cipherId: null, itemId: null, action: null });
     });
 
     return childComponent;
+  }
+
+  /**
+   * Takes a CipherView and opens a dialog where it can be viewed (wraps viewCipherById).
+   * @param cipher - CipherView
+   * @returns Promise<void>
+   */
+  viewCipher(cipher: CipherView) {
+    return this.viewCipherById(cipher.id);
+  }
+
+  /**
+   * Takes a cipher id and opens a dialog where it can be viewed.
+   * @param id - string
+   * @returns Promise<void>
+   */
+  async viewCipherById(id: string) {
+    const cipher = await this.cipherService.get(id);
+    // If cipher exists (cipher is null when new) and MP reprompt
+    // is on for this cipher, then show password reprompt.
+    if (
+      cipher &&
+      cipher.reprompt !== 0 &&
+      !(await this.passwordRepromptService.showPasswordPrompt())
+    ) {
+      // Didn't pass password prompt, so don't open add / edit modal.
+      this.go({ cipherId: null, itemId: null });
+      return;
+    }
+
+    const activeUserId = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+    );
+    // Decrypt the cipher.
+    const cipherView = await cipher.decrypt(
+      await this.cipherService.getKeyForCipherKeyDecryption(cipher, activeUserId),
+    );
+
+    // Open the dialog.
+    const dialogRef = openViewCipherDialog(this.dialogService, {
+      data: { cipher: cipherView },
+    });
+
+    // Wait for the dialog to close.
+    const result: ViewCipherDialogCloseResult = await lastValueFrom(dialogRef.closed);
+
+    // If the dialog was closed by deleting the cipher, refresh the vault.
+    if (result?.action === ViewCipherDialogResult.deleted) {
+      this.refresh();
+    }
+
+    // If the dialog was closed by any other action (close button, escape key, etc), navigate back to the vault.
+    if (!result?.action) {
+      this.go({ cipherId: null, itemId: null, action: null });
+    }
   }
 
   async addCollection() {
@@ -712,8 +784,7 @@ export class VaultComponent implements OnInit, OnDestroy {
 
   async deleteCollection(collection: CollectionView): Promise<void> {
     const organization = await this.organizationService.get(collection.organizationId);
-    const flexibleCollectionsV1Enabled = await firstValueFrom(this.flexibleCollectionsV1Enabled$);
-    if (!collection.canDelete(organization, flexibleCollectionsV1Enabled)) {
+    if (!collection.canDelete(organization)) {
       this.showMissingPermissionsError();
       return;
     }
@@ -811,7 +882,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if ((await this.flexibleCollectionsV1Enabled()) && !c.edit) {
+    if (!c.edit) {
       this.showMissingPermissionsError();
       return;
     }
@@ -834,7 +905,7 @@ export class VaultComponent implements OnInit, OnDestroy {
   }
 
   async bulkRestore(ciphers: CipherView[]) {
-    if ((await this.flexibleCollectionsV1Enabled()) && ciphers.some((c) => !c.edit)) {
+    if (ciphers.some((c) => !c.edit)) {
       this.showMissingPermissionsError();
       return;
     }
@@ -887,7 +958,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if ((await this.flexibleCollectionsV1Enabled()) && !c.edit) {
+    if (!c.edit) {
       this.showMissingPermissionsError();
       return;
     }
@@ -936,19 +1007,12 @@ export class VaultComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const flexibleCollectionsV1Enabled = await this.flexibleCollectionsV1Enabled();
-
     const canDeleteCollections =
       collections == null ||
-      collections.every((c) =>
-        c.canDelete(
-          organizations.find((o) => o.id == c.organizationId),
-          flexibleCollectionsV1Enabled,
-        ),
-      );
+      collections.every((c) => c.canDelete(organizations.find((o) => o.id == c.organizationId)));
     const canDeleteCiphers = ciphers == null || ciphers.every((c) => c.edit);
 
-    if (flexibleCollectionsV1Enabled && (!canDeleteCollections || !canDeleteCiphers)) {
+    if (!canDeleteCollections || !canDeleteCiphers) {
       this.showMissingPermissionsError();
       return;
     }
@@ -1052,10 +1116,7 @@ export class VaultComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (
-      (await this.flexibleCollectionsV1Enabled()) &&
-      ciphers.some((c) => c.organizationId != null)
-    ) {
+    if (ciphers.some((c) => c.organizationId != null)) {
       // You cannot move ciphers between organizations
       this.showMissingPermissionsError();
       return;
@@ -1099,10 +1160,8 @@ export class VaultComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    const flexibleCollectionsV1Enabled = await this.flexibleCollectionsV1Enabled();
-
     const organization = this.allOrganizations.find((o) => o.id === cipher.organizationId);
-    return organization.canEditAllCiphers(flexibleCollectionsV1Enabled, false);
+    return organization.canEditAllCiphers(false);
   }
 
   private go(queryParams: any = null) {
@@ -1130,10 +1189,6 @@ export class VaultComponent implements OnInit, OnDestroy {
       title: null,
       message: this.i18nService.t("missingPermissions"),
     });
-  }
-
-  private flexibleCollectionsV1Enabled() {
-    return firstValueFrom(this.flexibleCollectionsV1Enabled$);
   }
 }
 

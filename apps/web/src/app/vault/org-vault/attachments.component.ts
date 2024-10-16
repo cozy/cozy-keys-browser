@@ -3,6 +3,7 @@ import { firstValueFrom } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
@@ -12,6 +13,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { UserId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
@@ -28,7 +30,6 @@ export class AttachmentsComponent extends BaseAttachmentsComponent implements On
   viewOnly = false;
   organization: Organization;
 
-  private flexibleCollectionsV1Enabled = false;
   private restrictProviderAccess = false;
 
   constructor(
@@ -42,6 +43,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent implements On
     fileDownloadService: FileDownloadService,
     dialogService: DialogService,
     billingAccountProfileStateService: BillingAccountProfileStateService,
+    accountService: AccountService,
     private configService: ConfigService,
   ) {
     super(
@@ -55,14 +57,12 @@ export class AttachmentsComponent extends BaseAttachmentsComponent implements On
       fileDownloadService,
       dialogService,
       billingAccountProfileStateService,
+      accountService,
     );
   }
 
   async ngOnInit() {
     await super.ngOnInit();
-    this.flexibleCollectionsV1Enabled = await firstValueFrom(
-      this.configService.getFeatureFlag$(FeatureFlag.FlexibleCollectionsV1),
-    );
     this.restrictProviderAccess = await firstValueFrom(
       this.configService.getFeatureFlag$(FeatureFlag.RestrictProviderAccess),
     );
@@ -70,10 +70,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent implements On
 
   protected async reupload(attachment: AttachmentView) {
     if (
-      this.organization.canEditAllCiphers(
-        this.flexibleCollectionsV1Enabled,
-        this.restrictProviderAccess,
-      ) &&
+      this.organization.canEditAllCiphers(this.restrictProviderAccess) &&
       this.showFixOldAttachments(attachment)
     ) {
       await super.reuploadCipherAttachment(attachment, true);
@@ -81,36 +78,24 @@ export class AttachmentsComponent extends BaseAttachmentsComponent implements On
   }
 
   protected async loadCipher() {
-    if (
-      !this.organization.canEditAllCiphers(
-        this.flexibleCollectionsV1Enabled,
-        this.restrictProviderAccess,
-      )
-    ) {
+    if (!this.organization.canEditAllCiphers(this.restrictProviderAccess)) {
       return await super.loadCipher();
     }
     const response = await this.apiService.getCipherAdmin(this.cipherId);
     return new Cipher(new CipherData(response));
   }
 
-  protected saveCipherAttachment(file: File) {
+  protected saveCipherAttachment(file: File, userId: UserId) {
     return this.cipherService.saveAttachmentWithServer(
       this.cipherDomain,
       file,
-      this.organization.canEditAllCiphers(
-        this.flexibleCollectionsV1Enabled,
-        this.restrictProviderAccess,
-      ),
+      userId,
+      this.organization.canEditAllCiphers(this.restrictProviderAccess),
     );
   }
 
   protected deleteCipherAttachment(attachmentId: string) {
-    if (
-      !this.organization.canEditAllCiphers(
-        this.flexibleCollectionsV1Enabled,
-        this.restrictProviderAccess,
-      )
-    ) {
+    if (!this.organization.canEditAllCiphers(this.restrictProviderAccess)) {
       return super.deleteCipherAttachment(attachmentId);
     }
     return this.apiService.deleteCipherAttachmentAdmin(this.cipherId, attachmentId);
@@ -118,11 +103,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent implements On
 
   protected showFixOldAttachments(attachment: AttachmentView) {
     return (
-      attachment.key == null &&
-      this.organization.canEditAllCiphers(
-        this.flexibleCollectionsV1Enabled,
-        this.restrictProviderAccess,
-      )
+      attachment.key == null && this.organization.canEditAllCiphers(this.restrictProviderAccess)
     );
   }
 }

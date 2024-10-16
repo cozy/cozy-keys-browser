@@ -14,19 +14,17 @@ import {
   takeUntil,
 } from "rxjs";
 
+import { OrganizationUserApiService } from "@bitwarden/admin-console/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
-import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { UserId } from "@bitwarden/common/types/guid";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 import { CollectionAdminService } from "../../../vault/core/collection-admin.service";
 import { CollectionAdminView } from "../../../vault/core/views/collection-admin.view";
@@ -96,9 +94,6 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
   private organization$ = this.organizationService
     .get$(this.organizationId)
     .pipe(shareReplay({ refCount: true }));
-  private flexibleCollectionsV1Enabled$ = this.configService.getFeatureFlag$(
-    FeatureFlag.FlexibleCollectionsV1,
-  );
 
   protected PermissionMode = PermissionMode;
   protected ResultType = GroupAddEditDialogResultType;
@@ -136,7 +131,7 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
   );
 
   private get orgMembers$(): Observable<Array<AccessItemView & { userId: UserId }>> {
-    return from(this.organizationUserService.getAllUsers(this.organizationId)).pipe(
+    return from(this.organizationUserApiService.getAllUsers(this.organizationId)).pipe(
       map((response) =>
         response.data.map((m) => ({
           id: m.id,
@@ -179,27 +174,19 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
     shareReplay({ refCount: true, bufferSize: 1 }),
   );
 
-  protected allowAdminAccessToAllCollectionItems$ = combineLatest([
-    this.organization$,
-    this.flexibleCollectionsV1Enabled$,
-  ]).pipe(
-    map(([organization, flexibleCollectionsV1Enabled]) => {
-      if (!flexibleCollectionsV1Enabled) {
-        return true;
-      }
-
+  protected allowAdminAccessToAllCollectionItems$ = this.organization$.pipe(
+    map((organization) => {
       return organization.allowAdminAccessToAllCollectionItems;
     }),
   );
 
   protected canAssignAccessToAnyCollection$ = combineLatest([
     this.organization$,
-    this.flexibleCollectionsV1Enabled$,
     this.allowAdminAccessToAllCollectionItems$,
   ]).pipe(
     map(
-      ([org, flexibleCollectionsV1Enabled, allowAdminAccessToAllCollectionItems]) =>
-        org.canEditAnyCollection(flexibleCollectionsV1Enabled) ||
+      ([org, allowAdminAccessToAllCollectionItems]) =>
+        org.canEditAnyCollection ||
         // Manage Groups custom permission cannot edit any collection but they can assign access from this dialog
         // if permitted by collection management settings
         (org.permissions.manageGroups && allowAdminAccessToAllCollectionItems),
@@ -215,7 +202,7 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
     @Inject(DIALOG_DATA) private params: GroupAddEditDialogParams,
     private dialogRef: DialogRef<GroupAddEditDialogResultType>,
     private apiService: ApiService,
-    private organizationUserService: OrganizationUserService,
+    private organizationUserApiService: OrganizationUserApiService,
     private groupService: GroupService,
     private i18nService: I18nService,
     private platformUtilsService: PlatformUtilsService,
@@ -224,9 +211,9 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private dialogService: DialogService,
     private organizationService: OrganizationService,
-    private configService: ConfigService,
     private accountService: AccountService,
     private collectionAdminService: CollectionAdminService,
+    private toastService: ToastService,
   ) {
     this.tabIndex = params.initialTab ?? GroupAddEditTabType.Info;
   }
@@ -242,27 +229,13 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
       this.cannotAddSelfToGroup$,
       this.accountService.activeAccount$,
       this.organization$,
-      this.flexibleCollectionsV1Enabled$,
     ])
       .pipe(takeUntil(this.destroy$))
       .subscribe(
-        ([
-          collections,
-          members,
-          group,
-          restrictGroupAccess,
-          activeAccount,
-          organization,
-          flexibleCollectionsV1Enabled,
-        ]) => {
+        ([collections, members, group, restrictGroupAccess, activeAccount, organization]) => {
           this.members = members;
           this.group = group;
-          this.collections = mapToAccessItemViews(
-            collections,
-            organization,
-            flexibleCollectionsV1Enabled,
-            group,
-          );
+          this.collections = mapToAccessItemViews(collections, organization, group);
 
           if (this.group != undefined) {
             // Must detect changes so that AccessSelector @Inputs() are aware of the latest
@@ -308,11 +281,14 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
 
     if (this.groupForm.invalid) {
       if (this.tabIndex !== GroupAddEditTabType.Info) {
-        this.platformUtilsService.showToast(
-          "error",
-          null,
-          this.i18nService.t("fieldOnTabRequiresAttention", this.i18nService.t("groupInfo")),
-        );
+        this.toastService.showToast({
+          variant: "error",
+          title: null,
+          message: this.i18nService.t(
+            "fieldOnTabRequiresAttention",
+            this.i18nService.t("groupInfo"),
+          ),
+        });
       }
       return;
     }
@@ -328,11 +304,14 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
 
     await this.groupService.save(groupView);
 
-    this.platformUtilsService.showToast(
-      "success",
-      null,
-      this.i18nService.t(this.editMode ? "editedGroupId" : "createdGroupId", formValue.name),
-    );
+    this.toastService.showToast({
+      variant: "success",
+      title: null,
+      message: this.i18nService.t(
+        this.editMode ? "editedGroupId" : "createdGroupId",
+        formValue.name,
+      ),
+    });
 
     this.dialogRef.close(GroupAddEditDialogResultType.Saved);
   };
@@ -353,11 +332,11 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
 
     await this.groupService.delete(this.organizationId, this.groupId);
 
-    this.platformUtilsService.showToast(
-      "success",
-      null,
-      this.i18nService.t("deletedGroupId", this.group.name),
-    );
+    this.toastService.showToast({
+      variant: "success",
+      title: null,
+      message: this.i18nService.t("deletedGroupId", this.group.name),
+    });
     this.dialogRef.close(GroupAddEditDialogResultType.Deleted);
   };
 }
@@ -384,7 +363,6 @@ function mapToAccessSelections(group: GroupView, items: AccessItemView[]): Acces
 function mapToAccessItemViews(
   collections: CollectionAdminView[],
   organization: Organization,
-  flexibleCollectionsV1Enabled: boolean,
   group?: GroupView,
 ): AccessItemView[] {
   return (
@@ -396,7 +374,7 @@ function mapToAccessItemViews(
           type: AccessItemType.Collection,
           labelName: c.name,
           listName: c.name,
-          readonly: !c.canEditGroupAccess(organization, flexibleCollectionsV1Enabled),
+          readonly: !c.canEditGroupAccess(organization),
           readonlyPermission: accessSelection ? convertToPermission(accessSelection) : undefined,
         };
       })

@@ -5,6 +5,7 @@ import { first } from "rxjs/operators";
 
 import { AttachmentsComponent as BaseAttachmentsComponent } from "@bitwarden/angular/vault/components/attachments.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
@@ -41,6 +42,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent implements On
     private historyService: HistoryService,
     dialogService: DialogService,
     billingAccountProfileStateService: BillingAccountProfileStateService,
+    accountService: AccountService,
   ) {
     super(
       cipherService,
@@ -54,6 +56,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent implements On
       fileDownloadService,
       dialogService,
       billingAccountProfileStateService,
+      accountService,
     );
   }
 

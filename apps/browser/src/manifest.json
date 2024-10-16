@@ -140,7 +140,9 @@
   "sidebar_action": {
     "default_title": "Cozy",
     "default_panel": "popup/index.html?uilocation=sidebar",
-    "default_icon": "images/icon19.png"
+    "default_icon": "images/icon19.png",
+    "open_at_install": false,
+    "browser_style": false
   },
   "storage": {
     "managed_schema": "managed_schema.json"

@@ -36,6 +36,9 @@
   "notes": {
     "message": "Заметки"
   },
+  "note": {
+    "message": "Заметка"
+  },
   "customFields": {
     "message": "Пользовательские поля"
   },
@@ -45,6 +48,30 @@
   "loginCredentials": {
     "message": "Данные для авторизации"
   },
+  "personalDetails": {
+    "message": "Личные данные"
+  },
+  "identification": {
+    "message": "Идентификация"
+  },
+  "contactInfo": {
+    "message": "Контактная информация"
+  },
+  "cardDetails": {
+    "message": "Реквизиты карты"
+  },
+  "cardBrandDetails": {
+    "message": "Реквизиты $BRAND$",
+    "placeholders": {
+      "brand": {
+        "content": "$1",
+        "example": "Visa"
+      }
+    }
+  },
+  "itemHistory": {
+    "message": "История элемента"
+  },
   "authenticatorKey": {
     "message": "Ключ аутентификатора"
   },
@@ -53,6 +80,16 @@
   },
   "websiteUri": {
     "message": "Сайт (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Веб-сайт (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
     "message": "Сайт добавлен"
@@ -181,6 +218,12 @@
   "dr": {
     "message": "Тов."
   },
+  "cardExpiredTitle": {
+    "message": "Истек срок действия карты"
+  },
+  "cardExpiredMessage": {
+    "message": "Если вы заменили карту, обновите информацию о ней"
+  },
   "expirationMonth": {
     "message": "Месяц"
   },
@@ -191,13 +234,16 @@
     "message": "Ключ аутентификатора (TOTP)"
   },
   "totpHelperTitle": {
-    "message": "Сделать двухэтапную аутентификацию бесшовной"
+    "message": "Сделайте двухэтапную аутентификацию простой и удобной"
   },
   "totpHelper": {
     "message": "Bitwarden может хранить и заполнять коды двухэтапной аутентификации. Скопируйте и вставьте ключ в это поле."
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden может хранить и заполнять коды двухэтапной аутентификации. Выберите значок камеры, чтобы сделать скриншот QR-кода этого сайта, или скопируйте и вставьте ключ в это поле."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Узнайте больше об аутентификаторах"
   },
   "folder": {
     "message": "Папка"
@@ -417,6 +463,9 @@
   "fullName": {
     "message": "Полное имя"
   },
+  "address": {
+    "message": "Адрес"
+  },
   "address1": {
     "message": "Строка адреса 1"
   },
@@ -458,6 +507,15 @@
   },
   "viewItem": {
     "message": "Просмотр элемента"
+  },
+  "viewItemType": {
+    "message": "Просмотр $ITEMTYPE$",
+    "placeholders": {
+      "itemtype": {
+        "content": "$1",
+        "example": "login"
+      }
+    }
   },
   "new": {
     "message": "Новый",
@@ -874,6 +932,9 @@
   "masterPassHint": {
     "message": "Подсказка к мастер-паролю (необяз.)"
   },
+  "newMasterPassHint": {
+    "message": "Новая подсказка для мастер-пароля (необязательно)"
+  },
   "masterPassHintLabel": {
     "message": "Подсказка к мастер-паролю"
   },
@@ -929,6 +990,12 @@
   },
   "newAccountCreated": {
     "message": "Ваш аккаунт создан! Теперь вы можете войти в систему."
+  },
+  "newAccountCreated2": {
+    "message": "Ваш новый аккаунт создан!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Вы авторизовались!"
   },
   "trialAccountCreated": {
     "message": "Аккаунт успешно создан."
@@ -1504,6 +1571,10 @@
   "onboardingImportDataDetailsLink": {
     "message": "новый элемент.",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "новый логин",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": " вместо этого.",
@@ -3683,7 +3754,7 @@
     "message": "Установите лимит мест для вашей подписки. По достижении этого лимита вы не сможете приглашать новых пользователей."
   },
   "limitSmSubscriptionDesc": {
-    "message": "Установите лимит мест для вашей подписки на Менеджер секретов. По достижении этого лимита вы не сможете приглашать новых пользователей."
+    "message": "Установите лимит мест для вашей подписки на Менеджер секретов. По достижении этого лимита вы не сможете приглашать новых пользователей.Менеджер секретов"
   },
   "maxSeatLimit": {
     "message": "Предел мест (необязательно)",
@@ -4945,6 +5016,10 @@
       }
     }
   },
+  "viewSend": {
+    "message": "Просмотр Send",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "viewSendHiddenEmailWarning": {
     "message": "Пользователь Bitwarden, создавший эту Send, решил скрыть свой адрес email. Вы должны убедиться, что доверяете источнику этой ссылки, прежде чем использовать или скачивать ее содержимое.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -5322,6 +5397,18 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущий сеанс будет завершен и потребуется повторная авторизация. Сеансы на других устройствах могут оставаться активными в течение часа."
+  },
+  "automaticAppLogin": {
+    "message": "Автоматическая авторизация пользователей в разрешенные приложения"
+  },
+  "automaticAppLoginDesc": {
+    "message": "Формы авторизаций будут автоматически заполняться и отправляться для приложений, запущенных с помощью настроенного провайдера идентификационных данных."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Хост провайдера идентификации"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Введите URL хоста провайдера идентификационных данных. Вводите несколько URL, разделяя их запятой."
   },
   "tdeDisabledMasterPasswordRequired": {
     "message": "Ваша организация обновила параметры расшифровки. Пожалуйста, установите мастер-пароль для доступа к вашему хранилищу."
@@ -7699,7 +7786,7 @@
     "message": "Запрошено одобрение устройства."
   },
   "tdeOffboardingPasswordSet": {
-    "message": "Пользователь установил мастер-пароль во время регистрации в TDE."
+    "message": "Пользователь установил мастер-пароль при деактивации TDE."
   },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Начните 7-дневную бесплатную пробную версию Bitwarden для $ORG$",
@@ -8907,5 +8994,69 @@
   },
   "additionalStorageGbMessage": {
     "message": "Дополнительное место в хранилище"
+  },
+  "premiumAccounts": {
+    "message": "6 Премиум-аккаунтов"
+  },
+  "unlimitedSharing": {
+    "message": "Делитесь без ограничений"
+  },
+  "unlimitedCollections": {
+    "message": "Неограниченное количество коллекций"
+  },
+  "secureDataSharing": {
+    "message": "Защищенный обмен данными"
+  },
+  "eventLogMonitoring": {
+    "message": "Мониторинг журнала событий"
+  },
+  "directoryIntegration": {
+    "message": "Интеграция с доменами"
+  },
+  "passwordLessSso": {
+    "message": "SSO без пароля"
+  },
+  "accountRecovery": {
+    "message": "Восстановление аккаунта"
+  },
+  "customRoles": {
+    "message": "Пользовательские роли"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Неограниченное хранилище секретов"
+  },
+  "unlimitedUsers": {
+    "message": "Неограниченное количество пользователей"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "До 50 машинных аккаунтов"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "До 20 машинных аккаунтов"
+  },
+  "current": {
+    "message": "Текущий"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Ваша подписка на Менеджер секретов будет обновляться в зависимости от выбранного тарифа"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden - Менеджер паролей"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Ваш дополнительный год подписки на Менеджер паролей обновится до выбранный тарифа. Плата не будет взиматься до окончания бесплатного периода."
+  },
+  "publicApi": {
+    "message": "Публичный API",
+    "description": "The text, 'API', is an acronymn and should not be translated."
+  },
+  "showCharacterCount": {
+    "message": "Показать количество символов"
+  },
+  "hideCharacterCount": {
+    "message": "Скрыть количество символов"
+  },
+  "editAccess": {
+    "message": "Изменить доступ"
   }
 }

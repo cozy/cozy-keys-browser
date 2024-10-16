@@ -9,8 +9,11 @@ export type AutofillKeywordsMap = WeakMap<
   }
 >;
 
+export type SubmitButtonKeywordsMap = WeakMap<HTMLElement, string>;
+
 export interface InlineMenuFieldQualificationService {
   isUsernameField(field: AutofillField): boolean;
+  isCurrentPasswordField(field: AutofillField): boolean;
   isNewPasswordField(field: AutofillField): boolean;
   isEmailField(field: AutofillField): boolean;
   isFieldForLoginForm(field: AutofillField, pageDetails: AutofillPageDetails): boolean;
@@ -40,6 +43,7 @@ export interface InlineMenuFieldQualificationService {
   isFieldForIdentityEmail(field: AutofillField): boolean;
   isFieldForIdentityUsername(field: AutofillField): boolean;
   // Cozy customization
+  isTotpField(field: AutofillField): boolean; // Changed from private to public
   isFieldForContactSurname(field: AutofillField): boolean;
   isFieldForContactJobTitle(field: AutofillField): boolean;
   isFieldForContactBirthDay(field: AutofillField): boolean;
@@ -67,4 +71,6 @@ export interface InlineMenuFieldQualificationService {
   isFieldForPaperTaxNoticeNumber(field: AutofillField): boolean;
   isFieldForPaperTaxNoticeRefTaxIncome(field: AutofillField): boolean;
   // Cozy customization end
+  isElementLoginSubmitButton(element: Element): boolean;
+  isElementChangePasswordSubmitButton(element: Element): boolean;
 }

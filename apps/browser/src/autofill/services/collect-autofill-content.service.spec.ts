@@ -13,8 +13,9 @@ import {
 
 import { InlineMenuFieldQualificationService } from "./abstractions/inline-menu-field-qualifications.service";
 import { AutofillOverlayContentService } from "./autofill-overlay-content.service";
-import CollectAutofillContentService from "./collect-autofill-content.service";
+import { CollectAutofillContentService } from "./collect-autofill-content.service";
 import DomElementVisibilityService from "./dom-element-visibility.service";
+import { DomQueryService } from "./dom-query.service";
 
 const mockLoginForm = `
   <div id="root">
@@ -30,7 +31,9 @@ const waitForIdleCallback = () => new Promise((resolve) => globalThis.requestIdl
 describe("CollectAutofillContentService", () => {
   const domElementVisibilityService = new DomElementVisibilityService();
   const inlineMenuFieldQualificationService = mock<InlineMenuFieldQualificationService>();
+  const domQueryService = new DomQueryService();
   const autofillOverlayContentService = new AutofillOverlayContentService(
+    domQueryService,
     inlineMenuFieldQualificationService,
   );
   let collectAutofillContentService: CollectAutofillContentService;
@@ -43,6 +46,7 @@ describe("CollectAutofillContentService", () => {
     document.body.innerHTML = mockLoginForm;
     collectAutofillContentService = new CollectAutofillContentService(
       domElementVisibilityService,
+      domQueryService,
       autofillOverlayContentService,
     );
     window.IntersectionObserver = jest.fn(() => mockIntersectionObserver);
@@ -155,7 +159,7 @@ describe("CollectAutofillContentService", () => {
         "data-stripe": null,
       };
       collectAutofillContentService["domRecentlyMutated"] = false;
-      collectAutofillContentService["autofillFormElements"] = new Map([
+      collectAutofillContentService["_autofillFormElements"] = new Map([
         [formElement, autofillForm],
       ]);
       collectAutofillContentService["autofillFieldElements"] = new Map([
@@ -243,7 +247,7 @@ describe("CollectAutofillContentService", () => {
         "data-stripe": null,
       };
       collectAutofillContentService["domRecentlyMutated"] = false;
-      collectAutofillContentService["autofillFormElements"] = new Map([
+      collectAutofillContentService["_autofillFormElements"] = new Map([
         [formElement, autofillForm],
       ]);
       collectAutofillContentService["autofillFieldElements"] = new Map([
@@ -254,7 +258,7 @@ describe("CollectAutofillContentService", () => {
         .mockResolvedValue(true);
       const setupAutofillOverlayListenerOnFieldSpy = jest.spyOn(
         collectAutofillContentService["autofillOverlayContentService"],
-        "setupInlineMenu",
+        "setupOverlayListeners",
       );
 
       await collectAutofillContentService.getPageDetails();
@@ -457,51 +461,6 @@ describe("CollectAutofillContentService", () => {
     });
   });
 
-  describe("deepQueryElements", () => {
-    beforeEach(() => {
-      collectAutofillContentService["mutationObserver"] = mock<MutationObserver>();
-    });
-
-    it("queries form field elements that are nested within a ShadowDOM", () => {
-      const root = document.createElement("div");
-      const shadowRoot = root.attachShadow({ mode: "open" });
-      const form = document.createElement("form");
-      const input = document.createElement("input");
-      input.type = "text";
-      form.appendChild(input);
-      shadowRoot.appendChild(form);
-
-      const formFieldElements = collectAutofillContentService.deepQueryElements(
-        shadowRoot,
-        "input",
-        true,
-      );
-
-      expect(formFieldElements).toStrictEqual([input]);
-    });
-
-    it("queries form field elements that are nested within multiple ShadowDOM elements", () => {
-      const root = document.createElement("div");
-      const shadowRoot1 = root.attachShadow({ mode: "open" });
-      const root2 = document.createElement("div");
-      const shadowRoot2 = root2.attachShadow({ mode: "open" });
-      const form = document.createElement("form");
-      const input = document.createElement("input");
-      input.type = "text";
-      form.appendChild(input);
-      shadowRoot2.appendChild(form);
-      shadowRoot1.appendChild(root2);
-
-      const formFieldElements = collectAutofillContentService.deepQueryElements(
-        shadowRoot1,
-        "input",
-        true,
-      );
-
-      expect(formFieldElements).toStrictEqual([input]);
-    });
-  });
-
   describe("buildAutofillFormsData", () => {
     it("will not attempt to gather data from a cached form element", () => {
       const documentTitle = "Test Page";
@@ -527,7 +486,7 @@ describe("CollectAutofillContentService", () => {
         htmlID: formId,
         htmlMethod: formMethod,
       };
-      collectAutofillContentService["autofillFormElements"] = new Map([
+      collectAutofillContentService["_autofillFormElements"] = new Map([
         [formElement, existingAutofillForm],
       ]);
       const formElements = Array.from(document.querySelectorAll("form"));
@@ -2135,7 +2094,7 @@ describe("CollectAutofillContentService", () => {
       const removedNodes = document.querySelectorAll("form");
       const autofillForm: AutofillForm = createAutofillFormMock({});
       const autofillField: AutofillField = createAutofillFieldMock({});
-      collectAutofillContentService["autofillFormElements"] = new Map([[form, autofillForm]]);
+      collectAutofillContentService["_autofillFormElements"] = new Map([[form, autofillForm]]);
       collectAutofillContentService["autofillFieldElements"] = new Map([
         [usernameInput, autofillField],
       ]);
@@ -2158,7 +2117,7 @@ describe("CollectAutofillContentService", () => {
       ]);
       await waitForIdleCallback();
 
-      expect(collectAutofillContentService["autofillFormElements"].size).toEqual(0);
+      expect(collectAutofillContentService["_autofillFormElements"].size).toEqual(0);
       expect(collectAutofillContentService["autofillFieldElements"].size).toEqual(0);
     });
 
@@ -2280,13 +2239,13 @@ describe("CollectAutofillContentService", () => {
         htmlAction: "https://example.com",
         htmlMethod: "POST",
       };
-      collectAutofillContentService["autofillFormElements"] = new Map([
+      collectAutofillContentService["_autofillFormElements"] = new Map([
         [formElement, autofillForm],
       ]);
 
       collectAutofillContentService["deleteCachedAutofillElement"](formElement);
 
-      expect(collectAutofillContentService["autofillFormElements"].size).toEqual(0);
+      expect(collectAutofillContentService["_autofillFormElements"].size).toEqual(0);
     });
 
     it("removes the autofill field element form the map of elements", () => {
@@ -2332,7 +2291,7 @@ describe("CollectAutofillContentService", () => {
       expect(collectAutofillContentService["domRecentlyMutated"]).toEqual(true);
       expect(collectAutofillContentService["noFieldsFound"]).toEqual(false);
       expect(collectAutofillContentService["updateAutofillElementsAfterMutation"]).toBeCalled();
-      expect(collectAutofillContentService["autofillFormElements"].size).toEqual(0);
+      expect(collectAutofillContentService["_autofillFormElements"].size).toEqual(0);
       expect(collectAutofillContentService["autofillFieldElements"].size).toEqual(0);
     });
   });
@@ -2379,7 +2338,9 @@ describe("CollectAutofillContentService", () => {
         removedNodes: null,
         target: targetNode,
       };
-      collectAutofillContentService["autofillFormElements"] = new Map([[targetNode, autofillForm]]);
+      collectAutofillContentService["_autofillFormElements"] = new Map([
+        [targetNode, autofillForm],
+      ]);
       jest.spyOn(collectAutofillContentService as any, "updateAutofillFormElementData");
 
       collectAutofillContentService["handleAutofillElementAttributeMutation"](mutationRecord);
@@ -2451,14 +2412,14 @@ describe("CollectAutofillContentService", () => {
     const updatedAttributes = ["action", "name", "id", "method"];
 
     beforeEach(() => {
-      collectAutofillContentService["autofillFormElements"] = new Map([
+      collectAutofillContentService["_autofillFormElements"] = new Map([
         [formElement, autofillForm],
       ]);
     });
 
     updatedAttributes.forEach((attribute) => {
       it(`will update the ${attribute} value for the form element`, () => {
-        jest.spyOn(collectAutofillContentService["autofillFormElements"], "set");
+        jest.spyOn(collectAutofillContentService["_autofillFormElements"], "set");
 
         collectAutofillContentService["updateAutofillFormElementData"](
           attribute,
@@ -2466,7 +2427,7 @@ describe("CollectAutofillContentService", () => {
           autofillForm,
         );
 
-        expect(collectAutofillContentService["autofillFormElements"].set).toBeCalledWith(
+        expect(collectAutofillContentService["_autofillFormElements"].set).toBeCalledWith(
           formElement,
           autofillForm,
         );
@@ -2474,7 +2435,7 @@ describe("CollectAutofillContentService", () => {
     });
 
     it("will not update an attribute value if it is not present in the updateActions object", () => {
-      jest.spyOn(collectAutofillContentService["autofillFormElements"], "set");
+      jest.spyOn(collectAutofillContentService["_autofillFormElements"], "set");
 
       collectAutofillContentService["updateAutofillFormElementData"](
         "aria-label",
@@ -2482,7 +2443,7 @@ describe("CollectAutofillContentService", () => {
         autofillForm,
       );
 
-      expect(collectAutofillContentService["autofillFormElements"].set).not.toBeCalled();
+      expect(collectAutofillContentService["_autofillFormElements"].set).not.toBeCalled();
     });
   });
 
@@ -2568,7 +2529,7 @@ describe("CollectAutofillContentService", () => {
       );
       setupAutofillOverlayListenerOnFieldSpy = jest.spyOn(
         collectAutofillContentService["autofillOverlayContentService"],
-        "setupInlineMenu",
+        "setupOverlayListeners",
       );
     });
 

@@ -22,12 +22,11 @@ import {
 } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { ThemeType } from "@bitwarden/common/platform/enums";
-import { ThemeStateService } from "@bitwarden/common/platform/theming/theme-state.service";
 import { UserId } from "@bitwarden/common/types/guid";
 import { ButtonModule, I18nMockService } from "@bitwarden/components";
 
 import { RegistrationCheckEmailIcon } from "../../../../../../libs/auth/src/angular/icons/registration-check-email.icon";
+import { PopupRouterCacheService } from "../../../platform/popup/view-cache/popup-router-cache.service";
 
 import { ExtensionAnonLayoutWrapperDataService } from "./extension-anon-layout-wrapper-data.service";
 import {
@@ -46,7 +45,6 @@ const decorators = (options: {
   applicationVersion?: string;
   clientType?: ClientType;
   hostName?: string;
-  themeType?: ThemeType;
 }) => {
   return [
     componentWrapperDecorator(
@@ -120,12 +118,6 @@ const decorators = (options: {
           } as Partial<PlatformUtilsService>,
         },
         {
-          provide: ThemeStateService,
-          useValue: {
-            selectedTheme$: of(options.themeType || ThemeType.Light),
-          } as Partial<ThemeStateService>,
-        },
-        {
           provide: I18nService,
           useFactory: () => {
             return new I18nMockService({
@@ -145,7 +137,15 @@ const decorators = (options: {
       ],
     }),
     applicationConfig({
-      providers: [importProvidersFrom(RouterModule.forRoot(options.routes))],
+      providers: [
+        importProvidersFrom(RouterModule.forRoot(options.routes)),
+        {
+          provide: PopupRouterCacheService,
+          useValue: {
+            back() {},
+          } as Partial<PopupRouterCacheService>,
+        },
+      ],
     }),
   ];
 };

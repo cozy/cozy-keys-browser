@@ -255,7 +255,7 @@ export class Utils {
 
   // Cozy customization, we use our id format
   //*
-  static cozyidRegex = /[0-9a-z]{32}/;
+  static cozyidRegex = /^[0-9a-z]{32}$/;
 
   static isGuid(id: string) {
     return RegExp(Utils.cozyidRegex, "i").test(id);

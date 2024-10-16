@@ -70,6 +70,7 @@ export class AutofillOptionsComponent implements OnInit {
   }
 
   protected defaultMatchDetection$ = this.domainSettingsService.defaultUriMatchStrategy$;
+  protected autofillOnPageLoadEnabled$ = this.autofillSettingsService.autofillOnPageLoad$;
 
   protected autofillOptions: { label: string; value: boolean | null }[] = [
     { label: this.i18nService.t("default"), value: null },
@@ -142,6 +143,20 @@ export class AutofillOptionsComponent implements OnInit {
     this.autofillOptionsForm.patchValue({
       autofillOnPageLoad: existingLogin.autofillOnPageLoad,
     });
+
+    if (this.cipherFormContainer.config.initialValues?.loginUri) {
+      // Avoid adding the same uri again if it already exists
+      if (
+        existingLogin.uris?.findIndex(
+          (uri) => uri.uri === this.cipherFormContainer.config.initialValues.loginUri,
+        ) === -1
+      ) {
+        this.addUri({
+          uri: this.cipherFormContainer.config.initialValues.loginUri,
+          matchDetection: null,
+        });
+      }
+    }
   }
 
   private initNewCipher() {

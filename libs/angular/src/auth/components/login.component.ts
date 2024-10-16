@@ -1,8 +1,8 @@
 import { Directive, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subject, firstValueFrom } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
+import { Subject, firstValueFrom, of } from "rxjs";
+import { switchMap, take, takeUntil } from "rxjs/operators";
 
 import {
   LoginStrategyServiceAbstraction,
@@ -23,6 +23,8 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { UserId } from "@bitwarden/common/types/guid";
+import { ToastService } from "@bitwarden/components";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import {
@@ -39,7 +41,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
   showPassword = false;
   formPromise: Promise<AuthResult>;
   onSuccessfulLogin: () => Promise<any>;
-  onSuccessfulLoginNavigate: () => Promise<any>;
+  onSuccessfulLoginNavigate: (userId: UserId) => Promise<any>;
   onSuccessfulLoginTwoFactorNavigate: () => Promise<any>;
   onSuccessfulLoginForceResetNavigate: () => Promise<any>;
   showLoginWithDevice: boolean;
@@ -91,33 +93,45 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
     protected ssoLoginService: SsoLoginServiceAbstraction,
     protected webAuthnLoginService: WebAuthnLoginServiceAbstraction,
     protected registerRouteService: RegisterRouteService,
+    protected toastService: ToastService,
   ) {
-    super(environmentService, i18nService, platformUtilsService);
+    super(environmentService, i18nService, platformUtilsService, toastService);
   }
 
   async ngOnInit() {
-    this.route?.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      if (!params) {
-        return;
-      }
+    this.route?.queryParams
+      .pipe(
+        switchMap((params) => {
+          if (!params) {
+            // If no params,loadEmailSettings from state
+            return this.loadEmailSettings();
+          }
 
-      const queryParamsEmail = params.email;
+          const queryParamsEmail = params.email;
 
-      // Cozy customization, do not check for @ because we use cozy URL
-      //*
-      if (queryParamsEmail != null) {
-        this.formGroup.controls.email.setValue(queryParamsEmail);
-        this.paramEmailSet = true;
-      }
-      /*/
-      if (queryParamsEmail != null && queryParamsEmail.indexOf("@") > -1) {
-        this.formGroup.controls.email.setValue(queryParamsEmail);
-        this.paramEmailSet = true;
-      }
-      //*/
-    });
+          // Cozy customization, do not check for @ because we use cozy URL
+          //*
+          if (queryParamsEmail != null) {
+            this.formGroup.controls.email.setValue(queryParamsEmail);
+            this.paramEmailSet = true;
+          }
+          /*/
+          if (queryParamsEmail != null && queryParamsEmail.indexOf("@") > -1) {
+            this.formGroup.controls.email.setValue(queryParamsEmail);
+            this.paramEmailSet = true;
+          }
+          //*/
 
-    if (!this.paramEmailSet) {
+          // If paramEmailSet is false, loadEmailSettings from state
+          return this.paramEmailSet ? of(null) : this.loadEmailSettings();
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+
+    // Backup check to handle unknown case where activatedRoute is not available
+    // This shouldn't happen under normal circumstances
+    if (!this.route) {
       await this.loadEmailSettings();
     }
   }
@@ -142,7 +156,11 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
     //desktop, browser; This should be removed once all clients use reactive forms
     if (this.formGroup.invalid && showToast) {
       const errorText = this.getErrorToastMessage();
-      this.platformUtilsService.showToast("error", this.i18nService.t("errorOccurred"), errorText);
+      this.toastService.showToast({
+        variant: "error",
+        title: this.i18nService.t("errorOccurred"),
+        message: errorText,
+      });
       return;
     }
 
@@ -193,7 +211,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
         if (this.onSuccessfulLoginNavigate != null) {
           // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this.onSuccessfulLoginNavigate();
+          this.onSuccessfulLoginNavigate(response.userId);
         } else {
           this.loginEmailService.clearValues();
           // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
@@ -305,7 +323,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
 
   private async loadEmailSettings() {
     // Try to load from memory first
-    const email = this.loginEmailService.getEmail();
+    const email = await firstValueFrom(this.loginEmailService.loginEmail$);
     const rememberEmail = this.loginEmailService.getRememberEmail();
     if (email) {
       this.formGroup.controls.email.setValue(email);
@@ -322,7 +340,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
   }
 
   protected async saveEmailSettings() {
-    this.loginEmailService.setEmail(this.formGroup.value.email);
+    this.loginEmailService.setLoginEmail(this.formGroup.value.email);
     this.loginEmailService.setRememberEmail(this.formGroup.value.rememberEmail);
     await this.loginEmailService.saveEmailSettings();
   }
@@ -334,11 +352,11 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
       return false;
     }
 
-    this.platformUtilsService.showToast(
-      "error",
-      this.i18nService.t("errorOccured"),
-      this.i18nService.t("encryptionKeyMigrationRequired"),
-    );
+    this.toastService.showToast({
+      variant: "error",
+      title: this.i18nService.t("errorOccured"),
+      message: this.i18nService.t("encryptionKeyMigrationRequired"),
+    });
     return true;
   }
 

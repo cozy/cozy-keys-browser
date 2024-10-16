@@ -98,9 +98,14 @@
         "curly": ["error", "all"],
         "import/namespace": ["off"], // This doesn't resolve namespace imports correctly, but TS will throw for this anyway
         "import/no-restricted-paths": [
-          "error",
+          "off", // Cozy customization; we add code that does not 100% follow the rules of Bitwarden architecture
           {
             "zones": [
+              {
+                "target": ["libs/**/*"],
+                "from": ["apps/**/*"],
+                "message": "Libs should not import app-specific code."
+              },
               {
                 // avoid specific frameworks or large dependencies in common
                 "target": "./libs/common/**/*",

@@ -25,7 +25,7 @@
     "**/node_modules/argon2/package.json",
     "**/node_modules/argon2/build/Release/argon2.node"
   ],
-  "electronVersion": "31.3.1",
+  "electronVersion": "32.0.1",
   "generateUpdatesFilesForAllChannels": true,
   "publish": {
     "provider": "generic",
@@ -234,7 +234,7 @@
     "autoStart": true,
     "base": "core22",
     "confinement": "strict",
-    "plugs": ["default", "password-manager-service"],
+    "plugs": ["default", "network", "network-bind", "password-manager-service"],
     "stagePackages": ["default"]
   },
   "protocols": [
