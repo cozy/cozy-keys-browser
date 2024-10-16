@@ -17,7 +17,6 @@ import { CollectionService } from "@bitwarden/common/vault/abstractions/collecti
 
 /* start Cozy imports */
 /* eslint-disable */
-import { HistoryService } from "../../../../popup/services/history.service";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { BrowserApi } from "../../../../platform/browser/browser-api";
 /* eslint-enable */
@@ -38,7 +37,6 @@ export class ShareComponent extends BaseShareComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     organizationService: OrganizationService,
-    private historyService: HistoryService,
     private cozyClientService: CozyClientService,
     accountService: AccountService,
   ) {
@@ -56,13 +54,9 @@ export class ShareComponent extends BaseShareComponent implements OnInit {
   async ngOnInit() {
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil
     this.onSharedCipher.subscribe(() => {
-      /* Cozy custo
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.router.navigate(["view-cipher", { cipherId: this.cipherId }]);
-      */
-      this.historyService.gotoPreviousUrl();
-      /** end custo */
     });
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.queryParams.pipe(first()).subscribe(async (params) => {
@@ -80,16 +74,12 @@ export class ShareComponent extends BaseShareComponent implements OnInit {
   }
 
   cancel() {
-    /* Cozy custo
     // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.router.navigate(["/view-cipher"], {
       replaceUrl: true,
       queryParams: { cipherId: this.cipher.id },
     });
-    */
-    this.historyService.gotoPreviousUrl();
-    /* end custo */
   }
 
   /* Cozy customization */

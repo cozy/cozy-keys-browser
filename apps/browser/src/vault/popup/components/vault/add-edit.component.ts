@@ -42,7 +42,6 @@ import { closeAddEditVaultItemPopout, VaultPopoutType } from "../../utils/vault-
 /* eslint-disable */
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { KonnectorsService } from "../../../../popup/services/konnectors.service";
-import { HistoryService } from "../../../../popup/services/history.service";
 import { deleteCipher } from "./cozy-utils";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 /* eslint-enable */
@@ -90,7 +89,6 @@ export class AddEditComponent extends BaseAddEditComponent implements OnInit {
     passwordRepromptService: PasswordRepromptService,
     logService: LogService,
     private konnectorsService: KonnectorsService,
-    private historyService: HistoryService,
     private cozyClientService: CozyClientService,
     sendApiService: SendApiService,
     dialogService: DialogService,
@@ -170,18 +168,6 @@ export class AddEditComponent extends BaseAddEditComponent implements OnInit {
 
       await this.load();
 
-      // Cozy customization
-      //*
-      if (params.tempCipher) {
-        // the cipher was already in edition and popup has been closed or navigation in pwd generator
-        // we have to select the correct pwd
-        // first retrive data form url
-        const cipherJson = JSON.parse(params.tempCipher);
-        const histCipher = CipherView.fromJSON(cipherJson);
-        Object.assign(this.cipher, histCipher);
-      }
-      // end custo */
-
       if (!this.editMode || this.cloneMode) {
         // Only allow setting username if there's no existing value
         if (
@@ -224,16 +210,6 @@ export class AddEditComponent extends BaseAddEditComponent implements OnInit {
       this.popupCloseWarningService.enable();
     }
   }
-
-  /* Cozy custo
-   note Cozy : beforeunload event would be better but is not triggered in webextension...
-   see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
-  */
-  @HostListener("window:unload", ["$event"])
-  async unloadMnger(event: any) {
-    this.historyService.saveTempCipherInHistory(this.cipher);
-  }
-  /* end custo */
 
   async load() {
     await super.load();
@@ -305,22 +281,12 @@ export class AddEditComponent extends BaseAddEditComponent implements OnInit {
     }
 
     if (this.cloneMode) {
-      /* Cozy customization : why should we go back to vault after cloning a cipher ?
-         we prefer go back in history twice (from where the initial cipher has been opened)
-      /*
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.router.navigate(["/tabs/vault"]);
-      */
-      this.historyService.gotoPreviousUrl(2);
-      /* end custo */
     } else {
-      /* Cozy customization
-      this.location.back();
-      */
       void this.konnectorsService.createSuggestions();
-      this.historyService.gotoPreviousUrl();
-      /* end custo */
+      this.location.back();
     }
     return true;
   }
@@ -368,27 +334,17 @@ export class AddEditComponent extends BaseAddEditComponent implements OnInit {
       closeAddEditVaultItemPopout();
       return;
     }
-    /* Cozy customization
+
     this.location.back();
-    */
-    this.historyService.gotoPreviousUrl();
-    //*/
   }
 
   async generateUsername(): Promise<boolean> {
     const confirmed = await super.generateUsername();
     if (confirmed) {
       await this.saveCipherState();
-      // save cipher state in url for when popup will be closed.
-      this.historyService.saveTempCipherInHistory(this.cipher);
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.router.navigate(["generator"], {
-        queryParams: {
-          type: "username",
-          tempCipher: JSON.stringify(this.cipher),
-        },
-      });
+      this.router.navigate(["generator"], { queryParams: { type: "username" } });
     }
     return confirmed;
   }
@@ -397,13 +353,9 @@ export class AddEditComponent extends BaseAddEditComponent implements OnInit {
     const confirmed = await super.generatePassword();
     if (confirmed) {
       await this.saveCipherState();
-      // save cipher state in url for when popup will be closed.
-      this.historyService.saveTempCipherInHistory(this.cipher);
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.router.navigate(["generator"], {
-        queryParams: { type: "password", tempCipher: JSON.stringify(this.cipher) },
-      });
+      this.router.navigate(["generator"], { queryParams: { type: "password" } });
     }
     return confirmed;
   }
@@ -423,12 +375,10 @@ export class AddEditComponent extends BaseAddEditComponent implements OnInit {
       this.organizationService,
     );
     if (confirmed) {
-      /* Cozy customization
+      await this.saveCipherState();
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.router.navigate(["/tabs/vault"]);
-      */
-      this.historyService.gotoPreviousUrl();
+      this.router.navigate(["generator"], { queryParams: { type: "password" } });
     }
     return confirmed;
   }

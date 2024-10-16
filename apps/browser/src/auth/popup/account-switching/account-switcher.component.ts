@@ -28,7 +28,6 @@ import { PopOutComponent } from "../../../platform/popup/components/pop-out.comp
 import { HeaderComponent } from "../../../platform/popup/header.component";
 import { PopupHeaderComponent } from "../../../platform/popup/layout/popup-header.component";
 import { PopupPageComponent } from "../../../platform/popup/layout/popup-page.component";
-import { HistoryService } from "../../../popup/services/history.service";
 
 import { AccountComponent } from "./account.component";
 import { CurrentAccountComponent } from "./current-account.component";
@@ -72,7 +71,6 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private authService: AuthService,
     private configService: ConfigService,
-    private historyService: HistoryService,
     private lockService: LockService,
   ) {}
 
@@ -129,11 +127,7 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    /* Cozy custo
     this.location.back();
-    */
-    this.historyService.gotoPreviousUrl();
-    /* end custo */
   }
 
   async lock(userId: string) {

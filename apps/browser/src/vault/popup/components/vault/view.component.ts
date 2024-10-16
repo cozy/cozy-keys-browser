@@ -58,7 +58,6 @@ import {
 } from "../../../../../../../libs/cozy/contactCipher";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { CAN_SHARE_ORGANIZATION } from "../../../../cozy/flags";
-import { HistoryService } from "../../../../popup/services/history.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { PaperType } from "@bitwarden/common/enums/paperType";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -133,7 +132,6 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
     fileDownloadService: FileDownloadService,
     private messageSender: MessageSender,
     private cozyClientService: CozyClientService,
-    private historyService: HistoryService,
     private syncService: SyncService,
     private sanitizer: DomSanitizer,
     dialogService: DialogService,
@@ -230,14 +228,6 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
     super.ngOnDestroy();
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
   }
-
-  /* Cozy customization : beforeunload event would be better but is not triggered in webextension...
-  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension */
-  @HostListener("window:unload", ["$event"])
-  async unloadMnger(event?: any) {
-    void this.historyService.updateTimeStamp();
-  }
-  /* end custo */
 
   async load() {
     await super.load();
@@ -477,11 +467,7 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
       return;
     }
 
-    /* Cozy custo
     this.location.back();
-    */
-    this.historyService.gotoPreviousUrl();
-    /* end custo */
   }
 
   private async loadPageDetails() {

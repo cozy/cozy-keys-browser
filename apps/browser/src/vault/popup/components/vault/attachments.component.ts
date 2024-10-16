@@ -16,10 +16,6 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { DialogService } from "@bitwarden/components";
 
-/* Cozy imports */
-import { HistoryService } from "../../../../popup/services/history.service";
-/* END */
-
 @Component({
   selector: "app-vault-attachments",
   templateUrl: "attachments.component.html",
@@ -39,7 +35,6 @@ export class AttachmentsComponent extends BaseAttachmentsComponent implements On
     stateService: StateService,
     logService: LogService,
     fileDownloadService: FileDownloadService,
-    private historyService: HistoryService,
     dialogService: DialogService,
     billingAccountProfileStateService: BillingAccountProfileStateService,
     accountService: AccountService,
@@ -71,12 +66,7 @@ export class AttachmentsComponent extends BaseAttachmentsComponent implements On
   }
 
   back() {
-    /* Cozy custo : attachements are not displayed in Cozy Pass Addon, but we modify nevertheless
-    // this back in case one day we decide to use this component
     this.location.back();
-    */
-    this.historyService.gotoPreviousUrl();
-    // end custo
   }
 
   close() {

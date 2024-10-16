@@ -37,7 +37,6 @@ import { VaultFilterService } from "../../../services/vault-filter.service";
 /* eslint-disable */
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { KonnectorsService } from "../../../../popup/services/konnectors.service";
-import { HistoryService } from "../../../../popup/services/history.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
@@ -124,7 +123,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     private location: Location,
     private cozyClientService: CozyClientService,
     private konnectorService: KonnectorsService,
-    private historyService: HistoryService,
     private organizationService: OrganizationService,
     private cryptoService: CryptoService,
     private stateService: StateService,
@@ -218,20 +216,10 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.saveState();
-    this.unloadMnger(); // Cozy custo
     this.broadcasterService.unsubscribe(ComponentId);
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  // Cozy custo : beforeunload event would be better but is not triggered in webextension...
-  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
-  @HostListener("window:unload", ["$event"])
-  async unloadMnger(event?: any) {
-    // save search state when popup is closed.
-    this.historyService.updateQueryParamInHistory("searchText", this.searchText);
-  }
-  // end custo
 
   async load() {
     this.vaultFilter = this.vaultFilterService.getVaultFilter();
@@ -614,10 +602,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
 
   openWebApp() {
     window.open(this.cozyClientService.getAppURL("passwords", ""));
-  }
-
-  back() {
-    this.historyService.gotoPreviousUrl();
   }
 
   async getCipherNumberForCurrentTab() {

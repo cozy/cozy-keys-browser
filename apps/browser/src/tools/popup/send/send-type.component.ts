@@ -20,11 +20,6 @@ import { DialogService, ToastService } from "@bitwarden/components";
 import { BrowserComponentState } from "../../../models/browserComponentState";
 import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 import { BrowserSendStateService } from "../services/browser-send-state.service";
-/** Start Cozy imports */
-/* eslint-disable */
-import { HistoryService } from "../../../popup/services/history.service";
-/* eslint-enable */
-/** End Cozy imports */
 
 const ComponentId = "SendTypeComponent";
 
@@ -54,7 +49,6 @@ export class SendTypeComponent extends BaseSendComponent implements OnInit, OnDe
     private broadcasterService: BroadcasterService,
     private router: Router,
     logService: LogService,
-    private historyService: HistoryService,
     sendApiService: SendApiService,
     dialogService: DialogService,
     toastService: ToastService,
@@ -181,11 +175,8 @@ export class SendTypeComponent extends BaseSendComponent implements OnInit, OnDe
 
   back() {
     (window as any).routeDirection = "b";
-    // note Cozy : collections are not displayed in Cozy Pass Addon, but we modify nevertheless
-    // this back in case one day we decide to use this component
-    // this.location.back();
-    this.historyService.gotoPreviousUrl();
-  }
+    this.location.back();
+ }
 
   private async saveState() {
     this.state = {

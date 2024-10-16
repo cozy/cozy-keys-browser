@@ -1,15 +1,4 @@
-/* Cozy custo
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
-*/
-import {
-  ChangeDetectorRef,
-  Component,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  HostListener,
-} from "@angular/core";
-/* end custo */
 import { Router } from "@angular/router";
 import { Subject, firstValueFrom, from, Subscription } from "rxjs";
 import { debounceTime, switchMap, takeUntil } from "rxjs/operators";
@@ -37,7 +26,6 @@ import { VaultFilterService } from "../../../services/vault-filter.service";
 /** Start Cozy imports */
 /* eslint-disable */
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
-import { HistoryService } from "../../../../popup/services/history.service";
 import { MessageSender } from "@bitwarden/common/platform/messaging";
 /* eslint-enable */
 /** End Cozy imports */
@@ -94,7 +82,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     private vaultSettingsService: VaultSettingsService,
     private messageSender: MessageSender,
     private cozyClientService: CozyClientService,
-    private historyService: HistoryService,
   ) {}
 
   async ngOnInit() {
@@ -181,14 +168,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  // Cozy custo : beforeunload event would be better but is not triggered in webextension...
-  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
-  @HostListener("window:unload", ["$event"])
-  async unloadMnger(event?: any) {
-    this.historyService.updateTimeStamp();
-  }
-  // end custo
 
   async refresh() {
     await this.load();
@@ -328,17 +307,10 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     await this.router.navigate(["/tabs/vault"], { queryParams: { searchText: this.searchText } });
   }
 
-  @HostListener("window:keydown", ["$event"]) // Cozy custo
   closeOnEsc(e: KeyboardEvent) {
-    /**
     // If input not empty, use browser default behavior of clearing input instead
     if (e.key === "Escape" && (this.searchText == null || this.searchText === "")) {
       BrowserApi.closePopup(window);
-    }
-    */
-    if (e.key === "Escape") {
-      this.back();
-      e.preventDefault();
     }
   }
 
@@ -470,10 +442,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   }
 
   // Cozy custo
-  back() {
-    this.historyService.gotoPreviousUrl();
-  }
-
   openWebApp() {
     window.open(this.cozyClientService.getAppURL("passwords", ""));
   }
