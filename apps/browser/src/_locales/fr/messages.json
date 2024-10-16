@@ -4758,6 +4758,9 @@
   "empty_jobTitle": {
     "message": "Aucune profession"
   },
+  "empty_company": {
+    "message": "Aucune entreprise"
+  },
   "new_address": {
     "message": "Nouvelle adresse"
   },
@@ -4772,6 +4775,9 @@
   },
   "new_jobTitle": {
     "message": "Nouvelle profession"
+  },
+  "new_company": {
+    "message": "Nouvelle entreprise"
   },
   "new_paperIdentityCardNumber": {
     "message": "Nouveau numéro de carte d'identité"
