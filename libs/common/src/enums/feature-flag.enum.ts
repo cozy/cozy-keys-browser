@@ -57,7 +57,12 @@ export const DefaultFeatureFlagValue = {
   [FeatureFlag.AC1795_UpdatedSubscriptionStatusSection]: FALSE,
   [FeatureFlag.EnableDeleteProvider]: FALSE,
   [FeatureFlag.ExtensionRefresh]: FALSE,
+    // Cozy customization, enable Bitwarden history service
+  //*
+  [FeatureFlag.PersistPopupView]: true,
+  /*/
   [FeatureFlag.PersistPopupView]: FALSE,
+  //*/
   [FeatureFlag.RestrictProviderAccess]: FALSE,
   [FeatureFlag.PM4154_BulkEncryptionService]: FALSE,
   [FeatureFlag.UseTreeWalkerApiForPageDetailsCollection]: FALSE,

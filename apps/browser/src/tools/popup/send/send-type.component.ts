@@ -176,7 +176,7 @@ export class SendTypeComponent extends BaseSendComponent implements OnInit, OnDe
   back() {
     (window as any).routeDirection = "b";
     this.location.back();
- }
+  }
 
   private async saveState() {
     this.state = {
