@@ -13,12 +13,6 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
-/** Start Cozy imports */
-/* eslint-disable */
-import { HistoryService } from "../../../../popup/services/history.service";
-/* eslint-enable */
-/** End Cozy imports */
-
 @Component({
   selector: "app-password-history",
   templateUrl: "password-history.component.html",
@@ -32,7 +26,6 @@ export class PasswordHistoryComponent extends BasePasswordHistoryComponent imple
     accountService: AccountService,
     private location: Location,
     private route: ActivatedRoute,
-    private historyService: HistoryService,
   ) {
     super(cipherService, platformUtilsService, i18nService, accountService, window);
   }
@@ -50,11 +43,7 @@ export class PasswordHistoryComponent extends BasePasswordHistoryComponent imple
   }
 
   close() {
-    /* Cozy custo
     this.location.back();
-    */
-    this.historyService.gotoPreviousUrl();
-    // end custo
   }
 
   // Cozy custo

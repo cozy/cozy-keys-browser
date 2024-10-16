@@ -20,11 +20,6 @@ import { DialogService, ToastService } from "@bitwarden/components";
 
 import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 import { FilePopoutUtilsService } from "../services/file-popout-utils.service";
-/** Start Cozy imports */
-/* eslint-disable */
-import { HistoryService } from "../../../popup/services/history.service";
-/* eslint-enable */
-/** End Cozy imports */
 
 @Component({
   selector: "app-send-add-edit",
@@ -58,7 +53,6 @@ export class SendAddEditComponent extends BaseAddEditComponent implements OnInit
     private filePopoutUtilsService: FilePopoutUtilsService,
     billingAccountProfileStateService: BillingAccountProfileStateService,
     accountService: AccountService,
-    private historyService: HistoryService,
     toastService: ToastService,
   ) {
     super(
@@ -131,13 +125,6 @@ export class SendAddEditComponent extends BaseAddEditComponent implements OnInit
   }
 
   cancel() {
-    // Cozy customization
-    // - collections are not displayed in Cozy Pass Addon, but we modify nevertheless
-    // this back in case one day we decide to use this component
-    // - the routing pb mentionned above by BW is not relevant for the historyService
-    //*
-    this.historyService.gotoPreviousUrl();
-    /*/
     // If true, the window was pop'd out on the add-send page. location.back will not work
     const isPopup = (window as any)?.previousPopupUrl?.startsWith("/add-send") ?? false;
     if (!isPopup) {
@@ -147,6 +134,5 @@ export class SendAddEditComponent extends BaseAddEditComponent implements OnInit
     } else {
       this.location.back();
     }
-    //*/
   }
 }

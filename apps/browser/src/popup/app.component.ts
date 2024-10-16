@@ -28,7 +28,6 @@ import { VaultBrowserStateService } from "../vault/services/vault-browser-state.
 import { routerTransition } from "./app-routing.animations";
 import { DesktopSyncVerificationDialogComponent } from "./components/desktop-sync-verification-dialog.component";
 import { CozyClientService } from "./services/cozyClient.service";
-import { HistoryService } from "./services/history.service";
 
 @Component({
   selector: "app-root",
@@ -63,7 +62,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private messageListener: MessageListener,
     private toastService: ToastService,
     private accountService: AccountService,
-    private historyService: HistoryService,
     private cozyClientService: CozyClientService,
     private animationControlService: AnimationControlService,
   ) {}
@@ -77,7 +75,6 @@ export class AppComponent implements OnInit, OnDestroy {
     await this.clearComponentStates();
 
     // Cozy customiszation
-    await this.historyService.init();
     await this.cozyClientService.getClientInstance();
 
     this.accountService.activeAccount$.pipe(takeUntil(this.destroy$)).subscribe((account) => {

@@ -133,7 +133,6 @@ import { PopupCloseWarningService } from "./popup-close-warning.service";
 import { CozyClientService } from "./cozyClient.service";
 import { CozySanitizeUrlService } from "./cozySanitizeUrl.service";
 import { KonnectorsService } from "./konnectors.service";
-import { HistoryService } from "./history.service";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -597,7 +596,6 @@ const safeProviders: SafeProvider[] = [
     { provide: CozyClientService, useValue: cozyClientService },
     { provide: KonnectorsService, useValue: konnectorsService },
     { provide: CozySanitizeUrlService },
-    { provide: HistoryService },
   ],
 })
 export class ServicesModule {}

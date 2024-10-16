@@ -39,7 +39,6 @@ import { VaultFilterService } from "../../../services/vault-filter.service";
 import { AutofillService } from "../../../../autofill/services/abstractions/autofill.service";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { KonnectorsService } from "../../../../popup/services/konnectors.service";
-import { HistoryService } from "../../../../popup/services/history.service";
 import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
 import { MessageSender } from "@bitwarden/common/platform/messaging";
 /* eslint-enable */
@@ -90,7 +89,6 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     private cozyClientService: CozyClientService,
     private konnectorsService: KonnectorsService,
     private autofillService: AutofillService,
-    private historyService: HistoryService,
     cipherService: CipherService,
     private vaultFilterService: VaultFilterService,
   ) {
@@ -272,20 +270,8 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.saveState();
-    this.unloadMnger(); // Cozy custo
     this.broadcasterService.unsubscribe(ComponentId);
   }
-
-  // Cozy custo : beforeunload event would be better but is not triggered in webextension...
-  // see : https://stackoverflow.com/questions/2315863/does-onbeforeunload-event-trigger-for-popup-html-in-a-google-chrome-extension
-  @HostListener("window:unload", ["$event"])
-  async unloadMnger(event?: any) {
-    this.historyService.updateQueryParamInHistory(
-      "searchText",
-      this.searchText ? this.searchText : "",
-    );
-  }
-  // end custo
 
   selectCipher(cipher: CipherView) {
     this.selectedTimeout = window.setTimeout(() => {
@@ -362,12 +348,8 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   }
 
   back() {
-    /* Cozy custo
     (window as any).routeDirection = "b";
     this.location.back();
-    */
-    this.historyService.gotoPreviousUrl();
-    // end custo
   }
 
   showGroupings() {

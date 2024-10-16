@@ -6,7 +6,6 @@ import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import { CozyClientService } from "../../../popup/services/cozyClient.service";
-import { HistoryService } from "../../../popup/services/history.service";
 
 @Component({
   selector: "app-vault-add-generic",
@@ -25,7 +24,6 @@ export class AddGenericComponent implements OnInit, OnDestroy {
 
   constructor(
     private cozyClientService: CozyClientService,
-    private historyService: HistoryService,
     private route: ActivatedRoute,
     private router: Router,
   ) {}
@@ -57,8 +55,6 @@ export class AddGenericComponent implements OnInit, OnDestroy {
 
   back() {
     this.onCancelled.emit();
-
-    this.historyService.gotoPreviousUrl();
   }
 
   async selectType(type: CipherType) {

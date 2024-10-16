@@ -34,7 +34,6 @@ import { LoginViaAuthRequestComponent } from "../auth/popup/login-via-auth-reque
 import { LoginComponent } from "../auth/popup/login.component";
 import { RegisterComponent } from "../auth/popup/register.component";
 import { RemovePasswordComponent } from "../auth/popup/remove-password.component";
-import { RestoreHistoryComponent } from "../auth/popup/restoreHistory.component";
 import { SetPasswordComponent } from "../auth/popup/set-password.component";
 import { AccountSecurityComponent } from "../auth/popup/settings/account-security.component";
 import { SsoComponent } from "../auth/popup/sso.component";
@@ -107,7 +106,7 @@ import { TabsComponent } from "./tabs.component";
 
 const unauthRouteOverrides = {
   homepage: () => {
-    return BrowserPopupUtils.inPopout(window) ? "/tabs/vault" : "/restoreHistory";
+    return BrowserPopupUtils.inPopout(window) ? "/tabs/vault" : "/tabs/current";
   },
 };
 
@@ -118,18 +117,13 @@ const routes: Routes = [
     children: [], // Children lets us have an empty component.
     canActivate: [
       popupRouterCacheGuard,
-      redirectGuard({ loggedIn: "/restoreHistory", loggedOut: "/home", locked: "/lock" }),
+      redirectGuard({ loggedIn: "/tabs/current", loggedOut: "/home", locked: "/lock" }),
     ],
   },
   {
     path: "vault",
     redirectTo: "/tabs/vault",
     pathMatch: "full",
-  },
-  {
-    path: "restoreHistory",
-    component: RestoreHistoryComponent,
-    data: { state: "restoreHistory" },
   },
   {
     path: "home",

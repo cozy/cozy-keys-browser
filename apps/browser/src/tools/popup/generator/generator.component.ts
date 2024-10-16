@@ -23,7 +23,6 @@ import {
 
 /* Cozy imports */
 /* eslint-disable */
-import { HistoryService } from "../../../popup/services/history.service";
 import { CozyClientService } from "../../../popup/services/cozyClient.service";
 import { first } from "rxjs/operators";
 /* eslint-enable */
@@ -52,7 +51,6 @@ export class GeneratorComponent extends BaseGeneratorComponent implements OnInit
     logService: LogService,
     ngZone: NgZone,
     private location: Location,
-    private historyService: HistoryService,
     protected cozyClientService: CozyClientService,
     toastService: ToastService,
   ) {
@@ -81,20 +79,6 @@ export class GeneratorComponent extends BaseGeneratorComponent implements OnInit
     if (this.cipherState?.login?.hasUris) {
       this.usernameWebsite = this.cipherState.login.uris[0].hostname;
     }
-    // Cozy customization
-    // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
-    this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
-      if (qParams.tempCipher) {
-        // a cipher is in edition, retrive cipher data form url
-        this.comingFromAddEdit = true;
-        const jsonCipher = JSON.parse(qParams.tempCipher);
-        this.cipherState = CipherView.fromJSON(jsonCipher);
-        if (this.cipherState?.login?.hasUris) {
-          this.usernameWebsite = this.cipherState.login.uris[0].hostname;
-        }
-      }
-    });
-    // end custo */
 
     await super.ngOnInit();
   }
@@ -111,23 +95,14 @@ export class GeneratorComponent extends BaseGeneratorComponent implements OnInit
     } else if (this.type === "username") {
       this.cipherState.login.username = this.username;
     }
-    /* Cozy custo
     this.addEditCipherInfo.cipher = this.cipherState;
     // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.cipherService.setAddEditCipherInfo(this.addEditCipherInfo);
-    */
-    this.historyService.updatePreviousAddEditCipher(this.cipherState);
-    /* end custo */
-    this.close();
   }
 
   close() {
-    /* Cozy custo
     this.location.back();
-    */
-    this.historyService.gotoPreviousUrl();
-    /* end custo */
   }
 
   emailHasFocus = false;

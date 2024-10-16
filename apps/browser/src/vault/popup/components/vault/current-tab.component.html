@@ -13,13 +13,13 @@
       <i class="bwi bwi-refresh-tab bwi-lg bwi-fw" aria-hidden="true"></i>
     </button>
     -->
-    <button type="button" appBlurClick (click)="back()" title="{{ 'back_shortcut' | i18n }}">
+    <button type="button" appBlurClick title="{{ 'back_shortcut' | i18n }}">
       <span class="header-icon" title="{{ 'back' | i18n }}"
         ><i class="icon-cozy icon-back"></i
       ></span>
     </button>
   </div>
-  <div class="search center" (click)="back()">
+  <div class="search center">
     <i class="icon-cozy icon-search"></i>
     <div id="search-tag">
       <span id="search-tag-text">{{ "forThisWebSite" | i18n }}</span>
@@ -35,7 +35,7 @@
       (keydown)="closeOnEsc($event)"
       appAutofocus
     />
-    <i class="icon-cozy icon-cross" aria-hidden="true" (click)="back()"></i>
+    <i class="icon-cozy icon-cross" aria-hidden="true"></i>
   </div>
   <div class="right">
     <!-- Cozy custo
