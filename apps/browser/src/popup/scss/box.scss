@@ -919,6 +919,12 @@ select:focus-visible {
 .box.list .box-content .box-content-row .no-white-space {
   white-space: normal !important;
 }
+
+.account-switcher-divider {
+  @include themify($themes) {
+    height: 1px;
+  }
+}
 /* Cozy customization end */
 
 .account-switcher-row {
