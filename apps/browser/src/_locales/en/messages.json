@@ -1953,9 +1953,6 @@
   "typePapers": {
     "message": "Documents and Notes"
   },
-  "forThisWebSite": {
-    "message": "For this web page"
-  },
   "newItemHeader": {
     "message": "New $TYPE$",
     "placeholders": {

@@ -21,13 +21,9 @@
   </div>
   <div class="search center">
     <i class="icon-cozy icon-search"></i>
-    <div id="search-tag">
-      <span id="search-tag-text">{{ "forThisWebSite" | i18n }}</span>
-      <span>X</span>
-    </div>
     <input
       type="{{ searchTypeSearch ? 'search' : 'text' }}"
-      placeholder=""
+      placeholder="{{ 'searchVault' | i18n }}"
       id="search"
       [(ngModel)]="searchText"
       (input)="search$.next()"
