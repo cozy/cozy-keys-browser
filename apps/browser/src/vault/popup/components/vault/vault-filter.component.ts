@@ -588,11 +588,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  selectCurrent() {
-    this.router.navigate(["/tabs/current"]);
-    // this.router.navigate(['current'])
-  }
-
   /** Cozy custo */
   emptySearch() {
     this.searchText = "";

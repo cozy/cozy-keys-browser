@@ -312,55 +312,10 @@ header:not(bit-callout header, bit-dialog header, popup-page header) {
       }
     }
 
-    #search-tag {
-      flex-grow: 0;
-      flex-shrink: 0;
-      padding: 0 6px;
-      background-color: white;
-      color: $brand-primary;
-      @include themify($themes) {
-        color: themed("primaryColor");
-      }
-      border-radius: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      font-size: 12px;
-      font-weight: bold;
-      :first-child {
-        position: relative;
-      }
-      :last-child {
-        color: #8d8d8d;
-        border-left: 1px solid #8d8d8d;
-        font-size: 0.6em;
-        padding: 0 0 0 4px;
-        margin: 0 0 0 4px;
-      }
-    }
-
     &:hover {
       cursor: pointer;
       input {
         cursor: pointer;
-      }
-      #search-tag-text::after {
-        content: "";
-        border-bottom: 1px solid $brand-primary;
-        @include themify($themes) {
-          border-bottom-color: themed("primaryColor");
-        }
-        position: absolute;
-        left: 0;
-        top: 56%;
-        width: 100%;
-      }
-      #search-tag-text + span {
-        color: $brand-primary;
-        border-color: $brand-primary;
-        @include themify($themes) {
-          color: themed("primaryColor");
-          border-color: themed("primaryColor");
-        }
       }
     }
 
@@ -413,12 +368,6 @@ header:not(bit-callout header, bit-dialog header, popup-page header) {
           background-color: themed("headerInputColor");
         }
         */
-      }
-    }
-    &.hideSearchTag {
-      #search-tag {
-        display: none;
-        padding: 0;
       }
     }
   }

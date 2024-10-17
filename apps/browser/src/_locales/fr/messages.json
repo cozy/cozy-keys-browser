@@ -1947,9 +1947,6 @@
   "typePapers": {
     "message": "Documents et Notes"
   },
-  "forThisWebSite": {
-    "message": "Pour ce site web"
-  },
   "newItemHeader": {
     "message": "Nouveau/nouvelle $TYPE$",
     "placeholders": {
