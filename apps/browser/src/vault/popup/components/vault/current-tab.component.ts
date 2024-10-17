@@ -23,12 +23,6 @@ import { AutofillService } from "../../../../autofill/services/abstractions/auto
 import { BrowserApi } from "../../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
 import { VaultFilterService } from "../../../services/vault-filter.service";
-/** Start Cozy imports */
-/* eslint-disable */
-import { CozyClientService } from "../../../../popup/services/cozyClient.service";
-import { MessageSender } from "@bitwarden/common/platform/messaging";
-/* eslint-enable */
-/** End Cozy imports */
 
 const BroadcasterSubscriptionId = "CurrentTabComponent";
 
@@ -42,7 +36,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   cardCiphers: CipherView[];
   identityCiphers: CipherView[];
   loginCiphers: CipherView[];
-  contactCiphers: CipherView[];
   url: string;
   hostname: string;
   searchText: string;
@@ -52,11 +45,9 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   isLoading = false;
   showOrganizations = false;
   showHowToAutofill = false;
-  autofillCalloutText: string[] = ["", ""];
+  autofillCalloutText: string;
   protected search$ = new Subject<void>();
   private destroy$ = new Subject<void>();
-  dontShowCards = false;
-  dontShowIdentities = false;
   private collectPageDetailsSubscription: Subscription;
 
   private totpCode: string;
@@ -80,8 +71,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     private organizationService: OrganizationService,
     private vaultFilterService: VaultFilterService,
     private vaultSettingsService: VaultSettingsService,
-    private messageSender: MessageSender,
-    private cozyClientService: CozyClientService,
   ) {}
 
   async ngOnInit() {
@@ -173,19 +162,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     await this.load();
   }
 
-  //* Cozy custo
   addCipher() {
-    this.router.navigate(["/add-generic"], {
-      queryParams: {
-        name: this.hostname,
-        uri: this.url,
-        selectedVault: this.vaultFilterService.getVaultFilter().selectedOrganizationId,
-      },
-    });
-  }
-  //*/
-  //*
-  addLoginCipher() {
     // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.router.navigate(["/add-cipher"], {
@@ -196,22 +173,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
       },
     });
   }
-
-  addCardCipher() {
-    this.router.navigate(["/add-cipher"], { queryParams: { type: 3 } });
-  }
-
-  addIdentityCipher() {
-    this.router.navigate(["/add-cipher"], { queryParams: { type: 4 } });
-  }
-
-  // Cozy customization
-  addContactCipher() {
-    const appUrl = this.cozyClientService.getAppURL("contacts", "new");
-    window.open(appUrl);
-  }
-  // Cozy customization end
-  //*/
 
   viewCipher(cipher: CipherView) {
     // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
@@ -238,28 +199,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     }
 
     try {
-      // Cozy customization; send doAutoFill to background because
-      // doAutoFill needs a Cozy Client store with all the contacts
-      // and only the background Cozy Client store has them on Manifest V3
-      if (
-        (cipher.type === CipherType.Contact || cipher.type === CipherType.Paper) &&
-        BrowserApi.isManifestVersion(3)
-      ) {
-        this.messageSender.send("doAutoFill", {
-          autofillOptions: {
-            tab: this.tab,
-            cipher: cipher,
-            pageDetails: this.pageDetails,
-            doc: window.document,
-            fillNewPassword: true,
-            allowTotpAutofill: true,
-          },
-        });
-
-        return;
-      }
-      // Cozy customization end
-
       this.totpCode = await this.autofillService.doAutoFill({
         tab: this.tab,
         cipher: cipher,
@@ -270,14 +209,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
       });
       if (this.totpCode != null) {
         this.platformUtilsService.copyToClipboard(this.totpCode, { window: window });
-        // Cozy custo
-        this.platformUtilsService.showToast(
-          "success",
-          this.i18nService.t("TOTP"),
-          this.i18nService.t("TOTPCopiedInClipboard"),
-        );
-        return;
-        // end custo
       }
       if (BrowserPopupUtils.inPopup(window)) {
         if (!closePopupDelay) {
@@ -345,13 +276,7 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     }
     if (!dontShowIdentities) {
       otherTypes.push(CipherType.Identity);
-      otherTypes.push(CipherType.Contact);
     }
-
-    // Cozy customization, forward dontShowCards and dontShowIdentities
-    // to view to hide completely these types if we do not want to show them
-    this.dontShowCards = dontShowCards;
-    this.dontShowIdentities = dontShowIdentities;
 
     const ciphers = await this.cipherService.getAllDecryptedForUrl(
       this.url,
@@ -361,7 +286,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     this.loginCiphers = [];
     this.cardCiphers = [];
     this.identityCiphers = [];
-    this.contactCiphers = [];
 
     ciphers.forEach((c) => {
       if (!this.vaultFilterService.filterCipherForSelectedVault(c)) {
@@ -375,11 +299,6 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
           case CipherType.Identity:
             this.identityCiphers.push(c);
             break;
-          // Cozy customization
-          case CipherType.Contact:
-            this.contactCiphers.push(c);
-            break;
-          // Cozy customization end
           default:
             break;
         }
@@ -424,20 +343,10 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
   }
 
   private setAutofillCalloutText(command: string) {
-    /* Cozy custo
     if (command) {
       this.autofillCalloutText = this.i18nService.t("autofillSelectInfoWithCommand", command);
     } else {
       this.autofillCalloutText = this.i18nService.t("autofillSelectInfoWithoutCommand");
     }
-    */
-    let trans;
-    if (command) {
-      trans = this.i18nService.t("autofillSelectInfoWithCommand", command);
-    } else {
-      trans = this.i18nService.t("autofillSelectInfoWithoutCommand");
-    }
-    this.autofillCalloutText = trans.split(" ✨ ");
-    /* end custo  */
   }
 }
