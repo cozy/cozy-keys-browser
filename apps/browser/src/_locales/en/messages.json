@@ -2008,7 +2008,10 @@
     "message": "Favorites"
   },
   "popOutNewWindow": {
-    "message": "Open in your Cozy"
+    "message": "Pop out to a new window"
+  },
+  "popOutCozy": {
+    "message": "Open in my Cozy"
   },
   "refresh": {
     "message": "Refresh"
@@ -4037,10 +4040,10 @@
     "message": "Insert the YubiKey associated with your LastPass account into your computer's USB port, then touch its button."
   },
   "switchAccount": {
-    "message": "Account"
+    "message": "Switch account"
   },
   "switchAccounts": {
-    "message": "Account"
+    "message": "Switch accounts"
   },
   "switchToAccount": {
     "message": "Switch to account"

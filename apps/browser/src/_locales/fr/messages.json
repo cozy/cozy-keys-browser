@@ -2002,7 +2002,10 @@
     "message": "Favoris"
   },
   "popOutNewWindow": {
-    "message": "Ouvrir dans votre Cozy"
+    "message": "Ouvrir dans une nouvelle fenêtre"
+  },
+  "popOutCozy": {
+    "message": "Ouvrir dans mon Cozy"
   },
   "refresh": {
     "message": "Actualiser"
@@ -4034,10 +4037,10 @@
     "message": "Insérez la YubiKey associée à votre compte LastPass dans le port USB de votre ordinateur, puis appuyez sur son bouton."
   },
   "switchAccount": {
-    "message": "Compte"
+    "message": "Basculer le compte"
   },
   "switchAccounts": {
-    "message": "Compte"
+    "message": "Basculer les comptes"
   },
   "switchToAccount": {
     "message": "Basculer vers le compte"
