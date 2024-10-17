@@ -24,10 +24,12 @@ import {
 } from "@bitwarden/components";
 
 import { enableAccountSwitching } from "../../../platform/flags";
+import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
 import { PopOutComponent } from "../../../platform/popup/components/pop-out.component";
 import { HeaderComponent } from "../../../platform/popup/header.component";
 import { PopupHeaderComponent } from "../../../platform/popup/layout/popup-header.component";
 import { PopupPageComponent } from "../../../platform/popup/layout/popup-page.component";
+import { CozyClientService } from "../../../popup/services/cozyClient.service";
 
 import { AccountComponent } from "./account.component";
 import { CurrentAccountComponent } from "./current-account.component";
@@ -62,6 +64,7 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
   enableAccountSwitching = true;
 
   constructor(
+    private cozyClientService: CozyClientService,
     private accountSwitcherService: AccountSwitcherService,
     private accountService: AccountService,
     private vaultTimeoutService: VaultTimeoutService,
@@ -162,6 +165,19 @@ export class AccountSwitcherComponent implements OnInit, OnDestroy {
     }
     this.loading = false;
   }
+
+  // Cozy customization
+  async expand() {
+    await BrowserPopupUtils.openCurrentPagePopout(
+      window,
+      BrowserPopupUtils.buildPopoutUrl("popup/index.html#/tabs/vault", undefined),
+    );
+  }
+
+  async openCozyInNewTab() {
+    window.open(this.cozyClientService.getAppURL("passwords", ""));
+  }
+  // Cozy customization end
 
   ngOnDestroy() {
     this.destroy$.next();

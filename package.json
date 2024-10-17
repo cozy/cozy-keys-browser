@@ -199,7 +199,7 @@
     "cozy-flags": "3.2.2",
     "cozy-logger": "1.10.4",
     "cozy-realtime": "5.0.1",
-    "cozy-ui": "110.3.0",
+    "cozy-ui": "111.20.0",
     "prosemirror-model": "1.21.3",
     "prosemirror-state": "1.4.3",
     "lodash": "4.17.21",

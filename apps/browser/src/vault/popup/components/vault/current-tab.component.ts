@@ -440,10 +440,4 @@ export class CurrentTabComponent implements OnInit, OnDestroy {
     this.autofillCalloutText = trans.split(" ✨ ");
     /* end custo  */
   }
-
-  // Cozy custo
-  openWebApp() {
-    window.open(this.cozyClientService.getAppURL("passwords", ""));
-  }
-  // end custo
 }

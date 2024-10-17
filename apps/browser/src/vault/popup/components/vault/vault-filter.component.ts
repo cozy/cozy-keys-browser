@@ -600,10 +600,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     this.search(50);
   }
 
-  openWebApp() {
-    window.open(this.cozyClientService.getAppURL("passwords", ""));
-  }
-
   async getCipherNumberForCurrentTab() {
     const tab = await BrowserApi.getTabFromCurrentWindow();
     const ciphers = await this.cipherService.getAllDecryptedForUrl(tab?.url);

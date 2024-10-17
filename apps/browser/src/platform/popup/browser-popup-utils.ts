@@ -243,7 +243,7 @@ class BrowserPopupUtils {
    * @param extensionUrlPath - A relative path to the extension page. Example: "popup/index.html#/tabs/vault"
    * @param singleActionKey - The single action popout key used to identify the popout.
    */
-  private static buildPopoutUrl(extensionUrlPath: string, singleActionKey: string) {
+  static buildPopoutUrl(extensionUrlPath: string, singleActionKey: string) {
     const parsedUrl = new URL(chrome.runtime.getURL(extensionUrlPath));
     parsedUrl.searchParams.set("uilocation", "popout");
 

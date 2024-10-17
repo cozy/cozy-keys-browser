@@ -686,6 +686,58 @@ li.active .icon-cozy-inline > svg {
   }
 }
 
+.icon-tab {
+  mask-image: url("cozy-ui/assets/icons/ui/tab.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/tab.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: $brand-primary;
+  @include themify($themes) {
+    background-color: themed("mutedColor");
+  }
+}
+
+.icon-cloud {
+  mask-image: url("cozy-ui/assets/icons/ui/cloud.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/cloud.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: $brand-primary;
+  @include themify($themes) {
+    background-color: themed("mutedColor");
+  }
+}
+
+.icon-lock {
+  mask-image: url("cozy-ui/assets/icons/ui/lock.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/lock.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: $brand-primary;
+  @include themify($themes) {
+    background-color: themed("mutedColor");
+  }
+}
+
+.icon-logout {
+  mask-image: url("cozy-ui/assets/icons/ui/logout.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/logout.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: $brand-primary;
+  @include themify($themes) {
+    background-color: themed("mutedColor");
+  }
+}
+
 .icon-profile {
   background-image: url("../images/icons-16-icon-profile.svg");
 }
