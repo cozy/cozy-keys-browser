@@ -1998,6 +1998,15 @@
   "favorites": {
     "message": "Favoris"
   },
+  "suggestions": {
+    "message": "Suggestions"
+  },
+  "suggestionsEmptyTitle": {
+    "message": "Ajouter un élément"
+  },
+  "suggestionsEmptyDescription": {
+    "message": "Aucune suggestion disponible pour la page actuelle"
+  },
   "popOutNewWindow": {
     "message": "Ouvrir dans une nouvelle fenêtre"
   },

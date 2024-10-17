@@ -2004,6 +2004,15 @@
   "favorites": {
     "message": "Favorites"
   },
+  "suggestions": {
+    "message": "Suggestions"
+  },
+  "suggestionsEmptyTitle": {
+    "message": "Add an element"
+  },
+  "suggestionsEmptyDescription": {
+    "message": "No available suggestion for the current page"
+  },
   "popOutNewWindow": {
     "message": "Pop out to a new window"
   },
