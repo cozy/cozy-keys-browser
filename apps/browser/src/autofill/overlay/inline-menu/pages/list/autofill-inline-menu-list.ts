@@ -56,6 +56,7 @@ import {
 import {
   COZY_ATTRIBUTES_MAPPING,
   cozypaperFieldNames,
+  isPaperAttributesModel,
 } from "../../../../../../../../libs/cozy/mapping";
 import { CozyAutofillOptions } from "src/autofill/services/abstractions/autofill.service";
 /* eslint-enable */
@@ -828,10 +829,12 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   private createPaperListItem(
     inlineMenuCipherId: string,
     contactName: string,
+    id: string,
     name: string,
     value: string,
+    qualificationLabel: string,
   ) {
-    const cozyAutofillOptions = { value };
+    const cozyAutofillOptions = { id, value, qualificationLabel };
     const actionMenuButtonElement = this.buildActionMenuButton(
       {
         type: "field",
@@ -917,18 +920,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.newItemButtonElement.addEventListener(EVENTS.CLICK, onClick);
     this.newItemButtonElement.appendChild(span);
 
-    let actionMenuButtonElement;
-
-    if (actionMenuData) {
-      const cipherId = isContactActionMenuData(actionMenuData)
-        ? actionMenuData.cipher.id
-        : actionMenuData.inlineMenuCipherId;
-      actionMenuButtonElement = this.buildActionButton(penIcon, () =>
-        this.editContactMessage(cipherId),
-      );
-    }
-
-    return this.buildListHeaderContainer(this.newItemButtonElement, actionMenuButtonElement);
+    return this.buildListHeaderContainer(this.newItemButtonElement);
   }
 
   private backToCipherList = () => {
@@ -1173,8 +1165,10 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         const li = this.createPaperListItem(
           inlineMenuCipherId,
           contactName,
+          paper.id,
           paper.name,
           paper.value,
+          paper.qualificationLabel,
         );
         ulElement.appendChild(li);
       }
@@ -2065,7 +2059,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       const viewCipherActionElement = this.createViewCipherAction(cipher);
       ulElement.appendChild(viewCipherActionElement);
 
-      const modifyCipherActionElement = this.createModifyCipherAction(cipher);
+      const modifyCipherActionElement = this.createModifyCipherAction(cipher.id, false);
       ulElement.appendChild(modifyCipherActionElement);
 
       const autofillCurrentElement = this.createAutofillCurrentAction(cipher, {
@@ -2086,6 +2080,18 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         ...cozyAutofillOptions,
         fillOnlyTheseFieldQualifiers: [fieldQualifier],
       });
+
+      const fieldModel = COZY_ATTRIBUTES_MAPPING[fieldQualifier];
+      const isPaperModel = isPaperAttributesModel(fieldModel);
+      const id = isPaperModel ? cozyAutofillOptions.id : cipher.id;
+
+      const editCurrentElement = this.createModifyCipherAction(
+        id,
+        isPaperModel,
+        cozyAutofillOptions.qualificationLabel,
+      );
+      ulElement.appendChild(editCurrentElement);
+
       ulElement.appendChild(autofillCurrentElement);
 
       const autofillAllElement = this.createAutofillAllAction(cipher);
@@ -2129,12 +2135,20 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return actionMenuButtonElement;
   }
 
-  private editContactMessage = (cipherId: string) => {
+  private editPapersMessage = (id: string, qualificationLabel: string) => {
+    this.postMessageToParent({
+      command: "redirectToCozy",
+      to: "mespapiers",
+      hash: `paper/files/${qualificationLabel}/${id}`,
+    });
+  };
+
+  private editContactMessage = (id: string) => {
     this.postMessageToParent({
       command: "redirectToCozy",
       to: "contacts",
       hash: "<id>/edit",
-      inlineMenuCipherId: cipherId,
+      inlineMenuCipherId: id,
     });
   };
 
@@ -2148,9 +2162,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return li;
   }
 
-  private createModifyCipherAction(cipher: InlineMenuCipherData) {
+  private createModifyCipherAction(id: string, isPaperModel: boolean, qualificationLabel?: string) {
     const li = this.createActionMenuItem(this.getTranslation("edit"), penIcon, () =>
-      this.editContactMessage(cipher.id),
+      isPaperModel ? this.editPapersMessage(id, qualificationLabel) : this.editContactMessage(id),
     );
 
     return li;
