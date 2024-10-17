@@ -87,7 +87,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   vaultFilter: VaultFilter;
   selectedOrganization: string = null;
   showCollections = true;
-  cipherNumberForCurrentTab: string;
+  ciphersForCurrentTab: CipherView[];
 
   private loadedTimeout: number;
   private selectedTimeout: number;
@@ -243,7 +243,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     }
     await this.search(null);
     this.getCounts();
-    this.getCipherNumberForCurrentTab();
+    this.getCiphersForCurrentTab();
   }
 
   async loadCollections() {
@@ -588,17 +588,17 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  /** Cozy custo */
+  // Cozy customization
   emptySearch() {
     this.searchText = "";
     document.getElementById("search").focus();
     this.search(50);
   }
 
-  async getCipherNumberForCurrentTab() {
+  async getCiphersForCurrentTab() {
     const tab = await BrowserApi.getTabFromCurrentWindow();
     const ciphers = await this.cipherService.getAllDecryptedForUrl(tab?.url);
-    this.cipherNumberForCurrentTab = ciphers.length == 0 ? "" : ciphers.length.toString();
+    this.ciphersForCurrentTab = ciphers;
   }
-  /** end custo */
+  // Cozy customization end
 }
