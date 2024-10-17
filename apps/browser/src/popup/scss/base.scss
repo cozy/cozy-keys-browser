@@ -225,9 +225,16 @@ header:not(bit-callout header, bit-dialog header, popup-page header) {
     margin: auto;
   }
 
+  // Cozy customization, do not show avatar but a dots icon
+  //*
+  app-pop-out > button,
+  div > button:not(.home-acc-switcher-btn),
+  div > a {
+    /*/
   app-pop-out > button,
   div > button:not(app-current-account button):not(.home-acc-switcher-btn),
   div > a {
+//*/
     border: none;
     padding: 0 10px;
     text-decoration: none;
@@ -431,6 +438,13 @@ header:not(bit-callout header, bit-dialog header, popup-page header) {
   }
   */
 }
+
+// Cozy customization; do not show avatar but a dots icon
+app-current-account,
+app-current-account > .right {
+  height: 100%;
+}
+// Cozy customization end;
 
 .no-bg {
   background-color: transparent;
