@@ -738,6 +738,20 @@ li.active .icon-cozy-inline > svg {
   }
 }
 
+// Duplicate of icon-plus that is fixed to white; we need to rethink globally our icons
+.icon-plus-2 {
+  mask-image: url("cozy-ui/assets/icons/ui/plus.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/plus.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-color: $brand-primary;
+  @include themify($themes) {
+    background-color: themed("mutedColor");
+  }
+}
+
 .icon-profile {
   background-image: url("../images/icons-16-icon-profile.svg");
 }
