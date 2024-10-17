@@ -225,19 +225,6 @@ header:not(bit-callout header, bit-dialog header, popup-page header) {
     margin: auto;
   }
 
-  button {
-    background-color: unset;
-    flex-grow: 0;
-    border: none;
-    padding: 0 10px;
-    &:hover,
-    &:focus {
-      @include themify($themes) {
-        background-color: themed("headerBackgroundHoverColor");
-      }
-    }
-  }
-
   app-pop-out > button,
   div > button:not(app-current-account button):not(.home-acc-switcher-btn),
   div > a {
