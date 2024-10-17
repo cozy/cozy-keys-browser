@@ -54,12 +54,52 @@
     </ng-container>
   </div>
   <ng-container *ngIf="ciphers && ciphers.length && !showSearching()">
-    <div class="box list" *ngIf="favoriteCiphers">
+    <div class="box list" *ngIf="ciphersForCurrentTab.length">
+      <h2 class="box-header">
+        {{ "suggestions" | i18n }}
+      </h2>
+      <div class="box-content" >
+        <app-cipher-row
+          *ngFor="let cipherForCurrentTab of ciphersForCurrentTab"
+          [cipher]="cipherForCurrentTab"
+          title="{{ 'viewItem' | i18n }}"
+          (onSelected)="selectCipher($event)"
+          (launchEvent)="launchCipher($event)"
+          [showView]="true"
+        >
+        </app-cipher-row>
+      </div>
+    </div>
+    <div class="box list" *ngIf="!ciphersForCurrentTab.length">
+      <h2 class="box-header">
+        {{ "suggestions" | i18n }}
+      </h2>
+      <div class="box-content">
+        <div class="box-content-row box-content-row-flex">
+          <button
+            type="button"
+            appStopClick
+            (click)="addCipher()"
+            class="row-main"
+          >
+            <div class="icon" aria-hidden="true">
+              <i class="icon-cozy icon-plus-2"></i>
+            </div>
+            <div class="row-main-content">
+              <span class="text">
+                <span class="truncate-box">
+                  <span class="truncate">{{ "suggestionsEmptyTitle" | i18n }}</span>
+                </span>
+              </span>
+              <span class="detail no-white-space">{{ "suggestionsEmptyDescription" | i18n }}</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="box list" *ngIf="favoriteCiphers.length">
       <h2 class="box-header">
         {{ "favorites" | i18n }}
-        <!-- Cozy custo : commented
-        <span class="flex-right">{{ favoriteCiphers.length }}</span>
-        -->
       </h2>
       <div class="box-content">
         <app-cipher-row
