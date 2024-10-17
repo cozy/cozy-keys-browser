@@ -22,9 +22,11 @@ export interface PageDetail {
 
 // Cozy customization
 export interface CozyAutofillOptions {
+  id?: string;
   type?: string;
   label?: "work" | "home";
   value?: string;
+  qualificationLabel?: string;
   fillOnlyThisFieldHtmlID?: string;
   fillOnlyTheseFieldQualifiers?: AutofillFieldQualifierType[];
   focusedFieldData?: FocusedFieldData;

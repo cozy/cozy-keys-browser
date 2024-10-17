@@ -88,11 +88,11 @@ import {
 /* start Cozy imports */
 /* eslint-disable */
 import { Q, models } from "cozy-client";
-import { IOCozyContact } from "cozy-client/types/types";
+import type { IOCozyContact, IOCozyFile } from "cozy-client/types/types";
 // @ts-ignore
 import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
-import { AmbiguousContactFieldName, AmbiguousContactFieldValue } from "src/autofill/types";
+import type { AmbiguousContactFieldName, AvailablePapers } from "src/autofill/types";
 import {
   COZY_ATTRIBUTES_MAPPING,
   isPaperAttributesModel,
@@ -1212,7 +1212,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       isHealthPaper(this.focusedFieldData?.fieldQualifier);
 
     if (isPaperAttributesModel(focusedFieldModel) && !shouldHideHealthPaper) {
-      const availablePapers = (
+      const availablePapers: AvailablePapers[] = (
         await getAllPapersFromContact({
           client,
           contactId: contact.id,
@@ -1220,7 +1220,12 @@ export class OverlayBackground implements OverlayBackgroundInterface {
           me: cipher.contact.me,
           cozyAttributeModel: focusedFieldModel,
         })
-      ).map((paper: any) => ({ name: paper.name, value: _.get(paper, focusedFieldModel.path) }));
+      ).map((paper: IOCozyFile) => ({
+        id: paper._id,
+        name: paper.name,
+        value: _.get(paper, focusedFieldModel.path),
+        qualificationLabel: _.get(paper, "metadata.qualification.label"),
+      }));
       this.inlineMenuListPort?.postMessage({
         command: "paperList",
         inlineMenuCipherId,
