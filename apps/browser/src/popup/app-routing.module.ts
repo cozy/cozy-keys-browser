@@ -78,7 +78,6 @@ import { clearVaultStateGuard } from "../vault/guards/clear-vault-state.guard";
 import { AddEditComponent } from "../vault/popup/components/vault/add-edit.component";
 import { AttachmentsComponent } from "../vault/popup/components/vault/attachments.component";
 import { CollectionsComponent } from "../vault/popup/components/vault/collections.component";
-import { CurrentTabComponent } from "../vault/popup/components/vault/current-tab.component";
 import { PasswordHistoryComponent } from "../vault/popup/components/vault/password-history.component";
 import { ShareComponent } from "../vault/popup/components/vault/share.component";
 import { VaultFilterComponent } from "../vault/popup/components/vault/vault-filter.component";
@@ -99,7 +98,6 @@ import { TrashComponent } from "../vault/popup/settings/trash.component";
 import { VaultSettingsV2Component } from "../vault/popup/settings/vault-settings-v2.component";
 import { VaultSettingsComponent } from "../vault/popup/settings/vault-settings.component";
 
-import { extensionRefreshRedirect } from "./extension-refresh-route-utils";
 import { debounceNavigationGuard } from "./services/debounce-navigation.service";
 import { TabsV2Component } from "./tabs-v2.component";
 import { TabsComponent } from "./tabs.component";
@@ -468,11 +466,16 @@ const routes: Routes = [
       },
       {
         path: "current",
+        // Cozy customization; no more tabs/current because we will add suggestions on tab/vault
+        //*
+        redirectTo: "/tabs/vault",
+        /*/
         component: CurrentTabComponent,
         canActivate: [authGuard],
         canMatch: [extensionRefreshRedirect("/tabs/vault")],
         data: { state: "tabs_current" },
         runGuardsAndResolvers: "always",
+        //*/
       },
       ...extensionRefreshSwap(VaultFilterComponent, VaultV2Component, {
         path: "vault",
