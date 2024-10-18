@@ -1225,6 +1225,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         name: paper.name,
         value: _.get(paper, focusedFieldModel.path),
         qualificationLabel: _.get(paper, "metadata.qualification.label"),
+        metadataName: focusedFieldModel.name,
       }));
       this.inlineMenuListPort?.postMessage({
         command: "paperList",

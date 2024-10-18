@@ -27,6 +27,7 @@ export interface CozyAutofillOptions {
   label?: "work" | "home";
   value?: string;
   qualificationLabel?: string;
+  metadataName?: string;
   fillOnlyThisFieldHtmlID?: string;
   fillOnlyTheseFieldQualifiers?: AutofillFieldQualifierType[];
   focusedFieldData?: FocusedFieldData;
