@@ -58,7 +58,7 @@
       <h2 class="box-header">
         {{ "suggestions" | i18n }}
       </h2>
-      <div class="box-content" >
+      <div class="box-content">
         <app-cipher-row
           *ngFor="let cipherForCurrentTab of ciphersForCurrentTab"
           [cipher]="cipherForCurrentTab"
@@ -76,12 +76,7 @@
       </h2>
       <div class="box-content">
         <div class="box-content-row box-content-row-flex">
-          <button
-            type="button"
-            appStopClick
-            (click)="addCipher()"
-            class="row-main"
-          >
+          <button type="button" appStopClick (click)="addCipher()" class="row-main">
             <div class="icon" aria-hidden="true">
               <i class="icon-cozy icon-plus-2"></i>
             </div>
