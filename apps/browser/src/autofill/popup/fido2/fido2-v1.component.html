@@ -4,12 +4,19 @@
       <div class="left">
         <ng-container *ngIf="data.message.type != BrowserFido2MessageTypes.PickCredentialRequest">
           <div class="logo">
+            <!-- Cozy customization; replace icon
             <i class="bwi bwi-shield"></i>
+            -->
+            <i class="icon-cozy icon-cozy-2x icon-cloud" aria-hidden="true"></i>
           </div>
         </ng-container>
         <ng-container *ngIf="data.message.type === BrowserFido2MessageTypes.PickCredentialRequest">
           <div class="logo">
+            <!-- Cozy customization; replace icon
             <i class="bwi bwi-shield"></i><span><strong>bit</strong>warden</span>
+            -->
+            <i class="icon-cozy icon-cozy-2x icon-cloud" aria-hidden="true"></i
+            ><span>Cozy Cloud</span>
           </div>
         </ng-container>
       </div>

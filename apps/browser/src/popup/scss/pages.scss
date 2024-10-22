@@ -352,10 +352,11 @@ app-fido2-v1 {
             }
           }
 
+          // Cozy customization; update fido2 header style
           span {
-            font-size: 45px;
+            font-size: 24px;
             font-weight: 300;
-            margin-top: -3px;
+            margin-left: 5px;
             @include themify($themes) {
               color: themed("primaryColor");
             }
