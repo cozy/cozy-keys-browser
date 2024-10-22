@@ -833,8 +833,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     name: string,
     value: string,
     qualificationLabel: string,
+    metadataName: string,
   ) {
-    const cozyAutofillOptions = { id, value, qualificationLabel };
+    const cozyAutofillOptions = { id, value, qualificationLabel, metadataName };
     const actionMenuButtonElement = this.buildActionMenuButton(
       {
         type: "field",
@@ -1169,6 +1170,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
           paper.name,
           paper.value,
           paper.qualificationLabel,
+          paper.metadataName,
         );
         ulElement.appendChild(li);
       }
@@ -2089,6 +2091,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         id,
         isPaperModel,
         cozyAutofillOptions.qualificationLabel,
+        cozyAutofillOptions.metadataName,
       );
       ulElement.appendChild(editCurrentElement);
 
@@ -2135,11 +2138,11 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return actionMenuButtonElement;
   }
 
-  private editPapersMessage = (id: string, qualificationLabel: string) => {
+  private editPapersMessage = (id: string, qualificationLabel: string, metadataName: string) => {
     this.postMessageToParent({
       command: "redirectToCozy",
       to: "mespapiers",
-      hash: `paper/files/${qualificationLabel}/${id}`,
+      hash: `paper/files/${qualificationLabel}/${id}/edit/information?metadata=${metadataName}`,
     });
   };
 
@@ -2162,9 +2165,16 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return li;
   }
 
-  private createModifyCipherAction(id: string, isPaperModel: boolean, qualificationLabel?: string) {
+  private createModifyCipherAction(
+    id: string,
+    isPaperModel: boolean,
+    qualificationLabel?: string,
+    metadataName?: string,
+  ) {
     const li = this.createActionMenuItem(this.getTranslation("edit"), penIcon, () =>
-      isPaperModel ? this.editPapersMessage(id, qualificationLabel) : this.editContactMessage(id),
+      isPaperModel
+        ? this.editPapersMessage(id, qualificationLabel, metadataName)
+        : this.editContactMessage(id),
     );
 
     return li;
