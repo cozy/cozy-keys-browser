@@ -12,7 +12,11 @@ import {
 } from "@angular/core";
 /* end custo */
 import { ActivatedRoute, Router } from "@angular/router";
+/* Cozy custo
 import { BehaviorSubject, Subject, firstValueFrom, from } from "rxjs";
+*/
+import { BehaviorSubject, Subject, Subscription, firstValueFrom, from } from "rxjs";
+/* end custo */
 import { first, switchMap, takeUntil } from "rxjs/operators";
 
 import { VaultFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-filter.model";
@@ -22,7 +26,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { SyncService } from "@bitwarden/common/platform/sync";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { CipherType } from "@bitwarden/common/vault/enums";
+import { CipherRepromptType, CipherType } from "@bitwarden/common/vault/enums";
 import { TreeNode } from "@bitwarden/common/vault/models/domain/tree-node";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
@@ -33,14 +37,17 @@ import { BrowserApi } from "../../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
 import { VaultBrowserStateService } from "../../../services/vault-browser-state.service";
 import { VaultFilterService } from "../../../services/vault-filter.service";
+
 /** Start Cozy imports */
 /* eslint-disable */
-import { CozyClientService } from "../../../../popup/services/cozyClient.service";
-import { KonnectorsService } from "../../../../popup/services/konnectors.service";
+import { PasswordRepromptService } from "@bitwarden/vault";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
+import { AutofillService } from "../../../../autofill/services/abstractions/autofill.service";
+import { CozyClientService } from "../../../../popup/services/cozyClient.service";
+import { KonnectorsService } from "../../../../popup/services/konnectors.service";
 import { DialogService } from "../../../../../../../libs/components/src/dialog";
 /* eslint-enable */
 
@@ -102,6 +109,14 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   private _searchText$ = new BehaviorSubject<string>("");
   private isSearchable: boolean = false;
 
+  // Cozy customization; allow to autofill from action buttons in vault-filter. Logic taken from current-tab.
+  tab: chrome.tabs.Tab;
+  pageDetails: any[] = [];
+  private collectPageDetailsSubscription: Subscription;
+  private totpCode: string;
+  private totpTimeout: number;
+  // Cozy customization end
+
   get searchText() {
     return this._searchText$.value;
   }
@@ -121,6 +136,8 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     private platformUtilsService: PlatformUtilsService,
     private searchService: SearchService,
     private location: Location,
+    private autofillService: AutofillService,
+    private passwordRepromptService: PasswordRepromptService,
     private cozyClientService: CozyClientService,
     private konnectorService: KonnectorsService,
     private organizationService: OrganizationService,
@@ -232,6 +249,16 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
       // Remove "No Folder" from folder listing
       this.nestedFolders = this.nestedFolders.slice(0, this.nestedFolders.length - 1);
     }
+
+    // Cozy customization; allow to autofill from action buttons in vault-filter. Logic taken from current-tab.
+    this.tab = await BrowserApi.getTabFromCurrentWindow();
+    this.pageDetails = [];
+    this.collectPageDetailsSubscription?.unsubscribe();
+    this.collectPageDetailsSubscription = this.autofillService
+      .collectPageDetailsFromTab$(this.tab)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((pageDetails) => (this.pageDetails = pageDetails));
+    // Cozy customization end
 
     this.loaded = true;
   }
@@ -599,6 +626,58 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     const tab = await BrowserApi.getTabFromCurrentWindow();
     const ciphers = await this.cipherService.getAllDecryptedForUrl(tab?.url);
     this.ciphersForCurrentTab = ciphers;
+  }
+  // Cozy customization end
+
+  // Cozy customization; allow to autofill from action buttons in vault-filter. Logic taken from current-tab.
+  async fillCipher(cipher: CipherView, closePopupDelay?: number) {
+    if (
+      cipher.reprompt !== CipherRepromptType.None &&
+      !(await this.passwordRepromptService.showPasswordPrompt())
+    ) {
+      return;
+    }
+
+    this.totpCode = null;
+    if (this.totpTimeout != null) {
+      window.clearTimeout(this.totpTimeout);
+    }
+
+    if (this.pageDetails == null || this.pageDetails.length === 0) {
+      this.platformUtilsService.showToast("error", null, this.i18nService.t("autofillError"));
+      return;
+    }
+
+    try {
+      this.totpCode = await this.autofillService.doAutoFill({
+        tab: this.tab,
+        cipher: cipher,
+        pageDetails: this.pageDetails,
+        doc: window.document,
+        fillNewPassword: true,
+        allowTotpAutofill: true,
+      });
+      if (this.totpCode != null) {
+        this.platformUtilsService.copyToClipboard(this.totpCode, { window: window });
+      }
+      if (BrowserPopupUtils.inPopup(window)) {
+        if (!closePopupDelay) {
+          if (this.platformUtilsService.isFirefox() || this.platformUtilsService.isSafari()) {
+            BrowserApi.closePopup(window);
+          } else {
+            // Slight delay to fix bug in Chromium browsers where popup closes without copying totp to clipboard
+            setTimeout(() => BrowserApi.closePopup(window), 50);
+          }
+        } else {
+          setTimeout(() => BrowserApi.closePopup(window), closePopupDelay);
+        }
+      }
+    } catch {
+      this.ngZone.run(() => {
+        this.platformUtilsService.showToast("error", null, this.i18nService.t("autofillError"));
+        this.changeDetectorRef.detectChanges();
+      });
+    }
   }
   // Cozy customization end
 }
