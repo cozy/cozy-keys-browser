@@ -51,7 +51,7 @@ const buildFileQueryById = (_id: string) => {
   return {
     definition: () => Q(FILES_DOCTYPE).getById(_id),
     options: {
-      as: `${FILES_DOCTYPE}/byId`,
+      as: `${FILES_DOCTYPE}/byId/${_id}`,
       singleDocData: true,
     },
   };

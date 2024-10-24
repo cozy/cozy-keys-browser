@@ -1134,6 +1134,8 @@ export default class MainBackground {
         this.accountService,
         this.syncService,
         this.cozyClientService,
+        this.cipherService,
+        this.i18nService,
         lockService,
       );
       this.nativeMessagingBackground = new NativeMessagingBackground(

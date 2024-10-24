@@ -285,22 +285,10 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
         this.accountService.activeAccount$.pipe(map((a) => a?.id)),
       );
 
-      if (this.cipher.type === CipherType.Paper) {
-        await favoritePaperCipher(
-          this.cipherService,
-          this.i18nService,
-          this.accountService,
-          this.cipher,
-          this.cozyClientService,
-        );
-      } else if (this.cipher.type === CipherType.Contact) {
-        await favoriteContactCipher(
-          this.cipherService,
-          this.i18nService,
-          this.accountService,
-          this.cipher,
-          this.cozyClientService,
-        );
+      if (this.cipher.type === CipherType.Paper || this.cipher.type === CipherType.Contact) {
+        await BrowserApi.sendMessageWithResponse("favoriteCozyCipher", {
+          favoriteOptions: { cipher: this.cipher },
+        });
       } else {
         this.cipher.favorite = !this.cipher.favorite;
 

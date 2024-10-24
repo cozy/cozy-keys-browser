@@ -61,6 +61,7 @@ export class RealTimeNotifications {
     const cipherData = await convertContactToCipherData(
       this.cipherService,
       this.i18nService,
+      this.accountService,
       data,
       null,
     );
@@ -75,6 +76,7 @@ export class RealTimeNotifications {
     const cipherData = await convertContactToCipherData(
       this.cipherService,
       this.i18nService,
+      this.accountService,
       data,
       null,
     );
