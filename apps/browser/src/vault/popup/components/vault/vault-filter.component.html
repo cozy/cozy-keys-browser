@@ -58,6 +58,9 @@
       <h2 class="box-header">
         {{ "suggestions" | i18n }}
       </h2>
+      <!-- Cozy customization -->
+      <app-autofill-tooltip></app-autofill-tooltip>
+      <!-- Cozy customization end -->
       <div class="box-content">
         <app-cipher-row
           *ngFor="let cipherForCurrentTab of ciphersForCurrentTab"
