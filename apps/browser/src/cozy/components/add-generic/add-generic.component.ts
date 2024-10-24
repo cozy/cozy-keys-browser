@@ -1,9 +1,9 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
+import { Location } from "@angular/common";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
-import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import { CozyClientService } from "../../../popup/services/cozyClient.service";
 
@@ -12,7 +12,6 @@ import { CozyClientService } from "../../../popup/services/cozyClient.service";
   templateUrl: "add-generic.component.html",
 })
 export class AddGenericComponent implements OnInit, OnDestroy {
-  @Output() onCancelled = new EventEmitter<CipherView>();
   title: string;
   cipherType = CipherType;
 
@@ -26,6 +25,7 @@ export class AddGenericComponent implements OnInit, OnDestroy {
     private cozyClientService: CozyClientService,
     private route: ActivatedRoute,
     private router: Router,
+    private location: Location,
   ) {}
 
   ngOnInit() {
@@ -54,7 +54,7 @@ export class AddGenericComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    this.onCancelled.emit();
+    this.location.back();
   }
 
   async selectType(type: CipherType) {
