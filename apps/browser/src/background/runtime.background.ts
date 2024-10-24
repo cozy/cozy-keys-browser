@@ -32,6 +32,10 @@ import MainBackground from "./main.background";
 /* eslint-disable */
 import { CozyClientService } from "src/popup/services/cozyClient.service";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { favoriteContactCipher } from "../../../../libs/cozy/contactCipher";
+import { favoritePaperCipher } from "../../../../libs/cozy/paperCipher";
 /* eslint-enable */
 // End Cozy imports
 
@@ -57,6 +61,8 @@ export default class RuntimeBackground {
     private accountService: AccountService,
     private syncService: SyncService,
     private cozyClientService: CozyClientService,
+    private cipherService: CipherService,
+    private i18nService: I18nService,
     private readonly lockService: LockService,
   ) {
     // onInstalled listener must be wired up before anything else, so we do it in the ctor
@@ -77,6 +83,7 @@ export default class RuntimeBackground {
       sendResponse: (response: any) => void,
     ) => {
       const messagesWithResponse = [
+        "favoriteCozyCipher",
         "biometricUnlock",
         "biometricUnlockAvailable",
         "getUseTreeWalkerApiForPageDetailsCollectionFeatureFlag",
@@ -119,6 +126,29 @@ export default class RuntimeBackground {
   // Messages that need the chrome sender and send back a response need to be registered in this method.
   async processMessageWithSender(msg: any, sender: chrome.runtime.MessageSender) {
     switch (msg.command) {
+      // Cozy customization; we need to do the favorite action on the background because Firefox
+      // is very strict on memory management with the Cozy Client store in the popup. We get quickly the error below.
+      // "cozy-client warn Could not get query from state. queryId: io.cozy.contacts/667277395369678d85fe4a93f8984909, error: can't access dead object"
+      case "favoriteCozyCipher":
+        if (msg.favoriteOptions.cipher.type === CipherType.Contact) {
+          return await favoriteContactCipher(
+            this.cipherService,
+            this.i18nService,
+            this.accountService,
+            msg.favoriteOptions.cipher,
+            this.cozyClientService,
+          );
+        } else if (msg.favoriteOptions.cipher.type === CipherType.Paper) {
+          return await favoritePaperCipher(
+            this.cipherService,
+            this.i18nService,
+            this.accountService,
+            msg.favoriteOptions.cipher,
+            this.cozyClientService,
+          );
+        }
+        break;
+      // Cozy customization end
       case "triggerAutofillScriptInjection":
         await this.autofillService.injectAutofillScripts(sender.tab, sender.frameId);
         break;
