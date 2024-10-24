@@ -99,6 +99,7 @@ import { ViewLabelComponent } from "../vault/popup/components/vault/view-label.c
 import { ContactAvatarComponent } from "../vault/popup/components/vault/contact-avatar.component";
 import { ProfilesMigrationComponent } from "../cozy/components/profiles-migration/profiles-migration.component";
 import { EncryptedInfoComponent } from "../cozy/components/encrypted-info/encrypted-info.component";
+import { AutofillTooltipComponent } from "../cozy/components/autofill-tooltip/autofill-tooltip.component";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -208,6 +209,7 @@ import "../platform/popup/locales";
     ContactAvatarComponent,
     ProfilesMigrationComponent,
     EncryptedInfoComponent,
+    AutofillTooltipComponent,
     /* end Cozy components */
     Fido2V1Component,
     AutofillV1Component,

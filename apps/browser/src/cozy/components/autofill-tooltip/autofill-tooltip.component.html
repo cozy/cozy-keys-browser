@@ -1,0 +1,13 @@
+<div class="autofillTooltip" *ngIf="!tooltipDismissed">
+  <div class="alert info">
+    <div class="alert-message">
+      <div class="alert-title">{{ "howToAutofill" | i18n }}</div>
+      <div>{{ "autofillSelectInfoWithoutCommand" | i18n }}</div>
+    </div>
+    <div class="alert-action">
+      <button type="button" class="btn link" (click)="dismiss()">
+        {{ "understood" | i18n }}
+      </button>
+    </div>
+  </div>
+</div>

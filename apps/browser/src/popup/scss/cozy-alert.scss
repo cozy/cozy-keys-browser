@@ -101,7 +101,8 @@
 }
 
 .profileMigration,
-.encryptedInfo {
+.encryptedInfo,
+.autofillTooltip {
   @include themify($themes) {
     background-color: themed("backgroundColorAlt");
   }
