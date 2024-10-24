@@ -46,7 +46,6 @@ import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.se
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { AutofillService } from "../../../../autofill/services/abstractions/autofill.service";
-import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { KonnectorsService } from "../../../../popup/services/konnectors.service";
 import { DialogService } from "../../../../../../../libs/components/src/dialog";
 /* eslint-enable */
@@ -138,7 +137,6 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     private location: Location,
     private autofillService: AutofillService,
     private passwordRepromptService: PasswordRepromptService,
-    private cozyClientService: CozyClientService,
     private konnectorService: KonnectorsService,
     private organizationService: OrganizationService,
     private cryptoService: CryptoService,
