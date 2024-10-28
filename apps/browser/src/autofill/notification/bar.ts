@@ -48,13 +48,14 @@ function initNotificationBar(message: NotificationBarWindowMessage) {
     close: chrome.i18n.getMessage("close"),
     never: chrome.i18n.getMessage("never"),
     folder: chrome.i18n.getMessage("folder"),
-    // Cozy customization; paper saved notification
+    // Cozy customization; Cozy notifications
     notificationPaperSavedDesc: chrome.i18n.getMessage(
       "notificationPaperSavedDesc",
       notificationBarIframeInitData.paperSavedQualificationLabel,
     ),
     notificationPaperSavedUnderstood: chrome.i18n.getMessage("notificationPaperSavedUnderstood"),
     notificationPaperSavedSee: chrome.i18n.getMessage("notificationPaperSavedSee"),
+    notificationTotpCopied: chrome.i18n.getMessage("TOTPCopiedInClipboard"),
     // Cozy customization end;
     notificationAddSave: chrome.i18n.getMessage("notificationAddSave"),
     notificationAddDesc: chrome.i18n.getMessage("notificationAddDesc"),
@@ -72,7 +73,7 @@ function initNotificationBar(message: NotificationBarWindowMessage) {
 
   setupLogoLink(i18n);
 
-  // Cozy customization; paper saved notification
+  // Cozy customization; Cozy notifications
   // i18n for "Paper Saved" template
   const paperSavedTemplate = document.getElementById("template-paper-saved") as HTMLTemplateElement;
 
@@ -85,6 +86,12 @@ function initNotificationBar(message: NotificationBarWindowMessage) {
 
   paperSavedTemplate.content.getElementById("paper-saved-text").textContent =
     i18n.notificationPaperSavedDesc;
+
+  // i18n for "TOTP copied" template
+  const totpCopiedTemplate = document.getElementById("template-totp-copied") as HTMLTemplateElement;
+
+  totpCopiedTemplate.content.getElementById("totp-copied-text").textContent =
+    i18n.notificationTotpCopied;
   // Cozy customization end;
 
   // i18n for "Add" template
@@ -148,9 +155,11 @@ function initNotificationBar(message: NotificationBarWindowMessage) {
 
   const notificationType = initData.type;
 
-  // Cozy customization; paper saved notification
+  // Cozy customization; Cozy notifications
   if (initData.type === "paper-saved") {
     handleTypePaperSaved();
+  } else if (initData.type === "totp-copied") {
+    handleTypeTotpCopied();
   }
   // Cozy customization end;
 
@@ -175,7 +184,7 @@ function initNotificationBar(message: NotificationBarWindowMessage) {
   adjustHeight();
 }
 
-// Cozy customization; paper saved notification
+// Cozy customization; Cozy notifications
 function handleTypePaperSaved() {
   setContent(document.getElementById("template-paper-saved") as HTMLTemplateElement);
 
@@ -194,6 +203,10 @@ function handleTypePaperSaved() {
       hash: `paper/files/${notificationBarIframeInitData.paperSavedQualification}/${notificationBarIframeInitData.paperSavedId}`,
     });
   });
+}
+
+function handleTypeTotpCopied() {
+  setContent(document.getElementById("template-totp-copied") as HTMLTemplateElement);
 }
 // Cozy customization end;
 

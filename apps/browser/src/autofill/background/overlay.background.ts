@@ -1077,6 +1077,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
 
     if (totpCode) {
       this.platformUtilsService.copyToClipboard(totpCode);
+      this.notificationBackground.totpCopied(sender.tab);
     }
 
     this.updateLastUsedInlineMenuCipher(inlineMenuCipherId, cipher);

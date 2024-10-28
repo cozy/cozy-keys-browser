@@ -44,6 +44,7 @@ import {
   LockedVaultPendingNotificationsData,
   NotificationBackgroundExtensionMessage,
   NotificationBackgroundExtensionMessageHandlers,
+  AddTotpCopiedQueueMessage,
 } from "./abstractions/notification.background";
 import { NotificationTypeData } from "./abstractions/overlay-notifications.background";
 import { OverlayBackgroundExtensionMessage } from "./abstractions/overlay.background";
@@ -210,7 +211,7 @@ export default class NotificationBackground {
     };
 
     switch (notificationType) {
-      // Cozy customization; paper saved notification
+      // Cozy customization; Cozy notifications
       case NotificationQueueMessageType.PaperSaved:
         typeData.paperSavedId = notificationQueueMessage.paperSavedId;
         typeData.paperSavedQualification = notificationQueueMessage.paperSavedQualification;
@@ -396,7 +397,7 @@ export default class NotificationBackground {
     });
   }
 
-  // Cozy customization; paper saved notification
+  // Cozy customization; Cozy notifications
   /**
    * Sets up a notification to inform the user a paper has been saved.
    *
@@ -434,12 +435,38 @@ export default class NotificationBackground {
   }
 
   /**
-   * Adds a login message to the notification queue, prompting the user to save
-   * the login if it does not already exist in the vault. If the cipher exists
-   * but the password has changed, the user will be prompted to update the password.
+   * Sets up a notification to inform the user a TOTP copied has been copied to the clipboard.
    *
-   * @param message - The message to add to the queue
+   * @param tab - The tab that the message was sent from
    */
+  async totpCopied(tab: chrome.tabs.Tab) {
+    const currentAuthStatus = await this.authService.getAuthStatus();
+
+    if (currentAuthStatus !== AuthenticationStatus.Unlocked || this.notificationQueue.length) {
+      return;
+    }
+
+    const loginDomain = Utils.getDomain(tab.url);
+
+    if (loginDomain) {
+      await this.pushTotpCopiedToQueue(loginDomain, tab);
+    }
+  }
+
+  private async pushTotpCopiedToQueue(loginDomain: string, tab: chrome.tabs.Tab) {
+    this.removeTabFromNotificationQueue(tab);
+    const launchTimestamp = new Date().getTime();
+    const message: AddTotpCopiedQueueMessage = {
+      type: NotificationQueueMessageType.TotpCopied,
+      domain: loginDomain,
+      tab: tab,
+      launchTimestamp,
+      expires: new Date(new Date().getTime() + 0.5 * 60000), // 30 seconds
+      wasVaultLocked: false,
+    };
+    await this.sendNotificationQueueMessage(tab, message);
+  }
+
   private async redirectToCozy(
     message: NotificationBackgroundExtensionMessage,
     sender: chrome.runtime.MessageSender,

@@ -14,12 +14,16 @@ interface NotificationQueueMessage {
   wasVaultLocked: boolean;
 }
 
-// Cozy customization; paper saved notification
+// Cozy customization; Cozy notifications
 interface AddPaperSavedQueueMessage extends NotificationQueueMessage {
   type: "paper-saved";
   paperSavedId: string;
   paperSavedQualification: string;
   paperSavedQualificationLabel: string;
+}
+
+interface AddTotpCopiedQueueMessage extends NotificationQueueMessage {
+  type: "totp-copied";
 }
 // Cozy customization end;
 
@@ -46,6 +50,7 @@ interface AddRequestFilelessImportQueueMessage extends NotificationQueueMessage 
 }
 
 type NotificationQueueMessageItem =
+  | AddTotpCopiedQueueMessage
   | AddPaperSavedQueueMessage
   | AddLoginQueueMessage
   | AddChangePasswordQueueMessage
@@ -131,6 +136,7 @@ type NotificationBackgroundExtensionMessageHandlers = {
 
 export {
   AddPaperSavedQueueMessage,
+  AddTotpCopiedQueueMessage,
   AddChangePasswordQueueMessage,
   AddLoginQueueMessage,
   AddUnlockVaultQueueMessage,
