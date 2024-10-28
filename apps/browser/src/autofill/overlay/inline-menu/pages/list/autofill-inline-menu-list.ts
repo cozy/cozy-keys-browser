@@ -29,6 +29,7 @@ import {
   fillFieldIcon,
   fillMultipleFieldsIcon,
   ellipsisIcon,
+  cozyContactIcon,
 } from "../../../../utils/svg-icons";
 import {
   AutofillInlineMenuListWindowMessageHandlers,
@@ -672,6 +673,72 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     this.inlineMenuListContainer.appendChild(addNewLoginButtonContainer);
     this.inlineMenuListContainer.classList.add("inline-menu-list-container--with-new-item-button");
     this.newItemButtonElement.addEventListener(EVENTS.KEYUP, this.handleNewItemButtonKeyUpEvent);
+  }
+
+  private buildViewMoreContactButton() {
+    const containerElement = globalThis.document.createElement("div");
+    containerElement.classList.add("cipher-container");
+
+    const viewMoreContactButtonElement = globalThis.document.createElement("button");
+    viewMoreContactButtonElement.tabIndex = -1;
+    viewMoreContactButtonElement.classList.add(
+      "inline-menu-list-button",
+      "inline-menu-list-action",
+    );
+    viewMoreContactButtonElement.classList.add(
+      "inline-menu-list-button",
+      "inline-menu-list-button--load-more",
+    );
+    viewMoreContactButtonElement.textContent = this.getTranslation("viewMoreContact");
+    viewMoreContactButtonElement.setAttribute("aria-label", this.getNewItemAriaLabel());
+    viewMoreContactButtonElement.addEventListener(EVENTS.CLICK, this.createViewMoreInfo.bind(this));
+
+    const inlineMenuListActionsItem = globalThis.document.createElement("li");
+    inlineMenuListActionsItem.setAttribute("role", "listitem");
+    inlineMenuListActionsItem.classList.add("inline-menu-list-actions-item");
+
+    containerElement.append(viewMoreContactButtonElement);
+    inlineMenuListActionsItem.appendChild(containerElement);
+
+    return inlineMenuListActionsItem;
+  }
+
+  private createViewMoreInfo() {
+    this.inlineMenuListContainer.innerHTML = "";
+    this.inlineMenuListContainer.classList.remove(
+      "inline-menu-list-container--with-new-item-button",
+    );
+
+    const header = this.buildNewListHeader(
+      this.getTranslation("viewMoreContact"),
+      this.backToCipherList,
+    );
+
+    const content = globalThis.document.createElement("div");
+    content.classList.add("view-more-contacts");
+
+    const paragraph01 = globalThis.document.createElement("p");
+    paragraph01.textContent = this.getTranslation("viewMoreContactInfo1");
+    const paragraph02 = globalThis.document.createElement("p");
+    paragraph02.textContent = this.getTranslation("viewMoreContactInfo2");
+
+    const spanContainer = globalThis.document.createElement("span");
+    spanContainer.classList.add("view-more-contacts-redirect");
+    const span = globalThis.document.createElement("span");
+    span.textContent = this.getTranslation("viewMoreContactRedirect");
+    spanContainer.addEventListener(EVENTS.CLICK, () => {
+      this.postMessageToParent({
+        command: "redirectToCozy",
+        to: "contacts",
+      });
+    });
+
+    spanContainer.appendChild(buildSvgDomElement(cozyContactIcon));
+    spanContainer.appendChild(span);
+    content.append(paragraph01, paragraph02, spanContainer);
+
+    this.inlineMenuListContainer.appendChild(header);
+    this.inlineMenuListContainer.appendChild(content);
   }
 
   private buildContactSearch() {
@@ -1383,6 +1450,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     if (this.currentCipherIndex >= ciphers.length) {
       this.ciphersList.removeEventListener(EVENTS.SCROLL, this.handleCiphersListScrollEvent);
+      if (this.isFilledByContactCipher()) {
+        this.ciphersList.appendChild(this.buildViewMoreContactButton());
+      }
     }
   }
 

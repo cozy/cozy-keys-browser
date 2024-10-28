@@ -433,6 +433,47 @@ body {
       border-top-color: themed("borderColor");
     }
   }
+
+  &--load-more {
+    margin-left: 1rem;
+    text-transform: uppercase;
+  }
+}
+
+.view-more-contacts {
+  margin: 2.4rem;
+  font-size: 1.6rem;
+  line-height: 21px;
+  font-family: $font-family-lato;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  height: 20rem;
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .view-more-contacts-redirect {
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 1.5rem;
+    width: fit-content;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    &:hover {
+      background-color: #f0f0f0;
+    }
+
+    @include themify($themes) {
+      border-color: themed("borderColor");
+    }
+  }
 }
 
 .unlock-button {

@@ -4756,6 +4756,18 @@
   "enterprisePolicyRequirementsApplied": {
     "message": "Enterprise policy requirements have been applied to this setting"
   },
+  "viewMoreContact": {
+    "message": "View more contacts"
+  },
+  "viewMoreContactInfo1": {
+    "message": "Only your favorite contacts are displayed here."
+  },
+  "viewMoreContactInfo2": {
+    "message": "Go to your Cozy Contacts App to manage the list of favorites and use them directly here when filling in online forms."
+  },
+  "viewMoreContactRedirect": {
+    "message": "Cozy Contacts"
+  },
   "contactSearch": {
     "message": "Search\u2026"
   },

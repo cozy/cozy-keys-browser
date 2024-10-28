@@ -4752,6 +4752,18 @@
   "systemDefault": {
     "message": "Par défaut"
   },
+  "viewMoreContact": {
+    "message": "Voir plus de contacts"
+  },
+  "viewMoreContactInfo1": {
+    "message": "Seuls vos contacts favoris sont affichés ici."
+  },
+  "viewMoreContactInfo2": {
+    "message": "Rendez-vous sur votre App Cozy Contacts pour gérer la liste des favoris et les utiliser directement ici lors du remplissage de formulaires en ligne."
+  },
+  "viewMoreContactRedirect": {
+    "message": "Cozy Contacts"
+  },
   "contactSearch": {
     "message": "Recherche\u2026"
   },
