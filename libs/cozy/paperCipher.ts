@@ -18,7 +18,7 @@ import { CozyClientService } from "../../apps/browser/src/popup/services/cozyCli
 import { FILES_DOCTYPE } from "./constants";
 import { convertNoteToCipherData, isNote, fetchNoteIllustrationUrl } from "./note.helper";
 import { convertPaperToCipherData } from "./paper.helper";
-import { fetchPapers, fetchPaper } from "./queries";
+import { fetchPaper } from "./queries";
 
 export const convertPapersAsCiphers = async (
   cipherService: CipherService,
@@ -76,18 +76,17 @@ export const convertPapersAsCiphers = async (
   return papersCiphers;
 };
 
-export const fetchPapersAndConvertAsCiphers = async (
+export const convertAllPapersAsCiphers = async (
   cipherService: CipherService,
   cryptoService: CryptoService,
   cozyClientService: CozyClientService,
   i18nService: I18nService,
   accountService: AccountService,
+  papers: any,
 ): Promise<CipherData[]> => {
   const client = await cozyClientService.getClientInstance();
 
   try {
-    const papers = await fetchPapers(client);
-
     const papersCiphers = await convertPapersAsCiphers(
       cipherService,
       cryptoService,
