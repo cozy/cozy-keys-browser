@@ -1078,9 +1078,6 @@
   "notificationChangeDesc": {
     "message": "Mettre à jour le mot de passe dans mon Cozy ?"
   },
-  "notificationTOTP": {
-    "message": "TOTP copié dans votre presse papier !"
-  },
   "notificationChangeSave": {
     "message": "Mettre à jour"
   },

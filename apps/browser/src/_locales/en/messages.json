@@ -1078,9 +1078,6 @@
   "notificationChangeDesc": {
     "message": "Update the password in my Cozy?"
   },
-  "notificationTOTP": {
-    "message": "TOTP copied in your clipboard"
-  },
   "notificationChangeSave": {
     "message": "Update"
   },
@@ -3305,7 +3302,7 @@
     }
   },
   "TOTPCopiedInClipboard": {
-    "message": "TOTP copied in your clipboard !"
+    "message": "TOTP copied in your clipboard!"
   },
   "sharingNotAcceptedYet": {
     "message": "File inaccessible - sharing to be finalized."
