@@ -181,7 +181,7 @@ export default class NotificationBackground {
         this.notificationQueue.splice(i, 1);
       }
     }
-    setTimeout(() => this.cleanupNotificationQueue(), 30000); // check every 30 seconds
+    setTimeout(() => this.cleanupNotificationQueue(), 10000); // check every 10 seconds
   }
 
   private async doNotificationQueueCheck(tab: chrome.tabs.Tab): Promise<void> {
@@ -431,6 +431,7 @@ export default class NotificationBackground {
       paperSavedQualification: options.paperSavedQualification,
       paperSavedQualificationLabel: options.paperSavedQualificationLabel,
     };
+    this.notificationQueue.push(message);
     await this.sendNotificationQueueMessage(tab, message);
   }
 
@@ -461,9 +462,10 @@ export default class NotificationBackground {
       domain: loginDomain,
       tab: tab,
       launchTimestamp,
-      expires: new Date(new Date().getTime() + 0.5 * 60000), // 30 seconds
+      expires: new Date(new Date().getTime() + 10000), // 10 seconds
       wasVaultLocked: false,
     };
+    this.notificationQueue.push(message);
     await this.sendNotificationQueueMessage(tab, message);
   }
 
