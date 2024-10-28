@@ -50,11 +50,10 @@ import { CoreSyncService } from "./core-sync.service";
 /* start Cozy imports */
 /* eslint-disable */
 import { CozyClientService } from "../../../../../apps/browser/src/popup/services/cozyClient.service";
-import { fetchContactsAndConvertAsCiphers } from "../../../../cozy/contactCipher";
-import { fetchPapersAndConvertAsCiphers } from "../../../../cozy/paperCipher";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { SyncCipherNotification } from "@bitwarden/common/models/response/notification.response";
 import { ProfileProviderOrganizationResponse } from "@bitwarden/common/admin-console/models/response/profile-provider-organization.response";
+import { getCozyCiphers } from "../../../../cozy/sync";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -152,40 +151,13 @@ export class DefaultSyncService extends CoreSyncService {
       await this.syncCollections(response.collections, response.profile.id);
 
       // Cozy customization
-      await this.cozyClientService.getClientInstance();
-
-      const fetchPromises = [
-        fetchPapersAndConvertAsCiphers(
-          this.cipherService,
-          this.cryptoService,
-          this.cozyClientService,
-          this.i18nService,
-          this.accountService,
-        ),
-        fetchContactsAndConvertAsCiphers(
-          this.cipherService,
-          this.cryptoService,
-          this.cozyClientService,
-          this.i18nService,
-          this.accountService,
-        ),
-      ];
-
-      const [papersPromise, contactsPromise] = await Promise.allSettled(fetchPromises);
-
-      let cozyCiphers: CipherData[] = [];
-
-      if (papersPromise.status === "fulfilled") {
-        // eslint-disable-next-line no-console
-        console.log(`${papersPromise.value.length} papers ciphers will be added`);
-        cozyCiphers = cozyCiphers.concat(papersPromise.value);
-      }
-
-      if (contactsPromise.status === "fulfilled") {
-        // eslint-disable-next-line no-console
-        console.log(`${contactsPromise.value.length} contacts ciphers will be added`);
-        cozyCiphers = cozyCiphers.concat(contactsPromise.value);
-      }
+      const cozyCiphers = await getCozyCiphers(
+        this.cipherService,
+        this.cryptoService,
+        this.cozyClientService,
+        this.i18nService,
+        this.accountService,
+      );
 
       await this.syncCiphers(response.ciphers, response.profile.id, cozyCiphers);
       // Cozy customization end

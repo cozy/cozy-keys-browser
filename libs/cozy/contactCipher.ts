@@ -15,7 +15,7 @@ import { DialogService, ToastService } from "@bitwarden/components";
 import { CozyClientService } from "../../apps/browser/src/popup/services/cozyClient.service";
 
 import { convertContactToCipherData } from "./contact.helper";
-import { fetchContacts, fetchContact } from "./queries";
+import { fetchContact } from "./queries";
 
 const convertContactsAsCiphers = async (
   cipherService: CipherService,
@@ -51,18 +51,14 @@ const convertContactsAsCiphers = async (
   return contactsCiphers;
 };
 
-export const fetchContactsAndConvertAsCiphers = async (
+export const convertAllContactsAsCiphers = async (
   cipherService: CipherService,
   cryptoService: CryptoService,
-  cozyClientService: CozyClientService,
   i18nService: I18nService,
   accountService: AccountService,
+  contacts: IOCozyContact[],
 ): Promise<CipherData[]> => {
-  const client = await cozyClientService.getClientInstance();
-
   try {
-    const contacts = await fetchContacts(client);
-
     const contactsCiphers = await convertContactsAsCiphers(
       cipherService,
       cryptoService,

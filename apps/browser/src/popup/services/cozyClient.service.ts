@@ -162,6 +162,15 @@ export class CozyClientService {
             },
           },
         },
+        contacts: {
+          doctype: CONTACTS_DOCTYPE,
+          relationships: {
+            related: {
+              type: HasMany,
+              doctype: CONTACTS_DOCTYPE,
+            },
+          },
+        },
       },
       appMetadata: {
         slug: "passwords",

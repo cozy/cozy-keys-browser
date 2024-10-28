@@ -27,11 +27,9 @@ const buildFilesQueryWithQualificationLabel = () => {
   return {
     definition: () =>
       Q(FILES_DOCTYPE)
-        .where({
+        .partialIndex({
           type: "file",
           trashed: false,
-        })
-        .partialIndex({
           "metadata.qualification.label": {
             $exists: true,
           },
@@ -39,8 +37,7 @@ const buildFilesQueryWithQualificationLabel = () => {
         })
         .select(select)
         .limitBy(1000)
-        .include(["contacts"])
-        .indexFields(["type", "trashed"]),
+        .include(["contacts"]),
     options: {
       as: `${FILES_DOCTYPE}/metadata_qualification_label`,
     },
@@ -62,6 +59,7 @@ export const fetchPapers = async (client: CozyClient) => {
 
   const data = await client.queryAll(filesQueryByLabels.definition(), filesQueryByLabels.options);
 
+  // Necessary because https://github.com/cozy/cozy-client/issues/493
   const hydratedData = client.hydrateDocuments(FILES_DOCTYPE, data);
 
   return hydratedData;
@@ -88,14 +86,28 @@ export const buildContactsQuery = () => ({
       },
     })
     .partialIndex({
-      $or: [
+      $and: [
         {
-          trashed: {
-            $exists: false,
-          },
+          $or: [
+            {
+              me: true,
+            },
+            {
+              "cozyMetadata.favorite": true,
+            },
+          ],
         },
         {
-          trashed: false,
+          $or: [
+            {
+              trashed: {
+                $exists: false,
+              },
+            },
+            {
+              trashed: false,
+            },
+          ],
         },
       ],
       "indexes.byFamilyNameGivenNameEmailCozyUrl": {
@@ -103,7 +115,7 @@ export const buildContactsQuery = () => ({
       },
     })
     .indexFields(["indexes.byFamilyNameGivenNameEmailCozyUrl"])
-    .sortBy([{ "indexes.byFamilyNameGivenNameEmailCozyUrl": "asc" }])
+    .include(["related"])
     .limitBy(1000),
   options: {
     as: `${CONTACTS_DOCTYPE}/indexedByFamilyNameGivenNameEmailCozyUrl`,
@@ -118,11 +130,40 @@ export const fetchContacts = async (client: CozyClient): Promise<IOCozyContact[]
     contactsQuery.options,
   );
 
-  return data;
+  // Necessary because https://github.com/cozy/cozy-client/issues/493
+  const hydratedData = client.hydrateDocuments(CONTACTS_DOCTYPE, data);
+
+  return hydratedData;
 };
 
 export const fetchContact = async (client: CozyClient, _id: string): Promise<IOCozyContact> => {
   const { data }: { data: IOCozyContact } = await client.query(Q(CONTACTS_DOCTYPE).getById(_id));
 
   return data;
+};
+
+// Helpers
+
+export const fetchContactsAndPapers = async (
+  client: CozyClient,
+): Promise<{ contacts: IOCozyContact[]; papers: any }> => {
+  const fetchPromises = [fetchContacts(client), fetchPapers(client)];
+
+  const [contactsPromise, papersPromise] = await Promise.allSettled(fetchPromises);
+
+  let contacts: IOCozyContact[] = [];
+  let papers: any[] = [];
+
+  if (contactsPromise.status === "fulfilled") {
+    contacts = contactsPromise.value;
+  }
+
+  if (papersPromise.status === "fulfilled") {
+    papers = papersPromise.value;
+  }
+
+  return {
+    contacts,
+    papers,
+  };
 };
