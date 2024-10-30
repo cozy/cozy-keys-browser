@@ -1150,10 +1150,10 @@
     "message": "Ce mot de passe sera utilisé pour exporter et importer ce fichier"
   },
   "accountRestrictedOptionDescription": {
-    "message": "Utilisez la clé de chiffrement de votre compte, dérivée du nom d'utilisateur et du mot de passe principal de votre compte, pour chiffrer l'export et restreindre l'import au seul compte Bitwarden actuel."
+    "message": "Utilisez la clé de chiffrement de votre compte, dérivée du nom d'utilisateur et du mot de passe principal de votre compte, pour chiffrer l'export et restreindre l'import au seul compte Cozy actuel."
   },
   "passwordProtectedOptionDescription": {
-    "message": "Définissez un mot de passe de fichier pour chiffrer l'exportation et l'importer dans n'importe quel compte Bitwarden en utilisant le mot de passe pour le déchiffrage."
+    "message": "Définissez un mot de passe de fichier pour chiffrer l'exportation et l'importer dans n'importe quelle extension compatible en utilisant le mot de passe pour le déchiffrage."
   },
   "exportTypeHeading": {
     "message": "Type d'exportation"
