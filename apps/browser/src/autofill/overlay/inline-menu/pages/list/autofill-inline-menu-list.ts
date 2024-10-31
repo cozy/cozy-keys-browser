@@ -684,9 +684,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     viewMoreContactButtonElement.classList.add(
       "inline-menu-list-button",
       "inline-menu-list-action",
-    );
-    viewMoreContactButtonElement.classList.add(
-      "inline-menu-list-button",
       "inline-menu-list-button--load-more",
     );
     viewMoreContactButtonElement.textContent = this.getTranslation("viewMoreContact");
