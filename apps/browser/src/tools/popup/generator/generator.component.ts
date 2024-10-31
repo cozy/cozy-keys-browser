@@ -92,6 +92,9 @@ export class GeneratorComponent extends BaseGeneratorComponent implements OnInit
     // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.cipherService.setAddEditCipherInfo(this.addEditCipherInfo);
+    // Cozy customization; copy generated password to clipboard directly
+    this.copy();
+    // Cozy customization end
     this.close();
   }
 
