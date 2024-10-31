@@ -30,7 +30,8 @@ export class EmailForwarderOptions {
 /* eslint-disable */
 import { CozyClientService } from "../../../../../../apps/browser/src/popup/services/cozyClient.service";
 /* eslint-enable */
-/* END */
+/* end Cozy imports */
+
 @Directive()
 export class GeneratorComponent implements OnInit, OnDestroy {
   @Input() comingFromAddEdit = false;

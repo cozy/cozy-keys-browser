@@ -2,10 +2,10 @@ import { Location } from "@angular/common";
 /* Cozy custo
 import { Component, NgZone, OnInit } from "@angular/core";
 */
-import { Component, NgZone, OnInit, OnDestroy, ElementRef, ViewChild } from "@angular/core";
+import { Component, NgZone, OnInit, ElementRef, ViewChild } from "@angular/core";
 /* end custo */
 import { ActivatedRoute } from "@angular/router";
-import { Subject, firstValueFrom } from "rxjs";
+import { firstValueFrom } from "rxjs";
 
 import { GeneratorComponent as BaseGeneratorComponent } from "@bitwarden/angular/tools/generator/components/generator.component";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
@@ -24,7 +24,6 @@ import {
 /* Cozy imports */
 /* eslint-disable */
 import { CozyClientService } from "../../../popup/services/cozyClient.service";
-import { first } from "rxjs/operators";
 /* eslint-enable */
 /* END */
 
@@ -32,10 +31,9 @@ import { first } from "rxjs/operators";
   selector: "app-generator",
   templateUrl: "generator.component.html",
 })
-export class GeneratorComponent extends BaseGeneratorComponent implements OnInit, OnDestroy {
+export class GeneratorComponent extends BaseGeneratorComponent implements OnInit {
   private addEditCipherInfo: AddEditCipherInfo;
   private cipherState: CipherView;
-  protected destroy$ = new Subject<void>();
 
   @ViewChild("emailInput") emailInputElement: ElementRef;
   private cipherService: CipherService;
@@ -83,11 +81,6 @@ export class GeneratorComponent extends BaseGeneratorComponent implements OnInit
     await super.ngOnInit();
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   select() {
     super.select();
     if (this.type === "password") {
@@ -99,6 +92,7 @@ export class GeneratorComponent extends BaseGeneratorComponent implements OnInit
     // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.cipherService.setAddEditCipherInfo(this.addEditCipherInfo);
+    this.close();
   }
 
   close() {
