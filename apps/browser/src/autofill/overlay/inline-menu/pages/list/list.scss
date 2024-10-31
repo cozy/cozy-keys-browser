@@ -437,6 +437,7 @@ body {
   &--load-more {
     margin-left: 1rem;
     text-transform: uppercase;
+    font-size: 1.4rem;
   }
 }
 
@@ -448,7 +449,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-  height: 20rem;
+  height: 22rem;
 
   p {
     margin: 0;
