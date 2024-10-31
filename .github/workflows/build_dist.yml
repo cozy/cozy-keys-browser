@@ -44,23 +44,9 @@ jobs:
         cd apps/browser
         npm run dist:sources
 
-    - name: Upload Chrome artifact to GitHub
-      uses: actions/upload-artifact@v3
+    - name: Upload Cozy Pass packages to GitHub
+      uses: actions/upload-artifact@v4
       with:
-        name: Chrome
+        name: Cozy Pass Packages
         path: |
-          apps/browser/dist/dist-chrome-mv3.zip
-
-    - name: Upload Firefox artifact to GitHub
-      uses: actions/upload-artifact@v3
-      with:
-        name: Firefox
-        path: |
-          apps/browser/dist/dist-firefox.zip
-
-    - name: Upload Sources artifact to GitHub
-      uses: actions/upload-artifact@v3
-      with:
-        name: Sources
-        path: |
-          apps/browser/dist/cozy-keys-sources.zip
+          apps/browser/dist/
