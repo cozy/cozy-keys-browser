@@ -447,6 +447,27 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     /* end custo */
   }
 
+  // Cozy customization; navigating to "/add-cipher" with a login type when adding a suggestion
+  async addLoginCipher() {
+    const tab = await BrowserApi.getTabFromCurrentWindow();
+    let url = "",
+      hostname = "";
+    if (tab != null) {
+      url = tab.url;
+      hostname = Utils.getHostname(url);
+    }
+
+    this.router.navigate(["/add-cipher"], {
+      queryParams: {
+        cloneMode: true, // we need this in order to go back twice after creation
+        type: CipherType.Login,
+        uri: url,
+        name: hostname,
+      },
+    });
+  }
+  // Cozy customization end
+
   async vaultFilterChanged() {
     if (this.showSearching) {
       await this.search();
