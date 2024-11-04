@@ -52,6 +52,7 @@ import { NotificationsSettingsComponent } from "../autofill/popup/settings/notif
 import { PremiumV2Component } from "../billing/popup/settings/premium-v2.component";
 import { PremiumComponent } from "../billing/popup/settings/premium.component";
 import { AddGenericComponent } from "../cozy/components/add-generic/add-generic.component";
+import { ViewMoreContactsComponent } from "../cozy/components/view-more-contacts/view-more-contacts.component";
 import BrowserPopupUtils from "../platform/popup/browser-popup-utils";
 import { popupRouterCacheGuard } from "../platform/popup/view-cache/popup-router-cache.service";
 import { CredentialGeneratorHistoryComponent } from "../tools/popup/generator/credential-generator-history.component";
@@ -264,6 +265,13 @@ const routes: Routes = [
     component: AddGenericComponent,
     canActivate: [authGuard, debounceNavigationGuard()],
     data: { state: "add-generic" },
+    runGuardsAndResolvers: "always",
+  },
+  {
+    path: "view-more-contacts",
+    component: ViewMoreContactsComponent,
+    canActivate: [authGuard, debounceNavigationGuard()],
+    data: { state: "view-more-contacts" },
     runGuardsAndResolvers: "always",
   },
   {

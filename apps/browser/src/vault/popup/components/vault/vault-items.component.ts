@@ -493,6 +493,12 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   }
   // end custo
 
+  // Cozy customization, open view more contacts page
+  protected viewMoreContacts() {
+    this.router.navigate(["/view-more-contacts"]);
+  }
+  // Cozy customization end
+
   // Cozy customization, override search method to always sort by date for papers
   protected async doSearch(indexedCiphers?: CipherView[]) {
     await super.doSearch(indexedCiphers);

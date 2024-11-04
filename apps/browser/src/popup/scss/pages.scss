@@ -237,6 +237,43 @@ app-vault-share {
 
 /* Cozy custo */
 
+app-vault-view-more-contacts {
+  .box {
+    margin: 10px;
+    width: 90%;
+  }
+
+  .view-more-contacts-redirect {
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 1.5rem;
+    width: fit-content;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    &:hover {
+      @include themify($themes) {
+        background-color: themed("boxBackgroundHoverColor");
+      }
+    }
+
+    @include themify($themes) {
+      background-color: themed("boxBackgroundColor");
+      border-color: themed("boxBorderColor");
+    }
+  }
+
+  .icon,
+  .icon-contacts {
+    line-height: 1rem;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
 app-help-and-feedback .box-content {
   padding-top: 25px;
 }
