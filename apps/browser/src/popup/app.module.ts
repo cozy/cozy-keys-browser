@@ -94,6 +94,7 @@ import { TabsComponent } from "./tabs.component";
 import { FlagConditionalComponent } from "../cozy/components/flag-conditional/flag-conditional.component";
 import { IfFlagDirective } from "../cozy/components/flag-conditional/if-flag.directive";
 import { AddGenericComponent } from "../cozy/components/add-generic/add-generic.component";
+import { ViewMoreContactsComponent } from "../cozy/components/view-more-contacts/view-more-contacts.component";
 import { ViewExpirationDateComponent } from "../vault/popup/components/vault/view-expiration-date.component";
 import { ViewLabelComponent } from "../vault/popup/components/vault/view-label.component";
 import { ContactAvatarComponent } from "../vault/popup/components/vault/contact-avatar.component";
@@ -204,6 +205,7 @@ import "../platform/popup/locales";
     FlagConditionalComponent,
     IfFlagDirective,
     AddGenericComponent,
+    ViewMoreContactsComponent,
     ViewExpirationDateComponent,
     ViewLabelComponent,
     ContactAvatarComponent,

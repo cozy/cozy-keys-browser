@@ -1,0 +1,27 @@
+<div>
+  <header>
+    <div class="left">
+      <button type="button" appBlurClick (click)="back()" title="{{ 'back_shortcut' | i18n }}">
+        <span class="header-icon" title="{{ 'back' | i18n }}"
+          ><i class="icon-cozy icon-back"></i
+        ></span>
+      </button>
+    </div>
+    <h1 class="center">
+      <span class="title">{{ "viewMoreContact" | i18n }}</span>
+    </h1>
+    <div class="right"></div>
+  </header>
+  <main tabindex="-1">
+    <div class="box list">
+      <div class="box-content single-line">
+        <p>{{ "viewMoreContactInfo1" | i18n }}</p>
+        <p>{{ "viewMoreContactInfo2" | i18n }}</p>
+        <span class="view-more-contacts-redirect" (click)="openContacts()">
+          <div class="icon"><i class="icon-cozy icon-contacts"></i></div>
+          {{ "viewMoreContactRedirect" | i18n }}
+        </span>
+      </div>
+    </div>
+  </main>
+</div>

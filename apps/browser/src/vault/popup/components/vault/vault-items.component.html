@@ -194,6 +194,13 @@
           ></app-cipher-row>
         </div>
       </div>
+      <!-- Cozy customization, open view more contacts page -->
+      <ng-container *ngIf="type === cipherType.Contact">
+        <button type="button" (click)="viewMoreContacts()" class="btn primary link tw-mt-2">
+          {{ "viewMoreContact" | i18n }}
+        </button>
+      </ng-container>
+      <!-- Cozy customization end -->
     </cdk-virtual-scroll-viewport>
   </ng-container>
 </main>
