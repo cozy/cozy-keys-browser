@@ -120,13 +120,15 @@ export const favoritePaperCipher = async (
 
   const paper = await fetchPaper(client, cipher.id);
 
-  const { data: updatedPaper } = await client.save({
-    ...paper,
-    cozyMetadata: {
-      ...paper.cozyMetadata,
+  if (paper.cozyMetadata) {
+    paper.cozyMetadata.favorite = !cipher.favorite;
+  } else {
+    paper.cozyMetadata = {
       favorite: !cipher.favorite,
-    },
-  });
+    };
+  }
+
+  const { data: updatedPaper } = await client.save(paper);
 
   const [updatePaperWithContacts] = client.hydrateDocuments(FILES_DOCTYPE, [updatedPaper]);
 

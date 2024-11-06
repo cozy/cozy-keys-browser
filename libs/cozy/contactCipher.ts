@@ -91,13 +91,15 @@ export const favoriteContactCipher = async (
 
   const contact = await fetchContact(client, cipher.id);
 
-  const { data: updatedContact } = await client.save({
-    ...contact,
-    cozyMetadata: {
-      ...contact.cozyMetadata,
+  if (contact.cozyMetadata) {
+    contact.cozyMetadata.favorite = !cipher.favorite;
+  } else {
+    contact.cozyMetadata = {
       favorite: !cipher.favorite,
-    },
-  });
+    };
+  }
+
+  const { data: updatedContact } = await client.save(contact);
 
   const cipherData = await convertContactToCipherData(
     cipherService,
