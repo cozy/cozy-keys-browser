@@ -25,7 +25,7 @@
     ></i>
   </div>
   <div class="right">
-    <button type="button" appBlurClick (click)="addCipher()" appA11yTitle="{{ 'addItem' | i18n }}">
+    <button type="button" (click)="addCipher()" appA11yTitle="{{ 'addItem' | i18n }}">
       <i class="icon-cozy icon-plus" aria-hidden="true"></i>
     </button>
   </div>
@@ -54,13 +54,12 @@
     </ng-container>
   </div>
   <ng-container *ngIf="ciphers && ciphers.length && !showSearching()">
+    <!-- Cozy customization; add a suggestion section -->
     <div class="box list" *ngIf="ciphersForCurrentTab && ciphersForCurrentTab.length">
       <h2 class="box-header">
         {{ "suggestions" | i18n }}
       </h2>
-      <!-- Cozy customization -->
       <app-autofill-tooltip></app-autofill-tooltip>
-      <!-- Cozy customization end -->
       <div class="box-content">
         <app-cipher-row
           *ngFor="let cipherForCurrentTab of ciphersForCurrentTab"
@@ -95,7 +94,8 @@
         </div>
       </div>
     </div>
-    <div class="box list" *ngIf="favoriteCiphers.length">
+    <!-- Cozy customization end -->
+    <div class="box list" *ngIf="favoriteCiphers">
       <h2 class="box-header">
         {{ "favorites" | i18n }}
       </h2>
@@ -118,12 +118,11 @@
         <span class="flex-right">4</span>
         -->
       </h2>
-      <div class="box-content single-line underline">
+      <div class="box-content single-line">
         <button
           type="button"
           class="box-content-row"
           appStopClick
-          appBlurClick
           (click)="selectType(cipherType.Login)"
         >
           <div class="row-main">
@@ -149,7 +148,6 @@
           type="button"
           class="box-content-row"
           appStopClick
-          appBlurClick
           (click)="selectType(cipherType.Card)"
         >
           <div class="row-main">
@@ -166,7 +164,7 @@
               </span>
             </div>
           </div>
-          <span class="row-sub-label">{{ this.typeCounts.get(cipherType.Card) || 0 }}</span>
+          <span class="row-sub-label">{{ typeCounts.get(cipherType.Card) || 0 }}</span>
           <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
         </button>
         <!-- Cozy customization -->
@@ -175,7 +173,6 @@
           type="button"
           class="box-content-row"
           appStopClick
-          appBlurClick
           (click)="selectType(cipherType.Identity)"
           *ngIf="this.typeCounts.get(cipherType.Identity) > 0"
         >
@@ -192,7 +189,6 @@
           type="button"
           class="box-content-row"
           appStopClick
-          appBlurClick
           (click)="selectType(cipherType.Contact)"
         >
           <div class="row-main">
@@ -208,7 +204,6 @@
           type="button"
           class="box-content-row"
           appStopClick
-          appBlurClick
           (click)="selectType(cipherType.Paper)"
         >
           <div class="row-main">
@@ -223,7 +218,6 @@
           type="button"
           class="box-content-row"
           appStopClick
-          appBlurClick
           (click)="selectType(cipherType.SecureNote)"
           *ngIf="this.typeCounts.get(cipherType.SecureNote)"
         >
@@ -286,7 +280,6 @@
           *ngFor="let nestedCollection of nestedCollections"
           class="box-content-row"
           appStopClick
-          appBlurClick
           (click)="selectCollection(nestedCollection.node)"
         >
           <div class="row-main">
