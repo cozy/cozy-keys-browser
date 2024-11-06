@@ -289,7 +289,7 @@ const routes: Routes = [
     path: "generator",
     component: GeneratorComponent,
     canActivate: [authGuard],
-    data: { state: "generator" },
+    data: { state: "generator", doNotSaveUrl: true },
   },
   ...extensionRefreshSwap(PasswordGeneratorHistoryComponent, CredentialGeneratorHistoryComponent, {
     path: "generator-history",
