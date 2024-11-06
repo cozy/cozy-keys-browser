@@ -54,7 +54,7 @@
     </ng-container>
   </div>
   <ng-container *ngIf="ciphers && ciphers.length && !showSearching()">
-    <div class="box list" *ngIf="ciphersForCurrentTab.length">
+    <div class="box list" *ngIf="ciphersForCurrentTab && ciphersForCurrentTab.length">
       <h2 class="box-header">
         {{ "suggestions" | i18n }}
       </h2>
@@ -73,7 +73,7 @@
         </app-cipher-row>
       </div>
     </div>
-    <div class="box list" *ngIf="!ciphersForCurrentTab.length">
+    <div class="box list" *ngIf="ciphersForCurrentTab && !ciphersForCurrentTab.length">
       <h2 class="box-header">
         {{ "suggestions" | i18n }}
       </h2>
