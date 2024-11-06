@@ -3260,7 +3260,7 @@
     "message": "How to autofill"
   },
   "autofillSelectInfoWithCommand": {
-    "message": "Click on ✨ below to fill in the current web page with one click ($COMMAND$)",
+    "message": "Click on ✨ below to fill in the current web page with one click ($COMMAND$).",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -3269,7 +3269,7 @@
     }
   },
   "autofillSelectInfoWithoutCommand": {
-    "message": "Click on ✨ below to fill in the current web page with one click"
+    "message": "Click on ✨ below to fill in the current web page with one click."
   },
   "gotIt": {
     "message": "Got it"

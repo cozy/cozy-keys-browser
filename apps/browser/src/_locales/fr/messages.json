@@ -3254,7 +3254,7 @@
     "message": "Le saviez-vous ?"
   },
   "autofillSelectInfoWithCommand": {
-    "message": "Cliquez sur ✨ ci-dessous pour remplir d'un clic la page web courante ($COMMAND$)",
+    "message": "Cliquez sur ✨ ci-dessous pour remplir d'un clic la page web courante ($COMMAND$).",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -3263,7 +3263,7 @@
     }
   },
   "autofillSelectInfoWithoutCommand": {
-    "message": "Cliquez sur ✨ ci-dessous pour remplir d'un clic la page web courante"
+    "message": "Cliquez sur ✨ ci-dessous pour remplir d'un clic la page web courante."
   },
   "gotIt": {
     "message": "Compris"
