@@ -1,8 +1,4 @@
-/* Cozy customization
 import { Component, NgZone, OnInit } from "@angular/core";
-*/
-import { Component, NgZone, OnInit, Input } from "@angular/core";
-/* Cozy customization end */
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
@@ -38,7 +34,6 @@ import { flagEnabled } from "../../platform/flags";
 /* start Cozy imports */
 /* eslint-disable */
 import { generateWebLink } from "cozy-client";
-import { CozySanitizeUrlService } from "../../popup/services/cozySanitizeUrl.service";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
 import { KonnectorsService } from "../../popup/services/konnectors.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -46,7 +41,6 @@ import { ThemeStateService } from "@bitwarden/common/platform/theming/theme-stat
 import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
 import { ThemeType } from "@bitwarden/common/platform/enums";
 import { PreloginRequest } from "@bitwarden/common/models/request/prelogin.request";
-import { sanitizeUrlInput } from "./login.component.functions";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -86,9 +80,6 @@ const shouldRedirectToOIDCPasswordPage = (cozyConfiguration: CozyConfiguration) 
   templateUrl: "login.component.html",
 })
 export class LoginComponent extends BaseLoginComponent implements OnInit {
-  /* Cozy customization */
-  @Input() cozyUrl = "";
-  /* Cozy customization end */
   showPasswordless = false;
   constructor(
     devicesApiService: DevicesApiServiceAbstraction,
@@ -110,7 +101,6 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     loginEmailService: LoginEmailServiceAbstraction,
     ssoLoginService: SsoLoginServiceAbstraction,
     webAuthnLoginService: WebAuthnLoginServiceAbstraction,
-    protected cozySanitizeUrlService: CozySanitizeUrlService,
     protected cozyClientService: CozyClientService,
     protected konnectorsService: KonnectorsService,
     protected themeStateService: ThemeStateService,
@@ -145,7 +135,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
       //*
       const syncPromise = syncService.fullSync(true).then(() => {
         this.cozyClientService.saveCozyCredentials(
-          sanitizeUrlInput(this.formGroup.value.email, this.cozySanitizeUrlService),
+          this.cozyUrl,
           this.formGroup.value.masterPassword,
         );
       });
@@ -237,15 +227,13 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     }
 
     try {
-      const cozyUrl = sanitizeUrlInput(data.email, this.cozySanitizeUrlService);
-
       // This adds the scheme if missing
       await this.environmentService.setEnvironment(Region.SelfHosted, {
-        base: cozyUrl + "/bitwarden",
+        base: this.cozyUrl + "/bitwarden",
       });
 
       // The email is based on the URL and necessary for login
-      const hostname = Utils.getHostname(cozyUrl);
+      const hostname = Utils.getHostname(this.cozyUrl);
 
       const credentials = new PasswordLoginCredentials(
         "me@" + hostname,
@@ -333,8 +321,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
   // }
 
   async forgotPassword() {
-    const cozyUrl = sanitizeUrlInput(this.formGroup.value.email, this.cozySanitizeUrlService);
-    if (!cozyUrl) {
+    if (!this.cozyUrl) {
       this.platformUtilsService.showToast(
         "error",
         this.i18nService.t("errorOccurred"),
@@ -343,7 +330,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
       return;
     }
 
-    await this.initializeEnvForCozy(cozyUrl);
+    await this.initializeEnvForCozy(this.cozyUrl);
 
     let cozyConfiguration: CozyConfiguration = {};
     try {
@@ -360,8 +347,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
     const shouldRedirectToOidc = shouldRedirectToOIDCPasswordPage(cozyConfiguration);
 
     const url = shouldRedirectToOidc
-      ? getCozyPassWebURL(cozyUrl, cozyConfiguration)
-      : getPassphraseResetURL(cozyUrl);
+      ? getCozyPassWebURL(this.cozyUrl, cozyConfiguration)
+      : getPassphraseResetURL(this.cozyUrl);
 
     const browser = window.browser || window.chrome;
     await browser.tabs.create({
@@ -377,8 +364,7 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
   }
 
   private getCozyConfiguration = async (): Promise<CozyConfiguration> => {
-    const cozyUrl = sanitizeUrlInput(this.formGroup.value.email, this.cozySanitizeUrlService);
-    const preloginResponse = await this.apiService.postPrelogin(new PreloginRequest(cozyUrl));
+    const preloginResponse = await this.apiService.postPrelogin(new PreloginRequest(this.cozyUrl));
 
     const { HasCiphers, OIDC, FlatSubdomains } = (preloginResponse as any).response;
 

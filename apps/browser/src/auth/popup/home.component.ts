@@ -115,7 +115,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Cozy customization end
 
     await this.setLoginEmailValues();
-    await this.router.navigate(["login"], { queryParams: { email: this.formGroup.value.email } });
+    await this.router.navigate(["login"], { queryParams: { email: this.formGroup.value.email, cozyUrl } });
   }
 
   async setLoginEmailValues() {
