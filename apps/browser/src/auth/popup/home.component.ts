@@ -14,7 +14,6 @@ import { ToastService } from "@bitwarden/components";
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { CozySanitizeUrlService } from "../../popup/services/cozySanitizeUrl.service";
 import { AccountSwitcherService } from "./account-switching/services/account-switcher.service";
-import { sanitizeUrlInput } from "./login.component.functions";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -102,20 +101,38 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     // Cozy customization; check if Cozy exists before navigating to login page
-    const cozyUrl = sanitizeUrlInput(this.formGroup.value.email, this.cozySanitizeUrlService);
+    const cozyUrl = this.cozySanitizeUrlService.sanitizeUrlInput(this.formGroup.value.email);
+    const glUrl = this.cozySanitizeUrlService.sanitizeUrlInput(
+      this.formGroup.value.email,
+      ".cozygrandlyon.cloud",
+    );
+    let selectedUrl = null;
 
-    if (await this.cozyDoesNotExist(cozyUrl)) {
+    const cozyExist = await this.cozyExist(cozyUrl);
+    if (cozyExist) {
+      selectedUrl = cozyUrl;
+    } else {
+      const glExist = await this.cozyExist(glUrl);
+      if (glExist) {
+        selectedUrl = glUrl;
+      }
+    }
+
+    if (!selectedUrl) {
       this.toastService.showToast({
         variant: "error",
         title: this.i18nService.t("errorOccured"),
-        message: this.i18nService.t("noCozyFound", cozyUrl),
+        message: this.i18nService.t("noCozyFound"),
       });
       return;
     }
+
     // Cozy customization end
 
     await this.setLoginEmailValues();
-    await this.router.navigate(["login"], { queryParams: { email: this.formGroup.value.email, cozyUrl } });
+    await this.router.navigate(["login"], {
+      queryParams: { email: this.formGroup.value.email, cozyUrl: selectedUrl },
+    });
   }
 
   async setLoginEmailValues() {
@@ -132,19 +149,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   /* end custo */
 
   // Cozy customization; check if Cozy exists before navigating to login page
-  async cozyDoesNotExist(cozyUrl: string) {
+  async cozyExist(cozyUrl: string) {
     const preloginCozyUrl = new URL("/public/prelogin", cozyUrl).toString();
 
     try {
       const preloginCozyResponse = await fetch(preloginCozyUrl);
 
-      return preloginCozyResponse.status === 404;
+      return preloginCozyResponse.status === 200;
     } catch {
       // If the request fails, we assume the Cozy does not exist.
       // It happens if the user enter a valid URL but that does not answer.
-      return true;
+      return false;
     }
-
   }
   // Cozy customization end
 }
