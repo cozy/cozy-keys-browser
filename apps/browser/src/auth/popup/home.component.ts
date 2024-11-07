@@ -135,9 +135,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   async cozyDoesNotExist(cozyUrl: string) {
     const preloginCozyUrl = new URL("/public/prelogin", cozyUrl).toString();
 
-    const preloginCozyResponse = await fetch(preloginCozyUrl);
+    try {
+      const preloginCozyResponse = await fetch(preloginCozyUrl);
 
-    return preloginCozyResponse.status === 404;
+      return preloginCozyResponse.status === 404;
+    } catch {
+      // If the request fails, we assume the Cozy does not exist.
+      // It happens if the user enter a valid URL but that does not answer.
+      return true;
+    }
+
   }
   // Cozy customization end
 }
