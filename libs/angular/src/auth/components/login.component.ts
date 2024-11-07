@@ -47,6 +47,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
   showLoginWithDevice: boolean;
   validatedEmail = false;
   paramEmailSet = false;
+  protected cozyUrl: string;
 
   get emailFormControl() {
     return this.formGroup.controls.email;
@@ -115,6 +116,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
             this.formGroup.controls.email.setValue(queryParamsEmail);
             this.paramEmailSet = true;
           }
+          this.cozyUrl = params.cozyUrl;
           /*/
           if (queryParamsEmail != null && queryParamsEmail.indexOf("@") > -1) {
             this.formGroup.controls.email.setValue(queryParamsEmail);
