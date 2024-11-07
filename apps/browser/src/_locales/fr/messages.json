@@ -759,13 +759,7 @@
     "message": "Oups, ce n'est pas la bonne adresse. Essayez d'écrire \"cozy\" avec un \"z\" !"
   },
   "noCozyFound": {
-    "message": "Impossible de se connecter à l'adresse $VALUE$, veuillez vérifier que c’est bien l’adresse de votre Cozy",
-    "placeholders": {
-      "value": {
-        "content": "$1",
-        "example": "https://alice.mycozy.cloud"
-      }
-    }
+    "message": "Impossible de se connecter à l'adresse donnée, veuillez vérifier que c’est bien l’adresse de votre Cozy"
   },
   "masterPassRequired": {
     "message": "Le mot de passe principal est requis."

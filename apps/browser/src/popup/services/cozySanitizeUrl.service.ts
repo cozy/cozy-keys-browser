@@ -31,4 +31,21 @@ export class CozySanitizeUrlService {
   };
 
   protected removeTrailingSlash = (value: string) => value.replace(/\/$/, "");
+
+  sanitizeUrlInput = (inputUrl: string, domain: string = this.cozyDomain): string => {
+    // Prevent empty url
+    if (!inputUrl) {
+      throw new Error("cozyUrlRequired");
+    }
+    // Prevent email input
+    if (inputUrl.includes("@")) {
+      throw new Error("noEmailAsCozyUrl");
+    }
+
+    if (this.hasMispelledCozy(inputUrl)) {
+      throw new Error("hasMispelledCozy");
+    }
+
+    return this.normalizeURL(inputUrl, domain);
+  };
 }

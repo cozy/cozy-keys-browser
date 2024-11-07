@@ -759,13 +759,7 @@
     "message": "Woops, the address is not correct. Try with \"cozy\" with a \"z\"!"
   },
   "noCozyFound": {
-    "message": "Unable to connect to address $VALUE$, please check that this is the address of your Cozy",
-    "placeholders": {
-      "value": {
-        "content": "$1",
-        "example": "https://alice.mycozy.cloud"
-      }
-    }
+    "message": "Unable to connect to given address, please check that this is the address of your Cozy"
   },
   "masterPassRequired": {
     "message": "Master password is required."
