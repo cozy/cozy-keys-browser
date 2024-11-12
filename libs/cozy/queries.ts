@@ -118,7 +118,7 @@ export const buildContactsQuery = () => ({
     .include(["related"])
     .limitBy(1000),
   options: {
-    as: `${CONTACTS_DOCTYPE}/indexedByFamilyNameGivenNameEmailCozyUrl`,
+    as: `${CONTACTS_DOCTYPE}/indexedByFamilyNameGivenNameEmailCozyUrl/meAndFavorite`,
   },
 });
 
