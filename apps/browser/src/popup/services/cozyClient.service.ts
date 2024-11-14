@@ -11,6 +11,7 @@ import { TokenService } from "@bitwarden/common/auth/abstractions/token.service"
 import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { SecureNoteType } from "@bitwarden/common/vault/enums";
@@ -61,6 +62,7 @@ export class CozyClientService {
     protected accountService: AccountService,
     private i18nService: I18nService,
     private tokenService: TokenService,
+    private logService: LogService,
   ) {
     this.flagChangedPointer = this.flagChanged.bind(this);
   }
@@ -189,6 +191,7 @@ export class CozyClientService {
       this.cipherService,
       this.i18nService,
       this.accountService,
+      this.logService,
       this.instance,
     );
     this.realTimeNotifications.init();

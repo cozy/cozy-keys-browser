@@ -78,6 +78,15 @@ export const fetchPaper = async (client: CozyClient, _id: string) => {
 
 // Contacts
 
+export const buildMyselfQuery = () => {
+  return {
+    definition: Q(CONTACTS_DOCTYPE).where({ me: true }),
+    options: {
+      as: `${CONTACTS_DOCTYPE}/myself`
+    },
+  };
+};
+
 export const buildContactsQuery = () => ({
   definition: Q(CONTACTS_DOCTYPE)
     .where({
@@ -121,6 +130,17 @@ export const buildContactsQuery = () => ({
     as: `${CONTACTS_DOCTYPE}/indexedByFamilyNameGivenNameEmailCozyUrl/meAndFavorite`,
   },
 });
+
+export const fetchMyself = async (client: CozyClient): Promise<IOCozyContact[]> => {
+  const myselfQuery = buildMyselfQuery();
+
+  const { data }: { data: IOCozyContact[] } = await client.query(
+    myselfQuery.definition,
+    myselfQuery.options,
+  );
+
+  return data;
+};
 
 export const fetchContacts = async (client: CozyClient): Promise<IOCozyContact[]> => {
   const contactsQuery = buildContactsQuery();

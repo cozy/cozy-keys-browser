@@ -3,6 +3,7 @@ import { CouchDBDocument, IOCozyContact } from "cozy-client/types/types";
 
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 
@@ -15,6 +16,7 @@ import {
 } from "../../../../../libs/cozy/note.helper";
 import { convertPaperToCipherData } from "../../../../../libs/cozy/paper.helper";
 import { fetchPaper } from "../../../../../libs/cozy/queries";
+import { shouldDisplayContact } from "../../../../../libs/cozy/sync";
 
 export class RealTimeNotifications {
   constructor(
@@ -22,6 +24,7 @@ export class RealTimeNotifications {
     private cipherService: CipherService,
     private i18nService: I18nService,
     private accountService: AccountService,
+    private logService: LogService,
     private client: CozyClient,
   ) {}
 
@@ -59,9 +62,16 @@ export class RealTimeNotifications {
   }
 
   async dispatchCreateContact(data: IOCozyContact) {
-    await this.upsertContactData(data);
+    const contactMustBeDisplayed = await shouldDisplayContact(this.client, data);
 
-    await dispatchCreate(this.client, "io.cozy.contacts", data as CouchDBDocument);
+    if (contactMustBeDisplayed) {
+      this.logService.info(`Contact ${data.displayName} (${data._id}) added from realtime`)
+      await this.upsertContactData(data);
+
+      await dispatchCreate(this.client, "io.cozy.contacts", data as CouchDBDocument);
+    } else {
+      this.logService.info(`Contact ${data.displayName} (${data._id}) not added from realtime`)
+    }
   }
 
   async dispatchUpdateContact(data: IOCozyContact) {
