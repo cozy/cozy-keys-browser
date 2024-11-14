@@ -76,6 +76,14 @@ export const fetchPaper = async (client: CozyClient, _id: string) => {
   return data;
 };
 
+export const fetchHydratedPaper = async (client: CozyClient, _id: string) => {
+  const paper = await fetchPaper(client, _id);
+
+  const hydratedPaper = client.hydrateDocuments(FILES_DOCTYPE, [paper])[0];
+
+  return hydratedPaper;
+};
+
 // Contacts
 
 export const buildMyselfQuery = () => {
