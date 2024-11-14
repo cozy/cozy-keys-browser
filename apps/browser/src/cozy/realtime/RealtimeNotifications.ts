@@ -115,30 +115,40 @@ export class RealTimeNotifications {
     if (!data.metadata?.qualification?.label) {
       return;
     }
-    if (data.dir_id === "io.cozy.files.trash-dir") {
-      // We don't want to display trashed papers in the extension's bin so we remove them from the vault
-      return this.dispatchDeletePaper(data);
-    }
 
-    const isCreate = !(await this.cipherService.get(data._id));
+    /*
+      A paper may be updated because a contact was added or removed from the association.
+      If it has been removed, we can not know if we need to remove the contact from the vault
+      without checking all the other papers and the contact which is almost equivalent
+      to a fullSync.
+      So, since now our fullSync is efficient, it's easier to do a fullSync than checking
+      every case.
+    */
 
-    if (isCreate) {
-      await dispatchCreate(this.client, "io.cozy.files", data);
-    } else {
-      await dispatchUpdate(this.client, "io.cozy.files", data);
-    }
+    this.logService.info(`Starting full sync from realtime because paper updated`)
 
-    const hydratedPaper = await fetchHydratedPaper(this.client, data._id);
-
-    await this.upsertPaperData(hydratedPaper);
+    this.messagingService.send("fullSync");
   }
 
   async dispatchDeletePaper(data: any) {
-    await this.cipherService.delete(data._id);
-    this.messagingService.send("syncedDeletedCipher", { cipherId: data._id });
-    this.messagingService.send("syncCompleted", { successfully: true });
+    if (data.type !== "file") {
+      return;
+    }
+    if (!data.metadata?.qualification?.label) {
+      return;
+    }
 
-    await dispatchDelete(this.client, "io.cozy.files", data);
+    /*
+      When a paper is deleted, we can not know if we need to remove the contact from the vault
+      without checking all the other papers and the contact which is almost equivalent
+      to a fullSync.
+      So, since now our fullSync is efficient, it's easier to do a fullSync than checking
+      every case.
+    */
+
+    this.logService.info(`Starting full sync from realtime because paper deleted`)
+
+    this.messagingService.send("fullSync");
   }
 
   async upsertPaperData(paper: IOCozyFile) {
