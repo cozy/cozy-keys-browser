@@ -15,7 +15,7 @@ import {
   isNote,
 } from "../../../../../libs/cozy/note.helper";
 import { convertPaperToCipherData } from "../../../../../libs/cozy/paper.helper";
-import { fetchPaper } from "../../../../../libs/cozy/queries";
+import { fetchHydratedPaper } from "../../../../../libs/cozy/queries";
 import { shouldDisplayContact } from "../../../../../libs/cozy/sync";
 
 export class RealTimeNotifications {
@@ -140,18 +140,17 @@ export class RealTimeNotifications {
   }
 
   async upsertPaperFromId(paperId: string) {
-    const itemFromDb = await fetchPaper(this.client, paperId);
-    const hydratedData = this.client.hydrateDocuments(FILES_DOCTYPE, [itemFromDb])[0];
+    const hydratedPaper = await fetchHydratedPaper(this.client, paperId);
 
     let cipherData;
-    if (isNote(itemFromDb)) {
+    if (isNote(hydratedPaper)) {
       const noteIllustrationUrl = await fetchNoteIllustrationUrl(this.client);
 
       cipherData = await convertNoteToCipherData(
         this.cipherService,
         this.i18nService,
         this.accountService,
-        hydratedData,
+        hydratedPaper,
         {
           noteIllustrationUrl,
         },
@@ -163,7 +162,7 @@ export class RealTimeNotifications {
         this.cipherService,
         this.i18nService,
         this.accountService,
-        hydratedData,
+        hydratedPaper,
         {
           baseUrl,
         },
