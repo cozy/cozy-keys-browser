@@ -1,3 +1,4 @@
+import CozyClient from "cozy-client";
 import { IOCozyContact, IOCozyFile } from "cozy-client/types/types";
 
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
@@ -10,8 +11,40 @@ import { CozyClientService } from "../../apps/browser/src/popup/services/cozyCli
 
 import { convertAllContactsAsCiphers } from "./contactCipher";
 import { convertAllPapersAsCiphers } from "./paperCipher";
-import { fetchContactsAndPapers } from "./queries";
+import { fetchContactsAndPapers, fetchPapers, fetchMyself } from "./queries";
 
+export const shouldDisplayContact = async (client: CozyClient, contact: IOCozyContact) => {
+  if (contact.me) {
+    return true;
+  }
+
+  if (contact.cozyMetadata.favorite) {
+    return true;
+  }
+
+  const me = await fetchMyself(client);
+
+  const contactRelatedToMe =
+    // @ts-expect-error related added manually with an hydration
+    me?.[0]?.relationships?.related?.data.find((relatedContact) => relatedContact._id === contact._id);
+
+  if (contactRelatedToMe) {
+    return true;
+  }
+
+  const papers = await fetchPapers(client);
+
+  const contactIsInPaper = papers.find((paper) => {
+    // @ts-expect-error contacts added manually with an hydration
+    return paper.contacts.data.find((paperContact) => paperContact._id === contact._id);
+  });
+
+  if (contactIsInPaper) {
+    return true;
+  }
+
+  return false;
+};
 export const selectContactsAndPapers = (
   contacts: IOCozyContact[],
   papers: IOCozyFile[],

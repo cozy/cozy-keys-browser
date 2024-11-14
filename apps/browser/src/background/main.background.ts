@@ -834,6 +834,7 @@ export default class MainBackground {
       this.accountService,
       this.i18nService,
       this.tokenService,
+      this.logService,
     );
     // Cozy customization end
 
