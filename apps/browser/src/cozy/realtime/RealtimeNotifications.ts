@@ -1,4 +1,5 @@
 import CozyClient, { dispatchCreate, dispatchUpdate, dispatchDelete } from "cozy-client";
+import { CouchDBDocument, IOCozyContact } from "cozy-client/types/types";
 
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -57,34 +58,16 @@ export class RealTimeNotifications {
     await realtime.unsubscribe("created", doctypeThumbnail, this.dispatchCreateThumbnail);
   }
 
-  async dispatchCreateContact(data: any) {
-    const cipherData = await convertContactToCipherData(
-      this.cipherService,
-      this.i18nService,
-      this.accountService,
-      data,
-      null,
-    );
-    await this.cipherService.upsert(cipherData);
-    this.messagingService.send("syncedUpsertedCipher", { cipherId: data._id });
-    this.messagingService.send("syncCompleted", { successfully: true });
+  async dispatchCreateContact(data: IOCozyContact) {
+    await this.upsertContactData(data);
 
-    await dispatchCreate(this.client, "io.cozy.contacts", data);
+    await dispatchCreate(this.client, "io.cozy.contacts", data as CouchDBDocument);
   }
 
-  async dispatchUpdateContact(data: any) {
-    const cipherData = await convertContactToCipherData(
-      this.cipherService,
-      this.i18nService,
-      this.accountService,
-      data,
-      null,
-    );
-    await this.cipherService.upsert(cipherData);
-    this.messagingService.send("syncedUpsertedCipher", { cipherId: data._id });
-    this.messagingService.send("syncCompleted", { successfully: true });
+  async dispatchUpdateContact(data: IOCozyContact) {
+    await this.upsertContactData(data);
 
-    await dispatchUpdate(this.client, "io.cozy.contacts", data);
+    await dispatchUpdate(this.client, "io.cozy.contacts", data as CouchDBDocument);
   }
 
   async dispatchDeleteContact(data: any) {
@@ -170,5 +153,20 @@ export class RealTimeNotifications {
     }
 
     this.upsertPaperFromId(data._id);
+  }
+
+  private async upsertContactData(data: IOCozyContact) {
+    const cipherData = await convertContactToCipherData(
+      this.cipherService,
+      this.i18nService,
+      this.accountService,
+      data,
+      null,
+    );
+
+    await this.cipherService.upsert(cipherData);
+
+    this.messagingService.send("syncedUpsertedCipher", { cipherId: data._id });
+    this.messagingService.send("syncCompleted", { successfully: true });
   }
 }
