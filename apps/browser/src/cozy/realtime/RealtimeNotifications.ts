@@ -1,5 +1,5 @@
 import CozyClient, { dispatchCreate, dispatchUpdate, dispatchDelete } from "cozy-client";
-import { CouchDBDocument, IOCozyContact } from "cozy-client/types/types";
+import { CouchDBDocument, IOCozyContact, IOCozyFile } from "cozy-client/types/types";
 
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -128,7 +128,9 @@ export class RealTimeNotifications {
       await dispatchUpdate(this.client, "io.cozy.files", data);
     }
 
-    await this.upsertPaperFromId(data._id);
+    const hydratedPaper = await fetchHydratedPaper(this.client, data._id);
+
+    await this.upsertPaperData(hydratedPaper);
   }
 
   async dispatchDeletePaper(data: any) {
@@ -139,18 +141,16 @@ export class RealTimeNotifications {
     await dispatchDelete(this.client, "io.cozy.files", data);
   }
 
-  async upsertPaperFromId(paperId: string) {
-    const hydratedPaper = await fetchHydratedPaper(this.client, paperId);
-
+  async upsertPaperData(paper: IOCozyFile) {
     let cipherData;
-    if (isNote(hydratedPaper)) {
+    if (isNote(paper)) {
       const noteIllustrationUrl = await fetchNoteIllustrationUrl(this.client);
 
       cipherData = await convertNoteToCipherData(
         this.cipherService,
         this.i18nService,
         this.accountService,
-        hydratedPaper,
+        paper,
         {
           noteIllustrationUrl,
         },
@@ -162,7 +162,7 @@ export class RealTimeNotifications {
         this.cipherService,
         this.i18nService,
         this.accountService,
-        hydratedPaper,
+        paper,
         {
           baseUrl,
         },
@@ -170,7 +170,7 @@ export class RealTimeNotifications {
     }
 
     await this.cipherService.upsert(cipherData);
-    this.messagingService.send("syncedUpsertedCipher", { cipherId: paperId });
+    this.messagingService.send("syncedUpsertedCipher", { cipherId: paper._id });
     this.messagingService.send("syncCompleted", { successfully: true });
   }
 
@@ -181,7 +181,9 @@ export class RealTimeNotifications {
       return;
     }
 
-    this.upsertPaperFromId(data._id);
+    const hydratedPaper = await fetchHydratedPaper(this.client, data._id);
+
+    this.upsertPaperData(hydratedPaper);
   }
 
   private async upsertContactData(data: IOCozyContact) {
