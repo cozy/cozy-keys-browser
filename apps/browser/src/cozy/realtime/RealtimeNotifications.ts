@@ -75,9 +75,29 @@ export class RealTimeNotifications {
   }
 
   async dispatchUpdateContact(data: IOCozyContact) {
-    await this.upsertContactData(data);
+    if (data.me) {
+      // We need to do a fullSync here because we have no other way to know
+      // if a contact related to me was removed of the me relation
+      this.logService.info(`Starting full sync from realtime because me`)
 
-    await dispatchUpdate(this.client, "io.cozy.contacts", data as CouchDBDocument);
+      this.messagingService.send("fullSync");
+
+      return;
+    }
+
+    const contactMustBeDisplayed = await shouldDisplayContact(this.client, data);
+
+    if (contactMustBeDisplayed) {
+      await this.upsertContactData(data);
+
+      await dispatchUpdate(this.client, "io.cozy.contacts", data as CouchDBDocument);
+
+      this.logService.info(`Contact ${data.displayName} (${data._id}) added or updated from realtime because changed`)
+    } else {
+      await this.dispatchDeleteContact(data);
+
+      this.logService.info(`Contact ${data.displayName} (${data._id}) removed from realtime because changed`)
+    }
   }
 
   async dispatchDeleteContact(data: any) {
