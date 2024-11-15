@@ -188,6 +188,7 @@
             [last]="last"
             title="{{ 'viewItem' | i18n }}"
             (onSelected)="selectCipher($event)"
+            (onAutofill)="fillCipher($event)"
             (launchEvent)="launchCipher($event)"
             (onView)="viewCipher($event)"
             [showView]="true"

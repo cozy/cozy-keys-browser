@@ -24,7 +24,7 @@ export class VaultItemsComponent implements OnInit, OnDestroy {
 
   protected searchPending = false;
 
-  private destroy$ = new Subject<void>();
+  protected destroy$ = new Subject<void>();
   private searchTimeout: any = null;
   private isSearchable: boolean = false;
   private _searchText$ = new BehaviorSubject<string>("");
