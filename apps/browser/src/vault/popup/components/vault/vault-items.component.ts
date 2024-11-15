@@ -12,7 +12,8 @@ import {
 } from "@angular/core";
 /* end custo */
 import { ActivatedRoute, Router } from "@angular/router";
-import { first } from "rxjs/operators";
+import { Subscription } from "rxjs";
+import { first, takeUntil } from "rxjs/operators";
 
 import { VaultItemsComponent as BaseVaultItemsComponent } from "@bitwarden/angular/vault/components/vault-items.component";
 import { VaultFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-filter.model";
@@ -23,7 +24,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
-import { CipherType } from "@bitwarden/common/vault/enums";
+import { CipherRepromptType, CipherType } from "@bitwarden/common/vault/enums";
 import { TreeNode } from "@bitwarden/common/vault/models/domain/tree-node";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
@@ -37,6 +38,7 @@ import { VaultFilterService } from "../../../services/vault-filter.service";
 /** Start Cozy imports */
 /* eslint-disable */
 import { AutofillService } from "../../../../autofill/services/abstractions/autofill.service";
+import { PasswordRepromptService } from "../../../../../../../libs/vault/src/services/password-reprompt.service";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { KonnectorsService } from "../../../../popup/services/konnectors.service";
 import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
@@ -70,7 +72,14 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   private preventSelected = false;
   private applySavedState = true;
   private scrollingContainer = "cdk-virtual-scroll-viewport";
-  private pageDetails: any[] = []; // Cozy custo
+
+  // Cozy customization; allow to autofill from action buttons in vault-filter. Logic taken from current-tab.
+  tab: chrome.tabs.Tab;
+  pageDetails: any[] = [];
+  private collectPageDetailsSubscription: Subscription;
+  private totpCode: string;
+  private totpTimeout: number;
+  // Cozy customization end
 
   constructor(
     searchService: SearchService,
@@ -89,6 +98,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
     private cozyClientService: CozyClientService,
     private konnectorsService: KonnectorsService,
     private autofillService: AutofillService,
+    private passwordRepromptService: PasswordRepromptService,
     cipherService: CipherService,
     private vaultFilterService: VaultFilterService,
   ) {
@@ -236,17 +246,6 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
               }, 500);
             }
             break;
-          // Cozy custo
-          case "collectPageDetailsResponse":
-            if (message.sender === ComponentId) {
-              this.pageDetails.push({
-                frameId: message.webExtSender.frameId,
-                tab: message.tab,
-                details: message.details,
-              });
-            }
-            break;
-          // end custo
           default:
             break;
         }
@@ -254,16 +253,20 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
         this.changeDetectorRef.detectChanges();
       });
     });
+  }
 
-    // Cozy custo : request page detail from current tab
-    const tab = await BrowserApi.getTabFromCurrentWindow();
+  async load(filter: (cipher: CipherView) => boolean = null, deleted = false) {
+    // Cozy customization; allow to autofill from action buttons in vault-filter. Logic taken from current-tab.
+    this.tab = await BrowserApi.getTabFromCurrentWindow();
     this.pageDetails = [];
-    BrowserApi.tabSendMessage(tab, {
-      command: "collectPageDetails",
-      tab: tab,
-      sender: ComponentId,
-    });
-    // end custo
+    this.collectPageDetailsSubscription?.unsubscribe();
+    this.collectPageDetailsSubscription = this.autofillService
+      .collectPageDetailsFromTab$(this.tab)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((pageDetails) => (this.pageDetails = pageDetails));
+    // Cozy customization end
+
+    super.load(filter);
   }
 
   ngOnDestroy() {
@@ -410,32 +413,22 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   }
   // Cozy customization end
 
-  // Cozy custo
-  async fillOrLaunchCipher(cipher: CipherView) {
-    // Get default matching setting for urls
-    let defaultMatch = await this.autofillService.getDefaultUriMatchStrategy();
-    if (defaultMatch == null) {
-      defaultMatch = UriMatchStrategy.Domain;
+  // Cozy customization; allow to autofill from action buttons in vault-filter. Logic taken from current-tab.
+  async fillCipher(cipher: CipherView, closePopupDelay?: number) {
+    if (
+      cipher.reprompt !== CipherRepromptType.None &&
+      !(await this.passwordRepromptService.showPasswordPrompt())
+    ) {
+      return;
     }
-    // Get the current url
-    const tab = await BrowserApi.getTabFromCurrentWindow();
-    const isCipherMatcinghUrl = await this.konnectorsService.hasURLMatchingCiphers(
-      tab.url,
-      [cipher],
-      defaultMatch,
-    );
-    if (isCipherMatcinghUrl) {
-      this.fillCipher(cipher);
-    } else {
-      this.launchCipher(cipher);
-    }
-  }
 
-  async fillCipher(cipher: CipherView) {
-    let totpCode = null;
+    this.totpCode = null;
+    if (this.totpTimeout != null) {
+      window.clearTimeout(this.totpTimeout);
+    }
 
     if (this.pageDetails == null || this.pageDetails.length === 0) {
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
+      this.platformUtilsService.showToast("error", null, this.i18nService.t("autofillError"));
       return;
     }
 
@@ -449,11 +442,12 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
       ) {
         this.messageSender.send("doAutoFill", {
           autofillOptions: {
+            tab: this.tab,
             cipher: cipher,
             pageDetails: this.pageDetails,
             doc: window.document,
-            tab: null,
             fillNewPassword: true,
+            allowTotpAutofill: true,
           },
         });
 
@@ -461,27 +455,39 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
       }
       // Cozy customization end
 
-      totpCode = await this.autofillService.doAutoFill({
+      this.totpCode = await this.autofillService.doAutoFill({
+        tab: this.tab,
         cipher: cipher,
         pageDetails: this.pageDetails,
         doc: window.document,
-        tab: null,
         fillNewPassword: true,
+        allowTotpAutofill: true,
       });
-      if (totpCode != null) {
-        this.platformUtilsService.copyToClipboard(totpCode, { window: window });
+      if (this.totpCode != null) {
+        this.platformUtilsService.copyToClipboard(this.totpCode, { window: window });
       }
       if (BrowserPopupUtils.inPopup(window)) {
-        BrowserApi.closePopup(window);
+        if (!closePopupDelay) {
+          if (this.platformUtilsService.isFirefox() || this.platformUtilsService.isSafari()) {
+            BrowserApi.closePopup(window);
+          } else {
+            // Slight delay to fix bug in Chromium browsers where popup closes without copying totp to clipboard
+            setTimeout(() => BrowserApi.closePopup(window), 50);
+          }
+        } else {
+          setTimeout(() => BrowserApi.closePopup(window), closePopupDelay);
+        }
       }
-    } catch (e) {
+    } catch {
       this.ngZone.run(() => {
         this.platformUtilsService.showToast("error", null, this.i18nService.t("autofillError"));
         this.changeDetectorRef.detectChanges();
       });
     }
   }
+  // Cozy customization end
 
+  // cozy custo
   emptySearch() {
     this.searchText = "";
     document.getElementById("search").focus();
