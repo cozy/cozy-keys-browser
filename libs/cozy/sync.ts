@@ -9,6 +9,7 @@ import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 
 import { CozyClientService } from "../../apps/browser/src/popup/services/cozyClient.service";
 
+import { CONTACTS_DOCTYPE } from "./constants";
 import { convertAllContactsAsCiphers } from "./contactCipher";
 import { convertAllPapersAsCiphers } from "./paperCipher";
 import { fetchContactsAndPapers, fetchPapers, fetchMyself } from "./queries";
@@ -24,11 +25,11 @@ export const shouldDisplayContact = async (client: CozyClient, contact: IOCozyCo
 
   const me = await fetchMyself(client);
 
-  const contactRelatedToMe = // @ts-expect-error related added manually with an hydration
-    me[0].relationships?.related?.data?.find(
-      // @ts-expect-error related added manually with an hydration
-      (relatedContact) => relatedContact._id === contact._id,
-    );
+  // @ts-expect-error related added manually with an hydration
+  const contactRelatedToMe = contact.relationships?.related?.data?.find(
+    // @ts-expect-error related added manually with an hydration
+    (relation) => relation._id === me[0]._id && relation._type === CONTACTS_DOCTYPE,
+  );
 
   if (contactRelatedToMe) {
     return true;

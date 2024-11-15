@@ -75,16 +75,6 @@ export class RealTimeNotifications {
   }
 
   async dispatchUpdateContact(data: IOCozyContact) {
-    if (data.me) {
-      // We need to do a fullSync here because we have no other way to know
-      // if a contact related to me was removed of the me relation
-      this.logService.info(`Starting full sync from realtime because me`);
-
-      this.messagingService.send("fullSync");
-
-      return;
-    }
-
     const contactMustBeDisplayed = await shouldDisplayContact(this.client, data);
 
     if (contactMustBeDisplayed) {
