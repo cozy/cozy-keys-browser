@@ -24,9 +24,11 @@ export const shouldDisplayContact = async (client: CozyClient, contact: IOCozyCo
 
   const me = await fetchMyself(client);
 
-  const contactRelatedToMe =
-    // @ts-expect-error related added manually with an hydration
-    me?.[0]?.relationships?.related?.data.find((relatedContact) => relatedContact._id === contact._id);
+  const contactRelatedToMe = // @ts-expect-error related added manually with an hydration
+    me?.[0]?.relationships?.related?.data.find(
+      // @ts-expect-error related added manually with an hydration
+      (relatedContact) => relatedContact._id === contact._id,
+    );
 
   if (contactRelatedToMe) {
     return true;
