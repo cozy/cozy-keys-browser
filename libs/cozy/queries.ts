@@ -90,7 +90,7 @@ export const buildMyselfQuery = () => {
   return {
     definition: Q(CONTACTS_DOCTYPE).where({ me: true }),
     options: {
-      as: `${CONTACTS_DOCTYPE}/myself`
+      as: `${CONTACTS_DOCTYPE}/myself`,
     },
   };
 };

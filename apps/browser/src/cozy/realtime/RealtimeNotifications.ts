@@ -65,12 +65,12 @@ export class RealTimeNotifications {
     const contactMustBeDisplayed = await shouldDisplayContact(this.client, data);
 
     if (contactMustBeDisplayed) {
-      this.logService.info(`Contact ${data.displayName} (${data._id}) added from realtime`)
+      this.logService.info(`Contact ${data.displayName} (${data._id}) added from realtime`);
       await this.upsertContactData(data);
 
       await dispatchCreate(this.client, "io.cozy.contacts", data as CouchDBDocument);
     } else {
-      this.logService.info(`Contact ${data.displayName} (${data._id}) not added from realtime`)
+      this.logService.info(`Contact ${data.displayName} (${data._id}) not added from realtime`);
     }
   }
 
@@ -78,7 +78,7 @@ export class RealTimeNotifications {
     if (data.me) {
       // We need to do a fullSync here because we have no other way to know
       // if a contact related to me was removed of the me relation
-      this.logService.info(`Starting full sync from realtime because me`)
+      this.logService.info(`Starting full sync from realtime because me`);
 
       this.messagingService.send("fullSync");
 
@@ -92,11 +92,15 @@ export class RealTimeNotifications {
 
       await dispatchUpdate(this.client, "io.cozy.contacts", data as CouchDBDocument);
 
-      this.logService.info(`Contact ${data.displayName} (${data._id}) added or updated from realtime because changed`)
+      this.logService.info(
+        `Contact ${data.displayName} (${data._id}) added or updated from realtime because changed`,
+      );
     } else {
       await this.dispatchDeleteContact(data);
 
-      this.logService.info(`Contact ${data.displayName} (${data._id}) removed from realtime because changed`)
+      this.logService.info(
+        `Contact ${data.displayName} (${data._id}) removed from realtime because changed`,
+      );
     }
   }
 
@@ -125,7 +129,7 @@ export class RealTimeNotifications {
       every case.
     */
 
-    this.logService.info(`Starting full sync from realtime because paper updated`)
+    this.logService.info(`Starting full sync from realtime because paper updated`);
 
     this.messagingService.send("fullSync");
   }
@@ -146,7 +150,7 @@ export class RealTimeNotifications {
       every case.
     */
 
-    this.logService.info(`Starting full sync from realtime because paper deleted`)
+    this.logService.info(`Starting full sync from realtime because paper deleted`);
 
     this.messagingService.send("fullSync");
   }
