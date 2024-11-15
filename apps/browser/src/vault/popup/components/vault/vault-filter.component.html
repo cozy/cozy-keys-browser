@@ -105,6 +105,7 @@
           [cipher]="favoriteCipher"
           title="{{ 'viewItem' | i18n }}"
           (onSelected)="selectCipher($event)"
+          (onAutofill)="fillCipher($event)"
           (launchEvent)="launchCipher($event)"
           [showView]="true"
         >
@@ -381,6 +382,7 @@
             [cipher]="searchedCipher"
             title="{{ 'viewItem' | i18n }}"
             (onSelected)="selectCipher($event)"
+            (onAutofill)="fillCipher($event)"
             (launchEvent)="launchCipher($event)"
             [showView]="true"
           >

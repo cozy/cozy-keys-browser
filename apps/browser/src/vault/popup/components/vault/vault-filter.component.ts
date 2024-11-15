@@ -42,6 +42,7 @@ import { VaultFilterService } from "../../../services/vault-filter.service";
 /* eslint-disable */
 import { PasswordRepromptService } from "@bitwarden/vault";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { MessageSender } from "@bitwarden/common/platform/messaging";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
@@ -137,6 +138,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     private location: Location,
     private autofillService: AutofillService,
     private passwordRepromptService: PasswordRepromptService,
+    private messageSender: MessageSender,
     private konnectorService: KonnectorsService,
     private organizationService: OrganizationService,
     private cryptoService: CryptoService,
@@ -668,6 +670,28 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     }
 
     try {
+      // Cozy customization; send doAutoFill to background because
+      // doAutoFill needs a Cozy Client store with all the contacts
+      // and only the background Cozy Client store has them on Manifest V3
+      if (
+        (cipher.type === CipherType.Contact || cipher.type === CipherType.Paper) &&
+        BrowserApi.isManifestVersion(3)
+      ) {
+        this.messageSender.send("doAutoFill", {
+          autofillOptions: {
+            tab: this.tab,
+            cipher: cipher,
+            pageDetails: this.pageDetails,
+            doc: window.document,
+            fillNewPassword: true,
+            allowTotpAutofill: true,
+          },
+        });
+
+        return;
+      }
+      // Cozy customization end
+
       this.totpCode = await this.autofillService.doAutoFill({
         tab: this.tab,
         cipher: cipher,
