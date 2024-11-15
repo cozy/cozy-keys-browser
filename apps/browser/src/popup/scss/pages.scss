@@ -193,14 +193,21 @@ body.body-full {
   font-style: italic;
 }
 
+// Cozy customization
+.login-page .box-content-row {
+  border-radius: $border-radius;
+  margin: 3px 5px;
+}
+// Cozy customization end
+
 .remember-email-check {
   padding-top: 18px;
   padding-left: 10px;
-  /*Cozy custo
   padding-bottom: 18px;
-  */
-  padding-bottom: 25px;
-  /* end custo */
+  // Cozy customization; better alignment with the checkbox
+  display: flex;
+  gap: 4px;
+  // Cozy customization end
 }
 
 .login-buttons > button {
