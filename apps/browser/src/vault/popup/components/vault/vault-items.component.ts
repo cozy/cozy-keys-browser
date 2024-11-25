@@ -266,7 +266,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
       .subscribe((pageDetails) => (this.pageDetails = pageDetails));
     // Cozy customization end
 
-    super.load(filter);
+    super.load(filter, deleted);
   }
 
   ngOnDestroy() {
