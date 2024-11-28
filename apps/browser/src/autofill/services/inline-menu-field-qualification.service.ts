@@ -321,9 +321,21 @@ export class InlineMenuFieldQualificationService
    * @param _pageDetails - Currently unused, will likely be required in the future
    */
   isFieldForIdentityForm(field: AutofillField, _pageDetails: AutofillPageDetails): boolean {
+    // Cozy customization, do not show inline menu if autocomplete is off
+    // Bitwarden decided to use only autocomplete field for identity but we changed it below.
+    // So we need to add back a small check to avoid showing the inline menu when autocomplete is off.
+    //*
+    if (
+      this.isExcludedFieldType(field, this.excludedAutofillFieldTypesSet) ||
+      this.fieldContainsAutocompleteValues(field, this.autocompleteDisabledValues)
+    ) {
+      return false;
+    }
+    /*/
     if (this.isExcludedFieldType(field, this.excludedAutofillFieldTypesSet)) {
       return false;
     }
+    //*/
 
     // Cozy customization, do not use only autocomplete field for identity
     // Bitwarden decided to use only autocomplete field for identity but it is too strict
