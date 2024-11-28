@@ -1541,7 +1541,12 @@ export class InlineMenuFieldQualificationService
       const keywords = [
         autofillFieldData.htmlID,
         autofillFieldData.htmlName,
+        // Cozy customization; do not check in classes for inline menu
+        // It triggers a lot of false positive, for example if a class "error-state" is present
+        // it will show the inline menu for addresses because of "state"
+        /*
         autofillFieldData.htmlClass,
+        */
         autofillFieldData.type,
         autofillFieldData.title,
         autofillFieldData.placeholder,
