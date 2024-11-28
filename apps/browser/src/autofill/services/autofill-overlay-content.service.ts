@@ -66,6 +66,8 @@ function getAppURLCozy(cozyUrl: string, appName: string, hash: string, nested: b
 let cozyPasswordsHostnames: string[] = [];
 let cozyContactsHostnames: string[] = [];
 let cozyMespapiersHostnames: string[] = [];
+let cozyDriveHostnames: string[] = [];
+let cozyPhotosHostnames: string[] = [];
 
 chrome.storage.local.get("global_environment_environment", (response) => {
   const storedValue = response?.global_environment_environment?.value;
@@ -84,6 +86,14 @@ chrome.storage.local.get("global_environment_environment", (response) => {
     cozyMespapiersHostnames = [
       new URL(getAppURLCozy(parsedValue.urls.base, "mespapiers", "", true)).hostname,
       new URL(getAppURLCozy(parsedValue.urls.base, "mespapiers", "", false)).hostname,
+    ];
+    cozyDriveHostnames = [
+      new URL(getAppURLCozy(parsedValue.urls.base, "drive", "", true)).hostname,
+      new URL(getAppURLCozy(parsedValue.urls.base, "drive", "", false)).hostname,
+    ];
+    cozyPhotosHostnames = [
+      new URL(getAppURLCozy(parsedValue.urls.base, "photos", "", true)).hostname,
+      new URL(getAppURLCozy(parsedValue.urls.base, "photos", "", false)).hostname,
     ];
   }
 });
@@ -1218,6 +1228,14 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       }
 
       if (cozyMespapiersHostnames.find((hostname) => hostname === url.hostname)) {
+        return true;
+      }
+
+      if (cozyDriveHostnames.find((hostname) => hostname === url.hostname)) {
+        return true;
+      }
+
+      if (cozyPhotosHostnames.find((hostname) => hostname === url.hostname)) {
         return true;
       }
 
