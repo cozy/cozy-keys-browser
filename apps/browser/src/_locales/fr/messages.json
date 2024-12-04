@@ -5285,8 +5285,8 @@
     "description": "Notification message for when a password has been regenerated"
   },
   "saveLoginToBitwarden": {
-    "message": "Enregistrer l'identifiant sur Bitwarden ?",
-    "description": "Confirmation message for saving a login to Bitwarden"
+    "message": "Enregistrer l'identifiant",
+    "description": "Confirmation message for saving a login"
   },
   "spaceCharacterDescriptor": {
     "message": "Espace",
