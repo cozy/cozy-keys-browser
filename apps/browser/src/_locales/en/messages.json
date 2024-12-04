@@ -1648,7 +1648,7 @@
     "message": "Show autofill suggestions on form fields"
   },
   "showInlineMenuIdentitiesLabel": {
-    "message": "Display identities as suggestions"
+    "message": "Display contacts as suggestions"
   },
   "showInlineMenuCardsLabel": {
     "message": "Display cards as suggestions"
