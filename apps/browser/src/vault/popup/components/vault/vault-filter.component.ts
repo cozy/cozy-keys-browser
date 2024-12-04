@@ -366,9 +366,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   async selectCollection(collection: CollectionView) {
     /** Cozy custo : if the collection is not yet validated, then display a warning */
     if (this.notValidatedCollectionId.includes(collection.id)) {
-      const fingerprint = await this.keyService.getFingerprint(
-        await this.stateService.getUserId(),
-      );
+      const fingerprint = await this.keyService.getFingerprint(await this.stateService.getUserId());
       const desc = `<p class="security-code-desc">
         ${this.i18nService.t("sharingNotAcceptedYetDesc1")}
         </p><p class="security-code">

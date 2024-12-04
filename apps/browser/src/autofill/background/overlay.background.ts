@@ -2377,25 +2377,17 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         "new_paperIdentityCardNumber",
         "new_paperPassportNumber",
         "new_paperSocialSecurityNumber",
-
         "new_paperResidencePermitNumber",
-
         "new_paperDrivingLicenseNumber",
-
         "new_paperVehicleRegistrationNumber",
-
         "new_paperVehicleRegistrationConfidentialCode",
-
         "new_paperVehicleRegistrationLicensePlateNumber",
-
         "new_paperBankIbanNumber",
         "new_paperBankBicNumber",
         "new_paperGrossSalaryAmount",
         "new_paperNetSalaryAmount",
         "new_paperTaxNoticeNumber",
-
         "new_paperTaxNoticeRefTaxIncome",
-
         "autofill_identityTitle",
         "autofill_identityFirstName",
         "autofill_identityMiddleName",
@@ -2437,6 +2429,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         "familyName",
         "displayName",
         "label",
+        "edit",
         "save",
         "cancel",
       ];
