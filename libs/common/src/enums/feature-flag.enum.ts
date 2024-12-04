@@ -82,7 +82,12 @@ export const DefaultFeatureFlagValue = {
   [FeatureFlag.EnableUpgradePasswordManagerSub]: FALSE,
   [FeatureFlag.GenerateIdentityFillScriptRefactor]: FALSE,
   [FeatureFlag.EnableNewCardCombinedExpiryAutofill]: FALSE,
+  // Cozy customization, temporary fix for Zimbra webmail which do not display emails when the extension is enabled
+  //*
+  [FeatureFlag.DelayFido2PageScriptInitWithinMv2]: true,
+  /*/
   [FeatureFlag.DelayFido2PageScriptInitWithinMv2]: FALSE,
+  //*/
   [FeatureFlag.AccountDeprovisioning]: FALSE,
   [FeatureFlag.NotificationBarAddLoginImprovements]: FALSE,
   [FeatureFlag.AC2476_DeprecateStripeSourcesAPI]: FALSE,
