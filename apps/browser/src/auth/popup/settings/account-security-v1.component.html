@@ -16,10 +16,12 @@
   <div class="box list">
     <h2 class="box-header">{{ "unlockMethods" | i18n }}</h2>
     <div class="box-content single-line">
+      <!-- Cozy customization; hide biometric
       <div class="box-content-row box-content-row-checkbox" appBoxRow *ngIf="supportsBiometric">
         <label for="biometric">{{ "unlockWithBiometrics" | i18n }}</label>
         <input id="biometric" type="checkbox" formControlName="biometric" />
       </div>
+      -->
       <div
         class="box-content-row box-content-row-checkbox"
         appBoxRow
@@ -94,6 +96,7 @@
       >
         <div class="row-main">{{ "fingerprintPhrase" | i18n }}</div>
       </button>
+      <!-- Cozy customization; hide 2FA link
       <button
         type="button"
         class="box-content-row box-content-row-flex text-default"
@@ -103,6 +106,7 @@
         <div class="row-main">{{ "twoStepLogin" | i18n }}</div>
         <i class="bwi bwi-external-link bwi-lg row-sub-icon" aria-hidden="true"></i>
       </button>
+      -->
       <button
         type="button"
         class="box-content-row box-content-row-flex text-default"
