@@ -5,7 +5,7 @@
     </ng-container>
   </popup-header>
 
-  <div class="tw-bg-background-alt tw-p-2">
+  <div class="tw-bg-background-alt">
     <p>
       <!--
       Cozy customisation: Replace "excludedDomainsDescAlt" & "excludedDomainsDesc" translation
@@ -24,7 +24,7 @@
       Cozy customisation end
       -->
     </p>
-    <bit-section>
+    <bit-section *ngIf="!isLoading">
       <bit-section-header>
         <h2 bitTypography="h6">{{ "domainsTitle" | i18n }}</h2>
         <span bitTypography="body2" slot="end">{{ excludedDomainsState?.length || 0 }}</span>
@@ -70,7 +70,13 @@
     </bit-section>
   </div>
   <popup-footer slot="footer">
-    <button bitButton buttonType="primary" type="submit" (click)="saveChanges()">
+    <button
+      bitButton
+      buttonType="primary"
+      type="submit"
+      [disabled]="dataIsPristine"
+      (click)="saveChanges()"
+    >
       {{ "save" | i18n }}
     </button>
   </popup-footer>

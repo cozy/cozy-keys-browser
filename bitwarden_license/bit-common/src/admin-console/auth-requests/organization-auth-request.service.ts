@@ -2,10 +2,11 @@ import {
   OrganizationUserApiService,
   OrganizationUserResetPasswordDetailsResponse,
 } from "@bitwarden/admin-console/common";
-import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { KeyService } from "@bitwarden/key-management";
 
 import { OrganizationAuthRequestApiService } from "./organization-auth-request-api.service";
 import { OrganizationAuthRequestUpdateRequest } from "./organization-auth-request-update.request";
@@ -14,7 +15,8 @@ import { PendingAuthRequestView } from "./pending-auth-request.view";
 export class OrganizationAuthRequestService {
   constructor(
     private organizationAuthRequestApiService: OrganizationAuthRequestApiService,
-    private cryptoService: CryptoService,
+    private keyService: KeyService,
+    private encryptService: EncryptService,
     private organizationUserApiService: OrganizationUserApiService,
   ) {}
 
@@ -108,17 +110,20 @@ export class OrganizationAuthRequestService {
     const devicePubKey = Utils.fromB64ToArray(devicePublicKey);
 
     // Decrypt Organization's encrypted Private Key with org key
-    const orgSymKey = await this.cryptoService.getOrgKey(organizationId);
-    const decOrgPrivateKey = await this.cryptoService.decryptToBytes(
+    const orgSymKey = await this.keyService.getOrgKey(organizationId);
+    const decOrgPrivateKey = await this.encryptService.decryptToBytes(
       new EncString(encryptedOrgPrivateKey),
       orgSymKey,
     );
 
     // Decrypt user key with decrypted org private key
-    const decValue = await this.cryptoService.rsaDecrypt(encryptedUserKey, decOrgPrivateKey);
+    const decValue = await this.encryptService.rsaDecrypt(
+      new EncString(encryptedUserKey),
+      decOrgPrivateKey,
+    );
     const userKey = new SymmetricCryptoKey(decValue);
 
     // Re-encrypt user Key with the Device Public Key
-    return await this.cryptoService.rsaEncrypt(userKey.key, devicePubKey);
+    return await this.encryptService.rsaEncrypt(userKey.key, devicePubKey);
   }
 }

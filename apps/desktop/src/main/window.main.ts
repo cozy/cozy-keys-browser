@@ -7,8 +7,8 @@ import { firstValueFrom } from "rxjs";
 
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { AbstractStorageService } from "@bitwarden/common/platform/abstractions/storage.service";
-import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
 import { processisolations } from "@bitwarden/desktop-napi";
+import { BiometricStateService } from "@bitwarden/key-management";
 
 import { WindowState } from "../platform/models/domain/window-state";
 import { DesktopSettingsService } from "../platform/services/desktop-settings.service";
@@ -308,7 +308,7 @@ export class WindowMain {
   }
 
   private async updateWindowState(configKey: string, win: BrowserWindow) {
-    if (win == null) {
+    if (win == null || win.isDestroyed()) {
       return;
     }
 

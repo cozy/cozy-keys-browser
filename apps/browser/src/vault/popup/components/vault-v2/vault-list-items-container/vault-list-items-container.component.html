@@ -1,27 +1,34 @@
 <bit-section *ngIf="ciphers?.length > 0 || description" [disableMargin]="disableSectionMargin">
-  <bit-section-header>
-    <h2 bitTypography="h6">
-      {{ title }}
-    </h2>
-    <button
-      *ngIf="showRefresh"
-      bitIconButton="bwi-refresh"
-      type="button"
-      size="small"
-      (click)="onRefresh.emit()"
-      [appA11yTitle]="'refresh' | i18n"
-    ></button>
-    <span bitTypography="body2" slot="end">{{ ciphers.length }}</span>
-  </bit-section-header>
+  <div class="tw-ml-1">
+    <bit-section-header>
+      <h2 bitTypography="h6">
+        {{ title }}
+      </h2>
+      <button
+        *ngIf="showRefresh"
+        bitIconButton="bwi-refresh"
+        type="button"
+        size="small"
+        (click)="onRefresh.emit()"
+        [appA11yTitle]="'refresh' | i18n"
+      ></button>
+      <span bitTypography="body2" slot="end">{{ ciphers.length }}</span>
+    </bit-section-header>
+  </div>
   <div *ngIf="description" class="tw-text-muted tw-px-1 tw-mb-2" bitTypography="body2">
     {{ description }}
   </div>
   <bit-item-group>
-    <cdk-virtual-scroll-viewport [itemSize]="ItemHeight">
+    <cdk-virtual-scroll-viewport
+      [itemSize]="ItemHeight"
+      class="tw-overflow-visible [&>.cdk-virtual-scroll-content-wrapper]:[contain:layout_style]"
+    >
       <bit-item *cdkVirtualFor="let cipher of ciphers">
-        <a
+        <button
           bit-item-content
+          type="button"
           (click)="onViewCipher(cipher)"
+          (dblclick)="launchCipher(cipher)"
           [appA11yTitle]="'viewItemTitle' | i18n: cipher.name"
           class="{{ ItemHeightClass }}"
         >
@@ -40,7 +47,7 @@
             [appA11yTitle]="'attachments' | i18n"
           ></i>
           <span slot="secondary">{{ cipher.subTitle }}</span>
-        </a>
+        </button>
         <ng-container slot="end">
           <bit-item-action *ngIf="showAutofillButton">
             <button
@@ -51,8 +58,18 @@
               [title]="'autofillTitle' | i18n: cipher.name"
               [attr.aria-label]="'autofillTitle' | i18n: cipher.name"
             >
-              {{ "autoFill" | i18n }}
+              {{ "fill" | i18n }}
             </button>
+          </bit-item-action>
+          <bit-item-action *ngIf="!showAutofillButton && cipher.canLaunch">
+            <button
+              type="button"
+              bitIconButton="bwi-external-link"
+              size="small"
+              (click)="launchCipher(cipher)"
+              [attr.aria-label]="'launchWebsiteName' | i18n: cipher.name"
+              [title]="'launchWebsiteName' | i18n: cipher.name"
+            ></button>
           </bit-item-action>
           <app-item-copy-actions [cipher]="cipher"></app-item-copy-actions>
           <app-item-more-options

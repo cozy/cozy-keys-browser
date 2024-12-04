@@ -18,7 +18,7 @@ import { AccountService } from "@bitwarden/common/auth/abstractions/account.serv
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
-import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
@@ -29,7 +29,9 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { TotpService } from "@bitwarden/common/vault/abstractions/totp.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { CipherAuthorizationService } from "@bitwarden/common/vault/services/cipher-authorization.service";
 import { DialogService } from "@bitwarden/components";
+import { KeyService } from "@bitwarden/key-management";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
 const BroadcasterSubscriptionId = "ViewComponent";
@@ -47,7 +49,8 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
     totpService: TotpService,
     tokenService: TokenService,
     i18nService: I18nService,
-    cryptoService: CryptoService,
+    keyService: KeyService,
+    encryptService: EncryptService,
     platformUtilsService: PlatformUtilsService,
     auditService: AuditService,
     broadcasterService: BroadcasterService,
@@ -64,6 +67,7 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
     datePipe: DatePipe,
     billingAccountProfileStateService: BillingAccountProfileStateService,
     accountService: AccountService,
+    cipherAuthorizationService: CipherAuthorizationService,
   ) {
     super(
       cipherService,
@@ -71,7 +75,8 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
       totpService,
       tokenService,
       i18nService,
-      cryptoService,
+      keyService,
+      encryptService,
       platformUtilsService,
       auditService,
       window,
@@ -88,6 +93,7 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
       datePipe,
       accountService,
       billingAccountProfileStateService,
+      cipherAuthorizationService,
     );
   }
   ngOnInit() {

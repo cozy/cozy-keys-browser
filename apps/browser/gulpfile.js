@@ -14,10 +14,6 @@ const betaBuild = process.env.BETA_BUILD === "1";
 const paths = {
   build: "./build/",
   dist: "./dist/",
-  coverage: "./coverage/",
-  node_modules: "./node_modules/",
-  popupDir: "./src/popup/",
-  cssDir: "./src/popup/css/",
   safari: "./src/safari/",
 };
 
@@ -65,11 +61,9 @@ function distFileName(browserName, ext) {
 
 async function dist(browserName, manifest) {
   const { default: zip } = await import("gulp-zip");
-  const { default: filter } = await import("gulp-filter");
 
   return gulp
     .src(paths.build + "**/*")
-    .pipe(filter(["**"].concat(filters.fonts).concat(filters.safari)))
     .pipe(gulpif("popup/index.html", replace("__BROWSER__", "browser_" + browserName)))
     .pipe(gulpif("manifest.json", jeditor(manifest)))
     .pipe(zip(distFileName(browserName, "zip")))
@@ -194,8 +188,6 @@ function distSafariApp(cb, subBuildPath) {
       return new Promise((resolve) => proc.on("close", resolve));
     })
     .then(async () => {
-      const { default: filter } = await import("gulp-filter");
-
       const libs = fs
         .readdirSync(builtAppexFrameworkPath)
         .filter((p) => p.endsWith(".dylib"))
@@ -239,13 +231,10 @@ function safariCopyAssets(source, dest) {
 }
 
 async function safariCopyBuild(source, dest) {
-  const { default: filter } = await import("gulp-filter");
-
   return new Promise((resolve, reject) => {
     gulp
       .src(source)
       .on("error", reject)
-      .pipe(filter(["**"].concat(filters.fonts)))
       .pipe(gulpif("popup/index.html", replace("__BROWSER__", "browser_safari")))
       .pipe(
         gulpif(
@@ -275,17 +264,6 @@ async function safariCopyBuild(source, dest) {
 function stdOutProc(proc) {
   proc.stdout.on("data", (data) => console.log(data.toString()));
   proc.stderr.on("data", (data) => console.error(data.toString()));
-}
-
-async function ciCoverage(cb) {
-  const { default: zip } = await import("gulp-zip");
-  const { default: filter } = await import("gulp-filter");
-
-  return gulp
-    .src(paths.coverage + "**/*")
-    .pipe(filter(["**", "!coverage/coverage*.zip"]))
-    .pipe(zip(`coverage${buildString()}.zip`))
-    .pipe(gulp.dest(paths.coverage));
 }
 
 function applyBetaLabels(manifest) {
@@ -321,5 +299,3 @@ exports["dist:safari:mas"] = distSafariMas;
 exports["dist:safari:masdev"] = distSafariMasDev;
 exports["dist:safari:dmg"] = distSafariDmg;
 exports.dist = gulp.parallel(distFirefox, distChrome, distOpera, distEdge);
-exports["ci:coverage"] = ciCoverage;
-exports.ci = ciCoverage;

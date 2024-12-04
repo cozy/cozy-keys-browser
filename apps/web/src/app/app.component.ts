@@ -1,9 +1,11 @@
 import { DOCUMENT } from "@angular/common";
 import { Component, Inject, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { NavigationEnd, Router } from "@angular/router";
 import * as jq from "jquery";
-import { Subject, filter, firstValueFrom, map, takeUntil, timeout } from "rxjs";
+import { Subject, filter, firstValueFrom, map, takeUntil, timeout, catchError, of } from "rxjs";
 
+import { CollectionService } from "@bitwarden/admin-console/common";
 import { LogoutReason } from "@bitwarden/auth/common";
 import { EventUploadService } from "@bitwarden/common/abstractions/event/event-upload.service";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
@@ -17,19 +19,20 @@ import { KeyConnectorService } from "@bitwarden/common/auth/abstractions/key-con
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
-import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { SdkService } from "@bitwarden/common/platform/abstractions/sdk/sdk.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
-import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
 import { StateEventRunnerService } from "@bitwarden/common/platform/state";
 import { SyncService } from "@bitwarden/common/platform/sync";
-import { UserId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { DialogService, ToastOptions, ToastService } from "@bitwarden/components";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
+import { KeyService, BiometricStateService } from "@bitwarden/key-management";
+
+import { flagEnabled } from "../utils/flags";
 
 import { PolicyListService } from "./admin-console/core/policy-list.service";
 import {
@@ -71,7 +74,7 @@ export class AppComponent implements OnDestroy, OnInit {
     private platformUtilsService: PlatformUtilsService,
     private ngZone: NgZone,
     private vaultTimeoutService: VaultTimeoutService,
-    private cryptoService: CryptoService,
+    private keyService: KeyService,
     private collectionService: CollectionService,
     private searchService: SearchService,
     private notificationsService: NotificationsService,
@@ -86,7 +89,28 @@ export class AppComponent implements OnDestroy, OnInit {
     private stateEventRunnerService: StateEventRunnerService,
     private organizationService: InternalOrganizationServiceAbstraction,
     private accountService: AccountService,
-  ) {}
+    private logService: LogService,
+    private sdkService: SdkService,
+  ) {
+    if (flagEnabled("sdk")) {
+      // Warn if the SDK for some reason can't be initialized
+      this.sdkService.supported$
+        .pipe(
+          takeUntilDestroyed(),
+          catchError(() => {
+            return of(false);
+          }),
+        )
+        .subscribe((supported) => {
+          if (!supported) {
+            this.logService.debug("SDK is not supported");
+            this.sdkService.failedToInitialize("web").catch((e) => this.logService.error(e));
+          } else {
+            this.logService.debug("SDK is supported");
+          }
+        });
+    }
+  }
 
   ngOnInit() {
     this.i18nService.locale$.pipe(takeUntil(this.destroy$)).subscribe((locale) => {
@@ -119,9 +143,12 @@ export class AppComponent implements OnDestroy, OnInit {
             this.notificationsService.updateConnection(false);
             break;
           case "loggedOut":
-            // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            this.notificationsService.updateConnection(false);
+            if (
+              message.userId == null ||
+              message.userId === (await firstValueFrom(this.accountService.activeAccount$))
+            ) {
+              await this.notificationsService.updateConnection(false);
+            }
             break;
           case "unlocked":
             // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
@@ -185,7 +212,7 @@ export class AppComponent implements OnDestroy, OnInit {
             if (premiumConfirmed) {
               // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
               // eslint-disable-next-line @typescript-eslint/no-floating-promises
-              this.router.navigate(["settings/subscription/premium"]);
+              await this.router.navigate(["settings/subscription/premium"]);
             }
             break;
           }
@@ -274,7 +301,7 @@ export class AppComponent implements OnDestroy, OnInit {
     await this.displayLogoutReason(logoutReason);
 
     await this.eventUploadService.uploadEvents();
-    const userId = (await this.stateService.getUserId()) as UserId;
+    const userId = await firstValueFrom(this.accountService.activeAccount$.pipe(map((a) => a?.id)));
 
     const logoutPromise = firstValueFrom(
       this.authService.authStatusFor$(userId).pipe(
@@ -289,7 +316,7 @@ export class AppComponent implements OnDestroy, OnInit {
     );
 
     await Promise.all([
-      this.cryptoService.clearKeys(),
+      this.keyService.clearKeys(),
       this.cipherService.clear(userId),
       this.folderService.clear(userId),
       this.collectionService.clear(userId),
@@ -311,7 +338,7 @@ export class AppComponent implements OnDestroy, OnInit {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.router.navigate(["/"]);
       }
-    });
+    }, userId);
   }
 
   private async recordActivity() {

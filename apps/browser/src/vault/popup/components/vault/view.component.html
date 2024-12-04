@@ -529,7 +529,7 @@
             attr.aria-label="{{ 'launch' | i18n }} {{ u.uri }}"
             appA11yTitle="{{ 'launch' | i18n }}"
             *ngIf="u.canLaunch"
-            (click)="launch(u)"
+            (click)="launch(u, cipher.id)"
           >
             <i class="bwi bwi-lg bwi-share-square" aria-hidden="true"></i>
           </button>
@@ -868,9 +868,7 @@
         class="box-content-row"
         appStopClick
         (click)="delete()"
-        *ngIf="
-          cipher.edit || cipher.type === cipherType.Paper || cipher.type === cipherType.Contact
-        "
+        *ngIf="canDeleteCipher$ | async"
       >
         <div class="row-main text-danger">
           <div class="icon text-danger" aria-hidden="true">

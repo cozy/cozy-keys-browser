@@ -1,7 +1,7 @@
 import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
-import { CipherType } from "@bitwarden/common/vault/enums";
 
 import { InlineMenuCipherData } from "../../../background/abstractions/overlay.background";
+import { InlineMenuFillTypes } from "../../../enums/autofill-overlay.enum";
 
 /* start Cozy imports */
 /* eslint-disable */
@@ -15,10 +15,11 @@ import { CozyAutofillOptions } from "src/autofill/services/abstractions/autofill
 
 type AutofillInlineMenuListMessage = { command: string };
 
-export type UpdateAutofillInlineMenuListCiphersMessage = AutofillInlineMenuListMessage & {
+export type UpdateAutofillInlineMenuListCiphersParams = {
   ciphers: InlineMenuCipherData[];
   showInlineMenuAccountCreation?: boolean;
   searchValue?: string;
+  isBack?: boolean;
 };
 
 // Cozy customization
@@ -39,6 +40,13 @@ export type UpdateAutofillInlineMenuListPaperMessage = AutofillInlineMenuListMes
 };
 // Cozy customization end
 
+export type UpdateAutofillInlineMenuListCiphersMessage = AutofillInlineMenuListMessage &
+  UpdateAutofillInlineMenuListCiphersParams;
+
+export type UpdateAutofillInlineMenuGeneratedPasswordMessage = AutofillInlineMenuListMessage & {
+  generatedPassword: string;
+};
+
 export type InitAutofillInlineMenuListMessage = AutofillInlineMenuListMessage & {
   authStatus: AuthenticationStatus;
   styleSheetUrl: string;
@@ -51,9 +59,12 @@ export type InitAutofillInlineMenuListMessage = AutofillInlineMenuListMessage & 
   fieldHtmlID?: string;
   fieldValue?: string;
   // Cozy customization end
-  filledByCipherType?: CipherType;
+  inlineMenuFillType?: InlineMenuFillTypes;
   showInlineMenuAccountCreation?: boolean;
+  showPasskeysLabels?: boolean;
   portKey: string;
+  generatedPassword?: string;
+  showSaveLoginMenu?: boolean;
 };
 
 export type AutofillInlineMenuListWindowMessageHandlers = {
@@ -78,6 +89,11 @@ export type AutofillInlineMenuListWindowMessageHandlers = {
     message: UpdateAutofillInlineMenuListAmbiguousMessage;
   }) => void;
   // Cozy customization end
+  updateAutofillInlineMenuGeneratedPassword: ({
+    message,
+  }: {
+    message: UpdateAutofillInlineMenuGeneratedPasswordMessage;
+  }) => void;
   focusAutofillInlineMenuList: () => void;
 };
 

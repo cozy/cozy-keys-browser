@@ -56,7 +56,8 @@ export class OssServeConfigurator {
       this.serviceContainer.collectionService,
       this.serviceContainer.totpService,
       this.serviceContainer.auditService,
-      this.serviceContainer.cryptoService,
+      this.serviceContainer.keyService,
+      this.serviceContainer.encryptService,
       this.serviceContainer.stateService,
       this.serviceContainer.searchService,
       this.serviceContainer.apiService,
@@ -78,7 +79,8 @@ export class OssServeConfigurator {
     this.createCommand = new CreateCommand(
       this.serviceContainer.cipherService,
       this.serviceContainer.folderService,
-      this.serviceContainer.cryptoService,
+      this.serviceContainer.keyService,
+      this.serviceContainer.encryptService,
       this.serviceContainer.apiService,
       this.serviceContainer.folderApiService,
       this.serviceContainer.billingAccountProfileStateService,
@@ -88,7 +90,8 @@ export class OssServeConfigurator {
     this.editCommand = new EditCommand(
       this.serviceContainer.cipherService,
       this.serviceContainer.folderService,
-      this.serviceContainer.cryptoService,
+      this.serviceContainer.keyService,
+      this.serviceContainer.encryptService,
       this.serviceContainer.apiService,
       this.serviceContainer.folderApiService,
       this.serviceContainer.accountService,
@@ -110,10 +113,12 @@ export class OssServeConfigurator {
       this.serviceContainer.apiService,
       this.serviceContainer.folderApiService,
       this.serviceContainer.billingAccountProfileStateService,
+      this.serviceContainer.cipherAuthorizationService,
     );
     this.confirmCommand = new ConfirmCommand(
       this.serviceContainer.apiService,
-      this.serviceContainer.cryptoService,
+      this.serviceContainer.keyService,
+      this.serviceContainer.encryptService,
       this.serviceContainer.organizationUserApiService,
     );
     this.restoreCommand = new RestoreCommand(this.serviceContainer.cipherService);
@@ -125,7 +130,7 @@ export class OssServeConfigurator {
     this.unlockCommand = new UnlockCommand(
       this.serviceContainer.accountService,
       this.serviceContainer.masterPasswordService,
-      this.serviceContainer.cryptoService,
+      this.serviceContainer.keyService,
       this.serviceContainer.userVerificationService,
       this.serviceContainer.cryptoFunctionService,
       this.serviceContainer.logService,
@@ -150,7 +155,7 @@ export class OssServeConfigurator {
       this.serviceContainer.sendService,
       this.serviceContainer.environmentService,
       this.serviceContainer.searchService,
-      this.serviceContainer.cryptoService,
+      this.serviceContainer.encryptService,
     );
     this.sendEditCommand = new SendEditCommand(
       this.serviceContainer.sendService,
@@ -394,7 +399,7 @@ export class OssServeConfigurator {
       this.processResponse(res, Response.error("You are not logged in."));
       return true;
     }
-    if (await this.serviceContainer.cryptoService.hasUserKey()) {
+    if (await this.serviceContainer.keyService.hasUserKey()) {
       return false;
     }
     this.processResponse(res, Response.error("Vault is locked."));

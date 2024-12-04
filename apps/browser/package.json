@@ -28,7 +28,6 @@
     "dist:safari:dmg": "npm run build:prod && gulp dist:safari:dmg",
     "dist:sources": "../../scripts/create-archive.sh",
     "test": "jest",
-    "test:coverage": "jest --coverage --coverageDirectory=coverage",
     "test:watch": "jest --watch",
     "test:watch:all": "jest --watchAll"
   }

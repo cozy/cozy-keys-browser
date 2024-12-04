@@ -4,13 +4,13 @@ import { IOCozyContact } from "cozy-client/types/types";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
-import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { DialogService, ToastService } from "@bitwarden/components";
+import { KeyService } from "@bitwarden/key-management";
 
 import { CozyClientService } from "../../apps/browser/src/popup/services/cozyClient.service";
 
@@ -19,14 +19,14 @@ import { fetchContact } from "./queries";
 
 const convertContactsAsCiphers = async (
   cipherService: CipherService,
-  cryptoService: CryptoService,
+  keyService: KeyService,
   i18nService: I18nService,
   accountService: AccountService,
   contacts: IOCozyContact[],
 ): Promise<CipherData[]> => {
   const contactsCiphers = [];
 
-  const key = await cryptoService.getUserKey();
+  const key = await keyService.getUserKey();
 
   for (const contact of contacts) {
     try {
@@ -53,7 +53,7 @@ const convertContactsAsCiphers = async (
 
 export const convertAllContactsAsCiphers = async (
   cipherService: CipherService,
-  cryptoService: CryptoService,
+  keyService: KeyService,
   i18nService: I18nService,
   accountService: AccountService,
   contacts: IOCozyContact[],
@@ -61,7 +61,7 @@ export const convertAllContactsAsCiphers = async (
   try {
     const contactsCiphers = await convertContactsAsCiphers(
       cipherService,
-      cryptoService,
+      keyService,
       i18nService,
       accountService,
       contacts,

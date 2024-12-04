@@ -6,7 +6,6 @@ import {
   distinctUntilChanged,
   distinctUntilKeyChanged,
   filter,
-  from,
   map,
   merge,
   MonoTypeOperatorFunction,
@@ -20,13 +19,13 @@ import {
   withLatestFrom,
 } from "rxjs";
 
+import { CollectionService } from "@bitwarden/admin-console/common";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { SyncService } from "@bitwarden/common/platform/sync";
 import { CollectionId, OrganizationId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
-import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { VaultSettingsService } from "@bitwarden/common/vault/abstractions/vault-settings/vault-settings.service";
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -111,6 +110,14 @@ export class VaultPopupItemsService {
     ),
   );
 
+  /**
+   * Observable that indicates whether there is search text present that is searchable.
+   * @private
+   */
+  private _hasSearchText$ = this._searchText$.pipe(
+    switchMap((searchText) => this.searchService.isSearchable(searchText)),
+  );
+
   private _filteredCipherList$: Observable<PopupCipherView[]> = combineLatest([
     this._activeCipherList$,
     this._searchText$,
@@ -179,7 +186,11 @@ export class VaultPopupItemsService {
         (cipher) => !autoFillCiphers.includes(cipher) && !favoriteCiphers.includes(cipher),
       ),
     ),
-    map((ciphers) => ciphers.sort(this.cipherService.getLocaleSortingFunction())),
+    withLatestFrom(this._hasSearchText$),
+    map(([ciphers, hasSearchText]) =>
+      // Do not sort alphabetically when there is search text, default to the search service scoring
+      hasSearchText ? ciphers : ciphers.sort(this.cipherService.getLocaleSortingFunction()),
+    ),
     shareReplay({ refCount: false, bufferSize: 1 }),
   );
 
@@ -192,19 +203,14 @@ export class VaultPopupItemsService {
   ).pipe(startWith(true), distinctUntilChanged(), shareReplay({ refCount: false, bufferSize: 1 }));
 
   /**
-   * Observable that indicates whether a filter is currently applied to the ciphers.
+   * Observable that indicates whether a filter or search text is currently applied to the ciphers.
    */
   hasFilterApplied$ = combineLatest([
-    this._searchText$,
+    this._hasSearchText$,
     this.vaultPopupListFiltersService.filters$,
   ]).pipe(
-    switchMap(([searchText, filters]) => {
-      return from(this.searchService.isSearchable(searchText)).pipe(
-        map(
-          (isSearchable) =>
-            isSearchable || Object.values(filters).some((filter) => filter !== null),
-        ),
-      );
+    map(([hasSearchText, filters]) => {
+      return hasSearchText || Object.values(filters).some((filter) => filter !== null);
     }),
   );
 
