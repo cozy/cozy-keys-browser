@@ -9,10 +9,8 @@ export enum FeatureFlag {
   GeneratorToolsModernization = "generator-tools-modernization",
   EnableConsolidatedBilling = "enable-consolidated-billing",
   AC1795_UpdatedSubscriptionStatusSection = "AC-1795_updated-subscription-status-section",
-  EnableDeleteProvider = "AC-1218-delete-provider",
   ExtensionRefresh = "extension-refresh",
   PersistPopupView = "persist-popup-view",
-  RestrictProviderAccess = "restrict-provider-access",
   PM4154_BulkEncryptionService = "PM-4154-bulk-encryption-service",
   UseTreeWalkerApiForPageDetailsCollection = "use-tree-walker-api-for-page-details-collection",
   EmailVerification = "email-verification",
@@ -23,10 +21,7 @@ export enum FeatureFlag {
   InlineMenuPositioningImprovements = "inline-menu-positioning-improvements",
   ProviderClientVaultPrivacyBanner = "ac-2833-provider-client-vault-privacy-banner",
   VaultBulkManagementAction = "vault-bulk-management-action",
-  AC2828_ProviderPortalMembersPage = "AC-2828_provider-portal-members-page",
   IdpAutoSubmitLogin = "idp-auto-submit-login",
-  DeviceTrustLogging = "pm-8285-device-trust-logging",
-  AuthenticatorTwoFactorToken = "authenticator-2fa-token",
   UnauthenticatedExtensionUIRefresh = "unauth-ui-refresh",
   EnableUpgradePasswordManagerSub = "AC-2708-upgrade-password-manager-sub",
   GenerateIdentityFillScriptRefactor = "generate-identity-fill-script-refactor",
@@ -36,6 +31,11 @@ export enum FeatureFlag {
   NotificationBarAddLoginImprovements = "notification-bar-add-login-improvements",
   AC2476_DeprecateStripeSourcesAPI = "AC-2476-deprecate-stripe-sources-api",
   CipherKeyEncryption = "cipher-key-encryption",
+  VerifiedSsoDomainEndpoint = "pm-12337-refactor-sso-details-endpoint",
+  PM11901_RefactorSelfHostingLicenseUploader = "PM-11901-refactor-self-hosting-license-uploader",
+  AccessIntelligence = "pm-13227-access-intelligence",
+  Pm13322AddPolicyDefinitions = "pm-13322-add-policy-definitions",
+  LimitCollectionCreationDeletionSplit = "pm-10863-limit-collection-creation-deletion-split",
 }
 
 export type AllowedFeatureFlagTypes = boolean | number | string;
@@ -55,7 +55,6 @@ export const DefaultFeatureFlagValue = {
   [FeatureFlag.GeneratorToolsModernization]: FALSE,
   [FeatureFlag.EnableConsolidatedBilling]: FALSE,
   [FeatureFlag.AC1795_UpdatedSubscriptionStatusSection]: FALSE,
-  [FeatureFlag.EnableDeleteProvider]: FALSE,
   [FeatureFlag.ExtensionRefresh]: FALSE,
   // Cozy customization, enable Bitwarden history service
   //*
@@ -63,7 +62,6 @@ export const DefaultFeatureFlagValue = {
   /*/
   [FeatureFlag.PersistPopupView]: FALSE,
   //*/
-  [FeatureFlag.RestrictProviderAccess]: FALSE,
   [FeatureFlag.PM4154_BulkEncryptionService]: FALSE,
   [FeatureFlag.UseTreeWalkerApiForPageDetailsCollection]: FALSE,
   [FeatureFlag.EmailVerification]: FALSE,
@@ -79,10 +77,7 @@ export const DefaultFeatureFlagValue = {
   //*/
   [FeatureFlag.ProviderClientVaultPrivacyBanner]: FALSE,
   [FeatureFlag.VaultBulkManagementAction]: FALSE,
-  [FeatureFlag.AC2828_ProviderPortalMembersPage]: FALSE,
   [FeatureFlag.IdpAutoSubmitLogin]: FALSE,
-  [FeatureFlag.DeviceTrustLogging]: FALSE,
-  [FeatureFlag.AuthenticatorTwoFactorToken]: FALSE,
   [FeatureFlag.UnauthenticatedExtensionUIRefresh]: FALSE,
   [FeatureFlag.EnableUpgradePasswordManagerSub]: FALSE,
   [FeatureFlag.GenerateIdentityFillScriptRefactor]: FALSE,
@@ -92,6 +87,11 @@ export const DefaultFeatureFlagValue = {
   [FeatureFlag.NotificationBarAddLoginImprovements]: FALSE,
   [FeatureFlag.AC2476_DeprecateStripeSourcesAPI]: FALSE,
   [FeatureFlag.CipherKeyEncryption]: FALSE,
+  [FeatureFlag.VerifiedSsoDomainEndpoint]: FALSE,
+  [FeatureFlag.PM11901_RefactorSelfHostingLicenseUploader]: FALSE,
+  [FeatureFlag.AccessIntelligence]: FALSE,
+  [FeatureFlag.Pm13322AddPolicyDefinitions]: FALSE,
+  [FeatureFlag.LimitCollectionCreationDeletionSplit]: FALSE,
 } satisfies Record<FeatureFlag, AllowedFeatureFlagTypes>;
 
 export type DefaultFeatureFlagValueType = typeof DefaultFeatureFlagValue;

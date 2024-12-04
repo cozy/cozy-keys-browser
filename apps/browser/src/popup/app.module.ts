@@ -15,20 +15,22 @@ import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ColorPasswordCountPipe } from "@bitwarden/angular/pipes/color-password-count.pipe";
 import { ColorPasswordPipe } from "@bitwarden/angular/pipes/color-password.pipe";
 import { UserVerificationDialogComponent } from "@bitwarden/auth/angular";
-import { AvatarModule, ButtonModule, ToastModule } from "@bitwarden/components";
+import { AvatarModule, ButtonModule, FormFieldModule, ToastModule } from "@bitwarden/components";
 
 import { AccountComponent } from "../auth/popup/account-switching/account.component";
 import { CurrentAccountComponent } from "../auth/popup/account-switching/current-account.component";
 import { EnvironmentComponent } from "../auth/popup/environment.component";
+import { ExtensionAnonLayoutWrapperComponent } from "../auth/popup/extension-anon-layout-wrapper/extension-anon-layout-wrapper.component";
 import { HintComponent } from "../auth/popup/hint.component";
 import { HomeComponent } from "../auth/popup/home.component";
 import { LockComponent } from "../auth/popup/lock.component";
 import { LoginDecryptionOptionsComponent } from "../auth/popup/login-decryption-options/login-decryption-options.component";
+import { LoginComponentV1 } from "../auth/popup/login-v1.component";
 import { LoginViaAuthRequestComponent } from "../auth/popup/login-via-auth-request.component";
-import { LoginComponent } from "../auth/popup/login.component";
 import { RegisterComponent } from "../auth/popup/register.component";
 import { RemovePasswordComponent } from "../auth/popup/remove-password.component";
 import { SetPasswordComponent } from "../auth/popup/set-password.component";
+import { AccountSecurityComponent as AccountSecurityComponentV1 } from "../auth/popup/settings/account-security-v1.component";
 import { AccountSecurityComponent } from "../auth/popup/settings/account-security.component";
 import { VaultTimeoutInputComponent } from "../auth/popup/settings/vault-timeout-input.component";
 import { SsoComponent } from "../auth/popup/sso.component";
@@ -112,6 +114,7 @@ import "../platform/popup/locales";
     A11yModule,
     AppRoutingModule,
     AutofillComponent,
+    AccountSecurityComponent,
     ToastModule.forRoot({
       maxOpened: 2,
       autoDismiss: true,
@@ -146,6 +149,8 @@ import "../platform/popup/locales";
     HeaderComponent,
     UserVerificationDialogComponent,
     CurrentAccountComponent,
+    FormFieldModule,
+    ExtensionAnonLayoutWrapperComponent,
   ],
   declarations: [
     ActionButtonsComponent,
@@ -169,7 +174,7 @@ import "../platform/popup/locales";
     HintComponent,
     HomeComponent,
     LockComponent,
-    LoginComponent,
+    LoginComponentV1,
     LoginViaAuthRequestComponent,
     LoginDecryptionOptionsComponent,
     NotificationsSettingsV1Component,
@@ -184,7 +189,6 @@ import "../platform/popup/locales";
     SendListComponent,
     SendTypeComponent,
     SetPasswordComponent,
-    AccountSecurityComponent,
     SettingsComponent,
     VaultSettingsComponent,
     ShareComponent,
@@ -196,6 +200,7 @@ import "../platform/popup/locales";
     TwoFactorOptionsComponent,
     UpdateTempPasswordComponent,
     UserVerificationComponent,
+    AccountSecurityComponentV1,
     VaultTimeoutInputComponent,
     ViewComponent,
     ViewCustomFieldsComponent,

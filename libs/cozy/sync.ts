@@ -2,10 +2,10 @@ import CozyClient from "cozy-client";
 import { IOCozyContact, IOCozyFile } from "cozy-client/types/types";
 
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
-import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
+import { KeyService } from "@bitwarden/key-management";
 
 import { CozyClientService } from "../../apps/browser/src/popup/services/cozyClient.service";
 
@@ -89,7 +89,7 @@ export const selectContactsAndPapers = (
 
 export const getCozyCiphers = async (
   cipherService: CipherService,
-  cryptoService: CryptoService,
+  keyService: KeyService,
   cozyClientService: CozyClientService,
   i18nService: I18nService,
   accountService: AccountService,
@@ -102,14 +102,14 @@ export const getCozyCiphers = async (
 
   const contactsCiphers = await convertAllContactsAsCiphers(
     cipherService,
-    cryptoService,
+    keyService,
     i18nService,
     accountService,
     filteredContacts,
   );
   const papersCiphers = await convertAllPapersAsCiphers(
     cipherService,
-    cryptoService,
+    keyService,
     cozyClientService,
     i18nService,
     accountService,

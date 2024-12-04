@@ -31,33 +31,33 @@ export class AutoFillConstants {
 
   static readonly TotpFieldNames: string[] = [
     "totp",
-    "2fa",
-    "mfa",
     "totpcode",
     "2facode",
     "approvals_code",
-    "code",
     "mfacode",
-    "otc",
     "otc-code",
-    "otp",
+    "onetimecode",
     "otp-code",
     "otpcode",
-    "pin",
+    "onetimepassword",
     "security_code",
     "twofactor",
     "twofa",
     "twofactorcode",
-    "verificationCode",
+    "verificationcode",
+    "verification code",
   ];
+
+  static readonly AmbiguousTotpFieldNames: string[] = ["code", "pin", "otc", "otp", "2fa", "mfa"];
 
   static readonly SearchFieldNames: string[] = ["search", "query", "find", "go"];
 
   static readonly FieldIgnoreList: string[] = ["captcha", "findanything", "forgot"];
 
   static readonly PasswordFieldExcludeList: string[] = [
+    "hint",
     ...AutoFillConstants.FieldIgnoreList,
-    "onetimepassword",
+    ...AutoFillConstants.TotpFieldNames,
   ];
 
   static readonly ExcludedAutofillLoginTypes: string[] = [
@@ -106,6 +106,7 @@ export class CreditCardAutoFillConstants {
   ];
 
   static readonly CardHolderFieldNames: string[] = [
+    "accountholdername",
     "cc-name",
     "card-name",
     "cardholder-name",
@@ -116,6 +117,7 @@ export class CreditCardAutoFillConstants {
   ];
 
   static readonly CardHolderFieldNameValues: string[] = [
+    "accountholdername",
     "cc-name",
     "card-name",
     "cardholder-name",
@@ -307,8 +309,6 @@ export class CreditCardAutoFillConstants {
     "cb-type",
   ];
 
-  static readonly CardExpiryDateDelimiters: string[] = ["/", "-", ".", " "];
-
   // Note, these are expressions of user-guidance for the expected expiry date format to be used
   static readonly CardExpiryDateFormats: CardExpiryDateFormat[] = [
     // English
@@ -380,6 +380,7 @@ export class IdentityAutoFillConstants {
     "label-left",
     "label-top",
     "data-recurly",
+    "accountCreationFieldType",
   ];
 
   static readonly FullNameFieldNames: string[] = ["name", "full-name", "your-name"];
@@ -1188,7 +1189,7 @@ export const SubmitLoginButtonNames: string[] = [
   "submit",
   "continue",
   "next",
-  "go",
+  "verify",
 ];
 
 export const SubmitChangePasswordButtonNames: string[] = [

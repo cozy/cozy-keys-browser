@@ -3,7 +3,7 @@
     "pretty": true,
     "moduleResolution": "node",
     "target": "ES2016",
-    "module": "es6",
+    "module": "ES2020",
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
@@ -25,6 +25,7 @@
       "@bitwarden/vault-export-core": [
         "../../libs/tools/export/vault-export/vault-export-core/src"
       ],
+      "@bitwarden/key-management": ["../../libs/key-management/src"],
       "@bitwarden/node/*": ["../../libs/node/src/*"]
     }
   },

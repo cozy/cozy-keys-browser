@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, HostBinding, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { RouterModule } from "@angular/router";
 import { firstValueFrom } from "rxjs";
 
 import { ClientType } from "@bitwarden/common/enums";
@@ -15,9 +16,15 @@ import { BitwardenLogo, BitwardenShield } from "../icons";
   standalone: true,
   selector: "auth-anon-layout",
   templateUrl: "./anon-layout.component.html",
-  imports: [IconModule, CommonModule, TypographyModule, SharedModule],
+  imports: [IconModule, CommonModule, TypographyModule, SharedModule, RouterModule],
 })
 export class AnonLayoutComponent implements OnInit, OnChanges {
+  @HostBinding("class")
+  get classList() {
+    // AnonLayout should take up full height of parent container for proper footer placement.
+    return ["tw-h-full"];
+  }
+
   @Input() title: string;
   @Input() subtitle: string;
   @Input() icon: Icon;

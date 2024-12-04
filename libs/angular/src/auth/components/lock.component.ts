@@ -22,21 +22,19 @@ import {
   MasterPasswordVerification,
   MasterPasswordVerificationResponse,
 } from "@bitwarden/common/auth/types/verification";
-import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
-import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
-import { BiometricsService } from "@bitwarden/common/platform/biometrics/biometric.service";
 import { KeySuffixOptions } from "@bitwarden/common/platform/enums";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { UserId } from "@bitwarden/common/types/guid";
 import { UserKey } from "@bitwarden/common/types/key";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { DialogService, ToastService } from "@bitwarden/components";
+import { KeyService, BiometricStateService, BiometricsService } from "@bitwarden/key-management";
 
 @Directive()
 export class LockComponent implements OnInit, OnDestroy {
@@ -69,7 +67,7 @@ export class LockComponent implements OnInit, OnDestroy {
     protected i18nService: I18nService,
     protected platformUtilsService: PlatformUtilsService,
     protected messagingService: MessagingService,
-    protected cryptoService: CryptoService,
+    protected keyService: KeyService,
     protected vaultTimeoutService: VaultTimeoutService,
     protected vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     protected environmentService: EnvironmentService,
@@ -137,7 +135,7 @@ export class LockComponent implements OnInit, OnDestroy {
     }
 
     await this.biometricStateService.setUserPromptCancelled();
-    const userKey = await this.cryptoService.getUserKeyFromStorage(
+    const userKey = await this.keyService.getUserKeyFromStorage(
       KeySuffixOptions.Biometric,
       this.activeUserId,
     );
@@ -269,6 +267,7 @@ export class LockComponent implements OnInit, OnDestroy {
 
     const userKey = await this.masterPasswordService.decryptUserKeyWithMasterKey(
       response.masterKey,
+      userId,
     );
     await this.setUserKeyAndContinue(userKey, userId, true);
   }
@@ -278,7 +277,7 @@ export class LockComponent implements OnInit, OnDestroy {
     userId: UserId,
     evaluatePasswordAfterUnlock = false,
   ) {
-    await this.cryptoService.setUserKey(key, userId);
+    await this.keyService.setUserKey(key, userId);
 
     // Now that we have a decrypted user key in memory, we can check if we
     // need to establish trust on the current device
@@ -340,7 +339,7 @@ export class LockComponent implements OnInit, OnDestroy {
     this.supportsBiometric = await this.biometricsService.supportsBiometric();
     this.biometricLock =
       (await this.vaultTimeoutSettingsService.isBiometricLockSet()) &&
-      ((await this.cryptoService.hasUserKeyStored(KeySuffixOptions.Biometric)) ||
+      ((await this.keyService.hasUserKeyStored(KeySuffixOptions.Biometric)) ||
         !this.platformUtilsService.supportsSecureStorage());
     this.email = await firstValueFrom(
       this.accountService.activeAccount$.pipe(map((a) => a?.email)),

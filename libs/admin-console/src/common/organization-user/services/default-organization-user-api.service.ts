@@ -19,6 +19,7 @@ import {
   OrganizationUserDetailsResponse,
   OrganizationUserResetPasswordDetailsResponse,
   OrganizationUserUserDetailsResponse,
+  OrganizationUserUserMiniResponse,
 } from "../models/responses";
 
 export class DefaultOrganizationUserApiService implements OrganizationUserApiService {
@@ -82,6 +83,19 @@ export class DefaultOrganizationUserApiService implements OrganizationUserApiSer
       true,
     );
     return new ListResponse(r, OrganizationUserUserDetailsResponse);
+  }
+
+  async getAllMiniUserDetails(
+    organizationId: string,
+  ): Promise<ListResponse<OrganizationUserUserMiniResponse>> {
+    const r = await this.apiService.send(
+      "GET",
+      `/organizations/${organizationId}/users/mini-details`,
+      null,
+      true,
+      true,
+    );
+    return new ListResponse(r, OrganizationUserUserMiniResponse);
   }
 
   async getOrganizationUserResetPasswordDetails(

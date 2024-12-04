@@ -3,6 +3,7 @@
   "flags": {
     "showPasswordless": true,
     "enableCipherKeyEncryption": false,
-    "accountSwitching": false
+    "accountSwitching": false,
+    "sdk": false
   }
 }

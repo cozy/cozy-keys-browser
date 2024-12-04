@@ -64,7 +64,15 @@ export abstract class StateService<T extends Account = Account> {
   getIsUserSetTheme: (options?: StorageOptions) => Promise<boolean>;
   setIsUserSetTheme: (value: boolean, options?: StorageOptions) => Promise<void>;
   //*/
+
+  /**
+   * @deprecated Use `TokenService.hasAccessToken$()` or `AuthService.authStatusFor$` instead.
+   */
   getIsAuthenticated: (options?: StorageOptions) => Promise<boolean>;
+
+  /**
+   * @deprecated Use `AccountService.activeAccount$` instead.
+   */
   getUserId: (options?: StorageOptions) => Promise<string>;
   // Cozy customization, clean profiles after X days
   //*

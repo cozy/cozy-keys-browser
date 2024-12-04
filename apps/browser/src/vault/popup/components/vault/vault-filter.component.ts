@@ -19,6 +19,7 @@ import { BehaviorSubject, Subject, Subscription, firstValueFrom, from } from "rx
 /* end custo */
 import { first, switchMap, takeUntil } from "rxjs/operators";
 
+import { CollectionView } from "@bitwarden/admin-console/common";
 import { VaultFilter } from "@bitwarden/angular/vault/vault-filter/models/vault-filter.model";
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
@@ -29,7 +30,6 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
 import { CipherRepromptType, CipherType } from "@bitwarden/common/vault/enums";
 import { TreeNode } from "@bitwarden/common/vault/models/domain/tree-node";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
-import { CollectionView } from "@bitwarden/common/vault/models/view/collection.view";
 import { FolderView } from "@bitwarden/common/vault/models/view/folder.view";
 
 import { BrowserGroupingsComponentState } from "../../../../models/browserGroupingsComponentState";
@@ -43,12 +43,12 @@ import { VaultFilterService } from "../../../services/vault-filter.service";
 import { PasswordRepromptService } from "@bitwarden/vault";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { MessageSender } from "@bitwarden/common/platform/messaging";
-import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { AutofillService } from "../../../../autofill/services/abstractions/autofill.service";
 import { KonnectorsService } from "../../../../popup/services/konnectors.service";
 import { DialogService } from "../../../../../../../libs/components/src/dialog";
+import { KeyService } from "@bitwarden/key-management";
 /* eslint-enable */
 
 interface CollectionViewWithKonnector extends CollectionView {
@@ -141,7 +141,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
     private messageSender: MessageSender,
     private konnectorService: KonnectorsService,
     private organizationService: OrganizationService,
-    private cryptoService: CryptoService,
+    private keyService: KeyService,
     private stateService: StateService,
     private vaultFilterService: VaultFilterService,
     private vaultBrowserStateService: VaultBrowserStateService,
@@ -366,7 +366,7 @@ export class VaultFilterComponent implements OnInit, OnDestroy {
   async selectCollection(collection: CollectionView) {
     /** Cozy custo : if the collection is not yet validated, then display a warning */
     if (this.notValidatedCollectionId.includes(collection.id)) {
-      const fingerprint = await this.cryptoService.getFingerprint(
+      const fingerprint = await this.keyService.getFingerprint(
         await this.stateService.getUserId(),
       );
       const desc = `<p class="security-code-desc">

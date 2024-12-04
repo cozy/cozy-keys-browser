@@ -1,14 +1,16 @@
 import { CommonModule } from "@angular/common";
-import { booleanAttribute, Component, Input } from "@angular/core";
+import { booleanAttribute, Component, Input, OnInit } from "@angular/core";
 import { Router, RouterModule } from "@angular/router";
-import { firstValueFrom, map } from "rxjs";
+import { firstValueFrom, map, Observable } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherRepromptType, CipherType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { CipherAuthorizationService } from "@bitwarden/common/vault/services/cipher-authorization.service";
 import {
   DialogService,
   IconButtonModule,
@@ -18,8 +20,6 @@ import {
 } from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
-import { BrowserApi } from "../../../../../platform/browser/browser-api";
-import BrowserPopupUtils from "../../../../../platform/popup/browser-popup-utils";
 import { VaultPopupAutofillService } from "../../../services/vault-popup-autofill.service";
 import { AddEditQueryParams } from "../add-edit/add-edit-v2.component";
 
@@ -29,7 +29,7 @@ import { AddEditQueryParams } from "../add-edit/add-edit-v2.component";
   templateUrl: "./item-more-options.component.html",
   imports: [ItemModule, IconButtonModule, MenuModule, CommonModule, JslibModule, RouterModule],
 })
-export class ItemMoreOptionsComponent {
+export class ItemMoreOptionsComponent implements OnInit {
   @Input({
     required: true,
   })
@@ -43,6 +43,10 @@ export class ItemMoreOptionsComponent {
   hideAutofillOptions: boolean;
 
   protected autofillAllowed$ = this.vaultPopupAutofillService.autofillAllowed$;
+  protected canClone$: Observable<boolean>;
+
+  /** Boolean dependent on the current user having access to an organization */
+  protected hasOrganizations = false;
 
   constructor(
     private cipherService: CipherService,
@@ -53,7 +57,14 @@ export class ItemMoreOptionsComponent {
     private i18nService: I18nService,
     private vaultPopupAutofillService: VaultPopupAutofillService,
     private accountService: AccountService,
+    private organizationService: OrganizationService,
+    private cipherAuthorizationService: CipherAuthorizationService,
   ) {}
+
+  async ngOnInit(): Promise<void> {
+    this.hasOrganizations = await this.organizationService.hasOrganizations();
+    this.canClone$ = this.cipherAuthorizationService.canCloneCipher$(this.cipher);
+  }
 
   get canEdit() {
     return this.cipher.edit;
@@ -80,30 +91,6 @@ export class ItemMoreOptionsComponent {
 
   async doAutofillAndSave() {
     await this.vaultPopupAutofillService.doAutofillAndSave(this.cipher, false);
-  }
-
-  /**
-   * Determines if the login cipher can be launched in a new browser tab.
-   */
-  get canLaunch() {
-    return this.cipher.type === CipherType.Login && this.cipher.login.canLaunch;
-  }
-
-  /**
-   * Launches the login cipher in a new browser tab.
-   */
-  async launchCipher() {
-    if (!this.canLaunch) {
-      return;
-    }
-
-    await this.cipherService.updateLastLaunchedDate(this.cipher.id);
-
-    await BrowserApi.createNewTab(this.cipher.login.launchUri);
-
-    if (BrowserPopupUtils.inPopup(window)) {
-      BrowserApi.closePopup(window);
-    }
   }
 
   /**

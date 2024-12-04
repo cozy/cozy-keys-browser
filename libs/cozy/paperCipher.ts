@@ -5,13 +5,13 @@ import CozyClient from "cozy-client/types/CozyClient";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { PaperType } from "@bitwarden/common/enums/paperType";
-import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { CipherData } from "@bitwarden/common/vault/models/data/cipher.data";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { DialogService, ToastService } from "@bitwarden/components";
+import { KeyService } from "@bitwarden/key-management";
 
 import { CozyClientService } from "../../apps/browser/src/popup/services/cozyClient.service";
 
@@ -22,7 +22,7 @@ import { fetchPaper } from "./queries";
 
 export const convertPapersAsCiphers = async (
   cipherService: CipherService,
-  cryptoService: CryptoService,
+  keyService: KeyService,
   i18nService: I18nService,
   accountService: AccountService,
   client: CozyClient,
@@ -34,7 +34,7 @@ export const convertPapersAsCiphers = async (
 
   const noteIllustrationUrl = await fetchNoteIllustrationUrl(client);
 
-  const key = await cryptoService.getUserKey();
+  const key = await keyService.getUserKey();
 
   for (const paper of papers) {
     let cipherData;
@@ -78,7 +78,7 @@ export const convertPapersAsCiphers = async (
 
 export const convertAllPapersAsCiphers = async (
   cipherService: CipherService,
-  cryptoService: CryptoService,
+  keyService: KeyService,
   cozyClientService: CozyClientService,
   i18nService: I18nService,
   accountService: AccountService,
@@ -89,7 +89,7 @@ export const convertAllPapersAsCiphers = async (
   try {
     const papersCiphers = await convertPapersAsCiphers(
       cipherService,
-      cryptoService,
+      keyService,
       i18nService,
       accountService,
       client,

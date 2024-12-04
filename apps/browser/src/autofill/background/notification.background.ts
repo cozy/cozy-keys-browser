@@ -185,13 +185,8 @@ export default class NotificationBackground {
   }
 
   private async doNotificationQueueCheck(tab: chrome.tabs.Tab): Promise<void> {
-    const tabDomain = Utils.getDomain(tab?.url);
-    if (!tabDomain) {
-      return;
-    }
-
     const queueMessage = this.notificationQueue.find(
-      (message) => message.tab.id === tab.id && message.domain === tabDomain,
+      (message) => message.tab.id === tab.id && this.queueMessageIsFromTabOrigin(message, tab),
     );
     if (queueMessage) {
       await this.sendNotificationQueueMessage(tab, queueMessage);
@@ -647,8 +642,7 @@ export default class NotificationBackground {
         continue;
       }
 
-      const tabDomain = Utils.getDomain(tab.url);
-      if (tabDomain != null && tabDomain !== queueMessage.domain) {
+      if (!this.queueMessageIsFromTabOrigin(queueMessage, tab)) {
         continue;
       }
 
@@ -796,8 +790,7 @@ export default class NotificationBackground {
         continue;
       }
 
-      const tabDomain = Utils.getDomain(tab.url);
-      if (tabDomain != null && tabDomain !== queueMessage.domain) {
+      if (!this.queueMessageIsFromTabOrigin(queueMessage, tab)) {
         continue;
       }
 
@@ -940,4 +933,18 @@ export default class NotificationBackground {
       .catch((error) => this.logService.error(error));
     return true;
   };
+
+  /**
+   * Validates whether the queue message is associated with the passed tab.
+   *
+   * @param queueMessage - The queue message to check
+   * @param tab - The tab to check the queue message against
+   */
+  private queueMessageIsFromTabOrigin(
+    queueMessage: NotificationQueueMessageItem,
+    tab: chrome.tabs.Tab,
+  ) {
+    const tabDomain = Utils.getDomain(tab.url);
+    return tabDomain === queueMessage.domain || tabDomain === Utils.getDomain(queueMessage.tab.url);
+  }
 }
