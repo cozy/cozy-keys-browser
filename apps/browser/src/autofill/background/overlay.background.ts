@@ -540,6 +540,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     const showFavicons = await firstValueFrom(this.domainSettingsService.showFavicons$);
     const inlineMenuCiphersArray = Array.from(this.inlineMenuCiphers);
     let inlineMenuCipherData: InlineMenuCipherData[];
+    this.showPasskeysLabelsWithinInlineMenu = false;
 
     if (this.shouldShowInlineMenuAccountCreation()) {
       inlineMenuCipherData = this.buildInlineMenuAccountCreationCiphers(
@@ -738,6 +739,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       };
       return inlineMenuData;
     }
+
     if (cipher.type === CipherType.Card) {
       inlineMenuData.card = cipher.card.subTitle;
       return inlineMenuData;

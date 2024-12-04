@@ -1383,7 +1383,7 @@ describe("OverlayBackground", () => {
         mock<chrome.runtime.MessageSender>({ tab }),
       );
       getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
-      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher2, loginCipher1]);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, loginCipher2]); // Cozy customization; linked to commenting sortCiphersByLastUsedThenName in overlay
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
 
       await overlayBackground.updateOverlayCiphers(false);
