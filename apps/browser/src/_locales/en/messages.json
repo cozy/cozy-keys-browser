@@ -727,12 +727,6 @@
   "yourVaultIsLocked": {
     "message": "Your vault is locked, confirm your password to continue."
   },
-  "yourVaultIsPinLocked": {
-    "message": "If you forget your pin code "
-  },
-  "yourVaultIsPinLocked2": {
-    "message": "  and re-authenticate."
-  },
   "yourVaultIsLockedV2": {
     "message": "Your vault is locked"
   },

@@ -724,12 +724,6 @@
   "verifyIdentity": {
     "message": "Vérifier l'identité"
   },
-  "yourVaultIsPinLocked": {
-    "message": "En cas d'oublie de votre code PIN, "
-  },
-  "yourVaultIsPinLocked2": {
-    "message": " puis ré-authentifiez vous."
-  },
   "yourVaultIsLocked": {
     "message": "Votre coffre est verrouillé. Vérifiez votre identité pour continuer."
   },
