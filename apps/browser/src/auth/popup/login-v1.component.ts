@@ -272,10 +272,6 @@ export class LoginComponentV1 extends BaseLoginComponent implements OnInit {
           this.router.navigate([this.forcePasswordResetRoute]);
         }
       } else {
-        // Cozy customization, set correct theme based on cozy's context
-        //*
-        await this.configureTheme();
-        //*/
         if (this.onSuccessfulLogin != null) {
           // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -295,24 +291,6 @@ export class LoginComponentV1 extends BaseLoginComponent implements OnInit {
       this.logService.error(e);
     }
   }
-
-  // Cozy customization, set correct theme based on cozy's context
-  //*
-  async configureTheme() {
-    const useContrastedThemeByDefault = await this.cozyClientService.getFlagValue(
-      "passwords.theme.default-contrasted",
-    );
-
-    const isUserSetTheme = await this.stateService.getIsUserSetTheme();
-
-    if (useContrastedThemeByDefault) {
-      await this.themeStateService.setSelectedTheme(ThemeType.LightContrasted);
-      await this.stateService.setIsUserSetTheme(false);
-    } else if (!isUserSetTheme) {
-      await this.themeStateService.setSelectedTheme(ThemeType.System);
-    }
-  }
-  //*/
 
   // TODOCOZY
   // togglePassword() {
