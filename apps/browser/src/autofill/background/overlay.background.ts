@@ -111,11 +111,7 @@ import type { IOCozyContact, IOCozyFile } from "cozy-client/types/types";
 import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
 import type { AmbiguousContactFieldName, AvailablePapers } from "src/autofill/types";
-import {
-  COZY_ATTRIBUTES_MAPPING,
-  isPaperAttributesModel,
-  isHealthPaper,
-} from "../../../../../libs/cozy/mapping";
+import { COZY_ATTRIBUTES_MAPPING, isPaperAttributesModel } from "../../../../../libs/cozy/mapping";
 import { createOrUpdateCozyDoctype } from "../../../../../libs/cozy/createOrUpdateCozyDoctype";
 import { getCozyValue, getAllPapersFromContact } from "../../../../../libs/cozy/getCozyValue";
 import _ from "lodash";
@@ -1406,11 +1402,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       On the ambiguous(phone/address/email) form field:
       - Display a menu to select value.
     */
-    const shouldHideHealthPaper =
-      (await this.cozyClientService.getFlagValue("hide.healthTheme.enabled")) &&
-      isHealthPaper(this.focusedFieldData?.fieldQualifier);
-
-    if (isPaperAttributesModel(focusedFieldModel) && !shouldHideHealthPaper) {
+    if (isPaperAttributesModel(focusedFieldModel)) {
       const availablePapers: AvailablePapers[] = (
         await getAllPapersFromContact({
           client,
@@ -1448,13 +1440,6 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         fieldHtmlIDToFill,
       });
     } else {
-      // Special case: if we are a paper and there are no ambiguous fields, we arrive here
-      // and we do not want to show the empty list
-      if (isPaperAttributesModel(focusedFieldModel) && shouldHideHealthPaper) {
-        this.fillInlineMenuCipher(message, port);
-        return;
-      }
-
       const value = await getCozyValue({
         client,
         cipher,
