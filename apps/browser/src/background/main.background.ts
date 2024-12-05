@@ -1618,14 +1618,6 @@ export default class MainBackground {
       ),
     );
 
-    // Cozy customization, reset theme to LighContrasted if user did not manually changed it
-    //*
-    const isUserSetTheme = await this.stateService.getIsUserSetTheme();
-    if (!isUserSetTheme) {
-      await this.themeStateService.setSelectedTheme(ThemeType.LightContrasted);
-    }
-    //*/
-
     await Promise.all([
       this.keyService.clearKeys(userBeingLoggedOut),
       this.cipherService.clear(userBeingLoggedOut),

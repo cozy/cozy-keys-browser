@@ -59,17 +59,10 @@ export abstract class StateService<T extends Account = Account> {
   setCryptoMasterKeyAuto: (value: string, options?: StorageOptions) => Promise<void>;
   getDuckDuckGoSharedKey: (options?: StorageOptions) => Promise<string>;
   setDuckDuckGoSharedKey: (value: string, options?: StorageOptions) => Promise<void>;
-  // Cozy customization, track if user manually set a preferred theme
-  //*
-  getIsUserSetTheme: (options?: StorageOptions) => Promise<boolean>;
-  setIsUserSetTheme: (value: boolean, options?: StorageOptions) => Promise<void>;
-  //*/
-
   /**
    * @deprecated Use `TokenService.hasAccessToken$()` or `AuthService.authStatusFor$` instead.
    */
   getIsAuthenticated: (options?: StorageOptions) => Promise<boolean>;
-
   /**
    * @deprecated Use `AccountService.activeAccount$` instead.
    */
