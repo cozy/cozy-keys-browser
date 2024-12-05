@@ -64,12 +64,12 @@ import { InlineMenuFormFieldData } from "../services/abstractions/autofill-overl
 import {
   AutofillService,
   PageDetail,
-  CozyAutofillOptions,
+  CozyAutofillOptions, // Added by Cozy
 } from "../services/abstractions/autofill.service";
 import { InlineMenuFieldQualificationService } from "../services/abstractions/inline-menu-field-qualifications.service";
 import {
-  ambiguousContactFieldNames,
-  getAmbiguousFieldsContact,
+  ambiguousContactFieldNames, // Added by Cozy
+  getAmbiguousFieldsContact, // Added by Cozy
   generateDomainMatchPatterns,
   generateRandomChars,
   isInvalidResponseStatusCode,
@@ -275,21 +275,6 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   ) {
     this.initOverlayEventObservables();
   }
-
-  private redirectToCozy = (message: OverlayPortMessage) => {
-    // Interpolate "<id>" in the hash by the id correspond to the inline menu cipher id
-    // Useful to open alice.contacts.mycozy.cloud/#/127950390436f45accdf242cac55a2e4/edit for example
-    if (message.inlineMenuCipherId) {
-      const cipher = this.inlineMenuCiphers.get(message.inlineMenuCipherId);
-      message.hash = message.hash.replace("<id>", cipher.id);
-    }
-
-    BrowserApi.createNewTab(this.cozyClientService.getAppURL(message.to, message.hash), true);
-  };
-
-  private searchContacts = (message: OverlayPortMessage) => {
-    this.updateOverlayCiphers(undefined, undefined, message.searchValue);
-  };
 
   /**
    * Sets up the extension message listeners and gets the settings for the
@@ -1307,6 +1292,23 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     this.inlineMenuCiphers = new Map([[inlineMenuCipherId, cipher], ...this.inlineMenuCiphers]);
   }
 
+  // ### Cozy methods ###
+
+  private redirectToCozy = (message: OverlayPortMessage) => {
+    // Interpolate "<id>" in the hash by the id correspond to the inline menu cipher id
+    // Useful to open alice.contacts.mycozy.cloud/#/127950390436f45accdf242cac55a2e4/edit for example
+    if (message.inlineMenuCipherId) {
+      const cipher = this.inlineMenuCiphers.get(message.inlineMenuCipherId);
+      message.hash = message.hash.replace("<id>", cipher.id);
+    }
+
+    BrowserApi.createNewTab(this.cozyClientService.getAppURL(message.to, message.hash), true);
+  };
+
+  private searchContacts = (message: OverlayPortMessage) => {
+    this.updateOverlayCiphers(undefined, undefined, message.searchValue);
+  };
+
   /**
    * Sets the most recently used cipher at the top of the list of ciphers.
    * If the contact doesn't have a Name AND has several ambiguity(tel|email|address), we call `emptyNameList` after selecting the ambiguity.
@@ -1526,6 +1528,8 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       });
     }
   }
+
+  // ### Cozy methods end ###
 
   /**
    * Checks if the inline menu is focused. Will check the inline menu list
