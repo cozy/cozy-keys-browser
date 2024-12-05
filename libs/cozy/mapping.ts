@@ -33,9 +33,6 @@ export const isPaperAttributesModel = (
 ): model is PaperAttributesModel => {
   return model.doctype === FILES_DOCTYPE;
 };
-export const isHealthPaper = (fieldQualifier: AutofillFieldQualifierType): boolean => {
-  return fieldQualifier === AutofillFieldQualifier.paperSocialSecurityNumber;
-};
 export const areContactAttributesModels = (
   model: CozyAttributesModel[],
 ): model is ContactAttributesModel[] => {
