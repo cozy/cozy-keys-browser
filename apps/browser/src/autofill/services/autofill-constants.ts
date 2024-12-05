@@ -26,6 +26,7 @@ export class AutoFillConstants {
     "benutzer id",
     // French
     "identifiant",
+    "utilisateur",
     ...AutoFillConstants.EmailFieldNames,
   ];
 
