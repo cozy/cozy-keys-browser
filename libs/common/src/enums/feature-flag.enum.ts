@@ -65,7 +65,12 @@ export const DefaultFeatureFlagValue = {
   [FeatureFlag.PM4154_BulkEncryptionService]: FALSE,
   [FeatureFlag.UseTreeWalkerApiForPageDetailsCollection]: FALSE,
   [FeatureFlag.EmailVerification]: FALSE,
+  // Cozy customization, enable enhanced login detection in inline menu
+  //*
+  [FeatureFlag.InlineMenuFieldQualification]: true,
+  /*/
   [FeatureFlag.InlineMenuFieldQualification]: FALSE,
+  //*/
   [FeatureFlag.MemberAccessReport]: FALSE,
   [FeatureFlag.TwoFactorComponentRefactor]: FALSE,
   [FeatureFlag.EnableTimeThreshold]: FALSE,

@@ -1459,9 +1459,22 @@ export class InlineMenuFieldQualificationService
       const checkedAttributeValue = checkedAttributeValues[i];
       const cleanedValue = checkedAttributeValue?.toLowerCase().replace(/[\s_-]/g, "");
 
+      // Cozy customization, this method is called because we enabled InlineMenuFieldQualification but
+      // it is too strict and gives false positive like when a password htmlName is "p"
+      //*
+      if (
+        cleanedValue &&
+        AutoFillConstants.FieldIgnoreList.some(
+          (fieldIgnore) => cleanedValue.indexOf(fieldIgnore) > -1,
+        )
+      ) {
+        return true;
+      }
+      /*/
       if (cleanedValue && this.fieldIgnoreListString.indexOf(cleanedValue) > -1) {
         return true;
       }
+      //*/
     }
 
     return false;
