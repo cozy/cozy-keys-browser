@@ -18,7 +18,17 @@ import { convertPaperToCipherData } from "../../../../../libs/cozy/paper.helper"
 import { fetchHydratedPaper } from "../../../../../libs/cozy/queries";
 import { shouldDisplayContact } from "../../../../../libs/cozy/sync";
 
+import { SynchronousJobQueue } from "./synchronousJobQueue";
+
 export class RealTimeNotifications {
+  // This synchronous queue allows to update correctly contacts ciphers when you update multiple contacts in the same time
+  // (for example when setting 4 contacts as favorite in the same time)
+  private synchronousJobQueue: SynchronousJobQueue = new SynchronousJobQueue({
+    onDone: () => {
+      this.messagingService.send("syncCompleted", { successfully: true });
+    },
+  });
+
   constructor(
     private messagingService: MessagingService,
     private cipherService: CipherService,
@@ -33,9 +43,24 @@ export class RealTimeNotifications {
     // @ts-expect-error reatime item is not typed as it is dynamically injected at runtime
     const realtime = this.client.plugins.realtime;
 
-    await realtime.subscribe("created", CONTACTS_DOCTYPE, this.dispatchCreateContact.bind(this));
-    await realtime.subscribe("updated", CONTACTS_DOCTYPE, this.dispatchUpdateContact.bind(this));
-    await realtime.subscribe("deleted", CONTACTS_DOCTYPE, this.dispatchDeleteContact.bind(this));
+    await realtime.subscribe("created", CONTACTS_DOCTYPE, (args: any) =>
+      this.synchronousJobQueue.push({
+        function: this.dispatchCreateContact.bind(this),
+        arguments: args,
+      }),
+    );
+    await realtime.subscribe("updated", CONTACTS_DOCTYPE, (args: any) =>
+      this.synchronousJobQueue.push({
+        function: this.dispatchUpdateContact.bind(this),
+        arguments: args,
+      }),
+    );
+    await realtime.subscribe("deleted", CONTACTS_DOCTYPE, (args: any) =>
+      this.synchronousJobQueue.push({
+        function: this.dispatchDeleteContact.bind(this),
+        arguments: args,
+      }),
+    );
 
     // We don't want to listen Creation as it is always followed by an Update notification with more data
     await realtime.subscribe("updated", FILES_DOCTYPE, this.dispatchUpdatePaper.bind(this));
@@ -96,8 +121,6 @@ export class RealTimeNotifications {
 
   async dispatchDeleteContact(data: any) {
     await this.cipherService.delete(data._id);
-    this.messagingService.send("syncedDeletedCipher", { cipherId: data._id });
-    this.messagingService.send("syncCompleted", { successfully: true });
 
     await dispatchDelete(this.client, "io.cozy.contacts", data);
   }
@@ -200,8 +223,5 @@ export class RealTimeNotifications {
     );
 
     await this.cipherService.upsert(cipherData);
-
-    this.messagingService.send("syncedUpsertedCipher", { cipherId: data._id });
-    this.messagingService.send("syncCompleted", { successfully: true });
   }
 }
