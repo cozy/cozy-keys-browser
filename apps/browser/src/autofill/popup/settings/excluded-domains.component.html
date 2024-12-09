@@ -7,22 +7,9 @@
 
   <div class="tw-bg-background-alt">
     <p>
-      <!--
-      Cozy customisation: Replace "excludedDomainsDescAlt" & "excludedDomainsDesc" translation
-      -->
-      <!--
       {{
         accountSwitcherEnabled ? ("excludedDomainsDescAlt" | i18n) : ("excludedDomainsDesc" | i18n)
       }}
-      -->
-      {{
-        accountSwitcherEnabled
-          ? ("excludedDomainsDescAltCozy" | i18n)
-          : ("excludedDomainsDescCozy" | i18n)
-      }}
-      <!--
-      Cozy customisation end
-      -->
     </p>
     <bit-section *ngIf="!isLoading">
       <bit-section-header>

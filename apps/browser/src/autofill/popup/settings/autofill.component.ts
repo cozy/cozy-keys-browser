@@ -324,14 +324,8 @@ export class AutofillComponent implements OnInit {
     }
 
     await this.dialogService.openSimpleDialog({
-      // Cozy customization, replace Bitwarden translations
-      //*
-      title: { key: "overrideCozyDefaultBrowserAutofillTitle" },
-      content: { key: "overrideCozyDefaultBrowserAutofillDescription" },
-      /*/
       title: { key: "overrideDefaultBrowserAutofillTitle" },
       content: { key: "overrideDefaultBrowserAutofillDescription" },
-      //*/
       acceptButtonText: { key: "continue" },
       acceptAction: async () => await this.handleOverrideDialogAccept(),
       cancelButtonText: { key: "cancel" },
