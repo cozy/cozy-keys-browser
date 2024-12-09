@@ -66,6 +66,7 @@
         <span *ngIf="accountSwitcherEnabled">{{ "showInlineMenuOnFormFieldsDescAlt" | i18n }}</span>
         <span *ngIf="!canOverrideBrowserAutofillSetting">
           {{ "turnOffBrowserBuiltInPasswordManagerSettings" | i18n }}
+          <!-- Cozy customization; remove link to Bitwarden documentation
           <a
             [attr.href]="disablePasswordManagerLink"
             (click)="openDisablePasswordManagerLink($event)"
@@ -74,6 +75,7 @@
           >
             {{ "turnOffBrowserBuiltInPasswordManagerSettingsLink" | i18n }}
           </a>
+          -->
         </span>
       </div>
     </div>
