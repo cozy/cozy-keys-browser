@@ -46,6 +46,12 @@ import { SetPinComponent } from "../components/set-pin.component";
 
 import { AwaitDesktopDialogComponent } from "./await-desktop-dialog.component";
 
+/* start Cozy imports */
+/* eslint-disable */
+import { CozyClientService } from "../../../popup/services/cozyClient.service";
+/* eslint-enable */
+/* end Cozy imports */
+
 @Component({
   selector: "auth-account-security",
   templateUrl: "account-security-v1.component.html",
@@ -76,6 +82,7 @@ export class AccountSecurityComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   constructor(
+    private cozyClientService: CozyClientService,
     private accountService: AccountService,
     private pinService: PinServiceAbstraction,
     private policyService: PolicyService,
@@ -444,10 +451,13 @@ export class AccountSecurityComponent implements OnInit, OnDestroy {
       type: "info",
       acceptButtonText: { key: "continue" },
     });
+    // Cozy customization; redirect to Cozy password
     if (confirmed) {
-      const env = await firstValueFrom(this.environmentService.environment$);
-      await BrowserApi.createNewTab(env.getWebVaultUrl());
+      await BrowserApi.createNewTab(
+        this.cozyClientService.getAppURL("settings", "/profile/password"),
+      );
     }
+    // Cozy customization end
   }
 
   async twoStep() {
