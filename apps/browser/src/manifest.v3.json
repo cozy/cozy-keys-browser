@@ -36,6 +36,12 @@
       "js": ["content/lp-fileless-importer.js"],
       "matches": ["https://lastpass.com/export.php"],
       "run_at": "document_start"
+    },
+    {
+      "all_frames": true,
+      "js": ["content/appInfo.js"],
+      "matches": ["http://*/*", "https://*/*", "file:///*"],
+      "run_at": "document_start"
     }
   ],
   "background": {
