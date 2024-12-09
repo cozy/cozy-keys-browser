@@ -2299,7 +2299,7 @@
     "message": "Définissez votre code PIN de déverrouillage. Ce code PIN sera désactivé si vous vous déconnectez."
   },
   "setYourPinCode1": {
-    "message": "Votre code PIN sera utilisé pour déverrouiller Bitwarden au lieu de votre mot de passe principal. Votre code PIN sera réinitialisé si vous vous déconnectez complètement de Bitwarden."
+    "message": "Votre code PIN sera utilisé pour déverrouiller l'extension au lieu de votre mot de passe principal. Votre code PIN sera réinitialisé si vous vous déconnectez complètement de l'extension."
   },
   "pinRequired": {
     "message": "Le code PIN est requis."
@@ -2637,15 +2637,9 @@
     "message": "Domaines exclus"
   },
   "excludedDomainsDesc": {
-    "message": "Bitwarden ne proposera pas d'enregistrer les informations de connexion pour ces domaines. Vous devez actualiser la page pour que les modifications prennent effet."
-  },
-  "excludedDomainsDescAlt": {
-    "message": "Bitwarden ne demandera pas d'enregistrer les détails de connexion pour ces domaines pour tous les comptes connectés. Vous devez actualiser la page pour que les modifications prennent effet."
-  },
-  "excludedDomainsDescCozy": {
     "message": "Cozy Pass ne proposera pas d'enregistrer les informations de connexion pour ces domaines. Vous devez actualiser la page pour que les modifications prennent effet."
   },
-  "excludedDomainsDescAltCozy": {
+  "excludedDomainsDescAlt": {
     "message": "Cozy Pass ne demandera pas d'enregistrer les détails de connexion pour ces domaines pour tous les comptes connectés. Vous devez actualiser la page pour que les modifications prennent effet."
   },
   "websiteItemLabel": {
@@ -4394,26 +4388,14 @@
     "description": "Body content for dialog which asks if the user wants to proceed to the browser's keyboard shortcut settings page"
   },
   "overrideDefaultBrowserAutofillTitle": {
-    "message": "Faire de Bitwarden votre gestionnaire de mots de passe par défaut ?",
-    "description": "Dialog title facilitating the ability to override a chrome browser's default autofill behavior"
-  },
-  "overrideCozyDefaultBrowserAutofillTitle": {
     "message": "Faire de Cozy Pass votre gestionnaire de mots de passe par défaut ?",
     "description": "Dialog title facilitating the ability to override a chrome browser's default autofill behavior"
   },
   "overrideDefaultBrowserAutofillDescription": {
-    "message": "Ignorer cette option peut causer des conflits entre le menu de saisie automatique de Bitwarden et celui de votre navigateur.",
-    "description": "Dialog message facilitating the ability to override a chrome browser's default autofill behavior"
-  },
-  "overrideCozyDefaultBrowserAutofillDescription": {
     "message": "Ignorer cette option peut causer des conflits entre le menu de saisie automatique de Cozy Pass et celui de votre navigateur.",
     "description": "Dialog message facilitating the ability to override a chrome browser's default autofill behavior"
   },
   "overrideDefaultBrowserAutoFillSettings": {
-    "message": "Faire de Bitwarden votre gestionnaire de mots de passe par défaut",
-    "description": "Label for the setting that allows overriding the default browser autofill settings"
-  },
-  "overrideCozyDefaultBrowserAutoFillSettings": {
     "message": "Faire de Cozy Pass votre gestionnaire de mots de passe par défaut",
     "description": "Label for the setting that allows overriding the default browser autofill settings"
   },
