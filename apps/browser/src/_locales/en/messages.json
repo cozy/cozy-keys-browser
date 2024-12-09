@@ -2305,7 +2305,7 @@
     "message": "Set your unlock PIN. It will be deactivated if you log out."
   },
   "setYourPinCode1": {
-    "message": "Your PIN will be used to unlock Bitwarden instead of your master password. Your PIN will reset if you ever fully log out of Bitwarden."
+    "message": "Your PIN will be used to unlock the extension instead of your master password. Your PIN will reset if you ever fully log out of the extension."
   },
   "pinRequired": {
     "message": "PIN code is required."
@@ -2643,15 +2643,9 @@
     "message": "Excluded domains"
   },
   "excludedDomainsDesc": {
-    "message": "Bitwarden will not ask to save login details for these domains. You must refresh the page for changes to take effect."
-  },
-  "excludedDomainsDescAlt": {
-    "message": "Bitwarden will not ask to save login details for these domains for all logged in accounts. You must refresh the page for changes to take effect."
-  },
-  "excludedDomainsDescCozy": {
     "message": "Cozy Pass will not ask to save login details for these domains. You must refresh the page for changes to take effect."
   },
-  "excludedDomainsDescAltCozy": {
+  "excludedDomainsDescAlt": {
     "message": "Cozy Pass will not ask to save login details for these domains for all logged in accounts. You must refresh the page for changes to take effect."
   },
   "websiteItemLabel": {
@@ -4397,32 +4391,20 @@
     "description": "Body content for dialog which asks if the user wants to proceed to the browser's keyboard shortcut settings page"
   },
   "overrideDefaultBrowserAutofillTitle": {
-    "message": "Make Bitwarden your default password manager?",
-    "description": "Dialog title facilitating the ability to override a chrome browser's default autofill behavior"
-  },
-  "overrideCozyDefaultBrowserAutofillTitle": {
     "message": "Make Cozy Pass your default password manager?",
     "description": "Dialog title facilitating the ability to override a chrome browser's default autofill behavior"
   },
   "overrideDefaultBrowserAutofillDescription": {
-    "message": "Ignoring this option may cause conflicts between Bitwarden autofill suggestions and your browser's.",
-    "description": "Dialog message facilitating the ability to override a chrome browser's default autofill behavior"
-  },
-  "overrideCozyDefaultBrowserAutofillDescription": {
-    "message": "Ignoring this option may cause conflicts between the Cozy Pass auto-fill menu and your browser's.",
+    "message": "Ignoring this option may cause conflicts between Cozy Pass autofill suggestions and your browser's.",
     "description": "Dialog message facilitating the ability to override a chrome browser's default autofill behavior"
   },
   "overrideDefaultBrowserAutoFillSettings": {
-    "message": "Make Bitwarden your default password manager",
-    "description": "Label for the setting that allows overriding the default browser autofill settings"
-  },
-  "overrideCozyDefaultBrowserAutoFillSettings": {
     "message": "Make Cozy Pass your default password manager",
     "description": "Label for the setting that allows overriding the default browser autofill settings"
   },
   "privacyPermissionAdditionNotGrantedTitle": {
     "message": "Unable to set Cozy Pass as the default password manager",
-    "description": "Title for the dialog that appears when the user has not granted the extension permission to set privacy settings"
+    "description": "Title for the dialexcludedDomainsDescog that appears when the user has not granted the extension permission to set privacy settings"
   },
   "privacyPermissionAdditionNotGrantedDescription": {
     "message": "You must grant browser privacy permissions to Cozy Pass to set it as the default password manager.",

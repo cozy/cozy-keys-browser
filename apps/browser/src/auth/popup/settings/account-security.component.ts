@@ -549,11 +549,13 @@ export class AccountSecurityComponent implements OnInit, OnDestroy {
       acceptButtonText: { key: "continue" },
       cancelButtonText: { key: "cancel" },
     });
+    // Cozy customization; redirect to Cozy password
     if (confirmed) {
       await BrowserApi.createNewTab(
         this.cozyClientService.getAppURL("settings", "/profile/password"),
       );
     }
+    // Cozy customization end
   }
 
   async twoStep() {
