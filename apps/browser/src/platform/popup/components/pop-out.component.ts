@@ -25,6 +25,11 @@ export class PopOutComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    // Cozy customization; never show the app-pop-out button
+    this.show = false;
+    return;
+    // Cozy customization end
+
     this.useRefreshVariant = await this.configService.getFeatureFlag(FeatureFlag.ExtensionRefresh);
 
     if (this.show) {

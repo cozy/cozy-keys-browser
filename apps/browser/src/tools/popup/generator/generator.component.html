@@ -1,8 +1,6 @@
 <app-header [hideAccountSwitcher]="comingFromAddEdit">
   <div class="left">
-    <!-- Cozy customization; remove username generation from "Generator" tab
     <app-pop-out [show]="!comingFromAddEdit"></app-pop-out>
-    -->
     <button type="button" (click)="close()" *ngIf="comingFromAddEdit">
       {{ "cancel" | i18n }}
     </button>
