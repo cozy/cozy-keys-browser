@@ -1614,7 +1614,12 @@ export class InlineMenuFieldQualificationService
         autofillFieldData.title,
         autofillFieldData.placeholder,
         autofillFieldData.autoCompleteType,
+        // Cozy customization; do not check in data values for inline menu
+        // It triggers a lot of false positive, for example if data-view-name="xxxxx" is present
+        // it will show the inline menu for contacts because of "name"
+        /*
         autofillFieldData.dataSetValues,
+        */
         autofillFieldData["label-data"],
         autofillFieldData["label-aria"],
         autofillFieldData["label-left"],
