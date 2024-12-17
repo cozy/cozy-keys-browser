@@ -3,7 +3,7 @@ import { firstValueFrom, map, mergeMap } from "rxjs";
 import { LockService } from "@bitwarden/auth/common";
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
-import { AutofillOverlayVisibility, ExtensionCommand } from "@bitwarden/common/autofill/constants";
+import { ExtensionCommand } from "@bitwarden/common/autofill/constants";
 import { AutofillSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/autofill-settings.service";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ProcessReloadServiceAbstraction } from "@bitwarden/common/key-management/abstractions/process-reload.service";
@@ -433,9 +433,12 @@ export default class RuntimeBackground {
           }
           //*/
 
+          // Cozy customization, useless because OnFieldFocus is already our default value
+          /*
           await this.autofillSettingsService.setInlineMenuVisibility(
             AutofillOverlayVisibility.OnFieldFocus,
           );
+          //*/
 
           if (await this.environmentService.hasManagedEnvironment()) {
             await this.environmentService.setUrlsToManagedEnvironment();
