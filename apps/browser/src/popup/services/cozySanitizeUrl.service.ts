@@ -1,6 +1,3 @@
-/*
-    This code is from https://github.com/cozy/cozy-libs/blob/ff41af377c94d8ab5e34ffe91984bb1b1efd3b36/packages/cozy-authentication/src/steps/SelectServer.jsx#L194
-*/
 export class CozySanitizeUrlService {
   cozyDomain = ".mycozy.cloud";
 
