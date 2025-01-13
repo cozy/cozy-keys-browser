@@ -2174,8 +2174,9 @@ export class OverlayBackground implements OverlayBackgroundInterface {
   private async openInlineMenuOnFilledField(sender: chrome.runtime.MessageSender) {
     // Cozy customization; open inline menu on focus if it is a contact or a paper even if filled field
     if (
-      this.focusedFieldData.inlineMenuFillType === CipherType.Contact ||
-      this.focusedFieldData.inlineMenuFillType === CipherType.Paper
+      (this.focusedFieldData.inlineMenuFillType === CipherType.Contact ||
+        this.focusedFieldData.inlineMenuFillType === CipherType.Paper) &&
+      (await this.getInlineMenuVisibility()) === AutofillOverlayVisibility.OnFieldFocus
     ) {
       await this.updateInlineMenuPosition(sender, AutofillOverlayElement.Button);
       await this.updateInlineMenuPosition(sender, AutofillOverlayElement.List);
