@@ -3,7 +3,7 @@ import {
   AutofillFieldQualifierType,
 } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
 
-import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "./constants";
+import { CONTACTS_DOCTYPE } from "./constants";
 
 type CozyAttributesModel = {
   doctype: string;
@@ -19,41 +19,21 @@ export type ContactAttributesModel = CozyAttributesModel & {
   name: CozyContactFieldNames;
   postProcess?: (data: string | undefined) => string | undefined;
 };
-export type PaperAttributesModel = CozyAttributesModel & {
-  name: CozyPaperFieldNames;
-};
 
 export const isContactAttributesModel = (
   model: CozyAttributesModel,
 ): model is ContactAttributesModel => {
   return model.doctype === CONTACTS_DOCTYPE;
 };
-export const isPaperAttributesModel = (
-  model: CozyAttributesModel,
-): model is PaperAttributesModel => {
-  return model.doctype === FILES_DOCTYPE;
-};
 export const areContactAttributesModels = (
   model: CozyAttributesModel[],
 ): model is ContactAttributesModel[] => {
   return model[0].doctype === CONTACTS_DOCTYPE;
 };
-export const arePaperAttributesModels = (
-  model: CozyAttributesModel[],
-): model is PaperAttributesModel[] => {
-  return model[0].doctype === FILES_DOCTYPE;
-};
 
 export type CozyAttributesMapping = {
-  [key in AutofillFieldQualifierType]?: ContactAttributesModel | PaperAttributesModel;
+  [key in AutofillFieldQualifierType]?: ContactAttributesModel;
 };
-export type CozyPaperFieldNames =
-  | "number"
-  | "confidentialNumber"
-  | "licenseNumber"
-  | "bicNumber"
-  | "netSocialAmount"
-  | "refTaxIncome";
 export type CozyContactFieldNames =
   | "number"
   | "address"
@@ -84,15 +64,6 @@ export type CozyContactFieldNames =
 export type CozyFieldsNamesMapping = {
   [key in CozyContactFieldNames]: AutofillFieldQualifierType;
 };
-
-export const cozypaperFieldNames: CozyPaperFieldNames[] = [
-  "number",
-  "confidentialNumber",
-  "licenseNumber",
-  "bicNumber",
-  "netSocialAmount",
-  "refTaxIncome",
-];
 
 export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
   [AutofillFieldQualifier.identityFullName]: {
@@ -261,89 +232,5 @@ export const COZY_ATTRIBUTES_MAPPING: CozyAttributesMapping = {
     name: "entrycode",
     isPathArray: true,
     pathAttribute: "extendedAddress.entrycode",
-  },
-  [AutofillFieldQualifier.paperIdentityCardNumber]: {
-    doctype: FILES_DOCTYPE,
-    path: "metadata.number",
-    name: "number",
-    selector: { "metadata.qualification.label": "national_id_card" },
-  },
-  [AutofillFieldQualifier.paperPassportNumber]: {
-    doctype: FILES_DOCTYPE,
-    path: "metadata.number",
-    name: "number",
-    selector: { "metadata.qualification.label": "passport" },
-  },
-  [AutofillFieldQualifier.paperSocialSecurityNumber]: {
-    doctype: FILES_DOCTYPE,
-    path: "metadata.number",
-    name: "number",
-    selector: { "metadata.qualification.label": "national_health_insurance_card" },
-  },
-  [AutofillFieldQualifier.paperResidencePermitNumber]: {
-    doctype: FILES_DOCTYPE,
-    path: "metadata.number",
-    name: "number",
-    selector: { "metadata.qualification.label": "residence_permit" },
-  },
-  [AutofillFieldQualifier.paperDrivingLicenseNumber]: {
-    doctype: FILES_DOCTYPE,
-    path: "metadata.number",
-    name: "number",
-    selector: { "metadata.qualification.label": "driver_license" },
-  },
-  [AutofillFieldQualifier.paperVehicleRegistrationNumber]: {
-    doctype: FILES_DOCTYPE,
-    path: "metadata.number",
-    name: "number",
-    selector: { "metadata.qualification.label": "vehicle_registration" },
-  },
-  [AutofillFieldQualifier.paperVehicleRegistrationConfidentialCode]: {
-    doctype: FILES_DOCTYPE,
-    path: "metadata.vehicle.confidentialNumber",
-    name: "confidentialNumber",
-    selector: { "metadata.qualification.label": "vehicle_registration" },
-  },
-  [AutofillFieldQualifier.paperVehicleRegistrationLicensePlateNumber]: {
-    doctype: FILES_DOCTYPE,
-    path: "metadata.vehicle.licenseNumber",
-    name: "licenseNumber",
-    selector: { "metadata.qualification.label": "vehicle_registration" },
-  },
-  [AutofillFieldQualifier.paperBankIbanNumber]: {
-    doctype: FILES_DOCTYPE,
-    path: "metadata.number",
-    name: "number",
-    selector: { "metadata.qualification.label": "bank_details" },
-  },
-  [AutofillFieldQualifier.paperBankBicNumber]: {
-    doctype: FILES_DOCTYPE,
-    path: "metadata.bicNumber",
-    name: "bicNumber",
-    selector: { "metadata.qualification.label": "bank_details" },
-  },
-  [AutofillFieldQualifier.paperGrossSalaryAmount]: {
-    doctype: FILES_DOCTYPE,
-    path: "metadata.number",
-    name: "number",
-    selector: { "metadata.qualification.label": "pay_sheet" },
-  },
-  [AutofillFieldQualifier.paperNetSalaryAmount]: {
-    doctype: FILES_DOCTYPE,
-    path: "metadata.netSocialAmount",
-    name: "netSocialAmount",
-    selector: { "metadata.qualification.label": "pay_sheet" },
-  },
-  [AutofillFieldQualifier.paperTaxNoticeNumber]: {
-    doctype: FILES_DOCTYPE,
-    path: "metadata.number",
-    name: "number",
-    selector: { "metadata.qualification.label": "tax_notice" },
-  },
-  [AutofillFieldQualifier.paperTaxNoticeRefTaxIncome]: {
-    doctype: FILES_DOCTYPE,
-    path: "metadata.refTaxIncome",
-    name: "refTaxIncome",
-    selector: { "metadata.qualification.label": "tax_notice" },
   },
 };

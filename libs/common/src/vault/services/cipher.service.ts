@@ -52,7 +52,6 @@ import { Field } from "../models/domain/field";
 import { Identity } from "../models/domain/identity";
 import { Login } from "../models/domain/login";
 import { LoginUri } from "../models/domain/login-uri";
-import { Paper } from "../models/domain/paper";
 import { Password } from "../models/domain/password";
 import { SecureNote } from "../models/domain/secure-note";
 import { SortedCiphersCache } from "../models/domain/sorted-ciphers-cache";
@@ -188,10 +187,10 @@ export class CipherService implements CipherServiceAbstraction {
     originalCipher: Cipher = null,
   ): Promise<Cipher> {
     // Adjust password history
-    /* Cozy customization; we do not use password history for Papers & Contacts. Avoid to decrypt Papers & Contacts for nothing.
+    /* Cozy customization; we do not use password history for Contacts. Avoid to decrypt Contacts for nothing.
     if (model.id != null) {
     */
-    if (model.id != null && model.type !== CipherType.Paper && model.type !== CipherType.Contact) {
+    if (model.id != null && model.type !== CipherType.Contact) {
       if (originalCipher == null) {
         originalCipher = await this.get(model.id);
       }
@@ -1601,22 +1600,6 @@ export class CipherService implements CipherServiceAbstraction {
         );
         return;
       // Cozy customization
-      case CipherType.Paper:
-        cipher.paper = new Paper();
-        cipher.paper.type = model.paper.type;
-        await this.encryptObjProperty(
-          model.paper,
-          cipher.paper,
-          {
-            ownerName: null,
-            illustrationThumbnailUrl: null,
-            illustrationUrl: null,
-            qualificationLabel: null,
-            noteContent: null,
-          },
-          key,
-        );
-        return;
       case CipherType.Contact:
         cipher.contact = new Contact();
         cipher.contact.me = model.contact.me;

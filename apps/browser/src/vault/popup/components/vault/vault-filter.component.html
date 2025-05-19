@@ -197,21 +197,6 @@
           <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
         </button>
         <!-- Cozy customization end -->
-        <!-- Cozy customization ; display Paper type row -->
-        <button
-          type="button"
-          class="box-content-row"
-          appStopClick
-          (click)="selectType(cipherType.Paper)"
-        >
-          <div class="row-main">
-            <div class="icon"><i class="icon-cozy icon-mespapiers"></i></div>
-            <span class="text">{{ "typePapers" | i18n }}</span>
-          </div>
-          <span class="row-sub-label">{{ this.typeCounts.get(cipherType.Paper) || 0 }}</span>
-          <span><i class="bwi bwi-angle-right bwi-lg row-sub-icon"></i></span>
-        </button>
-        <!-- Cozy customization end -->
         <button
           type="button"
           class="box-content-row"

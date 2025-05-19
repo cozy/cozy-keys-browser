@@ -110,10 +110,10 @@ import type { IOCozyContact, IOCozyFile } from "cozy-client/types/types";
 // @ts-ignore
 import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
-import type { AmbiguousContactFieldName, AvailablePapers } from "src/autofill/types";
-import { COZY_ATTRIBUTES_MAPPING, isPaperAttributesModel } from "../../../../../libs/cozy/mapping";
+import type { AmbiguousContactFieldName } from "src/autofill/types";
+import { COZY_ATTRIBUTES_MAPPING } from "../../../../../libs/cozy/mapping";
 import { createOrUpdateCozyDoctype } from "../../../../../libs/cozy/createOrUpdateCozyDoctype";
-import { getCozyValue, getAllPapersFromContact } from "../../../../../libs/cozy/getCozyValue";
+import { getCozyValue } from "../../../../../libs/cozy/getCozyValue";
 import _ from "lodash";
 import {
   buildAddressObjectFromInputValues,
@@ -1391,39 +1391,7 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     const hasAtLeastOneFocusFieldValue =
       Object.values(ambiguousFormFieldsOfFocusedField).length > 0;
 
-    /*
-      On a form field with data coming from a paper :
-      - Display a menu to select or create a paper
-      On a form field other than ambiguous(phone/address/email):
-      - If the contact has one or less ambiguous value: autofill everything.
-      - If the contact has more than one ambiguous values: display a menu to choose which one.
-      On the ambiguous(phone/address/email) form field:
-      - Display a menu to select value.
-    */
-    if (isPaperAttributesModel(focusedFieldModel)) {
-      const availablePapers: AvailablePapers[] = (
-        await getAllPapersFromContact({
-          client,
-          contactId: contact.id,
-          contactEmail: cipher.contact.primaryEmail,
-          me: cipher.contact.me,
-          cozyAttributeModel: focusedFieldModel,
-        })
-      ).map((paper: IOCozyFile) => ({
-        id: paper._id,
-        name: paper.name,
-        value: _.get(paper, focusedFieldModel.path),
-        qualificationLabel: _.get(paper, "metadata.qualification.label"),
-        metadataName: focusedFieldModel.name,
-      }));
-      this.inlineMenuListPort?.postMessage({
-        command: "paperList",
-        inlineMenuCipherId,
-        contactName: contact.displayName,
-        availablePapers,
-        fieldHtmlIDToFill,
-      });
-    } else if (
+    if (
       (!isFocusedFieldAmbigous && hasMultipleAmbiguousValueInSameField) ||
       (isFocusedFieldAmbigous && hasAtLeastOneFocusFieldValue)
     ) {
@@ -1466,26 +1434,13 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       const client = await this.cozyClientService.getClientInstance();
       const cipher = this.inlineMenuCiphers.get(inlineMenuCipherId);
 
-      const createdOrUpdatedCozyDoctype = await createOrUpdateCozyDoctype({
+      await createOrUpdateCozyDoctype({
         client,
         cipher,
         inputValues,
         i18nService: this.i18nService,
         logService: this.logService,
       });
-
-      if (createdOrUpdatedCozyDoctype._type === FILES_DOCTYPE) {
-        const locale = this.i18nService.translationLocale || "en";
-        const t = locales.getBoundT(locale);
-
-        await this.notificationBackground.paperSaved(port.sender.tab, {
-          paperSavedId: createdOrUpdatedCozyDoctype._id,
-          paperSavedQualification: createdOrUpdatedCozyDoctype.metadata.qualification.label,
-          paperSavedQualificationLabel: t(
-            `Scan.items.${createdOrUpdatedCozyDoctype.metadata.qualification.label}`,
-          ),
-        });
-      }
 
       const isAddress = inputValues.values.some((inputValue) => inputValue.key === "street");
       // If is an address, we need set the value of the field to the formatted address, because getCozyValue refers to `formattedAddress` to return values corresponding to the postal address.
@@ -2172,10 +2127,9 @@ export class OverlayBackground implements OverlayBackgroundInterface {
    * @param sender - The sender of the port message
    */
   private async openInlineMenuOnFilledField(sender: chrome.runtime.MessageSender) {
-    // Cozy customization; open inline menu on focus if it is a contact or a paper even if filled field
+    // Cozy customization; open inline menu on focus if it is a contact even if filled field
     if (
-      (this.focusedFieldData.inlineMenuFillType === CipherType.Contact ||
-        this.focusedFieldData.inlineMenuFillType === CipherType.Paper) &&
+      this.focusedFieldData.inlineMenuFillType === CipherType.Contact &&
       (await this.getInlineMenuVisibility()) === AutofillOverlayVisibility.OnFieldFocus
     ) {
       await this.updateInlineMenuPosition(sender, AutofillOverlayElement.Button);
@@ -2375,20 +2329,6 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         "new_company",
         "new_contact",
         "addressDetails",
-        "new_paperIdentityCardNumber",
-        "new_paperPassportNumber",
-        "new_paperSocialSecurityNumber",
-        "new_paperResidencePermitNumber",
-        "new_paperDrivingLicenseNumber",
-        "new_paperVehicleRegistrationNumber",
-        "new_paperVehicleRegistrationConfidentialCode",
-        "new_paperVehicleRegistrationLicensePlateNumber",
-        "new_paperBankIbanNumber",
-        "new_paperBankBicNumber",
-        "new_paperGrossSalaryAmount",
-        "new_paperNetSalaryAmount",
-        "new_paperTaxNoticeNumber",
-        "new_paperTaxNoticeRefTaxIncome",
         "autofill_identityTitle",
         "autofill_identityFirstName",
         "autofill_identityMiddleName",
@@ -2411,20 +2351,6 @@ export class OverlayBackground implements OverlayBackgroundInterface {
         "autofill_identityPhone",
         "autofill_identityEmail",
         "autofill_identityUsername",
-        "autofill_paperIdentityCardNumber",
-        "autofill_paperPassportNumber",
-        "autofill_paperSocialSecurityNumber",
-        "autofill_paperResidencePermitNumber",
-        "autofill_paperDrivingLicenseNumber",
-        "autofill_paperVehicleRegistrationNumber",
-        "autofill_paperVehicleRegistrationConfidentialCode",
-        "autofill_paperVehicleRegistrationLicensePlateNumber",
-        "autofill_paperBankIbanNumber",
-        "autofill_paperBankBicNumber",
-        "autofill_paperGrossSalaryAmount",
-        "autofill_paperNetSalaryAmount",
-        "autofill_paperTaxNoticeNumber",
-        "autofill_paperTaxNoticeRefTaxIncome",
         "givenName",
         "additionalName",
         "familyName",

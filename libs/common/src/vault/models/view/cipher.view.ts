@@ -13,7 +13,6 @@ import { ContactView } from "./contact.view";
 import { FieldView } from "./field.view";
 import { IdentityView } from "./identity.view";
 import { LoginView } from "./login.view";
-import { PaperView } from "./paper.view";
 import { PasswordHistoryView } from "./password-history.view";
 import { SecureNoteView } from "./secure-note.view";
 
@@ -35,7 +34,6 @@ export class CipherView implements View, InitializerMetadata {
   identity = new IdentityView();
   card = new CardView();
   secureNote = new SecureNoteView();
-  paper = new PaperView();
   contact = new ContactView();
   attachments: AttachmentView[] = null;
   fields: FieldView[] = null;
@@ -79,8 +77,6 @@ export class CipherView implements View, InitializerMetadata {
       case CipherType.Identity:
         return this.identity;
       // Cozy customization
-      case CipherType.Paper:
-        return this.paper;
       case CipherType.Contact:
         return this.contact;
       // Cozy customization end
@@ -201,9 +197,6 @@ export class CipherView implements View, InitializerMetadata {
         view.secureNote = SecureNoteView.fromJSON(obj.secureNote);
         break;
       // Cozy customization
-      case CipherType.Paper:
-        view.paper = PaperView.fromJSON(obj.paper);
-        break;
       case CipherType.Contact:
         view.contact = ContactView.fromJSON(obj.contact);
         break;

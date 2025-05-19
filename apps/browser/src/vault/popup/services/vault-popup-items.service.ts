@@ -277,7 +277,6 @@ export class VaultPopupItemsService {
       [CipherType.Card]: 2,
       [CipherType.Identity]: 3,
       [CipherType.SecureNote]: 4,
-      [CipherType.Paper]: 1000,
       [CipherType.Contact]: 1001,
     };
 

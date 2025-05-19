@@ -1,4 +1,4 @@
-import CozyClient, { Q, models } from "cozy-client";
+import CozyClient, { Q } from "cozy-client";
 import type { IOCozyContact } from "cozy-client/types/types";
 import * as _ from "lodash";
 
@@ -9,24 +9,10 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { AutofillFieldQualifierType } from "../../apps/browser/src/autofill/enums/autofill-field.enums";
 import type { InputValues } from "../../apps/browser/src/autofill/overlay/inline-menu/abstractions/autofill-inline-menu-list";
 
-import { CONTACTS_DOCTYPE, FILES_DOCTYPE } from "./constants";
+import { CONTACTS_DOCTYPE } from "./constants";
 import { createOrUpdateCozyContactAddress } from "./contact.helper";
-import { getOrCreateAppFolderWithReference } from "./helpers/folder";
-import { createPDFWithText } from "./helpers/pdf";
-import {
-  areContactAttributesModels,
-  arePaperAttributesModels,
-  COZY_ATTRIBUTES_MAPPING,
-} from "./mapping";
-import type { ContactAttributesModel, PaperAttributesModel } from "./mapping";
-
-const {
-  document: { Qualification, locales },
-  file: { uploadFileWithConflictStrategy },
-  paper: { getTranslatedNameForInformationMetadata },
-  contact: { getDisplayName },
-} = models;
-
+import { areContactAttributesModels, COZY_ATTRIBUTES_MAPPING } from "./mapping";
+import type { ContactAttributesModel } from "./mapping";
 export interface AutofillValue {
   value: string;
   type?: string;
@@ -81,19 +67,6 @@ export const createOrUpdateCozyDoctype = async ({
     const { data: res } = await client.save(updatedContact);
 
     return res;
-  } else if (arePaperAttributesModels(cozyAttributeModels)) {
-    // only create for the moment
-    const createdPaper = await createOrUpdateCozyPaper({
-      client,
-      cozyAttributeModel: cozyAttributeModels[0],
-      inputValue: inputValues.values[0],
-      i18nService,
-      contact,
-    });
-
-    const { data: res } = await client.save(createdPaper);
-
-    return res;
   }
 };
 
@@ -136,87 +109,4 @@ export const createOrUpdateCozyContact = async ({
   }
 
   return contact;
-};
-
-interface CreateOrUpdateCozyPaperType {
-  client: CozyClient;
-  cozyAttributeModel: PaperAttributesModel;
-  inputValue: any;
-  i18nService: I18nService;
-  contact: IOCozyContact;
-}
-
-export const createOrUpdateCozyPaper = async ({
-  client,
-  cozyAttributeModel,
-  inputValue,
-  i18nService,
-  contact,
-}: CreateOrUpdateCozyPaperType): Promise<any> => {
-  const locale = i18nService.translationLocale || "en";
-  const t = locales.getBoundT(locale);
-
-  const [, qualificationLabelValue] = Object.entries(cozyAttributeModel.selector)[0];
-
-  const qualification = Qualification.getByLabel(qualificationLabelValue as string);
-
-  // Create the PDF
-
-  // Example: "RIB - John Doe"
-  const pdfTitle = `${t(`Scan.items.${qualification.label}`)} - ${getDisplayName(contact)}`;
-
-  // Example: "Numéro d'IBAN"
-  const label = getTranslatedNameForInformationMetadata(cozyAttributeModel.name, {
-    lang: locale,
-    qualificationLabel: qualification.label,
-  });
-
-  // Example: "FR00 0000 0000 0000 0000 0000 000"
-  const value = inputValue.value;
-
-  const pdfText = `
-    ${pdfTitle}
-
-    ${new Date().toLocaleDateString()}
-
-    ${label}: ${value}
-  `;
-  const pdfBytes = await createPDFWithText(pdfText);
-
-  // Build the io.cozy.files document
-  const dir = await getOrCreateAppFolderWithReference(client, i18nService);
-
-  const paperOptions = {
-    name: `${pdfTitle}.pdf`,
-    contentType: "application/pdf",
-    metadata: {
-      qualification,
-      paperProps: {
-        isBlank: true,
-      },
-    },
-    dirId: dir._id,
-    conflictStrategy: "rename",
-  };
-
-  _.set(paperOptions, cozyAttributeModel.path, inputValue.value);
-
-  const { data: fileCreated } = await uploadFileWithConflictStrategy(
-    client,
-    pdfBytes,
-    paperOptions,
-  );
-
-  // Add contact
-  const fileCollection = client.collection(FILES_DOCTYPE);
-  const references = [
-    {
-      _id: contact._id,
-      _type: CONTACTS_DOCTYPE,
-    },
-  ];
-
-  await fileCollection.addReferencedBy(fileCreated, references);
-
-  return fileCreated;
 };

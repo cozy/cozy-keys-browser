@@ -6,9 +6,6 @@ export type NotificationTypeData = {
   removeIndividualVault?: boolean;
   importType?: string;
   launchTimestamp?: number;
-  paperSavedId?: string;
-  paperSavedQualification?: string;
-  paperSavedQualificationLabel?: string;
 };
 
 export type NotificationsExtensionMessage = {

@@ -6,9 +6,6 @@ type NotificationBarIframeInitData = {
   theme?: Theme;
   removeIndividualVault?: boolean;
   importType?: string;
-  paperSavedId?: string;
-  paperSavedQualification?: string;
-  paperSavedQualificationLabel?: string;
   applyRedesign?: boolean;
   launchTimestamp?: number;
 };

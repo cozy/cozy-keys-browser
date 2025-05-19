@@ -33,7 +33,6 @@ import { NotificationQueueMessageType } from "../enums/notification-queue-messag
 import { AutofillService } from "../services/abstractions/autofill.service";
 
 import {
-  AddPaperSavedQueueMessage,
   AddChangePasswordQueueMessage,
   AddLoginQueueMessage,
   AddRequestFilelessImportQueueMessage,
@@ -206,14 +205,6 @@ export default class NotificationBackground {
     };
 
     switch (notificationType) {
-      // Cozy customization; Cozy notifications
-      case NotificationQueueMessageType.PaperSaved:
-        typeData.paperSavedId = notificationQueueMessage.paperSavedId;
-        typeData.paperSavedQualification = notificationQueueMessage.paperSavedQualification;
-        typeData.paperSavedQualificationLabel =
-          notificationQueueMessage.paperSavedQualificationLabel;
-        break;
-      // Cozy customization end;
       case NotificationQueueMessageType.AddLogin:
         typeData.removeIndividualVault = await this.removeIndividualVault();
         break;
@@ -393,43 +384,6 @@ export default class NotificationBackground {
   }
 
   // Cozy customization; Cozy notifications
-  /**
-   * Sets up a notification to inform the user a paper has been saved.
-   *
-   * @param tab - The tab that the message was sent from
-   */
-  async paperSaved(tab: chrome.tabs.Tab, options: any) {
-    const currentAuthStatus = await this.authService.getAuthStatus();
-
-    if (currentAuthStatus !== AuthenticationStatus.Unlocked || this.notificationQueue.length) {
-      return;
-    }
-
-    const loginDomain = Utils.getDomain(tab.url);
-
-    if (loginDomain) {
-      await this.pushPaperSavedToQueue(loginDomain, options, tab);
-    }
-  }
-
-  private async pushPaperSavedToQueue(loginDomain: string, options: any, tab: chrome.tabs.Tab) {
-    this.removeTabFromNotificationQueue(tab);
-    const launchTimestamp = new Date().getTime();
-    const message: AddPaperSavedQueueMessage = {
-      type: NotificationQueueMessageType.PaperSaved,
-      domain: loginDomain,
-      tab: tab,
-      launchTimestamp,
-      expires: new Date(new Date().getTime() + 0.5 * 60000), // 30 seconds
-      wasVaultLocked: false,
-      paperSavedId: options.paperSavedId,
-      paperSavedQualification: options.paperSavedQualification,
-      paperSavedQualificationLabel: options.paperSavedQualificationLabel,
-    };
-    this.notificationQueue.push(message);
-    await this.sendNotificationQueueMessage(tab, message);
-  }
-
   /**
    * Sets up a notification to inform the user a TOTP copied has been copied to the clipboard.
    *

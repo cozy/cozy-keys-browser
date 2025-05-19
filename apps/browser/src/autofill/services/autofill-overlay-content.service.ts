@@ -232,34 +232,6 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       this.inlineMenuFieldQualificationService.isFieldForAddressApartment,
     [AutofillFieldQualifier.addressEntrycode]:
       this.inlineMenuFieldQualificationService.isFieldForAddressEntrycode,
-    [AutofillFieldQualifier.paperIdentityCardNumber]:
-      this.inlineMenuFieldQualificationService.isFieldForPaperIdentityCardNumber,
-    [AutofillFieldQualifier.paperPassportNumber]:
-      this.inlineMenuFieldQualificationService.isFieldForPaperPassportNumber,
-    [AutofillFieldQualifier.paperSocialSecurityNumber]:
-      this.inlineMenuFieldQualificationService.isFieldForPaperSocialSecurityNumber,
-    [AutofillFieldQualifier.paperResidencePermitNumber]:
-      this.inlineMenuFieldQualificationService.isFieldForPaperResidencePermitNumber,
-    [AutofillFieldQualifier.paperDrivingLicenseNumber]:
-      this.inlineMenuFieldQualificationService.isFieldForPaperDrivingLicenseNumber,
-    [AutofillFieldQualifier.paperVehicleRegistrationNumber]:
-      this.inlineMenuFieldQualificationService.isFieldForPaperVehicleRegistrationNumber,
-    [AutofillFieldQualifier.paperVehicleRegistrationConfidentialCode]:
-      this.inlineMenuFieldQualificationService.isFieldForPaperVehicleRegistrationConfidentialCode,
-    [AutofillFieldQualifier.paperVehicleRegistrationLicensePlateNumber]:
-      this.inlineMenuFieldQualificationService.isFieldForPaperVehicleRegistrationLicensePlateNumber,
-    [AutofillFieldQualifier.paperBankIbanNumber]:
-      this.inlineMenuFieldQualificationService.isFieldForPaperBankIbanNumber,
-    [AutofillFieldQualifier.paperBankBicNumber]:
-      this.inlineMenuFieldQualificationService.isFieldForPaperBankBicNumber,
-    [AutofillFieldQualifier.paperGrossSalaryAmount]:
-      this.inlineMenuFieldQualificationService.isFieldForPaperGrossSalaryAmount,
-    [AutofillFieldQualifier.paperNetSalaryAmount]:
-      this.inlineMenuFieldQualificationService.isFieldForPaperNetSalaryAmount,
-    [AutofillFieldQualifier.paperTaxNoticeNumber]:
-      this.inlineMenuFieldQualificationService.isFieldForPaperTaxNoticeNumber,
-    [AutofillFieldQualifier.paperTaxNoticeRefTaxIncome]:
-      this.inlineMenuFieldQualificationService.isFieldForPaperTaxNoticeRefTaxIncome,
     // Cozy customization end
   };
 

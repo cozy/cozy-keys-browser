@@ -246,9 +246,6 @@
   "addIdentity": {
     "message": "Ajouter un profil"
   },
-  "addPaper": {
-    "message": "Ajouter un document"
-  },
   "addContact": {
     "message": "Ajouter un contact"
   },
@@ -1047,17 +1044,11 @@
   "deleteSharedItemConfirmation": {
     "message": "Cet identifiant permet actuellement d'importer les données du compte dans votre Cozy. En le supprimant, cet import automatique sera interrompu. Etes-vous sûr ?"
   },
-  "deletePaperItemConfirmation": {
-    "message": "Êtes-vous sûr de vouloir supprimer cet élément ?"
-  },
   "deleteContactItemConfirmation": {
     "message": "Êtes-vous sûr de vouloir supprimer ce contact ?"
   },
   "deletedItem": {
     "message": "Élément envoyé à la corbeille"
-  },
-  "deletedPaperItem": {
-    "message": "Élément envoyé à la corbeille de Cozy Drive"
   },
   "deletedContactItem": {
     "message": "Contact supprimé"
@@ -1124,21 +1115,6 @@
   "clearClipboardDesc": {
     "message": "Efface automatiquement les valeurs copiées de votre presse-papiers.",
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
-  },
-  "notificationPaperSavedDesc": {
-    "message": "Un nouveau document $VALUE$ avec l'information saisie vient d'être ajouté dans l'application Mes Papiers de votre Cozy.",
-    "placeholders": {
-      "value": {
-        "content": "$1",
-        "example": "Carte d'identité"
-      }
-    }
-  },
-  "notificationPaperSavedUnderstood": {
-    "message": "J'ai compris"
-  },
-  "notificationPaperSavedSee": {
-    "message": "Voir le document"
   },
   "notificationAddDesc": {
     "message": "Enregistrer le mot de passe dans mon Cozy ?"
@@ -1286,9 +1262,6 @@
   },
   "administrativeFolder": {
     "message": "Administratif"
-  },
-  "papersFolder": {
-    "message": "Mes papiers"
   },
   "movedItemToFolder": {
     "message": "Élément déplacé"
@@ -2045,12 +2018,6 @@
   },
   "typeContacts": {
     "message": "Contacts"
-  },
-  "typePaper": {
-    "message": "Document et Note"
-  },
-  "typePapers": {
-    "message": "Documents et Notes"
   },
   "newItemHeader": {
     "message": "Nouveau/nouvelle $TYPE$",
@@ -5063,48 +5030,6 @@
   "new_company": {
     "message": "Nouvelle entreprise"
   },
-  "new_paperIdentityCardNumber": {
-    "message": "Nouveau numéro de carte d'identité"
-  },
-  "new_paperPassportNumber": {
-    "message": "Nouveau numéro de passeport"
-  },
-  "new_paperSocialSecurityNumber": {
-    "message": "Nouveau numéro de sécurité sociale"
-  },
-  "new_paperResidencePermitNumber": {
-    "message": "Nouveau numéro de permis de résidence"
-  },
-  "new_paperDrivingLicenseNumber": {
-    "message": "Nouveau numéro de permis de conduire"
-  },
-  "new_paperVehicleRegistrationNumber": {
-    "message": "Nouveau numéro de carte grise"
-  },
-  "new_paperVehicleRegistrationConfidentialCode": {
-    "message": "Nouveau code confidentiel de carte grise"
-  },
-  "new_paperVehicleRegistrationLicensePlateNumber": {
-    "message": "Nouveau numéro d'immatriculation"
-  },
-  "new_paperBankIbanNumber": {
-    "message": "Nouveau numéro d'IBAN"
-  },
-  "new_paperBankBicNumber": {
-    "message": "Nouveau numéro BIC"
-  },
-  "new_paperGrossSalaryAmount": {
-    "message": "Nouvelle rémunération brute"
-  },
-  "new_paperNetSalaryAmount": {
-    "message": "Nouvelle rémunération nette"
-  },
-  "new_paperTaxNoticeNumber": {
-    "message": "Nouveau numéro fiscal de référence"
-  },
-  "new_paperTaxNoticeRefTaxIncome": {
-    "message": "Nouveau revenu fiscal de référence"
-  },
   "autofill_identityTitle": {
     "message": "Saisir le titre"
   },
@@ -5170,48 +5095,6 @@
   },
   "autofill_identityUsername": {
     "message": "Saisir l'identifiant"
-  },
-  "autofill_paperIdentityCardNumber": {
-    "message": "Saisir le numéro de carte d'identité"
-  },
-  "autofill_paperPassportNumber": {
-    "message": "Saisir le numéro de passeport"
-  },
-  "autofill_paperSocialSecurityNumber": {
-    "message": "Saisir le numéro de sécurité sociale"
-  },
-  "autofill_paperResidencePermitNumber": {
-    "message": "Saisir le numéro de permis de résidence"
-  },
-  "autofill_paperDrivingLicenseNumber": {
-    "message": "Saisir le numéro de permis de conduire"
-  },
-  "autofill_paperVehicleRegistrationNumber": {
-    "message": "Saisir le numéro de carte grise"
-  },
-  "autofill_paperVehicleRegistrationConfidentialCode": {
-    "message": "Saisir le code confidentiel de carte grise"
-  },
-  "autofill_paperVehicleRegistrationLicensePlateNumber": {
-    "message": "Saisir le numéro d'immatriculation"
-  },
-  "autofill_paperBankIbanNumber": {
-    "message": "Saisir le numéro d'IBAN"
-  },
-  "autofill_paperBankBicNumber": {
-    "message": "Saisir le numéro BIC"
-  },
-  "autofill_paperGrossSalaryAmount": {
-    "message": "Saisir la rémunération brute"
-  },
-  "autofill_paperNetSalaryAmount": {
-    "message": "Saisir la rémunération nette"
-  },
-  "autofill_paperTaxNoticeNumber": {
-    "message": "Saisir le numéro fiscal de référence"
-  },
-  "autofill_paperTaxNoticeRefTaxIncome": {
-    "message": "Saisir le revenu fiscal de référence"
   },
   "enterprisePolicyRequirementsApplied": {
     "message": "Les exigences de la politique d'entreprise ont été appliquées à ce paramètre"
