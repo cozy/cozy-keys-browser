@@ -14,8 +14,7 @@ The Cozy browser extension is written using the Web Extension API and Angular. I
 
 ## Requirements
 
-- [Node.js](https://nodejs.org) v16.15.0 (bug in npm 8.11.0 and greater)
-- NPM 8.5.5
+- [Node.js](https://nodejs.org) v20 and NPM v10
 - [Gulp](https://gulpjs.com/) (`npm install --global gulp-cli`)
 - Chrome (preferred), Opera, Firefox browser or Safari
 - toolchain C++ (ubuntu) `sudo apt-get install build-essential`
@@ -26,7 +25,7 @@ The Cozy browser extension is written using the Web Extension API and Angular. I
 cd ../..        # run install from project root
 npm install --legacy-peer-deps
 cd apps/browser # run from this directory
-npm run start
+npm run build:watch
 # In watch mode, you can run a command - for instance to play a sound - by personalizing the `webpack.announcer.plugin.js`
 ```
 
