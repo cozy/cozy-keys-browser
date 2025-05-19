@@ -5,10 +5,9 @@ import { InlineMenuFillTypes } from "../../../enums/autofill-overlay.enum";
 
 /* start Cozy imports */
 /* eslint-disable */
-import { AmbiguousContactFields, AvailablePapers } from "src/autofill/types";
+import { AmbiguousContactFields } from "src/autofill/types";
 import { AutofillFieldQualifierType } from "src/autofill/enums/autofill-field.enums";
-import { IOCozyContact } from "cozy-client/types/types";
-import { CozyContactFieldNames, CozyPaperFieldNames } from "../../../../../../../libs/cozy/mapping";
+import { CozyContactFieldNames } from "../../../../../../../libs/cozy/mapping";
 import { CozyAutofillOptions } from "src/autofill/services/abstractions/autofill.service";
 /* eslint-enable */
 /* end Cozy imports */
@@ -30,13 +29,6 @@ export type UpdateAutofillInlineMenuListAmbiguousMessage = AutofillInlineMenuLis
   isFocusedFieldAmbigous: boolean;
   fieldHtmlIDToFill: string;
   focusedFieldName: string;
-};
-
-export type UpdateAutofillInlineMenuListPaperMessage = AutofillInlineMenuListMessage & {
-  inlineMenuCipherId: string;
-  contactName: string;
-  availablePapers: AvailablePapers[];
-  fieldHtmlIDToFill: string;
 };
 // Cozy customization end
 
@@ -82,7 +74,6 @@ export type AutofillInlineMenuListWindowMessageHandlers = {
   }: {
     message: UpdateAutofillInlineMenuListAmbiguousMessage;
   }) => void;
-  paperList: ({ message }: { message: UpdateAutofillInlineMenuListPaperMessage }) => void;
   createEmptyNameList: ({
     message,
   }: {
@@ -98,13 +89,13 @@ export type AutofillInlineMenuListWindowMessageHandlers = {
 };
 
 export type InputRef = {
-  key: CozyContactFieldNames | CozyPaperFieldNames;
+  key: CozyContactFieldNames;
   element: HTMLInputElement;
   fieldQualifier: AutofillFieldQualifierType;
 };
 
 export type InputRefValue = {
-  key: CozyContactFieldNames | CozyPaperFieldNames;
+  key: CozyContactFieldNames;
   value: string;
   fieldQualifier: AutofillFieldQualifierType;
 };

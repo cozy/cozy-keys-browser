@@ -1,12 +1,9 @@
 <ng-container>
-  <!-- Cozy customization; hide "Custom fields" header and remove extra margin for Paper ciphers  -->
+  <!-- Cozy customization; hide "Custom fields" header and remove extra margin for Contacts ciphers  -->
   <!--
   <h2 class="box-header">
   -->
-  <h2
-    class="box-header"
-    *ngIf="cipher.type !== cipherType.Paper && cipher.type !== cipherType.Contact"
-  >
+  <h2 class="box-header" *ngIf="cipher.type !== cipherType.Contact">
     {{ "customFields" | i18n }}
   </h2>
   <!--
@@ -15,8 +12,7 @@
   <div
     class="box-content"
     [ngStyle]="{
-      'margin-top.px':
-        cipher.type !== cipherType.Paper && cipher.type !== cipherType.Contact ? 0 : -15,
+      'margin-top.px': cipher.type !== cipherType.Contact ? 0 : -15,
     }"
   >
     <!-- Cozy customization end -->
@@ -53,10 +49,6 @@
           <span *ngIf="field.type === fieldType.Linked" class="row-label">{{ field.name }}</span>
           <div *ngIf="field.type === fieldType.Text">
             {{ field.value || "&nbsp;" }}
-            <app-vault-view-expiration-date
-              *ngIf="field.subtype === fieldSubType.ExpirationDate"
-              [field]="field"
-            ></app-vault-view-expiration-date>
           </div>
           <div *ngIf="field.type === fieldType.Hidden">
             <span *ngIf="!field.showValue" class="monospaced">{{ field.maskedValue }}</span>

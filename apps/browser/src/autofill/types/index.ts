@@ -75,14 +75,6 @@ export type AmbiguousContactFields = {
 
 export type AmbiguousContactFieldValue = ContactPhone[] | ContactEmail[] | ContactAddress[];
 
-export type AvailablePapers = {
-  id?: string; // the file id
-  name?: string; // the file name
-  value?: string; // we are interested in only one value in the file metadata
-  qualificationLabel?: string; // the label of the qualification
-  metadataName?: string; // the name of the metadata
-};
-
 type ContactActionMenuData = {
   type: "contact";
   cipher: InlineMenuCipherData;

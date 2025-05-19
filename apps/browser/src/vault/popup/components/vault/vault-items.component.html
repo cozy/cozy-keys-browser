@@ -141,13 +141,6 @@
               {{ "addIdentity" | i18n }}
             </button>
           </ng-container>
-          <ng-container *ngIf="type === cipherType.Paper">
-            <div class="icon"><i class="icon-cozy icon-mespapiers icon-double"></i></div>
-            <p>{{ "addPaperExplanation" | i18n }}</p>
-            <button type="button" (click)="addCipher()" class="btn block primary link">
-              {{ "addPaper" | i18n }}
-            </button>
-          </ng-container>
           <ng-container *ngIf="type === cipherType.Contact">
             <div class="icon"><i class="icon-cozy icon-contacts icon-double"></i></div>
             <p>{{ "addContactExplanation" | i18n }}</p>

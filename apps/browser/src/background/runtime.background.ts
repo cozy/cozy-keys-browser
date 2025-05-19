@@ -34,7 +34,6 @@ import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.serv
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { favoriteContactCipher } from "../../../../libs/cozy/contactCipher";
-import { favoritePaperCipher } from "../../../../libs/cozy/paperCipher";
 /* eslint-enable */
 // End Cozy imports
 
@@ -130,14 +129,6 @@ export default class RuntimeBackground {
       case "favoriteCozyCipher":
         if (msg.favoriteOptions.cipher.type === CipherType.Contact) {
           return await favoriteContactCipher(
-            this.cipherService,
-            this.i18nService,
-            this.accountService,
-            msg.favoriteOptions.cipher,
-            this.cozyClientService,
-          );
-        } else if (msg.favoriteOptions.cipher.type === CipherType.Paper) {
-          return await favoritePaperCipher(
             this.cipherService,
             this.i18nService,
             this.accountService,

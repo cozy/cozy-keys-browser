@@ -5,7 +5,6 @@ import { ContactApi } from "../api/contact.api";
 import { FieldApi } from "../api/field.api";
 import { IdentityApi } from "../api/identity.api";
 import { LoginApi } from "../api/login.api";
-import { PaperApi } from "../api/paper.api";
 import { SecureNoteApi } from "../api/secure-note.api";
 
 import { AttachmentResponse } from "./attachment.response";
@@ -23,7 +22,6 @@ export class CipherResponse extends BaseResponse {
   card: CardApi;
   identity: IdentityApi;
   secureNote: SecureNoteApi;
-  paper: PaperApi;
   contact: ContactApi;
   favorite: boolean;
   edit: boolean;

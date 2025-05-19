@@ -124,8 +124,8 @@ export class IndividualVaultExportService
     });
 
     ciphers.forEach((c) => {
-      // Cozy customization; do not export papers and contacts
-      if (c.type === CipherType.Paper || c.type === CipherType.Contact) {
+      // Cozy customization; do not export contacts
+      if (c.type === CipherType.Contact) {
         return;
       }
       // Cozy customization end
@@ -197,8 +197,8 @@ export class IndividualVaultExportService
     });
 
     decCiphers.forEach((c) => {
-      // Cozy customization; do not export papers and contacts
-      if (c.type === CipherType.Paper || c.type === CipherType.Contact) {
+      // Cozy customization; do not export contacts
+      if (c.type === CipherType.Contact) {
         return;
       }
       // Cozy customization end

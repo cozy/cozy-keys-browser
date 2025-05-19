@@ -18,7 +18,6 @@ import { Contact } from "./contact";
 import { Field } from "./field";
 import { Identity } from "./identity";
 import { Login } from "./login";
-import { Paper } from "./paper";
 import { Password } from "./password";
 import { SecureNote } from "./secure-note";
 
@@ -41,7 +40,6 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
   identity: Identity;
   card: Card;
   secureNote: SecureNote;
-  paper: Paper;
   contact: Contact;
   attachments: Attachment[];
   fields: Field[];
@@ -102,9 +100,6 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
         this.identity = new Identity(obj.identity);
         break;
       // Cozy customization
-      case CipherType.Paper:
-        this.paper = new Paper(obj.paper);
-        break;
       case CipherType.Contact:
         this.contact = new Contact(obj.contact);
         break;
@@ -169,9 +164,6 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
         model.identity = await this.identity.decrypt(this.organizationId, encKey);
         break;
       // Cozy customization
-      case CipherType.Paper:
-        model.paper = await this.paper.decrypt(this.organizationId, encKey);
-        break;
       case CipherType.Contact:
         model.contact = await this.contact.decrypt(this.organizationId, encKey);
         break;
@@ -260,9 +252,6 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
       case CipherType.Identity:
         c.identity = this.identity.toIdentityData();
         break;
-      case CipherType.Paper:
-        c.paper = this.paper.toPaperData();
-        break;
       case CipherType.Contact:
         c.contact = this.contact.toContactData();
         break;
@@ -322,9 +311,6 @@ export class Cipher extends Domain implements Decryptable<CipherView> {
         domain.secureNote = SecureNote.fromJSON(obj.secureNote);
         break;
       // Cozy customization
-      case CipherType.Paper:
-        domain.paper = Paper.fromJSON(obj.paper);
-        break;
       case CipherType.Contact:
         domain.contact = Contact.fromJSON(obj.contact);
         break;

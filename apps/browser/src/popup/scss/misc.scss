@@ -427,20 +427,6 @@ li.active .icon-cozy-inline > svg {
 //   }
 // }
 
-.icon-paper-wrapper {
-  border: 3px solid #fff;
-  box-shadow:
-    0px 2px 4px 0px rgba(29, 33, 42, 0.16),
-    0px 4px 16px 0px rgba(29, 33, 42, 0.16),
-    0px 0px 0px 0.5px rgba(29, 33, 42, 0.16),
-    0px 0px 0px 0.5px rgba(29, 33, 42, 0.16);
-  // Reduce default border-radius
-  border-radius: 3px !important;
-  // Increase max-width and max-height to take into account border
-  max-width: 26px !important;
-  max-height: 26px !important;
-}
-
 .cipher-illustration {
   display: flex;
   justify-content: center;
@@ -639,32 +625,6 @@ li.active .icon-cozy-inline > svg {
   }
 }
 
-.icon-print-paper {
-  mask-image: url("cozy-ui/assets/icons/ui/printer.svg");
-  -webkit-mask-image: url("cozy-ui/assets/icons/ui/printer.svg");
-  mask-repeat: no-repeat;
-  -webkit-mask-repeat: no-repeat;
-  mask-size: contain;
-  -webkit-mask-size: contain;
-  background-color: $brand-primary;
-  @include themify($themes) {
-    background-color: themed("primaryColor");
-  }
-}
-
-.icon-download-paper {
-  mask-image: url("cozy-ui/assets/icons/ui/download.svg");
-  -webkit-mask-image: url("cozy-ui/assets/icons/ui/download.svg");
-  mask-repeat: no-repeat;
-  -webkit-mask-repeat: no-repeat;
-  mask-size: contain;
-  -webkit-mask-size: contain;
-  background-color: $brand-primary;
-  @include themify($themes) {
-    background-color: themed("primaryColor");
-  }
-}
-
 .icon-send-email {
   mask-image: url("cozy-ui/assets/icons/ui/email.svg");
   -webkit-mask-image: url("cozy-ui/assets/icons/ui/email.svg");
@@ -851,12 +811,6 @@ li.active .icon-cozy-inline > svg {
   @include themify($themes) {
     background-color: themed("headerInputPlaceholderColor");
   }
-}
-
-.icon-mespapiers {
-  background-image: url("../images/icon-mespapiers.svg");
-  width: 24px;
-  height: 24px;
 }
 
 .icon-contacts {
