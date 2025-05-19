@@ -57,20 +57,6 @@ export interface InlineMenuFieldQualificationService {
   isFieldForAddressStairs(field: AutofillField): boolean;
   isFieldForAddressApartment(field: AutofillField): boolean;
   isFieldForAddressEntrycode(field: AutofillField): boolean;
-  isFieldForPaperIdentityCardNumber(field: AutofillField): boolean;
-  isFieldForPaperPassportNumber(field: AutofillField): boolean;
-  isFieldForPaperSocialSecurityNumber(field: AutofillField): boolean;
-  isFieldForPaperResidencePermitNumber(field: AutofillField): boolean;
-  isFieldForPaperDrivingLicenseNumber(field: AutofillField): boolean;
-  isFieldForPaperVehicleRegistrationNumber(field: AutofillField): boolean;
-  isFieldForPaperVehicleRegistrationConfidentialCode(field: AutofillField): boolean;
-  isFieldForPaperVehicleRegistrationLicensePlateNumber(field: AutofillField): boolean;
-  isFieldForPaperBankIbanNumber(field: AutofillField): boolean;
-  isFieldForPaperBankBicNumber(field: AutofillField): boolean;
-  isFieldForPaperGrossSalaryAmount(field: AutofillField): boolean;
-  isFieldForPaperNetSalaryAmount(field: AutofillField): boolean;
-  isFieldForPaperTaxNoticeNumber(field: AutofillField): boolean;
-  isFieldForPaperTaxNoticeRefTaxIncome(field: AutofillField): boolean;
   // Cozy customization end
   isElementLoginSubmitButton(element: Element): boolean;
   isElementChangePasswordSubmitButton(element: Element): boolean;

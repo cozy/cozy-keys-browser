@@ -15,13 +15,6 @@ interface NotificationQueueMessage {
 }
 
 // Cozy customization; Cozy notifications
-interface AddPaperSavedQueueMessage extends NotificationQueueMessage {
-  type: "paper-saved";
-  paperSavedId: string;
-  paperSavedQualification: string;
-  paperSavedQualificationLabel: string;
-}
-
 interface AddTotpCopiedQueueMessage extends NotificationQueueMessage {
   type: "totp-copied";
 }
@@ -51,7 +44,6 @@ interface AddRequestFilelessImportQueueMessage extends NotificationQueueMessage 
 
 type NotificationQueueMessageItem =
   | AddTotpCopiedQueueMessage
-  | AddPaperSavedQueueMessage
   | AddLoginQueueMessage
   | AddChangePasswordQueueMessage
   | AddUnlockVaultQueueMessage
@@ -135,7 +127,6 @@ type NotificationBackgroundExtensionMessageHandlers = {
 };
 
 export {
-  AddPaperSavedQueueMessage,
   AddTotpCopiedQueueMessage,
   AddChangePasswordQueueMessage,
   AddLoginQueueMessage,

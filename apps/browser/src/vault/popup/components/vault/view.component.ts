@@ -53,15 +53,10 @@ const BroadcasterSubscriptionId = "ChildViewComponent";
 /* start Cozy imports */
 /* eslint-disable */
 import { deleteCipher } from "./cozy-utils";
-import { favoritePaperCipher, deletePaperCipher } from "../../../../../../../libs/cozy/paperCipher";
-import {
-  favoriteContactCipher,
-  deleteContactCipher,
-} from "../../../../../../../libs/cozy/contactCipher";
+import { deleteContactCipher } from "../../../../../../../libs/cozy/contactCipher";
 import { CozyClientService } from "../../../../popup/services/cozyClient.service";
 import { CAN_SHARE_ORGANIZATION } from "../../../../cozy/flags";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-import { PaperType } from "@bitwarden/common/enums/paperType";
 import { DomSanitizer } from "@angular/platform-browser";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { FILES_DOCTYPE } from "../../../../../../../libs/cozy/constants";
@@ -101,7 +96,6 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
   inPopout = false;
   cipherType = CipherType;
   // Cozy customization
-  paperType = PaperType;
   CAN_SHARE_ORGANIZATION = CAN_SHARE_ORGANIZATION;
   // Cozy customization end
   private fido2PopoutSessionData$ = fido2PopoutSessionData$();
@@ -253,7 +247,7 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
     }
 
     // Cozy customization
-    if (this.cipher.type === CipherType.Paper || this.cipher.type === CipherType.Contact) {
+    if (this.cipher.type === CipherType.Contact) {
       this.editInWebApp();
       return;
     }
@@ -302,7 +296,7 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
         this.accountService.activeAccount$.pipe(map((a) => a?.id)),
       );
 
-      if (this.cipher.type === CipherType.Paper || this.cipher.type === CipherType.Contact) {
+      if (this.cipher.type === CipherType.Contact) {
         await BrowserApi.sendMessageWithResponse("favoriteCozyCipher", {
           favoriteOptions: { cipher: this.cipher },
         });
@@ -419,10 +413,6 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
    */
   async delete() {
     const getDeleteMethod = () => {
-      if (this.cipher.type === CipherType.Paper) {
-        return deletePaperCipher;
-      }
-
       if (this.cipher.type === CipherType.Contact) {
         return deleteContactCipher;
       }
@@ -516,10 +506,7 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
       // Cozy customization; send doAutoFill to background because
       // doAutoFill needs a Cozy Client store with all the contacts
       // and only the background Cozy Client store has them on Manifest V3
-      if (
-        (this.cipher.type === CipherType.Contact || this.cipher.type === CipherType.Paper) &&
-        BrowserApi.isManifestVersion(3)
-      ) {
+      if (this.cipher.type === CipherType.Contact && BrowserApi.isManifestVersion(3)) {
         this.messageSender.send("doAutoFill", {
           autofillOptions: {
             tab: this.tab,
@@ -612,19 +599,7 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
   }
 
   openWebApp() {
-    if (this.cipher.type === CipherType.Paper && this.cipher.paper.type === PaperType.Paper) {
-      const hash = `/paper/files/${this.cipher.paper.qualificationLabel}/${this.cipher.id}`;
-      window.open(this.cozyClientService.getAppURL("mespapiers", hash));
-    } else if (this.cipher.type === CipherType.Paper && this.cipher.paper.type === PaperType.Note) {
-      const returnUrl = this.cozyClientService.getAppURL(
-        "mespapiers",
-        `/paper/files/${this.cipher.paper.qualificationLabel}`,
-      );
-      const destinationUrl = this.cozyClientService.getAppURL("notes", `n/${this.cipher.id}`);
-      const url = new URL(destinationUrl);
-      url.searchParams.set("returnUrl", returnUrl);
-      window.open(url.toString());
-    } else if (this.cipher.type === CipherType.Contact) {
+    if (this.cipher.type === CipherType.Contact) {
       const hash = this.cipher.id;
       window.open(this.cozyClientService.getAppURL("contacts", hash));
     } else {
@@ -634,27 +609,11 @@ export class ViewComponent extends BaseViewComponent implements OnInit, OnDestro
   }
 
   editInWebApp() {
-    if (this.cipher.type === CipherType.Paper) {
-      const hash = `/paper/files/${this.cipher.paper.qualificationLabel}/edit/${this.cipher.id}`;
-      window.open(this.cozyClientService.getAppURL("mespapiers", hash));
-      return;
-    } else if (this.cipher.type === CipherType.Contact) {
+    if (this.cipher.type === CipherType.Contact) {
       const hash = `${this.cipher.id}/edit`;
       window.open(this.cozyClientService.getAppURL("contacts", hash));
     }
   }
-
-  // Cozy customization
-  async print() {
-    const client = await this.cozyClientService.getClientInstance();
-
-    const printUrl = await client
-      .collection(FILES_DOCTYPE)
-      .getDownloadLinkById(this.cipher.id, this.cipher.name);
-
-    window.open(printUrl);
-  }
-  // Cozy customization end
 
   // Cozy customization
   async download() {

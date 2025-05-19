@@ -58,22 +58,7 @@ export class AddGenericComponent implements OnInit, OnDestroy {
   }
 
   async selectType(type: CipherType) {
-    if (type === CipherType.Paper) {
-      await this.cozyClientService.getClientInstance();
-
-      await this.back();
-      // window.open will instantaneously close the popup which may prevent the
-      // router navigation to happens (called inside the `back()` method)
-      // by calling it inside a `setTimeout()` we ensure the call will be done after
-      // the current Angular's loop tick and so we ensure navigation did occure
-      // (the 1ms value doesn't really matter here)
-      setTimeout(() => {
-        const appUrl = this.cozyClientService.getAppURL("mespapiers", "paper/create");
-        // eslint-disable-next-line no-restricted-globals
-        window.open(appUrl);
-      }, 1);
-      return;
-    } else if (type === CipherType.Contact) {
+    if (type === CipherType.Contact) {
       await this.cozyClientService.getClientInstance();
 
       await this.back();

@@ -840,9 +840,6 @@ async function loadNotificationBar() {
       theme: typeData.theme,
       removeIndividualVault: typeData.removeIndividualVault,
       importType: typeData.importType,
-      paperSavedId: typeData.paperSavedId,
-      paperSavedQualification: typeData.paperSavedQualification,
-      paperSavedQualificationLabel: typeData.paperSavedQualificationLabel,
     };
     const notificationBarUrl = "notification/bar.html";
 

@@ -163,9 +163,6 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
             this.groupingTitle = this.i18nService.t("secureNotes");
             break;
           // Cozy customization
-          case CipherType.Paper:
-            this.groupingTitle = this.i18nService.t("typePapers");
-            break;
           case CipherType.Contact:
             this.groupingTitle = this.i18nService.t("typeContacts");
             break;
@@ -174,12 +171,6 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
             break;
         }
         await this.load(this.buildFilter());
-
-        // Cozy customization
-        if (this.type === CipherType.Paper) {
-          await this.sortByCreationDate();
-        }
-        // Cozy customization end
       } else if (params.folderId) {
         this.showVaultFilter = true;
         this.folderId = params.folderId === "none" ? null : params.folderId;
@@ -326,10 +317,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
       return false;
     }
     // Cozy customization
-    if (this.type === CipherType.Paper) {
-      window.open(this.cozyClientService.getAppURL("mespapiers", "paper/create"));
-      return false;
-    } else if (this.type === CipherType.Contact) {
+    if (this.type === CipherType.Contact) {
       window.open(this.cozyClientService.getAppURL("contacts", "new"));
       return false;
     }
@@ -435,10 +423,7 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
       // Cozy customization; send doAutoFill to background because
       // doAutoFill needs a Cozy Client store with all the contacts
       // and only the background Cozy Client store has them on Manifest V3
-      if (
-        (cipher.type === CipherType.Contact || cipher.type === CipherType.Paper) &&
-        BrowserApi.isManifestVersion(3)
-      ) {
+      if (cipher.type === CipherType.Contact && BrowserApi.isManifestVersion(3)) {
         this.messageSender.send("doAutoFill", {
           autofillOptions: {
             tab: this.tab,
@@ -501,16 +486,6 @@ export class VaultItemsComponent extends BaseVaultItemsComponent implements OnIn
   // Cozy customization, open view more contacts page
   protected viewMoreContacts() {
     this.router.navigate(["/view-more-contacts"]);
-  }
-  // Cozy customization end
-
-  // Cozy customization, override search method to always sort by date for papers
-  protected async doSearch(indexedCiphers?: CipherView[]) {
-    await super.doSearch(indexedCiphers);
-
-    if (this.type === CipherType.Paper) {
-      await this.sortByCreationDate();
-    }
   }
   // Cozy customization end
 }

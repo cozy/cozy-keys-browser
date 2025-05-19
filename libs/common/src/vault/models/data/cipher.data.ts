@@ -10,7 +10,6 @@ import { ContactData } from "./contact.data";
 import { FieldData } from "./field.data";
 import { IdentityData } from "./identity.data";
 import { LoginData } from "./login.data";
-import { PaperData } from "./paper.data";
 import { PasswordHistoryData } from "./password-history.data";
 import { SecureNoteData } from "./secure-note.data";
 
@@ -30,7 +29,6 @@ export class CipherData {
   secureNote?: SecureNoteData;
   card?: CardData;
   identity?: IdentityData;
-  paper?: PaperData;
   contact?: ContactData;
   fields?: FieldData[];
   attachments?: AttachmentData[];
@@ -77,9 +75,6 @@ export class CipherData {
         this.identity = new IdentityData(response.identity);
         break;
       // Cozy customization
-      case CipherType.Paper:
-        this.paper = new PaperData(response.paper);
-        break;
       case CipherType.Contact:
         this.contact = new ContactData(response.contact);
         break;

@@ -31,13 +31,6 @@
 </header>
 <main tabindex="-1" *ngIf="cipher">
   <!-- Cozy customization -->
-  <div *ngIf="cipher.type === cipherType.Paper" class="cipher-illustration">
-    <img
-      [src]="sanitize(cipher.paper.illustrationThumbnailUrl)"
-      (click)="openWebApp()"
-      (error)="onIllustrationError()"
-    />
-  </div>
   <div *ngIf="cipher.type === cipherType.Contact" class="cipher-illustration">
     <app-vault-contact-avatar
       (click)="openWebApp()"
@@ -680,7 +673,7 @@
           <span>{{ "autoFillAndSave" | i18n }}</span>
         </div>
       </button>
-      <!-- Cozy customization; do not display "clone" action if cipher is a paper" -->
+      <!-- Cozy customization; do not display "clone" action if cipher is a contact" -->
       <!--
       <button
         type="button"
@@ -697,12 +690,7 @@
         appStopClick
         appBlurClick
         (click)="clone()"
-        *ngIf="
-          !cipher.organizationId &&
-          !cipher.isDeleted &&
-          cipher.type !== cipherType.Paper &&
-          cipher.type !== cipherType.Contact
-        "
+        *ngIf="!cipher.organizationId && !cipher.isDeleted && cipher.type !== cipherType.Contact"
       >
         <!-- Cozy customization end -->
         <div class="row-main text-primary">
@@ -727,11 +715,7 @@
         class="box-content-row"
         appStopClick
         (click)="share()"
-        *ngIf="
-          !cipher.isDeleted &&
-          cipher.type !== cipherType.Paper &&
-          cipher.type !== cipherType.Contact
-        "
+        *ngIf="!cipher.isDeleted && cipher.type !== cipherType.Contact"
       >
         <!-- end custo -->
         <div class="row-main text-primary">
@@ -758,40 +742,6 @@
             <i class="bwi bwi-star bwi-lg bwi-fw"></i>
           </div>
           <span>{{ "favorite" | i18n }}</span>
-        </div>
-      </button>
-      <!-- Cozy customization end -->
-      <!-- Cozy customization -->
-      <button
-        type="button"
-        class="box-content-row"
-        appStopClick
-        appBlurClick
-        (click)="print()"
-        *ngIf="cipher.type === cipherType.Paper && cipher.paper.type === paperType.Paper"
-      >
-        <div class="row-main text-primary">
-          <div class="icon text-primary" aria-hidden="true">
-            <i class="icon-cozy icon-print-paper" aria-hidden="true"></i>
-          </div>
-          <span>{{ "print" | i18n }}</span>
-        </div>
-      </button>
-      <!-- Cozy customization end -->
-      <!-- Cozy customization -->
-      <button
-        type="button"
-        class="box-content-row"
-        appStopClick
-        appBlurClick
-        (click)="download()"
-        *ngIf="cipher.type === cipherType.Paper"
-      >
-        <div class="row-main text-primary">
-          <div class="icon text-primary" aria-hidden="true">
-            <i class="icon-cozy icon-download-paper" aria-hidden="true"></i>
-          </div>
-          <span>{{ "download" | i18n }}</span>
         </div>
       </button>
       <!-- Cozy customization end -->

@@ -29,17 +29,6 @@
           <i class="icon-cozy icon-identity"></i>
         </div>
       </ng-container>
-      <ng-container
-        *ngIf="cipher.type === cipherType.Paper && cipher.paper.illustrationThumbnailUrl"
-      >
-        <div class="icon" aria-hidden="true">
-          <img
-            class="icon-paper-wrapper"
-            [src]="sanitize(cipher.paper.illustrationThumbnailUrl)"
-            (error)="onThumbnailError()"
-          />
-        </div>
-      </ng-container>
       <ng-container *ngIf="cipher.type === cipherType.Contact">
         <div class="icon" aria-hidden="true">
           <app-vault-contact-avatar [initials]="cipher.contact.initials" [size]="24">

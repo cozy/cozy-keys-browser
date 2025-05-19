@@ -59,16 +59,11 @@ import {
   AmbiguousContactFields,
   AmbiguousContactFieldValue,
   AmbiguousContactFieldName,
-  AvailablePapers,
   AddressContactSubFieldName,
   ActionMenuData,
   isContactActionMenuData,
 } from "../../../../../autofill/types";
-import {
-  COZY_ATTRIBUTES_MAPPING,
-  cozypaperFieldNames,
-  isPaperAttributesModel,
-} from "../../../../../../../../libs/cozy/mapping";
+import { COZY_ATTRIBUTES_MAPPING } from "../../../../../../../../libs/cozy/mapping";
 import { CozyAutofillOptions } from "src/autofill/services/abstractions/autofill.service";
 /* eslint-enable */
 /* end Cozy imports */
@@ -113,13 +108,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
           message.contactName,
           message.ambiguousFields,
           message.isFocusedFieldAmbigous,
-          message.fieldHtmlIDToFill,
-        ),
-      paperList: ({ message }) =>
-        this.paperList(
-          message.inlineMenuCipherId,
-          message.contactName,
-          message.availablePapers,
           message.fieldHtmlIDToFill,
         ),
       loadPageOfCiphers: () => this.loadPageOfCiphers(),
@@ -892,7 +880,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     // Cozy customization - On the contact ambiguous fields, if the field has a value, the corresponding menu is displayed directly. Unless we wish to return to the contact cypher list.
     if (
       this.fieldValue &&
-      [...ambiguousContactFieldNames, ...addressFieldNames, ...cozypaperFieldNames].includes(
+      [...ambiguousContactFieldNames, ...addressFieldNames].includes(
         COZY_ATTRIBUTES_MAPPING[this.fieldQualifier].name as AmbiguousContactFieldName,
       ) &&
       !isBack && // case where we are already on the ambiguous list and wish to return to the contacts list.
@@ -1148,85 +1136,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
   }
 
   /**
-   * @param inlineMenuCipherId
-   * @param contactName
-   * @param ambiguousKey
-   * @param ambiguousValue
-   * @param isAmbiguousFieldFocused
-   */
-  private createPaperListItem(
-    inlineMenuCipherId: string,
-    contactName: string,
-    id: string,
-    name: string,
-    value: string,
-    qualificationLabel: string,
-    metadataName: string,
-  ) {
-    const cozyAutofillOptions = { id, value, qualificationLabel, metadataName };
-    const actionMenuButtonElement = this.buildActionMenuButton(
-      {
-        type: "field",
-        inlineMenuCipherId,
-        fieldQualifier: this.fieldQualifier,
-        cozyAutofillOptions,
-      },
-      () => this.backToParent(inlineMenuCipherId),
-    );
-
-    const listItem = document.createElement("li");
-    listItem.setAttribute("role", "listitem");
-    listItem.classList.add("inline-menu-list-actions-item");
-
-    const div = document.createElement("div");
-    div.classList.add("cipher-container");
-
-    const fillButton = document.createElement("button");
-    fillButton.setAttribute("tabindex", "-1");
-    fillButton.classList.add("fill-cipher-button", "inline-menu-list-action");
-    fillButton.setAttribute("aria-label", contactName);
-    fillButton.addEventListener(
-      EVENTS.CLICK,
-      this.handleFillCipherWithCozyDataClickEvent(
-        inlineMenuCipherId,
-        cozyAutofillOptions,
-        uniqueId(),
-      ),
-    );
-
-    const radio = document.createElement("input");
-    radio.setAttribute("type", "radio");
-    radio.setAttribute("name", "contact");
-    radio.setAttribute("id", "contact");
-    radio.classList.add("fill-cipher-contact-radio");
-
-    const detailsSpan = document.createElement("span");
-    detailsSpan.classList.add("cipher-details");
-
-    const nameSpanText = name;
-    const nameSpan = document.createElement("span");
-    nameSpan.setAttribute("title", nameSpanText);
-    nameSpan.textContent = nameSpanText;
-    nameSpan.classList.add("cipher-name");
-
-    const subNameSpan = document.createElement("span");
-    subNameSpan.setAttribute("title", value);
-    subNameSpan.classList.add("cipher-subtitle");
-    subNameSpan.textContent = value;
-
-    detailsSpan.appendChild(nameSpan);
-    detailsSpan.appendChild(subNameSpan);
-    fillButton.appendChild(radio);
-    fillButton.appendChild(detailsSpan);
-
-    div.appendChild(fillButton);
-    div.appendChild(actionMenuButtonElement);
-    listItem.appendChild(div);
-
-    return listItem;
-  }
-
-  /**
    * @param contactName
    * @param onClick
    */
@@ -1454,63 +1363,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
         ulElement.appendChild(newButton);
       }
     }
-
-    this.inlineMenuListContainer.appendChild(addNewLoginButtonContainer);
-    this.inlineMenuListContainer.appendChild(ulElement);
-
-    this.inlineMenuListContainer.classList.add("inline-menu-list-container--with-new-item-button");
-
-    this.toggleScrollClass(undefined, ulElement);
-  }
-
-  /**
-   * @param inlineMenuCipherId
-   * @param papers
-   */
-  private paperList(
-    inlineMenuCipherId: string,
-    contactName: string,
-    availablePapers: AvailablePapers[],
-    fieldHtmlIDToFill: string,
-  ) {
-    this.inlineMenuListContainer.innerHTML = "";
-    this.inlineMenuListContainer.classList.remove(
-      "inline-menu-list-container--with-new-item-button",
-    );
-
-    const addNewLoginButtonContainer = this.buildNewListHeader(contactName, this.backToCipherList);
-
-    const ulElement = globalThis.document.createElement("ul");
-    ulElement.classList.add("inline-menu-list-actions");
-    ulElement.setAttribute("role", "list");
-    ulElement.addEventListener(EVENTS.SCROLL, this.updateCiphersListOnScroll);
-
-    if (availablePapers.length > 0) {
-      for (const paper of availablePapers) {
-        const li = this.createPaperListItem(
-          inlineMenuCipherId,
-          contactName,
-          paper.id,
-          paper.name,
-          paper.value,
-          paper.qualificationLabel,
-          paper.metadataName,
-        );
-        ulElement.appendChild(li);
-      }
-    } else {
-      const emptyLiText = this.getTranslation("noItemsToShow");
-      const emptyLi = this.createEmptyListItem(emptyLiText);
-      ulElement.appendChild(emptyLi);
-    }
-
-    const newButton = this.createNewButton(
-      inlineMenuCipherId,
-      fieldHtmlIDToFill,
-      contactName,
-      this.fieldQualifier,
-    );
-    ulElement.appendChild(newButton);
 
     this.inlineMenuListContainer.appendChild(addNewLoginButtonContainer);
     this.inlineMenuListContainer.appendChild(ulElement);
@@ -2645,7 +2497,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
       const viewCipherActionElement = this.createViewCipherAction(cipher);
       ulElement.appendChild(viewCipherActionElement);
 
-      const modifyCipherActionElement = this.createModifyCipherAction(cipher.id, false);
+      const modifyCipherActionElement = this.createModifyCipherAction(cipher.id);
       ulElement.appendChild(modifyCipherActionElement);
 
       const autofillCurrentElement = this.createAutofillCurrentAction(cipher, {
@@ -2655,57 +2507,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
       const autofillAllElement = this.createAutofillAllAction(cipher);
       ulElement.appendChild(autofillAllElement);
-    } else if (actionMenuData.type === "field") {
-      const { inlineMenuCipherId, fieldQualifier, cozyAutofillOptions } = actionMenuData;
-
-      const cipher = this.ciphers.find(({ id }) => id === inlineMenuCipherId);
-
-      actionMenuHeader = this.buildNewListHeader(cozyAutofillOptions.value, () => onBack(cipher));
-
-      const autofillCurrentElement = this.createAutofillCurrentAction(cipher, {
-        ...cozyAutofillOptions,
-        fillOnlyTheseFieldQualifiers: [fieldQualifier],
-      });
-
-      const fieldModel = COZY_ATTRIBUTES_MAPPING[fieldQualifier];
-      const isPaperModel = isPaperAttributesModel(fieldModel);
-      const id = isPaperModel ? cozyAutofillOptions.id : cipher.id;
-
-      const editCurrentElement = this.createModifyCipherAction(
-        id,
-        isPaperModel,
-        cozyAutofillOptions.qualificationLabel,
-        cozyAutofillOptions.metadataName,
-      );
-      ulElement.appendChild(editCurrentElement);
-
-      ulElement.appendChild(autofillCurrentElement);
-
-      const autofillAllElement = this.createAutofillAllAction(cipher);
-      ulElement.appendChild(autofillAllElement);
-      // Add action menu for header here
-      // } else if (actionMenuData.type === "fieldHeader") {
-      //   const { inlineMenuCipherId } = actionMenuData;
-      //   const cipher = this.ciphers.find(({ id }) => id === inlineMenuCipherId);
-      //   actionMenuHeader = this.buildNewListHeader(this.buildCipherName(cipher), () =>
-      //     onBack(cipher),
-      //   );
-      //   const modifyCipherActionElement = this.createModifyCipherAction(cipher);
-      //   ulElement.appendChild(modifyCipherActionElement);
     }
     this.inlineMenuListContainer.appendChild(actionMenuHeader);
     this.inlineMenuListContainer.appendChild(ulElement);
-  }
-
-  private buildActionButton(icon: string, onClick: () => void) {
-    const actionMenuButtonElement = document.createElement("button");
-    actionMenuButtonElement.tabIndex = -1;
-    actionMenuButtonElement.classList.add("action-button-header");
-
-    actionMenuButtonElement.append(buildSvgDomElement(icon));
-    actionMenuButtonElement.addEventListener(EVENTS.CLICK, onClick);
-
-    return actionMenuButtonElement;
   }
 
   private buildActionMenuButton(actionMenuData: ActionMenuData, onBack: () => void) {
@@ -2721,14 +2525,6 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
 
     return actionMenuButtonElement;
   }
-
-  private editPapersMessage = (id: string, qualificationLabel: string, metadataName: string) => {
-    this.postMessageToParent({
-      command: "redirectToCozy",
-      to: "mespapiers",
-      hash: `paper/files/${qualificationLabel}/${id}/edit/information?metadata=${metadataName}`,
-    });
-  };
 
   private editContactMessage = (id: string) => {
     this.postMessageToParent({
@@ -2749,16 +2545,9 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     return li;
   }
 
-  private createModifyCipherAction(
-    id: string,
-    isPaperModel: boolean,
-    qualificationLabel?: string,
-    metadataName?: string,
-  ) {
+  private createModifyCipherAction(id: string) {
     const li = this.createActionMenuItem(this.getTranslation("edit"), penIcon, () =>
-      isPaperModel
-        ? this.editPapersMessage(id, qualificationLabel, metadataName)
-        : this.editContactMessage(id),
+      this.editContactMessage(id),
     );
 
     return li;
