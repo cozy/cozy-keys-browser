@@ -284,9 +284,9 @@ app-vault-icon,
   display: inline-block;
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center;
   width: 16px;
   height: 16px;
-  background-position: center;
 }
 
 .icon-cozy-2x {
@@ -319,7 +319,7 @@ This class is responsible of changing tabs colors :
       color: themed("primaryColor");
     }
 
-    .bwi {
+    .bwi:not(.cozy-illus) {
       background-color: $brand-primary;
       @include themify($themes) {
         background-color: themed("primaryColor");
@@ -344,7 +344,7 @@ This class is responsible of changing tabs colors :
 
 .bwi-lock-f {
   background-color: $gray-light;
-  mask-image: url("cozy-ui/assets/icons/ui/stack.svg");
+  mask-image: url("cozy-ui/assets/icons/ui/lock.svg");
   mask-position: center;
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -368,7 +368,7 @@ This class is responsible of changing tabs colors :
 
 .bwi-cog-f {
   background-color: $gray-light;
-  mask-image: url("cozy-ui/assets/icons/ui/gear.svg");
+  mask-image: url("cozy-ui/assets/icons/ui/setting.svg");
   mask-position: center;
   mask-repeat: no-repeat;
   mask-size: contain;
@@ -379,11 +379,10 @@ This class is responsible of changing tabs colors :
 }
 
 .tab-icon-cozy-cloud {
-  background-color: $gray-light;
-  mask-image: url("cozy-ui/assets/icons/ui/cloud.svg");
-  mask-position: center;
-  mask-repeat: no-repeat;
-  mask-size: contain;
+  background-image: url("cozy-ui/assets/icons/illus/twake-workplace.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .tab-icon-cozy-cloud::before {
@@ -456,14 +455,17 @@ li.active .icon-cozy-inline > svg {
   background-color: white;
 }
 
-.icon-popout {
-  mask-image: url("../images/icons-16-popout.svg");
-  -webkit-mask-image: url("../images/icons-16-popout.svg");
+.icon-openwith {
+  mask-image: url("cozy-ui/assets/icons/ui/openwith.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/openwith.svg");
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: contain;
   -webkit-mask-size: contain;
-  background-color: $list-icon-color;
+  background-color: $brand-primary;
+  @include themify($themes) {
+    background-color: themed("mutedColor");
+  }
 }
 
 .icon-pop-inside {
@@ -520,9 +522,13 @@ li.active .icon-cozy-inline > svg {
 }
 
 .icon-login {
-  background-image: url("../images/icons-login.svg");
-  background-size: contain;
-  background-repeat: no-repeat;
+  mask-image: url("../images/password.svg"); // use icon from cozy-ui when its added
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background-color: $brand-primary;
+  @include themify($themes) {
+    background-color: themed("mutedColor");
+  }
   width: 24px;
   height: 24px;
 }
@@ -550,13 +556,19 @@ li.active .icon-cozy-inline > svg {
 }
 
 .icon-identity {
-  background-image: url("../images/icons-identity.svg");
+  background-image: url("cozy-ui/assets/icons/illus/contacts.svg");
   width: 24px;
   height: 24px;
 }
 
 .icon-card {
-  background-image: url("cozy-ui/assets/icons/illus/credit-card-large.svg");
+  mask-image: url("cozy-ui/assets/icons/ui/banking.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background-color: $brand-primary;
+  @include themify($themes) {
+    background-color: themed("mutedColor");
+  }
   width: 24px;
   height: 24px;
 }
@@ -568,7 +580,13 @@ li.active .icon-cozy-inline > svg {
 }
 
 .icon-trash {
-  background-image: url("cozy-ui/assets/icons/illus/trash-duotone.svg");
+  mask-image: url("cozy-ui/assets/icons/ui/trash.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background-color: $brand-primary;
+  @include themify($themes) {
+    background-color: themed("mutedColor");
+  }
   width: 24px;
   height: 24px;
 }
@@ -581,12 +599,6 @@ li.active .icon-cozy-inline > svg {
 
 .icon-key {
   background-image: url("../images/icons-16-icon-key.svg");
-}
-
-.icon-cozy-round {
-  background-image: url("../images/icon-cozy-round.svg");
-  width: 25px;
-  height: 25px;
 }
 
 .icon-search {
@@ -602,8 +614,8 @@ li.active .icon-cozy-inline > svg {
 }
 
 .icon-note {
-  mask-image: url("../images/icons-16-note.svg");
-  -webkit-mask-image: url("../images/icons-16-note.svg");
+  mask-image: url("cozy-ui/assets/icons/ui/note.svg");
+  -webkit-mask-image: url("cozy-ui/assets/icons/ui/note.svg");
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: contain;
@@ -664,17 +676,10 @@ li.active .icon-cozy-inline > svg {
   }
 }
 
-.icon-cloud {
-  mask-image: url("cozy-ui/assets/icons/ui/cloud.svg");
-  -webkit-mask-image: url("cozy-ui/assets/icons/ui/cloud.svg");
-  mask-repeat: no-repeat;
-  -webkit-mask-repeat: no-repeat;
-  mask-size: contain;
-  -webkit-mask-size: contain;
-  background-color: $brand-primary;
-  @include themify($themes) {
-    background-color: themed("mutedColor");
-  }
+.icon-twake {
+  background-image: url("cozy-ui/assets/icons/illus/twake-workplace.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .icon-lock {
@@ -725,14 +730,6 @@ li.active .icon-cozy-inline > svg {
   background-image: url("../images/icons-16-icon-hashtag.svg");
 }
 
-.icon-card {
-  background-image: url("../images/icons-files-cb.svg");
-}
-
-.icon-cozy-sync {
-  background-image: url("../images/icons-16-cozy-sync.svg");
-}
-
 .icon-history {
   background-image: url("../images/icons-16-icon-history.svg");
 }
@@ -752,20 +749,6 @@ li.active .icon-cozy-inline > svg {
   -webkit-mask-repeat: no-repeat;
   mask-size: contain;
   -webkit-mask-size: contain;
-  @include themify($themes) {
-    background-color: themed("headerInputPlaceholderColor");
-  }
-}
-
-.icon-cozy-smile {
-  mask-image: url("../images/icon-cozy-smile.svg");
-  -webkit-mask-image: url("../images/icon-cozy-smile.svg");
-  mask-repeat: no-repeat;
-  -webkit-mask-repeat: no-repeat;
-  mask-size: contain;
-  -webkit-mask-size: contain;
-  width: 25px;
-  height: 25px;
   @include themify($themes) {
     background-color: themed("headerInputPlaceholderColor");
   }
@@ -814,9 +797,11 @@ li.active .icon-cozy-inline > svg {
 }
 
 .icon-contacts {
-  background-image: url("../images/icon-contacts.svg");
-  width: 24px;
-  height: 24px;
+  background-image: url("cozy-ui/assets/icons/illus/contacts.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
 }
 
 .text-danger .icon-cozy {

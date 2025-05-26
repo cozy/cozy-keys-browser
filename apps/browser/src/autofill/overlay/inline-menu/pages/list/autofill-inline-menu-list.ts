@@ -2032,7 +2032,7 @@ export class AutofillInlineMenuList extends AutofillInlineMenuPageElement {
     if (cipher.contact) {
       cipherIcon.classList.remove("cipher-icon");
       cipherIcon.classList.add("contact-initials");
-      cipherIcon.style.backgroundColor = cipher.contact.initialsColor;
+      cipherIcon.style.background = cipher.contact.initialsColor;
       cipherIcon.textContent = cipher.contact.initials;
       return cipherIcon;
     }
