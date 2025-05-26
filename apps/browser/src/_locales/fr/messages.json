@@ -1,23 +1,23 @@
 {
   "appName": {
-    "message": "Cozy Pass"
+    "message": "Twake Pass"
   },
   "extName": {
-    "message": "Cozy Pass",
+    "message": "Twake Pass",
     "description": "Extension name"
   },
   "extDesc": {
-    "message": "Stockez et synchronisez tous vos mots de passe avec votre Cozy.",
+    "message": "Stockez et synchronisez tous vos mots de passe avec votre Twake.",
     "description": "Extension description"
   },
   "loginOrCreateNewAccount": {
-    "message": "Connectez-vous à votre Cozy pour accéder à votre coffre sécurisé."
+    "message": "Connectez-vous à votre Twake pour accéder à votre coffre sécurisé."
   },
   "inviteAccepted": {
     "message": "Invitation acceptée"
   },
   "createAccount": {
-    "message": "Créez votre Cozy !"
+    "message": "Créez votre Twake !"
   },
   "newToBitwarden": {
     "message": "Nouveau sur Bitwarden ?"
@@ -41,7 +41,7 @@
     "message": "J'ai oublié mon mot de passe"
   },
   "cozyPassword": {
-    "message": "Mot de passe Cozy"
+    "message": "Mot de passe Twake"
   },
   "enterpriseSingleSignOn": {
     "message": "Portail de connexion unique d'entreprise"
@@ -65,13 +65,13 @@
     "message": "Adresse électronique"
   },
   "cozyUrl": {
-    "message": "Adresse de mon Cozy"
+    "message": "Adresse de mon Twake"
   },
   "masterPass": {
     "message": "Mot de passe"
   },
   "masterPassDesc": {
-    "message": "Le mot de passe maître est le mot de passe que vous utilisez pour accéder à votre Cozy. Il est très important de ne pas l'oublier. Il n'existe aucun moyen de le récupérer si vous le perdez."
+    "message": "Le mot de passe maître est le mot de passe que vous utilisez pour accéder à votre Twake. Il est très important de ne pas l'oublier. Il n'existe aucun moyen de le récupérer si vous le perdez."
   },
   "masterPassHintDesc": {
     "message": "Un indice de mot de passe principal peut vous aider à vous souvenir de votre mot de passe si vous l'oubliez."
@@ -114,10 +114,10 @@
     "message": "Ce site web"
   },
   "myCozyTab": {
-    "message": "Mon Cozy"
+    "message": "Mon Twake"
   },
   "myCozyTab_toolTip": {
-    "message": "Accéder à mon Cozy"
+    "message": "Accéder à mon Twake"
   },
   "vault": {
     "message": "Coffre"
@@ -319,7 +319,7 @@
     "message": "Aidez les autres à savoir si Bitwarden est fait pour eux. Visitez le magasin d'extension de votre navigateur et laissez une évaluation maintenant."
   },
   "changeMasterPasswordOnWebConfirmation": {
-    "message": "Vous pouvez modifier votre mot de passe principal sur l'application web de Cozy."
+    "message": "Vous pouvez modifier votre mot de passe principal sur l'application web de Twake."
   },
   "fingerprintPhrase": {
     "message": "Code de sécurité pour les partages",
@@ -336,7 +336,7 @@
     "message": "Se déconnecter"
   },
   "pinLogOut": {
-    "message": "déconnectez vous du Cozy $ACCOUNT$",
+    "message": "déconnectez vous du Twake $ACCOUNT$",
     "placeholders": {
       "account": {
         "content": "$1"
@@ -344,7 +344,7 @@
     }
   },
   "aboutBitwarden": {
-    "message": "À propos de Cozy Pass"
+    "message": "À propos de Twake Pass"
   },
   "about": {
     "message": "À propos"
@@ -437,13 +437,13 @@
     "message": "https://support.cozy.io/category/378-gestionnaire-de-mots-de-passe"
   },
   "helpCenterCozy": {
-    "message": "Aide pour tout Cozy"
+    "message": "Aide pour tout Twake"
   },
   "helpCenter": {
-    "message": "Aide Cozy Pass"
+    "message": "Aide Twake Pass"
   },
   "communityForums": {
-    "message": "Forums communautaire Cozy"
+    "message": "Forums communautaire Twake"
   },
   "contactSupport": {
     "message": "Contactez nous"
@@ -737,7 +737,7 @@
     "message": "Déverrouiller"
   },
   "loggedInAsOn": {
-    "message": "Connecté au Cozy $HOSTNAME$",
+    "message": "Connecté au Twake $HOSTNAME$",
     "placeholders": {
       "hostname": {
         "content": "$1",
@@ -827,19 +827,19 @@
     "message": "Adresse électronique invalide."
   },
   "cozyUrlRequired": {
-    "message": "L'adresse du Cozy est requise"
+    "message": "L'adresse du Twake est requise"
   },
   "invalidCozyUrl": {
-    "message": "Adresse du Cozy invalide"
+    "message": "Adresse du Twake invalide"
   },
   "noEmailAsCozyUrl": {
-    "message": "L'adresse de votre Cozy n'est pas votre email"
+    "message": "L'adresse de votre Twake n'est pas votre email"
   },
   "hasMispelledCozy": {
     "message": "Oups, ce n'est pas la bonne adresse. Essayez d'écrire \"cozy\" avec un \"z\" !"
   },
   "noCozyFound": {
-    "message": "Impossible de se connecter à l'adresse donnée, veuillez vérifier que c’est bien l’adresse de votre Cozy"
+    "message": "Impossible de se connecter à l'adresse donnée, veuillez vérifier que c’est bien l’adresse de votre Twake"
   },
   "masterPassRequired": {
     "message": "Le mot de passe principal est requis."
@@ -1042,7 +1042,7 @@
     "message": "Êtes-vous sûr de vouloir supprimer cet identifiant ?"
   },
   "deleteSharedItemConfirmation": {
-    "message": "Cet identifiant permet actuellement d'importer les données du compte dans votre Cozy. En le supprimant, cet import automatique sera interrompu. Etes-vous sûr ?"
+    "message": "Cet identifiant permet actuellement d'importer les données du compte dans votre Twake. En le supprimant, cet import automatique sera interrompu. Etes-vous sûr ?"
   },
   "deleteContactItemConfirmation": {
     "message": "Êtes-vous sûr de vouloir supprimer ce contact ?"
@@ -1117,7 +1117,7 @@
     "description": "Clipboard is the operating system thing where you copy/paste data to on your device."
   },
   "notificationAddDesc": {
-    "message": "Enregistrer le mot de passe dans mon Cozy ?"
+    "message": "Enregistrer le mot de passe dans mon Twake ?"
   },
   "notificationAddSave": {
     "message": "Enregistrer"
@@ -1147,7 +1147,7 @@
     "message": "Demande l'enregistrement de nouvelles clés d'identification (passkeys) ou la connexion à l'aide des clés d'identification (passkeys) stockées dans votre coffre. S'applique à tous les comptes connectés."
   },
   "notificationChangeDesc": {
-    "message": "Mettre à jour le mot de passe dans mon Cozy ?"
+    "message": "Mettre à jour le mot de passe dans mon Twake ?"
   },
   "notificationChangeSave": {
     "message": "Mettre à jour"
@@ -1221,7 +1221,7 @@
     "message": "Ce mot de passe sera utilisé pour exporter et importer ce fichier"
   },
   "accountRestrictedOptionDescription": {
-    "message": "Utilisez la clé de chiffrement de votre compte, dérivée du nom d'utilisateur et du mot de passe principal de votre compte, pour chiffrer l'export et restreindre l'import au seul compte Cozy actuel."
+    "message": "Utilisez la clé de chiffrement de votre compte, dérivée du nom d'utilisateur et du mot de passe principal de votre compte, pour chiffrer l'export et restreindre l'import au seul compte Twake actuel."
   },
   "passwordProtectedOptionDescription": {
     "message": "Définissez un mot de passe de fichier pour chiffrer l'exportation et l'importer dans n'importe quelle extension compatible en utilisant le mot de passe pour le déchiffrage."
@@ -1258,7 +1258,7 @@
     "message": "Partagé"
   },
   "sharedWithKonnector": {
-    "message": "Partagé avec un Connecteur Cozy"
+    "message": "Partagé avec un Connecteur Twake"
   },
   "administrativeFolder": {
     "message": "Administratif"
@@ -1298,7 +1298,7 @@
     "message": "Choisissez un dossier dans lequel vous souhaitez ranger cet élément."
   },
   "moveToFolderDesc2": {
-    "message": "<b>Partage</b> :</br>En sélectionnant un dossier partagé, vous pourrez ainsi transmettre cet élément de manière sécurisée à d'autres utilisateurs.</br>Vous pouvez créer un dossier partagé en accédant à <a href=''>Cozy Pass</a> depuis un navigateur web."
+    "message": "<b>Partage</b> :</br>En sélectionnant un dossier partagé, vous pourrez ainsi transmettre cet élément de manière sécurisée à d'autres utilisateurs.</br>Vous pouvez créer un dossier partagé en accédant à <a href=''>Twake Pass</a> depuis un navigateur web."
   },
   "sharingPremiumLinkDesc": {
     "message": "Voir les offres permettant le partage, et plus !"
@@ -1415,7 +1415,7 @@
     "message": "Vous êtes un membre Premium !"
   },
   "premiumCurrentMemberThanks": {
-    "message": "Merci de supporter Cozy."
+    "message": "Merci de supporter Twake."
   },
   "premiumFeatures": {
     "message": "Mettre à niveau à la version Premium et recevez :"
@@ -1556,7 +1556,7 @@
     "message": "Environnement auto-hébergé"
   },
   "selfHostedEnvironmentFooter": {
-    "message": "Spécifiez l'URL de base de votre Cozy, suivie de /bitwarden."
+    "message": "Spécifiez l'URL de base de votre Twake, suivie de /bitwarden."
   },
   "selfHostedBaseUrlHint": {
     "message": "Spécifiez l'URL de base de votre installation autohébergée par Bitwarden. Exemple : https://bitwarden.compagnie.com"
@@ -1602,7 +1602,7 @@
     "message": "Désactiver la suggestion automatique de connecteurs"
   },
   "disableKonnectorsSuggestionsDesc": {
-    "message": "Votre Cozy ne saura plus vous aider à trouver les organismes dont il possède un connecteur et dont vous avez un compte dans votre gestionnaire de mot de passe."
+    "message": "Votre Twake ne saura plus vous aider à trouver les organismes dont il possède un connecteur et dont vous avez un compte dans votre gestionnaire de mot de passe."
   },
   "showAutoFillMenuOnFormFields": {
     "message": "Afficher le menu de saisie automatique dans les champs d'un formulaire",
@@ -1697,7 +1697,7 @@
     "message": "Affiche un menu de sélection dans les formulaires pouvant être remplis automatiquement."
   },
   "loginInPageMenuTitle": {
-    "message": "Connectez-vous à votre Cozy pour remplir les formulaires en un seul clic"
+    "message": "Connectez-vous à votre Twake pour remplir les formulaires en un seul clic"
   },
   "inPageMenuLoginError": {
     "message": "L'adresse et le mot de passe ne correspondent pas"
@@ -2092,7 +2092,7 @@
     "message": "Ouvrir dans une nouvelle fenêtre"
   },
   "popOutCozy": {
-    "message": "Ouvrir dans mon Cozy"
+    "message": "Ouvrir dans mon Twake"
   },
   "refresh": {
     "message": "Actualiser"
@@ -2604,10 +2604,10 @@
     "message": "Domaines exclus"
   },
   "excludedDomainsDesc": {
-    "message": "Cozy Pass ne proposera pas d'enregistrer les informations de connexion pour ces domaines. Vous devez actualiser la page pour que les modifications prennent effet."
+    "message": "Twake Pass ne proposera pas d'enregistrer les informations de connexion pour ces domaines. Vous devez actualiser la page pour que les modifications prennent effet."
   },
   "excludedDomainsDescAlt": {
-    "message": "Cozy Pass ne demandera pas d'enregistrer les détails de connexion pour ces domaines pour tous les comptes connectés. Vous devez actualiser la page pour que les modifications prennent effet."
+    "message": "Twake Pass ne demandera pas d'enregistrer les détails de connexion pour ces domaines pour tous les comptes connectés. Vous devez actualiser la page pour que les modifications prennent effet."
   },
   "websiteItemLabel": {
     "message": "Site web $number$ (URI)",
@@ -3538,10 +3538,10 @@
     "message": "Ce code de sécurité lui permettra de valider votre identité et ainsi d'accéder aux éléments partagés."
   },
   "profileMigrationTitle": {
-    "message": "L'extension Cozy évolue !"
+    "message": "L'extension Twake évolue !"
   },
   "profileMigrationContentSingle": {
-    "message": "Tous les Contacts et Papiers de votre Cozy y sont dorénavant accessibles. La notion de \"Profil\" est fusionnée avec les \"Contacts\" pour plus de simplicité. Votre Profil est affiché encore pendant $REMAINING$ pour vous permettre de déplacer les informations utiles vers vos Contacts. Il sera supprimé le $DATE$.",
+    "message": "Tous les Contacts de votre Twake y sont dorénavant accessibles. La notion de \"Profil\" est fusionnée avec les \"Contacts\" pour plus de simplicité. Votre Profil est affiché encore pendant $REMAINING$ pour vous permettre de déplacer les informations utiles vers vos Contacts. Il sera supprimé le $DATE$.",
     "placeholders": {
       "date": {
         "content": "$1",
@@ -3554,7 +3554,7 @@
     }
   },
   "profileMigrationContentMultiple": {
-    "message": "Tous les Contacts et Papiers de votre Cozy y sont dorénavant accessibles. La notion de \"Profil\" est fusionnée avec les \"Contacts\" pour plus de simplicité. Vos $PROFILES_COUNT$ Profils sont affichés encore pendant $REMAINING$ pour vous permettre de déplacer les informations utiles vers vos Contacts. Ils seront supprimés le $DATE$.",
+    "message": "Tous les Contacts de votre Twake y sont dorénavant accessibles. La notion de \"Profil\" est fusionnée avec les \"Contacts\" pour plus de simplicité. Vos $PROFILES_COUNT$ Profils sont affichés encore pendant $REMAINING$ pour vous permettre de déplacer les informations utiles vers vos Contacts. Ils seront supprimés le $DATE$.",
     "placeholders": {
       "date": {
         "content": "$1",
@@ -3577,7 +3577,7 @@
     "message": "Chiffré de bout en bout"
   },
   "encryptedInfoContent": {
-    "message": "Attention, ne perdez pas votre mot de passe Cozy. Vos identifiants et mots de passe sont chiffrés de bout en bout. Personne d’autre que vous ne peut y accéder, pas même Cozy Cloud."
+    "message": "Attention, ne perdez pas votre mot de passe Twake. Vos identifiants et mots de passe sont chiffrés de bout en bout. Personne d’autre que vous ne peut y accéder, pas même Twake Workplace."
   },
   "encryptedInfoMoreDetails": {
     "message": "En savoir plus"
@@ -3890,15 +3890,15 @@
     "message": "Accéder directement au contenu"
   },
   "bitwardenOverlayButton": {
-    "message": "Bouton menu de saisie automatique Cozy",
+    "message": "Bouton menu de saisie automatique Twake",
     "description": "Page title for the iframe containing the overlay button"
   },
   "toggleBitwardenVaultOverlay": {
-    "message": "(Dés)activer le menu de saisie automatique de Cozy",
+    "message": "(Dés)activer le menu de saisie automatique de Twake",
     "description": "Screen reader and tool tip label for the overlay button"
   },
   "bitwardenVault": {
-    "message": "Menu de saisie automatique Cozy",
+    "message": "Menu de saisie automatique Twake",
     "description": "Page title in overlay"
   },
   "unlockYourAccountToViewMatchingLogins": {
@@ -4355,23 +4355,23 @@
     "description": "Body content for dialog which asks if the user wants to proceed to the browser's keyboard shortcut settings page"
   },
   "overrideDefaultBrowserAutofillTitle": {
-    "message": "Faire de Cozy Pass votre gestionnaire de mots de passe par défaut ?",
+    "message": "Faire de Twake Pass votre gestionnaire de mots de passe par défaut ?",
     "description": "Dialog title facilitating the ability to override a chrome browser's default autofill behavior"
   },
   "overrideDefaultBrowserAutofillDescription": {
-    "message": "Ignorer cette option peut causer des conflits entre le menu de saisie automatique de Cozy Pass et celui de votre navigateur.",
+    "message": "Ignorer cette option peut causer des conflits entre le menu de saisie automatique de Twake Pass et celui de votre navigateur.",
     "description": "Dialog message facilitating the ability to override a chrome browser's default autofill behavior"
   },
   "overrideDefaultBrowserAutoFillSettings": {
-    "message": "Faire de Cozy Pass votre gestionnaire de mots de passe par défaut",
+    "message": "Faire de Twake Pass votre gestionnaire de mots de passe par défaut",
     "description": "Label for the setting that allows overriding the default browser autofill settings"
   },
   "privacyPermissionAdditionNotGrantedTitle": {
-    "message": "Impossible de définir Cozy Pass comme gestionnaire de mots de passe par défaut",
+    "message": "Impossible de définir Twake Pass comme gestionnaire de mots de passe par défaut",
     "description": "Title for the dialog that appears when the user has not granted the extension permission to set privacy settings"
   },
   "privacyPermissionAdditionNotGrantedDescription": {
-    "message": "Vous devez accorder les permissions de confidentialité du navigateur à Cozy Pass pour le définir comme gestionnaire de mots de passe par défaut.",
+    "message": "Vous devez accorder les permissions de confidentialité du navigateur à Twake Pass pour le définir comme gestionnaire de mots de passe par défaut.",
     "description": "Description for the dialog that appears when the user has not granted the extension permission to set privacy settings"
   },
   "makeDefault": {
@@ -4968,7 +4968,7 @@
     "message": "Text Sends"
   },
   "bitwardenNewLook": {
-    "message": "Cozy a un nouveau look !"
+    "message": "Twake a un nouveau look !"
   },
   "bitwardenNewLookDesc": {
     "message": "Il est plus facile et plus intuitif que jamais de remplir automatiquement les champs et d'effectuer des recherches à partir de l'onglet \"Coffre\". Jetez un coup d'œil !"
@@ -4989,10 +4989,10 @@
     "message": "Seuls vos contacts favoris sont affichés ici."
   },
   "viewMoreContactInfo2": {
-    "message": "Rendez-vous sur votre App Cozy Contacts pour gérer la liste des favoris et les utiliser directement ici lors du remplissage de formulaires en ligne."
+    "message": "Rendez-vous sur votre app Twake Contacts pour gérer la liste des favoris et les utiliser directement ici lors du remplissage de formulaires en ligne."
   },
   "viewMoreContactRedirect": {
-    "message": "Cozy Contacts"
+    "message": "Twake Contacts"
   },
   "contactSearch": {
     "message": "Recherche\u2026"
