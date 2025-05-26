@@ -129,4 +129,3 @@ declare let safari: any;
 declare module "cozy-client/dist/index";
 declare module "cozy-client/dist/CozyClient";
 declare module "cozy-client/dist/registry";
-declare module "cozy-ui/transpiled/react/Avatar/helpers";
