@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from "@angular/core";
-import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
+import { nameToColor } from "cozy-ui/transpiled/react/legacy/Avatar/helpers";
 
 @Component({
   selector: "app-vault-contact-avatar",
@@ -9,9 +9,9 @@ export class ContactAvatarComponent implements OnChanges {
   @Input() initials: string;
   @Input() size: number;
 
-  backgroundColor: string;
+  background: string;
 
   ngOnChanges() {
-    this.backgroundColor = nameToColor(this.initials);
+    this.background = nameToColor(this.initials);
   }
 }

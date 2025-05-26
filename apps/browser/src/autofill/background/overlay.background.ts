@@ -108,7 +108,7 @@ import {
 import { Q, models } from "cozy-client";
 import type { IOCozyContact, IOCozyFile } from "cozy-client/types/types";
 // @ts-ignore
-import { nameToColor } from "cozy-ui/transpiled/react/Avatar/helpers";
+import { nameToColor } from "cozy-ui/transpiled/react/legacy/Avatar/helpers";
 import { CozyClientService } from "../../popup/services/cozyClient.service";
 import type { AmbiguousContactFieldName } from "src/autofill/types";
 import { COZY_ATTRIBUTES_MAPPING } from "../../../../../libs/cozy/mapping";
