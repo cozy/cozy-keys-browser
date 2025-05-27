@@ -260,24 +260,18 @@ app-vault-icon,
 }
 
 .logo-image {
-  margin: 0 auto;
-  width: 142px;
-  height: 21px;
-  background-size: 142px 21px;
+  margin: auto;
+  background-image: url("cozy-ui/assets/icons/illus/pass.svg");
+  width: 64px;
+  height: 64px;
+  background-size: 64px;
   background-repeat: no-repeat;
-  @include themify($themes) {
-    background-image: url("../images/logo-" + themed("logoSuffix") + "@2x.png");
-  }
-  @media (min-width: 219px) {
-    width: 189px;
-    height: 28px;
-    background-size: 189px 28px;
-  }
-  @media (min-width: 314px) {
-    width: 284px;
-    height: 43px;
-    background-size: 284px 43px;
-  }
+}
+
+.login-button {
+  height: 48px;
+  border-radius: 100px;
+  border-width: 0px;
 }
 
 .icon-cozy {
