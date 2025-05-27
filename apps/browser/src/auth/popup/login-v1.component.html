@@ -80,7 +80,12 @@ No reconciliation is possible
         </div>
       </div>
       <div class="content">
-        <button class="btn primary block" type="submit" appBlurClick [disabled]="form.loading">
+        <button
+          class="btn primary block login-button"
+          type="submit"
+          appBlurClick
+          [disabled]="form.loading"
+        >
           <span [hidden]="form.loading">{{ "logIn" | i18n }}</span>
           <i
             class="bwi bwi-spinner bwi-lg bwi-spin"
