@@ -32,7 +32,7 @@ export class MainContextMenuHandler {
   private initContextMenuItems: InitContextMenuItems[] = [
     {
       id: ROOT_ID,
-      title: "Cozy Pass",
+      title: "Twake Pass",
     },
     {
       id: AUTOFILL_ID,

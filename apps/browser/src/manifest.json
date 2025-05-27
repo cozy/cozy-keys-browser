@@ -5,7 +5,7 @@
   "version": "2.4.1",
   "description": "__MSG_extDesc__",
   "default_locale": "en",
-  "author": "Cozy Cloud",
+  "author": "Twake Workplace",
   "homepage_url": "https://cozy.io/",
   "icons": {
     "16": "images/icon16.png",
@@ -52,7 +52,7 @@
       "19": "images/icon19.png",
       "38": "images/icon38.png"
     },
-    "default_title": "Cozy",
+    "default_title": "Twake",
     "default_popup": "popup/index.html"
   },
   "permissions": [
@@ -138,7 +138,7 @@
     }
   },
   "sidebar_action": {
-    "default_title": "Cozy",
+    "default_title": "Twake",
     "default_panel": "popup/index.html?uilocation=sidebar",
     "default_icon": "images/icon19.png",
     "open_at_install": false,
