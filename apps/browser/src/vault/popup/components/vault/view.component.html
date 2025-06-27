@@ -4,7 +4,7 @@
     <button type="button" (click)="close()">{{ "close" | i18n }}</button>
     -->
     <button type="button" appBlurClick (click)="close()" title="{{ 'close_shortcut' | i18n }}">
-      <i class="icon-cozy icon-cross" aria-hidden="true"></i>
+      <span class="header-icon"><i class="bwi bwi-close" aria-hidden="true"></i></span>
     </button>
     <!-- end custo -->
   </div>
@@ -24,7 +24,7 @@
       title="{{ 'edit' | i18n }}"
       appBlurClick
     >
-      <i class="icon-cozy icon-pen" aria-hidden="true"></i>
+      <span class="header-icon"><i class="bwi bwi-pencil-square" aria-hidden="true"></i></span>
     </button>
     <!-- end custo -->
   </div>

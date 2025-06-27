@@ -35,6 +35,8 @@ $gray-silver: #d6d8da;
 $text-muted: rgba($grey900, 0.48);
 $text-muted-contrasted: rgba($grey900, 0.72);
 
+$twake-text-color: rgba(28, 27, 31, 0.72);
+
 $brand-primary: #297ef2;
 $brand-primary-active: darken($brand-primary, 5%);
 $brand-danger: #ea3f3f;
@@ -51,7 +53,7 @@ $brand-info-contrasted: #008281;
 $brand-warning-contrasted: #a36800;
 $brand-primary-accent-contrasted: darken($brand-primary-contrasted, 8%);
 
-$background-color: #f5f6f7;
+$background-color: #f3f6f9;
 $background-color-alt: #ffffff;
 $background-color-lighter: #5397f4;
 
@@ -107,16 +109,16 @@ $themes: (
     boxBackgroundColor: $box-background-color,
     boxBackgroundHoverColor: $box-background-hover-color,
     boxBorderColor: $box-border-color,
-    tabBackgroundColor: #ffffff,
-    tabBackgroundHoverColor: $list-item-hover,
-    headerColor: #ffffff,
-    headerBackgroundColor: $brand-primary,
+    tabBackgroundColor: #f3f6f9,
+    tabBackgroundHoverColor: #f3f6f9,
+    headerColor: $twake-text-color,
+    headerBackgroundColor: #ffffff,
     headerBackgroundHoverColor: rgba(255, 255, 255, 0.1),
-    headerBorderColor: $brand-primary,
-    headerInputBackgroundColor: lighten($brand-primary, 8%),
-    headerInputBackgroundFocusColor: lighten($brand-primary, 8%),
-    headerInputColor: #ffffff,
-    headerInputPlaceholderColor: lighten($brand-primary, 35%),
+    headerBorderColor: #f2f2f2,
+    headerInputBackgroundColor: #f3f6f9,
+    headerInputBackgroundFocusColor: #f3f6f9,
+    headerInputColor: $twake-text-color,
+    headerInputPlaceholderColor: rgba(134, 134, 135, 1),
     listItemBackgroundHoverColor: $list-item-hover,
     disabledIconColor: $list-icon-color,
     disabledBoxOpacity: $disabled-box-opacity,
@@ -173,16 +175,16 @@ $themes: (
     boxBackgroundColor: $box-background-color,
     boxBackgroundHoverColor: $box-background-hover-color,
     boxBorderColor: $box-border-color,
-    tabBackgroundColor: #ffffff,
-    tabBackgroundHoverColor: $list-item-hover,
-    headerColor: #ffffff,
-    headerBackgroundColor: $brand-primary-contrasted,
+    tabBackgroundColor: #f3f6f9,
+    tabBackgroundHoverColor: #f3f6f9,
+    headerColor: $twake-text-color,
+    headerBackgroundColor: #ffffff,
     headerBackgroundHoverColor: rgba(255, 255, 255, 0.1),
-    headerBorderColor: $brand-primary-contrasted,
-    headerInputBackgroundColor: lighten($brand-primary-contrasted, 8%),
-    headerInputBackgroundFocusColor: lighten($brand-primary-contrasted, 8%),
-    headerInputColor: #ffffff,
-    headerInputPlaceholderColor: lighten($brand-primary-contrasted, 35%),
+    headerBorderColor: #f2f2f2,
+    headerInputBackgroundColor: #f3f6f9,
+    headerInputBackgroundFocusColor: #f3f6f9,
+    headerInputColor: $twake-text-color,
+    headerInputPlaceholderColor: rgba(134, 134, 135, 1),
     listItemBackgroundHoverColor: $list-item-hover,
     disabledIconColor: $list-icon-color,
     disabledBoxOpacity: $disabled-box-opacity,
