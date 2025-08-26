@@ -230,6 +230,7 @@ export class LoginComponentV1 extends BaseLoginComponent implements OnInit {
       // This adds the scheme if missing
       await this.environmentService.setEnvironment(Region.SelfHosted, {
         base: this.cozyUrl + "/bitwarden",
+        oidc: this.cozyUrl + "/oidc/bitwarden",
       });
 
       // The email is based on the URL and necessary for login
@@ -240,6 +241,7 @@ export class LoginComponentV1 extends BaseLoginComponent implements OnInit {
         data.masterPassword,
         null,
         null,
+        this.code,
       );
 
       this.formPromise = this.loginStrategyService.logIn(credentials);

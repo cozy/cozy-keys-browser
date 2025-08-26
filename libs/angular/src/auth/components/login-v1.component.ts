@@ -49,7 +49,10 @@ export class LoginComponentV1 extends CaptchaProtectedComponent implements OnIni
   showLoginWithDevice: boolean;
   validatedEmail = false;
   paramEmailSet = false;
+  // Cozy customization
   protected cozyUrl: string;
+  protected code: string;
+  // Cozy customization end
 
   get emailFormControl() {
     return this.formGroup.controls.email;
@@ -112,13 +115,14 @@ export class LoginComponentV1 extends CaptchaProtectedComponent implements OnIni
 
           const queryParamsEmail = params.email;
 
-          // Cozy customization, do not check for @ because we use cozy URL
+          // Cozy customization, do not check for @ because we use cozy URL, save OIDC code
           //*
           if (queryParamsEmail != null) {
             this.formGroup.controls.email.setValue(queryParamsEmail);
             this.paramEmailSet = true;
           }
           this.cozyUrl = params.cozyUrl;
+          this.code = params.code;
           /*/
           if (queryParamsEmail != null && queryParamsEmail.indexOf("@") > -1) {
             this.formGroup.controls.email.setValue(queryParamsEmail);
