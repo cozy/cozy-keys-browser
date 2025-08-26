@@ -14,6 +14,7 @@ import { ToastService } from "@bitwarden/components";
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { CozySanitizeUrlService } from "../../popup/services/cozySanitizeUrl.service";
 import { AccountSwitcherService } from "./account-switching/services/account-switcher.service";
+import { getLoginSuccessPageUri } from "../../../src/cozy/sso/helpers";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -27,6 +28,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private destroyed$: Subject<void> = new Subject();
 
   loginInitiated = false;
+  loginMode = "DEFAULT";
   formGroup = this.formBuilder.group({
     /** Cozy custo
     email: ["", [Validators.required, Validators.email]],
@@ -145,6 +147,31 @@ export class HomeComponent implements OnInit, OnDestroy {
   /* Cozy custo */
   openCozyWebsite() {
     BrowserApi.createNewTab("https://manager.cozycloud.cc/cozy/create");
+  }
+  /* end custo */
+
+  /* Cozy custo */
+  openTwakeLogin() {
+    const extensionUri = this.platformUtilsService.getExtensionUri();
+    const redirectUri = getLoginSuccessPageUri(extensionUri);
+
+    BrowserApi.createNewTab(
+      `https://oauthcallback.cozy.works/oidc/bitwarden/twake?redirect_uri=${redirectUri}`, // TODO: update URL with production environment
+    );
+  }
+  /* end custo */
+
+  /* Cozy custo */
+  setDefaultMode() {
+    this.loginMode = "DEFAULT";
+  }
+
+  setCompanyMode() {
+    this.loginMode = "COMPANY";
+  }
+
+  setUrlMode() {
+    this.loginMode = "URL";
   }
   /* end custo */
 
