@@ -216,6 +216,9 @@ export class DefaultEnvironmentService implements EnvironmentService {
       urls.notifications = formatUrl(urls.notifications);
       urls.events = formatUrl(urls.events);
       urls.keyConnector = formatUrl(urls.keyConnector);
+      // Cozy customization
+      urls.oidc = formatUrl(urls.oidc);
+      // Cozy customization end
       urls.scim = null;
 
       await this.globalState.update(() => ({
@@ -229,6 +232,9 @@ export class DefaultEnvironmentService implements EnvironmentService {
           notifications: urls.notifications,
           events: urls.events,
           keyConnector: urls.keyConnector,
+          // Cozy customization
+          oidc: urls.oidc,
+          // Cozy customization end
         },
       }));
 
@@ -381,6 +387,12 @@ abstract class UrlEnvironment implements Environment {
   getKeyConnectorUrl() {
     return this.urls.keyConnector;
   }
+
+  // Cozy customization
+  getOidcUrl() {
+    return this.urls.oidc;
+  }
+  // Cozy customization end
 
   getNotificationsUrl() {
     return this.getUrl("notifications", "/notifications");
