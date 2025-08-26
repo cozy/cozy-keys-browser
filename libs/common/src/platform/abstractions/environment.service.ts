@@ -12,6 +12,9 @@ export type Urls = {
   events?: string;
   keyConnector?: string;
   scim?: string;
+  // Cozy customization
+  oidc?: string;
+  // Cozy customization end
 };
 
 /**
@@ -62,6 +65,9 @@ export interface Environment {
   getEventsUrl(): string;
   getIconsUrl(): string;
   getIdentityUrl(): string;
+  // Cozy customization
+  getOidcUrl(): string;
+  // Cozy customization end
 
   /**
    * @deprecated This is currently only used by the CLI. This functionality should be extracted since
