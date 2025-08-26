@@ -3,15 +3,21 @@
   <div class="content login-page">
     <div class="logo-image"></div>
     <p class="lead text-center">{{ "loginOrCreateNewAccount" | i18n }}</p>
-    <form #form [formGroup]="formGroup" (ngSubmit)="submit()">
+    <form *ngIf="loginMode === 'DEFAULT'" #form [formGroup]="formGroup" (ngSubmit)="submit()">
+      <div class="box">
+        <button type="button" class="btn primary block login-button" (click)="openTwakeLogin()">
+          <b>{{ "login" | i18n }}</b>
+        </button>
+        <button type="button" class="btn secondary block login-button" (click)="setCompanyMode()">
+          <b>{{ "useYourCompanyServer" | i18n }}</b>
+        </button>
+      </div>
+    </form>
+    <form *ngIf="loginMode === 'URL'" #form [formGroup]="formGroup" (ngSubmit)="submit()">
       <div class="box">
         <div class="box-content">
           <div class="box-content-row" appBoxRow>
-            <!-- Cozy customization
-            <label for="email">{{ "emailAddress" | i18n }}</label>
-             -->
             <label for="email">{{ "cozyUrl" | i18n }}</label>
-            <!-- Cozy customization end -->
             <input
               id="email"
               type="email"
@@ -20,9 +26,6 @@
               placeholder="ex. https://claude.mycozy.cloud"
             />
           </div>
-          <!-- Cozy customization
-          <environment-selector></environment-selector>
-          -->
           <div class="remember-email-check">
             <input
               id="rememberEmail"
@@ -40,7 +43,39 @@
         </button>
       </div>
     </form>
-    <p class="createAccountLink">
+    <form *ngIf="loginMode === 'COMPANY'" #form [formGroup]="formGroup" (ngSubmit)="submit()">
+      <div class="box">
+        <div class="box-content">
+          <div class="box-content-row" appBoxRow>
+            <label for="companyEmail">{{ "companyEmail" | i18n }}</label>
+            <input
+              id="companyEmail"
+              type="companyEmail"
+              formControlName="companyEmail"
+              appInputVerbatim="false"
+            />
+          </div>
+          <div class="remember-email-check">
+            <input
+              id="rememberEmail"
+              type="checkbox"
+              name="rememberEmail"
+              formControlName="rememberEmail"
+            />
+            <label for="rememberEmail">{{ "rememberEmail" | i18n }}</label>
+          </div>
+        </div>
+      </div>
+      <div class="box">
+        <button type="submit" class="btn primary block login-button" (click)="openCompanyLogin()">
+          <b>{{ "continue" | i18n }}</b>
+        </button>
+        <button type="button" class="btn secondary block login-button" (click)="setUrlMode()">
+          <b>{{ "useUrl" | i18n }}</b>
+        </button>
+      </div>
+    </form>
+    <p *ngIf="loginMode === 'DEFAULT'" class="createAccountLink">
       {{ "newAroundHere" | i18n }}
       <!-- Cozy customization
       <a [routerLink]="registerRoute$ | async" (click)="setLoginEmailValues()">{{
@@ -51,6 +86,9 @@
         "createAccount" | i18n
       }}</a>
       <!-- Cozy customization end -->
+    </p>
+    <p *ngIf="loginMode !== 'DEFAULT'" class="backLink">
+      <a href="#" (click)="setDefaultMode()">{{ "back" | i18n }}</a>
     </p>
   </div>
 </div>

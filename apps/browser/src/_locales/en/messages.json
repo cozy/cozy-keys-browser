@@ -5294,5 +5294,14 @@
   },
   "generatedPassword": {
     "message": "Generated password"
+  },
+  "useYourCompanyServer": {
+    "message": "Use your company server"
+  },
+  "useUrl": {
+    "message": "Use my Twake URL"
+  },
+  "companyEmail": {
+    "message": "Company email address"
   }
 }
