@@ -67,6 +67,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     }
 
+    this.redirectIfSSOLoginSuccessTab();
+
     // Cozy customization
     /*
     this.environmentSelector.onOpenSelfHostedSettings
@@ -188,6 +190,29 @@ export class HomeComponent implements OnInit, OnDestroy {
       // It happens if the user enter a valid URL but that does not answer.
       return false;
     }
+  }
+  // Cozy customization end
+
+  // Cozy customization
+  async redirectIfSSOLoginSuccessTab() {
+    chrome.tabs.query({}, (tabs) => {
+      const extensionUri = this.platformUtilsService.getExtensionUri();
+      const redirectUri = getLoginSuccessPageUri(extensionUri);
+
+      const SSOLoginSuccessTab = tabs.find(
+        (tab) => tab.status === "complete" && tab.url.startsWith(redirectUri),
+      );
+
+      if (SSOLoginSuccessTab) {
+        const url = new URL(SSOLoginSuccessTab.url);
+        const instance = url.searchParams.get("instance");
+        const code = url.searchParams.get("code");
+
+        this.router.navigate(["login"], {
+          queryParams: { email: instance, cozyUrl: instance, code },
+        });
+      }
+    });
   }
   // Cozy customization end
 }
