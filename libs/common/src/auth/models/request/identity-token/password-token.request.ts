@@ -7,14 +7,25 @@ import { TokenTwoFactorRequest } from "./token-two-factor.request";
 import { TokenRequest } from "./token.request";
 
 export class PasswordTokenRequest extends TokenRequest implements CaptchaProtectedRequest {
+  // Cozy customization
+  protected code?: string;
+  // Cozy customization end
+
   constructor(
     public email: string,
     public masterPasswordHash: string,
     public captchaResponse: string,
     protected twoFactor: TokenTwoFactorRequest,
     device?: DeviceRequest,
+    // Cozy customization
+    code?: string,
+    // Cozy customization end
   ) {
     super(twoFactor, device);
+
+    // Cozy customization
+    this.code = code;
+    // Cozy customization end
   }
 
   toIdentityToken(clientId: ClientType) {
@@ -23,6 +34,10 @@ export class PasswordTokenRequest extends TokenRequest implements CaptchaProtect
     obj.grant_type = "password";
     obj.username = this.email;
     obj.password = this.masterPasswordHash;
+
+    // Cozy customization
+    obj.code = this.code;
+    // Cozy customization end
 
     if (this.captchaResponse != null) {
       obj.captchaResponse = this.captchaResponse;
@@ -43,4 +58,10 @@ export class PasswordTokenRequest extends TokenRequest implements CaptchaProtect
         : undefined,
     });
   }
+
+  // Cozy customization
+  isOidcRequest() {
+    return !!this.code;
+  }
+  // Cozy customization end
 }

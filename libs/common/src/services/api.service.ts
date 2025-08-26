@@ -230,24 +230,43 @@ export class ApiService implements ApiServiceAbstraction {
 
     const env = await firstValueFrom(this.environmentService.environment$);
 
-    const response = await this.fetch(
-      new Request(env.getIdentityUrl() + "/connect/token", {
-        // Cozy customization, we pass the client name to the stack, so in cozy-settings we can show
-        // "Cozy Password (browser name)" in the connected devices list.
-        //*
-        body: this.qsStringify({
-          ...identityToken,
-          clientName: `Cozy Pass (${getDeviceName(this.device)})`,
+    let response;
+
+    // Cozy customization; we call the OIDC login route from cozy-stack
+    if (request instanceof PasswordTokenRequest && request.isOidcRequest()) {
+      response = await this.fetch(
+        new Request(env.getOidcUrl() + "/unused", {
+          body: this.qsStringify({
+            ...identityToken,
+            clientName: `Cozy Pass (${getDeviceName(this.device)})`,
+          }),
+          credentials: await this.getCredentials(),
+          cache: "no-store",
+          headers: headers,
+          method: "POST",
         }),
-        /*/
+      );
+    } else {
+      // Default login call
+      response = await this.fetch(
+        new Request(env.getIdentityUrl() + "/connect/token", {
+          // Cozy customization, we pass the client name to the stack, so in cozy-settings we can show
+          // "Cozy Password (browser name)" in the connected devices list.
+          //*
+          body: this.qsStringify({
+            ...identityToken,
+            clientName: `Cozy Pass (${getDeviceName(this.device)})`,
+          }),
+          /*/
         body: this.qsStringify(identityToken),
         //*/
-        credentials: await this.getCredentials(),
-        cache: "no-store",
-        headers: headers,
-        method: "POST",
-      }),
-    );
+          credentials: await this.getCredentials(),
+          cache: "no-store",
+          headers: headers,
+          method: "POST",
+        }),
+      );
+    }
 
     let responseJson: any = null;
     if (this.isJsonResponse(response)) {

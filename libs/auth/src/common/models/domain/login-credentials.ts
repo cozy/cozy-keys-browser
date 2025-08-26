@@ -14,6 +14,9 @@ export class PasswordLoginCredentials {
     public masterPassword: string,
     public captchaToken?: string,
     public twoFactor?: TokenTwoFactorRequest,
+    // Cozy customization
+    public code?: string,
+    // Cozy customization end
   ) {}
 }
 

@@ -76,7 +76,7 @@ export class PasswordLoginStrategy extends LoginStrategy {
   }
 
   override async logIn(credentials: PasswordLoginCredentials) {
-    const { email, masterPassword, captchaToken, twoFactor } = credentials;
+    const { email, masterPassword, captchaToken, twoFactor, code } = credentials; // Cozy customization
 
     const data = new PasswordLoginStrategyData();
     data.masterKey = await this.loginStrategyService.makePreloginKey(masterPassword, email);
@@ -96,6 +96,7 @@ export class PasswordLoginStrategy extends LoginStrategy {
       captchaToken,
       await this.buildTwoFactor(twoFactor, email),
       await this.buildDeviceRequest(),
+      code, // Cozy customization
     );
 
     this.cache.next(data);
