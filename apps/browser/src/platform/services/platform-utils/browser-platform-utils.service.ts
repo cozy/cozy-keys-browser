@@ -338,4 +338,16 @@ export abstract class BrowserPlatformUtilsService implements PlatformUtilsServic
 
     return "";
   }
+
+  // Cozy customization
+  getExtensionUri(): string {
+    if (this.isFirefox()) {
+      return `moz-extension://${chrome.runtime.id}`;
+    } else if (this.isChrome) {
+      return `chrome-extension://${chrome.runtime.id}`;
+    }
+
+    return null;
+  }
+  // Cozy customization end
 }
