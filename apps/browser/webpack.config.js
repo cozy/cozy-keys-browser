@@ -193,6 +193,7 @@ let plugins = [
       { from: "./src/popup/images", to: "popup/images" },
       { from: "./src/autofill/content/autofill.css", to: "content" },
       { from: "./src/content/notification.css", to: "content" },
+      { from: "./src/content/oidcSuccess.html", to: "content" },
     ],
   }),
   new MiniCssExtractPlugin({

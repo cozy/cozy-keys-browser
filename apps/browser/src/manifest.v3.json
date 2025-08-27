@@ -134,7 +134,8 @@
         "overlay/menu.html",
         "overlay/button.html",
         "overlay/list.html",
-        "popup/fonts/*"
+        "popup/fonts/*",
+        "content/oidcSuccess.html"
       ],
       "matches": ["<all_urls>"]
     }
