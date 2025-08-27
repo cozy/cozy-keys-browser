@@ -45,4 +45,7 @@ export abstract class PlatformUtilsService {
   abstract readFromClipboard(): Promise<string>;
   abstract supportsSecureStorage(): boolean;
   abstract getAutofillKeyboardShortcut(): Promise<string>;
+  // Cozy customization
+  abstract getExtensionUri(): string;
+  // Cozy customization end
 }
