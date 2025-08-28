@@ -14,7 +14,7 @@ import { ToastService } from "@bitwarden/components";
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { CozySanitizeUrlService } from "../../popup/services/cozySanitizeUrl.service";
 import { AccountSwitcherService } from "./account-switching/services/account-switcher.service";
-import { getLoginSuccessPageUri } from "../../../src/cozy/sso/helpers";
+import { getLoginSuccessPageUri, extractDomain } from "../../../src/cozy/sso/helpers";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     email: ["", [Validators.required, Validators.email]],
      */
     email: [""],
+    companyEmail: [""],
     /** end custo */
     rememberEmail: [false],
   });
@@ -192,6 +193,79 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
   // Cozy customization end
+
+  async getLoginUri(companyEmail: string): Promise<URL | null> {
+    try {
+      const domain = extractDomain(companyEmail);
+
+      if (!domain) {
+        throw new Error();
+      }
+
+      const extensionUri = this.platformUtilsService.getExtensionUri();
+      const redirectUri = getLoginSuccessPageUri(extensionUri);
+
+      const uriFromWellKnown = await this.fetchLoginUriWithWellKnown(domain);
+
+      if (uriFromWellKnown) {
+        uriFromWellKnown.searchParams.append("redirect_uri", redirectUri);
+        return uriFromWellKnown;
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  private async fetchLoginUriWithWellKnown(domain: string): Promise<URL | null> {
+    const url = `https://${domain}/.well-known/twake-configuration`;
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const twakeConfiguration = await response.json();
+
+        return new URL(twakeConfiguration["twake-pass-login-uri"]) || null;
+      } else {
+        return null;
+      }
+    } catch {
+      return null;
+    }
+  }
+
+  async openCompanyLogin() {
+    const companyEmail = this.formGroup.value.companyEmail;
+
+    if (!companyEmail) {
+      this.toastService.showToast({
+        variant: "error",
+        title: this.i18nService.t("errorOccured"),
+        message: this.i18nService.t("emailRequired"),
+      });
+      return;
+    }
+
+    const loginUri = await this.getLoginUri(companyEmail);
+
+    if (loginUri) {
+      BrowserApi.createNewTab(loginUri.toString());
+    } else {
+      this.toastService.showToast({
+        variant: "error",
+        title: this.i18nService.t("errorOccured"),
+        message: this.i18nService.t("companyServerError"),
+      });
+    }
+  }
 
   // Cozy customization
   async redirectIfSSOLoginSuccessTab() {
