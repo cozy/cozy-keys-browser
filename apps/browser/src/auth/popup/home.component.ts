@@ -18,6 +18,10 @@ import { getLoginSuccessPageUri, extractDomain } from "../../../src/cozy/sso/hel
 /* eslint-enable */
 /* end Cozy imports */
 
+const DEV_STACK_OAUTHCALLBACK_URI = "https://oauthcallback.cozy.wtf";
+const INT_STACK_OAUTHCALLBACK_URI = "https://oauthcallback.cozy.works";
+const PROD_STACK_OAUTHCALLBACK_URI = "https://oauthcallback.mycozy.cloud";
+
 @Component({
   selector: "app-home",
   templateUrl: "home.component.html",
@@ -38,6 +42,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     /** end custo */
     rememberEmail: [false],
   });
+
+  // Cozy customization; to change stack URI
+  logoClickCount = 0;
+  baseUri = PROD_STACK_OAUTHCALLBACK_URI;
+  // Cozy customization
 
   // TODO: remove when email verification flag is removed
   registerRoute$ = this.registerRouteService.registerRoute$();
@@ -158,9 +167,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     const extensionUri = this.platformUtilsService.getExtensionUri();
     const redirectUri = getLoginSuccessPageUri(extensionUri);
 
-    BrowserApi.createNewTab(
-      `https://oauthcallback.cozy.works/oidc/bitwarden/twake?redirect_uri=${redirectUri}`, // TODO: update URL with production environment
-    );
+    BrowserApi.createNewTab(`${this.baseUri}/oidc/bitwarden/twake?redirect_uri=${redirectUri}`);
   }
   /* end custo */
 
@@ -287,6 +294,30 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+  // Cozy customization end
+
+  // Cozy customization
+  async logoClicked() {
+    this.logoClickCount++;
+
+    if (this.logoClickCount >= 6) {
+      const rest = this.logoClickCount % 3;
+
+      if (rest === 0) {
+        this.baseUri = DEV_STACK_OAUTHCALLBACK_URI;
+      } else if (rest === 1) {
+        this.baseUri = INT_STACK_OAUTHCALLBACK_URI;
+      } else if (rest === 2) {
+        this.baseUri = PROD_STACK_OAUTHCALLBACK_URI;
+      }
+
+      this.toastService.showToast({
+        variant: "info",
+        title: "New base URI",
+        message: this.baseUri,
+      });
+    }
   }
   // Cozy customization end
 }
