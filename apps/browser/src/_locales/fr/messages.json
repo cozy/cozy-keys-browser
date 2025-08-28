@@ -5302,5 +5302,8 @@
   },
   "companyEmail": {
     "message": "Adresse e-mail de votre entreprise"
+  },
+  "companyServerError": {
+    "message": "Serveur d'entreprise introuvable"
   }
 }

@@ -5303,5 +5303,8 @@
   },
   "companyEmail": {
     "message": "Company email address"
+  },
+  "companyServerError": {
+    "message": "Company server not found"
   }
 }
