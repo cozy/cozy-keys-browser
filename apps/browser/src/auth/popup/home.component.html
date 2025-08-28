@@ -1,7 +1,7 @@
 <app-header [noTheme]="true"> </app-header>
 <div class="center-content">
   <div class="content login-page">
-    <div class="logo-image"></div>
+    <div class="logo-image" (click)="logoClicked()"></div>
     <p class="lead text-center">{{ "loginOrCreateNewAccount" | i18n }}</p>
     <form *ngIf="loginMode === 'DEFAULT'" #form [formGroup]="formGroup" (ngSubmit)="submit()">
       <div class="box">
