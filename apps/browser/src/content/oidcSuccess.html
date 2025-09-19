@@ -4,8 +4,232 @@
     <meta charset="UTF-8" />
     <title>Twake Pass Extension</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        height: 100vh;
+        background: linear-gradient(135deg, rgba(247.56, 169.17, 51.58, 0.20) 0%, rgba(202.79, 39.51, 206.13, 0.20) 44%, rgba(10, 132, 255, 0.20) 100%), white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        max-width: 1400px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 4rem;
+      }
+
+      .left-content {
+        flex: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 2rem;
+        max-width: 600px;
+      }
+
+      .success {
+        margin-top: auto;
+        margin-bottom: auto;
+      }
+
+      .id-logo {
+        width: 160px;
+        height: auto;
+        margin-bottom: 3rem;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+      }
+
+      .success-message {
+        font-size: 2.2rem;
+        font-weight: 600;
+        color: #1C1B1F;
+        line-height: 1.3;
+        margin-bottom: 2rem;
+        max-width: 600px;
+      }
+
+      .copyright {
+        margin-top: auto;
+        font-size: 0.85rem;
+        color: rgba(45, 55, 72, 0.6);
+        font-weight: 400;
+      }
+
+      .right-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        max-width: 600px;
+      }
+
+      .mockup-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        max-width: 480px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .twake-pass-logo {
+        width: 120px;
+        height: auto;
+        margin: 0 auto 2rem;
+        display: block;
+      }
+
+      .mockup-image {
+        width: 100%;
+        height: auto;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .instruction-text {
+        font-size: 1rem;
+        color: #1C1B1F;
+        line-height: 1.5;
+        font-weight: 500;
+      }
+
+      .help-link {
+        display: block;
+        margin-top: 1rem;
+        color: #3182ce;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+      .help-link:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 1024px) {
+        .container {
+          flex-direction: column;
+          padding: 2rem;
+          justify-content: flex-start;
+        }
+
+        .left-content {
+          flex: none;
+          width: 100%;
+          max-width: none;
+          height: auto;
+          align-items: center;
+          text-align: center;
+          margin-bottom: 2rem;
+          padding: 1rem;
+        }
+
+        .right-content {
+          flex: none;
+          width: 100%;
+          max-width: none;
+          align-items: center;
+          text-align: center;
+        }
+
+        .success {
+          margin: 0;
+        }
+
+        .id-logo {
+          width: 120px;
+          margin-bottom: 2rem;
+        }
+
+        .success-message {
+          font-size: 1.8rem;
+          text-align: center;
+        }
+
+        .copyright {
+          margin-top: 1rem;
+          text-align: center;
+        }
+
+        .mockup-card {
+          max-width: 400px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .left-content {
+          padding: 0.5rem;
+        }
+
+        .id-logo {
+          width: 100px;
+          margin-bottom: 1.5rem;
+        }
+
+        .success-message {
+          font-size: 1.5rem;
+        }
+
+        .mockup-card {
+          padding: 1.5rem;
+          max-width: 100%;
+        }
+
+        .twake-pass-logo {
+          width: 100px;
+        }
+      }
+    </style>
   </head>
   <body>
-    <h1>Open your Twake Pass extension and enter your master password</h1>
+    <div class="container">
+      <div class="left-content">
+        <div class="success">
+          <img src="../images/logo-id.png" alt="ID Logo" class="id-logo" />
+          <div class="success-message">
+            You have been logged in to your Twake Workplace successfully.
+          </div>
+        </div>
+
+        <div class="copyright">
+          © 2020-2025, LINAGORA
+        </div>
+      </div>
+
+      <div class="right-content">
+        <div class="mockup-card">
+          <img src="../images/logo-text.png" alt="Twake Pass" class="twake-pass-logo" />
+          <img src="../images/mockup.png" alt="Twake Pass Extension" class="mockup-image" />
+          <div class="instruction-text">
+            Open the extension and enter your password for Twake Pass to complete login.
+          </div>
+          <a href="mailto:support@twake.app" class="help-link">I need help?</a>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
