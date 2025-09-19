@@ -6,24 +6,25 @@ const translations = {
     helpLink: "I need help?",
     logoAlt: "ID Logo",
     twakePassAlt: "Twake Pass",
-    extensionAlt: "Twake Pass Extension"
+    extensionAlt: "Twake Pass Extension",
   },
   fr: {
     title: "Extension Twake Pass",
     successMessage: "Vous avez été connecté à votre espace de travail Twake avec succès.",
-    instructionText: "Ouvrez l'extension et saisissez votre mot de passe pour Twake Pass afin de terminer la connexion.",
+    instructionText:
+      "Ouvrez l'extension et saisissez votre mot de passe pour Twake Pass afin de terminer la connexion.",
     helpLink: "J'ai besoin d'aide ?",
     logoAlt: "Logo ID",
     twakePassAlt: "Twake Pass",
-    extensionAlt: "Extension Twake Pass"
-  }
+    extensionAlt: "Extension Twake Pass",
+  },
 };
 
 function detectLanguage() {
   const browserLang = navigator.language || navigator.userLanguage;
-  const langCode = browserLang.split('-')[0].toLowerCase();
+  const langCode = browserLang.split("-")[0].toLowerCase();
 
-  return translations[langCode] ? langCode : 'en';
+  return translations[langCode] ? langCode : "en";
 }
 
 function applyTranslations(lang) {
@@ -31,26 +32,26 @@ function applyTranslations(lang) {
 
   document.title = t.title;
 
-  document.querySelectorAll('[data-i18n]').forEach(element => {
-    const key = element.getAttribute('data-i18n');
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const key = element.getAttribute("data-i18n");
     if (t[key]) {
       element.textContent = t[key];
     }
   });
 
-  document.querySelectorAll('img[alt]').forEach(img => {
+  document.querySelectorAll("img[alt]").forEach((img) => {
     const src = img.src;
-    if (src.includes('logo-id.png') && t.logoAlt) {
+    if (src.includes("logo-id.png") && t.logoAlt) {
       img.alt = t.logoAlt;
-    } else if (src.includes('logo-text.png') && t.twakePassAlt) {
+    } else if (src.includes("logo-text.png") && t.twakePassAlt) {
       img.alt = t.twakePassAlt;
-    } else if (src.includes('mockup.png') && t.extensionAlt) {
+    } else if (src.includes("mockup.png") && t.extensionAlt) {
       img.alt = t.extensionAlt;
     }
   });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
   const language = detectLanguage();
   applyTranslations(language);
 });
