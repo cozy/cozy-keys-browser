@@ -130,7 +130,8 @@
     "overlay/button.html",
     "overlay/list.html",
     "popup/fonts/*",
-    "content/oidcSuccess.html"
+    "content/oidcSuccess.html",
+    "content/oidcSuccess.js"
   ],
   "applications": {
     "gecko": {
