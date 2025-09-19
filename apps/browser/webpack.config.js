@@ -194,6 +194,7 @@ let plugins = [
       { from: "./src/autofill/content/autofill.css", to: "content" },
       { from: "./src/content/notification.css", to: "content" },
       { from: "./src/content/oidcSuccess.html", to: "content" },
+      { from: "./src/content/oidcSuccess.js", to: "content" },
     ],
   }),
   new MiniCssExtractPlugin({
