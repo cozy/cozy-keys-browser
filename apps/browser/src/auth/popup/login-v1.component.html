@@ -11,7 +11,7 @@ No reconciliation is possible
 -->
   <header>
     <div class="left">
-      <button type="button" routerLink="/home">
+      <button type="button" routerLink="/home" [queryParams]="{ noRedirect: true }">
         <span>{{ "cancel" | i18n }}</span>
       </button>
     </div>
@@ -19,7 +19,12 @@ No reconciliation is possible
       <span class="title">{{ "appName" | i18n }}</span>
     </h1>
     <div class="right">
-      <button type="button" routerLink="/home" style="visibility: hidden">
+      <button
+        type="button"
+        routerLink="/home"
+        [queryParams]="{ noRedirect: true }"
+        style="visibility: hidden"
+      >
         <span>{{ "cancel" | i18n }}</span>
       </button>
     </div>

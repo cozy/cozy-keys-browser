@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import { Router } from "@angular/router";
-import { Subject, firstValueFrom } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Subject, firstValueFrom, first, takeUntil } from "rxjs";
 
 import { EnvironmentSelectorComponent } from "@bitwarden/angular/auth/components/environment-selector.component";
 import { LoginEmailServiceAbstraction, RegisterRouteService } from "@bitwarden/auth/common";
@@ -61,6 +61,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private accountSwitcherService: AccountSwitcherService,
     private registerRouteService: RegisterRouteService,
     private toastService: ToastService,
+    private route: ActivatedRoute,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -77,7 +78,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.redirectIfSSOLoginSuccessTab();
+    // Cozy customization; avoid redirection if coming after a "Cancel" from login view
+    this.route.queryParams.pipe(first(), takeUntil(this.destroyed$)).subscribe((params) => {
+      if (!params.noRedirect) {
+        this.redirectIfSSOLoginSuccessTab();
+      }
+    });
+    // Cozy customization
 
     // Cozy customization
     /*
