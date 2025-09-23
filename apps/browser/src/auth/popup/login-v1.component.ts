@@ -65,7 +65,7 @@ const getCozyPassWebURL = (cozyUrl: string, cozyConfiguration: CozyConfiguration
 };
 
 const getPassphraseResetURL = (cozyUrl: string) => {
-  return `${cozyUrl}/auth/passphrase_reset`;
+  return `https://${cozyUrl}/auth/passphrase_reset`;
 };
 
 const shouldRedirectToOIDCPasswordPage = (cozyConfiguration: CozyConfiguration) => {
