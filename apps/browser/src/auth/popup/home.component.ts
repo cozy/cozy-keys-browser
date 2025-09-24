@@ -296,8 +296,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         const instance = url.searchParams.get("instance");
         const code = url.searchParams.get("code");
 
+        const cozyUrl = this.cozySanitizeUrlService.sanitizeUrlInput(instance);
+
         this.router.navigate(["login"], {
-          queryParams: { email: instance, cozyUrl: instance, code },
+          queryParams: { email: cozyUrl, cozyUrl: cozyUrl, code },
         });
       }
     });
