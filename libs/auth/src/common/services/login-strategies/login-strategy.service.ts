@@ -247,6 +247,7 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
   async makePreloginKey(masterPassword: string, email: string): Promise<MasterKey> {
     email = email.trim().toLowerCase();
     let kdfConfig: KdfConfig = null;
+    let salt: string | undefined = undefined;
     try {
       const preloginResponse = await this.apiService.postPrelogin(new PreloginRequest(email));
       if (preloginResponse != null) {
@@ -258,6 +259,7 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
                 preloginResponse.kdfMemory,
                 preloginResponse.kdfParallelism,
               );
+        salt = preloginResponse.salt;
       }
     } catch (e) {
       if (e == null || e.statusCode !== 404) {
@@ -267,7 +269,8 @@ export class LoginStrategyService implements LoginStrategyServiceAbstraction {
 
     kdfConfig.validateKdfConfigForPrelogin();
 
-    return await this.keyService.makeMasterKey(masterPassword, email, kdfConfig);
+    // Cozy customization; used salt from backend
+    return await this.keyService.makeMasterKey(masterPassword, salt, kdfConfig);
   }
 
   private async clearCache(): Promise<void> {
