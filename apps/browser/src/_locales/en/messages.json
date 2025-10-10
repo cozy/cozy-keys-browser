@@ -5296,15 +5296,15 @@
     "message": "Generated password"
   },
   "useYourCompanyServer": {
-    "message": "Use your company server"
+    "message": "Use your company organization"
   },
   "useUrl": {
     "message": "Use my Twake URL"
   },
   "companyEmail": {
-    "message": "Company email address"
+    "message": "Organization email address"
   },
   "companyServerError": {
-    "message": "Company server not found"
+    "message": "Organization server not found"
   }
 }
