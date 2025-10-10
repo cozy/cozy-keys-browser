@@ -18,9 +18,16 @@ import { getLoginSuccessPageUri, extractDomain } from "../../../src/cozy/sso/hel
 /* eslint-enable */
 /* end Cozy imports */
 
-const DEV_STACK_OAUTHCALLBACK_URI = "https://oauthcallback.cozy.wtf";
+// dev : on.cozy.lin-saas.com (stack int)
+// int : .stg.lin-saas.com (stack int)
+// prod : .twake.app (stack prod)
+const DEV_STACK_OAUTHCALLBACK_URI = "https://oauthcallback.cozy.works";
 const INT_STACK_OAUTHCALLBACK_URI = "https://oauthcallback.cozy.works";
 const PROD_STACK_OAUTHCALLBACK_URI = "https://oauthcallback.mycozy.cloud";
+
+const DEV_STACK_OAUTHCALLBACK_CONTEXT = "twake";
+const INT_STACK_OAUTHCALLBACK_CONTEXT = "twake_default";
+const PROD_STACK_OAUTHCALLBACK_CONTEXT = "twake_default";
 
 @Component({
   selector: "app-home",
@@ -46,6 +53,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   // Cozy customization; to change stack URI
   logoClickCount = 0;
   baseUri = PROD_STACK_OAUTHCALLBACK_URI;
+  baseContext = PROD_STACK_OAUTHCALLBACK_CONTEXT;
   // Cozy customization
 
   // TODO: remove when email verification flag is removed
@@ -174,7 +182,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     const extensionUri = this.platformUtilsService.getExtensionUri();
     const redirectUri = getLoginSuccessPageUri(extensionUri);
 
-    BrowserApi.createNewTab(`${this.baseUri}/oidc/bitwarden/twake?redirect_uri=${redirectUri}`);
+    BrowserApi.createNewTab(
+      `${this.baseUri}/oidc/bitwarden/${this.baseContext}?redirect_uri=${redirectUri}`,
+    );
   }
   /* end custo */
 
@@ -315,16 +325,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       if (rest === 0) {
         this.baseUri = DEV_STACK_OAUTHCALLBACK_URI;
+        this.baseContext = DEV_STACK_OAUTHCALLBACK_CONTEXT;
       } else if (rest === 1) {
         this.baseUri = INT_STACK_OAUTHCALLBACK_URI;
+        this.baseContext = INT_STACK_OAUTHCALLBACK_CONTEXT;
       } else if (rest === 2) {
         this.baseUri = PROD_STACK_OAUTHCALLBACK_URI;
+        this.baseContext = PROD_STACK_OAUTHCALLBACK_CONTEXT;
       }
 
       this.toastService.showToast({
         variant: "info",
-        title: "New base URI",
-        message: this.baseUri,
+        title: "New base URI and context",
+        message: `${this.baseUri} and ${this.baseContext}`,
       });
     }
   }
