@@ -1,6 +1,4 @@
-export const getLoginSuccessPageUri = (extensionUri: string) => {
-  return `${extensionUri}/content/oidcSuccess.html`;
-};
+export const LOGIN_SUCCESS_PAGE_PATH = "/content/oidcSuccess.html";
 
 export const extractDomain = (companyEmail: string): string | null => {
   if (!companyEmail) {
