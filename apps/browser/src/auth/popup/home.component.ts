@@ -14,7 +14,7 @@ import { ToastService } from "@bitwarden/components";
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { CozySanitizeUrlService } from "../../popup/services/cozySanitizeUrl.service";
 import { AccountSwitcherService } from "./account-switching/services/account-switcher.service";
-import { getLoginSuccessPageUri, extractDomain } from "../../../src/cozy/sso/helpers";
+import { LOGIN_SUCCESS_PAGE_PATH, extractDomain } from "../../../src/cozy/sso/helpers";
 /* eslint-enable */
 /* end Cozy imports */
 
@@ -179,8 +179,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   /* Cozy custo */
   openTwakeLogin() {
-    const extensionUri = this.platformUtilsService.getExtensionUri();
-    const redirectUri = getLoginSuccessPageUri(extensionUri);
+    const redirectUri = chrome.runtime.getURL(LOGIN_SUCCESS_PAGE_PATH);
 
     BrowserApi.createNewTab(
       `${this.baseUri}/oidc/bitwarden/${this.baseContext}?redirect_uri=${redirectUri}`,
@@ -226,8 +225,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         throw new Error();
       }
 
-      const extensionUri = this.platformUtilsService.getExtensionUri();
-      const redirectUri = getLoginSuccessPageUri(extensionUri);
+      const redirectUri = chrome.runtime.getURL(LOGIN_SUCCESS_PAGE_PATH);
 
       const uriFromWellKnown = await this.fetchLoginUriWithWellKnown(domain);
 
@@ -294,8 +292,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   // Cozy customization
   async redirectIfSSOLoginSuccessTab() {
     chrome.tabs.query({}, (tabs) => {
-      const extensionUri = this.platformUtilsService.getExtensionUri();
-      const redirectUri = getLoginSuccessPageUri(extensionUri);
+      const redirectUri = chrome.runtime.getURL(LOGIN_SUCCESS_PAGE_PATH);
 
       const SSOLoginSuccessTab = tabs.find(
         (tab) => tab.status === "complete" && tab.url.startsWith(redirectUri),
